@@ -1,80 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:40:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mpg123: security bump to
-	version 1.25.1
-Message-ID: <20170704154817.F277B7FAFC@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:47:05 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gst1-plugins-bad: fix
+	webrtc option
+Message-ID: <20170704154818.2D5E27FAFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71f4f03536daf68876da7433c6c1843f4d349d55
+commit: https://git.buildroot.net/buildroot/commit/?id=1195d84c71c5849117f40d99189e7ae077cd88fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-From the release notes:
+When the WebRTC plugin option was introduced in commit
+ee267886bc090335dd94c97dca1c294addccc090 ("gst1-plugins-bad: enable
+webrtc plugin"), it was incorrect added as "webrtc", while the actual
+name of the plugin and corresponding configure option is "webrtcdsp".
 
-- Avoid memset(NULL, 0, 0) to calm down the paranoid.
+This commit therefore fixes the .mk file to use the correct name. And
+also, since we want to keep Buildroot option consistent with the name
+of the GStreamer plugins, it renames the Config.in option as well, and
+introduces the necessary Config.in.legacy handling.
 
-- Fix bug 252, invalid read of size 1 in ID3v2 parser due to forgotten
-  offset from the frame flag bytes (unnoticed in practice for a long time).
-  Fuzzers are in the house again.  This one got CVE-2017-10683.
-
-  https://sourceforge.net/p/mpg123/bugs/252/
-
-- Avoid a mostly harmless conditional jump depending on uninitialised
-  fr->lay in compute_bpf() (mpg123_position()) when track is not ready yet.
-
-- Fix undefined shifts on signed long mask in layer3.c (worked in practice,
-  never right in theory).  Code might be a bit faster now, even.  Thanks to
-  Agostino Sarubbo for reporting.
-
-dlopen() is now directly used to load output modules (and the
---with-modules-suffix option has been removed), so adjust the modules logic
-to match.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b3a0afd47f278ab5dea4f5cbe01da79a2e05ec8c)
+(cherry picked from commit 4c06d2490a07f0b88f42c56c7409899fd2f5608a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash |  2 +-
- package/mpg123/mpg123.mk   | 11 ++++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ Config.in.legacy                                        | 10 ++++++++++
+ package/gstreamer1/gst1-plugins-bad/Config.in           |  6 +++---
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  6 +++---
+ 3 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index fa55809..69fbef3 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
-+sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 27c46dc..8eaaa62 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7decb91..0f2f95b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,16 @@ endif
  
--MPG123_VERSION = 1.23.8
-+MPG123_VERSION = 1.25.1
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
-@@ -74,10 +74,11 @@ endif
+ comment "Legacy options removed in 2017.02"
  
- MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
++	bool "gst1-plugins-bad webrtc renamed to webrtcdsp"
++	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
++	select BR2_LEGACY
++	help
++	  The WebRTC plugin in GStreamer 1.x has always been named
++	  webrtcdsp, but was wrongly introduced in Buildroot under the
++	  name webrtc. Therefore, we have renamed the option to match
++	  the actual name of the GStreamer plugin.
++
+ config BR2_PACKAGE_SPICE_CLIENT
+ 	bool "spice client support removed"
+ 	select BR2_LEGACY
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 1db5187..2fe9bb6 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -698,8 +698,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
+ 	help
+ 	  Webp image format plugin
  
--ifeq ($(BR2_PACKAGE_LIBTOOL),y)
--MPG123_DEPENDENCIES += libtool
--# .la files gets stripped , so directly load .so files rather than .la
--MPG123_CONF_OPTS += --with-modules --with-module-suffix=.so
-+# output modules are loaded with dlopen()
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MPG123_CONF_OPTS += --disable-modules
-+else
-+MPG123_CONF_OPTS += --enable-modules
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
+-	bool "webrtc"
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
++	bool "webrtcdsp"
+ 	# All depends from webrtc-audio-processing
+ 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -710,7 +710,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
+ 	help
+ 	  WebRTC echo-cancellation, gain control and noise suppression
+ 
+-comment "webrtc needs a toolchain w/ C++, NPTL, gcc >= 4.8"
++comment "webrtcdsp needs a toolchain w/ C++, NPTL, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index c6a151a..9f39bbf 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -813,11 +813,11 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
  endif
  
- $(eval $(autotools-package))
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
+-GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtcdsp
+ GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
+ else
+-GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtcdsp
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
