@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:37 +0200
-Subject: [Buildroot] [PATCH 057/100] minidlna: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:33 +0200
+Subject: [Buildroot] [PATCH 053/100] madplay: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-58-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-54-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,34 +19,34 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/minidlna/Config.in   | 1 -
- package/minidlna/minidlna.mk | 2 +-
+ package/madplay/Config.in  | 1 -
+ package/madplay/madplay.mk | 2 +-
  2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-index c900143..a8311af 100644
---- a/package/minidlna/Config.in
-+++ b/package/minidlna/Config.in
-@@ -13,7 +13,6 @@ config BR2_PACKAGE_MINIDLNA
- 	select BR2_PACKAGE_LIBEXIF
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_SQLITE
+diff --git a/package/madplay/Config.in b/package/madplay/Config.in
+index d83fac6..3baeaa0 100644
+--- a/package/madplay/Config.in
++++ b/package/madplay/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_MADPLAY
+ 	bool "madplay"
+ 	select BR2_PACKAGE_LIBMAD
+ 	select BR2_PACKAGE_LIBID3TAG
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
- 	  fully compliant with DLNA/UPnP-AV clients.
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 4fa5545..d0d9136 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -10,7 +10,7 @@ MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
- MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+ 	  Command-line front-end to libmad, a high-quality MPEG audio decoder.
+ 	  It currently supports MPEG-1 and the MPEG-2 extension to lower
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index 4ae95ab..e72e2f8 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -9,7 +9,7 @@ MADPLAY_SITE = http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VE
+ MADPLAY_LICENSE = GPL-2.0+
+ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
+ MADPLAY_LIBTOOL_PATCH = NO
+-MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
++MADPLAY_DEPENDENCIES = libmad libid3tag $(TARGET_NLS_DEPENDENCIES)
  
- MINIDLNA_DEPENDENCIES = \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext \
-+	$(TARGET_NLS_DEPENDENCIES) \
- 	ffmpeg flac libvorbis libogg libid3tag libexif jpeg sqlite \
- 	host-xutil_makedepend
- 
+ # Check if ALSA is built, then we should configure after alsa-lib so
+ # ./configure can find alsa-lib.
 -- 
 2.9.4
