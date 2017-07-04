@@ -1,82 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 00:39:38 +0200
-Subject: [Buildroot] [git commit] fs/ext2: use mkfs to generate rootfs image
-Message-ID: <20170704223652.DFCE880330@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 00:35:00 +0200
+Subject: [Buildroot] [git commit] fs/ext2: deprecate
+	BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option
+Message-ID: <20170704223652.C4E78817A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67aaa90d3bbe6ad5b5ffa9e66cdb0a1928448eb9
+commit: https://git.buildroot.net/buildroot/commit/?id=235b6f17a0e38d854245d451bfc55bf82c3bbfc1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mkfs is now capable of generating rootfs images. Use mkfs instead of
-genext2fs.
+Soon, the ext{2,3,4} rootfs image will no longer be generated with
+genext2fs, but using mke2fs instead which has no support for the extra
+inode number option.
 
-If not set, we now let mkfs calculate the block size and the number of
-inodes needed.
+So, deprecate the BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option and
+recommend, in lieu, to set the total inode number, taking account of
+the extra ones if needed.
 
-This change also adjusts the options to meet those of mkfs.
-
-Notes:
-* Passing a null inode number to mkfs triggers its automatic calculation.
-* Passing a fs-size with no unit suffix to mkfs is interpreted as using
-  1K block size.
-
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: don't pass PATH when calling mkfs.ext, just call it directly
-from $(HOST_DIR)/usr/sbin, as suggested by Arnout.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/ext2/Config.in |  2 +-
- fs/ext2/ext2.mk   | 18 +++++++++---------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ Config.in.legacy  | 15 +++++++++++++++
+ fs/ext2/Config.in |  8 --------
+ fs/ext2/ext2.mk   |  1 -
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f1a1b8a..2b88ddf 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,21 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.08"
+ 
++config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
++	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
++	default 0
++	help
++	  Buildroot now uses mkfs.ext2/3/4 to generate ext2/3/4
++	  images. It now automatically selects the number of inodes
++	  based on the image size. The extra number of inodes can no
++	  longer be provided; instead, provide the total number of
++	  inodes needed in BR2_TARGET_ROOTFS_EXT2_INODES.
++
++config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
++	bool
++	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
++	select BR2_LEGACY
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDXAPARSE
+ 	bool "cdxaparse removed"
+ 	select BR2_LEGACY
 diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index ec1b5f2..9c58ac6 100644
+index 6f16dde..ec1b5f2 100644
 --- a/fs/ext2/Config.in
 +++ b/fs/ext2/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_ROOTFS_EXT2
- 	bool "ext2/3/4 root filesystem"
--	select BR2_PACKAGE_HOST_MKE2IMG
-+	select BR2_PACKAGE_HOST_E2FSPROGS
- 	help
- 	  Build an ext2/3/4 root filesystem
+@@ -55,14 +55,6 @@ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
+ 	default 0
  
+-config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+-	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+-	default 0
+-	help
+-	  Enter here the number of extra free inodes you want on
+-	  your filesystem. By default, Buildroot will not leave
+-	  many free inodes.
+-
+ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	int "reserved blocks percentage"
+ 	default 5
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 8a648dd..ff04b78 100644
+index 0d5fc7f..8a648dd 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -10,18 +10,18 @@ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
- #" Syntax highlighting... :-/ )
+@@ -15,7 +15,6 @@ EXT2_OPTS = \
+ 	-B 1024 \
+ 	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
+ 	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+-	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
+ 	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+ 	-l "$(EXT2_LABEL)"
  
- EXT2_OPTS = \
--	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
--	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
--	-B 1024 \
--	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
--	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
--	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
--	-l "$(EXT2_LABEL)"
-+	-d $(TARGET_DIR) \
-+	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
-+	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
-+	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
-+	-L "$(EXT2_LABEL)"
- 
--ROOTFS_EXT2_DEPENDENCIES = host-mke2img
-+ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
- define ROOTFS_EXT2_CMD
--	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
-+	rm -f $@
-+	$(HOST_DIR)/usr/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
-+		 $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
- endef
- 
- rootfs-ext2-symlink:
