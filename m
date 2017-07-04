@@ -1,15 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:37:14 +0200
-Subject: [Buildroot] [git commit] gnuchess: remove libintl static linking
-	handling
-Message-ID: <20170704233520.07D6A7FBC5@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:37:15 +0200
+Subject: [Buildroot] [git commit] qt: remove libintl static linking handling
+Message-ID: <20170704233520.7F23F8013D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae087e850ad5ff5d87b950723cf1430707462222
+commit: https://git.buildroot.net/buildroot/commit/?id=5511f9acda9076641ca30891920914f06726f80a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 We no longer support building the full-blown libintl in static linking
@@ -18,59 +17,132 @@ that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-static-build-with-uClibc.patch        | 47 ----------------------
- 1 file changed, 47 deletions(-)
+ ...form-socklen_t-on-other-C-libraries-than.patch} |   0
+ ...-inclusion-order-when-building-statically.patch | 105 ---------------------
+ ...ith-ldl-option-only-when-it-is-supported.patch} |   0
+ ...12-OpenGL-EGL-Avoid-X11-header-collision.patch} |   0
+ 4 files changed, 105 deletions(-)
 
-diff --git a/package/gnuchess/0001-fix-static-build-with-uClibc.patch b/package/gnuchess/0001-fix-static-build-with-uClibc.patch
+diff --git a/package/qt/0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch b/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+similarity index 100%
+rename from package/qt/0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+rename to package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+diff --git a/package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch b/package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch
 deleted file mode 100644
-index 20a0835..0000000
---- a/package/gnuchess/0001-fix-static-build-with-uClibc.patch
+index f6163fa..0000000
+--- a/package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch
 +++ /dev/null
-@@ -1,47 +0,0 @@
--From 5bb2bc6384024c2344ef5cc6785131b382c38170 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Sun, 10 May 2015 22:19:03 +0200
--Subject: [PATCH] fix static build with uClibc
+@@ -1,105 +0,0 @@
+-From 7a912823158a4113256c3113a34c38d6b241d275 Mon Sep 17 00:00:00 2001
+-From: Alexey Brodkin <abrodkin@synopsys.com>
+-Date: Wed, 13 Jan 2016 20:15:36 +0300
+-Subject: [PATCH] Fix library inclusion order when building statically
 -
--uClibc doesn't provide lintl which should be provided
--by gettext. If gnuchess is linked statically, -lintl should
--be placed after libfrontend.a libadapter.a libengine.a.
+-When building application statically it's important to keep
+-libraries we're linking against in order. Otherwise if libA depends on
+-libB but it is mentioned after libB in linker command line
+-there will be unresolved symbols.
 -
--Fixes:
--http://autobuild.buildroot.net/results/dcb/dcb1c0eb7212bd8d1e0d8b51fd517b73b7569cea/
+-Consider real example - configuration of Qt with glib for static build.
+-Initially reported by Buildroot autobuilder here:
+-http://autobuild.buildroot.net/results/174/174c6e47eb761f9897275b6fedff742ace2f3081
 -
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+-What happens here:
+-
+-[1] Qt's configuration script tries to build glib test app
+-    (in config.tests/unix/glib)
+-
+-[2] For that it first asks which libs to use during linkage this way:
+-    QT_LIBS_GLIB=`$PKG_CONFIG --libs glib-2.0 gthread-2.0 2>/dev/null`
+-
+-    In our case we're getting something like this:
+-    -L/.../sysroot/usr/lib -lintl -lgthread-2.0 -pthread -lglib-2.0 \
+-    -lintl -pthread -lintl
+-
+-    Note "-lintl" is mentioned 3 times because libgthread depends on
+-    libthread and both of them plus libglib all depend on libintl - so
+-    we're getting "lintl" for each separate library mentioned above.
+-
+-[3] Now we execute "compileTest" for real heavy lifting this way:
+-    compileTest unix/glib "Glib" $QT_CFLAGS_GLIB $QT_LIBS_GLIB ...
+-
+-[4] compileTest (the one for unix) parses command-line passed to it
+-    groups all entries with "-l" prefix and puts them in LFLAGS
+-    variable. And finally executes qmake passing it that kind of
+-    construction:
+-    $OUTDIR/bin/qmake ..."LIBS*=$LFLAGS"
+-
+-[5] When qmake sees construction "MYVAR*=MYVAL" it populates MYVAR with
+-    unique values from MYVAL string.
+-
+-[6] As a result qmake generated Makefile with the following:
+-    LIBS = $(SUBLIBS) -pthread -L/.../sysroot/usr/lib -lintl -lgthread-2.0 \
+-    -lglib-2.0
+-
+-[7] And essentially on attempt to link glib test app a failure happens
+-    because libglib needs libintl, i.e. "-lintl" must follow "-lglib-2.0":
+--------------------->8------------------
+-linking glib
+-
+-g++ -static -Wl,-O1 -o glib glib.o -pthread -L/.../sysroot/usr/lib \
+--lintl -lgthread-2.0 -lglib-2.0
+-
+-/.../sysroot/usr/lib/libglib-2.0.a(libglib_2_0_la-ggettext.o): In function '_g_dgettext_should_translate':
+-ggettext.c:(.text+0x28): undefined reference to `libintl_textdomain'
+-ggettext.c:(.text+0x36): undefined reference to `libintl_gettext'
+-/.../sysroot/usr/lib/libglib-2.0.a(libglib_2_0_la-ggettext.o): In function `ensure_gettext_initialized':
+-ggettext.c:(.text+0xe6): undefined reference to `libintl_bindtextdomain'
+-ggettext.c:(.text+0xf6): undefined reference to `libintl_bind_textdomain_codeset'
+-/.../sysroot/usr/lib/libglib-2.0.a(libglib_2_0_la-ggettext.o): In function `g_dgettext':
+-ggettext.c:(.text+0x148): undefined reference to `libintl_dgettext'
+-/.../sysroot/usr/lib/libglib-2.0.a(libglib_2_0_la-ggettext.o): In function `g_dcgettext':
+-ggettext.c:(.text+0x2dc): undefined reference to `libintl_dcgettext'
+-/.../sysroot/usr/lib/libglib-2.0.a(libglib_2_0_la-ggettext.o): In function `g_dngettext':
+-ggettext.c:(.text+0x32a): undefined reference to `libintl_dngettext'
+-collect2: error: ld returned 1 exit status
+-Makefile:99: recipe for target 'glib' failed
+-make: *** [glib] Error 1
+-
+-Glib disabled.
+-Glib support cannot be enabled due to functionality tests!
+- Turn on verbose messaging (-v) to ./configure to see the final report.
+- If you believe this message is in error you may use the continue
+- switch (-continue) to ./configure to continue.
+--------------------->8------------------
+-
+-Solution to this problem is simple we have to pass all libraries exactly
+-in order of their initial mention by upper layers.
+-
+-Change-Id: I7ff00901031a8eb85b4fbd7889b0e0c02be806bb
+-
+-This fix was sent to Qt Gerrit for review here:
+-https://codereview.qt-project.org/#/c/145967/
+-
 ----
-- src/Makefile.am | 2 +-
-- src/Makefile.in | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
+- config.tests/unix/compile.test | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/Makefile.am b/src/Makefile.am
--index ba90bce..fc02543 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -34,7 +34,7 @@ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-- DISTCLEANFILES = *~
+-diff --git a/config.tests/unix/compile.test b/config.tests/unix/compile.test
+-index f484f03..dac0a4f 100755
+---- a/config.tests/unix/compile.test
+-+++ b/config.tests/unix/compile.test
+-@@ -73,7 +73,7 @@ test -r Makefile && $MAKE distclean >/dev/null 2>&1
+- rm -f "$EXE" "${EXE}.exe"
 - 
-- SUBDIRS = frontend adapter engine
---gnuchess_LDADD = $(LIBINTL) frontend/libfrontend.a adapter/libadapter.a engine/libengine.a
--+gnuchess_LDADD = frontend/libfrontend.a adapter/libadapter.a engine/libengine.a $(LIBINTL)
+- echo "QT_BUILD_TREE = $OUTDIR" > "$OUTDIR/$TEST/.qmake.cache"
+--"$OUTDIR/bin/qmake" -spec "$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "CONFIG-=debug_and_release" "LIBS*=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
+-+"$OUTDIR/bin/qmake" -spec "$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "CONFIG-=debug_and_release" "LIBS=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
 - 
-- configmake.h: Makefile
-- 	rm -f $@-t $@
--diff --git a/src/Makefile.in b/src/Makefile.in
--index 9460bfd..424da52 100644
----- a/src/Makefile.in
--+++ b/src/Makefile.in
--@@ -395,7 +395,7 @@ AM_LDFLAGS = $(PTHREAD_LDFLAGS) $(PTHREAD_LIBS)
-- AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib
-- DISTCLEANFILES = *~
-- SUBDIRS = frontend adapter engine
---gnuchess_LDADD = $(LIBINTL) frontend/libfrontend.a adapter/libadapter.a engine/libengine.a
--+gnuchess_LDADD = frontend/libfrontend.a adapter/libadapter.a engine/libengine.a $(LIBINTL)
-- BUILT_SOURCES = configmake.h
-- CLEANFILES = configmake.h configmake.h-t
-- all: $(BUILT_SOURCES) config.h
+- if [ "$VERBOSE" = "yes" ]; then
+-     $MAKE
 --- 
--1.9.3
+-2.4.3
 -
+diff --git a/package/qt/0012-Link-with-ldl-option-only-when-it-is-supported.patch b/package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch
+similarity index 100%
+rename from package/qt/0012-Link-with-ldl-option-only-when-it-is-supported.patch
+rename to package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch
+diff --git a/package/qt/0013-OpenGL-EGL-Avoid-X11-header-collision.patch b/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+similarity index 100%
+rename from package/qt/0013-OpenGL-EGL-Avoid-X11-header-collision.patch
+rename to package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
