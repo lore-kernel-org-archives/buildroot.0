@@ -1,60 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 19:09:58 +0200
-Subject: [Buildroot] [git commit] package/Makefile.in: fix musl handling
-Message-ID: <20170704170701.512D8800C6@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 19:09:53 +0200
+Subject: [Buildroot] [git commit] package: rename DISABLE_NLS to NLS_OPTS
+Message-ID: <20170704170701.227EE8015E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88cc3125730be66a2fbc732a1777981195620c06
+commit: https://git.buildroot.net/buildroot/commit/?id=8d603626a8aae9cb1dc73cfaf923f29ecd1a9008
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Until now, we had no support for full NLS with the musl C library:
-BR2_NEEDS_GETTEXT was only true for uClibc. But the musl C library
-provides a stub gettext implementation, which some packages were
-failing to recognize as being usable, and therefore we are passing
-autoconf cache variables to hint those packages that yes, the C
-library has a usable gettext implementation.
+We are going to use DISABLE_NLS not only for disabling NLS support,
+but also to explicitly enable it. Therefore, this preparatory commit
+renames it to NLS_OPTS, which is consistent with other foo_OPTS
+variables defined in package/Makefile.in.
 
-However, we are going to enable full NLS support for musl, by giving
-the possibility to build gettext libintl with musl. In such a case, we
-do not want packages to use the gettext implementation of the C
-library, but really the one provided by gettext libintl.
-
-Therefore, we should only pre-seed the
-gt_cv_func_gnugettext1_libc*=yes variables if we're on musl but
-without gettext libintl. Otherwise packages will fail building because:
-
- - libintl.h is the one from the full-blown gettext implementation, so
-   it assumes the package will link against -lintl
-
- - the package thinks gettext is provided by the C library, so it
-   doesn't link with -lintl
+While at it, we replace the := assignments by regular = assignments.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/Makefile.in      | 4 ++--
+ package/pkg-autotools.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/Makefile.in b/package/Makefile.in
-index d30da3f..b98333f 100644
+index 8087bde..4a5b3af 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -338,7 +338,12 @@ endif
- # AM_GNU_GETTEXT misdetects musl gettext support.
- # musl currently implements api level 1 and 2 (basic + ngettext)
- # http://www.openwall.com/lists/musl/2015/04/16/3
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+#
-+# These autoconf variables should only be pre-seeded when the minimal
-+# gettext implementation of musl is used. When the full blown
-+# implementation provided by gettext libintl is used, auto-detection
-+# works fine, and pre-seeding those values is actually wrong.
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y:)
- BR2_GT_CV_FUNC_GNUGETTEXT_LIBC = \
- 	gt_cv_func_gnugettext1_libc=yes \
- 	gt_cv_func_gnugettext2_libc=yes
+@@ -360,9 +360,9 @@ TARGET_CONFIGURE_ARGS = \
+ ################################################################################
+ 
+ ifeq ($(BR2_ENABLE_LOCALE),y)
+-DISABLE_NLS :=
++NLS_OPTS =
+ else
+-DISABLE_NLS :=--disable-nls
++NLS_OPTS = --disable-nls
+ endif
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index e215382..ba1f4d9 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -201,7 +201,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--with-fop=no \
+ 		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
+ 		--enable-ipv6 \
+-		$$(DISABLE_NLS) \
++		$$(NLS_OPTS) \
+ 		$$(SHARED_STATIC_LIBS_OPTS) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
+ 	)
