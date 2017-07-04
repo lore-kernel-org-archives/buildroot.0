@@ -1,112 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:49 +0200
-Subject: [Buildroot] [PATCH 009/100] system: introduce BR2_SYSTEM_ENABLE_NLS
+Date: Tue,  4 Jul 2017 16:47:54 +0200
+Subject: [Buildroot] [PATCH 014/100] axel: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-10-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-15-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, the option BR2_ENABLE_LOCALE was more-or-less controlling
-whether NLS support was enabled in packages. More precisely, if
-BR2_ENABLE_LOCALE=y, we were not doing anything (so some packages
-could have NLS support enabled, some not). And only when
-BR2_ENABLE_LOCALE was disabled we were explicitly passing
---disable-nls to packages.
+This commit switches to use the new gettext logic, which involves:
 
-This doesn't make much sense, and there is no reason to tie NLS
-support to locale support. You may want locale support, but not
-necessarily NLS support. Therefore, this commit introduces
-BR2_SYSTEM_ENABLE_NLS, which allows to enable/disable NLS support
-globally. When this option is enabled, we pass --enable-nls to
-packages, otherwise we pass --disable-nls.
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
 
-In addition, when this option is enabled and the C library doesn't
-provide a full-blown implementation of gettext, we select the gettext
-package, which will provide the full blown implementation.
+ - using TARGET_NLS_LIBS to force linking against libintl
 
-It is worth mentioning that this commit has a visible impact for users:
+ - dropping BR2_PACKAGE_GETTEXT selection
 
- - Prior to this commit, as soon as BR2_ENABLE_LOCALE=y, packages
-   *could* provide NLS support. It was up to each package to decide
-   whether they wanted to provide NLS support or not (we were not
-   passing --enable-nls nor --disable-nls).
+Note that -lpthread is no longer needed for -lintl, but axel uses
+pthread directly anyway, so we have to keep -lpthread as part of
+LDFLAGS.
 
- - After this commit, it's BR2_SYSTEM_ENABLE_NLS that controls whether
-   NLS is enabled or disabled, and this option is disabled by default.
-
-Bottom line: with the default of BR2_SYSTEM_ENABLE_NLS disabled, some
-packages may lose NLS support that they used to provide. But we
-believe it's a reasonable default behavior for Buildroot, where
-generally NLS support is not necessary.
+Finally, we now use BR2_SYSTEM_ENABLE_NLS to decide whether NLS
+support should be enabled or not.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in       |  4 ++--
- package/gettext/Config.in |  1 +
- system/Config.in          | 19 +++++++++++++++++++
- 3 files changed, 22 insertions(+), 2 deletions(-)
+ package/axel/Config.in |  1 -
+ package/axel/axel.mk   | 12 +++---------
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4a5b3af..462b7ca 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -359,8 +359,8 @@ TARGET_CONFIGURE_ARGS = \
+diff --git a/package/axel/Config.in b/package/axel/Config.in
+index aea85bf..6e709cf 100644
+--- a/package/axel/Config.in
++++ b/package/axel/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_AXEL
+ 	bool "axel"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  HTTP/FTP download accelerator.
  
- ################################################################################
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index e89a946..60bf5e4 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -8,16 +8,10 @@ AXEL_VERSION = 2.4
+ AXEL_SITE = http://sources.buildroot.net
+ AXEL_LICENSE = GPL-2.0+
+ AXEL_LICENSE_FILES = COPYING
++AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
  
--ifeq ($(BR2_ENABLE_LOCALE),y)
--NLS_OPTS =
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+NLS_OPTS = --enable-nls
- else
- NLS_OPTS = --disable-nls
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-AXEL_DEPENDENCIES += gettext
+-AXEL_LDFLAGS += -lintl
+-endif
+-
+-# -lintl may use symbols from -lpthread
+-AXEL_LDFLAGS += -lpthread
+-
+-ifneq ($(BR2_ENABLE_LOCALE),y)
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ AXEL_DISABLE_I18N = --i18n=0
  endif
-diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-index 18bfda6..0dea03d 100644
---- a/package/gettext/Config.in
-+++ b/package/gettext/Config.in
-@@ -17,6 +17,7 @@ if BR2_PACKAGE_GETTEXT
- config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
- 	bool
- 	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
-+	default y if BR2_SYSTEM_ENABLE_NLS
  
- endif
- 
-diff --git a/system/Config.in b/system/Config.in
-index 8588839..828df42 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -420,6 +420,25 @@ config BR2_GENERATE_LOCALE
- 	  specified, UTF-8 is assumed. Examples of locales: en_US,
- 	  fr_FR.UTF-8.
- 
-+config BR2_SYSTEM_ENABLE_NLS
-+	bool "Enable Native Language Support (NLS)"
-+	depends on BR2_USE_WCHAR
-+	#  - glibc has built-in NLS support, but anyway doesn't
-+	#    support static linking
-+	#  - musl and uclibc support static linking, but they don't
-+	#    have built-in NLS support, which is provided by the
-+	#    libintl library from gettext. The fact that it is a
-+	#    separate library causes too many problems for static
-+	#    linking.
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_GETTEXT if !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
-+	help
-+	  This option will enable Native Language Support, which will
-+	  allow software packages to support translations.
-+
-+comment "NLS support needs a toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+
- config BR2_TARGET_TZ_INFO
- 	bool "Install timezone info"
- 	select BR2_PACKAGE_TZDATA if BR2_TOOLCHAIN_USES_GLIBC
 -- 
 2.9.4
