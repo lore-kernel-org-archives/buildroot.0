@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Jul 2017 17:13:46 +0200
-Subject: [Buildroot] [PATCH v3 10/14] pkg-cmake: use $(HOST_DIR) instead
- of $(HOST_DIR)/usr as prefix
-In-Reply-To: <20170704140404.4098-11-arnout@mind.be>
+Date: Tue, 4 Jul 2017 17:14:46 +0200
+Subject: [Buildroot] [PATCH v3 11/14] pkg-cmake: move configuration
+ files out of $(HOST_DIR)/usr
+In-Reply-To: <20170704140404.4098-12-arnout@mind.be>
 References: <20170704140404.4098-1-arnout@mind.be>
- <20170704140404.4098-11-arnout@mind.be>
-Message-ID: <875541c5-e68c-a59a-12d4-c10915b17713@smile.fr>
+ <20170704140404.4098-12-arnout@mind.be>
+Message-ID: <905b8448-44b2-ef63-ee85-b0950894758c@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +15,8 @@ To: buildroot@busybox.net
 Hi Arnout,
 
 Le 04/07/2017 ? 16:04, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> Remove the redundant usr/ component of the HOST_DIR paths. Since a
-> previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
-> everything keeps on working.
+> Move toolchainfile.cmake and Buildroot.cmake from
+> $(HOST_DIR)/usr/share/buildroot to $(HOST_DIR)/share/buildroot.
 > 
 > Build-tested with a bunch of cmake packages.
 > 
@@ -29,20 +28,72 @@ Best regards,
 Romain
 
 > ---
->  package/pkg-cmake.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/pkg-cmake.mk                | 8 ++++----
+>  support/misc/toolchainfile.cmake.in | 4 ++--
+>  toolchain/toolchain/toolchain.mk    | 4 ++--
+>  3 files changed, 8 insertions(+), 8 deletions(-)
 > 
 > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 0897430f70..0606d26ad7 100644
+> index 0606d26ad7..1bb3652a13 100644
 > --- a/package/pkg-cmake.mk
 > +++ b/package/pkg-cmake.mk
-> @@ -115,7 +115,7 @@ define $(2)_CONFIGURE_CMDS
->  		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
->  		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
->  		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
-> -		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
-> +		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)" \
->  		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
->  		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
->  		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
+> @@ -86,7 +86,7 @@ define $(2)_CONFIGURE_CMDS
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+> -		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+> +		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+>  		-DCMAKE_INSTALL_PREFIX="/usr" \
+>  		-DCMAKE_COLOR_MAKEFILE=OFF \
+>  		-DBUILD_DOC=OFF \
+> @@ -234,10 +234,10 @@ CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
+>  endif
+>  
+>  # In order to allow the toolchain to be relocated, we calculate the HOST_DIR
+> -# based on the toolchainfile.cmake file's location: $(HOST_DIR)/usr/share/buildroot
+> +# based on the toolchainfile.cmake file's location: $(HOST_DIR)/share/buildroot
+>  # In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
+>  # so we have to strip "$(HOST_DIR)/" from the paths that contain it.
+> -$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+> +$(HOST_DIR)/share/buildroot/toolchainfile.cmake:
+>  	@mkdir -p $(@D)
+>  	sed \
+>  		-e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
+> @@ -254,5 +254,5 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+>  		> $@
+>  
+> -$(HOST_DIR)/usr/share/buildroot/Platform/Buildroot.cmake:
+> +$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake:
+>  	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake $(@)
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index c38800e598..c8c710bddd 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -4,11 +4,11 @@
+>  #
+>  
+>  # In order to allow the toolchain to be relocated, we calculate the
+> -# HOST_DIR based on this file's location: $(HOST_DIR)/usr/share/buildroot
+> +# HOST_DIR based on this file's location: $(HOST_DIR)/share/buildroot
+>  # and store it in RELOCATED_HOST_DIR.
+>  # All the other variables that need to refer to HOST_DIR will use the
+>  # RELOCATED_HOST_DIR variable.
+> -string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
+> +string(REPLACE "/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
+>  
+>  # Point cmake to the location where we have our custom modules,
+>  # so that it can find our custom platform description.
+> diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+> index e15ceeb426..b55b0c712c 100644
+> --- a/toolchain/toolchain/toolchain.mk
+> +++ b/toolchain/toolchain/toolchain.mk
+> @@ -39,5 +39,5 @@ endif
+>  
+>  $(eval $(virtual-package))
+>  
+> -toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+> -toolchain: $(HOST_DIR)/usr/share/buildroot/Platform/Buildroot.cmake
+> +toolchain: $(HOST_DIR)/share/buildroot/toolchainfile.cmake
+> +toolchain: $(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
 > 
