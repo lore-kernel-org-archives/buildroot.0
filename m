@@ -1,13 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 12:24:34 +0200
-Subject: [Buildroot] [PATCHv2 2/2] instrumentation: extend
- packages-file-list.txt with symlinks and directories
-In-Reply-To: <CAAXf6LW2dGORao22RQyPfrM9K+uyQnRA8-ZGaGb9yF4gpVTVhQ@mail.gmail.com>
-References: <20170205134507.15328-1-patrickdepinguin@gmail.com>
- <20170205134507.15328-3-patrickdepinguin@gmail.com>
- <51252cb1-29de-deb1-f21f-6aa8ac243afa@mind.be>
- <CAAXf6LW2dGORao22RQyPfrM9K+uyQnRA8-ZGaGb9yF4gpVTVhQ@mail.gmail.com>
-Message-ID: <329a4156-4d0d-b77f-9539-3ae2e0cb41ec@mind.be>
+Date: Tue, 4 Jul 2017 12:35:14 +0200
+Subject: [Buildroot] [PATCH v3 08/11] fs/ext2: deprecate
+ BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option
+In-Reply-To: <20170703225106.1492-9-s.martin49@gmail.com>
+References: <20170703225106.1492-1-s.martin49@gmail.com>
+ <20170703225106.1492-9-s.martin49@gmail.com>
+Message-ID: <ca4cf9d5-53c3-17e7-15ca-d7a207c9b002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +13,102 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+On 04-07-17 00:51, Samuel Martin wrote:
+> Soon, the ext{2,3,4} rootfs image will no longer be generated with
+> genext2fs, but using mke2fs instead which has no support for the extra
+> inode number option.
+> 
+> So, deprecate the BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option and
+> recommend, in lieu, to set the total inode number, taking account of
+> the extra ones if needed.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> changes v2->v3:
+> - new patch (Yann)
+> ---
+>  Config.in.legacy  | 11 +++++++++++
+>  fs/ext2/Config.in |  8 --------
+>  fs/ext2/ext2.mk   |  1 -
+>  3 files changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 453c5eb8b8..5efe0d1ba0 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,17 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2017.08"
+>  
+> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+> +	int "extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
 
-On 04-07-17 12:12, Thomas De Schampheleire wrote:
-> Hi Arnout,
-> 
-> Thanks for your review, please see below...
-> 
-> 2017-07-03 16:47 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->>
->>
->> On 05-02-17 14:45, Thomas De Schampheleire wrote:
-[snip]
->>>  define _step_pkg_size_get_file_list
->>> -     (cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
->>> -             $1
->>> +     (cd $(TARGET_DIR) ; \
->>> +             ( \
->>> +                     find . -xtype f -print0 | xargs -0 md5sum ; \
->>> +                     find . -xtype d -print0 | xargs -0 -I{} printf 'directory  {}\n'; \
->>
->>  I don't see symlinks being handled here, or am I missing something?
-> 
-> the clue is in the 'xtype', 'xtype f' is true if the target is a file
-> or a link to a file, 'xtype d' is true if target is directory or link
-> to directory.
+ I was going to say that there should be no condition any more. Indeed, we want
+this thing to show up whenever it appears in the old .config file. However, it's
+in fact convenient for the user that this thing disappears as soon as he sets
+BR2_TARGET_ROOTFS_EXT2_INODES to something, like he should. So OK.
 
- Thanks, I missed that. But if we want to store symlinks explicitly in the file
-with the -> construct it'd need an explicit -type l, right?
+ However, the prompt should clarify that this is about ext2. So:
 
-> 
->>
->>  Would it be too crazy to do things in a single find command?
->>
->>         find . \( -xtype f -exec md5sum '{}' \; \) -o \
->>                 \( -xtype d -exec printf 'directory %s' '{}' \;
-> 
-> I'm fine with either way but xargs is more efficient as it groups
-> arguments in a single invocation, at least for the md5sum call. To get
-> the same behavior with find one would need to use the syntax "-exec
-> command {} +" rather than "-exec command ;" .
+	int "ext2 extra inodes has been removed"
 
- Great! I like it! For the symlink part we still may need xargs though.
+> +	default 0
+
+ You don't select BR2_LEGACY hear. You need to introduce an extra symbol, like
+for BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS{,_WRAP}.
+
+
+ Otherwise looks good to me :-)
+
 
  Regards,
  Arnout
 
-> 
-> Best regards,
-> Thomas
+> +	help
+> +	  Buildroot now uses mkfs.ext2/3/4 to generate ext2/3/4 images. So
+> +	  let mkfs automatically selects the number of inodes needed. Set
+> +	  this option to 0.
+> +	  Note that, the number of inodes can still be set and passed to
+> +	  mkfs; so if extra inodes are needed, prefer setting
+> +	  BR2_TARGET_ROOTFS_EXT2_INODES taking account of them.
+> +
+>  config BR2_STRIP_none
+>  	bool "Strip command 'none' has been removed"
+>  	select BR2_LEGACY
+> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+> index 627294e17f..0071ba2bec 100644
+> --- a/fs/ext2/Config.in
+> +++ b/fs/ext2/Config.in
+> @@ -79,14 +79,6 @@ config BR2_TARGET_ROOTFS_EXT2_INODES
+>  	int "exact number of inodes (leave at 0 for auto calculation)"
+>  	default 0
+>  
+> -config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+> -	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+> -	default 0
+> -	help
+> -	  Enter here the number of extra free inodes you want on
+> -	  your filesystem. By default, Buildroot will not leave
+> -	  many free inodes.
+> -
+>  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+>  	int "reserved blocks percentage"
+>  	default 5
+> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+> index ec49caa3a5..24643afeb9 100644
+> --- a/fs/ext2/ext2.mk
+> +++ b/fs/ext2/ext2.mk
+> @@ -15,7 +15,6 @@ EXT2_OPTS = \
+>  	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
+>  	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
+>  	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+> -	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
+>  	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+>  	-l "$(EXT2_LABEL)"
+>  
 > 
 
 -- 
