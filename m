@@ -1,107 +1,75 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue, 4 Jul 2017 16:52:20 +0200
-Subject: [Buildroot] [PATCH v4 03/11] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <ca4ed8a9-8ffe-5d03-718a-5661a1d8a527@mind.be>
-References: <1498559207-8050-1-git-send-email-wg@grandegger.com>
- <1498559207-8050-4-git-send-email-wg@grandegger.com>
- <8aa491de-1a71-0a8e-3274-4512ec22f763@mind.be>
- <cf95d170-797e-c9c9-cf68-575e7e3a19a3@grandegger.com>
- <ca4ed8a9-8ffe-5d03-718a-5661a1d8a527@mind.be>
-Message-ID: <cdaecbe8-57a3-6435-d797-a03e952e5caf@grandegger.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Jul 2017 16:52:24 +0200
+Subject: [Buildroot] [PATCH v3 01/14] Move
+ $(HOST_DIR)/usr/$(GNU_TARGET_NAME) one level up.
+In-Reply-To: <20170704140404.4098-2-arnout@mind.be>
+References: <20170704140404.4098-1-arnout@mind.be>
+ <20170704140404.4098-2-arnout@mind.be>
+Message-ID: <63a16f9d-8860-7c99-d222-b568333c0969@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
-
-Am 04.07.2017 um 15:23 schrieb Arnout Vandecappelle:
+Le 04/07/2017 ? 16:03, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> This is a step towards eliminating $(HOST_DIR)/usr. It allows us to
+> convert all packages installing things into
+> $(HOST_DIR)/usr/$(GNU_TARGET_NAME) (i.e., binutils and gcc) without
+> affecting the rest.
 > 
+> To allow compatibility with packages that still use $(HOST_DIR)/usr as
+> the prefix, create a symlink from usr/$(GNU_TARGET_NAME) to
+> ../$(GNU_TARGET_NAME).
 > 
-> On 04-07-17 14:36, Wolfgang Grandegger wrote:
->> Hello,
->>
->> Am 04.07.2017 um 14:15 schrieb Arnout Vandecappelle:
->>>    Since you're going to revert to this v4, I'm going to add a few comments here.
->>
->> Yes, that's what doing now...
->>
->>> On 27-06-17 12:26, Wolfgang Grandegger wrote:
+> Note that the symlink creation will break when $(HOST_DIR)/usr/lib
+> already exists as a directory, i.e. when rebuilding in an existing
+> output directory. This is necessary: if we don't break it now, the
+> following commits (which remove the usr part from various variables)
+> _will_ break it.
 > 
-> [snip]
->>>> +    staging)
->>>> +        rootdir="${STAGING_DIR}"
->>>> +        # supress include files
->>>> +        find_args+=( "-path" "${STAGING_DIR}/usr/include" "-prune" "-o" )
->>>
->>>    Perhaps it's better to define a variable with all the paths we want to exclude
->>> - we may want to add more. OTOH, we can do that whenever we indeed do add more.
->>
->> But it's not just a variable, I need the leading -path and the trailing -prune
->> for each dir exclude.
+> Effectively, the usr/ part is removed from $(STAGING_SUBDIR) (and
+> therefore from $(STAGING_DIR)), so update the definition of that
+> variable right away.
 > 
->   Yeah, but you could do
->      for excludepath in $EXCLUDEPATHS; do
->          find_args += ( "-path" "${STAGING_DIR}""${excludepath}" "-prune" "-o" )
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-OK, and there will be exclude patches for each tree!
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
+Best regards,
+Romain
+
+> ---
+>  Makefile            | 2 ++
+>  package/Makefile.in | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 > 
->>
->>>> +        sanitize_extra_args+=( "--no-standard-lib-dirs" "--relative-to-file" )
->>>> +        ;;
->>>> +
->>>> +    target)
->>>> +        rootdir="${TARGET_DIR}"
->>>> +        sanitize_extra_args+=( "--no-standard-lib-dirs" )
->>>> +        ;;
->>>> +
->>>> +    *)
->>>> +        usage
->>>> +        exit 1
->>>> +        ;;
->>>> +    esac
->>>> +
->>>> +    find_args+=( "-type" "f" "-print" )
->>>> +
->>>> +    while read file ; do
->>>> +    # check if it's an ELF file
->>>> +    if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
->>>
->>>    Wasn't "readelf -d ${file} | grep DT_RUNPATH" faster? You did some experiments
->>> a while ago but I forgot what the conclusions were.
->>
->> There could also be DT_RPATH?
+> diff --git a/Makefile b/Makefile
+> index b37171fcf2..a0f9f62771 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -556,6 +556,8 @@ world: target-post-image
+>  $(STAGING_DIR):
+>  	@mkdir -p $(STAGING_DIR)
+>  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> +	@mkdir -p $(HOST_DIR)/usr
+> +	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
+>  
+>  RSYNC_VCS_EXCLUSIONS = \
+>  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 8087bde999..6b88ac4feb 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -107,7 +107,7 @@ ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
+>  TARGET_ABI += -matomic
+>  endif
+>  
+> -STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+> +STAGING_SUBDIR = $(GNU_TARGET_NAME)/sysroot
+>  STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
+>  
+>  ifeq ($(BR2_OPTIMIZE_0),y)
 > 
->   Er, right, indeed.
-> 
->> But a grep for RPATH should fix that. I didn't
->> test that, because I thought that pining is slower anyway. Without "grep
->> DT_RUNPATH" it's faster but it will succeed then on non-dynamic ELF files as
->> well. We could also tune patchelf to return faster if it's not an ELF file. I
->> will remeasure with the command above.
-> 
->   Since this series is already in v6, I propose that you do the simple thing that
-> you have now first, and it can be optimised later.
-
-Just playing with it. Here are some quick results:
-
-   if patchelf --print-rpath "${file}" > /dev/null 2>&1; then
-
-   35.5 sec
-
-   if readelf -d "${file}" 2>/dev/null | grep RPATH > /dev/null; then
-
-   30.4 sec
-
-   if readelf -d "${file}" > /dev/null 2>&1 -a \
-      patchelf --print-rpath "${file}" > /dev/null 2>&1; then
-
-   27.7 sec
-
-There is some saving but maybe not worth the effort for the moment. 
-Concentrating on the next release now.
-
-Wolfgang.
