@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:34:03 +0200
-Subject: [Buildroot] [git commit] python: use the new gettext logic
-Message-ID: <20170704233518.C5EB57F96C@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:35:41 +0200
+Subject: [Buildroot] [git commit] samba4: use the new gettext logic
+Message-ID: <20170704233519.276357FB43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf216e48e1a163c19f8130bbb9792089b0fec544
+commit: https://git.buildroot.net/buildroot/commit/?id=5add8f45dc8a6fa0ffb7161d31cbb9b8be04d94e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves
@@ -17,28 +17,33 @@ on gettext/host-gettext.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/samba4/samba4.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index d3f7b31..8724d8c 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -54,16 +54,12 @@ HOST_PYTHON_CONF_ENV += \
- # MAKE1 has shown to workaround the problem.
- HOST_PYTHON_MAKE = $(MAKE1)
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 93c45da..86546e9 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -15,7 +15,8 @@ SAMBA4_DEPENDENCIES = \
+ 	e2fsprogs popt python zlib \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+-	$(if $(BR2_PACKAGE_READLINE),readline)
++	$(if $(BR2_PACKAGE_READLINE),readline) \
++	$(TARGET_NLS_DEPENDENCIES)
  
--PYTHON_DEPENDENCIES = host-python libffi
-+PYTHON_DEPENDENCIES = host-python libffi $(TARGET_NLS_DEPENDENCIES)
- 
- HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
- 
- PYTHON_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ SAMBA4_CONF_OPTS += --with-acl-support
+@@ -46,12 +47,6 @@ else
+ SAMBA4_CONF_OPTS += --without-fam
+ endif
  
 -ifeq ($(BR2_PACKAGE_GETTEXT),y)
--PYTHON_DEPENDENCIES += gettext
+-SAMBA4_DEPENDENCIES += gettext
+-else
+-SAMBA4_CONF_OPTS += --without-gettext
 -endif
 -
- ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
- PYTHON_DEPENDENCIES += readline
- else
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ SAMBA4_CONF_OPTS += --enable-gnutls
+ SAMBA4_DEPENDENCIES += gnutls
