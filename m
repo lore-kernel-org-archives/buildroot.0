@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:01 +0200
-Subject: [Buildroot] [PATCH 021/100] ding-libs: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:47:58 +0200
+Subject: [Buildroot] [PATCH 018/100] cryptsetup: use new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-22-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-19-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,48 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - dropping BR2_PACKAGE_GETTEXT selection
+ - using TARGET_NLS_LIBS to force linking against libintl
 
-The BR2_USE_WCHAR dependency was only needed for gettext. But now, we
-no longer need gettext unconditionally, so this dependency on
-BR2_USE_WCHAR is removed.
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ding-libs/Config.in    | 6 ------
- package/ding-libs/ding-libs.mk | 2 +-
- 2 files changed, 1 insertion(+), 7 deletions(-)
+ package/cryptsetup/Config.in     | 1 -
+ package/cryptsetup/cryptsetup.mk | 7 ++-----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
-index d397f29..6dc2a80 100644
---- a/package/ding-libs/Config.in
-+++ b/package/ding-libs/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_DING_LIBS
- 	bool "ding-libs"
--	depends on BR2_USE_WCHAR || !BR2_NEEDS_GETTEXT
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 3ca23ba..5cd4676 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  The ding-libs packages contain a set of libraries used by
-@@ -16,7 +14,3 @@ config BR2_PACKAGE_DING_LIBS
- 	  structure (libini_config).
- 
- 	  https://git.fedorahosted.org/git/ding-libs.git
+ 	  This tool helps manipulate dm-crypt and luks partitions for
+ 	  on-disk encryption.
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 787331c..5496583 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -9,14 +9,11 @@ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).5
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++	$(TARGET_NLS_DEPENDENCIES)
+ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+ CRYPTSETUP_INSTALL_STAGING = YES
 -
--comment "ding-libs needs a toolchain w/ wchar"
--	depends on BR2_NEEDS_GETTEXT
--	depends on !BR2_USE_WCHAR
-diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
-index 4b045be..e9508cc 100644
---- a/package/ding-libs/ding-libs.mk
-+++ b/package/ding-libs/ding-libs.mk
-@@ -8,7 +8,7 @@ DING_LIBS_VERSION = 0_4_0
- DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
- DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
- DING_LIBS_DEPENDENCIES = host-pkgconf \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
-+	$(TARGET_NLS_DEPENDENCIES) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- DING_LIBS_INSTALL_STAGING = YES
- DING_LIBS_LICENSE = LGPL-3.0+ (library),GPL-3.0+ (test programs)
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
+-endif
++CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+ 
+ # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
+ # or kernel crypto modules instead
 -- 
 2.9.4
