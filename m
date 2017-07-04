@@ -1,66 +1,77 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue,  4 Jul 2017 18:22:38 +0200
-Subject: [Buildroot] [PATCH v6 09/10] external-toolchain: check if a
-	buildroot SDK has already been relocated
-In-Reply-To: <1499185359-8293-1-git-send-email-wg@grandegger.com>
-References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
-Message-ID: <1499185359-8293-10-git-send-email-wg@grandegger.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Jul 2017 18:22:51 +0200
+Subject: [Buildroot] [PATCH 098/100] toolchain: drop BR2_NEEDS_GETTEXT{,
+ _IF_LOCALE}
+In-Reply-To: <20170704144920.12318-99-thomas.petazzoni@free-electrons.com>
+References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
+ <20170704144920.12318-99-thomas.petazzoni@free-electrons.com>
+Message-ID: <d2e5312a-5210-eaf6-96ae-1f26b2292bf5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The location of the buildroot SDK is stored in the file "sdk-location"
-in "usr/share/buildroot". If it's content does not match the current
-SDK location, ask the user to run the script "relocate-sdk.sh" in the
-top directory once. The external toolchain may be a pre-installed one
-in a directory that is not writeable by us. Therefore, we can't run
-the script directly.
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
----
- toolchain/helpers.mk                                   | 18 ++++++++++++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk |  1 +
- 2 files changed, 19 insertions(+)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 90834f4..806968b 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -479,3 +479,21 @@ define simplify_symlink
- 	ln -sf "$${DOTS}$${REL_DEST}" "$${FULL_SRC}" ; \
- )
- endef
-+
-+#
-+# Check if it's a buildroot toolchain and if it's already relocatable by
-+# reading and testing the toolchain location file
-+#
-+# $1: toolchain installation directory
-+#
-+define check_buildroot_sdk_relocated
-+( \
-+	if [ -r $(1)/share/buildroot/sdk-location ]; then \
-+		sdkroot=`dirname "$(1)"`; \
-+		if [ "`cat $(1)/share/buildroot/sdk-location`" != "$${sdkroot}" ]; then \
-+			echo "Please relocate the buildroot SDK by executing \"$${sdkroot}/relocate-sdk.sh\" once!" ; \
-+			exit 1 ; \
-+		fi \
-+	fi \
-+)
-+endef
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 8460e37..3dd7185 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -545,6 +545,7 @@ endif
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # kernel headers version, type of C library and all C library features.
- define $(2)_CONFIGURE_CMDS
-+	$$(Q)$$(call check_buildroot_sdk_relocated,$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
- 	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
+On 04-07-17 16:49, Thomas Petazzoni wrote:
+> Now that all packages have been migrated to the new gettext logic, we
+> can remove the BR2_NEEDS_GETTEXT and BR2_NEEDS_GETTEXT_IF_LOCALE
+> variables.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> ---
+>  package/gettext/Config.in     |  1 -
+>  toolchain/toolchain-common.in | 14 --------------
+>  2 files changed, 15 deletions(-)
+> 
+> diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+> index 0dea03d..60f8d4f 100644
+> --- a/package/gettext/Config.in
+> +++ b/package/gettext/Config.in
+> @@ -22,5 +22,4 @@ config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+>  endif
+>  
+>  comment "gettext needs a toolchain w/ wchar"
+> -	depends on BR2_NEEDS_GETTEXT
+>  	depends on !BR2_USE_WCHAR
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index 56de9ed..1e4182e 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -74,20 +74,6 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
+>  
+>  	  Note: the full set of gconv libs are ~8MiB (on ARM).
+>  
+> -# glibc and eglibc directly include gettext, so a separatly compiled
+> -# gettext isn't needed and shouldn't be built to avoid conflicts. Some
+> -# packages always need gettext, other packages only need gettext when
+> -# locale support is enabled. See the documentation for how packages
+> -# should rely on the following two options.
+> -
+> -config BR2_NEEDS_GETTEXT
+> -	bool
+> -	default y if BR2_TOOLCHAIN_USES_UCLIBC
+> -
+> -config BR2_NEEDS_GETTEXT_IF_LOCALE
+> -	bool
+> -	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+> -
+>  # This boolean is true if the toolchain provides a built-in full
+>  # featured gettext implementation (glibc), and false if only a stub
+>  # gettext implementation is provided (uclibc, musl)
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
