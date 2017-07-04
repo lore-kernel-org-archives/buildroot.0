@@ -1,43 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 13:36:33 +0200
-Subject: [Buildroot] [PATCH v3 09/11] fs/ext2: use mkfs to generate
- rootfs image
-In-Reply-To: <20170703225106.1492-10-s.martin49@gmail.com>
+Date: Tue, 4 Jul 2017 13:38:44 +0200
+Subject: [Buildroot] [PATCH v3 10/11] fs/ext2: Add
+ BR2_TARGET_ROOTFS_EXT2_FEATURES option
+In-Reply-To: <20170703225106.1492-11-s.martin49@gmail.com>
 References: <20170703225106.1492-1-s.martin49@gmail.com>
- <20170703225106.1492-10-s.martin49@gmail.com>
-Message-ID: <bc01af2c-4e1e-0427-4302-3b20b68dd7c2@mind.be>
+ <20170703225106.1492-11-s.martin49@gmail.com>
+Message-ID: <f1b8e835-eeb9-45a1-3092-904f98d4b404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Can this patch be split up into
 
-1/ use mkfs to generate rootfs image
-
-2/ replace BR2_TARGET_ROOTFS_EXT2_BLOCKS with BR2_TARGET_ROOTFS_EXT2_SIZE
-
-?
-
- The latter patch will also have to be combined with fixing up the 8 defconfigs
-that use this option.
 
 On 04-07-17 00:51, Samuel Martin wrote:
 > From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 > 
-> mkfs is now capable of generating rootfs images. Use mkfs instead of
-> genext2fs.
-> 
-> If not set, we now let mkfs calculate the block size and the number of
-> inodes needed.
-> 
-> This change also adjusts the options to meet those of mkfs. Note that
-> passing a null inode number to mkfs triggers its automatic calculation.
-> 
-> The BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol is ranamed as well, into
-> BR2_TARGET_ROOTFS_EXT2_SIZE, since it now accepts the same values as the
-> mkfs' fs-size argument (i.e. with k, m, g or t suffix).
+> This option lets the user specify ext2/3/4 features.
+
+ Again, instead of a features option, I'd give a string option for additional
+arguments.
+
+
 > 
 > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
@@ -45,139 +30,65 @@ On 04-07-17 00:51, Samuel Martin wrote:
 > 
 > ---
 > changes v2->v3:
-> - reword commit log
+> - none
 > 
 > changes v1->v2:
 > - rebase
-> - add default size value
 > ---
->  Config.in.legacy  |  8 ++++++++
->  fs/ext2/Config.in | 21 +++++++++++----------
->  fs/ext2/ext2.mk   | 23 ++++++++++++++---------
->  3 files changed, 33 insertions(+), 19 deletions(-)
+>  fs/ext2/Config.in | 10 ++++++++++
+>  fs/ext2/ext2.mk   |  5 ++++-
+>  2 files changed, 14 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 5efe0d1ba0..68275f9e0e 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,14 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2017.08"
->  
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> +	int "exact size in blocks has been removed"
-> +	default 0
-> +	help
-> +	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
-
- Again BR2_LEGACY is not selected.
-
-> +
-> +# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS still reference in fs/ext2/Config.in
-> +
->  config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
->  	int "extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
->  	default 0
 > diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index 0071ba2bec..9850823e10 100644
+> index 9850823e10..123a4ad6a6 100644
 > --- a/fs/ext2/Config.in
 > +++ b/fs/ext2/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_TARGET_ROOTFS_EXT2
->  	bool "ext2/3/4 root filesystem"
-> -	select BR2_PACKAGE_HOST_MKE2IMG
-> +	select BR2_PACKAGE_HOST_E2FSPROGS
->  	help
->  	  Build an ext2/3/4 root filesystem
+> @@ -89,6 +89,16 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+>  	  Traditionally, this has been 5%, and all ext-related tools still
+>  	  default to reserving 5% when creating a nez ext filesystem.
 >  
-> @@ -66,19 +66,20 @@ config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
->  	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
->  	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
->  
-> -# 61440 block od 1024 bytes = 60MB, i.e usually small enough to fit
-> -# on a 64MB media
-> -config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> -	int "exact size in blocks"
-> -	default 61440
-> -	help
-> -	  Specify the file system size as a number of blocks, which
-> -	  size is specified above.
-> -
->  config BR2_TARGET_ROOTFS_EXT2_INODES
->  	int "exact number of inodes (leave at 0 for auto calculation)"
->  	default 0
->  
-> +config BR2_TARGET_ROOTFS_EXT2_SIZE
+> +config BR2_TARGET_ROOTFS_EXT2_FEATURES
+> +	string "Filesystem features"
+> +	default "^64bit"
 
- Admittedly this keeps things alphabetical, but I still think it makes more
-sense to have size first and inodes afterwards.
-
-> +	string "exact size"
-> +	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 # legacy 2017.08
-> +	default "60M" # default size
-> +	help
-> +	  The size of the filesystem image. If it does not have a suffix, it is
-> +	  interpreted as power-of-two kilobytes. If it is suffixed by 'k', 'm',
-
- So actually, it is NOT the same as the legacy BR2_TARGET_ROOTFS_EXT2_BLOCKS
-because that one was not kilobytes but blocks, and there was the option to use
-2K or 4K blocks... Oh, but of course, for legacy purposes, it actually *was* 1K
-blocks. So OK.
-
+ The commit message should mention why it is a good idea to default to this.
 
  Regards,
  Arnout
 
-
-> +	  'g', 't' (either upper-case or lower-case), then it is interpreted in
-> +	  power-of-two kilobytes, megabytes, gigabytes, terabytes, etc.
+> +	help
+> +	  Specify a comma-separated list of ext2/3/4 features.
+> +	  For more information about this option, see the mkefs' -O option in
+> +	  the manual page mke2fs(8).
+> +	  For more information about the features which can be set, see then
+> +	  manual page ext4(5).
 > +
->  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
->  	int "reserved blocks percentage"
->  	default 5
+>  choice
+>  	prompt "Compression method"
+>  	default BR2_TARGET_ROOTFS_EXT2_NONE
 > diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index 24643afeb9..bc366bc689 100644
+> index bc366bc689..ddf30ecd10 100644
 > --- a/fs/ext2/ext2.mk
 > +++ b/fs/ext2/ext2.mk
-> @@ -4,24 +4,29 @@
->  #
->  ################################################################################
+> @@ -9,6 +9,8 @@ ifeq ($(EXT2_SIZE),)
+>  $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
+>  endif
 >  
-> +EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
-> +ifeq ($(EXT2_SIZE),)
-> +$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
-> +endif
+> +EXT2_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_FEATURES))
 > +
 >  # qstrip results in stripping consecutive spaces into a single one. So the
 >  # variable is not qstrip-ed to preserve the integrity of the string value.
 >  EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
->  #" Syntax highlighting... :-/ )
+> @@ -20,7 +22,8 @@ EXT2_OPTS = \
+>  	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
+>  	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+>  	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+> -	-L "$(EXT2_LABEL)"
+> +	-L "$(EXT2_LABEL)" \
+> +	$(if $(EXT2_FEATURES),-O "$(EXT2_FEATURES)")
 >  
->  EXT2_OPTS = \
-> -	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
-> -	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
-> -	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
-> -	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
-> -	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
-> -	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
-> -	-l "$(EXT2_LABEL)"
-> +	-d $(TARGET_DIR) \
-> +	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
-> +	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
-> +	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
-> +	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
-> +	-L "$(EXT2_LABEL)"
+>  ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
 >  
-> -ROOTFS_EXT2_DEPENDENCIES = host-mke2img
-> +ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
->  
->  define ROOTFS_EXT2_CMD
-> -	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
-> +	rm -f $@
-> +	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(EXT2_SIZE)
->  endef
->  
->  rootfs-ext2-symlink:
 > 
 
 -- 
