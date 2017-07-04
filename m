@@ -1,111 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:37:15 +0200
-Subject: [Buildroot] [git commit] xfsprogs: remove libintl static linking
-	handling
-Message-ID: <20170704233520.9D2CD7FDE9@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:37:35 +0200
+Subject: [Buildroot] [git commit] toolchain: drop BR2_NEEDS_GETTEXT{,
+	_IF_LOCALE}
+Message-ID: <20170704233520.BDEAC80420@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a1d529b34a5fd0f506bcc72758d12013786660
+commit: https://git.buildroot.net/buildroot/commit/?id=4460da3e147a65377478bc5937b67fff831651d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We no longer support building the full-blown libintl in static linking
-scenarios, as it causes too many problems. Therefore, remove the
-patch and special code that was handling this.
+Now that all packages have been migrated to the new gettext logic, we
+can remove the BR2_NEEDS_GETTEXT and BR2_NEEDS_GETTEXT_IF_LOCALE
+variables.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0004-build-add-EXTRALIBS-to-link-with.patch    | 53 ----------------------
- package/xfsprogs/xfsprogs.mk                       | 17 -------
- 2 files changed, 70 deletions(-)
+ package/gettext/Config.in     |  1 -
+ toolchain/toolchain-common.in | 14 --------------
+ 2 files changed, 15 deletions(-)
 
-diff --git a/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch b/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
-deleted file mode 100644
-index 8ff0580..0000000
---- a/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 1e9bb2fba94bc508659f1667bf95501324849bb9 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 26 Feb 2017 12:04:54 +0100
--Subject: [PATCH] build: add EXTRALIBS to link with
--
--When doing a uClibc static build, the build fails to link:
--    http://autobuild.buildroot.org/results/503/50314716a9f72e8bb238e52e9dc342c68f7e0b8b/build-end.log
--
--The cause is due to:
--  - xfsprogs links dome programs with util-linux' libblkid
--  - util-linux' libblkid is linked to util-linux' libuuid
--  - util-linux' libuuid uses i18n functions when locales are enabled
--  - uClibc does not provide i18n functions
--  - i18n functions are provided by libintl from libintl from gettext
--
--util-linux installs pkg-config files for thos two libs. However,
--xfsprogs does not use pkg-config to find libblkid or libuuid, thus it
--misses the Libs.private field from libuid.
--
--In this case, it is necessary to pass LIBS=-lintl at configure time, so
--that configure correctly finds libblkid.
--
--Still, this is not enough, because the build will not use LIBS during
--the link phase.
--
--We fix that last bit by adding EXTRALIBS to the libraries to link with,
--so that it is possible to pass EXTRALIBS=-lintl at build time:
--
--    $ ./configure [...] LIBS=-lintl
--    $ make EXTRALIBS=-lintl
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Cc: Waldemar Brodkorb <wbx@openadk.org>
-----
-- include/buildmacros | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/buildmacros b/include/buildmacros
--index a7c5d8a..dd62d80 100644
----- a/include/buildmacros
--+++ b/include/buildmacros
--@@ -11,7 +11,7 @@ BUILDRULES = $(TOPDIR)/include/buildrules
-- 
-- LDFLAGS += $(LOADERFLAGS) $(LLDFLAGS)
-- LTLDFLAGS += $(LOADERFLAGS)
---LDLIBS = $(LLDLIBS) $(PLDLIBS) $(MALLOCLIB)
--+LDLIBS = $(LLDLIBS) $(PLDLIBS) $(MALLOCLIB) $(EXTRALIBS)
-- 
-- MAKEOPTS = --no-print-directory Q=$(Q)
-- SRCFILES = Makefile $(HFILES) $(CFILES) $(LSRCFILES) $(LFILES) $(YFILES)
---- 
--2.7.4
--
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index ed56d34..2f708f1 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -18,23 +18,6 @@ XFSPROGS_CONF_OPTS = \
- 	INSTALL_GROUP=root \
- 	--enable-static
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index 0dea03d..60f8d4f 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -22,5 +22,4 @@ config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+ endif
  
--# xfsprogs links some of its programs to libs from util-linux, which use
--# i18n functions. For shared-only builds, that's automatically pulled in.
--# Static builds need some help, though...
--#
--# No need to depend on gettext in this case: xfsprogs does not use it for
--# itself; util-linux does need it and has it in its own dependencies.
--#
--# xfsprogs' buildsystem uses hand-made Makefiles, not automake, and they
--# do not use the LIBS variable set by configure. So we use EXTRALIBS that
--# is added by our patch.
--#
--# It is not needed to propagate the EXTRALIBS to the install step.
--ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS)$(BR2_NEEDS_GETTEXT_IF_LOCALE),yy)
--XFSPROGS_CONF_OPTS += LIBS=-lintl
--XFSPROGS_MAKE_OPTS = EXTRALIBS=-lintl
--endif
--
- XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
+ comment "gettext needs a toolchain w/ wchar"
+-	depends on BR2_NEEDS_GETTEXT
+ 	depends on !BR2_USE_WCHAR
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 59115f3..c570cc8 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -79,20 +79,6 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
  
- $(eval $(autotools-package))
+ 	  Note: the full set of gconv libs are ~8MiB (on ARM).
+ 
+-# glibc and eglibc directly include gettext, so a separatly compiled
+-# gettext isn't needed and shouldn't be built to avoid conflicts. Some
+-# packages always need gettext, other packages only need gettext when
+-# locale support is enabled. See the documentation for how packages
+-# should rely on the following two options.
+-
+-config BR2_NEEDS_GETTEXT
+-	bool
+-	default y if BR2_TOOLCHAIN_USES_UCLIBC
+-
+-config BR2_NEEDS_GETTEXT_IF_LOCALE
+-	bool
+-	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+-
+ # This boolean is true if the toolchain provides a built-in full
+ # featured gettext implementation (glibc), and false if only a stub
+ # gettext implementation is provided (uclibc, musl)
