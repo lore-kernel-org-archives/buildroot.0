@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:27:25 +0200
-Subject: [Buildroot] [git commit] elfutils: use the new gettext logic
-Message-ID: <20170704233514.A1B0D802A8@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:27:26 +0200
+Subject: [Buildroot] [git commit] httping: use the new gettext logic
+Message-ID: <20170704233515.71E4C80F3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c1bfe6d42e619b536afac4cf9ffa6122e3b4ac7
+commit: https://git.buildroot.net/buildroot/commit/?id=654de6512554c2d5ede405fd4ecac345d075b06b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -18,52 +18,39 @@ This commit switches to use the new gettext logic, which involves:
 
  - using TARGET_NLS_LIBS to force linking against libintl
 
- - dropping BR2_PACKAGE_GETTEXT selection
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/elfutils/Config.in   |  1 -
- package/elfutils/elfutils.mk | 11 +++--------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ package/httping/Config.in  | 1 -
+ package/httping/httping.mk | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 3228319..ad86c31 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -14,7 +14,6 @@ config BR2_PACKAGE_ELFUTILS
- 	depends on !BR2_bfin
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/httping/Config.in b/package/httping/Config.in
+index 6564415..07ff102 100644
+--- a/package/httping/Config.in
++++ b/package/httping/Config.in
+@@ -4,7 +4,6 @@ comment "httping needs a toolchain w/ wchar"
+ config BR2_PACKAGE_HTTPING
+ 	bool "httping"
+ 	depends on BR2_USE_WCHAR
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  Libraries/utilities to handle ELF objects (drop in
- 	  replacement for libelf).
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index e43d036..5570a3b 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -10,7 +10,7 @@ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
- ELFUTILS_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
--ELFUTILS_DEPENDENCIES = zlib
-+ELFUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
- HOST_ELFUTILS_DEPENDENCIES = host-zlib host-bzip2 host-xz
- 
- # We patch configure.ac
-@@ -40,13 +40,8 @@ ELFUTILS_CONF_ENV += \
- 	CFLAGS="$(ELFUTILS_CFLAGS)" \
- 	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
- 
--ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
--
--# Unconditionnally requires gettext.
--ifeq ($(BR2_NEEDS_GETTEXT),y)
--ELFUTILS_DEPENDENCIES += gettext
--ELFUTILS_LDFLAGS += -lintl
--endif
-+ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
-+	$(TARGET_NLS_LIBS)
- 
- ELFUTILS_CONF_ENV += \
- 	LDFLAGS="$(ELFUTILS_LDFLAGS)"
+ 	  Httping is like 'ping' but for http-requests.
+ 	  Give it an url, and it'll show you how long it takes to connect,
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index e1c686f..649c643 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -10,10 +10,10 @@ HTTPING_SITE = http://www.vanheusden.com/httping
+ HTTPING_LICENSE = GPL-2.0
+ HTTPING_LICENSE_FILES = license.txt
+ HTTPING_LDFLAGS = $(TARGET_LDFLAGS) \
+-	$(if $(BR2_NEEDS_GETTEXT),-lintl) \
++	$(TARGET_NLS_LIBS) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),-liconv)
+-HTTPING_DEPENDENCIES = host-gettext \
+-	$(if $(BR2_NEEDS_GETTEXT),gettext) \
++HTTPING_DEPENDENCIES = \
++	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
