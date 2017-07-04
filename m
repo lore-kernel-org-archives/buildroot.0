@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:35 +0200
-Subject: [Buildroot] [PATCH 055/100] mcrypt: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:41 +0200
+Subject: [Buildroot] [PATCH 061/100] nftables: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-56-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-62-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,34 +19,34 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mcrypt/Config.in | 1 -
- package/mcrypt/mcrypt.mk | 2 +-
+ package/nftables/Config.in   | 1 -
+ package/nftables/nftables.mk | 2 +-
  2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/mcrypt/Config.in b/package/mcrypt/Config.in
-index 58567cd..ab2888b 100644
---- a/package/mcrypt/Config.in
-+++ b/package/mcrypt/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_MCRYPT
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBMCRYPT
- 	select BR2_PACKAGE_LIBMHASH
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index d0a1b89..7c0abe0 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_NFTABLES
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_LIBMNL
+ 	select BR2_PACKAGE_LIBNFTNL
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  MCrypt is a replacement for the old crypt() package and crypt(1)
- 	  command, with extensions.
-diff --git a/package/mcrypt/mcrypt.mk b/package/mcrypt/mcrypt.mk
-index 03a1719..f98895f 100644
---- a/package/mcrypt/mcrypt.mk
-+++ b/package/mcrypt/mcrypt.mk
-@@ -9,7 +9,7 @@ MCRYPT_SITE = http://downloads.sourceforge.net/project/mcrypt/MCrypt/$(MCRYPT_VE
- MCRYPT_DEPENDENCIES = libmcrypt libmhash \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+	$(TARGET_NLS_DEPENDENCIES)
- MCRYPT_CONF_OPTS = --with-libmcrypt-prefix=$(STAGING_DIR)/usr
- MCRYPT_LICENSE = GPL-3.0
- MCRYPT_LICENSE_FILES = COPYING
+ 	  nftables is the project that aims to replace the existing
+ 	  {ip,ip6,arp,eb}tables framework.
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 7263ec7..d1e6055 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -8,7 +8,7 @@ NFTABLES_VERSION = 0.7
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+-	host-pkgconf $(if $(BR2_NEEDS_GETTEXT),gettext)
++	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NFTABLES_LICENSE = GPL-2.0
+ NFTABLES_LICENSE_FILES = COPYING
+ 
 -- 
 2.9.4
