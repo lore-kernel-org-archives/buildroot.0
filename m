@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Jul 2017 17:37:44 +0200
-Subject: [Buildroot] [PATCH] tslib: use SPDX identifiers for licenses in
-	use
-In-Reply-To: <87eftx8ypu.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 03 Jul 2017 14:57:33 +0200")
-References: <20170703075008.18255-1-martink@posteo.de>
- <87eftx8ypu.fsf@dell.be.48ers.dk>
-Message-ID: <87y3s41ad3.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Jul 2017 17:40:05 +0200
+Subject: [Buildroot] [PATCH] vlc: add upstream security patches fixing
+	CVE-2017-10699
+In-Reply-To: <20170703150140.20387-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 3 Jul 2017 17:01:40 +0200")
+References: <20170703150140.20387-1-peter@korsgaard.com>
+Message-ID: <87tw2s1a96.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
->>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
- >> Signed-off-by: Martin Kepplinger <martink@posteo.de>
- >> ---
- >> package/tslib/tslib.mk | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ > avcodec 2.2.x, as used in VideoLAN VLC media player 2.2.7-x before
+ > 2017-06-29, allows out-of-bounds heap memory write due to calling memcpy()
+ > with a wrong size, leading to a denial of service (application crash) or
+ > possibly code execution.
 
- >> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
- >> index 91ba9db39..936243154 100644
- >> --- a/package/tslib/tslib.mk
- >> +++ b/package/tslib/tslib.mk
- >> @@ -7,7 +7,7 @@
- >> TSLIB_VERSION = 1.11
- >> TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- >> TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- >> -TSLIB_LICENSE = GPL, LGPL
- >> +TSLIB_LICENSE = GPL-2.0 (programs), LGPL-2.1 (libraries)
+ > https://trac.videolan.org/vlc/ticket/18467
 
- > I see the 'or (at your option) any later version' string in both tools/
- > and src/, so I've changed this to GPL-2.0+ / LGPL-2.1+ and committed,
- > thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
