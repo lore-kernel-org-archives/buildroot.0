@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:05 +0200
-Subject: [Buildroot] [PATCH 085/100] e2fsprogs: remove libintl static
+Date: Tue,  4 Jul 2017 16:49:15 +0200
+Subject: [Buildroot] [PATCH 095/100] util-linux: remove libintl static
 	linking handling
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-86-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-96-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,30 @@ To: buildroot@busybox.net
 
 We no longer support building the full-blown libintl in static linking
 scenarios, as it causes too many problems. Therefore, remove the
-special code in e2fsprogs that was handling this.
+special code that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/util-linux/util-linux.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 84af7ab..75e9213 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -77,12 +77,6 @@ HOST_E2FSPROGS_CONF_ENV += \
- 	ac_cv_header_magic_h=no \
- 	ac_cv_lib_magic_magic_file=no
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 61e3e63..4c2b1f6 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -223,13 +223,5 @@ endif
  
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_STATIC_LIBS),yy)
--# util-linux libuuid pulls in libintl if needed, so ensure we also
--# link against it, otherwise static linking fails
--E2FSPROGS_CONF_ENV += LIBS=-lintl
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+ 
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
+-define UTIL_LINUX_TWEAK_UUID_PC
+-	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+-	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+-endef
+-UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
 -endif
 -
- E2FSPROGS_MAKE_OPTS = LDCONFIG=true
- 
- E2FSPROGS_INSTALL_STAGING_OPTS = \
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.9.4
