@@ -1,53 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:57 +0200
-Subject: [Buildroot] [PATCH 077/100] tpm-tools: use the new gettext logic
-In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-78-thomas.petazzoni@free-electrons.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Jul 2017 17:01:00 +0200
+Subject: [Buildroot] [PATCH v3 03/14] Eliminate $(HOST_DIR)/usr
+In-Reply-To: <20170704140404.4098-4-arnout@mind.be>
+References: <20170704140404.4098-1-arnout@mind.be>
+ <20170704140404.4098-4-arnout@mind.be>
+Message-ID: <08de41df-f65e-1527-ceb3-3f0428c0d9c1@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves:
+Hi Arnout,
 
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
+Le 04/07/2017 ? 16:03, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> We currently use $(HOST_DIR)/usr as the prefix for host packages. That
+> has a few disadvantages:
+> 
+> - There are some things installed in $(HOST_DIR)/etc and
+>   $(HOST_DIR)/sbin, which is inconsistent.
+> 
+> - To pack a buildroot-built toolchain into a tarball for use as an
+>   external toolchain, you have to pack output/host/usr instead of the
+>   more obvious output/host.
+> 
+> - Because of the above, the internal toolchain wrapper breaks which
+>   forces us to work around it (call the actual toolchain executable
+>   directly). This is OK for us, but when used in another build system,
+>   that's a problem.
+> 
+> - Paths are four characters longer.
+> 
+> To allow us to gradually eliminate $(HOST_DIR)/usr while building
+> packages, replace it with a symlink to .
+> 
+> The symlinks from $(HOST_DIR)/usr/$(GNU_TARGET_NAME) and
+> $(HOST_DIR)/usr/lib that were added previously are removed again.
+> 
+> Note that the symlink creation will break when $(HOST_DIR)/usr
+> already exists as a directory, i.e. when rebuilding in an existing
+> output directory. This is necessary: if we don't break it now, the
+> following commits (which remove the usr part from various variables)
+> _will_ break it.
+> 
+> At the same time as creating this symlink, we have to update the
+> external toolchain wrapper and the external toolchain symlinks to go
+> one directory less up. Indeed, $(HOST_DIR) is one level less up than
+> it was before.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- - dropping BR2_PACKAGE_GETTEXT selection
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tpm-tools/Config.in    | 1 -
- package/tpm-tools/tpm-tools.mk | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Best regards,
+Romain
 
-diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
-index 091f424..e115687 100644
---- a/package/tpm-tools/Config.in
-+++ b/package/tpm-tools/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_TPM_TOOLS
- 	depends on !BR2_arc # trousers
- 	select BR2_PACKAGE_TROUSERS
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Tools to manage and diagnose a TPM
- 
-diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
-index c90edbb..4dbf50a 100644
---- a/package/tpm-tools/tpm-tools.mk
-+++ b/package/tpm-tools/tpm-tools.mk
-@@ -9,8 +9,7 @@ TPM_TOOLS_SITE = http://downloads.sourceforge.net/project/trousers/tpm-tools/$(T
- TPM_TOOLS_STRIP_COMPONENTS = 2
- TPM_TOOLS_LICENSE = Common Public License Version 1.0
- TPM_TOOLS_LICENSE_FILES = LICENSE
--TPM_TOOLS_DEPENDENCIES = trousers openssl \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+TPM_TOOLS_DEPENDENCIES = trousers openssl $(TARGET_NLS_DEPENDENCIES)
- # configure.in and lib/Makefile.am is patched
- TPM_TOOLS_AUTORECONF = YES
- TPM_TOOLS_GETTEXTIZE = YES
--- 
-2.9.4
+> ---
+> I intended to also move $(HOST_DIR)/usr/bin in a separate patch, but
+> that turns out to break the internal toolchain: host-gcc-initial uses
+> relative paths to find cc1 etc. and these will be broken.
+> ---
+>  Makefile                                               | 7 +++----
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 6 +++---
+>  toolchain/toolchain-wrapper.c                          | 2 +-
+>  3 files changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index ac349a79e8..7453bfd193 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -552,16 +552,15 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>  .PHONY: world
+>  world: target-post-image
+>  
+> -# When creating HOST_DIR, also symlink usr/lib -> ../lib
+> +# When creating HOST_DIR, also symlink usr -> .
+>  $(HOST_DIR):
+> -	@mkdir -p $@/usr $@/lib
+> -	@ln -snf ../lib $@/usr/lib
+> +	@mkdir -p $@
+> +	@ln -snf . $@/usr
+>  
+>  # Populating the staging with the base directories is handled by the skeleton package
+>  $(STAGING_DIR): | $(HOST_DIR)
+>  	@mkdir -p $(STAGING_DIR)
+>  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> -	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
+>  
+>  RSYNC_VCS_EXCLUSIONS = \
+>  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 8460e37d09..adbd3fe67e 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -250,18 +250,18 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+>  		base=$${i##*/}; \
+>  		case "$$base" in \
+>  		*-ar|*-ranlib|*-nm) \
+> -			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+> +			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+>  			;; \
+>  		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
+>  			ln -sf toolchain-wrapper $$base; \
+>  			;; \
+>  		*gdb|*gdbtui) \
+>  			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
+> -				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+> +				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+>  			fi \
+>  			;; \
+>  		*) \
+> -			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+> +			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+>  			;; \
+>  		esac; \
+>  	done
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index 100aa181c6..3a4455ff82 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -178,7 +178,7 @@ int main(int argc, char **argv)
+>  			perror(__FILE__ ": malloc");
+>  			return 2;
+>  		}
+> -		sprintf(relbasedir, "%s/../..", argv[0]);
+> +		sprintf(relbasedir, "%s/..", argv[0]);
+>  		absbasedir = realpath(relbasedir, NULL);
+>  	} else {
+>  		basename = progpath;
+> 
