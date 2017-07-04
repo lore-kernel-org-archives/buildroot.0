@@ -1,41 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 19:09:48 +0200
-Subject: [Buildroot] [git commit] uclibc: enable libintl stubs
-Message-ID: <20170704170700.D1FFE800C6@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 19:09:51 +0200
+Subject: [Buildroot] [git commit] gettext: force build libintl if needed
+Message-ID: <20170704170701.101278015E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9318b864d35542a2ea1d7a3ad12391660854a83c
+commit: https://git.buildroot.net/buildroot/commit/?id=b2fcabde4f09deb1f984e9dc2942fd5aab72d5a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In order to avoid having to bring libintl from gettext whenever you
-want to build a program that needs it, uClibc-ng now provides a stub
-implementation of the gettext functions in uClibc-ng itself. This
-brings uClibc-ng in the same situation as musl.
+This commit introduces a hidden option
+BR2_PACKAGE_GETTEXT_PROVIDES_INTL that is used by gettext.mk to force
+the build of libintl if the toolchain doesn't provide a full gettext
+implementation.
 
-This will fix a lot of build failures related to static linking with
-libintl, and generally is a first step to simplify our gettext
-handling.
+For now, this hidden option is not selected by anything, but a
+follow-up commit will introduce BR2_ENABLE_NLS, which will make use of
+it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/uClibc-ng.config | 1 +
- 1 file changed, 1 insertion(+)
+ package/gettext/Config.in  | 8 ++++++++
+ package/gettext/gettext.mk | 8 ++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-index f0a876f..5beb2bd 100644
---- a/package/uclibc/uClibc-ng.config
-+++ b/package/uclibc/uClibc-ng.config
-@@ -23,6 +23,7 @@ UCLIBC_HAS_RESOLVER_SUPPORT=y
- UCLIBC_HAS_LIBRESOLV_STUB=y
- UCLIBC_HAS_LIBNSL_STUB=y
- UCLIBC_HAS_CTYPE_CHECKED=y
-+UCLIBC_HAS_LIBINTL=y
- UCLIBC_HAS_HEXADECIMAL_FLOATS=y
- UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
- UCLIBC_HAS_STDIO_GETC_MACRO=y
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index 7871a48..18bfda6 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -12,6 +12,14 @@ config BR2_PACKAGE_GETTEXT
+ 
+ 	  http://www.gnu.org/software/gettext/
+ 
++if BR2_PACKAGE_GETTEXT
++
++config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
++	bool
++	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
++
++endif
++
+ comment "gettext needs a toolchain w/ wchar"
+ 	depends on BR2_NEEDS_GETTEXT
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 498dfab..454ad29 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -39,6 +39,14 @@ HOST_GETTEXT_CONF_OPTS = \
+ 	--disable-relocatable \
+ 	--without-emacs
+ 
++# Force the build of libintl, even if the C library provides a stub
++# gettext implementation
++ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
++GETTEXT_CONF_OPTS += --with-included-gettext
++else
++GETTEXT_CONF_OPTS += --without-included-gettext
++endif
++
+ # For the target version, we only need the runtime, and for the host
+ # version, we only need the tools.
+ GETTEXT_SUBDIR = gettext-runtime
