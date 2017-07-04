@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:32 +0200
-Subject: [Buildroot] [PATCH 052/100] ltris: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:31 +0200
+Subject: [Buildroot] [PATCH 051/100] lshw: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-53-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-52-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,47 +19,50 @@ This commit switches to use the new gettext logic, which involves:
 
  - dropping BR2_PACKAGE_GETTEXT selection
 
+ - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
+   whether NLS support is enabled or not
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltris/Config.in | 1 -
- package/ltris/ltris.mk  | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/lshw/Config.in | 1 -
+ package/lshw/lshw.mk   | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/ltris/Config.in b/package/ltris/Config.in
-index bf73489..7d9dc04 100644
---- a/package/ltris/Config.in
-+++ b/package/ltris/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_LTRIS
- 	bool "LTris"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_SDL
+diff --git a/package/lshw/Config.in b/package/lshw/Config.in
+index 8cc935a..83b7ffb 100644
+--- a/package/lshw/Config.in
++++ b/package/lshw/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LSHW
+ 	bool "lshw"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  LTris is a tetris clone, using SDL. It optionally requires
- 	  SDL_mixer for audio support. A display with minimum 640x480
-diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
-index 8f12ab1..fb0d4c3 100644
---- a/package/ltris/ltris.mk
-+++ b/package/ltris/ltris.mk
-@@ -9,7 +9,8 @@ LTRIS_VERSION = 1.0.19
- LTRIS_LICENSE = GPL-2.0+
- LTRIS_LICENSE_FILES = COPYING
+ 	  lshw (Hardware Lister) is a small tool to provide
+ 	  detailed information on the hardware configuration of the machine.
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index eb39611..43b937b 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -10,7 +10,7 @@ LSHW_LICENSE = GPL-2.0
+ LSHW_LICENSE_FILES = COPYING
  
--LTRIS_DEPENDENCIES = sdl
-+LTRIS_DEPENDENCIES = sdl $(TARGET_NLS_DEPENDENCIES)
-+LTRIS_LIBS = $(TARGET_NLS_LIBS)
- 
- LTRIS_CONF_ENV = \
- 	SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config" \
-@@ -25,9 +26,4 @@ else
- LTRIS_CONF_OPTS += --disable-sound
+ LSHW_CFLAGS = $(TARGET_CFLAGS)
+-ifeq ($(BR2_ENABLE_LOCALE),)
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ LSHW_CFLAGS += -DNONLS
  endif
  
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--LTRIS_DEPENDENCIES += gettext
--LTRIS_LIBS += -lintl
--endif
--
- $(eval $(autotools-package))
+@@ -18,8 +18,8 @@ LSHW_MAKE_OPTS = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
+ 	RPM_OPT_FLAGS="$(LSHW_CFLAGS)" all
+ LSHW_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+-	LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+-LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++	LIBS=$(TARGET_NLS_LIBS)
++LSHW_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
+ define LSHW_BUILD_CMDS
+ 	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPTS)
 -- 
 2.9.4
