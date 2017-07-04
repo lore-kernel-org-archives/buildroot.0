@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 5 Jul 2017 01:27:26 +0200
-Subject: [Buildroot] [git commit] gmpc: use the new gettext logic
-Message-ID: <20170704233515.3388D80F3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lbreakout2: use the new gettext logic
+Message-ID: <20170704233515.B138E81917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5441d46f66d18bf3e4c1db0a9cfc65d2491c7fe
+commit: https://git.buildroot.net/buildroot/commit/?id=c10979723a07a26fd3be2a481105723b145b2e7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -16,35 +16,48 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
+ - using TARGET_NLS_LIBS to force linking against libintl
+
  - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gmpc/Config.in | 1 -
- package/gmpc/gmpc.mk   | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/lbreakout2/Config.in     |  1 -
+ package/lbreakout2/lbreakout2.mk | 10 +++-------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
-index 43bc642..1aa7425 100644
---- a/package/gmpc/Config.in
-+++ b/package/gmpc/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_GMPC
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/lbreakout2/Config.in b/package/lbreakout2/Config.in
+index 221c9e2..6788aca 100644
+--- a/package/lbreakout2/Config.in
++++ b/package/lbreakout2/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LBREAKOUT2
+ 	bool "LBreakout2"
+ 	select BR2_PACKAGE_SDL
+ 	select BR2_PACKAGE_LIBPNG
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBMPD
- 	select BR2_PACKAGE_LIBSOUP
-diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
-index 7ba86a7..40b77eb 100644
---- a/package/gmpc/gmpc.mk
-+++ b/package/gmpc/gmpc.mk
-@@ -13,6 +13,6 @@ GMPC_LICENSE_FILES = COPYING
- GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkgconf host-vala \
- 	libglib2 libgtk2 libmpd libsoup sqlite \
- 	xlib_libICE xlib_libSM xlib_libX11 \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+	$(TARGET_NLS_DEPENDENCIES)
+ 	help
+ 	  LBreakout2 is the successor to LBreakout, a breakout-style arcade
+ 	  game in the manner of Arkanoid. Requires SDL, libpng, and
+diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
+index 017d562..274c534 100644
+--- a/package/lbreakout2/lbreakout2.mk
++++ b/package/lbreakout2/lbreakout2.mk
+@@ -10,15 +10,11 @@ LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT
+ LBREAKOUT2_LICENSE = GPL-2.0+
+ LBREAKOUT2_LICENSE_FILES = COPYING
  
- $(eval $(autotools-package))
+-LBREAKOUT2_DEPENDENCIES = sdl libpng
++LBREAKOUT2_DEPENDENCIES = sdl libpng $(TARGET_NLS_DEPENDENCIES)
+ 
+ LBREAKOUT2_CONF_ENV = \
+-	SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config"
+-
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-LBREAKOUT2_DEPENDENCIES += gettext
+-LBREAKOUT2_CONF_ENV += LIBS=-lintl
+-endif
++	SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config" \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LBREAKOUT2_AUDIO),y)
+ LBREAKOUT2_DEPENDENCIES += sdl_mixer
