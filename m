@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:12 +0200
-Subject: [Buildroot] [PATCH 092/100] perl: remove libintl static linking
+Date: Tue,  4 Jul 2017 16:49:11 +0200
+Subject: [Buildroot] [PATCH 091/100] parted: remove libintl static linking
 	handling
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-93-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-92-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,35 +17,69 @@ that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-static-build-with-gdbm-gettext.patch    | 20 --------------------
- 1 file changed, 20 deletions(-)
- delete mode 100644 package/perl/0001-fix-static-build-with-gdbm-gettext.patch
+ ...musl.patch => 0003-fix-includes-for-musl.patch} |  0
+ package/parted/0003-fix-static-link-uuid.patch     | 48 ----------------------
+ 2 files changed, 48 deletions(-)
+ rename package/parted/{0004-fix-includes-for-musl.patch => 0003-fix-includes-for-musl.patch} (100%)
+ delete mode 100644 package/parted/0003-fix-static-link-uuid.patch
 
-diff --git a/package/perl/0001-fix-static-build-with-gdbm-gettext.patch b/package/perl/0001-fix-static-build-with-gdbm-gettext.patch
+diff --git a/package/parted/0004-fix-includes-for-musl.patch b/package/parted/0003-fix-includes-for-musl.patch
+similarity index 100%
+rename from package/parted/0004-fix-includes-for-musl.patch
+rename to package/parted/0003-fix-includes-for-musl.patch
+diff --git a/package/parted/0003-fix-static-link-uuid.patch b/package/parted/0003-fix-static-link-uuid.patch
 deleted file mode 100644
-index ca6bf01..0000000
---- a/package/perl/0001-fix-static-build-with-gdbm-gettext.patch
+index d6ec2cf..0000000
+--- a/package/parted/0003-fix-static-link-uuid.patch
 +++ /dev/null
-@@ -1,20 +0,0 @@
--fix static build with gdbm + gettext
+@@ -1,48 +0,0 @@
+-configure: use pkg-config to find libuuid
 -
--see doc http://perldoc.perl.org/ExtUtils/MakeMaker.html#LIBS
+-In some conditions, libuuid may be linked with -lintl. This can be the
+-case on uClibc when locales are enabled.
 -
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-When doing a shared link, this dependency is automatically pulled in via
+-a DT_NEEDED ELF tag
 -
--index: b/ext/GDBM_File/Makefile.PL
--===================================================================
----- a/ext/GDBM_File/Makefile.PL
--+++ b/ext/GDBM_File/Makefile.PL
--@@ -2,7 +2,7 @@ use ExtUtils::MakeMaker;
-- use ExtUtils::Constant 0.11 'WriteConstants';
-- WriteMakefile(
--     NAME => 'GDBM_File',
---    LIBS => ["-lgdbm", "-ldbm"],
--+    LIBS => ["-lgdbm -lintl", "-lgdbm", "-ldbm"],
--     XSPROTOARG => '-noprototypes', 		# XXX remove later?
--     VERSION_FROM => 'GDBM_File.pm',
--     realclean => {FILES=> 'const-c.inc const-xs.inc'},
+-For a static link, there is no such mechanism to pull in dependent
+-libraries.
 -
+-Currently, the check for libuuid is done with AC_CHECK_LIB, but this
+-does not handle dependencies, and thus a stattic build fails.
+-
+-Use pkg-config to find libuuid, that automatically pulls in the
+-dependencies of libuuid, if any.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+----
+-Note: of course, that relies on the fact that libuuid installs a proper
+-.pc file; a patch will be submitted upstream shortly.
+-
+-But even considering the current situation, where libuuid does not
+-provide a proper .pc file (yet), this patch does not change the
+-behaviour we've had so far; it is a bet on the future! ;-)
+-
+-diff -durN parted-3.1.orig/configure.ac parted-3.1/configure.ac
+---- parted-3.1.orig/configure.ac	2014-11-29 16:27:49.520560137 +0100
+-+++ parted-3.1/configure.ac	2014-11-29 16:32:50.799702049 +0100
+-@@ -313,16 +313,7 @@
+- AC_SUBST([DL_LIBS])
+- 
+- dnl Check for libuuid
+--UUID_LIBS=""
+--AC_CHECK_LIB([uuid], [uuid_generate], [UUID_LIBS="-luuid"],
+--	[AC_MSG_ERROR(dnl
+--[GNU Parted requires libuuid - a part of the util-linux-ng package (but
+--usually distributed separately in libuuid-devel, uuid-dev or similar)
+--This can probably be found on your distribution's CD or FTP site or at:
+--    http://userweb.kernel.org/~kzak/util-linux-ng/
+--Note: originally, libuuid was part of the e2fsprogs package.  Later, it
+--moved to util-linux-ng-2.16, and that package is now the preferred source.])])
+--AC_SUBST([UUID_LIBS])
+-+PKG_CHECK_MODULES([UUID],[uuid])
+- 
+- dnl Check for libdevmapper
+- DM_LIBS=
 -- 
 2.9.4
