@@ -1,160 +1,99 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  4 Jul 2017 13:21:18 +0200
-Subject: [Buildroot] [PATCH v4 3/5] fs/ext2: use mkfs to generate rootfs
-	image
+Date: Tue,  4 Jul 2017 13:21:17 +0200
+Subject: [Buildroot] [PATCH v4 2/5] fs/ext2: deprecate
+	BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option
 In-Reply-To: <20170704112120.27977-1-s.martin49@gmail.com>
 References: <20170704112120.27977-1-s.martin49@gmail.com>
-Message-ID: <20170704112120.27977-4-s.martin49@gmail.com>
+Message-ID: <20170704112120.27977-3-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Soon, the ext{2,3,4} rootfs image will no longer be generated with
+genext2fs, but using mke2fs instead which has no support for the extra
+inode number option.
 
-mkfs is now capable of generating rootfs images. Use mkfs instead of
-genext2fs.
+So, deprecate the BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option and
+recommend, in lieu, to set the total inode number, taking account of
+the extra ones if needed.
 
-If not set, we now let mkfs calculate the block size and the number of
-inodes needed.
-
-This change also adjusts the options to meet those of mkfs. Note that
-passing a null inode number to mkfs triggers its automatic calculation.
-
-The BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol is ranamed as well, into
-BR2_TARGET_ROOTFS_EXT2_SIZE, since it now accepts the same values as the
-mkfs' fs-size argument (i.e. with k, m, g or t suffix).
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v3->v4:
-- disable the size check when ext* rootfs is disabled
-- remove unneeded comment
+- rename deprecate prompt in Config.in.legacy (Arnout)
 - introduce a _WRAP symbol to actually select BR2_LEGACY when needed
   (Arnout)
 
 changes v2->v3:
-- reword commit log
-
-changes v1->v2:
-- rebase
-- add default size value
+- new patch (Yann)
 ---
- Config.in.legacy  | 11 +++++++++++
- fs/ext2/Config.in | 21 +++++++++++----------
- fs/ext2/ext2.mk   | 23 ++++++++++++++---------
- 3 files changed, 36 insertions(+), 19 deletions(-)
+ Config.in.legacy  | 16 ++++++++++++++++
+ fs/ext2/Config.in |  8 --------
+ fs/ext2/ext2.mk   |  1 -
+ 3 files changed, 16 insertions(+), 9 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 1ec8d3a76e..c922cceec8 100644
+index 453c5eb8b8..1ec8d3a76e 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -145,6 +145,17 @@ endif
+@@ -145,6 +145,22 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2017.08"
  
-+config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-+	int "exact size in blocks has been removed"
++config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
++	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
 +	default 0
 +	help
-+	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
++	  Buildroot now uses mkfs.ext2/3/4 to generate ext2/3/4 images. So
++	  let mkfs automatically selects the number of inodes needed. Set
++	  this option to 0.
++	  Note that, the number of inodes can still be set and passed to
++	  mkfs; so if extra inodes are needed, prefer setting
++	  BR2_TARGET_ROOTFS_EXT2_INODES taking account of them.
 +
-+config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
++config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
 +	bool
-+	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0
++	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
 +	select BR2_LEGACY
 +
- config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
- 	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
- 	default 0
+ config BR2_STRIP_none
+ 	bool "Strip command 'none' has been removed"
+ 	select BR2_LEGACY
 diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index e573a3ca9b..1fc3ac9de7 100644
+index ec69f05cb7..e573a3ca9b 100644
 --- a/fs/ext2/Config.in
 +++ b/fs/ext2/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_ROOTFS_EXT2
- 	bool "ext2/3/4 root filesystem"
--	select BR2_PACKAGE_HOST_MKE2IMG
-+	select BR2_PACKAGE_HOST_E2FSPROGS
- 	help
- 	  Build an ext2/3/4 root filesystem
- 
-@@ -66,19 +66,20 @@ config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
- 	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
- 	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
- 
--# 61440 block of 1024 bytes = 60MB, i.e usually small enough to fit
--# on a 64MB media
--config BR2_TARGET_ROOTFS_EXT2_BLOCKS
--	int "exact size in blocks"
--	default 61440
--	help
--	  Specify the file system size as a number of blocks, which
--	  size is specified above.
--
- config BR2_TARGET_ROOTFS_EXT2_INODES
+@@ -79,14 +79,6 @@ config BR2_TARGET_ROOTFS_EXT2_INODES
  	int "exact number of inodes (leave at 0 for auto calculation)"
  	default 0
  
-+config BR2_TARGET_ROOTFS_EXT2_SIZE
-+	string "exact size"
-+	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 # legacy 2017.08
-+	default "60M" # default size
-+	help
-+	  The size of the filesystem image. If it does not have a suffix, it is
-+	  interpreted as power-of-two kilobytes. If it is suffixed by 'k', 'm',
-+	  'g', 't' (either upper-case or lower-case), then it is interpreted in
-+	  power-of-two kilobytes, megabytes, gigabytes, terabytes, etc.
-+
+-config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+-	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+-	default 0
+-	help
+-	  Enter here the number of extra free inodes you want on
+-	  your filesystem. By default, Buildroot will not leave
+-	  many free inodes.
+-
  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
  	int "reserved blocks percentage"
  	default 5
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 24643afeb9..de87efba63 100644
+index ec49caa3a5..24643afeb9 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -4,24 +4,29 @@
- #
- ################################################################################
+@@ -15,7 +15,6 @@ EXT2_OPTS = \
+ 	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
+ 	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
+ 	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+-	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
+ 	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+ 	-l "$(EXT2_LABEL)"
  
-+EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
-+ifeq ($(BR2_TARGET_ROOTFS_EXT)-$(EXT2_SIZE),y-)
-+$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
-+endif
-+
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
- EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
- #" Syntax highlighting... :-/ )
- 
- EXT2_OPTS = \
--	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
--	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
--	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
--	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
--	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
--	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
--	-l "$(EXT2_LABEL)"
-+	-d $(TARGET_DIR) \
-+	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
-+	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
-+	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
-+	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
-+	-L "$(EXT2_LABEL)"
- 
--ROOTFS_EXT2_DEPENDENCIES = host-mke2img
-+ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
- define ROOTFS_EXT2_CMD
--	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
-+	rm -f $@
-+	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(EXT2_SIZE)
- endef
- 
- rootfs-ext2-symlink:
 -- 
 2.13.2
