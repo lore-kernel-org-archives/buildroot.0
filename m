@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:02 +0200
-Subject: [Buildroot] [PATCH 022/100] dnsmasq: use new gettext logic
+Date: Tue,  4 Jul 2017 16:48:03 +0200
+Subject: [Buildroot] [PATCH 023/100] dos2unix: use new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-23-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-24-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +15,62 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
+ - using TARGET_NLS_LIBS to force linking against libintl
+
  - dropping BR2_PACKAGE_GETTEXT selection
+
+In addition, we now use BR2_SYSTEM_ENABLE_NLS instead of
+BR2_ENABLE_LOCALE to decide if NLS support should be enabled or
+disabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dnsmasq/Config.in  | 1 -
- package/dnsmasq/dnsmasq.mk | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/dos2unix/Config.in   |  1 -
+ package/dos2unix/dos2unix.mk | 15 +++++++--------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
-index 936b1de..8921fc6 100644
---- a/package/dnsmasq/Config.in
-+++ b/package/dnsmasq/Config.in
-@@ -31,7 +31,6 @@ config BR2_PACKAGE_DNSMASQ_IDN
- 	bool "IDN support"
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBIDN
+diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
+index 6945f52..cfb5ba4 100644
+--- a/package/dos2unix/Config.in
++++ b/package/dos2unix/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_DOS2UNIX
+ 	bool "dos2unix"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  Enable IDN support in dnsmasq.
- 	  This option is a big space taker since it pulls in many
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index c6f15e2..00a59da 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -32,8 +32,8 @@ endif
+ 	  dos2unix converts text file line endings between CRLF and LF
  
- # NLS requires IDN so only enable it (i18n) when IDN is true
- ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
--DNSMASQ_DEPENDENCIES += libidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext
--DNSMASQ_MAKE_OPTS += LIBS+="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
-+DNSMASQ_DEPENDENCIES += libidn $(TARGET_NLS_DEPENDENCIES)
-+DNSMASQ_MAKE_OPTS += LIBS+=$(TARGET_NLS_LIBS)
- DNSMASQ_COPTS += -DHAVE_IDN
- DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 3540ec8..87525fb 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -8,19 +8,18 @@ DOS2UNIX_VERSION = 7.3.4
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2-Clause
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
+-DOS2UNIX_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++DOS2UNIX_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
++	$(TARGET_NLS_DEPENDENCIES)
+ 
+-ifeq ($(BR2_ENABLE_LOCALE),y)
+-DOS2UNIX_DEPENDENCIES += host-gettext
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++DOS2UNIX_MAKE_OPTS += ENABLE_NLS=1
++DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=$(TARGET_NLS_LIBS)
+ else
++# Should be defined to empty to disable NLS support
+ DOS2UNIX_MAKE_OPTS += ENABLE_NLS=
+ endif
+ 
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-DOS2UNIX_DEPENDENCIES += gettext
+-DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=-lintl
+-endif
+-
+ ifeq ($(BR2_USE_WCHAR),)
+ DOS2UNIX_MAKE_OPTS += UCS=
  endif
 -- 
 2.9.4
