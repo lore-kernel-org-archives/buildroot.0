@@ -1,31 +1,39 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue,  4 Jul 2017 23:53:39 +0200
-Subject: [Buildroot] [PATCH] package/ratpoison: needs MMU
-Message-ID: <20170704215339.28270-1-romain.naour@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Jul 2017 23:56:05 +0200
+Subject: [Buildroot] [PATCH 0/3 v3] skeleton: move ifupdown script to
+ their own package
+In-Reply-To: <20170704234934.458e6239@windsurf>
+References: <cover.1499006091.git.yann.morin.1998@free.fr>
+ <20170704234934.458e6239@windsurf>
+Message-ID: <20170704215605.GB3499@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/10c/10c0a41275ba53473c89881990ba608b7550b23a
+Thomas, Arnout, All,
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/ratpoison/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On 2017-07-04 23:49 +0200, Thomas Petazzoni spake thusly:
+> On Sun,  2 Jul 2017 16:35:16 +0200, Yann E. MORIN wrote:
+> > Yann E. MORIN (3):
+> >       package/ifupdown-scripts: new package
+> >       package/ifupdown-scripts: not needed for systemd-networkd
+> >       package/ifupdown-scripts: allow use with a custom skeleton
+> 
+> I've applied those patches. As discussed with Arnout and you, I've
+> squashed PATCH 1 and PATCH 2. And in PATCH 1, I've removed the empty
+> IFUPDOWN_SCRIPTS_SOURCE variable.
 
-diff --git a/package/ratpoison/Config.in b/package/ratpoison/Config.in
-index 0c78a1f..7b72429 100644
---- a/package/ratpoison/Config.in
-+++ b/package/ratpoison/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RATPOISON
- 	bool "ratpoison"
-+	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_LIBERATION
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.9.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
