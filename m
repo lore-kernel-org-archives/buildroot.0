@@ -1,67 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 18:50:12 +0200
-Subject: [Buildroot] [PATCH 100/100] CHANGES: add details on the gettext
- revamp
-In-Reply-To: <20170704144920.12318-101-thomas.petazzoni@free-electrons.com>
-References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
- <20170704144920.12318-101-thomas.petazzoni@free-electrons.com>
-Message-ID: <da6e713c-a6f7-a80e-5c55-734d809817c7@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Jul 2017 18:50:41 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] Update for 2017.02.4
+Message-ID: <20170704164759.E7EEB81999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=7ea1487c0afbbb44eca7b2f9e8759305195ab2a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 28 ++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
-On 04-07-17 16:49, Thomas Petazzoni wrote:
-> The gettext revamp has some user-visible changes, so this commit
-> updates the CHANGES file to document them.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> ---
->  CHANGES | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/CHANGES b/CHANGES
-> index cf4b22b..7b98e84 100644
-> --- a/CHANGES
-> +++ b/CHANGES
-> @@ -1,3 +1,22 @@
-> +2017.08-rc1, To be released
-> +
-> +	Major revamp of the gettext handling, with user-visible
-> +	effect:
-> +
-> +	  - prior to this revamp, when BR2_ENABLE_LOCALE=y, each
-> +	    package could decide to enable or not NLS support. When
-> +	    BR2_ENABLE_LOCALE was disabled, NLS support was forced off
-> +	    by passing --disable-nls to packages.
-> +
-> +	  - after this revamp, a new BR2_SYSTEM_ENABLE_NLS option
-> +            controls whether NLS support should be enabled or not in
-> +            packages. This option defaults to disabled, which means
-> +            that now, NLS support is by default disabled in all
-> +            packages.
-> +
-> +	Therefore, if you need NLS support in packages, you must now
-> +	explicitly enable the BR2_SYSTEM_ENABLE_NLS option.
-> +
->  2017.05, Released May 31st, 2017
->  
->  	Minor fixes.
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/CHANGES b/CHANGES
+index d8b369f..90d409f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,31 @@
++2017.02.4, Released July 4th, 2017
++
++	Important / security related fixes.
++
++	Update support/scripts/scancpan to use METACPAN v1 API as v0
++	has been shutdown.
++
++	Update support/scripts/mkusers to handle setups where
++	/etc/shadow is a symlink.
++
++	External toolchain: Don't create musl dynamic loader symlink
++	for static builds.
++
++	Setlocalversion: Correct detection of mercurial revisions for
++	non-tagged versions.
++
++	Updated/fixed packages: apache, automake, bind, botan, c-ares,
++	dhcp, expat, fcgiwrap, gcc, gdb, gesftpserver, glibc, gnutls,
++	gst1-plugins-bad, imagemagick, imx-uuc, intltool, iperf,
++	ipsec-tools, irssi, libgcrypt, libmad, libnl, mosquitto,
++	mpg123, ncurses, nodejs, ntp, openssh, openvpn, qt5base,
++	qt5multimedia, rtl8821au, socat, spice, systemd, tor, tslib,
++	vlc, x264, xserver_xorg-server
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9976: License file for package 'rtl8821au' incorrect
++
+ 2017.02.3, Released June 2nd, 2017
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index f74d59b..321b307 100644
+--- a/Makefile
++++ b/Makefile
+@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2017.02.3
++export BR2_VERSION := 2017.02.4
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1496390000
++BR2_VERSION_EPOCH = 1499186000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
