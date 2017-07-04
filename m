@@ -1,60 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 23:31:50 +0200
-Subject: [Buildroot] [git commit] Update for 2017.05.1
-Message-ID: <20170704212905.8F7C780E52@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 23:29:20 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2017.05.1
+Message-ID: <20170704212905.7AEA381E86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9bcd5facc6c54c00d8fbcd114a9ea567f67c461
+commit: https://git.buildroot.net/buildroot/commit/?id=47dfc35b0ca921357bd73f418096ce943359440d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f3d8beeb369412a69adc75bf78391fb8a07d49b5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index e7f9b75..b284287 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,34 @@
-+2017.05.1, Released July 4th, 2017
-+
-+	Important / security related fixes.
-+
-+	Update support/scripts/scancpan to use METACPAN v1 API as v0
-+	has been shutdown.
-+
-+	Update support/scripts/mkusers to handle setups where
-+	/etc/shadow is a symlink.
-+
-+	External toolchain: Don't create musl dynamic loader symlink
-+	for static builds.
-+
-+	Setlocalversion: Correct detection of mercurial revisions for
-+	non-tagged versions.
-+
-+	Defconfigs: at91sam9x5ek_mmc: workaround boot rom issue.
-+
-+	Updated/fixed packages: apache, automake, bind, botan, c-ares,
-+	dhcp, expat, fcgiwrap, gcc, gdb, gesftpserver, glibc, glmark2,
-+	gnutls, gst1-plugins-bad, imagemagick, imx-uuc, intltool,
-+	iperf, ipsec-tools, irssi, kmod, libcurl, libgcrypt, libmad,
-+	libnl, lugaro, mosquitto, mpg123, ncurses, nodejs, ntp,
-+	openssh, openvpn, pngquant, python-simplegeneric, qt5base,
-+	qt5multimedia, rtl8821au, socat, spice, systemd, tor, trinity,
-+	tslib, vlc, x264, xen, xlib_libxshmfenc, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#9976: License file for package 'rtl8821au' incorrect
-+
- 2017.05, Released May 31st, 2017
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 1f98e5b..e9d1e33 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Minor fixes.
+-      <h3 style="text-align: center;">Latest stable release: <b>2017.05</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2017.05.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2017.05.tar.gz">buildroot-2017.05.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.05.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.05.1.tar.gz">buildroot-2017.05.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2017.05.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.05.tar.bz2">buildroot-2017.05.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.05.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.05.1.tar.bz2">buildroot-2017.05.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2017.05.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index d329fdc..9913285 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2017.05.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 July 2017</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2017.05.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2017.05 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.05.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-July/196743.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2017.05.1.tar.bz2">2017.05.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
