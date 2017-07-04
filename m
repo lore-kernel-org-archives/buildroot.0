@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 01:09:22 +0200
-Subject: [Buildroot] [PATCH 02/13] core/pkg-download: change all helpers
- to use common options
-In-Reply-To: <20170704162211.13238-3-maxime.hadjinlian@gmail.com>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-3-maxime.hadjinlian@gmail.com>
-Message-ID: <fbacea0c-0c08-d8d0-9cda-3e404207ab1d@mind.be>
+Date: Wed, 5 Jul 2017 01:11:18 +0200
+Subject: [Buildroot] [PATCH 1/3] package/kvazaar: add host-pkgconf
+ dependency
+In-Reply-To: <20170704230857.7916-1-romain.naour@smile.fr>
+References: <20170704230857.7916-1-romain.naour@smile.fr>
+Message-ID: <feca4664-a804-0fc9-424f-d8a97ea654c6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,72 +13,36 @@ To: buildroot@busybox.net
 
 
 
-On 04-07-17 18:22, Maxime Hadjinlian wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 05-07-17 01:08, Romain Naour wrote:
+> The build system use PKG_CHECK_MODULES.
+> 
+> checking pkg-config is at least version 0.9.0... ./configure: line 16886: output/host/usr/bin/pkg-config: No such file or directory
+> no
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-[snip]
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index c1ff53c02b..bf2dbb1a8b 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -19,7 +19,7 @@ set -e
->  #   3:  the hash file exists and there was no hash to check the file against
->  #   4:  the hash file exists and at least one hash type is unknown
->  
-> -while getopts :q OPT; do
-> +while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-
- This doesn't make sense to me: the global DL_GETOPTS are never passed to
-check-hash, and you're not using any of them. So I'd keep the explicit :q here.
-
->      case "${OPT}" in
->      q)  exec >/dev/null;;
->      \?) exit 1;;
-
-[snip]
-> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-> index f944b71db5..a29411e0ae 100755
-> --- a/support/download/dl-wrapper
-> +++ b/support/download/dl-wrapper
-> @@ -19,6 +19,8 @@
->  # We want to catch any unexpected failure, and exit immediately.
->  set -e
->  
-> +export BR_BACKEND_DL_GETOPTS=":hb:o:H:rRq"
-
- Since this variable is defined here, it makes sense to also document the
-options here. In fact, to make it makes more sense to document them all here
-rather than in each individual backend. Of course, no need to go and remove it
-in each backend, but I would like to have then documented here. Especially since
-a later patch will also parse them here.
-
-> +
->  main() {
->      local OPT OPTARG
->      local backend output hfile recurse quiet
-> @@ -83,7 +85,10 @@ main() {
->      # If the backend fails, we can just remove the temporary directory to
->      # remove all the cruft it may have left behind. Then we just exit in
->      # error too.
-> -    if ! "${OLDPWD}/support/download/${backend}" ${quiet} ${recurse} "${tmpf}" "${@}"; then
-> +    if ! "${OLDPWD}/support/download/${backend}" \
-> +            ${quiet} ${recurse} \
-
- I don't like it very much when options are mixed like this: either fill lines
-up completely, or do one option (or option combination, of course, like -o
-"...") per line. But since this will be changed again later it's not worth
-changing this patch.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> +            -o "${tmpf}" "${@}"
-> +    then
->          rm -rf "${tmpd}"
->          exit 1
->      fi
-[snip]
-
+> ---
+>  package/kvazaar/kvazaar.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/kvazaar/kvazaar.mk b/package/kvazaar/kvazaar.mk
+> index 30b8bda..f9149a7 100644
+> --- a/package/kvazaar/kvazaar.mk
+> +++ b/package/kvazaar/kvazaar.mk
+> @@ -10,6 +10,7 @@ KVAZAAR_LICENSE = LGPL-2.1+
+>  KVAZAAR_LICENSE_FILES = COPYING
+>  KVAZAAR_AUTORECONF = YES
+>  KVAZAAR_INSTALL_STAGING = YES
+> +KVAZAAR_DEPENDENCIES = host-pkgconf
+>  KVAZAAR_CONF_OPTS = --without-cryptopp
+>  
+>  $(eval $(autotools-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
