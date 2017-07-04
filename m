@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:12 +0200
-Subject: [Buildroot] [PATCH 032/100] glib-networking: use the new gettext
-	logic
+Date: Tue,  4 Jul 2017 16:48:13 +0200
+Subject: [Buildroot] [PATCH 033/100] gmpc: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-33-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-34-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,34 +19,33 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glib-networking/Config.in          | 1 -
- package/glib-networking/glib-networking.mk | 2 +-
+ package/gmpc/Config.in | 1 -
+ package/gmpc/gmpc.mk   | 2 +-
  2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-index 01d8552..ec29623 100644
---- a/package/glib-networking/Config.in
-+++ b/package/glib-networking/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_GLIB_NETWORKING
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
+index 43bc642..1aa7425 100644
+--- a/package/gmpc/Config.in
++++ b/package/gmpc/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_GMPC
  	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_PACKAGE_XORG7
  	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	help
- 	  Network-related GIO modules for glib.
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBMPD
+ 	select BR2_PACKAGE_LIBSOUP
+diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
+index 7ba86a7..40b77eb 100644
+--- a/package/gmpc/gmpc.mk
++++ b/package/gmpc/gmpc.mk
+@@ -13,6 +13,6 @@ GMPC_LICENSE_FILES = COPYING
+ GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkgconf host-vala \
+ 	libglib2 libgtk2 libmpd libsoup sqlite \
+ 	xlib_libICE xlib_libSM xlib_libX11 \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++	$(TARGET_NLS_DEPENDENCIES)
  
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index eb75c86..10a3b70 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -10,7 +10,7 @@ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- GLIB_NETWORKING_INSTALL_STAGING = YES
- GLIB_NETWORKING_DEPENDENCIES = \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
-+	$(TARGET_NLS_DEPENDENCIES) \
- 	host-pkgconf \
- 	host-intltool \
- 	libglib2
+ $(eval $(autotools-package))
 -- 
 2.9.4
