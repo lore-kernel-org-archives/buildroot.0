@@ -1,57 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:27:24 +0200
-Subject: [Buildroot] [git commit] binutils: use the new gettext logic
-Message-ID: <20170704233513.5C6587F89E@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:25:59 +0200
+Subject: [Buildroot] [git commit] Revert "gettext: build libintl
+	unconditionally for uClibc/musl"
+Message-ID: <20170704233512.DBD558083A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76b815514f4d4c6703d4369b50f816a2a99e0abc
+commit: https://git.buildroot.net/buildroot/commit/?id=de291b06a92849a089d49f9ab801dac0b4c63fab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit switches to use the new gettext logic, which involves:
+This reverts commit 431d00abc1ffd0db287f0392e45229a53db7a187, which in
+fact doesn't work for static linking situations, as can be seen in:
 
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - using TARGET_NLS_LIBS to force linking against libintl. This wasn't
-   done so far, but is needed for the build to work, because uClibc
-   now has a stub gettext implementation, which is mistaken as being
-   the full gettext implementation by the configure script
-
- - dropping BR2_PACKAGE_GETTEXT selection
+  http://autobuild.buildroot.net/results/a6a4039f23a6fbd2bdb5938bcef097a7310452cc/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in   | 1 -
- package/binutils/binutils.mk | 3 ++-
+ package/gettext/Config.in  | 2 +-
+ package/gettext/gettext.mk | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 360dd5e..e17a8ec 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
- 	depends on !BR2_nios2
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Install binutils on the target
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index bf16c34..0dea03d 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -17,7 +17,7 @@ if BR2_PACKAGE_GETTEXT
+ config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+ 	bool
+ 	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
+-	default y
++	default y if BR2_SYSTEM_ENABLE_NLS
  
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 0dc20a0..c64ec47 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -24,7 +24,8 @@ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
- BINUTILS_INSTALL_STAGING = YES
--BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+BINUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+BINUTILS_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
- BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
- BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+ endif
  
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index f3325dc..454ad29 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -42,7 +42,7 @@ HOST_GETTEXT_CONF_OPTS = \
+ # Force the build of libintl, even if the C library provides a stub
+ # gettext implementation
+ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+-GETTEXT_CONF_OPTS += --with-included-gettext --enable-nls
++GETTEXT_CONF_OPTS += --with-included-gettext
+ else
+ GETTEXT_CONF_OPTS += --without-included-gettext
+ endif
