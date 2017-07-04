@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Jul 2017 14:23:03 +0200
-Subject: [Buildroot] [PATCH] icu: propagate host gcc dependency to
-	reverse dependencies
-In-Reply-To: <20170703211859.6696-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 3 Jul 2017 23:18:59 +0200")
-References: <20170703211859.6696-1-peter@korsgaard.com>
-Message-ID: <87o9t02xy0.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Jul 2017 14:23:19 +0200
+Subject: [Buildroot] [PATCH] libmad: add security patch from debian
+In-Reply-To: <20170704084211.8696-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 4 Jul 2017 10:42:11 +0200")
+References: <20170704084211.8696-1-peter@korsgaard.com>
+Message-ID: <87k23o2xxk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +14,19 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes:
- > http://autobuild.buildroot.net/results/821/821eae7add252e3711ed069a2d292a04427fa43b/
+ > CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
+ > libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
+ > denial of service (assertion failure and application exit) via a crafted
+ > audio file.
 
- > Commit 87f43c3403 (package/icu: needs host gcc >= 4.8) added a new toolchain
- > dependency to icu, but didn't propagate it to the reverse dependencies of
- > icu.
+ > CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
+ > libmad 0.15.1b allows remote attackers to cause a denial of service
+ > (heap-based buffer overflow and application crash) or possibly have
+ > unspecified other impact via a crafted audio file.
 
- > Some of these have been fixed in later commits, but not all.
+ > CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
+ > 0.15.1b allows remote attackers to cause a denial of service (heap-based
+ > buffer over-read and application crash) via a crafted audio file.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
