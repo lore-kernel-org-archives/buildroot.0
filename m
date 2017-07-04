@@ -1,87 +1,160 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  4 Jul 2017 13:21:16 +0200
-Subject: [Buildroot] [PATCH v4 1/5] fs/ext2: add option to specify block size
+Date: Tue,  4 Jul 2017 13:21:18 +0200
+Subject: [Buildroot] [PATCH v4 3/5] fs/ext2: use mkfs to generate rootfs
+	image
 In-Reply-To: <20170704112120.27977-1-s.martin49@gmail.com>
 References: <20170704112120.27977-1-s.martin49@gmail.com>
-Message-ID: <20170704112120.27977-2-s.martin49@gmail.com>
+Message-ID: <20170704112120.27977-4-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+mkfs is now capable of generating rootfs images. Use mkfs instead of
+genext2fs.
+
+If not set, we now let mkfs calculate the block size and the number of
+inodes needed.
+
+This change also adjusts the options to meet those of mkfs. Note that
+passing a null inode number to mkfs triggers its automatic calculation.
+
+The BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol is ranamed as well, into
+BR2_TARGET_ROOTFS_EXT2_SIZE, since it now accepts the same values as the
+mkfs' fs-size argument (i.e. with k, m, g or t suffix).
+
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v3->v4:
-- fix typos (Arnout)
+- disable the size check when ext* rootfs is disabled
+- remove unneeded comment
+- introduce a _WRAP symbol to actually select BR2_LEGACY when needed
+  (Arnout)
 
 changes v2->v3:
-- reintroduce change from Yann' series
----
- fs/ext2/Config.in | 28 ++++++++++++++++++++++++++--
- fs/ext2/ext2.mk   |  2 +-
- 2 files changed, 27 insertions(+), 3 deletions(-)
+- reword commit log
 
+changes v1->v2:
+- rebase
+- add default size value
+---
+ Config.in.legacy  | 11 +++++++++++
+ fs/ext2/Config.in | 21 +++++++++++----------
+ fs/ext2/ext2.mk   | 23 ++++++++++++++---------
+ 3 files changed, 36 insertions(+), 19 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1ec8d3a76e..c922cceec8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,17 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.08"
+ 
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS
++	int "exact size in blocks has been removed"
++	default 0
++	help
++	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
++
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
++	bool
++	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0
++	select BR2_LEGACY
++
+ config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+ 	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+ 	default 0
 diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 6f16dde17f..ec69f05cb7 100644
+index e573a3ca9b..1fc3ac9de7 100644
 --- a/fs/ext2/Config.in
 +++ b/fs/ext2/Config.in
-@@ -44,12 +44,36 @@ config BR2_TARGET_ROOTFS_EXT2_REV
- config BR2_TARGET_ROOTFS_EXT2_LABEL
- 	string "filesystem label"
- 
--# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
-+choice
-+	bool "block size"
-+	help
-+	  The size, in bytes, of a block.
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
-+	bool "1024"
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
-+	bool "2048"
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
-+	bool "4096"
-+
-+endchoice
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
-+	int
-+	default 1024 if BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
-+	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
-+	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
-+
-+# 61440 block of 1024 bytes = 60MB, i.e usually small enough to fit
-+# on a 64MB media
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "exact size in blocks"
- 	default 61440
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_ROOTFS_EXT2
+ 	bool "ext2/3/4 root filesystem"
+-	select BR2_PACKAGE_HOST_MKE2IMG
++	select BR2_PACKAGE_HOST_E2FSPROGS
  	help
--	  Specify the file system size as a number of 1024-byte blocks.
-+	  Specify the file system size as a number of blocks, which
-+	  size is specified above.
+ 	  Build an ext2/3/4 root filesystem
  
+@@ -66,19 +66,20 @@ config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
+ 	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
+ 	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
+ 
+-# 61440 block of 1024 bytes = 60MB, i.e usually small enough to fit
+-# on a 64MB media
+-config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	int "exact size in blocks"
+-	default 61440
+-	help
+-	  Specify the file system size as a number of blocks, which
+-	  size is specified above.
+-
  config BR2_TARGET_ROOTFS_EXT2_INODES
  	int "exact number of inodes (leave at 0 for auto calculation)"
+ 	default 0
+ 
++config BR2_TARGET_ROOTFS_EXT2_SIZE
++	string "exact size"
++	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 # legacy 2017.08
++	default "60M" # default size
++	help
++	  The size of the filesystem image. If it does not have a suffix, it is
++	  interpreted as power-of-two kilobytes. If it is suffixed by 'k', 'm',
++	  'g', 't' (either upper-case or lower-case), then it is interpreted in
++	  power-of-two kilobytes, megabytes, gigabytes, terabytes, etc.
++
+ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	int "reserved blocks percentage"
+ 	default 5
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 0d5fc7f118..ec49caa3a5 100644
+index 24643afeb9..de87efba63 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -12,7 +12,7 @@ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+@@ -4,24 +4,29 @@
+ #
+ ################################################################################
+ 
++EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
++ifeq ($(BR2_TARGET_ROOTFS_EXT)-$(EXT2_SIZE),y-)
++$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
++endif
++
+ # qstrip results in stripping consecutive spaces into a single one. So the
+ # variable is not qstrip-ed to preserve the integrity of the string value.
+ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+ #" Syntax highlighting... :-/ )
+ 
  EXT2_OPTS = \
- 	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
- 	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
--	-B 1024 \
-+	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
- 	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
- 	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
- 	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
+-	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
+-	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
+-	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
+-	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
+-	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+-	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+-	-l "$(EXT2_LABEL)"
++	-d $(TARGET_DIR) \
++	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
++	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
++	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
++	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
++	-L "$(EXT2_LABEL)"
+ 
+-ROOTFS_EXT2_DEPENDENCIES = host-mke2img
++ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+ 
+ define ROOTFS_EXT2_CMD
+-	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
++	rm -f $@
++	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(EXT2_SIZE)
+ endef
+ 
+ rootfs-ext2-symlink:
 -- 
 2.13.2
