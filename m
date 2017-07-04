@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:59 +0200
-Subject: [Buildroot] [PATCH 079/100] util-linux: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:40 +0200
+Subject: [Buildroot] [PATCH 060/100] newt: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-80-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-61-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,53 +21,38 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/Config.in     | 1 -
- package/util-linux/util-linux.mk | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/newt/Config.in | 1 -
+ package/newt/newt.mk   | 6 ++++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 6ba239e..cba590c 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_UTIL_LINUX
- 	bool "util-linux"
+diff --git a/package/newt/Config.in b/package/newt/Config.in
+index a221615..c59af1c 100644
+--- a/package/newt/Config.in
++++ b/package/newt/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_NEWT
+ 	depends on !BR2_STATIC_LIBS # unconditionally creates .so
+ 	select BR2_PACKAGE_SLANG
+ 	select BR2_PACKAGE_POPT
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  Various useful/essential linux libraries and utilities.
+ 	  Programming library for color text mode, widget based user interfaces.
  
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index d55ee7c..61e3e63 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -17,7 +17,7 @@ UTIL_LINUX_AUTORECONF = YES
- UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
- UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
- UTIL_LINUX_INSTALL_STAGING = YES
--UTIL_LINUX_DEPENDENCIES = host-pkgconf
-+UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- # uClibc needs NTP_LEGACY for sys/timex.h -> ntp_gettime() support
- # (used in logger.c), and the common default is N.
- UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
-@@ -25,6 +25,7 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
- UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown
-+UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
- 
- # system depends on util-linux so we enable systemd support
- # (which needs systemd to be installed)
-@@ -62,11 +63,6 @@ endif
- UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
- endif
- 
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--UTIL_LINUX_DEPENDENCIES += gettext
--UTIL_LINUX_LIBS += -lintl
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- UTIL_LINUX_DEPENDENCIES += libcap-ng
- endif
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index 1764bbc..456dd69 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -7,8 +7,10 @@
+ NEWT_VERSION = 0.52.19
+ NEWT_SITE = https://pagure.io/releases/newt
+ NEWT_INSTALL_STAGING = YES
+-NEWT_DEPENDENCIES = popt slang \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++NEWT_DEPENDENCIES = popt slang $(TARGET_NLS_DEPENDENCIES)
++# Force to use libintl, otherwise it finds gettext functions in the C
++# library, and does not link against libintl.
++NEWT_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ NEWT_CONF_OPTS = --without-python --without-tcl
+ NEWT_MAKE = $(MAKE1)
+ NEWT_LICENSE = GPL-2.0
 -- 
 2.9.4
