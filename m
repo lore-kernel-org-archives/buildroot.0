@@ -1,48 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 4 Jul 2017 16:04:03 +0200
-Subject: [Buildroot] [PATCH v3 13/14] pkg-python: use $(HOST_DIR) instead of
-	$(HOST_DIR)/usr as prefix
-In-Reply-To: <20170704140404.4098-1-arnout@mind.be>
-References: <20170704140404.4098-1-arnout@mind.be>
-Message-ID: <20170704140404.4098-14-arnout@mind.be>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Tue, 4 Jul 2017 10:22:42 -0400
+Subject: [Buildroot] [v7] package: add qt5virtualkeyboard
+In-Reply-To: <20170703084733.2278a5b2@windsurf>
+References: <20170401223651.6393-1-gael.portay@savoirfairelinux.com>
+ <20170703084733.2278a5b2@windsurf>
+Message-ID: <20170704142242.fxzfu6647xrncyta@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the redundant usr/ component of the HOST_DIR paths. Since a
-previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
-everything keeps on working.
+Hi Thomas,
 
-Build-tested with a bunch of python packages.
+On Mon, Jul 03, 2017 at 08:47:33AM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat,  1 Apr 2017 18:36:51 -0400, Ga?l PORTAY wrote:
+> > This patch adds the Qt virtualkeyboard package.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes since v6:
+> >  - Add missing empty lines in Config.in.
+> >  - Reword note for all flag in help message.
+> >  - Remove mention of GPLv3 license in help message.
+> >  - Use filter text-function instead of strip+findstring to flag/install
+> >    3rd-parties.
+> >  - Fix useless call to strip when installing 3rd-parties.
+> 
+> I've applied to master, after fixing the following things:
+> 
+>     [Thomas:
+>      - use SDPX license codes
+>      - add entry to DEVELOPERS file
+>      - drop BR2_PACKAGE_QT5BASE_LICENSE_APPROVED logic, since we removed this option
+>      - select BR2_PACKAGE_QT5DECLARATIVE and
+>        BR2_PACKAGE_QT5DECLARATIVE_QUICK instead of using a "depends on"
+>        and propagate the appropriate dependencies]
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pkg-python.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 2418f5dfa4..6e411ab5c5 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -53,7 +53,7 @@ HOST_PKG_PYTHON_DISTUTILS_ENV = \
- 	PYTHONNOUSERSITE=1
- 
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)/usr
-+	--prefix=$(HOST_DIR)
- 
- # Target setuptools-based packages
- PKG_PYTHON_SETUPTOOLS_ENV = \
-@@ -83,7 +83,7 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PYTHONNOUSERSITE=1
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)/usr
-+	--prefix=$(HOST_DIR)
- 
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
--- 
-2.13.2
+Thanks!
