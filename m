@@ -1,11 +1,12 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 12:15:27 +0200
-Subject: [Buildroot] [PATCH v3 07/11] fs/ext2: add option to specify
- block size
-In-Reply-To: <20170703225106.1492-8-s.martin49@gmail.com>
-References: <20170703225106.1492-1-s.martin49@gmail.com>
- <20170703225106.1492-8-s.martin49@gmail.com>
-Message-ID: <cae99fce-e4d7-8019-de95-8b9a6d09a518@mind.be>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Tue, 4 Jul 2017 12:16:18 +0200
+Subject: [Buildroot] libasan.so missing
+In-Reply-To: <87podh5gi7.fsf@dell.be.48ers.dk>
+References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
+ <877ezp780a.fsf@dell.be.48ers.dk>
+ <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com>
+ <87podh5gi7.fsf@dell.be.48ers.dk>
+Message-ID: <ed1251ca-9f4a-6f7c-3b51-7cc399299574@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,91 +15,41 @@ To: buildroot@busybox.net
 
 
 
-On 04-07-17 00:51, Samuel Martin wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Am 03.07.2017 um 23:59 schrieb Peter Korsgaard:
+>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>   > Hello Peter,
+>   > Am 03.07.2017 um 19:19 schrieb Peter Korsgaard:
+>   >>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+>   >>
+>   >> > Hello,
+>   >> > I'm using the x86_64 buildroot toolchain with gcc 5.4. I wonder why
+>   >> > the address sanitizer library "libasan.so*" is not available in the
+>   >> > rootfs of the target. Is it intentional? And what is the best way to
+>   >> > get it added to the rootfs?
+>   >>
+>   >> Is this with uClibc-ng, musl or Glibc?
 > 
-> ---
-> changes v2->v3:
-> - reintroduce change from Yann' series
-> ---
->  fs/ext2/Config.in | 28 ++++++++++++++++++++++++++--
->  fs/ext2/ext2.mk   |  2 +-
->  2 files changed, 27 insertions(+), 3 deletions(-)
+>   > It's with Glibc. I think the libsanitizer libs are built but not moved
+>   > to the target.
 > 
-> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index 09ec87786f..627294e17f 100644
-> --- a/fs/ext2/Config.in
-> +++ b/fs/ext2/Config.in
-> @@ -44,12 +44,36 @@ config BR2_TARGET_ROOTFS_EXT2_REV
->  config BR2_TARGET_ROOTFS_EXT2_LABEL
->  	string "filesystem label"
->  
-> -# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
-> +choice
-> +	bool "block size"
-> +	help
-> +	  The size, in bytes, of a block.
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
-> +	bool "1024"
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
-> +	bool "2048"
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
-> +	bool "4096"
-> +
-> +endchoice
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
-> +	int
-> +	default 1024 if BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
-> +	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
-> +	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
-> +
-> +# 61440 block od 1024 bytes = 60MB, i.e usually small enough to fit
-                 ^^of
-
- With that:
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> +# on a 64MB media
->  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
->  	int "exact size in blocks"
->  	default 61440
->  	help
-> -	  Specify the file system size as a number of 1024-byte blocks.
-> +	  Specify the file system size as a number of blocks, which
-> +	  size is specified above.
->  
->  config BR2_TARGET_ROOTFS_EXT2_INODES
->  	int "exact number of inodes (leave at 0 for auto calculation)"
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index 0d5fc7f118..ec49caa3a5 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -12,7 +12,7 @@ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
->  EXT2_OPTS = \
->  	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
->  	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
-> -	-B 1024 \
-> +	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
->  	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
->  	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
->  	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
+> Correct. I've sent a patch fixing this for the internal and external
+> toolchain. Could you give it a try?
 > 
+> https://patchwork.ozlabs.org/patch/783661/
+> https://patchwork.ozlabs.org/patch/783660/
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+$ find . -name 'libasan*'
+./target/lib/libasan.so
+./target/lib/libasan_preinit.o
+./target/lib/libasan.so.2
+./target/lib/libasan.so.2.0.0
+
+It works. The libsanitizer adds some extra space and runtime overhead, I 
+assume. Therefore, on Ubuntu, the libraries are not installed by 
+default. They can be added by installing the "libasan0" package. For 
+buildroot, would it make sense to make this option configurable as well?
+
+(libasan.*) Extra toolchain libraries to be copied to target
+
+Wolfgang.
