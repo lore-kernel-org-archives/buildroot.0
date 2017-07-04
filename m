@@ -1,64 +1,91 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Tue, 4 Jul 2017 14:08:43 +0100
-Subject: [Buildroot] Unable to compile current master
-In-Reply-To: <d47d0a79-dd22-c778-17bb-137b7eab106e@mind.be>
-References: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
- <14b6e3d2-0c80-ec16-8be1-abd52121b0be@mind.be>
- <8cf117e9-a3f6-7707-5f1d-41e22fb0ce09@newflow.co.uk>
- <d47d0a79-dd22-c778-17bb-137b7eab106e@mind.be>
-Message-ID: <126ea0b7-3a2b-652e-f84c-444c308e899d@newflow.co.uk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Jul 2017 15:23:52 +0200
+Subject: [Buildroot] [PATCH v4 03/11] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <cf95d170-797e-c9c9-cf68-575e7e3a19a3@grandegger.com>
+References: <1498559207-8050-1-git-send-email-wg@grandegger.com>
+ <1498559207-8050-4-git-send-email-wg@grandegger.com>
+ <8aa491de-1a71-0a8e-3274-4512ec22f763@mind.be>
+ <cf95d170-797e-c9c9-cf68-575e7e3a19a3@grandegger.com>
+Message-ID: <ca4ed8a9-8ffe-5d03-718a-5661a1d8a527@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/07/17 12:45, Arnout Vandecappelle wrote:
+
+
+On 04-07-17 14:36, Wolfgang Grandegger wrote:
+> Hello,
 > 
+> Am 04.07.2017 um 14:15 schrieb Arnout Vandecappelle:
+>>   Since you're going to revert to this v4, I'm going to add a few comments here.
 > 
-> On 04-07-17 12:37, Mark Jackson wrote:
->> On 03/07/17 16:57, Arnout Vandecappelle wrote:
->>>
->>>
->>> On 03-07-17 17:14, Mark Jackson wrote:
->>>> I'm trying to bring an old 2012 buildroot project up-to-date, so to test my current setup I've branched the git master and tried:-
->>>>
->>>> $ git checkout origin/master -b master
->>>> $ git reset --hard origin/master
->>>> $ make clean
->>>> $ make beaglebone_defconfig
->>>> $ make
->>>>
->>>> But this fails when compiling gcc with the following:-
->>>>
->>>> ...
->>>> /usr/bin/g++ -fno-PIE -c   -O2 -I/home/mpfj/buildroot/output/host/usr/include -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include -I../../gcc/../libcpp/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include  -I../../gcc/../libdecnumber -I../../gcc/../libdecnumber/dpd -I../libdecnumber -I../../gcc/../libbacktrace   -o insn-extract.o -MT insn-extract.o -MMD -MP -MF ./.deps/insn-extract.TPo insn-extract.c
->>>> Makefile:2201: recipe for target 's-attrtab' failed
->>>
->>>    Apparently genattrtab failed but I can't find any output.
->>>
->>>    Can you continue the build with BR2_JLEVEL=1 ? That should make any error
->>> message easier to locate.
->>>
+> Yes, that's what doing now...
+> 
+>> On 27-06-17 12:26, Wolfgang Grandegger wrote:
+
+[snip]
+>>> +    staging)
+>>> +        rootdir="${STAGING_DIR}"
+>>> +        # supress include files
+>>> +        find_args+=( "-path" "${STAGING_DIR}/usr/include" "-prune" "-o" )
 >>
->> Okay ... with JLEVEL=1 (rather than 0 (auto)), it compiles !!
+>>   Perhaps it's better to define a variable with all the paths we want to exclude
+>> - we may want to add more. OTOH, we can do that whenever we indeed do add more.
+> 
+> But it's not just a variable, I need the leading -path and the trailing -prune
+> for each dir exclude.
+
+ Yeah, but you could do
+    for excludepath in $EXCLUDEPATHS; do
+        find_args += ( "-path" "${STAGING_DIR}""${excludepath}" "-prune" "-o" )
+
+> 
+>>> +        sanitize_extra_args+=( "--no-standard-lib-dirs" "--relative-to-file" )
+>>> +        ;;
+>>> +
+>>> +    target)
+>>> +        rootdir="${TARGET_DIR}"
+>>> +        sanitize_extra_args+=( "--no-standard-lib-dirs" )
+>>> +        ;;
+>>> +
+>>> +    *)
+>>> +        usage
+>>> +        exit 1
+>>> +        ;;
+>>> +    esac
+>>> +
+>>> +    find_args+=( "-type" "f" "-print" )
+>>> +
+>>> +    while read file ; do
+>>> +    # check if it's an ELF file
+>>> +    if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
 >>
->> So it must be some strange parallel compilation bug ...
+>>   Wasn't "readelf -d ${file} | grep DT_RUNPATH" faster? You did some experiments
+>> a while ago but I forgot what the conclusions were.
 > 
->   Actually it's more likely that your system ran out of memory. GCC uses some
-> weird internal memory allocator that will fail invisibly in some situations
-> (i.e. without invoking OOM killer or anything obvious like that).
-> 
->   Those generators were apparently running all in parallel in your build, so that
-> could indeed explain memory exhaustion.
-> 
->   Regards,
->   Arnout
-> 
+> There could also be DT_RPATH? 
 
-Confirmed ... I've upped my VM from 2GB to 8GB and it all now compiles with JLEVEL=0 (auto).
+ Er, right, indeed.
 
-FYI memory usage peaked at about 2.5GB.
+> But a grep for RPATH should fix that. I didn't
+> test that, because I thought that pining is slower anyway. Without "grep
+> DT_RUNPATH" it's faster but it will succeed then on non-dynamic ELF files as
+> well. We could also tune patchelf to return faster if it's not an ELF file. I
+> will remeasure with the command above.
 
-Cheers
-Mark J.
+ Since this series is already in v6, I propose that you do the simple thing that
+you have now first, and it can be optimised later.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
