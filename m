@@ -1,128 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 13:42:58 +0200
-Subject: [Buildroot] [RFC PATCH v5 06/11] pkg-generic: add
- GLOBAL_INSTRUMENTATION_HOOKS for rpath sanitation
-In-Reply-To: <52d48565-23cc-c878-faae-f6698ade87b6@grandegger.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Tue, 4 Jul 2017 13:44:26 +0200
+Subject: [Buildroot] [RFC PATCH v5 00/11] Make the SDK relocatable
+In-Reply-To: <05809006-f075-68b3-d64d-3c0dd3e5f2b7@mind.be>
 References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-7-git-send-email-wg@grandegger.com>
- <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
- <00d2dee8-fe63-bc07-b3bd-93b7df740b8f@mind.be>
- <c75cc499-d213-cad2-e496-dd1e7cdae5ea@grandegger.com>
- <1c3c6a13-1c9c-dda4-187f-92f85e0201b6@grandegger.com>
- <52d48565-23cc-c878-faae-f6698ade87b6@grandegger.com>
-Message-ID: <fdaeb222-34d1-ced9-3873-a522c67bed52@mind.be>
+ <d20f9390-20ae-7021-1005-4afe8daeea7f@mind.be>
+ <32b47557-046c-424f-9d70-6b67a741cfc7@grandegger.com>
+ <05809006-f075-68b3-d64d-3c0dd3e5f2b7@mind.be>
+Message-ID: <e5169231-ac6f-bd54-effc-af2087dea783@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Arnout,
 
-
-On 04-07-17 12:59, Wolfgang Grandegger wrote:
-> Hello,
+Am 04.07.2017 um 13:22 schrieb Arnout Vandecappelle:
+>   Hi Wolfgang,
 > 
-> Am 04.07.2017 um 10:57 schrieb Wolfgang Grandegger:
+> On 04-07-17 09:17, Wolfgang Grandegger wrote:
 >> Hello Arnout,
 >>
->> Am 04.07.2017 um 10:22 schrieb Wolfgang Grandegger:
+>> Am 04.07.2017 um 00:50 schrieb Arnout Vandecappelle:
+>>>    Hi Wolfgang,
 >>>
+>>>    Again thank you very much for sustaining the work on this series!
 >>>
->>> Am 04.07.2017 um 00:30 schrieb Arnout Vandecappelle:
+>>> On 30-06-17 10:36, Wolfgang Grandegger wrote:
+>>>> Hello,
 >>>>
+>>>> this is v5 of my patch series to make the buildroot SDK (HOST_DIR)
+>>>> relocatable. It sanitizes the RPATH of all ELF files in the "target",
+>>>> "staging" and "host" tree using "patchelf --make-rpath-relative". I
+>>>> have started the mainlining process to implement "--make-rpath-relative"
+>>>> using GitHub pull request [1]... till now, no answer!
 >>>>
->>>> On 03-07-17 23:47, Arnout Vandecappelle wrote:
->>>>>
->>>>>
->>>>> On 30-06-17 10:37, Wolfgang Grandegger wrote:
->>>>>> The hook calls the script "fix-rpath" at the end of the installation
->>>>>> step.
->>>>>>
->>>>>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->>>>>
->>>>>   Looks good to me. I'm not adding my reviewed-by yet because it will still
->>>>> change when the fix-rpath arguments change.
->>>>>
->>>>>   Regards,
->>>>>   Arnout
->>>>>
->>>>>> ---
->>>>>>   package/pkg-generic.mk | 10 ++++++++++
->>>>>>   1 file changed, 10 insertions(+)
->>>>>>
->>>>>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->>>>>> index 825ab0c..8812193 100644
->>>>>> --- a/package/pkg-generic.mk
->>>>>> +++ b/package/pkg-generic.mk
->>>>>> @@ -139,6 +139,16 @@ define step_check_build_dir
->>>>>>   endef
->>>>>>   GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
->>>>>> +define step_sanitize_rpath
->>>>>> +    $(if $(filter install-host-end,$(2)-$(1)),\
->>>>>> +        support/scripts/fix-rpath "host" $($(PKG)_DIR)/.br_host_filelist)
->>>>>> +    $(if $(filter install-staging-end,$(2)-$(1)),\
->>>>>> +        support/scripts/fix-rpath "staging"
->>>>>> $($(PKG)_DIR)/.br_staging_filelist)
->>>>>> +    $(if $(filter install-target-end,$(2)-$(1)),\
->>>>>> +        support/scripts/fix-rpath "target"
->>>>>> $($(PKG)_DIR)/.br_target_filelist)
->>>>
->>>>   After reviewing the qt.conf thing, I realized that this is in fact not
->>>> enough.
->>>> Indeed, staging-install may install things into host dir as well...
->>>>
->>>>   So I think that both for generating the lists and for doing fix-rpath, we
->>>> should not just look at the directory corresponding to the step, but to all
->>>> three.
->>>>
->>>>   Since that means that the same directory may be iterated over three times, I
->>>> think it's best to also make a total of 9 files:
->>>>
->>>> .br_host_install_host_filelist   -> things installed to host during
->>>> host-install
->>>> .br_host_install_target_filelist -> things installed to target during
->>>> host-install
->>>> .br_target_install_host_filelist -> things installed to target during
->>>> target-install
+>>>> In contrast to v4, this series now does RPATH sanitation per package
+>>>> after package installation into the host, staging or target tree
+>>>> using GLOBAL_INSTRUMENTATION_HOOKS, similar to "check-bin-arch" or
+>>>> "check-host-rpath". This is a first hack to demonstrate feasibility.
+>>>> The scripts in "pkg-generic.mk" needs some more polish to be more
+>>>> efficient and elegant. See also "Changes since v4" below.
 >>>
->>> Or we store the full path of installed files of all trees in one
->>> .br_install_filelist. fix-rpath could then act upon the path prefix (being
->>> equal to $HOST_DIR, etc.).
+>>>    Samuel and I reviewed the entire series now. It's getting closer but I expect a
+>>> v7 will still be needed even after you send v6. I've marked these as Changes
+>>> Requested in patchwork.
 >>
->> That would even simplify things (in pkg-generic.mk). Either I use the full
->> path or add the name of the tree before the relative file name:
->>
->>    host "file-name"
->>    staging "another-file-name"
->>
->> Then fix-rpath would scan that file and sanitize the file according to the
->> tree type. I think using the absolute path is more efficient as
->> I can scan in fix-rpath directly for the files with that name. If it's an ELF
->> file, it acts upon the rootdir prefix (host, staging or target).
->>
->> What do you think?
+>> Great. Just wait for my next series as it already contains a lot of changes
+>> (mainly to pkg-generic.mk and fix-rpath).
 > 
-> Thinking more about it... Generating the list of all installed files over and
-> over (for *each* packet *twice*) again is not very efficient.
-> Here some measurement on my rather fast i7 7700K PC with a rather big BSP:
+>   I had a big discussion with the others here at the BR Summer Camp, and they
+> don't agree that the current approach is the best one :-(
 > 
-> $ cd <a-host-dir>
-> $ time find . -type f -print0 | xargs -0 md5sum | sort > ~/junk/filelist
-> real    1m43.422s
+>   The argument as always is simplicity. Doing things in an instrumentation hook
+> is making it more complicated, and more difficult to understand what is going
+> on. It is cleaner and more in-line with how we currently do things to do the
+> sanitization at the end of the build.
 > 
-> Doing it once at the end is likely more efficient. To avoid rpath sanitization
-> with subsequent makes, we could maybe used some tags.
+>   The idea is that there would be an explicit 'make sdk' target that builds and
+> sanitizes the host (and of course installs the relocation script). There is no
+> sanitization at all if you don't call this 'make sdk'. Indeed, we currently
+> don't have it and things work fine as long as you stay within your build tree.
 
- OK, so it looks like nobody agrees with my idea of doing it for every package
-:-( Sorry that I pointed you in that direction.
+"make sdk", sounds good.
 
- Regards,
- Arnout
+>   So basically it means reverting to v4 of the fix-rpath script. It would be
+> called three times:
+> - from target-finalize to sanitize the target;
+> - from sdk to sanitize the host;
+> - from sdk to sanitize the staging.
+> 
+>   Oh, also we decided that the sanitization for staging should be the same as for
+> target, i.e. make it relative to the staging root. Indeed, the
+> executables/libraries in there should never be executed, unless they are copied
+> to the target tree. When copied, their location relative to the staging root
+> should remain the same, so doing the same sanitization as for target should work.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+OK, you mean not using $ORIGIN.
+
+>   I understand that it's annoying to be sent in the wrong direction like this,
+> and I hope we are not discouraging you. If you already have some patches to
+> generate the file lists, feel free to post them anyway since they may be useful
+> for other purposes - but then preferably separate from this series.
+
+Well, after trying a few more things along the per package and step 
+approach, I came to the same conclusion. It got more and more complex 
+and slow (see my other mail).
+
+Wolfgang.
