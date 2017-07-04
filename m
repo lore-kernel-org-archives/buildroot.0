@@ -1,33 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 23:49:34 +0200
-Subject: [Buildroot] [PATCH 0/3 v3] skeleton: move ifupdown script to
- their own package
-In-Reply-To: <cover.1499006091.git.yann.morin.1998@free.fr>
-References: <cover.1499006091.git.yann.morin.1998@free.fr>
-Message-ID: <20170704234934.458e6239@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  4 Jul 2017 23:53:15 +0200
+Subject: [Buildroot] [PATCH] utils/brmake: print the error code of the build
+Message-ID: <20170704215315.19990-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since the stdout and stderr streams are redirected, it is not
+immediately obvious when a build failed, even though brmake really exits
+with the same error code as make did.
 
-On Sun,  2 Jul 2017 16:35:16 +0200, Yann E. MORIN wrote:
+When there is an error, print the exit code after the elapsed time.
 
-> Yann E. MORIN (3):
->       package/ifupdown-scripts: new package
->       package/ifupdown-scripts: not needed for systemd-networkd
->       package/ifupdown-scripts: allow use with a custom skeleton
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ utils/brmake | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I've applied those patches. As discussed with Arnout and you, I've
-squashed PATCH 1 and PATCH 2. And in PATCH 1, I've removed the empty
-IFUPDOWN_SCRIPTS_SOURCE variable.
-
-Best regards,
-
-Thomas
+diff --git a/utils/brmake b/utils/brmake
+index 3c6f8485ab..e30119dd10 100755
+--- a/utils/brmake
++++ b/utils/brmake
+@@ -29,7 +29,12 @@ main() {
+     m=$((d/60))
+     d=$((d%60))
+     [ ${m} -eq 0 ] || { printf "%${mf}dmin " ${m}; sf="02"; }
+-    printf "%${sf}ds\n" ${d}
++    printf "%${sf}ds" ${d}
++
++    if [ ${ret} -ne 0 ]; then
++        printf "  (error code: %s)" ${ret}
++    fi
++    printf "\n"
+ 
+     return ${ret}
+ }
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
