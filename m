@@ -1,45 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:49 +0200
-Subject: [Buildroot] [PATCH 069/100] python: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:48 +0200
+Subject: [Buildroot] [PATCH 068/100] pv: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-70-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-69-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves
-using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-on gettext/host-gettext.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/pv/Config.in | 1 -
+ package/pv/pv.mk     | 8 +-------
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index d3f7b31..8724d8c 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -54,16 +54,12 @@ HOST_PYTHON_CONF_ENV += \
- # MAKE1 has shown to workaround the problem.
- HOST_PYTHON_MAKE = $(MAKE1)
- 
--PYTHON_DEPENDENCIES = host-python libffi
-+PYTHON_DEPENDENCIES = host-python libffi $(TARGET_NLS_DEPENDENCIES)
- 
- HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
- 
- PYTHON_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--PYTHON_DEPENDENCIES += gettext
--endif
+diff --git a/package/pv/Config.in b/package/pv/Config.in
+index d732296..671f78e 100644
+--- a/package/pv/Config.in
++++ b/package/pv/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PV
+ 	bool "pv"
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Pipe Viewer - is a terminal-based tool for
+ 	  monitoring the progress of data through a
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 2279805..0ef5a6f 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -9,13 +9,7 @@ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+ PV_SITE = http://www.ivarch.com/programs/sources
+ PV_LICENSE = Artistic-2.0
+ PV_LICENSE_FILES = doc/COPYING
 -
- ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
- PYTHON_DEPENDENCIES += readline
- else
+-# pv configure script is somewhat stupid: if it cannot find the host
+-# gettext tool msgfmt, it concludes that gettext is not available, and
+-# provides its own minimal version. Unfortunately, this minimal
+-# version conflicts with the available target gettext. We fix this by
+-# ensuring that host-gettext is built if gettext support is enabled;
+-PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
++PV_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
+ # --relax linker option is enabled by default on sparc/sparc64
+ # architectures, and it can't be used together with -r option, so
 -- 
 2.9.4
