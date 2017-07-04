@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:38 +0200
-Subject: [Buildroot] [PATCH 058/100] ndisc6: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:52 +0200
+Subject: [Buildroot] [PATCH 072/100] rpm: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-59-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-73-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +15,50 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using TARGET_NLS_LIBS to force linking against libintl
+ - pass --with-libintl-prefix only when a separate libintl library is
+   available
 
  - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ndisc6/Config.in | 1 -
- package/ndisc6/ndisc6.mk | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/rpm/Config.in | 1 -
+ package/rpm/rpm.mk    | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/ndisc6/Config.in b/package/ndisc6/Config.in
-index 321bfbc..a397ea6 100644
---- a/package/ndisc6/Config.in
-+++ b/package/ndisc6/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_NDISC6
- 	bool "ndisc6 tools"
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 9b4c8a7..aa857ef 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -12,7 +12,6 @@ config BR2_PACKAGE_RPM
+ 	select BR2_PACKAGE_BEECRYPT if !BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	select BR2_PACKAGE_FILE
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_ZLIB
  	help
- 	  NDisc6 is a small collection of useful tools for IPv6 networking
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 317ec14..c81a110 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -11,6 +11,7 @@ RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
+ RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
++RPM_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
  
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index 8326fc7..3ab8306 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
-@@ -7,15 +7,11 @@
- NDISC6_VERSION = 1.0.2
- NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
- NDISC6_SITE = http://www.remlab.net/files/ndisc6
--NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
-+NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99" LIBS=$(TARGET_NLS_LIBS)
- NDISC6_CONF_OPTS = --disable-rpath --disable-suid-install
- NDISC6_LICENSE = GPL-2.0 or GPL-3.0
- NDISC6_LICENSE_FILES = COPYING
--
+ # 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
+ # 0002-configure-ac-correct-stack-protector-check.patch
+@@ -42,8 +43,7 @@ RPM_CONF_OPTS += --with-beecrypt
+ RPM_CFLAGS += -I$(STAGING_DIR)/usr/include/beecrypt
+ endif
+ 
 -ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--NDISC6_DEPENDENCIES += gettext
--NDISC6_CONF_ENV += LIBS="-lintl"
--endif
-+NDISC8_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
- NDISC6_BIN_ += dnssort # perl script
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
+-RPM_DEPENDENCIES += gettext
++ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ RPM_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
+ else
+ RPM_CONF_OPTS += --without-libintl-prefix
 -- 
 2.9.4
