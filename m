@@ -1,51 +1,31 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Tue, 4 Jul 2017 10:22:42 -0400
-Subject: [Buildroot] [v7] package: add qt5virtualkeyboard
-In-Reply-To: <20170703084733.2278a5b2@windsurf>
-References: <20170401223651.6393-1-gael.portay@savoirfairelinux.com>
- <20170703084733.2278a5b2@windsurf>
-Message-ID: <20170704142242.fxzfu6647xrncyta@gportay>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 04 Jul 2017 14:40:59 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_9991=5D_SGX_Error_implicit_declarati?=
+ =?utf-8?b?b24gb2YgZnVuY3Rpb24g4oCYZG1hY19tYXBfYXJlYeKAmQ==?=
+In-Reply-To: <bug-9991-163@https.bugs.busybox.net/>
+References: <bug-9991-163@https.bugs.busybox.net/>
+Message-ID: <bug-9991-163-iXG1yi4svz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=9991
 
-On Mon, Jul 03, 2017 at 08:47:33AM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat,  1 Apr 2017 18:36:51 -0400, Ga?l PORTAY wrote:
-> > This patch adds the Qt virtualkeyboard package.
-> > 
-> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes since v6:
-> >  - Add missing empty lines in Config.in.
-> >  - Reword note for all flag in help message.
-> >  - Remove mention of GPLv3 license in help message.
-> >  - Use filter text-function instead of strip+findstring to flag/install
-> >    3rd-parties.
-> >  - Fix useless call to strip when installing 3rd-parties.
-> 
-> I've applied to master, after fixing the following things:
-> 
->     [Thomas:
->      - use SDPX license codes
->      - add entry to DEVELOPERS file
->      - drop BR2_PACKAGE_QT5BASE_LICENSE_APPROVED logic, since we removed this option
->      - select BR2_PACKAGE_QT5DECLARATIVE and
->        BR2_PACKAGE_QT5DECLARATIVE_QUICK instead of using a "depends on"
->        and propagate the appropriate dependencies]
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+michalciolek at gmail.com changed:
 
-Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
+
+--- Comment #2 from michalciolek at gmail.com ---
+I followed the tutorial:
+http://vanguardiasur.com.ar/opengl-es-on-beaglebone-black/ and I did not know
+that ti-gfx is no longer supported... With (beaglebone_qt5_defconfig) ti-gfx-km
+(and -um) options works! Thanks!
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
