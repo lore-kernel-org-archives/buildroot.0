@@ -1,69 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 13:47:32 +0200
-Subject: [Buildroot] [PATCH] libzip: depend on !BR2_STATIC_LIBS
-In-Reply-To: <20170704104830.oqdw4edgxppm4op2@tarshish>
-References: <1499163849-9884-1-git-send-email-brgl@bgdev.pl>
- <20170704104830.oqdw4edgxppm4op2@tarshish>
-Message-ID: <91898c3d-47c1-32ff-e92e-4d49893c76a8@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue,  4 Jul 2017 14:01:10 +0200
+Subject: [Buildroot] [PATCH 2/2] boot/syslinux: disable syslinux legacy-BIOS
+	for toolchains affected by binutils bug 19615
+In-Reply-To: <20170704120110.29107-1-romain.naour@smile.fr>
+References: <20170704120110.29107-1-romain.naour@smile.fr>
+Message-ID: <20170704120110.29107-2-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since [1] syslinux is build with the target toolchain in order to
+properly build with gnu-efi package.
+But toolchains built with binutils 2.26 break the syslinux legacy-BIOS
+build as reported [2].
 
+Thanks to Beno?t Allard for the investigation and the link to the
+binutils bug [3].
 
-On 04-07-17 12:48, Baruch Siach wrote:
-> Hi Bartosz,
-> 
-> On Tue, Jul 04, 2017 at 12:24:09PM +0200, Bartosz Golaszewski wrote:
->> Since version 1.2.0 libzip requires dynamic library capabilities.
->>
->> Fixes: http://autobuild.buildroot.net/results/c50/c50ffa5bf565e75333192edc89e2d39044d07f26/
->> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
->> ---
->>  package/libzip/Config.in | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/package/libzip/Config.in b/package/libzip/Config.in
->> index 54de9e5..0414186 100644
->> --- a/package/libzip/Config.in
->> +++ b/package/libzip/Config.in
->> @@ -1,8 +1,12 @@
->>  config BR2_PACKAGE_LIBZIP
->>  	bool "libzip"
->> +	depends on !BR2_STATIC_LIBS
-> 
-> You need to propagate dependencies to packages that select BR2_PACKAGE_LIBZIP, 
-> and their reverse dependencies, recursively. In this case libsigrok, 
-> sigrok-cli, and pulseview are affected.
+[1] 6e432d5ecb46959f3c27dbbca48e41512bb40a70
+[2] http://lists.busybox.net/pipermail/buildroot/2017-July/196253.html
+[3] https://sourceware.org/bugzilla/show_bug.cgi?id=19615
 
- Also, we usually put the reason in a comment, in this case:
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Beno?t Allard <benoit.allard@greenbone.net>
+---
+ boot/syslinux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-	depends on !BR2_STATIC_LIBS # dlsym()
-
-
- Regards,
- Arnout
-
-> 
-> baruch
-> 
->>  	select BR2_PACKAGE_ZLIB
->>  	help
->>  	  C library for reading, creating, and modifying zip archives. This
->>  	  package also contains zipcmp, ziptorrent and zipmerge utilities.
->>  
->>  	  http://www.nih.at/libzip/
->> +
->> +comment "libzip needs a toolchain w/ dynamic library"
->> +	depends on BR2_STATIC_LIBS
-> 
-
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index 299a559..da03549 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -35,6 +35,7 @@ config BR2_TARGET_SYSLINUX_PXELINUX
+ 
+ config BR2_TARGET_SYSLINUX_MBR
+ 	bool "install mbr"
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+ 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	help
+ 	  Install the legacy-BIOS 'mbr' image, to boot off a
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.4
