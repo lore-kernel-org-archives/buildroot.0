@@ -1,78 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 18:39:23 +0200
-Subject: [Buildroot] [git commit] linux-fusion: fix build issue with Linux
-	>= 4.7
-Message-ID: <20170704163743.441EF81DA3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Jul 2017 18:41:21 +0200
+Subject: [Buildroot] [PATCH] package/strace: fix nios2_sp_ptr definition
+In-Reply-To: <20170704163326.25583-1-romain.naour@smile.fr>
+References: <20170704163326.25583-1-romain.naour@smile.fr>
+Message-ID: <0934c44f-6c2b-7b4a-ebe2-ced29de69bb9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ae2cab4167cb978718dcbfe9fa006b126522b65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The size parameter from sock_recvmsg() was removed from Linux kernel
-API since 4.7. This commit adjusts the existing
-0004-Port-one-one_udp.c-to-Linux-4.1.patch to fix the build with Linux
->= 4.7.
+On 04-07-17 18:33, Romain Naour wrote:
+> The patch [1] introduced in streace 1.17 use the old way to access SP
+> register as defined for kernel headers < 4.0.
+> The kernel headers for nios2 has been changed in commit [2].
+> 
+> Use the new kernel header.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b9f/b9fc25b82f3280872fe1593ac252a8529ba83576
+> 
+> [1] https://github.com/strace/strace/commit/6117728aacf431a3e3c05761766c776874cc0861
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=92d5dd8cd6e2b211d32d8fbc6cf4b7470765a09f
 
-Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
-[Thomas: improved commit title/log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ Really strange to hack around this way, but what do you expect with strace...
 
-diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-index e1bff64..3ee4dac 100644
---- a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-+++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-@@ -24,12 +24,20 @@ one/one_udp.c: In function 'ksocket_send_iov':
- one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
- 
- Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+
-+Kernel commit 2da62906b1e29 dropped the size parameter in sock_recvmsg
-+since 4.7
-+
-+In function 'ksocket_receive'
-+one/one_udp.c:235:13: error: too many arguments to function 'sock_recvmsg'
-+
-+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
- ---
-- one/one_udp.c | 30 +++++++++++++++---------------
-- 1 file changed, 15 insertions(+), 15 deletions(-)
-+ one/one_udp.c | 34 +++++++++++++++++++---------------
-+ 1 file changed, 19 insertions(+), 15 deletions(-)
- 
- diff --git a/one/one_udp.c b/one/one_udp.c
--index 26b9e6a1f729..b1daae164cdf 100644
-+index 26b9e6a..9b59529 100644
- --- a/one/one_udp.c
- +++ b/one/one_udp.c
- @@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
-@@ -78,7 +86,7 @@ index 26b9e6a1f729..b1daae164cdf 100644
-       struct iovec iov;
-       mm_segment_t oldfs;
-       int size = 0;
--@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-+@@ -213,18 +215,20 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-       iov.iov_base = buf;
-       iov.iov_len = len;
-  
-@@ -97,3 +105,14 @@ index 26b9e6a1f729..b1daae164cdf 100644
-  
-       oldfs = get_fs();
-       set_fs(KERNEL_DS);
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,7,0) // commit 2da62906b1e29
-+      size = sock_recvmsg(sock,&msg,len,msg.msg_flags);
-++#else
-++     size = sock_recvmsg(sock, &msg,msg.msg_flags);
-++#endif
-+      set_fs(oldfs);
-+ 
-+      return size;
-+-- 
-+2.11.0
-+
+ What's the upstream status of the patch?
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>  ...os2-arch_regs-fix-nios2_sp_ptr-definition.patch | 43 ++++++++++++++++++++++
+>  package/strace/Config.in                           |  6 +++
+>  2 files changed, 49 insertions(+)
+>  create mode 100644 package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+> 
+> diff --git a/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch b/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+> new file mode 100644
+> index 0000000..81e1726
+> --- /dev/null
+> +++ b/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+> @@ -0,0 +1,43 @@
+> +From 8a1f47f7963991e5b039282769d0a798d36f9e45 Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@smile.fr>
+> +Date: Tue, 4 Jul 2017 18:06:14 +0200
+> +Subject: [PATCH] nios2/arch_regs: fix nios2_sp_ptr definition
+> +
+> +The patch [1] introduced in streace 1.17 use the old way to access SP register as defined
+> +for kernel headers < 4.0.
+> +The kernel headers for nios2 has been changed in commit [2].
+> +
+> +Use the new kernel header.
+> +
+> +Fixes:
+> +http://autobuild.buildroot.net/results/b9f/b9fc25b82f3280872fe1593ac252a8529ba83576
+> +
+> +[1] https://github.com/strace/strace/commit/6117728aacf431a3e3c05761766c776874cc0861
+> +[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=92d5dd8cd6e2b211d32d8fbc6cf4b7470765a09f
+> +
+> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> +---
+> + linux/nios2/arch_regs.c | 2 +-
+> + linux/nios2/arch_regs.h | 2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/linux/nios2/arch_regs.c b/linux/nios2/arch_regs.c
+> +index 8a668bc..c18a3aa 100644
+> +--- a/linux/nios2/arch_regs.c
+> ++++ b/linux/nios2/arch_regs.c
+> +@@ -1,4 +1,4 @@
+> + static struct user_pt_regs nios2_regs;
+> +-unsigned long *const nios2_sp_ptr = &nios2_regs.sp;
+> ++unsigned int *const nios2_sp_ptr = &nios2_regs.regs[PTR_SP];
+> + # define ARCH_REGS_FOR_GETREGSET nios2_regs
+> + #define ARCH_PC_REG nios2_regs.regs[PTR_EA]
+> +diff --git a/linux/nios2/arch_regs.h b/linux/nios2/arch_regs.h
+> +index 7f344b5..c4230ed 100644
+> +--- a/linux/nios2/arch_regs.h
+> ++++ b/linux/nios2/arch_regs.h
+> +@@ -1 +1 @@
+> +-extern unsigned long *const nios2_sp_ptr;
+> ++extern unsigned int *const nios2_sp_ptr;
+> +-- 
+> +2.9.4
+> +
+> diff --git a/package/strace/Config.in b/package/strace/Config.in
+> index bbb582a..501c964 100644
+> --- a/package/strace/Config.in
+> +++ b/package/strace/Config.in
+> @@ -1,8 +1,14 @@
+>  config BR2_PACKAGE_STRACE
+>  	bool "strace"
+> +	# needs at least kernel headers 4.0 on nios2
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
+>  	help
+>  	  A useful diagnostic, instructional, and debugging tool.
+>  	  Allows you to track what system calls a program makes
+>  	  while it is running.
+>  
+>  	  http://sourceforge.net/projects/strace/
+> +
+> +comment "strace needs a toolchain w/ headers >= 4.0 on nios2"
+> +	depends on BR2_nios2
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
