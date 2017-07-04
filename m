@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:58 +0200
-Subject: [Buildroot] [PATCH 078/100] ushare: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:56 +0200
+Subject: [Buildroot] [PATCH 076/100] sysstat: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-79-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-77-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,56 +19,44 @@ This commit switches to use the new gettext logic, which involves:
 
  - dropping BR2_PACKAGE_GETTEXT selection
 
- - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
-   if NLS support should be enabled or not
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ushare/Config.in |  1 -
- package/ushare/ushare.mk | 10 +++-------
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ package/sysstat/Config.in  | 1 -
+ package/sysstat/sysstat.mk | 8 ++------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/ushare/Config.in b/package/ushare/Config.in
-index 70bf24a..c3475b8 100644
---- a/package/ushare/Config.in
-+++ b/package/ushare/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_USHARE
- 	# linking.
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBUPNP
+diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
+index 923c48a..442b787 100644
+--- a/package/sysstat/Config.in
++++ b/package/sysstat/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_SYSSTAT
+ 	bool "sysstat"
+ 	depends on BR2_USE_MMU 	# fork()
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
- 	  It implements the server component that provides UPnP media devices
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index 32aa445..bb194f6 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -7,9 +7,10 @@
- USHARE_VERSION = 1.1a
- USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
- USHARE_SITE = http://ushare.geexbox.org/releases
--USHARE_DEPENDENCIES = host-pkgconf libupnp
-+USHARE_DEPENDENCIES = host-pkgconf libupnp $(TARGET_NLS_DEPENDENCIES)
- USHARE_LICENSE = GPL-2.0+
- USHARE_LICENSE_FILES = COPYING
-+USHARE_LDFLAGS = $(TARGET_NLS_LIBS)
- 
- USHARE_CONF_OPTS = \
- 	--prefix=/usr \
-@@ -18,12 +19,7 @@ USHARE_CONF_OPTS = \
- 	--sysconfdir=/etc \
- 	--disable-strip
- 
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--USHARE_DEPENDENCIES += gettext
--USHARE_LDFLAGS += -lintl
--endif
+ 	  The sysstat utilities are a collection of performance
+ 	  monitoring tools for Linux. These include sar, sadf, mpstat,
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index bd73214..e4ba662 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -8,14 +8,10 @@ SYSSTAT_VERSION = 11.4.4
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-file-attr --disable-sensors
+-SYSSTAT_DEPENDENCIES = host-gettext
++SYSSTAT_DEPENDENCIES = host-gettext $(TARGET_NLS_DEPENDENCIES)
+ SYSSTAT_LICENSE = GPL-2.0+
+ SYSSTAT_LICENSE_FILES = COPYING
 -
--ifeq ($(BR2_ENABLE_LOCALE),)
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
- USHARE_CONF_OPTS += --disable-nls
- endif
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-SYSSTAT_DEPENDENCIES += gettext
+-SYSSTAT_MAKE_OPTS += LFLAGS="$(TARGET_LDFLAGS) -lintl"
+-endif
++SYSSTAT_MAKE_OPTS += LFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
  
+ # The isag tool is a post processing script that depends on tcl/tk
+ # among other things. So we don't install it.
 -- 
 2.9.4
