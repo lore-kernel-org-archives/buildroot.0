@@ -1,37 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:17 +0200
-Subject: [Buildroot] [PATCH 097/100] xmlstarlet: remove libintl static
-	linking handling
+Date: Tue,  4 Jul 2017 16:48:51 +0200
+Subject: [Buildroot] [PATCH 071/100] rhash: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-98-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-72-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We no longer support building the full-blown libintl in static linking
-scenarios, as it causes too many problems. Therefore, remove the
-special code that was handling this.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - using TARGET_NLS_LIBS to force linking against libintl
+
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xmlstarlet/xmlstarlet.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rhash/Config.in | 1 -
+ package/rhash/rhash.mk  | 9 +++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-index 091c371..9920dcf 100644
---- a/package/xmlstarlet/xmlstarlet.mk
-+++ b/package/xmlstarlet/xmlstarlet.mk
-@@ -19,7 +19,7 @@ XMLSTARLET_CONF_OPTS += \
+diff --git a/package/rhash/Config.in b/package/rhash/Config.in
+index 46f6ca7..2ddcb00 100644
+--- a/package/rhash/Config.in
++++ b/package/rhash/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_RHASH
+ 	bool "rhash"
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  LibRHash is a professional, portable, thread-safe C library
+ 	  for computing a wide variety of hash sums, such as CRC32,
+diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
+index 6cfc271..53f49d8 100644
+--- a/package/rhash/rhash.mk
++++ b/package/rhash/rhash.mk
+@@ -10,12 +10,9 @@ RHASH_SITE = https://sourceforge.net/projects/rhash/files/rhash/$(RHASH_VERSION)
+ RHASH_LICENSE = MIT
+ RHASH_LICENSE_FILES = COPYING
+ RHASH_INSTALL_STAGING = YES
+-
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-RHASH_DEPENDENCIES += gettext
+-RHASH_ADDCFLAGS += -DUSE_GETTEXT
+-RHASH_ADDLDFLAGS += -lintl
+-endif
++RHASH_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++RHASH_ADDLDFLAGS = $(TARGET_NLS_LIBS)
++RHASH_ADDCFLAGS = $(if $(BR2_SYSTEM_ENABLE_NLS),-DUSE_GETTEXT)
  
- ifeq ($(BR2_STATIC_LIBS),y)
- XMLSTARLET_CONF_OPTS += --enable-static-libs
--XMLSTARLET_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libxml-2.0 libexslt` $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
-+XMLSTARLET_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libxml-2.0 libexslt`"
- else
- XMLSTARLET_CONF_OPTS += --disable-static-libs
- endif
+ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ RHASH_DEPENDENCIES += openssl
 -- 
 2.9.4
