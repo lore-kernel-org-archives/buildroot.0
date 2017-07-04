@@ -1,46 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:43 +0200
-Subject: [Buildroot] [PATCH 003/100] lvm2: force disable NLS support
+Date: Tue,  4 Jul 2017 16:47:46 +0200
+Subject: [Buildroot] [PATCH 006/100] toolchain: introduce
+	BR2_TOOLCHAIN_HAS_FULL_GETTEXT
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-4-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-7-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We are going to pass --enable-nls to all autotools packages when NLS
-support is enabled globally. However, lvm2 NLS support doesn't build,
-and anyway lvm2 doesn't provide any useful translation files, so we
-force disable NLS support for this package.
+This new boolean is true if the toolchain provides a built-in
+full-featured implementation of gettext (glibc), and false if only a
+stub implementation is provided (uclibc, musl).
+
+This will be used in follow-up commits to decide whether libintl needs
+to be built by gettext or not.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lvm2/lvm2.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ toolchain/Config.in           | 1 +
+ toolchain/toolchain-common.in | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 9a422fe..f5cd0b5 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -12,12 +12,14 @@ LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 6aaf68b..15ee335 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -11,6 +11,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
+ 	bool
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
++	select BR2_TOOLCHAIN_HAS_FULL_GETTEXT
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index ed993dd..56de9ed 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -88,6 +88,12 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	bool
+ 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
  
- # Make sure that binaries and libraries are installed with write
--# permissions for the owner.
-+# permissions for the owner. We disable NLS because it's broken, and
-+# the package anyway doesn't provide any translation files.
- LVM2_CONF_OPTS += \
- 	--enable-write_install \
- 	--enable-pkgconfig \
- 	--enable-cmdlib \
--	--enable-dmeventd
-+	--enable-dmeventd \
-+	--disable-nls
- 
- # LVM2 uses autoconf, but not automake, and the build system does not
- # take into account the toolchain passed at configure time.
++# This boolean is true if the toolchain provides a built-in full
++# featured gettext implementation (glibc), and false if only a stub
++# gettext implementation is provided (uclibc, musl)
++config BR2_TOOLCHAIN_HAS_FULL_GETTEXT
++	bool
++
+ config BR2_USE_MMU
+ 	bool "Enable MMU support" if BR2_ARCH_HAS_MMU_OPTIONAL
+ 	default y if BR2_ARCH_HAS_MMU_OPTIONAL || BR2_ARCH_HAS_MMU_MANDATORY
 -- 
 2.9.4
