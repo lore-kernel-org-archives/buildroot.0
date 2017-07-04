@@ -1,98 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:47:05 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gst1-plugins-bad: fix
-	webrtc option
-Message-ID: <20170704154818.2D5E27FAFC@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:50:34 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libmad: add security
+	patch from debian
+Message-ID: <20170704154818.3CA267FAFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1195d84c71c5849117f40d99189e7ae077cd88fb
+commit: https://git.buildroot.net/buildroot/commit/?id=9012a319f36a3ac8a9383f854569e04c3a110a35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-When the WebRTC plugin option was introduced in commit
-ee267886bc090335dd94c97dca1c294addccc090 ("gst1-plugins-bad: enable
-webrtc plugin"), it was incorrect added as "webrtc", while the actual
-name of the plugin and corresponding configure option is "webrtcdsp".
+Fixes:
 
-This commit therefore fixes the .mk file to use the correct name. And
-also, since we want to keep Buildroot option consistent with the name
-of the GStreamer plugins, it renames the Config.in option as well, and
-introduces the necessary Config.in.legacy handling.
+CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
+libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
+denial of service (assertion failure and application exit) via a crafted
+audio file.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
+libmad 0.15.1b allows remote attackers to cause a denial of service
+(heap-based buffer overflow and application crash) or possibly have
+unspecified other impact via a crafted audio file.
+
+CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
+0.15.1b allows remote attackers to cause a denial of service (heap-based
+buffer over-read and application crash) via a crafted audio file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4c06d2490a07f0b88f42c56c7409899fd2f5608a)
+(cherry picked from commit 6369a06150b9a2991807c0418a7f0a865ef6c084)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                        | 10 ++++++++++
- package/gstreamer1/gst1-plugins-bad/Config.in           |  6 +++---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  6 +++---
- 3 files changed, 16 insertions(+), 6 deletions(-)
+ package/libmad/libmad.hash | 1 +
+ package/libmad/libmad.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7decb91..0f2f95b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,16 @@ endif
+diff --git a/package/libmad/libmad.hash b/package/libmad/libmad.hash
+index 1e55556..173399f 100644
+--- a/package/libmad/libmad.hash
++++ b/package/libmad/libmad.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690  libmad-0.15.1b.tar.gz
++sha256  0e21f2c6b19337d0b237dacc04f7b90a56be7f359f4c9a2ee0b202d9af0cfa69  frame_length.diff
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 9c152f9..2200448 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -10,6 +10,8 @@ LIBMAD_INSTALL_STAGING = YES
+ LIBMAD_LIBTOOL_PATCH = NO
+ LIBMAD_LICENSE = GPLv2+
+ LIBMAD_LICENSE_FILES = COPYING
++LIBMAD_PATCH = \
++	https://sources.debian.net/data/main/libm/libmad/0.15.1b-8/debian/patches/frame_length.diff
  
- comment "Legacy options removed in 2017.02"
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
-+	bool "gst1-plugins-bad webrtc renamed to webrtcdsp"
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
-+	select BR2_LEGACY
-+	help
-+	  The WebRTC plugin in GStreamer 1.x has always been named
-+	  webrtcdsp, but was wrongly introduced in Buildroot under the
-+	  name webrtc. Therefore, we have renamed the option to match
-+	  the actual name of the GStreamer plugin.
-+
- config BR2_PACKAGE_SPICE_CLIENT
- 	bool "spice client support removed"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 1db5187..2fe9bb6 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -698,8 +698,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
- 	help
- 	  Webp image format plugin
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
--	bool "webrtc"
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
-+	bool "webrtcdsp"
- 	# All depends from webrtc-audio-processing
- 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -710,7 +710,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
- 	help
- 	  WebRTC echo-cancellation, gain control and noise suppression
- 
--comment "webrtc needs a toolchain w/ C++, NPTL, gcc >= 4.8"
-+comment "webrtcdsp needs a toolchain w/ C++, NPTL, gcc >= 4.8"
- 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index c6a151a..9f39bbf 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -813,11 +813,11 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtcdsp
- GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
- else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtcdsp
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
+ define LIBMAD_PREVENT_AUTOMAKE
+ 	# Prevent automake from running.
