@@ -1,10 +1,9 @@
 From: Markus Mayer <code@mmayer.net>
-Date: Tue,  4 Jul 2017 16:54:44 -0700
-Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools being
-	sorted alphabetically
+Date: Tue,  4 Jul 2017 16:54:45 -0700
+Subject: [Buildroot] [PATCH 2/2] package/linux-tools: add tmon
 In-Reply-To: <20170704235445.35255-1-code@mmayer.net>
 References: <20170704235445.35255-1-code@mmayer.net>
-Message-ID: <20170704235445.35255-2-code@mmayer.net>
+Message-ID: <20170704235445.35255-3-code@mmayer.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +12,66 @@ To: buildroot@busybox.net
 
 From: Markus Mayer <mmayer@broadcom.com>
 
-The Linux tools master makefile (linux-tools.mk) must be included after
-all Linux tools sub-makefiles (linux-tool-*.mk). This is currently
-ensured by sorting all package makefiles alphabetically.
-
-In preparation for adding linux-tool-tmon, we cannot keep relying on
-this mechanism. In the C locale, linux-tool-tmon.mk will be sorted
-behind linux-tools.mk, which would break the build.
-
-Therefore, we ensure that linux-tools.mk always comes after
-linux-tool-*.mk by explicitly including it after the other package
-makefiles.
+Add the tmon package to linux-tools.
 
 Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- Makefile                           | 6 +++++-
- package/linux-tools/linux-tools.mk | 8 +++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/linux-tools/Config.in          |  7 +++++++
+ package/linux-tools/linux-tool-tmon.mk | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+ create mode 100644 package/linux-tools/linux-tool-tmon.mk
 
-diff --git a/Makefile b/Makefile
-index b37171fcf..b5596444d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -495,7 +495,11 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
- -include $(PACKAGE_OVERRIDE_FILE)
- endif
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index db9ed9f19..0fa468a4f 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -83,4 +83,11 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  
--include $(sort $(wildcard package/*/*.mk))
-+# We need to insure that linux-tools.mk is included after all linux-tool-*.mk
-+# makefiles, and we can't rely on alphabetical sort order for this.
-+LINUX_TOOLS_MK = package/linux-tools/linux-tools.mk
-+include $(sort $(filter-out $(LINUX_TOOLS_MK),$(wildcard package/*/*.mk)))
-+include $(LINUX_TOOLS_MK)
- 
- include boot/common.mk
- include linux/linux.mk
-diff --git a/package/linux-tools/linux-tools.mk b/package/linux-tools/linux-tools.mk
-index 7fa8d194c..3d7a0bd92 100644
---- a/package/linux-tools/linux-tools.mk
-+++ b/package/linux-tools/linux-tools.mk
-@@ -14,11 +14,9 @@
- # to guarantee that each tool has a chance to register itself before we build
- # the list of build and install hooks, below.
- #
--# This is currently guaranteed by the naming of each file:
--# - they get included by the top-level Makefile, with $(sort $(wildcard ...))
--# - make's $(sort) function will aways sort in the C locale
--# - the files names correctly sort out in the C locale so that each tool's
--#   .mk file is included before this one.
-+# This is ensured by the main buildroot makefile, which explicitly includes
-+# linux-tools.mk after all linux-tool*.mk makefiles. Look for LINUX_TOOLS_MK
-+# in the top-level makefile to see where this is happening.
- 
- # We only need the kernel to be extracted, not actually built
- LINUX_TOOLS_PATCH_DEPENDENCIES = linux
++config BR2_PACKAGE_LINUX_TOOLS_TMON
++	bool "tmon"
++	select BR2_PACKAGE_LINUX_TOOLS
++	help
++	  tmon is a terminal-based tool (using curses) that allows access
++	  thermal information about the system.
++
+ endmenu
+diff --git a/package/linux-tools/linux-tool-tmon.mk b/package/linux-tools/linux-tool-tmon.mk
+new file mode 100644
+index 000000000..1330ea67b
+--- /dev/null
++++ b/package/linux-tools/linux-tool-tmon.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# tmon
++#
++################################################################################
++
++LINUX_TOOLS += tmon
++
++TMON_DEPENDENCIES = ncurses
++TMON_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
++	CC=$(TARGET_CC) \
++	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
++
++define TMON_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/thermal/tmon/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have the tmon tool." ; \
++		echo "At least kernel 3.13 must be used." ; \
++		exit 1 ; \
++	fi
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		$(TMON_MAKE_OPTS) \
++		tmon
++endef
++
++define TMON_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		$(TMON_MAKE_OPTS) \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		tmon_install
++endef
 -- 
 2.13.0
