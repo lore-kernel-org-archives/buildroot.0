@@ -1,153 +1,93 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue,  4 Jul 2017 12:01:23 -0700
-Subject: [Buildroot] [PATCH] zstd: add new package
-Message-ID: <20170704190123.13231-1-andrew.smirnov@gmail.com>
+Date: Tue,  4 Jul 2017 12:47:16 -0700
+Subject: [Buildroot] [PATCH] python-systemd: add new package
+Message-ID: <20170704194716.15130-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package to provide Zstandard compression tools
-(see https://facebook.github.io/zstd)
+Add package for official python bindings availibe as a part of systemd
+project at: https://github.com/systemd/python-systemd
 
-Minimal config snippet for utils/test-pkg is as follows:
+Minimal config snippet for utils/test-pkg is as follows (sans
+backslashes):
 
-BR2_PACKAGE_ZSTD=y
+\# BR2_INIT_BUSYBOX is not set
+\# BR2_INIT_SYSV is not set
+BR2_INIT_SYSTEMD=y
+\# BR2_INIT_NONE is not set
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON_SYSTEMD=y
 
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/zstd/Config.in | 25 ++++++++++++++++++++
- package/zstd/zstd.mk   | 63 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 90 insertions(+)
- create mode 100644 package/zstd/Config.in
- create mode 100644 package/zstd/zstd.mk
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-systemd/Config.in         |  7 +++++++
+ package/python-systemd/python-systemd.mk | 14 ++++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/python-systemd/Config.in
+ create mode 100644 package/python-systemd/python-systemd.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 08a138a..d907e2d 100644
+index 7c8d7f1..08a138a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -96,6 +96,7 @@ F:	package/python-scandir/
+@@ -94,6 +94,7 @@ F:	package/python-pathlib2/
+ F:	package/python-pickleshare/
+ F:	package/python-scandir/
  F:	package/python-simplegeneric/
- F:	package/python-systemd/
++F:	package/python-systemd/
  F:	package/python-traitlets/
-+F:	package/zstd/
  
  N:	Andrey Yurovsky <yurovsky@gmail.com>
- F:	package/rauc/
 diff --git a/package/Config.in b/package/Config.in
-index af1aa0c..1efdf26 100644
+index a811ff6..af1aa0c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -68,6 +68,7 @@ menu "Compressors and decompressors"
- 	source "package/unzip/Config.in"
- 	source "package/xz/Config.in"
- 	source "package/zip/Config.in"
-+	source "package/zstd/Config.in"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+@@ -860,6 +860,7 @@ menu "External python modules"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-sortedcontainers//Config.in"
+ 	source "package/python-spidev/Config.in"
++	source "package/python-systemd/Config.in"
+ 	source "package/python-tempora/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+diff --git a/package/python-systemd/Config.in b/package/python-systemd/Config.in
 new file mode 100644
-index 0000000..20738b9
+index 0000000..83fdcb4
 --- /dev/null
-+++ b/package/zstd/Config.in
-@@ -0,0 +1,25 @@
-+menuconfig BR2_PACKAGE_ZSTD
-+	bool "zstd"
++++ b/package/python-systemd/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SYSTEMD
++	bool "python-systemd"
++	depends on BR2_PACKAGE_SYSTEMD
 +	help
-+	  Zstandard, or zstd as short version, is a fast lossless
-+	  compression algorithm, targeting real-time compression
-+	  scenarios at zlib-level and better compression ratios
++	  Python module for native access to the systemd facilities.
 +
-+	  For more info see https://facebook.github.io/zstd
-+
-+	  The selection of other packages will enable some features:
-+
-+	  - xz and/or zlib will enable support for support of
-+	    corresponding compression formats
-+
-+if BR2_PACKAGE_ZSTD
-+
-+config BR2_PACKAGE_ZSTD_ZSTDLESS_ZSTDGREP
-+	bool "enable zstdless, zstdgrep tools"
-+	default n
-+
-+config BR2_PACKAGE_ZSTD_ZSTDCAT_UNZSTD_ZSTDMT
-+	bool "enable zstdcat, unzstd and zstdmt tools"
-+	default n
-+
-+endif
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
++	  https://github.com/systemd/python-systemd
+diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
 new file mode 100644
-index 0000000..6edb3f7
+index 0000000..a3684c4
 --- /dev/null
-+++ b/package/zstd/zstd.mk
-@@ -0,0 +1,63 @@
++++ b/package/python-systemd/python-systemd.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# zstd
++# python-systemd
 +#
 +################################################################################
 +
-+ZSTD_VERSION = v1.2.0
-+ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
-+ZSTD_LICENSE = BSD-3-Clause
-+ZSTD_LICENSE_FILES = LICENSE PATENTS
++PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
++PYTHON_SYSTEMD_VERSION = 233 # Should be kept in sync with $(SYSTEMD_VERSION)
++PYTHON_SYSTEMD_SITE = $(call github,systemd,python-systemd,v$(PYTHON_SYSTEMD_VERSION))
++PYTHON_SYSTEMD_SETUP_TYPE = distutils
++PYTHON_SYSTEMD_LICENSE = LGPL-2.1
++PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ZSTD_OPTS += HAVE_THREAD=1
-+else
-+ZSTD_OPTS += HAVE_THREAD=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+ZSTD_DEPENDENCIES += zlib
-+ZSTD_OPTS += HAVE_ZLIB=1
-+else
-+ZSTD_OPTS += HAVE_ZLIB=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+ZSTD_DEPENDENCIES += xz
-+ZSTD_OPTS += HAVE_LZMA=1
-+else
-+ZSTD_OPTS += HAVE_LZMA=0
-+endif
-+
-+define ZSTD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D) zstd
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ZSTD_ZSTDLESS_ZSTDGREP),y)
-+define ZSTD_INSTALL_TARGET_ZSTDLESS_ZSTDGREP
-+	$(INSTALL) -D -m 0755 $(@D)/programs/zstdless $(TARGET_DIR)/usr/bin/zstdless
-+	$(INSTALL) -D -m 0755 $(@D)/programs/zstdgrep $(TARGET_DIR)/usr/bin/zstdgrep
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZSTD_ZSTDCAT_UNZSTD_ZSTDMT),y)
-+define ZSTD_INSTALL_TARGET_ZSTDCAT_UNZSTD_ZSTDMT
-+	for tool in zstdcat unzstd zstdmt; do \
-+		ln -sf zstd $(TARGET_DIR)/usr/bin/$${tool}; \
-+	done
-+endef
-+endif
-+
-+#
-+# 'install' target provided with the package will unconditionally
-+# install man pages and all of the tools. To avoid that we install all
-+# of the binaries explicitly
-+#
-+define ZSTD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/zstd $(TARGET_DIR)/usr/bin/zstd
-+
-+	$(ZSTD_INSTALL_TARGET_ZSTDLESS_ZSTDGREP)
-+	$(ZSTD_INSTALL_TARGET_ZSTDCAT_UNZSTD_ZSTDMT)
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(python-package))
 -- 
 2.9.4
