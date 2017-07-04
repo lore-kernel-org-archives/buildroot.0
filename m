@@ -1,78 +1,153 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue,  4 Jul 2017 12:01:04 -0700
-Subject: [Buildroot] [PATCH] fs/cpio/init: remout / as read-only as a first
-	step
-Message-ID: <20170704190104.24703-1-andrew.smirnov@gmail.com>
+Date: Tue,  4 Jul 2017 12:01:23 -0700
+Subject: [Buildroot] [PATCH] zstd: add new package
+Message-ID: <20170704190123.13231-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When /init is present on root file system kernel does not take into
-accout kernel arguments such as "ro" and does not remount root as
-read-only. So prior to this commit the system would continue booting
-with "rw" root filesystem until corresponding line in /etc/fstab to
-remount it as "ro" was processed.
+Add package to provide Zstandard compression tools
+(see https://facebook.github.io/zstd)
 
-Change the code to immediately remount / as read-only and rely on
-/etc/fstab processing to remount it as "rw" if that is what's selected
-in Buildroot configuration.
+Minimal config snippet for utils/test-pkg is as follows:
+
+BR2_PACKAGE_ZSTD=y
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/zstd/Config.in | 25 ++++++++++++++++++++
+ package/zstd/zstd.mk   | 63 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 90 insertions(+)
+ create mode 100644 package/zstd/Config.in
+ create mode 100644 package/zstd/zstd.mk
 
-Hi everyone,
-
-Here's a little bit of a backstory for this patch:
-
-I have a PowerPC, systemd based system that is set up to build and boot
-from a compressed CPIO image. The system is build using stock
-Buildroot with a number of patches from
-https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/systemd-skeleton
-on top of it (to fix bug 7892).
-
-Running against systemd 232 (not reproducable with 233), I would
-occasionally see "systemd-remount-fs.service" fail to start because it
-would try to re-mount '/' as read-only and fail due to '/' being
-busy (I never figured out exactly what process was writing
-there). That particular failure, being not very critical on my setup,
-would leave my system in a state where everything worked as before,
-but root filesystem would be accessible for writing.
-
-Since all of the above run contrary to my expectaions (I expected
-rootfs to be read-only to begin with) I went onto reading kernel
-source to see if all of this was because I somehow misconfigured my
-kernel boot paramters. As I mentioned in commit message, doing so
-revealed that, when "/init" is present in the system, kernel would
-mount root as R/W and pass control onto "/init" without trying to
-honor "ro" bootflag. So, as far I can tell, in setup like this, it is
-the responsiblity of "/init" script/executable to set things up
-"correctly".
-
-Needless to say that applying the change made my original problem --
-"systemd-remount-fs.service" failing -- not reproducable.
-
-I am not sure if this is a geniunly good fix or if I missed something
-blatantly obvious and all of the above is my fault, so please let me
-know what you think.
-
-Thanks,
-Andrey Smirnov
-
- fs/cpio/init | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/cpio/init b/fs/cpio/init
-index a275482..349f98b 100755
---- a/fs/cpio/init
-+++ b/fs/cpio/init
-@@ -1,5 +1,6 @@
- #!/bin/sh
- # devtmpfs does not get automounted for initramfs
-+/bin/mount -o remount,ro /dev/root
- /bin/mount -t devtmpfs devtmpfs /dev
- exec 0</dev/console
- exec 1>/dev/console
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 08a138a..d907e2d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -96,6 +96,7 @@ F:	package/python-scandir/
+ F:	package/python-simplegeneric/
+ F:	package/python-systemd/
+ F:	package/python-traitlets/
++F:	package/zstd/
+ 
+ N:	Andrey Yurovsky <yurovsky@gmail.com>
+ F:	package/rauc/
+diff --git a/package/Config.in b/package/Config.in
+index af1aa0c..1efdf26 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -68,6 +68,7 @@ menu "Compressors and decompressors"
+ 	source "package/unzip/Config.in"
+ 	source "package/xz/Config.in"
+ 	source "package/zip/Config.in"
++	source "package/zstd/Config.in"
+ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
+diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+new file mode 100644
+index 0000000..20738b9
+--- /dev/null
++++ b/package/zstd/Config.in
+@@ -0,0 +1,25 @@
++menuconfig BR2_PACKAGE_ZSTD
++	bool "zstd"
++	help
++	  Zstandard, or zstd as short version, is a fast lossless
++	  compression algorithm, targeting real-time compression
++	  scenarios at zlib-level and better compression ratios
++
++	  For more info see https://facebook.github.io/zstd
++
++	  The selection of other packages will enable some features:
++
++	  - xz and/or zlib will enable support for support of
++	    corresponding compression formats
++
++if BR2_PACKAGE_ZSTD
++
++config BR2_PACKAGE_ZSTD_ZSTDLESS_ZSTDGREP
++	bool "enable zstdless, zstdgrep tools"
++	default n
++
++config BR2_PACKAGE_ZSTD_ZSTDCAT_UNZSTD_ZSTDMT
++	bool "enable zstdcat, unzstd and zstdmt tools"
++	default n
++
++endif
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+new file mode 100644
+index 0000000..6edb3f7
+--- /dev/null
++++ b/package/zstd/zstd.mk
+@@ -0,0 +1,63 @@
++################################################################################
++#
++# zstd
++#
++################################################################################
++
++ZSTD_VERSION = v1.2.0
++ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
++ZSTD_LICENSE = BSD-3-Clause
++ZSTD_LICENSE_FILES = LICENSE PATENTS
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ZSTD_OPTS += HAVE_THREAD=1
++else
++ZSTD_OPTS += HAVE_THREAD=0
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++ZSTD_DEPENDENCIES += zlib
++ZSTD_OPTS += HAVE_ZLIB=1
++else
++ZSTD_OPTS += HAVE_ZLIB=0
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++ZSTD_DEPENDENCIES += xz
++ZSTD_OPTS += HAVE_LZMA=1
++else
++ZSTD_OPTS += HAVE_LZMA=0
++endif
++
++define ZSTD_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D) zstd
++endef
++
++ifeq ($(BR2_PACKAGE_ZSTD_ZSTDLESS_ZSTDGREP),y)
++define ZSTD_INSTALL_TARGET_ZSTDLESS_ZSTDGREP
++	$(INSTALL) -D -m 0755 $(@D)/programs/zstdless $(TARGET_DIR)/usr/bin/zstdless
++	$(INSTALL) -D -m 0755 $(@D)/programs/zstdgrep $(TARGET_DIR)/usr/bin/zstdgrep
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_ZSTD_ZSTDCAT_UNZSTD_ZSTDMT),y)
++define ZSTD_INSTALL_TARGET_ZSTDCAT_UNZSTD_ZSTDMT
++	for tool in zstdcat unzstd zstdmt; do \
++		ln -sf zstd $(TARGET_DIR)/usr/bin/$${tool}; \
++	done
++endef
++endif
++
++#
++# 'install' target provided with the package will unconditionally
++# install man pages and all of the tools. To avoid that we install all
++# of the binaries explicitly
++#
++define ZSTD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/zstd $(TARGET_DIR)/usr/bin/zstd
++
++	$(ZSTD_INSTALL_TARGET_ZSTDLESS_ZSTDGREP)
++	$(ZSTD_INSTALL_TARGET_ZSTDCAT_UNZSTD_ZSTDMT)
++endef
++
++$(eval $(generic-package))
 -- 
 2.9.4
