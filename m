@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:09 +0200
-Subject: [Buildroot] [PATCH 029/100] flex: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:06 +0200
+Subject: [Buildroot] [PATCH 026/100] elfutils: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-30-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-27-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,56 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
+ - using TARGET_NLS_LIBS to force linking against libintl
+
  - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flex/Config.in | 1 -
- package/flex/flex.mk   | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/elfutils/Config.in   |  1 -
+ package/elfutils/elfutils.mk | 11 +++--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index 76e8bc7..33d123d 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_FLEX
- 	bool "flex"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 3228319..ad86c31 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -14,7 +14,6 @@ config BR2_PACKAGE_ELFUTILS
+ 	depends on !BR2_bfin
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  A fast lexical analyser generator. A tool for generating
- 	  programs that perform pattern-matching on text.
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 905621e..b782699 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -9,8 +9,7 @@ FLEX_SITE = https://github.com/westes/flex/files/981163
- FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
- FLEX_LICENSE_FILES = COPYING
--FLEX_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_GETTEXT_IF_LOCALE),gettext) host-m4
-+FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
- FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
- HOST_FLEX_DEPENDENCIES = host-m4
+ 	  Libraries/utilities to handle ELF objects (drop in
+ 	  replacement for libelf).
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index e43d036..5570a3b 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -10,7 +10,7 @@ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+ ELFUTILS_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
+-ELFUTILS_DEPENDENCIES = zlib
++ELFUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ HOST_ELFUTILS_DEPENDENCIES = host-zlib host-bzip2 host-xz
  
+ # We patch configure.ac
+@@ -40,13 +40,8 @@ ELFUTILS_CONF_ENV += \
+ 	CFLAGS="$(ELFUTILS_CFLAGS)" \
+ 	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
+ 
+-ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
+-
+-# Unconditionnally requires gettext.
+-ifeq ($(BR2_NEEDS_GETTEXT),y)
+-ELFUTILS_DEPENDENCIES += gettext
+-ELFUTILS_LDFLAGS += -lintl
+-endif
++ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
++	$(TARGET_NLS_LIBS)
+ 
+ ELFUTILS_CONF_ENV += \
+ 	LDFLAGS="$(ELFUTILS_LDFLAGS)"
 -- 
 2.9.4
