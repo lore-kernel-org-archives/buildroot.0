@@ -1,76 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:37:15 +0200
-Subject: [Buildroot] [git commit] popt: remove libintl static linking
-	handling
-Message-ID: <20170704233520.6FB0D8013D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 05 Jul 2017 01:39:09 +0200
+Subject: [Buildroot] [PATCH v5 3/5] fs/ext2: rename
+	BR2_TARGET_ROOTFS_EXT2_BLOCKS -> BR2_TARGET_ROOTFS_EXT2_SIZE
+In-Reply-To: <20170704144729.19753-4-s.martin49@gmail.com> (Samuel Martin's
+ message of "Tue, 4 Jul 2017 16:47:27 +0200")
+References: <20170704144729.19753-1-s.martin49@gmail.com>
+ <20170704144729.19753-4-s.martin49@gmail.com>
+Message-ID: <87zicjzs9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63bec77964d44f97102fb18271d8e7ec070aa405
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-We no longer support building the full-blown libintl in static linking
-scenarios, as it causes too many problems. Therefore, remove the patch
-that was handling this.
+ > This change deprecates the ext2/3/4 rootfs size in blocks symbol in
+ > favor of one that mimic the fs-size argument behavior of mkfs (i.e.
+ > size in a human readable format accepting k, m, g or t suffix or their
+ > upper-case variants).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-the-libintl-library-to-the-Libs.private-.patch | 47 ----------------------
- 1 file changed, 47 deletions(-)
+ > +++ b/fs/ext2/ext2.mk
+ > @@ -4,6 +4,11 @@
+ >  #
+ >  ################################################################################
+ 
+ > +EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
+ > +ifeq ($(BR2_TARGET_ROOTFS_EXT)-$(EXT2_SIZE),y-)
+ > +$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
+ > +endif
 
-diff --git a/package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch b/package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch
-deleted file mode 100644
-index 9b0b07e..0000000
---- a/package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 470755ccc353b59107c957972d908cbde4942c8d Mon Sep 17 00:00:00 2001
--From: Fabio Porcedda <fabio.porcedda@gmail.com>
--Date: Sun, 1 Mar 2015 21:13:48 +0100
--Subject: [PATCH] popt.pc: add the libintl library to the Libs.private field
--
--If static linking and libintl is used, the program that uses the popt
--library needs to link to the libintl library too so add the libintl
--library to the libs.private field because is useful for programs that call
--  pkg-config --static --libs popt
--they get the libintl library too:
--  -L<...> -lpopt -lintl
--
--This patch was already sent upstream:
--http://rpm5.org/community/popt-devel/0294.html
--
--Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-----
-- configure.ac | 1 +
-- popt.pc.in   | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index e8eb238..816d272 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -90,6 +90,7 @@ popt_sysconfdir="${sysconfdir}"
-- eval "popt_sysconfdir=\"${popt_sysconfdir}\"" # expand contained ${prefix}
-- AC_DEFINE_UNQUOTED([POPT_SYSCONFDIR], ["$popt_sysconfdir"], [Full path to default POPT configuration directory])
-- 
--+AC_SUBST([POPT_PKGCONFIG_LIBS_PRIVATE],"$LIBINTL")
-- 
-- # Define a (hope) portable Libs pkgconfig directive that 
-- # - Don't harm if the default library search path include ${libdir}
--diff --git a/popt.pc.in b/popt.pc.in
--index a86437c..0acfdb9 100644
----- a/popt.pc.in
--+++ b/popt.pc.in
--@@ -6,5 +6,6 @@ includedir=@includedir@
-- Name: popt
-- Version: @VERSION@
-- Description: popt library.
--+Libs.private: @POPT_PKGCONFIG_LIBS_PRIVATE@
-- Libs: @POPT_PKGCONFIG_LIBS@
-- Cflags: -I${includedir}
---- 
--2.3.1
--
+Hmm, shouldn't that be BR2_TARGET_ROOTFS_EXT2 instead of
+BR2_TARGET_ROOTFS_EXT?
+
+-- 
+Bye, Peter Korsgaard
