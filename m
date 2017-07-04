@@ -1,64 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:52 +0200
-Subject: [Buildroot] [PATCH 072/100] rpm: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:49:16 +0200
+Subject: [Buildroot] [PATCH 096/100] xfsprogs: remove libintl static linking
+	handling
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-73-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-97-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - pass --with-libintl-prefix only when a separate libintl library is
-   available
-
- - dropping BR2_PACKAGE_GETTEXT selection
+We no longer support building the full-blown libintl in static linking
+scenarios, as it causes too many problems. Therefore, remove the
+patch and special code that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpm/Config.in | 1 -
- package/rpm/rpm.mk    | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ .../0004-build-add-EXTRALIBS-to-link-with.patch    | 53 ----------------------
+ package/xfsprogs/xfsprogs.mk                       | 17 -------
+ 2 files changed, 70 deletions(-)
+ delete mode 100644 package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
 
-diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index 9b4c8a7..aa857ef 100644
---- a/package/rpm/Config.in
-+++ b/package/rpm/Config.in
-@@ -12,7 +12,6 @@ config BR2_PACKAGE_RPM
- 	select BR2_PACKAGE_BEECRYPT if !BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_BERKELEYDB
- 	select BR2_PACKAGE_FILE
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 317ec14..c81a110 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -11,6 +11,7 @@ RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
- RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
-+RPM_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch b/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
+deleted file mode 100644
+index 8ff0580..0000000
+--- a/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 1e9bb2fba94bc508659f1667bf95501324849bb9 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 26 Feb 2017 12:04:54 +0100
+-Subject: [PATCH] build: add EXTRALIBS to link with
+-
+-When doing a uClibc static build, the build fails to link:
+-    http://autobuild.buildroot.org/results/503/50314716a9f72e8bb238e52e9dc342c68f7e0b8b/build-end.log
+-
+-The cause is due to:
+-  - xfsprogs links dome programs with util-linux' libblkid
+-  - util-linux' libblkid is linked to util-linux' libuuid
+-  - util-linux' libuuid uses i18n functions when locales are enabled
+-  - uClibc does not provide i18n functions
+-  - i18n functions are provided by libintl from libintl from gettext
+-
+-util-linux installs pkg-config files for thos two libs. However,
+-xfsprogs does not use pkg-config to find libblkid or libuuid, thus it
+-misses the Libs.private field from libuid.
+-
+-In this case, it is necessary to pass LIBS=-lintl at configure time, so
+-that configure correctly finds libblkid.
+-
+-Still, this is not enough, because the build will not use LIBS during
+-the link phase.
+-
+-We fix that last bit by adding EXTRALIBS to the libraries to link with,
+-so that it is possible to pass EXTRALIBS=-lintl at build time:
+-
+-    $ ./configure [...] LIBS=-lintl
+-    $ make EXTRALIBS=-lintl
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Cc: Waldemar Brodkorb <wbx@openadk.org>
+----
+- include/buildmacros | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/buildmacros b/include/buildmacros
+-index a7c5d8a..dd62d80 100644
+---- a/include/buildmacros
+-+++ b/include/buildmacros
+-@@ -11,7 +11,7 @@ BUILDRULES = $(TOPDIR)/include/buildrules
+- 
+- LDFLAGS += $(LOADERFLAGS) $(LLDFLAGS)
+- LTLDFLAGS += $(LOADERFLAGS)
+--LDLIBS = $(LLDLIBS) $(PLDLIBS) $(MALLOCLIB)
+-+LDLIBS = $(LLDLIBS) $(PLDLIBS) $(MALLOCLIB) $(EXTRALIBS)
+- 
+- MAKEOPTS = --no-print-directory Q=$(Q)
+- SRCFILES = Makefile $(HFILES) $(CFILES) $(LSRCFILES) $(LFILES) $(YFILES)
+--- 
+-2.7.4
+-
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index ed56d34..2f708f1 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -18,23 +18,6 @@ XFSPROGS_CONF_OPTS = \
+ 	INSTALL_GROUP=root \
+ 	--enable-static
  
- # 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
- # 0002-configure-ac-correct-stack-protector-check.patch
-@@ -42,8 +43,7 @@ RPM_CONF_OPTS += --with-beecrypt
- RPM_CFLAGS += -I$(STAGING_DIR)/usr/include/beecrypt
- endif
+-# xfsprogs links some of its programs to libs from util-linux, which use
+-# i18n functions. For shared-only builds, that's automatically pulled in.
+-# Static builds need some help, though...
+-#
+-# No need to depend on gettext in this case: xfsprogs does not use it for
+-# itself; util-linux does need it and has it in its own dependencies.
+-#
+-# xfsprogs' buildsystem uses hand-made Makefiles, not automake, and they
+-# do not use the LIBS variable set by configure. So we use EXTRALIBS that
+-# is added by our patch.
+-#
+-# It is not needed to propagate the EXTRALIBS to the install step.
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS)$(BR2_NEEDS_GETTEXT_IF_LOCALE),yy)
+-XFSPROGS_CONF_OPTS += LIBS=-lintl
+-XFSPROGS_MAKE_OPTS = EXTRALIBS=-lintl
+-endif
+-
+ XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
  
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--RPM_DEPENDENCIES += gettext
-+ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
- RPM_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
- else
- RPM_CONF_OPTS += --without-libintl-prefix
+ $(eval $(autotools-package))
 -- 
 2.9.4
