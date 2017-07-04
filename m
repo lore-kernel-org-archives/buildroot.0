@@ -1,75 +1,31 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Jul 2017 16:52:24 +0200
-Subject: [Buildroot] [PATCH v3 01/14] Move
- $(HOST_DIR)/usr/$(GNU_TARGET_NAME) one level up.
-In-Reply-To: <20170704140404.4098-2-arnout@mind.be>
-References: <20170704140404.4098-1-arnout@mind.be>
- <20170704140404.4098-2-arnout@mind.be>
-Message-ID: <63a16f9d-8860-7c99-d222-b568333c0969@smile.fr>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Tue,  4 Jul 2017 15:53:48 +0100
+Subject: [Buildroot] [PATCH] iperf: fix file hash values
+Message-ID: <4620ba184d19644f63c3d4d2d61cb221c9a70e12.1499173828.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+The iperf download process fails, because the hash value is not
+correct. This patch fixes the hash values for sha1 and sha256.
 
-Le 04/07/2017 ? 16:03, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> This is a step towards eliminating $(HOST_DIR)/usr. It allows us to
-> convert all packages installing things into
-> $(HOST_DIR)/usr/$(GNU_TARGET_NAME) (i.e., binutils and gcc) without
-> affecting the rest.
-> 
-> To allow compatibility with packages that still use $(HOST_DIR)/usr as
-> the prefix, create a symlink from usr/$(GNU_TARGET_NAME) to
-> ../$(GNU_TARGET_NAME).
-> 
-> Note that the symlink creation will break when $(HOST_DIR)/usr/lib
-> already exists as a directory, i.e. when rebuilding in an existing
-> output directory. This is necessary: if we don't break it now, the
-> following commits (which remove the usr part from various variables)
-> _will_ break it.
-> 
-> Effectively, the usr/ part is removed from $(STAGING_SUBDIR) (and
-> therefore from $(STAGING_DIR)), so update the definition of that
-> variable right away.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+---
+ package/iperf/iperf.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-
-Best regards,
-Romain
-
-> ---
->  Makefile            | 2 ++
->  package/Makefile.in | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index b37171fcf2..a0f9f62771 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -556,6 +556,8 @@ world: target-post-image
->  $(STAGING_DIR):
->  	@mkdir -p $(STAGING_DIR)
->  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> +	@mkdir -p $(HOST_DIR)/usr
-> +	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
->  
->  RSYNC_VCS_EXCLUSIONS = \
->  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 8087bde999..6b88ac4feb 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -107,7 +107,7 @@ ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
->  TARGET_ABI += -matomic
->  endif
->  
-> -STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
-> +STAGING_SUBDIR = $(GNU_TARGET_NAME)/sysroot
->  STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
->  
->  ifeq ($(BR2_OPTIMIZE_0),y)
-> 
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index 3dd491a..3e96143 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -1,4 +1,4 @@
+ # From https://sourceforge.net/projects/iperf2/files/
+-sha1	9e215f6af8edd97f947f2b0207ff5487845d83d4	iperf-2.0.9.tar.gz
++sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
+ # Locally computed:
+-sha256  a5350777b191e910334d3a107b5e5219b72ffa393da4186da1e0a4552aeeded6  iperf-2.0.9.tar.gz
++sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
+-- 
+2.9.3
