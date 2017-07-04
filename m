@@ -1,100 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 23:29:20 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.05.1
-Message-ID: <20170704212905.7AEA381E86@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Jul 2017 23:38:18 +0200
+Subject: [Buildroot] [git commit] linux-firmware: add qca6174{bt} firmware
+Message-ID: <20170704213508.70CDE81D56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47dfc35b0ca921357bd73f418096ce943359440d
+commit: https://git.buildroot.net/buildroot/commit/?id=caaff41ec168d4abe083eccebb534c555b816e66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[Thomas: adjust alphabetic ordering, rename bluetooth option to
+include vendor name.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/linux-firmware/Config.in         | 10 ++++++++++
+ package/linux-firmware/linux-firmware.mk | 12 ++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 1f98e5b..e9d1e33 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 43ed841..7f4d2a0 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -39,6 +39,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IBT
+ 	  Firmware files for Intel 3160/7260/7265/8260/8265 Wireless
+ 	  bluetooth support.
  
--      <h3 style="text-align: center;">Latest stable release: <b>2017.05</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2017.05.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.05.tar.gz">buildroot-2017.05.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.05.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.05.1.tar.gz">buildroot-2017.05.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.05.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.05.tar.bz2">buildroot-2017.05.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.05.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.05.1.tar.bz2">buildroot-2017.05.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.05.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index d329fdc..9913285 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.05.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 July 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.05.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.05 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.05.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-July/196743.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.05.1.tar.bz2">2017.05.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
++	bool "Qualcomm Atheros Rome 6174A Bluetooth"
++	help
++	  Firmware files for QCA Rome 6174A bluetooth support.
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ endmenu # Bluetooth
+ 
+ menu "WiFi firmware"
+@@ -206,6 +211,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
+ 	help
+ 	  MediaTek MT7601U
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
++	bool "Qualcomm Atheros 6174"
++	help
++	  Firmware files for the Qualcomm Atheros QCA6174 chip
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+ 	bool "Ralink rt2501/rt61"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index bce36ce..dff15a2 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -30,6 +30,12 @@ LINUX_FIRMWARE_FILES += intel/ibt-*
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ibt_firmware
+ endif
+ 
++# Qualcomm Atheros Rome 6174A Bluetooth
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT),y)
++LINUX_FIRMWARE_FILES += qca/rampatch_usb_00000302.bin qca/nvm_usb_00000302.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qcom
++endif
++
+ # Freescale i.MX SDMA
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA),y)
+ LINUX_FIRMWARE_FILES += imx/sdma/sdma-imx6q.bin imx/sdma/sdma-imx7d.bin
+@@ -194,6 +200,12 @@ LINUX_FIRMWARE_FILES += mt7601u.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
+ endif
+ 
++# qca6174
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174),y)
++LINUX_FIRMWARE_FILES += ath10k/QCA6174
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
++endif
++
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+ # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
