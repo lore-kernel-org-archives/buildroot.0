@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:35:41 +0200
-Subject: [Buildroot] [git commit] sysstat: use the new gettext logic
-Message-ID: <20170704233519.4B4E47FCEB@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:36:54 +0200
+Subject: [Buildroot] [git commit] xscreensaver: use the new gettext logic
+Message-ID: <20170704233519.DDA747FBC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9835c1921c08f6eb7723d5df64371ac3446a7539
+commit: https://git.buildroot.net/buildroot/commit/?id=5ceabb945d9ce32a7b94f942fa062ffa615f1047
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -16,46 +16,36 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using TARGET_NLS_LIBS to force linking against libintl
-
  - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysstat/Config.in  | 1 -
- package/sysstat/sysstat.mk | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/xscreensaver/Config.in       | 1 -
+ package/xscreensaver/xscreensaver.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
-index 923c48a..442b787 100644
---- a/package/sysstat/Config.in
-+++ b/package/sysstat/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_SYSSTAT
- 	bool "sysstat"
- 	depends on BR2_USE_MMU 	# fork()
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index 5213ce3..032eab2 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -11,7 +11,6 @@ config BR2_PACKAGE_XSCREENSAVER
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXT
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  The sysstat utilities are a collection of performance
- 	  monitoring tools for Linux. These include sar, sadf, mpstat,
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index bd73214..e4ba662 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -8,14 +8,10 @@ SYSSTAT_VERSION = 11.4.4
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-file-attr --disable-sensors
--SYSSTAT_DEPENDENCIES = host-gettext
-+SYSSTAT_DEPENDENCIES = host-gettext $(TARGET_NLS_DEPENDENCIES)
- SYSSTAT_LICENSE = GPL-2.0+
- SYSSTAT_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--SYSSTAT_DEPENDENCIES += gettext
--SYSSTAT_MAKE_OPTS += LFLAGS="$(TARGET_LDFLAGS) -lintl"
--endif
-+SYSSTAT_MAKE_OPTS += LFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+ 	  XScreenSaver is the standard screen saver collection shipped on most
+ 	  Linux and Unix systems running the X11 Window System.
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index 77c37a9..34b1163 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -12,7 +12,7 @@ XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
+ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
  
- # The isag tool is a post processing script that depends on tcl/tk
- # among other things. So we don't install it.
+ XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext) host-intltool
++	$(TARGET_NLS_DEPENDENCIES) host-intltool
+ 
+ # otherwise we end up with host include/library dirs passed to the
+ # compiler/linker
