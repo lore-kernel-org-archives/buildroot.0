@@ -1,39 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:10 +0200
-Subject: [Buildroot] [PATCH 030/100] gdbm: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:12 +0200
+Subject: [Buildroot] [PATCH 032/100] glib-networking: use the new gettext
+	logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-31-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-33-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves
-using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies on
-gettext/host-gettext.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdbm/gdbm.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/glib-networking/Config.in          | 1 -
+ package/glib-networking/glib-networking.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
-index 4e3ed76..acd8cd2 100644
---- a/package/gdbm/gdbm.mk
-+++ b/package/gdbm/gdbm.mk
-@@ -9,10 +9,7 @@ GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
- GDBM_LICENSE = GPL-3.0+
- GDBM_LICENSE_FILES = COPYING
- GDBM_INSTALL_STAGING = YES
--
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--GDBM_DEPENDENCIES += gettext
--endif
-+GDBM_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+index 01d8552..ec29623 100644
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_GLIB_NETWORKING
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  Network-related GIO modules for glib.
  
- ifeq ($(BR2_PACKAGE_READLINE),y)
- GDBM_CONF_OPTS += --with-readline
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index eb75c86..10a3b70 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -10,7 +10,7 @@ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
+ GLIB_NETWORKING_DEPENDENCIES = \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
++	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-pkgconf \
+ 	host-intltool \
+ 	libglib2
 -- 
 2.9.4
