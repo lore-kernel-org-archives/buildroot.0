@@ -1,41 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:27:25 +0200
-Subject: [Buildroot] [git commit] fetchmail: use the new gettext logic
-Message-ID: <20170704233514.C7A48802A8@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:27:24 +0200
+Subject: [Buildroot] [git commit] dos2unix: use new gettext logic
+Message-ID: <20170704233514.622E38184E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39ec557f2db992bea439c24ddabf64ee549d4274
+commit: https://git.buildroot.net/buildroot/commit/?id=e0a46903ee7de81f6807725c2c523d238cab3f0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit switches to use the new gettext logic, which involves
-using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies on
-gettext/host-gettext.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - using TARGET_NLS_LIBS to force linking against libintl
+
+ - dropping BR2_PACKAGE_GETTEXT selection
+
+In addition, we now use BR2_SYSTEM_ENABLE_NLS instead of
+BR2_ENABLE_LOCALE to decide if NLS support should be enabled or
+disabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fetchmail/fetchmail.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ package/dos2unix/Config.in   |  1 -
+ package/dos2unix/dos2unix.mk | 15 +++++++--------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 164b2f8..37bbeab 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -24,12 +24,8 @@ FETCHMAIL_CONF_OPTS = \
+diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
+index 6945f52..cfb5ba4 100644
+--- a/package/dos2unix/Config.in
++++ b/package/dos2unix/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_DOS2UNIX
+ 	bool "dos2unix"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  dos2unix converts text file line endings between CRLF and LF
  
- FETCHMAIL_DEPENDENCIES = \
- 	ca-certificates \
--	openssl
--
--# libintl is an optional dependency
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--FETCHMAIL_DEPENDENCIES += gettext
--endif
-+	openssl \
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 3540ec8..87525fb 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -8,19 +8,18 @@ DOS2UNIX_VERSION = 7.3.4
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2-Clause
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
+-DOS2UNIX_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++DOS2UNIX_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
 +	$(TARGET_NLS_DEPENDENCIES)
  
- # fetchmailconf.py script is not (yet) python3-compliant.
- # Prevent the pyc-compilation with python-3 from failing by removing this
+-ifeq ($(BR2_ENABLE_LOCALE),y)
+-DOS2UNIX_DEPENDENCIES += host-gettext
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++DOS2UNIX_MAKE_OPTS += ENABLE_NLS=1
++DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=$(TARGET_NLS_LIBS)
+ else
++# Should be defined to empty to disable NLS support
+ DOS2UNIX_MAKE_OPTS += ENABLE_NLS=
+ endif
+ 
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-DOS2UNIX_DEPENDENCIES += gettext
+-DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=-lintl
+-endif
+-
+ ifeq ($(BR2_USE_WCHAR),)
+ DOS2UNIX_MAKE_OPTS += UCS=
+ endif
