@@ -1,80 +1,237 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 4 Jul 2017 23:38:18 +0200
-Subject: [Buildroot] [git commit] linux-firmware: add qca6174{bt} firmware
-Message-ID: <20170704213508.70CDE81D56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ifupdown-scripts: new package
+Message-ID: <20170704213508.95F027FDBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caaff41ec168d4abe083eccebb534c555b816e66
+commit: https://git.buildroot.net/buildroot/commit/?id=5fb1b867821b4e8968ca7f364196a5e67e80c436
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-[Thomas: adjust alphabetic ordering, rename bluetooth option to
-include vendor name.]
+The ifupdown scripts can be used independently of the init system, be it
+sysv, busybox or systemd; they could even be used when there is no init
+system (i.e. the user is providing his own).
+
+Currently, those ifupdown scripts are bundled in the skeleton.
+
+But we soon will have a skeleton specific to systemd, so we would be
+missing those scripts (when systemd-networkd is not enabled).
+
+So, move those scripts to their own package.
+
+To keep the current behaviour (before it is changed in future commits),
+we make that package default to y, but depend on the default skeleton.
+
+Instead of being a target-finalize hook, the scripts are installed as
+any other package are, with a package install-target command.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: drop empty IFUPDOWN_SCRIPTS_SOURCE]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         | 10 ++++++++++
- package/linux-firmware/linux-firmware.mk | 12 ++++++++++++
- 2 files changed, 22 insertions(+)
+ package/Config.in                                  |  1 +
+ package/ifupdown-scripts/Config.in                 |  8 ++++
+ .../init.d => ifupdown-scripts}/S40network         |  0
+ package/ifupdown-scripts/ifupdown-scripts.mk       | 55 ++++++++++++++++++++++
+ .../{systemd => ifupdown-scripts}/network.service  |  0
+ .../ifupdown-scripts}/network/if-down.d/.empty     |  0
+ .../network/if-post-down.d/.empty                  |  0
+ .../network/if-pre-up.d/wait_iface                 |  0
+ .../ifupdown-scripts}/network/if-up.d/.empty       |  0
+ package/{skeleton => ifupdown-scripts}/nfs_check   |  0
+ package/skeleton/skeleton.mk                       | 33 -------------
+ package/systemd/systemd.mk                         |  8 ----
+ 12 files changed, 64 insertions(+), 41 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 43ed841..7f4d2a0 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -39,6 +39,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IBT
- 	  Firmware files for Intel 3160/7260/7265/8260/8265 Wireless
- 	  bluetooth support.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
-+	bool "Qualcomm Atheros Rome 6174A Bluetooth"
+diff --git a/package/Config.in b/package/Config.in
+index 36747a2..46c78a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1603,6 +1603,7 @@ menu "Networking applications"
+ 	source "package/ifplugd/Config.in"
+ 	source "package/iftop/Config.in"
+ 	source "package/ifupdown/Config.in"
++	source "package/ifupdown-scripts/Config.in"
+ 	source "package/igd2-for-linux/Config.in"
+ 	source "package/igh-ethercat/Config.in"
+ 	source "package/igmpproxy/Config.in"
+diff --git a/package/ifupdown-scripts/Config.in b/package/ifupdown-scripts/Config.in
+new file mode 100644
+index 0000000..7086253
+--- /dev/null
++++ b/package/ifupdown-scripts/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_IFUPDOWN_SCRIPTS
++	bool
++	depends on BR2_ROOTFS_SKELETON_DEFAULT
++	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
++	default y
 +	help
-+	  Firmware files for QCA Rome 6174A bluetooth support.
++	  Set of scripts used by ifupdown (either the standalone one, or the
++	  busybox one) to bring network up, or tear it down.
+diff --git a/package/initscripts/init.d/S40network b/package/ifupdown-scripts/S40network
+similarity index 100%
+rename from package/initscripts/init.d/S40network
+rename to package/ifupdown-scripts/S40network
+diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+new file mode 100644
+index 0000000..317c8f4
+--- /dev/null
++++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+@@ -0,0 +1,55 @@
++################################################################################
++#
++# ifupdown-scripts
++#
++################################################################################
 +
- endmenu # Bluetooth
- 
- menu "WiFi firmware"
-@@ -206,6 +211,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
- 	help
- 	  MediaTek MT7601U
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
-+	bool "Qualcomm Atheros 6174"
-+	help
-+	  Firmware files for the Qualcomm Atheros QCA6174 chip
++define IFUPDOWN_SCRIPTS_LOCALHOST
++	( \
++		echo "# interface file auto-generated by buildroot"; \
++		echo ; \
++		echo "auto lo"; \
++		echo "iface lo inet loopback"; \
++	) > $(TARGET_DIR)/etc/network/interfaces
++endef
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
- 	bool "Ralink rt2501/rt61"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index bce36ce..dff15a2 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -30,6 +30,12 @@ LINUX_FIRMWARE_FILES += intel/ibt-*
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ibt_firmware
- endif
- 
-+# Qualcomm Atheros Rome 6174A Bluetooth
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT),y)
-+LINUX_FIRMWARE_FILES += qca/rampatch_usb_00000302.bin qca/nvm_usb_00000302.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qcom
++IFUPDOWN_SCRIPTS_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
++
++ifneq ($(IFUPDOWN_SCRIPTS_DHCP_IFACE),)
++define IFUPDOWN_SCRIPTS_DHCP
++	( \
++		echo ; \
++		echo "auto $(IFUPDOWN_SCRIPTS_DHCP_IFACE)"; \
++		echo "iface $(IFUPDOWN_SCRIPTS_DHCP_IFACE) inet dhcp"; \
++		echo "  pre-up /etc/network/nfs_check"; \
++		echo "  wait-delay 15"; \
++	) >> $(TARGET_DIR)/etc/network/interfaces
++	$(INSTALL) -m 0755 -D $(IFUPDOWN_SCRIPTS_PKGDIR)/nfs_check \
++		$(TARGET_DIR)/etc/network/nfs_check
++endef
 +endif
 +
- # Freescale i.MX SDMA
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA),y)
- LINUX_FIRMWARE_FILES += imx/sdma/sdma-imx6q.bin imx/sdma/sdma-imx7d.bin
-@@ -194,6 +200,12 @@ LINUX_FIRMWARE_FILES += mt7601u.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
++define IFUPDOWN_SCRIPTS_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/etc/network
++	cp -a $(IFUPDOWN_SCRIPTS_PKGDIR)/network/* $(TARGET_DIR)/etc/network
++	$(IFUPDOWN_SCRIPTS_LOCALHOST)
++	$(IFUPDOWN_SCRIPTS_DHCP)
++endef
++
++define IFUPDOWN_SCRIPTS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(IFUPDOWN_SCRIPTS_PKGDIR)/S40network \
++		$(TARGET_DIR)/etc/init.d/S40network
++endef
++
++# ifupdown-scripts can not be selected when systemd-networkd is
++# enabled, so if we are enabled with systemd, we must install our
++# own service file.
++define IFUPDOWN_SCRIPTS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(IFUPDOWN_SCRIPTS_PKGDIR)/network.service \
++		$(TARGET_DIR)/etc/systemd/system/network.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../network.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
++endef
++
++$(eval $(generic-package))
+diff --git a/package/systemd/network.service b/package/ifupdown-scripts/network.service
+similarity index 100%
+rename from package/systemd/network.service
+rename to package/ifupdown-scripts/network.service
+diff --git a/system/skeleton/etc/network/if-down.d/.empty b/package/ifupdown-scripts/network/if-down.d/.empty
+similarity index 100%
+rename from system/skeleton/etc/network/if-down.d/.empty
+rename to package/ifupdown-scripts/network/if-down.d/.empty
+diff --git a/system/skeleton/etc/network/if-post-down.d/.empty b/package/ifupdown-scripts/network/if-post-down.d/.empty
+similarity index 100%
+rename from system/skeleton/etc/network/if-post-down.d/.empty
+rename to package/ifupdown-scripts/network/if-post-down.d/.empty
+diff --git a/system/skeleton/etc/network/if-pre-up.d/wait_iface b/package/ifupdown-scripts/network/if-pre-up.d/wait_iface
+similarity index 100%
+rename from system/skeleton/etc/network/if-pre-up.d/wait_iface
+rename to package/ifupdown-scripts/network/if-pre-up.d/wait_iface
+diff --git a/system/skeleton/etc/network/if-up.d/.empty b/package/ifupdown-scripts/network/if-up.d/.empty
+similarity index 100%
+rename from system/skeleton/etc/network/if-up.d/.empty
+rename to package/ifupdown-scripts/network/if-up.d/.empty
+diff --git a/package/skeleton/nfs_check b/package/ifupdown-scripts/nfs_check
+similarity index 100%
+rename from package/skeleton/nfs_check
+rename to package/ifupdown-scripts/nfs_check
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 1321eb6..a310a31 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -145,39 +145,6 @@ endef
+ TARGET_FINALIZE_HOOKS += SKELETON_SET_ISSUE
  endif
  
-+# qca6174
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174),y)
-+LINUX_FIRMWARE_FILES += ath10k/QCA6174
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
-+endif
-+
- # wl127x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
- # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
+-define SKELETON_SET_NETWORK_LOCALHOST
+-	( \
+-		echo "# interface file auto-generated by buildroot"; \
+-		echo ; \
+-		echo "auto lo"; \
+-		echo "iface lo inet loopback"; \
+-	) > $(TARGET_DIR)/etc/network/interfaces
+-endef
+-
+-SKELETON_NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
+-
+-ifneq ($(SKELETON_NETWORK_DHCP_IFACE),)
+-define SKELETON_SET_NETWORK_DHCP
+-	( \
+-		echo ; \
+-		echo "auto $(SKELETON_NETWORK_DHCP_IFACE)"; \
+-		echo "iface $(SKELETON_NETWORK_DHCP_IFACE) inet dhcp"; \
+-		echo "	pre-up /etc/network/nfs_check"; \
+-		echo "	wait-delay 15"; \
+-	) >> $(TARGET_DIR)/etc/network/interfaces
+-	$(INSTALL) -m 0755 -D $(SKELETON_PKGDIR)/nfs_check \
+-		$(TARGET_DIR)/etc/network/nfs_check
+-endef
+-endif
+-
+-define SKELETON_SET_NETWORK
+-	mkdir -p $(TARGET_DIR)/etc/network/
+-	$(SKELETON_SET_NETWORK_LOCALHOST)
+-	$(SKELETON_SET_NETWORK_DHCP)
+-endef
+-
+-TARGET_FINALIZE_HOOKS += SKELETON_SET_NETWORK
+-
+ ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
+ ifeq ($(SKELETON_TARGET_GENERIC_ROOT_PASSWD),)
+ SKELETON_ROOT_PASSWORD =
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index f7894b2..94b8b96 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -303,13 +303,6 @@ endef
+ endif
+ else
+ SYSTEMD_CONF_OPTS += --disable-networkd
+-define SYSTEMD_INSTALL_SERVICE_NETWORK
+-	$(INSTALL) -D -m 644 package/systemd/network.service \
+-		$(TARGET_DIR)/etc/systemd/system/network.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../network.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
+-endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+@@ -401,7 +394,6 @@ endif
+ define SYSTEMD_INSTALL_INIT_SYSTEMD
+ 	$(SYSTEMD_DISABLE_SERVICE_TTY1)
+ 	$(SYSTEMD_INSTALL_SERVICE_TTY)
+-	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
+ 	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
+ 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
+ endef
