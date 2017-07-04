@@ -1,61 +1,44 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue,  4 Jul 2017 18:22:39 +0200
-Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf" to
-	make "qmake" relocatable
+Date: Tue,  4 Jul 2017 18:22:35 +0200
+Subject: [Buildroot] [PATCH v6 06/10] core: sanitize RPATH in host tree at
+	the very end of the build
 In-Reply-To: <1499185359-8293-1-git-send-email-wg@grandegger.com>
 References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
-Message-ID: <1499185359-8293-11-git-send-email-wg@grandegger.com>
+Message-ID: <1499185359-8293-7-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The file "qt.conf" can be used to override the hard-coded paths that are
-compiled into the Qt library. We need it to make "qmake" relocatable.
+We introduce the "finalize-host" target for that purpose.
+We need the patchelf host utility to check and fix the rpath.
 
-CC: Julien Corjon <corjon.j@ecagroup.com>
-CC: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- package/qt5/qt5base/qt.conf.in | 6 ++++++
- package/qt5/qt5base/qt5base.mk | 8 ++++++++
- 2 files changed, 14 insertions(+)
- create mode 100644 package/qt5/qt5base/qt.conf.in
+ Makefile | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
-new file mode 100644
-index 0000000..48e4b92
---- /dev/null
-+++ b/package/qt5/qt5base/qt.conf.in
-@@ -0,0 +1,6 @@
-+[Paths]
-+Prefix=@@HOST_DIR@@/usr
-+Sysroot=@@STAGING_DIR@@
-+Headers=/usr/include/qt5
-+Plugins=/usr/lib/qt/plugins
-+Examples=/usr/lib/qt/examples
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 5fe8bb8..883850b 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -258,9 +258,17 @@ define QT5BASE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+diff --git a/Makefile b/Makefile
+index d8db3f4..f5646ad 100644
+--- a/Makefile
++++ b/Makefile
+@@ -550,7 +550,15 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
  
-+# The file "qt.conf" can be used to override the hard-coded paths that are
-+# compiled into the Qt library. We need it to make "qmake" relocatable.
-+define QT5BASE_INSTALL_QT_CONF
-+	sed -e "s\\@@HOST_DIR@@\\$(HOST_DIR)\\" -e "s\\@@STAGING_DIR@@\\$(STAGING_DIR)\\" \
-+		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/usr/bin/qt.conf
-+endef
+ .PHONY: world
+-world: target-post-image
++world: target-post-image host-finalize
 +
- define QT5BASE_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- 	$(QT5_LA_PRL_FILES_FIXUP)
-+	$(QT5BASE_INSTALL_QT_CONF)
- endef
++.PHONY: host-finalize
++host-finalize:
++	@$(call MESSAGE,"Rendering the SDK relocatable")
++	$(TOPDIR)/support/scripts/fix-rpath host
++
++# We need patchelf for RPATH sanitization
++PACKAGES += host-patchelf
  
- define QT5BASE_INSTALL_TARGET_LIBS
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
 -- 
 2.7.4
