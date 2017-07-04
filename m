@@ -1,204 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 11:50:54 +0200
-Subject: [Buildroot] [git commit] gst1-vaapi: bump version to 1.12.0
-Message-ID: <20170704113141.9881082101@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 12:14:06 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-base: bump version to 1.12.0
+Message-ID: <20170704113141.ED09580526@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=737681603b08e577f88ba541f30329af602dfb40
+commit: https://git.buildroot.net/buildroot/commit/?id=76722342000dbe1062983c470ac7bc2bfe14e54d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-0001 patch already included in this release:
-  https://github.com/GStreamer/gstreamer-vaapi/commit/159e3c3f08ef1c19da4ede8a437337dd8cf7f0b7
-0002 patch already included in this release:
-  https://github.com/GStreamer/gstreamer-vaapi/commit/152217064f1192bb836620ad7eaadbc031624f4c
+Remove non-existant or unnecessary configure options:
 
+  --disable-oggtest, --disable-vorbistest:
+    It looks like these options will be taken into account by ogg.m4 and
+    vorbis.m4 only when ogg and vobis are enabled. However, according to
+    the code on those m4 files these two options are disabled by default.
+
+  --disable-gio_unix_2_0:
+    I don't know where this option comes from.
+
+  --disable-freetypetest:
+    https://github.com/GStreamer/gst-plugins-base/commit/183610c035dd6955c9b3540b940aec50474af031
+
+[Peter: add rawparse plugin]
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-O_CLOEXEC-needs-_GNU_SOURCE-defined.patch | 52 -------------
- ...n-debug-disabled-default-category-is-NULL.patch | 91 ----------------------
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash      |  4 +-
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk        |  2 +-
- 4 files changed, 3 insertions(+), 146 deletions(-)
+ package/gstreamer1/gst1-plugins-base/Config.in              |  5 +++++
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash |  4 ++--
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 12 +++++++-----
+ 3 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/0001-O_CLOEXEC-needs-_GNU_SOURCE-defined.patch b/package/gstreamer1/gst1-vaapi/0001-O_CLOEXEC-needs-_GNU_SOURCE-defined.patch
-deleted file mode 100644
-index d69846c..0000000
---- a/package/gstreamer1/gst1-vaapi/0001-O_CLOEXEC-needs-_GNU_SOURCE-defined.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 3e392e097fc0e98e606721748e8baee0e079a1a2 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 12 Mar 2017 18:59:42 +0100
--Subject: [PATCH] O_CLOEXEC needs _GNU_SOURCE defined
--
--From man open(2):
--
--    The O_CLOEXEC, O_DIRECTORY, and O_NOFOLLOW flags are not specified
--    in POSIX.1-2001, but are specified in POSIX.1-2008.  Since glibc
--    2.12, one can obtain their definitions by defining either
--    _POSIX_C_SOURCE with a value greater than or equal to 200809L or
--    _XOPEN_SOURCE with a value greater than or equal to 700.  In glibc
--    2.11 and earlier, one obtains the definitions by defining
--    _GNU_SOURCE.
--
--And indeed, with the uClibc C library, O_CLOEXEC is not exposed if
--_GNU_SOURCE is not defined. Therefore, this commit fixes the build of
--gstreamer-vaapi with the uClibc C library.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- gst-libs/gst/vaapi/gstvaapidisplay_drm.c | 1 +
-- tests/test-display.c                     | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/gst-libs/gst/vaapi/gstvaapidisplay_drm.c b/gst-libs/gst/vaapi/gstvaapidisplay_drm.c
--index f436036..00ff039 100644
----- a/gst-libs/gst/vaapi/gstvaapidisplay_drm.c
--+++ b/gst-libs/gst/vaapi/gstvaapidisplay_drm.c
--@@ -25,6 +25,7 @@
--  * @short_description: VA/DRM display abstraction
--  */
-- 
--+#define _GNU_SOURCE
-- #include "sysdeps.h"
-- #include <string.h>
-- #include <unistd.h>
--diff --git a/tests/test-display.c b/tests/test-display.c
--index be9c24b..9abe754 100644
----- a/tests/test-display.c
--+++ b/tests/test-display.c
--@@ -22,6 +22,7 @@
--  *  Boston, MA 02110-1301 USA
--  */
-- 
--+#define _GNU_SOURCE
-- #include "gst/vaapi/sysdeps.h"
-- #include <gst/video/video.h>
-- #if USE_DRM
---- 
--2.7.4
--
-diff --git a/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch b/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
-deleted file mode 100644
-index 0d83c5a..0000000
---- a/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
-+++ /dev/null
-@@ -1,91 +0,0 @@
--From 152217064f1192bb836620ad7eaadbc031624f4c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?V=C3=ADctor=20Manuel=20J=C3=A1quez=20Leal?=
-- <vjaquez@igalia.com>
--Date: Mon, 20 Mar 2017 16:45:01 +0100
--Subject: [PATCH] plugins: when debug disabled, default category is NULL
--
--As in gstreamer-vaapi a common base class is used, the specific
--default category is passed to the base-plugin initializator, thus
--the log messages are categorized with the used plugin.
--
--Nonetheless, when the gst-debug is disabled in compilation time,
--it is needed to pass NULL to the base-plugin initializator. This
--patch does that.
--
--https://bugzilla.gnome.org/show_bug.cgi?id=780302
--
--Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-----
-- gst/vaapi/gstvaapidecode.c   | 4 ++++
-- gst/vaapi/gstvaapiencode.c   | 4 ++++
-- gst/vaapi/gstvaapipostproc.c | 4 ++++
-- gst/vaapi/gstvaapisink.c     | 4 ++++
-- 4 files changed, 16 insertions(+)
--
--diff --git a/gst/vaapi/gstvaapidecode.c b/gst/vaapi/gstvaapidecode.c
--index 407e25b..c2bb42a 100644
----- a/gst/vaapi/gstvaapidecode.c
--+++ b/gst/vaapi/gstvaapidecode.c
--@@ -49,7 +49,11 @@
-- #define GST_VAAPI_DECODE_FLOW_PARSE_DATA        GST_FLOW_CUSTOM_SUCCESS_2
-- 
-- GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapidecode);
--+#ifndef GST_DISABLE_GST_DEBUG
-- #define GST_CAT_DEFAULT gst_debug_vaapidecode
--+#else
--+#define GST_CAT_DEFAULT NULL
--+#endif
-- 
-- #define GST_VAAPI_DECODE_PARAMS_QDATA \
--   g_quark_from_static_string("vaapidec-params")
--diff --git a/gst/vaapi/gstvaapiencode.c b/gst/vaapi/gstvaapiencode.c
--index dd60901..b0f0a32 100644
----- a/gst/vaapi/gstvaapiencode.c
--+++ b/gst/vaapi/gstvaapiencode.c
--@@ -38,7 +38,11 @@
-- #define GST_VAAPI_ENCODE_FLOW_CONVERT_ERROR     GST_FLOW_CUSTOM_ERROR_1
-- 
-- GST_DEBUG_CATEGORY_STATIC (gst_vaapiencode_debug);
--+#ifndef GST_DISABLE_GST_DEBUG
-- #define GST_CAT_DEFAULT gst_vaapiencode_debug
--+#else
--+#define GST_CAT_DEFAULT NULL
--+#endif
-- 
-- G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GstVaapiEncode,
--     gst_vaapiencode, GST_TYPE_VIDEO_ENCODER,
--diff --git a/gst/vaapi/gstvaapipostproc.c b/gst/vaapi/gstvaapipostproc.c
--index f4ddbb5..d45f7ee 100644
----- a/gst/vaapi/gstvaapipostproc.c
--+++ b/gst/vaapi/gstvaapipostproc.c
--@@ -49,7 +49,11 @@
-- #define GST_PLUGIN_DESC "A VA-API video postprocessing filter"
-- 
-- GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapipostproc);
--+#ifndef GST_DISABLE_GST_DEBUG
-- #define GST_CAT_DEFAULT gst_debug_vaapipostproc
--+#else
--+#define GST_CAT_DEFAULT NULL
--+#endif
-- 
-- /* Default templates */
-- /* *INDENT-OFF* */
--diff --git a/gst/vaapi/gstvaapisink.c b/gst/vaapi/gstvaapisink.c
--index cca71d9..9cc5154 100644
----- a/gst/vaapi/gstvaapisink.c
--+++ b/gst/vaapi/gstvaapisink.c
--@@ -59,7 +59,11 @@
-- #define GST_PLUGIN_DESC "A VA-API based videosink"
-- 
-- GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapisink);
--+#ifndef GST_DISABLE_GST_DEBUG
-- #define GST_CAT_DEFAULT gst_debug_vaapisink
--+#else
--+#define GST_CAT_DEFAULT NULL
--+#endif
-- 
-- /* Default template */
-- /* *INDENT-OFF* */
---- 
--2.6.2
--
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index 5409c2e..977b188 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index a17f2ad..6b08b68 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -66,6 +66,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
+ 	help
+ 	  Resamples audio
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_RAWPARSE
++	bool "rawparse"
++	help
++	  Parses byte streams into raw frames
++
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE
+ 	bool "subparse"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+index b526b14..b0fc90a 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
 @@ -1,2 +1,2 @@
--# from https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.10.4.tar.xz.sha256sum
--sha256 03e690621594d9f9495d86c7dac8b8590b3a150462770ed070dc76f66a70de75  gstreamer-vaapi-1.10.4.tar.xz
-+# from https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.0.tar.xz.sha256sum
-+sha256 4a1a5a174b3d3a76ce6c123203e7ee535a347d77f9d4f4ffaf69bfbbfeb03ddb  gstreamer-vaapi-1.12.0.tar.xz
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 8cb51bf..e92d758 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.4.tar.xz.sha256sum
+-sha256 f6d245b6b3d4cb733f81ebb021074c525ece83db0c10e932794b339b8d935eb7  gst-plugins-base-1.10.4.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.0.tar.xz.sha256sum
++sha256 345fc6877f54b8b6e97aacf2996be37a51a0e369f53fc2cf83108af9f764364d  gst-plugins-base-1.12.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 08f53f7..9fb5b17 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VAAPI_VERSION = 1.10.4
-+GST1_VAAPI_VERSION = 1.12.0
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
+-GST1_PLUGINS_BASE_VERSION = 1.10.4
++GST1_PLUGINS_BASE_VERSION = 1.12.0
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+@@ -14,10 +14,6 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
+ # gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
+-	--disable-oggtest \
+-	--disable-vorbistest \
+-	--disable-gio_unix_2_0 \
+-	--disable-freetypetest \
+ 	--disable-valgrind
+ 
+ # Options which require currently unpackaged libraries
+@@ -95,6 +91,12 @@ else
+ GST1_PLUGINS_BASE_CONF_OPTS += --disable-audioresample
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_RAWPARSE),y)
++GST1_PLUGINS_BASE_CONF_OPTS += --enable-rawparse
++else
++GST1_PLUGINS_BASE_CONF_OPTS += --disable-rawparse
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE),y)
+ GST1_PLUGINS_BASE_CONF_OPTS += --enable-subparse
+ else
