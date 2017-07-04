@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:28:45 +0200
-Subject: [Buildroot] [git commit] ndisc6: use the new gettext logic
-Message-ID: <20170704233517.D33D481E43@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:34:03 +0200
+Subject: [Buildroot] [git commit] pv: use the new gettext logic
+Message-ID: <20170704233518.B123D7F96C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f85d36e53b1fbf2e952bc6619e54a3c501b9735
+commit: https://git.buildroot.net/buildroot/commit/?id=4e0d9554a0c2d558f5ddc9cc34239e7b05b7f457
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -16,47 +16,41 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using TARGET_NLS_LIBS to force linking against libintl
-
  - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ndisc6/Config.in | 1 -
- package/ndisc6/ndisc6.mk | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/pv/Config.in | 1 -
+ package/pv/pv.mk     | 8 +-------
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/ndisc6/Config.in b/package/ndisc6/Config.in
-index 321bfbc..a397ea6 100644
---- a/package/ndisc6/Config.in
-+++ b/package/ndisc6/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_NDISC6
- 	bool "ndisc6 tools"
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/pv/Config.in b/package/pv/Config.in
+index d732296..671f78e 100644
+--- a/package/pv/Config.in
++++ b/package/pv/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PV
+ 	bool "pv"
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  NDisc6 is a small collection of useful tools for IPv6 networking
- 
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index 8326fc7..3ab8306 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
-@@ -7,15 +7,11 @@
- NDISC6_VERSION = 1.0.2
- NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
- NDISC6_SITE = http://www.remlab.net/files/ndisc6
--NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
-+NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99" LIBS=$(TARGET_NLS_LIBS)
- NDISC6_CONF_OPTS = --disable-rpath --disable-suid-install
- NDISC6_LICENSE = GPL-2.0 or GPL-3.0
- NDISC6_LICENSE_FILES = COPYING
+ 	  Pipe Viewer - is a terminal-based tool for
+ 	  monitoring the progress of data through a
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 2279805..0ef5a6f 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -9,13 +9,7 @@ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+ PV_SITE = http://www.ivarch.com/programs/sources
+ PV_LICENSE = Artistic-2.0
+ PV_LICENSE_FILES = doc/COPYING
 -
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--NDISC6_DEPENDENCIES += gettext
--NDISC6_CONF_ENV += LIBS="-lintl"
--endif
-+NDISC8_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+-# pv configure script is somewhat stupid: if it cannot find the host
+-# gettext tool msgfmt, it concludes that gettext is not available, and
+-# provides its own minimal version. Unfortunately, this minimal
+-# version conflicts with the available target gettext. We fix this by
+-# ensuring that host-gettext is built if gettext support is enabled;
+-PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
++PV_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
  
- NDISC6_BIN_ += dnssort # perl script
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
+ # --relax linker option is enabled by default on sparc/sparc64
+ # architectures, and it can't be used together with -r option, so
