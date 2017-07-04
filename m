@@ -1,39 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 23:38:18 +0200
-Subject: [Buildroot] [git commit] package/ifupdown-scripts: allow use with a
-	custom skeleton
-Message-ID: <20170704213508.A3BB681E68@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  4 Jul 2017 23:46:19 +0200
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.5.14
+Message-ID: <20170704214619.15545-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac41572e666b583052766799b543188e530bb130
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bugfix release, see the release notes for the fixes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+https://lists.gnupg.org/pipermail/gnutls-devel/2017-July/008469.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ifupdown-scripts/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ifupdown-scripts/Config.in b/package/ifupdown-scripts/Config.in
-index 7086253..7064d58 100644
---- a/package/ifupdown-scripts/Config.in
-+++ b/package/ifupdown-scripts/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_IFUPDOWN_SCRIPTS
--	bool
--	depends on BR2_ROOTFS_SKELETON_DEFAULT
-+	bool "ifupdown scripts"
- 	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
--	default y
-+	default y if BR2_ROOTFS_SKELETON_DEFAULT
- 	help
- 	  Set of scripts used by ifupdown (either the standalone one, or the
- 	  busybox one) to bring network up, or tear it down.
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index f699716801..608ccf89c5 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	79f5480ad198dad5bc78e075f4a40c4a315a1b2072666919d2d05a08aec13096	gnutls-3.5.13.tar.xz
++sha256	4aa12dec92f42a0434df794aca3d02f6f2a35b47b48c01252de65f355c051bda	gnutls-3.5.14.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index fa92a887f0..b00bd139cd 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-- 
+2.11.0
