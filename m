@@ -1,64 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:35:56 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] setlocalversion: fix
-	detection of hg revision for untagged versions
-Message-ID: <20170704154804.C06ED7F977@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:32:03 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] bind: security bump to
+	version 9.11.1-P2
+Message-ID: <20170704154804.9BF457FFED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b17792236ed17a88f162d327f6744cbf7b35c868
+commit: https://git.buildroot.net/buildroot/commit/?id=e1bcba49136d06145b693e21a57dc498c235da81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-By default, cut prints the entire line if the specified delimiter is not
-present at all:
+Fixes the following security issues:
 
-    $ printf "foo bar" | cut -d' ' -f2
-    bar
-    $ printf "foobar" | cut -d' ' -f2
-    foobar
+CVE-2017-3142: An error in TSIG authentication can permit unauthorized zone
+transfers
 
-In setlocalversion, cut is presented with the output of 'hg id' which has
-the format:
+An attacker who is able to send and receive messages to an authoritative DNS
+server and who has knowledge of a valid TSIG key name may be able to
+circumvent TSIG authentication of AXFR requests via a carefully constructed
+request packet. A server that relies solely on TSIG keys for protection with
+no other ACL protection could be manipulated into:
 
-    "<revision> <tags-if-any>"
+* providing an AXFR of a zone to an unauthorized recipient
+* accepting bogus NOTIFY packets
 
-If the current revision is not tagged, the output of 'hg id' does not
-contain the delimiter (space), cut prints the entire string, and
-setlocalversion thinks the version is the tag.
-As setlocalversion does not print anything for tagged versions, there is no
-output overall, and no correct indication of the mercurial revision.
+https://kb.isc.org/article/AA-01504/74/CVE-2017-3142
 
-Fix by passing the extra cut option '--only-delimited', which suppresses
-output if no delimiter is found.
+CVE-2017-3041: An error in TSIG authentication can permit unauthorized dynamic
+updates
 
-This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
-most recent revision of the branch) is treated specially: in this case the
-mercurial revision _is_ printed, i.e. the situation is treated as
-'untagged'.
-The problem is only seen when you are _not_ at the most recent revision in
-your branch.
+An attacker who is able to send and receive messages to an authoritative DNS
+server and who has knowledge of a valid TSIG key name for the zone and service
+being targeted may be able to manipulate BIND into accepting an unauthorized
+dynamic update.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+https://kb.isc.org/article/AA-01503/74/CVE-2017-3143
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ec019bcf643de83d502f30d85d56dd4547b0c11b)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a0c53973f87928ae51ca58926951c386c74fc023)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index adeeb78..33cd605 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -54,7 +54,7 @@ fi
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 3f0dda5..5dd15cb 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P1.tar.gz.sha256.asc
+-sha256 6b1b3e88d51b8471bd6aee24a8cea70817e850a5901315dc506f9dde275ca638 bind-9.11.1-P1.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
++sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b588eb5..fd5369a 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Check for mercurial and a mercurial repo.
- if hgid=`hg id 2>/dev/null`; then
--	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
-+	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
- 
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
+-BIND_VERSION = 9.11.1-P1
++BIND_VERSION = 9.11.1-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
