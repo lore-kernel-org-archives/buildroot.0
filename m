@@ -1,51 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:25:59 +0200
-Subject: [Buildroot] [git commit] Revert "gettext: build libintl
-	unconditionally for uClibc/musl"
-Message-ID: <20170704233512.DBD558083A@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:27:20 +0200
+Subject: [Buildroot] [git commit] avahi: use new gettext logic
+Message-ID: <20170704233513.2212C7F960@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de291b06a92849a089d49f9ab801dac0b4c63fab
+commit: https://git.buildroot.net/buildroot/commit/?id=218bcaeb8d356b3420d203c205f0dd5bab283552
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 431d00abc1ffd0db287f0392e45229a53db7a187, which in
-fact doesn't work for static linking situations, as can be seen in:
+This commit switches to use the new gettext logic, which involves:
 
-  http://autobuild.buildroot.net/results/a6a4039f23a6fbd2bdb5938bcef097a7310452cc/
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - using TARGET_NLS_LIBS to force linking against libintl
+
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gettext/Config.in  | 2 +-
- package/gettext/gettext.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/avahi/Config.in | 1 -
+ package/avahi/avahi.mk  | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-index bf16c34..0dea03d 100644
---- a/package/gettext/Config.in
-+++ b/package/gettext/Config.in
-@@ -17,7 +17,7 @@ if BR2_PACKAGE_GETTEXT
- config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
- 	bool
- 	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
--	default y
-+	default y if BR2_SYSTEM_ENABLE_NLS
+diff --git a/package/avahi/Config.in b/package/avahi/Config.in
+index a6b4ac8..5e303d0 100644
+--- a/package/avahi/Config.in
++++ b/package/avahi/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_AVAHI
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Avahi is a system which facilitates service
+ 	  discovery on a local network.
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index a356a08..94b6292 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -97,8 +97,8 @@ AVAHI_CONF_OPTS = \
+ 	--with-autoipd-group=avahi
  
- endif
+ AVAHI_DEPENDENCIES = \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool \
+-	host-pkgconf host-gettext
++	host-intltool host-pkgconf \
++	$(TARGET_NLS_DEPENDENCIES)
  
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index f3325dc..454ad29 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -42,7 +42,7 @@ HOST_GETTEXT_CONF_OPTS = \
- # Force the build of libintl, even if the C library provides a stub
- # gettext implementation
- ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
--GETTEXT_CONF_OPTS += --with-included-gettext --enable-nls
-+GETTEXT_CONF_OPTS += --with-included-gettext
- else
- GETTEXT_CONF_OPTS += --without-included-gettext
- endif
+ AVAHI_CFLAGS = $(TARGET_CFLAGS)
+ 
+@@ -168,7 +168,7 @@ endif
+ 
+ AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
+ 
+-AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
++AVAHI_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
+ 
+ define AVAHI_USERS
+ 	avahi -1 avahi -1 * - - -
