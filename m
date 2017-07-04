@@ -1,120 +1,47 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Jul 2017 16:55:43 +0200
-Subject: [Buildroot] [PATCH v3 02/14] Move $(HOST_DIR)/usr/lib to
- $(HOST_DIR)/lib
-In-Reply-To: <20170704140404.4098-3-arnout@mind.be>
-References: <20170704140404.4098-1-arnout@mind.be>
- <20170704140404.4098-3-arnout@mind.be>
-Message-ID: <1ec813e4-72cd-3852-6552-da22d0a858a0@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Jul 2017 16:56:07 +0200
+Subject: [Buildroot] [PATCH] iperf: fix file hash values
+In-Reply-To: <4620ba184d19644f63c3d4d2d61cb221c9a70e12.1499173828.git.jpinto@synopsys.com>
+References: <4620ba184d19644f63c3d4d2d61cb221c9a70e12.1499173828.git.jpinto@synopsys.com>
+Message-ID: <20170704165607.193769d0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hello,
 
-Le 04/07/2017 ? 16:03, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> This is a step towards eliminating $(HOST_DIR)/usr. It allows us to
-> convert all packages installing things into $(HOST_DIR)/usr/lib without
-> affecting the rest.
+On Tue,  4 Jul 2017 15:53:48 +0100, Joao Pinto wrote:
+> The iperf download process fails, because the hash value is not
+> correct. This patch fixes the hash values for sha1 and sha256.
 > 
-> To allow compatibility with packages that still use $(HOST_DIR)/usr as
-> the prefix, create a symlink from usr/lib to ../lib.
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  package/iperf/iperf.hash | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Note that the symlink creation will break when $(HOST_DIR)/usr/lib
-> already exists as a directory, i.e. when rebuilding in an existing
-> output directory. This is necessary: if we don't break it now, the
-> following commits (which remove the usr part from various variables)
-> _will_ break it.
-> 
-> At the same time as creating this symlink, we also have to update the
-> check-host-rpath to accept both $(HOST_DIR)/usr/lib and $(HOST_DIR)/lib,
-> because depending on how the package derives the path, it may be
-> different.
-> 
-> Since there are some dependency chains that involve $(STAGING_DIR),
-> $(STAGING_DIR) may in fact be created before $(HOST_DIR). Since
-> $(STAGING_DIR) is a subdirectory of $(HOST_DIR), it is possible that the
-> newly added rule for $(HOST_DIR) never triggers. To make sure that the
-> rule does trigger, add an order-only dependency from $(STAGING_DIR) to
-> $(HOST_DIR).
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+> index 3dd491a..3e96143 100644
+> --- a/package/iperf/iperf.hash
+> +++ b/package/iperf/iperf.hash
+> @@ -1,4 +1,4 @@
+>  # From https://sourceforge.net/projects/iperf2/files/
+> -sha1	9e215f6af8edd97f947f2b0207ff5487845d83d4	iperf-2.0.9.tar.gz
+> +sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
+>  # Locally computed:
+> -sha256  a5350777b191e910334d3a107b5e5219b72ffa393da4186da1e0a4552aeeded6  iperf-2.0.9.tar.gz
+> +sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Thanks, but this has already been solved by commit
+https://git.buildroot.org/buildroot/commit/package/iperf?id=62cf881a768c50e4c10c3dfce5b88f48beb6a26f.
+
+Make sure to send patches on top of the latest master :)
 
 Best regards,
-Romain
 
-> ---
-> v2: rebase on modifications of check-host-rpath with $ORIGIN.
-> ---
->  Makefile                         | 10 +++++++---
->  support/scripts/check-host-rpath |  8 +++++---
->  2 files changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index a0f9f62771..ac349a79e8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -237,7 +237,7 @@ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
->  # dependencies anywhere else
->  #
->  ################################################################################
-> -$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-> +$(BUILD_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
->  	@mkdir -p $@
->  
->  BR2_CONFIG = $(CONFIG_DIR)/.config
-> @@ -552,11 +552,15 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  .PHONY: world
->  world: target-post-image
->  
-> +# When creating HOST_DIR, also symlink usr/lib -> ../lib
-> +$(HOST_DIR):
-> +	@mkdir -p $@/usr $@/lib
-> +	@ln -snf ../lib $@/usr/lib
-> +
->  # Populating the staging with the base directories is handled by the skeleton package
-> -$(STAGING_DIR):
-> +$(STAGING_DIR): | $(HOST_DIR)
->  	@mkdir -p $(STAGING_DIR)
->  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> -	@mkdir -p $(HOST_DIR)/usr
->  	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
->  
->  RSYNC_VCS_EXCLUSIONS = \
-> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> index 020c12379f..adabfdf53f 100755
-> --- a/support/scripts/check-host-rpath
-> +++ b/support/scripts/check-host-rpath
-> @@ -1,7 +1,7 @@
->  #!/usr/bin/env bash
->  
-> -# This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
-> -# they have an RPATH to $(HOST_DIR)/usr/lib if they need libraries from
-> +# This script scans $(HOST_DIR)/{,usr/}{bin,sbin} for all ELF files, and checks
-> +# they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
->  # there.
->  
->  # Override the user's locale so we are sure we can parse the output of
-> @@ -40,7 +40,7 @@ elf_needs_rpath() {
->      local lib
->  
->      while read lib; do
-> -        [ -e "${hostdir}/usr/lib/${lib}" ] && return 0
-> +        [ -e "${hostdir}/lib/${lib}" ] && return 0
->      done < <( readelf -d "${file}"                                         \
->                |sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d;' \
->                       -e 's//\1/;'                                          \
-> @@ -58,6 +58,8 @@ check_elf_has_rpath() {
->          for dir in ${rpath//:/ }; do
->              # Remove duplicate and trailing '/' for proper match
->              dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
-> +            [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
-> +            # For the time being, the rpath is allowed with both usr/lib and lib
->              [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
->          done
->      done < <( readelf -d "${file}"                                              \
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
