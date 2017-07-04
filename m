@@ -1,60 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 19:31:47 +0200
-Subject: [Buildroot] [git commit] Update for 2017.02.4
-Message-ID: <20170704172923.06E1181932@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Jul 2017 19:37:18 +0200
+Subject: [Buildroot] [PATCH 01/13] pkg-{download,
+ generic}: remove source-check
+In-Reply-To: <20170704162211.13238-2-maxime.hadjinlian@gmail.com>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-2-maxime.hadjinlian@gmail.com>
+Message-ID: <20170704193718.34d387d8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=018b8aa7d106a899f60b503263a67fe240b56ddc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7ea1487c0afbbb44eca7b2f9e8759305195ab2a6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+On Tue,  4 Jul 2017 18:21:59 +0200, Maxime Hadjinlian wrote:
+> This feature is not used by anyone in the core developpers and makes a
+> drastic simplification of the pkg-download infrastructure harder.
+> 
+> The future patch will move much of what's in the current pkg-download.mk
+> file into the dl-wrapper which is a shell script.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-diff --git a/CHANGES b/CHANGES
-index cf4b22b..e7f9b75 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -204,6 +204,34 @@
- 	#9846: musl libc not installed correctly in target folder
- 	#9856: build libubox failed on ubuntu 17.04 64bit
- 
-+2017.02.4, Released July 4th, 2017
-+
-+	Important / security related fixes.
-+
-+	Update support/scripts/scancpan to use METACPAN v1 API as v0
-+	has been shutdown.
-+
-+	Update support/scripts/mkusers to handle setups where
-+	/etc/shadow is a symlink.
-+
-+	External toolchain: Don't create musl dynamic loader symlink
-+	for static builds.
-+
-+	Setlocalversion: Correct detection of mercurial revisions for
-+	non-tagged versions.
-+
-+	Updated/fixed packages: apache, automake, bind, botan, c-ares,
-+	dhcp, expat, fcgiwrap, gcc, gdb, gesftpserver, glibc, gnutls,
-+	gst1-plugins-bad, imagemagick, imx-uuc, intltool, iperf,
-+	ipsec-tools, irssi, libgcrypt, libmad, libnl, mosquitto,
-+	mpg123, ncurses, nodejs, ntp, openssh, openvpn, qt5base,
-+	qt5multimedia, rtl8821au, socat, spice, systemd, tor, tslib,
-+	vlc, x264, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#9976: License file for package 'rtl8821au' incorrect
-+
- 2017.02.3, Released June 2nd, 2017
- 
- 	Important / security related fixes.
+You forgot to remove lots of references to source-check, do a "git grep
+source-check" to find them.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
