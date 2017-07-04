@@ -1,71 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:32:03 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] bind: security bump to
-	version 9.11.1-P2
-Message-ID: <20170704154804.9BF457FFED@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:39:37 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] vlc: add upstream
+	security patches fixing CVE-2017-10699
+Message-ID: <20170704154805.0332B81EBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1bcba49136d06145b693e21a57dc498c235da81
+commit: https://git.buildroot.net/buildroot/commit/?id=2a670e41eb4c86456370148afaaa9b331e5f5f34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes the following security issues:
+avcodec 2.2.x, as used in VideoLAN VLC media player 2.2.7-x before
+2017-06-29, allows out-of-bounds heap memory write due to calling memcpy()
+with a wrong size, leading to a denial of service (application crash) or
+possibly code execution.
 
-CVE-2017-3142: An error in TSIG authentication can permit unauthorized zone
-transfers
-
-An attacker who is able to send and receive messages to an authoritative DNS
-server and who has knowledge of a valid TSIG key name may be able to
-circumvent TSIG authentication of AXFR requests via a carefully constructed
-request packet. A server that relies solely on TSIG keys for protection with
-no other ACL protection could be manipulated into:
-
-* providing an AXFR of a zone to an unauthorized recipient
-* accepting bogus NOTIFY packets
-
-https://kb.isc.org/article/AA-01504/74/CVE-2017-3142
-
-CVE-2017-3041: An error in TSIG authentication can permit unauthorized dynamic
-updates
-
-An attacker who is able to send and receive messages to an authoritative DNS
-server and who has knowledge of a valid TSIG key name for the zone and service
-being targeted may be able to manipulate BIND into accepting an unauthorized
-dynamic update.
-
-https://kb.isc.org/article/AA-01503/74/CVE-2017-3143
+https://trac.videolan.org/vlc/ticket/18467
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a0c53973f87928ae51ca58926951c386c74fc023)
+(cherry picked from commit b9153ed9546ab00eb78c30899a62d3e868a7a778)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...codec-avcodec-check-avcodec-visible-sizes.patch | 33 ++++++++++++++++++++++
+ ...r-check-visible-size-when-creating-buffer.patch | 33 ++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 3f0dda5..5dd15cb 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P1.tar.gz.sha256.asc
--sha256 6b1b3e88d51b8471bd6aee24a8cea70817e850a5901315dc506f9dde275ca638 bind-9.11.1-P1.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
-+sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index b588eb5..fd5369a 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.1-P1
-+BIND_VERSION = 9.11.1-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+diff --git a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+new file mode 100644
+index 0000000..41a5e25
+--- /dev/null
++++ b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+@@ -0,0 +1,33 @@
++From 6cc73bcad19da2cd2e95671173f2e0d203a57e9b Mon Sep 17 00:00:00 2001
++From: Francois Cartegnie <fcvlcdev@free.fr>
++Date: Thu, 29 Jun 2017 09:45:20 +0200
++Subject: [PATCH] codec: avcodec: check avcodec visible sizes
++
++refs #18467
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ modules/codec/avcodec/video.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/modules/codec/avcodec/video.c b/modules/codec/avcodec/video.c
++index 1bcad21..ce52544 100644
++--- a/modules/codec/avcodec/video.c
+++++ b/modules/codec/avcodec/video.c
++@@ -137,9 +137,11 @@ static inline picture_t *ffmpeg_NewPictBuf( decoder_t *p_dec,
++     }
++ 
++ 
++-    if( width == 0 || height == 0 || width > 8192 || height > 8192 )
+++    if( width == 0 || height == 0 || width > 8192 || height > 8192 ||
+++        width < p_context->width || height < p_context->height )
++     {
++-        msg_Err( p_dec, "Invalid frame size %dx%d.", width, height );
+++        msg_Err( p_dec, "Invalid frame size %dx%d. vsz %dx%d",
+++                 width, height, p_context->width, p_context->height );
++         return NULL; /* invalid display size */
++     }
++     p_dec->fmt_out.video.i_width = width;
++-- 
++2.1.4
++
+diff --git a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+new file mode 100644
+index 0000000..a16dcf0
+--- /dev/null
++++ b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+@@ -0,0 +1,33 @@
++From a38a85db58c569cc592d9380cc07096757ef3d49 Mon Sep 17 00:00:00 2001
++From: Francois Cartegnie <fcvlcdev@free.fr>
++Date: Thu, 29 Jun 2017 11:09:02 +0200
++Subject: [PATCH] decoder: check visible size when creating buffer
++
++early reject invalid visible size
++mishandled by filters.
++
++refs #18467
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/input/decoder.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/input/decoder.c b/src/input/decoder.c
++index 2c0823f..a216165 100644
++--- a/src/input/decoder.c
+++++ b/src/input/decoder.c
++@@ -2060,7 +2060,9 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
++         vout_thread_t *p_vout;
++ 
++         if( !p_dec->fmt_out.video.i_width ||
++-            !p_dec->fmt_out.video.i_height )
+++            !p_dec->fmt_out.video.i_height ||
+++            p_dec->fmt_out.video.i_width < p_dec->fmt_out.video.i_visible_width ||
+++            p_dec->fmt_out.video.i_height < p_dec->fmt_out.video.i_visible_height )
++         {
++             /* Can't create a new vout without display size */
++             return NULL;
++-- 
++2.1.4
++
