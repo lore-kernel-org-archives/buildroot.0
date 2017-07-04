@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 5 Jul 2017 01:27:25 +0200
-Subject: [Buildroot] [git commit] efibootmgr: use the new gettext logic
-Message-ID: <20170704233514.8ECA6802A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] exiv2: use the new gettext logic
+Message-ID: <20170704233514.B4D0E7FC74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2171d073156afc370d7298c1ec464424016e5243
+commit: https://git.buildroot.net/buildroot/commit/?id=cdc194883f1f3968cfd8d6683ce67f6c5bbbde84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -16,58 +16,30 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using TARGET_NLS_LIBS to force linking against libintl
-
- - dropping BR2_PACKAGE_GETTEXT selection
-
-The BR2_USE_WCHAR dependency was needed for gettext, now that we no
-longer need gettext, we can also get rid of this dependency.
+ - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
+   if NLS support should be enabled or not
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efibootmgr/Config.in     | 7 ++-----
- package/efibootmgr/efibootmgr.mk | 4 ++--
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/exiv2/exiv2.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index 57874fc..1096b9d 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -6,8 +6,6 @@ config BR2_PACKAGE_EFIBOOTMGR
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
--	depends on BR2_USE_WCHAR # gettext
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_EFIVAR
- 	help
- 	  A Linux user-space application to modify the Intel Extensible
-@@ -17,11 +15,10 @@ config BR2_PACKAGE_EFIBOOTMGR
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 6bc8848..32029ba 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -42,11 +42,10 @@ else
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=OFF -DEXIV2_ENABLE_LIBXMP=OFF
+ endif
  
- 	  https://github.com/rhinstaller/efibootmgr
- 
--comment "efibootmgr needs a glibc or uClibc toolchain w/ wchar, dynamic library, headers >= 3.12, gcc >= 4.9"
-+comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
- 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
- 		BR2_TOOLCHAIN_USES_MUSL || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
--		!BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index 094dd28..b32d9cb 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -8,8 +8,8 @@ EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPL-2.0+
- EFIBOOTMGR_LICENSE_FILES = COPYING
--EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
--EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)
-+EFIBOOTMGR_DEPENDENCIES = efivar $(TARGET_NLS_DEPENDENCIES)
-+EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
- define EFIBOOTMSR_PATCH_HEADER_PATH
- 	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
+-ifeq ($(BR2_ENABLE_LOCALE),y)
++EXIV2_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
++
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_NLS=ON
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
+-EXIV2_DEPENDENCIES += gettext
+-endif
+ else
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_NLS=OFF
+ endif
