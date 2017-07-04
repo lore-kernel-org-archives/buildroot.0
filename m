@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 5 Jul 2017 01:35:41 +0200
-Subject: [Buildroot] [git commit] tpm-tools: use the new gettext logic
-Message-ID: <20170704233519.5FE477FB43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] rrdtool: use the new gettext logic
+Message-ID: <20170704233519.15AD77FB43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3dd9a4b887fe7394dda7a09b49a6e2234d50b97
+commit: https://git.buildroot.net/buildroot/commit/?id=4fa80a811d744a64492086ede087e5578b5cbf7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -20,33 +20,43 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tpm-tools/Config.in    | 1 -
- package/tpm-tools/tpm-tools.mk | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/rrdtool/Config.in  | 1 -
+ package/rrdtool/rrdtool.mk | 6 +-----
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
-index 091f424..e115687 100644
---- a/package/tpm-tools/Config.in
-+++ b/package/tpm-tools/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_TPM_TOOLS
- 	depends on !BR2_arc # trousers
- 	select BR2_PACKAGE_TROUSERS
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
+index 3d8c0c6..631ed32 100644
+--- a/package/rrdtool/Config.in
++++ b/package/rrdtool/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_RRDTOOL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  Tools to manage and diagnose a TPM
+ 	  RRDtool is the OpenSource industry standard, high performance
+ 	  data logging and graphing system for time series data.
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 028b7cb..ea5c892 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -8,7 +8,7 @@ RRDTOOL_VERSION = 1.6.0
+ RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
+ RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
+-RRDTOOL_DEPENDENCIES = host-pkgconf libglib2
++RRDTOOL_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+ # autoreconf needed to avoid link failure due to missing -lintl,
+ # gettextize needed as a consequence of autoreconf
+ RRDTOOL_AUTORECONF = YES
+@@ -25,10 +25,6 @@ RRDTOOL_CONF_OPTS = \
+ 	--disable-ruby \
+ 	--disable-tcl
  
-diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
-index c90edbb..4dbf50a 100644
---- a/package/tpm-tools/tpm-tools.mk
-+++ b/package/tpm-tools/tpm-tools.mk
-@@ -9,8 +9,7 @@ TPM_TOOLS_SITE = http://downloads.sourceforge.net/project/trousers/tpm-tools/$(T
- TPM_TOOLS_STRIP_COMPONENTS = 2
- TPM_TOOLS_LICENSE = Common Public License Version 1.0
- TPM_TOOLS_LICENSE_FILES = LICENSE
--TPM_TOOLS_DEPENDENCIES = trousers openssl \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+TPM_TOOLS_DEPENDENCIES = trousers openssl $(TARGET_NLS_DEPENDENCIES)
- # configure.in and lib/Makefile.am is patched
- TPM_TOOLS_AUTORECONF = YES
- TPM_TOOLS_GETTEXTIZE = YES
+-ifeq ($(BR2_NEEDS_GETTEXT),y)
+-RRDTOOL_DEPENDENCIES += gettext
+-endif
+-
+ ifeq ($(BR2_PACKAGE_RRDTOOL_RRDGRAPH),y)
+ RRDTOOL_DEPENDENCIES += cairo pango
+ else
