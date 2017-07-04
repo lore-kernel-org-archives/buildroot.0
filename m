@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:36:54 +0200
-Subject: [Buildroot] [git commit] xscreensaver: use the new gettext logic
-Message-ID: <20170704233519.DDA747FBC5@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:35:41 +0200
+Subject: [Buildroot] [git commit] ushare: use the new gettext logic
+Message-ID: <20170704233519.792BB7FB43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ceabb945d9ce32a7b94f942fa062ffa615f1047
+commit: https://git.buildroot.net/buildroot/commit/?id=5ba9a7a6529f22866f5777fc46e1fefb3638aafc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -16,36 +16,58 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
+ - using TARGET_NLS_LIBS to force linking against libintl
+
  - dropping BR2_PACKAGE_GETTEXT selection
+
+ - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
+   if NLS support should be enabled or not
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xscreensaver/Config.in       | 1 -
- package/xscreensaver/xscreensaver.mk | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/ushare/Config.in |  1 -
+ package/ushare/ushare.mk | 10 +++-------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index 5213ce3..032eab2 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_XSCREENSAVER
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXT
+diff --git a/package/ushare/Config.in b/package/ushare/Config.in
+index 70bf24a..c3475b8 100644
+--- a/package/ushare/Config.in
++++ b/package/ushare/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_USHARE
+ 	# linking.
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBUPNP
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  XScreenSaver is the standard screen saver collection shipped on most
- 	  Linux and Unix systems running the X11 Window System.
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 77c37a9..34b1163 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -12,7 +12,7 @@ XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
- XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+ 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
+ 	  It implements the server component that provides UPnP media devices
+diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
+index 32aa445..bb194f6 100644
+--- a/package/ushare/ushare.mk
++++ b/package/ushare/ushare.mk
+@@ -7,9 +7,10 @@
+ USHARE_VERSION = 1.1a
+ USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
+ USHARE_SITE = http://ushare.geexbox.org/releases
+-USHARE_DEPENDENCIES = host-pkgconf libupnp
++USHARE_DEPENDENCIES = host-pkgconf libupnp $(TARGET_NLS_DEPENDENCIES)
+ USHARE_LICENSE = GPL-2.0+
+ USHARE_LICENSE_FILES = COPYING
++USHARE_LDFLAGS = $(TARGET_NLS_LIBS)
  
- XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext) host-intltool
-+	$(TARGET_NLS_DEPENDENCIES) host-intltool
+ USHARE_CONF_OPTS = \
+ 	--prefix=/usr \
+@@ -18,12 +19,7 @@ USHARE_CONF_OPTS = \
+ 	--sysconfdir=/etc \
+ 	--disable-strip
  
- # otherwise we end up with host include/library dirs passed to the
- # compiler/linker
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-USHARE_DEPENDENCIES += gettext
+-USHARE_LDFLAGS += -lintl
+-endif
+-
+-ifeq ($(BR2_ENABLE_LOCALE),)
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ USHARE_CONF_OPTS += --disable-nls
+ endif
+ 
