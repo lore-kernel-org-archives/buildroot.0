@@ -1,67 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:46 +0200
-Subject: [Buildroot] [PATCH 066/100] procps-ng: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:54 +0200
+Subject: [Buildroot] [PATCH 074/100] samba4: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-67-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-75-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - using TARGET_NLS_LIBS to force linking against libintl
-
- - dropping BR2_PACKAGE_GETTEXT selection
+This commit switches to use the new gettext logic, which involves
+using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+on gettext/host-gettext.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/procps-ng/Config.in    | 1 -
- package/procps-ng/procps-ng.mk | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/samba4/samba4.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
-index 553bea1..6ff8983 100644
---- a/package/procps-ng/Config.in
-+++ b/package/procps-ng/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_PROCPS_NG
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Standard informational utilities and process-handling tools.
- 	  Provides things like kill, ps, uptime, free, top, etc...
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 0ab3139..22ebc1a 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -10,7 +10,8 @@ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
- PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
- PROCPS_NG_INSTALL_STAGING = YES
--PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf
-+PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-+PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
- # For 0002-use-pkgconfig-for-ncursesw-cflags.patch
- PROCPS_NG_AUTORECONF = YES
- PROCPS_NG_GETTEXTIZE = YES
-@@ -21,11 +22,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- PROCPS_NG_DEPENDENCIES += busybox
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 93c45da..86546e9 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -15,7 +15,8 @@ SAMBA4_DEPENDENCIES = \
+ 	e2fsprogs popt python zlib \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+-	$(if $(BR2_PACKAGE_READLINE),readline)
++	$(if $(BR2_PACKAGE_READLINE),readline) \
++	$(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ SAMBA4_CONF_OPTS += --with-acl-support
+@@ -46,12 +47,6 @@ else
+ SAMBA4_CONF_OPTS += --without-fam
  endif
  
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--PROCPS_NG_DEPENDENCIES += gettext
--PROCPS_NG_CONF_OPTS += LIBS=-lintl
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
+-SAMBA4_DEPENDENCIES += gettext
+-else
+-SAMBA4_CONF_OPTS += --without-gettext
 -endif
 -
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- PROCPS_NG_DEPENDENCIES += systemd
- PROCPS_NG_CONF_OPTS += --with-systemd
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ SAMBA4_CONF_OPTS += --enable-gnutls
+ SAMBA4_DEPENDENCIES += gnutls
 -- 
 2.9.4
