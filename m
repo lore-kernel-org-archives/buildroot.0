@@ -1,38 +1,63 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 4 Jul 2017 16:03:56 +0200
-Subject: [Buildroot] [PATCH v3 06/14] package/Makefile.in: remove
-	$(HOST_DIR)/usr part from HOST_LDFLAGS
+Date: Tue, 4 Jul 2017 16:03:58 +0200
+Subject: [Buildroot] [PATCH v3 08/14] gcc-final: things are no longer
+	installed in $(HOST_DIR)/usr
 In-Reply-To: <20170704140404.4098-1-arnout@mind.be>
 References: <20170704140404.4098-1-arnout@mind.be>
-Message-ID: <20170704140404.4098-7-arnout@mind.be>
+Message-ID: <20170704140404.4098-9-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now $(HOST_DIR)/lib and $(HOST_DIR)/usr/lib are the same directory, it
-doesn't make sense to pass both to LDFLAGS.
-
-Also use $(HOST_DIR)/lib instead of $(HOST_DIR)/usr/lib for the RPATH.
+Since things are no longer installed in $(HOST_DIR)/usr, the callers
+should also not refer to it.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gcc/gcc-final/gcc-final.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 6b88ac4feb..25f1997fe6 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
- HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
--HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
-+HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index e8d2e18fe5..12f08c81a8 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -59,18 +59,18 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
+ HOST_GCC_FINAL_CONF_OPTS = \
+ 	$(HOST_GCC_COMMON_CONF_OPTS) \
+ 	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
+-	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
++	--with-build-time-tools=$(HOST_DIR)/$(GNU_TARGET_NAME)/bin
  
- # host-intltool should be executed with the system perl, so we save
- # the path to the system perl, before a host-perl built by Buildroot
+-HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*
++HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
+ # The kernel wants to use the -m4-nofpu option to make sure that it
+ # doesn't use floating point operations.
+ ifeq ($(BR2_sh4)$(BR2_sh4eb),y)
+ HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4,m4-nofpu"
+-HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
++HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
+ endif
+ ifeq ($(BR2_sh4a)$(BR2_sh4aeb),y)
+ HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
+-HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
++HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
+ endif
+ 
+ ifeq ($(BR2_bfin),y)
+@@ -103,9 +103,9 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
+ 
+ # Make sure we have 'cc'
+ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+-	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
+-		ln -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
+-			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
++	if [ ! -e $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-cc ]; then \
++		ln -f $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-gcc \
++			$(HOST_DIR)/bin/$(GNU_TARGET_NAME)-cc; \
+ 	fi
+ endef
+ 
 -- 
 2.13.2
