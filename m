@@ -1,54 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:26 +0200
-Subject: [Buildroot] [PATCH 046/100] libv4l: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:21 +0200
+Subject: [Buildroot] [PATCH 041/100] libftdi1: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-47-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-42-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - dropping BR2_PACKAGE_GETTEXT selection
+This commit switches to use the new gettext logic, which involves
+using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+on gettext/host-gettext.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/Config.in | 1 -
- package/libv4l/libv4l.mk | 4 +---
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ package/libftdi1/libftdi1.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 638aeff..e7f78dc 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -19,7 +19,6 @@ comment "libv4l JPEG support not enabled"
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index deeff39..6b84b95 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -28,9 +28,8 @@ LIBFTDI1_CONF_OPTS += -DPYTHON_BINDINGS=OFF
+ endif
  
- config BR2_PACKAGE_LIBV4L_UTILS
- 	bool "v4l-utils tools"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  v4l-utils is a collection of various video4linux and DVB utilities.
- 	  Enable this if you want to build the following tools:
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index b742717..5950c5a 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -61,9 +61,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
- LIBV4L_CONF_OPTS += --enable-v4l-utils
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--LIBV4L_DEPENDENCIES += gettext
--endif
-+LIBV4L_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
- ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
- LIBV4L_CONF_OPTS += --enable-qv4l2
- LIBV4L_DEPENDENCIES += qt5base
+ ifeq ($(BR2_PACKAGE_LIBFTDI1_FDTI_EEPROM),y)
+-# ftdi_eeprom optionally depends on libintl, so make sure gettext is built
+-# _before_ libfitdi1 when gettext is enbaled.
+-LIBFTDI1_DEPENDENCIES += libconfuse $(if $(BR2_PACKAGE_GETTEXT),gettext)
++# ftdi_eeprom optionally depends on libintl
++LIBFTDI1_DEPENDENCIES += libconfuse $(TARGET_NLS_DEPENDENCIES)
+ LIBFTDI1_CONF_OPTS += -DFTDI_EEPROM=ON
+ else
+ LIBFTDI1_CONF_OPTS += -DFTDI_EEPROM=OFF
 -- 
 2.9.4
