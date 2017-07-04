@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:20:46 +0200
-Subject: [Buildroot] [PATCH 1/3] package/kvazaar: add host-pkgconf
- dependency
-In-Reply-To: <20170704230857.7916-1-romain.naour@smile.fr>
-References: <20170704230857.7916-1-romain.naour@smile.fr>
-Message-ID: <20170705012046.2c1d99b9@windsurf>
+Date: Wed, 5 Jul 2017 01:28:13 +0200
+Subject: [Buildroot] [PATCH 031/100] git: use the new gettext logic
+In-Reply-To: <89181a7b-28f3-13e2-d715-70e54eb59f4a@mind.be>
+References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
+ <20170704144920.12318-32-thomas.petazzoni@free-electrons.com>
+ <89181a7b-28f3-13e2-d715-70e54eb59f4a@mind.be>
+Message-ID: <20170705012813.399457c5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  5 Jul 2017 01:08:55 +0200, Romain Naour wrote:
-> The build system use PKG_CHECK_MODULES.
-> 
-> checking pkg-config is at least version 0.9.0... ./configure: line 16886: output/host/usr/bin/pkg-config: No such file or directory
-> no
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->  package/kvazaar/kvazaar.mk | 1 +
->  1 file changed, 1 insertion(+)
+On Tue, 4 Jul 2017 23:59:27 +0200, Arnout Vandecappelle wrote:
 
-All three patches applied to master. Thanks!
+> > -GIT_DEPENDENCIES = zlib host-gettext  
+> 
+>  You dropped the host-gettext dependency, was that intentional?
+
+Yes: when NLS support is disabled, host-gettext is not needed. When NLS
+support is enabled, host-gettext is brought in by
+TARGET_NLS_DEPENDENCIES in:
+
+> > +GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
