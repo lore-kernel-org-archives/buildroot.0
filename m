@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:43 +0200
-Subject: [Buildroot] [PATCH 063/100] php: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:58 +0200
+Subject: [Buildroot] [PATCH 078/100] ushare: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-64-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-79-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +15,60 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - dropping BR2_PACKAGE_GETTEXT selection. Thanks to this, we can drop
-   the BR2_USE_WCHAR dependency
+ - using TARGET_NLS_LIBS to force linking against libintl
+
+ - dropping BR2_PACKAGE_GETTEXT selection
+
+ - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
+   if NLS support should be enabled or not
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/Config.ext | 5 -----
- package/php/php.mk     | 2 +-
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/ushare/Config.in |  1 -
+ package/ushare/ushare.mk | 10 +++-------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index bb6ada6..5fe3513 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -164,14 +164,9 @@ comment "Human language and character encoding support"
- 
- config BR2_PACKAGE_PHP_EXT_GETTEXT
- 	bool "Gettext"
--	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+diff --git a/package/ushare/Config.in b/package/ushare/Config.in
+index 70bf24a..c3475b8 100644
+--- a/package/ushare/Config.in
++++ b/package/ushare/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_USHARE
+ 	# linking.
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBUPNP
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  Gettext support
+ 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
+ 	  It implements the server component that provides UPnP media devices
+diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
+index 32aa445..bb194f6 100644
+--- a/package/ushare/ushare.mk
++++ b/package/ushare/ushare.mk
+@@ -7,9 +7,10 @@
+ USHARE_VERSION = 1.1a
+ USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
+ USHARE_SITE = http://ushare.geexbox.org/releases
+-USHARE_DEPENDENCIES = host-pkgconf libupnp
++USHARE_DEPENDENCIES = host-pkgconf libupnp $(TARGET_NLS_DEPENDENCIES)
+ USHARE_LICENSE = GPL-2.0+
+ USHARE_LICENSE_FILES = COPYING
++USHARE_LDFLAGS = $(TARGET_NLS_LIBS)
  
--comment "Gettext support needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
+ USHARE_CONF_OPTS = \
+ 	--prefix=/usr \
+@@ -18,12 +19,7 @@ USHARE_CONF_OPTS = \
+ 	--sysconfdir=/etc \
+ 	--disable-strip
+ 
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-USHARE_DEPENDENCIES += gettext
+-USHARE_LDFLAGS += -lintl
+-endif
 -
- config BR2_PACKAGE_PHP_EXT_ICONV
- 	bool "iconv"
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index fe531a4..1a1ed21 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -160,7 +160,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GETTEXT),y)
- PHP_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
--PHP_DEPENDENCIES += $(if $(BR2_NEEDS_GETTEXT),gettext)
-+PHP_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+-ifeq ($(BR2_ENABLE_LOCALE),)
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ USHARE_CONF_OPTS += --disable-nls
  endif
  
- ifeq ($(BR2_PACKAGE_PHP_EXT_ICONV),y)
 -- 
 2.9.4
