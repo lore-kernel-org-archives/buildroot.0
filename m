@@ -1,52 +1,53 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Tue, 4 Jul 2017 15:57:19 +0100
-Subject: [Buildroot] [PATCH] iperf: fix file hash values
-In-Reply-To: <20170704165607.193769d0@windsurf>
-References: <4620ba184d19644f63c3d4d2d61cb221c9a70e12.1499173828.git.jpinto@synopsys.com>
- <20170704165607.193769d0@windsurf>
-Message-ID: <a0a613d0-4f96-bbf3-6eb9-bd4d9611394d@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Jul 2017 16:48:57 +0200
+Subject: [Buildroot] [PATCH 077/100] tpm-tools: use the new gettext logic
+In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
+References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-78-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?s 3:56 PM de 7/4/2017, Thomas Petazzoni escreveu:
-> Hello,
-> 
-> On Tue,  4 Jul 2017 15:53:48 +0100, Joao Pinto wrote:
->> The iperf download process fails, because the hash value is not
->> correct. This patch fixes the hash values for sha1 and sha256.
->>
->> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
->> ---
->>  package/iperf/iperf.hash | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
->> index 3dd491a..3e96143 100644
->> --- a/package/iperf/iperf.hash
->> +++ b/package/iperf/iperf.hash
->> @@ -1,4 +1,4 @@
->>  # From https://urldefense.proofpoint.com/v2/url?u=https-3A__sourceforge.net_projects_iperf2_files_&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=s2fO0hii0OGNOv9qQy_HRXy-xAJUD1NNoEcc3io_kx0&m=MCGBiuUV5lM9stYPprAzRAw95Q7XlXsV4kwEjnjP4C0&s=FepPCZW9TAE1oZufVXMxyJiabQaSjYbeD9AGBtNNqHk&e= 
->> -sha1	9e215f6af8edd97f947f2b0207ff5487845d83d4	iperf-2.0.9.tar.gz
->> +sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
->>  # Locally computed:
->> -sha256  a5350777b191e910334d3a107b5e5219b72ffa393da4186da1e0a4552aeeded6  iperf-2.0.9.tar.gz
->> +sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
-> 
-> Thanks, but this has already been solved by commit
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__git.buildroot.org_buildroot_commit_package_iperf-3Fid-3D62cf881a768c50e4c10c3dfce5b88f48beb6a26f&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=s2fO0hii0OGNOv9qQy_HRXy-xAJUD1NNoEcc3io_kx0&m=MCGBiuUV5lM9stYPprAzRAw95Q7XlXsV4kwEjnjP4C0&s=AHWR3iszl3YsXf_gKMjLtnpjp5KWJJsu0veJG3XXM4w&e= .
+This commit switches to use the new gettext logic, which involves:
 
-Great!
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
 
-> 
-> Make sure to send patches on top of the latest master :)
-> 
-> Best regards,
-> 
-> Thomas
-> 
+ - dropping BR2_PACKAGE_GETTEXT selection
 
-Best Regards,
-Joao
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tpm-tools/Config.in    | 1 -
+ package/tpm-tools/tpm-tools.mk | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
+index 091f424..e115687 100644
+--- a/package/tpm-tools/Config.in
++++ b/package/tpm-tools/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_TPM_TOOLS
+ 	depends on !BR2_arc # trousers
+ 	select BR2_PACKAGE_TROUSERS
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Tools to manage and diagnose a TPM
+ 
+diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
+index c90edbb..4dbf50a 100644
+--- a/package/tpm-tools/tpm-tools.mk
++++ b/package/tpm-tools/tpm-tools.mk
+@@ -9,8 +9,7 @@ TPM_TOOLS_SITE = http://downloads.sourceforge.net/project/trousers/tpm-tools/$(T
+ TPM_TOOLS_STRIP_COMPONENTS = 2
+ TPM_TOOLS_LICENSE = Common Public License Version 1.0
+ TPM_TOOLS_LICENSE_FILES = LICENSE
+-TPM_TOOLS_DEPENDENCIES = trousers openssl \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++TPM_TOOLS_DEPENDENCIES = trousers openssl $(TARGET_NLS_DEPENDENCIES)
+ # configure.in and lib/Makefile.am is patched
+ TPM_TOOLS_AUTORECONF = YES
+ TPM_TOOLS_GETTEXTIZE = YES
+-- 
+2.9.4
