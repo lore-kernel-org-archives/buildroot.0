@@ -1,59 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:50:40 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] libmad: add security
-	patch from debian
-Message-ID: <20170704154805.9FC267F977@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:43:29 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] pngquant: doesn't support
+	building with ccache
+Message-ID: <20170704154805.3B0DA7F977@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ae271cd55e6dbe53686b1d05bb379a15debf92f
+commit: https://git.buildroot.net/buildroot/commit/?id=7c748b54081d7c57a8589246a54b85dc6198aa08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes:
+pngquant's homegrown configure script doesn't understand CC with a
+space, so we can't use ccache with it. Only the host variant is
+affected: for the target, we call ccache from the toolchain-wrapper so
+it's transparent to the configure script.
 
-CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
-libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
-denial of service (assertion failure and application exit) via a crafted
-audio file.
+This wasn't seen in the autobuilders since they never enable
+BR2_CCACHE.
 
-CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
-libmad 0.15.1b allows remote attackers to cause a denial of service
-(heap-based buffer overflow and application crash) or possibly have
-unspecified other impact via a crafted audio file.
+To test, use any configuration and do
+make BR2_CCACHE=y host-pngquant
 
-CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
-0.15.1b allows remote attackers to cause a denial of service (heap-based
-buffer over-read and application crash) via a crafted audio file.
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6369a06150b9a2991807c0418a7f0a865ef6c084)
+(cherry picked from commit 4a6168db97db6501af42e96091da3218ae64d5c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmad/libmad.hash | 1 +
- package/libmad/libmad.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/pngquant/pngquant.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libmad/libmad.hash b/package/libmad/libmad.hash
-index 1e55556..173399f 100644
---- a/package/libmad/libmad.hash
-+++ b/package/libmad/libmad.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690  libmad-0.15.1b.tar.gz
-+sha256  0e21f2c6b19337d0b237dacc04f7b90a56be7f359f4c9a2ee0b202d9af0cfa69  frame_length.diff
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index 0bb64da..0729b1e 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -10,6 +10,8 @@ LIBMAD_INSTALL_STAGING = YES
- LIBMAD_LIBTOOL_PATCH = NO
- LIBMAD_LICENSE = GPL-2.0+
- LIBMAD_LICENSE_FILES = COPYING
-+LIBMAD_PATCH = \
-+	https://sources.debian.net/data/main/libm/libmad/0.15.1b-8/debian/patches/frame_length.diff
- 
- define LIBMAD_PREVENT_AUTOMAKE
- 	# Prevent automake from running.
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 4a6f32f..938603a 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -36,6 +36,7 @@ endef
+ define HOST_PNGQUANT_CONFIGURE_CMDS
+ 	(cd $(@D) && \
+ 		$(HOST_CONFIGURE_OPTS) \
++		CC=$(HOSTCC_NOCCACHE) \
+ 		./configure --prefix=$(HOST_DIR)/usr \
+ 		--without-lcms2 \
+ 	)
