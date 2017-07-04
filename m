@@ -1,65 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 19:09:46 +0200
-Subject: [Buildroot] [git commit] ushare: do not use the DISABLE_NLS variable
-Message-ID: <20170704170700.C32C1800C6@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 19:09:40 +0200
+Subject: [Buildroot] [git commit] libglib2: disable compiler warnings
+Message-ID: <20170704170700.6316E81E06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94dce43a042fe0b5a5b327d8dde03fa76016ad59
+commit: https://git.buildroot.net/buildroot/commit/?id=f2800ac57cde2cd71df295d33441faae1b30dd3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ushare is not an autoconf/automake based package, so it does not have
-the standard behavior of autoconf that every enable/disable option
-supports both --enable-foo and --disable-foo.
+By default, libglib enables some fairly aggressive warnings, treated
+as errors. In particular, the -Wformat=2 warning triggers a warning
+due to the return value of the ngettext() macro from uClibc libintl
+stub not being understood as being potentially a format string.
 
-For example, it supports --disable-nls, but not
---enable-nls. Currently, DISABLE_NLS is either empty or --disable-nls,
-but this will be changed in a follow-up commit. As a preparation, this
-commit modifies ushare to no longer use DISABLE_NLS, but instead
-calculate itself whether --disable-nls should be passed.
+So, before we enable the stub libintl in uClibc, we disable such
+warnings. A bug will be reported to upstream uClibc to get the actual
+bug fixed, but disabling compiler warnings treated as errors is anyway
+a good thing in the context of Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ushare/ushare.mk | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ package/libglib2/libglib2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index 3a5f178..32aa445 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -11,17 +11,27 @@ USHARE_DEPENDENCIES = host-pkgconf libupnp
- USHARE_LICENSE = GPL-2.0+
- USHARE_LICENSE_FILES = COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d6b18dd..577dcec 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -113,7 +113,8 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ 	host-zlib
  
-+USHARE_CONF_OPTS = \
-+	--prefix=/usr \
-+	--cross-compile \
-+	--cross-prefix="$(TARGET_CROSS)" \
-+	--sysconfdir=/etc \
-+	--disable-strip
-+
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- USHARE_DEPENDENCIES += gettext
- USHARE_LDFLAGS += -lintl
- endif
+ LIBGLIB2_CONF_OPTS = \
+-	--with-pcre=system
++	--with-pcre=system \
++	--disable-compile-warnings
  
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+USHARE_CONF_OPTS += --disable-nls
-+endif
-+
- define USHARE_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
--		./configure --prefix=/usr $(DISABLE_NLS) --cross-compile \
--		--cross-prefix="$(TARGET_CROSS)" --sysconfdir=/etc \
--		--disable-strip \
-+		./configure \
-+			$(USHARE_CONF_OPTS) \
- 	)
- endef
- 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
