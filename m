@@ -1,146 +1,178 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 14:22:58 +0200
-Subject: [Buildroot] [git commit] icu: propagate host gcc dependency to
-	reverse dependencies
-Message-ID: <20170704122032.07AF981EBD@busybox.osuosl.org>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Tue, 4 Jul 2017 14:36:13 +0200
+Subject: [Buildroot] [PATCH v4 03/11] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <8aa491de-1a71-0a8e-3274-4512ec22f763@mind.be>
+References: <1498559207-8050-1-git-send-email-wg@grandegger.com>
+ <1498559207-8050-4-git-send-email-wg@grandegger.com>
+ <8aa491de-1a71-0a8e-3274-4512ec22f763@mind.be>
+Message-ID: <cf95d170-797e-c9c9-cf68-575e7e3a19a3@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7af50fddfd94468bb54b6d0ecf7edd1b016f9058
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/821/821eae7add252e3711ed069a2d292a04427fa43b/
+Am 04.07.2017 um 14:15 schrieb Arnout Vandecappelle:
+>   Since you're going to revert to this v4, I'm going to add a few comments here.
 
-Commit 87f43c3403 (package/icu: needs host gcc >= 4.8) added a new toolchain
-dependency to icu, but didn't propagate it to the reverse dependencies of
-icu.
+Yes, that's what doing now...
 
-Some of these have been fixed in later commits, but not all.
+> On 27-06-17 12:26, Wolfgang Grandegger wrote:
+>> From: Samuel Martin <s.martin49@gmail.com>
+>>
+>> This commit introduces the script "fix-rpath" able to scan a tree,
+>> detect ELF files, check their RPATH and fix it in a proper way.
+>> The RPATH fixup is done by the patchelf utility using the option
+>> "--make-rpath-relative <root-directory>".
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+>> ---
+>>   support/scripts/fix-rpath | 112 ++++++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 112 insertions(+)
+>>   create mode 100755 support/scripts/fix-rpath
+>>
+>> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+>> new file mode 100755
+>> index 0000000..5d40657
+>> --- /dev/null
+>> +++ b/support/scripts/fix-rpath
+>> @@ -0,0 +1,112 @@
+>> +#!/usr/bin/env bash
+>> +
+>> +# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
+>> +#
+>> +# This program is free software; you can redistribute it and/or modify
+>> +# it under the terms of the GNU General Public License as published by
+>> +# the Free Software Foundation; either version 2 of the License, or
+>> +# (at your option) any later version.
+>> +#
+>> +# This program is distributed in the hope that it will be useful,
+>> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+>> +# General Public License for more details.
+>> +#
+>> +# You should have received a copy of the GNU General Public License
+>> +# along with this program; if not, write to the Free Software
+>> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+>> +
+>> +usage() {
+>> +  cat <<EOF >&2
+>> +Usage:	${0} TREE_KIND
+>> +
+>> +Description:
+>> +
+>> +    This script scans a tree and sanitize ELF files' RPATH found in there.
+>> +
+>> +    Sanitization behaves the same whatever the kind of the processed tree,
+>> +    but the resulting RPATH differs. The rpath sanitization is done using
+>> +    "patchelf --make-rpath-relazive".
+>                                    ^t
+>> +
+>> +Arguments:
+>> +
+>> +    TREE_KIND	Kind of tree to be processed.
+>> +		Allowed values: host, target, staging
+>> +
+>> +Environment:
+>> +
+>> +    PATCHELF	patchelf program to use
+>> +		(default: HOST_DIR/usr/bin/patchelf)
+>> +EOF
+>> +}
+>> +
+>> +: ${PATCHELF:=${HOST_DIR}/usr/bin/patchelf}
+>> +
+>> +main() {
+>> +    local rootdir
+>> +    local tree="${1}"
+>> +    local find_args=( )
+>> +    local sanitize_extra_args=( )
+>> +
+>> +    case "${tree}" in
+>> +	host)
+> 
+>   Since now you need all this find stuff, my earlier suggestion to not pass the
+> tree as an argument is no longer valid.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cppcms/Config.in               | 5 +++--
- package/midori/Config.in               | 8 +++++---
- package/python-mwscrape2slob/Config.in | 4 +++-
- package/python-slob/Config.in          | 4 +++-
- package/webkitgtk/Config.in            | 4 +++-
- 5 files changed, 17 insertions(+), 8 deletions(-)
+I didn't change it so far.
 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index f02b283..d7b7fa8 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -27,15 +27,16 @@ if BR2_PACKAGE_CPPCMS
- config BR2_PACKAGE_CPPCMS_ICU
- 	bool "enable icu support"
- 	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
- 
--comment "icu support needs a toolchain w/ gcc >= 4.8"
-+comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- endif
- 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 840d689..4d30c83 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -1,13 +1,15 @@
--comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
-+comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
- 
- config BR2_PACKAGE_MIDORI
- 	bool "midori"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, gcr, gnupg2
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # webkitgtk -> icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # webkitgtk
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-diff --git a/package/python-mwscrape2slob/Config.in b/package/python-mwscrape2slob/Config.in
-index dc2b2ae..7856a2c 100644
---- a/package/python-mwscrape2slob/Config.in
-+++ b/package/python-mwscrape2slob/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
- 	bool "python-mwscrape2slob"
- 	depends on !BR2_BINFMT_FLAT # python-slob -> python-pyicu -> icu
- 	depends on BR2_INSTALL_LIBSTDCPP # python-slob -> python-pyicu -> icu
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # python-slob -> python-pyicu -> icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # python-slob -> python-pyicu -> icu
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
-@@ -15,7 +16,8 @@ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
- 
- 	  https://github.com/itkach/mwscrape2slob
- 
--comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.8"
-+comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/python-slob/Config.in b/package/python-slob/Config.in
-index a8b6e45..6f83808 100644
---- a/package/python-slob/Config.in
-+++ b/package/python-slob/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_SLOB
- 	bool "python-slob"
- 	depends on !BR2_BINFMT_FLAT # python-pyicu -> icu
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyicu -> icu
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # python-pyicu -> icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # python-pyicu -> icu
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PYICU # runtime
-@@ -13,7 +14,8 @@ config BR2_PACKAGE_PYTHON_SLOB
- 
- 	  https://github.com/itkach/slob
- 
--comment "python-slob needs a toolchain w/ C++, gcc >= 4.8"
-+comment "python-slob needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 0e53d06..0754fe5 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -10,16 +10,18 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
--comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_WEBKITGTK
- 	bool "webkitgtk"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LIBGTK3
+> 
+>> +	    rootdir="${HOST_DIR}"
+>> +
+>> +	    # do not process the sysroot (only contains target binaries)
+>> +	    find_args+=( "-path" "${STAGING_DIR}" "-prune" "-o" )
+>> +
+>> +	    # do not process the external toolchain installation directory to
+>> +	    # avoid breaking it.
+>> +	    test "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" != "" && \
+>> +		find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
+>> +
+>> +	    # ELF files should not be in these sub-directories
+>> +	    find_args+=( "-path" "${STAGING_DIR}/usr/share/terminfo" "-prune" "-o" )
+> 
+>   I don't understand how this can be needed, since STAGING_DIR is already pruned
+> above.
+
+That's wrong here. But there are many files in both, the host and 
+staging tree:
+
+$ find host/usr/share/terminfo/ -type f | wc -l
+2616
+$ find  host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/share/terminfo/ 
+share/terminfo/ -type f | wc -l
+2616
+
+> 
+>> +
+>> +	    # do not process the patchelf binary but a copy to work-around "file in use"
+>> +	    find_args+=( "-path" "${PATCHELF}" "-prune" "-o" )
+>> +	    cp "${PATCHELF}" "${PATCHELF}.__to_be_patched"
+>> +
+>> +	    sanitize_extra_args+=( "--relative-to-file" )
+>> +	    ;;
+>> +
+>> +	staging)
+>> +	    rootdir="${STAGING_DIR}"
+>> +	    # supress include files
+>> +	    find_args+=( "-path" "${STAGING_DIR}/usr/include" "-prune" "-o" )
+> 
+>   Perhaps it's better to define a variable with all the paths we want to exclude
+> - we may want to add more. OTOH, we can do that whenever we indeed do add more.
+
+But it's not just a variable, I need the leading -path and the trailing 
+-prune for each dir exclude.
+
+>> +	    sanitize_extra_args+=( "--no-standard-lib-dirs" "--relative-to-file" )
+>> +	    ;;
+>> +
+>> +	target)
+>> +	    rootdir="${TARGET_DIR}"
+>> +	    sanitize_extra_args+=( "--no-standard-lib-dirs" )
+>> +	    ;;
+>> +
+>> +	*)
+>> +	    usage
+>> +	    exit 1
+>> +	    ;;
+>> +    esac
+>> +
+>> +    find_args+=( "-type" "f" "-print" )
+>> +
+>> +    while read file ; do
+>> +	# check if it's an ELF file
+>> +	if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
+> 
+>   Wasn't "readelf -d ${file} | grep DT_RUNPATH" faster? You did some experiments
+> a while ago but I forgot what the conclusions were.
+
+There could also be DT_RPATH? But a grep for RPATH should fix that. I 
+didn't test that, because I thought that pining is slower anyway. 
+Without "grep DT_RUNPATH" it's faster but it will succeed then on 
+non-dynamic ELF files as well. We could also tune patchelf to return 
+faster if it's not an ELF file. I will remeasure with the command above.
+
+Wolfgang.
