@@ -1,39 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:21 +0200
-Subject: [Buildroot] [PATCH 041/100] libftdi1: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:24 +0200
+Subject: [Buildroot] [PATCH 044/100] libidn: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-42-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-45-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves
-using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-on gettext/host-gettext.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libftdi1/libftdi1.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/libidn/Config.in | 1 -
+ package/libidn/libidn.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index deeff39..6b84b95 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -28,9 +28,8 @@ LIBFTDI1_CONF_OPTS += -DPYTHON_BINDINGS=OFF
- endif
+diff --git a/package/libidn/Config.in b/package/libidn/Config.in
+index 7b558c7..20e0e2b 100644
+--- a/package/libidn/Config.in
++++ b/package/libidn/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBIDN
+ 	bool "libidn"
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Libidn's purpose is to encode and decode internationalized
+ 	  domain names.
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 18e28e0..b96e742 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -9,7 +9,7 @@ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
+ LIBIDN_CONF_OPTS = --disable-java --enable-csharp=no
+-LIBIDN_DEPENDENCIES = host-pkgconf $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LIBIDN_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBIDN_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
+ LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
  
- ifeq ($(BR2_PACKAGE_LIBFTDI1_FDTI_EEPROM),y)
--# ftdi_eeprom optionally depends on libintl, so make sure gettext is built
--# _before_ libfitdi1 when gettext is enbaled.
--LIBFTDI1_DEPENDENCIES += libconfuse $(if $(BR2_PACKAGE_GETTEXT),gettext)
-+# ftdi_eeprom optionally depends on libintl
-+LIBFTDI1_DEPENDENCIES += libconfuse $(TARGET_NLS_DEPENDENCIES)
- LIBFTDI1_CONF_OPTS += -DFTDI_EEPROM=ON
- else
- LIBFTDI1_CONF_OPTS += -DFTDI_EEPROM=OFF
 -- 
 2.9.4
