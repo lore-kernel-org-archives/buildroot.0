@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:37:11 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: remove libintl static linking
+Date: Wed, 5 Jul 2017 01:37:15 +0200
+Subject: [Buildroot] [git commit] perl: remove libintl static linking
 	handling
-Message-ID: <20170704233519.ED0247FBC5@busybox.osuosl.org>
+Message-ID: <20170704233520.62F388013D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b198cedc5007e6777efcedd2a6d9e2ff9952f65d
+commit: https://git.buildroot.net/buildroot/commit/?id=ee557967abde5d12f7ae09701045eb282be52d2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 We no longer support building the full-blown libintl in static linking
-scenarios, as it causes too many problems. Therefore, remove the
-special code in e2fsprogs that was handling this.
+scenarios, as it causes too many problems. Therefore, remove the patch
+that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/e2fsprogs/e2fsprogs.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ .../0001-fix-static-build-with-gdbm-gettext.patch    | 20 --------------------
+ 1 file changed, 20 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 84af7ab..75e9213 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -77,12 +77,6 @@ HOST_E2FSPROGS_CONF_ENV += \
- 	ac_cv_header_magic_h=no \
- 	ac_cv_lib_magic_magic_file=no
- 
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_STATIC_LIBS),yy)
--# util-linux libuuid pulls in libintl if needed, so ensure we also
--# link against it, otherwise static linking fails
--E2FSPROGS_CONF_ENV += LIBS=-lintl
--endif
+diff --git a/package/perl/0001-fix-static-build-with-gdbm-gettext.patch b/package/perl/0001-fix-static-build-with-gdbm-gettext.patch
+deleted file mode 100644
+index ca6bf01..0000000
+--- a/package/perl/0001-fix-static-build-with-gdbm-gettext.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-fix static build with gdbm + gettext
 -
- E2FSPROGS_MAKE_OPTS = LDCONFIG=true
- 
- E2FSPROGS_INSTALL_STAGING_OPTS = \
+-see doc http://perldoc.perl.org/ExtUtils/MakeMaker.html#LIBS
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-index: b/ext/GDBM_File/Makefile.PL
+-===================================================================
+---- a/ext/GDBM_File/Makefile.PL
+-+++ b/ext/GDBM_File/Makefile.PL
+-@@ -2,7 +2,7 @@ use ExtUtils::MakeMaker;
+- use ExtUtils::Constant 0.11 'WriteConstants';
+- WriteMakefile(
+-     NAME => 'GDBM_File',
+--    LIBS => ["-lgdbm", "-ldbm"],
+-+    LIBS => ["-lgdbm -lintl", "-lgdbm", "-ldbm"],
+-     XSPROTOARG => '-noprototypes', 		# XXX remove later?
+-     VERSION_FROM => 'GDBM_File.pm',
+-     realclean => {FILES=> 'const-c.inc const-xs.inc'},
+-
