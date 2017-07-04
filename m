@@ -1,77 +1,78 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  4 Jul 2017 18:39:35 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: add qca6174{bt} firmware
-Message-ID: <20170704163935.14221-1-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Jul 2017 18:39:23 +0200
+Subject: [Buildroot] [git commit] linux-fusion: fix build issue with Linux
+	>= 4.7
+Message-ID: <20170704163743.441EF81DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=0ae2cab4167cb978718dcbfe9fa006b126522b65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The size parameter from sock_recvmsg() was removed from Linux kernel
+API since 4.7. This commit adjusts the existing
+0004-Port-one-one_udp.c-to-Linux-4.1.patch to fix the build with Linux
+>= 4.7.
+
+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+[Thomas: improved commit title/log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         | 11 +++++++++++
- package/linux-firmware/linux-firmware.mk | 12 ++++++++++++
- 2 files changed, 23 insertions(+)
+ .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 43ed8413ae..5c653bffff 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -39,6 +39,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IBT
- 	  Firmware files for Intel 3160/7260/7265/8260/8265 Wireless
- 	  bluetooth support.
-
-+config BR2_PACKAGE_LINUX_FIRMWARE_QCA_6174A_BT
-+	bool "Qualcomm Atheros Rome 6174A Bluetooth"
-+	help
-+	  Firmware files for QCA Rome 6174A
-+	  bluetooth support.
+diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+index e1bff64..3ee4dac 100644
+--- a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
++++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+@@ -24,12 +24,20 @@ one/one_udp.c: In function 'ksocket_send_iov':
+ one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
+ 
+ Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
 +
- endmenu # Bluetooth
-
- menu "WiFi firmware"
-@@ -58,6 +64,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6004
- 	help
- 	  Firmware files for the Atheros AR6004 chip
-
-+config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
-+	bool "Qualcomm Atheros 6174"
-+	help
-+	  Firmware files for the Qualcomm Atheros QCA6174 chip
++Kernel commit 2da62906b1e29 dropped the size parameter in sock_recvmsg
++since 4.7
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010
- 	bool "Atheros 7010"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index bce36ceab8..87101689b0 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -30,6 +30,12 @@ LINUX_FIRMWARE_FILES += intel/ibt-*
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ibt_firmware
- endif
-
-+# Qualcomm Atheros Rome 6174A Bluetooth
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QCA_6174A_BT),y)
-+LINUX_FIRMWARE_FILES += qca/rampatch_usb_00000302.bin qca/nvm_usb_00000302.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qcom
-+endif
++In function 'ksocket_receive'
++one/one_udp.c:235:13: error: too many arguments to function 'sock_recvmsg'
 +
- # Freescale i.MX SDMA
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA),y)
- LINUX_FIRMWARE_FILES += imx/sdma/sdma-imx6q.bin imx/sdma/sdma-imx7d.bin
-@@ -102,6 +108,12 @@ LINUX_FIRMWARE_FILES += ath6k/AR6004
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
-
-+# qca6174
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174),y)
-+LINUX_FIRMWARE_FILES += ath10k/QCA6174
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
-+endif
++Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+ ---
+- one/one_udp.c | 30 +++++++++++++++---------------
+- 1 file changed, 15 insertions(+), 15 deletions(-)
++ one/one_udp.c | 34 +++++++++++++++++++---------------
++ 1 file changed, 19 insertions(+), 15 deletions(-)
+ 
+ diff --git a/one/one_udp.c b/one/one_udp.c
+-index 26b9e6a1f729..b1daae164cdf 100644
++index 26b9e6a..9b59529 100644
+ --- a/one/one_udp.c
+ +++ b/one/one_udp.c
+ @@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
+@@ -78,7 +86,7 @@ index 26b9e6a1f729..b1daae164cdf 100644
+       struct iovec iov;
+       mm_segment_t oldfs;
+       int size = 0;
+-@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
++@@ -213,18 +215,20 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
+       iov.iov_base = buf;
+       iov.iov_len = len;
+  
+@@ -97,3 +105,14 @@ index 26b9e6a1f729..b1daae164cdf 100644
+  
+       oldfs = get_fs();
+       set_fs(KERNEL_DS);
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,7,0) // commit 2da62906b1e29
++      size = sock_recvmsg(sock,&msg,len,msg.msg_flags);
+++#else
+++     size = sock_recvmsg(sock, &msg,msg.msg_flags);
+++#endif
++      set_fs(oldfs);
++ 
++      return size;
++-- 
++2.11.0
 +
- # ar7010
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010),y)
- LINUX_FIRMWARE_FILES += ar7010.fw ar7010_1_1.fw htc_7010.fw ath9k_htc/htc_7010-1.4.0.fw
---
-2.13.2
