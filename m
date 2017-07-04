@@ -1,36 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Jul 2017 17:51:12 +0200
-Subject: [Buildroot] [PATCH] libmad: add security patch from debian
-In-Reply-To: <20170704084211.8696-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 4 Jul 2017 10:42:11 +0200")
-References: <20170704084211.8696-1-peter@korsgaard.com>
-Message-ID: <87h8ys19qn.fsf@dell.be.48ers.dk>
+Date: Tue, 4 Jul 2017 17:35:56 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] setlocalversion: fix
+	detection of hg revision for untagged versions
+Message-ID: <20170704154804.C06ED7F977@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b17792236ed17a88f162d327f6744cbf7b35c868
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
- > Fixes:
- > CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
- > libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
- > denial of service (assertion failure and application exit) via a crafted
- > audio file.
+By default, cut prints the entire line if the specified delimiter is not
+present at all:
 
- > CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
- > libmad 0.15.1b allows remote attackers to cause a denial of service
- > (heap-based buffer overflow and application crash) or possibly have
- > unspecified other impact via a crafted audio file.
+    $ printf "foo bar" | cut -d' ' -f2
+    bar
+    $ printf "foobar" | cut -d' ' -f2
+    foobar
 
- > CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
- > 0.15.1b allows remote attackers to cause a denial of service (heap-based
- > buffer over-read and application crash) via a crafted audio file.
+In setlocalversion, cut is presented with the output of 'hg id' which has
+the format:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    "<revision> <tags-if-any>"
 
-Committed to 2017.02.x and 2017.05.x, thanks.
+If the current revision is not tagged, the output of 'hg id' does not
+contain the delimiter (space), cut prints the entire string, and
+setlocalversion thinks the version is the tag.
+As setlocalversion does not print anything for tagged versions, there is no
+output overall, and no correct indication of the mercurial revision.
 
--- 
-Bye, Peter Korsgaard
+Fix by passing the extra cut option '--only-delimited', which suppresses
+output if no delimiter is found.
+
+This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
+most recent revision of the branch) is treated specially: in this case the
+mercurial revision _is_ printed, i.e. the situation is treated as
+'untagged'.
+The problem is only seen when you are _not_ at the most recent revision in
+your branch.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ec019bcf643de83d502f30d85d56dd4547b0c11b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/setlocalversion | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
+index adeeb78..33cd605 100755
+--- a/support/scripts/setlocalversion
++++ b/support/scripts/setlocalversion
+@@ -54,7 +54,7 @@ fi
+ 
+ # Check for mercurial and a mercurial repo.
+ if hgid=`hg id 2>/dev/null`; then
+-	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
++	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
+ 
+ 	# Do we have an untagged version?
+ 	if [ -z "$tag" -o "$tag" = tip ]; then
