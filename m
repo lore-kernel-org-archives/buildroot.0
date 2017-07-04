@@ -1,102 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 18:57:15 +0200
-Subject: [Buildroot] [git commit] package/strace: fix nios2_sp_ptr definition
-Message-ID: <20170704165441.6E7AC81E7F@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue,  4 Jul 2017 18:58:22 +0200
+Subject: [Buildroot] [PATCH] skalibs: fix bashism in type sizes patch
+Message-ID: <20170704165822.12867-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6879dc239b1f9d7ac7e749010a0d5a079b8d2d62
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The patch [1] introduced in strace 1.17 uses the old way of accessing
-SP register as defined for kernel headers < 4.0. The kernel headers
-for nios2 has been changed in commit [2].
-
-This patch updates strace to use the new kernel/userspace interface.
+Instead of using a Bash-only variable substitution feature in the patch
+to determine type size at build time, invoke `sed` to make it portable.
 
 Fixes:
-http://autobuild.buildroot.net/results/b9f/b9fc25b82f3280872fe1593ac252a8529ba83576
-
-[1] https://github.com/strace/strace/commit/6117728aacf431a3e3c05761766c776874cc0861
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=92d5dd8cd6e2b211d32d8fbc6cf4b7470765a09f
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: improve a bit the commit log and patch description.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+http://autobuild.buildroot.net/results/023/023d71356376bea13d16c43898a0347e41cd19b9/
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- ...os2-arch_regs-fix-nios2_sp_ptr-definition.patch | 43 ++++++++++++++++++++++
- package/strace/Config.in                           |  6 +++
- 2 files changed, 49 insertions(+)
+ .../skalibs/0002-No-runtime-tests-for-type-sizes.patch    | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch b/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
-new file mode 100644
-index 0000000..7ba03b5
---- /dev/null
-+++ b/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
-@@ -0,0 +1,43 @@
-+From 8a1f47f7963991e5b039282769d0a798d36f9e45 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Tue, 4 Jul 2017 18:06:14 +0200
-+Subject: [PATCH] nios2/arch_regs: fix nios2_sp_ptr definition
-+
-+The patch [1] introduced in strace 1.17s use the old way of accessing
-+SP register as defined for kernel headers < 4.0. The kernel headers
-+for nios2 have been changed in commit [2].
-+
-+This patch updates strace to use the new kernel/userspace interface.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/b9f/b9fc25b82f3280872fe1593ac252a8529ba83576
-+
-+[1] https://github.com/strace/strace/commit/6117728aacf431a3e3c05761766c776874cc0861
-+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=92d5dd8cd6e2b211d32d8fbc6cf4b7470765a09f
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ linux/nios2/arch_regs.c | 2 +-
-+ linux/nios2/arch_regs.h | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/linux/nios2/arch_regs.c b/linux/nios2/arch_regs.c
-+index 8a668bc..c18a3aa 100644
-+--- a/linux/nios2/arch_regs.c
-++++ b/linux/nios2/arch_regs.c
-+@@ -1,4 +1,4 @@
-+ static struct user_pt_regs nios2_regs;
-+-unsigned long *const nios2_sp_ptr = &nios2_regs.sp;
-++unsigned int *const nios2_sp_ptr = &nios2_regs.regs[PTR_SP];
-+ # define ARCH_REGS_FOR_GETREGSET nios2_regs
-+ #define ARCH_PC_REG nios2_regs.regs[PTR_EA]
-+diff --git a/linux/nios2/arch_regs.h b/linux/nios2/arch_regs.h
-+index 7f344b5..c4230ed 100644
-+--- a/linux/nios2/arch_regs.h
-++++ b/linux/nios2/arch_regs.h
-+@@ -1 +1 @@
-+-extern unsigned long *const nios2_sp_ptr;
-++extern unsigned int *const nios2_sp_ptr;
-+-- 
-+2.9.4
-+
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index bbb582a..501c964 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -1,8 +1,14 @@
- config BR2_PACKAGE_STRACE
- 	bool "strace"
-+	# needs at least kernel headers 4.0 on nios2
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
- 	  Allows you to track what system calls a program makes
- 	  while it is running.
+diff --git a/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch b/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
+index 694b5d0..b1fdcfb 100644
+--- a/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
++++ b/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
+@@ -1,4 +1,4 @@
+-From 2596155d76e4f2a3eab45ef7d095ade996b8b2a5 Mon Sep 17 00:00:00 2001
++From 91045c0f5fa8f126fa7a407e467b6d941e7ef602 Mon Sep 17 00:00:00 2001
+ From: "Van Bemten, Lionel (Nokia - BE/Antwerp)" <lionel.van_bemten@nokia.com>
+ Date: Thu, 18 May 2017 19:38:46 +0200
+ Subject: [PATCH] No runtime tests for type sizes
+@@ -11,14 +11,14 @@ This improves support for cross-compilation.
+ Signed-off-by: "Van Bemten, Lionel (Nokia - BE/Antwerp)" <lionel.van_bemten@nokia.com>
+ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ ---
+- configure | 74 ++++++++++++++++++++++++++++++++++++++++++++++++++-------------
+- 1 file changed, 59 insertions(+), 15 deletions(-)
++ configure | 75 ++++++++++++++++++++++++++++++++++++++++++++++++++-------------
++ 1 file changed, 60 insertions(+), 15 deletions(-)
  
- 	  http://sourceforge.net/projects/strace/
-+
-+comment "strace needs a toolchain w/ headers >= 4.0 on nios2"
-+	depends on BR2_nios2
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ diff --git a/configure b/configure
+-index 5fffc34..115fea3 100755
++index 8ba948e..b129556 100755
+ --- a/configure
+ +++ b/configure
+-@@ -154,25 +154,69 @@ choose () {
++@@ -154,25 +154,70 @@ choose () {
+    fi
+  }
+  
+@@ -84,7 +84,8 @@ index 5fffc34..115fea3 100755
+ -    caps=$(echo $key | sed s/:\$// | tr a-z A-Z)
+ -    echo "#define ${package_macro_name}_${caps} $value" >> $sysdeps/sysdeps.h
+ +  for t in "unsigned short" "unsigned int" "unsigned long"; do
+-+    findtypesize "$t" "${t/nsigned /}"
+++    abbr=$(echo "$t" | sed -e 's/nsigned //')
+++    findtypesize "$t" "${abbr}"
+    done
+ -  ./output-types | grep -F signed | while read key value ; do
+ -    caps=$(echo $key | sed s/:\$// | tr a-z A-Z)
+@@ -104,5 +105,5 @@ index 5fffc34..115fea3 100755
+  }
+  
+ -- 
+-2.9.3
++2.9.4
+ 
+-- 
+2.9.4
