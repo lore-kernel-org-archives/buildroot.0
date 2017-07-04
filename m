@@ -1,67 +1,84 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  4 Jul 2017 18:35:33 +0200
-Subject: [Buildroot] [PATCH] qt5base: disable libraries not built
-In-Reply-To: <20170704163533.13923-1-maxime.hadjinlian@gmail.com>
-References: <20170704163533.13923-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20170704163533.13923-2-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Jul 2017 18:36:50 +0200
+Subject: [Buildroot] Systemd no longer working when transitioning from
+ 2017.02.3 to 2017.05
+In-Reply-To: <d4790720-4e78-418e-9f8a-d3035440e36f@cesnet.cz>
+References: <CAOLz05oMkX9563v=a+Zk1Zro-EUuQaBwgfCMyvi5Ne3Lz_2dQQ@mail.gmail.com>
+ <d4790720-4e78-418e-9f8a-d3035440e36f@cesnet.cz>
+Message-ID: <20170704163650.GA3499@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
+Jan, Amr, All,
 
-We don't build theses libraries by default (we deactivate them at
-configure time).
-Theses are at the moment enabled by default in BR, a better patch will
-be made at a later time.
----
- package/qt5/qt5base/qt5base.mk | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+On 2017-07-03 21:53 +0200, Jan Kundr?t spake thusly:
+> On ?ter? 20. ?ervna 2017 8:29:02 CEST, Amr Bekhit wrote:
+> >Startup log: https://pastebin.com/TtSmZF7F
+> >systemd-timesyncd: https://pastebin.com/qC2QMnRN
+> >systemd-resolved: https://pastebin.com/z0U5w98Y
+> 
+> You've linked to pastebin, so in case these links disappear in a few
+> days/years, here's the relevant part:
+> 
+> ># journalctl -xe -u systemd-timesyncd
+> >-- Logs begin at Mon 2017-06-19 13:59:33 +03, end at Mon 2017-06-19 14:01:03 +03. --
+> >Jun 19 13:59:35 xplained-d4 systemd[1]: Starting Network Time Synchronization...
+> >-- Subject: Unit systemd-timesyncd.service has begun start-up
+> >-- Defined-By: systemd
+> >-- Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+> >--
+> >-- Unit systemd-timesyncd.service has begun starting up.
+> >Jun 19 13:59:35 xplained-d4 systemd[899]: systemd-timesyncd.service: Failed at step NAMESPACE spawning /lib/systemd/systemd-timesyncd: No such file or directory
+> 
+> This is https://bugs.busybox.net/show_bug.cgi?id=9926 .
+> 
+> Buildroot's default filesystem layout breaks those units for which systemd
+> tries to use a private filesystem/mount namespace. In particular /tmp,
+> /var/tmp etc are relevant here. A correct fix is to ensure that the root
+> filesystem does *not* include symlinks for these directories because they
+> prevent creating the overlaying mounts.
+> 
+> There's some work-in-progress at [1] which attempts to re-structure the
+> rootfs and which also makes it more systemd-friendly.
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 2b9db5cb66..ddc1f64174 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -186,22 +186,22 @@ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_CONCURRENT) += Qt5Concurrent
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_OPENGL_LIB) += Qt5OpenGL
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglFSDeviceIntegration
--ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglFsKmsSupport
--endif
--else
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglDeviceIntegration
--endif
--
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
--QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_OPENGL_LIB) += Qt5OpenGL
-+#ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglFSDeviceIntegration
-+#ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglFsKmsSupport
-+#endif
-+#else
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglDeviceIntegration
-+#endif
-+#
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
-+#QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
- 
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
- 
+I've done quite some progress on this branch during the (extended)
+week-end, but it is still not 100% ready yet.
+
+> For me, it breaks
+> compilation with the Linaro toolchain (one has to run one mkdir between
+> `make toolchain` and `make all`), but otherwise it looks like a good thing
+> to do.
+
+Yup, I have your earlier mail still in my inbox about this, sorry I did
+not follow up on it. It plan on stabiolising this work, and when it is
+stable I'll address your issue as well. Thanks for the reminder! ;-)
+
+> I'm not updating the bug because Bugzilla won't load for me right now for
+> some reason.
+
+Yup, it seems there have been a few hiccups on the server in the recent
+past... :-/
+
+Regards,
+Yann E. MORIN.
+
+> Cheers,
+> Jan
+> 
+> [1]
+> https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/systemd-skeleton-2
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.13.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
