@@ -1,58 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 19:09:50 +0200
-Subject: [Buildroot] [git commit] toolchain: introduce
-	BR2_TOOLCHAIN_HAS_FULL_GETTEXT
-Message-ID: <20170704170700.E9B9B8015E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Jul 2017 19:11:48 +0200
+Subject: [Buildroot] Buildroot 2017.02.4 released
+Message-ID: <87d19g160b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85cb34a880a0eca6c7c33e548057adfbb0c0a8a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This new boolean is true if the toolchain provides a built-in
-full-featured implementation of gettext (glibc), and false if only a
-stub implementation is provided (uclibc, musl).
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-This will be used in follow-up commits to decide whether libintl needs
-to be built by gettext or not.
+Buildroot 2017.02.4 is released - Go download it at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/Config.in           | 1 +
- toolchain/toolchain-common.in | 6 ++++++
- 2 files changed, 7 insertions(+)
+http://buildroot.org/downloads/buildroot-2017.02.4.tar.gz
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 6aaf68b..15ee335 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -11,6 +11,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
-+	select BR2_TOOLCHAIN_HAS_FULL_GETTEXT
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 74e0e06..59115f3 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -93,6 +93,12 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
- 	bool
- 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
- 
-+# This boolean is true if the toolchain provides a built-in full
-+# featured gettext implementation (glibc), and false if only a stub
-+# gettext implementation is provided (uclibc, musl)
-+config BR2_TOOLCHAIN_HAS_FULL_GETTEXT
-+	bool
-+
- config BR2_USE_MMU
- 	bool "Enable MMU support" if BR2_ARCH_HAS_MMU_OPTIONAL
- 	default y if BR2_ARCH_HAS_MMU_OPTIONAL || BR2_ARCH_HAS_MMU_MANDATORY
+or
+
+http://buildroot.org/downloads/buildroot-2017.02.4.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.02.4 is the 4th bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2017.02.3 release.
+
+- Security fixes for apache, bind, c-ares, expat, gesftpserver, glibc,
+  gnutls, ipsec-tools, irssi, libgcrypt, libmad, mosquitto, mpg123,
+  openvpn, spice, systemd, tor, vlc
+
+- Fixes for download/compilation/runtime issues in automake, botan,
+  dhcp, fcgiwrap, gcc, gdb, gnutls, gst1-plugins-bad, imagemagick,
+  imx-uuc, intltool, iperf, libnl, ncurses, nodejs, ntp, openssh,
+  qt5base, qt5multimedia, rtl8821au, socat, systemd, tslib, x264,
+  xserver_xorg-server,
+
+- Update support/scripts/scancpan to use METACPAN v1 API as v0 has been
+  shutdown.
+
+- Update support/scripts/mkusers to handle setups where /etc/shadow is a
+  symlink.
+
+- External toolchain: Don't create musl dynamic loader symlink for
+  static builds.
+
+- Setlocalversion: Correct detection of mercurial revisions for
+  non-tagged versions.
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.02.3..
+
+    26  Peter Korsgaard
+    11  Bernd Kuhls
+     8  Baruch Siach
+     6  Fabio Estevam
+     6  Vicente Olivert Riera
+     6  Yann E. MORIN
+     3  Andrey Smirnov
+     2  Bartosz Golaszewski
+     2  J?rg Krause
+     2  Thomas Petazzoni
+     1  Adam Duskett
+     1  Alexander Dahl
+     1  Alexandre Esse
+     1  Francois Perrad
+     1  Jens Maus
+     1  Martin Kepplinger
+     1  Rodrigo Rebello
+     1  Romain Naour
+     1  Thomas Claveirole
+     1  Thomas De Schampheleire
+     1  Tobias Blass
+
+-- 
+Bye, Peter Korsgaard
