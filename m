@@ -1,60 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:37:35 +0200
-Subject: [Buildroot] [git commit] toolchain: drop BR2_NEEDS_GETTEXT{,
-	_IF_LOCALE}
-Message-ID: <20170704233520.BDEAC80420@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:37:42 +0200
+Subject: [Buildroot] [git commit] CHANGES: add details on the gettext revamp
+Message-ID: <20170704233520.DE6BB80420@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4460da3e147a65377478bc5937b67fff831651d3
+commit: https://git.buildroot.net/buildroot/commit/?id=2fce205673945c40c1ce3b0121eb6665348f371f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that all packages have been migrated to the new gettext logic, we
-can remove the BR2_NEEDS_GETTEXT and BR2_NEEDS_GETTEXT_IF_LOCALE
-variables.
+The gettext revamp has some user-visible changes, so this commit
+updates the CHANGES file to document them.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gettext/Config.in     |  1 -
- toolchain/toolchain-common.in | 14 --------------
- 2 files changed, 15 deletions(-)
+ CHANGES | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-index 0dea03d..60f8d4f 100644
---- a/package/gettext/Config.in
-+++ b/package/gettext/Config.in
-@@ -22,5 +22,4 @@ config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
- endif
+diff --git a/CHANGES b/CHANGES
+index b284287..105c931 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,22 @@
++2017.08-rc1, To be released
++
++	Major revamp of the gettext handling, with user-visible
++	effect:
++
++	  - prior to this revamp, when BR2_ENABLE_LOCALE=y, each
++	    package could decide to enable or not NLS support. When
++	    BR2_ENABLE_LOCALE was disabled, NLS support was forced off
++	    by passing --disable-nls to packages.
++
++	  - after this revamp, a new BR2_SYSTEM_ENABLE_NLS option
++            controls whether NLS support should be enabled or not in
++            packages. This option defaults to disabled, which means
++            that now, NLS support is by default disabled in all
++            packages.
++
++	Therefore, if you need NLS support in packages, you must now
++	explicitly enable the BR2_SYSTEM_ENABLE_NLS option.
++
+ 2017.05.1, Released July 4th, 2017
  
- comment "gettext needs a toolchain w/ wchar"
--	depends on BR2_NEEDS_GETTEXT
- 	depends on !BR2_USE_WCHAR
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 59115f3..c570cc8 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -79,20 +79,6 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
- 
- 	  Note: the full set of gconv libs are ~8MiB (on ARM).
- 
--# glibc and eglibc directly include gettext, so a separatly compiled
--# gettext isn't needed and shouldn't be built to avoid conflicts. Some
--# packages always need gettext, other packages only need gettext when
--# locale support is enabled. See the documentation for how packages
--# should rely on the following two options.
--
--config BR2_NEEDS_GETTEXT
--	bool
--	default y if BR2_TOOLCHAIN_USES_UCLIBC
--
--config BR2_NEEDS_GETTEXT_IF_LOCALE
--	bool
--	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
--
- # This boolean is true if the toolchain provides a built-in full
- # featured gettext implementation (glibc), and false if only a stub
- # gettext implementation is provided (uclibc, musl)
+ 	Important / security related fixes.
