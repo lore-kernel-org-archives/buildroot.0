@@ -1,124 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:19 +0200
-Subject: [Buildroot] [PATCH 099/100] docs/manual: update gettext details
+Date: Tue,  4 Jul 2017 16:48:46 +0200
+Subject: [Buildroot] [PATCH 066/100] procps-ng: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-100-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-67-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The way gettext is handled in Buildroot has significantly changed,
-with changes visible to packages. This commit updates the relevant
-section of the manual to document how packages should now interact
-with the gettext support.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - using TARGET_NLS_LIBS to force linking against libintl
+
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-gettext.txt | 83 +++++++++++++++++----------------
- 1 file changed, 42 insertions(+), 41 deletions(-)
+ package/procps-ng/Config.in    | 1 -
+ package/procps-ng/procps-ng.mk | 8 ++------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/docs/manual/adding-packages-gettext.txt b/docs/manual/adding-packages-gettext.txt
-index c955b1f..e9c6968 100644
---- a/docs/manual/adding-packages-gettext.txt
-+++ b/docs/manual/adding-packages-gettext.txt
-@@ -7,53 +7,54 @@ Many packages that support internationalization use the gettext
- library. Dependencies for this library are fairly complicated and
- therefore, deserve some explanation.
+diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
+index 553bea1..6ff8983 100644
+--- a/package/procps-ng/Config.in
++++ b/package/procps-ng/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_PROCPS_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Standard informational utilities and process-handling tools.
+ 	  Provides things like kill, ps, uptime, free, top, etc...
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 0ab3139..22ebc1a 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -10,7 +10,8 @@ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
+ PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
+ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
+ PROCPS_NG_INSTALL_STAGING = YES
+-PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf
++PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
++PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ # For 0002-use-pkgconfig-for-ncursesw-cflags.patch
+ PROCPS_NG_AUTORECONF = YES
+ PROCPS_NG_GETTEXTIZE = YES
+@@ -21,11 +22,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ PROCPS_NG_DEPENDENCIES += busybox
+ endif
  
--The 'uClibc' C library doesn't implement gettext functionality;
--therefore with this C library, a separate gettext must be compiled,
--which is provided by the additional +libintl+ library, part of the
-+The 'glibc' C library integrates a full-blown implementation of
-+'gettext', supporting translation. Native Language Support is
-+therefore built-in in 'glibc'.
-+
-+On the other hand, the 'uClibc' and 'musl' C libraries only provide a
-+stub implementation of the gettext functionality, which allows to
-+compile libraries and programs using gettext functions, but without
-+providing the translation capabilities of a full-blown gettext
-+implementation. With such C libraries, if real Native Language Support
-+is necessary, it can be provided by the +libintl+ library of the
- +gettext+ package.
- 
--On the other hand, the 'glibc' C library does integrate its own
--gettext library functions, so it is not necessary to build a separate
--+libintl+ library.
-+Due to this, and in order to make sure that Native Language Support is
-+properly handled, packages in Buildroot that can use NLS support
-+should:
- 
--However, certain packages need some gettext utilities on the target,
-+1. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
-+   is done automatically for 'autotools' packages and therefore should
-+   only be done for packages using other package infrastructures.
-+
-+1. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
-+   +<pkg>_DEPENDENCIES+ variable. This addition should be done
-+   unconditionally: the value of this variable is automatically
-+   adjusted by the core infrastructure to contain the relevant list of
-+   packages. If NLS support is disabled, this variable is empty. If
-+   NLS support is enabled, this variable contains +host-gettext+ so
-+   that tools needed to compile translation files are available on the
-+   host. In addition, if 'uClibc' or 'musl' are used, this variable
-+   also contains +gettext+ in order to get the full-blown 'gettext'
-+   implementation.
-+
-+1. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
-+   the package gets linked with +libintl+. This is generally not
-+   needed with 'autotools' packages as they usually detect
-+   automatically that they should link with +libintl+. However,
-+   packages using other build systems, or problematic autotools-based
-+   packages may need this. +$(TARGET_NLS_LIBS)+ should be added
-+   unconditionally to the linker flags, as the core automatically
-+   makes it empty or defined to +-lintl+ depending on the
-+   configuration.
-+
-+No changes should be made to the +Config.in+ file to support NLS.
-+
-+Finally, certain packages need some gettext utilities on the target,
- such as the +gettext+ program itself, which allows to retrieve
--translated strings, from the command line.
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-PROCPS_NG_DEPENDENCIES += gettext
+-PROCPS_NG_CONF_OPTS += LIBS=-lintl
+-endif
 -
--Additionally, some packages (such as +libglib2+) do require gettext
--functions unconditionally, while other packages (in general, those who
--support +--disable-nls+) only require gettext functions when locale
--support is enabled.
--
--Therefore, Buildroot defines two configuration options:
--
--* +BR2_NEEDS_GETTEXT+, which is true as soon as the toolchain doesn't
--  provide its own gettext implementation
--
--* +BR2_NEEDS_GETTEXT_IF_LOCALE+, which is true if the toolchain
--  doesn't provide its own gettext implementation and if locale support
--  is enabled
--
--Packages that need gettext only when locale support is enabled should:
--
--* use +select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE+ in the
--  +Config.in+ file;
--
--* use +$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)+ in the package
--  +DEPENDENCIES+ variable in the +.mk+ file.
--
--Packages that unconditionally need gettext (which should be very rare)
-+translated strings, from the command line. In such a case, the package
- should:
- 
--* use +select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT+ in the +Config.in+
--  file;
--
--* use +$(if $(BR2_NEEDS_GETTEXT),gettext)+ in the package
--  +DEPENDENCIES+ variable in the +.mk+ file.
--
--Packages that need the +gettext+ utilities on the target (should be
--rare) should:
--
- * use +select BR2_PACKAGE_GETTEXT+ in their +Config.in+ file,
-   indicating in a comment above that it's a runtime dependency only.
- 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
 -- 
 2.9.4
