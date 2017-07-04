@@ -1,80 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:40:48 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] mpg123: security bump to
-	version 1.25.1
-Message-ID: <20170704154805.16AB97FFED@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:50:40 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] libmad: add security
+	patch from debian
+Message-ID: <20170704154805.9FC267F977@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcbb6a4bbed06e78ab56cfac585b78926adca3fb
+commit: https://git.buildroot.net/buildroot/commit/?id=6ae271cd55e6dbe53686b1d05bb379a15debf92f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-From the release notes:
+Fixes:
 
-- Avoid memset(NULL, 0, 0) to calm down the paranoid.
+CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
+libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
+denial of service (assertion failure and application exit) via a crafted
+audio file.
 
-- Fix bug 252, invalid read of size 1 in ID3v2 parser due to forgotten
-  offset from the frame flag bytes (unnoticed in practice for a long time).
-  Fuzzers are in the house again.  This one got CVE-2017-10683.
+CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
+libmad 0.15.1b allows remote attackers to cause a denial of service
+(heap-based buffer overflow and application crash) or possibly have
+unspecified other impact via a crafted audio file.
 
-  https://sourceforge.net/p/mpg123/bugs/252/
-
-- Avoid a mostly harmless conditional jump depending on uninitialised
-  fr->lay in compute_bpf() (mpg123_position()) when track is not ready yet.
-
-- Fix undefined shifts on signed long mask in layer3.c (worked in practice,
-  never right in theory).  Code might be a bit faster now, even.  Thanks to
-  Agostino Sarubbo for reporting.
-
-dlopen() is now directly used to load output modules (and the
---with-modules-suffix option has been removed), so adjust the modules logic
-to match.
+CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
+0.15.1b allows remote attackers to cause a denial of service (heap-based
+buffer over-read and application crash) via a crafted audio file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b3a0afd47f278ab5dea4f5cbe01da79a2e05ec8c)
+(cherry picked from commit 6369a06150b9a2991807c0418a7f0a865ef6c084)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash |  2 +-
- package/mpg123/mpg123.mk   | 11 ++++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/libmad/libmad.hash | 1 +
+ package/libmad/libmad.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index fa55809..69fbef3 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
-+sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 2431df1..7fc6d7a 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libmad/libmad.hash b/package/libmad/libmad.hash
+index 1e55556..173399f 100644
+--- a/package/libmad/libmad.hash
++++ b/package/libmad/libmad.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690  libmad-0.15.1b.tar.gz
++sha256  0e21f2c6b19337d0b237dacc04f7b90a56be7f359f4c9a2ee0b202d9af0cfa69  frame_length.diff
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 0bb64da..0729b1e 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -10,6 +10,8 @@ LIBMAD_INSTALL_STAGING = YES
+ LIBMAD_LIBTOOL_PATCH = NO
+ LIBMAD_LICENSE = GPL-2.0+
+ LIBMAD_LICENSE_FILES = COPYING
++LIBMAD_PATCH = \
++	https://sources.debian.net/data/main/libm/libmad/0.15.1b-8/debian/patches/frame_length.diff
  
--MPG123_VERSION = 1.23.8
-+MPG123_VERSION = 1.25.1
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
-@@ -74,10 +74,11 @@ endif
- 
- MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
- 
--ifeq ($(BR2_PACKAGE_LIBTOOL),y)
--MPG123_DEPENDENCIES += libtool
--# .la files gets stripped , so directly load .so files rather than .la
--MPG123_CONF_OPTS += --with-modules --with-module-suffix=.so
-+# output modules are loaded with dlopen()
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MPG123_CONF_OPTS += --disable-modules
-+else
-+MPG123_CONF_OPTS += --enable-modules
- endif
- 
- $(eval $(autotools-package))
+ define LIBMAD_PREVENT_AUTOMAKE
+ 	# Prevent automake from running.
