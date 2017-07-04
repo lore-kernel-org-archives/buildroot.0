@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:51 +0200
-Subject: [Buildroot] [PATCH 071/100] rhash: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:38 +0200
+Subject: [Buildroot] [PATCH 058/100] ndisc6: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-72-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-59-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,40 +21,43 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rhash/Config.in | 1 -
- package/rhash/rhash.mk  | 9 +++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/ndisc6/Config.in | 1 -
+ package/ndisc6/ndisc6.mk | 8 ++------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/rhash/Config.in b/package/rhash/Config.in
-index 46f6ca7..2ddcb00 100644
---- a/package/rhash/Config.in
-+++ b/package/rhash/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_RHASH
- 	bool "rhash"
+diff --git a/package/ndisc6/Config.in b/package/ndisc6/Config.in
+index 321bfbc..a397ea6 100644
+--- a/package/ndisc6/Config.in
++++ b/package/ndisc6/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_NDISC6
+ 	bool "ndisc6 tools"
+ 	depends on BR2_USE_MMU # fork()
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  LibRHash is a professional, portable, thread-safe C library
- 	  for computing a wide variety of hash sums, such as CRC32,
-diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
-index 6cfc271..53f49d8 100644
---- a/package/rhash/rhash.mk
-+++ b/package/rhash/rhash.mk
-@@ -10,12 +10,9 @@ RHASH_SITE = https://sourceforge.net/projects/rhash/files/rhash/$(RHASH_VERSION)
- RHASH_LICENSE = MIT
- RHASH_LICENSE_FILES = COPYING
- RHASH_INSTALL_STAGING = YES
+ 	  NDisc6 is a small collection of useful tools for IPv6 networking
+ 
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index 8326fc7..3ab8306 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -7,15 +7,11 @@
+ NDISC6_VERSION = 1.0.2
+ NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
+ NDISC6_SITE = http://www.remlab.net/files/ndisc6
+-NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
++NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99" LIBS=$(TARGET_NLS_LIBS)
+ NDISC6_CONF_OPTS = --disable-rpath --disable-suid-install
+ NDISC6_LICENSE = GPL-2.0 or GPL-3.0
+ NDISC6_LICENSE_FILES = COPYING
 -
 -ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--RHASH_DEPENDENCIES += gettext
--RHASH_ADDCFLAGS += -DUSE_GETTEXT
--RHASH_ADDLDFLAGS += -lintl
+-NDISC6_DEPENDENCIES += gettext
+-NDISC6_CONF_ENV += LIBS="-lintl"
 -endif
-+RHASH_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+RHASH_ADDLDFLAGS = $(TARGET_NLS_LIBS)
-+RHASH_ADDCFLAGS = $(if $(BR2_SYSTEM_ENABLE_NLS),-DUSE_GETTEXT)
++NDISC8_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
  
- ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
- RHASH_DEPENDENCIES += openssl
+ NDISC6_BIN_ += dnssort # perl script
+ NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
 -- 
 2.9.4
