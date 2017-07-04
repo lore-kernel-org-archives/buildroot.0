@@ -1,63 +1,43 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue, 4 Jul 2017 09:17:19 +0200
-Subject: [Buildroot] [RFC PATCH v5 00/11] Make the SDK relocatable
-In-Reply-To: <d20f9390-20ae-7021-1005-4afe8daeea7f@mind.be>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <d20f9390-20ae-7021-1005-4afe8daeea7f@mind.be>
-Message-ID: <32b47557-046c-424f-9d70-6b67a741cfc7@grandegger.com>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Tue, 4 Jul 2017 09:37:07 +0200
+Subject: [Buildroot] Syslinux: mbr build failure
+In-Reply-To: <b2f7acb4-a732-92dc-445f-65834091bc9b@smile.fr>
+References: <b2f7acb4-a732-92dc-445f-65834091bc9b@smile.fr>
+Message-ID: <20170704093707.5984ba32@armant.office.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+On Mon, 3 Jul 2017 21:43:54 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-Am 04.07.2017 um 00:50 schrieb Arnout Vandecappelle:
->   Hi Wolfgang,
+> Hi Benoit,
 > 
->   Again thank you very much for sustaining the work on this series!
+> There is another issue with syslinux since the build with the target
+> toolchain is enabled.
 > 
-> On 30-06-17 10:36, Wolfgang Grandegger wrote:
->> Hello,
->>
->> this is v5 of my patch series to make the buildroot SDK (HOST_DIR)
->> relocatable. It sanitizes the RPATH of all ELF files in the "target",
->> "staging" and "host" tree using "patchelf --make-rpath-relative". I
->> have started the mainlining process to implement "--make-rpath-relative"
->> using GitHub pull request [1]... till now, no answer!
->>
->> In contrast to v4, this series now does RPATH sanitation per package
->> after package installation into the host, staging or target tree
->> using GLOBAL_INSTRUMENTATION_HOOKS, similar to "check-bin-arch" or
->> "check-host-rpath". This is a first hack to demonstrate feasibility.
->> The scripts in "pkg-generic.mk" needs some more polish to be more
->> efficient and elegant. See also "Changes since v4" below.
+> syslinux-6.03/bios/core/../lzo/prepcore ldlinux.raw ldlinux.bin
+> syslinux-6.03/bios/core/../lzo/prepcore: ldlinux.raw: write error
 > 
->   Samuel and I reviewed the entire series now. It's getting closer but I expect a
-> v7 will still be needed even after you send v6. I've marked these as Changes
-> Requested in patchwork.
+> You should be able to reproduce with this defconfig:
+> 
+> BR2_x86_64=y
+> BR2_x86_steamroller=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TARGET_SYSLINUX=y
+> BR2_TARGET_SYSLINUX_MBR=y
+> 
 
-Great. Just wait for my next series as it already contains a lot of 
-changes (mainly to pkg-generic.mk and fix-rpath).
+Indeed, I can reproduce it. I'll try to have a look, thanks for
+reporting !
 
->> Furthermore this patch creates the script "relocate-sdk.sh" in the top
->> directory of the "host" tree allowing to relocate the SDK after it has
->> been moved to a new location. It replaces the old path with the new
->> one in all text files identified by "file --mime-type". The location
->> is stored in "usr/share/buildroot/sdk-location".
-> 
->   These final patches are pretty much ready, just minor things. Peter will
-> probably fix them up tomorrow and commit directly. So if you start working on
-> those, please give us a ping first (preferably on IRC - Peter is Jacmet).
-> 
-> 
->> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
->> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
-> 
->   There will be many more packages that need this kind of treatment, I expect.
-> Things will hopefully improve over time.
-
-Yes, that's also my feeling.
-
-Wolfgang.
+Ben.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170704/58e82313/attachment.asc>
