@@ -1,42 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 17:01:59 +0200
-Subject: [Buildroot] [git commit] gst1-libav: bump version to 1.12.1
-Message-ID: <20170704150116.9CD67801AE@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Jul 2017 17:04:50 +0200
+Subject: [Buildroot] [PATCH v3 06/14] package/Makefile.in: remove
+ $(HOST_DIR)/usr part from HOST_LDFLAGS
+In-Reply-To: <20170704140404.4098-7-arnout@mind.be>
+References: <20170704140404.4098-1-arnout@mind.be>
+ <20170704140404.4098-7-arnout@mind.be>
+Message-ID: <fd235668-902e-de0a-3217-90cc13ca3f4d@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e987613106f0eb85de425230512698542aea7e27
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Le 04/07/2017 ? 16:03, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> Now $(HOST_DIR)/lib and $(HOST_DIR)/usr/lib are the same directory, it
+> doesn't make sense to pass both to LDFLAGS.
+> 
+> Also use $(HOST_DIR)/lib instead of $(HOST_DIR)/usr/lib for the RPATH.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index d88fe07..bd09444 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.0.tar.xz.sha256sum
--sha256 39d1477f642ee980b008e78d716b16801eec9a6e5958c5a6cdc0cb04ab0750c4  gst-libav-1.12.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.1.tar.xz.sha256sum
-+sha256 55d7823fdf63195de991adfef32db4b8a8bef3cafa46115a951e590dc18a5077  gst-libav-1.12.1.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index b834c73..375f5f0 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_LIBAV_VERSION = 1.12.0
-+GST1_LIBAV_VERSION = 1.12.1
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_CONF_OPTS = --with-system-libav
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+
+Best regards,
+Romain
+
+> ---
+>  package/Makefile.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 6b88ac4feb..25f1997fe6 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+>  HOST_CFLAGS   ?= -O2
+>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+> -HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+> +HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+>  
+>  # host-intltool should be executed with the system perl, so we save
+>  # the path to the system perl, before a host-perl built by Buildroot
+> 
