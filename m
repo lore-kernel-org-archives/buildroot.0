@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:28:46 +0200
-Subject: [Buildroot] [git commit] net-tools: use the new gettext logic
-Message-ID: <20170704233517.E75068007C@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:36:01 +0200
+Subject: [Buildroot] [git commit] vim: use the new gettext logic
+Message-ID: <20170704233519.A8EC57FA97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44f38e53df5fa998507447267ad80e1b06280f4d
+commit: https://git.buildroot.net/buildroot/commit/?id=5f8d6569ed75f7c7be83ad16e7a6d0fb50c3ad0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -16,59 +16,36 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using TARGET_NLS_LIBS to force linking against libintl
-
  - dropping BR2_PACKAGE_GETTEXT selection
-
- - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
-   if NLS support should be enabled or not
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/net-tools/Config.in    | 1 -
- package/net-tools/net-tools.mk | 6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/vim/Config.in | 1 -
+ package/vim/vim.mk    | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/net-tools/Config.in b/package/net-tools/Config.in
-index 3980b7e..5e24bd1 100644
---- a/package/net-tools/Config.in
-+++ b/package/net-tools/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_NET_TOOLS
- 	bool "net-tools"
+diff --git a/package/vim/Config.in b/package/vim/Config.in
+index b851627..1469be8 100644
+--- a/package/vim/Config.in
++++ b/package/vim/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_VIM
+ 	depends on BR2_USE_WCHAR
  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	select BR2_PACKAGE_NCURSES
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  A collection of programs that form the base set of the NET-3
- 	  networking distribution for the Linux operating system.
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index 5720fcc..57a3eb4 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -6,7 +6,7 @@
+ 	  VIM Text editor
  
- NET_TOOLS_VERSION = 3f170bff115303e92319791cbd56371e33dcbf6d
- NET_TOOLS_SITE = git://git.code.sf.net/p/net-tools/code
--NET_TOOLS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+NET_TOOLS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- NET_TOOLS_LICENSE = GPL-2.0+
- NET_TOOLS_LICENSE_FILES = COPYING
- 
-@@ -20,7 +20,7 @@ define NET_TOOLS_CONFIGURE_CMDS
- endef
- 
- # Enable I18N when appropiate
--ifeq ($(BR2_ENABLE_LOCALE),y)
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- define NET_TOOLS_ENABLE_I18N
- 	$(SED) 's:I18N 0:I18N 1:' $(@D)/config.h
- endef
-@@ -35,7 +35,7 @@ NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
- 
- define NET_TOOLS_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)" \
-+		LIBS=$(TARGET_NLS_LIBS) \
- 		$(MAKE) -C $(@D)
- endef
- 
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index ec49460..c235a08 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -8,7 +8,7 @@ VIM_VERSION = v8.0.0329
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
+-	ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
++	ncurses $(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ VIM_SUBDIR = src
+ VIM_CONF_ENV = \
