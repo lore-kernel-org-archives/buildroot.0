@@ -1,44 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 19:09:40 +0200
-Subject: [Buildroot] [git commit] libglib2: disable compiler warnings
-Message-ID: <20170704170700.6316E81E06@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 19:09:58 +0200
+Subject: [Buildroot] [git commit] package/Makefile.in: fix musl handling
+Message-ID: <20170704170701.512D8800C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2800ac57cde2cd71df295d33441faae1b30dd3e
+commit: https://git.buildroot.net/buildroot/commit/?id=88cc3125730be66a2fbc732a1777981195620c06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, libglib enables some fairly aggressive warnings, treated
-as errors. In particular, the -Wformat=2 warning triggers a warning
-due to the return value of the ngettext() macro from uClibc libintl
-stub not being understood as being potentially a format string.
+Until now, we had no support for full NLS with the musl C library:
+BR2_NEEDS_GETTEXT was only true for uClibc. But the musl C library
+provides a stub gettext implementation, which some packages were
+failing to recognize as being usable, and therefore we are passing
+autoconf cache variables to hint those packages that yes, the C
+library has a usable gettext implementation.
 
-So, before we enable the stub libintl in uClibc, we disable such
-warnings. A bug will be reported to upstream uClibc to get the actual
-bug fixed, but disabling compiler warnings treated as errors is anyway
-a good thing in the context of Buildroot.
+However, we are going to enable full NLS support for musl, by giving
+the possibility to build gettext libintl with musl. In such a case, we
+do not want packages to use the gettext implementation of the C
+library, but really the one provided by gettext libintl.
+
+Therefore, we should only pre-seed the
+gt_cv_func_gnugettext1_libc*=yes variables if we're on musl but
+without gettext libintl. Otherwise packages will fail building because:
+
+ - libintl.h is the one from the full-blown gettext implementation, so
+   it assumes the package will link against -lintl
+
+ - the package thinks gettext is provided by the C library, so it
+   doesn't link with -lintl
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglib2/libglib2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/Makefile.in | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d6b18dd..577dcec 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -113,7 +113,8 @@ HOST_LIBGLIB2_DEPENDENCIES = \
- 	host-zlib
- 
- LIBGLIB2_CONF_OPTS = \
--	--with-pcre=system
-+	--with-pcre=system \
-+	--disable-compile-warnings
- 
- ifneq ($(BR2_ENABLE_LOCALE),y)
- LIBGLIB2_DEPENDENCIES += libiconv
+diff --git a/package/Makefile.in b/package/Makefile.in
+index d30da3f..b98333f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -338,7 +338,12 @@ endif
+ # AM_GNU_GETTEXT misdetects musl gettext support.
+ # musl currently implements api level 1 and 2 (basic + ngettext)
+ # http://www.openwall.com/lists/musl/2015/04/16/3
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++#
++# These autoconf variables should only be pre-seeded when the minimal
++# gettext implementation of musl is used. When the full blown
++# implementation provided by gettext libintl is used, auto-detection
++# works fine, and pre-seeding those values is actually wrong.
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y:)
+ BR2_GT_CV_FUNC_GNUGETTEXT_LIBC = \
+ 	gt_cv_func_gnugettext1_libc=yes \
+ 	gt_cv_func_gnugettext2_libc=yes
