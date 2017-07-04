@@ -1,42 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  4 Jul 2017 23:53:15 +0200
-Subject: [Buildroot] [PATCH] utils/brmake: print the error code of the build
-Message-ID: <20170704215315.19990-1-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue,  4 Jul 2017 23:53:39 +0200
+Subject: [Buildroot] [PATCH] package/ratpoison: needs MMU
+Message-ID: <20170704215339.28270-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the stdout and stderr streams are redirected, it is not
-immediately obvious when a build failed, even though brmake really exits
-with the same error code as make did.
+Fixes:
+http://autobuild.buildroot.net/results/10c/10c0a41275ba53473c89881990ba608b7550b23a
 
-When there is an error, print the exit code after the elapsed time.
-
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- utils/brmake | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/ratpoison/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/utils/brmake b/utils/brmake
-index 3c6f8485ab..e30119dd10 100755
---- a/utils/brmake
-+++ b/utils/brmake
-@@ -29,7 +29,12 @@ main() {
-     m=$((d/60))
-     d=$((d%60))
-     [ ${m} -eq 0 ] || { printf "%${mf}dmin " ${m}; sf="02"; }
--    printf "%${sf}ds\n" ${d}
-+    printf "%${sf}ds" ${d}
-+
-+    if [ ${ret} -ne 0 ]; then
-+        printf "  (error code: %s)" ${ret}
-+    fi
-+    printf "\n"
- 
-     return ${ret}
- }
+diff --git a/package/ratpoison/Config.in b/package/ratpoison/Config.in
+index 0c78a1f..7b72429 100644
+--- a/package/ratpoison/Config.in
++++ b/package/ratpoison/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_RATPOISON
+ 	bool "ratpoison"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_LIBERATION
 -- 
-2.11.0
+2.9.4
