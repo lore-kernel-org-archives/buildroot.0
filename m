@@ -1,97 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 12:14:06 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-base: bump version to 1.12.0
-Message-ID: <20170704113141.ED09580526@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 12:19:10 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump version to 1.12.0
+Message-ID: <20170704113142.1A9937FCBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76722342000dbe1062983c470ac7bc2bfe14e54d
+commit: https://git.buildroot.net/buildroot/commit/?id=b006fe1c45b8f04551ed7ec87e19494e03a1d960
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove non-existant or unnecessary configure options:
+Remove non-existant configure options:
 
-  --disable-oggtest, --disable-vorbistest:
-    It looks like these options will be taken into account by ogg.m4 and
-    vorbis.m4 only when ogg and vobis are enabled. However, according to
-    the code on those m4 files these two options are disabled by default.
+  --enable-mad:
+    https://github.com/GStreamer/gst-plugins-ugly/commit/2f767fb24ac8ee001bde7e1452b46a4f8fe3a719
 
-  --disable-gio_unix_2_0:
-    I don't know where this option comes from.
-
-  --disable-freetypetest:
-    https://github.com/GStreamer/gst-plugins-base/commit/183610c035dd6955c9b3540b940aec50474af031
-
-[Peter: add rawparse plugin]
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-base/Config.in              |  5 +++++
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash |  4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 12 +++++++-----
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ Config.in.legacy                                            |  4 ++++
+ package/gstreamer1/gst1-plugins-ugly/Config.in              |  7 -------
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash |  4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 10 +---------
+ 4 files changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index a17f2ad..6b08b68 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -66,6 +66,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
- 	help
- 	  Resamples audio
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ddb0ffe..b8fe028 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,10 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.08"
  
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_RAWPARSE
-+	bool "rawparse"
-+	help
-+	  Parses byte streams into raw frames
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
++	bool "mad (*.mp3 audio) removed"
++	select BR2_LEGACY
 +
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE
- 	bool "subparse"
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
+ 	bool "gst1-plugins-bad webrtc renamed to webrtcdsp"
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index f30163a..c997411 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -50,13 +50,6 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
  	help
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index b526b14..b0fc90a 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+ 	  Encode MP3s with LAME
+ 
+-config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
+-	bool "mad (*.mp3 audio)"
+-	select BR2_PACKAGE_LIBID3TAG
+-	select BR2_PACKAGE_LIBMAD
+-	help
+-	  mp3 decoding based on the mad library
+-
+ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123
+ 	bool "mpg123 (*.mp3 audio)"
+ 	select BR2_PACKAGE_MPG123
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 9567d9c..5d211ce 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.4.tar.xz.sha256sum
--sha256 f6d245b6b3d4cb733f81ebb021074c525ece83db0c10e932794b339b8d935eb7  gst-plugins-base-1.10.4.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.0.tar.xz.sha256sum
-+sha256 345fc6877f54b8b6e97aacf2996be37a51a0e369f53fc2cf83108af9f764364d  gst-plugins-base-1.12.0.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 08f53f7..9fb5b17 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.10.4.tar.xz.sha256sum
+-sha256 6386c77ca8459cba431ed0b63da780c7062c7cc48055d222024d8eaf198ffa59  gst-plugins-ugly-1.10.4.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.12.0.tar.xz.sha256sum
++sha256 5e68ba5046e83ee87b17d7a13931e6091466fd771e1338c5b929ee0944d40ad6  gst-plugins-ugly-1.12.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index b0d9a65..4266ced 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BASE_VERSION = 1.10.4
-+GST1_PLUGINS_BASE_VERSION = 1.12.0
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
-@@ -14,10 +14,6 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
- # gio_unix_2_0 is only used for tests
- GST1_PLUGINS_BASE_CONF_OPTS = \
- 	--disable-examples \
--	--disable-oggtest \
--	--disable-vorbistest \
--	--disable-gio_unix_2_0 \
--	--disable-freetypetest \
- 	--disable-valgrind
- 
- # Options which require currently unpackaged libraries
-@@ -95,6 +91,12 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += --disable-audioresample
+-GST1_PLUGINS_UGLY_VERSION = 1.10.4
++GST1_PLUGINS_UGLY_VERSION = 1.12.0
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+@@ -77,14 +77,6 @@ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-lame
  endif
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_RAWPARSE),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-rawparse
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-rawparse
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE),y)
- GST1_PLUGINS_BASE_CONF_OPTS += --enable-subparse
- else
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD),y)
+-GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mad
+-GST1_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
+-GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
+-else
+-GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mad
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123),y)
+ GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpg123
+ GST1_PLUGINS_UGLY_DEPENDENCIES += mpg123
