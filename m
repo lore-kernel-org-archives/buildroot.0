@@ -1,52 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:04 +0200
-Subject: [Buildroot] [PATCH 084/100] xscreensaver: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:49:03 +0200
+Subject: [Buildroot] [PATCH 083/100] xlib_libXpm: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-85-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-84-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - dropping BR2_PACKAGE_GETTEXT selection
+This commit switches to use the new gettext logic, which involves
+using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+on gettext/host-gettext.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xscreensaver/Config.in       | 1 -
- package/xscreensaver/xscreensaver.mk | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index 5213ce3..032eab2 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_XSCREENSAVER
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXT
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  XScreenSaver is the standard screen saver collection shipped on most
- 	  Linux and Unix systems running the X11 Window System.
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 77c37a9..34b1163 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -12,7 +12,7 @@ XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
- XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index c8c5496..e781a8b 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -13,8 +13,7 @@ XLIB_LIBXPM_INSTALL_STAGING = YES
+ # we patch configure.ac
+ XLIB_LIBXPM_AUTORECONF = YES
+ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+-	host-gettext
++	$(TARGET_NLS_DEPENDENCIES)
  
- XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext) host-intltool
-+	$(TARGET_NLS_DEPENDENCIES) host-intltool
- 
- # otherwise we end up with host include/library dirs passed to the
- # compiler/linker
+ $(eval $(autotools-package))
 -- 
 2.9.4
