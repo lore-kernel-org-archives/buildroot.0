@@ -1,30 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 00:15:53 +0200
-Subject: [Buildroot] [PATCH] package/ratpoison: needs MMU
-In-Reply-To: <20170704215339.28270-1-romain.naour@smile.fr>
-References: <20170704215339.28270-1-romain.naour@smile.fr>
-Message-ID: <20170705001553.4bb147e6@windsurf>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed,  5 Jul 2017 00:22:24 +0200
+Subject: [Buildroot] [PATCH] package/filemq: disable Wformat-truncation to
+	build with gcc >= 7.1
+Message-ID: <20170704222224.26739-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The code intend to truncate the string to ~20 chars but this behaviour
+throw an error with new compiler (gcc >= 7.1).
 
-On Tue,  4 Jul 2017 23:53:39 +0200, Romain Naour wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/10c/10c0a41275ba53473c89881990ba608b7550b23a
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->  package/ratpoison/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+From: src/fmq_server_engine.inc:
+//  Set log file prefix; this string will be added to log data, to make
+//  log data more searchable. The string is truncated to ~20 chars.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/434/43452430edf44cbcef6ea3a5ab80ac0ff406208f
 
-Thomas
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/filemq/filemq.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 581e8a8..54b2ce5 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -20,4 +20,7 @@ endef
+ 
+ FILEMQ_POST_PATCH_HOOKS += FILEMQ_CREATE_CONFIG_DIR
+ 
++# Disable Wformat-truncation to build with gcc >= 7.1
++FILEMQ_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -Wno-format-truncation"
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.4
