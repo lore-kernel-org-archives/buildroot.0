@@ -1,43 +1,51 @@
-From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
-Date: Tue, 4 Jul 2017 09:37:07 +0200
-Subject: [Buildroot] Syslinux: mbr build failure
-In-Reply-To: <b2f7acb4-a732-92dc-445f-65834091bc9b@smile.fr>
-References: <b2f7acb4-a732-92dc-445f-65834091bc9b@smile.fr>
-Message-ID: <20170704093707.5984ba32@armant.office.greenbone.net>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Tue, 04 Jul 2017 09:57:22 +0200
+Subject: [Buildroot]
+	=?iso-8859-1?q?=5BPATCH_2/2=5D_toolchain-external=3A_?=
+	=?iso-8859-1?q?install_libsanitizer_libraries_if_available?=
+In-Reply-To: <20170703215803.6233-2-peter@korsgaard.com>
+References: <20170703215803.6233-1-peter@korsgaard.com>
+ <20170703215803.6233-2-peter@korsgaard.com>
+Message-ID: <ea78bc8e-822f-43e4-821e-fa0af46feff0@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 3 Jul 2017 21:43:54 +0200
-Romain Naour <romain.naour@smile.fr> wrote:
+On pond?l? 3. ?ervence 2017 23:58:03 CEST, Peter Korsgaard wrote:
+> Gcc builds libsanitizer (lib{a,l,t,u}san) for
+> -fsanitize={address,thread,leak,undefined} if the needed dependencies are
+> available, so ensure these also gets copied to the target fs to support
+> -fsanitize.
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> Hi Benoit,
-> 
-> There is another issue with syslinux since the build with the target
-> toolchain is enabled.
-> 
-> syslinux-6.03/bios/core/../lzo/prepcore ldlinux.raw ldlinux.bin
-> syslinux-6.03/bios/core/../lzo/prepcore: ldlinux.raw: write error
-> 
-> You should be able to reproduce with this defconfig:
-> 
-> BR2_x86_64=y
-> BR2_x86_steamroller=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TARGET_SYSLINUX=y
-> BR2_TARGET_SYSLINUX_MBR=y
-> 
+Tested on Linaro 2017.02 for beaglebone black, it appears to work.
 
-Indeed, I can reproduce it. I'll try to have a look, thanks for
-reporting !
+Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 
-Ben.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170704/58e82313/attachment.asc>
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git 
+> a/toolchain/toolchain-external/pkg-toolchain-external.mk 
+> b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 8460e37d09..0764b379b5 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -108,7 +108,7 @@ endif
+>  # Definitions of the list of libraries that should be copied to the target.
+>  #
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+> -TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* 
+> libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* 
+> libresolv.so.* librt.so.* libutil.so.*
+> +TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* 
+> libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* 
+> libresolv.so.* librt.so.* libutil.so.* lib?san.so.*
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
+>  TOOLCHAIN_EXTERNAL_LIBS += ld-linux-armhf.so.*
+>  else
