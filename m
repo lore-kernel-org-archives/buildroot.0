@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 5 Jul 2017 01:34:03 +0200
-Subject: [Buildroot] [git commit] powertop: use the new gettext logic
-Message-ID: <20170704233518.6F7987F87D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] procps-ng: use the new gettext logic
+Message-ID: <20170704233518.82ABC80819@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e43b76d716ce2424e4c12486c1a652620c0bd2b3
+commit: https://git.buildroot.net/buildroot/commit/?id=8833495a3659ee0686d6413133742a0b42580ecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -22,41 +22,45 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/powertop/Config.in   | 1 -
- package/powertop/powertop.mk | 9 +++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/procps-ng/Config.in    | 1 -
+ package/procps-ng/procps-ng.mk | 8 ++------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/powertop/Config.in b/package/powertop/Config.in
-index a532302..36701f8 100644
---- a/package/powertop/Config.in
-+++ b/package/powertop/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_POWERTOP
+diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
+index 553bea1..6ff8983 100644
+--- a/package/procps-ng/Config.in
++++ b/package/procps-ng/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_PROCPS_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_PCIUTILS
- 	select BR2_PACKAGE_LIBNL
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  A tool to diagnose issues with power consumption and power management
+ 	  Standard informational utilities and process-handling tools.
+ 	  Provides things like kill, ps, uptime, free, top, etc...
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 0ab3139..22ebc1a 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -10,7 +10,8 @@ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
+ PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
+ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
+ PROCPS_NG_INSTALL_STAGING = YES
+-PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf
++PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
++PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ # For 0002-use-pkgconfig-for-ncursesw-cflags.patch
+ PROCPS_NG_AUTORECONF = YES
+ PROCPS_NG_GETTEXTIZE = YES
+@@ -21,11 +22,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ PROCPS_NG_DEPENDENCIES += busybox
+ endif
  
-diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
-index 62b716f..ce7a118 100644
---- a/package/powertop/powertop.mk
-+++ b/package/powertop/powertop.mk
-@@ -7,14 +7,11 @@
- POWERTOP_VERSION = 2.9
- POWERTOP_SITE = https://01.org/sites/default/files/downloads/powertop
- POWERTOP_SOURCE = powertop-v$(POWERTOP_VERSION).tar.gz
--POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-gettext host-pkgconf
-+POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
-+	$(TARGET_NLS_DEPENDENCIES)
- POWERTOP_LICENSE = GPL-2.0
- POWERTOP_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_NEEDS_GETTEXT),y)
--POWERTOP_DEPENDENCIES += gettext
--POWERTOP_CONF_ENV += LIBS='-lintl'
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-PROCPS_NG_DEPENDENCIES += gettext
+-PROCPS_NG_CONF_OPTS += LIBS=-lintl
 -endif
-+POWERTOP_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- 
- # Help powertop at finding the right ncurses library depending on
- # which one is available.
+-
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
