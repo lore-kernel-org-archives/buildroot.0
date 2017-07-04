@@ -1,37 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 19:09:42 +0200
-Subject: [Buildroot] [git commit] flex: remove bogus comment
-Message-ID: <20170704170700.83D8E7F960@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 19:09:44 +0200
+Subject: [Buildroot] [git commit] lvm2: force disable NLS support
+Message-ID: <20170704170700.A80AE8015E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2c055f63db7bf4ac72b096028dfb96efd1db231
+commit: https://git.buildroot.net/buildroot/commit/?id=9cb296d09c3f152926dae2d2095f58c0b4437061
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The comment that explains why we were defining HOST_FLEX_DEPENDENCIES
-instead of inheriting from FLEX_DEPENDENCIES no longer makes sense,
-since we remove such automatic inheritance of host dependencies from
-target dependencies a while ago.
+We are going to pass --enable-nls to all autotools packages when NLS
+support is enabled globally. However, lvm2 NLS support doesn't build,
+and anyway lvm2 doesn't provide any useful translation files, so we
+force disable NLS support for this package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flex/flex.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/lvm2/lvm2.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index aa6c026..905621e 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -12,7 +12,6 @@ FLEX_LICENSE_FILES = COPYING
- FLEX_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_GETTEXT_IF_LOCALE),gettext) host-m4
- FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
--# we don't have a host-gettext/libintl
- HOST_FLEX_DEPENDENCIES = host-m4
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 9a422fe..f5cd0b5 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -12,12 +12,14 @@ LVM2_LICENSE = GPL-2.0, LGPL-2.1
+ LVM2_LICENSE_FILES = COPYING COPYING.LIB
  
- define FLEX_DISABLE_PROGRAM
+ # Make sure that binaries and libraries are installed with write
+-# permissions for the owner.
++# permissions for the owner. We disable NLS because it's broken, and
++# the package anyway doesn't provide any translation files.
+ LVM2_CONF_OPTS += \
+ 	--enable-write_install \
+ 	--enable-pkgconfig \
+ 	--enable-cmdlib \
+-	--enable-dmeventd
++	--enable-dmeventd \
++	--disable-nls
+ 
+ # LVM2 uses autoconf, but not automake, and the build system does not
+ # take into account the toolchain passed at configure time.
