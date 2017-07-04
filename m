@@ -1,82 +1,55 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue, 4 Jul 2017 10:22:01 +0200
-Subject: [Buildroot] [RFC PATCH v5 06/11] pkg-generic: add
- GLOBAL_INSTRUMENTATION_HOOKS for rpath sanitation
-In-Reply-To: <00d2dee8-fe63-bc07-b3bd-93b7df740b8f@mind.be>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-7-git-send-email-wg@grandegger.com>
- <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
- <00d2dee8-fe63-bc07-b3bd-93b7df740b8f@mind.be>
-Message-ID: <c75cc499-d213-cad2-e496-dd1e7cdae5ea@grandegger.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  4 Jul 2017 10:42:11 +0200
+Subject: [Buildroot] [PATCH] libmad: add security patch from debian
+Message-ID: <20170704084211.8696-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
 
+CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
+libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
+denial of service (assertion failure and application exit) via a crafted
+audio file.
 
-Am 04.07.2017 um 00:30 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 03-07-17 23:47, Arnout Vandecappelle wrote:
->>
->>
->> On 30-06-17 10:37, Wolfgang Grandegger wrote:
->>> The hook calls the script "fix-rpath" at the end of the installation
->>> step.
->>>
->>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->>
->>   Looks good to me. I'm not adding my reviewed-by yet because it will still
->> change when the fix-rpath arguments change.
->>
->>   Regards,
->>   Arnout
->>
->>> ---
->>>   package/pkg-generic.mk | 10 ++++++++++
->>>   1 file changed, 10 insertions(+)
->>>
->>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->>> index 825ab0c..8812193 100644
->>> --- a/package/pkg-generic.mk
->>> +++ b/package/pkg-generic.mk
->>> @@ -139,6 +139,16 @@ define step_check_build_dir
->>>   endef
->>>   GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
->>>   
->>> +define step_sanitize_rpath
->>> +	$(if $(filter install-host-end,$(2)-$(1)),\
->>> +		support/scripts/fix-rpath "host" $($(PKG)_DIR)/.br_host_filelist)
->>> +	$(if $(filter install-staging-end,$(2)-$(1)),\
->>> +		support/scripts/fix-rpath "staging" $($(PKG)_DIR)/.br_staging_filelist)
->>> +	$(if $(filter install-target-end,$(2)-$(1)),\
->>> +		support/scripts/fix-rpath "target" $($(PKG)_DIR)/.br_target_filelist)
-> 
->   After reviewing the qt.conf thing, I realized that this is in fact not enough.
-> Indeed, staging-install may install things into host dir as well...
-> 
->   So I think that both for generating the lists and for doing fix-rpath, we
-> should not just look at the directory corresponding to the step, but to all three.
-> 
->   Since that means that the same directory may be iterated over three times, I
-> think it's best to also make a total of 9 files:
-> 
-> .br_host_install_host_filelist   -> things installed to host during host-install
-> .br_host_install_target_filelist -> things installed to target during host-install
-> .br_target_install_host_filelist -> things installed to target during target-install
+CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
+libmad 0.15.1b allows remote attackers to cause a denial of service
+(heap-based buffer overflow and application crash) or possibly have
+unspecified other impact via a crafted audio file.
 
-Or we store the full path of installed files of all trees in one 
-.br_install_filelist. fix-rpath could then act upon the path prefix 
-(being equal to $HOST_DIR, etc.).
+CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
+0.15.1b allows remote attackers to cause a denial of service (heap-based
+buffer over-read and application crash) via a crafted audio file.
 
->   Ideally .br_host_install_target_filelist etc. should be empty, so we can also
-> warn or error if that is not the case.
-> 
->   What do you think?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libmad/libmad.hash | 1 +
+ package/libmad/libmad.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-Well, things are getting complicated then. Maybe doing the global 
-sanitization is then the better choice. I need to think a bit more about it.
-
-Wolfgang.
+diff --git a/package/libmad/libmad.hash b/package/libmad/libmad.hash
+index 1e555568fe..173399f7ff 100644
+--- a/package/libmad/libmad.hash
++++ b/package/libmad/libmad.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690  libmad-0.15.1b.tar.gz
++sha256  0e21f2c6b19337d0b237dacc04f7b90a56be7f359f4c9a2ee0b202d9af0cfa69  frame_length.diff
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 0bb64da2f7..0729b1e6d4 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -10,6 +10,8 @@ LIBMAD_INSTALL_STAGING = YES
+ LIBMAD_LIBTOOL_PATCH = NO
+ LIBMAD_LICENSE = GPL-2.0+
+ LIBMAD_LICENSE_FILES = COPYING
++LIBMAD_PATCH = \
++	https://sources.debian.net/data/main/libm/libmad/0.15.1b-8/debian/patches/frame_length.diff
+ 
+ define LIBMAD_PREVENT_AUTOMAKE
+ 	# Prevent automake from running.
+-- 
+2.11.0
