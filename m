@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 08:51:00 +0200
-Subject: [Buildroot] [PATCH v3 05/11] fs/ext2: simplify code
-In-Reply-To: <20170703225106.1492-6-s.martin49@gmail.com>
+Date: Tue, 4 Jul 2017 08:51:22 +0200
+Subject: [Buildroot] [PATCH v3 06/11] package/mke2img: add option to
+ specify block size
+In-Reply-To: <20170703225106.1492-7-s.martin49@gmail.com>
 References: <20170703225106.1492-1-s.martin49@gmail.com>
- <20170703225106.1492-6-s.martin49@gmail.com>
-Message-ID: <20170704085100.61b4424b@windsurf>
+ <20170703225106.1492-7-s.martin49@gmail.com>
+Message-ID: <20170704085122.269ecea0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  4 Jul 2017 00:51:00 +0200, Samuel Martin wrote:
+On Tue,  4 Jul 2017 00:51:01 +0200, Samuel Martin wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> No option is conditional anymore, so just collate them into a single
-> assignment.
+> ext filesystems can use a block size of 1024, 2048, or 4096 bytes, the
+> former being interesting to store small files, while the latter being
+> more intersting to store bigger files.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v2->v3:
-> - reintroduce this change from Yann' series
-> ---
->  fs/ext2/ext2.mk | 19 ++++++++-----------
->  1 file changed, 8 insertions(+), 11 deletions(-)
+> So far, we were using the defualt, which was to use a 1024-byte block.
 
-Applied to master, thanks.
+defualt -> default
+
+Applied with this fixed. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
