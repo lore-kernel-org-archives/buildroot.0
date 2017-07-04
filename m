@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 23:46:48 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: add qca6174{bt} firmware
-In-Reply-To: <20170704163935.14221-1-maxime.hadjinlian@gmail.com>
-References: <20170704163935.14221-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20170704234648.28bf7351@windsurf>
+Date: Tue, 4 Jul 2017 23:49:34 +0200
+Subject: [Buildroot] [PATCH 0/3 v3] skeleton: move ifupdown script to
+ their own package
+In-Reply-To: <cover.1499006091.git.yann.morin.1998@free.fr>
+References: <cover.1499006091.git.yann.morin.1998@free.fr>
+Message-ID: <20170704234934.458e6239@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  4 Jul 2017 18:39:35 +0200, Maxime Hadjinlian wrote:
+On Sun,  2 Jul 2017 16:35:16 +0200, Yann E. MORIN wrote:
 
-> +config BR2_PACKAGE_LINUX_FIRMWARE_QCA_6174A_BT
+> Yann E. MORIN (3):
+>       package/ifupdown-scripts: new package
+>       package/ifupdown-scripts: not needed for systemd-networkd
+>       package/ifupdown-scripts: allow use with a custom skeleton
 
-Renamed to BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT to have the
-full vendor name.
+I've applied those patches. As discussed with Arnout and you, I've
+squashed PATCH 1 and PATCH 2. And in PATCH 1, I've removed the empty
+IFUPDOWN_SCRIPTS_SOURCE variable.
 
-> +config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
-> +	bool "Qualcomm Atheros 6174"
-> +	help
-> +	  Firmware files for the Qualcomm Atheros QCA6174 chip
-
-I've also fixed alphabetic ordering.
-
-Applied with those issues fixed. Thanks!
+Best regards,
 
 Thomas
 -- 
