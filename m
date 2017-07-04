@@ -1,45 +1,42 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Jul 2017 17:03:26 +0200
-Subject: [Buildroot] [PATCH v3 05/14] Makefile: remove $(HOST_DIR)/usr
- from BR_PATH
-In-Reply-To: <20170704140404.4098-6-arnout@mind.be>
-References: <20170704140404.4098-1-arnout@mind.be>
- <20170704140404.4098-6-arnout@mind.be>
-Message-ID: <7216bedd-d816-3580-dc2d-42ddad1c051b@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Jul 2017 17:01:53 +0200
+Subject: [Buildroot] [git commit] gstreamer1: bump to version 1.12.1
+Message-ID: <20170704150115.D140881842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=e28b2cb2dca5893ba92e3de5d2a0506667e879d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 04/07/2017 ? 16:03, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> Now $(HOST_DIR)/usr is a symlink to $(HOST_DIR), it makes no sense to
-> still have it in BR_PATH.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-
-Best regards,
-Romain
-
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 7453bfd193..19d8b442a3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -440,7 +440,7 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
->  HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
->  
->  # Quotes are needed for spaces and all in the original PATH content.
-> -BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
-> +BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
->  
->  # Location of a file giving a big fat warning that output/target
->  # should not be used as the root filesystem.
-> 
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 56e1c17..992b9ec 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.0.tar.xz.sha256sum
+-sha256 14d5eef8297d2bf2a728d38fa43cd92cc267a0ad260cf83d770215212aff4302  gstreamer-1.12.0.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.1.tar.xz.sha256sum
++sha256 9044b9d8b3ff44457fa9e36faa59c56684b587b34dee449bfe15ec0c32a3a6d2  gstreamer-1.12.1.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index ac498d5..84b2e2a 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.12.0
++GSTREAMER1_VERSION = 1.12.1
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
