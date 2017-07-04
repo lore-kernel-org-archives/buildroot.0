@@ -1,40 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:37:15 +0200
-Subject: [Buildroot] [git commit] oprofile: remove libintl static linking
-	handling
-Message-ID: <20170704233520.455D87FEE4@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:36:34 +0200
+Subject: [Buildroot] [git commit] whois: use the new gettext logic
+Message-ID: <20170704233519.B7F377FCEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a578f7b79ee3cd41f67a6b4ae514bb250bb7055
+commit: https://git.buildroot.net/buildroot/commit/?id=3eb862bff5d318bb2e1e4983abf3a7dfc7efdece
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We no longer support building the full-blown libintl in static linking
-scenarios, as it causes too many problems. Therefore, remove the
-special code that was handling this.
+This commit switches to use the new gettext logic, which involves:
+
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
+
+ - using TARGET_NLS_LIBS to force linking against libintl
+
+ - dropping BR2_PACKAGE_GETTEXT selection, which means we no longer
+   need to depend on BR2_USE_WCHAR, so this dependency is dropped
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/oprofile/oprofile.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/whois/Config.in | 6 ------
+ package/whois/whois.mk  | 8 ++------
+ 2 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index d86b8c5..4e0278e 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -41,12 +41,6 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
- OPROFILE_DEPENDENCIES += libpfm4
- endif
+diff --git a/package/whois/Config.in b/package/whois/Config.in
+index 0fbaf90..9505d58 100644
+--- a/package/whois/Config.in
++++ b/package/whois/Config.in
+@@ -1,13 +1,7 @@
+ config BR2_PACKAGE_WHOIS
+ 	bool "whois"
+-	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  Improved whois client.
  
--# When gettext is enabled, popt links with -lintl, specifies it in its
--# popt.pc and has done so for the past 6+ years. But oprofile does not
--# use pkconfig to find popt, so misses -lintl, which is important for
--# a static build. We have to do the call to pkgconfig manually...
--OPROFILE_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
+ 	  http://www.linux.it/~md/software/
 -
- ifeq ($(BR2_STATIC_LIBS),)
- define OPROFILE_INSTALL_SHARED_LIBRARY
- 	$(INSTALL) -m 755 $(@D)/libopagent/.libs/*.so* $(TARGET_DIR)/usr/lib/oprofile
+-comment "whois needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
+-	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 24b6b69..b773499 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -8,17 +8,13 @@ WHOIS_VERSION = 5.2.14
+ WHOIS_SITE = http://snapshot.debian.org/archive/debian/20161230T032015Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+-WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
+ WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+ WHOIS_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ 	LIBS="$(WHOIS_EXTRA_LIBS)"
+ WHOIS_LICENSE = GPL-2.0+
+ WHOIS_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_NEEDS_GETTEXT),y)
+-WHOIS_DEPENDENCIES += gettext
+-WHOIS_EXTRA_LIBS += -lintl
+-endif
++WHOIS_EXTRA_LIBS = $(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WHOIS_DEPENDENCIES += libiconv
