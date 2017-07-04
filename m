@@ -1,93 +1,79 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue,  4 Jul 2017 12:47:16 -0700
-Subject: [Buildroot] [PATCH] python-systemd: add new package
-Message-ID: <20170704194716.15130-1-andrew.smirnov@gmail.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Tue, 4 Jul 2017 21:54:52 +0200
+Subject: [Buildroot] [PATCH v6 00/10] Make the SDK relocatable
+In-Reply-To: <7fa2231c-4942-da98-6c91-435b4761940b@mind.be>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <7fa2231c-4942-da98-6c91-435b4761940b@mind.be>
+Message-ID: <684e2d2e-8611-01f3-1184-8dd982a871fe@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package for official python bindings availibe as a part of systemd
-project at: https://github.com/systemd/python-systemd
+Hello Arnout,
 
-Minimal config snippet for utils/test-pkg is as follows (sans
-backslashes):
+Am 04.07.2017 um 19:55 schrieb Arnout Vandecappelle:
+>   Hi Wolfgang,
+> 
+>   I've already marked patch 7 and 10 as superseded in patchwork because they were
+> already applied by Thomas. Can you check if there is a significant difference
+> with what was applied?
+> 
+> On 04-07-17 18:22, Wolfgang Grandegger wrote:
+>> Hello,
+>>
+>> this is v6 of my patch series to make the buildroot SDK (HOST_DIR)
+>> relocatable. It sanitizes the RPATH of all ELF files in the "target",
+>> "staging" and "host" tree using "patchelf --make-rpath-relative". We
+>> now use patchelf v0.9 to still support old Debian and RHEL systems.
+>>
+>> v5 did RPATH sanitization per package after package installation into
+>> the host, staging or target tree using GLOBAL_INSTRUMENTATION_HOOKS.
+>> This approach got more and more complex and inefficient. Therefore
+>> it was abandoned in favor of global sanititation at the end of the
+>> host, staging and target build (see changes since v5).
+>>
+>> Furthermore this patch creates the script "relocate-sdk.sh" in the top
+>> directory of the "host" tree allowing to relocate the SDK after it has
+>> been moved to a new location. It replaces the old path with the new
+>> one in all text files identified by "file --mime-type". The location
+>> is stored in "usr/share/buildroot/sdk-location".
+>>
+>> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
+>> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
+>>
+>> Hope I have not too much pending issues.
+> 
+>   We all do :-) But this is really complicated infrastructural work, so it is to
+> be expected that it takes time. Just 7 revisions would already be pretty good!
 
-\# BR2_INIT_BUSYBOX is not set
-\# BR2_INIT_SYSV is not set
-BR2_INIT_SYSTEMD=y
-\# BR2_INIT_NONE is not set
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_SYSTEMD=y
+It's going forward... that's really good news!
+>>
+>> Wolfgang.
+>>
+>> Things not yet addressed:
+>>
+>> - "make toolchain" creates a toolchain tree which still has references
+>>    to the build system (in ELF and text files).
+>>
+>> Changes since v5:
+>> - switch back to v4
+>> - patchelf patches are now based on v0.9
+>> - patchelf now calculates minimal relative path to the ELF file
+>>    (and not to the rootdir as before).
+>> - patchelf: neededLibFound is now passed to libFoundInRPath
+> 
+>   If any more issues are found in the rpath fixup, they can be handled in
+> follow-up patches.
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-systemd/Config.in         |  7 +++++++
- package/python-systemd/python-systemd.mk | 14 ++++++++++++++
- 4 files changed, 23 insertions(+)
- create mode 100644 package/python-systemd/Config.in
- create mode 100644 package/python-systemd/python-systemd.mk
+Great!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7c8d7f1..08a138a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -94,6 +94,7 @@ F:	package/python-pathlib2/
- F:	package/python-pickleshare/
- F:	package/python-scandir/
- F:	package/python-simplegeneric/
-+F:	package/python-systemd/
- F:	package/python-traitlets/
- 
- N:	Andrey Yurovsky <yurovsky@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index a811ff6..af1aa0c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -860,6 +860,7 @@ menu "External python modules"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
-+	source "package/python-systemd/Config.in"
- 	source "package/python-tempora/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tomako/Config.in"
-diff --git a/package/python-systemd/Config.in b/package/python-systemd/Config.in
-new file mode 100644
-index 0000000..83fdcb4
---- /dev/null
-+++ b/package/python-systemd/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SYSTEMD
-+	bool "python-systemd"
-+	depends on BR2_PACKAGE_SYSTEMD
-+	help
-+	  Python module for native access to the systemd facilities.
-+
-+	  https://github.com/systemd/python-systemd
-diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
-new file mode 100644
-index 0000000..a3684c4
---- /dev/null
-+++ b/package/python-systemd/python-systemd.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-systemd
-+#
-+################################################################################
-+
-+PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
-+PYTHON_SYSTEMD_VERSION = 233 # Should be kept in sync with $(SYSTEMD_VERSION)
-+PYTHON_SYSTEMD_SITE = $(call github,systemd,python-systemd,v$(PYTHON_SYSTEMD_VERSION))
-+PYTHON_SYSTEMD_SETUP_TYPE = distutils
-+PYTHON_SYSTEMD_LICENSE = LGPL-2.1
-+PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.9.4
+BTW, I have another little patch for patchelf speeding up the open path 
+significantly. Currently, the complete file will be read in regardless 
+if it's an ELF file or not. Then it starts checking size, magic number, 
+etc. Now it just reads the necessary data (ELF Header) for the checks 
+and only if it's an ELF file, the rest of the data will be read as well. 
+More soon...
+
+Wolfgang.
