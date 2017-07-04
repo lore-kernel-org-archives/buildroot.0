@@ -1,45 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:43:29 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] pngquant: doesn't support
-	building with ccache
-Message-ID: <20170704154805.3B0DA7F977@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:36:02 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] setlocalversion: fix
+	detection of hg revision for untagged versions
+Message-ID: <20170704154817.AC3B17FAFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c748b54081d7c57a8589246a54b85dc6198aa08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1a704805131024f4b0ad8da09a8e493d1cde05f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-pngquant's homegrown configure script doesn't understand CC with a
-space, so we can't use ccache with it. Only the host variant is
-affected: for the target, we call ccache from the toolchain-wrapper so
-it's transparent to the configure script.
+By default, cut prints the entire line if the specified delimiter is not
+present at all:
 
-This wasn't seen in the autobuilders since they never enable
-BR2_CCACHE.
+    $ printf "foo bar" | cut -d' ' -f2
+    bar
+    $ printf "foobar" | cut -d' ' -f2
+    foobar
 
-To test, use any configuration and do
-make BR2_CCACHE=y host-pngquant
+In setlocalversion, cut is presented with the output of 'hg id' which has
+the format:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+    "<revision> <tags-if-any>"
+
+If the current revision is not tagged, the output of 'hg id' does not
+contain the delimiter (space), cut prints the entire string, and
+setlocalversion thinks the version is the tag.
+As setlocalversion does not print anything for tagged versions, there is no
+output overall, and no correct indication of the mercurial revision.
+
+Fix by passing the extra cut option '--only-delimited', which suppresses
+output if no delimiter is found.
+
+This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
+most recent revision of the branch) is treated specially: in this case the
+mercurial revision _is_ printed, i.e. the situation is treated as
+'untagged'.
+The problem is only seen when you are _not_ at the most recent revision in
+your branch.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4a6168db97db6501af42e96091da3218ae64d5c1)
+(cherry picked from commit ec019bcf643de83d502f30d85d56dd4547b0c11b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pngquant/pngquant.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/setlocalversion | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
-index 4a6f32f..938603a 100644
---- a/package/pngquant/pngquant.mk
-+++ b/package/pngquant/pngquant.mk
-@@ -36,6 +36,7 @@ endef
- define HOST_PNGQUANT_CONFIGURE_CMDS
- 	(cd $(@D) && \
- 		$(HOST_CONFIGURE_OPTS) \
-+		CC=$(HOSTCC_NOCCACHE) \
- 		./configure --prefix=$(HOST_DIR)/usr \
- 		--without-lcms2 \
- 	)
+diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
+index adeeb78..33cd605 100755
+--- a/support/scripts/setlocalversion
++++ b/support/scripts/setlocalversion
+@@ -54,7 +54,7 @@ fi
+ 
+ # Check for mercurial and a mercurial repo.
+ if hgid=`hg id 2>/dev/null`; then
+-	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
++	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
+ 
+ 	# Do we have an untagged version?
+ 	if [ -z "$tag" -o "$tag" = tip ]; then
