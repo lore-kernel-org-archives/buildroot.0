@@ -1,60 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:51 +0200
-Subject: [Buildroot] [PATCH 011/100] package/Makefile.in: fix musl handling
+Date: Tue,  4 Jul 2017 16:47:49 +0200
+Subject: [Buildroot] [PATCH 009/100] system: introduce BR2_SYSTEM_ENABLE_NLS
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-12-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-10-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we had no support for full NLS with the musl C library:
-BR2_NEEDS_GETTEXT was only true for uClibc. But the musl C library
-provides a stub gettext implementation, which some packages were
-failing to recognize as being usable, and therefore we are passing
-autoconf cache variables to hint those packages that yes, the C
-library has a usable gettext implementation.
+Until now, the option BR2_ENABLE_LOCALE was more-or-less controlling
+whether NLS support was enabled in packages. More precisely, if
+BR2_ENABLE_LOCALE=y, we were not doing anything (so some packages
+could have NLS support enabled, some not). And only when
+BR2_ENABLE_LOCALE was disabled we were explicitly passing
+--disable-nls to packages.
 
-However, we are going to enable full NLS support for musl, by giving
-the possibility to build gettext libintl with musl. In such a case, we
-do not want packages to use the gettext implementation of the C
-library, but really the one provided by gettext libintl.
+This doesn't make much sense, and there is no reason to tie NLS
+support to locale support. You may want locale support, but not
+necessarily NLS support. Therefore, this commit introduces
+BR2_SYSTEM_ENABLE_NLS, which allows to enable/disable NLS support
+globally. When this option is enabled, we pass --enable-nls to
+packages, otherwise we pass --disable-nls.
 
-Therefore, we should only pre-seed the
-gt_cv_func_gnugettext1_libc*=yes variables if we're on musl but
-without gettext libintl. Otherwise packages will fail building because:
+In addition, when this option is enabled and the C library doesn't
+provide a full-blown implementation of gettext, we select the gettext
+package, which will provide the full blown implementation.
 
- - libintl.h is the one from the full-blown gettext implementation, so
-   it assumes the package will link against -lintl
+It is worth mentioning that this commit has a visible impact for users:
 
- - the package thinks gettext is provided by the C library, so it
-   doesn't link with -lintl
+ - Prior to this commit, as soon as BR2_ENABLE_LOCALE=y, packages
+   *could* provide NLS support. It was up to each package to decide
+   whether they wanted to provide NLS support or not (we were not
+   passing --enable-nls nor --disable-nls).
+
+ - After this commit, it's BR2_SYSTEM_ENABLE_NLS that controls whether
+   NLS is enabled or disabled, and this option is disabled by default.
+
+Bottom line: with the default of BR2_SYSTEM_ENABLE_NLS disabled, some
+packages may lose NLS support that they used to provide. But we
+believe it's a reasonable default behavior for Buildroot, where
+generally NLS support is not necessary.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/Makefile.in       |  4 ++--
+ package/gettext/Config.in |  1 +
+ system/Config.in          | 19 +++++++++++++++++++
+ 3 files changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/package/Makefile.in b/package/Makefile.in
-index d30da3f..b98333f 100644
+index 4a5b3af..462b7ca 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -338,7 +338,12 @@ endif
- # AM_GNU_GETTEXT misdetects musl gettext support.
- # musl currently implements api level 1 and 2 (basic + ngettext)
- # http://www.openwall.com/lists/musl/2015/04/16/3
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+#
-+# These autoconf variables should only be pre-seeded when the minimal
-+# gettext implementation of musl is used. When the full blown
-+# implementation provided by gettext libintl is used, auto-detection
-+# works fine, and pre-seeding those values is actually wrong.
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y:)
- BR2_GT_CV_FUNC_GNUGETTEXT_LIBC = \
- 	gt_cv_func_gnugettext1_libc=yes \
- 	gt_cv_func_gnugettext2_libc=yes
+@@ -359,8 +359,8 @@ TARGET_CONFIGURE_ARGS = \
+ 
+ ################################################################################
+ 
+-ifeq ($(BR2_ENABLE_LOCALE),y)
+-NLS_OPTS =
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++NLS_OPTS = --enable-nls
+ else
+ NLS_OPTS = --disable-nls
+ endif
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index 18bfda6..0dea03d 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -17,6 +17,7 @@ if BR2_PACKAGE_GETTEXT
+ config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+ 	bool
+ 	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
++	default y if BR2_SYSTEM_ENABLE_NLS
+ 
+ endif
+ 
+diff --git a/system/Config.in b/system/Config.in
+index 8588839..828df42 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -420,6 +420,25 @@ config BR2_GENERATE_LOCALE
+ 	  specified, UTF-8 is assumed. Examples of locales: en_US,
+ 	  fr_FR.UTF-8.
+ 
++config BR2_SYSTEM_ENABLE_NLS
++	bool "Enable Native Language Support (NLS)"
++	depends on BR2_USE_WCHAR
++	#  - glibc has built-in NLS support, but anyway doesn't
++	#    support static linking
++	#  - musl and uclibc support static linking, but they don't
++	#    have built-in NLS support, which is provided by the
++	#    libintl library from gettext. The fact that it is a
++	#    separate library causes too many problems for static
++	#    linking.
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_GETTEXT if !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
++	help
++	  This option will enable Native Language Support, which will
++	  allow software packages to support translations.
++
++comment "NLS support needs a toolchain w/ wchar, dynamic library"
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
++
+ config BR2_TARGET_TZ_INFO
+ 	bool "Install timezone info"
+ 	select BR2_PACKAGE_TZDATA if BR2_TOOLCHAIN_USES_GLIBC
 -- 
 2.9.4
