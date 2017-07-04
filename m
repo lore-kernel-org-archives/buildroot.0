@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:41 +0200
-Subject: [Buildroot] [PATCH 001/100] libglib2: disable compiler warnings
+Date: Tue,  4 Jul 2017 16:47:42 +0200
+Subject: [Buildroot] [PATCH 002/100] flex: remove bogus comment
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-3-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, libglib enables some fairly aggressive warnings, treated
-as errors. In particular, the -Wformat=2 warning triggers a warning
-due to the return value of the ngettext() macro from uClibc libintl
-stub not being understood as being potentially a format string.
-
-So, before we enable the stub libintl in uClibc, we disable such
-warnings. A bug will be reported to upstream uClibc to get the actual
-bug fixed, but disabling compiler warnings treated as errors is anyway
-a good thing in the context of Buildroot.
+The comment that explains why we were defining HOST_FLEX_DEPENDENCIES
+instead of inheriting from FLEX_DEPENDENCIES no longer makes sense,
+since we remove such automatic inheritance of host dependencies from
+target dependencies a while ago.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libglib2/libglib2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/flex/flex.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d6b18dd..577dcec 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -113,7 +113,8 @@ HOST_LIBGLIB2_DEPENDENCIES = \
- 	host-zlib
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index aa6c026..905621e 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -12,7 +12,6 @@ FLEX_LICENSE_FILES = COPYING
+ FLEX_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_GETTEXT_IF_LOCALE),gettext) host-m4
+ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
+-# we don't have a host-gettext/libintl
+ HOST_FLEX_DEPENDENCIES = host-m4
  
- LIBGLIB2_CONF_OPTS = \
--	--with-pcre=system
-+	--with-pcre=system \
-+	--disable-compile-warnings
- 
- ifneq ($(BR2_ENABLE_LOCALE),y)
- LIBGLIB2_DEPENDENCIES += libiconv
+ define FLEX_DISABLE_PROGRAM
 -- 
 2.9.4
