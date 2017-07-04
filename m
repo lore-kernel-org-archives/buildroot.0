@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:07 +0200
-Subject: [Buildroot] [PATCH 027/100] exiv2: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:48:14 +0200
+Subject: [Buildroot] [PATCH 034/100] gnuchess: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-28-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-35-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,37 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
-   if NLS support should be enabled or not
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exiv2/exiv2.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/gnuchess/Config.in   | 1 -
+ package/gnuchess/gnuchess.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 6bc8848..32029ba 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -42,11 +42,10 @@ else
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=OFF -DEXIV2_ENABLE_LIBXMP=OFF
- endif
+diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
+index 4993b1a..aa446f4 100644
+--- a/package/gnuchess/Config.in
++++ b/package/gnuchess/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_GNUCHESS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FLEX
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  GNU Chess lets most modern computers play a full game of chess.
  
--ifeq ($(BR2_ENABLE_LOCALE),y)
-+EXIV2_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
-+
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_NLS=ON
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--EXIV2_DEPENDENCIES += gettext
--endif
- else
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_NLS=OFF
- endif
+diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
+index 0103367..1465ab0 100644
+--- a/package/gnuchess/gnuchess.mk
++++ b/package/gnuchess/gnuchess.mk
+@@ -11,6 +11,6 @@ GNUCHESS_LICENSE_FILES = COPYING
+ 
+ GNUCHESS_DEPENDENCIES = host-flex flex
+ GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline) \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++	$(TARGET_NLS_DEPENDENCIES)
+ 
+ $(eval $(autotools-package))
 -- 
 2.9.4
