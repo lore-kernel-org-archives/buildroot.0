@@ -1,99 +1,81 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  4 Jul 2017 13:21:17 +0200
-Subject: [Buildroot] [PATCH v4 2/5] fs/ext2: deprecate
-	BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option
+Date: Tue,  4 Jul 2017 13:21:19 +0200
+Subject: [Buildroot] [PATCH v4 4/5] fs/ext2: Add
+	BR2_TARGET_ROOTFS_EXT2_FEATURES option
 In-Reply-To: <20170704112120.27977-1-s.martin49@gmail.com>
 References: <20170704112120.27977-1-s.martin49@gmail.com>
-Message-ID: <20170704112120.27977-3-s.martin49@gmail.com>
+Message-ID: <20170704112120.27977-5-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Soon, the ext{2,3,4} rootfs image will no longer be generated with
-genext2fs, but using mke2fs instead which has no support for the extra
-inode number option.
+From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-So, deprecate the BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES option and
-recommend, in lieu, to set the total inode number, taking account of
-the extra ones if needed.
+This option lets the user specify ext2/3/4 features.
 
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v3->v4:
-- rename deprecate prompt in Config.in.legacy (Arnout)
-- introduce a _WRAP symbol to actually select BR2_LEGACY when needed
-  (Arnout)
+- none
 
 changes v2->v3:
-- new patch (Yann)
----
- Config.in.legacy  | 16 ++++++++++++++++
- fs/ext2/Config.in |  8 --------
- fs/ext2/ext2.mk   |  1 -
- 3 files changed, 16 insertions(+), 9 deletions(-)
+- none
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 453c5eb8b8..1ec8d3a76e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
- 
-+config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
-+	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
-+	default 0
-+	help
-+	  Buildroot now uses mkfs.ext2/3/4 to generate ext2/3/4 images. So
-+	  let mkfs automatically selects the number of inodes needed. Set
-+	  this option to 0.
-+	  Note that, the number of inodes can still be set and passed to
-+	  mkfs; so if extra inodes are needed, prefer setting
-+	  BR2_TARGET_ROOTFS_EXT2_INODES taking account of them.
-+
-+config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
-+	bool
-+	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
-+	select BR2_LEGACY
-+
- config BR2_STRIP_none
- 	bool "Strip command 'none' has been removed"
- 	select BR2_LEGACY
+changes v1->v2:
+- rebase
+---
+ fs/ext2/Config.in | 10 ++++++++++
+ fs/ext2/ext2.mk   |  5 ++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
 diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index ec69f05cb7..e573a3ca9b 100644
+index 1fc3ac9de7..1841bfaa90 100644
 --- a/fs/ext2/Config.in
 +++ b/fs/ext2/Config.in
-@@ -79,14 +79,6 @@ config BR2_TARGET_ROOTFS_EXT2_INODES
- 	int "exact number of inodes (leave at 0 for auto calculation)"
- 	default 0
+@@ -89,6 +89,16 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	  Traditionally, this has been 5%, and all ext-related tools still
+ 	  default to reserving 5% when creating a new ext filesystem.
  
--config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
--	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
--	default 0
--	help
--	  Enter here the number of extra free inodes you want on
--	  your filesystem. By default, Buildroot will not leave
--	  many free inodes.
--
- config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	int "reserved blocks percentage"
- 	default 5
++config BR2_TARGET_ROOTFS_EXT2_FEATURES
++	string "Filesystem features"
++	default "^64bit"
++	help
++	  Specify a comma-separated list of ext2/3/4 features.
++	  For more information about this option, see the mkefs' -O option in
++	  the manual page mke2fs(8).
++	  For more information about the features which can be set, see then
++	  manual page ext4(5).
++
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index ec49caa3a5..24643afeb9 100644
+index de87efba63..1c0d34cd4f 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -15,7 +15,6 @@ EXT2_OPTS = \
- 	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
- 	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
- 	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
--	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
- 	-r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
- 	-l "$(EXT2_LABEL)"
+@@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT)-$(EXT2_SIZE),y-)
+ $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
+ endif
+ 
++EXT2_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_FEATURES))
++
+ # qstrip results in stripping consecutive spaces into a single one. So the
+ # variable is not qstrip-ed to preserve the integrity of the string value.
+ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+@@ -20,7 +22,8 @@ EXT2_OPTS = \
+ 	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
+ 	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+ 	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+-	-L "$(EXT2_LABEL)"
++	-L "$(EXT2_LABEL)" \
++	$(if $(EXT2_FEATURES),-O "$(EXT2_FEATURES)")
+ 
+ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
  
 -- 
 2.13.2
