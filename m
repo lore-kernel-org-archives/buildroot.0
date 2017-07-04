@@ -1,12 +1,15 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue, 4 Jul 2017 12:16:18 +0200
-Subject: [Buildroot] libasan.so missing
-In-Reply-To: <87podh5gi7.fsf@dell.be.48ers.dk>
-References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
- <877ezp780a.fsf@dell.be.48ers.dk>
- <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com>
- <87podh5gi7.fsf@dell.be.48ers.dk>
-Message-ID: <ed1251ca-9f4a-6f7c-3b51-7cc399299574@grandegger.com>
+Date: Tue, 4 Jul 2017 12:23:57 +0200
+Subject: [Buildroot] [RFC PATCH v5 07/11] support/scripts: add
+ reloacte-sdk.sh script for SDK relocation
+In-Reply-To: <4262a106-bcb5-cb1d-0fc8-07ea21d82b59@mind.be>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-8-git-send-email-wg@grandegger.com>
+ <778420e1-443a-355e-e2ac-edc3f91aa2d3@mind.be>
+ <5d1f1a6e-084f-7530-0bdd-c2239b8bc47c@grandegger.com>
+ <CAHXCMML7nZOMjV6uicBB9szFnDFZ2b1ryQWhY8bcs1aTPrtOUQ@mail.gmail.com>
+ <4262a106-bcb5-cb1d-0fc8-07ea21d82b59@mind.be>
+Message-ID: <1c9fd6c8-85a2-a1f4-700f-458583a27b44@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +18,58 @@ To: buildroot@busybox.net
 
 
 
-Am 03.07.2017 um 23:59 schrieb Peter Korsgaard:
->>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+Am 04.07.2017 um 12:06 schrieb Arnout Vandecappelle:
 > 
->   > Hello Peter,
->   > Am 03.07.2017 um 19:19 schrieb Peter Korsgaard:
->   >>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
->   >>
->   >> > Hello,
->   >> > I'm using the x86_64 buildroot toolchain with gcc 5.4. I wonder why
->   >> > the address sanitizer library "libasan.so*" is not available in the
->   >> > rootfs of the target. Is it intentional? And what is the best way to
->   >> > get it added to the rootfs?
->   >>
->   >> Is this with uClibc-ng, musl or Glibc?
 > 
->   > It's with Glibc. I think the libsanitizer libs are built but not moved
->   > to the target.
+> On 04-07-17 09:14, Samuel Martin wrote:
+>> Wolfgang,
+>>
+>> On Tue, Jul 4, 2017 at 9:01 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
+>>>
+>>> Am 04.07.2017 um 00:01 schrieb Arnout Vandecappelle:
+>>>>
+>>>>    Type in the subject: reloacte -> relocate
+>>>>
+>>>> On 30-06-17 10:37, Wolfgang Grandegger wrote:
+>> [...]
+>>>>> +newpath="$(sed -e "s\\${OLDPATH}\\${NEWPATH}\\g" "${LOCFILE}")"
+>>>>
+>>>>
+>>>>    \\ is a bit a weird sed separator... We use % mostly, sometimes @ or ,.
+>>>> But I'd
+>>>> advise %.
+>>>
+>>>
+>>> "%" and "@" are legal character of a file name. That's why I have chosen
+>>> "\".
+>>
+>> I think youcan choose one of the characters from [1] (my preference
+>> would be either ':' or '|').
+>>
+>> [1] https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
 > 
-> Correct. I've sent a patch fixing this for the internal and external
-> toolchain. Could you give it a try?
-> 
-> https://patchwork.ozlabs.org/patch/783661/
-> https://patchwork.ozlabs.org/patch/783660/
+>   Not a great reference. The only characters that are not allowed in Unix path
+> names are / and \0. Neither of them is usable for the sed replacement.
 
-$ find . -name 'libasan*'
-./target/lib/libasan.so
-./target/lib/libasan_preinit.o
-./target/lib/libasan.so.2
-./target/lib/libasan.so.2.0.0
+Yes, see my other mail on that topic to Samuel. Also "my" "\" shows the 
+same issue. But I thought it's exotic enough to be almost safe.
 
-It works. The libsanitizer adds some extra space and runtime overhead, I 
-assume. Therefore, on Ubuntu, the libraries are not installed by 
-default. They can be added by installing the "libasan0" package. For 
-buildroot, would it make sense to make this option configurable as well?
+>   However, Buildroot will break down if the output dir contains strange
+> characters. Admittedly the external toolchain dir is probably more robust. But
+> we already have plenty of sed replacements using % and some with @ or , or :.
+> 
+>   So I've discussed it here at the Summer Camp and basically everyone has a
+> different opinion. Since this patch is basically ready to go in (after fixing up
+> the type in the subject), whoever commits it will replace the \\ with their
+> preference.
 
-(libasan.*) Extra toolchain libraries to be copied to target
+My next preference would here be "|" as it, like "\" needs special 
+handling (using an escape character), in contrast to:
+
+$ mkdir dir%
+$ mkdir dir@
+$ mkdir dir:
+
+Just another different opinion, of course.
 
 Wolfgang.
