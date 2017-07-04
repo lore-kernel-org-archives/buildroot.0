@@ -1,29 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Jul 2017 17:40:05 +0200
-Subject: [Buildroot] [PATCH] vlc: add upstream security patches fixing
-	CVE-2017-10699
-In-Reply-To: <20170703150140.20387-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 3 Jul 2017 17:01:40 +0200")
-References: <20170703150140.20387-1-peter@korsgaard.com>
-Message-ID: <87tw2s1a96.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Jul 2017 17:43:50 +0200
+Subject: [Buildroot] [PATCH] pngquant: doesn't support building with
+	ccache
+In-Reply-To: <20170703214355.30076-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Mon, 3 Jul 2017 23:43:55 +0200")
+References: <20170703214355.30076-1-arnout@mind.be>
+Message-ID: <87podg1a2x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > avcodec 2.2.x, as used in VideoLAN VLC media player 2.2.7-x before
- > 2017-06-29, allows out-of-bounds heap memory write due to calling memcpy()
- > with a wrong size, leading to a denial of service (application crash) or
- > possibly code execution.
+ > pngquant's homegrown configure script doesn't understand CC with a
+ > space, so we can't use ccache with it. Only the host variant is
+ > affected: for the target, we call ccache from the toolchain-wrapper so
+ > it's transparent to the configure script.
 
- > https://trac.videolan.org/vlc/ticket/18467
+ > This wasn't seen in the autobuilders since they never enable
+ > BR2_CCACHE.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > To test, use any configuration and do
+ > make BR2_CCACHE=y host-pngquant
 
-Committed to 2017.02.x and 2017.05.x, thanks.
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed to 2017.05.x (not in 2017.02), thanks.
 
 -- 
 Bye, Peter Korsgaard
