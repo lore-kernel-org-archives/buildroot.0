@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:28:44 +0200
-Subject: [Buildroot] [git commit] linux-pam: use the new gettext logic
-Message-ID: <20170704233516.B762780330@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:27:25 +0200
+Subject: [Buildroot] [git commit] elfutils: use the new gettext logic
+Message-ID: <20170704233514.A1B0D802A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa9a082a3df897ea1126cff24f86bc0214bc8f4d
+commit: https://git.buildroot.net/buildroot/commit/?id=8c1bfe6d42e619b536afac4cf9ffa6122e3b4ac7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -22,42 +22,48 @@ This commit switches to use the new gettext logic, which involves:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-pam/Config.in    | 1 -
- package/linux-pam/linux-pam.mk | 9 +++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/elfutils/Config.in   |  1 -
+ package/elfutils/elfutils.mk | 11 +++--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index ab7cf55..33e5154 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_LINUX_PAM
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_FLEX
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 3228319..ad86c31 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -14,7 +14,6 @@ config BR2_PACKAGE_ELFUTILS
+ 	depends on !BR2_bfin
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  A Security Framework that Provides Authentication for Applications
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index fb2f99c..5c80e78 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -16,15 +16,12 @@ LINUX_PAM_CONF_OPTS = \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
- 	--libdir=/lib
--LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf
-+LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf \
-+	$(TARGET_NLS_DEPENDENCIES)
- LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_LICENSE = BSD-3-Clause
- LINUX_PAM_LICENSE_FILES = Copyright
--
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--LINUX_PAM_DEPENDENCIES += gettext
--LINUX_PAM_MAKE_OPTS += LIBS=-lintl
--endif
-+LINUX_PAM_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
+ 	  Libraries/utilities to handle ELF objects (drop in
+ 	  replacement for libelf).
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index e43d036..5570a3b 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -10,7 +10,7 @@ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+ ELFUTILS_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
+-ELFUTILS_DEPENDENCIES = zlib
++ELFUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ HOST_ELFUTILS_DEPENDENCIES = host-zlib host-bzip2 host-xz
  
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- LINUX_PAM_CONF_OPTS += --enable-selinux
+ # We patch configure.ac
+@@ -40,13 +40,8 @@ ELFUTILS_CONF_ENV += \
+ 	CFLAGS="$(ELFUTILS_CFLAGS)" \
+ 	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
+ 
+-ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
+-
+-# Unconditionnally requires gettext.
+-ifeq ($(BR2_NEEDS_GETTEXT),y)
+-ELFUTILS_DEPENDENCIES += gettext
+-ELFUTILS_LDFLAGS += -lintl
+-endif
++ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
++	$(TARGET_NLS_LIBS)
+ 
+ ELFUTILS_CONF_ENV += \
+ 	LDFLAGS="$(ELFUTILS_LDFLAGS)"
