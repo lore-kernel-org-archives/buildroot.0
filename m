@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:56 +0200
-Subject: [Buildroot] [PATCH 016/100] clamav: use new gettext logic
+Date: Tue,  4 Jul 2017 16:47:57 +0200
+Subject: [Buildroot] [PATCH 017/100] coreutils: use the new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-17-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-18-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - dropping BR2_PACKAGE_GETTEXT selection
+This commit uses TARGET_NLS_DEPENDENCIES instead of existing logic to
+add the dependency on gettext. To keep the existing behavior, we keep
+the --with-libintl-prefix option, but only when a libintl library is
+effectively provided by gettext.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/clamav/Config.in | 1 -
- package/clamav/clamav.mk | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/coreutils/coreutils.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index a962103..bc934ea 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_CLAMAV
- 	bool "clamav"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 23dee0a..5429abb 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -15,7 +15,7 @@ CLAMAV_DEPENDENCIES = \
- 	libtool \
- 	openssl \
- 	zlib \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 14b952f..6a8a31b 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -77,10 +77,11 @@ else
+ COREUTILS_CONF_OPTS += --disable-xattr
+ endif
  
- # mmap cannot be detected when cross-compiling, needed for mempool support
- CLAMAV_CONF_ENV = \
++COREUTILS_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
++
+ # It otherwise fails to link properly, not mandatory though
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
++ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ COREUTILS_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
+-COREUTILS_DEPENDENCIES += gettext
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GMP),y)
 -- 
 2.9.4
