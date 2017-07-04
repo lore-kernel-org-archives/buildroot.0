@@ -1,56 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  4 Jul 2017 08:56:34 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] system: default to using Etc/UTC as a
-	timezone
-Message-ID: <cover.1499151384.git.yann.morin.1998@free.fr>
+Date: Tue,  4 Jul 2017 08:56:38 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] package/tz: fix variable name
+In-Reply-To: <cover.1499151384.git.yann.morin.1998@free.fr>
+References: <cover.1499151384.git.yann.morin.1998@free.fr>
+Message-ID: <ac47ce5aaeb022761a1645d1173188097311c9a8.1499151384.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The tz packages mizes its own variable with the one fro the tzdata
+package...
 
-A tiemzone is required by systemd, so we must have one defined.
-See the second commit log for more details.
+Fix the variable name in tz.
 
-Changes v1 -> v2:
-  - don't accept empty as default  (Arnout)
-  - don't sneak whitespace cleanups, tell about them ;-)  (Arnout)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Alexandre BELLONI <alexandre.belloni@free-electrons.com>
+---
+ package/tz/tz.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 417ade5f2bbd6941d717d40af309f638abc108d5
-
-  pkg-rebar: remove redundant / in front of $($(PKG)_ERLANG_LIBDIR) (2017-07-04 08:35:09 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 4928890759713fe0a785e193fa843dcff9805ed6
-
-  system: use Etc/UTC as default timezone (2017-07-04 08:45:13 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/tz: fix variable name
-      system: use Etc/UTC as default timezone
-
- package/tz/tz.mk         | 13 +++++--------
- package/tzdata/tzdata.mk | 15 ++++++---------
- system/Config.in         |  4 +---
- 3 files changed, 12 insertions(+), 20 deletions(-)
-
+diff --git a/package/tz/tz.mk b/package/tz/tz.mk
+index 4d1c8c4d61..6b1f9f4d24 100644
+--- a/package/tz/tz.mk
++++ b/package/tz/tz.mk
+@@ -26,13 +26,13 @@ define TZ_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo/uclibc
+ 	cp -a $(@D)/output/* $(TARGET_DIR)/usr/share/zoneinfo/uclibc
+ 	if [ -n "$(TZ_LOCALTIME)" ]; then \
+-		if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZDATA_LOCALTIME) ]; then \
++		if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) ]; then \
+ 			printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
+-			"$(TZDATA_LOCALTIME)"; \
++				"$(TZ_LOCALTIME)"; \
+ 			exit 1; \
+ 		fi; \
+ 		cd $(TARGET_DIR)/etc; \
+-		ln -sf ../usr/share/zoneinfo/uclibc/$(TZDATA_LOCALTIME) TZ; \
++		ln -sf ../usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) TZ; \
+ 	fi
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
