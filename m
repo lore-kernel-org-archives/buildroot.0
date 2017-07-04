@@ -1,87 +1,73 @@
-From: GitLab <gitlab@mg.gitlab.com>
-Date: Mon, 03 Jul 2017 23:31:35 +0000
-Subject: [Buildroot] buildroot | Pipeline #9550904 has failed for master |
-	0fe71511
-Message-ID: <595ad3d7c5e47_2bc63fa4e48a9f4437458@sidekiq04.mail>
+From: Matthew Shyu <matthew.shyu.amlogic@gmail.com>
+Date: Tue,  4 Jul 2017 11:12:38 +0800
+Subject: [Buildroot] [PATCH 1/1] linux-fusion: fix a build issue
+Message-ID: <20170704031238.14389-1-matthew.shyu.amlogic@gmail.com>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Your pipeline has failed.
+From: Matthew Shyu <matthew.shyu@amlogic.com>
 
-Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
-Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
+size parameter from sock_recvmsg was removed from kernel API since 4.7
 
-Commit: 0fe71511 ( https://gitlab.com/buildroot.org/buildroot/commit/0fe71511175a58a3dbee9385fec1c0e4372d8f98 )
-Commit Message: package/libunwind: fix build failure due to asm...
-Commit Author: Romain Naour
-Committed by: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
-
-Pipeline #9550904 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9550904 ) triggered by arnout ( https://gitlab.com/arnout )
-had 4 failed builds.
-
-Job #20979765 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/20979765 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660SyslinuxInternal
-Trace: Ran 1 test in 655.413s
-
-FAILED (errors=1)
-23:19:21 TestIso9660SyslinuxInternal              Starting
-23:19:21 TestIso9660SyslinuxInternal              Building
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=20979765 responseStatus[0;m=201 Created token[0;m=YrcMSKr1
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #20979764 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/20979764 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660SyslinuxExternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 532.600s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=20979764 responseStatus[0;m=201 Created token[0;m=ysYxPkz2
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #20979762 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/20979762 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660GrubExternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 145.617s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=20979762 responseStatus[0;m=201 Created token[0;m=8SBWZvsK
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #20979763 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/20979763 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660GrubInternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 108.037s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=20979763 responseStatus[0;m=201 Created token[0;m=jEWVRjk_
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-
+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
 ---
-You're receiving this email because of your account on gitlab.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170703/bb21ab50/attachment.html>
+ .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+index e1bff64f3b..3ee4dac487 100644
+--- a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
++++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+@@ -24,12 +24,20 @@ one/one_udp.c: In function 'ksocket_send_iov':
+ one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
+ 
+ Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++
++Kernel commit 2da62906b1e29 dropped the size parameter in sock_recvmsg
++since 4.7
++
++In function 'ksocket_receive'
++one/one_udp.c:235:13: error: too many arguments to function 'sock_recvmsg'
++
++Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+ ---
+- one/one_udp.c | 30 +++++++++++++++---------------
+- 1 file changed, 15 insertions(+), 15 deletions(-)
++ one/one_udp.c | 34 +++++++++++++++++++---------------
++ 1 file changed, 19 insertions(+), 15 deletions(-)
+ 
+ diff --git a/one/one_udp.c b/one/one_udp.c
+-index 26b9e6a1f729..b1daae164cdf 100644
++index 26b9e6a..9b59529 100644
+ --- a/one/one_udp.c
+ +++ b/one/one_udp.c
+ @@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
+@@ -78,7 +86,7 @@ index 26b9e6a1f729..b1daae164cdf 100644
+       struct iovec iov;
+       mm_segment_t oldfs;
+       int size = 0;
+-@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
++@@ -213,18 +215,20 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
+       iov.iov_base = buf;
+       iov.iov_len = len;
+  
+@@ -97,3 +105,14 @@ index 26b9e6a1f729..b1daae164cdf 100644
+  
+       oldfs = get_fs();
+       set_fs(KERNEL_DS);
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,7,0) // commit 2da62906b1e29
++      size = sock_recvmsg(sock,&msg,len,msg.msg_flags);
+++#else
+++     size = sock_recvmsg(sock, &msg,msg.msg_flags);
+++#endif
++      set_fs(oldfs);
++ 
++      return size;
++-- 
++2.11.0
++
+-- 
+2.11.0
