@@ -1,163 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 19:55:33 +0200
-Subject: [Buildroot] [PATCH v6 00/10] Make the SDK relocatable
-In-Reply-To: <1499185359-8293-1-git-send-email-wg@grandegger.com>
-References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
-Message-ID: <7fa2231c-4942-da98-6c91-435b4761940b@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  4 Jul 2017 20:31:24 +0200
+Subject: [Buildroot] [PATCH 2/3] package/kodi: remove -DCMAKE_C_FLAGS needed
+	for sunxi-mali
+In-Reply-To: <20170704183125.15212-1-bernd.kuhls@t-online.de>
+References: <20170704183125.15212-1-bernd.kuhls@t-online.de>
+Message-ID: <20170704183125.15212-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Wolfgang,
+https://git.buildroot.net/buildroot/commit/package/kodi/kodi.mk?id=23c3919c5e5b4fa69af9d16ce6a9286869740fd3
+added CFLAGS "because configure uses gcc to detect egl support".
 
- I've already marked patch 7 and 10 as superseded in patchwork because they were
-already applied by Thomas. Can you check if there is a significant difference
-with what was applied?
+This was needed for the autoconf build system and is not needed for the
+cmake build system anymore, tested using this defconfig
 
-On 04-07-17 18:22, Wolfgang Grandegger wrote:
-> Hello,
-> 
-> this is v6 of my patch series to make the buildroot SDK (HOST_DIR)
-> relocatable. It sanitizes the RPATH of all ELF files in the "target",
-> "staging" and "host" tree using "patchelf --make-rpath-relative". We
-> now use patchelf v0.9 to still support old Debian and RHEL systems.
-> 
-> v5 did RPATH sanitization per package after package installation into
-> the host, staging or target tree using GLOBAL_INSTRUMENTATION_HOOKS.
-> This approach got more and more complex and inefficient. Therefore
-> it was abandoned in favor of global sanititation at the end of the
-> host, staging and target build (see changes since v5).
-> 
-> Furthermore this patch creates the script "relocate-sdk.sh" in the top
-> directory of the "host" tree allowing to relocate the SDK after it has
-> been moved to a new location. It replaces the old path with the new
-> one in all text files identified by "file --mime-type". The location
-> is stored in "usr/share/buildroot/sdk-location".
-> 
-> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
-> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
-> 
-> Hope I have not too much pending issues.
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_ARM_INSTRUCTIONS_THUMB2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_RPI_USERLAND=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
 
- We all do :-) But this is really complicated infrastructural work, so it is to
-be expected that it takes time. Just 7 revisions would already be pretty good!
+$ grep -i gles .config
+BR2_PACKAGE_KODI_EGL_GLES=y
+BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
+BR2_PACKAGE_HAS_LIBGLES=y
 
-> 
-> Wolfgang.
-> 
-> Things not yet addressed:
-> 
-> - "make toolchain" creates a toolchain tree which still has references
->   to the build system (in ELF and text files).
-> 
-> Changes since v5:
-> - switch back to v4
-> - patchelf patches are now based on v0.9
-> - patchelf now calculates minimal relative path to the ELF file
->   (and not to the rootdir as before).
-> - patchelf: neededLibFound is now passed to libFoundInRPath
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/kodi.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
- If any more issues are found in the rpath fixup, they can be handled in
-follow-up patches.
-
-
- Regards,
- Arnout
-
-> - Makefile: the "host-finalize" target has been added for SDK relocation
-> - fix-rpath now uses variables to define the list of dirs to be pruned
-> - fix-rpath: the staging tree is sanitized like the target tree
-> - various minor fixes (typos)
-> 
-> Changes since v4:
-> 
-> - RPATH sanitation is now done per package and installation step
->   in "pkg-generic.mk".
-> - After the installation step, the list of the installed files is
->   stored in "<package-build-dir>/.br_[host|staging|target]_filelist".
-> - The GLOBAL_INSTRUMENTATION_HOOKS "step_sanitize_rpath" then calls
->   "fix-rpath" to do the sanitation.
-> - DEPENDENCIES_HOST_PREREQ += host-patchelf is set early in the
->   Makefile as we need it for RPATH sanitation. As soon it's available
->   sanitation can start (currently missing some packages).
-> - The patchelf "file busy" issue is now worked-around differently.
-> 
-> Changes since v3:
-> 
-> - The patchelf patch implementing " --make-rpath-relative" now supports
->   the option "--relative-to-file" instructing to use "$ORIGIN" in
->   RPATHs. Otherwise an absolute path relative to the root directory will
->   be used.
-> - The staging tree is now sanitized as well using the options
->   "--relative-to-file" and "--no-standard-libs".
-> - For the "target" tree, relative RPATHs do not use "$ORIGIN" any
->   longer. An absolute path relative to the root directory is used
->   instead.
-> 
-> Changes since v2:
-> 
-> - provide "qt.conf" to make "qmake" relocatable
-> - sed now uses the separator "\" to substitute the directory path.
->   It's one of the few characters not allowed in file names. To
->   avoid interpreting it as escape character, the "read -r" is used.
-> - The paranoia substituion check is done before doing the real
->   substituion.
-> 
-> Changes since v1:
-> 
-> - The name SDK has been chosen for the relocatabed "HOST_DIR" (instead
->   of toolchanin).
-> - The patchelf version bump and patching are now done by 2 patches
-> - No more helper functions are used in the Makefile to call "fix-rpath"
->   but added directly.
-> - The staging tree is not touched any more... until we have a good
->   reason to do so. 
-> - The sanitation is now performed by an optimized "fix-rpath" script.
-> - The relocate-sdk script is now copied for support/misc to the
->   top directory of the host tree.
-> 
-> Samuel Martin (1):
->   support/scripts: add fix-rpath script to sanitize the rpath
-> 
-> Wolfgang Grandegger (9):
->   support/scripts: check-host-rpath now handles $ORIGIN/../lib
->   package/patchelf: add patch for rpath sanitization under a root
->     directory
->   core: sanitize RPATH in staging tree at the end of target finalization
->   core: sanitize RPATH in target tree at the end of target finalization
->   core: sanitize RPATH in host tree at the very end of the build
->   support/scripts: add relocate-sdk.sh script for SDK relocation
->   core: install relocation script and location at the end of the build
->   external-toolchain: check if a buildroot SDK has already been
->     relocated
->   package/qt5base: provide "qt.conf" to make "qmake" relocatable
-> 
->  Makefile                                           |  17 +-
->  ...move-apparently-incorrect-usage-of-static.patch |  49 +++
->  ...unction-for-splitting-a-colon-separated-s.patch |  58 +++
->  ...to-make-the-rpath-relative-under-a-specif.patch | 419 +++++++++++++++++++++
->  package/qt5/qt5base/qt.conf.in                     |   6 +
->  package/qt5/qt5base/qt5base.mk                     |   8 +
->  support/misc/relocate-sdk.sh                       |  47 +++
->  support/scripts/check-host-rpath                   |   2 +-
->  support/scripts/fix-rpath                          | 122 ++++++
->  toolchain/helpers.mk                               |  18 +
->  .../toolchain-external/pkg-toolchain-external.mk   |   1 +
->  11 files changed, 745 insertions(+), 2 deletions(-)
->  create mode 100644 package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->  create mode 100644 package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
->  create mode 100644 package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
->  create mode 100644 package/qt5/qt5base/qt.conf.in
->  create mode 100755 support/misc/relocate-sdk.sh
->  create mode 100755 support/scripts/fix-rpath
-> 
-
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 7a031b748..f3e654ba2 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -231,7 +231,6 @@ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+ KODI_CONF_OPTS += \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+ 	-DENABLE_OPENGLES=ON
+ else
+ KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
