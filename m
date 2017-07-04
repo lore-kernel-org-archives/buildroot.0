@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:48:03 +0200
-Subject: [Buildroot] [PATCH 023/100] dos2unix: use new gettext logic
+Date: Tue,  4 Jul 2017 16:48:04 +0200
+Subject: [Buildroot] [PATCH 024/100] dropwatch: use new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-24-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-25-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +12,42 @@ To: buildroot@busybox.net
 
 This commit switches to use the new gettext logic, which involves:
 
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
+ - using TARGET_NLS_DEPENDENCIES instead of relying on binutils
+   depending on gettext/host-gettext
 
  - using TARGET_NLS_LIBS to force linking against libintl
 
- - dropping BR2_PACKAGE_GETTEXT selection
-
-In addition, we now use BR2_SYSTEM_ENABLE_NLS instead of
-BR2_ENABLE_LOCALE to decide if NLS support should be enabled or
-disabled.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dos2unix/Config.in   |  1 -
- package/dos2unix/dos2unix.mk | 15 +++++++--------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/dropwatch/dropwatch.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
-index 6945f52..cfb5ba4 100644
---- a/package/dos2unix/Config.in
-+++ b/package/dos2unix/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_DOS2UNIX
- 	bool "dos2unix"
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  dos2unix converts text file line endings between CRLF and LF
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index e08a0c1..692a6e8 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -6,18 +6,16 @@
  
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 3540ec8..87525fb 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -8,19 +8,18 @@ DOS2UNIX_VERSION = 7.3.4
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
--DOS2UNIX_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+DOS2UNIX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
+ DROPWATCH_VERSION = 7c33d8a8ed105b07a46b55d71d93b36ed34c16db
+ DROPWATCH_SITE = git://git.infradead.org/users/nhorman/dropwatch.git
+-DROPWATCH_DEPENDENCIES = binutils libnl readline host-pkgconf
++DROPWATCH_DEPENDENCIES = binutils libnl readline host-pkgconf \
 +	$(TARGET_NLS_DEPENDENCIES)
+ DROPWATCH_LICENSE = GPL-2.0
+ DROPWATCH_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_ENABLE_LOCALE),y)
--DOS2UNIX_DEPENDENCIES += host-gettext
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+DOS2UNIX_MAKE_OPTS += ENABLE_NLS=1
-+DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=$(TARGET_NLS_LIBS)
- else
-+# Should be defined to empty to disable NLS support
- DOS2UNIX_MAKE_OPTS += ENABLE_NLS=
- endif
- 
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--DOS2UNIX_DEPENDENCIES += gettext
--DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=-lintl
--endif
+ # libbfd may be linked to libintl
+ # Ugly... but LDLIBS are hardcoded anyway
+ DROPWATCH_LDLIBS = \
+-	-lbfd -lreadline -lnl-3 -lnl-genl-3 -lpthread -lncurses -lm
 -
- ifeq ($(BR2_USE_WCHAR),)
- DOS2UNIX_MAKE_OPTS += UCS=
- endif
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-DROPWATCH_LDLIBS += -lintl
+-endif
++	-lbfd -lreadline -lnl-3 -lnl-genl-3 -lpthread -lncurses -lm \
++	$(TARGET_NLS_LIBS)
+ 
+ define DROPWATCH_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
 -- 
 2.9.4
