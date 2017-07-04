@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:35:41 +0200
-Subject: [Buildroot] [git commit] ushare: use the new gettext logic
-Message-ID: <20170704233519.792BB7FB43@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:35:58 +0200
+Subject: [Buildroot] [git commit] util-linux: use the new gettext logic
+Message-ID: <20170704233519.895417FB43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ba9a7a6529f22866f5777fc46e1fefb3638aafc
+commit: https://git.buildroot.net/buildroot/commit/?id=7426b582f6aedef449f398b1f815fb22978687ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit switches to use the new gettext logic, which involves:
@@ -20,54 +20,54 @@ This commit switches to use the new gettext logic, which involves:
 
  - dropping BR2_PACKAGE_GETTEXT selection
 
- - using BR2_SYSTEM_ENABLE_NLS instead of BR2_ENABLE_LOCALE to decide
-   if NLS support should be enabled or not
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/ushare/Config.in |  1 -
- package/ushare/ushare.mk | 10 +++-------
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ package/util-linux/Config.in     | 1 -
+ package/util-linux/util-linux.mk | 8 ++------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/ushare/Config.in b/package/ushare/Config.in
-index 70bf24a..c3475b8 100644
---- a/package/ushare/Config.in
-+++ b/package/ushare/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_USHARE
- 	# linking.
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBUPNP
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 6ba239e..cba590c 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -1,6 +1,5 @@
+ menuconfig BR2_PACKAGE_UTIL_LINUX
+ 	bool "util-linux"
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
- 	  It implements the server component that provides UPnP media devices
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index 32aa445..bb194f6 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -7,9 +7,10 @@
- USHARE_VERSION = 1.1a
- USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
- USHARE_SITE = http://ushare.geexbox.org/releases
--USHARE_DEPENDENCIES = host-pkgconf libupnp
-+USHARE_DEPENDENCIES = host-pkgconf libupnp $(TARGET_NLS_DEPENDENCIES)
- USHARE_LICENSE = GPL-2.0+
- USHARE_LICENSE_FILES = COPYING
-+USHARE_LDFLAGS = $(TARGET_NLS_LIBS)
+ 	  Various useful/essential linux libraries and utilities.
  
- USHARE_CONF_OPTS = \
- 	--prefix=/usr \
-@@ -18,12 +19,7 @@ USHARE_CONF_OPTS = \
- 	--sysconfdir=/etc \
- 	--disable-strip
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index d55ee7c..61e3e63 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -17,7 +17,7 @@ UTIL_LINUX_AUTORECONF = YES
+ UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
+ UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
+ UTIL_LINUX_INSTALL_STAGING = YES
+-UTIL_LINUX_DEPENDENCIES = host-pkgconf
++UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ # uClibc needs NTP_LEGACY for sys/timex.h -> ntp_gettime() support
+ # (used in logger.c), and the common default is N.
+ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
+@@ -25,6 +25,7 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
+ UTIL_LINUX_CONF_OPTS += \
+ 	--disable-rpath \
+ 	--disable-makeinstall-chown
++UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
  
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--USHARE_DEPENDENCIES += gettext
--USHARE_LDFLAGS += -lintl
--endif
--
--ifeq ($(BR2_ENABLE_LOCALE),)
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
- USHARE_CONF_OPTS += --disable-nls
+ # system depends on util-linux so we enable systemd support
+ # (which needs systemd to be installed)
+@@ -62,11 +63,6 @@ endif
+ UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
  endif
  
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-UTIL_LINUX_DEPENDENCIES += gettext
+-UTIL_LINUX_LIBS += -lintl
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
+ endif
