@@ -1,65 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 08:45:17 +0200
-Subject: [Buildroot] [git commit] libsepol: rework host installation
-Message-ID: <20170704064206.8933581ED9@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 08:45:29 +0200
+Subject: [Buildroot] [PATCH 2/8] libsepol: rework host installation
+In-Reply-To: <20170703124502.26113-3-arnout@mind.be>
+References: <20170703124502.26113-1-arnout@mind.be>
+ <20170703124502.26113-3-arnout@mind.be>
+Message-ID: <20170704084529.1d6e0fa7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12a9fb947c7b642b418c2615530207883a246ac3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libsepol has a pretty peculiar interpretation of DESTDIR and PREFIX.
-PREFIX is not consistently used: some installation paths are forced to
-$(DESTDIR)/usr/... . Also, the shared lib symlink is forced to ../../lib
-(i.e. assumes it's installed under /usr). For these reasons, the host
-build and install commands are a bit unusual: they use DESTDIR instead
-of PREFIX, DESTDIR points to $(HOST_DIR) without /usr, and some
-additional fixup is needed to correct the installation directory of
-libsepol.so.1 and the symlink to it.
+On Mon, 3 Jul 2017 14:44:56 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> libsepol has a pretty peculiar interpretation of DESTDIR and PREFIX.
+> PREFIX is not consistently used: some installation paths are forced to
+> $(DESTDIR)/usr/... . Also, the shared lib symlink is forced to ../../lib
+> (i.e. assumes it's installed under /usr). For these reasons, the host
+> build and install commands are a bit unusual: they use DESTDIR instead
+> of PREFIX, DESTDIR points to $(HOST_DIR) without /usr, and some
+> additional fixup is needed to correct the installation directory of
+> libsepol.so.1 and the symlink to it.
+> 
+> This can be simplified quite a lot by passing both DESTDIR and PREFIX,
+> and including the /usr part in both. The symlink still has to be fixed,
+> but that's much simpler.
+> 
+> Note that a side effect is that the man pages are now installed under
+> $(HOST_DIR)/usr/usr/man. While not very nice, we don't really care
+> about man pages. In addition, this will resolve itself when we later
+> move $(HOST_DIR)/usr to $(HOST_DIR).
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> It's a bit counter-intuitive to have a patch that adds /usr in a series
+> that is meant to remove it, but this is the simplest way to have a
+> bisectable series...
+> ---
+>  package/libsepol/libsepol.mk | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
 
-This can be simplified quite a lot by passing both DESTDIR and PREFIX,
-and including the /usr part in both. The symlink still has to be fixed,
-but that's much simpler.
+Applied to master, thanks.
 
-Note that a side effect is that the man pages are now installed under
-$(HOST_DIR)/usr/usr/man. While not very nice, we don't really care
-about man pages. In addition, this will resolve itself when we later
-move $(HOST_DIR)/usr to $(HOST_DIR).
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsepol/libsepol.mk | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 9bdac1e..d360bfb 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -33,15 +33,18 @@ define LIBSEPOL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
- endef
- 
-+HOST_LIBSEPOL_MAKE_ENV = \
-+	$(HOST_MAKE_ENV) \
-+	DESTDIR=$(HOST_DIR)/usr \
-+	PREFIX=$(HOST_DIR)/usr
-+
- define HOST_LIBSEPOL_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
- endef
- 
- define HOST_LIBSEPOL_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
--	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
--	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
--	-rmdir $(HOST_DIR)/lib
-+	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS)
-+	ln -sf libsepol.so.1 $(HOST_DIR)/usr/lib/libsepol.so
- endef
- 
- $(eval $(generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
