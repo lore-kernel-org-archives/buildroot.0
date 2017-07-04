@@ -1,59 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:50:34 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libmad: add security
-	patch from debian
-Message-ID: <20170704154818.3CA267FAFC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Jul 2017 17:59:37 +0200
+Subject: [Buildroot] [git commit] support/scripts: add relocate-sdk.sh
+	script for SDK relocation
+Message-ID: <20170704160233.40EE981975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9012a319f36a3ac8a9383f854569e04c3a110a35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ec29ef3e4eba720605487149d169df17d7dce5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+It will install the script "relocate-sdk.sh" in the HOST_DIR
+allowing to adjust the path to the SDK directory in all text
+files after it has been moved to a new location.
 
-CVE-2017-8372 - The mad_layer_III function in layer3.c in Underbit MAD
-libmad 0.15.1b, if NDEBUG is omitted, allows remote attackers to cause a
-denial of service (assertion failure and application exit) via a crafted
-audio file.
-
-CVE-2017-8373 - The mad_layer_III function in layer3.c in Underbit MAD
-libmad 0.15.1b allows remote attackers to cause a denial of service
-(heap-based buffer overflow and application crash) or possibly have
-unspecified other impact via a crafted audio file.
-
-CVE-2017-8374 - The mad_bit_skip function in bit.c in Underbit MAD libmad
-0.15.1b allows remote attackers to cause a denial of service (heap-based
-buffer over-read and application crash) via a crafted audio file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6369a06150b9a2991807c0418a7f0a865ef6c084)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+[Thomas:
+ - Fix shebang to be /bin/sh instead of /bin/bash, suggested by Arnout
+ - Use | instead of \ as a separator for sed expressions, suggested by
+   Arnout, discussed with Wolfgang and others
+ - Remove ./ at the beginning of LOCFILE, suggested by Arnout
+ - Fix comment about the path check being made before doing the
+   replacement, suggested by Arnout
+ - Fix indentation, suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmad/libmad.hash | 1 +
- package/libmad/libmad.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ support/misc/relocate-sdk.sh | 47 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/libmad/libmad.hash b/package/libmad/libmad.hash
-index 1e55556..173399f 100644
---- a/package/libmad/libmad.hash
-+++ b/package/libmad/libmad.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690  libmad-0.15.1b.tar.gz
-+sha256  0e21f2c6b19337d0b237dacc04f7b90a56be7f359f4c9a2ee0b202d9af0cfa69  frame_length.diff
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index 9c152f9..2200448 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -10,6 +10,8 @@ LIBMAD_INSTALL_STAGING = YES
- LIBMAD_LIBTOOL_PATCH = NO
- LIBMAD_LICENSE = GPLv2+
- LIBMAD_LICENSE_FILES = COPYING
-+LIBMAD_PATCH = \
-+	https://sources.debian.net/data/main/libm/libmad/0.15.1b-8/debian/patches/frame_length.diff
- 
- define LIBMAD_PREVENT_AUTOMAKE
- 	# Prevent automake from running.
+diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
+new file mode 100755
+index 0000000..2a9ebc9
+--- /dev/null
++++ b/support/misc/relocate-sdk.sh
+@@ -0,0 +1,47 @@
++#!/bin/sh
++#
++if [ "$#" -ne 0 ]; then
++    echo "Run this script to relocate the buildroot SDK at that location"
++    exit 1
++fi
++
++LOCFILE="usr/share/buildroot/sdk-location"
++FILEPATH="$(readlink -f "$0")"
++NEWPATH="$(dirname "${FILEPATH}")"
++
++cd "${NEWPATH}"
++if [ ! -r "${LOCFILE}" ]; then
++    echo "Previous location of the buildroot SDK not found!"
++    exit 1
++fi
++OLDPATH="$(cat "${LOCFILE}")"
++
++if [ "${NEWPATH}" = "${OLDPATH}" ]; then
++    echo "This buildroot SDK has already been relocated!"
++    exit 0
++fi
++
++# Check if the path substitution does work properly, e.g.  a tree
++# "/a/b/c" copied into "/a/b/c/a/b/c/" would not be allowed.
++newpath="$(sed -e "s|${OLDPATH}|${NEWPATH}|g" "${LOCFILE}")"
++if [ "${NEWPATH}" != "${newpath}" ]; then
++    echo "Something went wrong with substituting the path!"
++    echo "Please choose another location for your SDK!"
++    exit 1
++fi
++
++echo "Relocating the buildroot SDK from ${OLDPATH} to ${NEWPATH} ..."
++
++# Make sure file uses the right language
++export LC_ALL=C
++# Replace the old path with the new one in all text files
++while read -r FILE ; do
++    if file -b --mime-type "${FILE}" | grep -q '^text/' && [ "${FILE}" != "${LOCFILE}" ]
++    then
++        sed -i "s|${OLDPATH}|${NEWPATH}|g" "${FILE}"
++    fi
++done < <(grep -lr "${OLDPATH}" .)
++
++# At the very end, we update the location file to not break the
++# SDK if this script gets interruted.
++sed -i "s|${OLDPATH}|${NEWPATH}|g" ${LOCFILE}
