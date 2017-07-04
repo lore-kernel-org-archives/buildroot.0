@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:36:01 +0200
-Subject: [Buildroot] [git commit] vim: use the new gettext logic
-Message-ID: <20170704233519.A8EC57FA97@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:37:15 +0200
+Subject: [Buildroot] [git commit] util-linux: remove libintl static linking
+	handling
+Message-ID: <20170704233520.8D40480257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f8d6569ed75f7c7be83ad16e7a6d0fb50c3ad0c
+commit: https://git.buildroot.net/buildroot/commit/?id=3ba3474a4bb924a3f21cab4aa60d7b34a4da8062
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - dropping BR2_PACKAGE_GETTEXT selection
+We no longer support building the full-blown libintl in static linking
+scenarios, as it causes too many problems. Therefore, remove the
+special code that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vim/Config.in | 1 -
- package/vim/vim.mk    | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/util-linux/util-linux.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/package/vim/Config.in b/package/vim/Config.in
-index b851627..1469be8 100644
---- a/package/vim/Config.in
-+++ b/package/vim/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_VIM
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  VIM Text editor
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 61e3e63..4c2b1f6 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -223,13 +223,5 @@ endif
  
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index ec49460..c235a08 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -8,7 +8,7 @@ VIM_VERSION = v8.0.0329
- VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
- # Win over busybox vi since vim is more feature-rich
- VIM_DEPENDENCIES = \
--	ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
-+	ncurses $(TARGET_NLS_DEPENDENCIES) \
- 	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
- VIM_SUBDIR = src
- VIM_CONF_ENV = \
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+ 
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
+-define UTIL_LINUX_TWEAK_UUID_PC
+-	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+-	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+-endef
+-UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
+-endif
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
