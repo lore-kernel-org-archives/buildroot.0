@@ -1,10 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 13:40:08 +0200
-Subject: [Buildroot] [PATCH v3 11/11] package/mke2img: remove package
-In-Reply-To: <20170703225106.1492-12-s.martin49@gmail.com>
-References: <20170703225106.1492-1-s.martin49@gmail.com>
- <20170703225106.1492-12-s.martin49@gmail.com>
-Message-ID: <8d77134b-a6e6-f224-1e43-b5410af7754a@mind.be>
+Date: Tue, 4 Jul 2017 13:42:58 +0200
+Subject: [Buildroot] [RFC PATCH v5 06/11] pkg-generic: add
+ GLOBAL_INSTRUMENTATION_HOOKS for rpath sanitation
+In-Reply-To: <52d48565-23cc-c878-faae-f6698ade87b6@grandegger.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-7-git-send-email-wg@grandegger.com>
+ <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
+ <00d2dee8-fe63-bc07-b3bd-93b7df740b8f@mind.be>
+ <c75cc499-d213-cad2-e496-dd1e7cdae5ea@grandegger.com>
+ <1c3c6a13-1c9c-dda4-187f-92f85e0201b6@grandegger.com>
+ <52d48565-23cc-c878-faae-f6698ade87b6@grandegger.com>
+Message-ID: <fdaeb222-34d1-ced9-3873-a522c67bed52@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,329 +19,105 @@ To: buildroot@busybox.net
 
 
 
-On 04-07-17 00:51, Samuel Martin wrote:
-> From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+On 04-07-17 12:59, Wolfgang Grandegger wrote:
+> Hello,
 > 
-> Now that we use mkfs to generate ext2/3/4 filesystem image by calling
-> mkfs directly from fs/ext2/ext2.mk, we can remove this package.
+> Am 04.07.2017 um 10:57 schrieb Wolfgang Grandegger:
+>> Hello Arnout,
+>>
+>> Am 04.07.2017 um 10:22 schrieb Wolfgang Grandegger:
+>>>
+>>>
+>>> Am 04.07.2017 um 00:30 schrieb Arnout Vandecappelle:
+>>>>
+>>>>
+>>>> On 03-07-17 23:47, Arnout Vandecappelle wrote:
+>>>>>
+>>>>>
+>>>>> On 30-06-17 10:37, Wolfgang Grandegger wrote:
+>>>>>> The hook calls the script "fix-rpath" at the end of the installation
+>>>>>> step.
+>>>>>>
+>>>>>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+>>>>>
+>>>>>   Looks good to me. I'm not adding my reviewed-by yet because it will still
+>>>>> change when the fix-rpath arguments change.
+>>>>>
+>>>>>   Regards,
+>>>>>   Arnout
+>>>>>
+>>>>>> ---
+>>>>>>   package/pkg-generic.mk | 10 ++++++++++
+>>>>>>   1 file changed, 10 insertions(+)
+>>>>>>
+>>>>>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>>>>>> index 825ab0c..8812193 100644
+>>>>>> --- a/package/pkg-generic.mk
+>>>>>> +++ b/package/pkg-generic.mk
+>>>>>> @@ -139,6 +139,16 @@ define step_check_build_dir
+>>>>>>   endef
+>>>>>>   GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
+>>>>>> +define step_sanitize_rpath
+>>>>>> +    $(if $(filter install-host-end,$(2)-$(1)),\
+>>>>>> +        support/scripts/fix-rpath "host" $($(PKG)_DIR)/.br_host_filelist)
+>>>>>> +    $(if $(filter install-staging-end,$(2)-$(1)),\
+>>>>>> +        support/scripts/fix-rpath "staging"
+>>>>>> $($(PKG)_DIR)/.br_staging_filelist)
+>>>>>> +    $(if $(filter install-target-end,$(2)-$(1)),\
+>>>>>> +        support/scripts/fix-rpath "target"
+>>>>>> $($(PKG)_DIR)/.br_target_filelist)
+>>>>
+>>>>   After reviewing the qt.conf thing, I realized that this is in fact not
+>>>> enough.
+>>>> Indeed, staging-install may install things into host dir as well...
+>>>>
+>>>>   So I think that both for generating the lists and for doing fix-rpath, we
+>>>> should not just look at the directory corresponding to the step, but to all
+>>>> three.
+>>>>
+>>>>   Since that means that the same directory may be iterated over three times, I
+>>>> think it's best to also make a total of 9 files:
+>>>>
+>>>> .br_host_install_host_filelist   -> things installed to host during
+>>>> host-install
+>>>> .br_host_install_target_filelist -> things installed to target during
+>>>> host-install
+>>>> .br_target_install_host_filelist -> things installed to target during
+>>>> target-install
+>>>
+>>> Or we store the full path of installed files of all trees in one
+>>> .br_install_filelist. fix-rpath could then act upon the path prefix (being
+>>> equal to $HOST_DIR, etc.).
+>>
+>> That would even simplify things (in pkg-generic.mk). Either I use the full
+>> path or add the name of the tree before the relative file name:
+>>
+>>    host "file-name"
+>>    staging "another-file-name"
+>>
+>> Then fix-rpath would scan that file and sanitize the file according to the
+>> tree type. I think using the absolute path is more efficient as
+>> I can scan in fix-rpath directly for the files with that name. If it's an ELF
+>> file, it acts upon the rootdir prefix (host, staging or target).
+>>
+>> What do you think?
 > 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Thinking more about it... Generating the list of all installed files over and
+> over (for *each* packet *twice*) again is not very efficient.
+> Here some measurement on my rather fast i7 7700K PC with a rather big BSP:
+> 
+> $ cd <a-host-dir>
+> $ time find . -type f -print0 | xargs -0 md5sum | sort > ~/junk/filelist
+> real    1m43.422s
+> 
+> Doing it once at the end is likely more efficient. To avoid rpath sanitization
+> with subsequent makes, we could maybe used some tags.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ OK, so it looks like nobody agrees with my idea of doing it for every package
+:-( Sorry that I pointed you in that direction.
 
  Regards,
  Arnout
-
-> 
-> ---
-> changes v2->v3:
-> - none
-> 
-> changes v1->v2:
-> - rebase
-> ---
->  Config.in.legacy               |   6 ++
->  DEVELOPERS                     |   1 -
->  package/Config.in.host         |   1 -
->  package/mke2img/Config.in.host |  11 ---
->  package/mke2img/mke2img        | 205 -----------------------------------------
->  package/mke2img/mke2img.mk     |  13 ---
->  6 files changed, 6 insertions(+), 231 deletions(-)
->  delete mode 100644 package/mke2img/Config.in.host
->  delete mode 100755 package/mke2img/mke2img
->  delete mode 100644 package/mke2img/mke2img.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 68275f9e0e..130ad1b12e 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,12 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2017.08"
->  
-> +config BR2_PACKAGE_HOST_MKE2IMG
-> +	bool "host mke2img has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  We now call mkfs directly to generate ext2/3/4 filesystem image.
-> +
->  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
->  	int "exact size in blocks has been removed"
->  	default 0
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d121bd8163..62172abcd0 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1779,7 +1779,6 @@ F:	package/libiscsi/
->  F:	package/libseccomp/
->  F:	package/linux-tools/
->  F:	package/mesa3d-headers/
-> -F:	package/mke2img/
->  F:	package/nbd/
->  F:	package/nut/
->  F:	package/nvidia-driver/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 0932b9f1f9..c5a852b858 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -24,7 +24,6 @@ menu "Host utilities"
->  	source "package/lpc3250loader/Config.in.host"
->  	source "package/lttng-babeltrace/Config.in.host"
->  	source "package/mfgtools/Config.in.host"
-> -	source "package/mke2img/Config.in.host"
->  	source "package/mkpasswd/Config.in.host"
->  	source "package/mtd/Config.in.host"
->  	source "package/mtools/Config.in.host"
-> diff --git a/package/mke2img/Config.in.host b/package/mke2img/Config.in.host
-> deleted file mode 100644
-> index b5bcb8455f..0000000000
-> --- a/package/mke2img/Config.in.host
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -config BR2_PACKAGE_HOST_MKE2IMG
-> -	bool "host mke2img"
-> -	select BR2_PACKAGE_HOST_E2FSPROGS
-> -	select BR2_PACKAGE_HOST_GENEXT2FS
-> -	help
-> -	  Easily create filesystems of the extend familly: ext2/3/4.
-> -
-> -	  This tool is bundled by, and specific to Buildroot. However, it can
-> -	  be used from post-images scripts is needed.
-> -
-> -	  https://code.google.com/p/mke2img/
-> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-> deleted file mode 100755
-> index 399012a2be..0000000000
-> --- a/package/mke2img/mke2img
-> +++ /dev/null
-> @@ -1,205 +0,0 @@
-> -#!/usr/bin/env bash
-> -
-> -# Buildroot wrapper to the collection of ext2/3/4 filesystem tools:
-> -# - genext2fs, to generate ext2 filesystem images
-> -# - tune2fs, to modify an ext2/3/4 filesystem (possibly in an image file)
-> -# - e2fsck, to check and fix an ext2/3/4 filesystem (possibly in an image file)
-> -
-> -set -e
-> -
-> -main() {
-> -    local OPT OPTARG
-> -    local nb_blocks nb_inodes nb_res_blocks root_dir image gen rev label uuid
-> -    local -a genext2fs_opts
-> -    local -a tune2fs_opts
-> -    local tune2fs_O_opts
-> -
-> -    # Default values
-> -    gen=2
-> -    rev=1
-> -    nb_extra_inodes=0
-> -
-> -    while getopts :hB:b:i:I:r:d:o:G:R:l:u: OPT; do
-> -        case "${OPT}" in
-> -        h)  help; exit 0;;
-> -        B)  block_size="${OPTARG}";;
-> -        b)  nb_blocks=${OPTARG};;
-> -        i)  nb_inodes=${OPTARG};;
-> -        I)  nb_extra_inodes=${OPTARG};;
-> -        r)  nb_res_blocks=${OPTARG};;
-> -        d)  root_dir="${OPTARG}";;
-> -        o)  image="${OPTARG}";;
-> -        G)  gen=${OPTARG};;
-> -        R)  rev=${OPTARG};;
-> -        l)  label="${OPTARG}";;
-> -        u)  uuid="${OPTARG}";;
-> -        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-> -        \?) error "unknown option '%s'\n" "${OPTARG}";;
-> -        esac
-> -    done
-> -
-> -    # Sanity checks
-> -    if [ -z "${root_dir}" ]; then
-> -        error "you must specify a root directory with '-d'\n"
-> -    fi
-> -    if [ -z "${image}" ]; then
-> -        error "you must specify an output image file with '-o'\n"
-> -    fi
-> -    if [ -z "${nb_blocks}" ]; then
-> -        error "you must specify the size of the output image with '-b'\n"
-> -    fi
-> -    case "${block_size}" in
-> -    1024|2048|4096) ;; # Sole valid values
-> -    '') error "you must specify the size of a block with -B\n";;
-> -    *)  error "invalid block size '%s' (valid: 1024. 2048, 4096)\n" "${block_size}";;
-> -    esac
-> -    case "${gen}:${rev}" in
-> -    2:0|2:1|3:1|4:1)
-> -        ;;
-> -    3:0|4:0)
-> -        error "revision 0 is invalid for ext3 and ext4\n"
-> -        ;;
-> -    *)  error "unknown ext generation '%s' and/or revision '%s'\n" \
-> -               "${gen}" "${rev}"
-> -        ;;
-> -    esac
-> -
-> -    # calculate needed inodes
-> -    if [ ${nb_inodes:-0} -eq 0 ]; then
-> -        nb_inodes=$(find "${root_dir}" | wc -l)
-> -        nb_inodes=$((nb_inodes+400))
-> -    fi
-> -    nb_inodes=$((nb_inodes+nb_extra_inodes))
-> -
-> -    # Upgrade to rev1 if needed
-> -    if [ ${rev} -ge 1 ]; then
-> -        tune2fs_O_opts+=",filetype,sparse_super"
-> -    fi
-> -
-> -    # Add a journal for ext3 and above
-> -    if [ ${gen} -ge 3 ]; then
-> -        tune2fs_opts+=( -j -J size=1 )
-> -    fi
-> -
-> -    # Add ext4 specific features
-> -    if [ ${gen} -ge 4 ]; then
-> -        tune2fs_O_opts+=",extents,uninit_bg,dir_index"
-> -    fi
-> -
-> -    # Add our -O options (there will be at most one leading comma, remove it)
-> -    if [ -n "${tune2fs_O_opts}" ]; then
-> -        tune2fs_opts+=( -O "${tune2fs_O_opts#,}" )
-> -    fi
-> -
-> -    # Add the label if specified
-> -    if [ -n "${label}" ]; then
-> -        tune2fs_opts+=( -L "${label}" )
-> -    fi
-> -
-> -    # Generate the filesystem
-> -    genext2fs_opts=( -z -B ${block_size} -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
-> -    if [ -n "${nb_res_blocks}" ]; then
-> -        genext2fs_opts+=( -m ${nb_res_blocks} )
-> -    fi
-> -    genext2fs "${genext2fs_opts[@]}" "${image}"
-> -
-> -    # genext2fs does not generate a UUID, but fsck will whine if one
-> -    # is missing, so we need to add a UUID.
-> -    # Of course, this has to happen _before_ we run fsck.
-> -    # Also, some ext4 metadata are based on the UUID, so we must
-> -    # set it before we can convert the filesystem to ext4.
-> -    # If the user did not specify a UUID, we generate a random one.
-> -    # Although a random UUID may seem bad for reproducibility, there
-> -    # already are so many things that are not reproducible in a
-> -    # filesystem: file dates, file ordering, content of the files...
-> -    tune2fs -U "${uuid:-random}" "${image}"
-> -
-> -    # Upgrade the filesystem
-> -    if [ ${#tune2fs_opts[@]} -ne 0 ]; then
-> -        tune2fs "${tune2fs_opts[@]}" "${image}"
-> -    fi
-> -
-> -    # After changing filesystem options, running fsck is required
-> -    # (see: man tune2fs). Running e2fsck in other cases will ensure
-> -    # coherency of the filesystem, although it is not required.
-> -    # 'e2fsck -pDf' means:
-> -    #  - automatically repair
-> -    #  - optimise and check for duplicate entries
-> -    #  - force checking
-> -    # Sending output to oblivion, as e2fsck can be *very* verbose,
-> -    # especially with filesystems generated by genext2fs.
-> -    # Exit codes 1 & 2 are OK, it means fs errors were successfully
-> -    # corrected, hence our little trick with $ret.
-> -    ret=0
-> -    e2fsck -pDf "${image}" >/dev/null || ret=$?
-> -    case ${ret} in
-> -       0|1|2) ;;
-> -       *)   errorN ${ret} "failed to run e2fsck on '%s' (ext%d)\n" \
-> -                   "${image}" ${gen}
-> -    esac
-> -    printf "\n"
-> -    trace "e2fsck was successfully run on '%s' (ext%d)\n" "${image}" ${gen}
-> -    printf "\n"
-> -
-> -    # Remove count- and time-based checks, they are not welcome
-> -    # on embedded devices, where they can cause serious boot-time
-> -    # issues by tremendously slowing down the boot.
-> -    tune2fs -c 0 -i 0 "${image}"
-> -}
-> -
-> -help() {
-> -    cat <<_EOF_
-> -NAME
-> -    ${my_name} - Create an ext2/3/4 filesystem image
-> -
-> -SYNOPSIS
-> -    ${my_name} [OPTION]...
-> -
-> -DESCRIPTION
-> -    Create ext2/3/4 filesystem image from the content of a directory.
-> -
-> -    -b BLOCKS
-> -        Create a filesystem of BLOCKS 1024-byte blocs. The default is to
-> -        compute the required number of blocks.
-> -
-> -    -i INODES
-> -        Create a filesystem with INODES inodes. The default is to compute
-> -        the required number of inodes.
-> -
-> -    -r RES_BLOCKS
-> -        Create a filesystem with RES_BLOCKS reserved blocks. The default
-> -        is to reserve 0 block.
-> -
-> -    -d ROOT_DIR
-> -        Create a filesystem, using the content of ROOT_DIR as the content
-> -        of the root of the filesystem. Mandatory.
-> -
-> -    -o FILE
-> -        Create the filesystem in FILE. Madatory.
-> -
-> -    -G GEN -R REV
-> -        Create a filesystem of generation GEN (2, 3 or 4), and revision
-> -        REV (0 or 1). The default is to generate an ext2 revision 1
-> -        filesystem; revision 0 is invalid for ext3 and ext4.
-> -
-> -    -l LABEL
-> -        Create a filesystem with label LABEL. The default is to not set
-> -        a label.
-> -
-> -    -u UUID
-> -        Create filesystem with uuid UUID. The default is to set a random
-> -        UUID.
-> -
-> -  Exit status:
-> -    0   if OK
-> -    !0  in case of error
-> -_EOF_
-> -}
-> -
-> -trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
-> -warn()   { trace "${@}" >&2; }
-> -errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
-> -error()  { errorN 1 "${@}"; }
-> -
-> -my_name="${0##*/}"
-> -main "$@"
-> diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
-> deleted file mode 100644
-> index 9de387a3a3..0000000000
-> --- a/package/mke2img/mke2img.mk
-> +++ /dev/null
-> @@ -1,13 +0,0 @@
-> -################################################################################
-> -#
-> -# mke2img
-> -#
-> -################################################################################
-> -
-> -HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
-> -
-> -define HOST_MKE2IMG_INSTALL_CMDS
-> -	$(INSTALL) -D -m 0755 package/mke2img/mke2img $(HOST_DIR)/usr/bin/mke2img
-> -endef
-> -
-> -$(eval $(host-generic-package))
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
