@@ -1,73 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:35:58 +0200
-Subject: [Buildroot] [git commit] util-linux: use the new gettext logic
-Message-ID: <20170704233519.895417FB43@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:37:14 +0200
+Subject: [Buildroot] [git commit] gptfdisk: remove libintl static linking
+	handling
+Message-ID: <20170704233520.15D7C7FBC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7426b582f6aedef449f398b1f815fb22978687ef
+commit: https://git.buildroot.net/buildroot/commit/?id=68637236e9a00db088be68991f024e9d4afa25eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit switches to use the new gettext logic, which involves:
-
- - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-   on gettext/host-gettext
-
- - using TARGET_NLS_LIBS to force linking against libintl
-
- - dropping BR2_PACKAGE_GETTEXT selection
+We no longer support building the full-blown libintl in static linking
+scenarios, as it causes too many problems. Therefore, remove the
+special code that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/util-linux/Config.in     | 1 -
- package/util-linux/util-linux.mk | 8 ++------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/gptfdisk/gptfdisk.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 6ba239e..cba590c 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_UTIL_LINUX
- 	bool "util-linux"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Various useful/essential linux libraries and utilities.
- 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index d55ee7c..61e3e63 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -17,7 +17,7 @@ UTIL_LINUX_AUTORECONF = YES
- UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
- UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
- UTIL_LINUX_INSTALL_STAGING = YES
--UTIL_LINUX_DEPENDENCIES = host-pkgconf
-+UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- # uClibc needs NTP_LEGACY for sys/timex.h -> ntp_gettime() support
- # (used in logger.c), and the common default is N.
- UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
-@@ -25,6 +25,7 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
- UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown
-+UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
- 
- # system depends on util-linux so we enable systemd support
- # (which needs systemd to be installed)
-@@ -62,11 +63,6 @@ endif
- UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 9c94421..c5826df 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -22,13 +22,8 @@ GPTFDISK_DEPENDENCIES += ncurses
  endif
  
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--UTIL_LINUX_DEPENDENCIES += gettext
--UTIL_LINUX_LIBS += -lintl
+ ifeq ($(BR2_STATIC_LIBS),y)
+-# gptfdisk dependencies may link against libintl/libiconv, so we need
+-# to do so as well when linking statically
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
+-GPTFDISK_DEPENDENCIES += gettext
+-GPTFDISK_LDLIBS += -lintl
 -endif
 -
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- UTIL_LINUX_DEPENDENCIES += libcap-ng
- endif
++# gptfdisk dependencies may link against libiconv, so we need to do so
++# as well when linking statically
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ GPTFDISK_DEPENDENCIES += libiconv
+ GPTFDISK_LDLIBS += -liconv
