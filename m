@@ -1,71 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 17:32:12 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] bind: security bump to
-	version 9.11.1-P2
-Message-ID: <20170704154817.9227281D38@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 17:37:10 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] tslib: use SPDX
+	identifiers for licenses in use
+Message-ID: <20170704154817.D5D607FAFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=783d9bea4a93261187ad9d1a01cdd0fb7dccd3b2
+commit: https://git.buildroot.net/buildroot/commit/?id=984d85972f592c1b09642be09cf15967dca3c307
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issues:
-
-CVE-2017-3142: An error in TSIG authentication can permit unauthorized zone
-transfers
-
-An attacker who is able to send and receive messages to an authoritative DNS
-server and who has knowledge of a valid TSIG key name may be able to
-circumvent TSIG authentication of AXFR requests via a carefully constructed
-request packet. A server that relies solely on TSIG keys for protection with
-no other ACL protection could be manipulated into:
-
-* providing an AXFR of a zone to an unauthorized recipient
-* accepting bogus NOTIFY packets
-
-https://kb.isc.org/article/AA-01504/74/CVE-2017-3142
-
-CVE-2017-3041: An error in TSIG authentication can permit unauthorized dynamic
-updates
-
-An attacker who is able to send and receive messages to an authoritative DNS
-server and who has knowledge of a valid TSIG key name for the zone and service
-being targeted may be able to manipulate BIND into accepting an unauthorized
-dynamic update.
-
-https://kb.isc.org/article/AA-01503/74/CVE-2017-3143
-
+[Peter: License is GPL-2.0+ / LGPL-2.1+]
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a0c53973f87928ae51ca58926951c386c74fc023)
+
+(cherry picked from commit 56ed4a1ef20aea9bbf46c8c17cb275e3173d5acf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tslib/tslib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 3f0dda5..5dd15cb 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P1.tar.gz.sha256.asc
--sha256 6b1b3e88d51b8471bd6aee24a8cea70817e850a5901315dc506f9dde275ca638 bind-9.11.1-P1.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
-+sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 31c3388..ee7621c 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 08b1d26..3650650 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -7,7 +7,7 @@
+ TSLIB_VERSION = 1.5
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+-TSLIB_LICENSE = GPL, LGPL
++TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ TSLIB_LICENSE_FILES = COPYING
  
--BIND_VERSION = 9.11.1-P1
-+BIND_VERSION = 9.11.1-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+ TSLIB_AUTORECONF = YES
