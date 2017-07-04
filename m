@@ -1,51 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 08:45:29 +0200
-Subject: [Buildroot] [PATCH 2/8] libsepol: rework host installation
-In-Reply-To: <20170703124502.26113-3-arnout@mind.be>
-References: <20170703124502.26113-1-arnout@mind.be>
- <20170703124502.26113-3-arnout@mind.be>
-Message-ID: <20170704084529.1d6e0fa7@windsurf>
+Date: Tue, 4 Jul 2017 08:46:18 +0200
+Subject: [Buildroot] [git commit] package/mke2img: specifying zero inodes
+	means auto
+Message-ID: <20170704064312.9244A82112@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9b5df8f2c3c4e0aa4bca8af0cb05594063725d46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 3 Jul 2017 14:44:56 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> libsepol has a pretty peculiar interpretation of DESTDIR and PREFIX.
-> PREFIX is not consistently used: some installation paths are forced to
-> $(DESTDIR)/usr/... . Also, the shared lib symlink is forced to ../../lib
-> (i.e. assumes it's installed under /usr). For these reasons, the host
-> build and install commands are a bit unusual: they use DESTDIR instead
-> of PREFIX, DESTDIR points to $(HOST_DIR) without /usr, and some
-> additional fixup is needed to correct the installation directory of
-> libsepol.so.1 and the symlink to it.
-> 
-> This can be simplified quite a lot by passing both DESTDIR and PREFIX,
-> and including the /usr part in both. The symlink still has to be fixed,
-> but that's much simpler.
-> 
-> Note that a side effect is that the man pages are now installed under
-> $(HOST_DIR)/usr/usr/man. While not very nice, we don't really care
-> about man pages. In addition, this will resolve itself when we later
-> move $(HOST_DIR)/usr to $(HOST_DIR).
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> It's a bit counter-intuitive to have a patch that adds /usr in a series
-> that is meant to remove it, but this is the simplest way to have a
-> bisectable series...
-> ---
->  package/libsepol/libsepol.mk | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+Currently, leaving the number of inodes to be autocalculated requires
+the user to not specify the -i option at all.
 
-Applied to master, thanks.
+Also accept zero as meaning auto; this will help simplify the ext2.mk
+code a little bit.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mke2img/mke2img | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+index 758b6de..266df48 100755
+--- a/package/mke2img/mke2img
++++ b/package/mke2img/mke2img
+@@ -59,7 +59,7 @@ main() {
+     esac
+ 
+     # calculate needed inodes
+-    if [ -z "${nb_inodes}" ]; then
++    if [ ${nb_inodes:-0} -eq 0 ]; then
+         nb_inodes=$(find "${root_dir}" | wc -l)
+         nb_inodes=$((nb_inodes+400))
+     fi
