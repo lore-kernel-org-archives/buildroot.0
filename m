@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:30:49 +0200
-Subject: [Buildroot] [PATCH v6 1/2] fs/ext2: rename
- BR2_TARGET_ROOTFS_EXT2_BLOCKS -> BR2_TARGET_ROOTFS_EXT2_SIZE
-In-Reply-To: <20170705130750.c3ilmo52bakld4cf@tarshish>
-References: <20170705130100.441-1-s.martin49@gmail.com>
- <20170705130750.c3ilmo52bakld4cf@tarshish>
-Message-ID: <20170705163049.56337a21@windsurf>
+Date: Wed, 5 Jul 2017 16:31:49 +0200
+Subject: [Buildroot] [PATCH v4 00/36] Remove /usr component from
+ HOST_DIR (continued)
+In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
+References: <20170705111453.2284-1-arnout@mind.be>
+Message-ID: <20170705163149.322bd8e9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +13,51 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 5 Jul 2017 16:07:50 +0300, Baruch Siach wrote:
+On Wed, 5 Jul 2017 13:14:17 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-> > +config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> > +	int "exact size in blocks has been removed"
-> > +	default 0  
-> 
-> Missing BR2_LEGACY.
+> Arnout Vandecappelle (36):
+>   generic packages: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+>   Globally replace $(HOST_DIR)/usr/bin with $(HOST_DIR)/bin
+>   Globally replace $(HOST_DIR)/usr/sbin with $(HOST_DIR)/sbin
+>   Globally replace $(HOST_DIR)/usr/lib with $(HOST_DIR)/lib
+>   Globally replace $(HOST_DIR)/usr/include with $(HOST_DIR)/include
+>   Globally replace $(HOST_DIR)/usr/share with $(HOST_DIR)/share
+>   Globally replace $(HOST_DIR)/usr with $(HOST_DIR)
+>   qt: fix up alignment after mechanical replacement
+>   boards: replace $HOST_DIR/usr/ with $HOST_DIR/ in scripts
+>   chromebook snow: remove $(HOST_DIR)/usr reference from README
+>   warpboard: remove $(HOST_DIR)/usr reference from README
+>   stm32f429-disco: replace $HOST_DIR/usr with $HOST_DIR in flash script
+>   stm32f469-disco: replace $HOST_DIR/usr with $HOST_DIR in flash script
+>   eclipse-register-toolchain: toolchain is no longer installed in
+>     $(HOST_DIR)/usr
+>   manual: remove references to host/usr paths
+>   grub2: remove host/usr reference from help text
+>   lttng-tools: remove host/usr reference from help text
+>   mfgtools: remove host/usr reference from readme.txt
+>   lesstif: remove host/usr reference from .mk comment
+>   board/gdb/bfin-bf512: remove host/usr reference from readme.txt
+>   board/csky: remove host/usr reference from readme.txt
+>   libffi: avoid $(HOST_DIR)/usr while moving headers
+>   genromfs: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+>   libcap: use $(HOST_DIR) as prefix instead of DESTDIR
+>   lzip: use $(HOST_DIR) as prefix instead of DESTDIR
+>   opkg-utils: use $(HOST_DIR) as PREFIX instead of DESTDIR
+>   raspberrypi-usbboot: remove /usr from DESTDIR-based install commands
+>   dos2unix: use prefix instead of DESTDIR for host installation
+>   imx-uxb-loader: use prefix instead of DESTDIR for host installation
+>   grub2: install in $(HOST_DIR) instead of $(HOST_DIR)/usr
+>   sepolgen: strip /usr/ part from HOST_DIR
+>   libsemanage: rework host installation
+>   libselinux: rework host installation
+>   checkpolicy: rework host installation
+>   policycoreutils: rework host installation
+>   execline: remove --shebangdir configure option
 
-No, because it's an int option. It's the ..._WRAP option below that
-selects BR2_LEGACY.
+Entire series applied. Let's see what the autobuilders have to say.
 
-> > +	help
-> > +	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
-> > +	  It has been set automatically to the value you had before.
-> > +
-> > +config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
-> > +	bool
-> > +	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0
-> > +	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 61440 # deprecated default value
-> > +	select BR2_LEGACY
-> > +
-> > +# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP still reference in fs/ext2/Config.in  
-
-See the big comment at the top of Config.in.legacy for details about
-why we're doing it like that.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
