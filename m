@@ -1,64 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 11:48:56 +0200
-Subject: [Buildroot] [git commit] gcc-final: things are no longer installed
-	in $(HOST_DIR)/usr
-Message-ID: <20170705095036.1F3027FA7A@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 11:46:26 +0200
+Subject: [Buildroot] [git commit] package/Makefile.in: remove
+	$(HOST_DIR)/usr part from HOST_LDFLAGS
+Message-ID: <20170705095035.F063C817B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67f9b36af146a1b4c34fb290e616c0eb4cce0803
+commit: https://git.buildroot.net/buildroot/commit/?id=ac4f527d7353fc4f362f029b92d7c90c31be0966
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since things are no longer installed in $(HOST_DIR)/usr, the callers
-should also not refer to it.
+Now $(HOST_DIR)/lib and $(HOST_DIR)/usr/lib are the same directory, it
+doesn't make sense to pass both to LDFLAGS.
+
+Also use $(HOST_DIR)/lib instead of $(HOST_DIR)/usr/lib for the RPATH.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index e8d2e18..12f08c8 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -59,18 +59,18 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
- HOST_GCC_FINAL_CONF_OPTS = \
- 	$(HOST_GCC_COMMON_CONF_OPTS) \
- 	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
--	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
-+	--with-build-time-tools=$(HOST_DIR)/$(GNU_TARGET_NAME)/bin
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 291108c..87c8316 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+ HOST_CFLAGS   ?= -O2
+ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+-HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
++HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
  
--HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*
-+HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
- # The kernel wants to use the -m4-nofpu option to make sure that it
- # doesn't use floating point operations.
- ifeq ($(BR2_sh4)$(BR2_sh4eb),y)
- HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4,m4-nofpu"
--HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
-+HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
- endif
- ifeq ($(BR2_sh4a)$(BR2_sh4aeb),y)
- HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
--HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
-+HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
- endif
- 
- ifeq ($(BR2_bfin),y)
-@@ -103,9 +103,9 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
- 
- # Make sure we have 'cc'
- define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
--	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
--		ln -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
--			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
-+	if [ ! -e $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-cc ]; then \
-+		ln -f $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-gcc \
-+			$(HOST_DIR)/bin/$(GNU_TARGET_NAME)-cc; \
- 	fi
- endef
- 
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
