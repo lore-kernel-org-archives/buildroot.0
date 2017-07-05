@@ -1,66 +1,76 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:49 +0200
-Subject: [Buildroot] [PATCH v4 32/36] libsemanage: rework host installation
+Date: Wed, 5 Jul 2017 13:14:44 +0200
+Subject: [Buildroot] [PATCH v4 27/36] raspberrypi-usbboot: remove /usr from
+	DESTDIR-based install commands
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-33-arnout@mind.be>
+Message-ID: <20170705111453.2284-28-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsemanage has a pretty peculiar interpretation of DESTDIR and PREFIX.
-PREFIX is not consistently used: some installation paths are forced to
-$(DESTDIR)/usr/... . In other cases, PREFIX is indeed used. PREFIX
-defaults to $(DESTDIR)/usr
+We have a patch that adds $(DESTDIR) to the install commands of
+raspberrypi-usbboot, but it would still be installed in $(DESTDIR)/usr.
+We don't want that, so remove the /usr part in the installation
+commands.
 
-Try to be a little bit more correct by passing both DESTDIR and PREFIX,
-both set to $(HOST_DIR). This is not a complete fix: man pages are
-still installed in $(HOST_DIR)/usr - but we don't care about that.
+Note that upstream has removed the 'install' target entirely, so
+there's no point trying to keep the patch in upstreamable shape (i.e.
+defaulting DESTDIR to /usr).
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libsemanage/libsemanage.mk | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ .../0002-Makefile-add-DESTDIR-support.patch        | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 5ef2d57e35..2964c56f96 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -29,7 +29,12 @@ endef
+diff --git a/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch b/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
+index c37d5a1e0a..a757cb0e03 100644
+--- a/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
++++ b/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
+@@ -7,6 +7,8 @@ This allows installing rpiboot outside of /usr if needed.
  
- HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
- 				host-ustr host-bzip2 host-swig
--HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
-+
-+# DESTDIR is needed during the compile to compute library and header paths.
-+HOST_LIBSEMANAGE_MAKE_OPTS += \
-+	$(HOST_CONFIGURE_OPTS) \
-+	DESTDIR=$(HOST_DIR) \
-+	PREFIX=$(HOST_DIR) \
- 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
-@@ -47,15 +52,13 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
- endif
- 
- define HOST_LIBSEMANAGE_BUILD_CMDS
--	# DESTDIR is needed during the compile to compute library and
--	# header paths.
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) all
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) swigify pywrap
- endef
- 
- define HOST_LIBSEMANAGE_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) install-pywrap
- endef
- 
- $(eval $(generic-package))
+ Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Arnout: remove /usr]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ ---
+  Makefile | 20 ++++++++++----------
+  1 file changed, 10 insertions(+), 10 deletions(-)
+@@ -24,11 +26,11 @@ index d9a7220..7835b7f 100755
+ -	cp usbbootcode.bin /usr/share/rpiboot
+ -	cp msd.elf /usr/share/rpiboot
+ -	cp buildroot.elf /usr/share/rpiboot
+-+	cp rpiboot $(DESTDIR)/usr/bin
+-+	mkdir -p $(DESTDIR)//usr/share/rpiboot
+-+	cp usbbootcode.bin $(DESTDIR)/usr/share/rpiboot
+-+	cp msd.elf $(DESTDIR)/usr/share/rpiboot
+-+	cp buildroot.elf $(DESTDIR)/usr/share/rpiboot
+++	cp rpiboot $(DESTDIR)bin
+++	mkdir -p $(DESTDIR)/share/rpiboot
+++	cp usbbootcode.bin $(DESTDIR)/share/rpiboot
+++	cp msd.elf $(DESTDIR)/share/rpiboot
+++	cp buildroot.elf $(DESTDIR)/share/rpiboot
+  
+  uninstall:
+ -	rm -f /usr/bin/rpiboot
+@@ -36,11 +38,11 @@ index d9a7220..7835b7f 100755
+ -	rm -f /usr/share/rpiboot/msd.elf
+ -	rm -f /usr/share/rpiboot/buildroot.elf
+ -	rmdir --ignore-fail-on-non-empty /usr/share/rpiboot/
+-+	rm -f $(DESTDIR)/usr/bin/rpiboot
+-+	rm -f $(DESTDIR)/usr/share/rpiboot/usbbootcode.bin
+-+	rm -f $(DESTDIR)/usr/share/rpiboot/msd.elf
+-+	rm -f $(DESTDIR)/usr/share/rpiboot/buildroot.elf
+-+	rmdir --ignore-fail-on-non-empty $(DESTDIR)/usr/share/rpiboot/
+++	rm -f $(DESTDIR)/bin/rpiboot
+++	rm -f $(DESTDIR)/share/rpiboot/usbbootcode.bin
+++	rm -f $(DESTDIR)/share/rpiboot/msd.elf
+++	rm -f $(DESTDIR)/share/rpiboot/buildroot.elf
+++	rmdir --ignore-fail-on-non-empty $(DESTDIR)/share/rpiboot/
+  
+  clean: 
+  	rm rpiboot
 -- 
 2.13.2
