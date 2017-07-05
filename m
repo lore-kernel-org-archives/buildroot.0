@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 11:46:26 +0200
-Subject: [Buildroot] [git commit] package/Makefile.in: remove
-	$(HOST_DIR)/usr part from HOST_LDFLAGS
-Message-ID: <20170705095035.F063C817B3@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 11:49:08 +0200
+Subject: [Buildroot] [git commit] pkg-autotools: use $(HOST_DIR) instead of
+	$(HOST_DIR)/usr as prefix
+Message-ID: <20170705095036.33A7C7FA7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac4f527d7353fc4f362f029b92d7c90c31be0966
+commit: https://git.buildroot.net/buildroot/commit/?id=8529a7d9a7e9780a4557e4d0956161e4a9519c68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now $(HOST_DIR)/lib and $(HOST_DIR)/usr/lib are the same directory, it
-doesn't make sense to pass both to LDFLAGS.
+Remove the redundant usr/ component of the HOST_DIR paths. Since a
+previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
+everything keeps on working.
 
-Also use $(HOST_DIR)/lib instead of $(HOST_DIR)/usr/lib for the RPATH.
+Build-tested with a bunch of autotools packages.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in | 2 +-
+ package/pkg-autotools.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 291108c..87c8316 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
- HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
--HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
-+HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
- 
- # host-intltool should be executed with the system perl, so we save
- # the path to the system perl, before a host-perl built by Buildroot
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index ba1f4d9..45de993 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -220,7 +220,7 @@ define $(2)_CONFIGURE_CMDS
+ 	$$($$(PKG)_CONF_ENV) \
+ 	CONFIG_SITE=/dev/null \
+ 	./configure \
+-		--prefix="$$(HOST_DIR)/usr" \
++		--prefix="$$(HOST_DIR)" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
+ 		--localstatedir="$$(HOST_DIR)/var" \
+ 		--enable-shared --disable-static \
