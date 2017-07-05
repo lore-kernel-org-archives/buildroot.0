@@ -1,106 +1,86 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  5 Jul 2017 23:00:12 +0200
-Subject: [Buildroot] [PATCH v8 2/2] fs/ext2: Add
-	BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
-In-Reply-To: <20170705210012.10226-1-s.martin49@gmail.com>
-References: <20170705210012.10226-1-s.martin49@gmail.com>
-Message-ID: <20170705210012.10226-2-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 23:19:53 +0200
+Subject: [Buildroot] [git commit] toolchain: replace absolute symlinks by
+	relative symlinks during sysroot copy
+Message-ID: <20170705212308.3C6778043E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b291525ac74273191c1a53a8361b9e7a6a58e79f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This option lets the user specify mke2fs options and/or ext2/3/4
-features.
+In commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
+("toolchain-external: copy ld*.so* for all C libraries") we changed
+how the musl dynamic linker symbolic link was being created. Instead
+of having specific logic in Buildroot, we switched to simply copying
+the ld*.so.* symbolic link from staging to target, as well as the
+target of this symbolic link.
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+However, it turns out that by default, musl creates its dynamic linker
+symbolic link with an absolute path as the target of the link:
+/lib/libc.so.
 
+Therefore, external Musl toolchains built with Buildroot look like
+this:
+
+  lrwxrwxrwx 1 thomas thomas      12 Jul  4 19:46 ld-musl-armhf.so.1 -> /lib/libc.so
+
+The principle of the copy_toolchain_lib_root function, which is used
+to copy libraries from staging to target, is to copy symbolic links
+and follow their targets. In this case, it means we end up copying
+/lib/libc.so (from the host machine) into the target folder. From
+there on, there are two cases:
+
+ 1. /lib/libc.so exists in your host system. It gets copied to the
+    target. But later on, Buildroot also copies /lib/libc.so from
+    staging to target, overwriting the bogus libc.so. So everything
+    works fine, even though it's admittedly ugly.
+
+ 2. /lib/libc.so doesn't exist in your host system. In this case, the
+    build fails with no clear error message.
+
+This problem does not happen with Musl toolchains built by
+Crosstool-NG, because Crosstool-NG replaces the absolute target of the
+dynamic linker symbolic link by a relative path.
+
+However, since we want to support existing Buildroot Musl toolchains
+and generally work with the fact that Musl by default installs an
+absolute symlink, the following commit improves the
+copy_toolchain_sysroot function to replace symbolic links with an
+absolute destination to use a relative destination. I.e, in staging,
+the ld-musl-armhf.so.1 symbolic link looks like this:
+
+lrwxrwxrwx 1 thomas thomas 14 Jul  5 22:59 output/staging/lib/ld-musl-armhf.so.1 -> ../lib/libc.so
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ce80264575918a8f71d9eab1091c21df85b65b1a/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-changes v7->v8:
-- typos (Arnout)
+ toolchain/helpers.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-changes v6->v7:
-- none
-
-changes v5->v6:
-- wrap help text at 70 chars. (Arnout)
-- reword default value explainations (Arnout)
-
-changes v4->v5:
-- turn the options to accept any mke2fs options, not only ext2/3/4
-  features (Arnout)
-- add explaination for the default value for this new option (Arnout)
-
-changes v3->v4:
-- none
-
-changes v2->v3:
-- none
-
-changes v1->v2:
-- rebase
----
- fs/ext2/Config.in | 18 ++++++++++++++++++
- fs/ext2/ext2.mk   |  5 ++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index a851afb439..f0a5cd76e2 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -68,6 +68,24 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	  Traditionally, this has been 5%, and all ext-related tools still
- 	  default to reserving 5% when creating a new ext filesystem.
- 
-+config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
-+	string "additional mke2fs options"
-+	default "-O ^64bit"
-+	help
-+	  Specify a space-separated list of mke2fs options, including any
-+	  ext2/3/4 filesystem features.
-+
-+	  For more information about the mke2fs options, see the manual
-+	  page mke2fs(8).
-+
-+	  For more information about the ext2/3/4 features which can be
-+	  set, see then manual page ext4(5).
-+
-+	  The default is "-O ^64bit", i.e. disable the 64-bit filesystem.
-+	  This is chosen because U-Boot versions before 2017.02 don't
-+	  support that filesystem option, which may render the system
-+	  unbootable if it is used.
-+
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_EXT2_NONE
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index fdd4a389a0..902e6639ee 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
- $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
- endif
- 
-+EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
-+
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
- EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-@@ -19,7 +21,8 @@ EXT2_OPTS = \
- 	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
- 	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
- 	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
--	-L "$(EXT2_LABEL)"
-+	-L "$(EXT2_LABEL)" \
-+	$(EXT2_MKFS_OPTS)
- 
- ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
--- 
-2.13.2
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 9942ce4..e9e36d2 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -117,6 +117,15 @@ copy_toolchain_sysroot = \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
++	for link in $$(find $(STAGING_DIR) -type l); do \
++		target=$$(readlink $${link}) ; \
++		if [ "$${target}" == "$${target\#/}" ] ; then \
++			continue ; \
++		fi ; \
++		relpath="$(call relpath_prefix,$${target\#/})" ; \
++		echo "Fixing symlink $${link} from $${target} to $${relpath}$${target\#/}" ; \
++		ln -sf $${relpath}$${target\#/} $${link} ; \
++	done ; \
+ 	relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
+ 	if [ "$${relpath}" != "" ]; then \
+ 		for i in $$(find -H $(STAGING_DIR)/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} -type l -xtype l); do \
