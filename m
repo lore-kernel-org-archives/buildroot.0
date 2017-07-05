@@ -1,42 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:37 +0200
-Subject: [Buildroot] [git commit] libffi: avoid $(HOST_DIR)/usr while moving
-	headers
-Message-ID: <20170705141336.AA2727FB34@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 05 Jul 2017 16:17:27 +0200
+Subject: [Buildroot] [PATCH] fs/cpio/init: remout / as read-only as a
+	first step
+In-Reply-To: <20170704190104.24703-1-andrew.smirnov@gmail.com> (Andrey
+ Smirnov's message of "Tue, 4 Jul 2017 12:01:04 -0700")
+References: <20170704190104.24703-1-andrew.smirnov@gmail.com>
+Message-ID: <87r2xvynm0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a82680a61871f5fb96e307a1dfb28a0a330e98d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libffi/libffi.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ > When /init is present on root file system kernel does not take into
+ > accout kernel arguments such as "ro" and does not remount root as
+ > read-only. So prior to this commit the system would continue booting
+ > with "rw" root filesystem until corresponding line in /etc/fstab to
+ > remount it as "ro" was processed.
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 38ef2d6..32e01e9 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -14,13 +14,13 @@ LIBFFI_AUTORECONF = YES
- # Move the headers to the usual location, and adjust the .pc file
- # accordingly.
- define LIBFFI_MOVE_HEADERS
--	mv $(1)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/usr/include/
-+	mv $(1)/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/include/
- 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
--		$(1)/usr/lib/pkgconfig/libffi.pc
--	rm -rf $(1)/usr/lib/libffi-*
-+		$(1)/lib/pkgconfig/libffi.pc
-+	rm -rf $(1)/lib/libffi-*
- endef
- 
--LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR))
-+LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR)/usr)
- LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
- 
- HOST_LIBFFI_MOVE_HOST_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(HOST_DIR))
+ > Change the code to immediately remount / as read-only and rely on
+ > /etc/fstab processing to remount it as "rw" if that is what's selected
+ > in Buildroot configuration.
+
+ > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+
+I see what you're getting at, but this doesn't actually work (with
+busybox mount at least):
+
+NET: Registered protocol family 17
+Freeing unused kernel memory: 2528K
+This architecture does not have kernel memory protection.
+mount: can't read '/proc/mounts': No such file or directory
+Starting logging: OK
+Initializing random number generator... done.
+
+The reason is that mount had to read the current mount flags (either
+directly in /proc/mounts or through /etc/mtab depending on busybox
+config, but we symlink /etc/mtab to /proc/mounts) to be able to remount,
+and as /proc is not mounted in an initramfs this doesn't work.
+
+We could conceptually mount /proc in /init as well, but then things gets
+confusing when /sbin/init does it again.
+
+I don't see any clean way of doing this without adding quite some
+complexity, and I think your usecase (systemd in initramfs that you want
+ro) is so special that I would suggest you just use a custom /init in
+your rootfs overlay.
+
+-- 
+Bye, Peter Korsgaard
