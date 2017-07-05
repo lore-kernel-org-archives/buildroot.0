@@ -1,49 +1,42 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed,  5 Jul 2017 17:33:03 +0300
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: bump to version 2.16.5
-Message-ID: <20170705143303.26282-1-aperez@igalia.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Wed, 5 Jul 2017 16:33:35 +0200
+Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf"
+ to make "qmake" relocatable
+In-Reply-To: <20170705161317.205dc3ae@windsurf>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <1499185359-8293-11-git-send-email-wg@grandegger.com>
+ <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
+ <a3612c93-7e2a-f2e0-0fbd-9d93bd4e759a@grandegger.com>
+ <57657dbc-eca2-a352-ae7c-902a01c9ce73@grandegger.com>
+ <51297962-b3bc-bd68-8dee-3a1ad8ca92ae@grandegger.com>
+ <20170705161317.205dc3ae@windsurf>
+Message-ID: <e0641e1d-7b26-954e-06b7-6655645ed099@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This simply updates to the latest stable release. WebKitGTK+ versions
-in the 2.1x series avoid bumping the dependencies in order to allow
-distributions to provide updates, therefore no new dependencies are
-needed.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f01c7f0c07..5df4ce8df3 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.12.5.tar.xz.sha1
--sha1	2d73fd5b47c68c73aea8b3d7b88acc8e62bdb99c	webkitgtk-2.12.5.tar.xz
--# Calculated based on the hash above
--sha256	6b147854b864a5f115fadb97b2b6200b2f696db015216a34e7298d11c88b1c40	webkitgtk-2.12.5.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.16.5.tar.xz.sums
-+md5 fce72dc89cd310a663d9eb97133861fe webkitgtk-2.16.5.tar.xz
-+sha1 8052fda41b1b666f175baaac787c5cba39ed24a0 webkitgtk-2.16.5.tar.xz
-+sha256 8e0396f3428e757898c5856e642eed4fcd5a20ae03d96d3eaa03b76634be7dd4 webkitgtk-2.16.5.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f37aaa6e0c..cc8d960e47 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.12.5
-+WEBKITGTK_VERSION = 2.16.5
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
--- 
-2.13.2
+Am 05.07.2017 um 16:13 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Wed, 5 Jul 2017 15:48:22 +0200, Wolfgang Grandegger wrote:
+> 
+>> What about making the relocation stuff configurable as shown in the patch below.
+>> The advantage is that it could also control the generation of the "qt.conf",
+>> for example.
+> 
+> We don't want to make it configurable, through a Config.in option.
+> However, we would like to have a separate make target that prepares the
+> SDK, creates the tarball, etc.
+> 
+> Basically, a normal "make" would not run all the rpath sanitization
+> logic, absolute path replacement, etc. There should be a separate "make
+> sdk" target that does this.
+
+Yes I understand, but how do you want to handle static things like the 
+creation of "qt.conf" required for the relocatable SDK?
+
+Wolfgang.
