@@ -1,52 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:51 +0200
-Subject: [Buildroot] [PATCH v4 34/36] checkpolicy: rework host installation
+Date: Wed, 5 Jul 2017 13:14:40 +0200
+Subject: [Buildroot] [PATCH v4 23/36] genromfs: use $(HOST_DIR) instead of
+	$(HOST_DIR)/usr as prefix
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-35-arnout@mind.be>
+Message-ID: <20170705111453.2284-24-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-checkpolicy has a pretty peculiar interpretation of DESTDIR and PREFIX.
-PREFIX simply defaults to $(DESTDIR)/usr, and is used in the rest of
-the build system. DESTDIR isn't used any further.
+genromfs is special because it uses "PREFIX" in the meaning of DESTDIR
+and "prefix" in the meaning of prefix. We were up to know using it
+incorrectly for host: PREFIX shouldn't be set and only prefix should
+be set.
 
-For the host installation, we don't want the usr part, so set PREFIX
-instead of DESTDIR.
+Add an explanatory comment for this unusual behaviour.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/checkpolicy/checkpolicy.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ package/genromfs/genromfs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index d80bb792b4..f0cca593d3 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -31,17 +31,19 @@ endef
- 
- HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
- 
--HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+# PREFIX is used at build time to find host-libselinux
-+HOST_CHECKPOLICY_MAKE_OPTS = \
-+	$(HOST_CONFIGURE_OPTS) \
-+	PREFIX=$(HOST_DIR) \
- 	LEX="$(HOST_DIR)/bin/flex" \
- 	YACC="$(HOST_DIR)/bin/bison -y"
- 
--# DESTDIR is used at build time to find host-libselinux
- define HOST_CHECKPOLICY_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS)
+diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
+index 3025550637..fd696b45b2 100644
+--- a/package/genromfs/genromfs.mk
++++ b/package/genromfs/genromfs.mk
+@@ -16,6 +16,8 @@ define GENROMFS_BUILD_CMDS
+ 		LDFLAGS="$(TARGET_LDFLAGS)"
  endef
  
- define HOST_CHECKPOLICY_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) install
++# "PREFIX" is the equivalent of DESTDIR in autotools, "prefix" is the
++# traditional prefix. "prefix" defaults to /usr so no need to set it.
+ define GENROMFS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install
+ endef
+@@ -25,7 +27,7 @@ define HOST_GENROMFS_BUILD_CMDS
+ endef
+ 
+ define HOST_GENROMFS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
  endef
  
  $(eval $(generic-package))
