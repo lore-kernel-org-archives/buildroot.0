@@ -1,50 +1,63 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 16:54:18 +0200
-Subject: [Buildroot] [PATCH] toolchain/helpers.mk: fix creation of DESTDIR
-	in copy_toolchain_lib_root
-Message-ID: <20170705145418.25101-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 16:53:56 +0200
+Subject: [Buildroot] [git commit] support/testing: remove references to
+	host/usr
+Message-ID: <20170705145153.06FF881EE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit b3cc7e65ee, the definition of the DESTDIR variable was moved
-down into the loop that follows symlinks in the libraries that are
-copied to target. However, the corresponding mkdir was not moved down,
-so that no directories are ever created.
+commit: https://git.buildroot.net/buildroot/commit/?id=8367d388d4d581f12d33e882aef21af6977a2ef9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In practice, this mkdir is normally redundant since the directories
-should already have been created as part of creating STAGING_DIR.
-Still, the current situation is clearly wrong, so fix it by moving the
-mkdir down to after the assignment to DESTDIR.
-
-While we're at it, also remove a redundant empty line. It's a leftover
-from when a lot of variables were declared above.
+The tools are now installed in host/bin instead of host/usr/bin.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ support/testing/tests/fs/test_ext.py      | 2 +-
+ support/testing/tests/fs/test_jffs2.py    | 2 +-
+ support/testing/tests/fs/test_squashfs.py | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 6136aef6b9..9942ce404f 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -10,13 +10,12 @@
- #
- copy_toolchain_lib_root = \
- 	LIBPATTERN="$(strip $1)"; \
--\
- 	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIBPATTERN}" 2>/dev/null` ; \
- 	for LIBPATH in $${LIBPATHS} ; do \
--		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
- 		while true ; do \
- 			LIBNAME=`basename $${LIBPATH}`; \
- 			DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
-+			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
- 			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
- 			if test -h $${LIBPATH} ; then \
- 				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
--- 
-2.13.2
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+index ea3d3f1..34321a3 100644
+--- a/support/testing/tests/fs/test_ext.py
++++ b/support/testing/tests/fs/test_ext.py
+@@ -13,7 +13,7 @@ RESBLKCNT_PROP = "Reserved block count"
+ CHECK_FS_TYPE_CMD = "mount | grep '/dev/root on / type {}'"
+ 
+ def dumpe2fs_run(builddir, image):
+-    cmd = ["host/usr/sbin/dumpe2fs", os.path.join("images", image)]
++    cmd = ["host/sbin/dumpe2fs", os.path.join("images", image)]
+     ret = subprocess.check_output(cmd,
+                                   stderr=open(os.devnull, "w"),
+                                   cwd=builddir,
+diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
+index 0d45af2..7185df7 100644
+--- a/support/testing/tests/fs/test_jffs2.py
++++ b/support/testing/tests/fs/test_jffs2.py
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x4000000
+ 
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.jffs2")
+-        out = subprocess.check_output(["host/usr/sbin/jffs2dump", "-c", img],
++        out = subprocess.check_output(["host/sbin/jffs2dump", "-c", img],
+                                       cwd=self.builddir,
+                                       env={"LANG": "C"})
+         out = out.splitlines()
+diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+index edaa087..b205b6a 100644
+--- a/support/testing/tests/fs/test_squashfs.py
++++ b/support/testing/tests/fs/test_squashfs.py
+@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
+ """
+ 
+     def test_run(self):
+-        unsquashfs_cmd = ["host/usr/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
++        unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
+         out = subprocess.check_output(unsquashfs_cmd,
+                                       cwd=self.builddir,
+                                       env={"LANG": "C"})
