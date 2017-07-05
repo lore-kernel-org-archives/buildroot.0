@@ -1,90 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 18:17:42 +0200
-Subject: [Buildroot] [PATCH v3] board: Add nanopi-m1 Support
-In-Reply-To: <1499270655-2781-1-git-send-email-chakra@openedev.com>
-References: <1499270655-2781-1-git-send-email-chakra@openedev.com>
-Message-ID: <20170705181742.43923a6b@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  5 Jul 2017 18:32:53 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/kodi: remove -DCMAKE_C_FLAGS
+	needed for sunxi-mali
+In-Reply-To: <20170705163254.15156-1-bernd.kuhls@t-online.de>
+References: <20170705163254.15156-1-bernd.kuhls@t-online.de>
+Message-ID: <20170705163254.15156-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://git.buildroot.net/buildroot/commit/package/kodi/kodi.mk?id=23c3919c5e5b4fa69af9d16ce6a9286869740fd3
+added CFLAGS "because configure uses gcc to detect egl support".
 
-On Wed,  5 Jul 2017 21:34:15 +0530, Chakra Divi wrote:
-> Add initial support for nanopi-m1 board
-> with below features
-> - U-Boot 2017.07-rc1
-> - Linux 4.11.5
-> - Default packages from buildroot
-> 
-> Signed-off-by: Chakra Divi <chakra@openedev.com>
+This was needed for the autoconf build system and is not needed for the
+cmake build system anymore, tested using this defconfig
 
-I've applied, but there were nonetheless a few things to fix, see below.
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_ARM_INSTRUCTIONS_THUMB2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_RPI_USERLAND=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
 
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 3ae7e5d..bbc5bb8 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -127,6 +127,7 @@ mx53loco_defconfig: *defconfig
->  mx6cubox_defconfig: *defconfig
->  mx6sx_udoo_neo_defconfig: *defconfig
->  mx6udoo_defconfig: *defconfig
-> +nanopi_m1_defconfig: *defconfig
->  nanopi_neo_defconfig: *defconfig
->  nexbox_a95x_defconfig: *defconfig
->  nitrogen6sx_defconfig: *defconfig
-> @@ -205,28 +206,3 @@ zynq_microzed_defconfig: *defconfig
->  zynq_zc706_defconfig: *defconfig
->  zynq_zed_defconfig: *defconfig
->  zynq_zybo_defconfig: *defconfig
-> -tests.core.test_post_scripts.TestPostScripts: *runtime_test
-> -tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
-> -tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
-> -tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: *runtime_test
-> -tests.core.test_timezone.TestNoTimezone: *runtime_test
-> -tests.fs.test_ext.TestExt2: *runtime_test
-> -tests.fs.test_ext.TestExt2r1: *runtime_test
-> -tests.fs.test_ext.TestExt3: *runtime_test
-> -tests.fs.test_ext.TestExt4: *runtime_test
-> -tests.fs.test_iso9660.TestIso9660Grub2External: *runtime_test
-> -tests.fs.test_iso9660.TestIso9660Grub2Internal: *runtime_test
-> -tests.fs.test_iso9660.TestIso9660GrubExternal: *runtime_test
-> -tests.fs.test_iso9660.TestIso9660GrubInternal: *runtime_test
-> -tests.fs.test_iso9660.TestIso9660SyslinuxExternal: *runtime_test
-> -tests.fs.test_iso9660.TestIso9660SyslinuxInternal: *runtime_test
-> -tests.fs.test_jffs2.TestJffs2: *runtime_test
-> -tests.fs.test_squashfs.TestSquashfs: *runtime_test
-> -tests.fs.test_ubi.TestUbi: *runtime_test
-> -tests.fs.test_yaffs2.TestYaffs2: *runtime_test
-> -tests.package.test_dropbear.TestDropbear: *runtime_test
-> -tests.package.test_python.TestPythonBase: *runtime_test
-> -tests.toolchain.test_external.TestExternalToolchainLinaroArm: *runtime_test
-> -tests.toolchain.test_external.TestExternalToolchainSourceryArmv4: *runtime_test
-> -tests.toolchain.test_external.TestExternalToolchainSourceryArmv5: *runtime_test
-> -tests.toolchain.test_external.TestExternalToolchainSourceryArmv7: *runtime_test
+$ grep -i gles .config
+BR2_PACKAGE_KODI_EGL_GLES=y
+BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
+BR2_PACKAGE_HAS_LIBGLES=y
 
-Can you investigate why on your system all those lines were removed? I
-believe it's because you don't have python-nose2 and/or python-pexpect
-installed. Can you run:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
 
-  ./support/testing/run-tests -l
+ package/kodi/kodi.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-and see what it gives ?
-
->  N:	Chakra Divi <chakra@openedev.com>
-> +F:	board/friendlyarm/nanopi-m1
->  F:	board/olimex/a13_olinuxino
->  F:	board/orangepi/orangepi-plus
-> +F:	configs/nanopi_m1_defconfig	
-
-There was a trailing tab here.
-
-Thanks,
-
-Thomas
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 309d0d3af..3d6c70bee 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -231,7 +231,6 @@ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+ KODI_CONF_OPTS += \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+ 	-DENABLE_OPENGLES=ON
+ else
+ KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
