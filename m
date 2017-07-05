@@ -1,27 +1,38 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed, 5 Jul 2017 23:31:42 +0200
-Subject: [Buildroot] [PATCH 1/1] libcodec2: Update to version 0.6.
-Message-ID: <CALdGskKdBi9_OLBAo0TSb+a1AJ5DpuLBymQckE1+DArdjTk0HQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 23:31:33 +0200
+Subject: [Buildroot] [git commit] toolchain: replace absolute symlinks
+ by relative symlinks during sysroot copy
+In-Reply-To: <20170705212308.3C6778043E@busybox.osuosl.org>
+References: <20170705212308.3C6778043E@busybox.osuosl.org>
+Message-ID: <20170705233133.6ab298e1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd
+Arnout, Thomas, Peter,
 
-The easiest solution I have to fix the lib issue would be to add the
-following line to the libcodec2.mk file.  I'm not sure if it would be the
-preferred way to go(right solution), or if there is something that has to
-be fixed in the upstream repo rather.
+> commit: https://git.buildroot.net/buildroot/commit/?id=b291525ac74273191c1a53a8361b9e7a6a58e79f
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LIBCODEC2_CONF_OPTS += -DCMAKE_INSTALL_LIBDIR=/lib
+I normally don't push such complicated patches directly without prior
+review. However, the autobuilders were being spammed with this musl
+toolchain problem, so I wanted to have a fix merged quickly.
 
-If this is the best way, I can update the patch to that effect.
+I have obviously no problem to see your objections/comments about the
+commit, and I'm willing to send follow-up patches to change/improve
+this if needed.
 
-regards
+I've tested it by running all our tests for external toolchains in
+support/testing/.
 
-Olivier
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170705/e74bacb2/attachment.html>
+Let me know if you have any comments.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
