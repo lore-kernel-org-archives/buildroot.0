@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 5 Jul 2017 22:06:01 +0200
-Subject: [Buildroot] [git commit] gssdp: add hash for license file
-Message-ID: <20170705200929.1C7ED7FAE8@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 22:08:43 +0200
+Subject: [Buildroot] [git commit] cxxtest: add hash for license file
+Message-ID: <20170705200929.752307FE10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c93c554acefd56cc016772980ffd17fd1573efb
+commit: https://git.buildroot.net/buildroot/commit/?id=1e5659fff89b44ea361a77f4703e446e52a71647
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gssdp/gssdp.hash | 3 +++
+ package/cxxtest/cxxtest.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index aac5f74..acf6b3a 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
+diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
+index f552e80..be2cbd3 100644
+--- a/package/cxxtest/cxxtest.hash
++++ b/package/cxxtest/cxxtest.hash
 @@ -1,2 +1,5 @@
- # Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.2.sha256sum:
- sha256 a1e17c09c7e1a185b0bd84fd6ff3794045a3cd729b707c23e422ff66471535dc  gssdp-1.0.2.tar.xz
+ # Locally computed:
+ sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
 +
 +# Hash for license file:
-+sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
