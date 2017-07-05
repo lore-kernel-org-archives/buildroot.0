@@ -1,52 +1,63 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 5 Jul 2017 13:55:06 +0300
-Subject: [Buildroot] [PATCH 2/5] arch/arm: fix defaults for AArch64 in
- 64-bit mode
-In-Reply-To: <354db2be118602b0b12429d6d0f897455918ea12.1499250321.git.yann.morin.1998@free.fr>
-References: <cover.1499250321.git.yann.morin.1998@free.fr>
- <354db2be118602b0b12429d6d0f897455918ea12.1499250321.git.yann.morin.1998@free.fr>
-Message-ID: <20170705105506.eutzkvcalunabk2b@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 12:57:08 +0200
+Subject: [Buildroot] [PATCH 1/3] testing/infra/emulator: allow to
+ specify pexpect timeout
+In-Reply-To: <20170704185807.27189-1-andrew.smirnov@gmail.com>
+References: <20170704185807.27189-1-andrew.smirnov@gmail.com>
+Message-ID: <20170705125708.273a3669@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-On Wed, Jul 05, 2017 at 12:25:34PM +0200, Yann E. MORIN wrote:
-> Even in 64-bit mode we have to specify the -mcpu value.
+First of all, thanks a lot for working on the testing infrastructure.
+It's nice to see people progressively making use of it!
+
+I however have one comment below.
+
+On Tue,  4 Jul 2017 11:58:05 -0700, Andrey Smirnov wrote:
+> Some commands take more than 5 seconds to complete under QEMU, so add
+> provisions to allow individual unit-test to specify different duration
+> to avoid false negative test failures.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 > ---
->  arch/Config.in.arm | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  support/testing/infra/emulator.py | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index aaf4506d7f..e6beacf3d8 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -534,9 +534,9 @@ config BR2_GCC_TARGET_CPU
->  	default "strongarm"	if BR2_strongarm
->  	default "xscale"	if BR2_xscale
->  	default "iwmmxt"	if BR2_iwmmxt
-> -	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
-> -	default "cortex-a57"		if (BR2_cortex_a57 && !BR2_ARCH_IS_64)
-> -	default "cortex-a72"		if (BR2_cortex_a72 && !BR2_ARCH_IS_64)
-> +	default "cortex-a53"		if (BR2_cortex_a53)
-> +	default "cortex-a57"		if (BR2_cortex_a57)
-> +	default "cortex-a72"		if (BR2_cortex_a72)
+> diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+> index a39d59b..4e988a4 100644
+> --- a/support/testing/infra/emulator.py
+> +++ b/support/testing/infra/emulator.py
+> @@ -26,7 +26,10 @@ class Emulator(object):
+>      #
+>      # options: array of command line options to pass to Qemu
+>      #
+> -    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
+> +    # timeout: timeout to wait for when excuting commands
+> +    #
+> +    def boot(self, arch, kernel=None, kernel_cmdline=None,
+> +             options=None, timeout=5):
 
-What are the parentheses good for?
+I don't really like the fact that the timeout is passed at boot() and
+then applies to the entire pexpect session.
 
-baruch
+Indeed, within a single pexpect session, we may have some commands that
+are expected to be short, some commands that are expected to be long.
 
->  
->  config BR2_GCC_TARGET_ABI
->  	default "aapcs-linux"	if BR2_arm || BR2_armeb
+The .expect() method of the spawn class does have a timeout argument,
+so I believe we could do that per-command.
 
+Do you think it would be possible to instead add the timeout to
+emulator.run() instead, and use it only when starting the interpreter ?
+
+Thanks!
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
