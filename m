@@ -1,67 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Jul 2017 13:01:31 +0200
-Subject: [Buildroot] [PATCH 2/5] arch/arm: fix defaults for AArch64 in
- 64-bit mode
-In-Reply-To: <20170705105506.eutzkvcalunabk2b@tarshish>
-References: <cover.1499250321.git.yann.morin.1998@free.fr>
- <354db2be118602b0b12429d6d0f897455918ea12.1499250321.git.yann.morin.1998@free.fr>
- <20170705105506.eutzkvcalunabk2b@tarshish>
-Message-ID: <20170705110131.GG3499@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 13:14:38 +0200
+Subject: [Buildroot] [PATCH v6 01/10] support/scripts: check-host-rpath
+ now handles $ORIGIN/../lib
+In-Reply-To: <1499185359-8293-2-git-send-email-wg@grandegger.com>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <1499185359-8293-2-git-send-email-wg@grandegger.com>
+Message-ID: <20170705131438.45b0a817@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hello,
 
-On 2017-07-05 13:55 +0300, Baruch Siach spake thusly:
-> On Wed, Jul 05, 2017 at 12:25:34PM +0200, Yann E. MORIN wrote:
-> > Even in 64-bit mode we have to specify the -mcpu value.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  arch/Config.in.arm | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> > index aaf4506d7f..e6beacf3d8 100644
-> > --- a/arch/Config.in.arm
-> > +++ b/arch/Config.in.arm
-> > @@ -534,9 +534,9 @@ config BR2_GCC_TARGET_CPU
-> >  	default "strongarm"	if BR2_strongarm
-> >  	default "xscale"	if BR2_xscale
-> >  	default "iwmmxt"	if BR2_iwmmxt
-> > -	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
-> > -	default "cortex-a57"		if (BR2_cortex_a57 && !BR2_ARCH_IS_64)
-> > -	default "cortex-a72"		if (BR2_cortex_a72 && !BR2_ARCH_IS_64)
-> > +	default "cortex-a53"		if (BR2_cortex_a53)
-> > +	default "cortex-a57"		if (BR2_cortex_a57)
-> > +	default "cortex-a72"		if (BR2_cortex_a72)
+On Tue,  4 Jul 2017 18:22:30 +0200, Wolfgang Grandegger wrote:
+> The new RPath sanitization uses now the relative path
+> "$ORIGIN/../lib" for binaries in "/usr/bin".
 > 
-> What are the parentheses good for?
-
-They are just so that the series is not applied on the first go. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> baruch
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  support/scripts/check-host-rpath | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> >  
-> >  config BR2_GCC_TARGET_ABI
-> >  	default "aapcs-linux"	if BR2_arm || BR2_armeb
-> 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+> index 020c123..e79560b 100755
+> --- a/support/scripts/check-host-rpath
+> +++ b/support/scripts/check-host-rpath
+> @@ -58,7 +58,7 @@ check_elf_has_rpath() {
+>          for dir in ${rpath//:/ }; do
+>              # Remove duplicate and trailing '/' for proper match
+>              dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+> -            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
+> +            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
 
+I guess this needs to be revisited with the removal of $(HOST_DIR)/usr:
+now everything is under $(HOST_DIR) directly.
+
+Could you rebase your series on the latest master, in which I just
+merged earlier today Arnout patches removing $(HOST_DIR)/usr ?
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
