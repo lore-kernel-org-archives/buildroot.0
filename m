@@ -1,12 +1,15 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  5 Jul 2017 13:22:03 +0200
-Subject: [Buildroot] [PATCH 1/2] package/pulseaudio: remove kde files
-Message-ID: <20170705112204.12442-1-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 13:24:38 +0200
+Subject: [Buildroot] [git commit] package/pulseaudio: remove kde files
+Message-ID: <20170705112134.8469081EF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=90536c3dfc8e375ebac2042ae9741e98b4ebc8f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Upstream removed the src/daemon/pulseaudio-kde.desktop.in since the
 version 6.0 [1].
@@ -14,6 +17,7 @@ version 6.0 [1].
 [1] https://github.com/pulseaudio/pulseaudio/commit/f46799579f438125b695dced4edf8bca05cbe90a
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/pulseaudio/pulseaudio.mk | 2 --
  1 file changed, 2 deletions(-)
@@ -31,5 +35,3 @@ index 0c409a7..54a9a61 100644
  endef
  PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FIXUP_DESKTOP_FILES
  endif
--- 
-2.9.4
