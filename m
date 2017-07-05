@@ -1,111 +1,237 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Wed, 5 Jul 2017 14:34:46 -0700
-Subject: [Buildroot] [PATCH] python-systemd: add new package
-In-Reply-To: <CAGm1_kt1LUEfa-pQOMFJLvoiq6yL256rjyPT0N++qv5LH9XkAg@mail.gmail.com>
-References: <20170704194716.15130-1-andrew.smirnov@gmail.com>
- <CAGm1_kt1LUEfa-pQOMFJLvoiq6yL256rjyPT0N++qv5LH9XkAg@mail.gmail.com>
-Message-ID: <CAHQ1cqGUGfABXZPesD+nbnTENx4t5_Jvcb6Kf6oWpLiWtp28Ag@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed,  5 Jul 2017 23:39:35 +0200
+Subject: [Buildroot] [PATCH v9 1/2] fs/ext2: rename
+	BR2_TARGET_ROOTFS_EXT2_BLOCKS -> BR2_TARGET_ROOTFS_EXT2_SIZE
+Message-ID: <20170705213936.22344-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 5, 2017 at 2:46 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Hi Andrey,
->
-> On Tue, Jul 4, 2017 at 9:47 PM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
->> Add package for official python bindings availibe as a part of systemd
->> project at: https://github.com/systemd/python-systemd
->>
->> Minimal config snippet for utils/test-pkg is as follows (sans
->> backslashes):
->>
->> \# BR2_INIT_BUSYBOX is not set
->> \# BR2_INIT_SYSV is not set
->> BR2_INIT_SYSTEMD=y
->> \# BR2_INIT_NONE is not set
->> BR2_PACKAGE_PYTHON3=y
->> BR2_PACKAGE_PYTHON_SYSTEMD=y
->>
->> Cc: Yegor Yefremov <yegorslists@googlemail.com>
->> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
->> ---
->>  DEVELOPERS                               |  1 +
->>  package/Config.in                        |  1 +
->>  package/python-systemd/Config.in         |  7 +++++++
->>  package/python-systemd/python-systemd.mk | 14 ++++++++++++++
->
-> python-systemd.hash file is missing.
+This change deprecates the ext2/3/4 rootfs size in blocks symbol in
+favor of one that mimic the fs-size argument behavior of mkfs (i.e.
+size in a human readable format accepting k, m, g or t suffix or their
+upper-case variants).
 
-Dang! Forgot to "git add" it. Will fix in v2.
+This change also updates the defconfigs that used to set
+BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol.
 
->
->>  4 files changed, 23 insertions(+)
->>  create mode 100644 package/python-systemd/Config.in
->>  create mode 100644 package/python-systemd/python-systemd.mk
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index 7c8d7f1..08a138a 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -94,6 +94,7 @@ F:    package/python-pathlib2/
->>  F:     package/python-pickleshare/
->>  F:     package/python-scandir/
->>  F:     package/python-simplegeneric/
->> +F:     package/python-systemd/
->>  F:     package/python-traitlets/
->>
->>  N:     Andrey Yurovsky <yurovsky@gmail.com>
->> diff --git a/package/Config.in b/package/Config.in
->> index a811ff6..af1aa0c 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -860,6 +860,7 @@ menu "External python modules"
->>         source "package/python-socketio/Config.in"
->>         source "package/python-sortedcontainers//Config.in"
->>         source "package/python-spidev/Config.in"
->> +       source "package/python-systemd/Config.in"
->>         source "package/python-tempora/Config.in"
->>         source "package/python-thrift/Config.in"
->>         source "package/python-tomako/Config.in"
->> diff --git a/package/python-systemd/Config.in b/package/python-systemd/Config.in
->> new file mode 100644
->> index 0000000..83fdcb4
->> --- /dev/null
->> +++ b/package/python-systemd/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_PYTHON_SYSTEMD
->> +       bool "python-systemd"
->> +       depends on BR2_PACKAGE_SYSTEMD
->> +       help
->> +         Python module for native access to the systemd facilities.
->> +
->> +         https://github.com/systemd/python-systemd
->
-> Missing comment saying, that this package needs systemd
->
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-OK, will fix in v2.
+---
+changes v8->v9:
+- fix BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP condition (Arnout, ThomasP)
 
->> diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
->> new file mode 100644
->> index 0000000..a3684c4
->> --- /dev/null
->> +++ b/package/python-systemd/python-systemd.mk
->> @@ -0,0 +1,14 @@
->> +################################################################################
->> +#
->> +# python-systemd
->> +#
->> +################################################################################
->> +
->> +PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
->
-> put dependencies statement after license stuff
+changes v7->v8:
+- correctly wrap help text (Arnout)
 
-OK, will fix in v2.
+changes v6->v7:
+- rebase after usr/ removal
 
-Thanks,
-Andrey Smirnov
+changes v5->v6:
+- rebase
+- fix typo (Peter)
+- add comments in legacy (Arnout)
+- quote EXT2_SIZE usage (Arnout)
+- use more human-friendly size (defaults + defconfigs) (Arnout)
+- trigger legacy when using the deprecated valid (Arnout)
+
+changes v4->v5:
+- new patch (Arnout)
+---
+ Config.in.legacy                            | 15 +++++++++++++++
+ configs/at91sam9x5ek_mmc_dev_defconfig      |  2 +-
+ configs/beaglebone_qt5_defconfig            |  2 +-
+ configs/firefly_rk3288_demo_defconfig       |  2 +-
+ configs/minnowboard_max-graphical_defconfig |  3 +--
+ configs/nanopi_neo_defconfig                |  2 +-
+ configs/pc_x86_64_bios_defconfig            |  2 +-
+ configs/pc_x86_64_efi_defconfig             |  2 +-
+ configs/raspberrypi3_64_defconfig           |  2 +-
+ fs/ext2/Config.in                           | 14 +++++++++-----
+ fs/ext2/ext2.mk                             |  7 ++++++-
+ 11 files changed, 38 insertions(+), 15 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 12362da6f2..5f12dea624 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -152,6 +152,21 @@ config BR2_PACKAGE_HOST_MKE2IMG
+ 	  We now call mkfs directly to generate ext2/3/4 filesystem
+ 	  image, so mke2img is no longer necessary.
+ 
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS
++	int "exact size in blocks has been removed"
++	default 0
++	help
++	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
++	  It has been set automatically to the value you had before.
++
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
++	bool
++	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 && \
++		BR2_TARGET_ROOTFS_EXT2_BLOCKS != 61440 # deprecated default value
++	select BR2_LEGACY
++
++# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP still reference in fs/ext2/Config.in
++
+ config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+ 	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+ 	default 0
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index 0060111fca..d704b8152a 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -81,7 +81,7 @@ BR2_PACKAGE_VIM=y
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ 
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 34063739a2..4135f718ed 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=126976
++BR2_TARGET_ROOTFS_EXT2_SIZE="124M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
+index 0f4dd368c4..d394ede30e 100644
+--- a/configs/firefly_rk3288_demo_defconfig
++++ b/configs/firefly_rk3288_demo_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_QT5BASE_EGLFS=y
+ BR2_PACKAGE_MALI_T76X=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=250000
++BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index 1a2cd33be2..3540f9fa87 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -68,6 +68,5 @@ BR2_PACKAGE_STARTUP_NOTIFICATION=y
+ # Filesystem image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+-
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index a22705269d..aa464917b5 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ # Build an sdcard image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=32768
++BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_ROOTFS_EXT2_INODES=8192
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index d64f09a1dc..7e852f3650 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_GRUB2=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index ea2abc39be..f558c3e8cb 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_GRUB2_X86_64_EFI=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 13a505b031..23db9ccb05 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -30,7 +30,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 9c58ac62ed..a851afb439 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -44,12 +44,16 @@ config BR2_TARGET_ROOTFS_EXT2_REV
+ config BR2_TARGET_ROOTFS_EXT2_LABEL
+ 	string "filesystem label"
+ 
+-# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
+-config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	int "exact size in blocks"
+-	default 61440
++config BR2_TARGET_ROOTFS_EXT2_SIZE
++	string "exact size"
++	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
++	default "60M" # default size
+ 	help
+-	  Specify the file system size as a number of 1024-byte blocks.
++	  The size of the filesystem image. If it does not have a suffix,
++	  it is interpreted as power-of-two kilobytes. If it is suffixed
++	  by 'k', 'm', 'g', 't' (either upper-case or lower-case), then
++	  it is interpreted in power-of-two kilobytes, megabytes,
++	  gigabytes, terabytes, etc.
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 99d03f10cf..fdd4a389a0 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -4,6 +4,11 @@
+ #
+ ################################################################################
+ 
++EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
++ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
++$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
++endif
++
+ # qstrip results in stripping consecutive spaces into a single one. So the
+ # variable is not qstrip-ed to preserve the integrity of the string value.
+ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+@@ -21,7 +26,7 @@ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+ define ROOTFS_EXT2_CMD
+ 	rm -f $@
+ 	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
+-		 $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
++		"$(EXT2_SIZE)"
+ endef
+ 
+ rootfs-ext2-symlink:
+-- 
+2.13.2
