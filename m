@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:26:51 +0200
-Subject: [Buildroot] [PATCH] pciutils: bump to version 3.5.5
-In-Reply-To: <1499262582-20744-1-git-send-email-fabio.estevam@nxp.com>
-References: <1499262582-20744-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20170705162651.0980b620@windsurf>
+Date: Wed, 5 Jul 2017 16:27:07 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: add BR2_HOST_GCC_AT_LEAST_7
+In-Reply-To: <20170705130633.12365-2-aperez@igalia.com>
+References: <20170705130633.12365-1-aperez@igalia.com>
+ <20170705130633.12365-2-aperez@igalia.com>
+Message-ID: <20170705162707.67247d32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 5 Jul 2017 10:49:42 -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@gmail.com>
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+On Wed,  5 Jul 2017 16:06:33 +0300, Adrian Perez de Castro wrote:
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/pciutils/pciutils.hash | 2 +-
->  package/pciutils/pciutils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
 
 Applied to master, thanks.
 
