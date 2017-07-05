@@ -1,125 +1,71 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Wed, 5 Jul 2017 19:12:08 +0200
-Subject: [Buildroot] [PATCH] package/linuxptp: remove incdefs.sh to
- avoid cross-compilation issues
-In-Reply-To: <20170705141028.28194-1-romain.naour@smile.fr>
-References: <20170705141028.28194-1-romain.naour@smile.fr>
-Message-ID: <7b3079cb-f604-6ab2-3da7-448dacf9ef55@jikos.cz>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Wed, 5 Jul 2017 10:19:01 -0700
+Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
+ being sorted alphabetically
+In-Reply-To: <CAGt4E5ueb6x_S4ff=dAeK-x9JnO1SmhnUGz+Q3XKUtj6s24L_Q@mail.gmail.com>
+References: <20170704235445.35255-1-code@mmayer.net>
+ <20170704235445.35255-2-code@mmayer.net>
+ <20170705072538.GE3499@scaer> <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
+ <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
+ <CAGt4E5ueb6x_S4ff=dAeK-x9JnO1SmhnUGz+Q3XKUtj6s24L_Q@mail.gmail.com>
+Message-ID: <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+On 5 July 2017 at 08:31, Markus Mayer <markus.mayer@broadcom.com> wrote:
 
-thank you for the patch. A few comments from my side.
-
-Setting the headers dependency is a good thing.
-The package homepage says the minimum required kernel version is 3.0. So 
-the limit can be set to that. Kernel headers 3.2 seem to be too restrictive.
-
-What else was exactly failing in your case? Maybe there are some 
-improvements I can propose to the package mainstream?
-Certainly hard-coding these the literals is not optimal. It might work 
-for you but fail in other configurations...
-
-Regards
-Petr
-
-On 05/07/17 16:10, Romain Naour wrote:
-> incdefs.sh try to define some flags based on some build tests and
-> by checking a kernel header. It doesn't work well while cross-compiling.
+> I got the error, "Your kernel version is too old and does not have the
+> tmon tool.", because it tried building linux-tool-tmon before
+> extracting the kernel. Running make a second time succeed, because it
+> extracted the kernel right away. This was an Ubuntu box running 16.04.
 >
-> The Buildroot buildsystem define these definition directly
-> in the EXTRA_CFLAGS.
+> I will try again to see if I can still reproduce it.
 >
-> Fixes:
-> http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
+> Also, I did figure out why it is sorted differently by "ls". The
+> locale is set to en_CA.UTF-8. I thought I had reset the locale.
+> Apparently not.
 >
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->   ...move-incdefs.sh-to-avoid-cross-compilatio.patch | 31 ++++++++++++++++++++++
->   package/linuxptp/Config.in                         |  4 +++
->   package/linuxptp/linuxptp.mk                       | 10 +++++--
->   3 files changed, 43 insertions(+), 2 deletions(-)
->   create mode 100644 package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
+> $ echo $LANG
+> en_CA.UTF-8
 >
-> diff --git a/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch b/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
-> new file mode 100644
-> index 0000000..cc932b4
-> --- /dev/null
-> +++ b/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
-> @@ -0,0 +1,31 @@
-> +From 0759b36ad0a728a49f329fa0e7e6173fe3ccb657 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@smile.fr>
-> +Date: Wed, 5 Jul 2017 15:37:22 +0200
-> +Subject: [PATCH] makefile: remove incdefs.sh to avoid cross-compilation issues
-> +
-> +The Buildroot buildsystem define these definition directly
-> +in the EXTRA_CFLAGS.
-> +
-> +Fixes:
-> +http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
-> +
-> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> +---
-> + makefile | 1 -
-> + 1 file changed, 1 deletion(-)
-> +
-> +diff --git a/makefile b/makefile
-> +index f898336..5912f9a 100644
-> +--- a/makefile
-> ++++ b/makefile
-> +@@ -33,7 +33,6 @@ OBJECTS	= $(OBJ) hwstamp_ctl.o phc2sys.o phc_ctl.o pmc.o pmc_common.o \
-> + SRC	= $(OBJECTS:.o=.c)
-> + DEPEND	= $(OBJECTS:.o=.d)
-> + srcdir	:= $(dir $(lastword $(MAKEFILE_LIST)))
-> +-incdefs := $(shell $(srcdir)/incdefs.sh)
-> + version := $(shell $(srcdir)/version.sh $(srcdir))
-> + VPATH	= $(srcdir)
-> +
-> +--
-> +2.9.4
-> +
-> diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
-> index 3e18a0c..8c9d684 100644
-> --- a/package/linuxptp/Config.in
-> +++ b/package/linuxptp/Config.in
-> @@ -1,5 +1,6 @@
->   config BR2_PACKAGE_LINUXPTP
->   	bool "linuxptp"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
->   	help
->   	  The Linux PTP Project is the Precision Time Protocol
->   	  implementation according to IEEE standard 1588 for Linux.
-> @@ -11,3 +12,6 @@ config BR2_PACKAGE_LINUXPTP
->   	  not a goal.
->   
->   	  http://linuxptp.sourceforge.net/
-> +
-> +comment "linuxptp needs a toolchain w/ headers >= 3.2"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-> diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-> index beb2591..35702e0 100644
-> --- a/package/linuxptp/linuxptp.mk
-> +++ b/package/linuxptp/linuxptp.mk
-> @@ -10,10 +10,16 @@ LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
->   LINUXPTP_LICENSE = GPL-2.0+
->   LINUXPTP_LICENSE_FILES = COPYING
->   
-> +# incdefs.sh doesn't work for cross-compilation.
-> +# Define HAVE_ONESTEP_SYNC in EXTRA_CFLAGS directly and depends on
-> +# kernel headers >= 3.2.
->   define LINUXPTP_BUILD_CMDS
->   	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
-> -		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
-> -		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
-> +		$(MAKE) \
-> +		EXTRA_CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE \
-> +			-DHAVE_ONESTEP_SYNC -DHAVE_CLOCK_ADJTIME \
-> +			-DHAVE_POSIX_SPAWN" \
-> +		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
->   		-C $(@D) all
->   endef
->   
+> $ ls -l
+> total 32
+> -rw-rw-r-- 1 mmayer mmayer 2965 Jul  4 11:13 Config.in
+> -rw-rw-r-- 1 mmayer mmayer 1084 May  9 10:46 linux-tool-cpupower.mk
+> -rw-rw-r-- 1 mmayer mmayer  721 May  9 10:46 linux-tool-gpio.mk
+> -rw-rw-r-- 1 mmayer mmayer  730 May  9 10:46 linux-tool-iio.mk
+> -rw-rw-r-- 1 mmayer mmayer 4015 May  9 10:46 linux-tool-perf.mk
+> -rw-rw-r-- 1 mmayer mmayer 1469 May  9 10:46 linux-tool-selftests.mk
+> -rw-rw-r-- 1 mmayer mmayer 1861 Jul  4 11:13 linux-tools.mk
+> -rw-rw-r-- 1 mmayer mmayer  832 Jul  4 11:13 linux-tool-tmon.mk
+>
+> $ LANG=C ls -l
+> total 32
+> -rw-rw-r-- 1 mmayer mmayer 2965 Jul  4 11:13 Config.in
+> -rw-rw-r-- 1 mmayer mmayer 1084 May  9 10:46 linux-tool-cpupower.mk
+> -rw-rw-r-- 1 mmayer mmayer  721 May  9 10:46 linux-tool-gpio.mk
+> -rw-rw-r-- 1 mmayer mmayer  730 May  9 10:46 linux-tool-iio.mk
+> -rw-rw-r-- 1 mmayer mmayer 4015 May  9 10:46 linux-tool-perf.mk
+> -rw-rw-r-- 1 mmayer mmayer 1469 May  9 10:46 linux-tool-selftests.mk
+> -rw-rw-r-- 1 mmayer mmayer  832 Jul  4 11:13 linux-tool-tmon.mk
+> -rw-rw-r-- 1 mmayer mmayer 1861 Jul  4 11:13 linux-tools.mk
+>
+> I'll experiment more with this and see what I can find out.
+
+Looks like the build is actually succeeding for me now. Not sure what
+happened originally when it bailed the way it did. My build must have
+been in a weird state. My apologies for the false alarm. I
+successfully built arm and arm64.
+
+This means, we don't need patch 1/2 after all.
+
+That said, and while I am a complete buildroot newbie, I do like the
+suggestion of creating sub-directories for the tools and including the
+makefiles from linux-tools.mk rather than relying on alphabetical
+sorting.
+
+Regards,
+-Markus
