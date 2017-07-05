@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 02:36:44 +0200
-Subject: [Buildroot] [PATCH] package/libglib2: add missing dependency on
- host-python[3]
-In-Reply-To: <20170705003038.5318-1-andrew.smirnov@gmail.com>
-References: <20170705003038.5318-1-andrew.smirnov@gmail.com>
-Message-ID: <ec246461-b4fe-b71b-1899-fd9a43fbb1e3@mind.be>
+Date: Wed, 5 Jul 2017 02:38:26 +0200
+Subject: [Buildroot] [PATCH 02/13] core/pkg-download: change all helpers
+ to use common options
+In-Reply-To: <20170704231413.GC3499@scaer>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-3-maxime.hadjinlian@gmail.com>
+ <fbacea0c-0c08-d8d0-9cda-3e404207ab1d@mind.be> <20170704231413.GC3499@scaer>
+Message-ID: <add0922b-b2ac-81cd-03a6-1dd86487a926@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +15,102 @@ To: buildroot@busybox.net
 
 
 
-On 05-07-17 02:30, Andrey Smirnov wrote:
-> Building gio/gdbus-2.0/codegen/ subdirectory requires host to have a
-> python interpreter. Add 'host-python'/'host-python3' as a dependency
-> to reflect that fact and prevent build failures.
+On 05-07-17 01:14, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2017-07-05 01:09 +0200, Arnout Vandecappelle spake thusly:
+>> On 04-07-17 18:22, Maxime Hadjinlian wrote:
+>>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> diff --git a/support/download/check-hash b/support/download/check-hash
+>>> index c1ff53c02b..bf2dbb1a8b 100755
+>>> --- a/support/download/check-hash
+>>> +++ b/support/download/check-hash
+>>> @@ -19,7 +19,7 @@ set -e
+>>>  #   3:  the hash file exists and there was no hash to check the file against
+>>>  #   4:  the hash file exists and at least one hash type is unknown
+>>>  
+>>> -while getopts :q OPT; do
+>>> +while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+>>
+>>  This doesn't make sense to me: the global DL_GETOPTS are never passed to
+>> check-hash, and you're not using any of them. So I'd keep the explicit :q here.
+> 
+> It took me a bit of time to understand what you meant, because
+> BR_BACKEND_DL_GETOPTS is actually exported by dl-wrapper, and it is
+> dl-wrapper that calls check-hash. So let me rephrase it, and you'll tell
+> me if I understood correctly:
+> 
+>     This doesn't make sense to me: none of the variabels from
+>     BR_BACKEND_DL_GETOPTS are ever passed to check-hash, so [...]
 
- Do you have an actual build failure for this? We already require a python to be
-present on the host, so there shouldn't be a need to build one here. And we
-really do want to avoid that libglib2 pulls in host-python (to limit the build
-time).
+ Yes, that's what I meant. I guess I don't formulate very clearly at 01:09 (much
+less at 02:38...)
 
  Regards,
  Arnout
 
 > 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
->  package/libglib2/libglib2.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Right? If so I agree.
 > 
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index 47d9f63..ba4c015 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -112,6 +112,14 @@ HOST_LIBGLIB2_DEPENDENCIES = \
->  	host-util-linux \
->  	host-zlib
->  
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +HOST_LIBGLIB2_DEPENDENCIES += host-python3
-> +LIBGLIB2_DEPENDENCIES      += host-python3
-> +else
-> +HOST_LIBGLIB2_DEPENDENCIES += host-python
-> +LIBGLIB2_DEPENDENCIES      += host-python
-> +endif
-> +
->  LIBGLIB2_CONF_OPTS = \
->  	--with-pcre=system
->  
+> Regards,
+> Yann E. MORIN.
+> 
+>>>      case "${OPT}" in
+>>>      q)  exec >/dev/null;;
+>>>      \?) exit 1;;
+>>
+>> [snip]
+>>> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+>>> index f944b71db5..a29411e0ae 100755
+>>> --- a/support/download/dl-wrapper
+>>> +++ b/support/download/dl-wrapper
+>>> @@ -19,6 +19,8 @@
+>>>  # We want to catch any unexpected failure, and exit immediately.
+>>>  set -e
+>>>  
+>>> +export BR_BACKEND_DL_GETOPTS=":hb:o:H:rRq"
+>>
+>>  Since this variable is defined here, it makes sense to also document the
+>> options here. In fact, to make it makes more sense to document them all here
+>> rather than in each individual backend. Of course, no need to go and remove it
+>> in each backend, but I would like to have then documented here. Especially since
+>> a later patch will also parse them here.
+>>
+>>> +
+>>>  main() {
+>>>      local OPT OPTARG
+>>>      local backend output hfile recurse quiet
+>>> @@ -83,7 +85,10 @@ main() {
+>>>      # If the backend fails, we can just remove the temporary directory to
+>>>      # remove all the cruft it may have left behind. Then we just exit in
+>>>      # error too.
+>>> -    if ! "${OLDPWD}/support/download/${backend}" ${quiet} ${recurse} "${tmpf}" "${@}"; then
+>>> +    if ! "${OLDPWD}/support/download/${backend}" \
+>>> +            ${quiet} ${recurse} \
+>>
+>>  I don't like it very much when options are mixed like this: either fill lines
+>> up completely, or do one option (or option combination, of course, like -o
+>> "...") per line. But since this will be changed again later it's not worth
+>> changing this patch.
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>> +            -o "${tmpf}" "${@}"
+>>> +    then
+>>>          rm -rf "${tmpd}"
+>>>          exit 1
+>>>      fi
+>> [snip]
+>>
+>>
+>> -- 
+>> Arnout Vandecappelle                          arnout at mind be
+>> Senior Embedded Software Architect            +32-16-286500
+>> Essensium/Mind                                http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 > 
 
 -- 
