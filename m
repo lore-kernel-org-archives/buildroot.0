@@ -1,47 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:54:12 +0200
-Subject: [Buildroot] [git commit] check-host-rpath: no longer allow
-	$(HOST_DIR)/usr
-Message-ID: <20170705145153.15A387FF07@busybox.osuosl.org>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Wed,  5 Jul 2017 20:25:21 +0530
+Subject: [Buildroot] [PATCH 1/7] glog: add hash for license file
+Message-ID: <1499266527-11091-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d11d6314cd5ab793b5f2db784d11614f2d2d604
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now all packages have been updated to install things in $(HOST_DIR)/lib
-instead of $(HOST_DIR)/usr/lib, there should no longer be any reason
-to have $(HOST_DIR)/usr/lib in the RPATH, so we don't allow it any more.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- support/scripts/check-host-rpath | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/glog/glog.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 2846d5e..74a25ba 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -1,7 +1,7 @@
- #!/usr/bin/env bash
- 
- # This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
--# they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
-+# they have an RPATH to $(HOST_DIR)/lib if they need libraries from
- # there.
- 
- # Override the user's locale so we are sure we can parse the output of
-@@ -59,8 +59,6 @@ check_elf_has_rpath() {
-             # Remove duplicate and trailing '/' for proper match
-             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
-             [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
--            # For the time being, the rpath is allowed with both usr/lib and lib
--            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
-         done
-     done < <( readelf -d "${file}"                                              \
-               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
+diff --git a/package/glog/glog.hash b/package/glog/glog.hash
+index 6f1efdb..909e072 100644
+--- a/package/glog/glog.hash
++++ b/package/glog/glog.hash
+@@ -1,2 +1,5 @@
+ # Locally computed
+ sha256 7580e408a2c0b5a89ca214739978ce6ff480b5e7d8d7698a2aa92fadc484d1e0  glog-v0.3.5.tar.gz
++
++# Hash for License file:
++sha256 0fc497129c5c69ff6f22da6933c7e4aaef082fde8437fd57680c2780100772a4  COPYING
+-- 
+2.7.4
