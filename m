@@ -1,49 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 11:50:29 +0200
-Subject: [Buildroot] [git commit] pkg-python: use $(HOST_DIR) instead of
-	$(HOST_DIR)/usr as prefix
-Message-ID: <20170705095036.73FA67FA7A@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 11:46:41 +0200
+Subject: [Buildroot] [git commit] gdb: Remove /usr part from installation
+	path of gdbserver
+Message-ID: <20170705095036.0F23F817B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=048689be87693b45a7d682ebe2754d1db9bf4f61
+commit: https://git.buildroot.net/buildroot/commit/?id=967874a65589079cc8f9d2d0c6ec8c86cee100b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Remove the redundant usr/ component of the HOST_DIR paths. Since a
-previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
-everything keeps on working.
-
-Build-tested with a bunch of python packages.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-python.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gdb/gdb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 2418f5d..6e411ab 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -53,7 +53,7 @@ HOST_PKG_PYTHON_DISTUTILS_ENV = \
- 	PYTHONNOUSERSITE=1
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 7036b4c..9a97cb7 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -181,7 +181,7 @@ GDB_POST_INSTALL_TARGET_HOOKS += GDB_REMOVE_UNNEEDED_FILES
+ # does.
+ define GDB_SDK_INSTALL_GDBSERVER
+ 	$(INSTALL) -D -m 0755 $(TARGET_DIR)/usr/bin/gdbserver \
+-		$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/debug-root/usr/bin/gdbserver
++		$(HOST_DIR)/$(GNU_TARGET_NAME)/debug-root/usr/bin/gdbserver
+ endef
  
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)/usr
-+	--prefix=$(HOST_DIR)
- 
- # Target setuptools-based packages
- PKG_PYTHON_SETUPTOOLS_ENV = \
-@@ -83,7 +83,7 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PYTHONNOUSERSITE=1
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)/usr
-+	--prefix=$(HOST_DIR)
- 
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
+ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
