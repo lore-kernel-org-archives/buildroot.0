@@ -1,40 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 11:49:30 +0200
-Subject: [Buildroot] [git commit] pkg-cmake: use $(HOST_DIR) instead of
-	$(HOST_DIR)/usr as prefix
-Message-ID: <20170705095036.45C6A817B3@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 11:45:58 +0200
+Subject: [Buildroot] [git commit] check-host-rpath: no longer check
+	$(HOST_DIR)/usr/{bin, sbin}
+Message-ID: <20170705095035.D1EBD7FA7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b1255d8895beb9d7e27227a00856001e846620e
+commit: https://git.buildroot.net/buildroot/commit/?id=2295780a950cbcd8eb76b01ceb15503b0f973f55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove the redundant usr/ component of the HOST_DIR paths. Since a
-previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
-everything keeps on working.
-
-Build-tested with a bunch of cmake packages.
+Since $(HOST_DIR)/usr/{bin,sbin} are now symlinks to
+$(HOST_DIR)/{bin,sbin}, it makes no sense to check them - they are
+already covered.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/check-host-rpath | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 0897430..0606d26 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -115,7 +115,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
--		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
-+		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)" \
- 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index adabfdf..2846d5e 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env bash
+ 
+-# This script scans $(HOST_DIR)/{,usr/}{bin,sbin} for all ELF files, and checks
++# This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
+ # they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
+ # there.
+ 
+@@ -26,7 +26,7 @@ main() {
+             printf "*** ERROR: package %s installs executables without proper RPATH:\n" "${pkg}"
+         fi
+         printf "***   %s\n" "${file}"
+-    done < <( find "${hostdir}"/{,usr/}{bin,sbin} -type f -exec file {} + 2>/dev/null \
++    done < <( find "${hostdir}"/{bin,sbin} -type f -exec file {} + 2>/dev/null \
+               |sed -r -e '/^([^:]+):.*\<ELF\>.*\<executable\>.*/!d'                \
+                       -e 's//\1/'                                                  \
+             )
