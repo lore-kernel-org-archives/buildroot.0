@@ -1,33 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 18:10:21 +0200
-Subject: [Buildroot] [PATCH 1/3] support/testing: remove references to
- host/usr
-In-Reply-To: <20170705120950.23189-1-arnout@mind.be>
-References: <20170705120950.23189-1-arnout@mind.be>
-Message-ID: <20170705181021.12d90297@windsurf>
+Date: Wed, 5 Jul 2017 18:10:46 +0200
+Subject: [Buildroot] [git commit] toolchain/helpers.mk: fix creation of
+	DESTDIR in copy_toolchain_lib_root
+Message-ID: <20170705160800.22AB881805@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9971e936be6eb2ee5f531953bc35259d016dc60f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 5 Jul 2017 14:09:48 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The tools are now installed in host/bin instead of host/usr/bin.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  support/testing/tests/fs/test_ext.py      | 2 +-
->  support/testing/tests/fs/test_jffs2.py    | 2 +-
->  support/testing/tests/fs/test_squashfs.py | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+In commit b3cc7e65ee, the definition of the DESTDIR variable was moved
+down into the loop that follows symlinks in the libraries that are
+copied to target. However, the corresponding mkdir was not moved down,
+so that no directories are ever created.
 
-Series applied to master. Thanks!
+In practice, this mkdir is normally redundant since the directories
+should already have been created as part of creating STAGING_DIR.
+Still, the current situation is clearly wrong, so fix it by moving the
+mkdir down to after the assignment to DESTDIR.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+While we're at it, also remove a redundant empty line. It's a leftover
+from when a lot of variables were declared above.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6136aef..9942ce4 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -10,13 +10,12 @@
+ #
+ copy_toolchain_lib_root = \
+ 	LIBPATTERN="$(strip $1)"; \
+-\
+ 	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIBPATTERN}" 2>/dev/null` ; \
+ 	for LIBPATH in $${LIBPATHS} ; do \
+-		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ 		while true ; do \
+ 			LIBNAME=`basename $${LIBPATH}`; \
+ 			DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
++			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ 			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+ 			if test -h $${LIBPATH} ; then \
+ 				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
