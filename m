@@ -1,38 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:54:21 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with removal of
+Date: Wed, 5 Jul 2017 16:54:12 +0200
+Subject: [Buildroot] [git commit] check-host-rpath: no longer allow
 	$(HOST_DIR)/usr
-Message-ID: <20170705145153.39E0D81EE7@busybox.osuosl.org>
+Message-ID: <20170705145153.15A387FF07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51b3315b754327afa03e18491ec684eaa98101bd
+commit: https://git.buildroot.net/buildroot/commit/?id=1d11d6314cd5ab793b5f2db784d11614f2d2d604
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Now all packages have been updated to install things in $(HOST_DIR)/lib
+instead of $(HOST_DIR)/usr/lib, there should no longer be any reason
+to have $(HOST_DIR)/usr/lib in the RPATH, so we don't allow it any more.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- CHANGES | 7 +++++++
- 1 file changed, 7 insertions(+)
+ support/scripts/check-host-rpath | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 105c931..a530e8f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -17,6 +17,13 @@
- 	Therefore, if you need NLS support in packages, you must now
- 	explicitly enable the BR2_SYSTEM_ENABLE_NLS option.
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 2846d5e..74a25ba 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
  
-+	Infrastructure:
-+
-+	- The host directory no longer has a usr/ component. This
-+	  makes it much more natural to use that directory as an
-+	  externally used toolchain. For compatibility with existing
-+	  scripts, a link usr -> . is still added.
-+
- 2017.05.1, Released July 4th, 2017
+ # This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
+-# they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
++# they have an RPATH to $(HOST_DIR)/lib if they need libraries from
+ # there.
  
- 	Important / security related fixes.
+ # Override the user's locale so we are sure we can parse the output of
+@@ -59,8 +59,6 @@ check_elf_has_rpath() {
+             # Remove duplicate and trailing '/' for proper match
+             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+             [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
+-            # For the time being, the rpath is allowed with both usr/lib and lib
+-            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
+         done
+     done < <( readelf -d "${file}"                                              \
+               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
