@@ -1,50 +1,115 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  5 Jul 2017 09:55:57 +0200
-Subject: [Buildroot] [PATCH] package/kvazaar: disable on PowerPC
-Message-ID: <20170705075557.20288-1-romain.naour@smile.fr>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed,  5 Jul 2017 09:56:20 +0200
+Subject: [Buildroot] [PATCH v2] libzip: depend on !BR2_STATIC_LIBS
+Message-ID: <1499241380-1707-1-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a build issue with kvazaar on PowerPC due to deprecated vec_lvsl()
-function:
+Since version 1.2.0 libzip requires dynamic library capabilities. Add
+it to Config.in and propagate this dependency to packages selecting
+libzip.
 
-strategies/altivec/picture-altivec.c: In function ?reg_sad_altivec?:
-strategies/altivec/picture-altivec.c:43:5: error: vec_lvsl is deprecated for little endian; use assignment for unaligned loads and stores [-Werror=deprecated]
-perm1 = vec_lvsl(0, &data1[y * stride1]);
-^~~~~
-
-Fixes:
-http://autobuild.buildroot.net/results/486/486757f04bc73736b64d18c3298216280be897b1
-
-Upstream status:
-https://github.com/ultravideo/kvazaar/issues/172
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Fixes: http://autobuild.buildroot.net/results/c50/c50ffa5bf565e75333192edc89e2d39044d07f26/
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 ---
- package/kvazaar/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+v1->v2:
+- added comments explaining the !BR2_STATIC_LIBS dependency
+- propagated the dependency to packages selecting libzip
 
-diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
-index fb97369..558d161 100644
---- a/package/kvazaar/Config.in
-+++ b/package/kvazaar/Config.in
-@@ -3,11 +3,14 @@ config BR2_PACKAGE_KVAZAAR
- 	depends on BR2_INSTALL_LIBSTDCPP
+ package/libsigrok/Config.in  | 6 ++++--
+ package/libzip/Config.in     | 4 ++++
+ package/pulseview/Config.in  | 6 ++++--
+ package/sigrok-cli/Config.in | 7 +++++--
+ 4 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index d2d022ebf..658d029e7 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSIGROK
+ 	depends on BR2_USE_WCHAR
  	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	# use deprecated altivec vec_lvsl()
-+	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
+ 	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS # libzip
+ 	# std=c11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	select BR2_PACKAGE_LIBZIP
+@@ -34,6 +35,7 @@ comment "C++ bindings need a toolchain w/ C++, gcc >= 4.8"
+ 
+ endif
+ 
+-comment "libsigrok needs a toolchain w/ wchar, threads, gcc >= 4.7"
++comment "libsigrok needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
+diff --git a/package/libzip/Config.in b/package/libzip/Config.in
+index 54de9e5af..6c952ac46 100644
+--- a/package/libzip/Config.in
++++ b/package/libzip/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBZIP
+ 	bool "libzip"
++	depends on !BR2_STATIC_LIBS # dlsym()
+ 	select BR2_PACKAGE_ZLIB
  	help
- 	  An open-source HEVC encoder licensed under LGPLv2.1
+ 	  C library for reading, creating, and modifying zip archives. This
+ 	  package also contains zipcmp, ziptorrent and zipmerge utilities.
  
- 	  https://github.com/ultravideo/kvazaar
+ 	  http://www.nih.at/libzip/
++
++comment "libzip needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index 81c73e352..926376e78 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# libsigrok->libzip
++	depends on !BR2_STATIC_LIBS
+ 	# libsigrok
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	select BR2_PACKAGE_LIBSIGROK
+@@ -24,8 +26,8 @@ config BR2_PACKAGE_PULSEVIEW
  
- comment "kvazaar needs a toolchain w/ C++, threads"
-+	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 	  http://sigrok.org/wiki/PulseView
+ 
+-comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pulseview needs a toolchain w/ wchar, threads, dynamic library, C++, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
+index 236166595..75bd8c6d5 100644
+--- a/package/sigrok-cli/Config.in
++++ b/package/sigrok-cli/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_SIGROK_CLI
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
++	# libsigrok->libzip
++	depends on !BR2_STATIC_LIBS
+ 	# libsigrok
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	select BR2_PACKAGE_LIBSIGROK
+@@ -13,6 +15,7 @@ config BR2_PACKAGE_SIGROK_CLI
+ 
+ 	  http://sigrok.org/wiki/Sigrok-cli
+ 
+-comment "sigrok-cli needs a toolchain w/ wchar, threads, gcc >= 4.7"
++comment "sigrok-cli needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
 -- 
-2.9.4
+2.13.2
