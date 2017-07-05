@@ -1,222 +1,124 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  5 Jul 2017 18:32:52 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/kodi: broken with sunxi mali
-	package
-Message-ID: <20170705163254.15156-1-bernd.kuhls@t-online.de>
+Date: Wed,  5 Jul 2017 18:32:54 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/kodi: Add support for more archs
+In-Reply-To: <20170705163254.15156-1-bernd.kuhls@t-online.de>
+References: <20170705163254.15156-1-bernd.kuhls@t-online.de>
+Message-ID: <20170705163254.15156-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building this defconfig
+For the autoconf-based build system it was necessary to allow each
+supported architecture separatly:
+https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_ARM_INSTRUCTIONS_THUMB2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_SUNXI_MALI=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_PY_ONLY=y
-
-ends up with this build error:
-
-[ 98%] Building CXX object build/windowing/egl/CMakeFiles/windowing_egl.dir/EGLWrapper.cpp.o
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In function ?bool {anonymous}::CorrectGuess(CEGLNativeType*, const string&)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:63:13: error: invalid use of incomplete type ?class CEGLNativeType?
-     if(guess->CheckCompatibility())
-             ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:65:34: error: invalid use of incomplete type ?class CEGLNativeType?
-       if (implementation == guess->GetNativeName() ||
-                                  ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::Initialize(const string&)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:105:7: error: expected primary-expression before ?)? token
-       )
-       ^
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:109:18: error: invalid use of incomplete type ?class CEGLNativeType?
-     m_nativeTypes->Initialize();
-                  ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::Destroy()?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:121:16: error: invalid use of incomplete type ?class CEGLNativeType?
-   m_nativeTypes->Destroy();
-                ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:123:10: warning: possible problem detected in invocation of delete operator: [-Wdelete-incomplete]
-   delete m_nativeTypes;
-          ^~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:123:10: warning: invalid use of incomplete type ?class CEGLNativeType?
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:123:10: note: neither the destructor nor the class-specific operator delete will be called, even if they are declared when the class is defined
-   delete m_nativeTypes;
-          ^~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?std::__cxx11::string CEGLWrapper::GetNativeName()?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:131:25: error: invalid use of incomplete type ?class CEGLNativeType?
-     return m_nativeTypes->GetNativeName();
-                         ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::CreateNativeDisplay()?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:140:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->CreateNativeDisplay();
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::CreateNativeWindow()?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:148:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->CreateNativeWindow();
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?void CEGLWrapper::DestroyNativeDisplay()?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:154:18: error: invalid use of incomplete type ?class CEGLNativeType?
-     m_nativeTypes->DestroyNativeDisplay();
-                  ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?void CEGLWrapper::DestroyNativeWindow()?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:160:18: error: invalid use of incomplete type ?class CEGLNativeType?
-     m_nativeTypes->DestroyNativeWindow();
-                  ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::SetNativeResolution(RESOLUTION_INFO&)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:167:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->SetNativeResolution(res);
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::ProbeResolutions(std::vector<RESOLUTION_INFO>&)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:174:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->ProbeResolutions(resolutions);
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::GetPreferredResolution(RESOLUTION_INFO*)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:182:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->GetPreferredResolution(res);
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::GetNativeResolution(RESOLUTION_INFO*)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:190:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->GetNativeResolution(res);
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::ShowWindow(bool)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:198:23: error: invalid use of incomplete type ?class CEGLNativeType?
-   return m_nativeTypes->ShowWindow(show);
-                       ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::GetQuirks(int*)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:205:26: error: invalid use of incomplete type ?class CEGLNativeType?
-   *quirks = m_nativeTypes->GetQuirks();
-                          ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::InitDisplay(void**)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:217:21: error: invalid use of incomplete type ?class CEGLNativeType?
-   if (!m_nativeTypes->GetNativeDisplay((XBNativeDisplayType**)&nativeDisplay))
-                     ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:217:41: error: ?XBNativeDisplayType? was not declared in this scope
-   if (!m_nativeTypes->GetNativeDisplay((XBNativeDisplayType**)&nativeDisplay))
-                                         ^~~~~~~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:217:62: error: expected primary-expression before ?)? token
-   if (!m_nativeTypes->GetNativeDisplay((XBNativeDisplayType**)&nativeDisplay))
-                                                              ^
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp: In member function ?bool CEGLWrapper::CreateSurface(EGLDisplay, EGLConfig, void**)?:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:288:21: error: invalid use of incomplete type ?class CEGLNativeType?
-   if (!m_nativeTypes->GetNativeWindow((XBNativeWindowType**)&nativeWindow))
-                     ^~
-In file included from /home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:40:0:
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.h:28:7: note: forward declaration of ?class CEGLNativeType?
- class CEGLNativeType;
-       ^~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:288:40: error: ?XBNativeWindowType? was not declared in this scope
-   if (!m_nativeTypes->GetNativeWindow((XBNativeWindowType**)&nativeWindow))
-                                        ^~~~~~~~~~~~~~~~~~
-/home/buildroot/output/build/kodi-17.3-Krypton/xbmc/windowing/egl/EGLWrapper.cpp:288:60: error: expected primary-expression before ?)? token
-   if (!m_nativeTypes->GetNativeWindow((XBNativeWindowType**)&nativeWindow))
-                                                            ^
+For the CMake build system this is not necessary anymore so we only
+blacklist archs in Config.in known to be broken.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: no changes
+v2: rebased
 
- package/kodi/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/kodi/Config.in |  6 +++---
+ package/kodi/kodi.mk   | 45 +++++++++++++++++++++++++++++++++++----------
+ 2 files changed, 38 insertions(+), 13 deletions(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 658670139..00e4fbaef 100644
+index 00e4fbaef..e0c16fac3 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -22,16 +22,21 @@ config BR2_PACKAGE_KODI_EGL_GLES
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
- 	depends on !BR2_PACKAGE_KODI_GL_EGL # prefer GL if available
-+	depends on !BR2_PACKAGE_SUNXI_MALI
- 
- config BR2_PACKAGE_KODI_GL_EGL
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
  	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on !BR2_PACKAGE_SUNXI_MALI
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+-		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+-		&& BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on BR2_USE_MMU # libcdio, and others
++# i386: needs sse (see upstream PR 10351)
++	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
++		&& !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
  
- comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
- 	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
+ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 3d6c70bee..e6fe5a6fa 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -57,6 +57,7 @@ KODI_EXTRA_DOWNLOADS = \
+ 	https://github.com/xbmc/libdvdread/archive/$(KODI_LIBDVDREAD_VERSION).tar.gz
  
-+comment "kodi does not support the sunxi mali driver"
-+	depends on BR2_PACKAGE_SUNXI_MALI
+ KODI_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(KODI_CXX_FLAGS)" \
+ 	-DENABLE_CCACHE=OFF \
+ 	-DENABLE_DVDCSS=ON \
+ 	-DENABLE_INTERNAL_CROSSGUID=OFF \
+@@ -70,14 +71,34 @@ KODI_CONF_OPTS += \
+ 	-DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
+ 	-DLIBDVDREAD_URL=$(DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
+-ifeq ($(BR2_arm),y)
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
++KODI_DEPENDENCIES += rpi-userland
++# These CPU-specific options are only used on rbpi:
++# https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L13
++ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
++endif
++else
++ifeq ($(BR2_arceb)$(BR2_arcle),y)
++KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
++else ifeq ($(BR2_armeb),y)
+ KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+-else ifeq ($(BR2_mips),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
+-else ifeq ($(BR2_i386),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
+-else ifeq ($(BR2_x86_64),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
++else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
++KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
++else
++# Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
++# see project/cmake/scripts/linux/ArchSetup.cmake
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
++endif
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+@@ -128,6 +149,11 @@ else
+ KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
+ endif
+ 
++# mips: uses __atomic_load_8
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++KODI_CXX_FLAGS += -latomic
++endif
 +
- menuconfig BR2_PACKAGE_KODI
- 	bool "kodi"
- 	depends on BR2_ENABLE_LOCALE
+ ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+ KODI_DEPENDENCIES += mysql
+@@ -229,9 +255,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+-KODI_CONF_OPTS += \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+-	-DENABLE_OPENGLES=ON
++KODI_CONF_OPTS += -DENABLE_OPENGLES=ON
++KODI_CXX_FLAGS = `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
+ else
+ KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
+ endif
 -- 
 2.11.0
