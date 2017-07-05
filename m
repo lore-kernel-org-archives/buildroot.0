@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:37 +0200
-Subject: [Buildroot] [PATCH v4 20/36] board/gdb/bfin-bf512: remove host/usr
-	reference from readme.txt
+Date: Wed, 5 Jul 2017 13:14:39 +0200
+Subject: [Buildroot] [PATCH v4 22/36] libffi: avoid $(HOST_DIR)/usr while
+	moving headers
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-21-arnout@mind.be>
+Message-ID: <20170705111453.2284-23-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/gdb/bfin-bf512/readme.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libffi/libffi.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/gdb/bfin-bf512/readme.txt b/board/gdb/bfin-bf512/readme.txt
-index a56b5bcfe9..b8ff250a04 100644
---- a/board/gdb/bfin-bf512/readme.txt
-+++ b/board/gdb/bfin-bf512/readme.txt
-@@ -1,10 +1,10 @@
- Run the simulation with GDB for FDPIC:
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 38ef2d60d0..32e01e9cd1 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -14,13 +14,13 @@ LIBFFI_AUTORECONF = YES
+ # Move the headers to the usual location, and adjust the .pc file
+ # accordingly.
+ define LIBFFI_MOVE_HEADERS
+-	mv $(1)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/usr/include/
++	mv $(1)/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/include/
+ 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
+-		$(1)/usr/lib/pkgconfig/libffi.pc
+-	rm -rf $(1)/usr/lib/libffi-*
++		$(1)/lib/pkgconfig/libffi.pc
++	rm -rf $(1)/lib/libffi-*
+ endef
  
-- ./output/host/usr/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
-+ ./output/host/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
+-LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR))
++LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR)/usr)
+ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
  
- Run the simulation with GDB for FLAT:
- 
-- ./output/host/usr/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
-+ ./output/host/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
- 
- The login prompt will appear in the terminal that started GDB.
- 
+ HOST_LIBFFI_MOVE_HOST_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(HOST_DIR))
 -- 
 2.13.2
