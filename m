@@ -1,98 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 12:59:59 +0200
-Subject: [Buildroot] [PATCH 2/3] testing/tests/package/test_python:
- refactor to support better code reuse
-In-Reply-To: <20170704185807.27189-2-andrew.smirnov@gmail.com>
-References: <20170704185807.27189-1-andrew.smirnov@gmail.com>
- <20170704185807.27189-2-andrew.smirnov@gmail.com>
-Message-ID: <20170705125959.09d059bc@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Jul 2017 13:01:31 +0200
+Subject: [Buildroot] [PATCH 2/5] arch/arm: fix defaults for AArch64 in
+ 64-bit mode
+In-Reply-To: <20170705105506.eutzkvcalunabk2b@tarshish>
+References: <cover.1499250321.git.yann.morin.1998@free.fr>
+ <354db2be118602b0b12429d6d0f897455918ea12.1499250321.git.yann.morin.1998@free.fr>
+ <20170705105506.eutzkvcalunabk2b@tarshish>
+Message-ID: <20170705110131.GG3499@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Baruch, All,
 
-The commit title should mention that a test for Python 3 is added. Or
-perhaps you could split this into two commits: one that does the
-refactor but keeps only the Python 2 test. And one that only adds the
-Python 3 test case on top of that.
-
-On Tue,  4 Jul 2017 11:58:06 -0700, Andrey Smirnov wrote:
-> Refactor TestPythonBase class in the following ways:
+On 2017-07-05 13:55 +0300, Baruch Siach spake thusly:
+> On Wed, Jul 05, 2017 at 12:25:34PM +0200, Yann E. MORIN wrote:
+> > Even in 64-bit mode we have to specify the -mcpu value.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  arch/Config.in.arm | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> > index aaf4506d7f..e6beacf3d8 100644
+> > --- a/arch/Config.in.arm
+> > +++ b/arch/Config.in.arm
+> > @@ -534,9 +534,9 @@ config BR2_GCC_TARGET_CPU
+> >  	default "strongarm"	if BR2_strongarm
+> >  	default "xscale"	if BR2_xscale
+> >  	default "iwmmxt"	if BR2_iwmmxt
+> > -	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
+> > -	default "cortex-a57"		if (BR2_cortex_a57 && !BR2_ARCH_IS_64)
+> > -	default "cortex-a72"		if (BR2_cortex_a72 && !BR2_ARCH_IS_64)
+> > +	default "cortex-a53"		if (BR2_cortex_a53)
+> > +	default "cortex-a57"		if (BR2_cortex_a57)
+> > +	default "cortex-a72"		if (BR2_cortex_a72)
 > 
-> 	 - Split single test_run() function into multiple smaller once
->            to allow derivative classes to mix and match what they want
->            to test. Also avoid naming any of the functions starting
->            with "test_" to prevent nose2 from picking up
->            TestPythonBase class as a class that defines any unit
->            tests.
+> What are the parentheses good for?
+
+They are just so that the series is not applied on the first go. ;-)
+
+Regards,
+Yann E. MORIN.
+
+> baruch
 > 
-> 	 - Allow derivative classes to specify QEMU/pexpect timeout in
->            login() method
+> >  
+> >  config BR2_GCC_TARGET_ABI
+> >  	default "aapcs-linux"	if BR2_arm || BR2_armeb
 > 
-> 	 - Do not hardcode 'python' as a interpreter to use and
->            specify that via class variable 'interpreter'. This way
->            classes that inherit from TestPythonBase can override this
->            particualr aspect of the test code
-> 
-> 	 - Change code of libc related test to be both Python2 and
->            Python3 compliant so as to be usable for testing both
-> 
-> 	 - Create two derivative classes TestPython2 and TestPython3
->            that perform all of the tests specified in TestPythonBase
->            using Python2 and Python3 correspondingly
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 
-Why use such a huge indentation for the bullet list?
-
-
-> -    def test_run(self):
-> +    def login(self, timeout=5):
->          cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
->          self.emulator.boot(arch="armv5",
->                             kernel="builtin",
-> -                           options=["-initrd", cpio_file])
-> +                           options=["-initrd", cpio_file],
-> +                           timeout)
->          self.emulator.login()
-> -        cmd = "python --version 2>&1 | grep '^Python 2'"
-> -        _, exit_code = self.emulator.run(cmd)
-> -        self.assertEqual(exit_code, 0)
-
-I'm not a big fan of having a method called .login() also start the
-interpreter, it feels a bit weird.
-
-> +class TestPython2(TestPythonBase):
-> +    config = TestPythonBase.config + \
-> +"""
-> +BR2_PACKAGE_PYTHON=y
-> +"""
-> +    def test_run(self):
-> +        self.login()
-> +        self.version_test("Python 2")
-> +        self.math_floor_test()
-> +        self.libc_time_test()
-> +        self.zlib_test()
-> +
-> +class TestPython3(TestPythonBase):
-> +    config = TestPythonBase.config + \
-> +"""
-> +BR2_PACKAGE_PYTHON3=y
-> +"""
-> +    def test_run(self):
-> +        self.login()
-> +        self.version_test("Python 3")
-> +        self.math_floor_test()
-> +        self.libc_time_test()
-> +        self.zlib_test()
-
-This indeed looks really nice!
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
