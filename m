@@ -1,122 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 02:38:26 +0200
-Subject: [Buildroot] [PATCH 02/13] core/pkg-download: change all helpers
- to use common options
-In-Reply-To: <20170704231413.GC3499@scaer>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-3-maxime.hadjinlian@gmail.com>
- <fbacea0c-0c08-d8d0-9cda-3e404207ab1d@mind.be> <20170704231413.GC3499@scaer>
-Message-ID: <add0922b-b2ac-81cd-03a6-1dd86487a926@mind.be>
+From: GitLab <gitlab@mg.gitlab.com>
+Date: Wed, 05 Jul 2017 01:11:14 +0000
+Subject: [Buildroot] buildroot | Pipeline #9582146 has failed for master |
+	2fce2056
+Message-ID: <595c3cb26d417_6a8f3fe97ad911e489063@sidekiq05.mail>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Your pipeline has failed.
+
+Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
+Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
+
+Commit: 2fce2056 ( https://gitlab.com/buildroot.org/buildroot/commit/2fce205673945c40c1ce3b0121eb6665348f371f )
+Commit Message: CHANGES: add details on the gettext revamp
+
+The...
+Commit Author: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
+
+Pipeline #9582146 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9582146 ) triggered by arnout ( https://gitlab.com/arnout )
+had 2 failed builds.
+
+Job #21103457 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21103457 )
+
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubExternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 117.498s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=21103457 responseStatus[0;m=201 Created token[0;m=zjiP7ncv
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #21103458 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21103458 )
+
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubInternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 109.595s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=21103458 responseStatus[0;m=201 Created token[0;m=R4Pu97Jm
+[31;1mERROR: Job failed: exit code 1
+[0;m
 
 
-On 05-07-17 01:14, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2017-07-05 01:09 +0200, Arnout Vandecappelle spake thusly:
->> On 04-07-17 18:22, Maxime Hadjinlian wrote:
->>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> diff --git a/support/download/check-hash b/support/download/check-hash
->>> index c1ff53c02b..bf2dbb1a8b 100755
->>> --- a/support/download/check-hash
->>> +++ b/support/download/check-hash
->>> @@ -19,7 +19,7 @@ set -e
->>>  #   3:  the hash file exists and there was no hash to check the file against
->>>  #   4:  the hash file exists and at least one hash type is unknown
->>>  
->>> -while getopts :q OPT; do
->>> +while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
->>
->>  This doesn't make sense to me: the global DL_GETOPTS are never passed to
->> check-hash, and you're not using any of them. So I'd keep the explicit :q here.
-> 
-> It took me a bit of time to understand what you meant, because
-> BR_BACKEND_DL_GETOPTS is actually exported by dl-wrapper, and it is
-> dl-wrapper that calls check-hash. So let me rephrase it, and you'll tell
-> me if I understood correctly:
-> 
->     This doesn't make sense to me: none of the variabels from
->     BR_BACKEND_DL_GETOPTS are ever passed to check-hash, so [...]
-
- Yes, that's what I meant. I guess I don't formulate very clearly at 01:09 (much
-less at 02:38...)
-
- Regards,
- Arnout
-
-> 
-> Right? If so I agree.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>>      case "${OPT}" in
->>>      q)  exec >/dev/null;;
->>>      \?) exit 1;;
->>
->> [snip]
->>> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
->>> index f944b71db5..a29411e0ae 100755
->>> --- a/support/download/dl-wrapper
->>> +++ b/support/download/dl-wrapper
->>> @@ -19,6 +19,8 @@
->>>  # We want to catch any unexpected failure, and exit immediately.
->>>  set -e
->>>  
->>> +export BR_BACKEND_DL_GETOPTS=":hb:o:H:rRq"
->>
->>  Since this variable is defined here, it makes sense to also document the
->> options here. In fact, to make it makes more sense to document them all here
->> rather than in each individual backend. Of course, no need to go and remove it
->> in each backend, but I would like to have then documented here. Especially since
->> a later patch will also parse them here.
->>
->>> +
->>>  main() {
->>>      local OPT OPTARG
->>>      local backend output hfile recurse quiet
->>> @@ -83,7 +85,10 @@ main() {
->>>      # If the backend fails, we can just remove the temporary directory to
->>>      # remove all the cruft it may have left behind. Then we just exit in
->>>      # error too.
->>> -    if ! "${OLDPWD}/support/download/${backend}" ${quiet} ${recurse} "${tmpf}" "${@}"; then
->>> +    if ! "${OLDPWD}/support/download/${backend}" \
->>> +            ${quiet} ${recurse} \
->>
->>  I don't like it very much when options are mixed like this: either fill lines
->> up completely, or do one option (or option combination, of course, like -o
->> "...") per line. But since this will be changed again later it's not worth
->> changing this patch.
->>
->>  Regards,
->>  Arnout
->>
->>> +            -o "${tmpf}" "${@}"
->>> +    then
->>>          rm -rf "${tmpd}"
->>>          exit 1
->>>      fi
->> [snip]
->>
->>
->> -- 
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+---
+You're receiving this email because of your account on gitlab.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170705/8661281a/attachment.html>
