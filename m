@@ -1,142 +1,72 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 5 Jul 2017 22:26:57 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/kodi: Add support for more
-	archs
-In-Reply-To: <20170705163254.15156-3-bernd.kuhls@t-online.de>
-References: <20170705163254.15156-1-bernd.kuhls@t-online.de>
- <20170705163254.15156-3-bernd.kuhls@t-online.de>
-Message-ID: <CAHXCMMK5kgFrNrnxroea7ZAcxEEEeoHHSTRMhqCnAAgGxvnn4A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 22:30:55 +0200
+Subject: [Buildroot] [git commit] xvisor: fix build on AArch64
+Message-ID: <20170705202947.AB27B81F86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=117fd5dfbc756c4f2b4aef97fc2b568528c66df7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Jul 5, 2017 at 6:32 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> For the autoconf-based build system it was necessary to allow each
-> supported architecture separatly:
-> https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
->
-> For the CMake build system this is not necessary anymore so we only
-> blacklist archs in Config.in known to be broken.
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: rebased
->
->  package/kodi/Config.in |  6 +++---
->  package/kodi/kodi.mk   | 45 +++++++++++++++++++++++++++++++++++----------
->  2 files changed, 38 insertions(+), 13 deletions(-)
->
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index 00e4fbaef..e0c16fac3 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -1,9 +1,9 @@
->  config BR2_PACKAGE_KODI_ARCH_SUPPORTS
->         bool
-> -       default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-> -               && BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
-> -               && BR2_TOOLCHAIN_HAS_SYNC_8
->         depends on BR2_USE_MMU # libcdio, and others
-> +# i386: needs sse (see upstream PR 10351)
-> +       default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
-> +               && !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
->
->  comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
->         depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 3d6c70bee..e6fe5a6fa 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -57,6 +57,7 @@ KODI_EXTRA_DOWNLOADS = \
->         https://github.com/xbmc/libdvdread/archive/$(KODI_LIBDVDREAD_VERSION).tar.gz
->
->  KODI_CONF_OPTS += \
-> +       -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(KODI_CXX_FLAGS)" \
->         -DENABLE_CCACHE=OFF \
->         -DENABLE_DVDCSS=ON \
->         -DENABLE_INTERNAL_CROSSGUID=OFF \
-> @@ -70,14 +71,34 @@ KODI_CONF_OPTS += \
->         -DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
->         -DLIBDVDREAD_URL=$(DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
->
-> -ifeq ($(BR2_arm),y)
-> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> +KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
-> +KODI_DEPENDENCIES += rpi-userland
-> +# These CPU-specific options are only used on rbpi:
-> +# https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L13
-> +ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
-> +KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
-> +endif
-> +else
-> +ifeq ($(BR2_arceb)$(BR2_arcle),y)
-> +KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
-> +else ifeq ($(BR2_armeb),y)
->  KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
-> -else ifeq ($(BR2_mips),y)
-> -KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
-> -else ifeq ($(BR2_i386),y)
-> -KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
-> -else ifeq ($(BR2_x86_64),y)
-> -KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
-> +else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-> +KODI_CONF_OPTS += \
-> +       -DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
-> +       -DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
-> +else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
-> +KODI_CONF_OPTS += \
-> +       -DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
-> +       -DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
-> +else ifeq ($(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
-> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
-> +else
-> +# Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
-> +# see project/cmake/scripts/linux/ArchSetup.cmake
-> +KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
-> +endif
->  endif
->
->  ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-> @@ -128,6 +149,11 @@ else
->  KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
->  endif
->
-> +# mips: uses __atomic_load_8
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +KODI_CXX_FLAGS += -latomic
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
->  KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
->  KODI_DEPENDENCIES += mysql
-> @@ -229,9 +255,8 @@ endif
->
->  ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
->  KODI_DEPENDENCIES += libegl libgles
-> -KODI_CONF_OPTS += \
-> -       -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
-> -       -DENABLE_OPENGLES=ON
-> +KODI_CONF_OPTS += -DENABLE_OPENGLES=ON
-> +KODI_CXX_FLAGS = `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
+Xvisor was failing to build on AArch64 with:
 
-s/=/+=/ otherwise you may override "-latomic" set just above.
+package/xvisor/xvisor.mk:60: *** No Xvisor defconfig name specified, check your BR2_PACKAGE_XVISOR_DEFCONFIG setting.  Stop.
 
->  else
->  KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
->  endif
-> --
-> 2.11.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The first problem is that the Config.in file had a typo: it was using
+BR2_AARCH64 instead of BR2_aarch64, and therefore the
+BR2_PACKAGE_XVISOR_DEFCONFIG variable had no value.
 
-Regards,
+Once this is fixed, another problem occurs: the ARCH variable needs to
+be specified as "arm" for XVisor, for both ARM and AArch64. Therefore,
+a XVISOR_ARCH variable is introduced, which is calculated according to
+the Buildroot configuration options. Only x86-64, arm and aarch64 are
+supported by Xvisor currently, so it remains simple.
 
--- 
-Samuel
+Fixes:
+
+  http://autobuild.buildroot.net/results/1719a63ff257f13634a06a14327abfb327984101/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xvisor/Config.in |  2 +-
+ package/xvisor/xvisor.mk | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
+index 1f8fd1f..c9f7429 100644
+--- a/package/xvisor/Config.in
++++ b/package/xvisor/Config.in
+@@ -35,7 +35,7 @@ config BR2_PACKAGE_XVISOR_DEFCONFIG
+ 	default "generic-v5" if BR2_ARM_CPU_ARMV5
+ 	default "generic-v6" if BR2_ARM_CPU_ARMV6
+ 	default "generic-v7" if BR2_ARM_CPU_ARMV7A
+-	default "generic-v8" if BR2_AARCH64
++	default "generic-v8" if BR2_aarch64
+ 	default "x86_64_generic" if BR2_x86_64
+ 	depends on BR2_PACKAGE_XVISOR_USE_DEFCONFIG
+ 	help
+diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
+index 141a0e3..8be4be9 100644
+--- a/package/xvisor/xvisor.mk
++++ b/package/xvisor/xvisor.mk
+@@ -26,8 +26,16 @@ XVISOR_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE))
+ endif
+ XVISOR_KCONFIG_EDITORS = menuconfig
+ 
++ifeq ($(BR2_x86_64),y)
++XVISOR_ARCH = x86
++else ifeq ($(BR2_arm)$(BR2_aarch64),y)
++XVISOR_ARCH = arm
++else
++$(error "Architecture not supported by XVisor")
++endif
++
+ XVISOR_MAKE_ENV = \
+-	ARCH=$(if $(BR2_x86_64),x86,$(BR2_ARCH)) \
++	ARCH=$(XVISOR_ARCH) \
+ 	CROSS_COMPILE=$(TARGET_CROSS)
+ 
+ XVISOR_MAKE_OPTS = $(if $(VERBOSE),VERBOSE=1)
