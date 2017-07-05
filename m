@@ -1,38 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 14:09:50 +0200
-Subject: [Buildroot] [PATCH 3/3] CHANGES: update with removal of
-	$(HOST_DIR)/usr
-In-Reply-To: <20170705120950.23189-1-arnout@mind.be>
-References: <20170705120950.23189-1-arnout@mind.be>
-Message-ID: <20170705120950.23189-3-arnout@mind.be>
+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+Date: Wed,  5 Jul 2017 12:45:18 +0200
+Subject: [Buildroot] [PATCH 1/1] libpwquality: Link with zlib when required
+	in static builds
+Message-ID: <20170705104518.23599-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- CHANGES | 7 +++++++
- 1 file changed, 7 insertions(+)
+Fixes:
+http://autobuild.buildroot.net/results/cfb3a591391d90762a326d91af3ec502a6161ac5
 
-diff --git a/CHANGES b/CHANGES
-index 105c9318f4..a530e8fb45 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -17,6 +17,13 @@
- 	Therefore, if you need NLS support in packages, you must now
- 	explicitly enable the BR2_SYSTEM_ENABLE_NLS option.
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ package/libpwquality/libpwquality.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
+index 66b15d8..5b5c0e0 100644
+--- a/package/libpwquality/libpwquality.mk
++++ b/package/libpwquality/libpwquality.mk
+@@ -27,6 +27,11 @@ else
+ LIBPWQUALITY_CONF_OPTS += --disable-pam
+ endif
  
-+	Infrastructure:
++# Static link with cracklib requires -lz if zlib is enabled
++ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_ZLIB),y:y)
++LIBPWQUALITY_CONF_ENV += LIBS="-lz"
++endif
 +
-+	- The host directory no longer has a usr/ component. This
-+	  makes it much more natural to use that directory as an
-+	  externally used toolchain. For compatibility with existing
-+	  scripts, a link usr -> . is still added.
-+
- 2017.05.1, Released July 4th, 2017
- 
- 	Important / security related fixes.
+ ifeq ($(BR2_PACKAGE_LIBPWQUALITY_TOOLS),)
+ define LIBPWQUALITY_REMOVE_TOOLS
+ 	rm -f $(TARGET_DIR)/usr/bin/pwmake
 -- 
-2.13.2
+2.9.4
