@@ -1,29 +1,45 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Wed,  5 Jul 2017 20:25:27 +0530
-Subject: [Buildroot] [PATCH 7/7] cxxtest: add hash for license file
-In-Reply-To: <1499266527-11091-1-git-send-email-rahulbedarkar89@gmail.com>
-References: <1499266527-11091-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1499266527-11091-7-git-send-email-rahulbedarkar89@gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed, 5 Jul 2017 17:01:11 +0200
+Subject: [Buildroot] [PATCH] download: allow for BR2_PRIMARY_SITE(_ONLY)
+ environment override
+In-Reply-To: <87inj7ym6z.fsf@dell.be.48ers.dk>
+References: <20170705123359.19116-1-m.niestroj@grinn-global.com>
+ <87inj7ym6z.fsf@dell.be.48ers.dk>
+Message-ID: <fc0894de-0269-61e4-5acd-2adbe0007bf9@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- package/cxxtest/cxxtest.hash | 3 +++
- 1 file changed, 3 insertions(+)
+Hi,
 
-diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
-index f552e80..be2cbd3 100644
---- a/package/cxxtest/cxxtest.hash
-+++ b/package/cxxtest/cxxtest.hash
-@@ -1,2 +1,5 @@
- # Locally computed:
- sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
-+
-+# Hash for license file:
-+sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+On 05.07.2017 16:48, Peter Korsgaard wrote:
+>>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+> 
+>   > Allow BR2_PRIMARY_SITE and BR2_PRIMARY_SITE_ONLY .config options to be
+>   > overriden by environment variables with the same names.
+> 
+>   > This is usefull for CI build environments, so primary site can be
+>   > overridden without .config change. That way download can be speeded up
+>   > if using mirror servers in the same network as CI.
+> 
+> You can already pass these as make arguments (E.G. make
+> BR2_PRIMARY_SITE=".."). Is there any real reason why that cannot be used
+> by the CI setup instead?
+> 
+
+1. Environment variable allows to set this configuration in a single
+place, so in case of multiple CI jobs we do not need to modify the
+"make" step in each one.
+2. In case of CI setups that are configured by a file in project git
+repository (such as gitlab CI) we do not need to hardcode
+BR2_PRIMARY_SITE there.
+3. As a developer I want to have BR2_PRIMARY_SITE set in ~/.bashrc or
+something similar, so I do not need to issue
+"make BR2_PRIMARY_SITE=some_really_long_uri" every time in multiple
+Buildroot projects / board configurations that I have on my workstation.
+
 -- 
-2.7.4
+Regards,
+Marcin Niestroj
