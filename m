@@ -1,54 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:52 +0200
-Subject: [Buildroot] [git commit] checkpolicy: rework host installation
-Message-ID: <20170705141337.D8AB17FB34@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 16:06:50 +0200
+Subject: [Buildroot] [git commit] libselinux: rework host installation
+Message-ID: <20170705141337.C1B2881D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=283793a6ca28bbdb2d57a052c06ad3076390e760
+commit: https://git.buildroot.net/buildroot/commit/?id=8b8257e7d366a3c0306e1b3c0119193777555b0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-checkpolicy has a pretty peculiar interpretation of DESTDIR and PREFIX.
-PREFIX simply defaults to $(DESTDIR)/usr, and is used in the rest of
-the build system. DESTDIR isn't used any further.
+libselinux has a pretty peculiar interpretation of DESTDIR and PREFIX.
+PREFIX is not consistently used: some installation paths are forced to
+$(DESTDIR)/usr/... . In other cases, PREFIX is indeed used. PREFIX
+defaults to $(DESTDIR)/usr.
 
-For the host installation, we don't want the usr part, so set PREFIX
-instead of DESTDIR.
+Try to be a little bit more correct by passing both DESTDIR and PREFIX,
+both set to $(HOST_DIR). This is not a complete fix: man pages are
+still installed in $(HOST_DIR)/usr - but we don't care about that.
+
+Also simplify the symlink creation, like how it's done in libsepol.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/checkpolicy/checkpolicy.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ package/libselinux/libselinux.mk | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index d80bb79..f0cca59 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -31,17 +31,19 @@ endef
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 1698947..f23eea4 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -85,32 +85,31 @@ HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/
+ HOST_LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ endif
  
- HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
- 
--HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+# PREFIX is used at build time to find host-libselinux
-+HOST_CHECKPOLICY_MAKE_OPTS = \
-+	$(HOST_CONFIGURE_OPTS) \
++# DESTDIR is needed during the compile to compute library and header paths.
+ HOST_LIBSELINUX_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
++	DESTDIR=$(HOST_DIR) \
 +	PREFIX=$(HOST_DIR) \
- 	LEX="$(HOST_DIR)/bin/flex" \
- 	YACC="$(HOST_DIR)/bin/bison -y"
+ 	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
+ 	PYINC="$(HOST_LIBSELINUX_PYINC)" \
+ 	PYSITEDIR="$(HOST_DIR)/lib/$(HOST_LIBSELINUX_PYLIBVER)/site-packages" \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
  
--# DESTDIR is used at build time to find host-libselinux
- define HOST_CHECKPOLICY_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS)
+ define HOST_LIBSELINUX_BUILD_CMDS
+-	# DESTDIR is needed during the compile to compute library and
+-	# header paths.
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+-		SHLIBDIR=$(HOST_DIR)/lib all
++		$(HOST_LIBSELINUX_MAKE_OPTS) all
+ 	# Generate python interface wrapper
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
++		$(HOST_LIBSELINUX_MAKE_OPTS) swigify pywrap
  endef
  
- define HOST_CHECKPOLICY_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) install
+ define HOST_LIBSELINUX_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+-		SHLIBDIR=$(HOST_DIR)/lib SBINDIR=$(HOST_DIR)/sbin install
+-	(cd $(HOST_DIR)/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
++		$(HOST_LIBSELINUX_MAKE_OPTS) install
++	ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+ 	# Install python interface wrapper
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
++		$(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
  endef
  
  $(eval $(generic-package))
