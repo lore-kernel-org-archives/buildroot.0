@@ -1,53 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Jul 2017 13:20:43 +0200
-Subject: [Buildroot] [PATCH] legal-info: add hash for our own license file
-Message-ID: <20170705112043.22913-1-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed,  5 Jul 2017 13:22:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/pulseaudio: update the condition on
+	NLS
+In-Reply-To: <20170705112204.12442-1-romain.naour@smile.fr>
+References: <20170705112204.12442-1-romain.naour@smile.fr>
+Message-ID: <20170705112204.12442-2-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This silences the annoying warning that there is no hash file for our
-own COPYING file.
+Since the BR2_SYSTEM_ENABLE_NLS has been introduced [1], the
+NLS support can be disabled when BR2_ENABLE_LOCALE is enabled.
 
-Also change the message so that it is more obvious what we're doing.
+So change BR2_ENABLE_LOCALE by BR2_SYSTEM_ENABLE_NLS and while
+at it use a positive logic.
 
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Fixes:
+[nios2]  http://autobuild.buildroot.net/results/b69/b69c347e2866a97cc2c5d4844d567c4448592d72
+[xtensa] http://autobuild.buildroot.net/results/b63/b63fd204fe36200ed5de70fff23cb59cf2bc778c
 
+[1] dc057d2865afafbf76c2bc2685d2dfe852ba7c54
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-Note: the message is not properly aligned with the others, because
-saving our own license file is not part of a package action.
----
- Makefile                          | 4 ++--
- support/legal-info/buildroot.hash | 2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
- create mode 100644 support/legal-info/buildroot.hash
+ package/pulseaudio/pulseaudio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 19d8b442a3..1c243b9c80 100644
---- a/Makefile
-+++ b/Makefile
-@@ -744,8 +744,8 @@ legal-info-clean:
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 54a9a61..d6088b2 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -117,7 +117,7 @@ PULSEAUDIO_DEPENDENCIES += libxcb xlib_libSM xlib_libXtst
  
- .PHONY: legal-info-prepare
- legal-info-prepare: $(LEGAL_INFO_DIR)
--	@$(call MESSAGE,"Collecting legal info")
--	@$(call legal-license-file,buildroot,buildroot,.,COPYING,COPYING,HOST)
-+	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
-+	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
- 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
-diff --git a/support/legal-info/buildroot.hash b/support/legal-info/buildroot.hash
-new file mode 100644
-index 0000000000..1b62dbeef7
---- /dev/null
-+++ b/support/legal-info/buildroot.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 9755181e27175cb3510b4da8629caa406fb355a19aa8e7d55f06bf8ab33323c4  COPYING
+ # .desktop file generation needs nls support, so fake it for !locale builds
+ # https://bugs.freedesktop.org/show_bug.cgi?id=54658
+-ifneq ($(BR2_ENABLE_LOCALE),y)
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ define PULSEAUDIO_FIXUP_DESKTOP_FILES
+ 	cp $(@D)/src/daemon/pulseaudio.desktop.in \
+ 		$(@D)/src/daemon/pulseaudio.desktop
 -- 
-2.11.0
+2.9.4
