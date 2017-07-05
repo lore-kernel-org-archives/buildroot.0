@@ -1,109 +1,37 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 5 Jul 2017 11:46:04 +0200
-Subject: [Buildroot] [PATCH] python-systemd: add new package
-In-Reply-To: <20170704194716.15130-1-andrew.smirnov@gmail.com>
-References: <20170704194716.15130-1-andrew.smirnov@gmail.com>
-Message-ID: <CAGm1_kt1LUEfa-pQOMFJLvoiq6yL256rjyPT0N++qv5LH9XkAg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 11:46:15 +0200
+Subject: [Buildroot] [git commit] Makefile: remove $(HOST_DIR)/usr from
+	BR_PATH
+Message-ID: <20170705095035.E0F3B817B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andrey,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c8872d8e71a99a1eee448d57d25403dbab9dafc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Jul 4, 2017 at 9:47 PM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> Add package for official python bindings availibe as a part of systemd
-> project at: https://github.com/systemd/python-systemd
->
-> Minimal config snippet for utils/test-pkg is as follows (sans
-> backslashes):
->
-> \# BR2_INIT_BUSYBOX is not set
-> \# BR2_INIT_SYSV is not set
-> BR2_INIT_SYSTEMD=y
-> \# BR2_INIT_NONE is not set
-> BR2_PACKAGE_PYTHON3=y
-> BR2_PACKAGE_PYTHON_SYSTEMD=y
->
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/python-systemd/Config.in         |  7 +++++++
->  package/python-systemd/python-systemd.mk | 14 ++++++++++++++
+Now $(HOST_DIR)/usr is a symlink to $(HOST_DIR), it makes no sense to
+still have it in BR_PATH.
 
-python-systemd.hash file is missing.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  4 files changed, 23 insertions(+)
->  create mode 100644 package/python-systemd/Config.in
->  create mode 100644 package/python-systemd/python-systemd.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 7c8d7f1..08a138a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -94,6 +94,7 @@ F:    package/python-pathlib2/
->  F:     package/python-pickleshare/
->  F:     package/python-scandir/
->  F:     package/python-simplegeneric/
-> +F:     package/python-systemd/
->  F:     package/python-traitlets/
->
->  N:     Andrey Yurovsky <yurovsky@gmail.com>
-> diff --git a/package/Config.in b/package/Config.in
-> index a811ff6..af1aa0c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -860,6 +860,7 @@ menu "External python modules"
->         source "package/python-socketio/Config.in"
->         source "package/python-sortedcontainers//Config.in"
->         source "package/python-spidev/Config.in"
-> +       source "package/python-systemd/Config.in"
->         source "package/python-tempora/Config.in"
->         source "package/python-thrift/Config.in"
->         source "package/python-tomako/Config.in"
-> diff --git a/package/python-systemd/Config.in b/package/python-systemd/Config.in
-> new file mode 100644
-> index 0000000..83fdcb4
-> --- /dev/null
-> +++ b/package/python-systemd/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_SYSTEMD
-> +       bool "python-systemd"
-> +       depends on BR2_PACKAGE_SYSTEMD
-> +       help
-> +         Python module for native access to the systemd facilities.
-> +
-> +         https://github.com/systemd/python-systemd
-
-Missing comment saying, that this package needs systemd
-
-> diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
-> new file mode 100644
-> index 0000000..a3684c4
-> --- /dev/null
-> +++ b/package/python-systemd/python-systemd.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-systemd
-> +#
-> +################################################################################
-> +
-> +PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
-
-put dependencies statement after license stuff
-
-Yegor
-
-> +PYTHON_SYSTEMD_VERSION = 233 # Should be kept in sync with $(SYSTEMD_VERSION)
-> +PYTHON_SYSTEMD_SITE = $(call github,systemd,python-systemd,v$(PYTHON_SYSTEMD_VERSION))
-> +PYTHON_SYSTEMD_SETUP_TYPE = distutils
-> +PYTHON_SYSTEMD_LICENSE = LGPL-2.1
-> +PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
-> +
-> +$(eval $(python-package))
-> --
-> 2.9.4
+diff --git a/Makefile b/Makefile
+index 7453bfd..19d8b44 100644
+--- a/Makefile
++++ b/Makefile
+@@ -440,7 +440,7 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+ 
+ # Quotes are needed for spaces and all in the original PATH content.
+-BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
++BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+ 
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
