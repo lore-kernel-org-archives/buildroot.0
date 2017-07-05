@@ -1,124 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 22:44:03 +0200
-Subject: [Buildroot] [PATCH v7 2/2] fs/ext2: Add
- BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
-In-Reply-To: <20170705201657.8361-2-s.martin49@gmail.com>
-References: <20170705201657.8361-1-s.martin49@gmail.com>
- <20170705201657.8361-2-s.martin49@gmail.com>
-Message-ID: <beb9dc0c-c342-1c50-5c5d-dea921c4792d@mind.be>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Wed, 5 Jul 2017 13:52:14 -0700
+Subject: [Buildroot] [PATCH] fs/cpio/init: remout / as read-only as a
+	first step
+In-Reply-To: <87r2xvynm0.fsf@dell.be.48ers.dk>
+References: <20170704190104.24703-1-andrew.smirnov@gmail.com>
+ <87r2xvynm0.fsf@dell.be.48ers.dk>
+Message-ID: <CAHQ1cqF1GHw0_E3rxuPqZMpLoWBhy=3ieCmTUOyz-7x551p0KQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jul 5, 2017 at 7:17 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
+>
+>  > When /init is present on root file system kernel does not take into
+>  > accout kernel arguments such as "ro" and does not remount root as
+>  > read-only. So prior to this commit the system would continue booting
+>  > with "rw" root filesystem until corresponding line in /etc/fstab to
+>  > remount it as "ro" was processed.
+>
+>  > Change the code to immediately remount / as read-only and rely on
+>  > /etc/fstab processing to remount it as "rw" if that is what's selected
+>  > in Buildroot configuration.
+>
+>  > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+>
+> I see what you're getting at, but this doesn't actually work (with
+> busybox mount at least):
+>
+> NET: Registered protocol family 17
+> Freeing unused kernel memory: 2528K
+> This architecture does not have kernel memory protection.
+> mount: can't read '/proc/mounts': No such file or directory
+> Starting logging: OK
+> Initializing random number generator... done.
+>
+> The reason is that mount had to read the current mount flags (either
+> directly in /proc/mounts or through /etc/mtab depending on busybox
+> config, but we symlink /etc/mtab to /proc/mounts) to be able to remount,
+> and as /proc is not mounted in an initramfs this doesn't work.
+>
 
+Hmm, fascinating. I think the reason why I didn't see this and why it
+worked for me is because systemd selects BR2_PACKAGE_UTIL_LINUX_MOUNT
+and my system is using it instead of what busybox provides.
 
-On 05-07-17 22:16, Samuel Martin wrote:
-> From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> 
-> This option lets the user specify mke2fs options and/or ext2/3/4
-> features.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> changes v6->v7:
-> - none
-> 
-> changes v5->v6:
-> - wrap help text at 70 chars. (Arnout)
-> - reword default value explainations (Arnout)
-> 
-> changes v4->v5:
-> - turn the options to accept any mke2fs options, not only ext2/3/4
->   features (Arnout)
-> - add explaination for the default value for this new option (Arnout)
-> 
-> changes v3->v4:
-> - none
-> 
-> changes v2->v3:
-> - none
-> 
-> changes v1->v2:
-> - rebase
-> ---
->  fs/ext2/Config.in | 18 ++++++++++++++++++
->  fs/ext2/ext2.mk   |  5 ++++-
->  2 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index aeee91748f..5aec21078a 100644
-> --- a/fs/ext2/Config.in
-> +++ b/fs/ext2/Config.in
-> @@ -67,6 +67,24 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
->  	  Traditionally, this has been 5%, and all ext-related tools still
->  	  default to reserving 5% when creating a new ext filesystem.
->  
-> +config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
-> +	string "additional mke2fs options"
-> +	default "-O ^64bit"
-> +	help
-> +	  Specify a space-separated list of mke2fs options, including any
-> +	  ext2/3/4 filesystem features.
-> +
-> +	  For more information about the mke2fs option, see the manual
-                                                options
+> We could conceptually mount /proc in /init as well, but then things gets
+> confusing when /sbin/init does it again.
+>
+> I don't see any clean way of doing this without adding quite some
+> complexity, and I think your usecase (systemd in initramfs that you want
+> ro) is so special that I would suggest you just use a custom /init in
+> your rootfs overlay.
+>
 
-> +	  page mke2fs(8).
-> +
-> +	  For more information about the ext2/3/4 features which can be
-> +	  set, see then manual page ext4(5).
-> +
-> +	  The default is "-O ^64bit", i.e. disable the 64-bit filesystem.
-> +	  This is chosen because U-Boot versions before 2017.02 don't
-> +	  support that filesystem option, which may render the system
-> +	  unbootable if it is used.
-> +
->  choice
->  	prompt "Compression method"
->  	default BR2_TARGET_ROOTFS_EXT2_NONE
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index fdd4a389a0..902e6639ee 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
->  $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
->  endif
->  
-> +EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
+What about either of the following:
 
- I don't see much advantage in adding a variable for this, but OK.
+- Adding that line and silencing errors, so that on on systems with
+busybox's mount it would be effectively a no-op and systems that use
+util-linux it would achieve desired results?
 
- With the spelling error fixed:
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+- Making BR2_TARGET_ROOTFS_CPIO select BR2_PACKAGE_UTIL_LINUX_MOUNT?
 
- Regards,
- Arnout
+- Optionally adding that line if BR2_PACKAGE_UTIL_LINUX_MOUNT?
 
-> +
->  # qstrip results in stripping consecutive spaces into a single one. So the
->  # variable is not qstrip-ed to preserve the integrity of the string value.
->  EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-> @@ -19,7 +21,8 @@ EXT2_OPTS = \
->  	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
->  	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
->  	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
-> -	-L "$(EXT2_LABEL)"
-> +	-L "$(EXT2_LABEL)" \
-> +	$(EXT2_MKFS_OPTS)
->  
->  ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
->  
-> 
+- Adding a note to fs/cpio/Config.in that root filesystem will become
+read-only only after corresponding line in /etc/fstab is processed
+successfully?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+I am more than happy to alter the patch to accommodate for either of
+the above or just drop it and keep this change private to my buildroot
+customization layer.
+
+Thanks,
+Andrey Smirnov
