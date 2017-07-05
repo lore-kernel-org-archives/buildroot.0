@@ -1,46 +1,40 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed,  5 Jul 2017 18:53:08 +0200
-Subject: [Buildroot] [PATCH v7 3/9] core: sanitize RPATH in staging tree at
-	the end of target finalization
+Date: Wed,  5 Jul 2017 18:53:10 +0200
+Subject: [Buildroot] [PATCH v7 5/9] core: sanitize RPATH in host tree at the
+	very end of the build
 In-Reply-To: <1499273594-12106-1-git-send-email-wg@grandegger.com>
 References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
-Message-ID: <1499273594-12106-4-git-send-email-wg@grandegger.com>
+Message-ID: <1499273594-12106-6-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need that pachelf utility for RPATH sanitization.
+We introduce the "finalize-host" target for that purpose.
 
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Makefile | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index a22e87f..cdc3a64 100644
+index 1a826fc..2a265e0 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -456,6 +456,9 @@ else
- export BR_NO_CCACHE
- endif
+@@ -553,7 +553,12 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
  
-+# We need patchelf for RPATH sanitization
-+PACKAGES += host-patchelf
+ .PHONY: world
+-world: target-post-image
++world: target-post-image host-finalize
 +
- # Scripts in support/ or post-build scripts may need to reference
- # these locations, so export them so it is easier to use
- export BR2_CONFIG
-@@ -720,6 +723,9 @@ endif
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++.PHONY: host-finalize
++host-finalize:
++	@$(call MESSAGE,"Rendering the SDK relocatable")
++	$(TOPDIR)/support/scripts/fix-rpath host
  
-+	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
-+	$(TOPDIR)/support/scripts/fix-rpath staging
-+
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ # When creating HOST_DIR, also symlink usr -> .
+ $(HOST_DIR):
 -- 
 2.7.4
