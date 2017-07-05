@@ -1,45 +1,53 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed, 5 Jul 2017 12:28:14 +0200
-Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf"
- to make "qmake" relocatable
-In-Reply-To: <a3612c93-7e2a-f2e0-0fbd-9d93bd4e759a@grandegger.com>
-References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
- <1499185359-8293-11-git-send-email-wg@grandegger.com>
- <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
- <a3612c93-7e2a-f2e0-0fbd-9d93bd4e759a@grandegger.com>
-Message-ID: <57657dbc-eca2-a352-ae7c-902a01c9ce73@grandegger.com>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Wed,  5 Jul 2017 18:33:44 +0800
+Subject: [Buildroot] [PATCH] bwm-ng: update to latest upstream version to
+	fix build issue
+Message-ID: <1499250824-26093-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 05.07.2017 um 11:30 schrieb Wolfgang Grandegger:
-> Hello Arnout,
-> 
-> Am 05.07.2017 um 10:59 schrieb Arnout Vandecappelle:
->>   Hi Wolfgang,
->>
->> On 04-07-17 18:22, Wolfgang Grandegger wrote:
->>> The file "qt.conf" can be used to override the hard-coded paths that are
->>> compiled into the Qt library. We need it to make "qmake" relocatable.
->>
->>   All qt5 packages are failing because of this, e.g.
->> http://autobuild.buildroot.net/results/33e/33eb7b7ef7d232bed2432d1d44fd80a4fc8c4e2d 
->>
->>
->> qt5serialport: installs files in
->> /accts/mlweber1/instance-2/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot//accts/mlweber1/instance-2/output 
->>
->>
->>
->>   Can you have a look?
-> 
-> I know the problem! The patched used an old version (from an old series) 
-> of "qt.conf.in"..., sorry!
+From: Keguang Zhang <keguang.zhang@spreadtrum.com>
 
-The patch is reverted now. So just for the records, the patch below
-fixes the problem. I'm going to provide a proper patch with my next
-series. This also shows, that if "qt.conf" is in place, it's active and
-will always overwrite the pathes compiled into qmake... which will break
-the idea of "make sdk" somehow.
+The latest upstream version had fixed the build issus.
+
+Fixes:
+http://autobuild.buildroot.net/results/1d9/1d9f0b62e4cc387f508b4fe0086621ab9996a085/
+
+Signed-off-by: Keguang Zhang <keguang.zhang@spreadtrum.com>
+---
+ package/bwm-ng/bwm-ng.hash | 2 +-
+ package/bwm-ng/bwm-ng.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
+index 1d3a240..4c12b0d 100644
+--- a/package/bwm-ng/bwm-ng.hash
++++ b/package/bwm-ng/bwm-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  027cf3c960cd96fc9ffacdf7713df62d0fc55eeef4a1388289f8a62ae5e50df0  bwm-ng-0.6.1.tar.gz
++sha256  4b34a8ac2eae2d204d6dea8258c5e34b37094259086f8c9169391409a9311fb5  bwm-ng-f54b3fad2c80bfe63f920c9b5e7c1d80389c57ef.tar.gz
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+index 85ee689..587ffbe 100644
+--- a/package/bwm-ng/bwm-ng.mk
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-BWM_NG_VERSION = 0.6.1
+-BWM_NG_SITE = http://www.gropp.org/bwm-ng
++BWM_NG_VERSION = f54b3fad2c80bfe63f920c9b5e7c1d80389c57ef
++BWM_NG_SITE = $(call github,vgropp,bwm-ng,$(BWM_NG_VERSION))
+ BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
+ BWM_NG_LICENSE = GPL-2.0
+ BWM_NG_LICENSE_FILES = COPYING
++BWM_NG_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ BWM_NG_CONF_OPTS += --with-ncurses
+-- 
+1.9.1
