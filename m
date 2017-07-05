@@ -1,80 +1,115 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed,  5 Jul 2017 14:33:59 +0200
-Subject: [Buildroot] [PATCH] download: allow for BR2_PRIMARY_SITE(_ONLY)
-	environment override
-Message-ID: <20170705123359.19116-1-m.niestroj@grinn-global.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Wed, 5 Jul 2017 14:35:34 +0200
+Subject: [Buildroot] [PATCH v6 02/10] package/patchelf: add patch for
+ rpath sanitization under a root directory
+In-Reply-To: <20170705131600.05eadaa9@windsurf>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <1499185359-8293-3-git-send-email-wg@grandegger.com>
+ <20170705131600.05eadaa9@windsurf>
+Message-ID: <33b116c3-f111-5e13-119f-7fe77ab2e33f@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow BR2_PRIMARY_SITE and BR2_PRIMARY_SITE_ONLY .config options to be
-overriden by environment variables with the same names.
+Hello,
 
-This is usefull for CI build environments, so primary site can be
-overridden without .config change. That way download can be speeded up
-if using mirror servers in the same network as CI.
+Am 05.07.2017 um 13:16 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Tue,  4 Jul 2017 18:22:31 +0200, Wolfgang Grandegger wrote:
+> 
+>> diff --git a/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
+>> new file mode 100644
+>> index 0000000..46fd123
+>> --- /dev/null
+>> +++ b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
+>> @@ -0,0 +1,49 @@
+>> +From a365bcb7d7025da51b33165ef7ebc7180199a05e Mon Sep 17 00:00:00 2001
+>> +From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+>> +Date: Mon, 19 Sep 2016 17:31:37 +0200
+>> +Subject: [PATCH 14/30] Remove apparently incorrect usage of "static"
+> 
+> The 14/30 should be removed, just make it [PATCH]
+> 
+>> +
+> 
+> Please add here:
+> 
+> [Upstream commit: URL of the upstream commit.]
+> Signed-off-by: ...
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- Makefile                     | 6 ++++++
- docs/manual/common-usage.txt | 6 ++++++
- package/pkg-download.mk      | 8 ++++++++
- 3 files changed, 20 insertions(+)
+They (patchelf developers) don't add "Signed-off-by". Should I add mine 
+anyway?
 
-diff --git a/Makefile b/Makefile
-index 19d8b442a3..d7a929fb41 100644
---- a/Makefile
-+++ b/Makefile
-@@ -208,6 +208,12 @@ endif
- ifneq ($(BR2_CCACHE_DIR),)
- BR_CACHE_DIR := $(BR2_CCACHE_DIR)
- endif
-+ifneq ($(BR2_PRIMARY_SITE),)
-+BR_PRIMARY_SITE := $(BR2_PRIMARY_SITE)
-+endif
-+ifneq ($(BR2_PRIMARY_SITE_ONLY),)
-+BR_PRIMARY_SITE_ONLY := $(BR2_PRIMARY_SITE_ONLY)
-+endif
- 
- # Need that early, before we scan packages
- # Avoids doing the $(or...) everytime
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index a22da20188..e27e3ab2e7 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -90,6 +90,12 @@ to +make+ or set in the environment:
- * +BR2_DL_DIR+ to override the directory in which
-   Buildroot stores/retrieves downloaded files
-   +
-+* +BR2_PRIMARY_SITE+ to override .config primary site to download
-+  package sources from.
-+  +
-+* +BR2_PRIMARY_SITE_ONLY+ to override .config primary site only
-+  download option.
-+  +
-   Note that the Buildroot download directory can also be set from the
-   configuration interface, so through the Buildroot +.config+ file. See
-   xref:download-location[] for more details on how you can set the download
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index fbbc2d7391..e271371ceb 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -217,6 +217,14 @@ endef
- # sites serve just plain files.
- ################################################################################
- 
-+# Restore the BR2_PRIMARY_SITE(_ONLY) that were overridden by the .config file
-+ifneq ($(origin BR_PRIMARY_SITE),undefined)
-+BR2_PRIMARY_SITE = $(BR_PRIMARY_SITE)
-+endif
-+ifneq ($(origin BR_PRIMARY_SITE_ONLY),undefined)
-+BR2_PRIMARY_SITE_ONLY = $(BR_PRIMARY_SITE_ONLY)
-+endif
-+
- define DOWNLOAD
- 	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),DOWNLOAD)
- endef
--- 
-2.13.2
+> 
+>> diff --git a/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch b/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
+>> new file mode 100644
+>> index 0000000..63f3bce
+>> --- /dev/null
+>> +++ b/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
+>> @@ -0,0 +1,58 @@
+>> +From 2e3fdc2030c75c19df6fc2924083cfad53856562 Mon Sep 17 00:00:00 2001
+>> +From: Tuomas Tynkkynen <tuomas@tuxera.com>
+>> +Date: Fri, 3 Jun 2016 23:03:51 +0300
+>> +Subject: [PATCH 08/30] Extract a function for splitting a colon-separated
+>> + string
+>> +
+>> +We're going to need this logic in another place, so make a function of
+>> +this.
+> 
+> Same comments here.
+> 
+> 
+>> diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+>> new file mode 100644
+>> index 0000000..4f700d9
+>> --- /dev/null
+>> +++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+>> @@ -0,0 +1,419 @@
+>> +From af8d4a24a0ef613bdb47f0b1c3d962d59c53a4be Mon Sep 17 00:00:00 2001
+>> +From: Wolfgang Grandegger <wg@grandegger.com>
+>> +Date: Mon, 20 Feb 2017 16:29:24 +0100
+>> +Subject: [PATCH] Add option to make the rpath relative under a specified root
+>> + directory
+>> +
+>> +Running "patchelf" with the option "--make-rpath-relative ROOTDIR" will
+>> +modify or delete the RPATHDIRs according the following rules
+>> +similar to Martin's patches [1] making the Buildroot toolchaing/SDK
+>> +relocatable.
+>> +
+>> +RPATHDIR starts with "$ORIGIN":
+>> +    The original build-system already took care of setting a relative
+>> +    RPATH, resolve it and test if it's valid (does exist)
+>> +
+>> +RPATHDIR starts with ROOTDIR:
+>> +    The original build-system added some absolute RPATH (absolute on
+>> +    the build machine). Test if it's valid (does exist).
+>> +
+>> +ROOTDIR/RPATHDIR exists:
+>> +    The original build-system already took care of setting an absolute
+>> +    RPATH (absolute in the final rootfs), resolve it and test if it's
+>> +    valid (does exist).
+>> +
+>> +RPATHDIR points somewhere else:
+>> +    (can be anywhere: build trees, staging tree, host location,
+>> +    non-existing location, etc.). Just discard such a path.
+>> +
+>> +The option "--no-standard-libs" will discard RPATHDIRs ROOTDIR/lib and
+>> +ROOTDIR/usr/lib. Like "--shrink-rpath", RPATHDIRs are also discarded
+>> +if the directories do not contain a library referenced by the
+>> +DT_NEEDED fields.
+>> +If the option "--relative-to-file" is given, the rpath will start
+>> +with "$ORIGIN" making it relative to the ELF file, otherwise an
+>> +absolute path relative to ROOTDIR will be used.
+>> +
+>> +[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159422.html
+> 
+> If this has been accepted upstream, add the URL to the upstream commit
+> here as well.
+
+So far there was now response to my GitHub-Merge-Request. And it's now 
+based on v0.9 for the known reasons.
+
+Wolfgang.
