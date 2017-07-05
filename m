@@ -1,13 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 Jul 2017 00:09:10 +0200
-Subject: [Buildroot] [PATCH 2/3] testing/tests/package/test_python:
- refactor to support better code reuse
-In-Reply-To: <CAHQ1cqEHAaVa5rp=gJ=UdjQS0LMc2iaESjB=gftux9Ar3UQ=TA@mail.gmail.com>
-References: <20170704185807.27189-1-andrew.smirnov@gmail.com>
- <20170704185807.27189-2-andrew.smirnov@gmail.com>
- <20170705125959.09d059bc@windsurf>
- <CAHQ1cqEHAaVa5rp=gJ=UdjQS0LMc2iaESjB=gftux9Ar3UQ=TA@mail.gmail.com>
-Message-ID: <ba95e326-7229-d4a1-3e1c-b4aae54a4f5d@mind.be>
+Date: Thu, 6 Jul 2017 00:18:23 +0200
+Subject: [Buildroot] [PATCH] fs/cpio/init: remout / as read-only as a
+ first step
+In-Reply-To: <CAHQ1cqF1GHw0_E3rxuPqZMpLoWBhy=3ieCmTUOyz-7x551p0KQ@mail.gmail.com>
+References: <20170704190104.24703-1-andrew.smirnov@gmail.com>
+ <87r2xvynm0.fsf@dell.be.48ers.dk>
+ <CAHQ1cqF1GHw0_E3rxuPqZMpLoWBhy=3ieCmTUOyz-7x551p0KQ@mail.gmail.com>
+Message-ID: <7ec73871-5122-7b03-46ed-082ba7d76dcc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,75 +15,82 @@ To: buildroot@busybox.net
 
 
 
-On 05-07-17 23:30, Andrey Smirnov wrote:
-> On Wed, Jul 5, 2017 at 3:59 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
+On 05-07-17 22:52, Andrey Smirnov wrote:
+> On Wed, Jul 5, 2017 at 7:17 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
 >>
->> The commit title should mention that a test for Python 3 is added. Or
->> perhaps you could split this into two commits: one that does the
->> refactor but keeps only the Python 2 test. And one that only adds the
->> Python 3 test case on top of that.
+>>  > When /init is present on root file system kernel does not take into
+>>  > accout kernel arguments such as "ro" and does not remount root as
+>>  > read-only. So prior to this commit the system would continue booting
+>>  > with "rw" root filesystem until corresponding line in /etc/fstab to
+>>  > remount it as "ro" was processed.
 >>
-> 
-> Yeah, I think this commit should be split into at least two. Will do in v2.
-> 
->> On Tue,  4 Jul 2017 11:58:06 -0700, Andrey Smirnov wrote:
->>> Refactor TestPythonBase class in the following ways:
->>>
->>>        - Split single test_run() function into multiple smaller once
->>>            to allow derivative classes to mix and match what they want
->>>            to test. Also avoid naming any of the functions starting
->>>            with "test_" to prevent nose2 from picking up
->>>            TestPythonBase class as a class that defines any unit
->>>            tests.
->>>
->>>        - Allow derivative classes to specify QEMU/pexpect timeout in
->>>            login() method
->>>
->>>        - Do not hardcode 'python' as a interpreter to use and
->>>            specify that via class variable 'interpreter'. This way
->>>            classes that inherit from TestPythonBase can override this
->>>            particualr aspect of the test code
->>>
->>>        - Change code of libc related test to be both Python2 and
->>>            Python3 compliant so as to be usable for testing both
->>>
->>>        - Create two derivative classes TestPython2 and TestPython3
->>>            that perform all of the tests specified in TestPythonBase
->>>            using Python2 and Python3 correspondingly
+>>  > Change the code to immediately remount / as read-only and rely on
+>>  > /etc/fstab processing to remount it as "rw" if that is what's selected
+>>  > in Buildroot configuration.
 >>
->> Why use such a huge indentation for the bullet list?
+>>  > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+>>
+>> I see what you're getting at, but this doesn't actually work (with
+>> busybox mount at least):
+>>
+>> NET: Registered protocol family 17
+>> Freeing unused kernel memory: 2528K
+>> This architecture does not have kernel memory protection.
+>> mount: can't read '/proc/mounts': No such file or directory
+>> Starting logging: OK
+>> Initializing random number generator... done.
+>>
+>> The reason is that mount had to read the current mount flags (either
+>> directly in /proc/mounts or through /etc/mtab depending on busybox
+>> config, but we symlink /etc/mtab to /proc/mounts) to be able to remount,
+>> and as /proc is not mounted in an initramfs this doesn't work.
 >>
 > 
-> Sorry about that, will fix in v2.
+> Hmm, fascinating. I think the reason why I didn't see this and why it
+> worked for me is because systemd selects BR2_PACKAGE_UTIL_LINUX_MOUNT
+> and my system is using it instead of what busybox provides.
 > 
+>> We could conceptually mount /proc in /init as well, but then things gets
+>> confusing when /sbin/init does it again.
 >>
->>> -    def test_run(self):
->>> +    def login(self, timeout=5):
->>>          cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
->>>          self.emulator.boot(arch="armv5",
->>>                             kernel="builtin",
->>> -                           options=["-initrd", cpio_file])
->>> +                           options=["-initrd", cpio_file],
->>> +                           timeout)
->>>          self.emulator.login()
->>> -        cmd = "python --version 2>&1 | grep '^Python 2'"
->>> -        _, exit_code = self.emulator.run(cmd)
->>> -        self.assertEqual(exit_code, 0)
->>
->> I'm not a big fan of having a method called .login() also start the
->> interpreter, it feels a bit weird.
+>> I don't see any clean way of doing this without adding quite some
+>> complexity, and I think your usecase (systemd in initramfs that you want
+>> ro) is so special that I would suggest you just use a custom /init in
+>> your rootfs overlay.
 >>
 > 
-> I'll split it in the code into custom "boot()" and "login()" in v2,
-> unless you have something else in mind.
+> What about either of the following:
+> 
+> - Adding that line and silencing errors, so that on on systems with
+> busybox's mount it would be effectively a no-op and systems that use
+> util-linux it would achieve desired results?
+> 
+> - Making BR2_TARGET_ROOTFS_CPIO select BR2_PACKAGE_UTIL_LINUX_MOUNT?
+> 
+> - Optionally adding that line if BR2_PACKAGE_UTIL_LINUX_MOUNT?
 
- I *think* this is a mistake on Thomas's part, that he thought the login()
-function would boot, login and start Python. I.e., he missed the - in front of
-the line. For me at least it's very natural that the login() function does the
-boot + login.
+ All of this is fairly complicated for something that is really a corner case.
 
+
+> - Adding a note to fs/cpio/Config.in that root filesystem will become
+> read-only only after corresponding line in /etc/fstab is processed
+> successfully?
+
+ The thing is, depending on various circumstances, the kernel may start the
+rootfs either rw or ro. It's pretty complicated. It's not even specific for
+cpio/initramfs (except that in that case it always starts rw so it's in fact
+simpler).
+
+ You *might* add a comment like that in the BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+option, but even that is a bit too much detail I think.
+
+
+> I am more than happy to alter the patch to accommodate for either of
+> the above or just drop it and keep this change private to my buildroot
+> customization layer.
+
+ Yes, just put your version of /init in your fs-overlay and Bob's your uncle.
 
  Regards,
  Arnout
