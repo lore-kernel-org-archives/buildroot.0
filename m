@@ -1,74 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 21:03:22 +0200
-Subject: [Buildroot] [git commit] package/kvazaar: disable on PowerPC,
-	PowerPC64 and PowerPC64le
-Message-ID: <20170705190002.16F3C7FBBE@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed,  5 Jul 2017 22:08:39 +0300
+Subject: [Buildroot] [PATCH 0/1] Fix for packages which use
+	CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT and target is ARMv8
+Message-ID: <20170705190840.22469-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e922c1774cb6b2b048336f0af5f540f59e280a5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello again,
 
-kvazaar is affected by three different build issues on PowerPC and
-related architectures:
+Earlier today I sent a patch to update WebKitGTK+ to version 2.16.5, which
+I tested by building for the RPi3 with a configuration which was incorrectly
+using ARMv6 as target. Then later I noticed the mistake and switched over to
+use ARMv8 as target, but then WebKitGTK+ wouldn't build and CMake would stop
+with the following error:
 
- - On PowerPC64, the build fails due to the use of a deprecated
-   vec_lvsl() function:
+   [...]
+   -- Detecting CXX compiler ABI info - done
+   -- Detecting CXX compile features
+   -- Detecting CXX compile features - done
+   CMake Error at CMakeLists.txt:87 (message):
+     Unknown CPU 'l'
 
-strategies/altivec/picture-altivec.c: In function ???reg_sad_altivec???:
-strategies/altivec/picture-altivec.c:43:5: error: vec_lvsl is deprecated for little endian; use assignment for unaligned loads and stores [-Werror=deprecated]
-perm1 = vec_lvsl(0, &data1[y * stride1]);
-^~~~~
+Applying this patch to pkg-cmake.mk fixes the issue above, which I suspect
+might affect other packages as well.
 
-   This bug has been reported upstream at:
-   https://github.com/ultravideo/kvazaar/issues/172
+Cheers,
 
- - On PowerPC 8548, the build fails due to mixing AltiVec and E500
-   instructions:
 
-strategies/altivec/picture-altivec.c:1:0: error: AltiVec and E500 instructions cannot coexist
+Adrian Perez de Castro (1):
+  pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT for ARMv8
 
-   This bug has been reported upstream at:
-   https://github.com/ultravideo/kvazaar/issues/173
+ package/pkg-cmake.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- - On PowerPC e500mc, because Altivec is not supported on this target:
-
-strategies/altivec/picture-altivec.c:1:0: error: AltiVec not supported in this target
-
-   This bug has been reported upstream at:
-   https://github.com/ultravideo/kvazaar/issues/174
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/486/486757f04bc73736b64d18c3298216280be897b1
-  http://autobuild.buildroot.net/results/45d/45d22c9f2f5b593bed286319105c82cbc3396835
-  http://autobuild.buildroot.net/results/76c/76c76191f84748326d76fe0cc89456a72738a06b
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kvazaar/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
-index fb97369..558d161 100644
---- a/package/kvazaar/Config.in
-+++ b/package/kvazaar/Config.in
-@@ -3,11 +3,14 @@ config BR2_PACKAGE_KVAZAAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	# use deprecated altivec vec_lvsl()
-+	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
- 	help
- 	  An open-source HEVC encoder licensed under LGPLv2.1
- 
- 	  https://github.com/ultravideo/kvazaar
- 
- comment "kvazaar needs a toolchain w/ C++, threads"
-+	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.13.2
