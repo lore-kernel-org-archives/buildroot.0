@@ -1,58 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 10:30:51 +0200
-Subject: [Buildroot] [PATCH 04/13] pkg-generic: make PKG_DL_DIR equal to
- DL_DIR
-In-Reply-To: <20170704162211.13238-5-maxime.hadjinlian@gmail.com>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-5-maxime.hadjinlian@gmail.com>
-Message-ID: <1faba3ef-a7bd-0709-d1e8-c09c1f834a63@mind.be>
+Date: Wed, 5 Jul 2017 10:59:40 +0200
+Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf"
+ to make "qmake" relocatable
+In-Reply-To: <1499185359-8293-11-git-send-email-wg@grandegger.com>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <1499185359-8293-11-git-send-email-wg@grandegger.com>
+Message-ID: <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Wolfgang,
+
+On 04-07-17 18:22, Wolfgang Grandegger wrote:
+> The file "qt.conf" can be used to override the hard-coded paths that are
+> compiled into the Qt library. We need it to make "qmake" relocatable.
+
+ All qt5 packages are failing because of this, e.g.
+http://autobuild.buildroot.net/results/33e/33eb7b7ef7d232bed2432d1d44fd80a4fc8c4e2d
+
+qt5serialport: installs files in
+/accts/mlweber1/instance-2/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot//accts/mlweber1/instance-2/output
 
 
-On 04-07-17 18:22, Maxime Hadjinlian wrote:
-> This variable is currently not used by anyone.
-> The value is changed to match the path to DL_DIR.
-> 
-> The next patch will introduce the use of PKG_DL_DIR for packages that
-> use specific EXTRACT_CMDS.
-> 
-> And then we will be able to change the value of PKG_DL_DIR to create a
-> new directory structure in DL_DIR with a subdirectory for each package.
-
- Funny, you will later change it to almost the same as what it is now...
-
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(doesn't depend on the earlier patches in the series).
+ Can you have a look?
 
  Regards,
  Arnout
 
-> ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 79bea906e2..c1cd41fda5 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -434,7 +434,7 @@ endif
+> CC: Julien Corjon <corjon.j@ecagroup.com>
+> CC: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  package/qt5/qt5base/qt.conf.in | 6 ++++++
+>  package/qt5/qt5base/qt5base.mk | 8 ++++++++
+>  2 files changed, 14 insertions(+)
+>  create mode 100644 package/qt5/qt5base/qt.conf.in
+> 
+> diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
+> new file mode 100644
+> index 0000000..48e4b92
+> --- /dev/null
+> +++ b/package/qt5/qt5base/qt.conf.in
+> @@ -0,0 +1,6 @@
+> +[Paths]
+> +Prefix=@@HOST_DIR@@/usr
+> +Sysroot=@@STAGING_DIR@@
+> +Headers=/usr/include/qt5
+> +Plugins=/usr/lib/qt/plugins
+> +Examples=/usr/lib/qt/examples
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 5fe8bb8..883850b 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -258,9 +258,17 @@ define QT5BASE_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
 >  
->  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
-> -$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
-> +$(2)_DL_DIR	=  $$(DL_DIR)
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+> +# The file "qt.conf" can be used to override the hard-coded paths that are
+> +# compiled into the Qt library. We need it to make "qmake" relocatable.
+> +define QT5BASE_INSTALL_QT_CONF
+> +	sed -e "s\\@@HOST_DIR@@\\$(HOST_DIR)\\" -e "s\\@@STAGING_DIR@@\\$(STAGING_DIR)\\" \
+> +		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/usr/bin/qt.conf
+> +endef
+> +
+>  define QT5BASE_INSTALL_STAGING_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+>  	$(QT5_LA_PRL_FILES_FIXUP)
+> +	$(QT5BASE_INSTALL_QT_CONF)
+>  endef
 >  
->  ifndef $(2)_SUBDIR
+>  define QT5BASE_INSTALL_TARGET_LIBS
 > 
 
 -- 
