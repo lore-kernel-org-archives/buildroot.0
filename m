@@ -1,21 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 05 Jul 2017 22:11:34 +0200
-Subject: [Buildroot] [PATCH 1/7] glog: add hash for license file
-In-Reply-To: <1499266527-11091-1-git-send-email-rahulbedarkar89@gmail.com>
- (Rahul Bedarkar's message of "Wed, 5 Jul 2017 20:25:21 +0530")
-References: <1499266527-11091-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <87o9syy77t.fsf@dell.be.48ers.dk>
+Date: Wed, 5 Jul 2017 22:02:34 +0200
+Subject: [Buildroot] [git commit] gflags: add hash for license file
+Message-ID: <20170705200929.0085A7FAE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahulbedarkar89@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e9661e23a75b773392e29595b410384d75a18694
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gflags/gflags.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
+index b9eeb57..3cae2b0 100644
+--- a/package/gflags/gflags.hash
++++ b/package/gflags/gflags.hash
+@@ -1,2 +1,5 @@
+ # Locally computed
+ sha256	466c36c6508a451734e4f4d76825cf9cd9b8716d2b70ef36479ae40f08271f88	gflags-v2.2.0.tar.gz
++
++# Hash for license file:
++sha256 90d1f3701813c3cd65eee2dc736746fe46b465918f3f7d6d31463a2018b33fa5  COPYING.txt
