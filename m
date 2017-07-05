@@ -1,116 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 12:20:05 +0200
-Subject: [Buildroot] [git commit] toolchain-external: copy ld*.so* for all C
-	libraries
-Message-ID: <20170705101717.123D081EAD@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 5 Jul 2017 12:21:47 +0200
+Subject: [Buildroot] uclibc-ng 1.0.25: issue with netinet/udp.h check
+Message-ID: <f4f0af83-d47f-da92-722f-91faea1eb381@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Waldemar,
 
-Currently, for the dynamic loader, we're copying ld*.so* for glibc and
-uClibc, except for glibc/EABIhf where we are explicitly copying
-ld-linux-armhf.so.*. For musl, we're not copying the dynamic linker
-because it's simply a symbolic link to libc.so. However, the name of
-the musl dynamic linker changes from one architecture to the other,
-and we don't handle all cases.
+There are two new build issues with uClibc-ng 1.0.25.
 
-Since handling the musl dynamic linker symlink creation is becoming
-more and more annoying to maintain, this commit makes musl use the
-same mechanism as glibc/uClibc: put the dynamic linker in
-TOOLCHAIN_EXTERNAL_LIBS.
+http://autobuild.buildroot.net/results/3e4/3e468c7b1be376024422e2f06750571f64f433a2/build-end.log
 
-In addition, the special condition on glibc/EABIhf was added in
-11ec38b6950cf3337b52fb97f27c2fd7c776c5c2 ("toolchain-external: fix
-Linaro ARM toolchain support") because an old Linaro toolchain had two
-dynamic loaders, and we wanted to copy only one. But 1/ this is old
-and 2/ having the two dynamic linkers doesn't really matter.
+http://autobuild.buildroot.net/results/8c6/8c629a1c5c4a1d78c8bf09a091a332a424a0f757/build-end.log
 
-So this commit simply unconditionally adds "ld*.so*" to
-TOOLCHAIN_EXTERNAL_LIBS, regardless of the C library being chosen. It
-re-uses the musl dynamic linker symlink from the sysroot, which makes
-it always correct, and allows us to remove the
-TOOLCHAIN_EXTERNAL_MUSL_LD_LINK hook, and all the related logic.
+Also, see the error in netinet/udp.h check:
+http://autobuild.buildroot.net/results/8c6/8c629a1c5c4a1d78c8bf09a091a332a424a0f757//efl-1.19.1/config.log
 
-This commit therefore solves two problems with the musl dynamic linker
-symbolic link creation logic:
+configure:39124: checking for netinet/udp.h
+configure:39124:
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/bin/arm-linux-gcc
+-std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
 
- 1 We support all architectures, without having to hardcode in
-   Buildroot the mapping between the CPU architecture and the
-   corresponding dynamic linker name. For example, our current logic
-   was not handling the mips64+n32 ABI case, where the dynamic linker
-   is named ld-musl-mipsn32el.so.1.
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:62:7:
+error: unknown type name 'uint16_t'
+       uint16_t uh_sport; /* source port */
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:63:7:
+error: unknown type name 'uint16_t'
+       uint16_t uh_dport; /* destination port */
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:64:7:
+error: unknown type name 'uint16_t'
+       uint16_t uh_ulen;  /* udp length */
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:65:7:
+error: unknown type name 'uint16_t'
+       uint16_t uh_sum;  /* udp checksum */
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:69:7:
+error: unknown type name 'uint16_t'
+       uint16_t source;
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:70:7:
+error: unknown type name 'uint16_t'
+       uint16_t dest;
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:71:7:
+error: unknown type name 'uint16_t'
+       uint16_t len;
+       ^
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/udp.h:72:7:
+error: unknown type name 'uint16_t'
+       uint16_t check;
 
- 2 We support Crosstool-NG musl toolchains, where the dynamic linker
-   is in /lib, but libc.so is in /usr/lib.
+It look like an issue related to "Remove __FAVOR_BSD and sync with GNU C library".
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-This commit therefore replaces:
+Can you have a look ?
 
- - https://patchwork.ozlabs.org/patch/780411/ (was another solution
-   for solving problem 1 above)
-
- - https://patchwork.ozlabs.org/patch/763977/ and
-   https://patchwork.ozlabs.org/patch/748974/ (was another solution
-   for solving problem 2 above)
----
- .../toolchain-external/pkg-toolchain-external.mk   | 32 ++--------------------
- 1 file changed, 3 insertions(+), 29 deletions(-)
-
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index adbd3fe..67f1361 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -107,13 +107,11 @@ endif
- #
- # Definitions of the list of libraries that should be copied to the target.
- #
-+
-+TOOLCHAIN_EXTERNAL_LIBS += ld*.so*
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
--TOOLCHAIN_EXTERNAL_LIBS += ld-linux-armhf.so.*
--else
--TOOLCHAIN_EXTERNAL_LIBS += ld*.so.*
--endif
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
- ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
-@@ -470,30 +468,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
- 	fi
- endef
- 
--# Various utility functions used by the external toolchain based on musl.
--
--# With the musl C library, the libc.so library directly plays the role
--# of the dynamic library loader. We just need to create a symbolic
--# link to libc.so with the appropriate name.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL):$(BR2_STATIC_LIBS),y:)
--ifeq ($(BR2_i386),y)
--MUSL_ARCH = i386
--else ifeq ($(BR2_ARM_EABIHF),y)
--MUSL_ARCH = armhf
--else ifeq ($(BR2_mips):$(BR2_SOFT_FLOAT),y:y)
--MUSL_ARCH = mips-sf
--else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
--MUSL_ARCH = mipsel-sf
--else ifeq ($(BR2_sh),y)
--MUSL_ARCH = sh
--else
--MUSL_ARCH = $(ARCH)
--endif
--define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
--	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
--endef
--endif
--
- # uClibc-ng dynamic loader is called ld-uClibc.so.1, but gcc is not
- # patched specifically for uClibc-ng, so it continues to generate
- # binaries that expect the dynamic loader to be named ld-uClibc.so.0,
+Best regards,
+Romain
