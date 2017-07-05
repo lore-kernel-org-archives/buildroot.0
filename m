@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 10:15:48 +0200
+Date: Wed, 5 Jul 2017 10:18:34 +0200
 Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
  being sorted alphabetically
-In-Reply-To: <20170705073807.GF3499@scaer>
+In-Reply-To: <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
 References: <20170704235445.35255-1-code@mmayer.net>
  <20170704235445.35255-2-code@mmayer.net> <20170705072538.GE3499@scaer>
- <20170705073807.GF3499@scaer>
-Message-ID: <ec76e925-ea4b-32d2-35f0-ec04537f6584@mind.be>
+ <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
+Message-ID: <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,12 @@ To: buildroot@busybox.net
 
 
 
-On 05-07-17 09:38, Yann E. MORIN wrote:
-> Markus, All,
+On 05-07-17 10:09, Arnout Vandecappelle wrote:
 > 
-> On 2017-07-05 09:25 +0200, Yann E. MORIN spake thusly:
+> 
+> On 05-07-17 09:25, Yann E. MORIN wrote:
+>> Markus, all,
+>>
 >> On 2017-07-04 16:54 -0700, Markus Mayer spake thusly:
 >>> From: Markus Mayer <mmayer@broadcom.com>
 >>>
@@ -29,33 +31,19 @@ On 05-07-17 09:38, Yann E. MORIN wrote:
 >>> In preparation for adding linux-tool-tmon, we cannot keep relying on
 >>> this mechanism. In the C locale, linux-tool-tmon.mk will be sorted
 >>> behind linux-tools.mk, which would break the build.
-> [--SNIP--]
->> However, I am totally in favour of fixing it once and for all.
->>
->> But rather than do a hack in the main Makefile as you suggest, I would
->> just ensure the ordering of the files.
->>
->> I think we should just rneame the individual tool files to remove
->> the .mk extension, and then exp[licitly source them from
->> package/linux-tools/linux-tools.mk
->>
->>     include $(wildcard package/linux-tools/linux-tool-*)
->>
->> and be done with that once and for all.
+>> That is not the case for me:
 > 
-> But don't hurry in doing so, we've been discussing this IRL with Thomas,
-> and he is not happy with that proposal (but he agrees that touching the
-> main Makefile is not acceptable).
-> 
-> We're looking to find an alternative solution...
+>  Indeed, but it's just the commit message that is wrong. The sort is not done by
+> the sort program, but by make, and make doesn't get the LC_ALL=C passed to it.
+> So we indeed need to find a robust solution.
 
- The proposal is to move all the linux-tool-*.mk files to subdirectories of
-package/linux-tools, and include them from the linux-tool.mk file at the
-appropriate place. This is more in-line with how we do it for other packages,
-e.g. qt5 or barebox. Ideally, the Config.in would also be split up into the
-individual subpackages.
+ Hm, Yann tells me that make always uses the C locale for sorting. So why does
+it fail for you? The C locale for sure sorts correctly.
 
- Could you prepare a patch for that?
+ Also, the only thing that is sensitive to the order in this case is
+LINUX_TOOLS_DEPENDENCIES. So you would miss the dependency on ncurses if it is
+in the wrong order. Is that what happens for you? Could you tell us what error
+you get?
 
  Regards,
  Arnout
