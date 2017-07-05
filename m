@@ -1,42 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:55 +0200
-Subject: [Buildroot] [git commit] execline: remove --shebangdir configure
-	option
-Message-ID: <20170705141338.0582681D3F@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 16:06:53 +0200
+Subject: [Buildroot] [git commit] policycoreutils: rework host installation
+Message-ID: <20170705141337.E94797FB34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fd1d54ab6fe079bbaefe4d5dfe29d131402a106
+commit: https://git.buildroot.net/buildroot/commit/?id=44874939f834fb380501f0fe4d12870ba7acef18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The host build passes the --shebangdir configure option, the target
-build doesn't.  With the removal of $(HOST_DIR)/usr, it is not clear
-if this should be /bin or /usr/bin or $(HOST_DIR)/bin. Looking at the
-source code, it turns out that this variable is not used at all, and
-/usr/bin doesn't appear anywhere in the installed files.
+policycoreutils has a pretty peculiar interpretation of DESTDIR and
+PREFIX.  PREFIX is not consistently used: some installation paths and
+include paths are forced to $(DESTDIR)/usr/... . In other cases,
+PREFIX is indeed used. PREFIX defaults to $(DESTDIR)/usr
 
-Since it is not clear what this option should be set to, and it
-anyway doesn't do anything, remove it entirely.
+Try to be a little bit more correct by passing both DESTDIR and PREFIX,
+both set to $(HOST_DIR). This is not a complete fix: some things are
+still installed in $(HOST_DIR)/usr - but nothing we care about (just
+manpages, systemd services, ...). More importantly, however, it still
+looks for e.g. D-Bus in $(DESTDIR)/usr/include/dbus-1.0.
 
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Still, it's better than nothing.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/execline/execline.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/policycoreutils/policycoreutils.mk | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 50c3fca..d3d69a8 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
-@@ -46,7 +46,6 @@ HOST_EXECLINE_DEPENDENCIES = host-skalibs
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 480fd6e..6fec4af 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -87,13 +87,18 @@ HOST_POLICYCOREUTILS_DEPENDENCIES = \
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+ # large file support.
+ # See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
++# We need to pass DESTDIR at build time because it's used by
++# policycoreutils build system to find headers and libraries.
++# We also need to pass PREFIX because it defaults to $(DESTDIR)/usr
+ HOST_POLICYCOREUTILS_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
+ 	CPPFLAGS="$(HOST_CPPFLAGS) -U_FILE_OFFSET_BITS" \
+ 	PYTHON="$(HOST_DIR)/bin/python" \
+ 	PYTHON_INSTALL_ARGS="$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)" \
+-	ARCH="$(HOSTARCH)"
++	ARCH="$(HOSTARCH)" \
++	DESTDIR=$(HOST_DIR) \
++	PREFIX=$(HOST_DIR)
  
- HOST_EXECLINE_CONF_OPTS = \
- 	--prefix=$(HOST_DIR) \
--	--shebangdir=/usr/bin \
- 	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(HOST_DIR)/include \
- 	--with-dynlib=$(HOST_DIR)/lib \
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ HOST_POLICYCOREUTILS_DEPENDENCIES += host-python3
+@@ -112,19 +117,15 @@ HOST_POLICYCOREUTILS_MAKE_DIRS = \
+ 	semodule_package setfiles restorecond \
+ 	audit2allow scripts semanage sepolicy
+ 
+-# We need to pass DESTDIR at build time because it's used by
+-# policycoreutils build system to find headers and libraries.
+ define HOST_POLICYCOREUTILS_BUILD_CMDS
+ 	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
+-		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) \
+-			DESTDIR=$(HOST_DIR) all
++		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
+ 	)
+ endef
+ 
+ define HOST_POLICYCOREUTILS_INSTALL_CMDS
+ 	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
+-		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) \
+-			DESTDIR=$(HOST_DIR) install
++		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
+ 	)
+ 	# Fix python paths
+ 	$(SED) 's%/usr/bin/%$(HOST_DIR)/bin/%g' $(HOST_DIR)/bin/audit2allow
