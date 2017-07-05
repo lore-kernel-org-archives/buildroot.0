@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  5 Jul 2017 15:47:39 +0200
-Subject: [Buildroot] [PATCH 1/4] python-hyperframe: new package
-Message-ID: <20170705134742.9178-1-yegorslists@googlemail.com>
+Date: Wed,  5 Jul 2017 15:47:40 +0200
+Subject: [Buildroot] [PATCH 2/4] python-hpack: new package
+In-Reply-To: <20170705134742.9178-1-yegorslists@googlemail.com>
+References: <20170705134742.9178-1-yegorslists@googlemail.com>
+Message-ID: <20170705134742.9178-2-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +14,66 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                                |  1 +
- package/python-hyperframe/Config.in              |  6 ++++++
- package/python-hyperframe/python-hyperframe.hash |  3 +++
- package/python-hyperframe/python-hyperframe.mk   | 14 ++++++++++++++
+ package/Config.in                      |  1 +
+ package/python-hpack/Config.in         |  6 ++++++
+ package/python-hpack/python-hpack.hash |  3 +++
+ package/python-hpack/python-hpack.mk   | 14 ++++++++++++++
  4 files changed, 24 insertions(+)
- create mode 100644 package/python-hyperframe/Config.in
- create mode 100644 package/python-hyperframe/python-hyperframe.hash
- create mode 100644 package/python-hyperframe/python-hyperframe.mk
+ create mode 100644 package/python-hpack/Config.in
+ create mode 100644 package/python-hpack/python-hpack.hash
+ create mode 100644 package/python-hpack/python-hpack.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 46c78a0121..b72a24bcbe 100644
+index b72a24bcbe..5607f33114 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -742,6 +742,7 @@ menu "External python modules"
+@@ -739,6 +739,7 @@ menu "External python modules"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-gunicorn/Config.in"
++	source "package/python-hpack/Config.in"
  	source "package/python-html5lib/Config.in"
  	source "package/python-httplib2/Config.in"
  	source "package/python-humanize/Config.in"
-+	source "package/python-hyperframe/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-incremental/Config.in"
-diff --git a/package/python-hyperframe/Config.in b/package/python-hyperframe/Config.in
+diff --git a/package/python-hpack/Config.in b/package/python-hpack/Config.in
 new file mode 100644
-index 0000000000..f3318a20e2
+index 0000000000..b0ea03bc42
 --- /dev/null
-+++ b/package/python-hyperframe/Config.in
++++ b/package/python-hpack/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_HYPERFRAME
-+	bool "python-hyperframe"
++config BR2_PACKAGE_PYTHON_HPACK
++	bool "python-hpack"
 +	help
-+	  HTTP/2 framing layer for Python.
++	  Pure-Python HPACK header compression.
 +
 +	  http://hyper.rtfd.org
-diff --git a/package/python-hyperframe/python-hyperframe.hash b/package/python-hyperframe/python-hyperframe.hash
+diff --git a/package/python-hpack/python-hpack.hash b/package/python-hpack/python-hpack.hash
 new file mode 100644
-index 0000000000..e6139374ec
+index 0000000000..445d4d59f5
 --- /dev/null
-+++ b/package/python-hyperframe/python-hyperframe.hash
++++ b/package/python-hpack/python-hpack.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/hyperframe/json, sha256 locally computed
-+md5	c2aa71dd091836e72d2c6784d1dd1591  hyperframe-5.1.0.tar.gz
-+sha256	a25944539db36d6a2e47689e7915dcee562b3f8d10c6cdfa0d53c91ed692fb04  hyperframe-5.1.0.tar.gz
-diff --git a/package/python-hyperframe/python-hyperframe.mk b/package/python-hyperframe/python-hyperframe.mk
++# md5 from https://pypi.python.org/pypi/hpack/json, sha256 locally computed
++md5	556b0ae66180f54c2ce8029a0952088b  hpack-3.0.0.tar.gz
++sha256	8eec9c1f4bfae3408a3f30500261f7e6a65912dc138526ea054f9ad98892e9d2  hpack-3.0.0.tar.gz
+diff --git a/package/python-hpack/python-hpack.mk b/package/python-hpack/python-hpack.mk
 new file mode 100644
-index 0000000000..8d0688f6bd
+index 0000000000..d6b96649e9
 --- /dev/null
-+++ b/package/python-hyperframe/python-hyperframe.mk
++++ b/package/python-hpack/python-hpack.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-hyperframe
++# python-hpack
 +#
 +################################################################################
 +
-+PYTHON_HYPERFRAME_VERSION = 5.1.0
-+PYTHON_HYPERFRAME_SOURCE = hyperframe-$(PYTHON_HYPERFRAME_VERSION).tar.gz
-+PYTHON_HYPERFRAME_SITE = https://pypi.python.org/packages/a4/59/dddaddc73b4d53e9649850998e23b6daca80817c5442465a12423235d20b
-+PYTHON_HYPERFRAME_SETUP_TYPE = setuptools
-+PYTHON_HYPERFRAME_LICENSE = MIT
-+PYTHON_HYPERFRAME_LICENSE_FILES = LICENSE
++PYTHON_HPACK_VERSION = 3.0.0
++PYTHON_HPACK_SOURCE = hpack-$(PYTHON_HPACK_VERSION).tar.gz
++PYTHON_HPACK_SITE = https://pypi.python.org/packages/44/f1/b4440e46e265a29c0cb7b09b6daec6edf93c79eae713cfed93fbbf8716c5
++PYTHON_HPACK_SETUP_TYPE = setuptools
++PYTHON_HPACK_LICENSE = MIT
++PYTHON_HPACK_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
