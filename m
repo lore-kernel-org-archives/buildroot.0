@@ -1,109 +1,49 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  5 Jul 2017 23:39:36 +0200
-Subject: [Buildroot] [PATCH v9 2/2] fs/ext2: Add
-	BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
-In-Reply-To: <20170705213936.22344-1-s.martin49@gmail.com>
-References: <20170705213936.22344-1-s.martin49@gmail.com>
-Message-ID: <20170705213936.22344-2-s.martin49@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 5 Jul 2017 16:47:40 -0500
+Subject: [Buildroot] [PATCH 1/1] paxtest: new package
+In-Reply-To: <20170621222939.2f43e719@windsurf>
+References: <1497906876-27014-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170621222939.2f43e719@windsurf>
+Message-ID: <CANQCQpbO0rGSJDhOqPpkDuW4LCqQLZn9BeucupJhW_Qa0ScZPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Thomas, All.
 
-This option lets the user specify mke2fs options and/or ext2/3/4
-features.
+On Wed, Jun 21, 2017 at 3:29 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+<snip>
 
----
-changes v8->v9:
-- none
+>> +config BR2_PACKAGE_PAXTEST
+>> +     bool "paxtest"
+>> +     depends on BR2_TOOLCHAIN_USES_GLIBC
+>
+> Could you please add a comment about why we have this glibc dependency?
+>
 
-changes v7->v8:
-- typos (Arnout)
+I started to look into this and I've found a few changes so far.....
+1) It will require the "depends on BR2_TOOLCHAIN_USES_GLIBC" but I'll
+add the following justification
+        # No UCLIBC or MUSL because __NO_A_OUT_SUPPORT
 
-changes v6->v7:
-- none
+2) Still looking into these assembler errors.  They don't seem to be
+dependent on GCC version. (armv5-ctng-linux-gnueabi GCC4.8 /
+sourcery-arm-armv4t GCC4.8  / sourcery-arm GCC4.8  /br-nios2-glibc
+GCC6.0 )
+    /home/buildroot/paxtest_gcc_GLIBC/armv5-ctng-linux-gnueabi/host/usr/bin/armv5-ctng-linux-gnueabi-gcc
+ -o chpax chpax-0.7/aout.o chpax-0.7/chpax.o chpax-0.7/elf32.o
+chpax-0.7/elf64.o chpax-0.7/flags.o chpax-0.7/io.o
+    /home/buildroot/paxtest_gcc_GLIBC/armv5-ctng-linux-gnueabi/host/usr/bin/armv5-ctng-linux-gnueabi-gcc
+-O2 -Wa,--noexecstack -U_FORTIFY_SOURCE -DRUNDIR=\".\"
+-fno-stack-protector   -fPIC -o shlibtest.o -c shlibtest.c
+    /tmp/ccoq8vb7.s: Assembler messages:
+    /tmp/ccoq8vb7.s:27: Error: alignment too large: 15 assumed
+    make[3]: *** [shlibtest.o] Error 1
 
-changes v5->v6:
-- wrap help text at 70 chars. (Arnout)
-- reword default value explainations (Arnout)
-
-changes v4->v5:
-- turn the options to accept any mke2fs options, not only ext2/3/4
-  features (Arnout)
-- add explaination for the default value for this new option (Arnout)
-
-changes v3->v4:
-- none
-
-changes v2->v3:
-- none
-
-changes v1->v2:
-- rebase
----
- fs/ext2/Config.in | 18 ++++++++++++++++++
- fs/ext2/ext2.mk   |  5 ++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index a851afb439..f0a5cd76e2 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -68,6 +68,24 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	  Traditionally, this has been 5%, and all ext-related tools still
- 	  default to reserving 5% when creating a new ext filesystem.
- 
-+config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
-+	string "additional mke2fs options"
-+	default "-O ^64bit"
-+	help
-+	  Specify a space-separated list of mke2fs options, including any
-+	  ext2/3/4 filesystem features.
-+
-+	  For more information about the mke2fs options, see the manual
-+	  page mke2fs(8).
-+
-+	  For more information about the ext2/3/4 features which can be
-+	  set, see then manual page ext4(5).
-+
-+	  The default is "-O ^64bit", i.e. disable the 64-bit filesystem.
-+	  This is chosen because U-Boot versions before 2017.02 don't
-+	  support that filesystem option, which may render the system
-+	  unbootable if it is used.
-+
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_EXT2_NONE
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index fdd4a389a0..902e6639ee 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
- $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
- endif
- 
-+EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
-+
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
- EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-@@ -19,7 +21,8 @@ EXT2_OPTS = \
- 	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
- 	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
- 	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
--	-L "$(EXT2_LABEL)"
-+	-L "$(EXT2_LABEL)" \
-+	$(EXT2_MKFS_OPTS)
- 
- ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
--- 
-2.13.2
+Matt
