@@ -1,160 +1,432 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:20 +0200
-Subject: [Buildroot] [PATCH v4 03/36] Globally replace $(HOST_DIR)/usr/sbin
-	with $(HOST_DIR)/sbin
-In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
-References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-4-arnout@mind.be>
+Date: Wed, 5 Jul 2017 13:14:17 +0200
+Subject: [Buildroot] [PATCH v4 00/36] Remove /usr component from HOST_DIR
+	(continued)
+Message-ID: <20170705111453.2284-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since things are no longer installed in $(HOST_DIR)/usr, the callers
-should also not refer to it.
+Now the /usr component has been removed from HOST_DIR, we can clean up
+all the packages that still refer to $(HOST_DIR)/usr.
 
-This is a mechanical change with
-git grep -l '$(HOST_DIR)/usr/sbin' | xargs sed -i 's%$(HOST_DIR)/usr/sbin%$(HOST_DIR)/sbin%g'
+- The first seven patches clean up things globally using various
+  regexes. I actually created those patches over a year ago already and
+  just refreshed them by re-applying the regex.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- fs/ext2/ext2.mk                          | 2 +-
- fs/ubifs/ubi.mk                          | 2 +-
- fs/ubifs/ubifs.mk                        | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk | 2 +-
- package/gptfdisk/gptfdisk.mk             | 2 +-
- package/libselinux/libselinux.mk         | 2 +-
- package/mtd/mtd.mk                       | 4 ++--
- package/tzdump/tzdump.mk                 | 4 ++--
- package/zic/zic.mk                       | 4 ++--
- 9 files changed, 12 insertions(+), 12 deletions(-)
+- Next comes a fixup patch that restores alignment that was destroyed
+  by the automatic replacement.
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index ff04b78efb..99d03f10cf 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -20,7 +20,7 @@ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
- define ROOTFS_EXT2_CMD
- 	rm -f $@
--	$(HOST_DIR)/usr/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
-+	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
- 		 $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
- endef
- 
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index e488cb5f8a..2baece5fb0 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -25,7 +25,7 @@ endif
- define ROOTFS_UBI_CMD
- 	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
- 		$(UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
--	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
-+	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
- 	rm $(BUILD_DIR)/ubinize.cfg
- endef
- 
-diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
-index f1e4126e86..7b2b0fb2cc 100644
---- a/fs/ubifs/ubifs.mk
-+++ b/fs/ubifs/ubifs.mk
-@@ -21,7 +21,7 @@ UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
- ROOTFS_UBIFS_DEPENDENCIES = host-mtd
- 
- define ROOTFS_UBIFS_CMD
--	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
-+	$(HOST_DIR)/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
- endef
- 
- $(eval $(call ROOTFS_TARGET,ubifs))
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index c05cee31db..f24216da26 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -21,7 +21,7 @@ define IMX_UUC_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/uuc $(TARGET_DIR)/usr/bin/uuc
- 	$(INSTALL) -D -m 755 $(@D)/sdimage $(TARGET_DIR)/usr/bin/sdimage
- 	dd if=/dev/zero of=$(TARGET_DIR)/fat bs=1M count=1
--	$(HOST_DIR)/usr/sbin/mkfs.vfat $(TARGET_DIR)/fat
-+	$(HOST_DIR)/sbin/mkfs.vfat $(TARGET_DIR)/fat
- endef
- 
- define IMX_UUC_INSTALL_INIT_SYSV
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index c5826dfb8d..a7bc41c89f 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -48,7 +48,7 @@ define HOST_GPTFDISK_BUILD_CMDS
- endef
- 
- define HOST_GPTFDISK_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/sgdisk $(HOST_DIR)/usr/sbin/sgdisk
-+	$(INSTALL) -D -m 0755 $(@D)/sgdisk $(HOST_DIR)/sbin/sgdisk
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index b6c5809134..6362792201 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -106,7 +106,7 @@ endef
- define HOST_LIBSELINUX_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
--		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/usr/sbin install
-+		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/sbin install
- 	(cd $(HOST_DIR)/usr/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
- 	# Install python interface wrapper
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index df2e5a3ecd..7c3a2b6bda 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -46,8 +46,8 @@ endif
- 
- HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
- 
--MKFS_JFFS2 = $(HOST_DIR)/usr/sbin/mkfs.jffs2
--SUMTOOL = $(HOST_DIR)/usr/sbin/sumtool
-+MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
-+SUMTOOL = $(HOST_DIR)/sbin/sumtool
- 
- MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK)		+= docfdisk
- MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS)	+= doc_loadbios
-diff --git a/package/tzdump/tzdump.mk b/package/tzdump/tzdump.mk
-index 3f035a56cb..baad978c4f 100644
---- a/package/tzdump/tzdump.mk
-+++ b/package/tzdump/tzdump.mk
-@@ -13,9 +13,9 @@ define HOST_TZDUMP_BUILD_CMDS
- endef
- 
- define HOST_TZDUMP_INSTALL_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/tzdump $(HOST_DIR)/usr/sbin/tzdump
-+	$(INSTALL) -m 0755 -D $(@D)/tzdump $(HOST_DIR)/sbin/tzdump
- endef
- 
- $(eval $(host-generic-package))
- 
--TZDUMP = $(HOST_DIR)/usr/sbin/tzdump
-+TZDUMP = $(HOST_DIR)/sbin/tzdump
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index de2f3c9676..cbda414d3e 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -15,10 +15,10 @@ define HOST_ZIC_BUILD_CMDS
- endef
- 
- define HOST_ZIC_INSTALL_CMDS
--	$(INSTALL) -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
-+	$(INSTALL) -D -m 755 $(@D)/zic $(HOST_DIR)/sbin/zic
- 	$(INSTALL) -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/usr/include/tzfile.h
- endef
- 
- $(eval $(host-generic-package))
- 
--ZIC = $(HOST_DIR)/usr/sbin/zic
-+ZIC = $(HOST_DIR)/sbin/zic
+- Then come thirteen patches that fix up things in various scripts and
+  readmes and that weren't caught by the automatic replacement (mostly
+  because those are using $HOST_DIR and not $(HOST_DIR) ).
+
+- Then we get the libffi patch, which fixes a use of $(HOST_DIR)/usr
+  that I accidentally stumbled upon while testing.
+
+- Then we get 13 patches that fix the use of $(HOST_DIR) as prefix
+  instead of DESTDIR. In autotools and CMake host packages, we don't
+  use DESTDIR but we set --prefix to the host directory. Indeed,
+  DESTDIR is meant for situations where we build in a build-root, i.e.
+  where the installation directory is not the same absolute path where
+  things will be executed. For host packages, however, the installation
+  directory *is* where it will be executed.
+
+  So for autotools and CMake host packages this works well, but quite a
+  few generic packages turn out to use something like DESTDIR
+  incorrectly. I found these by grepping for DESTDIR.*HOST_DIR and
+  checking if it was correct (in very few cases it was indeed correct).
+  See the individual patches for details.
+
+  In this part, the SELinux packages turn out to be a bit problematic.
+  Most of them have a PREFIX that defaults to $(DESTDIR)/usr, but then
+  some installation commands don't use PREFIX and instead directlly
+  refer to $(DESTDIR)/etc or $(DESTDIR)/usr/share/man. Also, sometimes
+  policycoreutils uses $(DESTDIR)/usr/include/glib-2.0 to find glib
+  includes.
+
+- Finally there is a patch that removes a useless configure option in
+  the execline host package.
+
+After the entire series, I have removed the usr symlink and I've
+build-tested all the host packages, as well as grub2, gummiboot and
+syslinux. Quite a few of these just failed to build on my machine, but
+that didn't seem to be related to the host/usr move.
+
+There are still problematic packages:
+
+- As mentioned before, policycoreutils hardcodes the /usr part to find
+  glib-2.0 and dbus-1.0 headers and libraries.
+
+- policycoreutils and the other SELinux packages install stuff in
+  $(HOST_DIR)/usr, but it's harmless stuff (man pages, bash completion,
+  etc.).
+
+All the rest looks fine!
+
+To keep compatibility with existing post-build scripts, we're going to
+keep the usr symlink for the time being. It doesn't hurt anyone and it
+also avoids breakage of packages that happen to still install stuff
+under usr/.
+
+Regards,
+Arnout
+
+
+Arnout Vandecappelle (36):
+  generic packages: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+  Globally replace $(HOST_DIR)/usr/bin with $(HOST_DIR)/bin
+  Globally replace $(HOST_DIR)/usr/sbin with $(HOST_DIR)/sbin
+  Globally replace $(HOST_DIR)/usr/lib with $(HOST_DIR)/lib
+  Globally replace $(HOST_DIR)/usr/include with $(HOST_DIR)/include
+  Globally replace $(HOST_DIR)/usr/share with $(HOST_DIR)/share
+  Globally replace $(HOST_DIR)/usr with $(HOST_DIR)
+  qt: fix up alignment after mechanical replacement
+  boards: replace $HOST_DIR/usr/ with $HOST_DIR/ in scripts
+  chromebook snow: remove $(HOST_DIR)/usr reference from README
+  warpboard: remove $(HOST_DIR)/usr reference from README
+  stm32f429-disco: replace $HOST_DIR/usr with $HOST_DIR in flash script
+  stm32f469-disco: replace $HOST_DIR/usr with $HOST_DIR in flash script
+  eclipse-register-toolchain: toolchain is no longer installed in
+    $(HOST_DIR)/usr
+  manual: remove references to host/usr paths
+  grub2: remove host/usr reference from help text
+  lttng-tools: remove host/usr reference from help text
+  mfgtools: remove host/usr reference from readme.txt
+  lesstif: remove host/usr reference from .mk comment
+  board/gdb/bfin-bf512: remove host/usr reference from readme.txt
+  board/csky: remove host/usr reference from readme.txt
+  libffi: avoid $(HOST_DIR)/usr while moving headers
+  genromfs: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+  libcap: use $(HOST_DIR) as prefix instead of DESTDIR
+  lzip: use $(HOST_DIR) as prefix instead of DESTDIR
+  opkg-utils: use $(HOST_DIR) as PREFIX instead of DESTDIR
+  raspberrypi-usbboot: remove /usr from DESTDIR-based install commands
+  dos2unix: use prefix instead of DESTDIR for host installation
+  imx-uxb-loader: use prefix instead of DESTDIR for host installation
+  grub2: install in $(HOST_DIR) instead of $(HOST_DIR)/usr
+  sepolgen: strip /usr/ part from HOST_DIR
+  libsemanage: rework host installation
+  libselinux: rework host installation
+  checkpolicy: rework host installation
+  policycoreutils: rework host installation
+  execline: remove --shebangdir configure option
+
+ Makefile                                           |  4 ++--
+ board/boundarydevices/common/post-build.sh         |  4 ++--
+ board/chromebook/snow/mksd.sh                      |  4 ++--
+ board/chromebook/snow/readme.txt                   |  2 +-
+ board/chromebook/snow/sign.sh                      |  6 ++---
+ board/csky/readme.txt                              |  2 +-
+ board/firefly/firefly-rk3288/post-image.sh         |  2 +-
+ board/freescale/warpboard/README                   |  4 ++--
+ board/friendlyarm/nanopi-neo/post-build.sh         |  2 +-
+ board/gdb/bfin-bf512/readme.txt                    |  4 ++--
+ board/lemaker/bananapro/post-build.sh              |  2 +-
+ board/linksprite/pcduino/post-build.sh             |  2 +-
+ board/nexbox/a95x/post-build.sh                    |  2 +-
+ board/olimex/a13_olinuxino/post-build.sh           |  2 +-
+ board/orangepi/post-build.sh                       |  2 +-
+ board/pc/post-image.sh                             |  2 +-
+ board/solidrun/mx6cubox/post-build.sh              |  2 +-
+ board/stmicroelectronics/stm32f429-disco/flash.sh  |  2 +-
+ board/stmicroelectronics/stm32f469-disco/flash.sh  |  2 +-
+ board/technologic/ts4800/post-image.sh             |  2 +-
+ board/technologic/ts4900/post-image.sh             |  2 +-
+ board/udoo/neo/post-build.sh                       |  2 +-
+ board/wandboard/post-build.sh                      |  2 +-
+ boot/grub2/Config.in                               |  4 ++--
+ boot/grub2/grub2.mk                                |  8 ++++---
+ boot/mxs-bootlets/mxs-bootlets.mk                  |  2 +-
+ boot/syslinux/syslinux.mk                          |  6 ++---
+ boot/uboot/uboot.mk                                | 12 +++++-----
+ docs/manual/faq-troubleshooting.txt                |  2 +-
+ docs/manual/using-buildroot-debugger.txt           |  2 +-
+ docs/manual/using-buildroot-toolchain.txt          |  2 +-
+ fs/axfs/axfs.mk                                    |  2 +-
+ fs/cloop/cloop.mk                                  |  4 ++--
+ fs/common.mk                                       |  4 ++--
+ fs/cramfs/cramfs.mk                                |  2 +-
+ fs/ext2/ext2.mk                                    |  2 +-
+ fs/iso9660/iso9660.mk                              |  6 ++---
+ fs/romfs/romfs.mk                                  |  2 +-
+ fs/squashfs/squashfs.mk                            |  2 +-
+ fs/ubifs/ubi.mk                                    |  2 +-
+ fs/ubifs/ubifs.mk                                  |  2 +-
+ fs/yaffs2/yaffs.mk                                 |  2 +-
+ linux/linux.mk                                     |  6 ++---
+ package/4th/4th.mk                                 | 10 ++++----
+ package/Makefile.in                                | 16 ++++++-------
+ package/acl/acl.mk                                 |  6 ++---
+ package/acpica/acpica.mk                           |  2 +-
+ package/am335x-pru-package/am335x-pru-package.mk   |  2 +-
+ package/android-tools/android-tools.mk             |  2 +-
+ package/attr/attr.mk                               |  4 ++--
+ package/autoconf-archive/autoconf-archive.mk       |  2 +-
+ package/autoconf/autoconf.mk                       |  8 +++----
+ package/automake/automake.mk                       |  6 ++---
+ package/axfsutils/axfsutils.mk                     |  2 +-
+ package/b43-firmware/b43-firmware.mk               |  2 +-
+ package/b43-fwcutter/b43-fwcutter.mk               |  2 +-
+ package/boost/boost.mk                             |  8 +++----
+ package/bzip2/bzip2.mk                             |  4 ++--
+ package/ca-certificates/ca-certificates.mk         |  2 +-
+ package/canfestival/canfestival.mk                 |  6 ++---
+ package/checkpolicy/checkpolicy.mk                 | 18 +++++++-------
+ package/cloop/cloop.mk                             |  6 ++---
+ package/cmake/cmake.mk                             |  4 ++--
+ package/cppcms/cppcms.mk                           |  2 +-
+ package/cramfs/cramfs.mk                           |  4 ++--
+ package/cryptopp/cryptopp.mk                       |  2 +-
+ package/cups/cups.mk                               |  2 +-
+ package/dbus-glib/dbus-glib.mk                     |  2 +-
+ package/dbus-python/dbus-python.mk                 |  4 ++--
+ package/dbus/dbus.mk                               |  2 +-
+ package/directfb/directfb.mk                       |  4 ++--
+ package/docker-containerd/docker-containerd.mk     |  2 +-
+ package/docker-engine/docker-engine.mk             |  2 +-
+ package/dos2unix/dos2unix.mk                       |  2 +-
+ package/dtc/dtc.mk                                 |  4 ++--
+ package/efl/efl.mk                                 | 18 +++++++-------
+ package/ejabberd/ejabberd.mk                       |  2 +-
+ package/elftosb/elftosb.mk                         |  6 ++---
+ package/enlightenment/enlightenment.mk             |  6 ++---
+ package/erlang-rebar/erlang-rebar.mk               |  2 +-
+ package/erlang/erlang.mk                           |  2 +-
+ package/execline/execline.mk                       |  9 ++++---
+ package/fakedate/fakedate.mk                       |  2 +-
+ package/faketime/faketime.mk                       |  4 ++--
+ package/flannel/flannel.mk                         |  2 +-
+ package/freescale-imx/imx-uuc/imx-uuc.mk           |  2 +-
+ package/gcc/gcc-final/gcc-final.mk                 |  2 +-
+ package/gcc/gcc.mk                                 | 12 +++++-----
+ package/gdb/gdb.mk                                 |  4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk                   |  6 ++---
+ package/genromfs/genromfs.mk                       |  4 +++-
+ package/gettext/gettext.mk                         |  6 ++---
+ package/go-bootstrap/go-bootstrap.mk               |  2 +-
+ package/go/go.mk                                   |  6 ++---
+ package/gob2/gob2.mk                               |  2 +-
+ package/google-breakpad/google-breakpad.mk         |  2 +-
+ package/gptfdisk/gptfdisk.mk                       |  2 +-
+ package/gtest/gtest.mk                             |  4 ++--
+ package/guile/guile.mk                             |  2 +-
+ package/gutenprint/gutenprint.mk                   |  6 ++---
+ package/gvfs/gvfs.mk                               |  2 +-
+ package/heimdal/heimdal.mk                         |  8 +++----
+ package/i2c-tools/i2c-tools.mk                     |  4 ++--
+ package/imx-usb-loader/imx-usb-loader.mk           |  3 +--
+ package/iw/iw.mk                                   |  2 +-
+ package/jsmin/jsmin.mk                             |  2 +-
+ .../kodi-jsonschemabuilder.mk                      |  2 +-
+ .../kodi-skin-confluence/kodi-skin-confluence.mk   |  2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk   |  2 +-
+ package/kodi/kodi.mk                               |  6 ++---
+ package/leafnode2/leafnode2.mk                     |  4 ++--
+ package/lesstif/lesstif.mk                         |  2 +-
+ package/libcap/libcap.mk                           |  4 ++--
+ package/libffi/libffi.mk                           |  8 +++----
+ package/libglib2/libglib2.mk                       |  6 ++---
+ package/libgtk2/libgtk2.mk                         |  6 ++---
+ package/libgtk3/libgtk3.mk                         | 18 +++++++-------
+ package/libiio/libiio.mk                           |  4 ++--
+ package/libselinux/libselinux.mk                   | 27 ++++++++++-----------
+ package/libsemanage/libsemanage.mk                 | 27 +++++++++++----------
+ package/libsepol/libsepol.mk                       |  6 ++---
+ package/libsigrok/libsigrok.mk                     |  2 +-
+ package/libsvgtiny/libsvgtiny.mk                   |  2 +-
+ package/libtool/libtool.mk                         |  4 ++--
+ package/libv4l/libv4l.mk                           |  6 ++---
+ package/libxml-parser-perl/libxml-parser-perl.mk   | 10 ++++----
+ package/libxml2/libxml2.mk                         |  2 +-
+ package/libxmlrpc/libxmlrpc.mk                     |  2 +-
+ .../linux-syscall-support/linux-syscall-support.mk |  2 +-
+ package/localedef/localedef.mk                     |  2 +-
+ package/lpc3250loader/lpc3250loader.mk             |  2 +-
+ package/lttng-tools/Config.in                      |  2 +-
+ package/lua/lua.mk                                 |  4 ++--
+ package/luainterpreter/luainterpreter.mk           |  2 +-
+ package/luajit/luajit.mk                           |  4 ++--
+ package/luarocks/luarocks.mk                       | 12 +++++-----
+ package/luvi/luvi.mk                               |  2 +-
+ package/lz4/lz4.mk                                 |  2 +-
+ package/lzip/lzip.mk                               |  4 ++--
+ package/lzma/lzma.mk                               |  2 +-
+ package/lzop/lzop.mk                               |  2 +-
+ package/makedevs/makedevs.mk                       |  2 +-
+ package/mfgtools/mfgtools.mk                       |  6 ++---
+ package/mfgtools/readme.txt                        |  2 +-
+ package/mkpasswd/mkpasswd.mk                       |  4 ++--
+ package/mkpimage/mkpimage.mk                       |  2 +-
+ package/moarvm/moarvm.mk                           |  2 +-
+ package/mono-gtksharp3/mono-gtksharp3.mk           |  2 +-
+ package/mono/mono.mk                               |  4 ++--
+ package/monolite/monolite.mk                       |  4 ++--
+ package/mplayer/mplayer.mk                         |  2 +-
+ package/mtd/mtd.mk                                 |  4 ++--
+ package/mxsldr/mxsldr.mk                           |  2 +-
+ package/ncftp/ncftp.mk                             |  2 +-
+ package/netsurf-buildsystem/netsurf-buildsystem.mk |  2 +-
+ package/ninja/ninja.mk                             |  2 +-
+ package/nodejs/nodejs.mk                           | 28 +++++++++++-----------
+ package/omap-u-boot-utils/omap-u-boot-utils.mk     |  2 +-
+ package/omniorb/omniorb.mk                         |  6 ++---
+ package/omxplayer/omxplayer.mk                     |  2 +-
+ package/opencv3/opencv3.mk                         |  4 ++--
+ package/openocd/openocd.mk                         |  4 ++--
+ package/openssl/openssl.mk                         |  2 +-
+ package/opkg-utils/opkg-utils.mk                   |  2 +-
+ package/oracle-mysql/oracle-mysql.mk               |  2 +-
+ package/owfs/owfs.mk                               |  2 +-
+ package/perl/perl.mk                               |  2 +-
+ package/php-amqp/php-amqp.mk                       |  4 ++--
+ package/php-geoip/php-geoip.mk                     |  4 ++--
+ package/php-gnupg/php-gnupg.mk                     |  4 ++--
+ package/php-imagick/php-imagick.mk                 |  4 ++--
+ package/php-memcached/php-memcached.mk             |  4 ++--
+ package/php-ssh2/php-ssh2.mk                       |  4 ++--
+ package/php-yaml/php-yaml.mk                       |  4 ++--
+ package/php-zmq/php-zmq.mk                         |  4 ++--
+ package/pinentry/pinentry.mk                       |  2 +-
+ package/pkg-cmake.mk                               |  4 ++--
+ package/pkg-perl.mk                                |  2 +-
+ package/pkg-python.mk                              |  6 ++---
+ package/pkg-waf.mk                                 | 10 ++++----
+ package/pkgconf/pkgconf.mk                         | 10 ++++----
+ package/pngquant/pngquant.mk                       |  2 +-
+ package/policycoreutils/policycoreutils.mk         | 23 +++++++++---------
+ package/protobuf/protobuf.mk                       |  2 +-
+ package/pseudo/pseudo.mk                           |  6 ++---
+ package/pulseaudio/pulseaudio.mk                   |  2 +-
+ package/python-cffi/python-cffi.mk                 |  2 +-
+ package/python-gobject/python-gobject.mk           |  4 ++--
+ package/python-lxml/python-lxml.mk                 |  4 ++--
+ package/python-pypcap/python-pypcap.mk             |  4 ++--
+ package/python-pyqt/python-pyqt.mk                 |  4 ++--
+ package/python-pyqt5/python-pyqt5.mk               |  4 ++--
+ package/python-setuptools/python-setuptools.mk     |  2 +-
+ package/python-sip/python-sip.mk                   |  6 ++---
+ package/python-web2py/python-web2py.mk             |  2 +-
+ package/python/python.mk                           |  6 ++---
+ package/python3/python3.mk                         | 16 ++++++-------
+ package/qemu/qemu.mk                               | 10 ++++----
+ package/qpid-proton/qpid-proton.mk                 |  2 +-
+ package/qt/qt.mk                                   | 20 ++++++++--------
+ package/qt5/qt5.mk                                 |  2 +-
+ package/qt5/qt53d/qt53d.mk                         |  2 +-
+ package/qt5/qt5base/qt5base.mk                     |  2 +-
+ package/qt5/qt5canvas3d/qt5canvas3d.mk             |  2 +-
+ package/qt5/qt5connectivity/qt5connectivity.mk     |  2 +-
+ package/qt5/qt5declarative/qt5declarative.mk       |  2 +-
+ package/qt5/qt5enginio/qt5enginio.mk               |  2 +-
+ .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |  2 +-
+ package/qt5/qt5imageformats/qt5imageformats.mk     |  2 +-
+ package/qt5/qt5location/qt5location.mk             |  2 +-
+ package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |  2 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk |  2 +-
+ package/qt5/qt5script/qt5script.mk                 |  2 +-
+ package/qt5/qt5sensors/qt5sensors.mk               |  2 +-
+ package/qt5/qt5serialbus/qt5serialbus.mk           |  2 +-
+ package/qt5/qt5serialport/qt5serialport.mk         |  2 +-
+ package/qt5/qt5svg/qt5svg.mk                       |  2 +-
+ package/qt5/qt5tools/qt5tools.mk                   |  2 +-
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |  2 +-
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  2 +-
+ package/qt5/qt5webkit/qt5webkit.mk                 |  4 ++--
+ package/qt5/qt5websockets/qt5websockets.mk         |  2 +-
+ package/qt5/qt5x11extras/qt5x11extras.mk           |  2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  2 +-
+ package/qt5cinex/qt5cinex.mk                       |  2 +-
+ .../0002-Makefile-add-DESTDIR-support.patch        | 22 +++++++++--------
+ package/refpolicy/refpolicy.mk                     |  2 +-
+ package/runc/runc.mk                               |  2 +-
+ package/s6-rc/s6-rc.mk                             | 10 ++++----
+ package/s6/s6.mk                                   |  8 +++----
+ package/sam-ba/sam-ba.mk                           |  4 ++--
+ package/scons/scons.mk                             |  4 ++--
+ package/sdl_image/sdl_image.mk                     |  4 ++--
+ package/sepolgen/sepolgen.mk                       |  4 ++--
+ package/setools/setools.mk                         | 12 +++++-----
+ package/shared-mime-info/shared-mime-info.mk       |  4 ++--
+ package/skalibs/skalibs.mk                         |  2 +-
+ package/socat/socat.mk                             |  2 +-
+ package/softether/softether.mk                     |  2 +-
+ package/sqlcipher/sqlcipher.mk                     |  2 +-
+ package/squashfs/squashfs.mk                       |  2 +-
+ package/sunxi-tools/sunxi-tools.mk                 |  6 ++---
+ package/swig/swig.mk                               |  8 +++----
+ package/systemd/systemd.mk                         |  2 +-
+ package/tcllib/tcllib.mk                           |  2 +-
+ package/terminology/terminology.mk                 |  2 +-
+ package/thrift/thrift.mk                           |  6 ++---
+ package/ti-cgt-pru/ti-cgt-pru.mk                   |  4 ++--
+ package/tvheadend/tvheadend.mk                     |  4 ++--
+ package/tz/tz.mk                                   |  6 ++---
+ package/tzdata/tzdata.mk                           |  6 ++---
+ package/tzdump/tzdump.mk                           |  4 ++--
+ package/uboot-tools/uboot-tools.mk                 |  8 +++----
+ package/uclibc/uclibc.mk                           |  8 +++----
+ package/upx/upx.mk                                 |  4 ++--
+ package/vala/vala.mk                               |  8 +++----
+ package/vboot-utils/vboot-utils.mk                 |  2 +-
+ package/vlc/vlc.mk                                 |  6 ++---
+ package/waf/waf.mk                                 |  2 +-
+ package/wireshark/wireshark.mk                     |  6 ++---
+ package/x11r7/libxcb/libxcb.mk                     |  4 ++--
+ .../xfont_font-adobe-100dpi.mk                     |  4 ++--
+ .../xfont_font-adobe-75dpi.mk                      |  4 ++--
+ .../xfont_font-adobe-utopia-100dpi.mk              |  4 ++--
+ .../xfont_font-adobe-utopia-75dpi.mk               |  4 ++--
+ .../xfont_font-adobe-utopia-type1.mk               |  4 ++--
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk |  4 ++--
+ .../xfont_font-arabic-misc.mk                      |  4 ++--
+ .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |  4 ++--
+ .../xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk     |  4 ++--
+ .../xfont_font-bh-lucidatypewriter-100dpi.mk       |  4 ++--
+ .../xfont_font-bh-lucidatypewriter-75dpi.mk        |  4 ++--
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |  4 ++--
+ .../xfont_font-bh-type1/xfont_font-bh-type1.mk     |  4 ++--
+ .../xfont_font-bitstream-100dpi.mk                 |  4 ++--
+ .../xfont_font-bitstream-75dpi.mk                  |  4 ++--
+ .../xfont_font-bitstream-type1.mk                  |  4 ++--
+ .../xfont_font-cronyx-cyrillic.mk                  |  4 ++--
+ .../xfont_font-cursor-misc.mk                      |  4 ++--
+ .../xfont_font-daewoo-misc.mk                      |  4 ++--
+ .../xfont_font-dec-misc/xfont_font-dec-misc.mk     |  4 ++--
+ .../xfont_font-ibm-type1/xfont_font-ibm-type1.mk   |  4 ++--
+ .../xfont_font-isas-misc/xfont_font-isas-misc.mk   |  4 ++--
+ .../xfont_font-jis-misc/xfont_font-jis-misc.mk     |  4 ++--
+ .../xfont_font-micro-misc/xfont_font-micro-misc.mk |  4 ++--
+ .../xfont_font-misc-cyrillic.mk                    |  4 ++--
+ .../xfont_font-misc-ethiopic.mk                    |  4 ++--
+ .../xfont_font-misc-meltho.mk                      |  4 ++--
+ .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |  4 ++--
+ .../xfont_font-mutt-misc/xfont_font-mutt-misc.mk   |  4 ++--
+ .../xfont_font-schumacher-misc.mk                  |  4 ++--
+ .../xfont_font-screen-cyrillic.mk                  |  4 ++--
+ .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |  4 ++--
+ .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |  4 ++--
+ .../xfont_font-winitzki-cyrillic.mk                |  4 ++--
+ .../xfont_font-xfree86-type1.mk                    |  4 ++--
+ package/x11r7/xlib_libX11/xlib_libX11.mk           |  2 +-
+ package/x264/x264.mk                               |  2 +-
+ package/xen/xen.mk                                 |  2 +-
+ package/yaffs2utils/yaffs2utils.mk                 |  2 +-
+ package/zic/zic.mk                                 |  6 ++---
+ package/zip/zip.mk                                 |  2 +-
+ package/zlib/zlib.mk                               |  2 +-
+ package/zynq-boot-bin/zynq-boot-bin.mk             |  2 +-
+ support/dependencies/check-host-cmake.mk           |  2 +-
+ support/dependencies/check-host-lzip.mk            |  2 +-
+ support/dependencies/check-host-tar.mk             |  2 +-
+ support/dependencies/check-host-xzcat.mk           |  2 +-
+ support/scripts/eclipse-register-toolchain         |  2 +-
+ .../toolchain-external/pkg-toolchain-external.mk   |  8 +++----
+ toolchain/toolchain-wrapper.mk                     |  2 +-
+ 312 files changed, 660 insertions(+), 651 deletions(-)
+
 -- 
 2.13.2
