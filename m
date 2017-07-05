@@ -1,35 +1,36 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:43 +0200
-Subject: [Buildroot] [PATCH v4 26/36] opkg-utils: use $(HOST_DIR) as PREFIX
-	instead of DESTDIR
+Date: Wed, 5 Jul 2017 13:14:45 +0200
+Subject: [Buildroot] [PATCH v4 28/36] dos2unix: use prefix instead of
+	DESTDIR for host installation
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-27-arnout@mind.be>
+Message-ID: <20170705111453.2284-29-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... and remove the /usr prefix
+prefix defaults to /usr, so setting DESTDIR installs things in
+$(HOST_DIR)/usr.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/opkg-utils/opkg-utils.mk | 2 +-
+ package/dos2unix/dos2unix.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index 6f4e64e34f..df202220d2 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -15,7 +15,7 @@ define HOST_OPKG_UTILS_BUILD_CMDS
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 87525fb468..276a18ebcc 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -38,7 +38,7 @@ define HOST_DOS2UNIX_BUILD_CMDS
  endef
  
- define HOST_OPKG_UTILS_INSTALL_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) PREFIX=/usr install
-+	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
+ define HOST_DOS2UNIX_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) ENABLE_NLS= \
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(HOST_DIR) ENABLE_NLS= \
+ 		install
  endef
  
- $(eval $(host-generic-package))
 -- 
 2.13.2
