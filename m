@@ -1,37 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:34 +0200
-Subject: [Buildroot] [git commit] board/gdb/bfin-bf512: remove host/usr
-	reference from readme.txt
-Message-ID: <20170705141336.7ECCE81D3F@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 16:06:36 +0200
+Subject: [Buildroot] [git commit] board/csky: remove host/usr reference from
+	readme.txt
+Message-ID: <20170705141336.97BF181D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23671c2f4c8a366f6d382e0a27d6c44612989234
+commit: https://git.buildroot.net/buildroot/commit/?id=6999e61394ba06fd05565f6b8fda9a13c464f884
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/gdb/bfin-bf512/readme.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ board/csky/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/gdb/bfin-bf512/readme.txt b/board/gdb/bfin-bf512/readme.txt
-index a56b5bc..b8ff250 100644
---- a/board/gdb/bfin-bf512/readme.txt
-+++ b/board/gdb/bfin-bf512/readme.txt
-@@ -1,10 +1,10 @@
- Run the simulation with GDB for FDPIC:
+diff --git a/board/csky/readme.txt b/board/csky/readme.txt
+index daf7185..b4605c5 100644
+--- a/board/csky/readme.txt
++++ b/board/csky/readme.txt
+@@ -84,5 +84,5 @@ Run
+   Setup the Console with the rate 115200/8-N-1.
  
-- ./output/host/usr/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
-+ ./output/host/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
- 
- Run the simulation with GDB for FLAT:
- 
-- ./output/host/usr/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
-+ ./output/host/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
- 
- The login prompt will appear in the terminal that started GDB.
+   $ cd output/images
+-  $ ../host/usr/bin/csky-linux-gdb -x ../../board/csky/gx6605s/gdbinit vmlinux
++  $ ../host/bin/csky-linux-gdb -x ../../board/csky/gx6605s/gdbinit vmlinux
  
