@@ -1,60 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 12:20:05 +0200
-Subject: [Buildroot] [git commit] toolchain/helpers.mk: re-evaluate DESTDIR
-	in copy_toolchain_lib_root
-Message-ID: <20170705101716.EB4B17FBDE@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 12:20:06 +0200
+Subject: [Buildroot] [git commit] toolchain-external: also put libgcc_s.so
+	unconditionally in TOOLCHAIN_EXTERNAL_LIBS
+Message-ID: <20170705101717.294D181809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3cc7e65ee53a0413dca074259b80425f6102d03
+commit: https://git.buildroot.net/buildroot/commit/?id=4cdd18c7f09a69194c15771a931ab0827c2b04ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-copy_toolchain_lib_root copies libraries from staging to target,
-resolving and copying symbolic links along the way.
-
-The most inner loop, a "while" loop, starts from an initial name, and
-if it's a symbolic link, gets resolved to the target, and the loop
-iterates until we reach a real file. However, the destination folder
-where the symbolic link or real file is created is computed in DESTDIR
-only once, before this loop starts. Therefore, this loop works fine
-when all symbolic links in the chain, and the real file all belong to
-the same directory. But it doesn't do the correct thing when the
-symbolic link and/or real file are in different folder.
-
-An example is Crosstool-NG musl toolchains, where the dynamic loader
-is in /lib/ld-musl*.so but points to ../usr/lib/libc.so. With the
-current logic, we copy /lib/ld-musl*.so to /lib, but we also copy
-libc.so to /lib instead of the expected /usr/lib.
-
-This currently doesn't cause any problem because the musl dynamic
-linker is manually created by the TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-hook. However, this logic has a number of problems, so in a followup
-commit, we are going to put the musl dynamic linker in
-TOOLCHAIN_EXTERNAL_LIBS, which will cause it to be copied by
-copy_toolchain_lib_root. But we obviously want the link and its target
-to be copied to the right place, hence this fix.
+libgcc_s.so is now added to TOOLCHAIN_EXTERNAL_LIBS for glibc/uclibc
+in one place, and for musl in another place. Bottom line: it should be
+in TOOLCHAIN_EXTERNAL_LIBS unconditionally.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 90834f4..fe2b4b9 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -13,10 +13,10 @@ copy_toolchain_lib_root = \
- \
- 	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIBPATTERN}" 2>/dev/null` ; \
- 	for LIBPATH in $${LIBPATHS} ; do \
--		DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
- 		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
- 		while true ; do \
- 			LIBNAME=`basename $${LIBPATH}`; \
-+			DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
- 			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
- 			if test -h $${LIBPATH} ; then \
- 				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 67f1361..3cba6ff 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -108,10 +108,10 @@ endif
+ # Definitions of the list of libraries that should be copied to the target.
+ #
+ 
+-TOOLCHAIN_EXTERNAL_LIBS += ld*.so*
++TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.*
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
++TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
+ ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+@@ -125,7 +125,7 @@ TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.* libanl
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libc.so libgcc_s.so.*
++TOOLCHAIN_EXTERNAL_LIBS += libc.so
+ endif
+ 
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
