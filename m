@@ -1,40 +1,40 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed, 5 Jul 2017 11:55:00 +0200
-Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf"
- to make "qmake" relocatable
-In-Reply-To: <20170705113043.5007de39@windsurf>
-References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
- <1499185359-8293-11-git-send-email-wg@grandegger.com>
- <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
- <20170705113043.5007de39@windsurf>
-Message-ID: <000a1137-c595-35cb-4938-514a2e183479@grandegger.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 11:57:04 +0200
+Subject: [Buildroot] [PATCH v3 00/14] Remove /usr component from HOST_DIR
+In-Reply-To: <20170704140404.4098-1-arnout@mind.be>
+References: <20170704140404.4098-1-arnout@mind.be>
+Message-ID: <20170705115704.3341f15b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-Am 05.07.2017 um 11:30 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Wed, 5 Jul 2017 10:59:40 +0200, Arnout Vandecappelle wrote:
-> 
->> On 04-07-17 18:22, Wolfgang Grandegger wrote:
->>> The file "qt.conf" can be used to override the hard-coded paths that are
->>> compiled into the Qt library. We need it to make "qmake" relocatable.
->>
->>   All qt5 packages are failing because of this, e.g.
->> http://autobuild.buildroot.net/results/33e/33eb7b7ef7d232bed2432d1d44fd80a4fc8c4e2d
->>
->> qt5serialport: installs files in
->> /accts/mlweber1/instance-2/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot//accts/mlweber1/instance-2/output
-> 
-> Due to the numerous build failures caused by this patch, I reverted the
-> commit.
+On Tue, 4 Jul 2017 16:03:50 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-I will resend then a proper patch for QT5 with the next release of my 
-"Make SDK relocatable" patch series.
+> Arnout Vandecappelle (14):
+>   Move $(HOST_DIR)/usr/$(GNU_TARGET_NAME) one level up.
+>   Move $(HOST_DIR)/usr/lib to $(HOST_DIR)/lib
+>   Eliminate $(HOST_DIR)/usr
+>   check-host-rpath: no longer check $(HOST_DIR)/usr/{bin,sbin}
+>   Makefile: remove $(HOST_DIR)/usr from BR_PATH
+>   package/Makefile.in: remove $(HOST_DIR)/usr part from HOST_LDFLAGS
+>   gdb: Remove /usr part from installation path of gdbserver
+>   gcc-final: things are no longer installed in $(HOST_DIR)/usr
+>   pkg-autotools: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+>   pkg-cmake: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+>   pkg-cmake: move configuration files out of $(HOST_DIR)/usr
+>   pkg-cmake: programs are now installed in $(HOST_DIR)/bin
+>   pkg-python: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
+>   pkg-rebar: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
 
-Wolfgang
+Series applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
