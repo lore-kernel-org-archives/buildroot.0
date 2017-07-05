@@ -1,79 +1,111 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:52 +0200
-Subject: [Buildroot] [PATCH v4 35/36] policycoreutils: rework host
-	installation
-In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
-References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-36-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 13:16:00 +0200
+Subject: [Buildroot] [PATCH v6 02/10] package/patchelf: add patch for
+ rpath sanitization under a root directory
+In-Reply-To: <1499185359-8293-3-git-send-email-wg@grandegger.com>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <1499185359-8293-3-git-send-email-wg@grandegger.com>
+Message-ID: <20170705131600.05eadaa9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-policycoreutils has a pretty peculiar interpretation of DESTDIR and
-PREFIX.  PREFIX is not consistently used: some installation paths and
-include paths are forced to $(DESTDIR)/usr/... . In other cases,
-PREFIX is indeed used. PREFIX defaults to $(DESTDIR)/usr
+Hello,
 
-Try to be a little bit more correct by passing both DESTDIR and PREFIX,
-both set to $(HOST_DIR). This is not a complete fix: some things are
-still installed in $(HOST_DIR)/usr - but nothing we care about (just
-manpages, systemd services, ...). More importantly, however, it still
-looks for e.g. D-Bus in $(DESTDIR)/usr/include/dbus-1.0.
+On Tue,  4 Jul 2017 18:22:31 +0200, Wolfgang Grandegger wrote:
 
-Still, it's better than nothing.
+> diff --git a/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
+> new file mode 100644
+> index 0000000..46fd123
+> --- /dev/null
+> +++ b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
+> @@ -0,0 +1,49 @@
+> +From a365bcb7d7025da51b33165ef7ebc7180199a05e Mon Sep 17 00:00:00 2001
+> +From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+> +Date: Mon, 19 Sep 2016 17:31:37 +0200
+> +Subject: [PATCH 14/30] Remove apparently incorrect usage of "static"
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/policycoreutils/policycoreutils.mk | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+The 14/30 should be removed, just make it [PATCH]
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 480fd6e09d..6fec4afb25 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -87,13 +87,18 @@ HOST_POLICYCOREUTILS_DEPENDENCIES = \
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- # large file support.
- # See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+# We need to pass DESTDIR at build time because it's used by
-+# policycoreutils build system to find headers and libraries.
-+# We also need to pass PREFIX because it defaults to $(DESTDIR)/usr
- HOST_POLICYCOREUTILS_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
- 	CPPFLAGS="$(HOST_CPPFLAGS) -U_FILE_OFFSET_BITS" \
- 	PYTHON="$(HOST_DIR)/bin/python" \
- 	PYTHON_INSTALL_ARGS="$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)" \
--	ARCH="$(HOSTARCH)"
-+	ARCH="$(HOSTARCH)" \
-+	DESTDIR=$(HOST_DIR) \
-+	PREFIX=$(HOST_DIR)
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_POLICYCOREUTILS_DEPENDENCIES += host-python3
-@@ -112,19 +117,15 @@ HOST_POLICYCOREUTILS_MAKE_DIRS = \
- 	semodule_package setfiles restorecond \
- 	audit2allow scripts semanage sepolicy
- 
--# We need to pass DESTDIR at build time because it's used by
--# policycoreutils build system to find headers and libraries.
- define HOST_POLICYCOREUTILS_BUILD_CMDS
- 	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) \
--			DESTDIR=$(HOST_DIR) all
-+		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
- 	)
- endef
- 
- define HOST_POLICYCOREUTILS_INSTALL_CMDS
- 	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) \
--			DESTDIR=$(HOST_DIR) install
-+		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
- 	)
- 	# Fix python paths
- 	$(SED) 's%/usr/bin/%$(HOST_DIR)/bin/%g' $(HOST_DIR)/bin/audit2allow
+> +
+
+Please add here:
+
+[Upstream commit: URL of the upstream commit.]
+Signed-off-by: ...
+
+
+> diff --git a/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch b/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
+> new file mode 100644
+> index 0000000..63f3bce
+> --- /dev/null
+> +++ b/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
+> @@ -0,0 +1,58 @@
+> +From 2e3fdc2030c75c19df6fc2924083cfad53856562 Mon Sep 17 00:00:00 2001
+> +From: Tuomas Tynkkynen <tuomas@tuxera.com>
+> +Date: Fri, 3 Jun 2016 23:03:51 +0300
+> +Subject: [PATCH 08/30] Extract a function for splitting a colon-separated
+> + string
+> +
+> +We're going to need this logic in another place, so make a function of
+> +this.
+
+Same comments here.
+
+
+> diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+> new file mode 100644
+> index 0000000..4f700d9
+> --- /dev/null
+> +++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+> @@ -0,0 +1,419 @@
+> +From af8d4a24a0ef613bdb47f0b1c3d962d59c53a4be Mon Sep 17 00:00:00 2001
+> +From: Wolfgang Grandegger <wg@grandegger.com>
+> +Date: Mon, 20 Feb 2017 16:29:24 +0100
+> +Subject: [PATCH] Add option to make the rpath relative under a specified root
+> + directory
+> +
+> +Running "patchelf" with the option "--make-rpath-relative ROOTDIR" will
+> +modify or delete the RPATHDIRs according the following rules
+> +similar to Martin's patches [1] making the Buildroot toolchaing/SDK
+> +relocatable.
+> +
+> +RPATHDIR starts with "$ORIGIN":
+> +    The original build-system already took care of setting a relative
+> +    RPATH, resolve it and test if it's valid (does exist)
+> +
+> +RPATHDIR starts with ROOTDIR:
+> +    The original build-system added some absolute RPATH (absolute on
+> +    the build machine). Test if it's valid (does exist).
+> +
+> +ROOTDIR/RPATHDIR exists:
+> +    The original build-system already took care of setting an absolute
+> +    RPATH (absolute in the final rootfs), resolve it and test if it's
+> +    valid (does exist).
+> +
+> +RPATHDIR points somewhere else:
+> +    (can be anywhere: build trees, staging tree, host location,
+> +    non-existing location, etc.). Just discard such a path.
+> +
+> +The option "--no-standard-libs" will discard RPATHDIRs ROOTDIR/lib and
+> +ROOTDIR/usr/lib. Like "--shrink-rpath", RPATHDIRs are also discarded
+> +if the directories do not contain a library referenced by the
+> +DT_NEEDED fields.
+> +If the option "--relative-to-file" is given, the rpath will start
+> +with "$ORIGIN" making it relative to the ELF file, otherwise an
+> +absolute path relative to ROOTDIR will be used.
+> +
+> +[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159422.html
+
+If this has been accepted upstream, add the URL to the upstream commit
+here as well.
+
+Thanks!
+
+Thomas
 -- 
-2.13.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
