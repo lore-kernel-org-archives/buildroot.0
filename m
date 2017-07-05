@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:40 +0200
-Subject: [Buildroot] [git commit] libcap: use $(HOST_DIR) as prefix instead
-	of DESTDIR
-Message-ID: <20170705141336.DDFC281D3F@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 16:06:44 +0200
+Subject: [Buildroot] [git commit] dos2unix: use prefix instead of DESTDIR
+	for host installation
+Message-ID: <20170705141337.3DB7381D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4013858646c41f5f4074d81aa67386e28dbc5d7a
+commit: https://git.buildroot.net/buildroot/commit/?id=86e07957b61f15aad2329f821bf11798ad0cdb6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... and also remove the /usr prefix.
+prefix defaults to /usr, so setting DESTDIR installs things in
+$(HOST_DIR)/usr.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcap/libcap.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dos2unix/dos2unix.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 35a6a97..48c2cb3 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -63,8 +63,8 @@ define HOST_LIBCAP_BUILD_CMDS
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 87525fb..276a18e 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -38,7 +38,7 @@ define HOST_DOS2UNIX_BUILD_CMDS
  endef
  
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
--		RAISE_SETFCAP=no prefix=/usr lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
-+		RAISE_SETFCAP=no lib=lib install
+ define HOST_DOS2UNIX_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) ENABLE_NLS= \
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(HOST_DIR) ENABLE_NLS= \
+ 		install
  endef
  
- $(eval $(generic-package))
