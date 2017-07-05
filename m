@@ -1,115 +1,152 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed, 5 Jul 2017 14:35:34 +0200
-Subject: [Buildroot] [PATCH v6 02/10] package/patchelf: add patch for
- rpath sanitization under a root directory
-In-Reply-To: <20170705131600.05eadaa9@windsurf>
-References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
- <1499185359-8293-3-git-send-email-wg@grandegger.com>
- <20170705131600.05eadaa9@windsurf>
-Message-ID: <33b116c3-f111-5e13-119f-7fe77ab2e33f@grandegger.com>
+From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Wed, 5 Jul 2017 14:08:04 +0200
+Subject: [Buildroot] [PATCH v5 4/5] fs/ext2: Add
+ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
+In-Reply-To: <2776e2e7-c975-92e1-c213-b7f0d161bf21@mind.be>
+References: <20170704144729.19753-1-s.martin49@gmail.com>
+ <20170704144729.19753-5-s.martin49@gmail.com>
+ <2776e2e7-c975-92e1-c213-b7f0d161bf21@mind.be>
+Message-ID: <3829c54e-be21-fd33-f4eb-f8ee00d5c953@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Am 05.07.2017 um 13:16 schrieb Thomas Petazzoni:
-> Hello,
+On 07/04/2017 07:39 PM, Arnout Vandecappelle wrote:
 > 
-> On Tue,  4 Jul 2017 18:22:31 +0200, Wolfgang Grandegger wrote:
 > 
->> diff --git a/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->> new file mode 100644
->> index 0000000..46fd123
->> --- /dev/null
->> +++ b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->> @@ -0,0 +1,49 @@
->> +From a365bcb7d7025da51b33165ef7ebc7180199a05e Mon Sep 17 00:00:00 2001
->> +From: Eelco Dolstra <eelco.dolstra@logicblox.com>
->> +Date: Mon, 19 Sep 2016 17:31:37 +0200
->> +Subject: [PATCH 14/30] Remove apparently incorrect usage of "static"
-> 
-> The 14/30 should be removed, just make it [PATCH]
-> 
+> On 04-07-17 16:47, Samuel Martin wrote:
+>> From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>>
+>> This option lets the user specify mke2fs options and/or ext2/3/4
+>> features.
+>>
+>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+>> ---
+>> changes v4->v5:
+>> - turn the options to accept any mke2fs options, not only ext2/3/4
+>>   features (Arnout)
+>> - add explaination for the default value for this new option (Arnout)
+>>
+>> changes v3->v4:
+>> - none
+>>
+>> changes v2->v3:
+>> - none
+>>
+>> changes v1->v2:
+>> - rebase
+>> ---
+>>  fs/ext2/Config.in | 17 +++++++++++++++++
+>>  fs/ext2/ext2.mk   |  5 ++++-
+>>  2 files changed, 21 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+>> index b2363940f0..9bbeb797a5 100644
+>> --- a/fs/ext2/Config.in
+>> +++ b/fs/ext2/Config.in
+>> @@ -67,6 +67,23 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+>>  	  Traditionally, this has been 5%, and all ext-related tools still
+>>  	  default to reserving 5% when creating a new ext filesystem.
+>>  
+>> +config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
+>> +	string "additional mke2fs options"
+>> +	default "-O ^64bit"
+>> +	help
+>> +	  Specify a space-separated list of mke2fs options, including any
+>> +	  ext2/3/4 filesystem features.
 >> +
+>> +	  For more information about the mke2fs option, see the manual page
 > 
-> Please add here:
+>  Lines should be wrapped at 72 columns, where tab counts for 8, so 62
+> significant characters.
 > 
-> [Upstream commit: URL of the upstream commit.]
-> Signed-off-by: ...
+>> +	  mke2fs(8).
+>> +
+>> +	  For more information about the ext2/3/4 features which can be set,
+>> +	  see then manual page ext4(5).
+>> +
+>> +	  The defaults disables the 64bit ext2/3/4 filesystem support since
+>> +	  its has been enable lately in 2017 in uboot, so most of the uboot
+>> +	  versions do not support it yet.
+> 
+>  Replace:
+> 	  The default is "-O ^64bit", i.e. disable the 64-bit filesystem.
+> 	  This is chosen because U-Boot versions before 2017.02 don't
+> 	  support that filesystem option, which may render the system
+> 	  unbootable if it is used.
+> 
+>  BTW, on reading the ext4 man page, I doubt this is needed at all:
+> 
+>        64bit
+>               Enables the file system to be larger than 2^32 blocks.  This
+> feature is set automatically, as needed, but it can be  useful  to  specify
+> this  feature explicitly  if the file system might need to be resized larger
+> than 2^32 blocks, even if it was smaller than that threshold when it was
+> originally created.  Note that some older kernels and older versions of
+> e2fsprogs will not support file systems with this ext4 feature enabled.
+> 
+> In other words, unless you create a filesystem larger than 4TB, this option
+> wouldn't be set anyway...
+> 
+>  But OK, it doesn't hurt to have this default I guess.
+> 
+>  S?bastien, could you comment?
 
-They (patchelf developers) don't add "Signed-off-by". Should I add mine 
-anyway?
+Since e2fsprogs 1.43 [1], the 64bit feature is enabled by default.
+
+[1] http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.43
+
+"Mke2fs will now create file systems with the metadata_csum and 64bit
+features enabled by default."
+
+Regards,
 
 > 
->> diff --git a/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch b/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
->> new file mode 100644
->> index 0000000..63f3bce
->> --- /dev/null
->> +++ b/package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
->> @@ -0,0 +1,58 @@
->> +From 2e3fdc2030c75c19df6fc2924083cfad53856562 Mon Sep 17 00:00:00 2001
->> +From: Tuomas Tynkkynen <tuomas@tuxera.com>
->> +Date: Fri, 3 Jun 2016 23:03:51 +0300
->> +Subject: [PATCH 08/30] Extract a function for splitting a colon-separated
->> + string
->> +
->> +We're going to need this logic in another place, so make a function of
->> +this.
 > 
-> Same comments here.
+>  Regards,
+>  Arnout
 > 
 > 
->> diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
->> new file mode 100644
->> index 0000000..4f700d9
->> --- /dev/null
->> +++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
->> @@ -0,0 +1,419 @@
->> +From af8d4a24a0ef613bdb47f0b1c3d962d59c53a4be Mon Sep 17 00:00:00 2001
->> +From: Wolfgang Grandegger <wg@grandegger.com>
->> +Date: Mon, 20 Feb 2017 16:29:24 +0100
->> +Subject: [PATCH] Add option to make the rpath relative under a specified root
->> + directory
 >> +
->> +Running "patchelf" with the option "--make-rpath-relative ROOTDIR" will
->> +modify or delete the RPATHDIRs according the following rules
->> +similar to Martin's patches [1] making the Buildroot toolchaing/SDK
->> +relocatable.
+>>  choice
+>>  	prompt "Compression method"
+>>  	default BR2_TARGET_ROOTFS_EXT2_NONE
+>> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+>> index c8da9c4451..a4c4a7b3d3 100644
+>> --- a/fs/ext2/ext2.mk
+>> +++ b/fs/ext2/ext2.mk
+>> @@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT)-$(EXT2_SIZE),y-)
+>>  $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
+>>  endif
+>>  
+>> +EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
 >> +
->> +RPATHDIR starts with "$ORIGIN":
->> +    The original build-system already took care of setting a relative
->> +    RPATH, resolve it and test if it's valid (does exist)
->> +
->> +RPATHDIR starts with ROOTDIR:
->> +    The original build-system added some absolute RPATH (absolute on
->> +    the build machine). Test if it's valid (does exist).
->> +
->> +ROOTDIR/RPATHDIR exists:
->> +    The original build-system already took care of setting an absolute
->> +    RPATH (absolute in the final rootfs), resolve it and test if it's
->> +    valid (does exist).
->> +
->> +RPATHDIR points somewhere else:
->> +    (can be anywhere: build trees, staging tree, host location,
->> +    non-existing location, etc.). Just discard such a path.
->> +
->> +The option "--no-standard-libs" will discard RPATHDIRs ROOTDIR/lib and
->> +ROOTDIR/usr/lib. Like "--shrink-rpath", RPATHDIRs are also discarded
->> +if the directories do not contain a library referenced by the
->> +DT_NEEDED fields.
->> +If the option "--relative-to-file" is given, the rpath will start
->> +with "$ORIGIN" making it relative to the ELF file, otherwise an
->> +absolute path relative to ROOTDIR will be used.
->> +
->> +[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159422.html
+>>  # qstrip results in stripping consecutive spaces into a single one. So the
+>>  # variable is not qstrip-ed to preserve the integrity of the string value.
+>>  EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+>> @@ -19,7 +21,8 @@ EXT2_OPTS = \
+>>  	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
+>>  	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+>>  	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+>> -	-L "$(EXT2_LABEL)"
+>> +	-L "$(EXT2_LABEL)" \
+>> +	$(EXT2_MKFS_OPTS)
+>>  
+>>  ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+>>  
+>>
 > 
-> If this has been accepted upstream, add the URL to the upstream commit
-> here as well.
 
-So far there was now response to my GitHub-Merge-Request. And it's now 
-based on v0.9 for the known reasons.
 
-Wolfgang.
+-- 
+S?bastien Szymanski
+Software engineer, Armadeus Systems
+Tel: +33 (0)9 72 29 41 44
+Fax: +33 (0)9 72 28 79 26
