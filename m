@@ -1,39 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  5 Jul 2017 19:23:01 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/gnuradio: link with libatomic
-	when needed
-Message-ID: <20170705172301.2634-1-bernd.kuhls@t-online.de>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 5 Jul 2017 20:42:40 +0300
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: bump to version 2.16.5
+In-Reply-To: <20170705200406.GB2822@momiji>
+References: <20170705143303.26282-1-aperez@igalia.com>
+ <87a84izzff.fsf@dell.be.48ers.dk> <20170705200406.GB2822@momiji>
+Message-ID: <20170705204240.GG2822@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/528/52825918bf65b23241cd68d99513350703469294/
+On Wed, 5 Jul 2017 20:04:06 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> On Wed, 05 Jul 2017 17:16:52 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> > [...]
+> >
+> > I take it that you actively use webkitgtk? I personally don't. Would you
+> > be interested getting added to DEVELOPERS and looking after the package?
+> 
+> Sure thing, I can send a patch to add myself [...]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: use CMAKE_EXE_LINKER_FLAGS instead of CMAKE_C_FLAGS (Thomas)
-v2: fix typo CMAKE_CXX_FLAGS -> CMAKE_C_FLAGS (Thomas)
+Patch posted: https://patchwork.ozlabs.org/patch/784762/
 
- package/gnuradio/gnuradio.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+:-)
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 6407dd4f8..a55c11611 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -30,6 +30,10 @@ GNURADIO_CONF_OPTS = \
- # compile time.
- GNURADIO_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GNURADIO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- # Yes, this is silly, because -march is already known by the compiler
- # with the internal toolchain, and passed by the external wrapper for
- # external toolchains. Nonetheless, gnuradio does some matching on the
--- 
-2.11.0
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170705/5929d63e/attachment.asc>
