@@ -1,78 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:53 +0200
-Subject: [Buildroot] [git commit] policycoreutils: rework host installation
-Message-ID: <20170705141337.E94797FB34@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 16:06:37 +0200
+Subject: [Buildroot] [git commit] libffi: avoid $(HOST_DIR)/usr while moving
+	headers
+Message-ID: <20170705141336.AA2727FB34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44874939f834fb380501f0fe4d12870ba7acef18
+commit: https://git.buildroot.net/buildroot/commit/?id=a82680a61871f5fb96e307a1dfb28a0a330e98d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-policycoreutils has a pretty peculiar interpretation of DESTDIR and
-PREFIX.  PREFIX is not consistently used: some installation paths and
-include paths are forced to $(DESTDIR)/usr/... . In other cases,
-PREFIX is indeed used. PREFIX defaults to $(DESTDIR)/usr
-
-Try to be a little bit more correct by passing both DESTDIR and PREFIX,
-both set to $(HOST_DIR). This is not a complete fix: some things are
-still installed in $(HOST_DIR)/usr - but nothing we care about (just
-manpages, systemd services, ...). More importantly, however, it still
-looks for e.g. D-Bus in $(DESTDIR)/usr/include/dbus-1.0.
-
-Still, it's better than nothing.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/policycoreutils/policycoreutils.mk | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ package/libffi/libffi.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 480fd6e..6fec4af 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -87,13 +87,18 @@ HOST_POLICYCOREUTILS_DEPENDENCIES = \
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- # large file support.
- # See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+# We need to pass DESTDIR at build time because it's used by
-+# policycoreutils build system to find headers and libraries.
-+# We also need to pass PREFIX because it defaults to $(DESTDIR)/usr
- HOST_POLICYCOREUTILS_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
- 	CPPFLAGS="$(HOST_CPPFLAGS) -U_FILE_OFFSET_BITS" \
- 	PYTHON="$(HOST_DIR)/bin/python" \
- 	PYTHON_INSTALL_ARGS="$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)" \
--	ARCH="$(HOSTARCH)"
-+	ARCH="$(HOSTARCH)" \
-+	DESTDIR=$(HOST_DIR) \
-+	PREFIX=$(HOST_DIR)
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_POLICYCOREUTILS_DEPENDENCIES += host-python3
-@@ -112,19 +117,15 @@ HOST_POLICYCOREUTILS_MAKE_DIRS = \
- 	semodule_package setfiles restorecond \
- 	audit2allow scripts semanage sepolicy
- 
--# We need to pass DESTDIR at build time because it's used by
--# policycoreutils build system to find headers and libraries.
- define HOST_POLICYCOREUTILS_BUILD_CMDS
- 	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) \
--			DESTDIR=$(HOST_DIR) all
-+		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
- 	)
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 38ef2d6..32e01e9 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -14,13 +14,13 @@ LIBFFI_AUTORECONF = YES
+ # Move the headers to the usual location, and adjust the .pc file
+ # accordingly.
+ define LIBFFI_MOVE_HEADERS
+-	mv $(1)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/usr/include/
++	mv $(1)/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/include/
+ 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
+-		$(1)/usr/lib/pkgconfig/libffi.pc
+-	rm -rf $(1)/usr/lib/libffi-*
++		$(1)/lib/pkgconfig/libffi.pc
++	rm -rf $(1)/lib/libffi-*
  endef
  
- define HOST_POLICYCOREUTILS_INSTALL_CMDS
- 	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) \
--			DESTDIR=$(HOST_DIR) install
-+		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
- 	)
- 	# Fix python paths
- 	$(SED) 's%/usr/bin/%$(HOST_DIR)/bin/%g' $(HOST_DIR)/bin/audit2allow
+-LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR))
++LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR)/usr)
+ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+ 
+ HOST_LIBFFI_MOVE_HOST_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(HOST_DIR))
