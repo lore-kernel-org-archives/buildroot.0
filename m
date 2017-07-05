@@ -1,57 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Jul 2017 10:18:34 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
- being sorted alphabetically
-In-Reply-To: <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
-References: <20170704235445.35255-1-code@mmayer.net>
- <20170704235445.35255-2-code@mmayer.net> <20170705072538.GE3499@scaer>
- <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
-Message-ID: <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed,  5 Jul 2017 10:19:57 +0200
+Subject: [Buildroot] [PATCH] package/filemq: bump to the latest master
+Message-ID: <20170705081957.10639-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This bump include a patch that fixes a build issue with gcc >= 7.1.
 
+Fixes:
+http://autobuild.buildroot.net/results/434/43452430edf44cbcef6ea3a5ab80ac0ff406208f
 
-On 05-07-17 10:09, Arnout Vandecappelle wrote:
-> 
-> 
-> On 05-07-17 09:25, Yann E. MORIN wrote:
->> Markus, all,
->>
->> On 2017-07-04 16:54 -0700, Markus Mayer spake thusly:
->>> From: Markus Mayer <mmayer@broadcom.com>
->>>
->>> The Linux tools master makefile (linux-tools.mk) must be included after
->>> all Linux tools sub-makefiles (linux-tool-*.mk). This is currently
->>> ensured by sorting all package makefiles alphabetically.
->>>
->>> In preparation for adding linux-tool-tmon, we cannot keep relying on
->>> this mechanism. In the C locale, linux-tool-tmon.mk will be sorted
->>> behind linux-tools.mk, which would break the build.
->> That is not the case for me:
-> 
->  Indeed, but it's just the commit message that is wrong. The sort is not done by
-> the sort program, but by make, and make doesn't get the LC_ALL=C passed to it.
-> So we indeed need to find a robust solution.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/filemq/filemq.hash | 2 +-
+ package/filemq/filemq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Hm, Yann tells me that make always uses the C locale for sorting. So why does
-it fail for you? The C locale for sure sorts correctly.
-
- Also, the only thing that is sensitive to the order in this case is
-LINUX_TOOLS_DEPENDENCIES. So you would miss the dependency on ncurses if it is
-in the wrong order. Is that what happens for you? Could you tell us what error
-you get?
-
- Regards,
- Arnout
-
+diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
+index d76d009..d1df1ff 100644
+--- a/package/filemq/filemq.hash
++++ b/package/filemq/filemq.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 a9973117f8afea6d4cbde95e4d7f46ab90d67cb0d72e42165410d665bf1765c1  filemq-3dc89932903b0320853d87833aabc6f7e7781c49.tar.gz
++sha256 f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 581e8a8..75d8bd9 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FILEMQ_VERSION = 3dc89932903b0320853d87833aabc6f7e7781c49
++FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
+ FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+ 
+ FILEMQ_AUTORECONF = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.4
