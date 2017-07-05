@@ -1,39 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 11:30:43 +0200
-Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf"
- to make "qmake" relocatable
-In-Reply-To: <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
-References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
- <1499185359-8293-11-git-send-email-wg@grandegger.com>
- <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
-Message-ID: <20170705113043.5007de39@windsurf>
+Date: Wed, 5 Jul 2017 11:32:46 +0200
+Subject: [Buildroot] [git commit] package/filemq: bump to the latest master
+Message-ID: <20170705092943.F19187FCC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=421b9d175fc1e4c0369ecbe32d83caf29d10b093
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 5 Jul 2017 10:59:40 +0200, Arnout Vandecappelle wrote:
+This bump include a patch that fixes a build issue with gcc >= 7.1.
 
-> On 04-07-17 18:22, Wolfgang Grandegger wrote:
-> > The file "qt.conf" can be used to override the hard-coded paths that are
-> > compiled into the Qt library. We need it to make "qmake" relocatable.  
-> 
->  All qt5 packages are failing because of this, e.g.
-> http://autobuild.buildroot.net/results/33e/33eb7b7ef7d232bed2432d1d44fd80a4fc8c4e2d
-> 
-> qt5serialport: installs files in
-> /accts/mlweber1/instance-2/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot//accts/mlweber1/instance-2/output
+Fixes:
+http://autobuild.buildroot.net/results/434/43452430edf44cbcef6ea3a5ab80ac0ff406208f
 
-Due to the numerous build failures caused by this patch, I reverted the
-commit.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/filemq/filemq.hash | 2 +-
+ package/filemq/filemq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
+index d76d009..d1df1ff 100644
+--- a/package/filemq/filemq.hash
++++ b/package/filemq/filemq.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 a9973117f8afea6d4cbde95e4d7f46ab90d67cb0d72e42165410d665bf1765c1  filemq-3dc89932903b0320853d87833aabc6f7e7781c49.tar.gz
++sha256 f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 581e8a8..75d8bd9 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FILEMQ_VERSION = 3dc89932903b0320853d87833aabc6f7e7781c49
++FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
+ FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+ 
+ FILEMQ_AUTORECONF = YES
