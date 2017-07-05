@@ -1,75 +1,116 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  5 Jul 2017 11:34:54 +0200
-Subject: [Buildroot] [PATCH] busybox: disable CONFIG_FEATURE_CLEAN_UP in
-	default configs
-Message-ID: <20170705093454.8326-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 11:35:51 +0200
+Subject: [Buildroot] [git commit] libzip: depend on !BR2_STATIC_LIBS
+Message-ID: <20170705093251.34D407F96B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FEATURE_CLEAN_UP is a configuration feature to get busybox to explicitly
-call free() on dynamic allocated memory just before exiting so memory leak
-detectors like valgrind don't get confused.  Upstream explicitly recommends
-to NOT enable this option:
+commit: https://git.buildroot.net/buildroot/commit/?id=7d9d40683260e6c74faaabb76715dfc77b9edd60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-config FEATURE_CLEAN_UP
-	bool "Clean up all memory before exiting (usually not needed)"
-	default n
-	help
-	  As a size optimization, busybox normally exits without explicitly
-	  freeing dynamically allocated memory or closing files. This saves
-	  space since the OS will clean up for us, but it can confuse debuggers
-	  like valgrind, which report tons of memory and resource leaks.
+Since version 1.2.0 libzip requires dynamic library capabilities. Add
+it to Config.in and propagate this dependency to packages selecting
+libzip.
 
-	  Don't enable this unless you have a really good reason to clean
-	  things up manually.
+Fixes:
 
-Having this option enabled adds a bit of bloat, but more significantly these
-cleanup code paths don't get tested very often so some times get out of sync
-with the allocation code which can lead to crashes (or security issues from
-double frees), so it is safer to disable the option.
+  http://autobuild.buildroot.net/results/c50ffa5bf565e75333192edc89e2d39044d07f26/
 
-For people wanting to debug memory leak issues with busybox, the option can
-still be enabled with a configuration fragment (or a custom config).
-
-The size difference isn't huge (br-arm-full-static):
-
--rwxr-xr-x 1 peko peko 886K Jul  5 10:56 output-busybox1/target/bin/busybox
--rwxr-xr-x 1 peko peko 882K Jul  5 10:53 output-busybox2/target/bin/busybox
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox-minimal.config | 2 +-
- package/busybox/busybox.config         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsigrok/Config.in  | 6 ++++--
+ package/libzip/Config.in     | 4 ++++
+ package/pulseview/Config.in  | 6 ++++--
+ package/sigrok-cli/Config.in | 7 +++++--
+ 4 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index 2abf458b78..0c8e63e627 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
-@@ -22,7 +22,7 @@ CONFIG_FEATURE_INSTALLER=y
- # CONFIG_PAM is not set
- CONFIG_LONG_OPTS=y
- CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
-+# CONFIG_FEATURE_CLEAN_UP is not set
- CONFIG_FEATURE_UTMP=y
- CONFIG_FEATURE_WTMP=y
- # CONFIG_FEATURE_PIDFILE is not set
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index c45de21808..508128d5e3 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -22,7 +22,7 @@ CONFIG_FEATURE_INSTALLER=y
- # CONFIG_PAM is not set
- CONFIG_LONG_OPTS=y
- CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
-+# CONFIG_FEATURE_CLEAN_UP is not set
- CONFIG_FEATURE_UTMP=y
- CONFIG_FEATURE_WTMP=y
- # CONFIG_FEATURE_PIDFILE is not set
--- 
-2.11.0
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index d2d022e..658d029 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSIGROK
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS # libzip
+ 	# std=c11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	select BR2_PACKAGE_LIBZIP
+@@ -34,6 +35,7 @@ comment "C++ bindings need a toolchain w/ C++, gcc >= 4.8"
+ 
+ endif
+ 
+-comment "libsigrok needs a toolchain w/ wchar, threads, gcc >= 4.7"
++comment "libsigrok needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
+diff --git a/package/libzip/Config.in b/package/libzip/Config.in
+index 54de9e5..6c952ac 100644
+--- a/package/libzip/Config.in
++++ b/package/libzip/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBZIP
+ 	bool "libzip"
++	depends on !BR2_STATIC_LIBS # dlsym()
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  C library for reading, creating, and modifying zip archives. This
+ 	  package also contains zipcmp, ziptorrent and zipmerge utilities.
+ 
+ 	  http://www.nih.at/libzip/
++
++comment "libzip needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index 81c73e3..926376e 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# libsigrok->libzip
++	depends on !BR2_STATIC_LIBS
+ 	# libsigrok
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	select BR2_PACKAGE_LIBSIGROK
+@@ -24,8 +26,8 @@ config BR2_PACKAGE_PULSEVIEW
+ 
+ 	  http://sigrok.org/wiki/PulseView
+ 
+-comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pulseview needs a toolchain w/ wchar, threads, dynamic library, C++, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
+index 2361665..75bd8c6 100644
+--- a/package/sigrok-cli/Config.in
++++ b/package/sigrok-cli/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_SIGROK_CLI
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
++	# libsigrok->libzip
++	depends on !BR2_STATIC_LIBS
+ 	# libsigrok
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	select BR2_PACKAGE_LIBSIGROK
+@@ -13,6 +15,7 @@ config BR2_PACKAGE_SIGROK_CLI
+ 
+ 	  http://sigrok.org/wiki/Sigrok-cli
+ 
+-comment "sigrok-cli needs a toolchain w/ wchar, threads, gcc >= 4.7"
++comment "sigrok-cli needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
