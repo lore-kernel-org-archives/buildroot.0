@@ -1,119 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 11:45:35 +0200
-Subject: [Buildroot] [git commit] Eliminate $(HOST_DIR)/usr
-Message-ID: <20170705095035.BA04A7FA7A@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 11:50:51 +0200
+Subject: [Buildroot] [git commit] pkg-rebar: use $(HOST_DIR) instead of
+	$(HOST_DIR)/usr as prefix
+Message-ID: <20170705095036.82A6981979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14151d77af20ec50eeba6e30465debf87b35faaa
+commit: https://git.buildroot.net/buildroot/commit/?id=9c9e076a9fcea33dd08ca6d184d3ed4b1d66b4f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We currently use $(HOST_DIR)/usr as the prefix for host packages. That
-has a few disadvantages:
+Remove the redundant usr/ component of the HOST_DIR paths. Since a
+previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
+everything keeps on working.
 
-- There are some things installed in $(HOST_DIR)/etc and
-  $(HOST_DIR)/sbin, which is inconsistent.
-
-- To pack a buildroot-built toolchain into a tarball for use as an
-  external toolchain, you have to pack output/host/usr instead of the
-  more obvious output/host.
-
-- Because of the above, the internal toolchain wrapper breaks which
-  forces us to work around it (call the actual toolchain executable
-  directly). This is OK for us, but when used in another build system,
-  that's a problem.
-
-- Paths are four characters longer.
-
-To allow us to gradually eliminate $(HOST_DIR)/usr while building
-packages, replace it with a symlink to .
-
-The symlinks from $(HOST_DIR)/usr/$(GNU_TARGET_NAME) and
-$(HOST_DIR)/usr/lib that were added previously are removed again.
-
-Note that the symlink creation will break when $(HOST_DIR)/usr
-already exists as a directory, i.e. when rebuilding in an existing
-output directory. This is necessary: if we don't break it now, the
-following commits (which remove the usr part from various variables)
-_will_ break it.
-
-At the same time as creating this symlink, we have to update the
-external toolchain wrapper and the external toolchain symlinks to go
-one directory less up. Indeed, $(HOST_DIR) is one level less up than
-it was before.
+$(PKG)_ERLANG_LIBDIR is problematic because it is used both for host
+and staging/target. Therefore, the usr/ part is removed from it, and
+added the the callers instead.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                                               | 7 +++----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 6 +++---
- toolchain/toolchain-wrapper.c                          | 2 +-
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ package/pkg-rebar.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index ac349a7..7453bfd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -552,16 +552,15 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- .PHONY: world
- world: target-post-image
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+index cc6b775..e2b4a58 100644
+--- a/package/pkg-rebar.mk
++++ b/package/pkg-rebar.mk
+@@ -25,14 +25,14 @@
+ # infrastructure tells rebar to NOT download dependencies during
+ # the build stage.
+ #
+-REBAR_HOST_DEPS_DIR = $(HOST_DIR)/usr/share/rebar/deps
++REBAR_HOST_DEPS_DIR = $(HOST_DIR)/share/rebar/deps
+ REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
  
--# When creating HOST_DIR, also symlink usr/lib -> ../lib
-+# When creating HOST_DIR, also symlink usr -> .
- $(HOST_DIR):
--	@mkdir -p $@/usr $@/lib
--	@ln -snf ../lib $@/usr/lib
-+	@mkdir -p $@
-+	@ln -snf . $@/usr
+ # Tell rebar where to find the dependencies
+ #
+ REBAR_HOST_DEPS_ENV = \
+ 	ERL_COMPILER_OPTIONS='{i, "$(REBAR_HOST_DEPS_DIR)"}' \
+-	ERL_EI_LIBDIR=$(HOST_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
++	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+ REBAR_TARGET_DEPS_ENV = \
+ 	ERL_COMPILER_OPTIONS='{i, "$(REBAR_TARGET_DEPS_DIR)"}' \
+ 	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+@@ -119,10 +119,10 @@ define inner-rebar-package
+ $(2)_ERLANG_APP = $(subst -,_,$(patsubst erlang-%,%,$(patsubst host-%,%,$(1))))
  
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR): | $(HOST_DIR)
- 	@mkdir -p $(STAGING_DIR)
- 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
--	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
+ # Path where to store the package's libs, relative to either $(HOST_DIR)
+-# for host packages, or $(STAGING_DIR) for target packages.
++# for host packages, or $(STAGING_DIR)/usr for target packages.
+ #
+ $(2)_ERLANG_LIBDIR = \
+-	usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
++	lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
  
- RSYNC_VCS_EXCLUSIONS = \
- 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 8460e37..adbd3fe 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -250,18 +250,18 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 		base=$${i##*/}; \
- 		case "$$base" in \
- 		*-ar|*-ranlib|*-nm) \
--			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
-+			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			;; \
- 		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
- 			ln -sf toolchain-wrapper $$base; \
- 			;; \
- 		*gdb|*gdbtui) \
- 			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
--				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
-+				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			fi \
- 			;; \
- 		*) \
--			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
-+			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			;; \
- 		esac; \
- 	done
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 100aa18..3a4455f 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -178,7 +178,7 @@ int main(int argc, char **argv)
- 			perror(__FILE__ ": malloc");
- 			return 2;
- 		}
--		sprintf(relbasedir, "%s/../..", argv[0]);
-+		sprintf(relbasedir, "%s/..", argv[0]);
- 		absbasedir = realpath(relbasedir, NULL);
- 	} else {
- 		basename = progpath;
+ # If a host package, inherit <pkg>_USE_BUNDLED_REBAR from the target
+ # package, if not explicitly defined. Otherwise, default to NO.
+@@ -173,8 +173,8 @@ endif
+ # package-related variables
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(call install-erlang-directories,$$(STAGING_DIR),include)
+-	$$(call install-rebar-deps,$$(STAGING_DIR),TARGET)
++	$$(call install-erlang-directories,$$(STAGING_DIR)/usr,include)
++	$$(call install-rebar-deps,$$(STAGING_DIR)/usr,TARGET)
+ endef
+ endif
+ 
+@@ -182,7 +182,7 @@ endif
+ # package-related variables
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$(call install-erlang-directories,$$(TARGET_DIR))
++	$$(call install-erlang-directories,$$(TARGET_DIR)/usr)
+ endef
+ endif
+ 
