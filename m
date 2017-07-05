@@ -1,69 +1,109 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  5 Jul 2017 11:42:30 +0200
-Subject: [Buildroot] [PATCH v2] package/kvazaar: disable on PowerPC
-Message-ID: <20170705094230.21439-1-romain.naour@smile.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 5 Jul 2017 11:46:04 +0200
+Subject: [Buildroot] [PATCH] python-systemd: add new package
+In-Reply-To: <20170704194716.15130-1-andrew.smirnov@gmail.com>
+References: <20170704194716.15130-1-andrew.smirnov@gmail.com>
+Message-ID: <CAGm1_kt1LUEfa-pQOMFJLvoiq6yL256rjyPT0N++qv5LH9XkAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is actually three build issues with kvazaar on PowerPC:
+Hi Andrey,
 
-The first one due to deprecated vec_lvsl() function:
+On Tue, Jul 4, 2017 at 9:47 PM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+> Add package for official python bindings availibe as a part of systemd
+> project at: https://github.com/systemd/python-systemd
+>
+> Minimal config snippet for utils/test-pkg is as follows (sans
+> backslashes):
+>
+> \# BR2_INIT_BUSYBOX is not set
+> \# BR2_INIT_SYSV is not set
+> BR2_INIT_SYSTEMD=y
+> \# BR2_INIT_NONE is not set
+> BR2_PACKAGE_PYTHON3=y
+> BR2_PACKAGE_PYTHON_SYSTEMD=y
+>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  DEVELOPERS                               |  1 +
+>  package/Config.in                        |  1 +
+>  package/python-systemd/Config.in         |  7 +++++++
+>  package/python-systemd/python-systemd.mk | 14 ++++++++++++++
 
-strategies/altivec/picture-altivec.c: In function ?reg_sad_altivec?:
-strategies/altivec/picture-altivec.c:43:5: error: vec_lvsl is deprecated for little endian; use assignment for unaligned loads and stores [-Werror=deprecated]
-perm1 = vec_lvsl(0, &data1[y * stride1]);
-^~~~~
+python-systemd.hash file is missing.
 
-Reported upstream:
-https://github.com/ultravideo/kvazaar/issues/172
+>  4 files changed, 23 insertions(+)
+>  create mode 100644 package/python-systemd/Config.in
+>  create mode 100644 package/python-systemd/python-systemd.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7c8d7f1..08a138a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -94,6 +94,7 @@ F:    package/python-pathlib2/
+>  F:     package/python-pickleshare/
+>  F:     package/python-scandir/
+>  F:     package/python-simplegeneric/
+> +F:     package/python-systemd/
+>  F:     package/python-traitlets/
+>
+>  N:     Andrey Yurovsky <yurovsky@gmail.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index a811ff6..af1aa0c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -860,6 +860,7 @@ menu "External python modules"
+>         source "package/python-socketio/Config.in"
+>         source "package/python-sortedcontainers//Config.in"
+>         source "package/python-spidev/Config.in"
+> +       source "package/python-systemd/Config.in"
+>         source "package/python-tempora/Config.in"
+>         source "package/python-thrift/Config.in"
+>         source "package/python-tomako/Config.in"
+> diff --git a/package/python-systemd/Config.in b/package/python-systemd/Config.in
+> new file mode 100644
+> index 0000000..83fdcb4
+> --- /dev/null
+> +++ b/package/python-systemd/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_SYSTEMD
+> +       bool "python-systemd"
+> +       depends on BR2_PACKAGE_SYSTEMD
+> +       help
+> +         Python module for native access to the systemd facilities.
+> +
+> +         https://github.com/systemd/python-systemd
 
-The second one due to mixing AltiVec and E500 instructions:
+Missing comment saying, that this package needs systemd
 
-strategies/altivec/picture-altivec.c:1:0: error: AltiVec and E500 instructions cannot coexist
+> diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
+> new file mode 100644
+> index 0000000..a3684c4
+> --- /dev/null
+> +++ b/package/python-systemd/python-systemd.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-systemd
+> +#
+> +################################################################################
+> +
+> +PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
 
-Reported upstream:
-https://github.com/ultravideo/kvazaar/issues/173
+put dependencies statement after license stuff
 
-The last one due to enabling AltiVec on unsupported target:
+Yegor
 
-strategies/altivec/picture-altivec.c:1:0: error: AltiVec not supported in this target
-
-Reported upstream:
-https://github.com/ultravideo/kvazaar/issues/174
-
-Fixes:
-[1] http://autobuild.buildroot.net/results/486/486757f04bc73736b64d18c3298216280be897b1
-[2] http://autobuild.buildroot.net/results/45d/45d22c9f2f5b593bed286319105c82cbc3396835
-[3] http://autobuild.buildroot.net/results/76c/76c76191f84748326d76fe0cc89456a72738a06b
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-v2: rework the commit log and add upstream bug report (ThomasP)
----
- package/kvazaar/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
-index fb97369..558d161 100644
---- a/package/kvazaar/Config.in
-+++ b/package/kvazaar/Config.in
-@@ -3,11 +3,14 @@ config BR2_PACKAGE_KVAZAAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	# use deprecated altivec vec_lvsl()
-+	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
- 	help
- 	  An open-source HEVC encoder licensed under LGPLv2.1
- 
- 	  https://github.com/ultravideo/kvazaar
- 
- comment "kvazaar needs a toolchain w/ C++, threads"
-+	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.9.4
+> +PYTHON_SYSTEMD_VERSION = 233 # Should be kept in sync with $(SYSTEMD_VERSION)
+> +PYTHON_SYSTEMD_SITE = $(call github,systemd,python-systemd,v$(PYTHON_SYSTEMD_VERSION))
+> +PYTHON_SYSTEMD_SETUP_TYPE = distutils
+> +PYTHON_SYSTEMD_LICENSE = LGPL-2.1
+> +PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
+> +
+> +$(eval $(python-package))
+> --
+> 2.9.4
