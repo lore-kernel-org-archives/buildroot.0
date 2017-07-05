@@ -1,108 +1,41 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  5 Jul 2017 16:10:28 +0200
-Subject: [Buildroot] [PATCH] package/linuxptp: remove incdefs.sh to avoid
-	cross-compilation issues
-Message-ID: <20170705141028.28194-1-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 16:13:17 +0200
+Subject: [Buildroot] [PATCH v6 10/10] package/qt5base: provide "qt.conf"
+ to make "qmake" relocatable
+In-Reply-To: <51297962-b3bc-bd68-8dee-3a1ad8ca92ae@grandegger.com>
+References: <1499185359-8293-1-git-send-email-wg@grandegger.com>
+ <1499185359-8293-11-git-send-email-wg@grandegger.com>
+ <ccd502d6-648b-7a9d-1d64-6e14eb90196f@mind.be>
+ <a3612c93-7e2a-f2e0-0fbd-9d93bd4e759a@grandegger.com>
+ <57657dbc-eca2-a352-ae7c-902a01c9ce73@grandegger.com>
+ <51297962-b3bc-bd68-8dee-3a1ad8ca92ae@grandegger.com>
+Message-ID: <20170705161317.205dc3ae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-incdefs.sh try to define some flags based on some build tests and
-by checking a kernel header. It doesn't work well while cross-compiling.
+Hello,
 
-The Buildroot buildsystem define these definition directly
-in the EXTRA_CFLAGS.
+On Wed, 5 Jul 2017 15:48:22 +0200, Wolfgang Grandegger wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
+> What about making the relocation stuff configurable as shown in the patch below.
+> The advantage is that it could also control the generation of the "qt.conf",
+> for example.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...move-incdefs.sh-to-avoid-cross-compilatio.patch | 31 ++++++++++++++++++++++
- package/linuxptp/Config.in                         |  4 +++
- package/linuxptp/linuxptp.mk                       | 10 +++++--
- 3 files changed, 43 insertions(+), 2 deletions(-)
- create mode 100644 package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
+We don't want to make it configurable, through a Config.in option.
+However, we would like to have a separate make target that prepares the
+SDK, creates the tarball, etc.
 
-diff --git a/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch b/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
-new file mode 100644
-index 0000000..cc932b4
---- /dev/null
-+++ b/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
-@@ -0,0 +1,31 @@
-+From 0759b36ad0a728a49f329fa0e7e6173fe3ccb657 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Wed, 5 Jul 2017 15:37:22 +0200
-+Subject: [PATCH] makefile: remove incdefs.sh to avoid cross-compilation issues
-+
-+The Buildroot buildsystem define these definition directly
-+in the EXTRA_CFLAGS.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ makefile | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/makefile b/makefile
-+index f898336..5912f9a 100644
-+--- a/makefile
-++++ b/makefile
-+@@ -33,7 +33,6 @@ OBJECTS	= $(OBJ) hwstamp_ctl.o phc2sys.o phc_ctl.o pmc.o pmc_common.o \
-+ SRC	= $(OBJECTS:.o=.c)
-+ DEPEND	= $(OBJECTS:.o=.d)
-+ srcdir	:= $(dir $(lastword $(MAKEFILE_LIST)))
-+-incdefs := $(shell $(srcdir)/incdefs.sh)
-+ version := $(shell $(srcdir)/version.sh $(srcdir))
-+ VPATH	= $(srcdir)
-+ 
-+-- 
-+2.9.4
-+
-diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
-index 3e18a0c..8c9d684 100644
---- a/package/linuxptp/Config.in
-+++ b/package/linuxptp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LINUXPTP
- 	bool "linuxptp"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	help
- 	  The Linux PTP Project is the Precision Time Protocol
- 	  implementation according to IEEE standard 1588 for Linux.
-@@ -11,3 +12,6 @@ config BR2_PACKAGE_LINUXPTP
- 	  not a goal.
- 
- 	  http://linuxptp.sourceforge.net/
-+
-+comment "linuxptp needs a toolchain w/ headers >= 3.2"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index beb2591..35702e0 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -10,10 +10,16 @@ LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
- LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
- 
-+# incdefs.sh doesn't work for cross-compilation.
-+# Define HAVE_ONESTEP_SYNC in EXTRA_CFLAGS directly and depends on
-+# kernel headers >= 3.2.
- define LINUXPTP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
--		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
--		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
-+		$(MAKE) \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE \
-+			-DHAVE_ONESTEP_SYNC -DHAVE_CLOCK_ADJTIME \
-+			-DHAVE_POSIX_SPAWN" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		-C $(@D) all
- endef
- 
+Basically, a normal "make" would not run all the rpath sanitization
+logic, absolute path replacement, etc. There should be a separate "make
+sdk" target that does this.
+
+Best regards,
+
+Thomas
 -- 
-2.9.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
