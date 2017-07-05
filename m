@@ -1,77 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 12:25:15 +0200
-Subject: [Buildroot] [git commit] busybox: disable CONFIG_FEATURE_CLEAN_UP
-	in default configs
-Message-ID: <20170705102219.54BB980811@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  5 Jul 2017 12:25:32 +0200
+Subject: [Buildroot] [PATCH 0/5] arch/arm: introduce big.LITTLE
+	configurations
+Message-ID: <cover.1499250321.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15e8e721f6e391c7aa397f3081b7970fe8bbcab9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-FEATURE_CLEAN_UP is a configuration feature to get busybox to explicitly
-call free() on dynamic allocated memory just before exiting so memory leak
-detectors like valgrind don't get confused.  Upstream explicitly recommends
-to NOT enable this option:
+This series adds four new CPU variants to the arm choice, to enable
+optimising for big.LITTLE CPUs.
 
-config FEATURE_CLEAN_UP
-	bool "Clean up all memory before exiting (usually not needed)"
-	default n
-	help
-	  As a size optimization, busybox normally exits without explicitly
-	  freeing dynamically allocated memory or closing files. This saves
-	  space since the OS will clean up for us, but it can confuse debuggers
-	  like valgrind, which report tons of memory and resource leaks.
+We first fix the current values inthe first two patches, then introduce
+the actual new variants, and then make use of the sole packages that
+needs to know of them.
 
-	  Don't enable this unless you have a really good reason to clean
-	  things up manually.
+This has been only slightly tested by simply building the toolchains for
+the six possibilities:
+  - the four variants in arm mode (32-bit),
+  - the two armv8 variants in aarch64 mode (64-bit).
 
-Having this option enabled adds a bit of bloat, but more significantly these
-cleanup code paths don't get tested very often so some times get out of sync
-with the allocation code which can lead to crashes (or security issues from
-double frees), so it is safer to disable the option.
+The variants were introduced in various versions of gcc, so we protect
+the internal gcc as well as the external toolchains accordingly.
 
-For people wanting to debug memory leak issues with busybox, the option can
-still be enabled with a configuration fragment (or a custom config).
 
-The size difference isn't huge (br-arm-full-static):
+Regards,
+Yann E. MORIN.
 
--rwxr-xr-x 1 peko peko 886K Jul  5 10:56 output-busybox1/target/bin/busybox
--rwxr-xr-x 1 peko peko 882K Jul  5 10:53 output-busybox2/target/bin/busybox
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox-minimal.config | 2 +-
- package/busybox/busybox.config         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The following changes since commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index 2abf458..0c8e63e 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
-@@ -22,7 +22,7 @@ CONFIG_FEATURE_INSTALLER=y
- # CONFIG_PAM is not set
- CONFIG_LONG_OPTS=y
- CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
-+# CONFIG_FEATURE_CLEAN_UP is not set
- CONFIG_FEATURE_UTMP=y
- CONFIG_FEATURE_WTMP=y
- # CONFIG_FEATURE_PIDFILE is not set
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index c45de21..508128d 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -22,7 +22,7 @@ CONFIG_FEATURE_INSTALLER=y
- # CONFIG_PAM is not set
- CONFIG_LONG_OPTS=y
- CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
-+# CONFIG_FEATURE_CLEAN_UP is not set
- CONFIG_FEATURE_UTMP=y
- CONFIG_FEATURE_WTMP=y
- # CONFIG_FEATURE_PIDFILE is not set
+  syslinux: drop patch 0003, not needed after gnu-efi update (2017-07-04 18:45:26 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to cdc5ada0fd19765aff9779fc109a26284c9320b6
+
+  package/kvm-unit-test: available for big.LITTLE arm cores too (2017-07-05 12:07:49 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      arch/arm: fix -mcpu default values for AArch64
+      arch/arm: fix defaults for AArch64 in 64-bit mode
+      package/kvm-unit-tests: introduce _ARCH_SUPPORTS
+      arch/arm: add big.LITTLE cpu variants
+      package/kvm-unit-test: available for big.LITTLE arm cores too
+
+ arch/Config.in.arm                                 | 50 ++++++++++++++++++----
+ package/gcc/Config.in.host                         |  5 ++-
+ package/kvm-unit-tests/Config.in                   | 19 ++++----
+ .../Config.in                                      |  2 +
+ .../toolchain-external-codesourcery-arm/Config.in  |  4 ++
+ 5 files changed, 62 insertions(+), 18 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
