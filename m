@@ -1,53 +1,99 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 5 Jul 2017 15:42:48 +0300
-Subject: [Buildroot] [PATCH 1/1] libpwquality: Link with zlib when
- required in static builds
-In-Reply-To: <20170705104518.23599-1-stefan.sorensen@spectralink.com>
-References: <20170705104518.23599-1-stefan.sorensen@spectralink.com>
-Message-ID: <20170705124248.y4rot3ibr5o5b4kc@tarshish>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed,  5 Jul 2017 15:01:00 +0200
+Subject: [Buildroot] [PATCH v6 2/2] fs/ext2: Add
+	BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
+In-Reply-To: <20170705130100.441-1-s.martin49@gmail.com>
+References: <20170705130100.441-1-s.martin49@gmail.com>
+Message-ID: <20170705130100.441-2-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-On Wed, Jul 05, 2017 at 12:45:18PM +0200, Stefan S?rensen wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/cfb3a591391d90762a326d91af3ec502a6161ac5
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
->  package/libpwquality/libpwquality.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
-> index 66b15d8..5b5c0e0 100644
-> --- a/package/libpwquality/libpwquality.mk
-> +++ b/package/libpwquality/libpwquality.mk
-> @@ -27,6 +27,11 @@ else
->  LIBPWQUALITY_CONF_OPTS += --disable-pam
->  endif
->  
-> +# Static link with cracklib requires -lz if zlib is enabled
-> +ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_ZLIB),y:y)
+This option lets the user specify mke2fs options and/or ext2/3/4
+features.
 
-No need for ':', just test equation to 'yy'. The ':' is only useful when you 
-want to make sure that one specific variable is 'y' and the other is not set. 
-Testing equation to 'y' only means that any variable is set, and the other 
-not.
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-baruch
+---
+changes v5->v6:
+- wrap help text at 70 chars. (Arnout)
+- reword default value explainations (Arnout)
 
-> +LIBPWQUALITY_CONF_ENV += LIBS="-lz"
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBPWQUALITY_TOOLS),)
->  define LIBPWQUALITY_REMOVE_TOOLS
->  	rm -f $(TARGET_DIR)/usr/bin/pwmake
+changes v4->v5:
+- turn the options to accept any mke2fs options, not only ext2/3/4
+  features (Arnout)
+- add explaination for the default value for this new option (Arnout)
 
+changes v3->v4:
+- none
+
+changes v2->v3:
+- none
+
+changes v1->v2:
+- rebase
+---
+ fs/ext2/Config.in | 18 ++++++++++++++++++
+ fs/ext2/ext2.mk   |  5 ++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index aeee91748..5aec21078 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -67,6 +67,24 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	  Traditionally, this has been 5%, and all ext-related tools still
+ 	  default to reserving 5% when creating a new ext filesystem.
+ 
++config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
++	string "additional mke2fs options"
++	default "-O ^64bit"
++	help
++	  Specify a space-separated list of mke2fs options, including any
++	  ext2/3/4 filesystem features.
++
++	  For more information about the mke2fs option, see the manual
++	  page mke2fs(8).
++
++	  For more information about the ext2/3/4 features which can be
++	  set, see then manual page ext4(5).
++
++	  The default is "-O ^64bit", i.e. disable the 64-bit filesystem.
++	  This is chosen because U-Boot versions before 2017.02 don't
++	  support that filesystem option, which may render the system
++	  unbootable if it is used.
++
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index b609d36ae..06970f0ee 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
+ $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
+ endif
+ 
++EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
++
+ # qstrip results in stripping consecutive spaces into a single one. So the
+ # variable is not qstrip-ed to preserve the integrity of the string value.
+ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+@@ -19,7 +21,8 @@ EXT2_OPTS = \
+ 	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
+ 	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+ 	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
+-	-L "$(EXT2_LABEL)"
++	-L "$(EXT2_LABEL)" \
++	$(EXT2_MKFS_OPTS)
+ 
+ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.13.0
