@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:42 +0200
-Subject: [Buildroot] [PATCH v4 25/36] lzip: use $(HOST_DIR) as prefix
+Date: Wed, 5 Jul 2017 13:14:43 +0200
+Subject: [Buildroot] [PATCH v4 26/36] opkg-utils: use $(HOST_DIR) as PREFIX
 	instead of DESTDIR
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-26-arnout@mind.be>
+Message-ID: <20170705111453.2284-27-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lzip/lzip.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/opkg-utils/opkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index 04c83f1133..cb8803737e 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
-@@ -15,7 +15,7 @@ define LZIP_CONFIGURE_CMDS
+diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
+index 6f4e64e34f..df202220d2 100644
+--- a/package/opkg-utils/opkg-utils.mk
++++ b/package/opkg-utils/opkg-utils.mk
+@@ -15,7 +15,7 @@ define HOST_OPKG_UTILS_BUILD_CMDS
  endef
  
- define HOST_LZIP_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_MAKE_ENV) ./configure --prefix=/usr \
-+	(cd $(@D); $(HOST_MAKE_ENV) ./configure --prefix=$(HOST_DIR) \
- 		$(HOST_CONFIGURE_OPTS) )
+ define HOST_OPKG_UTILS_INSTALL_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) PREFIX=/usr install
++	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
  endef
  
-@@ -32,7 +32,7 @@ define LZIP_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_LZIP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
- # It's not autotools-based
+ $(eval $(host-generic-package))
 -- 
 2.13.2
