@@ -1,72 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 22:30:55 +0200
-Subject: [Buildroot] [git commit] xvisor: fix build on AArch64
-Message-ID: <20170705202947.AB27B81F86@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 Jul 2017 22:23:26 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
+ CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT for ARMv8
+In-Reply-To: <20170705190840.22469-2-aperez@igalia.com>
+References: <20170705190840.22469-1-aperez@igalia.com>
+ <20170705190840.22469-2-aperez@igalia.com>
+Message-ID: <407724d9-6ae3-b166-63df-7d1559d2160c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=117fd5dfbc756c4f2b4aef97fc2b568528c66df7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Xvisor was failing to build on AArch64 with:
 
-package/xvisor/xvisor.mk:60: *** No Xvisor defconfig name specified, check your BR2_PACKAGE_XVISOR_DEFCONFIG setting.  Stop.
+On 05-07-17 21:08, Adrian Perez de Castro wrote:
+> This is needed for correctly building some CMake-based packages which
+> use this variable. For example, this is needed for WebKitGTK+ 2.16.x
+> to build correctly when an ARMv8 target is configured.
 
-The first problem is that the Config.in file had a typo: it was using
-BR2_AARCH64 instead of BR2_aarch64, and therefore the
-BR2_PACKAGE_XVISOR_DEFCONFIG variable had no value.
+ Well, it's needed for any cmake package on ARMv8...
 
-Once this is fixed, another problem occurs: the ARCH variable needs to
-be specified as "arm" for XVisor, for both ARM and AArch64. Therefore,
-a XVISOR_ARCH variable is introduced, which is calculated according to
-the Buildroot configuration options. Only x86-64, arm and aarch64 are
-supported by Xvisor currently, so it remains simple.
 
-Fixes:
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-  http://autobuild.buildroot.net/results/1719a63ff257f13634a06a14327abfb327984101/
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xvisor/Config.in |  2 +-
- package/xvisor/xvisor.mk | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+> ---
+>  package/pkg-cmake.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 401084fb12..914bda7482 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -219,6 +219,8 @@ else ifeq ($(BR2_ARM_CPU_ARMV6),y)
+>  CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv6
+>  else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
 
-diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
-index 1f8fd1f..c9f7429 100644
---- a/package/xvisor/Config.in
-+++ b/package/xvisor/Config.in
-@@ -35,7 +35,7 @@ config BR2_PACKAGE_XVISOR_DEFCONFIG
- 	default "generic-v5" if BR2_ARM_CPU_ARMV5
- 	default "generic-v6" if BR2_ARM_CPU_ARMV6
- 	default "generic-v7" if BR2_ARM_CPU_ARMV7A
--	default "generic-v8" if BR2_AARCH64
-+	default "generic-v8" if BR2_aarch64
- 	default "x86_64_generic" if BR2_x86_64
- 	depends on BR2_PACKAGE_XVISOR_USE_DEFCONFIG
- 	help
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index 141a0e3..8be4be9 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -26,8 +26,16 @@ XVISOR_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE))
- endif
- XVISOR_KCONFIG_EDITORS = menuconfig
- 
-+ifeq ($(BR2_x86_64),y)
-+XVISOR_ARCH = x86
-+else ifeq ($(BR2_arm)$(BR2_aarch64),y)
-+XVISOR_ARCH = arm
-+else
-+$(error "Architecture not supported by XVisor")
-+endif
-+
- XVISOR_MAKE_ENV = \
--	ARCH=$(if $(BR2_x86_64),x86,$(BR2_ARCH)) \
-+	ARCH=$(XVISOR_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS)
- 
- XVISOR_MAKE_OPTS = $(if $(VERBOSE),VERBOSE=1)
+ I noticed that armv7m is also missing. Could you try to find the corresponding
+CMake architecture and add it?
+
+ Also, it could be useful to add
+
+else
+$(error ARM CPU variant not set for CMake)
+endif
+
+ Not *that* helpful for users, but better than the error you got :-)
+
+ Regards,
+ Arnout
+
+>  CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv7
+> +else ifeq ($(BR2_ARM_CPU_ARMV8),y)
+> +CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv8
+>  endif
+>  
+>  ifeq ($(BR2_arm),y)
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
