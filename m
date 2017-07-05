@@ -1,44 +1,64 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  5 Jul 2017 10:19:57 +0200
-Subject: [Buildroot] [PATCH] package/filemq: bump to the latest master
-Message-ID: <20170705081957.10639-1-romain.naour@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 Jul 2017 10:30:51 +0200
+Subject: [Buildroot] [PATCH 04/13] pkg-generic: make PKG_DL_DIR equal to
+ DL_DIR
+In-Reply-To: <20170704162211.13238-5-maxime.hadjinlian@gmail.com>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-5-maxime.hadjinlian@gmail.com>
+Message-ID: <1faba3ef-a7bd-0709-d1e8-c09c1f834a63@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump include a patch that fixes a build issue with gcc >= 7.1.
 
-Fixes:
-http://autobuild.buildroot.net/results/434/43452430edf44cbcef6ea3a5ab80ac0ff406208f
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/filemq/filemq.hash | 2 +-
- package/filemq/filemq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 04-07-17 18:22, Maxime Hadjinlian wrote:
+> This variable is currently not used by anyone.
+> The value is changed to match the path to DL_DIR.
+> 
+> The next patch will introduce the use of PKG_DL_DIR for packages that
+> use specific EXTRACT_CMDS.
+> 
+> And then we will be able to change the value of PKG_DL_DIR to create a
+> new directory structure in DL_DIR with a subdirectory for each package.
 
-diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
-index d76d009..d1df1ff 100644
---- a/package/filemq/filemq.hash
-+++ b/package/filemq/filemq.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a9973117f8afea6d4cbde95e4d7f46ab90d67cb0d72e42165410d665bf1765c1  filemq-3dc89932903b0320853d87833aabc6f7e7781c49.tar.gz
-+sha256 f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 581e8a8..75d8bd9 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILEMQ_VERSION = 3dc89932903b0320853d87833aabc6f7e7781c49
-+FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
- FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
- 
- FILEMQ_AUTORECONF = YES
+ Funny, you will later change it to almost the same as what it is now...
+
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(doesn't depend on the earlier patches in the series).
+
+ Regards,
+ Arnout
+
+> ---
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 79bea906e2..c1cd41fda5 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -434,7 +434,7 @@ endif
+>  
+>  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+>  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+> -$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+> +$(2)_DL_DIR	=  $$(DL_DIR)
+>  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+>  
+>  ifndef $(2)_SUBDIR
+> 
+
 -- 
-2.9.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
