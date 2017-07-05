@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:06:48 +0200
-Subject: [Buildroot] [git commit] sepolgen: strip /usr/ part from HOST_DIR
-Message-ID: <20170705141337.9B4AB802F0@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 16:06:55 +0200
+Subject: [Buildroot] [git commit] execline: remove --shebangdir configure
+	option
+Message-ID: <20170705141338.0582681D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f606d76a30f837590e270aa15fc541a1e0c6f14
+commit: https://git.buildroot.net/buildroot/commit/?id=6fd1d54ab6fe079bbaefe4d5dfe29d131402a106
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-sepolgen is a bit weird: DESTDIR acts as a kind of prefix, PYTHONLIBDIR
-is relative to it (and a / is added between them).
+The host build passes the --shebangdir configure option, the target
+build doesn't.  With the removal of $(HOST_DIR)/usr, it is not clear
+if this should be /bin or /usr/bin or $(HOST_DIR)/bin. Looking at the
+source code, it turns out that this variable is not used at all, and
+/usr/bin doesn't appear anywhere in the installed files.
 
+Since it is not clear what this option should be set to, and it
+anyway doesn't do anything, remove it entirely.
+
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Adam Duskett <aduskett@codeblue.com>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sepolgen/sepolgen.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/execline/execline.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
-index 033b468..ab7f18d 100644
---- a/package/sepolgen/sepolgen.mk
-+++ b/package/sepolgen/sepolgen.mk
-@@ -30,11 +30,11 @@ endef
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_SEPOLGEN_DEPENDENCIES = host-python3
- HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
--	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+	PYTHONLIBDIR=lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
- else
- HOST_SEPOLGEN_DEPENDENCIES = host-python
- HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
--	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+	PYTHONLIBDIR=lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- endif
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index 50c3fca..d3d69a8 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
+@@ -46,7 +46,6 @@ HOST_EXECLINE_DEPENDENCIES = host-skalibs
  
- define HOST_SEPOLGEN_BUILD_CMDS
+ HOST_EXECLINE_CONF_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+-	--shebangdir=/usr/bin \
+ 	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(HOST_DIR)/include \
+ 	--with-dynlib=$(HOST_DIR)/lib \
