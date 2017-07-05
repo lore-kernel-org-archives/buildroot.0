@@ -1,76 +1,75 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:44 +0200
-Subject: [Buildroot] [PATCH v4 27/36] raspberrypi-usbboot: remove /usr from
-	DESTDIR-based install commands
+Date: Wed, 5 Jul 2017 13:14:50 +0200
+Subject: [Buildroot] [PATCH v4 33/36] libselinux: rework host installation
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-28-arnout@mind.be>
+Message-ID: <20170705111453.2284-34-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a patch that adds $(DESTDIR) to the install commands of
-raspberrypi-usbboot, but it would still be installed in $(DESTDIR)/usr.
-We don't want that, so remove the /usr part in the installation
-commands.
+libselinux has a pretty peculiar interpretation of DESTDIR and PREFIX.
+PREFIX is not consistently used: some installation paths are forced to
+$(DESTDIR)/usr/... . In other cases, PREFIX is indeed used. PREFIX
+defaults to $(DESTDIR)/usr.
 
-Note that upstream has removed the 'install' target entirely, so
-there's no point trying to keep the patch in upstreamable shape (i.e.
-defaulting DESTDIR to /usr).
+Try to be a little bit more correct by passing both DESTDIR and PREFIX,
+both set to $(HOST_DIR). This is not a complete fix: man pages are
+still installed in $(HOST_DIR)/usr - but we don't care about that.
+
+Also simplify the symlink creation, like how it's done in libsepol.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0002-Makefile-add-DESTDIR-support.patch        | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ package/libselinux/libselinux.mk | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch b/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
-index c37d5a1e0a..a757cb0e03 100644
---- a/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
-+++ b/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
-@@ -7,6 +7,8 @@ This allows installing rpiboot outside of /usr if needed.
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 1698947184..f23eea4962 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -85,32 +85,31 @@ HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/
+ HOST_LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ endif
  
- Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Arnout: remove /usr]
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- ---
-  Makefile | 20 ++++++++++----------
-  1 file changed, 10 insertions(+), 10 deletions(-)
-@@ -24,11 +26,11 @@ index d9a7220..7835b7f 100755
- -	cp usbbootcode.bin /usr/share/rpiboot
- -	cp msd.elf /usr/share/rpiboot
- -	cp buildroot.elf /usr/share/rpiboot
--+	cp rpiboot $(DESTDIR)/usr/bin
--+	mkdir -p $(DESTDIR)//usr/share/rpiboot
--+	cp usbbootcode.bin $(DESTDIR)/usr/share/rpiboot
--+	cp msd.elf $(DESTDIR)/usr/share/rpiboot
--+	cp buildroot.elf $(DESTDIR)/usr/share/rpiboot
-++	cp rpiboot $(DESTDIR)bin
-++	mkdir -p $(DESTDIR)/share/rpiboot
-++	cp usbbootcode.bin $(DESTDIR)/share/rpiboot
-++	cp msd.elf $(DESTDIR)/share/rpiboot
-++	cp buildroot.elf $(DESTDIR)/share/rpiboot
-  
-  uninstall:
- -	rm -f /usr/bin/rpiboot
-@@ -36,11 +38,11 @@ index d9a7220..7835b7f 100755
- -	rm -f /usr/share/rpiboot/msd.elf
- -	rm -f /usr/share/rpiboot/buildroot.elf
- -	rmdir --ignore-fail-on-non-empty /usr/share/rpiboot/
--+	rm -f $(DESTDIR)/usr/bin/rpiboot
--+	rm -f $(DESTDIR)/usr/share/rpiboot/usbbootcode.bin
--+	rm -f $(DESTDIR)/usr/share/rpiboot/msd.elf
--+	rm -f $(DESTDIR)/usr/share/rpiboot/buildroot.elf
--+	rmdir --ignore-fail-on-non-empty $(DESTDIR)/usr/share/rpiboot/
-++	rm -f $(DESTDIR)/bin/rpiboot
-++	rm -f $(DESTDIR)/share/rpiboot/usbbootcode.bin
-++	rm -f $(DESTDIR)/share/rpiboot/msd.elf
-++	rm -f $(DESTDIR)/share/rpiboot/buildroot.elf
-++	rmdir --ignore-fail-on-non-empty $(DESTDIR)/share/rpiboot/
-  
-  clean: 
-  	rm rpiboot
++# DESTDIR is needed during the compile to compute library and header paths.
+ HOST_LIBSELINUX_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
++	DESTDIR=$(HOST_DIR) \
++	PREFIX=$(HOST_DIR) \
+ 	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
+ 	PYINC="$(HOST_LIBSELINUX_PYINC)" \
+ 	PYSITEDIR="$(HOST_DIR)/lib/$(HOST_LIBSELINUX_PYLIBVER)/site-packages" \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
+ 
+ define HOST_LIBSELINUX_BUILD_CMDS
+-	# DESTDIR is needed during the compile to compute library and
+-	# header paths.
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+-		SHLIBDIR=$(HOST_DIR)/lib all
++		$(HOST_LIBSELINUX_MAKE_OPTS) all
+ 	# Generate python interface wrapper
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
++		$(HOST_LIBSELINUX_MAKE_OPTS) swigify pywrap
+ endef
+ 
+ define HOST_LIBSELINUX_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+-		SHLIBDIR=$(HOST_DIR)/lib SBINDIR=$(HOST_DIR)/sbin install
+-	(cd $(HOST_DIR)/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
++		$(HOST_LIBSELINUX_MAKE_OPTS) install
++	ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+ 	# Install python interface wrapper
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
++		$(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.13.2
