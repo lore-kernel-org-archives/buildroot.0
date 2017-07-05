@@ -1,66 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 16:31:49 +0200
-Subject: [Buildroot] [PATCH v4 00/36] Remove /usr component from
- HOST_DIR (continued)
-In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
-References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705163149.322bd8e9@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 5 Jul 2017 16:31:40 +0200
+Subject: [Buildroot] [git commit] legal-info: add hash for our own license
+	file
+Message-ID: <20170705142853.4BB9F80AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=719726af2e95a62432013a6238954bebdc2d3dec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 5 Jul 2017 13:14:17 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+This silences the annoying warning that there is no hash file for our
+own COPYING file.
 
-> Arnout Vandecappelle (36):
->   generic packages: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
->   Globally replace $(HOST_DIR)/usr/bin with $(HOST_DIR)/bin
->   Globally replace $(HOST_DIR)/usr/sbin with $(HOST_DIR)/sbin
->   Globally replace $(HOST_DIR)/usr/lib with $(HOST_DIR)/lib
->   Globally replace $(HOST_DIR)/usr/include with $(HOST_DIR)/include
->   Globally replace $(HOST_DIR)/usr/share with $(HOST_DIR)/share
->   Globally replace $(HOST_DIR)/usr with $(HOST_DIR)
->   qt: fix up alignment after mechanical replacement
->   boards: replace $HOST_DIR/usr/ with $HOST_DIR/ in scripts
->   chromebook snow: remove $(HOST_DIR)/usr reference from README
->   warpboard: remove $(HOST_DIR)/usr reference from README
->   stm32f429-disco: replace $HOST_DIR/usr with $HOST_DIR in flash script
->   stm32f469-disco: replace $HOST_DIR/usr with $HOST_DIR in flash script
->   eclipse-register-toolchain: toolchain is no longer installed in
->     $(HOST_DIR)/usr
->   manual: remove references to host/usr paths
->   grub2: remove host/usr reference from help text
->   lttng-tools: remove host/usr reference from help text
->   mfgtools: remove host/usr reference from readme.txt
->   lesstif: remove host/usr reference from .mk comment
->   board/gdb/bfin-bf512: remove host/usr reference from readme.txt
->   board/csky: remove host/usr reference from readme.txt
->   libffi: avoid $(HOST_DIR)/usr while moving headers
->   genromfs: use $(HOST_DIR) instead of $(HOST_DIR)/usr as prefix
->   libcap: use $(HOST_DIR) as prefix instead of DESTDIR
->   lzip: use $(HOST_DIR) as prefix instead of DESTDIR
->   opkg-utils: use $(HOST_DIR) as PREFIX instead of DESTDIR
->   raspberrypi-usbboot: remove /usr from DESTDIR-based install commands
->   dos2unix: use prefix instead of DESTDIR for host installation
->   imx-uxb-loader: use prefix instead of DESTDIR for host installation
->   grub2: install in $(HOST_DIR) instead of $(HOST_DIR)/usr
->   sepolgen: strip /usr/ part from HOST_DIR
->   libsemanage: rework host installation
->   libselinux: rework host installation
->   checkpolicy: rework host installation
->   policycoreutils: rework host installation
->   execline: remove --shebangdir configure option
+Also change the message so that it is more obvious what we're doing.
 
-Entire series applied. Let's see what the autobuilders have to say.
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile                          | 4 ++--
+ support/legal-info/buildroot.hash | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 0827c4e..a22e87f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -744,8 +744,8 @@ legal-info-clean:
+ 
+ .PHONY: legal-info-prepare
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+-	@$(call MESSAGE,"Collecting legal info")
+-	@$(call legal-license-file,buildroot,buildroot,.,COPYING,COPYING,HOST)
++	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
++	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+ 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
+diff --git a/support/legal-info/buildroot.hash b/support/legal-info/buildroot.hash
+new file mode 100644
+index 0000000..1b62dbe
+--- /dev/null
++++ b/support/legal-info/buildroot.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 9755181e27175cb3510b4da8629caa406fb355a19aa8e7d55f06bf8ab33323c4  COPYING
