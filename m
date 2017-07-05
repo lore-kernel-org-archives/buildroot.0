@@ -1,69 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Jul 2017 12:25:32 +0200
-Subject: [Buildroot] [PATCH 0/5] arch/arm: introduce big.LITTLE
-	configurations
-Message-ID: <cover.1499250321.git.yann.morin.1998@free.fr>
+Date: Wed,  5 Jul 2017 12:25:33 +0200
+Subject: [Buildroot] [PATCH 1/5] arch/arm: fix -mcpu default values for
+	AArch64
+In-Reply-To: <cover.1499250321.git.yann.morin.1998@free.fr>
+References: <cover.1499250321.git.yann.morin.1998@free.fr>
+Message-ID: <024f0b53f0d0da9c0942607b47db08748bdcd9a0.1499250321.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+For AArch64, +fp and +simd are the default, so they are totally useless.
 
-This series adds four new CPU variants to the arm choice, to enable
-optimising for big.LITTLE CPUs.
+Remove them.
 
-We first fix the current values inthe first two patches, then introduce
-the actual new variants, and then make use of the sole packages that
-needs to know of them.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm | 6 ------
+ 1 file changed, 6 deletions(-)
 
-This has been only slightly tested by simply building the toolchains for
-the six possibilities:
-  - the four variants in arm mode (32-bit),
-  - the two armv8 variants in aarch64 mode (64-bit).
-
-The variants were introduced in various versions of gcc, so we protect
-the internal gcc as well as the external toolchains accordingly.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9
-
-  syslinux: drop patch 0003, not needed after gnu-efi update (2017-07-04 18:45:26 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to cdc5ada0fd19765aff9779fc109a26284c9320b6
-
-  package/kvm-unit-test: available for big.LITTLE arm cores too (2017-07-05 12:07:49 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      arch/arm: fix -mcpu default values for AArch64
-      arch/arm: fix defaults for AArch64 in 64-bit mode
-      package/kvm-unit-tests: introduce _ARCH_SUPPORTS
-      arch/arm: add big.LITTLE cpu variants
-      package/kvm-unit-test: available for big.LITTLE arm cores too
-
- arch/Config.in.arm                                 | 50 ++++++++++++++++++----
- package/gcc/Config.in.host                         |  5 ++-
- package/kvm-unit-tests/Config.in                   | 19 ++++----
- .../Config.in                                      |  2 +
- .../toolchain-external-codesourcery-arm/Config.in  |  4 ++
- 5 files changed, 62 insertions(+), 18 deletions(-)
-
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index b1817ed568..aaf4506d7f 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -535,14 +535,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "xscale"	if BR2_xscale
+ 	default "iwmmxt"	if BR2_iwmmxt
+ 	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
+-	default "cortex-a53+fp"		if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
+-	default "cortex-a53+fp+simd"	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+ 	default "cortex-a57"		if (BR2_cortex_a57 && !BR2_ARCH_IS_64)
+-	default "cortex-a57+fp"		if (BR2_cortex_a57 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
+-	default "cortex-a57+fp+simd"	if (BR2_cortex_a57 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+ 	default "cortex-a72"		if (BR2_cortex_a72 && !BR2_ARCH_IS_64)
+-	default "cortex-a72+fp"		if (BR2_cortex_a72 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
+-	default "cortex-a72+fp+simd"	if (BR2_cortex_a72 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+ 
+ config BR2_GCC_TARGET_ABI
+ 	default "aapcs-linux"	if BR2_arm || BR2_armeb
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
