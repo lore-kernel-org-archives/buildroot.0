@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 13:14:33 +0200
-Subject: [Buildroot] [PATCH v4 16/36] grub2: remove host/usr reference from
-	help text
+Date: Wed, 5 Jul 2017 13:14:34 +0200
+Subject: [Buildroot] [PATCH v4 17/36] lttng-tools: remove host/usr reference
+	from help text
 In-Reply-To: <20170705111453.2284-1-arnout@mind.be>
 References: <20170705111453.2284-1-arnout@mind.be>
-Message-ID: <20170705111453.2284-17-arnout@mind.be>
+Message-ID: <20170705111453.2284-18-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- boot/grub2/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lttng-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index 7dc5cae218..2f4a3f069e 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -31,8 +31,8 @@ config BR2_TARGET_GRUB2
- 	     sudo tar -C /mnt -xf output/images/rootfs.tar
- 	     sudo umount /mnt
- 	  5. Install Grub2
--	     sudo ./output/host/usr/sbin/grub-bios-setup \
--			-b ./output/host/usr/lib/grub/i386-pc/boot.img \
-+	     sudo ./output/host/sbin/grub-bios-setup \
-+			-b ./output/host/lib/grub/i386-pc/boot.img \
- 			-c ./output/images/grub.img -d . /dev/loop0
- 	  6. Cleanup loop device
- 	     sudo partx -d /dev/loop0
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 187e424b0b..9c86cc2646 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	  and stop tracing sessions. Analysis of the trace can be done
+ 	  on the host machine using the babeltrace utility. This
+ 	  utility is automatically built by Buildroot in
+-	  $(O)/host/usr/bin/babeltrace, as a dependency of
++	  $(O)/host/bin/babeltrace, as a dependency of
+ 	  lttng-tools. However, there is also a lttng-babeltrace
+ 	  package for the target, if babeltrace on the target is
+ 	  interesting.
 -- 
 2.13.2
