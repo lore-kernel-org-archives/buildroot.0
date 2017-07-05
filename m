@@ -1,61 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 5 Jul 2017 14:09:48 +0200
-Subject: [Buildroot] [PATCH 1/3] support/testing: remove references to
-	host/usr
-Message-ID: <20170705120950.23189-1-arnout@mind.be>
+Date: Wed, 5 Jul 2017 14:09:49 +0200
+Subject: [Buildroot] [PATCH 2/3] check-host-rpath: no longer allow
+	$(HOST_DIR)/usr
+In-Reply-To: <20170705120950.23189-1-arnout@mind.be>
+References: <20170705120950.23189-1-arnout@mind.be>
+Message-ID: <20170705120950.23189-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tools are now installed in host/bin instead of host/usr/bin.
+Now all packages have been updated to install things in $(HOST_DIR)/lib
+instead of $(HOST_DIR)/usr/lib, there should no longer be any reason
+to have $(HOST_DIR)/usr/lib in the RPATH, so we don't allow it any more.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
 ---
- support/testing/tests/fs/test_ext.py      | 2 +-
- support/testing/tests/fs/test_jffs2.py    | 2 +-
- support/testing/tests/fs/test_squashfs.py | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/check-host-rpath | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
-index ea3d3f11d7..34321a3995 100644
---- a/support/testing/tests/fs/test_ext.py
-+++ b/support/testing/tests/fs/test_ext.py
-@@ -13,7 +13,7 @@ RESBLKCNT_PROP = "Reserved block count"
- CHECK_FS_TYPE_CMD = "mount | grep '/dev/root on / type {}'"
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 2846d5eb51..74a25ba99c 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
  
- def dumpe2fs_run(builddir, image):
--    cmd = ["host/usr/sbin/dumpe2fs", os.path.join("images", image)]
-+    cmd = ["host/sbin/dumpe2fs", os.path.join("images", image)]
-     ret = subprocess.check_output(cmd,
-                                   stderr=open(os.devnull, "w"),
-                                   cwd=builddir,
-diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
-index 0d45af209b..7185df7899 100644
---- a/support/testing/tests/fs/test_jffs2.py
-+++ b/support/testing/tests/fs/test_jffs2.py
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x4000000
+ # This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
+-# they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
++# they have an RPATH to $(HOST_DIR)/lib if they need libraries from
+ # there.
  
-     def test_run(self):
-         img = os.path.join(self.builddir, "images", "rootfs.jffs2")
--        out = subprocess.check_output(["host/usr/sbin/jffs2dump", "-c", img],
-+        out = subprocess.check_output(["host/sbin/jffs2dump", "-c", img],
-                                       cwd=self.builddir,
-                                       env={"LANG": "C"})
-         out = out.splitlines()
-diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-index edaa087106..b205b6a55a 100644
---- a/support/testing/tests/fs/test_squashfs.py
-+++ b/support/testing/tests/fs/test_squashfs.py
-@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
- """
- 
-     def test_run(self):
--        unsquashfs_cmd = ["host/usr/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
-+        unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
-         out = subprocess.check_output(unsquashfs_cmd,
-                                       cwd=self.builddir,
-                                       env={"LANG": "C"})
+ # Override the user's locale so we are sure we can parse the output of
+@@ -59,8 +59,6 @@ check_elf_has_rpath() {
+             # Remove duplicate and trailing '/' for proper match
+             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+             [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
+-            # For the time being, the rpath is allowed with both usr/lib and lib
+-            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
+         done
+     done < <( readelf -d "${file}"                                              \
+               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
 -- 
 2.13.2
