@@ -1,78 +1,234 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Wed, 5 Jul 2017 13:52:14 -0700
-Subject: [Buildroot] [PATCH] fs/cpio/init: remout / as read-only as a
-	first step
-In-Reply-To: <87r2xvynm0.fsf@dell.be.48ers.dk>
-References: <20170704190104.24703-1-andrew.smirnov@gmail.com>
- <87r2xvynm0.fsf@dell.be.48ers.dk>
-Message-ID: <CAHQ1cqF1GHw0_E3rxuPqZMpLoWBhy=3ieCmTUOyz-7x551p0KQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed,  5 Jul 2017 23:00:11 +0200
+Subject: [Buildroot] [PATCH v8 1/2] fs/ext2: rename
+	BR2_TARGET_ROOTFS_EXT2_BLOCKS -> BR2_TARGET_ROOTFS_EXT2_SIZE
+Message-ID: <20170705210012.10226-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 5, 2017 at 7:17 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
->
->  > When /init is present on root file system kernel does not take into
->  > accout kernel arguments such as "ro" and does not remount root as
->  > read-only. So prior to this commit the system would continue booting
->  > with "rw" root filesystem until corresponding line in /etc/fstab to
->  > remount it as "ro" was processed.
->
->  > Change the code to immediately remount / as read-only and rely on
->  > /etc/fstab processing to remount it as "rw" if that is what's selected
->  > in Buildroot configuration.
->
->  > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
->
-> I see what you're getting at, but this doesn't actually work (with
-> busybox mount at least):
->
-> NET: Registered protocol family 17
-> Freeing unused kernel memory: 2528K
-> This architecture does not have kernel memory protection.
-> mount: can't read '/proc/mounts': No such file or directory
-> Starting logging: OK
-> Initializing random number generator... done.
->
-> The reason is that mount had to read the current mount flags (either
-> directly in /proc/mounts or through /etc/mtab depending on busybox
-> config, but we symlink /etc/mtab to /proc/mounts) to be able to remount,
-> and as /proc is not mounted in an initramfs this doesn't work.
->
+This change deprecates the ext2/3/4 rootfs size in blocks symbol in
+favor of one that mimic the fs-size argument behavior of mkfs (i.e.
+size in a human readable format accepting k, m, g or t suffix or their
+upper-case variants).
 
-Hmm, fascinating. I think the reason why I didn't see this and why it
-worked for me is because systemd selects BR2_PACKAGE_UTIL_LINUX_MOUNT
-and my system is using it instead of what busybox provides.
+This change also updates the defconfigs that used to set
+BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol.
 
-> We could conceptually mount /proc in /init as well, but then things gets
-> confusing when /sbin/init does it again.
->
-> I don't see any clean way of doing this without adding quite some
-> complexity, and I think your usecase (systemd in initramfs that you want
-> ro) is so special that I would suggest you just use a custom /init in
-> your rootfs overlay.
->
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-What about either of the following:
+---
+changes v7->v8:
+- correctly wrap help text (Arnout)
 
-- Adding that line and silencing errors, so that on on systems with
-busybox's mount it would be effectively a no-op and systems that use
-util-linux it would achieve desired results?
+changes v6->v7:
+- rebase after usr/ removal
 
-- Making BR2_TARGET_ROOTFS_CPIO select BR2_PACKAGE_UTIL_LINUX_MOUNT?
+changes v5->v6:
+- rebase
+- fix typo (Peter)
+- add comments in legacy (Arnout)
+- quote EXT2_SIZE usage (Arnout)
+- use more human-friendly size (defaults + defconfigs) (Arnout)
+- trigger legacy when using the deprecated valid (Arnout)
 
-- Optionally adding that line if BR2_PACKAGE_UTIL_LINUX_MOUNT?
+changes v4->v5:
+- new patch (Arnout)
+---
+ Config.in.legacy                            | 15 +++++++++++++++
+ configs/at91sam9x5ek_mmc_dev_defconfig      |  2 +-
+ configs/beaglebone_qt5_defconfig            |  2 +-
+ configs/firefly_rk3288_demo_defconfig       |  2 +-
+ configs/minnowboard_max-graphical_defconfig |  3 +--
+ configs/nanopi_neo_defconfig                |  2 +-
+ configs/pc_x86_64_bios_defconfig            |  2 +-
+ configs/pc_x86_64_efi_defconfig             |  2 +-
+ configs/raspberrypi3_64_defconfig           |  2 +-
+ fs/ext2/Config.in                           | 14 +++++++++-----
+ fs/ext2/ext2.mk                             |  7 ++++++-
+ 11 files changed, 38 insertions(+), 15 deletions(-)
 
-- Adding a note to fs/cpio/Config.in that root filesystem will become
-read-only only after corresponding line in /etc/fstab is processed
-successfully?
-
-I am more than happy to alter the patch to accommodate for either of
-the above or just drop it and keep this change private to my buildroot
-customization layer.
-
-Thanks,
-Andrey Smirnov
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 12362da6f2..853e2f913d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -152,6 +152,21 @@ config BR2_PACKAGE_HOST_MKE2IMG
+ 	  We now call mkfs directly to generate ext2/3/4 filesystem
+ 	  image, so mke2img is no longer necessary.
+ 
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS
++	int "exact size in blocks has been removed"
++	default 0
++	help
++	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
++	  It has been set automatically to the value you had before.
++
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
++	bool
++	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0
++	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 61440 # deprecated default value
++	select BR2_LEGACY
++
++# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP still reference in fs/ext2/Config.in
++
+ config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+ 	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+ 	default 0
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index 0060111fca..d704b8152a 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -81,7 +81,7 @@ BR2_PACKAGE_VIM=y
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ 
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 34063739a2..4135f718ed 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=126976
++BR2_TARGET_ROOTFS_EXT2_SIZE="124M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
+index 0f4dd368c4..d394ede30e 100644
+--- a/configs/firefly_rk3288_demo_defconfig
++++ b/configs/firefly_rk3288_demo_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_QT5BASE_EGLFS=y
+ BR2_PACKAGE_MALI_T76X=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=250000
++BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index 1a2cd33be2..3540f9fa87 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -68,6 +68,5 @@ BR2_PACKAGE_STARTUP_NOTIFICATION=y
+ # Filesystem image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+-
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index a22705269d..aa464917b5 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ # Build an sdcard image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=32768
++BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_ROOTFS_EXT2_INODES=8192
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index d64f09a1dc..7e852f3650 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_GRUB2=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index ea2abc39be..f558c3e8cb 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_GRUB2_X86_64_EFI=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 13a505b031..23db9ccb05 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -30,7 +30,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 9c58ac62ed..a851afb439 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -44,12 +44,16 @@ config BR2_TARGET_ROOTFS_EXT2_REV
+ config BR2_TARGET_ROOTFS_EXT2_LABEL
+ 	string "filesystem label"
+ 
+-# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
+-config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	int "exact size in blocks"
+-	default 61440
++config BR2_TARGET_ROOTFS_EXT2_SIZE
++	string "exact size"
++	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
++	default "60M" # default size
+ 	help
+-	  Specify the file system size as a number of 1024-byte blocks.
++	  The size of the filesystem image. If it does not have a suffix,
++	  it is interpreted as power-of-two kilobytes. If it is suffixed
++	  by 'k', 'm', 'g', 't' (either upper-case or lower-case), then
++	  it is interpreted in power-of-two kilobytes, megabytes,
++	  gigabytes, terabytes, etc.
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 99d03f10cf..fdd4a389a0 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -4,6 +4,11 @@
+ #
+ ################################################################################
+ 
++EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
++ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
++$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
++endif
++
+ # qstrip results in stripping consecutive spaces into a single one. So the
+ # variable is not qstrip-ed to preserve the integrity of the string value.
+ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+@@ -21,7 +26,7 @@ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+ define ROOTFS_EXT2_CMD
+ 	rm -f $@
+ 	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
+-		 $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
++		"$(EXT2_SIZE)"
+ endef
+ 
+ rootfs-ext2-symlink:
+-- 
+2.13.2
