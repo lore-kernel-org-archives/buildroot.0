@@ -1,11 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 20:57:07 +0200
-Subject: [Buildroot] [PATCH] libtomcrypt: bump to version 1.18.0-rc1
-In-Reply-To: <CAB0FRstL5wU2_8smT2LPx9Xv9uBhmJQNax_paLH=u4H43kGt_g@mail.gmail.com>
-References: <20170706175456.11742-1-francois.perrad@gadz.org>
- <20170706202526.365ec65c@windsurf.lan>
- <CAB0FRstL5wU2_8smT2LPx9Xv9uBhmJQNax_paLH=u4H43kGt_g@mail.gmail.com>
-Message-ID: <20170706205707.6402f1e3@windsurf.lan>
+Date: Thu, 6 Jul 2017 21:02:37 +0200
+Subject: [Buildroot] Next Developers meeting: October 21-22, Prague
+Message-ID: <20170706210237.75ef745a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +10,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 6 Jul 2017 20:45:35 +0200, Fran?ois Perrad wrote:
+The Buildroot community organizes twice a year a developers meeting, an
+event that allows Buildroot developers and contributors to gather, work
+on Buildroot, discuss open topics, review and merge patches, and
+generally meet each other.
 
-> > Why would we upgrade to a release candidate version?
-> >
-> It's a good way to test it (with autobuilder).
+The next developers meeting will take place on October 21 and 22
+(Saturday and Sunday) in Prague, right before the Embedded Linux
+Conference Europe [1].
 
-Buildroot is not really meant to test release candidates of upstream
-packages, especially when the final release is unlikely to be released
-before the next Buildroot release will be cut.
+This event is free of charge and open to all Buildroot contributors. It
+is really a nice opportunity to meet each other, and combined with
+ELCE, a good reason to travel to Prague in late October.
 
-> Note: in BR, many packages use a Git hash commit as version/tag.
+More details about the event are available at:
 
-And every time because there's a good reason: no stable release at all,
-or the last stable release has some issue that cannot be fixed by just
-backporting a few patches.
+  http://elinux.org/Buildroot:DeveloperDaysELCE2017
 
-Here there are no issues, and you propose to bump to a release
-candidate. I really don't think we want to do this.
+We are looking for sponsors [2], in order to pay for the meeting location
+and potentially travel expenses for some of the participants. Let us
+know if your company is interested in becoming a Buildroot sponsor.
 
 Best regards,
 
 Thomas
+
+[1] http://events.linuxfoundation.org/events/embedded-linux-conference-europe
+[2] https://buildroot.org/sponsors.html
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
