@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Jul 2017 01:18:33 +0200
-Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir
- fit for multi-user setups
-In-Reply-To: <20170706104841.7711-1-peter@korsgaard.com>
-References: <20170706104841.7711-1-peter@korsgaard.com>
-Message-ID: <8c3c10e0-7f63-0063-5ec2-5edb24ce978f@mind.be>
+Date: Fri, 7 Jul 2017 01:32:55 +0200
+Subject: [Buildroot] [PATCH v2 1/1] paxtest: new package
+In-Reply-To: <1499308509-30051-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1499308509-30051-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <4bd9bc00-761e-be3a-6981-5def37da00e9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +12,144 @@ To: buildroot@busybox.net
 
 
 
-On 06-07-17 12:48, Peter Korsgaard wrote:
-> While building I noticed:
-> 
->>>> host-ccache 3.3.4 Building
-> conf.c: In function 'conf_create':
-> conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
->   conf->cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
->   ^
-> 
-> As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
-> hardcoding the build user homedir isn't really nice for the relocatable
-> SDK feature (or simply for a SDK used by multiple users).
+On 06-07-17 04:35, Matt Weber wrote:
+[snip]
+> diff --git a/package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch b/package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch
+> new file mode 100644
+> index 0000000..8e836d6
+> --- /dev/null
+> +++ b/package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch
+> @@ -0,0 +1,49 @@
+> +From 70406ad5668a15fedce2ae1ed3bc4fad04d9f040 Mon Sep 17 00:00:00 2001
+> +From: Matt Weber <matthew.weber@rockwellcollins.com>
+> +Date: Wed, 5 Jul 2017 20:47:42 -0500
+> +Subject: [PATCH] paxtest: page alignment ARM and NIOS2 arch
+> +
+> +- Extended ARM range from ARMv6-v7 to also include v4-v7
+> +- Added NIOS2 arch to conditionally have smaller alignment
+> +
+> +Submitted Upstream to pageexec at freemail.hu.  Also posted a
+> +bug to both (Hardened) Suse and Gentoo's bugtrackers.
+> +https://bugzilla.opensuse.org/show_bug.cgi?id=1047422
+> +https://bugs.gentoo.org/show_bug.cgi?id=623946
+> +
+> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +---
+> + paxtest.h | 12 ++++++++++--
+> + 1 file changed, 10 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/paxtest.h b/paxtest.h
+> +index 8623bfb..a230c1a 100644
+> +--- a/paxtest.h
+> ++++ b/paxtest.h
+> +@@ -5,13 +5,21 @@
+> + #include <unistd.h>
+> + 
+> + /*
+> +- * ARMv6 and ARMv7 do not like 64k alignment, 32k is ok
+> ++ * ARMv4 through ARMv7 do not like 64k alignment, 32k is ok
+> +  */
+> +-#if defined(__arm__) && __ARM_ARCH >= 6 && __ARM_ARCH <= 7
+> ++#if defined(__arm__) && __ARM_ARCH >= 4 && __ARM_ARCH <= 7
 
- Absolutely true. However, I wonder if hardcoding the ccache path in the ccache
-binary is really such a good idea in the context of an SDK. So perhaps we should
-just replace the default with our own default, i.e.
-sed s,%s/\.ccache,%s/.buildroot-ccache,
+ >= 4 is always true, isn't it? I mean, ARMv3 has been dead for several decades, no?
 
- Note also that it may have been intentional to point to a shared ccache
-directory that happens to reside in some user's home directory. But of course,
-in that case, the BR_CACHE_DIR we use will still take over.
+> + #define PAGE_SIZE_MAX  (32768)
+> + #else
+> + #define PAGE_SIZE_MAX	0x10000	/* 64k should cover most arches */
+> + #endif
+> ++
+> ++/*
+> ++ * NIOS2's assemblier doesn't like 64k alignment
+> ++ */
+> ++#if defined(__nios2_arch__)
+> ++#define PAGE_SIZE_MAX  (32768)
+> ++#endif
+> ++
+> + #ifndef __aligned
+> + #define __aligned(x)	__attribute__((aligned(x)))
+> + #endif
+> +-- 
+> +1.9.1
+> +
+> diff --git a/package/paxtest/Config.in b/package/paxtest/Config.in
+> new file mode 100644
+> index 0000000..5782d46
+> --- /dev/null
+> +++ b/package/paxtest/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PAXTEST
+> +	bool "paxtest"
+> +	# No UCLIBC or MUSL because __NO_A_OUT_SUPPORT
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  PaX regression test suite
+> +
+> +	  http://pax.grsecurity.net/docs
 
-> 
-> As the warning shows, CCache replaces "%s" with the current user home
-> directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
-> $HOME.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/ccache/ccache.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-> index 97d66bb45b..afbec44fac 100644
-> --- a/package/ccache/ccache.mk
-> +++ b/package/ccache/ccache.mk
-> @@ -28,9 +28,13 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
->  #    BR2_CCACHE_DIR.
->  #  - Change hard-coded last-ditch default to match path in .config, to avoid
->  #    the need to specify BR_CACHE_DIR when invoking ccache directly.
-> +#    CCache replaces "%s" with the home directory of the current user,
-> +#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
-> +HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
+ There should be a comment about the glibc requirement.
 
- This looked really really weird to me when I first saw it, but in the end it
-does make sense.
+> diff --git a/package/paxtest/paxtest.hash b/package/paxtest/paxtest.hash
+> new file mode 100644
+> index 0000000..c10566c
+> --- /dev/null
+> +++ b/package/paxtest/paxtest.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256	d553848431fd8c2ab6c8361b62e5cedfed1cc1d60088241f4a33d2af15dd667f	paxtest-0.9.15.tar.gz
+> diff --git a/package/paxtest/paxtest.mk b/package/paxtest/paxtest.mk
+> new file mode 100644
+> index 0000000..fe88571
+> --- /dev/null
+> +++ b/package/paxtest/paxtest.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# paxtest
+> +#
+> +################################################################################
+> +
+> +PAXTEST_VERSION = 0.9.15
+> +PAXTEST_SOURCE = paxtest-$(PAXTEST_VERSION).tar.gz
 
- Still, since nobody ever complained about this, I'm not so sure we should "fix"
-it. It's just as likely to actually break things for some user. So it's a weak
-NACK from me.
+ This is the default and can be removed.
+
+> +PAXTEST_SITE = https://www.grsecurity.net/~spender
+> +PAXTEST_LICENSE = GPL-2.0+
+> +PAXTEST_LICENSE_FILES = README
+> +
+> +# Not using TARGET_CONFIGURE_OPTS as this package needs to set it's own
+> +# compile/link flags to do checks for things like if -fPIE is working, etc
+
+ We typically do export TARGET_CONFIGURE_OPTS in the environment, which means
+the Makefile settings take precedence. Doesn't this work for the paxtest Makefile?
+
+> +
+> +define PAXTEST_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC=$(TARGET_CC) LD=$(TARGET_LD) linux
+
+ TARGET_CC may consist of multiple words, so you have to quote this.
+
+ Does this package really use LD? That's usually annoying because it breaks
+situations that require specific architecture options to build correctly. Can
+you try if it works with LD=$(TARGET_CC) ?
+
+> +endef
+> +
+> +define PAXTEST_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
+
+ Please use the same options as for building, i.e. include CC= and LD=, just in
+case something still gets built at install time.
 
  Regards,
  Arnout
 
+> +		BINDIR="usr/bin" \
+> +		RUNDIR="usr/lib" -f Makefile.psm install
+> +endef
 > +
->  define HOST_CCACHE_PATCH_CONFIGURATION
->  	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
-> -	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
-> +	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
->  endef
->  
->  HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
+> +$(eval $(generic-package))
 > 
 
 -- 
