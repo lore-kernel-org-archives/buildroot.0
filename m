@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 23:21:19 +0200
-Subject: [Buildroot] [git commit] cjson: bump to version 1.5.6
-Message-ID: <20170706211949.3EA3581796@busybox.osuosl.org>
+Date: Thu, 6 Jul 2017 23:21:28 +0200
+Subject: [Buildroot] [git commit] pkg-cmake.mk: Set
+	CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT for ARMv8
+Message-ID: <20170706211949.53B908007C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d60315ef39bbc2f261d4c6e304cf4b2cf0e9bea4
+commit: https://git.buildroot.net/buildroot/commit/?id=4007c9e1d07ee3a0bb1353523bcf9df45bd16494
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This is needed for correctly building some CMake-based packages which
+use this variable. For example, this is needed for WebKitGTK+ 2.16.x
+to build correctly when an ARMv8 target is configured.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-cmake.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 9e12791..a14223a 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 f131a3067c78603683f84759de31320444f58d859a77afa77fca858d92ceba60  cjson-v1.5.5.tar.gz
-+sha256 0ab704247ddb85b65f860923db78013c1376b632785cc3cde77aacddbeac7778  cjson-v1.5.6.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index dc1eb06..ef37b51 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 401084f..914bda7 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -219,6 +219,8 @@ else ifeq ($(BR2_ARM_CPU_ARMV6),y)
+ CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv6
+ else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv7
++else ifeq ($(BR2_ARM_CPU_ARMV8),y)
++CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv8
+ endif
  
--CJSON_VERSION = v1.5.5
-+CJSON_VERSION = v1.5.6
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+ ifeq ($(BR2_arm),y)
