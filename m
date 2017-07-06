@@ -1,49 +1,60 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Thu, 6 Jul 2017 23:50:19 +0200
-Subject: [Buildroot] [PATCH] package/linuxptp: remove incdefs.sh to
- avoid cross-compilation issues
-In-Reply-To: <6827f8c2-c2dc-5727-1844-109bd321a498@smile.fr>
-References: <20170705141028.28194-1-romain.naour@smile.fr>
- <7b3079cb-f604-6ab2-3da7-448dacf9ef55@jikos.cz>
- <6827f8c2-c2dc-5727-1844-109bd321a498@smile.fr>
-Message-ID: <f0e2c860-ca4e-bf3d-f685-ffc2f9915a8a@jikos.cz>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 6 Jul 2017 23:50:39 +0200
+Subject: [Buildroot] ARM cross compiler path error "no such file or
+ directory"
+In-Reply-To: <20170706173509.5181f14d@windsurf.lan>
+References: <5ea74359-6a01-7668-c1d2-3784711227ab@newflow.co.uk>
+ <20170706173509.5181f14d@windsurf.lan>
+Message-ID: <da907d83-16e4-4b89-6d4b-db3d686a2a85@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
 
-On 06/07/17 19:06, Romain Naour wrote:
->> What else was exactly failing in your case? Maybe there are some improvements I
->> can propose to the package mainstream?
-> While looking at the issue I made some changes that make me believe that
-> CROSS_COMPILE was not defined while incdefs.sh was called.
->
-> With Yann, we looked at the issue after I published this patch to the mailing
-> list. We fixed the build issue and I'll send a v2 shortly.
->
-> But, we think that greping in a header is not a good practice.
-> To check if a define is available or not the build system should try to build a
-> small code including the header. A build system like autotools and CMake can be
-> used to do so.
->
-> Maybe you can try to upstream a new build system ?
-I fully agree with you that this grep approach is very weak. I have 
-already tried to propose changes that compile bits of code like 
-autotools do.
-Unfortunately the owner of linuxptp almost religiuosly rejects the 
-autotools approach. He is convinced that autotools are bad and can't see 
-that the grep approach is not portable and cannot work reliably.
-He rather prefers to finetune the grep expressions, instead of accepting 
-the de-facto industry standard.
 
-The only thing that seems to work is to point out concrete 
-configurations and environments where the compilation fails and 
-persistently report issues to him.
-I can take over this inconvenient job of a postman, but need a concrete 
-input from you.
+On 06-07-17 17:35, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 6 Jul 2017 15:34:27 +0100, Mark Jackson wrote:
+> 
+>> I can successfully compile "beaglebone_defconfig".
+>>
+>> $ make clean
+>> $ make beaglebone_defconfig
+>> $ make
+>>
+>> And in output/host/usr/bin, I can find all the "arm-linux-xyz" cross compiler tools (gcc, strings, strip, etc).
+>>
+>> But when I try to use these to compile my own code, I get an error as follows:-
+>>
+>> $ which arm-linux-gcc
+>> /home/mpfj/buildroot/output/host/usr/bin/arm-linux-gcc
+>> $ arm-linux-gcc
+>> /home/mpfj/buildroot/output/usr/bin/arm-linux-gcc.br_real: No such file or directory
+>>
+>> Quite correctly, "output/usr/bin" doesn't exist ... the files are in "output/host/usr/bin"
+>>
+>> arm-linux-gcc is just a symlink to toolchain-wrapper, so toolchain-wrapper seems to be pointing to the wrong directory!!
+>>
+>> I'm sure was working yesterday, but I did a "git pull" this morning, so it may be something quite recent ??
+> 
+> We pushed some changes over the last few days that moved everything in
+> $(HOST_DIR)/usr up into $(HOST_DIR), so it is possible that there are
+> some regressions.
 
-Thanks and regards
-Petr
+ You need to rebuild the toolchain (actually the toolchain wrapper) after this
+change. And probably other things need to be rebuilt as well. To be safe, do a
+"make clean; make".
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
