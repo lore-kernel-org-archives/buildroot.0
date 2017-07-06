@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 21:28:34 +0200
-Subject: [Buildroot] [PATCH] python-txaio: bump to version 2.8.0
-In-Reply-To: <20170706085447.14584-1-yegorslists@googlemail.com>
-References: <20170706085447.14584-1-yegorslists@googlemail.com>
-Message-ID: <20170706212834.15015b99@windsurf.lan>
+Date: Thu, 6 Jul 2017 21:28:38 +0200
+Subject: [Buildroot] [PATCH] python-jinja2: don't remove async files for
+ Python 3
+In-Reply-To: <20170706085753.14779-1-yegorslists@googlemail.com>
+References: <20170706085753.14779-1-yegorslists@googlemail.com>
+Message-ID: <20170706212838.2340f4ac@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Jul 2017 10:54:47 +0200, yegorslists at googlemail.com wrote:
+On Thu,  6 Jul 2017 10:57:53 +0200, yegorslists at googlemail.com wrote:
 > From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> The needed functionality is already included into Python 3.6.x,
+> so these files can be now compiled without errors.
 > 
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/python-txaio/python-txaio.hash | 4 ++--
->  package/python-txaio/python-txaio.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-jinja2/python-jinja2.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
