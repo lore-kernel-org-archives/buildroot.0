@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Jul 2017 00:52:52 +0200
-Subject: [Buildroot] [PATCH 2/3] mtd: host variant needs host-util-linux,
- host-e2fsprogs
-In-Reply-To: <20170706205849.22298-2-thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Jul 2017 00:57:59 +0200
+Subject: [Buildroot] [PATCH 3/3] mtd: be explicit about config options
+ for the host
+In-Reply-To: <20170706205849.22298-3-thomas.petazzoni@free-electrons.com>
 References: <20170706205849.22298-1-thomas.petazzoni@free-electrons.com>
- <20170706205849.22298-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <8b8cbad5-556f-40fa-4ba9-6310e32d16eb@mind.be>
+ <20170706205849.22298-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <b44bd05b-2ba9-d91a-803a-bb35cf4be5ee@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +15,43 @@ To: buildroot@busybox.net
 
 
 On 06-07-17 22:58, Thomas Petazzoni wrote:
-> Since mtd was converted to the package infrastructure in commit
-> de4cf4e9135e198d4c3beefc8ad63c03870eb78a ("mtd: convert to gentargets,
-> add host package"), its host variant depended on host-e2fsprogs. At
-> the time, only a host variant of the mtd package was available.
-> 
-> When a target variant of mtd was introduced in commit
-> b50e0fa113bf641a3764ae99b94bb7ba4e1e8f85 ("mtd: add option to build
-> mkfs.ubifs for target"), it depended on util-linux.
-> 
-> So today, the target variant continues to depend on util-linux, while
-> the target variant depends on e2fsprogs. What mkfs.ubifs really needs
-> is libuuid, which is provided by util-linux. It was in fact provided
-> by the fact that host-e2fsprogs depends on host-util-linux.
-> 
-> But really, host-e2fsprogs is not needed as a dependency, so use
-> host-util-linux to be consistent with the target variant.
+> Instead of letting auto-detection do its job, be explicit about the
+> fact that we want the JFFS2 and UBIFS utilities when building the host
+> variant of mtd.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/mtd/mtd.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 3bac2d5..807f559 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -45,7 +45,10 @@ MTD_CONF_OPTS += --without-xattr
+>  endif
+>  
+>  HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
+> -HOST_MTD_CONF_OPTS = --disable-tests
+> +HOST_MTD_CONF_OPTS = \
+> +	--with-jffs \
+> +	--with-ubifs \
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ If you do this, it would also seem natural to add
 
- Excellent commit message!
+--without-xattr --with-lzo
+
+(although we probably want xattr support in ubifs images, at least if
+BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES is set, but that's for
+another day :-).
 
  Regards,
  Arnout
 
-> ---
->  package/mtd/mtd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index 043f1c7..3bac2d5 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -44,7 +44,7 @@ else
->  MTD_CONF_OPTS += --without-xattr
->  endif
->  
-> -HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
-> +HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
->  HOST_MTD_CONF_OPTS = --disable-tests
+> +	--disable-tests
 >  
 >  MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
+>  SUMTOOL = $(HOST_DIR)/sbin/sumtool
 > 
 
 -- 
