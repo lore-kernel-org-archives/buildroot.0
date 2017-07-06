@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  6 Jul 2017 11:08:59 +0200
-Subject: [Buildroot] [PATCH 2/3] python-m2r: new package
+Date: Thu,  6 Jul 2017 11:09:00 +0200
+Subject: [Buildroot] [PATCH 3/3] python-automat: new package
 In-Reply-To: <20170706090900.15999-1-yegorslists@googlemail.com>
 References: <20170706090900.15999-1-yegorslists@googlemail.com>
-Message-ID: <20170706090900.15999-2-yegorslists@googlemail.com>
+Message-ID: <20170706090900.15999-3-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,76 +12,72 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Host variant is needed to generate long description
-for python-automat package.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                  |  1 +
- package/python-m2r/Config.in       |  8 ++++++++
- package/python-m2r/python-m2r.hash |  3 +++
- package/python-m2r/python-m2r.mk   | 16 ++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-m2r/Config.in
- create mode 100644 package/python-m2r/python-m2r.hash
- create mode 100644 package/python-m2r/python-m2r.mk
+ package/Config.in                          |  1 +
+ package/python-automat/Config.in           |  8 ++++++++
+ package/python-automat/python-automat.hash |  3 +++
+ package/python-automat/python-automat.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-automat/Config.in
+ create mode 100644 package/python-automat/python-automat.hash
+ create mode 100644 package/python-automat/python-automat.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index aac2b23063..f178aec963 100644
+index f178aec963..238e5c3123 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -764,6 +764,7 @@ menu "External python modules"
- 	source "package/python-lmdb/Config.in"
- 	source "package/python-logbook/Config.in"
- 	source "package/python-lxml/Config.in"
-+	source "package/python-m2r/Config.in"
- 	source "package/python-mad/Config.in"
- 	source "package/python-mako/Config.in"
- 	source "package/python-markdown/Config.in"
-diff --git a/package/python-m2r/Config.in b/package/python-m2r/Config.in
+@@ -687,6 +687,7 @@ menu "External python modules"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-attrs/Config.in"
+ 	source "package/python-autobahn/Config.in"
++	source "package/python-automat/Config.in"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-backports-shutil-get-terminal-size/Config.in"
+diff --git a/package/python-automat/Config.in b/package/python-automat/Config.in
 new file mode 100644
-index 0000000000..44dafaa464
+index 0000000000..910b3d6aec
 --- /dev/null
-+++ b/package/python-m2r/Config.in
++++ b/package/python-automat/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_M2R
-+	bool "python-m2r"
-+	select BR2_PACKAGE_PYTHON_MISTUNE # runtime
-+	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
++config BR2_PACKAGE_PYTHON_AUTOMAT
++	bool "python-automat"
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
 +	help
-+	  Markdown to reStructuredText converter.
++	  Self-service finite-state machines for the programmer on the go.
 +
-+	  https://github.com/miyakogi/m2r
-diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
++	  https://github.com/glyph/Automat
+diff --git a/package/python-automat/python-automat.hash b/package/python-automat/python-automat.hash
 new file mode 100644
-index 0000000000..102da33b55
+index 0000000000..c0e3505234
 --- /dev/null
-+++ b/package/python-m2r/python-m2r.hash
++++ b/package/python-automat/python-automat.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/m2r/json, sha256 locally computed
-+md5	aac67f2167a3d81c8ccd7615e9c2cb7a  m2r-0.1.6.tar.gz
-+sha256	a26bc2e25e0ad3f8650385aea25cf734ac4fcd30e54faec92fd39675da75e527  m2r-0.1.6.tar.gz
-diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
++# md5 from https://pypi.python.org/pypi/automat/json, sha256 locally computed
++md5	ad7bba58d262d8956d732330cb5ef53d  Automat-0.6.0.tar.gz
++sha256	3c1fd04ecf08ac87b4dd3feae409542e9bf7827257097b2b6ed5692f69d6f6a8  Automat-0.6.0.tar.gz
+diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
 new file mode 100644
-index 0000000000..b506ad8517
+index 0000000000..96a4f51506
 --- /dev/null
-+++ b/package/python-m2r/python-m2r.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-automat/python-automat.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-m2r
++# python-automat
 +#
 +################################################################################
 +
-+PYTHON_M2R_VERSION = 0.1.6
-+PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
-+PYTHON_M2R_SITE = https://pypi.python.org/packages/8d/74/558f9aba132bb34cd661fad9e17d42bfa1332363466ff314e600096f78c3
-+PYTHON_M2R_SETUP_TYPE = setuptools
-+PYTHON_M2R_LICENSE = MIT
-+PYTHON_M2R_LICENSE_FILES = LICENSE
-+HOST_PYTHON_M2R_DEPENDENCIES = host-python-docutils host-python-mistune
++PYTHON_AUTOMAT_VERSION = 0.6.0
++PYTHON_AUTOMAT_SOURCE = Automat-$(PYTHON_AUTOMAT_VERSION).tar.gz
++PYTHON_AUTOMAT_SITE = https://pypi.python.org/packages/de/05/b8e453085cf8a7f27bb1226596f4ccf5cc9e758377d60284f990bbdc592c
++PYTHON_AUTOMAT_SETUP_TYPE = setuptools
++PYTHON_AUTOMAT_LICENSE = MIT
++PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
++PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm
 +
 +$(eval $(python-package))
-+$(eval $(host-python-package))
 -- 
 2.11.0
