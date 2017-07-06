@@ -1,40 +1,55 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  6 Jul 2017 08:50:34 +0200
-Subject: [Buildroot] [PATCH] monit: bump to version 5.23.0
-Message-ID: <20170706065034.7873-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Jul 2017 09:08:21 +0200
+Subject: [Buildroot] [PATCH 2/3] testing/tests/package/test_python:
+ refactor to support better code reuse
+In-Reply-To: <ba95e326-7229-d4a1-3e1c-b4aae54a4f5d@mind.be>
+References: <20170704185807.27189-1-andrew.smirnov@gmail.com>
+ <20170704185807.27189-2-andrew.smirnov@gmail.com>
+ <20170705125959.09d059bc@windsurf>
+ <CAHQ1cqEHAaVa5rp=gJ=UdjQS0LMc2iaESjB=gftux9Ar3UQ=TA@mail.gmail.com>
+ <ba95e326-7229-d4a1-3e1c-b4aae54a4f5d@mind.be>
+Message-ID: <20170706090821.64b4948b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/monit/monit.hash | 4 ++--
- package/monit/monit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-index 8eb02fce66..d20286c07c 100644
---- a/package/monit/monit.hash
-+++ b/package/monit/monit.hash
-@@ -1,2 +1,2 @@
--# From https://mmonit.com/monit/dist/monit-5.20.0.tar.gz.sha256:
--sha256  ebac395ec50c1ae64d568db1260bc049d0e0e624c00e79d7b1b9a59c2679b98d  monit-5.20.0.tar.gz
-+# From https://mmonit.com/monit/dist/monit-5.23.0.tar.gz.sha256:
-+sha256  dd39fe3a379c02402ba9c44c201b3ba925ebdc8f04225918820607b6c5d56713  monit-5.23.0.tar.gz
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index dc202fd4d0..32cef1e9c2 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONIT_VERSION = 5.20.0
-+MONIT_VERSION = 5.23.0
- MONIT_SITE = http://mmonit.com/monit/dist
- MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
- MONIT_LICENSE_FILES = COPYING
+On Thu, 6 Jul 2017 00:09:10 +0200, Arnout Vandecappelle wrote:
+
+> >>> +    def login(self, timeout=5):
+> >>>          cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> >>>          self.emulator.boot(arch="armv5",
+> >>>                             kernel="builtin",
+> >>> -                           options=["-initrd", cpio_file])
+> >>> +                           options=["-initrd", cpio_file],
+> >>> +                           timeout)
+> >>>          self.emulator.login()
+> >>> -        cmd = "python --version 2>&1 | grep '^Python 2'"
+> >>> -        _, exit_code = self.emulator.run(cmd)
+> >>> -        self.assertEqual(exit_code, 0)  
+> >>
+> >> I'm not a big fan of having a method called .login() also start the
+> >> interpreter, it feels a bit weird.
+> >>  
+> > 
+> > I'll split it in the code into custom "boot()" and "login()" in v2,
+> > unless you have something else in mind.  
+> 
+>  I *think* this is a mistake on Thomas's part, that he thought the login()
+> function would boot, login and start Python. I.e., he missed the - in front of
+> the line. For me at least it's very natural that the login() function does the
+> boot + login.
+
+Ah, indeed. My bad. It's perfectly fine for me if a .login() or .boot()
+method does both the boot+login.
+
+Sorry for having misread the patch :/
+
+Thomas
 -- 
-2.13.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
