@@ -1,7 +1,8 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  6 Jul 2017 10:54:47 +0200
-Subject: [Buildroot] [PATCH] python-txaio: bump to version 2.8.0
-Message-ID: <20170706085447.14584-1-yegorslists@googlemail.com>
+Date: Thu,  6 Jul 2017 10:57:53 +0200
+Subject: [Buildroot] [PATCH] python-jinja2: don't remove async files for
+	Python 3
+Message-ID: <20170706085753.14779-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +11,31 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+The needed functionality is already included into Python 3.6.x,
+so these files can be now compiled without errors.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-txaio/python-txaio.hash | 4 ++--
- package/python-txaio/python-txaio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-jinja2/python-jinja2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
-index 37da82b1b7..f19014c5bb 100644
---- a/package/python-txaio/python-txaio.hash
-+++ b/package/python-txaio/python-txaio.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/txaio/json, sha256 locally computed.
--md5	7b0f5321515d380ad5d32f01666b6ee7  txaio-2.5.1.tar.gz
--sha256	625076477182e2dde78b79d0b2b0d6b3cecb0e24fe0ea7eaf2abd26a4c0dd1de  txaio-2.5.1.tar.gz
-+md5	643ac20b895b878786cd6a46790367d0  txaio-2.8.0.tar.gz
-+sha256	8029d956591107ff9a2221d2a288fdd3718713a6991f59b97359d3d4f4b7b564  txaio-2.8.0.tar.gz
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
-index 34c6e99cc6..e0f5e28918 100644
---- a/package/python-txaio/python-txaio.mk
-+++ b/package/python-txaio/python-txaio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 34342ab704..c7dd4902b0 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -17,11 +17,13 @@ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ # not available in Python 2 and some features available in Python 3.6.
+ # So in both cases *.py compilation would produce compiler errors.
+ # Hence remove both files after package extraction.
++ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+ 	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
+ endef
  
--PYTHON_TXAIO_VERSION = 2.5.1
-+PYTHON_TXAIO_VERSION = 2.8.0
- PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
--PYTHON_TXAIO_SITE = https://pypi.python.org/packages/45/e1/f7d88767d65dbfc20d4b4aa0dad657dbbe8ca629ead2bef24da04630a12a
-+PYTHON_TXAIO_SITE = https://pypi.python.org/packages/03/86/2cb7ae81209cc3fc64f68a31d70c20ab4771b520d7e13a5219b1f5e16ee1
- PYTHON_TXAIO_LICENSE = MIT
- PYTHON_TXAIO_LICENSE_FILES = LICENSE
- PYTHON_TXAIO_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
++endif
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
 2.11.0
