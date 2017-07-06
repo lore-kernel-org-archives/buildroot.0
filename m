@@ -1,116 +1,127 @@
-From: GitLab <gitlab@mg.gitlab.com>
-Date: Thu, 06 Jul 2017 04:08:49 +0000
-Subject: [Buildroot] buildroot | Pipeline #9617434 has failed for master |
-	b291525a
-Message-ID: <595db7d1c0490_48913f9370cfaf9c275c2@sidekiq02.mail>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 6 Jul 2017 07:16:48 +0300
+Subject: [Buildroot] [PATCH] package/linuxptp: remove incdefs.sh to
+ avoid cross-compilation issues
+In-Reply-To: <20170705141028.28194-1-romain.naour@smile.fr>
+References: <20170705141028.28194-1-romain.naour@smile.fr>
+Message-ID: <20170706041648.p546saeul5pdr576@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Your pipeline has failed.
+Hi Romain,
 
-Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
-Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
+On Wed, Jul 05, 2017 at 04:10:28PM +0200, Romain Naour wrote:
+> incdefs.sh try to define some flags based on some build tests and
+> by checking a kernel header. It doesn't work well while cross-compiling.
 
-Commit: b291525a ( https://gitlab.com/buildroot.org/buildroot/commit/b291525ac74273191c1a53a8361b9e7a6a58e79f )
-Commit Message: toolchain: replace absolute symlinks by relativ...
-Commit Author: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
+Can you elaborate on why that doesn't work with cross compiling? Since commit 
+85bf5750fe641 (linuxptp: don't check host headers for target features), 
+incdefs.sh only searches the target headers.
 
-Pipeline #9617434 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9617434 ) triggered by arnout ( https://gitlab.com/arnout )
-had 6 failed builds.
+> The Buildroot buildsystem define these definition directly
+> in the EXTRA_CFLAGS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>  ...move-incdefs.sh-to-avoid-cross-compilatio.patch | 31 ++++++++++++++++++++++
+>  package/linuxptp/Config.in                         |  4 +++
+>  package/linuxptp/linuxptp.mk                       | 10 +++++--
+>  3 files changed, 43 insertions(+), 2 deletions(-)
+>  create mode 100644 package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
+> 
+> diff --git a/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch b/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
+> new file mode 100644
+> index 0000000..cc932b4
+> --- /dev/null
+> +++ b/package/linuxptp/0001-makefile-remove-incdefs.sh-to-avoid-cross-compilatio.patch
+> @@ -0,0 +1,31 @@
+> +From 0759b36ad0a728a49f329fa0e7e6173fe3ccb657 Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@smile.fr>
+> +Date: Wed, 5 Jul 2017 15:37:22 +0200
+> +Subject: [PATCH] makefile: remove incdefs.sh to avoid cross-compilation issues
+> +
+> +The Buildroot buildsystem define these definition directly
+> +in the EXTRA_CFLAGS.
 
-Job #21269239 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21269239 )
+Since you add the correct macros in EXTRA_CFLAGS, why do you need to remove 
+the incdefs.sh call?
 
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660GrubExternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 11.960s
+> +
+> +Fixes:
+> +http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
+> +
+> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> +---
+> + makefile | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/makefile b/makefile
+> +index f898336..5912f9a 100644
+> +--- a/makefile
+> ++++ b/makefile
+> +@@ -33,7 +33,6 @@ OBJECTS	= $(OBJ) hwstamp_ctl.o phc2sys.o phc_ctl.o pmc.o pmc_common.o \
+> + SRC	= $(OBJECTS:.o=.c)
+> + DEPEND	= $(OBJECTS:.o=.d)
+> + srcdir	:= $(dir $(lastword $(MAKEFILE_LIST)))
+> +-incdefs := $(shell $(srcdir)/incdefs.sh)
+> + version := $(shell $(srcdir)/version.sh $(srcdir))
+> + VPATH	= $(srcdir)
+> + 
+> +-- 
+> +2.9.4
+> +
+> diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
+> index 3e18a0c..8c9d684 100644
+> --- a/package/linuxptp/Config.in
+> +++ b/package/linuxptp/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LINUXPTP
+>  	bool "linuxptp"
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+>  	help
+>  	  The Linux PTP Project is the Precision Time Protocol
+>  	  implementation according to IEEE standard 1588 for Linux.
+> @@ -11,3 +12,6 @@ config BR2_PACKAGE_LINUXPTP
+>  	  not a goal.
+>  
+>  	  http://linuxptp.sourceforge.net/
+> +
+> +comment "linuxptp needs a toolchain w/ headers >= 3.2"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+> index beb2591..35702e0 100644
+> --- a/package/linuxptp/linuxptp.mk
+> +++ b/package/linuxptp/linuxptp.mk
+> @@ -10,10 +10,16 @@ LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
+>  LINUXPTP_LICENSE = GPL-2.0+
+>  LINUXPTP_LICENSE_FILES = COPYING
+>  
+> +# incdefs.sh doesn't work for cross-compilation.
+> +# Define HAVE_ONESTEP_SYNC in EXTRA_CFLAGS directly and depends on
+> +# kernel headers >= 3.2.
 
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=21269239 responseStatus[0;m=201 Created token[0;m=_ge-9UQW
-[31;1mERROR: Job failed: exit code 1
-[0;m
+Can't we make HAVE_ONESTEP_SYNC depend on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2?
 
-Job #21269238 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21269238 )
+>  define LINUXPTP_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
+> -		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
+> -		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		$(MAKE) \
+> +		EXTRA_CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE \
+> +			-DHAVE_ONESTEP_SYNC -DHAVE_CLOCK_ADJTIME \
+> +			-DHAVE_POSIX_SPAWN" \
+> +		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+>  		-C $(@D) all
 
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660Grub2Internal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 11.553s
+baruch
 
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=21269238 responseStatus[0;m=201 Created token[0;m=mw2W-xvh
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #21269240 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21269240 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660GrubInternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 11.522s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=21269240 responseStatus[0;m=201 Created token[0;m=b2ESJqVz
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #21269242 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21269242 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660SyslinuxInternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 8.748s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=21269242 responseStatus[0;m=201 Created token[0;m=TKrSFDmh
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #21269237 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21269237 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660Grub2External
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 8.344s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=21269237 responseStatus[0;m=201 Created token[0;m=EExFoxVF
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #21269241 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/21269241 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660SyslinuxExternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 7.941s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=21269241 responseStatus[0;m=201 Created token[0;m=axgYwbMh
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-
----
-You're receiving this email because of your account on gitlab.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170706/654e8c30/attachment-0001.html>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
