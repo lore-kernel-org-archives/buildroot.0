@@ -1,268 +1,53 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 6 Jul 2017 06:16:18 -0400
-Subject: [Buildroot] [PATCH v3 1/3] libssl: new virtual package
-In-Reply-To: <36fa6794-7eae-2eb7-b9e2-7a0f58a39c0b@mind.be>
-References: <20170626162538.27101-1-aduskett@codeblue.com>
- <36fa6794-7eae-2eb7-b9e2-7a0f58a39c0b@mind.be>
-Message-ID: <CAFSsvmpk1kv=ePdvmccKGwo7BFQ16W2D-Qv=gbt=LoRPYbJJWg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  6 Jul 2017 12:48:41 +0200
+Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir fit
+	for multi-user setups
+Message-ID: <20170706104841.7711-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Arnout;
+While building I noticed:
 
-Thanks for the feedback! See my comments below:
+>>> host-ccache 3.3.4 Building
+conf.c: In function 'conf_create':
+conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
+  conf->cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
+  ^
 
-On Wed, Jul 5, 2017 at 3:50 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Adam,
->
-> On 26-06-17 18:25, Adam Duskett wrote:
->> libressl is API compatible with OpenSSL 1.0.1 and is almost API
->> compatible with OpenSSL 1.0.2.  As such, a new virtual package is needed
->> to handle having both libressl and openssl.
->>
->> To start, add OpenSSL as the only provider. In the following patches
->> libressl will also be added as a provider.
->
->  We finally got around to discussing this at the BR Summer Camp (too many things
-> to do...). In the end, we came to the following conclusion:
->
-> * Although libressl is supposed to be a drop-in replacement of openssl, it isn't
-> really. E.g. quite a few packages are using features from openssl 1.0.2 which
-> aren't available in libressl (yet).
->
-I agree, but hopefully, it will be soon!
+As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
+hardcoding the build user homedir isn't really nice for the relocatable
+SDK feature (or simply for a SDK used by multiple users).
 
-> * Therefore, we need to verify for each and every package if they support
-> libressl. A build-time check may not be sufficient, it really needs to be a
-> runtime test to be sure, due to the highly dynamic nature of openssl/libressl.
->
-Agreed.  Once this package is in place I am going to try and convert
-my current big
-project over to it.  This will include several packages so it will be
-a good test run.
+As the warning shows, CCache replaces "%s" with the current user home
+directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
+$HOME.
 
-> * That means we need to convert packages one by one, probably on demand by a
-> user who wants to replace openssl with libressl in his particular setup.
->
-> * We have no idea at the moment how many packages actually do support either
-> libressl or openssl. Therefore, it is difficult to estimate at this point
-> whether it is worth to create a virtual package.
->
-> * For boringssl even more so.
->
-I know janus-gateway supports boringssl right now. There's even a
-option for it in the
-config file! :)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ccache/ccache.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> * Transitioning to the virtual package will anyway be painful from a legacy
-> handling point of view. Indeed, we want to make sure that a configuration that
-> currently has openssl selected still has openssl selected in the future; we want
-> packages to be able to select openssl; and we ideally want a choice between the two.
->
->
-> Therefore, the proposal is to use the "old" way of having the two options:
->
-> config BR2_PACKAGE_LIBRESSL
->         bool "libressl"
->         depends on !BR2_PACKAGE_OPENSSL
->
-> and in packages that depend on either libressl or openssl:
->
->         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
->
-> and in packages that optionally depend on libressl or openssl:
->
-> ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> FOO_DEPENDENCIES += openssl
-> endif
-> ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-> FOO_DEPENDENCIES += libressl
-> endif
->
->
->  If a significant number of packages (don't know how much, but at least 5) are
-> able to support both, then we can consider introducing the virtual package after
-> all. But see below for the problems.
->
-I am sure there are, and hopefully more than just myself want to use
-libressl instead of
-openssl. :)
->>
->> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
->
-> [snip]
->> diff --git a/package/libssl/Config.in b/package/libssl/Config.in
->> new file mode 100644
->> index 0000000..5b912e6
->> --- /dev/null
->> +++ b/package/libssl/Config.in
->> @@ -0,0 +1,53 @@
->> +config BR2_PACKAGE_LIBSSL
->> +     bool "libssl support"
->> +     help
->> +       Select the desired ssl library provider.
->> +
->> +if BR2_PACKAGE_LIBSSL
->> +
->> +choice
->> +     prompt "libssl variant"
->> +     default BR2_PACKAGE_OPENSSL
->> +     help
->> +       Select OpenSSL
->> +
->> +config BR2_PACKAGE_OPENSSL
->
->  So here is the problem: if an existing config has BR2_PACKAGE_OPENSSL selected,
-> then it will silently disappear when they update Buildroot. There is no simple
-> way to resolve this, except by renaming the openssl package to something else,
-> and making sure that the virtual package is called openssl. This is how we did
-> it for libjpeg/jpegturbo: libjpeg was originally called jpeg and jpeg became the
-> virtual package.
->
-mmm, I disagree.  I don't think it's as insurmountable or as difficult
-as we are making it
-out to be to transition.  A quick glance: There are 157~ (current)
-packages that select openssl.
-That's not too terrible to do a transition.
-
->  But that is a rather big change, and we want to delay it until there are clear
-> users of the virtual package.
->
->  Some more notes below, just in case we do convert to the virtual package a few
-> months from now.
->
->> +     bool "openssl"
->> +     select BR2_PACKAGE_ZLIB
->> +     select BR2_PACKAGE_HAS_LIBSSL
->> +     help
->> +       A collaborative effort to develop a robust, commercial-grade,
->> +       fully featured, and Open Source toolkit implementing the
->> +       Secure Sockets Layer (SSL v2/v3) and Transport Security
->> +       (TLS v1) as well as a full-strength general-purpose
->> +       cryptography library.
->> +
->> +       http://www.openssl.org/
->> +       Note: Some helper scripts need perl.
->> +
->> +endchoice
->> +
->> +if BR2_PACKAGE_OPENSSL
->
->  I would personally prefer to keep this in package/openssl/Config.in and to add here
->
-> source "package/openssl/Config.in"
->
-Ok.  I was following the libjpeg/jpeg-turbo virtual package model.  If
-we go this route, would
-it be a good idea to add the respective Config.in files to libjpeg and
-jpeg-turbo as well?
-
->> +
->> +config BR2_PACKAGE_OPENSSL_BIN
->> +     bool "openssl binary"
->> +     help
->> +       Install the openssl binary and the associated helper scripts
->> +       to the target file system. This is a command line tool for
->> +       doing various cryptographic stuff.
->> +
->> +config BR2_PACKAGE_OPENSSL_ENGINES
->> +     bool "openssl additional engines"
->> +     help
->> +       Install additional encryption engine libraries.
->> +
->> +endif
->> +
->> +config BR2_PACKAGE_HAS_LIBSSL
->> +     bool
->
->  This should be at the top of the file.
->
->> +
->> +config BR2_PACKAGE_PROVIDES_LIBSSL
->> +     string
->
->  This should also be at the top of the file, and repeated in
-> package/openssl/Config.in (but without the string) together with the line below.
->
->
->  Regards,
->  Arnout
->
-Thanks so much for the feedback!
-
-Adam
->
->> +     default "openssl"    if BR2_PACKAGE_OPENSSL
->> +
->> +endif
->> diff --git a/package/libssl/libssl.mk b/package/libssl/libssl.mk
->> new file mode 100644
->> index 0000000..3bd775d
->> --- /dev/null
->> +++ b/package/libssl/libssl.mk
->> @@ -0,0 +1,7 @@
->> +################################################################################
->> +#
->> +# libssl
->> +#
->> +################################################################################
->> +
->> +$(eval $(virtual-package))
->> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
->> deleted file mode 100644
->> index e08b648..0000000
->> --- a/package/openssl/Config.in
->> +++ /dev/null
->> @@ -1,28 +0,0 @@
->> -config BR2_PACKAGE_OPENSSL
->> -     bool "openssl"
->> -     select BR2_PACKAGE_ZLIB
->> -     help
->> -       A collaborative effort to develop a robust, commercial-grade, fully
->> -       featured, and Open Source toolkit implementing the Secure Sockets
->> -       Layer (SSL v2/v3) and Transport Security (TLS v1) as well as a
->> -       full-strength general-purpose cryptography library.
->> -
->> -       http://www.openssl.org/
->> -
->> -       Note: Some helper scripts need perl.
->> -
->> -if BR2_PACKAGE_OPENSSL
->> -
->> -config BR2_PACKAGE_OPENSSL_BIN
->> -     bool "openssl binary"
->> -     help
->> -       Install the openssl binary and the associated helper scripts to the
->> -       target file system. This is a command line tool for doing various
->> -       cryptographic stuff.
->> -
->> -config BR2_PACKAGE_OPENSSL_ENGINES
->> -     bool "openssl additional engines"
->> -     help
->> -       Install additional encryption engine libraries.
->> -
->> -endif
->> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
->> index 5f56b44..c028290 100644
->> --- a/package/openssl/openssl.mk
->> +++ b/package/openssl/openssl.mk
->> @@ -10,6 +10,7 @@ OPENSSL_LICENSE = OpenSSL or SSLeay
->>  OPENSSL_LICENSE_FILES = LICENSE
->>  OPENSSL_INSTALL_STAGING = YES
->>  OPENSSL_DEPENDENCIES = zlib
->> +OPENSSL_PROVIDES = libssl
->>  HOST_OPENSSL_DEPENDENCIES = host-zlib
->>  OPENSSL_TARGET_ARCH = generic32
->>  OPENSSL_CFLAGS = $(TARGET_CFLAGS)
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 97d66bb45b..afbec44fac 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -28,9 +28,13 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+ #    BR2_CCACHE_DIR.
+ #  - Change hard-coded last-ditch default to match path in .config, to avoid
+ #    the need to specify BR_CACHE_DIR when invoking ccache directly.
++#    CCache replaces "%s" with the home directory of the current user,
++#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
++HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
++
+ define HOST_CCACHE_PATCH_CONFIGURATION
+ 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+-	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
++	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
+ endef
+ 
+ HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
+-- 
+2.11.0
