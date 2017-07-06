@@ -1,74 +1,43 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu,  6 Jul 2017 19:43:36 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/linuxptp: set KBUILD_OUTPUT to
-	STAGING_DIR
-In-Reply-To: <20170706174336.12294-1-romain.naour@smile.fr>
-References: <20170706174336.12294-1-romain.naour@smile.fr>
-Message-ID: <20170706174336.12294-2-romain.naour@smile.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  6 Jul 2017 19:54:56 +0200
+Subject: [Buildroot] [PATCH] libtomcrypt: bump to version 1.18.0-rc1
+Message-ID: <20170706175456.11742-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-incdefs.sh try to define some flags with user_flags() and kernel_flags()
-functions. The later is looking at the kernel headers installed on the host
-when KBUILD_OUTPUT is not set. If no kernel headers are installed on the host,
-the grep fail and HAVE_ONESTEP_SYNC is not set on the command line:
-see: grep: /usr/include/linux/net_tstamp.h: No such file or directory
-So the missing.h define HWTSTAMP_TX_ONESTEP_SYNC which is also present in the
-kernel headers installed in STAGING_DIR (toolchain w/ headers >= 3.2).
-
-Indeed KBUILD_OUTPUT is empty because it's reset in the makefile, so move
-KBUILD_OUTPUT in the enviroment while calling "make"/
-
-Also set KBUILD_OUTPUT to STAGING_DIR to find net_tstamp.h.
-
-While at it, use the same arguments for BUILD_CMD and INSTALL_TARGET_CMD.
-
-Thanks to Yann for the live review during the Buildroot summer camp.
-
-Fixes:
-http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Petr Kulhavy <brain@jikos.cz>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v2: rework BUILD_CMD and INSTALL_TARGET_CMD to avoid patching makefile
----
- package/linuxptp/linuxptp.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/libtomcrypt/libtomcrypt.hash | 2 +-
+ package/libtomcrypt/libtomcrypt.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 0fc85b0..d8bcc2b 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -13,8 +13,9 @@ LINUXPTP_LICENSE_FILES = COPYING
- define LINUXPTP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	KBUILD_OUTPUT=$(STAGING_DIR) \
- 	$(MAKE) \
--		KBUILD_OUTPUT=$(TARGET_DIR) \
-+		prefix=/usr \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
- 		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		-C $(@D) all
-@@ -22,10 +23,13 @@ endef
+diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
+index 562016d5..932052e8 100644
+--- a/package/libtomcrypt/libtomcrypt.hash
++++ b/package/libtomcrypt/libtomcrypt.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116  crypt-1.17.tar.bz2
++sha256  943af136e6c624371659dc6c98a2d749ea45912628717b72e4f8894339709b20  crypt-1.18.0-rc1.tar.xz
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index 8cc02b28..ee0c68e8 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- define LINUXPTP_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	KBUILD_OUTPUT=$(STAGING_DIR) \
- 	$(MAKE) \
- 		prefix=/usr \
- 		DESTDIR=$(TARGET_DIR) \
--		$(TARGET_CONFIGURE_OPTS) \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		-C $(@D) install
- 
- 	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp.cfg \
+-LIBTOMCRYPT_VERSION = 1.17
+-LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
+-LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
++LIBTOMCRYPT_VERSION = 1.18.0-rc1
++LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/v$(LIBTOMCRYPT_VERSION)
++LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.xz
+ LIBTOMCRYPT_LICENSE = WTFPL
+ LIBTOMCRYPT_LICENSE_FILES = LICENSE
+ LIBTOMCRYPT_INSTALL_STAGING = YES
 -- 
-2.9.4
+2.11.0
