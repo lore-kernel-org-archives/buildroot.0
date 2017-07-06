@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 21:28:30 +0200
-Subject: [Buildroot] [PATCH] python-setproctitle: change setup type to
- setuptools
-In-Reply-To: <20170706085259.14394-1-yegorslists@googlemail.com>
-References: <20170706085259.14394-1-yegorslists@googlemail.com>
-Message-ID: <20170706212830.6a1abb7d@windsurf.lan>
+Date: Thu, 6 Jul 2017 21:28:34 +0200
+Subject: [Buildroot] [PATCH] python-txaio: bump to version 2.8.0
+In-Reply-To: <20170706085447.14584-1-yegorslists@googlemail.com>
+References: <20170706085447.14584-1-yegorslists@googlemail.com>
+Message-ID: <20170706212834.15015b99@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Jul 2017 10:52:59 +0200, yegorslists at googlemail.com wrote:
+On Thu,  6 Jul 2017 10:54:47 +0200, yegorslists at googlemail.com wrote:
 > From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Changing setup type to setuptools avoids installing as zipped .egg
 > 
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/python-setproctitle/python-setproctitle.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/python-txaio/python-txaio.hash | 4 ++--
+>  package/python-txaio/python-txaio.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
