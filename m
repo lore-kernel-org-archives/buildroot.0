@@ -1,53 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  6 Jul 2017 12:48:41 +0200
-Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir fit
-	for multi-user setups
-Message-ID: <20170706104841.7711-1-peter@korsgaard.com>
+Date: Thu, 06 Jul 2017 13:09:12 +0200
+Subject: [Buildroot] [PATCH] download: allow for BR2_PRIMARY_SITE(_ONLY)
+	environment override
+In-Reply-To: <0b665ee9-9f6d-f612-1ade-67616281488c@grinn-global.com> (Marcin
+ Niestroj's message of "Thu, 6 Jul 2017 12:01:53 +0200")
+References: <20170705123359.19116-1-m.niestroj@grinn-global.com>
+ <87inj7ym6z.fsf@dell.be.48ers.dk>
+ <fc0894de-0269-61e4-5acd-2adbe0007bf9@grinn-global.com>
+ <8760f6zynp.fsf@dell.be.48ers.dk>
+ <0b665ee9-9f6d-f612-1ade-67616281488c@grinn-global.com>
+Message-ID: <8737a9yg87.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While building I noticed:
+>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
->>> host-ccache 3.3.4 Building
-conf.c: In function 'conf_create':
-conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
-  conf->cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
-  ^
+Hi,
 
-As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
-hardcoding the build user homedir isn't really nice for the relocatable
-SDK feature (or simply for a SDK used by multiple users).
+ > I still think that using environment variable with make command instead
+ > of brmake alias is more comfortable for a developer. But I get your
+ > point, so I will not insist on this patch :)
 
-As the warning shows, CCache replaces "%s" with the current user home
-directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
-$HOME.
+I understand. The problem is that it is very difficult to remove
+features once people start using it, and we try very hard to keep
+Buildroot (relatively) simple. Part of this is to not have multiple ways
+of doing the same thing.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ccache/ccache.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Sorry.
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 97d66bb45b..afbec44fac 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -28,9 +28,13 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
- #    BR2_CCACHE_DIR.
- #  - Change hard-coded last-ditch default to match path in .config, to avoid
- #    the need to specify BR_CACHE_DIR when invoking ccache directly.
-+#    CCache replaces "%s" with the home directory of the current user,
-+#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
-+HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
-+
- define HOST_CCACHE_PATCH_CONFIGURATION
- 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
--	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
-+	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
- endef
- 
- HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
 -- 
-2.11.0
+Bye, Peter Korsgaard
