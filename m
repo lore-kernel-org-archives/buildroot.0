@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Jul 2017 00:57:59 +0200
-Subject: [Buildroot] [PATCH 3/3] mtd: be explicit about config options
- for the host
-In-Reply-To: <20170706205849.22298-3-thomas.petazzoni@free-electrons.com>
-References: <20170706205849.22298-1-thomas.petazzoni@free-electrons.com>
- <20170706205849.22298-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <b44bd05b-2ba9-d91a-803a-bb35cf4be5ee@mind.be>
+Date: Fri, 7 Jul 2017 01:18:33 +0200
+Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir
+ fit for multi-user setups
+In-Reply-To: <20170706104841.7711-1-peter@korsgaard.com>
+References: <20170706104841.7711-1-peter@korsgaard.com>
+Message-ID: <8c3c10e0-7f63-0063-5ec2-5edb24ce978f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +13,68 @@ To: buildroot@busybox.net
 
 
 
-On 06-07-17 22:58, Thomas Petazzoni wrote:
-> Instead of letting auto-detection do its job, be explicit about the
-> fact that we want the JFFS2 and UBIFS utilities when building the host
-> variant of mtd.
+On 06-07-17 12:48, Peter Korsgaard wrote:
+> While building I noticed:
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>> host-ccache 3.3.4 Building
+> conf.c: In function 'conf_create':
+> conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
+>   conf->cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
+>   ^
+> 
+> As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
+> hardcoding the build user homedir isn't really nice for the relocatable
+> SDK feature (or simply for a SDK used by multiple users).
+
+ Absolutely true. However, I wonder if hardcoding the ccache path in the ccache
+binary is really such a good idea in the context of an SDK. So perhaps we should
+just replace the default with our own default, i.e.
+sed s,%s/\.ccache,%s/.buildroot-ccache,
+
+ Note also that it may have been intentional to point to a shared ccache
+directory that happens to reside in some user's home directory. But of course,
+in that case, the BR_CACHE_DIR we use will still take over.
+
+> 
+> As the warning shows, CCache replaces "%s" with the current user home
+> directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
+> $HOME.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/mtd/mtd.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/ccache/ccache.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index 3bac2d5..807f559 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -45,7 +45,10 @@ MTD_CONF_OPTS += --without-xattr
->  endif
->  
->  HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
-> -HOST_MTD_CONF_OPTS = --disable-tests
-> +HOST_MTD_CONF_OPTS = \
-> +	--with-jffs \
-> +	--with-ubifs \
+> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+> index 97d66bb45b..afbec44fac 100644
+> --- a/package/ccache/ccache.mk
+> +++ b/package/ccache/ccache.mk
+> @@ -28,9 +28,13 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+>  #    BR2_CCACHE_DIR.
+>  #  - Change hard-coded last-ditch default to match path in .config, to avoid
+>  #    the need to specify BR_CACHE_DIR when invoking ccache directly.
+> +#    CCache replaces "%s" with the home directory of the current user,
+> +#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
+> +HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
 
- If you do this, it would also seem natural to add
+ This looked really really weird to me when I first saw it, but in the end it
+does make sense.
 
---without-xattr --with-lzo
-
-(although we probably want xattr support in ubifs images, at least if
-BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES is set, but that's for
-another day :-).
+ Still, since nobody ever complained about this, I'm not so sure we should "fix"
+it. It's just as likely to actually break things for some user. So it's a weak
+NACK from me.
 
  Regards,
  Arnout
 
-> +	--disable-tests
+> +
+>  define HOST_CCACHE_PATCH_CONFIGURATION
+>  	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+> -	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
+> +	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
+>  endef
 >  
->  MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
->  SUMTOOL = $(HOST_DIR)/sbin/sumtool
+>  HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
 > 
 
 -- 
