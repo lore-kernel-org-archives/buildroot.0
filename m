@@ -1,62 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 21:54:09 +0200
-Subject: [Buildroot] [PATCH v3] pkg-stats: allow to sort by column
-In-Reply-To: <20170706013631.19238-1-ricardo.martincoski@gmail.com>
-References: <20170701043555.25851-1-ricardo.martincoski@gmail.com>
- <20170706013631.19238-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170706215409.109ed854@windsurf.lan>
+Date: Thu, 6 Jul 2017 21:54:58 +0200
+Subject: [Buildroot] [git commit] atop: add hash for license file
+Message-ID: <20170706195216.0B39A81841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6473a185cef48a18c2cb611cf36a06dae050809c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Jul 2017 22:36:31 -0300, Ricardo Martincoski wrote:
-> With 2000+ packages it's not trivial to identify i.e.:
-> - all packages that don't have a hash file;
-> - all packages that have patches;
-> - all packages that have code style warnings;
-> 
-> User experience can be improved by dynamically sorting the resulting
-> table.
-> 
-> There is an open-source solution that does that in the client-side and
-> requires minimal changes to our script: sorttable.js.
-> The script is MIT licensed as stated in its website.
-> 
-> Include instructions to download the third-party script and adapt our
-> script accordingly, following the example in the tool's website.
-> 
-> Also add a hint to the user that the table can be sorted.
-> Display the hint when all these conditions are met:
-> - the browser has JavaScript support enabled;
-> - the sorttable.js script is loaded;
-> - the page is loaded.
-> 
-> Usage (static table):
-> ./support/scripts/pkg-stats > /tmp/pkg.html
-> 
-> Usage (sortable table):
-> ./support/scripts/pkg-stats > /tmp/pkg.html
-> wget https://www.kryogenix.org/code/browser/sorttable/sorttable.js \
->   -O /tmp/sorttable.js
-> Open /tmp/pkg.html using a JavaScript-enabled web browser and click on
-> the headers of the table to sort it.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/atop/atop.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I've changed your patch so that the generated HTML directly uses the
-online Javascript file, rather than having to download it separately.
-Applied with this change, and a few other additional changes to
-pkg-stats.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/atop/atop.hash b/package/atop/atop.hash
+index 7a7bffb..9ee0d62 100644
+--- a/package/atop/atop.hash
++++ b/package/atop/atop.hash
+@@ -1,2 +1,5 @@
+ # Locally computed:
+ sha256  73e4725de0bafac8c63b032e8479e2305e3962afbe977ec1abd45f9e104eb264  atop-2.3.0.tar.gz
++
++# Hash for license file:
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
