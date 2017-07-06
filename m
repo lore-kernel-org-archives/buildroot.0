@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Jul 2017 00:51:12 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/linuxptp: set KBUILD_OUTPUT
- to STAGING_DIR
-In-Reply-To: <5f935067-e1fc-f3e5-77e5-805b985ee8cd@jikos.cz>
-References: <20170706174336.12294-1-romain.naour@smile.fr>
- <20170706174336.12294-2-romain.naour@smile.fr>
- <5f935067-e1fc-f3e5-77e5-805b985ee8cd@jikos.cz>
-Message-ID: <7bc283d5-7b77-010b-cfce-e8ee662cc806@mind.be>
+Date: Fri, 7 Jul 2017 00:52:52 +0200
+Subject: [Buildroot] [PATCH 2/3] mtd: host variant needs host-util-linux,
+ host-e2fsprogs
+In-Reply-To: <20170706205849.22298-2-thomas.petazzoni@free-electrons.com>
+References: <20170706205849.22298-1-thomas.petazzoni@free-electrons.com>
+ <20170706205849.22298-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <8b8cbad5-556f-40fa-4ba9-6310e32d16eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,93 +14,50 @@ To: buildroot@busybox.net
 
 
 
-On 07-07-17 00:03, Petr Kulhavy wrote:
-> Thanks Romain, that looks very good.
+On 06-07-17 22:58, Thomas Petazzoni wrote:
+> Since mtd was converted to the package infrastructure in commit
+> de4cf4e9135e198d4c3beefc8ad63c03870eb78a ("mtd: convert to gentargets,
+> add host package"), its host variant depended on host-e2fsprogs. At
+> the time, only a host variant of the mtd package was available.
+> 
+> When a target variant of mtd was introduced in commit
+> b50e0fa113bf641a3764ae99b94bb7ba4e1e8f85 ("mtd: add option to build
+> mkfs.ubifs for target"), it depended on util-linux.
+> 
+> So today, the target variant continues to depend on util-linux, while
+> the target variant depends on e2fsprogs. What mkfs.ubifs really needs
+> is libuuid, which is provided by util-linux. It was in fact provided
+> by the fact that host-e2fsprogs depends on host-util-linux.
+> 
+> But really, host-e2fsprogs is not needed as a dependency, so use
+> host-util-linux to be consistent with the target variant.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- You can do more formal review by replying with:
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Reviewed-by: Your Full Name <your@email.address>
-
-below the Signed-off-by. This will be recorded in patchwork and in git.
-
- Of course, you should only do so if you have actually reviewed the patch in detail.
-
- If you have tested it, you can add:
-
- Tested-by: Your Full Name <your@email.address>
- (details of what you tested)
+ Excellent commit message!
 
  Regards,
  Arnout
 
-
+> ---
+>  package/mtd/mtd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Petr
-> 
-> On 06/07/17 19:43, Romain Naour wrote:
->> incdefs.sh try to define some flags with user_flags() and kernel_flags()
->> functions. The later is looking at the kernel headers installed on the host
->> when KBUILD_OUTPUT is not set. If no kernel headers are installed on the host,
->> the grep fail and HAVE_ONESTEP_SYNC is not set on the command line:
->> see: grep: /usr/include/linux/net_tstamp.h: No such file or directory
->> So the missing.h define HWTSTAMP_TX_ONESTEP_SYNC which is also present in the
->> kernel headers installed in STAGING_DIR (toolchain w/ headers >= 3.2).
->>
->> Indeed KBUILD_OUTPUT is empty because it's reset in the makefile, so move
->> KBUILD_OUTPUT in the enviroment while calling "make"/
->>
->> Also set KBUILD_OUTPUT to STAGING_DIR to find net_tstamp.h.
->>
->> While at it, use the same arguments for BUILD_CMD and INSTALL_TARGET_CMD.
->>
->> Thanks to Yann for the live review during the Buildroot summer camp.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
->>
->>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->> Cc: Petr Kulhavy <brain@jikos.cz>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> ---
->> v2: rework BUILD_CMD and INSTALL_TARGET_CMD to avoid patching makefile
->> ---
->>   package/linuxptp/linuxptp.mk | 8 ++++++--
->>   1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
->> index 0fc85b0..d8bcc2b 100644
->> --- a/package/linuxptp/linuxptp.mk
->> +++ b/package/linuxptp/linuxptp.mk
->> @@ -13,8 +13,9 @@ LINUXPTP_LICENSE_FILES = COPYING
->>   define LINUXPTP_BUILD_CMDS
->>       $(TARGET_MAKE_ENV) \
->>       CROSS_COMPILE="$(TARGET_CROSS)" \
->> +    KBUILD_OUTPUT=$(STAGING_DIR) \
->>       $(MAKE) \
->> -        KBUILD_OUTPUT=$(TARGET_DIR) \
->> +        prefix=/usr \
->>           EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
->>           EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
->>           -C $(@D) all
->> @@ -22,10 +23,13 @@ endef
->>     define LINUXPTP_INSTALL_TARGET_CMDS
->>       $(TARGET_MAKE_ENV) \
->> +    CROSS_COMPILE="$(TARGET_CROSS)" \
->> +    KBUILD_OUTPUT=$(STAGING_DIR) \
->>       $(MAKE) \
->>           prefix=/usr \
->>           DESTDIR=$(TARGET_DIR) \
->> -        $(TARGET_CONFIGURE_OPTS) \
->> +        EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
->> +        EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
->>           -C $(@D) install
->>         $(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp.cfg \
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 043f1c7..3bac2d5 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -44,7 +44,7 @@ else
+>  MTD_CONF_OPTS += --without-xattr
+>  endif
+>  
+> -HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
+> +HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
+>  HOST_MTD_CONF_OPTS = --disable-tests
+>  
+>  MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
 > 
 
 -- 
