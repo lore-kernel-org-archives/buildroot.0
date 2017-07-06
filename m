@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 23:24:13 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
- CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT for ARMv8
-In-Reply-To: <20170705190840.22469-2-aperez@igalia.com>
-References: <20170705190840.22469-1-aperez@igalia.com>
- <20170705190840.22469-2-aperez@igalia.com>
-Message-ID: <20170706232413.526b130d@windsurf.lan>
+Date: Thu, 6 Jul 2017 23:25:40 +0200
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: select libgcrypt
+In-Reply-To: <20170705194653.19890-2-aperez@igalia.com>
+References: <20170705194653.19890-1-aperez@igalia.com>
+ <20170705194653.19890-2-aperez@igalia.com>
+Message-ID: <20170706232540.4c9a2425@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  5 Jul 2017 22:08:40 +0300, Adrian Perez de Castro wrote:
-> This is needed for correctly building some CMake-based packages which
-> use this variable. For example, this is needed for WebKitGTK+ 2.16.x
-> to build correctly when an ARMv8 target is configured.
+On Wed,  5 Jul 2017 22:46:53 +0300, Adrian Perez de Castro wrote:
+> Libgrcrypt is a direct dependency of WebKitGTK+, and as such it
+> should be selected.
 > 
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/pkg-cmake.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/webkitgtk/Config.in    | 1 +
+>  package/webkitgtk/webkitgtk.mk | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
+When you select a package, you must replicate its dependencies. So in
+this case, when you add "select BR2_PACKAGE_LIBGCRYPT", you must add
+"depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS".
 
-It is worth mentioning that sending a cover letter for a one patch
-patch series isn't really necessary. If you want to put additional
-information besides the commit log, you can put them after the "---"
-separator below the SoB line.
+Of course, the set of architectures supported by WebKitGTK+ is probably
+already smaller than the set of architectures supported by
+libgpg-error, but for consistency reasons, replicating the dependency
+is recommended.
 
-Thanks a lot!
+I've applied your patch after addressing this issue. Thanks a lot!
 
 Thomas
 -- 
