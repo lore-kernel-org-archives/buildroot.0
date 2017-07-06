@@ -1,33 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 21:28:38 +0200
-Subject: [Buildroot] [PATCH] python-jinja2: don't remove async files for
- Python 3
-In-Reply-To: <20170706085753.14779-1-yegorslists@googlemail.com>
-References: <20170706085753.14779-1-yegorslists@googlemail.com>
-Message-ID: <20170706212838.2340f4ac@windsurf.lan>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 6 Jul 2017 21:31:36 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/linuxptp: fix coding style
+ issue
+In-Reply-To: <20170706210935.4204fd61@windsurf.lan>
+References: <20170706174336.12294-1-romain.naour@smile.fr>
+ <20170706210935.4204fd61@windsurf.lan>
+Message-ID: <1223fd70-9088-5527-02a4-f128d2a3eb53@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu,  6 Jul 2017 10:57:53 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Le 06/07/2017 ? 21:09, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> The needed functionality is already included into Python 3.6.x,
-> so these files can be now compiled without errors.
+> On Thu,  6 Jul 2017 19:43:35 +0200, Romain Naour wrote:
+>> Thanks to Yann for the live review during the Buildroot summer camp.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> Cc: Petr Kulhavy <brain@jikos.cz>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> ---
+>>  package/linuxptp/linuxptp.mk | 17 ++++++++++++-----
+>>  1 file changed, 12 insertions(+), 5 deletions(-)
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-jinja2/python-jinja2.mk | 2 ++
->  1 file changed, 2 insertions(+)
+> I've applied both patches. However, the second patch created quite a
+> bit of duplication between the build and install steps, so I committed
+> an additional patch that creates and uses LINUXPTP_MAKE_ENV and
+> LINUXPTP_MAKE_OPTS variables.
 
-Applied to master, thanks.
+Indeed, thanks for fixing this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
