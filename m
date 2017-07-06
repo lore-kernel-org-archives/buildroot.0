@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 23:25:40 +0200
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: select libgcrypt
-In-Reply-To: <20170705194653.19890-2-aperez@igalia.com>
-References: <20170705194653.19890-1-aperez@igalia.com>
- <20170705194653.19890-2-aperez@igalia.com>
-Message-ID: <20170706232540.4c9a2425@windsurf.lan>
+Date: Thu, 6 Jul 2017 23:26:11 +0200
+Subject: [Buildroot] [git commit] azure-iot-sdk-c: Bump to version 2017-06-30
+Message-ID: <20170706212249.D9CEF81EFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5c44c6b24d3d220c4e18600abcebdc5dfa26cdf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Jul 2017 22:46:53 +0300, Adrian Perez de Castro wrote:
-> Libgrcrypt is a direct dependency of WebKitGTK+, and as such it
-> should be selected.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  package/webkitgtk/Config.in    | 1 +
->  package/webkitgtk/webkitgtk.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-When you select a package, you must replicate its dependencies. So in
-this case, when you add "select BR2_PACKAGE_LIBGCRYPT", you must add
-"depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS".
-
-Of course, the set of architectures supported by WebKitGTK+ is probably
-already smaller than the set of architectures supported by
-libgpg-error, but for consistency reasons, replicating the dependency
-is recommended.
-
-I've applied your patch after addressing this issue. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index dbdef3e..18c3e24 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AZURE_IOT_SDK_C_VERSION = 2017-05-05
++AZURE_IOT_SDK_C_VERSION = 2017-06-30
+ AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
+ AZURE_IOT_SDK_C_SITE_METHOD = git
+ AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
