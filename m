@@ -1,36 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 16:27:59 +0200
-Subject: [Buildroot] [PATCH v4 1/1] libressl: new package
-In-Reply-To: <20170706111201.6806-1-aduskett@codeblue.com>
-References: <20170706111201.6806-1-aduskett@codeblue.com>
-Message-ID: <20170706162759.19812c63@windsurf.lan>
+From: Mark Jackson <mpfj-list@newflow.co.uk>
+Date: Thu, 6 Jul 2017 15:34:27 +0100
+Subject: [Buildroot] ARM cross compiler path error "no such file or
+	directory"
+Message-ID: <5ea74359-6a01-7668-c1d2-3784711227ab@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I can successfully compile "beaglebone_defconfig".
 
-On Thu,  6 Jul 2017 07:12:01 -0400, Adam Duskett wrote:
+$ make clean
+$ make beaglebone_defconfig
+$ make
 
-> +#Run install-exec to prevent header files and man pages from being installed
-> +#to the target.
-> +define LIBRESSL_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-exec
-> +endef
+And in output/host/usr/bin, I can find all the "arm-linux-xyz" cross compiler tools (gcc, strings, strip, etc).
 
-I think it has already been said in previous reviews: we want to do a
-regular "make install" to the target, so please drop
-INSTALL_TARGET_CMDS entirely, and rely on the one provided by the
-autotools package infrastructure
+But when I try to use these to compile my own code, I get an error as follows:-
 
-Header files and man pages are automatically removed by Buildroot at
-the end of the build (see the target-finalize make target in the main
-Makefile).
+$ which arm-linux-gcc
+/home/mpfj/buildroot/output/host/usr/bin/arm-linux-gcc
+$ arm-linux-gcc
+/home/mpfj/buildroot/output/usr/bin/arm-linux-gcc.br_real: No such file or directory
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Quite correctly, "output/usr/bin" doesn't exist ... the files are in "output/host/usr/bin"
+                                                                             ^^^^
+
+arm-linux-gcc is just a symlink to toolchain-wrapper, so toolchain-wrapper seems to be pointing to the wrong directory!!
+
+I'm sure was working yesterday, but I did a "git pull" this morning, so it may be something quite recent ??
