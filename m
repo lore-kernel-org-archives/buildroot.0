@@ -1,53 +1,74 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Thu,  6 Jul 2017 19:43:35 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/linuxptp: fix coding style issue
-Message-ID: <20170706174336.12294-1-romain.naour@smile.fr>
+Date: Thu,  6 Jul 2017 19:43:36 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/linuxptp: set KBUILD_OUTPUT to
+	STAGING_DIR
+In-Reply-To: <20170706174336.12294-1-romain.naour@smile.fr>
+References: <20170706174336.12294-1-romain.naour@smile.fr>
+Message-ID: <20170706174336.12294-2-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+incdefs.sh try to define some flags with user_flags() and kernel_flags()
+functions. The later is looking at the kernel headers installed on the host
+when KBUILD_OUTPUT is not set. If no kernel headers are installed on the host,
+the grep fail and HAVE_ONESTEP_SYNC is not set on the command line:
+see: grep: /usr/include/linux/net_tstamp.h: No such file or directory
+So the missing.h define HWTSTAMP_TX_ONESTEP_SYNC which is also present in the
+kernel headers installed in STAGING_DIR (toolchain w/ headers >= 3.2).
+
+Indeed KBUILD_OUTPUT is empty because it's reset in the makefile, so move
+KBUILD_OUTPUT in the enviroment while calling "make"/
+
+Also set KBUILD_OUTPUT to STAGING_DIR to find net_tstamp.h.
+
+While at it, use the same arguments for BUILD_CMD and INSTALL_TARGET_CMD.
+
 Thanks to Yann for the live review during the Buildroot summer camp.
+
+Fixes:
+http://autobuild.buildroot.net/results/364/36470db2c262d2e1fda5144a08cfe221831e093e
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Cc: Petr Kulhavy <brain@jikos.cz>
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linuxptp/linuxptp.mk | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+v2: rework BUILD_CMD and INSTALL_TARGET_CMD to avoid patching makefile
+---
+ package/linuxptp/linuxptp.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index beb2591..0fc85b0 100644
+index 0fc85b0..d8bcc2b 100644
 --- a/package/linuxptp/linuxptp.mk
 +++ b/package/linuxptp/linuxptp.mk
-@@ -11,15 +11,22 @@ LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
- 
+@@ -13,8 +13,9 @@ LINUXPTP_LICENSE_FILES = COPYING
  define LINUXPTP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
--		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
--		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(TARGET_MAKE_ENV) \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	$(MAKE) \
-+		KBUILD_OUTPUT=$(TARGET_DIR) \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	$(TARGET_MAKE_ENV) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
++	KBUILD_OUTPUT=$(STAGING_DIR) \
+ 	$(MAKE) \
+-		KBUILD_OUTPUT=$(TARGET_DIR) \
++		prefix=/usr \
+ 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+ 		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
  		-C $(@D) all
- endef
+@@ -22,10 +23,13 @@ endef
  
  define LINUXPTP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) prefix=/usr DESTDIR=$(TARGET_DIR) \
--		$(TARGET_CONFIGURE_OPTS) -C $(@D) install
-+	$(TARGET_MAKE_ENV) \
-+	$(MAKE) \
-+		prefix=/usr \
-+		DESTDIR=$(TARGET_DIR) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		-C $(@D) install
+ 	$(TARGET_MAKE_ENV) \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	KBUILD_OUTPUT=$(STAGING_DIR) \
+ 	$(MAKE) \
+ 		prefix=/usr \
+ 		DESTDIR=$(TARGET_DIR) \
+-		$(TARGET_CONFIGURE_OPTS) \
++		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		-C $(@D) install
  
  	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp.cfg \
- 		$(TARGET_DIR)/etc/linuxptp.cfg
 -- 
 2.9.4
