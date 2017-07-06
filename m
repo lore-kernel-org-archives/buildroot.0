@@ -1,45 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  6 Jul 2017 11:42:29 +0200
-Subject: [Buildroot] [PATCH] xvisor: fix bogus check on XVISOR_ARCH
-Message-ID: <20170706094229.18820-1-thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Jul 2017 11:45:00 +0200
+Subject: [Buildroot] [git commit] toolchain-external: drop reference to
+	non-existing variable
+Message-ID: <20170706094145.B91AA807BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The XVISOR_ARCH check added in commit
-117fd5dfbc756c4f2b4aef97fc2b568528c66df7 ("xvisor: fix build on
-AArch64") broke Buildroot entirely on all architectures except ARM,
-AArch64 and x86-64, because the $(error ...) test was not enclosed
-inside a condition that made sure the xvisor package was enabled.
+commit: https://git.buildroot.net/buildroot/commit/?id=0efb7785eab110dc8860c271c361fdf67d3d1fb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit fixes that, and allows Buildroot to be usable again on all
-architectures.
+Commit 32bec8ee2fb0 (toolchain-external: copy ld*.so* for all C libraries)
+removed the definition of TOOLCHAIN_EXTERNAL_MUSL_LD_LINK. Remove also the
+reference to it.
 
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xvisor/xvisor.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index 8be4be9..addd7e6 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -30,9 +30,13 @@ ifeq ($(BR2_x86_64),y)
- XVISOR_ARCH = x86
- else ifeq ($(BR2_arm)$(BR2_aarch64),y)
- XVISOR_ARCH = arm
--else
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XVISOR)$(BR_BUILDING),yy)
-+ifeq ($(XVISOR_ARCH),)
- $(error "Architecture not supported by XVisor")
- endif
-+endif
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 33449d3..1c5a579 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -561,10 +561,6 @@ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
  
- XVISOR_MAKE_ENV = \
- 	ARCH=$(XVISOR_ARCH) \
--- 
-2.9.4
+-ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+-$(2)_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+-endif
+-
+ # Even though we're installing things in both the staging, the host
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
