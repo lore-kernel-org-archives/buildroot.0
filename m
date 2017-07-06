@@ -1,83 +1,76 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  6 Jul 2017 11:09:00 +0200
-Subject: [Buildroot] [PATCH 3/3] python-automat: new package
-In-Reply-To: <20170706090900.15999-1-yegorslists@googlemail.com>
-References: <20170706090900.15999-1-yegorslists@googlemail.com>
-Message-ID: <20170706090900.15999-3-yegorslists@googlemail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 6 Jul 2017 12:14:46 +0300
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
+ CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT for ARMv8
+In-Reply-To: <407724d9-6ae3-b166-63df-7d1559d2160c@mind.be>
+References: <20170705190840.22469-1-aperez@igalia.com>
+ <20170705190840.22469-2-aperez@igalia.com>
+ <407724d9-6ae3-b166-63df-7d1559d2160c@mind.be>
+Message-ID: <20170706121446.GC21278@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Arnout,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                          |  1 +
- package/python-automat/Config.in           |  8 ++++++++
- package/python-automat/python-automat.hash |  3 +++
- package/python-automat/python-automat.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-automat/Config.in
- create mode 100644 package/python-automat/python-automat.hash
- create mode 100644 package/python-automat/python-automat.mk
+Thanks for the reviewing :-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f178aec963..238e5c3123 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -687,6 +687,7 @@ menu "External python modules"
- 	source "package/python-arrow/Config.in"
- 	source "package/python-attrs/Config.in"
- 	source "package/python-autobahn/Config.in"
-+	source "package/python-automat/Config.in"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-backports-shutil-get-terminal-size/Config.in"
-diff --git a/package/python-automat/Config.in b/package/python-automat/Config.in
-new file mode 100644
-index 0000000000..910b3d6aec
---- /dev/null
-+++ b/package/python-automat/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_AUTOMAT
-+	bool "python-automat"
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Self-service finite-state machines for the programmer on the go.
-+
-+	  https://github.com/glyph/Automat
-diff --git a/package/python-automat/python-automat.hash b/package/python-automat/python-automat.hash
-new file mode 100644
-index 0000000000..c0e3505234
---- /dev/null
-+++ b/package/python-automat/python-automat.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/automat/json, sha256 locally computed
-+md5	ad7bba58d262d8956d732330cb5ef53d  Automat-0.6.0.tar.gz
-+sha256	3c1fd04ecf08ac87b4dd3feae409542e9bf7827257097b2b6ed5692f69d6f6a8  Automat-0.6.0.tar.gz
-diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
-new file mode 100644
-index 0000000000..96a4f51506
---- /dev/null
-+++ b/package/python-automat/python-automat.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-automat
-+#
-+################################################################################
-+
-+PYTHON_AUTOMAT_VERSION = 0.6.0
-+PYTHON_AUTOMAT_SOURCE = Automat-$(PYTHON_AUTOMAT_VERSION).tar.gz
-+PYTHON_AUTOMAT_SITE = https://pypi.python.org/packages/de/05/b8e453085cf8a7f27bb1226596f4ccf5cc9e758377d60284f990bbdc592c
-+PYTHON_AUTOMAT_SETUP_TYPE = setuptools
-+PYTHON_AUTOMAT_LICENSE = MIT
-+PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
-+PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm
-+
-+$(eval $(python-package))
--- 
-2.11.0
+On Wed, 5 Jul 2017 22:23:26 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 05-07-17 21:08, Adrian Perez de Castro wrote:
+> > This is needed for correctly building some CMake-based packages which
+> > use this variable. For example, this is needed for WebKitGTK+ 2.16.x
+> > to build correctly when an ARMv8 target is configured.
+> 
+>  Well, it's needed for any cmake package on ARMv8...
+> 
+> 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> > ---
+> >  package/pkg-cmake.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> > index 401084fb12..914bda7482 100644
+> > --- a/package/pkg-cmake.mk
+> > +++ b/package/pkg-cmake.mk
+> > @@ -219,6 +219,8 @@ else ifeq ($(BR2_ARM_CPU_ARMV6),y)
+> >  CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT = armv6
+> >  else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+> 
+>  I noticed that armv7m is also missing. Could you try to find the corresponding
+> CMake architecture and add it?
+
+Sure, I'll try and look into this.
+
+>  Also, it could be useful to add
+> 
+> else
+> $(error ARM CPU variant not set for CMake)
+> endif
+> 
+>  Not *that* helpful for users, but better than the error you got :-)
+
+I think that is a good idea. Even if for an user it is not so handy, it is
+better to fail early. It took me a good while to figure out where was the root
+of the issue was, and having an error message early would have been faster.
+Even if a build succeeds without setting CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT,
+not having a correct value here could potentially cause mysterious failures at
+run-time. I'll be sending a patch for this later as well.
+
+Cheers,
+
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170706/4d9a046e/attachment.asc>
