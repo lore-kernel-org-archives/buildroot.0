@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 21:27:04 +0200
-Subject: [Buildroot] [git commit] monit: bump to version 5.23.0
-Message-ID: <20170706192410.260B682127@busybox.osuosl.org>
+Date: Thu, 6 Jul 2017 21:27:52 +0200
+Subject: [Buildroot] [git commit] python-jinja2: don't remove async files
+	for Python 3
+Message-ID: <20170706192429.95209800A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=887a218eeb511c2a3c561d1582ada2de653b6206
+commit: https://git.buildroot.net/buildroot/commit/?id=845d3576a5054c4f691fd60a4071fa62f1f7f0bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+The needed functionality is already included into Python 3.6.x,
+so these files can be now compiled without errors.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/monit/monit.hash | 4 ++--
- package/monit/monit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-jinja2/python-jinja2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-index 8eb02fc..d20286c 100644
---- a/package/monit/monit.hash
-+++ b/package/monit/monit.hash
-@@ -1,2 +1,2 @@
--# From https://mmonit.com/monit/dist/monit-5.20.0.tar.gz.sha256:
--sha256  ebac395ec50c1ae64d568db1260bc049d0e0e624c00e79d7b1b9a59c2679b98d  monit-5.20.0.tar.gz
-+# From https://mmonit.com/monit/dist/monit-5.23.0.tar.gz.sha256:
-+sha256  dd39fe3a379c02402ba9c44c201b3ba925ebdc8f04225918820607b6c5d56713  monit-5.23.0.tar.gz
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index dc202fd..32cef1e 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 34342ab..c7dd490 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -17,11 +17,13 @@ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ # not available in Python 2 and some features available in Python 3.6.
+ # So in both cases *.py compilation would produce compiler errors.
+ # Hence remove both files after package extraction.
++ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+ 	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
+ endef
  
--MONIT_VERSION = 5.20.0
-+MONIT_VERSION = 5.23.0
- MONIT_SITE = http://mmonit.com/monit/dist
- MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
- MONIT_LICENSE_FILES = COPYING
+ PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
++endif
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
