@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jul 2017 23:26:11 +0200
-Subject: [Buildroot] [git commit] azure-iot-sdk-c: Bump to version 2017-06-30
-Message-ID: <20170706212249.D9CEF81EFB@busybox.osuosl.org>
+Date: Thu, 6 Jul 2017 23:26:26 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
+In-Reply-To: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
+References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <20170706232626.007a04b5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c44c6b24d3d220c4e18600abcebdc5dfa26cdf1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed,  5 Jul 2017 19:53:21 +0200, Andr? Hentschel wrote:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index dbdef3e..18c3e24 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZURE_IOT_SDK_C_VERSION = 2017-05-05
-+AZURE_IOT_SDK_C_VERSION = 2017-06-30
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
