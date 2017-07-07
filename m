@@ -1,40 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jul 2017 11:57:13 +0200
-Subject: [Buildroot] [PATCH 1/3] mtd: fix build issues on older hosts
-In-Reply-To: <a942a235-97d6-f1ab-dde6-35525bea8bbf@mind.be>
-References: <20170706205849.22298-1-thomas.petazzoni@free-electrons.com>
- <20170707100232.0115d847@windsurf.lan>
- <a942a235-97d6-f1ab-dde6-35525bea8bbf@mind.be>
-Message-ID: <20170707115713.3c5d2694@windsurf.lan>
+From: Mark Jackson <mpfj-list@newflow.co.uk>
+Date: Fri, 7 Jul 2017 12:12:40 +0100
+Subject: [Buildroot] [PATCH] toolchain-wrapper: fix breakage after
+ host/usr removal
+In-Reply-To: <20170707074330.27294-1-arnout@mind.be>
+References: <20170707092406.722b80f4@windsurf.lan>
+ <20170707074330.27294-1-arnout@mind.be>
+Message-ID: <3c521cd2-7079-9aef-cd85-df9e14581d65@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Fri, 7 Jul 2017 10:21:36 +0200, Arnout Vandecappelle wrote:
-
-> > Patches 1 and 2 applied. Thanks Arnout for the review.  
+On 07/07/17 08:43, Arnout Vandecappelle (Essensium/Mind) wrote:
+> The toolchain wrapper, when called through PATH, strips the last three
+> levels of /proc/self/exe to find HOST_DIR. However, after the host/usr
+> removal, this should be just two levels.
 > 
->  Unfortunately you missed Baruch's comment...
+> The toolchain wrapper has different logic for when it is called with a
+> full path (i.e. $HOST_DIR/usr/bin/arm-linux-gcc) then when it is called
+> through the PATH (i.e. just arm-linux-gcc). The latter is never used
+> internally in Buildroot, that's why this wasn't discovered through
+> testing.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Mark Jackson <mpfj-list@newflow.co.uk>
 
-Dammit :-/
+Tested-by: Mark Jackson <mpfj-list@newflow.co.uk>
 
-And still, I did notice and fixed a mistake that neither you nor Baruch
-spotted:
+Works fine now.  Cheers.
 
-"""
-So today, the target variant continues to depend on util-linux, while
-the target variant depends on e2fsprogs. 
-"""
-
-Obviously the second "target variant" should have been "host variant",
-and I fixed that before pushing.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> ---
+> Sorry for the breakage :-)
+> 
+> Note to self: add a test for calling the toolchain through PATH.
+> 
+> To fix an existing toolchain without rebuilding:
+> make host-gcc-final-rebuild
+> (or make host-toolchain-external-custom-rebuild if that's what you're
+> using).
+> ---
+>   toolchain/toolchain-wrapper.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index 3a4455ff82..a73e6d6f94 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -192,7 +192,7 @@ int main(int argc, char **argv)
+>   		for (i = ret; i > 0; i--) {
+>   			if (absbasedir[i] == '/') {
+>   				absbasedir[i] = '\0';
+> -				if (++count == 3)
+> +				if (++count == 2)
+>   					break;
+>   			}
+>   		}
+>
