@@ -1,60 +1,71 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 7 Jul 2017 06:23:01 +0300
-Subject: [Buildroot] [PATCH 2/3] mtd: host variant needs host-util-linux,
- host-e2fsprogs
-In-Reply-To: <20170706205849.22298-2-thomas.petazzoni@free-electrons.com>
-References: <20170706205849.22298-1-thomas.petazzoni@free-electrons.com>
- <20170706205849.22298-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170707032301.5cubeqtcubznibhp@tarshish>
+Date: Fri, 7 Jul 2017 06:36:26 +0300
+Subject: [Buildroot] [PATCH 1/7] linux-pam: introduce
+ BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+In-Reply-To: <20170707022242.20128-2-casantos@datacom.ind.br>
+References: <20170707022242.20128-1-casantos@datacom.ind.br>
+ <20170707022242.20128-2-casantos@datacom.ind.br>
+Message-ID: <20170707033626.ma6y3kcn7o6vadp6@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Carlos,
 
-On Thu, Jul 06, 2017 at 10:58:48PM +0200, Thomas Petazzoni wrote:
-> Since mtd was converted to the package infrastructure in commit
-> de4cf4e9135e198d4c3beefc8ad63c03870eb78a ("mtd: convert to gentargets,
-> add host package"), its host variant depended on host-e2fsprogs. At
-> the time, only a host variant of the mtd package was available.
+On Thu, Jul 06, 2017 at 11:22:36PM -0300, Carlos Santos wrote:
+> This will allow us to use the hidden option in dependent packages,
+> instead of repeating the dependencies in each Config.in file.
 > 
-> When a target variant of mtd was introduced in commit
-> b50e0fa113bf641a3764ae99b94bb7ba4e1e8f85 ("mtd: add option to build
-> mkfs.ubifs for target"), it depended on util-linux.
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/linux-pam/Config.in | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
 > 
-> So today, the target variant continues to depend on util-linux, while
-> the target variant depends on e2fsprogs. What mkfs.ubifs really needs
-> is libuuid, which is provided by util-linux. It was in fact provided
-> by the fact that host-e2fsprogs depends on host-util-linux.
->
-> But really, host-e2fsprogs is not needed as a dependency, so use
-> host-util-linux to be consistent with the target variant.
+> diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
+> index 33e5154..0daffe4 100644
+> --- a/package/linux-pam/Config.in
+> +++ b/package/linux-pam/Config.in
+> @@ -1,9 +1,20 @@
+> -config BR2_PACKAGE_LINUX_PAM
+> -	bool "linux-pam"
+> +# Use this option instead of duplicating the dependencies in each
+> +# dependent package.
+> +#
+> +# If you change these dependencies then update the comment below
+> +# and the # corresponding ones in other Config.in files.
+> +#
+> +config BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+> +	bool
+> +	default y
+>  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL
+>  	depends on BR2_USE_MMU # fork()
 
-Missing 'not' in the subject line.
+These are feature dependencies, not arch dependencies, so the config name is 
+misleading. But regardless of that, we want to see this list in all dependent 
+packages, IMO. This allows us to (more) easily see and grep for direct and 
+indirect dependencies. It also makes dependencies comments easier to maintain 
+as you noted.
 
 baruch
 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/mtd/mtd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index 043f1c7..3bac2d5 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -44,7 +44,7 @@ else
->  MTD_CONF_OPTS += --without-xattr
->  endif
+> +
+> +config BR2_PACKAGE_LINUX_PAM
+> +	bool "linux-pam"
+> +	depends on BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_FLEX
+>  	help
+>  	  A Security Framework that Provides Authentication for Applications
+> @@ -11,5 +22,4 @@ config BR2_PACKAGE_LINUX_PAM
+>  	  http://linux-pam.org
 >  
-> -HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
-> +HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
->  HOST_MTD_CONF_OPTS = --disable-tests
->  
->  MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
+>  comment "linux-pam needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+> -	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+> -		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+> +	depends on !BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
