@@ -1,31 +1,45 @@
-From: Andre Renaud <andre@ignavus.net>
-Date: Fri, 07 Jul 2017 02:00:01 +0000
-Subject: [Buildroot] [PATCH] opencv: Enable NEON flags
-Message-ID: <CAEj2-1O-xw2ZJoSY=GXj2FBJp_oc7Z81ri3Xe2n_rezP5uhfZw@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu,  6 Jul 2017 23:22:37 -0300
+Subject: [Buildroot] [PATCH 2/7] nodm: use
+	BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+In-Reply-To: <20170707022242.20128-1-casantos@datacom.ind.br>
+References: <20170707022242.20128-1-casantos@datacom.ind.br>
+Message-ID: <20170707022242.20128-3-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-opencv: Enable NEON optimizations if available
+Do not repeat linux-pam dependencies.
 
-Signed-off-by: Andre Renaud <andre@ignavus.net>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/nodm/Config.in | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 92cfd43..b5b1253 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -79,7 +79,8 @@ OPENCV_CONF_OPTS += \
-        -DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF) \
-        -DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF) \
-        -DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
--       -DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
-+       -DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF) \
-+       -DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF)
-
- # Cuda stuff
- OPENCV_CONF_OPTS += \
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170707/b3d93515/attachment.html>
+diff --git a/package/nodm/Config.in b/package/nodm/Config.in
+index 38171e8..038b1fd 100644
+--- a/package/nodm/Config.in
++++ b/package/nodm/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_NODM
+ 	bool "nodm"
+ 	depends on BR2_PACKAGE_XORG7
+-	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+-	depends on !BR2_STATIC_LIBS # linux-pam
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+-	depends on BR2_USE_MMU # linux-pam
++	depends on BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+@@ -20,5 +17,4 @@ config BR2_PACKAGE_NODM
+ 
+ comment "nodm needs a glibc or uClibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on BR2_PACKAGE_XORG7
+-	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+-- 
+2.9.4
