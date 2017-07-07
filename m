@@ -1,70 +1,101 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 7 Jul 2017 08:11:26 -0300 (BRT)
-Subject: [Buildroot] [PATCH 1/7] linux-pam: introduce
- BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
-In-Reply-To: <20170707095035.0e268fe2@windsurf.lan>
-References: <20170707022242.20128-1-casantos@datacom.ind.br>
- <20170707022242.20128-2-casantos@datacom.ind.br>
- <20170707033626.ma6y3kcn7o6vadp6@tarshish>
- <20170707095035.0e268fe2@windsurf.lan>
-Message-ID: <2133150840.3993463.1499425886009.JavaMail.zimbra@datacom.ind.br>
+From: Chakra D <2chakrass@gmail.com>
+Date: Fri, 7 Jul 2017 16:47:43 +0530
+Subject: [Buildroot] [PATCH v3] board: Add nanopi-m1 Support
+In-Reply-To: <20170705181742.43923a6b@windsurf>
+References: <1499270655-2781-1-git-send-email-chakra@openedev.com>
+ <20170705181742.43923a6b@windsurf>
+Message-ID: <CAA4kGkqC2gASK=7E97jco+b_Tk+Oe_MtVfYu0BWuRYW-2CUfqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> To: "Baruch Siach" <baruch@tkos.co.il>
-> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "Karoly Kasza" <kaszak@gmail.com>, "Ezequiel Garcia"
-> <ezequiel@vanguardiasur.com.ar>, buildroot at buildroot.org
-> Sent: Friday, July 7, 2017 4:50:35 AM
-> Subject: Re: [Buildroot] [PATCH 1/7] linux-pam: introduce BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+Hi Thomas,
 
+Thanks for the inputs
+
+On Wed, Jul 5, 2017 at 9:47 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Fri, 7 Jul 2017 06:36:26 +0300, Baruch Siach wrote:
-> 
->> > diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
->> > index 33e5154..0daffe4 100644
->> > --- a/package/linux-pam/Config.in
->> > +++ b/package/linux-pam/Config.in
->> > @@ -1,9 +1,20 @@
->> > -config BR2_PACKAGE_LINUX_PAM
->> > -	bool "linux-pam"
->> > +# Use this option instead of duplicating the dependencies in each
->> > +# dependent package.
->> > +#
->> > +# If you change these dependencies then update the comment below
->> > +# and the # corresponding ones in other Config.in files.
->> > +#
->> > +config BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
->> > +	bool
->> > +	default y
->> >  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
->> >  	depends on !BR2_STATIC_LIBS
->> >  	depends on !BR2_TOOLCHAIN_USES_MUSL
->> >  	depends on BR2_USE_MMU # fork()
->> 
->> These are feature dependencies, not arch dependencies, so the config name is
->> misleading. But regardless of that, we want to see this list in all dependent
->> packages, IMO. This allows us to (more) easily see and grep for direct and
->> indirect dependencies. It also makes dependencies comments easier to maintain
->> as you noted.
+>
+> On Wed,  5 Jul 2017 21:34:15 +0530, Chakra Divi wrote:
+>> Add initial support for nanopi-m1 board
+>> with below features
+>> - U-Boot 2017.07-rc1
+>> - Linux 4.11.5
+>> - Default packages from buildroot
+>>
+>> Signed-off-by: Chakra Divi <chakra@openedev.com>
+>
+> I've applied, but there were nonetheless a few things to fix, see below.
+>
+>> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+>> index 3ae7e5d..bbc5bb8 100644
+>> --- a/.gitlab-ci.yml
+>> +++ b/.gitlab-ci.yml
+>> @@ -127,6 +127,7 @@ mx53loco_defconfig: *defconfig
+>>  mx6cubox_defconfig: *defconfig
+>>  mx6sx_udoo_neo_defconfig: *defconfig
+>>  mx6udoo_defconfig: *defconfig
+>> +nanopi_m1_defconfig: *defconfig
+>>  nanopi_neo_defconfig: *defconfig
+>>  nexbox_a95x_defconfig: *defconfig
+>>  nitrogen6sx_defconfig: *defconfig
+>> @@ -205,28 +206,3 @@ zynq_microzed_defconfig: *defconfig
+>>  zynq_zc706_defconfig: *defconfig
+>>  zynq_zed_defconfig: *defconfig
+>>  zynq_zybo_defconfig: *defconfig
+>> -tests.core.test_post_scripts.TestPostScripts: *runtime_test
+>> -tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
+>> -tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+>> -tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: *runtime_test
+>> -tests.core.test_timezone.TestNoTimezone: *runtime_test
+>> -tests.fs.test_ext.TestExt2: *runtime_test
+>> -tests.fs.test_ext.TestExt2r1: *runtime_test
+>> -tests.fs.test_ext.TestExt3: *runtime_test
+>> -tests.fs.test_ext.TestExt4: *runtime_test
+>> -tests.fs.test_iso9660.TestIso9660Grub2External: *runtime_test
+>> -tests.fs.test_iso9660.TestIso9660Grub2Internal: *runtime_test
+>> -tests.fs.test_iso9660.TestIso9660GrubExternal: *runtime_test
+>> -tests.fs.test_iso9660.TestIso9660GrubInternal: *runtime_test
+>> -tests.fs.test_iso9660.TestIso9660SyslinuxExternal: *runtime_test
+>> -tests.fs.test_iso9660.TestIso9660SyslinuxInternal: *runtime_test
+>> -tests.fs.test_jffs2.TestJffs2: *runtime_test
+>> -tests.fs.test_squashfs.TestSquashfs: *runtime_test
+>> -tests.fs.test_ubi.TestUbi: *runtime_test
+>> -tests.fs.test_yaffs2.TestYaffs2: *runtime_test
+>> -tests.package.test_dropbear.TestDropbear: *runtime_test
+>> -tests.package.test_python.TestPythonBase: *runtime_test
+>> -tests.toolchain.test_external.TestExternalToolchainLinaroArm: *runtime_test
+>> -tests.toolchain.test_external.TestExternalToolchainSourceryArmv4: *runtime_test
+>> -tests.toolchain.test_external.TestExternalToolchainSourceryArmv5: *runtime_test
+>> -tests.toolchain.test_external.TestExternalToolchainSourceryArmv7: *runtime_test
+>
+> Can you investigate why on your system all those lines were removed? I
+> believe it's because you don't have python-nose2 and/or python-pexpect
+> installed. Can you run:
+>
+>   ./support/testing/run-tests -l
+>
+> and see what it gives ?
+>
 
-How would repeating the list in all dependent packages make dependencies
-comments *easier* to maintain? I didn't meant to say that.
+As you said, nose2 is not installed on my system. run-tests gave
+"Import Error: No module named nose2". Will install it
 
-> Correct: the <foo>_ARCH_SUPPORTS hidden options should really only be
-> used for architecture dependencies. So in the list above, that would be
-> just BR2_USE_MMU. All the other dependencies are *not* architecture
-> dependencies, and we want to repeat them explicitly, because each
-> package anyway needs to have a Config.in comment that tells the user
-> about such toolchain dependencies.
-
-What could be used instead of <foo>_ARCH_SUPPORTS in cases like this?
-
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+>>  N:   Chakra Divi <chakra@openedev.com>
+>> +F:   board/friendlyarm/nanopi-m1
+>>  F:   board/olimex/a13_olinuxino
+>>  F:   board/orangepi/orangepi-plus
+>> +F:   configs/nanopi_m1_defconfig
+>
+> There was a trailing tab here.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
