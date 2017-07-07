@@ -1,57 +1,45 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu,  6 Jul 2017 23:22:36 -0300
-Subject: [Buildroot] [PATCH 1/7] linux-pam: introduce
+Date: Thu,  6 Jul 2017 23:22:38 -0300
+Subject: [Buildroot] [PATCH 3/7] openvmtools: use
 	BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
 In-Reply-To: <20170707022242.20128-1-casantos@datacom.ind.br>
 References: <20170707022242.20128-1-casantos@datacom.ind.br>
-Message-ID: <20170707022242.20128-2-casantos@datacom.ind.br>
+Message-ID: <20170707022242.20128-4-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will allow us to use the hidden option in dependent packages,
-instead of repeating the dependencies in each Config.in file.
+Do not repeat linux-pam dependencies.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/linux-pam/Config.in | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ package/openvmtools/Config.in | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index 33e5154..0daffe4 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -1,9 +1,20 @@
--config BR2_PACKAGE_LINUX_PAM
--	bool "linux-pam"
-+# Use this option instead of duplicating the dependencies in each
-+# dependent package.
-+#
-+# If you change these dependencies then update the comment below
-+# and the # corresponding ones in other Config.in files.
-+#
-+config BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
-+	bool
-+	default y
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_MMU # fork()
-+
-+config BR2_PACKAGE_LINUX_PAM
-+	bool "linux-pam"
-+	depends on BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FLEX
- 	help
- 	  A Security Framework that Provides Authentication for Applications
-@@ -11,5 +22,4 @@ config BR2_PACKAGE_LINUX_PAM
- 	  http://linux-pam.org
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index f76bdf2..d0bb27c 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -33,16 +33,13 @@ comment "procps support needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
  
- comment "linux-pam needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
--	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	bool "PAM support"
+-	# linux-pam needs locale and wchar, but we already have this
+-	# dependency on the main symbol, above.
+-	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	depends on BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Support for PAM in openvmtools
+ 
+ comment "PAM support needs a glibc toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
 +	depends on !BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
+ 
+ endif
+ 
 -- 
 2.9.4
