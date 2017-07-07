@@ -1,55 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jul 2017 15:52:57 +0200
-Subject: [Buildroot] Patch not being applied to out of tree package
-In-Reply-To: <1499430383935-170337.post@n4.nabble.com>
-References: <1499430383935-170337.post@n4.nabble.com>
-Message-ID: <20170707155257.78b51950@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 7 Jul 2017 09:08:22 -0500
+Subject: [Buildroot] libasan.so missing
+In-Reply-To: <87shic2xz3.fsf@dell.be.48ers.dk>
+References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
+ <877ezp780a.fsf@dell.be.48ers.dk>
+ <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com>
+ <87podh5gi7.fsf@dell.be.48ers.dk>
+ <ed1251ca-9f4a-6f7c-3b51-7cc399299574@grandegger.com>
+ <87shic2xz3.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpa-LaGyG9B-XfQm36o9rJwWL82Bna5qxqjRJeKXF6H7FQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Fri, 7 Jul 2017 05:26:23 -0700 (PDT), ngu wrote:
-
-> My goal is to integrate a driver to buildroot.
-> From what I understand, the best way to do so is to create a package, this
-> is what I did. The package is out of tree which is not a problem a I
-> correctly set the BR2_EXTERNAL to the right path. I can generate a valid
-> image for my system and I even had a "hello world" driver as an external
-> package. For the driver I want to integrate, I need to fix a few calls
-> which, I believe, should be done with a patch. As I understand, there are at
-> least 2 ways to place the patch. The first one is to have a global patch
-> directory (BR2_GLOBAL_PATCH_DIR) or to place the patch in the package
-> directory. I did both.
-> My problem is that the patch seems to be ignored and is not applied.
-> 
-> For the info, I tried:
-> make mypackage-dirclean
-> make mypackage-patch V=1
-> 
-> The second command doesn't output anything about the patch, only the "rsync"
-> command.
+On Tue, Jul 4, 2017 at 7:22 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
 >
-> Could the patch not be applied because the source files are local?
+> Hi,
+>
+>  >> Correct. I've sent a patch fixing this for the internal and external
+>  >> toolchain. Could you give it a try?
+>  >>
+>  >> https://patchwork.ozlabs.org/patch/783661/
+>  >> https://patchwork.ozlabs.org/patch/783660/
+>
+>  > $ find . -name 'libasan*'
+>  > ./target/lib/libasan.so
+>  > ./target/lib/libasan_preinit.o
+>  > ./target/lib/libasan.so.2
+>  > ./target/lib/libasan.so.2.0.0
+>
+>  > It works. The libsanitizer adds some extra space and runtime overhead,
+>  > I assume. Therefore, on Ubuntu, the libraries are not installed by
+>  > default. They can be added by installing the "libasan0" package. For
+>  > buildroot, would it make sense to make this option configurable as
+>  > well?
+>
+>  > (libasan.*) Extra toolchain libraries to be copied to target
+>
+> Yes, I'll respin the series to add an option to install
+> asan/lsan/tsan/usan.
+>
 
-Correct: when you use <pkg>_SITE_METHOD = local or
-<pkg>_OVERRIDE_SRCDIR in local.mk, we simply rsync the source code, and
-the patching step is skipped.
+I'm building the following Buildroot Custom toolchain config and
+noticing a libsanitizer failure.  I haven't looked to far into why
+yet.  This was working back on master ~06/13
 
-The assumption is that if the source tree is local... you'd rather
-have the changes you need made on it directly, rather than having
-patches in Buildroot.
+../../../../libsanitizer/asan/asan_linux.cc: In function ?bool
+__asan::AsanInterceptsSignal(int)?:
+../../../../libsanitizer/asan/asan_linux.cc:222:20: error: ?SIGSEGV?
+was not declared in this scope
+   return signum == SIGSEGV && common_flags()->handle_segv;
+                    ^
+make[6]: *** [asan_linux.lo] Error 1
+make[5]: *** [all-recursive] Error 1
+make[4]: *** [all] Error 2
+make[3]: *** [all-target-libsanitizer] Error 2
+make[2]: *** [all] Error 2
+make[1]: *** [/accts/mlweber1/target/build/host-gcc-final-5.4.0/.stamp_built]
+Error 2
+make: *** [_all] Error 2
 
-This sadly doesn't seem to be mentioned in the Buildroot manual, and it
-should be fixed.
+Config to reproduce:
+BR2_powerpc=y
+BR2_powerpc_e500mc=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="3.12.37"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+BR2_GCC_VERSION_5_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_LTO=y
 
-Best regards,
 
-Thomas
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
