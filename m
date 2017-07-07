@@ -1,24 +1,33 @@
-From: Nicolas G. <ngu@irts.fr>
-Date: Fri, 7 Jul 2017 07:12:04 -0700 (PDT)
-Subject: [Buildroot] Patch not being applied to out of tree package
-In-Reply-To: <20170707155257.78b51950@windsurf>
-References: <1499430383935-170337.post@n4.nabble.com>
- <20170707155257.78b51950@windsurf>
-Message-ID: <1499436724923-170341.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Jul 2017 16:44:21 +0200
+Subject: [Buildroot] [PATCH v2 1/1] nginx: bump to version 1.12.0
+In-Reply-To: <20170704172008.2564-1-Adamduskett@outlook.com>
+References: <20170704172008.2564-1-Adamduskett@outlook.com>
+Message-ID: <20170707164421.34a11d7a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-Thank you for your reply! This makes sense.
+On Tue,  4 Jul 2017 13:20:08 -0400, Adam Duskett wrote:
+> Also update the patch line numbers to work with 1.12.0
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> ---
+> Changes v1 -> v2:
+>   - Moved SOB to below the existing one in first patch (Arnout)
 
-Nicolas
+There are build failures, apparently caused by this bump:
+http://autobuild.buildroot.net/?reason=nginx-1.12.0. Could you have a
+look?
 
+Thanks!
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Patch-not-being-applied-to-out-of-tree-package-tp170337p170341.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
