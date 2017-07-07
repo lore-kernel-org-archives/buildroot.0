@@ -1,60 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jul 2017 09:50:35 +0200
-Subject: [Buildroot] [PATCH 1/7] linux-pam: introduce
- BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
-In-Reply-To: <20170707033626.ma6y3kcn7o6vadp6@tarshish>
-References: <20170707022242.20128-1-casantos@datacom.ind.br>
- <20170707022242.20128-2-casantos@datacom.ind.br>
- <20170707033626.ma6y3kcn7o6vadp6@tarshish>
-Message-ID: <20170707095035.0e268fe2@windsurf.lan>
+Date: Fri, 7 Jul 2017 09:57:14 +0200
+Subject: [Buildroot] [git commit] toolchain-wrapper: fix breakage after
+	host/usr removal
+Message-ID: <20170707075407.3DA887F984@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=015d68c84c9c6ad6f6d41f181d19d813f309088b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 7 Jul 2017 06:36:26 +0300, Baruch Siach wrote:
+The toolchain wrapper, when called through PATH, strips the last three
+levels of /proc/self/exe to find HOST_DIR. However, after the host/usr
+removal, this should be just two levels.
 
-> > diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-> > index 33e5154..0daffe4 100644
-> > --- a/package/linux-pam/Config.in
-> > +++ b/package/linux-pam/Config.in
-> > @@ -1,9 +1,20 @@
-> > -config BR2_PACKAGE_LINUX_PAM
-> > -	bool "linux-pam"
-> > +# Use this option instead of duplicating the dependencies in each
-> > +# dependent package.
-> > +#
-> > +# If you change these dependencies then update the comment below
-> > +# and the # corresponding ones in other Config.in files.
-> > +#
-> > +config BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS
-> > +	bool
-> > +	default y
-> >  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-> >  	depends on !BR2_STATIC_LIBS
-> >  	depends on !BR2_TOOLCHAIN_USES_MUSL
-> >  	depends on BR2_USE_MMU # fork()  
-> 
-> These are feature dependencies, not arch dependencies, so the config name is 
-> misleading. But regardless of that, we want to see this list in all dependent 
-> packages, IMO. This allows us to (more) easily see and grep for direct and 
-> indirect dependencies. It also makes dependencies comments easier to maintain 
-> as you noted.
+The toolchain wrapper has different logic for when it is called with a
+full path (i.e. $HOST_DIR/usr/bin/arm-linux-gcc) then when it is called
+through the PATH (i.e. just arm-linux-gcc). The latter is never used
+internally in Buildroot, that's why this wasn't discovered through
+testing.
 
-Correct: the <foo>_ARCH_SUPPORTS hidden options should really only be
-used for architecture dependencies. So in the list above, that would be
-just BR2_USE_MMU. All the other dependencies are *not* architecture
-dependencies, and we want to repeat them explicitly, because each
-package anyway needs to have a Config.in comment that tells the user
-about such toolchain dependencies.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Mark Jackson <mpfj-list@newflow.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-wrapper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Therefore, I'm afraid the patch series is not correct :/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 3a4455f..a73e6d6 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -192,7 +192,7 @@ int main(int argc, char **argv)
+ 		for (i = ret; i > 0; i--) {
+ 			if (absbasedir[i] == '/') {
+ 				absbasedir[i] = '\0';
+-				if (++count == 3)
++				if (++count == 2)
+ 					break;
+ 			}
+ 		}
