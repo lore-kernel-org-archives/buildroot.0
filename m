@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jul 2017 09:24:06 +0200
-Subject: [Buildroot] ARM cross compiler path error "no such file or
- directory"
-In-Reply-To: <da907d83-16e4-4b89-6d4b-db3d686a2a85@mind.be>
-References: <5ea74359-6a01-7668-c1d2-3784711227ab@newflow.co.uk>
- <20170706173509.5181f14d@windsurf.lan>
- <da907d83-16e4-4b89-6d4b-db3d686a2a85@mind.be>
-Message-ID: <20170707092406.722b80f4@windsurf.lan>
+Date: Fri, 7 Jul 2017 09:28:08 +0200
+Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir
+ fit for multi-user setups
+In-Reply-To: <87y3s1w672.fsf@dell.be.48ers.dk>
+References: <20170706104841.7711-1-peter@korsgaard.com>
+ <20170706212148.4f6a4f47@windsurf.lan>
+ <87y3s1w672.fsf@dell.be.48ers.dk>
+Message-ID: <20170707092808.23bae4fd@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +15,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 6 Jul 2017 23:50:39 +0200, Arnout Vandecappelle wrote:
+On Fri, 07 Jul 2017 00:28:49 +0200, Peter Korsgaard wrote:
 
-> > On Thu, 6 Jul 2017 15:34:27 +0100, Mark Jackson wrote:
-> >   
-> >> I can successfully compile "beaglebone_defconfig".
-> >>
-> >> $ make clean
-> >> $ make beaglebone_defconfig
-> >> $ make
-> >>
-> >> And in output/host/usr/bin, I can find all the "arm-linux-xyz" cross compiler tools (gcc, strings, strip, etc).
-> >>
-> >> But when I try to use these to compile my own code, I get an error as follows:-
-> >>
-> >> $ which arm-linux-gcc
-> >> /home/mpfj/buildroot/output/host/usr/bin/arm-linux-gcc
-> >> $ arm-linux-gcc
-> >> /home/mpfj/buildroot/output/usr/bin/arm-linux-gcc.br_real: No such file or directory
-> >>
-> >> Quite correctly, "output/usr/bin" doesn't exist ... the files are in "output/host/usr/bin"
-> >>
-> >> arm-linux-gcc is just a symlink to toolchain-wrapper, so toolchain-wrapper seems to be pointing to the wrong directory!!
-> >>
-> >> I'm sure was working yesterday, but I did a "git pull" this morning, so it may be something quite recent ??  
-> > 
-> > We pushed some changes over the last few days that moved everything in
-> > $(HOST_DIR)/usr up into $(HOST_DIR), so it is possible that there are
-> > some regressions.  
+>  > If I set BR2_CCACHE_DIR to /home/thomas/projects/foobar/ccache/, which
+>  > works on my machine, you most likely won't
+>  > have /home/jacmet/projects/foobar/ccache/ on your machine.  
 > 
->  You need to rebuild the toolchain (actually the toolchain wrapper) after this
-> change. And probably other things need to be rebuilt as well. To be safe, do a
-> "make clean; make".
+> No, but as far as I read the ccache code, it will create the cache dir +
+> parent directories if they don't exist.
+> 
+> E.G.:
+> 
+> CCACHE_DIR=/tmp/some/funky/sub/directory ccache -s
+> cache directory                     /tmp/some/funky/sub/directory
+> primary config                      /tmp/some/funky/sub/directory/ccache.conf
+> secondary config      (readonly)    /etc/ccache.conf
+> cache hit (direct)                     0
+> cache hit (preprocessed)               0
+> cache miss                             0
+> cache hit rate                      0.00 %
+> cleanups performed                     0
+> files in cache                         0
+> cache size                           0.0 kB
+> max cache size                       5.0 GB
+> ls -l /tmp/some/funky/sub/directory
+> total 4
+> -rw-r--r-- 1 peko peko 16 Jul  7 00:26 ccache.conf
 
-Re-read the original message from Mark: he starts by saying that he has
-done "make clean; make beaglebone_defconfig; make".
+OK, but I definitely don't want ccache to create a random directory
+somewhere in my $HOME folder, just because it was hardcoded into the
+ccache binary.
+
+> Hardcoding /home/thomas/.buildroot-ccache is very unlikely to work for
+> other users, whereas ~/.buildroot-cache is quite likely.
+
+Sure. But if I set BR2_CCACHE_DIR to /opt/ccache/, it won't work when
+the SDK is moved to another machine (permissions may not be set), and
+if I set BR2_CCACHE_DIR to $HOME/projects/foobar/cache/, and you run my
+SDK on your system, you will get this funky folder created.
 
 Thomas
 -- 
