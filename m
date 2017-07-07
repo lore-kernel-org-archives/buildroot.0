@@ -1,93 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 Jul 2017 08:50:25 +0200
-Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir
-	fit for multi-user setups
-In-Reply-To: <8c3c10e0-7f63-0063-5ec2-5edb24ce978f@mind.be> (Arnout
- Vandecappelle's message of "Fri, 7 Jul 2017 01:18:33 +0200")
-References: <20170706104841.7711-1-peter@korsgaard.com>
- <8c3c10e0-7f63-0063-5ec2-5edb24ce978f@mind.be>
-Message-ID: <87tw2owxji.fsf@dell.be.48ers.dk>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Fri, 07 Jul 2017 08:58:08 +0200
+Subject: [Buildroot] [PATCH 1/1] capnproto: new package
+In-Reply-To: <20170706211612.5c4bf11c@windsurf.lan>
+References: <201707061544.v66FiZQQ020306@mx1.sonologic.net>
+ <20170706211612.5c4bf11c@windsurf.lan>
+Message-ID: <A9C99900-5E84-4FF4-9980-DBB39ED471AA@sonologic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-
- > On 06-07-17 12:48, Peter Korsgaard wrote:
- >> While building I noticed:
- >> 
- >>>>> host-ccache 3.3.4 Building
- >> conf.c: In function 'conf_create':
- >> conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
- conf-> cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
- >> ^
- >> 
- >> As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
- >> hardcoding the build user homedir isn't really nice for the relocatable
- >> SDK feature (or simply for a SDK used by multiple users).
-
- >  Absolutely true. However, I wonder if hardcoding the ccache path in the ccache
- > binary is really such a good idea in the context of an SDK. So perhaps we should
- > just replace the default with our own default, i.e.
- > sed s,%s/\.ccache,%s/.buildroot-ccache,
-
-That is effectively what the patch does by default, while still allowing
-you to hardcode an absolute path or a ~/ relative one.
-
-We cannot easily remove the cache dir configuration option / default
-fixup as we have supported this for more than 3 years now - Since:
-
-commit d93a0b402934309c632d4a825b7fe6183ce8c4c7
-Author: Danomi Manchego <danomimanchego123@gmail.com>
-Date:   Wed Apr 30 22:05:06 2014 -0400
-
-    ccache: change default cache directory path to match config setting
 
 
- >  Note also that it may have been intentional to point to a shared ccache
- > directory that happens to reside in some user's home directory. But of course,
- > in that case, the BR_CACHE_DIR we use will still take over.
-
-Correct, that chould possibly be a use case, but I would argue a quite
-unlikely one, whereas "I just enabled ccache in the sdk and now
-everything breaks horribly for my colleagues" is more likely.
+On 6 July 2017 21:16:12 CEST, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>Hello,
+>
+>On Thu, 6 Jul 2017 17:40:01 +0200, Koen Martens wrote:
 
 
- >> #  - Change hard-coded last-ditch default to match path in .config, to avoid
- >> #    the need to specify BR_CACHE_DIR when invoking ccache directly.
- >> +#    CCache replaces "%s" with the home directory of the current user,
- >> +#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
- >> +HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
-
- >  This looked really really weird to me when I first saw it, but in the end it
- > does make sense.
-
-I agree that it isn't really obvious (which is why I added the comments
-above), but I don't see how we can otherwise fix it as BR_CACHE_DIR is
-already expanded by the time we get here.
 
 
- >  Still, since nobody ever complained about this, I'm not so sure we should "fix"
- > it. It's just as likely to actually break things for some user. So it's a weak
- > NACK from me.
 
-We are only now adding relocatable SDK support, so I would imagine reuse
-of the $(HOST_DIR) between users & machines to grow in the future.
+>> diff --git a/package/capnproto/0001-execinfo.patch
+>b/package/capnproto/0001-execinfo.patch
+>> new file mode 100644
+>> index 0000000..85ef716
+>> --- /dev/null
+>> +++ b/package/capnproto/0001-execinfo.patch
+>> @@ -0,0 +1,85 @@
+>> +Capnproto assumes that if __GLIBC__ is defined then
+>> +execinfo.h is available. uClibc does not implement
+>> +execinfo.h, but does define __GLIBC__ in features.h
+>> +(documented as an acceptable lie).
+>> +
+>> +We add an explicit check for existence of execinfo.h
+>> +to configure and use HAVE_EXECINFO_H in the code
+>> +that includes execinfo.h
+>> +
+>> +A more permanent patch has been submitted upstream
+>> +as a pull-request.
+>> +
+>> +https://github.com/capnproto/capnproto/pull/511
+>> +
+>> +Signed-off-by: Koen Martens <gmc@sonologic.nl>
+>
+>Since upstream uses Git, we prefer to have a Git-formatted patch, i.e
+>generated with "git format-patch -N". It should also have a proper
+>commit title, i.e a single line at the beginning that summarizes the
+>commit, separated from the rest of the commit log by one empty line.
 
-I don't agree with the "just as likely to actually break"
-statement. CCache is already an advanced option. Using CCache and
-customizing the cache dir to a fixed path that happens to reside under
-the home directory of the user building it (on the build machine) is
-IMHO significantly less unlikely than just enabling ccache and not
-tweaking anything else.
+Sure, except the published tarball is from a subdirectory of the upstream git repo. So creating a git patch with format-patch results in a patch that needs 'patch -p2' to apply in buildroot. I understand this is impossible. What do you prefer i do? Manually modify the patch to remove the subdir that should be stripped?
 
-And even if so, for those advanced use cases you can always set
-BR_CACHE_DIR in the environment. Like for other features, we should make
-sure that simple things work out of the box and that advanced things are
-possible - But not that you should jump through extra hoops just to get
-ccache to work.
+
+
+
+
+
+>> +CAPNPROTO_DEPENDENCIES = host-capnproto
+>
+>Could you give some details as to why the host capnproto is necessary
+>to build the target capnproto ?
+
+Capnproto provides a compiler to compile capnproto message definitions to c++ code. The library uses capnproto messages itself, and thus needs the capnproto compiler to compile. This obviously must be the host capnproto compiler, because the target compiler will not run on the compiling host.
+
+Is that sufficient detail, or do you want this in the package files somewhere? If so, where?
+
+- Koen
 
 -- 
-Bye, Peter Korsgaard
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
