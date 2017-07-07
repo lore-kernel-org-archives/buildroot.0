@@ -1,149 +1,224 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 7 Jul 2017 06:43:50 -0500
-Subject: [Buildroot] [PATCH v2 1/1] paxtest: new package
-In-Reply-To: <5c0cab0d-11bb-2b45-655f-cb17a5e8f9aa@mind.be>
-References: <1499308509-30051-1-git-send-email-matthew.weber@rockwellcollins.com>
- <4bd9bc00-761e-be3a-6981-5def37da00e9@mind.be>
- <CANQCQpb7fPZLS48niCz7F=5E-yF7ZMkC-WByi0yvCUBaE3GddQ@mail.gmail.com>
- <5c0cab0d-11bb-2b45-655f-cb17a5e8f9aa@mind.be>
-Message-ID: <CANQCQpa2SgjLfvE7vC-at9abKHd4j4Jj1GT4R3S8LSGH9abdAQ@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri,  7 Jul 2017 06:44:57 -0500
+Subject: [Buildroot] [PATCH v3 1/1] paxtest: new package
+Message-ID: <1499427897-36149-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+PaX regression test suite
 
-On Fri, Jul 7, 2017 at 2:14 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 07-07-17 04:32, Matthew Weber wrote:
->> Arnout,
->>
->> On Thu, Jul 6, 2017 at 6:32 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>
->>>
->>> On 06-07-17 04:35, Matt Weber wrote:
-> [snip]
->>>> +PAXTEST_SOURCE = paxtest-$(PAXTEST_VERSION).tar.gz
->>>
->>>  This is the default and can be removed.
->>
->> Thanks, the previous site we used had the dash as a underscore, didn't
->> realize when I updated it is back to normal.  Will remove.
->
->  Easy to miss. That's why even Peter and Thomas post their patches for review.
->
-> [snip]
->>>> +define PAXTEST_BUILD_CMDS
->>>> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC=$(TARGET_CC) LD=$(TARGET_LD) linux
->>>
->>>  TARGET_CC may consist of multiple words, so you have to quote this.
->>>
->>>  Does this package really use LD? That's usually annoying because it breaks
->>> situations that require specific architecture options to build correctly. Can
->>> you try if it works with LD=$(TARGET_CC) ?
->>>
->>
->> It works using TARGET_CC instead.  Will make that update.
->
->  It would be good to do a build test with one of those weird MIPS architectures
-> to be sure. Check e.g. if it builds correctly with BR2_mips64=y and
-> BR2_MIPS_NABI32=y.
+Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes v2 -> v3
+[Arnout V
+ - Add Config.in comment when glibc toolchain not used
+ - Removed PAXTEST_SOURCE assignment as it was default
+ - Updated ARMv# patch to be anything less then v7 instead of
+   a range from 4-7
+ - Tested that TARGET_CONFIGURE_OPTS could be used and added it in
+ - Updated LD= to use TARGET_CC and enclosed in quotes
 
-test-pkg cfg:
-BR2_PACKAGE_PAXTEST=y
+Changes v1 -> v2
+[Matt W
+ - Ran check-package script against all pkg files
+ - Added new patch to fix alignment build failure on ARM/NIOS2
 
-                armv5-ctng-linux-gnueabi [ 1/47]: OK
-              armv7-ctng-linux-gnueabihf [ 2/47]: OK
-                        br-aarch64-glibc [ 3/47]: OK
-                  br-arm-cortex-a9-glibc [ 6/47]: OK
-                 br-mips32r6-el-hf-glibc [18/47]: OK
-                 br-mips64r6-el-hf-glibc [20/47]: OK
-                          br-nios2-glibc [22/47]: OK
-             br-powerpc64le-power8-glibc [25/47]: OK
-               br-powerpc64-power7-glibc [26/47]: OK
-                        br-sparc64-glibc [29/47]: OK
-                     i686-ctng-linux-gnu [34/47]: OK
-                          linaro-aarch64 [35/47]: OK
-                              linaro-arm [36/47]: OK
-             mips64el-ctng_n32-linux-gnu [37/47]: OK
-             mips64el-ctng_n64-linux-gnu [38/47]: OK
-        powerpc-ctng_e500v2-linux-gnuspe [39/47]: OK
-                     sourcery-arm-armv4t [40/47]: OK
-                            sourcery-arm [41/47]: OK
-                     sourcery-arm-thumb2 [42/47]: OK
-                         sourcery-mips64 [43/47]: OK
-                           sourcery-mips [44/47]: OK
-                          sourcery-nios2 [45/47]: OK
-                         sourcery-x86-64 [46/47]: OK
-           x86_64-ctng_locales-linux-gnu [47/47]: OK
-47 builds, 23 skipped, 0 build failed, 0 legal-info failed
+[Thomas P
+ - Added DEVELOPERS
+ - Commented about GLIBC depends and ran test-pkg to verify
+   why.
+ - Added URL in Config.in
+ - Updated pkg to 0.9.15 and refactored move log location patch
+ - Cleaned up MAKE OPTS use and added MAKE ENV
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-genpaxtest-move-log-location.patch        | 30 +++++++++++++
+ ...paxtest-page-alignment-ARM-and-NIOS2-arch.patch | 49 ++++++++++++++++++++++
+ package/paxtest/Config.in                          | 11 +++++
+ package/paxtest/paxtest.hash                       |  2 +
+ package/paxtest/paxtest.mk                         | 25 +++++++++++
+ 7 files changed, 119 insertions(+)
+ create mode 100644 package/paxtest/0001-genpaxtest-move-log-location.patch
+ create mode 100644 package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch
+ create mode 100644 package/paxtest/Config.in
+ create mode 100644 package/paxtest/paxtest.hash
+ create mode 100644 package/paxtest/paxtest.mk
 
-
->
->>
->>>> +endef
->>>> +
->>>> +define PAXTEST_INSTALL_TARGET_CMDS
->>>> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
->>>
->>>  Please use the same options as for building, i.e. include CC= and LD=, just in
->>> case something still gets built at install time.
->>
->> Sure.
->>
->> So my .mk ends up looking like:
->>
->> PAXTEST_VERSION = 0.9.15
->> PAXTEST_SITE = https://www.grsecurity.net/~spender
->> PAXTEST_LICENSE = GPL-2.0+
->> PAXTEST_LICENSE_FILES = README
->>
->> define PAXTEST_BUILD_CMDS
->>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->>                 CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
->> endef
->>
->> define PAXTEST_INSTALL_TARGET_CMDS
->>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->>                 CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
->>                 DESTDIR=$(TARGET_DIR) \
->>                 BINDIR="usr/bin" \
->>                 RUNDIR="usr/lib" -f Makefile.psm install
->> endef
->>
->> $(eval $(generic-package))
->
->  Looks good to me.
->
->  Regards,
->  Arnout
->
->>
->>
->> Appreciate the review!
->>
->> Matt
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4faa1a8..1edeb67 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1143,6 +1143,7 @@ F:	package/libsepol/
+ F:	package/libqmi/
+ F:	package/nginx-upload/
+ F:	package/omniorb/
++F:	package/paxtest/
+ F:	package/policycoreutils/
+ F:	package/python-ipy/
+ F:	package/python-posix-ipc/
+diff --git a/package/Config.in b/package/Config.in
+index 46c78a0..c97da17 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1788,6 +1788,7 @@ endmenu
+ 
+ menu "Security"
+ 	source "package/checkpolicy/Config.in"
++	source "package/paxtest/Config.in"
+ 	source "package/policycoreutils/Config.in"
+ 	source "package/refpolicy/Config.in"
+ 	source "package/sepolgen/Config.in"
+diff --git a/package/paxtest/0001-genpaxtest-move-log-location.patch b/package/paxtest/0001-genpaxtest-move-log-location.patch
+new file mode 100644
+index 0000000..6447d53
+--- /dev/null
++++ b/package/paxtest/0001-genpaxtest-move-log-location.patch
+@@ -0,0 +1,30 @@
++From 623d99e4f557ef9cd771006e4f916c12d22a07a8 Mon Sep 17 00:00:00 2001
++From: David Graziano <david.graziano@rockwellcollins.com>
++Date: Mon, 12 Jun 2017 10:41:45 -0500
++Subject: [PATCH] genpaxtest: move log location
++
++Move log location to /var/log instead of local directory.
++(For read-only filesystems)
++
++Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
++---
++ genpaxtest | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/genpaxtest b/genpaxtest
++index 5a22e15..d62b15e 100644
++--- a/genpaxtest
+++++ b/genpaxtest
++@@ -35,7 +35,7 @@
++        exit 1
++ fi
++
++-LOG=\$HOME/paxtest.log
+++LOG=/var/log/paxtest.log
++ [ -n "\$1" ] && LOG=\$1
++ touch "\$LOG"
++ if [ ! -e "\$LOG" ]; then
++ 
++-- 
++1.9.1
++
+diff --git a/package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch b/package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch
+new file mode 100644
+index 0000000..54e5e69
+--- /dev/null
++++ b/package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch
+@@ -0,0 +1,49 @@
++From 70406ad5668a15fedce2ae1ed3bc4fad04d9f040 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Wed, 5 Jul 2017 20:47:42 -0500
++Subject: [PATCH] paxtest: page alignment ARM and NIOS2 arch
++
++- Extended ARM range from ARMv6-v7 to also include anything below v7
++- Added NIOS2 arch to conditionally have smaller alignment
++
++Submitted Upstream to pageexec at freemail.hu.  Also posted a
++bug to both (Hardened) Suse and Gentoo's bugtrackers.
++https://bugzilla.opensuse.org/show_bug.cgi?id=1047422
++https://bugs.gentoo.org/show_bug.cgi?id=623946
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ paxtest.h | 12 ++++++++++--
++ 1 file changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/paxtest.h b/paxtest.h
++index 8623bfb..a230c1a 100644
++--- a/paxtest.h
+++++ b/paxtest.h
++@@ -5,13 +5,21 @@
++ #include <unistd.h>
++ 
++ /*
++- * ARMv6 and ARMv7 do not like 64k alignment, 32k is ok
+++ * Earlier ARMv# through ARMv7 do not like 64k alignment, 32k is ok
++  */
++-#if defined(__arm__) && __ARM_ARCH >= 6 && __ARM_ARCH <= 7
+++#if defined(__arm__) && __ARM_ARCH <= 7
++ #define PAGE_SIZE_MAX  (32768)
++ #else
++ #define PAGE_SIZE_MAX	0x10000	/* 64k should cover most arches */
++ #endif
+++
+++/*
+++ * NIOS2's assemblier doesn't like 64k alignment
+++ */
+++#if defined(__nios2_arch__)
+++#define PAGE_SIZE_MAX  (32768)
+++#endif
+++
++ #ifndef __aligned
++ #define __aligned(x)	__attribute__((aligned(x)))
++ #endif
++-- 
++1.9.1
++
+diff --git a/package/paxtest/Config.in b/package/paxtest/Config.in
+new file mode 100644
+index 0000000..1e09820
+--- /dev/null
++++ b/package/paxtest/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PAXTEST
++	bool "paxtest"
++	# No UCLIBC or MUSL because __NO_A_OUT_SUPPORT
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  PaX regression test suite
++
++	  http://pax.grsecurity.net/docs
++
++comment "paxtest needs a glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/paxtest/paxtest.hash b/package/paxtest/paxtest.hash
+new file mode 100644
+index 0000000..c10566c
+--- /dev/null
++++ b/package/paxtest/paxtest.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	d553848431fd8c2ab6c8361b62e5cedfed1cc1d60088241f4a33d2af15dd667f	paxtest-0.9.15.tar.gz
+diff --git a/package/paxtest/paxtest.mk b/package/paxtest/paxtest.mk
+new file mode 100644
+index 0000000..5eaee86
+--- /dev/null
++++ b/package/paxtest/paxtest.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# paxtest
++#
++################################################################################
++
++PAXTEST_VERSION = 0.9.15
++PAXTEST_SITE = https://www.grsecurity.net/~spender
++PAXTEST_LICENSE = GPL-2.0+
++PAXTEST_LICENSE_FILES = README
++
++define PAXTEST_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
++endef
++
++define PAXTEST_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
++		DESTDIR=$(TARGET_DIR) \
++		BINDIR="usr/bin" \
++		RUNDIR="usr/lib" -f Makefile.psm install
++endef
++
++$(eval $(generic-package))
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.9.1
