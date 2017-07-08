@@ -1,55 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Jul 2017 15:56:30 +0200
-Subject: [Buildroot] [git commit] toolchain: add 4.12.x choice for headers
-Message-ID: <20170708135437.5945481EBD@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  8 Jul 2017 16:08:34 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] arch/arm: introduce big.LITTLE
+	configurations
+Message-ID: <cover.1499522760.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9f6a61dd98a3108f57803931d56fcfc972a6bd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-common.in                                        | 5 +++++
- .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
- 2 files changed, 9 insertions(+)
+This series adds four new CPU variants to the arm choice, to enable
+optimising for big.LITTLE CPUs.
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index c570cc8..932eeca 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -245,10 +245,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 	default "4.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
- 	default "4.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	default "4.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index d1b76c3..ae343dd 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -93,6 +93,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12
-+	bool "4.12.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_11
- 	bool "4.11.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+We first fix the current values in the first patch, then introduce the
+actual new variants, and then make use of them in the sole package that
+needs to know of them.
+
+This has been only slightly tested by simply building the toolchains for
+the six possibilities:
+  - the four variants in arm mode (32-bit),
+  - the two armv8 variants in aarch64 mode (64-bit).
+
+The variants were introduced in various versions of gcc, so we protect
+the internal gcc as well as the external toolchains accordingly.
+
+To be noted: openblas also has a cortex-a15 optimisation, so maybe that
+optimisation can also be used for the cortex-a15.cortex-a7 variant as
+well. But I have absolutely no clue what openblas is doing with that
+anyway, so I left it alone for someone else to deal with...
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9
+
+  syslinux: drop patch 0003, not needed after gnu-efi update (2017-07-04 18:45:26 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to d1065a08c9b2a83d4611a6566f068528a5b1ca3c
+
+  package/kvm-unit-test: available for big.LITTLE arm cores too (2017-07-08 15:51:23 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      arch/arm: fix -mcpu default values for AArch64
+      package/kvm-unit-tests: introduce _ARCH_SUPPORTS
+      arch/arm: add big.LITTLE cpu variants
+      package/kvm-unit-test: available for big.LITTLE arm cores too
+
+ arch/Config.in.arm                                 | 50 ++++++++++++++++++----
+ package/gcc/Config.in.host                         |  5 ++-
+ package/kvm-unit-tests/Config.in                   | 19 ++++----
+ .../Config.in                                      |  2 +
+ .../toolchain-external-codesourcery-arm/Config.in  |  4 ++
+ 5 files changed, 62 insertions(+), 18 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
