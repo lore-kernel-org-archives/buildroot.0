@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Jul 2017 20:55:38 +0200
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.4
-In-Reply-To: <20170708143433.29253-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 8 Jul 2017 16:34:33 +0200")
-References: <20170708143433.29253-1-peter@korsgaard.com>
-Message-ID: <87shi6vjv9.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Jul 2017 20:55:50 +0200
+Subject: [Buildroot] [PATCH] ccache: make default host-ccache cache dir
+	fit for multi-user setups
+In-Reply-To: <20170706104841.7711-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 6 Jul 2017 12:48:41 +0200")
+References: <20170706104841.7711-1-peter@korsgaard.com>
+Message-ID: <87o9suvjux.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > From the advisory:
- > https://irssi.org/security/irssi_sa_2017_07.txt
+ > While building I noticed:
+ >>>> host-ccache 3.3.4 Building
+ > conf.c: In function 'conf_create':
+ > conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
+ conf-> cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
+ >   ^
 
- > Two vulnerabilities have been located in Irssi.
+ > As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
+ > hardcoding the build user homedir isn't really nice for the relocatable
+ > SDK feature (or simply for a SDK used by multiple users).
 
- > (a) When receiving messages with invalid time stamps, Irssi would try
- >     to dereference a NULL pointer. Found by Brian 'geeknik' Carpenter
- >     of Geeknik Labs. (CWE-690)
-
- >     CVE-2017-10965 [2] was assigned to this bug
-
- > (b) While updating the internal nick list, Irssi may incorrectly use
- >     the GHashTable interface and free the nick while updating it. This
- >     will then result in use-after-free conditions on each access of
- >     the hash table. Found by Brian 'geeknik' Carpenter of Geeknik
- >     Labs. (CWE-416 caused by CWE-227)
-
- >     CVE-2017-10966 [3] was assigned to this bug
-
- > Impact
- > ------
-
- > (a) May result in denial of service (remote crash).
-
- > (b) Undefined behaviour.
+ > As the warning shows, CCache replaces "%s" with the current user home
+ > directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
+ > $HOME.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
 
 Committed, thanks.
 
