@@ -1,23 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Jul 2017 15:57:41 +0200
-Subject: [Buildroot] [PATCH 1/3] linux-headers: bump to 4.12 kernel
-	version
-In-Reply-To: <20170706045617.12847-1-joel@jms.id.au> (Joel Stanley's message
- of "Thu, 6 Jul 2017 14:26:15 +0930")
-References: <20170706045617.12847-1-joel@jms.id.au>
-Message-ID: <871sprvxnu.fsf@dell.be.48ers.dk>
+Date: Sat, 8 Jul 2017 15:57:00 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.12
+Message-ID: <20170708135438.320598187E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e861b972bbfdb58e69a6f52705144b37235ed225
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Patch 1 depends on patch 2, so I've reordered the series and committed,
-thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index c110384..c9dadcd 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.11.9)"
++	bool "Latest version (4.12)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.11.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
