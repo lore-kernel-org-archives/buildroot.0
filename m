@@ -1,43 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jul 2017 23:16:12 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
- being sorted alphabetically
-In-Reply-To: <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
-References: <20170704235445.35255-1-code@mmayer.net>
- <20170704235445.35255-2-code@mmayer.net> <20170705072538.GE3499@scaer>
- <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
- <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
- <CAGt4E5ueb6x_S4ff=dAeK-x9JnO1SmhnUGz+Q3XKUtj6s24L_Q@mail.gmail.com>
- <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
-Message-ID: <e5027435-15fb-ee00-6967-85da2e14d493@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  9 Jul 2017 00:49:00 +0300
+Subject: [Buildroot] [PATCH] libssh: bump to version 0.7.5
+Message-ID: <989c0615af8d49c23cf423e0e97ae47262669a5a.1499550540.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libssh/libssh.hash | 7 ++++---
+ package/libssh/libssh.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-
-On 05-07-17 19:19, Markus Mayer wrote:
-> That said, and while I am a complete buildroot newbie, I do like the
-> suggestion of creating sub-directories for the tools and including the
-> makefiles from linux-tools.mk rather than relying on alphabetical
-> sorting.
-
- If you're willing to upgrade from newbie to contributor, feel free to send a
-patch that does exactly this!
-
- When you do, don't forget to update
-docs/manual/adding-packages-linux-kernel-spec-infra.txt
-as well.
-
- Regards,
- Arnout
-
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 1eef804e5c3a..009a335e3b59 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,4 +1,5 @@
+ # from https://red.libssh.org/projects/libssh/files/
+-md5	05465da8004f3258db946346213209de	libssh-0.7.3.tar.xz
+-# Locally calculated after checking signature on uncompressed libssh-0.7.3.tar
+-sha256	26ef46be555da21112c01e4b9f5e3abba9194485c8822ab55ba3d6496222af98  libssh-0.7.3.tar.xz
++md5	d3fc864208bf607ad87cdee836894feb	libssh-0.7.5.tar.xz
++# Locally calculated after checking signature on uncompressed libssh-0.7.5.tar
++# https://red.libssh.org/attachments/download/217/libssh-0.7.5.tar.asc
++sha256	54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095  libssh-0.7.5.tar.xz
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index b6b6dbb4578a..34716c502a14 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBSSH_VERSION = 0.7.3
++LIBSSH_VERSION = 0.7.5
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+-LIBSSH_SITE = https://red.libssh.org/attachments/download/195
++LIBSSH_SITE = https://red.libssh.org/attachments/download/218
+ LIBSSH_LICENSE = LGPL-2.1
+ LIBSSH_LICENSE_FILES = COPYING
+ LIBSSH_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.2
