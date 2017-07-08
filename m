@@ -1,65 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  8 Jul 2017 16:34:33 +0200
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.4
-Message-ID: <20170708143433.29253-1-peter@korsgaard.com>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sat, 8 Jul 2017 16:08:54 +0200
+Subject: [Buildroot] ARM cross compiler path error "no such file or
+ directory"
+In-Reply-To: <da907d83-16e4-4b89-6d4b-db3d686a2a85@mind.be>
+References: <5ea74359-6a01-7668-c1d2-3784711227ab@newflow.co.uk>
+ <20170706173509.5181f14d@windsurf.lan>
+ <da907d83-16e4-4b89-6d4b-db3d686a2a85@mind.be>
+Message-ID: <732f5ed8-6ba1-96eb-8a19-1c15e87eecc2@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the advisory:
-https://irssi.org/security/irssi_sa_2017_07.txt
+Hey Arnout,
 
-Two vulnerabilities have been located in Irssi.
+On 06.07.2017 23:50, Arnout Vandecappelle wrote:
+> 
+> 
+> On 06-07-17 17:35, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Thu, 6 Jul 2017 15:34:27 +0100, Mark Jackson wrote:
+>>
+>>> I can successfully compile "beaglebone_defconfig".
+>>>
+>>> $ make clean
+>>> $ make beaglebone_defconfig
+>>> $ make
+>>>
+>>> And in output/host/usr/bin, I can find all the "arm-linux-xyz" cross compiler tools (gcc, strings, strip, etc).
+>>>
+>>> But when I try to use these to compile my own code, I get an error as follows:-
+>>>
+>>> $ which arm-linux-gcc
+>>> /home/mpfj/buildroot/output/host/usr/bin/arm-linux-gcc
+>>> $ arm-linux-gcc
+>>> /home/mpfj/buildroot/output/usr/bin/arm-linux-gcc.br_real: No such file or directory
+>>>
+>>> Quite correctly, "output/usr/bin" doesn't exist ... the files are in "output/host/usr/bin"
+>>>
+>>> arm-linux-gcc is just a symlink to toolchain-wrapper, so toolchain-wrapper seems to be pointing to the wrong directory!!
+>>>
+>>> I'm sure was working yesterday, but I did a "git pull" this morning, so it may be something quite recent ??
+>>
+>> We pushed some changes over the last few days that moved everything in
+>> $(HOST_DIR)/usr up into $(HOST_DIR), so it is possible that there are
+>> some regressions.
+> 
+>  You need to rebuild the toolchain (actually the toolchain wrapper) after this
+> change. And probably other things need to be rebuilt as well. To be safe, do a
+> "make clean; make".
 
-(a) When receiving messages with invalid time stamps, Irssi would try
-    to dereference a NULL pointer. Found by Brian 'geeknik' Carpenter
-    of Geeknik Labs. (CWE-690)
+Now I wonder, is there any difference to doing "make clean all"?
 
-    CVE-2017-10965 [2] was assigned to this bug
+> 
+>  Regards,
+>  Arnout
 
-(b) While updating the internal nick list, Irssi may incorrectly use
-    the GHashTable interface and free the nick while updating it. This
-    will then result in use-after-free conditions on each access of
-    the hash table. Found by Brian 'geeknik' Carpenter of Geeknik
-    Labs. (CWE-416 caused by CWE-227)
-
-    CVE-2017-10966 [3] was assigned to this bug
-
-Impact
-------
-
-(a) May result in denial of service (remote crash).
-
-(b) Undefined behaviour.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index abb421998c..7b019025d8 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	838220297dcbe7c8c42d01005059779a82f5b7b7e7043db37ad13f5966aff581	irssi-1.0.3.tar.xz
-+sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index ef9d0aafbd..d2b8169479 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.0.3
-+IRSSI_VERSION = 1.0.4
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
--- 
-2.11.0
+Best wishes,
+Marcus
