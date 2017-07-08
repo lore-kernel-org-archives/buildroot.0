@@ -1,11 +1,15 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jul 2017 23:13:44 +0200
-Subject: [Buildroot] [PATCH v9 2/2] fs/ext2: Add
- BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
-In-Reply-To: <20170705213936.22344-2-s.martin49@gmail.com>
-References: <20170705213936.22344-1-s.martin49@gmail.com>
- <20170705213936.22344-2-s.martin49@gmail.com>
-Message-ID: <13f47bb2-7927-4efa-91c5-a7f87395f31a@mind.be>
+Date: Sat, 8 Jul 2017 23:16:12 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
+ being sorted alphabetically
+In-Reply-To: <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
+References: <20170704235445.35255-1-code@mmayer.net>
+ <20170704235445.35255-2-code@mmayer.net> <20170705072538.GE3499@scaer>
+ <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
+ <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
+ <CAGt4E5ueb6x_S4ff=dAeK-x9JnO1SmhnUGz+Q3XKUtj6s24L_Q@mail.gmail.com>
+ <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
+Message-ID: <e5027435-15fb-ee00-6967-85da2e14d493@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +18,22 @@ To: buildroot@busybox.net
 
 
 
-On 05-07-17 23:39, Samuel Martin wrote:
-> From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> 
-> This option lets the user specify mke2fs options and/or ext2/3/4
-> features.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 05-07-17 19:19, Markus Mayer wrote:
+> That said, and while I am a complete buildroot newbie, I do like the
+> suggestion of creating sub-directories for the tools and including the
+> makefiles from linux-tools.mk rather than relying on alphabetical
+> sorting.
 
- Even better:
+ If you're willing to upgrade from newbie to contributor, feel free to send a
+patch that does exactly this!
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- :-)
-
+ When you do, don't forget to update
+docs/manual/adding-packages-linux-kernel-spec-infra.txt
+as well.
 
  Regards,
  Arnout
-[snip]
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
