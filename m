@@ -1,82 +1,221 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Jul 2017 15:35:42 +0200
-Subject: [Buildroot] [git commit] fs/ext2: Add
-	BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS option
-Message-ID: <20170709133251.6268E7FA13@busybox.osuosl.org>
+Date: Sun, 9 Jul 2017 15:35:30 +0200
+Subject: [Buildroot] [git commit] fs/ext2: rename
+	BR2_TARGET_ROOTFS_EXT2_BLOCKS to BR2_TARGET_ROOTFS_EXT2_SIZE
+Message-ID: <20170709133251.3E37681F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b404b27d419bdca7da15c6bdad2c8a1e48f2cbad
+commit: https://git.buildroot.net/buildroot/commit/?id=bee9e881a2d3addd6880b39f3e33a7180d0b1eb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This option lets the user specify mke2fs options and/or ext2/3/4
-features.
+This change deprecates the ext2/3/4 rootfs size in blocks symbol in
+favor of one that mimic the fs-size argument behavior of mkfs (i.e.
+size in a human readable format accepting k, m, g or t suffix or their
+upper-case variants).
 
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+This change also updates the defconfigs that used to set
+BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: improve wording a bit, fix typos.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/ext2/Config.in | 19 +++++++++++++++++++
- fs/ext2/ext2.mk   |  5 ++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
+ Config.in.legacy                            | 17 +++++++++++++++++
+ configs/at91sam9x5ek_mmc_dev_defconfig      |  2 +-
+ configs/beaglebone_qt5_defconfig            |  2 +-
+ configs/firefly_rk3288_demo_defconfig       |  2 +-
+ configs/minnowboard_max-graphical_defconfig |  3 +--
+ configs/nanopi_neo_defconfig                |  2 +-
+ configs/pc_x86_64_bios_defconfig            |  2 +-
+ configs/pc_x86_64_efi_defconfig             |  2 +-
+ configs/raspberrypi3_64_defconfig           |  2 +-
+ fs/ext2/Config.in                           | 14 +++++++++-----
+ fs/ext2/ext2.mk                             |  7 ++++++-
+ 11 files changed, 40 insertions(+), 15 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 12362da..805d5a4 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -152,6 +152,23 @@ config BR2_PACKAGE_HOST_MKE2IMG
+ 	  We now call mkfs directly to generate ext2/3/4 filesystem
+ 	  image, so mke2img is no longer necessary.
+ 
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS
++	int "exact size in blocks has been removed"
++	default 0
++	help
++	  This option has been removed in favor of
++	  BR2_TARGET_ROOTFS_EXT2_SIZE. It has been set automatically
++	  to the value you had before. Set to 0 here to remove the
++	  warning.
++
++config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
++	bool
++	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 && \
++		BR2_TARGET_ROOTFS_EXT2_BLOCKS != 61440 # deprecated default value
++	select BR2_LEGACY
++
++# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP still referenced in fs/ext2/Config.in
++
+ config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+ 	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+ 	default 0
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index 0060111..d704b81 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -81,7 +81,7 @@ BR2_PACKAGE_VIM=y
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ 
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 3406373..4135f71 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=126976
++BR2_TARGET_ROOTFS_EXT2_SIZE="124M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
+index 0f4dd36..d394ede 100644
+--- a/configs/firefly_rk3288_demo_defconfig
++++ b/configs/firefly_rk3288_demo_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_QT5BASE_EGLFS=y
+ BR2_PACKAGE_MALI_T76X=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=250000
++BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index 1a2cd33..3540f9f 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -68,6 +68,5 @@ BR2_PACKAGE_STARTUP_NOTIFICATION=y
+ # Filesystem image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+-
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index a227052..aa46491 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ # Build an sdcard image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=32768
++BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_ROOTFS_EXT2_INODES=8192
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index d64f09a..7e852f3 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_GRUB2=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index ea2abc3..f558c3e 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_GRUB2_X86_64_EFI=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 13a505b..23db9cc 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -30,7 +30,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
 diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 493f6c9..05c9e48 100644
+index 9c58ac6..493f6c9 100644
 --- a/fs/ext2/Config.in
 +++ b/fs/ext2/Config.in
-@@ -68,6 +68,25 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	  Traditionally, this has been 5%, and all ext-related tools still
- 	  default to reserving 5% when creating a new ext filesystem.
+@@ -44,12 +44,16 @@ config BR2_TARGET_ROOTFS_EXT2_REV
+ config BR2_TARGET_ROOTFS_EXT2_LABEL
+ 	string "filesystem label"
  
-+config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
-+	string "additional mke2fs options"
-+	default "-O ^64bit"
-+	help
-+	  Specify a space-separated list of mke2fs options, including any
-+	  ext2/3/4 filesystem features.
-+
-+	  For more information about the mke2fs options, see the manual
-+	  page mke2fs(8).
-+
-+	  For more information about the ext2/3/4 features which can be
-+	  set, see the manual page ext4(5).
-+
-+	  The default is "-O ^64bit", i.e. disable 64-bit filesystem
-+	  support. This default value has been chosen because U-Boot
-+	  versions before 2017.02 don't support this filesystem
-+	  option: using it may make the filesystem unreadable by
-+	  U-Boot.
-+
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_EXT2_NONE
+-# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
+-config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	int "exact size in blocks"
+-	default 61440
++config BR2_TARGET_ROOTFS_EXT2_SIZE
++	string "exact size"
++	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
++	default "60M"
+ 	help
+-	  Specify the file system size as a number of 1024-byte blocks.
++	  The size of the filesystem image. If it does not have a suffix,
++	  it is interpreted as power-of-two kilobytes. If it is suffixed
++	  by 'k', 'm', 'g', 't' (either upper-case or lower-case), then
++	  it is interpreted in power-of-two kilobytes, megabytes,
++	  gigabytes, terabytes, etc.
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index fdd4a38..902e663 100644
+index 99d03f1..fdd4a38 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -9,6 +9,8 @@ ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
- $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
- endif
+@@ -4,6 +4,11 @@
+ #
+ ################################################################################
  
-+EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
++EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
++ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
++$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
++endif
 +
  # qstrip results in stripping consecutive spaces into a single one. So the
  # variable is not qstrip-ed to preserve the integrity of the string value.
  EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-@@ -19,7 +21,8 @@ EXT2_OPTS = \
- 	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
- 	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
- 	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
--	-L "$(EXT2_LABEL)"
-+	-L "$(EXT2_LABEL)" \
-+	$(EXT2_MKFS_OPTS)
+@@ -21,7 +26,7 @@ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+ define ROOTFS_EXT2_CMD
+ 	rm -f $@
+ 	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
+-		 $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
++		"$(EXT2_SIZE)"
+ endef
  
- ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
+ rootfs-ext2-symlink:
