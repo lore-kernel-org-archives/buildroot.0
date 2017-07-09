@@ -1,47 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 9 Jul 2017 13:10:38 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
- being sorted alphabetically
-In-Reply-To: <20170709081346.GA3196@scaer>
-References: <20170704235445.35255-1-code@mmayer.net>
- <20170704235445.35255-2-code@mmayer.net> <20170705072538.GE3499@scaer>
- <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
- <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
- <CAGt4E5ueb6x_S4ff=dAeK-x9JnO1SmhnUGz+Q3XKUtj6s24L_Q@mail.gmail.com>
- <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
- <20170709081346.GA3196@scaer>
-Message-ID: <855c5444-80f0-491b-5d70-aef7cd13b110@mind.be>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun,  9 Jul 2017 05:21:54 -0700
+Subject: [Buildroot] [PATCH v2 0/7] xtensa overlay application rework
+Message-ID: <1499602921-25097-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+This series cleans up xtensa overlay application code, making
+it uniform across its users in the toolchain, reducing the number of
+configuration variables and making it possible to use compressed
+overlays and download overlays from network.
 
-On 09-07-17 10:13, Yann E. MORIN wrote:
-> Markus, All,
-> 
-> On 2017-07-05 10:19 -0700, Markus Mayer spake thusly:
-> [--SNIP--]
->> That said, and while I am a complete buildroot newbie, I do like the
->> suggestion of creating sub-directories for the tools and including the
->> makefiles from linux-tools.mk rather than relying on alphabetical
->> sorting.
-> 
-> To be sure we're on the same line: one single sub-directory with all tools
-> in there, not one sub-dir per tool.
+Changes v1->v2:
+- drop arch-xtensa-overlay and host-arch-xtensa-overlay macros, use
+  arch-xtensa-overlay-extract directly in package makefiles.
 
- Really? One sub-dir per tool would be more in-line with how we handle normal
-packages.
+Max Filippov (2):
+  linux: apply xtensa overlay
+  uboot: apply xtensa overlay
 
- Regards,
- Arnout
+Yann E. MORIN (5):
+  arch/xtensa: get rid of an intermediate blind kconfig option
+  arch/xtensa: allow specifying path to tarball file
+  arch/xtensa: accept the overlay to be compressed
+  arch/xtensa: accept the overlay to be an URL
+  configs/qemu-xtensa: use overlay from the github repository
+
+ Config.in.legacy                         |  23 +++++++++++++++++++++++
+ arch/Config.in.xtensa                    |  27 ++++++++++-----------------
+ arch/arch.mk.xtensa                      |  30 +++++++++++++++++++-----------
+ board/qemu/xtensa-lx60/xtensa_dc233c.tar | Bin 808960 -> 0 bytes
+ boot/uboot/uboot.mk                      |   8 ++++++++
+ configs/qemu_xtensa_lx60_defconfig       |   4 +---
+ configs/qemu_xtensa_lx60_nommu_defconfig |   4 +---
+ linux/linux.mk                           |   8 ++++++++
+ package/binutils/binutils.mk             |   4 +++-
+ package/gcc/gcc-final/gcc-final.mk       |   3 ++-
+ package/gcc/gcc-initial/gcc-initial.mk   |   3 ++-
+ package/gdb/gdb.mk                       |   4 +++-
+ 12 files changed, 80 insertions(+), 38 deletions(-)
+ delete mode 100644 board/qemu/xtensa-lx60/xtensa_dc233c.tar
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
