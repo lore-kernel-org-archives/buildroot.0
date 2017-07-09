@@ -1,47 +1,43 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Sun, 9 Jul 2017 22:00:58 +0200
-Subject: [Buildroot] [PATCH] package/linuxptp: remove incdefs.sh to
- avoid cross-compilation issues
-In-Reply-To: <7f981b4f-8202-0df8-25aa-ba128b6d8e0b@smile.fr>
-References: <20170705141028.28194-1-romain.naour@smile.fr>
- <7b3079cb-f604-6ab2-3da7-448dacf9ef55@jikos.cz>
- <6827f8c2-c2dc-5727-1844-109bd321a498@smile.fr>
- <f0e2c860-ca4e-bf3d-f685-ffc2f9915a8a@jikos.cz>
- <7f981b4f-8202-0df8-25aa-ba128b6d8e0b@smile.fr>
-Message-ID: <03a699d8-a382-bc28-65b8-a5b94e96c92a@jikos.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 9 Jul 2017 23:10:22 +0200
+Subject: [Buildroot] [git commit] libssh2: fix link with libgcrypt
+Message-ID: <20170709210725.574138211C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+commit: https://git.buildroot.net/buildroot/commit/?id=816ba1cee50e9808702304f137de688ce2908d62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 09/07/17 11:28, Romain Naour wrote:
-> Do you have a link to your discussion ?
-> I can understand that autotools maybe difficult to set up but reinvent the wheel
-> is also difficult :p
-> I would suggest to use cmake instead.
+libssh2 uses the implicit 'yes' argument of the --with-libgcrypt parameter as
+a library path prefix, which breaks the build. Pass the library path as
+--with-libgcrypt argument to fix that. Drop the unneeded
+--with-libgcrypt-prefix.
 
-You can see the thread here, scroll down to "patch 4/4" where the 
-relevant discussion starts:
-https://sourceforge.net/p/linuxptp/mailman/linuxptp-devel/thread/20170523050744.GB1739%40localhost.localdomain/#msg35854067
+Fixes:
+http://autobuild.buildroot.net/results/ac3/ac3a3f5871a6c20f5407a468809682ce491b9cb3/
+http://autobuild.buildroot.net/results/ba3/ba31fa11b2ce2875649414dd9093e039dfc129e8/
+http://autobuild.buildroot.net/results/b07/b07bbbf7fe164ba6dc435de6d8b41fadff7a3b08/
 
-> The issue seems to be fixed in the autobuilders [1] but we have to do some
-> changes in linuxptp.mk.
->
-> [1]
-> http://autobuild.buildroot.net/?reason=linuxptp-97c351cafd7327fd28047580c9e2528a6f7e742b
->
-I've seen the last failing auto-build. But that was before your patches 
-have been applied.
-So now it seems to be OK.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libssh2/libssh2.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The path handling in kernel_flags() in incdefs.sh is a bit clumsy and 
-obscure. But it seems to work now with the right environment variables 
-set (in linuxptp.mk).
-So I would stick to the advice "never touch a running system". For me 
-the outcome is not worth the effort.
-
-Regards
-Petr
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index ab721ac..c658282 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -15,8 +15,7 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
+ # Favour libgcrypt.
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ LIBSSH2_DEPENDENCIES += libgcrypt
+-LIBSSH2_CONF_OPTS += --with-libgcrypt \
+-	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
++LIBSSH2_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr \
+ 	--without-openssl
+ # configure.ac forgets to link to dependent libraries of gcrypt breaking static
+ # linking
