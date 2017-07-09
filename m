@@ -1,48 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Jul 2017 18:16:53 +0200
-Subject: [Buildroot] [PATCH 2/4 v2] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <20170709180305.5146f312@windsurf>
-References: <cover.1499522760.git.yann.morin.1998@free.fr>
- <0d5c040b902f29f870a4a941f1850d7c29e43144.1499522760.git.yann.morin.1998@free.fr>
- <b0102f89-d625-7b1a-074e-006c4bdebeaf@mind.be>
- <20170708163045.GD3867@scaer> <20170709180305.5146f312@windsurf>
-Message-ID: <20170709161653.GE3196@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Jul 2017 18:25:32 +0200
+Subject: [Buildroot] Issue with the HOST_DIR/usr -> HOST_DIR move
+Message-ID: <20170709182532.40ff2614@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Arnout,
 
-On 2017-07-09 18:03 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 8 Jul 2017 18:30:45 +0200, Yann E. MORIN wrote:
-> > >  GCC is *not* an arch dependency, so this should just be  
-> > Yet we already use similar construct in other packages, like [...]
-[--SNIP--]
-> > Arguaby, none of the above have a dependency on gcc, but some are on the
-> > C library, and others are on toolchain features...
-> 
-> Yes, but see what I replied to Carlos about adding a
-> BR2_PACKAGE_LINUX_PAM_ARCH_SUPPORTS option, which would have encoded
-> non-architecture dependencies.
+I've started rebuilding the pre-built Buildroot external toolchains
+after the HOST_DIR/usr -> HOST_DIR move. I've dropped my hack on the
+toolchain wrapper to support the fact that I was moving the toolchain
+out of the usr/ folder... because obviously this is no longer needed.
+So basically, I'm building on top of master + a patch that builds
+host-flex, host-gmp, host-mpc, etc. as static libraries instead of
+shared ones.
 
-And it looks like I agree as I addressed Arnout's comment in v3. ;-)
+Using this defconfig:
 
-I was just pointing out that we are not entirely consistent with this
-rule, as some packages have such non-arch dependencies in their
-_ARCH_SUPPORT symbols.
+BR2_arm=y
+BR2_HOST_DIR="/opt/br-arm-full-2017.05-1071-gef605f5"
+BR2_JLEVEL=16
+BR2_KERNEL_HEADERS_3_10=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
 
-I'll try to find some time to fix them. :-)
+I'm seeing this build failure:
 
-Regards,
-Yann E. MORIN.
+ESC[7m>>> uclibc 1.0.25 BuildingESC[27m
+/usr/bin/make -j16 -C /opt/toolchain-build/build/uclibc-1.0.25 ARCH="arm" CROSS_COMPILE="/opt/br-arm-full-2017.05-1071-gef605f5/bin/arm-buildroot-linux-uclibcgnueabi-" UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc" headers
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+make[1]: Entering directory `/opt/toolchain-build/build/uclibc-1.0.25'
+  MKDIR include/bits
+  GEN include/bits/uClibc_config.h
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+  LN include/semaphore.h
+  LN include/pthread.h
+  LN include/bits/libc-lock.h
+  LN include/bits/stdio-lock.h
+  LN include/bits/pthreadtypes.h
+  LN include/bits/semaphore.h
+  GEN include/bits/sysnum.h
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
+/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
 
+There are two problems here:
+
+ * First, the problem that $(HOST_DIR)/usr didn't exist. The reason is
+   that you rule that creates $(HOST_DIR)/usr is only triggered if the
+   Buildroot Makefile creates $(HOST_DIR). But when you're building a
+   SDK inside /opt/foo/, therefore setting BR2_HOST_DIR=/opt/foo/, it's
+   pretty likely that /opt/foo/ might exist before Buildroot gets
+   triggered. In such a situation, your $(HOST_DIR) rule in the main
+   Makefile doesn't get triggered, and $(HOST_DIR)/usr is not created.
+
+ * Even if the symlink doesn't exist, the build should still work.
+   Indeed, the symlink was kept for backward compatibility reasons, but
+   here I'm doing a full build from scratch, which I would expect to
+   work even without the usr/ compatibility symlink.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
