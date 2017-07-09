@@ -1,34 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Jul 2017 18:30:15 +0200
-Subject: [Buildroot] [PATCH 1/2] pcre2: new package, required by Qt 5.9
-In-Reply-To: <361f50e8-a49c-2e88-8375-89b2ff56212c@mind.be>
-References: <DM5PR03MB2924501FB63A9FEA79548F57BFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
- <361f50e8-a49c-2e88-8375-89b2ff56212c@mind.be>
-Message-ID: <20170709183015.615b4e1e@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  9 Jul 2017 22:05:24 +0300
+Subject: [Buildroot] [PATCH] libssh2: fix link with libgcrypt
+Message-ID: <2fef5081d7176868ea9bd4b9c00b083ac0de57aa.1499627124.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libssh2 uses the implicit 'yes' argument of the --with-libgcrypt parameter as
+a library path prefix, which breaks the build. Pass the library path as
+--with-libgcrypt argument to fix that. Drop the unneeded
+--with-libgcrypt-prefix.
 
-On Sat, 8 Jul 2017 22:58:03 +0200, Arnout Vandecappelle wrote:
+Fixes:
+http://autobuild.buildroot.net/results/ac3/ac3a3f5871a6c20f5407a468809682ce491b9cb3/
+http://autobuild.buildroot.net/results/ba3/ba31fa11b2ce2875649414dd9093e039dfc129e8/
+http://autobuild.buildroot.net/results/b07/b07bbbf7fe164ba6dc435de6d8b41fadff7a3b08/
 
->  So everything is OK except for the authorship, the reference to the signature
-> and the fact that the patch is broken. With those things fixed you can add my:
-> 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libssh2/libssh2.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-One thing you forgot is the entry to the DEVELOPERS file.
-
-Also, another thing I'm noticing now is that a host variant of pcre2
-was added, and I don't see it used anywhere in the Qt 5.9 bump.
-
-Best regards,
-
-Thomas
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index ab721ac2dc87..c658282349be 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -15,8 +15,7 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
+ # Favour libgcrypt.
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ LIBSSH2_DEPENDENCIES += libgcrypt
+-LIBSSH2_CONF_OPTS += --with-libgcrypt \
+-	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
++LIBSSH2_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr \
+ 	--without-openssl
+ # configure.ac forgets to link to dependent libraries of gcrypt breaking static
+ # linking
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.2
