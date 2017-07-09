@@ -1,81 +1,118 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Jul 2017 18:25:32 +0200
-Subject: [Buildroot] Issue with the HOST_DIR/usr -> HOST_DIR move
-Message-ID: <20170709182532.40ff2614@windsurf>
+Date: Sun, 9 Jul 2017 18:13:39 +0200
+Subject: [Buildroot] [git commit] pcre2: new package
+Message-ID: <20170709162524.5C35C820E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=49dfb3306f4985907672a3734957b2198c068b15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've started rebuilding the pre-built Buildroot external toolchains
-after the HOST_DIR/usr -> HOST_DIR move. I've dropped my hack on the
-toolchain wrapper to support the fact that I was moving the toolchain
-out of the usr/ folder... because obviously this is no longer needed.
-So basically, I'm building on top of master + a patch that builds
-host-flex, host-gmp, host-mpc, etc. as static libraries instead of
-shared ones.
+Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+Signed-off-by: Brent Sink <brents_3@hotmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas:
+ - reassign authorship to Naoki Matsumoto
+ - add entry to DEVELOPERS file
+ - fix broken patch
+ - add comment about where the PGP signature was coming from]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS               |  3 +++
+ package/Config.in        |  1 +
+ package/pcre2/Config.in  | 22 ++++++++++++++++++++++
+ package/pcre2/pcre2.hash |  2 ++
+ package/pcre2/pcre2.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
 
-Using this defconfig:
-
-BR2_arm=y
-BR2_HOST_DIR="/opt/br-arm-full-2017.05-1071-gef605f5"
-BR2_JLEVEL=16
-BR2_KERNEL_HEADERS_3_10=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_GCC_VERSION_4_9_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-
-I'm seeing this build failure:
-
-ESC[7m>>> uclibc 1.0.25 BuildingESC[27m
-/usr/bin/make -j16 -C /opt/toolchain-build/build/uclibc-1.0.25 ARCH="arm" CROSS_COMPILE="/opt/br-arm-full-2017.05-1071-gef605f5/bin/arm-buildroot-linux-uclibcgnueabi-" UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc" headers
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-make[1]: Entering directory `/opt/toolchain-build/build/uclibc-1.0.25'
-  MKDIR include/bits
-  GEN include/bits/uClibc_config.h
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-  LN include/semaphore.h
-  LN include/pthread.h
-  LN include/bits/libc-lock.h
-  LN include/bits/stdio-lock.h
-  LN include/bits/pthreadtypes.h
-  LN include/bits/semaphore.h
-  GEN include/bits/sysnum.h
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-/opt/br-arm-full-2017.05-1071-gef605f5/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc.br_real: No such file or directory
-
-There are two problems here:
-
- * First, the problem that $(HOST_DIR)/usr didn't exist. The reason is
-   that you rule that creates $(HOST_DIR)/usr is only triggered if the
-   Buildroot Makefile creates $(HOST_DIR). But when you're building a
-   SDK inside /opt/foo/, therefore setting BR2_HOST_DIR=/opt/foo/, it's
-   pretty likely that /opt/foo/ might exist before Buildroot gets
-   triggered. In such a situation, your $(HOST_DIR) rule in the main
-   Makefile doesn't get triggered, and $(HOST_DIR)/usr is not created.
-
- * Even if the symlink doesn't exist, the build should still work.
-   Indeed, the symlink was kept for backward compatibility reasons, but
-   here I'm doing a full build from scratch, which I would expect to
-   work even without the usr/ compatibility symlink.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c997500..1ec405a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1239,6 +1239,9 @@ N:	Murat Demirten <mdemirten@yh.com.tr>
+ F:	package/jpeg-turbo/
+ F:	package/libgeotiff/
+ 
++N:	Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
++F:	package/pcre2/
++
+ N:	Nathan Lynch <ntl@pobox.com>
+ F:	package/chrony/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index e675bca..db943df 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1494,6 +1494,7 @@ menu "Text and terminal handling"
+ 	source "package/ncurses/Config.in"
+ 	source "package/newt/Config.in"
+ 	source "package/pcre/Config.in"
++	source "package/pcre2/Config.in"
+ 	source "package/popt/Config.in"
+ 	source "package/readline/Config.in"
+ 	source "package/slang/Config.in"
+diff --git a/package/pcre2/Config.in b/package/pcre2/Config.in
+new file mode 100644
+index 0000000..b49d306
+--- /dev/null
++++ b/package/pcre2/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_PCRE2
++	bool "pcre2"
++	help
++	  Perl Compatible Regular Expressions. By default, only the
++	  8-bits libpcre2 is built. To get the 16-bits and/or 32-bits
++	  variants libpcre2-16/libpcre2-32, use the package sub-options.
++
++	  http://www.pcre.org/
++
++if BR2_PACKAGE_PCRE2
++
++config BR2_PACKAGE_PCRE2_16
++	bool "16-bit pcre2"
++	help
++	  This option builds the 16-bits pcre2 library, i.e 'libpcre2-16'
++
++config BR2_PACKAGE_PCRE2_32
++	bool "32-bit pcre2"
++	help
++	  This option builds the 32-bits pcre2 library, i.e 'libpcre2-32'
++
++endif
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+new file mode 100644
+index 0000000..97a5d5e
+--- /dev/null
++++ b/package/pcre2/pcre2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.23.tar.bz2.sig
++sha256	dfc79b918771f02d33968bd34a749ad7487fa1014aeb787fad29dd392b78c56e	pcre2-10.23.tar.bz2
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+new file mode 100644
+index 0000000..5b7a163
+--- /dev/null
++++ b/package/pcre2/pcre2.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# pcre2
++#
++################################################################################
++
++PCRE2_VERSION = 10.23
++PCRE2_SITE = https://ftp.pcre.org/pub/pcre
++PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
++PCRE2_LICENSE = BSD-3-Clause
++PCRE2_LICENSE_FILES = LICENCE
++PCRE2_INSTALL_STAGING = YES
++PCRE2_CONFIG_SCRIPTS = pcre2-config
++
++PCRE2_CONF_OPTS += --enable-pcre2-8
++PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
++PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_32),--enable-pcre2-32,--disable-pcre2-32)
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
