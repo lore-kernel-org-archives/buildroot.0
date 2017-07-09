@@ -1,21 +1,20 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 09 Jul 2017 22:07:21 +0000
-Subject: [Buildroot] [Bug 10011] wget does not work from Buildroot
-In-Reply-To: <bug-10011-163@https.bugs.busybox.net/>
-References: <bug-10011-163@https.bugs.busybox.net/>
-Message-ID: <bug-10011-163-azULCwgi58@https.bugs.busybox.net/>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Jul 2017 01:21:16 +0200
+Subject: [Buildroot] [PATCH 0/7] More HOST_DIR/usr fixes
+Message-ID: <20170709232123.30120-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10011
+Thomas started rebuilding the toolchains after the HOST_DIR/usr removal
+and noticed a corner case that didn't work. While investigating that, I
+uncovered a slew of other issues.
 
---- Comment #2 from Paul Tomov <ptomov@mirion.com> ---
-Buidroot latest version 2017.05.1 was used from Ubuntu 16.4.2 VMWare
-Workstation Pro 12 image.
+I was also in the process of adding a test for
+BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y but that turns out to require a
+lot of refactoring of the testing infra. So it's for another day.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Arnout
