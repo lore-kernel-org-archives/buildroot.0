@@ -1,51 +1,51 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 10 Jul 2017 01:21:21 +0200
-Subject: [Buildroot] [PATCH 5/7] support/testing: add test of BR2_CCACHE
-	with an external toolchain
+Date: Mon, 10 Jul 2017 01:21:22 +0200
+Subject: [Buildroot] [PATCH 6/7] Makefile: add check that $(HOST_DIR)/usr is
+	not a directory
 In-Reply-To: <20170709232123.30120-1-arnout@mind.be>
 References: <20170709232123.30120-1-arnout@mind.be>
-Message-ID: <20170709232123.30120-6-arnout@mind.be>
+Message-ID: <20170709232123.30120-7-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We piggy-back on an existing test.
+We create a compatibility symlink for $(HOST_DIR)/usr. However, if
+that exists already as a directory, the link can't be created. Make
+will not even try since it exists already and has no dependencies. If
+it exists as a directory, any post-build script that is still using
+$(HOST_DIR)/usr will fail to find what it needs. Therefore, add a
+check that it is not a directory.
+
+This check has to be made as part of some PHONY target. We can reuse
+the dirs target, on which all packages depend.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/toolchain/test_external.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Personally I don't think it's important enough to add such a check.
+If someone ends up in this situation, they'll be motivated to fix
+their post-build scripts :-)
+---
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index afb4bb0b50..c315ef8055 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -207,9 +207,13 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
-         self.emulator.login()
+diff --git a/Makefile b/Makefile
+index 188ce9adc7..a94555d130 100644
+--- a/Makefile
++++ b/Makefile
+@@ -542,6 +542,11 @@ endif
+ .PHONY: dirs
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
++	@if [ -d "$(HOST_DIR)/usr" -a ! -L "$(HOST_DIR)/usr" ]; then \
++		printf '%s is not allowed to be a directory\n' "$(HOST_DIR)/usr" 1>&2; \
++		printf 'Please remove this directory and rebuild\n' 1>&2; \
++		exit 1; \
++	fi
  
- class TestExternalToolchainBuildrootuClibc(TestExternalToolchain):
-+    # On this test we piggy-back a test of BR2_CCACHE in combination
-+    # with an external toolchain.
-     config = BASIC_CONFIG + \
- """
- BR2_arm=y
-+BR2_CCACHE=y
-+BR2_CCACHE_DIR="{builddir}/ccache-dir"
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-@@ -222,6 +226,10 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
- """
-     toolchain_prefix = "arm-linux"
- 
-+    def __init__(self, names):
-+        super(TestExternalToolchainBuildrootuClibc, self).__init__(names)
-+        self.config = self.config.format(builddir = self.builddir)
-+
-     def test_run(self):
-         TestExternalToolchain.common_check(self)
-         img = os.path.join(self.builddir, "images", "rootfs.cpio")
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
 -- 
 2.13.2
