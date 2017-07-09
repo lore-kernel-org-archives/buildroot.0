@@ -1,56 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Jul 2017 17:24:58 +0200
-Subject: [Buildroot] [PATCH v2 4/7] arch/xtensa: accept the overlay to
- be an URL
-In-Reply-To: <20170709135718.GD3196@scaer>
-References: <1499602921-25097-1-git-send-email-jcmvbkbc@gmail.com>
- <1499602921-25097-5-git-send-email-jcmvbkbc@gmail.com>
- <20170709154853.68622a94@windsurf> <20170709135718.GD3196@scaer>
-Message-ID: <20170709172458.04eaf58d@windsurf>
+Date: Sun, 9 Jul 2017 17:25:48 +0200
+Subject: [Buildroot] [git commit] manual: patches are not applied for
+	SITE_METHOD = local
+Message-ID: <20170709152234.271E881E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0611045c42373f0049a5f95bcbea91bbb22b0e27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 9 Jul 2017 15:57:18 +0200, Yann E. MORIN wrote:
+We had several remarks on the mailing list of users that were surprised
+that patches were not applied for packages whose SITE_METHOD is local.
+So document this.
 
-> > Another issue that I have is that we're not checking its hash, even if
-> > the file used in the qemu xtensa defconfigs doesn't have any version
-> > information in its name, making it quite likely that the contents of
-> > the file will change without us knowing.  
-> 
-> Hmm... IIRC, in the following patch, we're using the file from a specific
-> git sha1, aren't we? In this case, we don't really expect it to change...
+Note that for OVERRIDE_SRCDIR itself it is already documented:
 
-Yes, we are fetching from a specific git sha1. And anyway since it's a
-custom download, there's no way to store a hash.
+  When Buildroot finds that for a given package, an
+  <pkg>_OVERRIDE_SRCDIR has been defined, it will no longer attempt to
+  download, extract and patch the package. Instead, it will directly use
+  the source code available in in the specified directory.
 
-> > In any case, I'd like to hear about a direction to solve the
-> > per-package DL_DIR issue.  
-> 
-> I think this will be as simple as using:
-> 
->     ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
-> 
-> since this will be expanded in the commands for the .stamp_downloaded
-> stamp file.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-generic.txt | 5 ++++-
+ docs/manual/adding-packages-hooks.txt   | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Indeed, so it's fine for me. I've applied the patches.
-
-> But as you say, this means the file will be duplicated for each
-> component that needs the overlay.
-
-Not a big deal IMO. It's a 90 KB file, and it's only for the specific
-case of Xtensa, so I don't think it's worth extending the infra to
-optimize for this.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 12cf160..63ea51b 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -315,7 +315,10 @@ information is (assuming the package name is +libfoo+) :
+   ** +local+ for a local source code directory. One should use this
+      when +LIBFOO_SITE+ specifies a local directory path containing
+      the package source code. Buildroot copies the contents of the
+-     source directory into the package's build directory.
++     source directory into the package's build directory. Note that
++     for +local+ packages, no patches are applied. If you need to
++     still patch the source code, use +LIBFOO_POST_RSYNC_HOOKS+, see
++     xref:hooks-rsync[].
+ 
+ * +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
+   with the git submodules in the repository.  This is only available
+diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
+index d25092a..0ce79f8 100644
+--- a/docs/manual/adding-packages-hooks.txt
++++ b/docs/manual/adding-packages-hooks.txt
+@@ -59,6 +59,7 @@ endef
+ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
+ ----------------------
+ 
++[[hooks-rsync]]
+ ==== Using the +POST_RSYNC+ hook
+ The +POST_RSYNC+ hook is run only for packages that use a local source,
+ either through the +local+ site method or the +OVERRIDE_SRCDIR+
