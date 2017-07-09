@@ -1,68 +1,82 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 9 Jul 2017 11:28:17 +0200
-Subject: [Buildroot] [PATCH] package/linuxptp: remove incdefs.sh to
- avoid cross-compilation issues
-In-Reply-To: <f0e2c860-ca4e-bf3d-f685-ffc2f9915a8a@jikos.cz>
-References: <20170705141028.28194-1-romain.naour@smile.fr>
- <7b3079cb-f604-6ab2-3da7-448dacf9ef55@jikos.cz>
- <6827f8c2-c2dc-5727-1844-109bd321a498@smile.fr>
- <f0e2c860-ca4e-bf3d-f685-ffc2f9915a8a@jikos.cz>
-Message-ID: <7f981b4f-8202-0df8-25aa-ba128b6d8e0b@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  9 Jul 2017 11:29:56 +0200
+Subject: [Buildroot] [PATCH 0/4 v3] arch/arm: introduce big.LITTLE
+	configurations
+Message-ID: <cover.1499592591.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+Hello All!
 
-Le 06/07/2017 ? 23:50, Petr Kulhavy a ?crit :
-> Hi Romain,
-> 
-> On 06/07/17 19:06, Romain Naour wrote:
->>> What else was exactly failing in your case? Maybe there are some improvements I
->>> can propose to the package mainstream?
->> While looking at the issue I made some changes that make me believe that
->> CROSS_COMPILE was not defined while incdefs.sh was called.
->>
->> With Yann, we looked at the issue after I published this patch to the mailing
->> list. We fixed the build issue and I'll send a v2 shortly.
->>
->> But, we think that greping in a header is not a good practice.
->> To check if a define is available or not the build system should try to build a
->> small code including the header. A build system like autotools and CMake can be
->> used to do so.
->>
->> Maybe you can try to upstream a new build system ?
-> I fully agree with you that this grep approach is very weak. I have already
-> tried to propose changes that compile bits of code like autotools do.
-> Unfortunately the owner of linuxptp almost religiuosly rejects the autotools
-> approach. He is convinced that autotools are bad and can't see that the grep
-> approach is not portable and cannot work reliably.
-> He rather prefers to finetune the grep expressions, instead of accepting the
-> de-facto industry standard.
+This series adds four new CPU variants to the arm choice, to enable
+optimising for big.LITTLE CPUs.
 
-Do you have a link to your discussion ?
-I can understand that autotools maybe difficult to set up but reinvent the wheel
-is also difficult :p
-I would suggest to use cmake instead.
+We first fix the current values in the first patch, then introduce the
+actual new variants, and then make use of them in the sole package that
+needs to know of them.
 
-> 
-> The only thing that seems to work is to point out concrete configurations and
-> environments where the compilation fails and persistently report issues to him.
-> I can take over this inconvenient job of a postman, but need a concrete input
-> from you.
+This has been only slightly tested by simply building the toolchains for
+the six possibilities:
+  - the four variants in arm mode (32-bit),
+  - the two armv8 variants in aarch64 mode (64-bit).
 
-The issue seems to be fixed in the autobuilders [1] but we have to do some
-changes in linuxptp.mk.
+The variants were introduced in various versions of gcc, so we protect
+the internal gcc as well as the external toolchains accordingly.
 
-[1]
-http://autobuild.buildroot.net/?reason=linuxptp-97c351cafd7327fd28047580c9e2528a6f7e742b
+To be noted: openblas also has a cortex-a15 optimisation, so maybe that
+optimisation can also be used for the cortex-a15.cortex-a7 variant as
+well. But I have absolutely no clue what openblas is doing with that
+anyway, so I left it alone for someone else to deal with...
 
-Best regards,
-Romain
+Changes v2 -> v3:
+  - augment the commit log for the big.LITTLE variants and their gcc
+    version dependencies  (Arnout)
+  - fix KVM_UNIT_TEST_ARCH_SUPPORT wrt gcc  (Arnout)
 
-> 
-> Thanks and regards
-> Petr
-> 
+Changes v1 -> v2:
+  - squash first two patches in one  (Thomas)
+  - parentheses and indentation cleanup  (Baruch, me)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9
+
+  syslinux: drop patch 0003, not needed after gnu-efi update (2017-07-04 18:45:26 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to e9a53f9e66ea0d124e8c4ab028f01b41d694910d
+
+  package/kvm-unit-test: available for big.LITTLE arm cores too (2017-07-09 11:24:31 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      arch/arm: fix -mcpu default values for AArch64
+      package/kvm-unit-tests: introduce _ARCH_SUPPORTS
+      arch/arm: add big.LITTLE cpu variants
+      package/kvm-unit-test: available for big.LITTLE arm cores too
+
+ arch/Config.in.arm                                 | 50 ++++++++++++++++++----
+ package/gcc/Config.in.host                         |  5 ++-
+ package/kvm-unit-tests/Config.in                   | 23 +++++++---
+ .../Config.in                                      |  2 +
+ .../toolchain-external-codesourcery-arm/Config.in  |  4 ++
+ 5 files changed, 67 insertions(+), 17 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
