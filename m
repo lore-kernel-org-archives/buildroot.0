@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 09 Jul 2017 11:12:45 +0200
-Subject: [Buildroot] [PATCH] libssh: bump to version 0.7.5
-In-Reply-To: <989c0615af8d49c23cf423e0e97ae47262669a5a.1499550540.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 9 Jul 2017 00:49:00 +0300")
-References: <989c0615af8d49c23cf423e0e97ae47262669a5a.1499550540.git.baruch@tkos.co.il>
-Message-ID: <87bmouug6q.fsf@dell.be.48ers.dk>
+Date: Sun, 09 Jul 2017 11:12:49 +0200
+Subject: [Buildroot] [PATCH] libssh2: bump to version 1.8.0
+In-Reply-To: <95317f900d64d7027802e5805e79d21f60944e8a.1499564151.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 9 Jul 2017 04:35:51 +0300")
+References: <95317f900d64d7027802e5805e79d21f60944e8a.1499564151.git.baruch@tkos.co.il>
+Message-ID: <877eziug6m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
