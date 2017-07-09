@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Jul 2017 18:29:14 +0200
+Date: Sun, 9 Jul 2017 18:30:15 +0200
 Subject: [Buildroot] [PATCH 1/2] pcre2: new package, required by Qt 5.9
-In-Reply-To: <DM5PR03MB2924501FB63A9FEA79548F57BFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
+In-Reply-To: <361f50e8-a49c-2e88-8375-89b2ff56212c@mind.be>
 References: <DM5PR03MB2924501FB63A9FEA79548F57BFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
-Message-ID: <20170709182914.2613e5f5@windsurf>
+ <361f50e8-a49c-2e88-8375-89b2ff56212c@mind.be>
+Message-ID: <20170709183015.615b4e1e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 7 Jul 2017 03:45:16 +0000, Brent Sink wrote:
-> This patch has been provided by Naoki Matsumoto
-> https://patchwork.ozlabs.org/patch/781474/
+On Sat, 8 Jul 2017 22:58:03 +0200, Arnout Vandecappelle wrote:
+
+>  So everything is OK except for the authorship, the reference to the signature
+> and the fact that the patch is broken. With those things fixed you can add my:
 > 
-> Signed-off-by: Brent Sink <brents_3@hotmail.com>
-> Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-> ---
->  package/Config.in                                  |  1 +
->  package/pcre2/Config.in                            | 22 ++++++++++++++++++++++
->  package/pcre2/pcre2.hash                           |  2 ++
->  package/pcre2/pcre2.mk                             | 20 ++++++++++++++++++++
->  4 files changed, 45 insertions(+)
->  create mode 100644 package/pcre2/Config.in
->  create mode 100644 package/pcre2/pcre2.hash
->  create mode 100644 package/pcre2/pcre2.mk
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-I've applied, after doing the following changes:
+One thing you forgot is the entry to the DEVELOPERS file.
 
-    [Thomas:
-     - reassign authorship to Naoki Matsumoto
-     - add entry to DEVELOPERS file
-     - fix broken patch
-     - add comment about where the PGP signature was coming from]
+Also, another thing I'm noticing now is that a host variant of pcre2
+was added, and I don't see it used anywhere in the Qt 5.9 bump.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
