@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Jul 2017 15:36:56 +0200
-Subject: [Buildroot] [PATCH v10 1/2] fs/ext2: rename
- BR2_TARGET_ROOTFS_EXT2_BLOCKS -> BR2_TARGET_ROOTFS_EXT2_SIZE
-In-Reply-To: <20170709050039.8329-1-s.martin49@gmail.com>
-References: <20170709050039.8329-1-s.martin49@gmail.com>
-Message-ID: <20170709153656.2f91cd4d@windsurf>
+Date: Sun, 9 Jul 2017 15:45:11 +0200
+Subject: [Buildroot] [PATCH v2 1/7] arch/xtensa: get rid of an
+ intermediate blind kconfig option
+In-Reply-To: <1499602921-25097-2-git-send-email-jcmvbkbc@gmail.com>
+References: <1499602921-25097-1-git-send-email-jcmvbkbc@gmail.com>
+ <1499602921-25097-2-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20170709154511.23d76b59@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  9 Jul 2017 07:00:38 +0200, Samuel Martin wrote:
-> This change deprecates the ext2/3/4 rootfs size in blocks symbol in
-> favor of one that mimic the fs-size argument behavior of mkfs (i.e.
-> size in a human readable format accepting k, m, g or t suffix or their
-> upper-case variants).
+On Sun,  9 Jul 2017 05:21:55 -0700, Max Filippov wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> This change also updates the defconfigs that used to set
-> BR2_TARGET_ROOTFS_EXT2_BLOCKS symbol.
+> It is not needed to have an intermediate blind option, we can just
+> hide the prompt behind the same dependency as the non-blind symbol.
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Update our qemu-xtensa defconfig acordingly (note: it was using
+> different values for both options, which is not possible; the blind
+> option was just set to the non-blind one in the .config).
 > 
+> Also remove an unneeded empty default for the BR2_XTENSA_OVERLAY_DIR
+> string option (strings are empty by default).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 > ---
-> changes v9->v10:
-> - fix typo (Arnout)
-> - update legacy help text (Arnout)
-> - remove useless comment (Arnout)
+>  Config.in.legacy                         | 11 +++++++++++
+>  arch/Config.in.xtensa                    | 16 ++++++----------
+>  configs/qemu_xtensa_lx60_defconfig       |  3 +--
+>  configs/qemu_xtensa_lx60_nommu_defconfig |  3 +--
+>  4 files changed, 19 insertions(+), 14 deletions(-)
 
-Both applied to master. Thanks!
+Applied to master, thanks. I've fixed a small typo in the
+Config.in.legacy help text.
 
 Thomas
 -- 
