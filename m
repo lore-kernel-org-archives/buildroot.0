@@ -1,42 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 10 Jul 2017 01:21:19 +0200
-Subject: [Buildroot] [PATCH 3/7] support/testing: strip /usr/ part from
-	HOST_DIR
+Date: Mon, 10 Jul 2017 01:21:20 +0200
+Subject: [Buildroot] [PATCH 4/7] support/testing: move BRTest initialisation
+	to __init__
 In-Reply-To: <20170709232123.30120-1-arnout@mind.be>
 References: <20170709232123.30120-1-arnout@mind.be>
-Message-ID: <20170709232123.30120-4-arnout@mind.be>
+Message-ID: <20170709232123.30120-5-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+BRTest's setUp() method contains a few assignments that initialize its
+member variables. Since we will want to use these in test case
+overrides, move them to the __init__ function.
+
+Also allow the config member to be overridden, rather than always
+taking the class member.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/testing/infra/__init__.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/infra/basetest.py | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-index a55ad7fdf5..27e2a2708d 100644
---- a/support/testing/infra/__init__.py
-+++ b/support/testing/infra/__init__.py
-@@ -55,7 +55,7 @@ def get_elf_arch_tag(builddir, prefix, fpath, tag):
-     v5TEJ
-     >>>
-     """
--    cmd = ["host/usr/bin/{}-readelf".format(prefix),
-+    cmd = ["host/bin/{}-readelf".format(prefix),
-            "-A", os.path.join("target", fpath)]
-     out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
-     regexp = re.compile("^  {}: (.*)$".format(tag))
-@@ -80,7 +80,7 @@ def get_elf_prog_interpreter(builddir, prefix, fpath):
-     /lib/ld-linux-armhf.so.3
-     >>>
-     """
--    cmd = ["host/usr/bin/{}-readelf".format(prefix),
-+    cmd = ["host/bin/{}-readelf".format(prefix),
-            "-l", os.path.join("target", fpath)]
-     out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
-     regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index d75458a02c..2a5c9ec939 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -36,15 +36,18 @@ class BRTest(unittest.TestCase):
+     keepbuilds = False
+     jlevel = None
+ 
++    def __init__(self, names):
++        super(BRTest, self).__init__(names)
++        self.testname = self.__class__.__name__
++        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
++        self.emulator = None
++
+     def show_msg(self, msg):
+         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
+                                     self.testname, msg)
+     def setUp(self):
+-        self.testname = self.__class__.__name__
+-        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
+-        self.emulator = None
+         self.show_msg("Starting")
+-        config = self.__class__.config
++        config = self.config
+         if self.jlevel:
+             config += "BR2_JLEVEL={}\n".format(self.jlevel)
+         self.b = Builder(config, self.builddir, self.logtofile)
 -- 
 2.13.2
