@@ -1,52 +1,64 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 10 Jul 2017 20:54:52 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-07-08
-In-Reply-To: <87lgnwtoth.fsf@dell.be.48ers.dk>
-References: <20170709063052.6F78221DB3@mail.free-electrons.com>
- <480602992.4326585.1499689836292.JavaMail.zimbra@datacom.ind.br>
- <20170710144340.4fab6bd4@windsurf.lan>
- <87lgnwtoth.fsf@dell.be.48ers.dk>
-Message-ID: <20170710185452.GA22803@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jul 2017 21:51:50 +0200
+Subject: [Buildroot] [PATCH 6/7] Makefile: add check that
+ $(HOST_DIR)/usr is not a directory
+In-Reply-To: <20170710161238.GA3014@scaer>
+References: <20170709232123.30120-1-arnout@mind.be>
+ <20170709232123.30120-7-arnout@mind.be>
+ <20170710180240.43215e1a@windsurf.lan> <20170710161238.GA3014@scaer>
+Message-ID: <3a401955-07d9-054c-61a4-c91871ae1257@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-Peter Korsgaard wrote,
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> Hi,
-> 
->  >> > Build failures related to your packages:
->  >> > 
->  >> >    mips64el |           host-util-linux-2.30 |
->  >> >    http://autobuild.buildroot.net/results/a0096eb6e65b83b2b0c7d38e5f978c3fe636cb30  
->  >> 
->  >> Segfault in /bin/bash. Does not seem to be related to the package.
-> 
->  > This is happening on Peter's autobuilder instance. It failed twice:
->  > http://autobuild.buildroot.net/?reason=host-util-linux-2.30. One time
->  > due to an Illegal instruction, second time due to a Segmentation fault.
-> 
->  > Peter ? :-)
-> 
-> Sorry, no idea. gcc68 is a new Ryzen based machine in the compile farm
-> that I recently started an autobuilder instance on:
-> 
-> https://cfarm.tetaneutral.net/machines/list/
-> 
-> I'll try to reproduce manually and have a closer look tonight.
 
-I have seen a lot of illegal instruction errors from the host gcc
-on this machine. (also on gcc67).
+On 10-07-17 18:12, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2017-07-10 18:02 +0200, Thomas Petazzoni spake thusly:
+[snip]
+>> I also don't like very much adding such checks. In which situation can
+>> our users fall into this problem?
+> 
+> I've explained it in details when you initially reported the issue of
+> regenerating the toolchains:
+> 
+>     http://lists.busybox.net/pipermail/buildroot/2017-July/197456.html
+> 
+>> They have an existing Buildroot tree, they do "git pull" and do a
+>> partial rebuild ?
+> 
+> No, that occurs when a user points HOST_DIR outside, like you do for the
+> toolchains, and that host-dir already exists, and it already contains a
+> usr/ directory.
 
-Dunno if the Debian is too old or what is the reason.
+ Actually, I realize now: when people do a git pull, we expect them to do "make
+clean all" afterwards. And "make clean" will delete HOST_DIR - so no
+HOST_DIR/usr will exist anymore.
 
-So the problems are not specific to buildroot.
+ So the original report from Thomas only happened because Thomas didn't do a
+"make clean" like he should have...
 
-best regards
- Waldemar
+ Or am I missing something?
+
+
+> My opinion is that we should not allow using HOST_DIR if it is not empty
+> at all.
+
+ Not sure what you mean with "using HOST_DIR". Do you mean "using a non-default
+HOST_DIR"? Do you mean that we should force people to do "make clean all" *all
+the time* when using a non-default HOST_DIR?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
