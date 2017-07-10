@@ -1,40 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 10 Jul 2017 23:45:31 +0200
-Subject: [Buildroot] [PATCH] support/testing: fix TestExt4 after ext2fs
-	refactoring
-Message-ID: <20170710214531.15758-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Jul 2017 23:47:41 +0200
+Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
+ _ARCH_SUPPORTS
+In-Reply-To: <20170710162056.GB3014@scaer>
+References: <cover.1499592591.git.yann.morin.1998@free.fr>
+ <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
+ <20170710180949.764a0fdb@windsurf.lan>
+ <20170710162056.GB3014@scaer>
+Message-ID: <20170710234741.554c7a44@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit bee9e881a2d3addd6880b39f3e33a7180d0b1eb4 removed the
-BR2_TARGET_ROOTFS_EXT2_BLOCKS but didn't update TestExt4 that uses
-(tests) that option.
+Hello,
 
-Convert it to BR2_TARGET_ROOTFS_EXT2_SIZE, using 16M so the M gets
-tested as well.
+On Mon, 10 Jul 2017 18:20:56 +0200, Yann E. MORIN wrote:
 
-Fixes: https://gitlab.com/arnout/buildroot/-/jobs/21910153
+> > What about the x86_64 dependency on a host compiler >= 4.5 ?  
+> 
+> In the manual, it is said that one should not add a comment about a
+> dependency on the host toolchain...
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/testing/tests/fs/test_ext.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The manual says one thing, reality says another:
 
-diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
-index 34321a3995..733c7469f2 100644
---- a/support/testing/tests/fs/test_ext.py
-+++ b/support/testing/tests/fs/test_ext.py
-@@ -97,7 +97,7 @@ class TestExt4(infra.basetest.BRTest):
- """
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_BLOCKS=16384
-+BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
- BR2_TARGET_ROOTFS_EXT2_INODES=3000
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
- # BR2_TARGET_ROOTFS_TAR is not set
+package/collectd/Config.in:comment "write_prometheus needs a toolchain w/ C++, host gcc >= 4.5"
+package/cppcms/Config.in:comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
+package/icu/Config.in:comment "icu needs a toolchain w/ C++, wchar, threads, gcc >= 4.8, host gcc >= 4.8"
+package/kodi/Config.in:comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
+package/mfgtools/Config.in.host:comment "mfgtools needs host gcc >= 4.8"
+package/midori/Config.in:comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9, host gcc >= 4.8"
+package/php/Config.ext:comment "intl support needs a toolchain w/ C++, wchar, threads, gcc >= 4.8, host gcc >= 4.8"
+package/protobuf-c/Config.in:comment "protobuf-c needs a toolchain w/ C++, threads, host gcc >= 4.5"
+package/python-mwscrape2slob/Config.in:comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
+package/python-pyicu/Config.in:comment "python-pyicu needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
+package/python-slob/Config.in:comment "python-slob needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
+package/qt5/qt5base/Config.in:comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
+package/qt5/qt5webkit/Config.in:comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 4.8, host gcc >= 4.8"
+package/riemann-c-client/Config.in:comment "riemann-c-client needs a toolchain w/ C++, threads, host gcc >= 4.5"
+package/webkitgtk/Config.in:comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9, host gcc >= 4.8"
+
+I'm not sure why we would not add Config.in comment for dependencies on
+the host toolchain. What's the reasoning for *not* adding such
+dependencies ?
+
+Best regards,
+
+Thomas
 -- 
-2.13.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
