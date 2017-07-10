@@ -1,79 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Jul 2017 18:09:49 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
-Message-ID: <20170710180949.764a0fdb@windsurf.lan>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 10 Jul 2017 11:10:34 -0500
+Subject: [Buildroot] RFC: ASLR
+Message-ID: <CANQCQpb32H5XF+DtgYcuu=JFdgGCE3gEm+pHffWYk0yno6w0pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter,
 
-On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
+I have a patchset we're starting to assemble for enabling hardening
+across specific packages in Buildroot.  I hear you may have already
+looked at this problem/feature?
 
-> diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-> index 7eab0c25d6..3db10fc820 100644
-> --- a/package/kvm-unit-tests/Config.in
-> +++ b/package/kvm-unit-tests/Config.in
-> @@ -1,15 +1,19 @@
-> +config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
-> +	bool
-> +	# On ARM, it uses virtualization extensions
-> +	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
-> +		BR2_cortex_a15 || BR2_cortex_a17
-> +	default y if BR2_i386 || BR2_x86_64
-> +	default y if BR2_powerpc64 || BR2_powerpc64le
-> +
->  config BR2_PACKAGE_KVM_UNIT_TESTS
->  	bool "kvm-unit-tests"
-> +	depends on BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
->  	# on i386 and x86-64, __builtin_reachable is used, so we need
->  	# gcc 4.5 at least. on i386, we use the target gcc, while on
->  	# x86-64 we use the host gcc (see .mk file for details)
-> -	# On ARM, it uses virtualization extensions
-> -	depends on BR2_cortex_a7 || BR2_cortex_a12 || \
-> -		BR2_cortex_a15 || BR2_cortex_a17 || \
-> -		(BR2_i386 && BR2_TOOLCHAIN_GCC_AT_LEAST_4_5) || \
-> -		BR2_powerpc64 || \
-> -		BR2_powerpc64le || \
-> -		(BR2_x86_64 && BR2_HOST_GCC_AT_LEAST_4_5)
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 if BR2_i386
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_5 if BR2_x86_64
+What I'm seeing is that these changes are considered "optional" at a
+package build level.  Plus I'm not advocating we carry specific
+Buildroot patches for items where it doesn't make sense for the
+package upstream to default to them.  Instead, could we add a
+conditional in the .mk that adds the FLAGS update on specific packages
+which have the ability to enable it? Sort of in a similar way to how
+we enable libcurl and other dependencies automatically in other
+packages if that package/option is enabled.  This would allow us to
+grow support over time and not force all packages to build with the
+option (plus keep it optional in general for those that want it
+enabled).
 
-Didn't know this syntax was valid. We usually do:
+Thoughts?
 
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
-
-but if the "depends on ... if ..." syntax works, I'm happy with it.
-
->  	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
->  	help
->  	  kvm-unit-tests is a project as old as KVM. As its name
-> @@ -28,3 +32,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
->  	  features are submitted with accompanying unit tests.
->  
->  	  http://www.linux-kvm.org/page/KVM-unit-tests
-> +
-> +comment "kvm-unit-tests needs a toolchain w/ gcc >= 4.5"
-> +	depends on BR2_i386
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-
-What about the x86_64 dependency on a host compiler >= 4.5 ?
-
-But those Config.in comments are not really related to the introduction
-of the _ARCH_SUPPORTS variable, so perhaps they should be in a separate
-patch. If you don't want to respin but agree with what I said, just let
-me know, I can fixup when applying.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
