@@ -1,72 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Jul 2017 17:45:57 +0200
-Subject: [Buildroot] [git commit] Makefile: properly create $(HOST_DIR)/usr
-	compatibility symlink
-Message-ID: <20170710154309.17BBF81F88@busybox.osuosl.org>
+Date: Mon, 10 Jul 2017 17:46:11 +0200
+Subject: [Buildroot] [git commit] toolchain-wrapper: remove remaining
+	references to HOST_DIR/usr
+Message-ID: <20170710154309.31F457FD63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce58db7232900a063a543abd2699b6120d9fbbf3
+commit: https://git.buildroot.net/buildroot/commit/?id=2a47bd37b59403f044920f090fe2ea21bb9380f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Up to now we created the $(HOST_DIR)/usr compatibility symlink as part
-of the creation of $(HOST_DIR) itself. However, when the user specifies
-a custom BR2_HOST_DIR, it is possible that the directory already exists
-so this rule will never trigger.
-
-Therefore, add an explicit rule for creating $(HOST_DIR)/usr and add
-this rule to the dependencies of the dirs target. HOST_DIR itself goes
-back to the standard rule for directories. The order-only dependency of
-STAGING_DIR isn't needed any more either: HOST_DIR is implicitly
-created if needed by mkdir -p, and we don't need to trigger the
-HOST_DIR rule any more if the directory already exists.
+Commit 14151d77af20ec50eeba6e30465debf87b35faaa that eliminated
+$(HOST_DIR)/usr seriously missed the toolchain-wrapper - only a single
+reference was updated, the other three were missed. Commit
+015d68c84c9c6ad6f6d41f181d19d813f309088b removed one more. This commit
+finally removes the two remaining ones.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ toolchain/toolchain-wrapper.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index a22e87f..188ce9a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -237,7 +237,7 @@ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
- # dependencies anywhere else
- #
- ################################################################################
--$(BUILD_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-+$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
- 	@mkdir -p $@
- 
- BR2_CONFIG = $(CONFIG_DIR)/.config
-@@ -541,7 +541,7 @@ endif
- 
- .PHONY: dirs
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(BINARIES_DIR)
-+	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -552,13 +552,12 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- .PHONY: world
- world: target-post-image
- 
--# When creating HOST_DIR, also symlink usr -> .
--$(HOST_DIR):
--	@mkdir -p $@
--	@ln -snf . $@/usr
-+# Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
-+$(HOST_DIR)/usr: $(HOST_DIR)
-+	@ln -snf . $@
- 
- # Populating the staging with the base directories is handled by the skeleton package
--$(STAGING_DIR): | $(HOST_DIR)
-+$(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
- 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
- 
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index a73e6d6..c048992 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -208,14 +208,14 @@ int main(int argc, char **argv)
+ #elif defined(BR_CROSS_PATH_ABS)
+ 	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s" BR_CROSS_PATH_SUFFIX, basename);
+ #else
+-	ret = snprintf(path, sizeof(path), "%s/usr/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
++	ret = snprintf(path, sizeof(path), "%s/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
+ #endif
+ 	if (ret >= sizeof(path)) {
+ 		perror(__FILE__ ": overflow");
+ 		return 3;
+ 	}
+ #ifdef BR_CCACHE
+-	ret = snprintf(ccache_path, sizeof(ccache_path), "%s/usr/bin/ccache", absbasedir);
++	ret = snprintf(ccache_path, sizeof(ccache_path), "%s/bin/ccache", absbasedir);
+ 	if (ret >= sizeof(ccache_path)) {
+ 		perror(__FILE__ ": overflow");
+ 		return 3;
