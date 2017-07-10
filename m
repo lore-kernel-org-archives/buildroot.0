@@ -1,59 +1,44 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 10 Jul 2017 20:25:33 +0200
-Subject: [Buildroot] [PATCH] olimex_imx233: refactor with genimage.sh
-In-Reply-To: <20170701174510.08a506bd@windsurf.home>
-References: <20170701153433.11906-1-francois.perrad@gadz.org>
- <20170701174510.08a506bd@windsurf.home>
-Message-ID: <CAB0FRsu64aDtXhaXNSbjNc67SuK+0BOh+KhZ3emeN73CV-XBjw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 10 Jul 2017 20:51:22 +0200
+Subject: [Buildroot] [PATCH v1] pcre2: enable no MMU build
+Message-ID: <20170710185122.16031-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-07-01 17:45 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+Use '--disable-pcre2grep-callout' for !BR2_USE_MMU, disables
+fork usage.
 
-> Hello,
->
-> On Sat,  1 Jul 2017 17:34:33 +0200, Francois Perrad wrote:
-> > instead of use a freescale script
-> >
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Could you explain why this is an improvement? The whole idea of
-> board/freescale/common/mxs/post-image.sh is to have a single
-> genimage.cfg.template file that covers all MXS boards. So your change
-> doesn't seem to go in the right direction.
->
->
-First, I like common tools which avoid duplication of effort.
+Fixes [1]:
 
-I introduced the use of the common mxs script on November 2016, soon after
-its creation by Fabio.
+    CCLD     pcre2grep
+  src/pcre2grep-pcre2grep.o: In function `pcre2grep_callout':
+  pcre2grep.c:(.text+0x402): undefined reference to `fork'
+  collect2: error: ld returned 1 exit status
 
-But, I dislike the level indirection given by the template of image
-description (the use of this template is good inside board/freescale, but
-not outside).
+[1] http://autobuild.buildroot.net/results/2c2/2c2665844748a3bdb010315200eea70aa3504b95
 
-So now, I prefer use the new global common script
-support/scripts/genimage.sh.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/pcre2/pcre2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Fran?ois
-
-
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170710/6ec615b8/attachment.html>
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 5b7a163255..b7da1ed991 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -16,5 +16,10 @@ PCRE2_CONF_OPTS += --enable-pcre2-8
+ PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
+ PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_32),--enable-pcre2-32,--disable-pcre2-32)
+ 
++# disable fork usage if not available
++ifeq ($(BR2_USE_MMU),)
++PCRE2_CONF_OPTS += --disable-pcre2grep-callout
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.11.0
