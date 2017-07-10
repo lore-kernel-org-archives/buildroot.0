@@ -1,58 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jul 2017 18:26:16 +0200
-Subject: [Buildroot] [PATCH 0/3] fs/squashfs: tweaks and cleanups
-Message-ID: <cover.1499703968.git.yann.morin.1998@free.fr>
+Date: Mon, 10 Jul 2017 18:26:18 +0200
+Subject: [Buildroot] [PATCH 1/3] fs/squashfs: cleanup if-else cascade
+In-Reply-To: <cover.1499703968.git.yann.morin.1998@free.fr>
+References: <cover.1499703968.git.yann.morin.1998@free.fr>
+Message-ID: <1418df90863689c87a3c1cfa4ad87c6f9ad332e1.1499703968.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+And add myself to the DEVELOPPERS for squashfs.
 
-The Linux kernel refuses to ount a squashfs image tha is not padded to
-a 1MiB boundary. Fix that when generating the image, and drop the
-workaround we had in our testing infra.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ DEVELOPERS              |  1 +
+ fs/squashfs/squashfs.mk | 12 +++---------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
-Clean up squashfs.mk at the same time.
-
-Regards,
-Yann E. MORIN.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 9d06e91df85a2f02dd10dcac6a37a19da11b13aa
-
-  arch/arm: fix -mcpu default values for AArch64 (2017-07-10 18:04:16 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 53358d256db8df549cb58e41ae6805b8e808b000
-
-  support/test: don't workaround squashfs padding (2017-07-10 18:25:32 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      fs/squashfs: cleanup if-else cascade
-      fs/squashfs: align size to 1MiB
-      support/test: don't workaround squashfs padding
-
- DEVELOPERS                                |  1 +
- fs/squashfs/squashfs.mk                   | 13 ++++---------
- support/testing/tests/fs/test_squashfs.py |  1 -
- 3 files changed, 5 insertions(+), 10 deletions(-)
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ec405a570..f392838efe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1777,6 +1777,7 @@ N:	Wojciech Nizi?ski <niziak@spox.org>
+ F:	package/fwup/
+ 
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
++F:	fs/squashfs/
+ F:	package/cegui06/
+ F:	package/celt051/
+ F:	package/dtc/
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index 68a57b074a..342c7a8a37 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -8,21 +8,15 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
+-else
+-ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
++else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lzo
+-else
+-ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
++else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lzma
+-else
+-ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
++else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
+ ROOTFS_SQUASHFS_ARGS += -comp xz
+ else
+ ROOTFS_SQUASHFS_ARGS += -comp gzip
+ endif
+-endif
+-endif
+-endif
+ 
+ define ROOTFS_SQUASHFS_CMD
+ 	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
