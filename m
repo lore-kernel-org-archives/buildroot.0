@@ -1,35 +1,85 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 10 Jul 2017 11:10:34 -0500
-Subject: [Buildroot] RFC: ASLR
-Message-ID: <CANQCQpb32H5XF+DtgYcuu=JFdgGCE3gEm+pHffWYk0yno6w0pg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Jul 2017 18:12:38 +0200
+Subject: [Buildroot] [PATCH 6/7] Makefile: add check that
+ $(HOST_DIR)/usr is not a directory
+In-Reply-To: <20170710180240.43215e1a@windsurf.lan>
+References: <20170709232123.30120-1-arnout@mind.be>
+ <20170709232123.30120-7-arnout@mind.be>
+ <20170710180240.43215e1a@windsurf.lan>
+Message-ID: <20170710161238.GA3014@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Thomas, All,
 
-I have a patchset we're starting to assemble for enabling hardening
-across specific packages in Buildroot.  I hear you may have already
-looked at this problem/feature?
+On 2017-07-10 18:02 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 10 Jul 2017 01:21:22 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+> > We create a compatibility symlink for $(HOST_DIR)/usr. However, if
+> > that exists already as a directory, the link can't be created. Make
+> > will not even try since it exists already and has no dependencies. If
+> > it exists as a directory, any post-build script that is still using
+> > $(HOST_DIR)/usr will fail to find what it needs. Therefore, add a
+> > check that it is not a directory.
+> > 
+> > This check has to be made as part of some PHONY target. We can reuse
+> > the dirs target, on which all packages depend.
+> > 
+> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> > ---
+> > Personally I don't think it's important enough to add such a check.
+> > If someone ends up in this situation, they'll be motivated to fix
+> > their post-build scripts :-)
+> 
+> I also don't like very much adding such checks. In which situation can
+> our users fall into this problem?
 
-What I'm seeing is that these changes are considered "optional" at a
-package build level.  Plus I'm not advocating we carry specific
-Buildroot patches for items where it doesn't make sense for the
-package upstream to default to them.  Instead, could we add a
-conditional in the .mk that adds the FLAGS update on specific packages
-which have the ability to enable it? Sort of in a similar way to how
-we enable libcurl and other dependencies automatically in other
-packages if that package/option is enabled.  This would allow us to
-grow support over time and not force all packages to build with the
-option (plus keep it optional in general for those that want it
-enabled).
+I've explained it in details when you initially reported the issue of
+regenerating the toolchains:
 
-Thoughts?
+    http://lists.busybox.net/pipermail/buildroot/2017-July/197456.html
+
+> They have an existing Buildroot tree, they do "git pull" and do a
+> partial rebuild ?
+
+No, that occurs when a user points HOST_DIR outside, like you do for the
+toolchains, and that host-dir already exists, and it already contains a
+usr/ directory.
+
+My opinion is that we should not allow using HOST_DIR if it is not empty
+at all.
+
+Regards,
+Yann E. MORIN.
+
+> > diff --git a/Makefile b/Makefile
+> > index 188ce9adc7..a94555d130 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -542,6 +542,11 @@ endif
+> >  .PHONY: dirs
+> >  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+> >  	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
+> > +	@if [ -d "$(HOST_DIR)/usr" -a ! -L "$(HOST_DIR)/usr" ]; then \
+> > +		printf '%s is not allowed to be a directory\n' "$(HOST_DIR)/usr" 1>&2; \
+> > +		printf 'Please remove this directory and rebuild\n' 1>&2; \
+> 
+> What about saying "Please run make clean all" ?
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
