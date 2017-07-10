@@ -1,39 +1,59 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 10 Jul 2017 20:14:09 +0200
-Subject: [Buildroot] [PATCH] olimex_imx233_olinuxino: bump versions
-Message-ID: <1499710449-27765-1-git-send-email-francois.perrad@gadz.org>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 10 Jul 2017 20:25:33 +0200
+Subject: [Buildroot] [PATCH] olimex_imx233: refactor with genimage.sh
+In-Reply-To: <20170701174510.08a506bd@windsurf.home>
+References: <20170701153433.11906-1-francois.perrad@gadz.org>
+ <20170701174510.08a506bd@windsurf.home>
+Message-ID: <CAB0FRsu64aDtXhaXNSbjNc67SuK+0BOh+KhZ3emeN73CV-XBjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_imx233_olinuxino_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+2017-07-01 17:45 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 1b35b74..d4b154a 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.36"
- BR2_LINUX_KERNEL_DEFCONFIG="mxs"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/imx233_olinuxino/linux-wifi.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -40,7 +40,7 @@ BR2_TARGET_ROOTFS_EXT4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
- BR2_TARGET_UBOOT_FORMAT_SD=y
-  
--- 
-2.7.4
+> Hello,
+>
+> On Sat,  1 Jul 2017 17:34:33 +0200, Francois Perrad wrote:
+> > instead of use a freescale script
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Could you explain why this is an improvement? The whole idea of
+> board/freescale/common/mxs/post-image.sh is to have a single
+> genimage.cfg.template file that covers all MXS boards. So your change
+> doesn't seem to go in the right direction.
+>
+>
+First, I like common tools which avoid duplication of effort.
+
+I introduced the use of the common mxs script on November 2016, soon after
+its creation by Fabio.
+
+But, I dislike the level indirection given by the template of image
+description (the use of this template is good inside board/freescale, but
+not outside).
+
+So now, I prefer use the new global common script
+support/scripts/genimage.sh.
+
+Fran?ois
+
+
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170710/6ec615b8/attachment.html>
