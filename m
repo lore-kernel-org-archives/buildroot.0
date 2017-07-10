@@ -1,54 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Jul 2017 17:46:25 +0200
-Subject: [Buildroot] [git commit] support/testing: move BRTest
-	initialisation to __init__
-Message-ID: <20170710154309.5A3568212C@busybox.osuosl.org>
+Date: Mon, 10 Jul 2017 17:59:28 +0200
+Subject: [Buildroot] [PATCH 1/7] Makefile: properly create
+ $(HOST_DIR)/usr compatibility symlink
+In-Reply-To: <20170709232123.30120-2-arnout@mind.be>
+References: <20170709232123.30120-1-arnout@mind.be>
+ <20170709232123.30120-2-arnout@mind.be>
+Message-ID: <20170710175928.3138db23@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b78b50465c20c1733753a8dd47945cf80c9155f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-BRTest's setUp() method contains a few assignments that initialize its
-member variables. Since we will want to use these in test case
-overrides, move them to the __init__ function.
+On Mon, 10 Jul 2017 01:21:17 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Up to now we created the $(HOST_DIR)/usr compatibility symlink as part
+> of the creation of $(HOST_DIR) itself. However, when the user specifies
+> a custom BR2_HOST_DIR, it is possible that the directory already exists
+> so this rule will never trigger.
+> 
+> Therefore, add an explicit rule for creating $(HOST_DIR)/usr and add
+> this rule to the dependencies of the dirs target. HOST_DIR itself goes
+> back to the standard rule for directories. The order-only dependency of
+> STAGING_DIR isn't needed any more either: HOST_DIR is implicitly
+> created if needed by mkdir -p, and we don't need to trigger the
+> HOST_DIR rule any more if the directory already exists.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  Makefile | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
 
-Also allow the config member to be overridden, rather than always
-taking the class member.
+Applied to master, thanks.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/testing/infra/basetest.py | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index d75458a..2a5c9ec 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -36,15 +36,18 @@ class BRTest(unittest.TestCase):
-     keepbuilds = False
-     jlevel = None
- 
-+    def __init__(self, names):
-+        super(BRTest, self).__init__(names)
-+        self.testname = self.__class__.__name__
-+        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
-+        self.emulator = None
-+
-     def show_msg(self, msg):
-         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
-                                     self.testname, msg)
-     def setUp(self):
--        self.testname = self.__class__.__name__
--        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
--        self.emulator = None
-         self.show_msg("Starting")
--        config = self.__class__.config
-+        config = self.config
-         if self.jlevel:
-             config += "BR2_JLEVEL={}\n".format(self.jlevel)
-         self.b = Builder(config, self.builddir, self.logtofile)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
