@@ -1,40 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Jul 2017 19:51:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: fix gtk support
-Message-ID: <20170710175137.1402-1-bernd.kuhls@t-online.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 10 Jul 2017 20:14:09 +0200
+Subject: [Buildroot] [PATCH] olimex_imx233_olinuxino: bump versions
+Message-ID: <1499710449-27765-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gtk support is controlled by ARG_WITH since
-https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4
-
-Fixes a build error if libgtk2/3 was built before transmission:
-http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/transmission/transmission.mk | 4 ++--
+ configs/olimex_imx233_olinuxino_defconfig | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index f8abb2b8b..d84e5cb77 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -82,10 +82,10 @@ TRANSMISSION_CONF_OPTS += --disable-remote
- endif
- 
- ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
--TRANSMISSION_CONF_OPTS += --enable-gtk
-+TRANSMISSION_CONF_OPTS += --with-gtk
- TRANSMISSION_DEPENDENCIES += libgtk2
- else
--TRANSMISSION_CONF_OPTS += --disable-gtk
-+TRANSMISSION_CONF_OPTS += --without-gtk
- endif
- 
- $(eval $(autotools-package))
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index 1b35b74..d4b154a 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.36"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/imx233_olinuxino/linux-wifi.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -40,7 +40,7 @@ BR2_TARGET_ROOTFS_EXT4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+  
 -- 
-2.11.0
+2.7.4
