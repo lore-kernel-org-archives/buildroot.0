@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Jul 2017 23:49:01 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-07-08
-In-Reply-To: <20170710185452.GA22803@waldemar-brodkorb.de>
-References: <20170709063052.6F78221DB3@mail.free-electrons.com>
- <480602992.4326585.1499689836292.JavaMail.zimbra@datacom.ind.br>
- <20170710144340.4fab6bd4@windsurf.lan>
- <87lgnwtoth.fsf@dell.be.48ers.dk>
- <20170710185452.GA22803@waldemar-brodkorb.de>
-Message-ID: <20170710234901.221eb3a2@windsurf.lan>
+Date: Mon, 10 Jul 2017 23:51:33 +0200
+Subject: [Buildroot] [git commit] support/testing: unbreak run-tests -l
+Message-ID: <20170710214801.C18E3807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=704db1586c1408106e1337bc7a2ab3cfec593899
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 10 Jul 2017 20:54:52 +0200, Waldemar Brodkorb wrote:
+In commit b78b50465c20c1733753a8dd47945cf80c9155f8, the initialisation
+of BRTest.builddir was moved to the __init__ function. However, it is
+set based on BRTest.outputdir and that is only set when the -o argument
+is given to run-tests. When called as "run-tests -l", there is no -o
+argument so BRTest.outputdir remains unset.
 
-> > Sorry, no idea. gcc68 is a new Ryzen based machine in the compile farm
-> > that I recently started an autobuilder instance on:
-> > 
-> > https://cfarm.tetaneutral.net/machines/list/
-> > 
-> > I'll try to reproduce manually and have a closer look tonight.  
-> 
-> I have seen a lot of illegal instruction errors from the host gcc
-> on this machine. (also on gcc67).
-> 
-> Dunno if the Debian is too old or what is the reason.
-> 
-> So the problems are not specific to buildroot.
+To fix, keep BRTest.builddir at None when BRTest.outputdir is None.
 
-OK, so perhaps it is better to stop the autobuilder instance from this
-machine, and other, more stable machines.
+While we're at it, drop the direct access to the class member. If a
+subclass wishes to set outputdir to something else before calling
+BRTest.__init__, they are free to do so.
 
-Best regards,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/basetest.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 2a5c9ec..1a082bb 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -39,7 +39,7 @@ class BRTest(unittest.TestCase):
+     def __init__(self, names):
+         super(BRTest, self).__init__(names)
+         self.testname = self.__class__.__name__
+-        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
++        self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
+         self.emulator = None
+ 
+     def show_msg(self, msg):
