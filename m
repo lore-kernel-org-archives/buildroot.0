@@ -1,86 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jul 2017 22:10:05 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <a891c4f7-746f-0a6f-94dc-4981ea5d9c06@mind.be>
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
- <20170710180949.764a0fdb@windsurf.lan>
- <20170710162056.GB3014@scaer>
- <a891c4f7-746f-0a6f-94dc-4981ea5d9c06@mind.be>
-Message-ID: <20170710201005.GA2953@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jul 2017 22:10:13 +0200
+Subject: [Buildroot] [PATCH 5/7] support/testing: add test of BR2_CCACHE
+ with an external toolchain
+In-Reply-To: <20170710180105.44fa823a@windsurf.lan>
+References: <20170709232123.30120-1-arnout@mind.be>
+ <20170709232123.30120-6-arnout@mind.be>
+ <20170710180105.44fa823a@windsurf.lan>
+Message-ID: <19dfa428-8dab-287a-bc79-b3ba6023a04d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2017-07-10 21:56 +0200, Arnout Vandecappelle spake thusly:
-> On 10-07-17 18:20, Yann E. MORIN wrote:
-> > Thomas, All,
-> > 
-> > On 2017-07-10 18:09 +0200, Thomas Petazzoni spake thusly:
-> >> On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
-> >>
-> >>> diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-> >>> index 7eab0c25d6..3db10fc820 100644
-> >>> --- a/package/kvm-unit-tests/Config.in
-> >>> +++ b/package/kvm-unit-tests/Config.in
-> > [--SNIP--]
-> >>> @@ -28,3 +32,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
-> >>>  	  features are submitted with accompanying unit tests.
-> >>>  
-> >>>  	  http://www.linux-kvm.org/page/KVM-unit-tests
-> >>> +
-> >>> +comment "kvm-unit-tests needs a toolchain w/ gcc >= 4.5"
-> >>> +	depends on BR2_i386
-> >>> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-> >> What about the x86_64 dependency on a host compiler >= 4.5 ?
-> > In the manual, it is said that one should not add a comment about a
-> > dependency on the host toolchain...
+
+On 10-07-17 18:01, Thomas Petazzoni wrote:
+> Hello,
 > 
->  I *think* Thomas didn't mean to say "host compiler". I think he meant:
+> On Mon, 10 Jul 2017 01:21:21 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> We piggy-back on an existing test.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>>  support/testing/tests/toolchain/test_external.py | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
+>> index afb4bb0b50..c315ef8055 100644
+>> --- a/support/testing/tests/toolchain/test_external.py
+>> +++ b/support/testing/tests/toolchain/test_external.py
+>> @@ -207,9 +207,13 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>>          self.emulator.login()
+>>  
+>>  class TestExternalToolchainBuildrootuClibc(TestExternalToolchain):
+>> +    # On this test we piggy-back a test of BR2_CCACHE in combination
+>> +    # with an external toolchain.
 > 
-> Shouldn't this be:
-> 	depends on BR2_i386 || BR2_x86_64
-> 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-
-No, because for x86_64 we are using the host compiler. See the .mk file:
-
-    # For all architectures but x86-64, we use the target
-    # compiler. However, for x86-64, we use the host compiler, as
-    # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
-    # x86-64 cannot do.
-    ifneq ($(BR2_x86_64),y)
-    KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
-    endif
-
-So for x86_64 there is no dependency to add on the target compiler at
-all.
-
-Regards,
-Yann E. MORIN.
-
+> I'm not sure I'm a big fan of "hijacking" an existing test to validate
+> ccache. Shouldn't we have a separate test for that, clearly identified
+> as being ccache related?
 > 
->  Regards,
->  Arnout
-> 
-> [snip]
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Could be a test that inherits from this one, and simply adds more
+> options. But at least in case of failure it will be clearly identified
+> as a CCache related test in the Gitlab CI results.
+
+ I didn't want to duplicate stuff, that's why. Inheriting is a great idea.
+
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
