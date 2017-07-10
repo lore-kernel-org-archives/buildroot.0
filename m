@@ -1,89 +1,54 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 10 Jul 2017 16:32:47 -0500
-Subject: [Buildroot] libasan.so missing
-In-Reply-To: <CANQCQpa-LaGyG9B-XfQm36o9rJwWL82Bna5qxqjRJeKXF6H7FQ@mail.gmail.com>
-References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
- <877ezp780a.fsf@dell.be.48ers.dk>
- <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com>
- <87podh5gi7.fsf@dell.be.48ers.dk>
- <ed1251ca-9f4a-6f7c-3b51-7cc399299574@grandegger.com>
- <87shic2xz3.fsf@dell.be.48ers.dk>
- <CANQCQpa-LaGyG9B-XfQm36o9rJwWL82Bna5qxqjRJeKXF6H7FQ@mail.gmail.com>
-Message-ID: <CANQCQpZh0Pj0Qu+eKtktzcVWnfgnuZQ0gfVHbFuuikFho2XE6w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Jul 2017 23:35:16 +0200
+Subject: [Buildroot] [PATCH 2/3] fs/squashfs: align size to 1MiB
+In-Reply-To: <20170710232439.7dba43f1@windsurf.lan>
+References: <cover.1499703968.git.yann.morin.1998@free.fr>
+ <03816ee56333f1eddb6ca8a048aea947fc027963.1499703968.git.yann.morin.1998@free.fr>
+ <20170710232439.7dba43f1@windsurf.lan>
+Message-ID: <20170710213516.GB22898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thomas, All,
 
-On Fri, Jul 7, 2017 at 9:08 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> All,
->
-> On Tue, Jul 4, 2017 at 7:22 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
->>
->> Hi,
->>
->>  >> Correct. I've sent a patch fixing this for the internal and external
->>  >> toolchain. Could you give it a try?
->>  >>
->>  >> https://patchwork.ozlabs.org/patch/783661/
->>  >> https://patchwork.ozlabs.org/patch/783660/
->>
->>  > $ find . -name 'libasan*'
->>  > ./target/lib/libasan.so
->>  > ./target/lib/libasan_preinit.o
->>  > ./target/lib/libasan.so.2
->>  > ./target/lib/libasan.so.2.0.0
->>
->>  > It works. The libsanitizer adds some extra space and runtime overhead,
->>  > I assume. Therefore, on Ubuntu, the libraries are not installed by
->>  > default. They can be added by installing the "libasan0" package. For
->>  > buildroot, would it make sense to make this option configurable as
->>  > well?
->>
->>  > (libasan.*) Extra toolchain libraries to be copied to target
->>
->> Yes, I'll respin the series to add an option to install
->> asan/lsan/tsan/usan.
->>
->
-> I'm building the following Buildroot Custom toolchain config and
-> noticing a libsanitizer failure.  I haven't looked to far into why
-> yet.  This was working back on master ~06/13
->
-> ../../../../libsanitizer/asan/asan_linux.cc: In function ?bool
-> __asan::AsanInterceptsSignal(int)?:
-> ../../../../libsanitizer/asan/asan_linux.cc:222:20: error: ?SIGSEGV?
-> was not declared in this scope
->    return signum == SIGSEGV && common_flags()->handle_segv;
->                     ^
-> make[6]: *** [asan_linux.lo] Error 1
-> make[5]: *** [all-recursive] Error 1
-> make[4]: *** [all] Error 2
-> make[3]: *** [all-target-libsanitizer] Error 2
-> make[2]: *** [all] Error 2
-> make[1]: *** [/accts/mlweber1/target/build/host-gcc-final-5.4.0/.stamp_built]
-> Error 2
-> make: *** [_all] Error 2
->
-> Config to reproduce:
-> BR2_powerpc=y
-> BR2_powerpc_e500mc=y
-> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> BR2_KERNEL_HEADERS_VERSION=y
-> BR2_DEFAULT_KERNEL_VERSION="3.12.37"
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-> BR2_GCC_VERSION_5_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_GCC_ENABLE_LTO=y
->
+On 2017-07-10 23:24 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 10 Jul 2017 18:26:19 +0200, Yann E. MORIN wrote:
+> > The Linux kernel will refuse to mount a squashfs image/partition that is
+> > not padded to a 1MiB boundary.
+> 
+> Besides experimental evidence, do you have a pointer to a place in the
+> Linux kernel documentation / code that confirms this statement ?
+> 
+> If you don't, that's fine, but if you have such a reference, it would
+> be useful to add it to the commit log.
 
-Looks like I need to post a GCC5 bugfix.  Pending more testing :-)
+Sorry, I have no such reference. As you say, it is experimental
+evidence... Which turns out to be wrong.
 
-https://www.mail-archive.com/gcc-patches at gcc.gnu.org/msg159613.html
+Now I tried to round it to 128KiB (the block size), but it was no good.
 
-Matt
+Then I tried to round it to 256KiB (just for fun). And it works.
+
+Damn... :-/
+
+Regards,
+Yann E. MORIN.
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
