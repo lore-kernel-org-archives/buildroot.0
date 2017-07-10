@@ -1,36 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Jul 2017 13:41:13 +0200
-Subject: [Buildroot] [PATCH] board: add support for nanopi-m1-plus
-In-Reply-To: <CAA4kGkp6Royw9_xPoRK2Fhg8Qk5MovKUm-XNGbaFegeA31UNDA@mail.gmail.com>
- (Chakra D.'s message of "Mon, 10 Jul 2017 16:58:01 +0530")
-References: <1499364298-8433-1-git-send-email-chakra@openedev.com>
- <20170706212626.0abcaf57@windsurf.lan>
- <CAA4kGkp6Royw9_xPoRK2Fhg8Qk5MovKUm-XNGbaFegeA31UNDA@mail.gmail.com>
-Message-ID: <87tw2ktt7q.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 10 Jul 2017 15:03:07 +0300
+Subject: [Buildroot] [PATCH] i2c-tools: use upstream tarball
+In-Reply-To: <20170710113801.31752-1-peter@korsgaard.com>
+References: <20170710113801.31752-1-peter@korsgaard.com>
+Message-ID: <20170710120307.owivm5mq6farxorr@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chakra" == Chakra D <2chakrass@gmail.com> writes:
+Hi Peter,
 
-Hi,
+On Mon, Jul 10, 2017 at 01:38:01PM +0200, Peter Korsgaard wrote:
+> Tarballs of the releases are now again available:
+> 
+> https://www.spinics.net/lists/linux-i2c/msg30349.html
+> 
+> So change back to that instead of getting the source code from git.
+> 
+> While we're at it, add a hash for the license file.
 
- >> Also, please put this patch in:
- >> 
- >> board/friendlyarm/nanopi-m1-plus/linux/patches/
- >> 
- >> and name it just 0001-<something>.patch (i.e without the linux- prefix).
- >> 
+You can also update the Config.in homepage link:
 
- > Do we need additional "patches" directory here ? Is this a convention
- > we need to follow for adding patches ?
+https://i2c.wiki.kernel.org/index.php/I2C_Tools
+https://www.spinics.net/lists/linux-i2c/msg30371.html
 
-This is for the generic (E.G. not specific to the Linux package)
-BR2_GLOBAL_PATCH_DIR option. With this, it will look in
-$BR2_GLOBAL_PATCH_DIR/linux for linux patches, and yes - Our convention
-is to use board/<vendor>/<board>/patches for the toplevel BR2_GLOBAL_PATCH_DIR.
+baruch
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
