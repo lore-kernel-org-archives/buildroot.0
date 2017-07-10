@@ -1,43 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Jul 2017 23:27:35 +0200
-Subject: [Buildroot] [PATCH 6/7] Makefile: add check that
- $(HOST_DIR)/usr is not a directory
-In-Reply-To: <3a401955-07d9-054c-61a4-c91871ae1257@mind.be>
-References: <20170709232123.30120-1-arnout@mind.be>
- <20170709232123.30120-7-arnout@mind.be>
- <20170710180240.43215e1a@windsurf.lan>
- <20170710161238.GA3014@scaer>
- <3a401955-07d9-054c-61a4-c91871ae1257@mind.be>
-Message-ID: <20170710232735.0844286e@windsurf.lan>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 10 Jul 2017 16:32:47 -0500
+Subject: [Buildroot] libasan.so missing
+In-Reply-To: <CANQCQpa-LaGyG9B-XfQm36o9rJwWL82Bna5qxqjRJeKXF6H7FQ@mail.gmail.com>
+References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
+ <877ezp780a.fsf@dell.be.48ers.dk>
+ <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com>
+ <87podh5gi7.fsf@dell.be.48ers.dk>
+ <ed1251ca-9f4a-6f7c-3b51-7cc399299574@grandegger.com>
+ <87shic2xz3.fsf@dell.be.48ers.dk>
+ <CANQCQpa-LaGyG9B-XfQm36o9rJwWL82Bna5qxqjRJeKXF6H7FQ@mail.gmail.com>
+Message-ID: <CANQCQpZh0Pj0Qu+eKtktzcVWnfgnuZQ0gfVHbFuuikFho2XE6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Mon, 10 Jul 2017 21:51:50 +0200, Arnout Vandecappelle wrote:
+On Fri, Jul 7, 2017 at 9:08 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> All,
+>
+> On Tue, Jul 4, 2017 at 7:22 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+>>
+>> Hi,
+>>
+>>  >> Correct. I've sent a patch fixing this for the internal and external
+>>  >> toolchain. Could you give it a try?
+>>  >>
+>>  >> https://patchwork.ozlabs.org/patch/783661/
+>>  >> https://patchwork.ozlabs.org/patch/783660/
+>>
+>>  > $ find . -name 'libasan*'
+>>  > ./target/lib/libasan.so
+>>  > ./target/lib/libasan_preinit.o
+>>  > ./target/lib/libasan.so.2
+>>  > ./target/lib/libasan.so.2.0.0
+>>
+>>  > It works. The libsanitizer adds some extra space and runtime overhead,
+>>  > I assume. Therefore, on Ubuntu, the libraries are not installed by
+>>  > default. They can be added by installing the "libasan0" package. For
+>>  > buildroot, would it make sense to make this option configurable as
+>>  > well?
+>>
+>>  > (libasan.*) Extra toolchain libraries to be copied to target
+>>
+>> Yes, I'll respin the series to add an option to install
+>> asan/lsan/tsan/usan.
+>>
+>
+> I'm building the following Buildroot Custom toolchain config and
+> noticing a libsanitizer failure.  I haven't looked to far into why
+> yet.  This was working back on master ~06/13
+>
+> ../../../../libsanitizer/asan/asan_linux.cc: In function ?bool
+> __asan::AsanInterceptsSignal(int)?:
+> ../../../../libsanitizer/asan/asan_linux.cc:222:20: error: ?SIGSEGV?
+> was not declared in this scope
+>    return signum == SIGSEGV && common_flags()->handle_segv;
+>                     ^
+> make[6]: *** [asan_linux.lo] Error 1
+> make[5]: *** [all-recursive] Error 1
+> make[4]: *** [all] Error 2
+> make[3]: *** [all-target-libsanitizer] Error 2
+> make[2]: *** [all] Error 2
+> make[1]: *** [/accts/mlweber1/target/build/host-gcc-final-5.4.0/.stamp_built]
+> Error 2
+> make: *** [_all] Error 2
+>
+> Config to reproduce:
+> BR2_powerpc=y
+> BR2_powerpc_e500mc=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_KERNEL_HEADERS_VERSION=y
+> BR2_DEFAULT_KERNEL_VERSION="3.12.37"
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+> BR2_GCC_VERSION_5_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_GCC_ENABLE_LTO=y
+>
 
->  Actually, I realize now: when people do a git pull, we expect them to do "make
-> clean all" afterwards. And "make clean" will delete HOST_DIR - so no
-> HOST_DIR/usr will exist anymore.
-> 
->  So the original report from Thomas only happened because Thomas didn't do a
-> "make clean" like he should have...
+Looks like I need to post a GCC5 bugfix.  Pending more testing :-)
 
-Not correct, each time my output directory and host directories were
-empty. The only thing that was different is that the host directory is
-not set to the default of $(BASE_DIR)/host, but to /opt/something, and
-this /opt/something is created (empty) before I start the build.
+https://www.mail-archive.com/gcc-patches at gcc.gnu.org/msg159613.html
 
-So my build was perfectly clean, it is just that I created the host
-directory prior to starting the build, which IMO isn't crazy,
-especially when such host directory was customized in the Buildroot
-configuration.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matt
