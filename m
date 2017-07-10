@@ -1,50 +1,78 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Mon, 10 Jul 2017 15:29:13 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-07-08
-In-Reply-To: <87lgnwtoth.fsf@dell.be.48ers.dk>
-References: <20170709063052.6F78221DB3@mail.free-electrons.com>
- <480602992.4326585.1499689836292.JavaMail.zimbra@datacom.ind.br>
- <20170710144340.4fab6bd4@windsurf.lan> <87lgnwtoth.fsf@dell.be.48ers.dk>
-Message-ID: <40907299-2458-29b7-adf6-4866a39117d1@grandegger.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 10 Jul 2017 16:36:50 +0300
+Subject: [Buildroot] [PATCH] ARC: Add support for ARC HS38 with Hardware
+	Floating Point
+Message-ID: <20170710133650.8692-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+---
+ arch/Config.in.arc       | 10 +++++++---
+ package/uclibc/Config.in |  1 +
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-Am 10.07.2017 um 15:16 schrieb Peter Korsgaard:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> Hi,
-> 
->   >> > Build failures related to your packages:
->   >> >
->   >> >    mips64el |           host-util-linux-2.30 |
->   >> >    http://autobuild.buildroot.net/results/a0096eb6e65b83b2b0c7d38e5f978c3fe636cb30
->   >>
->   >> Segfault in /bin/bash. Does not seem to be related to the package.
-> 
->   > This is happening on Peter's autobuilder instance. It failed twice:
->   > http://autobuild.buildroot.net/?reason=host-util-linux-2.30. One time
->   > due to an Illegal instruction, second time due to a Segmentation fault.
-> 
->   > Peter ? :-)
-> 
-> Sorry, no idea. gcc68 is a new Ryzen based machine in the compile farm
-> that I recently started an autobuilder instance on:
-> 
-> https://cfarm.tetaneutral.net/machines/list/
-> 
-> I'll try to reproduce manually and have a closer look tonight.
-
-In April I bought a Ryzen 1700 PC showing similar problems with 
-buildroot. Random crashes of bash, sh or internal compiler errors. If 
-you restart the build it may finish properly. I think it's a known 
-problem with that new AMD CPUs. Gentoo people are reporting similar 
-issues. A recent BIOS version may fix it but my patience was to an 
-end... in the meantime I have replaced it with an Intel i7 PC.
-
-Wolfgang.
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 7d341f3136..d0e2286557 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -14,12 +14,15 @@ config BR2_arc770d
+ config BR2_archs38
+ 	bool "ARC HS38"
+ 
++config BR2_archs38_hf
++	bool "ARC HS38 with hard floating-point"
++
+ endchoice
+ 
+ # Choice of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+-	default y if BR2_arc770d || BR2_archs38
++	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_hf
+ 
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+@@ -37,6 +40,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "arc700" if BR2_arc750d
+ 	default "arc700" if BR2_arc770d
+ 	default "archs"	 if BR2_archs38
++	default "hs38_linux"	 if BR2_archs38_hf
+ 
+ choice
+ 	prompt "MMU Page Size"
+@@ -56,7 +60,7 @@ choice
+ 
+ config BR2_ARC_PAGE_SIZE_4K
+ 	bool "4KB"
+-	depends on BR2_arc770d || BR2_archs38
++	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_hf
+ 
+ config BR2_ARC_PAGE_SIZE_8K
+ 	bool "8KB"
+@@ -66,7 +70,7 @@ config BR2_ARC_PAGE_SIZE_8K
+ 
+ config BR2_ARC_PAGE_SIZE_16K
+ 	bool "16KB"
+-	depends on BR2_arc770d || BR2_archs38
++	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_hf
+ 
+ endchoice
+ 
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index fdf007e601..646ae3e0db 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -134,6 +134,7 @@ config BR2_UCLIBC_ARC_TYPE
+ 	default "ARC_CPU_700"	if BR2_arc750d
+ 	default "ARC_CPU_700"	if BR2_arc770d
+ 	default "ARC_CPU_HS"	if BR2_archs38
++	default "ARC_CPU_HS"	if BR2_archs38_hf
+ 
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+-- 
+2.11.0
