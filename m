@@ -1,81 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jul 2017 22:19:16 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <f9114b63-5118-7228-cae8-bfa2194a450d@mind.be>
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
- <20170710180949.764a0fdb@windsurf.lan>
- <20170710162056.GB3014@scaer>
- <a891c4f7-746f-0a6f-94dc-4981ea5d9c06@mind.be>
- <20170710201005.GA2953@scaer>
- <f9114b63-5118-7228-cae8-bfa2194a450d@mind.be>
-Message-ID: <20170710201916.GB2953@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Jul 2017 22:40:06 +0200
+Subject: [Buildroot] [PATCH 1/2] support/testing: unbreak run-tests -l
+Message-ID: <20170710204007.8402-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+In commit b78b50465c20c1733753a8dd47945cf80c9155f8, the initialisation
+of BRTest.builddir was moved to the __init__ function. However, it is
+set based on BRTest.outputdir and that is only set when the -o argument
+is given to run-tests. When called as "run-tests -l", there is no -o
+argument so BRTest.outputdir remains unset.
 
-On 2017-07-10 22:12 +0200, Arnout Vandecappelle spake thusly:
-> On 10-07-17 22:10, Yann E. MORIN wrote:
-> > On 2017-07-10 21:56 +0200, Arnout Vandecappelle spake thusly:
-> >> On 10-07-17 18:20, Yann E. MORIN wrote:
-> >>> On 2017-07-10 18:09 +0200, Thomas Petazzoni spake thusly:
-> >>>> On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
-> >>>>> +comment "kvm-unit-tests needs a toolchain w/ gcc >= 4.5"
-> >>>>> +	depends on BR2_i386
-> >>>>> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-> >>>> What about the x86_64 dependency on a host compiler >= 4.5 ?
-> >>> In the manual, it is said that one should not add a comment about a
-> >>> dependency on the host toolchain...
-> >>
-> >>  I *think* Thomas didn't mean to say "host compiler". I think he meant:
-> >>
-> >> Shouldn't this be:
-> >> 	depends on BR2_i386 || BR2_x86_64
-> >> 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-> > 
-> > No, because for x86_64 we are using the host compiler. See the .mk file:
-> > 
-> >     # For all architectures but x86-64, we use the target
-> >     # compiler. However, for x86-64, we use the host compiler, as
-> >     # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
-> >     # x86-64 cannot do.
-> >     ifneq ($(BR2_x86_64),y)
-> >     KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
-> >     endif
-> > 
-> > So for x86_64 there is no dependency to add on the target compiler at
-> > all.
-> 
->  D'oh, I missed that subtlety, thanks for the explanation.
+To fix, keep BRTest.builddir at None when BRTest.outputdir is None.
 
-Yep, no problem. I got bitten by it as well, that's why I "fixed" it
-(and I should have improved the commit log a bit more, it seems ;-) ).
+While we're at it, drop the direct access to the class member. If a
+subclass wishes to set outputdir to something else before calling
+BRTest.__init__, they are free to do so.
 
-Thanks for the reviews! :-)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/testing/infra/basetest.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 2a5c9ec939..1a082bb441 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -39,7 +39,7 @@ class BRTest(unittest.TestCase):
+     def __init__(self, names):
+         super(BRTest, self).__init__(names)
+         self.testname = self.__class__.__name__
+-        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
++        self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
+         self.emulator = None
+ 
+     def show_msg(self, msg):
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.2
