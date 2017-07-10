@@ -1,69 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jul 2017 22:48:05 +0200
-Subject: [Buildroot] [PATCH 1/2] support/testing: unbreak run-tests -l
-In-Reply-To: <20170710204007.8402-1-arnout@mind.be>
-References: <20170710204007.8402-1-arnout@mind.be>
-Message-ID: <20170710204805.GA22898@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 10 Jul 2017 23:54:15 +0300
+Subject: [Buildroot] [PATCH] efivar: fix build with gcc 7
+Message-ID: <78474fc422b1274f5f4850920cb57f07326d2849.1499720055.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Add upstream patch fixing a warning that breaks the build because of -Werror.
 
-On 2017-07-10 22:40 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> In commit b78b50465c20c1733753a8dd47945cf80c9155f8, the initialisation
-> of BRTest.builddir was moved to the __init__ function. However, it is
-> set based on BRTest.outputdir and that is only set when the -o argument
-> is given to run-tests. When called as "run-tests -l", there is no -o
-> argument so BRTest.outputdir remains unset.
-> 
-> To fix, keep BRTest.builddir at None when BRTest.outputdir is None.
-> 
-> While we're at it, drop the direct access to the class member. If a
-> subclass wishes to set outputdir to something else before calling
-> BRTest.__init__, they are free to do so.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
+http://autobuild.buildroot.net/results/33a/33adc3ef139d6814aef4c92ae0bcc4c810ab0b86/
+http://autobuild.buildroot.net/results/e7d/e7d80e823e13edc6698148244553bd90367bcd03/
+http://autobuild.buildroot.net/results/3b6/3b61246f8b04a332d1c61732f0eb6e50ea8ca366/
 
-Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...some-extra-const-that-gcc-complains-about.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
 
-Thanks for the quick fixing! :-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/testing/infra/basetest.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-> index 2a5c9ec939..1a082bb441 100644
-> --- a/support/testing/infra/basetest.py
-> +++ b/support/testing/infra/basetest.py
-> @@ -39,7 +39,7 @@ class BRTest(unittest.TestCase):
->      def __init__(self, names):
->          super(BRTest, self).__init__(names)
->          self.testname = self.__class__.__name__
-> -        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
-> +        self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
->          self.emulator = None
->  
->      def show_msg(self, msg):
-> -- 
-> 2.13.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch b/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
+new file mode 100644
+index 000000000000..6b9f77eb8b75
+--- /dev/null
++++ b/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
+@@ -0,0 +1,47 @@
++From 1c7c0f71c9d22efda4156881eb187b8c69d1cca7 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 6 Feb 2017 14:28:19 -0500
++Subject: [PATCH] Remove some extra "const" that gcc complains about.
++
++One of these days I'll get these right.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream commit 1c7c0f71c9d22e.
++
++ src/include/efivar/efiboot-loadopt.h | 4 ++--
++ src/loadopt.c                        | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/include/efivar/efiboot-loadopt.h b/src/include/efivar/efiboot-loadopt.h
++index 07db5c4c53e3..efc29c69d47e 100644
++--- a/src/include/efivar/efiboot-loadopt.h
+++++ b/src/include/efivar/efiboot-loadopt.h
++@@ -32,8 +32,8 @@ extern ssize_t efi_loadopt_create(uint8_t *buf, ssize_t size,
++ 
++ extern efidp efi_loadopt_path(efi_load_option *opt, ssize_t limit)
++ 	__attribute__((__nonnull__ (1)));
++-extern const unsigned char const * efi_loadopt_desc(efi_load_option *opt,
++-						    ssize_t limit)
+++extern const unsigned char * efi_loadopt_desc(efi_load_option *opt,
+++					      ssize_t limit)
++ 	__attribute__((__visibility__ ("default")))
++ 	__attribute__((__nonnull__ (1)));
++ extern uint32_t efi_loadopt_attrs(efi_load_option *opt)
++diff --git a/src/loadopt.c b/src/loadopt.c
++index a63ca792d2dc..ce889867fd29 100644
++--- a/src/loadopt.c
+++++ b/src/loadopt.c
++@@ -357,7 +357,7 @@ teardown(void)
++ 
++ __attribute__((__nonnull__ (1)))
++ __attribute__((__visibility__ ("default")))
++-const unsigned char const *
+++const unsigned char *
++ efi_loadopt_desc(efi_load_option *opt, ssize_t limit)
++ {
++ 	if (last_desc) {
++-- 
++2.13.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.2
