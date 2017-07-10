@@ -1,44 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 10 Jul 2017 20:51:22 +0200
-Subject: [Buildroot] [PATCH v1] pcre2: enable no MMU build
-Message-ID: <20170710185122.16031-1-ps.report@gmx.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 10 Jul 2017 20:54:52 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-07-08
+In-Reply-To: <87lgnwtoth.fsf@dell.be.48ers.dk>
+References: <20170709063052.6F78221DB3@mail.free-electrons.com>
+ <480602992.4326585.1499689836292.JavaMail.zimbra@datacom.ind.br>
+ <20170710144340.4fab6bd4@windsurf.lan>
+ <87lgnwtoth.fsf@dell.be.48ers.dk>
+Message-ID: <20170710185452.GA22803@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use '--disable-pcre2grep-callout' for !BR2_USE_MMU, disables
-fork usage.
+Hi Peter,
+Peter Korsgaard wrote,
 
-Fixes [1]:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+> Hi,
+> 
+>  >> > Build failures related to your packages:
+>  >> > 
+>  >> >    mips64el |           host-util-linux-2.30 |
+>  >> >    http://autobuild.buildroot.net/results/a0096eb6e65b83b2b0c7d38e5f978c3fe636cb30  
+>  >> 
+>  >> Segfault in /bin/bash. Does not seem to be related to the package.
+> 
+>  > This is happening on Peter's autobuilder instance. It failed twice:
+>  > http://autobuild.buildroot.net/?reason=host-util-linux-2.30. One time
+>  > due to an Illegal instruction, second time due to a Segmentation fault.
+> 
+>  > Peter ? :-)
+> 
+> Sorry, no idea. gcc68 is a new Ryzen based machine in the compile farm
+> that I recently started an autobuilder instance on:
+> 
+> https://cfarm.tetaneutral.net/machines/list/
+> 
+> I'll try to reproduce manually and have a closer look tonight.
 
-    CCLD     pcre2grep
-  src/pcre2grep-pcre2grep.o: In function `pcre2grep_callout':
-  pcre2grep.c:(.text+0x402): undefined reference to `fork'
-  collect2: error: ld returned 1 exit status
+I have seen a lot of illegal instruction errors from the host gcc
+on this machine. (also on gcc67).
 
-[1] http://autobuild.buildroot.net/results/2c2/2c2665844748a3bdb010315200eea70aa3504b95
+Dunno if the Debian is too old or what is the reason.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/pcre2/pcre2.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+So the problems are not specific to buildroot.
 
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 5b7a163255..b7da1ed991 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -16,5 +16,10 @@ PCRE2_CONF_OPTS += --enable-pcre2-8
- PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
- PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_32),--enable-pcre2-32,--disable-pcre2-32)
- 
-+# disable fork usage if not available
-+ifeq ($(BR2_USE_MMU),)
-+PCRE2_CONF_OPTS += --disable-pcre2grep-callout
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.11.0
+best regards
+ Waldemar
