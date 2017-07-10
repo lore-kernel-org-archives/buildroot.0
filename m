@@ -1,56 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Jul 2017 13:35:55 +0200
-Subject: [Buildroot] [PATCH] board: add support for nanopi-m1-plus
-In-Reply-To: <CAA4kGkp6Royw9_xPoRK2Fhg8Qk5MovKUm-XNGbaFegeA31UNDA@mail.gmail.com>
-References: <1499364298-8433-1-git-send-email-chakra@openedev.com>
- <20170706212626.0abcaf57@windsurf.lan>
- <CAA4kGkp6Royw9_xPoRK2Fhg8Qk5MovKUm-XNGbaFegeA31UNDA@mail.gmail.com>
-Message-ID: <20170710133555.3819183c@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 Jul 2017 13:38:01 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: use upstream tarball
+Message-ID: <20170710113801.31752-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Tarballs of the releases are now again available:
 
-On Mon, 10 Jul 2017 16:58:01 +0530, Chakra D wrote:
+https://www.spinics.net/lists/linux-i2c/msg30349.html
 
-> Will add the info about mainline
-> 
-> > Also, please put this patch in:
-> >
-> > board/friendlyarm/nanopi-m1-plus/linux/patches/
+So change back to that instead of getting the source code from git.
 
-I was wrong, it should be the opposite:
+While we're at it, add a hash for the license file.
 
-board/friendlyarm/nanopi-m1-plus/patches/linux/
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/i2c-tools/i2c-tools.hash | 5 ++++-
+ package/i2c-tools/i2c-tools.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-> > and name it just 0001-<something>.patch (i.e without the linux- prefix).
-> >  
-> 
-> Do we need additional "patches" directory here ? Is this a convention
-> we need to follow for adding patches ?
-
-See above. With BR2_GLOBAL_PATCH_DIR, you need one sub-directory per
-package. So, you can do:
-
-BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-m1-plus/"
-
-with the Linux patch in board/friendlyarm/nanopi-m1-plus/linux
-
-or you can do:
-
-BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-m1-plus/patches/"
-
-with the Linux patch in board/friendlyarm/nanopi-m1-plus/patches/linux
-
-The latter being the preferred way. See board/beaglebone/ for example.
-
-Best regards,
-
-Thomas
+diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
+index e45e5324bf..464219dea8 100644
+--- a/package/i2c-tools/i2c-tools.hash
++++ b/package/i2c-tools/i2c-tools.hash
+@@ -1,2 +1,5 @@
+ # Locally computed
+-sha256 972b8da73b5aada91e8f21573cf5dbf6dc2d5d64864210e80b2b1aa710a66d02  i2c-tools-v3.1.2.tar.gz
++sha256 6d6079153cd49a62d4addacef4c092db1a46ba60b2807070a3fbe050262aef87  i2c-tools-3.1.2.tar.xz
++
++# License file
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 978c5c0430..3bbaf38ff3 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-I2C_TOOLS_VERSION = v3.1.2
+-I2C_TOOLS_SITE = git://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git
++I2C_TOOLS_VERSION = 3.1.2
++I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
++I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+ I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
