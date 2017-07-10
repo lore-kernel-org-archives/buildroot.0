@@ -1,65 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jul 2017 18:20:56 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <20170710180949.764a0fdb@windsurf.lan>
+Date: Mon, 10 Jul 2017 18:22:49 +0200
+Subject: [Buildroot] [PATCH 1/4 v3] arch/arm: fix -mcpu default values
+ for AArch64
+In-Reply-To: <b8d56b1cd3b5450c82d885f0215dc042@mirion.com>
 References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
- <20170710180949.764a0fdb@windsurf.lan>
-Message-ID: <20170710162056.GB3014@scaer>
+ <cbd726c5aa26ea8278c518508ba76efc5b796f7a.1499592591.git.yann.morin.1998@free.fr>
+ <20170710180458.7ff45d1c@windsurf.lan>
+ <b8d56b1cd3b5450c82d885f0215dc042@mirion.com>
+Message-ID: <20170710162249.GC3014@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Pavel,
 
-On 2017-07-10 18:09 +0200, Thomas Petazzoni spake thusly:
-> On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
+On 2017-07-10 16:18 +0000, Tomov, Pavel spake thusly:
+> Hi everybody,
 > 
-> > diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-> > index 7eab0c25d6..3db10fc820 100644
-> > --- a/package/kvm-unit-tests/Config.in
-> > +++ b/package/kvm-unit-tests/Config.in
-[--SNIP--]
-> > @@ -28,3 +32,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
-> >  	  features are submitted with accompanying unit tests.
-> >  
-> >  	  http://www.linux-kvm.org/page/KVM-unit-tests
-> > +
-> > +comment "kvm-unit-tests needs a toolchain w/ gcc >= 4.5"
-> > +	depends on BR2_i386
-> > +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-> 
-> What about the x86_64 dependency on a host compiler >= 4.5 ?
+> Please remove my e-mail from your exchange list.
 
-In the manual, it is said that one should not add a comment about a
-dependency on the host toolchain...
+You may remove yourself from the list, by following the link that is
+repeated at the bottom of every message that comes from the list:
 
-> But those Config.in comments are not really related to the introduction
-> of the _ARCH_SUPPORTS variable, so perhaps they should be in a separate
-> patch.
-
-Well, the comment did not exist previously indeed, but the dependency on
-gcc did exist.
-
-> If you don't want to respin but agree with what I said, just let
-> me know, I can fixup when applying.
-
-If you want to add this _one_ comment in a separate patch, I'm fine with
-you splitting it.
+    http://lists.busybox.net/mailman/listinfo/buildroot
 
 Regards,
 Yann E. MORIN.
 
-> Thanks!
+> I just posted a ticket (ID 10011) for resolving the failure when Buildroot calls wget.
+> 
+> Thank you for your understanding,
+> 
+> Pavel Tomov
+> (Mirion technologies)
+> 
+> -----Original Message-----
+> From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> Sent: Monday, July 10, 2017 9:05 AM
+> To: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 1/4 v3] arch/arm: fix -mcpu default values for AArch64
+> 
+> Hello,
+> 
+> On Sun,  9 Jul 2017 11:29:58 +0200, Yann E. MORIN wrote:
+> > We have to specify the -mcpu value, even in 64-bit mode.
+> >
+> > For AArch64, +fp and +simd are the default, so they are totally useless.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Baruch Siach <baruch@tkos.co.il>
+> >
+> > ---
+> > Changes v1 -> v2:
+> >   - squash the two changes into one patch  (Thomas)
+> >   - remove useless parentheses  (Baruch)
+> >   - remove superfluous indentation
+> 
+> Applied to master, thanks.
 > 
 > Thomas
-> -- 
+> --
 > Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> Embedded Linux, Kernel and Android engineering http://free-electrons.com _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> ________________________________
+> 
+> PROPRIETARY INFORMATION NOTICE: This e-mail message and all attachments transmitted with it are intended solely for use by the addressee, may contain proprietary information of Mirion Technologies and/or its affiliates, and is subject to all applicable export controls. If the reader of this message is not the intended recipient, you are hereby notified that any review, dissemination, distribution, copying or other use of this message is strictly prohibited. If you have received this message in error, please notify the sender immediately by replying to the message, delete the original message and all attachments from your computer, and destroy any copies you may have made. Thank you.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
