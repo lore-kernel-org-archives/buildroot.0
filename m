@@ -1,50 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Jul 2017 13:56:02 +0200
-Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
-In-Reply-To: <20170106223748.2203-1-cedric.marie@openmailbox.org>
-References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
-Message-ID: <20170711135602.7cedcdf1@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Jul 2017 14:19:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-07-08
+In-Reply-To: <20170710234901.221eb3a2@windsurf.lan> (Thomas Petazzoni's
+ message of "Mon, 10 Jul 2017 23:49:01 +0200")
+References: <20170709063052.6F78221DB3@mail.free-electrons.com>
+ <480602992.4326585.1499689836292.JavaMail.zimbra@datacom.ind.br>
+ <20170710144340.4fab6bd4@windsurf.lan>
+ <87lgnwtoth.fsf@dell.be.48ers.dk>
+ <20170710185452.GA22803@waldemar-brodkorb.de>
+ <20170710234901.221eb3a2@windsurf.lan>
+Message-ID: <87d197tbct.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Reviving a fairly old thread.
+Hi,
 
-On Fri,  6 Jan 2017 23:37:47 +0100, C?dric Marie wrote:
+ > OK, so perhaps it is better to stop the autobuilder instance from this
+ > machine, and other, more stable machines.
 
-> Tested on following packages: cannelloni, graphite2, libcuefile,
-> libubox, rabbitmq-c, ubus.
+I guess so :/
 
-I ended up needing this patch to experiment for a project, so I took it
-and tested. It generally works fine, but I found one Buildroot CMake
-package that doesn't behave properly when the Ninja backend is used:
-the "bullet" package.
+I've stopped the instance on gcc68.
 
-With the "make" backend, it builds and installs fine, and everything
-you expect is install to staging and target.
-
-With the "ninja" backend, it builds and installs fine, but in fact the
-only thing it installs to staging and target are two .cmake files. None
-of the shared libraries or headers are installed.
-
-The build log with the "make" backend clearly shows that lots of stuff
-are being installed: http://code.bulix.org/sx2yb8-160329.
-
-The build log with the "ninja" backend shows just two .cmake files
-being installed to staging and target:
-http://code.bulix.org/u145dq-160328.
-
-Do you know why a CMake package could be working with the make backend,
-but not with the ninja backend ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
