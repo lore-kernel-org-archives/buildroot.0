@@ -1,44 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Jul 2017 20:45:28 +0000
-Subject: [Buildroot] [Bug 10036] New: Buildroot builds Raspbian Jessie
- headless image presenting incorrect prompt
-Message-ID: <bug-10036-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 11 Jul 2017 23:47:57 +0300
+Subject: [Buildroot] [PATCH 2/3] efivar: bump to version 31
+In-Reply-To: <20170711182554.7677e18e@windsurf.lan>
+References: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
+ <20170711155957.10815-2-thomas.petazzoni@free-electrons.com>
+ <20170711161054.qhsr2glldmil6uzt@tarshish>
+ <20170711182554.7677e18e@windsurf.lan>
+Message-ID: <20170711204757.rw24pc2tgztcuco3@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10036
+Hi Thomas,
 
-            Bug ID: 10036
-           Summary: Buildroot builds Raspbian Jessie headless image
-                    presenting incorrect prompt
-           Product: buildroot
-           Version: 2017.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ptomov at mirion.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Tue, Jul 11, 2017 at 06:25:54PM +0200, Thomas Petazzoni wrote:
+> On Tue, 11 Jul 2017 19:10:54 +0300, Baruch Siach wrote:
+> > On Tue, Jul 11, 2017 at 05:59:56PM +0200, Thomas Petazzoni wrote:
+> > > This allows to drop two patches that have been upstreamed:
+> > > 
+> > >  0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch is
+> > >  upstream as of commit 18b9b3dd7ebf23a16de07b3fb6ae622be488d712
+> > > 
+> > >  0003-Remove-some-extra-const-that-gcc-complains-about.patch is
+> > >  upstream as of commit 1c7c0f71c9d22efda4156881eb187b8c69d1cca7.  
+> > 
+> > Version 31 is marked as pre-release[1], like 29 and 25 before. It seems like 
+> > only even version numbers are stable releases.
+> 
+> OK, good point, I didn't notice that. So it was really a good idea to
+> split PATCH 1/3 that adds just the gcc 7.x fix from the rest of the
+> series.
+> 
+> I'll apply PATCH 1/3 and reject PATCH 2/3 and 3/3. Is that OK for you?
 
-Hi,
+Looks good to me.
 
-After building a new headless raspbian Jessie image from the original Buildroot
-clone, I flashed it into a CD card and started my Rasberry Pi 3 board with this
-card. But the prompt in the login stage was "buidroot login:" and not as I
-expected "rpi3 login:". Please advise me how to define the correct prompt name
-before building my image.
-
-Thanks,
-
-   Pavel
+baruch
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
