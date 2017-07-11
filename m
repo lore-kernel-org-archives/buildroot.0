@@ -1,33 +1,32 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 11 Jul 2017 10:44:46 -0300
-Subject: [Buildroot] [PATCH v3] imx6q-sabresd: Add a qt5 defconfig
-	variant
-In-Reply-To: <1498078187-32377-1-git-send-email-festevam@gmail.com>
-References: <1498078187-32377-1-git-send-email-festevam@gmail.com>
-Message-ID: <CAOMZO5DTwfOrBy8xDf0Yxg-Rk34-v-vAGaqkoyGUscZ0hiM-5A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Jul 2017 15:55:49 +0200
+Subject: [Buildroot] XWindow Browser, anyone ?
+In-Reply-To: <1497442264883-167534.post@n4.nabble.com>
+References: <CAOrUntZhzjati0cHKQp0s=ov-eoLaeGDjz987qjSZ=1ZMFYA-A@mail.gmail.com>
+ <20111219145326.226d43f1@skate>
+ <1497442264883-167534.post@n4.nabble.com>
+Message-ID: <20170711155549.74e11aa0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wed, Jun 21, 2017 at 5:49 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> Introduce imx6q-sabresd_qt5_defconfig that supports the opensource
-> Etnaviv graphical stack.
->
-> This defconfig provides a way to quickly test some graphical applications,
-> such as kmscube, qt5, glmark2.
->
-> Currently kernel mainline exhibits issues when running cpufreq as ondemand
-> governor on mx6, so add a linux fragment that disables such option for the
-> time being.
->
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v2:
-> - Drop BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST (Thomas)
-> - Bump to the latest kernel 4.11.6
+On Wed, 14 Jun 2017 05:11:04 -0700 (PDT), denisebrise wrote:
 
-Any feedback, please?
+> My first idea was to add chromium package (from :
+> https://gfiber.googlesource.com/buildroot/+/master/package/chromium/), but I
+> am stucked as from the beginning :
+
+You're looking at the Buildroot fork from Google for the Google Fiber
+project. There is no chromium package in the official Buildroot.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
