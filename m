@@ -1,45 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Jul 2017 23:47:57 +0300
-Subject: [Buildroot] [PATCH 2/3] efivar: bump to version 31
-In-Reply-To: <20170711182554.7677e18e@windsurf.lan>
-References: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
- <20170711155957.10815-2-thomas.petazzoni@free-electrons.com>
- <20170711161054.qhsr2glldmil6uzt@tarshish>
- <20170711182554.7677e18e@windsurf.lan>
-Message-ID: <20170711204757.rw24pc2tgztcuco3@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Jul 2017 22:59:24 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-07-08
+In-Reply-To: <87d197tbct.fsf@dell.be.48ers.dk>
+References: <20170709063052.6F78221DB3@mail.free-electrons.com>
+ <480602992.4326585.1499689836292.JavaMail.zimbra@datacom.ind.br>
+ <20170710144340.4fab6bd4@windsurf.lan>
+ <87lgnwtoth.fsf@dell.be.48ers.dk>
+ <20170710185452.GA22803@waldemar-brodkorb.de>
+ <20170710234901.221eb3a2@windsurf.lan>
+ <87d197tbct.fsf@dell.be.48ers.dk>
+Message-ID: <20170711205924.GB2991@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Peter, All,
 
-On Tue, Jul 11, 2017 at 06:25:54PM +0200, Thomas Petazzoni wrote:
-> On Tue, 11 Jul 2017 19:10:54 +0300, Baruch Siach wrote:
-> > On Tue, Jul 11, 2017 at 05:59:56PM +0200, Thomas Petazzoni wrote:
-> > > This allows to drop two patches that have been upstreamed:
-> > > 
-> > >  0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch is
-> > >  upstream as of commit 18b9b3dd7ebf23a16de07b3fb6ae622be488d712
-> > > 
-> > >  0003-Remove-some-extra-const-that-gcc-complains-about.patch is
-> > >  upstream as of commit 1c7c0f71c9d22efda4156881eb187b8c69d1cca7.  
-> > 
-> > Version 31 is marked as pre-release[1], like 29 and 25 before. It seems like 
-> > only even version numbers are stable releases.
+On 2017-07-11 14:19 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  > OK, so perhaps it is better to stop the autobuilder instance from this
+>  > machine, and other, more stable machines.
+> I guess so :/
 > 
-> OK, good point, I didn't notice that. So it was really a good idea to
-> split PATCH 1/3 that adds just the gcc 7.x fix from the rest of the
-> series.
-> 
-> I'll apply PATCH 1/3 and reject PATCH 2/3 and 3/3. Is that OK for you?
+> I've stopped the instance on gcc68.
 
-Looks good to me.
+I was also investigating my build issues about dvb-apps:
+    http://autobuild.buildroot.org/?reason=dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35
 
-baruch
+And I just noticed that the recent failures were all on gcc68.
+
+But I think that's propbably because of an incorrect/partial perl
+installation on the host. Which hint that we may need to have our own
+shot perl, or add extra dependency checking somehow... :-/
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
