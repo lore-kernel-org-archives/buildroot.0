@@ -1,33 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Jul 2017 22:48:32 +0000
-Subject: [Buildroot] [Bug 10036] Buildroot builds Raspbian Jessie headless
- image presenting incorrect prompt
-In-Reply-To: <bug-10036-163@https.bugs.busybox.net/>
-References: <bug-10036-163@https.bugs.busybox.net/>
-Message-ID: <bug-10036-163-jatQdaN0BK@https.bugs.busybox.net/>
+From: GitLab <gitlab@mg.gitlab.com>
+Date: Tue, 11 Jul 2017 23:30:30 +0000
+Subject: [Buildroot] buildroot | Pipeline #9783571 has failed for master |
+	815d78f8
+Message-ID: <59655f9626512_def53fb640c318342740b2@sidekiq-asap04.mail>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10036
+Your pipeline has failed.
 
---- Comment #3 from Paul Tomov <ptomov@mirion.com> ---
+Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
+Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
 
-Hi,
+Commit: 815d78f8 ( https://gitlab.com/buildroot.org/buildroot/commit/815d78f8ba78eda7bd9f119d9ce2739bf0ae7af8 )
+Commit Message: fs/squashfs: cleanup if-else cascade
 
-Please explain what packages I need to add to Buildroot image in order to build
-a full-fledged (including "sudo" available) Rasbian headless image or raspberry
-Pi 3 and the places to download them from.
+And add m...
+Commit Author: Yann E. MORIN ( https://gitlab.com/ymorin )
+Committed by: Peter Korsgaard ( https://gitlab.com/jacmet )
 
-The other question is how to add my application files to the Buildroot image
-and make my application a startup one.
+Pipeline #9783571 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9783571 ) triggered by arnout ( https://gitlab.com/arnout )
+had 3 failed builds.
 
-Thank you,
+Job #22098107 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22098107 )
 
-   Pavel
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubExternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 141.428s
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22098107 responseStatus[0;m=201 Created token[0;m=KrTKKNux
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22098108 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22098108 )
+
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubInternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 118.464s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22098108 responseStatus[0;m=201 Created token[0;m=Nn9MicZW
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22098104 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22098104 )
+
+Stage: test
+Name: tests.fs.test_ext.TestExt4
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 2.869s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22098104 responseStatus[0;m=201 Created token[0;m=HH_wzMy5
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+
+---
+You're receiving this email because of your account on gitlab.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170711/cb928c6b/attachment.html>
