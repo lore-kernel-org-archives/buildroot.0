@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 21:31:57 +0200
-Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.25.2
-In-Reply-To: <20170711102857.24770-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 11 Jul 2017 12:28:57 +0200")
-References: <20170711102857.24770-1-peter@korsgaard.com>
-Message-ID: <87vamysrbm.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Jul 2017 21:32:03 +0200
+Subject: [Buildroot] [PATCH] mosquitto: bump version to 1.4.14
+In-Reply-To: <20170711095713.8258-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 11 Jul 2017 11:57:13 +0200")
+References: <20170711095713.8258-1-peter@korsgaard.com>
+Message-ID: <87r2xmsrbg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > From the release notes:
- >  - Extend pow tables for layer III to properly handle files with i-stereo and
- >    5-bit scalefactors. Never observed them for real, just as fuzzed input to
- >    trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
- >    calling remote denial of service. While the accesses are out of bounds for
- >    the pow tables, they still are safely within libmpg123's memory (other
- >    static tables). Just wrong values are used for computation, no actual crash
- >    unless you use something like GCC's AddressSanitizer, nor any information
- >    disclosure.
- >  - Avoid left-shifts of negative integers in layer I decoding.
+ > Drop CVE 2017-9868 patch as that is now upstream.
+ > 1.4.14 is a bugfix release, fixing significant websocket performance /
+ > correctness issues.
 
- > While we're at it, add a hash for the license file.
+ > Use HTTPS for the download as the server uses HSTS, thus saving a redirect.
+
+ > While we're at it, add hashes for the license files.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
