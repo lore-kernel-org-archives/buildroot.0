@@ -1,147 +1,184 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Jul 2017 17:59:56 +0200
-Subject: [Buildroot] [PATCH 2/3] efivar: bump to version 31
+Date: Tue, 11 Jul 2017 17:59:57 +0200
+Subject: [Buildroot] [PATCH 3/3] efibootmgr: bump to version 15
 In-Reply-To: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
 References: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170711155957.10815-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170711155957.10815-3-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows to drop two patches that have been upstreamed:
+Patch 0001-dont-use-fshort-wchar-when-building.patch
+b/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch is
+dropped as it is upstream as of commit
+3466fd05c8c6f1052e0426d64eed40f8a88fd78f.
 
- 0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch is
- upstream as of commit 18b9b3dd7ebf23a16de07b3fb6ae622be488d712
+Patch 0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch is
+dropped as it is upstream as of commit
+a542b169003c2ef95ce6c00d40050eb10568b612.
 
- 0003-Remove-some-extra-const-that-gcc-complains-about.patch is
- upstream as of commit 1c7c0f71c9d22efda4156881eb187b8c69d1cca7.
+We now need to pass a value for the EFIDIR value, which is the
+subdirectory inside the EFI System Partition reserved for the
+distribution. It used to be hardcoded to the value "redhat" by the
+efibootmgr, and must now be specified explicitly. We're currently not
+using it for anything special, but using a value of "buildroot" is
+probably more sensible than "redhat" in our case.
+
+If no EFIDIR value is passed, the build fails with:
+
+  output/build/efibootmgr-15/Make.defaults:55: *** EFIDIR or .gitconfig efibootmgr.efidir must be set to this distro's reserved EFI System Partition subdirectory name.  Stop.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  ...bc.patch => 0001-Allow-build-with-uClibc.patch} |  0
- ...fs-to-avoid-the-multiple-definitions-bug-.patch | 29 -------------
- ...some-extra-const-that-gcc-complains-about.patch | 47 ----------------------
- package/efivar/efivar.hash                         |  2 +-
- package/efivar/efivar.mk                           |  2 +-
- 5 files changed, 2 insertions(+), 78 deletions(-)
- rename package/efivar/{0002-Allow-build-with-uClibc.patch => 0001-Allow-build-with-uClibc.patch} (100%)
- delete mode 100644 package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
- delete mode 100644 package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
+ .../0001-dont-use-fshort-wchar-when-building.patch | 28 ------------
+ ...e-extra-const-keywords-gcc-7-gripes-about.patch | 51 ----------------------
+ package/efibootmgr/efibootmgr.hash                 |  2 +-
+ package/efibootmgr/efibootmgr.mk                   |  8 ++--
+ 5 files changed, 6 insertions(+), 83 deletions(-)
+ rename package/efibootmgr/{0002-Allow-build-with-uClibc.patch => 0001-Allow-build-with-uClibc.patch} (100%)
+ delete mode 100644 package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
+ delete mode 100644 package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
 
-diff --git a/package/efivar/0002-Allow-build-with-uClibc.patch b/package/efivar/0001-Allow-build-with-uClibc.patch
+diff --git a/package/efibootmgr/0002-Allow-build-with-uClibc.patch b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
 similarity index 100%
-rename from package/efivar/0002-Allow-build-with-uClibc.patch
-rename to package/efivar/0001-Allow-build-with-uClibc.patch
-diff --git a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+rename from package/efibootmgr/0002-Allow-build-with-uClibc.patch
+rename to package/efibootmgr/0001-Allow-build-with-uClibc.patch
+diff --git a/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch b/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
 deleted file mode 100644
-index 2bc3ff2..0000000
---- a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+index abafcec..0000000
+--- a/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From 314eb67b239e60c2ed3700e2baf9cd0e590465f3 Mon Sep 17 00:00:00 2001
--From: Peter Jones <pjones@redhat.com>
--Date: Thu, 27 Oct 2016 09:19:18 -0400
--Subject: [PATCH] Use -z muldefs to avoid the multiple definitions bug
-- without -flto
+@@ -1,28 +0,0 @@
+-From 3466fd05c8c6f1052e0426d64eed40f8a88fd78f Mon Sep 17 00:00:00 2001
+-From: steve-mcintyre <steve-github@einval.com>
+-Date: Fri, 6 Jan 2017 18:18:47 +0000
+-Subject: [PATCH] Don't use -fshort-wchar when building (#63)
 -
--This fixes github issue #64
+-It's not needed and is causing build failures with gcc 6. Closes
+-Debian bug #849651
 -
--Signed-off-by: Peter Jones <pjones@redhat.com>
--Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+-Signed-off-by: Steve McIntyre <steve@einval.com>
+-[Upstream commit: https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- Make.defaults | 1 +
-- 1 file changed, 1 insertion(+)
+- Make.defaults | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
 -diff --git a/Make.defaults b/Make.defaults
--index aa974d9..c9d599f 100644
+-index 50f1f4d..0ac50ef 100644
 ---- a/Make.defaults
 -+++ b/Make.defaults
--@@ -32,6 +32,7 @@ cflags	= $(CFLAGS) -I${TOPDIR}/src/include/efivar/ \
-- clang_ccldflags =
-- gcc_ccldflags =
-- ccldflags = $(cflags) -L. $(CCLDFLAGS) $(LDFLAGS) \
--+	-Wl,-z,muldefs \
-- 	$(if $(findstring clang,$(CCLD)),$(clang_ccldflags),) \
-- 	$(if $(findstring gcc,$(CCLD)),$(gcc_ccldflags),) \
-- 	$(call pkg-config-ccldflags)
---- 
--2.10.2
--
-diff --git a/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch b/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
+-@@ -26,7 +26,7 @@ clang_cflags =
+- gcc_cflags =
+- cflags	= $(CFLAGS) $(SUBDIR_CFLAGS) \
+- 	-Werror -Wall -Wextra -Wsign-compare -Wstrict-aliasing \
+--	-std=gnu11 -fshort-wchar -fPIC \
+-+	-std=gnu11 -fPIC \
+- 	-D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DLOCALEDIR=\"$(localedir)\" \
+- 	-DEFIBOOTMGR_VERSION="\"$(VERSION)\"" \
+- 	$(if $(findstring clang,$(CC)),$(clang_cflags),) \
+diff --git a/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
 deleted file mode 100644
-index 6b9f77e..0000000
---- a/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
+index 8bc6f01..0000000
+--- a/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
 +++ /dev/null
-@@ -1,47 +0,0 @@
--From 1c7c0f71c9d22efda4156881eb187b8c69d1cca7 Mon Sep 17 00:00:00 2001
+@@ -1,51 +0,0 @@
+-From a542b169003c2ef95ce6c00d40050eb10568b612 Mon Sep 17 00:00:00 2001
 -From: Peter Jones <pjones@redhat.com>
--Date: Mon, 6 Feb 2017 14:28:19 -0500
--Subject: [PATCH] Remove some extra "const" that gcc complains about.
--
--One of these days I'll get these right.
+-Date: Mon, 6 Feb 2017 16:34:54 -0500
+-Subject: [PATCH] Remove extra const keywords gcc 7 gripes about.
 -
 -Signed-off-by: Peter Jones <pjones@redhat.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[Backported from upstream commit a542b169003c2ef95ce6c00d40050eb10568b612]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
--Upstream commit 1c7c0f71c9d22e.
--
-- src/include/efivar/efiboot-loadopt.h | 4 ++--
-- src/loadopt.c                        | 2 +-
+- src/efibootdump.c | 2 +-
+- src/efibootmgr.c  | 4 ++--
 - 2 files changed, 3 insertions(+), 3 deletions(-)
 -
--diff --git a/src/include/efivar/efiboot-loadopt.h b/src/include/efivar/efiboot-loadopt.h
--index 07db5c4c53e3..efc29c69d47e 100644
----- a/src/include/efivar/efiboot-loadopt.h
--+++ b/src/include/efivar/efiboot-loadopt.h
--@@ -32,8 +32,8 @@ extern ssize_t efi_loadopt_create(uint8_t *buf, ssize_t size,
+-diff --git a/src/efibootdump.c b/src/efibootdump.c
+-index 6ff8360..30a1943 100644
+---- a/src/efibootdump.c
+-+++ b/src/efibootdump.c
+-@@ -39,7 +39,7 @@ print_boot_entry(efi_load_option *loadopt, size_t data_size)
+- 	uint8_t *optional_data = NULL;
+- 	size_t optional_data_len = 0;
+- 	uint16_t pathlen;
+--	const unsigned char const *desc;
+-+	const unsigned char *desc;
+- 	char *raw;
+- 	size_t raw_len;
 - 
-- extern efidp efi_loadopt_path(efi_load_option *opt, ssize_t limit)
-- 	__attribute__((__nonnull__ (1)));
---extern const unsigned char const * efi_loadopt_desc(efi_load_option *opt,
---						    ssize_t limit)
--+extern const unsigned char * efi_loadopt_desc(efi_load_option *opt,
--+					      ssize_t limit)
-- 	__attribute__((__visibility__ ("default")))
-- 	__attribute__((__nonnull__ (1)));
-- extern uint32_t efi_loadopt_attrs(efi_load_option *opt)
--diff --git a/src/loadopt.c b/src/loadopt.c
--index a63ca792d2dc..ce889867fd29 100644
----- a/src/loadopt.c
--+++ b/src/loadopt.c
--@@ -357,7 +357,7 @@ teardown(void)
+-diff --git a/src/efibootmgr.c b/src/efibootmgr.c
+-index 493f2cf..90a0998 100644
+---- a/src/efibootmgr.c
+-+++ b/src/efibootmgr.c
+-@@ -221,7 +221,7 @@ warn_duplicate_name(list_t *var_list)
+- 	list_t *pos;
+- 	var_entry_t *entry;
+- 	efi_load_option *load_option;
+--	const unsigned char const *desc;
+-+	const unsigned char *desc;
 - 
-- __attribute__((__nonnull__ (1)))
-- __attribute__((__visibility__ ("default")))
---const unsigned char const *
--+const unsigned char *
-- efi_loadopt_desc(efi_load_option *opt, ssize_t limit)
+- 	list_for_each(pos, var_list) {
+- 		entry = list_entry(pos, var_entry_t, list);
+-@@ -873,7 +873,7 @@ show_vars(const char *prefix)
 - {
-- 	if (last_desc) {
+- 	list_t *pos;
+- 	var_entry_t *boot;
+--	const unsigned char const *description;
+-+	const unsigned char *description;
+- 	efi_load_option *load_option;
+- 	efidp dp = NULL;
+- 	unsigned char *optional_data = NULL;
 --- 
--2.13.2
+-2.9.4
 -
-diff --git a/package/efivar/efivar.hash b/package/efivar/efivar.hash
-index e337b96..9a3a6db 100644
---- a/package/efivar/efivar.hash
-+++ b/package/efivar/efivar.hash
+diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
+index f71dced..7790539 100644
+--- a/package/efibootmgr/efibootmgr.hash
++++ b/package/efibootmgr/efibootmgr.hash
 @@ -1,2 +1,2 @@
  # locally computed hash
--sha256 20709c76311f8eb8be92977b7ac008ce62501fa9f7fe885a784321540fc352f9 efivar-30.tar.gz
-+sha256 fa9331b762ab9f0749dd8d58a218701f33e4ea515ac57a120657447e046e6568 efivar-31.tar.gz
-diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-index d06192e..6b26290 100644
---- a/package/efivar/efivar.mk
-+++ b/package/efivar/efivar.mk
-@@ -4,7 +4,7 @@
+-sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
++sha256 5a708b9690cdc631fd75d8f598128d20cad007e711b975b0143f9517c2dd1bf4 efibootmgr-15.tar.gz
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index b32d9cb..3cd33b8 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--EFIVAR_VERSION = 30
-+EFIVAR_VERSION = 31
- EFIVAR_SITE = $(call github,rhinstaller,efivar,$(EFIVAR_VERSION))
- EFIVAR_LICENSE = LGPL-2.1
- EFIVAR_LICENSE_FILES = COPYING
+-EFIBOOTMGR_VERSION = 14
++EFIBOOTMGR_VERSION = 15
+ EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
+ EFIBOOTMGR_LICENSE = GPL-2.0+
+ EFIBOOTMGR_LICENSE_FILES = COPYING
+ EFIBOOTMGR_DEPENDENCIES = efivar $(TARGET_NLS_DEPENDENCIES)
+ EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++EFIBOOTMGR_MAKE_OPTS = EFIDIR=buildroot
+ 
+ define EFIBOOTMSR_PATCH_HEADER_PATH
+ 	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
+@@ -19,12 +20,13 @@ EFIBOOTMGR_POST_PATCH_HOOKS += EFIBOOTMSR_PATCH_HEADER_PATH
+ 
+ define EFIBOOTMGR_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+-		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D)
++		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D) \
++		$(EFIBOOTMGR_MAKE_OPTS)
+ endef
+ 
+ define EFIBOOTMGR_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR) install
++		$(EFIBOOTMGR_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.9.4
