@@ -1,49 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jul 2017 23:31:38 +0200
-Subject: [Buildroot] [PATCH 2/3] fs/squashfs: align size to 1MiB
-In-Reply-To: <20170711204204.GA2991@scaer>
-References: <cover.1499703968.git.yann.morin.1998@free.fr>
- <03816ee56333f1eddb6ca8a048aea947fc027963.1499703968.git.yann.morin.1998@free.fr>
- <20170710232439.7dba43f1@windsurf.lan> <20170710213516.GB22898@scaer>
- <87pod6rak1.fsf@dell.be.48ers.dk> <20170711204204.GA2991@scaer>
-Message-ID: <2a123420-ecda-47a0-c0c3-155e3ad77f07@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 11 Jul 2017 23:38:06 +0200
+Subject: [Buildroot] [PATCH 2/2] olimex_a20_olinuxino_micro: bump to Linux
+	4.12
+In-Reply-To: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net>
+References: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1499809086-3174-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[Build- and run-tested]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ configs/olimex_a20_olinuxino_micro_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-On 11-07-17 22:42, Yann E. MORIN wrote:
-[snip]
-> $ qemu-system-arm -M vexpress-a9 -smp 1 -m 256 -kernel output/images/zImage -dtb output/images/vexpress-v2p-ca9.dtb 
-> -drive file=output/images/rootfs.squashfs,if=sd,format=raw
-> -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net
-nic,model=lan9118 -net user
-[snip]
-> mmcblk0: mmc0:4567 QEMU! 2.25 MiB
-
- Hm, you're emulating an SD card here. I'm not sure how qemu deals with emulated
-devices where the backing file doesn't have a size that corresponds to what the
-kernel driver expects... Possibly the last bit is just chopped off, which might
-lead to an issue like this...
-
- Does it also happen when you emulate it as an IDE device? Or even better, does
-it also happen on actual hardware?
-
- I don't feel good doing such padding just to make qemu happy when actual
-hardware doesn't need it...
-
-
- Regards,
- Arnout
-
-[snip]
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+index 0b788f3e6578..a2aff0ca334d 100644
+--- a/configs/olimex_a20_olinuxino_micro_defconfig
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++# Linux headers same as kernel, a 4.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
