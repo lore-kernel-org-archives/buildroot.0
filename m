@@ -1,63 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 22:33:51 +0200
-Subject: [Buildroot] [git commit] fs/squashfs: cleanup if-else cascade
-Message-ID: <20170711203009.88280818B3@busybox.osuosl.org>
+Date: Tue, 11 Jul 2017 22:39:43 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] xen: security bump to
+	version 4.7.3
+Message-ID: <20170711203535.0004081ED1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=815d78f8ba78eda7bd9f119d9ce2739bf0ae7af8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=78ec7c6592e2a74a9b510bc0f72fe716bc4811d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-And add myself to the DEVELOPPERS for squashfs.
+The 4.7.3 release brings a number of bugfixes and improvements:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+https://www.xenproject.org/downloads/xen-archives/xen-project-47-series/xen-473.html
+
+Including fixes for the following security issues:
+
+XSA-211: Cirrus VGA Heap overflow via display refresh (CVE-2016-9603)
+XSA-212: x86: broken check in memory_exchange() permits PV guest breakout
+         (CVE-2017-7228)
+XSA-213: x86: 64bit PV guest breakout via pagetable use-after-mode-change
+         (CVE-2017-8903)
+XSA-214: grant transfer allows PV guest to elevate privileges (CVE-2017-8904)
+XSA-215: possible memory corruption via failsafe callback (CVE-2017-8905)
+XSA-216: blkif responses leak backend stack data (CVE-2017-10911)
+XSA-217: page transfer may allow PV guest to elevate privilege
+         (CVE-2017-10912)
+XSA-218: Races in the grant table unmap code (CVE-2017-10913 CVE-2017-10914)
+XSA-219: x86: insufficient reference counts during shadow emulation
+         (CVE-2017-10915)
+XSA-220: x86: PKRU and BND* leakage between vCPU-s (CVE-2017-10916)
+XSA-221: NULL pointer deref in event channel poll (CVE-2017-10917)
+XSA-222: stale P2M mappings due to insufficient error checking
+         (CVE-2017-10918)
+XSA-223: ARM guest disabling interrupt may crash Xen (CVE-2017-10919)
+XSA-224: grant table operations mishandle reference counts
+         (CVE-2017-10920 CVE-2017-10921 CVE-2017-10922)
+XSA-225: arm: vgic: Out-of-bound access when sending SGIs (CVE-2017-10923)
+
+Also change download location as bits.xensource.com seems to be down.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS              |  1 +
- fs/squashfs/squashfs.mk | 12 +++---------
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1ec405a..f392838 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1777,6 +1777,7 @@ N:	Wojciech Nizi??ski <niziak@spox.org>
- F:	package/fwup/
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 2143f46..0b14e29 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 61494a56d9251e2108080f95b0dc8e3d175f1ba4da34603fc07b91cfebf358d5 xen-4.7.2.tar.gz
++sha256 5b5385b476e59e4cf31ecc6dd605df38814b83432b8e8d917f18c8edfdfb708f xen-4.7.3.tar.gz
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 9ff1b40..a973b40 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
-+F:	fs/squashfs/
- F:	package/cegui06/
- F:	package/celt051/
- F:	package/dtc/
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 68a57b0..342c7a8 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -8,21 +8,15 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
--else
--ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
-+else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
- ROOTFS_SQUASHFS_ARGS += -comp lzo
--else
--ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
-+else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
- ROOTFS_SQUASHFS_ARGS += -comp lzma
--else
--ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
-+else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
- ROOTFS_SQUASHFS_ARGS += -comp xz
- else
- ROOTFS_SQUASHFS_ARGS += -comp gzip
- endif
--endif
--endif
--endif
- 
- define ROOTFS_SQUASHFS_CMD
- 	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
+-XEN_VERSION = 4.7.2
+-XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
++XEN_VERSION = 4.7.3
++XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPLv2
+ XEN_LICENSE_FILES = COPYING
+ XEN_DEPENDENCIES = host-python
