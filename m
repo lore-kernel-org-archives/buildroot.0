@@ -1,13 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jul 2017 23:14:33 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <20170710215748.GD22898@scaer>
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
- <20170710180949.764a0fdb@windsurf.lan> <20170710162056.GB3014@scaer>
- <20170710234741.554c7a44@windsurf.lan> <20170710215748.GD22898@scaer>
-Message-ID: <28d2cd39-27ca-4c60-1e58-37315cd7bc35@mind.be>
+Date: Tue, 11 Jul 2017 23:16:42 +0200
+Subject: [Buildroot] [PATCH 2/2] qt5: bump to 5.9.1
+In-Reply-To: <22a46dfc-6665-4a13-e5e9-5e59280cbd37@microchip.com>
+References: <1499399077-3542-1-git-send-email-brents_3@hotmail.com>
+ <DM5PR03MB2924FBF3A3BF12875E828F5BBFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
+ <79ab1fe5-2dac-abde-15b0-a985b9e37959@ecagroup.com>
+ <22a46dfc-6665-4a13-e5e9-5e59280cbd37@microchip.com>
+Message-ID: <1967578a-0059-d174-edcc-e62efdd0843f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,18 +15,30 @@ To: buildroot@busybox.net
 
 
 
-On 10-07-17 23:57, Yann E. MORIN wrote:
-> As much as it is "possible" to change the version for the cross-gcc, the
-> native compiler is often not replaceable. This is most probably the case
-> on enterprise-grade servers, where users are not root (and are stuck
-> with a precambrian host compiler)...
+On 11-07-17 02:00, Joshua Henderson wrote:
+> Julien,
+> 
+> On 07/10/2017 05:02 AM, Julien CORJON wrote:
+[snip]
+>>    - 0004-examples-fix-compile-without-gui-module.patch (See 
+>> https://code.qt.io/cgit/qt/qtbase.git/commit/examples/gui/gui.pro?id=18d49808db46add078d9d4bcffaac5361d5c7269 
+>> and 
+>> https://code.qt.io/cgit/qt/qtbase.git/commit/examples/widgets/widgets.pro?id=18d49808db46add078d9d4bcffaac5361d5c7269)
+>>
+> 
+> Noticed the last one is not actually upstream for 5.8 (if it matters):
+> 
+>     0004-examples-fix-compile-without-gui-module.patch
+>     examples: fix compile without gui module (18d49808d).
+> 
+> It only seems to be available upstream for 5.9.  Should the 5.8.0 folder
+> still be removed?
 
- Building a native compiler from source is annoying, but not impossible. Libc is
-a different story, but a compiler is feasible. In addition, many users can
-indeed install a decent compiler either from the distro or from a PPA, so really
-it does make sense to have such a comment.
+ Since the 5.8 version of qt5 is removed by this patch, indeed the entire folder
+should be removed. There is no way to use those patches any more.
 
- What you *really* can't change is your target architecture and its features.
+ If some patch were not upstream yet in 5.9.1, then instead of removing it, it
+would have to be renamed to 5.9.1/0001-examples-fix-...
 
  Regards,
  Arnout
