@@ -1,45 +1,49 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 11 Jul 2017 23:38:06 +0200
-Subject: [Buildroot] [PATCH 2/2] olimex_a20_olinuxino_micro: bump to Linux
-	4.12
-In-Reply-To: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net>
-References: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1499809086-3174-2-git-send-email-luca@lucaceresoli.net>
+Date: Tue, 11 Jul 2017 23:38:05 +0200
+Subject: [Buildroot] [PATCH 1/2] olimex_a20_olinuxino_micro: bump to U-Boot
+	2017.5 and fix build
+Message-ID: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This defconfig does not build anymore since commit
+6cda724efb20682bb98e6d738e5f7c909415ae07 ("package/gcc: switch to gcc
+6.x as the default"). Fix by upgrading to the latest U-Boot version.
+
+Fixes:
+  In file included from include/linux/compiler.h:54:0,
+                   from include/linux/bitops.h:5,
+                   from ./include/common.h:20:
+  include/linux/compiler-gcc.h:114:30: fatal error: linux/compiler-gcc6.h: No such file or directory
+   #include gcc_header(__GNUC__)
+                                ^
+  compilation terminated.
+
 [Build- and run-tested]
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- configs/olimex_a20_olinuxino_micro_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ configs/olimex_a20_olinuxino_micro_defconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index 0b788f3e6578..a2aff0ca334d 100644
+index 6690df6a8812..0b788f3e6578 100644
 --- a/configs/olimex_a20_olinuxino_micro_defconfig
 +++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+@@ -31,9 +31,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.12 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino_MICRO"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
 -- 
 2.7.4
