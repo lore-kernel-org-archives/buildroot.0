@@ -1,56 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 12:28:57 +0200
-Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.25.2
-Message-ID: <20170711102857.24770-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Jul 2017 11:28:50 +0000
+Subject: [Buildroot] [Bug 10026] New: [PATCH] lua-5.3.4: fix lua linker
+	error in swupdate
+Message-ID: <bug-10026-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
+https://bugs.busybox.net/show_bug.cgi?id=10026
 
- - Extend pow tables for layer III to properly handle files with i-stereo and
-   5-bit scalefactors. Never observed them for real, just as fuzzed input to
-   trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
-   calling remote denial of service. While the accesses are out of bounds for
-   the pow tables, they still are safely within libmpg123's memory (other
-   static tables). Just wrong values are used for computation, no actual crash
-   unless you use something like GCC's AddressSanitizer, nor any information
-   disclosure.
- - Avoid left-shifts of negative integers in layer I decoding.
+            Bug ID: 10026
+           Summary: [PATCH] lua-5.3.4: fix lua linker error in swupdate
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: chemobejk at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-While we're at it, add a hash for the license file.
+Created attachment 7101
+  --> https://bugs.busybox.net/attachment.cgi?id=7101&action=edit
+add missing -ldl to lua.pc
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpg123/mpg123.hash | 5 ++++-
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+When I updated my existing buildroot configuration to 2017.05 or newer I get
+build errors in the package "swupdate":
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 69fbef36c2..cbab6f3ee9 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
-+sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
-+
-+# License file
-+sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 7fc6d7ab00..01923d7990 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.25.1
-+MPG123_VERSION = 1.25.2
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+  Trying libraries: pthread lua m z ubootenv
+  Failed: -Wl,--start-group -lpthread -llua -lm -lz -lubootenv -Wl,--end-group
+  ...
+  ==========
+  .../output/host/arm-buildroot-linux-gnueabihf/sysroot/lib/liblua.so:
+undefined reference to `dlopen'
+  .../output/host/arm-buildroot-linux-gnueabihf/sysroot/lib/liblua.so:
+undefined reference to `dlclose'
+  .../output/host/arm-buildroot-linux-gnueabihf/sysroot/lib/liblua.so:
+undefined reference to `dlerror'
+  .../output/host/arm-buildroot-linux-gnueabihf/sysroot/lib/liblua.so:
+undefined reference to `dlsym'
+  collect2: error: ld returned 1 exit status
+  make[1]: *** [swupdate_unstripped] Error 1
+
+The root cause is a missing "-ldl" in etc/lua.pc.
+
+This is probably wrong for all lua patches that add etc/lua.pc, although I
+personally only tested lua-5.3.4. The patch should apply to them too.
+
+I'm attaching the patch that I added to my buildroot external directory to fix
+the build problem.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
