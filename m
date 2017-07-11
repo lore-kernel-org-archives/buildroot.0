@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 21:38:43 +0200
-Subject: [Buildroot] [git commit] pcre2: enable no MMU build
-Message-ID: <20170711193642.B083D80767@busybox.osuosl.org>
+Date: Tue, 11 Jul 2017 21:37:30 +0200
+Subject: [Buildroot] [git commit] olimex_imx233_olinuxino: bump versions
+Message-ID: <20170711193642.A4BED82158@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ab924213d3d50b176f1b8efaecb5fcaef28dae4
+commit: https://git.buildroot.net/buildroot/commit/?id=0c23c1bb7fa880a8c77321adbec655dd52867f60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use '--disable-pcre2grep-callout' for !BR2_USE_MMU, disables
-fork usage.
-
-Fixes [1]:
-
-    CCLD     pcre2grep
-  src/pcre2grep-pcre2grep.o: In function `pcre2grep_callout':
-  pcre2grep.c:(.text+0x402): undefined reference to `fork'
-  collect2: error: ld returned 1 exit status
-
-[1] http://autobuild.buildroot.net/results/2c2/2c2665844748a3bdb010315200eea70aa3504b95
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre2/pcre2.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ configs/olimex_imx233_olinuxino_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 5b7a163..b7da1ed 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -16,5 +16,10 @@ PCRE2_CONF_OPTS += --enable-pcre2-8
- PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
- PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_32),--enable-pcre2-32,--disable-pcre2-32)
- 
-+# disable fork usage if not available
-+ifeq ($(BR2_USE_MMU),)
-+PCRE2_CONF_OPTS += --disable-pcre2grep-callout
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index 1b35b74..d4b154a 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.36"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/imx233_olinuxino/linux-wifi.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -40,7 +40,7 @@ BR2_TARGET_ROOTFS_EXT4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+  
