@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 21:32:15 +0200
-Subject: [Buildroot] [PATCH] php: security bump to version 7.1.7
-In-Reply-To: <20170711090220.5478-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 11 Jul 2017 11:02:20 +0200")
-References: <20170711090220.5478-1-peter@korsgaard.com>
-Message-ID: <87mv8asrb4.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Jul 2017 21:32:41 +0200
+Subject: [Buildroot] [PATCH] xserver_xorg-server: add upstream security
+	fixes for CVE-2017-10971 / 10972
+In-Reply-To: <20170710070752.16623-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 10 Jul 2017 09:07:52 +0200")
+References: <20170710070752.16623-1-peter@korsgaard.com>
+Message-ID: <87iniysrae.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +14,24 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
- > decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
- > reached with a call to the imagecreatefromstring() function) uses
- > constant-sized color tables of size 3 * 256, but does not zero-out these
- > arrays before use.
+ > Add upstream patches fixing the following security issues:
+ > CVE-2017-10971:
+ > 	The endianess handling for X Events assumed a fixed size of X Event structures and
+ > 	had a specific 32 byte stack buffer for that.
 
- > CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
- > Out-of-bonds access in oniguruma regexp library.
+ > 	However "GenericEvents" can have any size, so if the events were sent in the wrong
+ > 	endianess, this stack buffer could be overflowed easily.
 
- > CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
- > 7.1.7, the openssl extension PEM sealing code did not check the return value
- > of the OpenSSL sealing function, which could lead to a crash of the PHP
- > interpreter, related to an interpretation conflict for a negative number in
- > ext/openssl/openssl.c, and an OpenSSL documentation omission.
+ > 	So authenticated X users could overflow the stack in the X Server and with the X
+ > 	server usually running as root gaining root prileveges.
 
- > CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
- > 7.1.7, lack of a bounds check in the date extension's timelib_meridian
- > parsing code could be used by attackers able to supply date strings to leak
- > information from the interpreter, related to an ext/date/lib/parse_date.c
- > out-of-bounds read affecting the php_parse_date function.
+ > CVE-2017-10972:
+ > 	An information leak out of the X server due to an uninitialized stack area when swapping
+ > 	event endianess.
 
- > CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
- > through 7.1.7, lack of bounds checks in the date extension's
- > timelib_meridian parsing code could be used by attackers able to supply date
- > strings to leak information from the interpreter, related to
- > ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
- > function.  NOTE: this vulnerability exists because of an incomplete fix for
- > CVE-2017-11145.
+ > For more details, see the advisory:
 
- > While we're at it, add a hash for the license file.
+ > http://www.openwall.com/lists/oss-security/2017/07/06/6
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
