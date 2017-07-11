@@ -1,52 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jul 2017 23:16:42 +0200
-Subject: [Buildroot] [PATCH 2/2] qt5: bump to 5.9.1
-In-Reply-To: <22a46dfc-6665-4a13-e5e9-5e59280cbd37@microchip.com>
-References: <1499399077-3542-1-git-send-email-brents_3@hotmail.com>
- <DM5PR03MB2924FBF3A3BF12875E828F5BBFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
- <79ab1fe5-2dac-abde-15b0-a985b9e37959@ecagroup.com>
- <22a46dfc-6665-4a13-e5e9-5e59280cbd37@microchip.com>
-Message-ID: <1967578a-0059-d174-edcc-e62efdd0843f@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Jul 2017 23:17:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/transmission: fix gtk support
+In-Reply-To: <87a84asr2s.fsf@dell.be.48ers.dk>
+References: <20170710175137.1402-1-bernd.kuhls@t-online.de>
+ <87a84asr2s.fsf@dell.be.48ers.dk>
+Message-ID: <20170711231701.3850d479@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue, 11 Jul 2017 21:37:15 +0200, Peter Korsgaard wrote:
 
-On 11-07-17 02:00, Joshua Henderson wrote:
-> Julien,
+>  > Gtk support is controlled by ARG_WITH since
+>  > https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4  
 > 
-> On 07/10/2017 05:02 AM, Julien CORJON wrote:
-[snip]
->>    - 0004-examples-fix-compile-without-gui-module.patch (See 
->> https://code.qt.io/cgit/qt/qtbase.git/commit/examples/gui/gui.pro?id=18d49808db46add078d9d4bcffaac5361d5c7269 
->> and 
->> https://code.qt.io/cgit/qt/qtbase.git/commit/examples/widgets/widgets.pro?id=18d49808db46add078d9d4bcffaac5361d5c7269)
->>
+>  > Fixes a build error if libgtk2/3 was built before transmission:
+>  > http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/  
 > 
-> Noticed the last one is not actually upstream for 5.8 (if it matters):
+>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>  
 > 
->     0004-examples-fix-compile-without-gui-module.patch
->     examples: fix compile without gui module (18d49808d).
-> 
-> It only seems to be available upstream for 5.9.  Should the 5.8.0 folder
-> still be removed?
+> So this has been broken since (atleast) the version bump in early 2016?
+> Wow.
 
- Since the 5.8 version of qt5 is removed by this patch, indeed the entire folder
-should be removed. There is no way to use those patches any more.
+Maybe not:
 
- If some patch were not upstream yet in 5.9.1, then instead of removing it, it
-would have to be renamed to 5.9.1/0001-examples-fix-...
+configure: error: "The gtk client cannot be built without nls support.  Try adding either --enable-nls or --without-gtk" 
 
- Regards,
- Arnout
+Until the recent gettext revamp we were passing --disable-nls only when
+BR2_ENABLE_LOCALE was disabled. However, the transmission-gtk support has:
 
+	depends on BR2_PACKAGE_LIBGTK2 && BR2_ENABLE_LOCALE
+
+Therefore, we were never building transmission with --disable-nls. With
+the gettext revamp, we now pass --disable-nls to all packages, unless
+BR2_SYSTEM_ENABLE_NLS is enabled (which it isn't by default).
+
+So I am not sure the fix is complete. Indeed the error says that the
+gtk client cannot be built without nls support. So I guess that if you
+have BR2_PACKCAGE_TRANSMISSION_GTK=y, but BR2_SYSTEM_ENABLE_NLS
+disabled it still fails to build.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
