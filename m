@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 21:32:03 +0200
-Subject: [Buildroot] [PATCH] mosquitto: bump version to 1.4.14
-In-Reply-To: <20170711095713.8258-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 11 Jul 2017 11:57:13 +0200")
-References: <20170711095713.8258-1-peter@korsgaard.com>
-Message-ID: <87r2xmsrbg.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Jul 2017 21:32:15 +0200
+Subject: [Buildroot] [PATCH] php: security bump to version 7.1.7
+In-Reply-To: <20170711090220.5478-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 11 Jul 2017 11:02:20 +0200")
+References: <20170711090220.5478-1-peter@korsgaard.com>
+Message-ID: <87mv8asrb4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,37 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Drop CVE 2017-9868 patch as that is now upstream.
- > 1.4.14 is a bugfix release, fixing significant websocket performance /
- > correctness issues.
+ > Fixes the following security issues:
+ > CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
+ > decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
+ > reached with a call to the imagecreatefromstring() function) uses
+ > constant-sized color tables of size 3 * 256, but does not zero-out these
+ > arrays before use.
 
- > Use HTTPS for the download as the server uses HSTS, thus saving a redirect.
+ > CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
+ > Out-of-bonds access in oniguruma regexp library.
 
- > While we're at it, add hashes for the license files.
+ > CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+ > 7.1.7, the openssl extension PEM sealing code did not check the return value
+ > of the OpenSSL sealing function, which could lead to a crash of the PHP
+ > interpreter, related to an interpretation conflict for a negative number in
+ > ext/openssl/openssl.c, and an OpenSSL documentation omission.
+
+ > CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+ > 7.1.7, lack of a bounds check in the date extension's timelib_meridian
+ > parsing code could be used by attackers able to supply date strings to leak
+ > information from the interpreter, related to an ext/date/lib/parse_date.c
+ > out-of-bounds read affecting the php_parse_date function.
+
+ > CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
+ > through 7.1.7, lack of bounds checks in the date extension's
+ > timelib_meridian parsing code could be used by attackers able to supply date
+ > strings to leak information from the interpreter, related to
+ > ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
+ > function.  NOTE: this vulnerability exists because of an incomplete fix for
+ > CVE-2017-11145.
+
+ > While we're at it, add a hash for the license file.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
