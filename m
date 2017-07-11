@@ -1,75 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 11:02:20 +0200
-Subject: [Buildroot] [PATCH] php: security bump to version 7.1.7
-Message-ID: <20170711090220.5478-1-peter@korsgaard.com>
+Date: Tue, 11 Jul 2017 11:57:13 +0200
+Subject: [Buildroot] [PATCH] mosquitto: bump version to 1.4.14
+Message-ID: <20170711095713.8258-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Drop CVE 2017-9868 patch as that is now upstream.
 
-CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
-decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
-reached with a call to the imagecreatefromstring() function) uses
-constant-sized color tables of size 3 * 256, but does not zero-out these
-arrays before use.
+1.4.14 is a bugfix release, fixing significant websocket performance /
+correctness issues.
 
-CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
-Out-of-bonds access in oniguruma regexp library.
+Use HTTPS for the download as the server uses HSTS, thus saving a redirect.
 
-CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
-7.1.7, the openssl extension PEM sealing code did not check the return value
-of the OpenSSL sealing function, which could lead to a crash of the PHP
-interpreter, related to an interpretation conflict for a negative number in
-ext/openssl/openssl.c, and an OpenSSL documentation omission.
-
-CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
-7.1.7, lack of a bounds check in the date extension's timelib_meridian
-parsing code could be used by attackers able to supply date strings to leak
-information from the interpreter, related to an ext/date/lib/parse_date.c
-out-of-bounds read affecting the php_parse_date function.
-
-CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
-through 7.1.7, lack of bounds checks in the date extension's
-timelib_meridian parsing code could be used by attackers able to supply date
-strings to leak information from the interpreter, related to
-ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
-function.  NOTE: this vulnerability exists because of an incomplete fix for
-CVE-2017-11145.
-
-While we're at it, add a hash for the license file.
+While we're at it, add hashes for the license files.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 5 ++++-
- package/php/php.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/mosquitto/mosquitto.hash | 11 +++++++----
+ package/mosquitto/mosquitto.mk   |  6 ++----
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 0c8518b13b..c724f6d8ce 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,5 @@
- # From http://php.net/downloads.php
--sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
-+sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 4ef174300e..f6f17aa5ef 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,4 +1,7 @@
+-# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.12.tar.gz
+-sha512  75e6105498869ab13265df7a0bea6052c014d59d0c0efb61162d8257d34c0153fce32130e84c28e99fd494f374949aac5e01c19f7439c2eea575b52ef1179c3c  mosquitto-1.4.12.tar.gz
+-# Locally computed:
+-sha256  06abd1206e548ac2378dd96f5434cb3e40ed77cecb6a9c37fbabab0b0f1360e5  mosquitto-1.4.x_cve-2017-9868.patch
++# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.14.tar.gz
++sha512 dc75a971354f87deeb79f32435acfae9bc561a1a24a75ee4940a35176ff91758071930d2105d8dee2a090e07527dbfaa5692bece67e03cc87e8b4b8b46f846c2  mosquitto-1.4.14.tar.gz
 +
-+# License file
-+sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 1a1ed21718..b1bd97ca9a 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
++# License files
++sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
++sha256 3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
++sha256 e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 829984896f..c763f48ab1 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.1.6
-+PHP_VERSION = 7.1.7
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-MOSQUITTO_VERSION = 1.4.12
+-MOSQUITTO_SITE = http://mosquitto.org/files/source
++MOSQUITTO_VERSION = 1.4.14
++MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+ MOSQUITTO_INSTALL_STAGING = YES
+-MOSQUITTO_PATCH = \
+-	https://mosquitto.org/files/cve/2017-9868/mosquitto-1.4.x_cve-2017-9868.patch
+ 
+ MOSQUITTO_MAKE_OPTS = \
+ 	UNAME=Linux \
 -- 
 2.11.0
