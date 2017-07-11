@@ -1,36 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Jul 2017 17:59:24 +0200
-Subject: [Buildroot] [PATCH] efivar: fix build with gcc 7
-In-Reply-To: <78474fc422b1274f5f4850920cb57f07326d2849.1499720055.git.baruch@tkos.co.il>
-References: <78474fc422b1274f5f4850920cb57f07326d2849.1499720055.git.baruch@tkos.co.il>
-Message-ID: <20170711175924.2f452e80@windsurf.lan>
+Date: Tue, 11 Jul 2017 17:59:55 +0200
+Subject: [Buildroot] [PATCH 1/3] efibootmgr: fix build with gcc 7.x
+Message-ID: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Now that the build of efivar with gcc 7.x has been fixed by commit
+0ca30170345a81f5f21e4ef4424b1f186cde1988 ("efivar: fix build with gcc
+7"), efibootmgr fails similarly with gcc 7.x.
 
-On Mon, 10 Jul 2017 23:54:15 +0300, Baruch Siach wrote:
-> Add upstream patch fixing a warning that breaks the build because of -Werror.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/33a/33adc3ef139d6814aef4c92ae0bcc4c810ab0b86/
-> http://autobuild.buildroot.net/results/e7d/e7d80e823e13edc6698148244553bd90367bcd03/
-> http://autobuild.buildroot.net/results/3b6/3b61246f8b04a332d1c61732f0eb6e50ea8ca366/
-> 
-> Cc: Erico Nunes <nunes.erico@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...some-extra-const-that-gcc-complains-about.patch | 47 ++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
+This commit backports an upstream patch that fixes this issue.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...e-extra-const-keywords-gcc-7-gripes-about.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
 
-Thomas
+diff --git a/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
+new file mode 100644
+index 0000000..8bc6f01
+--- /dev/null
++++ b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
+@@ -0,0 +1,51 @@
++From a542b169003c2ef95ce6c00d40050eb10568b612 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 6 Feb 2017 16:34:54 -0500
++Subject: [PATCH] Remove extra const keywords gcc 7 gripes about.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++[Backported from upstream commit a542b169003c2ef95ce6c00d40050eb10568b612]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/efibootdump.c | 2 +-
++ src/efibootmgr.c  | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/efibootdump.c b/src/efibootdump.c
++index 6ff8360..30a1943 100644
++--- a/src/efibootdump.c
+++++ b/src/efibootdump.c
++@@ -39,7 +39,7 @@ print_boot_entry(efi_load_option *loadopt, size_t data_size)
++ 	uint8_t *optional_data = NULL;
++ 	size_t optional_data_len = 0;
++ 	uint16_t pathlen;
++-	const unsigned char const *desc;
+++	const unsigned char *desc;
++ 	char *raw;
++ 	size_t raw_len;
++ 
++diff --git a/src/efibootmgr.c b/src/efibootmgr.c
++index 493f2cf..90a0998 100644
++--- a/src/efibootmgr.c
+++++ b/src/efibootmgr.c
++@@ -221,7 +221,7 @@ warn_duplicate_name(list_t *var_list)
++ 	list_t *pos;
++ 	var_entry_t *entry;
++ 	efi_load_option *load_option;
++-	const unsigned char const *desc;
+++	const unsigned char *desc;
++ 
++ 	list_for_each(pos, var_list) {
++ 		entry = list_entry(pos, var_entry_t, list);
++@@ -873,7 +873,7 @@ show_vars(const char *prefix)
++ {
++ 	list_t *pos;
++ 	var_entry_t *boot;
++-	const unsigned char const *description;
+++	const unsigned char *description;
++ 	efi_load_option *load_option;
++ 	efidp dp = NULL;
++ 	unsigned char *optional_data = NULL;
++-- 
++2.9.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.4
