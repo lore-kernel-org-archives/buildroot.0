@@ -1,45 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 21:31:17 +0200
-Subject: [Buildroot] [git commit] package/apache: bump version to 2.4.27
-Message-ID: <20170711193642.895C080DE0@busybox.osuosl.org>
+Date: Tue, 11 Jul 2017 21:31:07 +0200
+Subject: [Buildroot] [git commit] mpg123: security bump to version 1.25.2
+Message-ID: <20170711193642.68D1C82131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9b7cedac14de7cf5650589bf4c37635b5438a9
+commit: https://git.buildroot.net/buildroot/commit/?id=474daa20f8da2a677250146e8ee1652206923ee8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Announcement: http://www.apache.org/dist/httpd/Announcement2.4.html
-Release notes: http://www.apache.org/dist/httpd/CHANGES_2.4.27
+From the release notes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ - Extend pow tables for layer III to properly handle files with i-stereo and
+   5-bit scalefactors. Never observed them for real, just as fuzzed input to
+   trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
+   calling remote denial of service. While the accesses are out of bounds for
+   the pow tables, they still are safely within libmpg123's memory (other
+   static tables). Just wrong values are used for computation, no actual crash
+   unless you use something like GCC's AddressSanitizer, nor any information
+   disclosure.
+ - Avoid left-shifts of negative integers in layer I decoding.
+
+While we're at it, add a hash for the license file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpg123/mpg123.hash | 5 ++++-
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index fe7174a..f29ae45 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.26.tar.bz2.sha256
--sha256 a07eb52fafc879e0149d31882f7da63173e72df4478db4dc69f7a775b663d387 httpd-2.4.26.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
-+sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index b276b8d..857e538 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 69fbef3..cbab6f3 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
++sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
++
++# License file
++sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 7fc6d7a..01923d7 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.26
-+APACHE_VERSION = 2.4.27
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-MPG123_VERSION = 1.25.1
++MPG123_VERSION = 1.25.2
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
