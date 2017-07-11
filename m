@@ -1,63 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Jul 2017 11:57:13 +0200
-Subject: [Buildroot] [PATCH] mosquitto: bump version to 1.4.14
-Message-ID: <20170711095713.8258-1-peter@korsgaard.com>
+Date: Tue, 11 Jul 2017 12:28:57 +0200
+Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.25.2
+Message-ID: <20170711102857.24770-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop CVE 2017-9868 patch as that is now upstream.
+From the release notes:
 
-1.4.14 is a bugfix release, fixing significant websocket performance /
-correctness issues.
+ - Extend pow tables for layer III to properly handle files with i-stereo and
+   5-bit scalefactors. Never observed them for real, just as fuzzed input to
+   trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
+   calling remote denial of service. While the accesses are out of bounds for
+   the pow tables, they still are safely within libmpg123's memory (other
+   static tables). Just wrong values are used for computation, no actual crash
+   unless you use something like GCC's AddressSanitizer, nor any information
+   disclosure.
+ - Avoid left-shifts of negative integers in layer I decoding.
 
-Use HTTPS for the download as the server uses HSTS, thus saving a redirect.
-
-While we're at it, add hashes for the license files.
+While we're at it, add a hash for the license file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 11 +++++++----
- package/mosquitto/mosquitto.mk   |  6 ++----
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ package/mpg123/mpg123.hash | 5 ++++-
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 4ef174300e..f6f17aa5ef 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,4 +1,7 @@
--# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.12.tar.gz
--sha512  75e6105498869ab13265df7a0bea6052c014d59d0c0efb61162d8257d34c0153fce32130e84c28e99fd494f374949aac5e01c19f7439c2eea575b52ef1179c3c  mosquitto-1.4.12.tar.gz
--# Locally computed:
--sha256  06abd1206e548ac2378dd96f5434cb3e40ed77cecb6a9c37fbabab0b0f1360e5  mosquitto-1.4.x_cve-2017-9868.patch
-+# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.14.tar.gz
-+sha512 dc75a971354f87deeb79f32435acfae9bc561a1a24a75ee4940a35176ff91758071930d2105d8dee2a090e07527dbfaa5692bece67e03cc87e8b4b8b46f846c2  mosquitto-1.4.14.tar.gz
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 69fbef36c2..cbab6f3ee9 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
++sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
 +
-+# License files
-+sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-+sha256 3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
-+sha256 e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 829984896f..c763f48ab1 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,13 +4,11 @@
++# License file
++sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 7fc6d7ab00..01923d7990 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.4.12
--MOSQUITTO_SITE = http://mosquitto.org/files/source
-+MOSQUITTO_VERSION = 1.4.14
-+MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
- MOSQUITTO_INSTALL_STAGING = YES
--MOSQUITTO_PATCH = \
--	https://mosquitto.org/files/cve/2017-9868/mosquitto-1.4.x_cve-2017-9868.patch
- 
- MOSQUITTO_MAKE_OPTS = \
- 	UNAME=Linux \
+-MPG123_VERSION = 1.25.1
++MPG123_VERSION = 1.25.2
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
 2.11.0
