@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Jul 2017 23:11:16 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: Remove upstreamed 5.8.0
- patches
-In-Reply-To: <1499795800-712-1-git-send-email-joshua.henderson@microchip.com>
-References: <1499795800-712-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20170711231116.5147a530@windsurf.lan>
+Date: Tue, 11 Jul 2017 23:13:06 +0200
+Subject: [Buildroot] [RFC v1] libv4l: build utils only on MMU (with fork
+ support) platforms
+In-Reply-To: <20170711172624.7516-1-ps.report@gmx.net>
+References: <20170711172624.7516-1-ps.report@gmx.net>
+Message-ID: <20170711231306.7405dea8@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 11 Jul 2017 10:56:40 -0700, Joshua Henderson wrote:
-> This removes the following patches that have been upstreamed:
+On Tue, 11 Jul 2017 19:26:24 +0200, Peter Seiderer wrote:
+> Fixes [1]:
 > 
-> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [1]
-> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [2]
-> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [3]
-> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [4]
+>     CXXLD    v4l2-compliance
+>   .../output/build/libv4l-1.12.5/lib/libv4lconvert/.libs/libv4lconvert.so: undefined reference to `fork'
+>   collect2: error: ld returned 1 exit status
 > 
-> And the following patches that do not appear to be upstream:
+> [1] http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe
 > 
-> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> The libv4l build for noMMU platforms was enabled with commit 'package/libv4l:
+> allow build of v4l2 utilities on noMMU platforms' (see [2]). But libv4lconvert uses
+> fork internally, so all utils linking against fail to build. Fix this by disabling
+> the utils on noMMU platforms (so keep building all libraries).
 > 
-> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
-> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
-> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
-> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
+> Alternatives would be:
 > 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Brent Sink <brents_3@hotmail.com>
+> - disable libv4l on all noMMU platforms (not only the utils), revert a part
+>   of commit [2]
+> 
+> - create a patch to disable only libv4lconvert (and all dependend utils)
+>   on noMMU platforms
+> 
+> [2] https://git.buildroot.net/buildroot/commit/?id=f837251785e9389f53d695ddb8a094707865171b
 
-How can this be a separate patch from the bump to Qt 5.9.1 ?
+Hugues, could you comment on this, since you originally re-enabled
+libv4l for noMMU architectures ?
 
-If you remove the Qt 5.8.0 patches, then Qt will fail to build, right?
-So the removal of the patches should be done as part of the patch
-bumping to 5.9.1.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
