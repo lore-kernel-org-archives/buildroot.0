@@ -1,72 +1,97 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jul 2017 23:42:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: fix gtk support
-In-Reply-To: <20170711231701.3850d479@windsurf.lan>
-References: <20170710175137.1402-1-bernd.kuhls@t-online.de>
- <87a84asr2s.fsf@dell.be.48ers.dk> <20170711231701.3850d479@windsurf.lan>
-Message-ID: <a69e0db5-ae3c-fa51-7864-8fd8c98dd71c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Jul 2017 23:47:37 +0200
+Subject: [Buildroot] [PATCH 2/3] fs/squashfs: align size to 1MiB
+In-Reply-To: <20170711204204.GA2991@scaer> (Yann E. MORIN's message of "Tue,
+ 11 Jul 2017 22:42:04 +0200")
+References: <cover.1499703968.git.yann.morin.1998@free.fr>
+ <03816ee56333f1eddb6ca8a048aea947fc027963.1499703968.git.yann.morin.1998@free.fr>
+ <20170710232439.7dba43f1@windsurf.lan> <20170710213516.GB22898@scaer>
+ <87pod6rak1.fsf@dell.be.48ers.dk> <20170711204204.GA2991@scaer>
+Message-ID: <878tjur6h2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
+Hi,
 
-On 11-07-17 23:17, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 11 Jul 2017 21:37:15 +0200, Peter Korsgaard wrote:
-> 
->>  > Gtk support is controlled by ARG_WITH since
->>  > https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4  
->>
->>  > Fixes a build error if libgtk2/3 was built before transmission:
->>  > http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/  
->>
->>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>  
->>
->> So this has been broken since (atleast) the version bump in early 2016?
->> Wow.
-> 
-> Maybe not:
-> 
-> configure: error: "The gtk client cannot be built without nls support.  Try adding either --enable-nls or --without-gtk" 
-> 
-> Until the recent gettext revamp we were passing --disable-nls only when
-> BR2_ENABLE_LOCALE was disabled. However, the transmission-gtk support has:
-> 
-> 	depends on BR2_PACKAGE_LIBGTK2 && BR2_ENABLE_LOCALE
+ > Well, I also did not remeber such an issue either, but ot urns out that
+ > the squashfs images that are generated with mksquashfs are not bootable
+ > in a (recent-ish) kernel if their size is not a multiple of at least
+ > 256KiB...
 
- So in fact this dependency on LOCALE is wrong now. Indeed, the commit message
-that added it (d6dfc2109c7149a795f7bda963a9a583685dec3f) says:
+ > Steps to reproduce:
+ >   - start with qemu_arm_vexpress_defconfig,
+ >   - change the toolchain to external (for speed)
+ >   - change the fs ro squashfs
+ >   - build
+ >   - boot
 
-    Otherwise configure errors out with:
+ > Expected results:
+ >   - it boots to a login prompt
 
-    configure: error: "The gtk client cannot be built without nls support.
-    Try adding either --enable-nls or --disable-gtk"
+ > Actual result:
+ >   - the kernel panics beacuse it can't mount the root filesystem
 
-> Therefore, we were never building transmission with --disable-nls. With
-> the gettext revamp, we now pass --disable-nls to all packages, unless
-> BR2_SYSTEM_ENABLE_NLS is enabled (which it isn't by default).
-> 
-> So I am not sure the fix is complete. Indeed the error says that the
-> gtk client cannot be built without nls support. So I guess that if you
-> have BR2_PACKCAGE_TRANSMISSION_GTK=y, but BR2_SYSTEM_ENABLE_NLS
-> disabled it still fails to build.
+Are we sure this isn't just some kind of issue in the qemu sd card
+emulation?
 
- But only because we pass --disable-nls. I expect that passing --enable-nls
-should be sufficient to fix the build again. Indeed, all libcs not have libintl
-stubs built in so there is no reason why it shouldn't just work when you pass
---enable-nls.
+I did a test with qemu_arm_versatile_defconfig (just because that's the
+defconfig I normally use), and here it works:
 
- Regards,
- Arnout
+Booting Linux on physical CPU 0x0
+Linux version 4.11.3 (peko at dell) (gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29) ) #2 Tue Jul 11 23:38:39 CEST 2017
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00093177
+CPU: VIVT data cache, VIVT instruction cache
+OF: fdt: Machine model: ARM Versatile PB
+Memory policy: Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 32512
+Kernel command line: root=/dev/sda console=ttyAMA0,115200
+..
+
+sd 0:0:0:0: [sda] 4480 512-byte logical blocks: (2.29 MB/2.19 MiB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 0:0:0:0: [sda] Attached SCSI disk
+Segment Routing with IPv6
+sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+NET: Registered protocol family 17
+input: AT Raw Set 2 keyboard as /devices/platform/amba/amba:fpga/10006000.kmi/serio0/input/input0
+input: ImExPS/2 Generic Explorer Mouse as /devices/platform/amba/amba:fpga/10007000.kmi/serio1/input/input2
+VFS: Mounted root (squashfs filesystem) readonly on device 8:0.
+devtmpfs: mounted
+Freeing unused kernel memory: 136K
+This architecture does not have kernel memory protection.
+Starting logging: OK
+read-only file system detected...done
+Starting network: 8139cp 0000:00:0c.0 eth0: link up, 100Mbps, full-duplex, lpa 0x05E1
+udhcpc: started, v1.26.2
+udhcpc: sending discover
+udhcpc: sending select for 10.0.2.15
+udhcpc: lease of 10.0.2.15 obtained, lease time 86400
+deleting routers
+adding dns 10.0.2.3
+OK
+
+Welcome to Buildroot
+
+This is with this rootfs image:
+
+ls -la rootfs.squashfs
+-rw-r--r-- 1 peko peko 2293760 Jul 11 23:38 rootfs.squashfs
+
+2293760 is 0x230000, so 64KB alignment.
+
+Adding strace bumps it up to:
+
+-rw-r--r-- 1 peko peko 2457600 Jul 11 23:46 rootfs.squashfs
+
+2457600 is 0x258000, so 32KB alignment.
+
+And this rootfs also works.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
