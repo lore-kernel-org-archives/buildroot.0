@@ -1,50 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Jul 2017 18:38:55 +0200
-Subject: [Buildroot] [PATCH] configs: nexbox_a95x_defconfig: bump to
- kernel 4.12
-In-Reply-To: <20170712122322.12281-1-peter@korsgaard.com>
-References: <20170712122322.12281-1-peter@korsgaard.com>
-Message-ID: <20170712183855.34dd31b1@windsurf.lan>
+Date: Wed, 12 Jul 2017 18:39:09 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{9,11,12}.x series
+Message-ID: <20170712163500.244607FD58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8e95c2e9ca72d39823a0ef72c69590da0ca8b140
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Jul 2017 14:23:22 +0200, Peter Korsgaard wrote:
-> Main difference is that the drm driver now supports the hdmi output.
-> 
-> The gxl variant device tree has been renamed in:
-> 
-> commit 7eea67101b9713ae438955e8899b3c4b078419f9
-> Author: Kevin Hilman <khilman@baylibre.com>
-> Date:   Fri Jan 20 07:57:52 2017 -0800
-> 
->     ARM64: dts: meson-gxl: rename Nexbox A95x for consistency
-> 
->     Since the GXL family has S905X and S905D SoCs, we're keeping the SoC
->     name in the DTS filename for clarity.  Rename this file accordingly to
->     be consistent with the rest of the GXL DTS files.
-> 
->     Cc: Neil Armstrong <narmstrong@baylibre.com>
->     Reviewed-by: Andreas F?rber <afaerber@suse.de>
->     Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> 
-> So adjust the defconfig and boot script to match.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  board/nexbox/a95x/boot.txt     | 2 +-
->  board/nexbox/a95x/genimage.cfg | 2 +-
->  configs/nexbox_a95x_defconfig  | 6 +++---
->  3 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ab49b60..6dc519d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.76"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.36"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.37"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+-	default "4.11.9"	if BR2_KERNEL_HEADERS_4_11
+-	default "4.12"		if BR2_KERNEL_HEADERS_4_12
++	default "4.11.10"	if BR2_KERNEL_HEADERS_4_11
++	default "4.12.1"		if BR2_KERNEL_HEADERS_4_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
