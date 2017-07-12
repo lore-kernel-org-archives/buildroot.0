@@ -1,60 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 12 Jul 2017 16:27:51 +0000
-Subject: [Buildroot] [Bug 10051] New: make: *** No rule to make target
- 'raspberrpi3_defconfig'. Stop reported with Buildroot v 2o17.05.1
-Message-ID: <bug-10051-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Jul 2017 18:27:57 +0200
+Subject: [Buildroot] [PATCH 4/8] python-versiontools: add host variant
+In-Reply-To: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170712162801.31131-5-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10051
+It will be needed by python-json-schema-validator.
 
-            Bug ID: 10051
-           Summary: make: *** No rule to make target
-                    'raspberrpi3_defconfig'.  Stop reported with Buildroot
-                    v 2o17.05.1
-           Product: buildroot
-           Version: 2017.05.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ptomov at mirion.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-versiontools/python-versiontools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Created attachment 7106
-  --> https://bugs.busybox.net/attachment.cgi?id=7106&action=edit
-Screenshot of the error
-
-Hi,
-
-
-I cloned the Buildroot to version 2017.05.1. with:
-
-git clone https://git.buildroot.net/buildroot
-
-But now when running 
-
-make rasberrypi3_defconfig
-
-Buildroot does not create a .config file in  /../../buildroot/ folder. The
-following error was reported:
-
-make: *** No rule to make target 'raspberrpi3_defconfig'.  Stop.
-
-In did not change any configuration. The Make file is the original one. Please
-see the attached screenshot and advise me how to fix this problem.
-
-Thanks,
-
-   Pavel
-
+diff --git a/package/python-versiontools/python-versiontools.mk b/package/python-versiontools/python-versiontools.mk
+index 2170730..fbf1040 100644
+--- a/package/python-versiontools/python-versiontools.mk
++++ b/package/python-versiontools/python-versiontools.mk
+@@ -11,3 +11,4 @@ PYTHON_VERSIONTOOLS_SETUP_TYPE = setuptools
+ PYTHON_VERSIONTOOLS_LICENSE = LGPL-3.0
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.9.4
