@@ -1,57 +1,56 @@
 From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Tue, 11 Jul 2017 17:25:20 -0700
-Subject: [Buildroot] [PATCH 2/2] qt5: bump to 5.9.1
-In-Reply-To: <1967578a-0059-d174-edcc-e62efdd0843f@mind.be>
-References: <1499399077-3542-1-git-send-email-brents_3@hotmail.com>
- <DM5PR03MB2924FBF3A3BF12875E828F5BBFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
- <79ab1fe5-2dac-abde-15b0-a985b9e37959@ecagroup.com>
- <22a46dfc-6665-4a13-e5e9-5e59280cbd37@microchip.com>
- <1967578a-0059-d174-edcc-e62efdd0843f@mind.be>
-Message-ID: <edc5f69f-8c3d-656d-8a21-01ecb02ed24e@microchip.com>
+Date: Tue, 11 Jul 2017 17:30:28 -0700
+Subject: [Buildroot] [PATCH] package/qt5base: Remove upstreamed 5.8.0
+ patches
+In-Reply-To: <20170711231116.5147a530@windsurf.lan>
+References: <1499795800-712-1-git-send-email-joshua.henderson@microchip.com>
+ <20170711231116.5147a530@windsurf.lan>
+Message-ID: <9d1e8ca9-38a3-6302-825b-f73bf1ebac3b@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Thomas,
 
-On 07/11/2017 02:16 PM, Arnout Vandecappelle wrote:
+On 07/11/2017 02:11 PM, Thomas Petazzoni wrote:
+> Hello,
 > 
+> On Tue, 11 Jul 2017 10:56:40 -0700, Joshua Henderson wrote:
+>> This removes the following patches that have been upstreamed:
+>>
+>> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [1]
+>> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [2]
+>> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [3]
+>> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [4]
+>>
+>> And the following patches that do not appear to be upstream:
+>>
+>> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
+>>
+>> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
+>> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
+>> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
+>> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
+>>
+>> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+>> Cc: Julien Corjon <corjon.j@ecagroup.com>
+>> Cc: Brent Sink <brents_3@hotmail.com>
 > 
-> On 11-07-17 02:00, Joshua Henderson wrote:
->> Julien,
->>
->> On 07/10/2017 05:02 AM, Julien CORJON wrote:
-> [snip]
->>>    - 0004-examples-fix-compile-without-gui-module.patch (See 
->>> https://code.qt.io/cgit/qt/qtbase.git/commit/examples/gui/gui.pro?id=18d49808db46add078d9d4bcffaac5361d5c7269 
->>> and 
->>> https://code.qt.io/cgit/qt/qtbase.git/commit/examples/widgets/widgets.pro?id=18d49808db46add078d9d4bcffaac5361d5c7269)
->>>
->>
->> Noticed the last one is not actually upstream for 5.8 (if it matters):
->>
->>     0004-examples-fix-compile-without-gui-module.patch
->>     examples: fix compile without gui module (18d49808d).
->>
->> It only seems to be available upstream for 5.9.  Should the 5.8.0 folder
->> still be removed?
+> How can this be a separate patch from the bump to Qt 5.9.1 ?
 > 
->  Since the 5.8 version of qt5 is removed by this patch, indeed the entire folder
-> should be removed. There is no way to use those patches any more.
+> If you remove the Qt 5.8.0 patches, then Qt will fail to build, right?
+> So the removal of the patches should be done as part of the patch
+> bumping to 5.9.1.
 > 
 
-OK.
+You are correct.  Send this to the trash pile.  I'll roll it in to the other patch, assuming you
+don't come back with the option to keep this separate and put this in a patch series after the bump
+to 5.9.1.
 
->  If some patch were not upstream yet in 5.9.1, then instead of removing it, it
-> would have to be renamed to 5.9.1/0001-examples-fix-...
-
-Everything is upstream for 5.9.1 that I can tell, so this step is not necessary.
-
-I sent a patch for this change today that looks to be inline with this thread [1].
-It has its own issues.
-
-[1] https://patchwork.ozlabs.org/patch/786793/
+Now that I think about it, this could use a bit of clarification in the commit message above noted
+as "do not appear to be upstream" which is only true for 5.8.  All patches in this folder are
+upstream for 5.9.
 
 Josh
