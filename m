@@ -1,72 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Jul 2017 18:27:54 +0200
-Subject: [Buildroot] [PATCH 1/8] python-pyasn: switch to setuptools instead
-	of distutils
+Date: Wed, 12 Jul 2017 18:27:58 +0200
+Subject: [Buildroot] [PATCH 5/8] python-json-schema-validator: needs
+	versiontools on the host
 In-Reply-To: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
 References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170712162801.31131-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170712162801.31131-6-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-pyasn can use setuptools instead of distutils, and using
-setuptools is generally preferred.
+python-json-schema-validator does not need versiontools on the target,
+but only on the host, as it's listed in setup_requires in setup.py.
 
-In addition, using setuptools allows to make sure the package will
-continue to build when we will adjust the PYTHONPATH variable to no
-longer point to target Python modules. Without such a change to
-setuptools, the build would fail with:
-
-=====================================================================
-running install
-Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
-/home/test/buildroot/output/host/bin/python -E -c pass
-TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
-error: bad install directory or PYTHONPATH
-
-You are attempting to install a package to a directory that is not
-on PYTHONPATH and which Python does not read ".pth" files from.  The
-installation directory you specified (via --install-dir, --prefix, or
-the distutils default setting) was:
-
-    /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
-
-and your PYTHONPATH environment variable currently contains:
-
-    '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
-
-Here are some of your options for correcting the problem:
-
-* You can choose a different installation directory, i.e., one that is
-  on PYTHONPATH or supports .pth files
-
-* You can add the installation directory to the PYTHONPATH environment
-  variable.  (It must then also be on PYTHONPATH whenever you run
-  Python and want to use the package(s) you are installing.)
-
-* You can set up the installation directory to support ".pth" files by
-  using one of the approaches described here:
-
-  https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
-=====================================================================
+This was not noticed so far because host Python interpreter is started
+with a PYTHONPATH that contains a directory with target Python
+packages, so versiontools was found there. But as we are about to fix
+PYTHONPATH to no longer include such a directory,
+python-json-schema-validator would fail due to versiontools being
+missed on the host.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyasn/python-pyasn.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-json-schema-validator/Config.in                       | 1 -
+ package/python-json-schema-validator/python-json-schema-validator.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
-index 255341f..f34520f 100644
---- a/package/python-pyasn/python-pyasn.mk
-+++ b/package/python-pyasn/python-pyasn.mk
-@@ -9,6 +9,6 @@ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
- PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
- PYTHON_PYASN_LICENSE = BSD-2-Clause
- PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
--PYTHON_PYASN_SETUP_TYPE = distutils
-+PYTHON_PYASN_SETUP_TYPE = setuptools
+diff --git a/package/python-json-schema-validator/Config.in b/package/python-json-schema-validator/Config.in
+index dbc5328..e50e8ee 100644
+--- a/package/python-json-schema-validator/Config.in
++++ b/package/python-json-schema-validator/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
+ 	bool "python-json-schema-validator"
+-	select BR2_PACKAGE_PYTHON_VERSIONTOOLS
+ 	help
+ 	  JSON Schema Validator
+ 
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
+index 6accbd6..c0a335c 100644
+--- a/package/python-json-schema-validator/python-json-schema-validator.mk
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
+@@ -9,6 +9,6 @@ PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE = json-schema-validator-$(PYTHON_JSON_SCHEMA
+ PYTHON_JSON_SCHEMA_VALIDATOR_SITE = https://pypi.python.org/packages/70/46/ba39cb7efad1898cfc89bf3588b8612f24d128f1c25b761994f524a59cef
+ PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPL-3.0
+ PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
+-PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
++PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = host-python-versiontools
  
  $(eval $(python-package))
 -- 
