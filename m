@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 12 Jul 2017 16:41:29 +0200
-Subject: [Buildroot] [PATCH 2/4] python-markupsafe: bump to version 1.0
+Date: Wed, 12 Jul 2017 16:41:30 +0200
+Subject: [Buildroot] [PATCH 3/4] python-pysocks: bump to version 1.6.7
 In-Reply-To: <20170712144131.26364-1-yegorslists@googlemail.com>
 References: <20170712144131.26364-1-yegorslists@googlemail.com>
-Message-ID: <20170712144131.26364-2-yegorslists@googlemail.com>
+Message-ID: <20170712144131.26364-3-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,43 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Change setup type to setuptools and use proper license file.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-markupsafe/python-markupsafe.hash | 6 +++---
- package/python-markupsafe/python-markupsafe.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pysocks/python-pysocks.hash | 4 ++--
+ package/python-pysocks/python-pysocks.mk   | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
-index 448252b0d..4226a1ddf 100644
---- a/package/python-markupsafe/python-markupsafe.hash
-+++ b/package/python-markupsafe/python-markupsafe.hash
+diff --git a/package/python-pysocks/python-pysocks.hash b/package/python-pysocks/python-pysocks.hash
+index ac0b63ac9..802bd37f0 100644
+--- a/package/python-pysocks/python-pysocks.hash
++++ b/package/python-pysocks/python-pysocks.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f5ab3deee4c37cd6a922fb81e730da6e, sha256 locally computed
--md5	f5ab3deee4c37cd6a922fb81e730da6e  MarkupSafe-0.23.tar.gz
--sha256	a4ec1aff59b95a14b45eb2e23761a0179e98319da5a7eb76b56ea8cdc7b871c3  MarkupSafe-0.23.tar.gz
-+# md5 from https://pypi.python.org/pypi/markupsafe/json, sha256 locally computed
-+md5	2fcedc9284d50e577b5192e8e3578355  MarkupSafe-1.0.tar.gz
-+sha256	a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665  MarkupSafe-1.0.tar.gz
-diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
-index d8e3acbd8..625a9b5bb 100644
---- a/package/python-markupsafe/python-markupsafe.mk
-+++ b/package/python-markupsafe/python-markupsafe.mk
-@@ -4,9 +4,9 @@
+ # md5 from https://pypi.python.org/pypi/pysocks/json, sha256 locally computed
+-md5 571f4c23982fa86bf0e7a441f1b6c881 PySocks-1.6.6.tar.gz
+-sha256 02419a225ff5dcfc3c9695ef8fc9b4d8cc99658e650c6d4718d4c8f451e63f41 PySocks-1.6.6.tar.gz
++md5  07007ec7ed46292dab06013f2e3af365  PySocks-1.6.7.tar.gz
++sha256  d00329f27efa157db7efe3ca26fcd69033cd61f83822461ee3f8a353b48e33cf  PySocks-1.6.7.tar.gz
+diff --git a/package/python-pysocks/python-pysocks.mk b/package/python-pysocks/python-pysocks.mk
+index 10c76b29a..163da761b 100644
+--- a/package/python-pysocks/python-pysocks.mk
++++ b/package/python-pysocks/python-pysocks.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_MARKUPSAFE_VERSION = 0.23
-+PYTHON_MARKUPSAFE_VERSION = 1.0
- PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
--PYTHON_MARKUPSAFE_SITE = http://pypi.python.org/packages/source/M/MarkupSafe
-+PYTHON_MARKUPSAFE_SITE = https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b
- PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
- PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
- PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE
+-PYTHON_PYSOCKS_VERSION = 1.6.6
++PYTHON_PYSOCKS_VERSION = 1.6.7
+ PYTHON_PYSOCKS_SOURCE = PySocks-$(PYTHON_PYSOCKS_VERSION).tar.gz
+-PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/fd/70/ba9982cedc9b3ed3c06934f1f46a609e0f23c7bfdf567c52a09f1296b8cb
++PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/7d/38/edca891ce16827a1de45cc347e4b6c22311eba25838b9825a5e6c48cf560
+ PYTHON_PYSOCKS_LICENSE = BSD-3-Clause
+-PYTHON_PYSOCKS_LICENSE_FILES = socks.py
+-PYTHON_PYSOCKS_SETUP_TYPE = distutils
++PYTHON_PYSOCKS_LICENSE_FILES = LICENSE
++PYTHON_PYSOCKS_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.11.0
