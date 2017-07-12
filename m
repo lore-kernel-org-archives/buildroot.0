@@ -1,74 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Jul 2017 09:23:47 +0200
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <BN6PR03MB29146452670D6E67E98CBF46BFAF0@BN6PR03MB2914.namprd03.prod.outlook.com>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <BN6PR03MB29146452670D6E67E98CBF46BFAF0@BN6PR03MB2914.namprd03.prod.outlook.com>
-Message-ID: <d801601f-d2cb-9ccd-56cf-4f51e575cacf@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Jul 2017 09:32:18 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: Tweak TARGET_ABI for
+ MPC8548
+In-Reply-To: <20170712024737.21578-1-andrew.smirnov@gmail.com>
+References: <20170712024737.21578-1-andrew.smirnov@gmail.com>
+Message-ID: <20170712093218.5a6a20ff@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 12-07-17 03:41, Brent Sink wrote:
-> All,
+On Tue, 11 Jul 2017 19:47:37 -0700, Andrey Smirnov wrote:
+> From: Mark Hinds <mhinds@spaceflightindustries.com>
 > 
-> I did some testing on an i.MX6, and found that I need to export 
-> QT_QPA_EGLFS_INTEGRATION=eglfs_viv, before running a Qt app. There is a 
-> bug report for this here: https://bugreports.qt.io/browse/QTBUG-61156
+> Add -mcpu=8548 -mhard-float to TARGET_ABI so that hardware FP is used
+> to build all of the package in the system.
 > 
+> Signed-off-by: Mark Hinds <zoronic@gmail.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  package/Makefile.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> On 7/11/2017 8:45 PM, Arnout Vandecappelle wrote:
->>   Hi Joshua,
->>
->>   Quick review before you resubmit.
->>
->>   When you resubmit, make sure you send it together with the qt5wayland change as
->> one series, since that patch depends on this one.
-> 
-> Should this this be a part of this patch, or is it only specific for 
-> imx?  They are saying that "the buildroot configuration is broken. As a 
-> workaround, try exporting the environment variable 
-> QT_QPA_EGLFS_INTEGRATION=eglfs_viv before running Qt apps. This should 
-> not be necessary normally since the build environment is expected to set 
-> the correct eglfs backend on a per target device basis. Qt's own device 
-> specs do this, but for other build systems (Yocto, Buildroot) it's up to 
-> those recipes to manage this."
-> 
-> Can anyone point me to where this environment variable should be added? 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index b95e5e3..958d72c 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -78,7 +78,7 @@ ifeq ($(BR2_powerpc_8540),y)
+>  TARGET_ABI += -mabi=spe -mfloat-gprs=single -Wa,-me500
+>  endif
+>  ifeq ($(BR2_powerpc_8548),y)
+> -TARGET_ABI += -mabi=spe -mfloat-gprs=double -Wa,-me500x2
+> +TARGET_ABI += -mabi=spe -mfloat-gprs=double -Wa,-me500x2 -mcpu=8548 -mhard-float
 
- No, you shouldn't add the environment variable, you should change
-BR2_PACKAGE_QT5BASE_DEFAULT_QPA. Which is part of the defconfig, not part of the
-build system itself. It might be possible to set the default QPA based on other
-packages selected, but it's a bit complicated so nobody has implemented that.
+Adding the -mcpu is useless, because it's already passed thanks to
+BR2_GCC_TARGET_CPU, defined to 8548 when BR2_powerpc_8548=y in
+arch/Config.in.powerpc.
 
- At least, I think that is it. It's also possible that the
-QT5BASE_CONFIGURE_OPTS or qmake.conf or qplatformdefs.h or
-QT5BASE_ARCH_CONFIG_FILE has to be adapted.
+Unconditionally passing -mhard-float here is wrong, because people may
+want to use soft-float, which can be selected using the
+BR2_POWERPC_SOFT_FLOAT option.
 
-> If this should be part of this patch, I'll create the patch and then 
-> Josh can submit the final version.  Otherwise, I'll just submit a new patch.
+When BR2_SOFT_FLOAT=y (which is selected by BR2_POWERPC_SOFT_FLOAT), we:
 
- It should be a separate patch for sure, and it can be sent as part of the qt5
-bump series or separately - since they don't conflict, either is possible.
+ * Pass --with-float=soft when building gcc (see package/gcc/gcc.mk).
+   This solves the case of internal toolchain being used.
 
- Regards,
- Arnout
+ * Add -msoft-float in the toolchain wrapper when an external toolchain
+   is used (toolchain/toolchain-external/pkg-toolchain-external.mk).
 
-> 
-> Thanks!
-> 
-> -brent
-> 
+However, we indeed never explicitly pass --with-float=hard (when
+building gcc) or -mhard-float (for external toolchains).
 
+Could you describe more precisely the problem you're seeing? Are you
+using the internal toolchain backend, or an external toolchain? In the
+latter case, which external toolchain are you using?
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
