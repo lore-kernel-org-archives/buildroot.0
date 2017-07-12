@@ -1,46 +1,46 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 12 Jul 2017 16:04:36 -0700
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
-Message-ID: <4fa3475a-2ba2-43e5-89cb-fba66a1a99b6@microchip.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 13 Jul 2017 02:55:27 +0300
+Subject: [Buildroot] [PATCH 0/4] Update patches applied to WebKitGTK+,
+	fix Wayland-only builds
+Message-ID: <20170712235531.20444-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi all,
 
->>> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>> +#  * -system-pcre because pcre is mandatory to build Qt, and we
->>> +#    want to use the one packaged in Buildroot
->>> +#    with Qt5.9 pcre should be > 10.20 (pcre2)
->>> +QT5BASE_CONFIGURE_OPTS += -system-pcre
->>
->>  So this option no longer exists in 5.9.1? Then it should be removed from line
->> 26, as well as the comment there.
->>
-> 
-> I will double check with 5.9.1, but this was originally found to be removed in
-> some version of QT between 5.8.0 and 5.9.1.
-> 
+This patch set removes a patch which has been included upstream for a while,
+and then adds two to fix the build for ARMv8-A, plus one patch to fix the
+build when only Wayland is used (and X11 is disabled). All the patches were
+pulled from their respective bug reports at bugs.webkit.org and they will be
+included in future releases.
 
-Upon further inspection, my statement above is wrong.  The global configure opts are
-already:
+Tested by building for the Raspberry Pi 3, using raspberrypi3_defconfig as
+starting point, which makes the cross-compiler specifically target ARMv8-A
+(so it defined __ARCH_ARM_8A__ instead of the more generic __ARCH_ARM_8__).
 
-    QT5BASE_CONFIGURE_OPTS += \
-            -optimized-qmake \
-            -no-cups \
-            -no-iconv \
-            -system-zlib \
-            -system-pcre \
-            -no-pch \
-            -shared
+Cheers,
 
-Meaning, there is no need to conditionally set -system-pcre later for any version. That
-addition to set it for 5.6 will be removed.
 
-Josh
+Adrian Perez de Castro (4):
+  webkitgtk: Remove patch uneeded for the current version
+  webkitgtk: Add patches which allow building for ARMv8-A
+  webkitgtk: Add patch to allow Wayland-only builds
+  webkitgtk: Ensure that Mesa headers do not include X11 headers on
+    Wayland builds
+
+ ...lure-to-build-when-the-compiler-specifica.patch | 20 ++++++++
+ package/webkitgtk/0001-fix-gcc6-builds.patch       | 53 ----------------------
+ ...-to-build-when-the-compiler-specifically-.patch | 20 ++++++++
+ .../webkitgtk/0003-angle-egl-wayland-support.patch | 45 ++++++++++++++++++
+ package/webkitgtk/webkitgtk.mk                     |  3 ++
+ 5 files changed, 88 insertions(+), 53 deletions(-)
+ create mode 100644 package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
+ delete mode 100644 package/webkitgtk/0001-fix-gcc6-builds.patch
+ create mode 100644 package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
+ create mode 100644 package/webkitgtk/0003-angle-egl-wayland-support.patch
+
+-- 
+2.13.2
