@@ -1,202 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Jul 2017 18:28:01 +0200
-Subject: [Buildroot] [PATCH 8/8] python: remove target Python packages from
-	PYTHONPATH
-In-Reply-To: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
-References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170712162801.31131-9-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Jul 2017 16:29:54 +0000
+Subject: [Buildroot] [Bug 10051] make: *** No rule to make target
+ 'raspberrpi3_defconfig'. Stop reported with Buildroot v 2o17.05.1
+In-Reply-To: <bug-10051-163@https.bugs.busybox.net/>
+References: <bug-10051-163@https.bugs.busybox.net/>
+Message-ID: <bug-10051-163-LuUf8s3qbw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently have
-$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
-inside the PYTHON_PATH variable, which gets used to define PYTHONPATH,
-passed to the host Python interpreter when building/installing target
-packages.
+https://bugs.busybox.net/show_bug.cgi?id=10051
 
-However, this is terribly wrong, as it causes the host interpreter to
-potentially import target Python packages. This is wrong for several
-reasons:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- - Some Python packages might need some Python modules to be installed
-   on the host (described in setup_requires in setup.py), but their
-   installation currently works because by luck the corresponding
-   Python module is installed for the target. Some of those cases were
-   happening for real, and fixed by previous patches.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
- - Some Python packages include some native code, therefore built for
-   a specific CPU architecture. When you point the host Python
-   interpreter to native libraries built for the target, you get nice
-   build failures, such as the one affecting the python-cffi related
-   packages.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Did you notice the typos in the defconfig you used?
 
-Making this change allows to fix the python-cffi related build
-failures:
+Please look at "make list-defconfigs" or "ls configs/" and use defconfig names
+that actually exist.
 
-  http://autobuild.buildroot.net/results/a9af84f2d845ee25e2b7d8b92aef485112b46060/
-  (python-cryptography)
+Also, please double check what you're doing before reporting issues in the bug
+tracker. Thanks!
 
-  http://autobuild.buildroot.net/results/b017c4f6b4d45c0afbf06a80dbd3f2ebe5d49d20/
-  (python-pynacl)
-
-  http://autobuild.buildroot.net/results/25144ea191ad46d851b31d3a2f0ef939f215494b/
-  (python-smbus-cffi)
-
-This change has been verified with the following defconfig that
-enables a lot of Python packages:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-834-gb595627.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_ALSAAUDIO=y
-BR2_PACKAGE_PYTHON_ARROW=y
-BR2_PACKAGE_PYTHON_ATTRS=y
-BR2_PACKAGE_PYTHON_AUTOBAHN=y
-BR2_PACKAGE_PYTHON_BITSTRING=y
-BR2_PACKAGE_PYTHON_BOTTLE=y
-BR2_PACKAGE_PYTHON_CAN=y
-BR2_PACKAGE_PYTHON_CBOR=y
-BR2_PACKAGE_PYTHON_CHARDET=y
-BR2_PACKAGE_PYTHON_CHEETAH=y
-BR2_PACKAGE_PYTHON_CHERRYPY=y
-BR2_PACKAGE_PYTHON_CONFIGOBJ=y
-BR2_PACKAGE_PYTHON_CONFIGSHELL_FB=y
-BR2_PACKAGE_PYTHON_CRC16=y
-BR2_PACKAGE_PYTHON_CRCMOD=y
-BR2_PACKAGE_PYTHON_CSSSELECT=y
-BR2_PACKAGE_PYTHON_CSSUTILS=y
-BR2_PACKAGE_PYTHON_DAEMON=y
-BR2_PACKAGE_PYTHON_DIALOG=y
-BR2_PACKAGE_PYTHON_DICTTOXML=y
-BR2_PACKAGE_PYTHON_DJANGO=y
-BR2_PACKAGE_PYTHON_DOCOPT=y
-BR2_PACKAGE_PYTHON_DPKT=y
-BR2_PACKAGE_PYTHON_ECDSA=y
-BR2_PACKAGE_PYTHON_ENUM=y
-BR2_PACKAGE_PYTHON_FLASK_BABEL=y
-BR2_PACKAGE_PYTHON_FLASK_JSONRPC=y
-BR2_PACKAGE_PYTHON_FLASK_LOGIN=y
-BR2_PACKAGE_PYTHON_FLUP=y
-BR2_PACKAGE_PYTHON_GOBJECT=y
-BR2_PACKAGE_PYTHON_GUNICORN=y
-BR2_PACKAGE_PYTHON_HTML5LIB=y
-BR2_PACKAGE_PYTHON_HTTPLIB2=y
-BR2_PACKAGE_PYTHON_HUMANIZE=y
-BR2_PACKAGE_PYTHON_ID3=y
-BR2_PACKAGE_PYTHON_INIPARSE=y
-BR2_PACKAGE_PYTHON_IOWAIT=y
-BR2_PACKAGE_PYTHON_IPADDR=y
-BR2_PACKAGE_PYTHON_IPY=y
-BR2_PACKAGE_PYTHON_IPYTHON=y
-BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR=y
-BR2_PACKAGE_PYTHON_KEYRING=y
-BR2_PACKAGE_PYTHON_LIBCONFIG=y
-BR2_PACKAGE_PYTHON_LMDB=y
-BR2_PACKAGE_PYTHON_LXML=y
-BR2_PACKAGE_PYTHON_MAD=y
-BR2_PACKAGE_PYTHON_MARKDOWN=y
-BR2_PACKAGE_PYTHON_MELD3=y
-BR2_PACKAGE_PYTHON_MISTUNE=y
-BR2_PACKAGE_PYTHON_MSGPACK=y
-BR2_PACKAGE_PYTHON_MUTAGEN=y
-BR2_PACKAGE_PYTHON_MWSCRAPE=y
-BR2_PACKAGE_PYTHON_NETADDR=y
-BR2_PACKAGE_PYTHON_NETIFACES=y
-BR2_PACKAGE_PYTHON_NFC=y
-BR2_PACKAGE_PYTHON_NUMPY=y
-BR2_PACKAGE_PYTHON_PAHO_MQTT=y
-BR2_PACKAGE_PYTHON_PAM=y
-BR2_PACKAGE_PYTHON_PARAMIKO=y
-BR2_PACKAGE_PYTHON_PILLOW=y
-BR2_PACKAGE_PYTHON_POSIX_IPC=y
-BR2_PACKAGE_PYTHON_PSUTIL=y
-BR2_PACKAGE_PYTHON_PUDB=y
-BR2_PACKAGE_PYTHON_PYCLI=y
-BR2_PACKAGE_PYTHON_PYCPARSER=y
-BR2_PACKAGE_PYTHON_PYELFTOOLS=y
-BR2_PACKAGE_PYTHON_PYFTPDLIB=y
-BR2_PACKAGE_PYTHON_PYGAME=y
-BR2_PACKAGE_PYTHON_PYGAME_IMAGE=y
-BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES=y
-BR2_PACKAGE_PYTHON_PYGAME_FONT=y
-BR2_PACKAGE_PYTHON_PYGAME_MIXER=y
-BR2_PACKAGE_PYTHON_PYINOTIFY=y
-BR2_PACKAGE_PYTHON_PYLIBFTDI=y
-BR2_PACKAGE_PYTHON_PYMYSQL=y
-BR2_PACKAGE_PYTHON_PYPARTED=y
-BR2_PACKAGE_PYTHON_PYPCAP=y
-BR2_PACKAGE_PYTHON_PYQRCODE=y
-BR2_PACKAGE_PYTHON_PYRATEMP=y
-BR2_PACKAGE_PYTHON_PYRO=y
-BR2_PACKAGE_PYTHON_PYROUTE2=y
-BR2_PACKAGE_PYTHON_PYSENDFILE=y
-BR2_PACKAGE_PYTHON_PYSMB=y
-BR2_PACKAGE_PYTHON_PYSNMP_APPS=y
-BR2_PACKAGE_PYTHON_PYSNMP_MIBS=y
-BR2_PACKAGE_PYTHON_PYSOCKS=y
-BR2_PACKAGE_PYTHON_PYTABLEWRITER=y
-BR2_PACKAGE_PYTHON_PYTRIE=y
-BR2_PACKAGE_PYTHON_PYUSB=y
-BR2_PACKAGE_PYTHON_PYXB=y
-BR2_PACKAGE_PYTHON_PYZMQ=y
-BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT=y
-BR2_PACKAGE_PYTHON_RPI_GPIO=y
-BR2_PACKAGE_PYTHON_RTSLIB_FB=y
-BR2_PACKAGE_PYTHON_SDNOTIFY=y
-BR2_PACKAGE_PYTHON_SERIAL=y
-BR2_PACKAGE_PYTHON_SETPROCTITLE=y
-BR2_PACKAGE_PYTHON_SH=y
-BR2_PACKAGE_PYTHON_SHUTILWHICH=y
-BR2_PACKAGE_PYTHON_SIMPLEJSON=y
-BR2_PACKAGE_PYTHON_SMBUS_CFFI=y
-BR2_PACKAGE_PYTHON_SOCKETIO=y
-BR2_PACKAGE_PYTHON_SORTEDCONTAINERS=y
-BR2_PACKAGE_PYTHON_SPIDEV=y
-BR2_PACKAGE_PYTHON_THRIFT=y
-BR2_PACKAGE_PYTHON_TOMAKO=y
-BR2_PACKAGE_PYTHON_TREQ=y
-BR2_PACKAGE_PYTHON_U_MSGPACK=y
-BR2_PACKAGE_PYTHON_UBJSON=y
-BR2_PACKAGE_PYTHON_UJSON=y
-BR2_PACKAGE_PYTHON_URLLIB3=y
-BR2_PACKAGE_PYTHON_VERSIONTOOLS=y
-BR2_PACKAGE_PYTHON_WATCHDOG=y
-BR2_PACKAGE_PYTHON_WEB2PY=y
-BR2_PACKAGE_PYTHON_WEBPY=y
-BR2_PACKAGE_PYTHON_WHOOSH=y
-BR2_PACKAGE_PYTHON_WS4PY=y
-BR2_PACKAGE_PYTHON_WSACCEL=y
-BR2_PACKAGE_PYTHON_XLUTILS=y
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python/python.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 30c55b7..cf1ddfb 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -235,7 +235,7 @@ HOST_PYTHON_POST_INSTALL_HOOKS += HOST_PYTHON_INSTALL_PYTHON_SYMLINK
- endif
- 
- # Provided to other packages
--PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
-+PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
-2.9.4
+You are receiving this mail because:
+You are on the CC list for the bug.
