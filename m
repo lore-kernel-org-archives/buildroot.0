@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Jul 2017 18:39:31 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.12.1
-In-Reply-To: <1499874038-32290-1-git-send-email-fabio.estevam@nxp.com>
-References: <1499874038-32290-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20170712183931.72ed8e59@windsurf.lan>
+Date: Wed, 12 Jul 2017 18:40:52 +0200
+Subject: [Buildroot] [git commit] libxml-parser-perl: add LICENSE_FILES
+Message-ID: <20170712163647.D732380AD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=730da52edc45f2b72fc1d522ff184276d20c8b0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Jul 2017 12:40:37 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  linux/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+There is copyright information in the top level README file. Use this
+file as the license file which will be included by the `legal-info`
+build rule.
 
-Both applied. Thanks!
+Signed-off-by: Ben Leinweber <bleinweber@spaceflight.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libxml-parser-perl/libxml-parser-perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 4a3b196..514c457 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -9,6 +9,7 @@ LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+ LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
++LIBXML_PARSER_PERL_LICENSE_FILES = README
+ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+ 
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
