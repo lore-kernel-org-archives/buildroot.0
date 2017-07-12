@@ -1,31 +1,70 @@
-From: Oleksandr Zhadan <oleks@arcturusnetworks.com>
-Date: Wed, 12 Jul 2017 14:31:03 -0400
-Subject: [Buildroot] [PATCH 1/1] configs/arcturus_ucp1020_defconfig
-Message-ID: <20170712183103.30139-1-oleks@arcturusnetworks.com>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Wed, 12 Jul 2017 13:34:16 -0500
+Subject: [Buildroot] [PATCH] package/libglib2: add missing dependency on
+	host-python[3]
+In-Reply-To: <aad6f493-998a-66cc-5772-c0baa3302379@mind.be>
+References: <20170705003038.5318-1-andrew.smirnov@gmail.com>
+ <ec246461-b4fe-b71b-1899-fd9a43fbb1e3@mind.be>
+ <CAHQ1cqEV0Exj6oNa2rQef+R-71cpq_EgpMW4mBc4CMTY5CVCGw@mail.gmail.com>
+ <aad6f493-998a-66cc-5772-c0baa3302379@mind.be>
+Message-ID: <CAHQ1cqGXFqAc-ZX9=1tSpzbSRYTgJde_51YvPg8B35TNP8e_4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Back to the BR2_GCC_VERSION_4_9_X, because the default/latest GCC fails to build the Linux kernel.
+On Sat, Jul 8, 2017 at 4:03 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 06-07-17 02:04, Andrey Smirnov wrote:
+>> On Tue, Jul 4, 2017 at 5:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>
+>>>
+>>> On 05-07-17 02:30, Andrey Smirnov wrote:
+>>>> Building gio/gdbus-2.0/codegen/ subdirectory requires host to have a
+>>>> python interpreter. Add 'host-python'/'host-python3' as a dependency
+>>>> to reflect that fact and prevent build failures.
+>>>
+>>>  Do you have an actual build failure for this? We already require a python to be
+>>> present on the host, so there shouldn't be a need to build one here. And we
+>>> really do want to avoid that libglib2 pulls in host-python (to limit the build
+>>> time).
+>>
+>> It's a corner case involving partial rebuilds, so maybe not worth
+>> trying to fix, but it can be reproduced in configuration that pulls
+>> in/builds some flavor of "host-python" _before_ "host-libglib2" by
+>> doing:
+>>
+>> find ${BUILD_DIR} -name ".stamp_host_installed" | xargs rm -f
+>> rm -rf ${HOST_DIR}
+>> make host-libglib2-install
+>>
+>> what happens is host-libglib2's ./configure picks up python from PATH,
+>> which if built after host-python, ends up being python from
+>> ${HOST_DIR}, but since host-libglib2 doesn't reference host-python as
+>> a dependency re-executing "host-libglib2-install" ends up in failure.
+>
+>  We typically solve this by adding a dependency only if BR2_PACKAGE_PYTHON{,3}
+> is selected. However...
+>
 
-Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
----
- configs/arcturus_ucp1020_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Ah, makes sense. Good to know.
 
-diff --git a/configs/arcturus_ucp1020_defconfig b/configs/arcturus_ucp1020_defconfig
-index cc1297ce1..29e0f766b 100644
---- a/configs/arcturus_ucp1020_defconfig
-+++ b/configs/arcturus_ucp1020_defconfig
-@@ -10,6 +10,7 @@ BR2_TARGET_GENERIC_HOSTNAME="UCP1020"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Arcturus uCP1020 System on Module"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_SYSTEM_DHCP="eth0"
-+BR2_GCC_VERSION_4_9_X=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--- 
-2.11.0
+>
+>> Another option to handle this would be to explicitly specify which
+>> python to use with --with-python when configuring libglib2.
+>
+>  This is a lot more convenient, since the dependency really is not needed. Since
+> we require both python and which to be in PATH, you can do
+>
+> --with-python=`which python`
+>
+>  Can you roll a patch for that? Don't forget to add a brief comment why this is
+> needed, and a more extensive explanation in the commit log.
+>
+
+Yeah, sounds good. I'll send a separate patch, so please disregard this one.
+
+Thanks,
+Andrey Smirnov
