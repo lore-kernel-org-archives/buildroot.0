@@ -1,70 +1,43 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Wed, 12 Jul 2017 13:34:16 -0500
-Subject: [Buildroot] [PATCH] package/libglib2: add missing dependency on
-	host-python[3]
-In-Reply-To: <aad6f493-998a-66cc-5772-c0baa3302379@mind.be>
-References: <20170705003038.5318-1-andrew.smirnov@gmail.com>
- <ec246461-b4fe-b71b-1899-fd9a43fbb1e3@mind.be>
- <CAHQ1cqEV0Exj6oNa2rQef+R-71cpq_EgpMW4mBc4CMTY5CVCGw@mail.gmail.com>
- <aad6f493-998a-66cc-5772-c0baa3302379@mind.be>
-Message-ID: <CAHQ1cqGXFqAc-ZX9=1tSpzbSRYTgJde_51YvPg8B35TNP8e_4w@mail.gmail.com>
+Date: Wed, 12 Jul 2017 13:35:15 -0500
+Subject: [Buildroot] [PATCH v2] python-systemd: add new package
+In-Reply-To: <CAGm1_kv41ZqKYE+kwHJUb2wyH5dES_hesvcwOJEXYHX3mXc7yQ@mail.gmail.com>
+References: <20170712024121.2564-1-andrew.smirnov@gmail.com>
+ <20170712043701.frfvmmnf535ukcjk@sapphire.tkos.co.il>
+ <CAGm1_kv41ZqKYE+kwHJUb2wyH5dES_hesvcwOJEXYHX3mXc7yQ@mail.gmail.com>
+Message-ID: <CAHQ1cqGSuuEBdww9r0T-WR7rKNWyfAXROYPVfTN9307GW4rRtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 8, 2017 at 4:03 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Wed, Jul 12, 2017 at 2:31 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hi Andrey,
 >
+> On Wed, Jul 12, 2017 at 6:37 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> Hi Andrey,
+>>
+>> On Tue, Jul 11, 2017 at 07:41:21PM -0700, Andrey Smirnov wrote:
+>>> Add package for official python bindings availibe as a part of systemd
+>>> project at: https://github.com/systemd/python-systemd
+>>>
+>>> Minimal config snippet for utils/test-pkg is as follows (sans
+>>> backslashes):
+>>>
+>>> \# BR2_INIT_BUSYBOX is not set
+>>> \# BR2_INIT_SYSV is not set
+>>
+>> You can use the --cleanup=whitespace parameter of the 'git commit' command to
+>> skip the removal of lines starting with '#'. That would make config fragments
+>> look nicer.
 >
-> On 06-07-17 02:04, Andrey Smirnov wrote:
->> On Tue, Jul 4, 2017 at 5:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>
->>>
->>> On 05-07-17 02:30, Andrey Smirnov wrote:
->>>> Building gio/gdbus-2.0/codegen/ subdirectory requires host to have a
->>>> python interpreter. Add 'host-python'/'host-python3' as a dependency
->>>> to reflect that fact and prevent build failures.
->>>
->>>  Do you have an actual build failure for this? We already require a python to be
->>> present on the host, so there shouldn't be a need to build one here. And we
->>> really do want to avoid that libglib2 pulls in host-python (to limit the build
->>> time).
->>
->> It's a corner case involving partial rebuilds, so maybe not worth
->> trying to fix, but it can be reproduced in configuration that pulls
->> in/builds some flavor of "host-python" _before_ "host-libglib2" by
->> doing:
->>
->> find ${BUILD_DIR} -name ".stamp_host_installed" | xargs rm -f
->> rm -rf ${HOST_DIR}
->> make host-libglib2-install
->>
->> what happens is host-libglib2's ./configure picks up python from PATH,
->> which if built after host-python, ends up being python from
->> ${HOST_DIR}, but since host-libglib2 doesn't reference host-python as
->> a dependency re-executing "host-libglib2-install" ends up in failure.
->
->  We typically solve this by adding a dependency only if BR2_PACKAGE_PYTHON{,3}
-> is selected. However...
+> With Baruch's changes applied you can add my Reviewed-by: Yegor
+> Yefremov <yegorslists@googlemail.com>
 >
 
-Ah, makes sense. Good to know.
-
->
->> Another option to handle this would be to explicitly specify which
->> python to use with --with-python when configuring libglib2.
->
->  This is a lot more convenient, since the dependency really is not needed. Since
-> we require both python and which to be in PATH, you can do
->
-> --with-python=`which python`
->
->  Can you roll a patch for that? Don't forget to add a brief comment why this is
-> needed, and a more extensive explanation in the commit log.
->
-
-Yeah, sounds good. I'll send a separate patch, so please disregard this one.
+OK, will do in v3.
 
 Thanks,
 Andrey Smirnov
