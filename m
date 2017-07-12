@@ -1,55 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Jul 2017 15:39:40 +0200
-Subject: [Buildroot] [PATCH] configs: nexbox_a95x_defconfig: bump to
- kernel 4.12
-In-Reply-To: <20170712122322.12281-1-peter@korsgaard.com>
-References: <20170712122322.12281-1-peter@korsgaard.com>
-Message-ID: <20170712153940.610cae5e@windsurf.lan>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 12 Jul 2017 16:41:28 +0200
+Subject: [Buildroot] [PATCH 1/4] python-attrs: bump to version 17.2.0
+Message-ID: <20170712144131.26364-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Wed, 12 Jul 2017 14:23:22 +0200, Peter Korsgaard wrote:
-> Main difference is that the drm driver now supports the hdmi output.
-> 
-> The gxl variant device tree has been renamed in:
-> 
-> commit 7eea67101b9713ae438955e8899b3c4b078419f9
-> Author: Kevin Hilman <khilman@baylibre.com>
-> Date:   Fri Jan 20 07:57:52 2017 -0800
-> 
->     ARM64: dts: meson-gxl: rename Nexbox A95x for consistency
-> 
->     Since the GXL family has S905X and S905D SoCs, we're keeping the SoC
->     name in the DTS filename for clarity.  Rename this file accordingly to
->     be consistent with the rest of the GXL DTS files.
-> 
->     Cc: Neil Armstrong <narmstrong@baylibre.com>
->     Reviewed-by: Andreas F?rber <afaerber@suse.de>
->     Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> 
-> So adjust the defconfig and boot script to match.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Since you used this board, perhaps you could remove the bit in the
-post-build.sh script that generates boot.scr, and use
-BR2_TARGET_UBOOT_BOOT_SCRIPT instead ? Should be a separate patch of
-course.
-
-Sadly, this will not allow to remove completely post-build.sh, as it
-needs a special AArch64 uImage for the kernel. But I wonder why this is
-done in the post-build.sh script and not the post-image.sh script.
-
-And the post-image.sh script can be refactored to use the common
-genimage script :)
-
-Thomas
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index 33ecd2c0f..4434fa192 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/attrs/json, sha256 locally computed
+-md5	4ec003c49360853cf935113d1ae56151  attrs-16.3.0.tar.gz
+-sha256	80203177723e36f3bbe15aa8553da6e80d47bfe53647220ccaa9ad7a5e473ccc  attrs-16.3.0.tar.gz
++md5	3b7136a570f3ff8a4ff42e7360073f9f  attrs-17.2.0.tar.gz
++sha256	5d4d1b99f94d69338f485984127e4473b3ab9e20f43821b0e546cc3b2302fd11  attrs-17.2.0.tar.gz
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 5e7985a3f..c9633711c 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ATTRS_VERSION = 16.3.0
++PYTHON_ATTRS_VERSION = 17.2.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://pypi.python.org/packages/01/b0/3ac73bf6df716a38568a16f6a9cbc46cc9e8ed6fe30c8768260030db55d4
++PYTHON_ATTRS_SITE = https://pypi.python.org/packages/be/41/e909cb6d901e9689da947419505cc7fb7d242a08a62ee221fce6a009a523
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
