@@ -1,49 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Jul 2017 17:36:44 +0200
-Subject: [Buildroot] RFC: ASLR
-In-Reply-To: <CANQCQpb32H5XF+DtgYcuu=JFdgGCE3gEm+pHffWYk0yno6w0pg@mail.gmail.com>
- (Matthew Weber's message of "Mon, 10 Jul 2017 11:10:34 -0500")
-References: <CANQCQpb32H5XF+DtgYcuu=JFdgGCE3gEm+pHffWYk0yno6w0pg@mail.gmail.com>
-Message-ID: <87inixpsz7.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 12 Jul 2017 12:40:37 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.12.1
+Message-ID: <1499874038-32290-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Peter,
- > I have a patchset we're starting to assemble for enabling hardening
- > across specific packages in Buildroot.  I hear you may have already
- > looked at this problem/feature?
-
-Well, it is on my todo list - But I haven't done any actual work on it
-yet - So your timing is perfect ;)
-
-
- > What I'm seeing is that these changes are considered "optional" at a
- > package build level.  Plus I'm not advocating we carry specific
- > Buildroot patches for items where it doesn't make sense for the
- > package upstream to default to them.  Instead, could we add a
- > conditional in the .mk that adds the FLAGS update on specific packages
- > which have the ability to enable it? Sort of in a similar way to how
- > we enable libcurl and other dependencies automatically in other
- > packages if that package/option is enabled.  This would allow us to
- > grow support over time and not force all packages to build with the
- > option (plus keep it optional in general for those that want it
- > enabled).
-
-Do you see actual breakage with packages if these flags are added
-globally to TARGET_CFLAGS? From a quick look at lede, they seem to
-enable it globally:
-
-https://git.lede-project.org/?p=source.git;a=blob;f=config/Config-build.in#l175
-
-There seems to be some some hooks (E.G. PKG_RELRO) to disable this for
-specific packages, but I don't see it getting used anywhere:
-
-https://git.lede-project.org/?p=source.git;a=blob;f=include/hardening.mk
-
+diff --git a/linux/Config.in b/linux/Config.in
+index c9dadcd..b92bd8b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.12)"
++	bool "Latest version (4.12.1)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.12.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-Bye, Peter Korsgaard
+2.7.4
