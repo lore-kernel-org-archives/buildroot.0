@@ -1,67 +1,51 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 12 Jul 2017 18:46:43 +0200
-Subject: [Buildroot] [PATCH v2 07/13] package/minetest: add gles
- optional dependency
-In-Reply-To: <20170624172116.35677c25@windsurf.home>
-References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-7-romain.naour@gmail.com>
- <20170624172116.35677c25@windsurf.home>
-Message-ID: <8cab150b-ac70-997a-683b-818816e53628@gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 12 Jul 2017 13:52:12 -0300
+Subject: [Buildroot] [PATCH] configs/mx53loco: Bump kernel and U-Boot
+	versions
+Message-ID: <1499878332-13010-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Bump Linux kernel version to 4.12.1 and U-Boot to 2017.05.
 
-Le 24/06/2017 ? 17:21, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Mon, 12 Jun 2017 22:54:04 +0200, Romain Naour wrote:
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/minetest/minetest.mk | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
->> index 5075fc0..0302bd3 100644
->> --- a/package/minetest/minetest.mk
->> +++ b/package/minetest/minetest.mk
->> @@ -14,7 +14,6 @@ MINETEST_DEPENDENCIES = irrlicht gmp jpeg jsoncpp luajit sqlite zlib
->>  MINETEST_CONF_OPTS = \
->>  	-DDEFAULT_RUN_IN_PLACE=OFF \
->>  	-DENABLE_SOUND=OFF \
->> -	-DENABLE_GLES=OFF \
->>  	-DENABLE_LUAJIT=ON \
->>  	-DENABLE_CURSES=OFF \
->>  	-DENABLE_POSTGRESQL=OFF \
->> @@ -52,6 +51,13 @@ else
->>  MINETEST_CONF_OPTS += -DENABLE_GETTEXT=OFF
->>  endif
->>  
->> +ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
->> +MINETEST_DEPENDENCIES += libgles
->> +MINETEST_CONF_OPTS += -DENABLE_GLES=ON
->> +else
->> +MINETEST_CONF_OPTS += -DENABLE_GLES=OFF
->> +endif
-> 
-> The overall minetest package already depends on libGL support,
-> inherited from irrlicht. Do we have useful situations where GLES
-> support can be leveraged, since anyway you require libGL+X11 ?
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I looked in the code and it seems that GLES is used only for Android build.
-
-https://github.com/minetest/minetest/blob/master/src/client/tile.cpp#L43
-
-I'll remove this patch the v3.
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index a79cacd..6c8949b 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+-- 
+2.7.4
