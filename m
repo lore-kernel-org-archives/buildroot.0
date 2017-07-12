@@ -1,44 +1,97 @@
-From: Brent Sink <brents_3@hotmail.com>
-Date: Wed, 12 Jul 2017 01:41:39 +0000
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
-Message-ID: <BN6PR03MB29146452670D6E67E98CBF46BFAF0@BN6PR03MB2914.namprd03.prod.outlook.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Tue, 11 Jul 2017 22:16:27 -0400
+Subject: [Buildroot] [PATCHv2 0/3] Qt WebEngine support
+Message-ID: <20170712021630.31121-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+The purpose of this patch series is to continue the integration of Qt5 WebEngine
+in buildroot; started long time ago by Akihiko Odaki [1] and Julien Corjon [2].
 
-I did some testing on an i.MX6, and found that I need to export 
-QT_QPA_EGLFS_INTEGRATION=eglfs_viv, before running a Qt app. There is a 
-bug report for this here: https://bugreports.qt.io/browse/QTBUG-61156
+The first patch fixes the rpi-userland OpenGL libraries symlinks. WebEngine
+eglfs backend is linked against libEGL.so.1 and libGLESv2.so.2.
 
+	# ls -l /usr/lib/lib*GL*
+	lrwxrwxrwx    1 root     root            11 Mar 21 17:24 /usr/lib/libEGL.so -> libEGL.so.1
+	lrwxrwxrwx    1 root     root            15 Mar 21 17:24 /usr/lib/libEGL.so.1 -> libEGL.so.1.0.0
+	-rwxr-xr-x    1 root     root        163152 Mar 22 14:56 /usr/lib/libEGL.so.1.0.0
+	lrwxrwxrwx    1 root     root            14 Mar 21 17:24 /usr/lib/libGLESv2.so -> libGLESv2.so.2
+	lrwxrwxrwx    1 root     root            18 Mar 21 17:24 /usr/lib/libGLESv2.so.2 -> libGLESv2.so.2.0.0
+	-rwxr-xr-x    1 root     root         78788 Mar 22 14:56 /usr/lib/libGLESv2.so.2.0.0
 
-On 7/11/2017 8:45 PM, Arnout Vandecappelle wrote:
->   Hi Joshua,
->
->   Quick review before you resubmit.
->
->   When you resubmit, make sure you send it together with the qt5wayland change as
-> one series, since that patch depends on this one.
+The second patch provides the Qt WebEngine package.
 
-Should this this be a part of this patch, or is it only specific for 
-imx?  They are saying that "the buildroot configuration is broken. As a 
-workaround, try exporting the environment variable 
-QT_QPA_EGLFS_INTEGRATION=eglfs_viv before running Qt apps. This should 
-not be necessary normally since the build environment is expected to set 
-the correct eglfs backend on a per target device basis. Qt's own device 
-specs do this, but for other build systems (Yocto, Buildroot) it's up to 
-those recipes to manage this."
+The last patch is a special defconfig that provides a Qt WebEngine setup on
+raspberrypi3.
 
-Can anyone point me to where this environment variable should be added?  
-If this should be part of this patch, I'll create the patch and then 
-Josh can submit the final version.  Otherwise, I'll just submit a new patch.
+With this patchset, one can run the Qt quicknanobrowser sample on a rpi3 with
+the following options:
+  - BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc" and
+    BR2_TOOLCHAIN_BUILDROOT_CXX=y (Qt 5 needs a toolchain w/ wchar, NPTL, C++,
+    dynamic library)
+  - BR2_PACKAGE_LIBERATION (Qt 5.8 requires a least one font)
+  - BR2_PACKAGE_RPI_USERLAND (to enable OpenGL backend)
+  - BR2_PACKAGE_QT5BASE_LICENSE_APPROVED (to not prompt for license agreement;
+    webengine takes many hours to be compiled (and maybe more!))
+  - BR2_PACKAGE_QT5BASE_EXAMPLES (to install quicknanobrowser sample)
+  - BR2_PACKAGE_QT5QUICKCONTROLS (needed by quicknanobrowser)
+  - BR2_PACKAGE_QT5WEBENGINE (because it is what we want :))
 
-Thanks!
+To browse for HTTPS websites, please consider adding the following options as
+well:
+  - BR2_PACKAGE_CA_CERT (for certificates)
+  - BR2_PACKAGE_NTPD (to sync date)
 
--brent
+To run quicknanobrowser:
+	# cd /usr/lib/qt/examples/webengine/quicknanobrowser/
+	# ./quicknanobrowser
+
+Enjoy ;)
+
+Note: For now, quicknanobrowser will just display the qt website without any
+input backend.
+
+[1] https://patchwork.ozlabs.org/patch/640633/
+[2] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+
+Changes since RFC:
+ - rebase to master (use SPDX licenses, remove license approved, update
+   qt5_defconfig...)
+ - remove the patch "prefer arm tune"
+ - disable build with Qt 5.6 LTS (not working, waiting for 5.6.3 in August)
+ - re-order patches
+
+Changes since v1:
+ - manually create symlinks to preserve SONAME
+ - add my signed-off-by to the rpi-userland patch
+ - make qtwe package depends on supported architectures
+ - fix Kconfig comment about Qt 5.6
+ - sort alphabetically chromium licenses
+
+Ga?l PORTAY (3):
+  rpi-userland: fix opengl library symlinks
+  qt5webengine: new package
+  configs: new raspberrypi3 qt5 config
+
+ configs/raspberrypi3_qt5_defconfig                 |  47 ++++
+ package/qt5/Config.in                              |   1 +
+ .../qt5webengine/0001-change-default-ssl-dir.patch |  19 ++
+ package/qt5/qt5webengine/Config.in                 |  51 +++++
+ package/qt5/qt5webengine/chromium.inc              | 238 +++++++++++++++++++++
+ package/qt5/qt5webengine/qt5webengine.hash         |   5 +
+ package/qt5/qt5webengine/qt5webengine.mk           |  77 +++++++
+ .../0001-Add-OpenGL-library-versioning.patch       |  35 +++
+ 8 files changed, 473 insertions(+)
+ create mode 100644 configs/raspberrypi3_qt5_defconfig
+ create mode 100644 package/qt5/qt5webengine/0001-change-default-ssl-dir.patch
+ create mode 100644 package/qt5/qt5webengine/Config.in
+ create mode 100644 package/qt5/qt5webengine/chromium.inc
+ create mode 100644 package/qt5/qt5webengine/qt5webengine.hash
+ create mode 100644 package/qt5/qt5webengine/qt5webengine.mk
+ create mode 100644 package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
+
+-- 
+2.13.2
