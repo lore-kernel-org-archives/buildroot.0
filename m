@@ -1,18 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Jul 2017 18:27:55 +0200
-Subject: [Buildroot] [PATCH 2/8] python-pyro: switch to setuptools instead
-	of distutils
+Date: Wed, 12 Jul 2017 18:27:56 +0200
+Subject: [Buildroot] [PATCH 3/8] python-u-msgpack: switch to setuptools
+	instead of distutils
 In-Reply-To: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
 References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170712162801.31131-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170712162801.31131-4-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-pyro can use setuptools instead of distutils, and using
-setuptools is generally preferred.
+python-u-msgpack can use setuptools instead of distutils, and
+using setuptools is generally preferred.
 
 In addition, using setuptools allows to make sure the package will
 continue to build when we will adjust the PYTHONPATH variable to no
@@ -54,20 +54,21 @@ Here are some of your options for correcting the problem:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyro/python-pyro.mk | 2 +-
+ package/python-u-msgpack/python-u-msgpack.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pyro/python-pyro.mk b/package/python-pyro/python-pyro.mk
-index bf916ba..06b4f45 100644
---- a/package/python-pyro/python-pyro.mk
-+++ b/package/python-pyro/python-pyro.mk
-@@ -9,6 +9,6 @@ PYTHON_PYRO_SOURCE = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
- PYTHON_PYRO_SITE = https://pypi.python.org/packages/61/68/0978adae315261b87acd216517c2c7f00780396e4d1426c5412458c6a28f
- PYTHON_PYRO_LICENSE = MIT
- PYTHON_PYRO_LICENSE_FILES = LICENSE
--PYTHON_PYRO_SETUP_TYPE = distutils
-+PYTHON_PYRO_SETUP_TYPE = setuptools
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+index a88beeb..89240c3 100644
+--- a/package/python-u-msgpack/python-u-msgpack.mk
++++ b/package/python-u-msgpack/python-u-msgpack.mk
+@@ -7,7 +7,7 @@
+ PYTHON_U_MSGPACK_VERSION = 2.2
+ PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+ PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
+-PYTHON_U_MSGPACK_SETUP_TYPE = distutils
++PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+ PYTHON_U_MSGPACK_LICENSE = MIT
+ PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
  
- $(eval $(python-package))
 -- 
 2.9.4
