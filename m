@@ -1,83 +1,81 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 13 Jul 2017 02:55:28 +0300
-Subject: [Buildroot] [PATCH 1/4] webkitgtk: Remove patch uneeded for the
-	current version
+Date: Thu, 13 Jul 2017 02:55:29 +0300
+Subject: [Buildroot] [PATCH 2/4] webkitgtk: Add patches which allow building
+	for ARMv8-A
 In-Reply-To: <20170712235531.20444-1-aperez@igalia.com>
 References: <20170712235531.20444-1-aperez@igalia.com>
-Message-ID: <20170712235531.20444-2-aperez@igalia.com>
+Message-ID: <20170712235531.20444-3-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.16.5 of WebKitGTK+ already includes the fix added by the
-removed patch, which is now unneeded.
+The two added patches allow building WebKitGTK+ when the compiler
+scpecifically targets ARMv8-A, and reports as such be pre-defining
+__ARCH_ARM_8A__ instead of just __ARCH_ARM_8__. Both patches were
+pulled from the corresponding upstream bug reports and edited to
+remove the conflicting parts which edit the ChangeLog files.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/webkitgtk/0001-fix-gcc6-builds.patch | 53 ----------------------------
- 1 file changed, 53 deletions(-)
- delete mode 100644 package/webkitgtk/0001-fix-gcc6-builds.patch
+ ...ailure-to-build-when-the-compiler-specifica.patch | 20 ++++++++++++++++++++
+ ...re-to-build-when-the-compiler-specifically-.patch | 20 ++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
+ create mode 100644 package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
 
-diff --git a/package/webkitgtk/0001-fix-gcc6-builds.patch b/package/webkitgtk/0001-fix-gcc6-builds.patch
-deleted file mode 100644
-index 35487ad55a..0000000000
---- a/package/webkitgtk/0001-fix-gcc6-builds.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--[CMake] Build failure with GCC 6 (fatal error: stdlib.h: No such file or directory)
--
--https://bugs.webkit.org/show_bug.cgi?id=161697
--
--Reviewed by Michael Catanzaro.
--
--Get the list of system includes from GCC and add it to the CMake
--list of implicit includes. This way, CMake will filter any of this
--directories from the list of includes when calling the compiler.
--
--This avoids an issue with GCC 6 that causes build failures when
--including the default include path as a system include (-isystem).
--
--Upstream, from: https://trac.webkit.org/changeset/205672
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: trunk/Source/cmake/OptionsCommon.cmake
--===================================================================
----- trunk/Source/cmake/OptionsCommon.cmake	(revision 204084)
--+++ trunk/Source/cmake/OptionsCommon.cmake	(revision 205672)
--@@ -36,4 +36,31 @@
--     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcolor-diagnostics")
--     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
--+endif ()
--+
--+# Ensure that the default include system directories are added to the list of CMake implicit includes.
--+# This workarounds an issue that happens when using GCC 6 and using system includes (-isystem).
--+# For more details check: https://bugs.webkit.org/show_bug.cgi?id=161697
--+macro(DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang _compiler _flags _result)
--+    file(WRITE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy" "\n")
--+    separate_arguments(_buildFlags UNIX_COMMAND "${_flags}")
--+    execute_process(COMMAND ${_compiler} ${_buildFlags} -v -E -x ${_lang} -dD dummy
--+                    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles OUTPUT_QUIET
--+                    ERROR_VARIABLE _gccOutput)
--+    file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy")
--+    if ("${_gccOutput}" MATCHES "> search starts here[^\n]+\n *(.+) *\n *End of (search) list")
--+        set(${_result} ${CMAKE_MATCH_1})
--+        string(REPLACE "\n" " " ${_result} "${${_result}}")
--+        separate_arguments(${_result})
--+    endif ()
--+endmacro()
--+
--+if (CMAKE_COMPILER_IS_GNUCC)
--+   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c" "${CMAKE_C_COMPILER}" "${CMAKE_C_FLAGS}" SYSTEM_INCLUDE_DIRS)
--+   set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
--+endif ()
--+
--+if (CMAKE_COMPILER_IS_GNUCXX)
--+   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c++" "${CMAKE_CXX_COMPILER}" "${CMAKE_CXX_FLAGS}" SYSTEM_INCLUDE_DIRS)
--+   set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
-- endif ()
-- 
+diff --git a/package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch b/package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
+new file mode 100644
+index 0000000000..7d5f6c6b47
+--- /dev/null
++++ b/package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
+@@ -0,0 +1,20 @@
++bmalloc: Failure to build when the compiler specifically targets ARMv8-A / defines __ARM_ARCH_8A__
++
++Upstream, from https://bugs.webkit.org/show_bug.cgi?id=174424
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++
++diff --git a/Source/bmalloc/bmalloc/BPlatform.h b/Source/bmalloc/bmalloc/BPlatform.h
++index 45bbc249f59..597f7819d18 100644
++--- a/Source/bmalloc/bmalloc/BPlatform.h
+++++ b/Source/bmalloc/bmalloc/BPlatform.h
++@@ -123,7 +123,8 @@
++ || defined(__ARM_ARCH_7S__)
++ #define BARM_ARCH_VERSION 7
++ 
++-#elif defined(__ARM_ARCH_8__)
+++#elif defined(__ARM_ARCH_8__) \
+++|| defined(__ARM_ARCH_8A__)
++ #define BARM_ARCH_VERSION 8
++ 
++ /* MSVC sets _M_ARM */
+diff --git a/package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch b/package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
+new file mode 100644
+index 0000000000..a1bf9738af
+--- /dev/null
++++ b/package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
+@@ -0,0 +1,20 @@
++[WTF] Failure to build when the compiler specifically targets ARMv8-A / defines __ARM_ARCH_8A__
++
++Upstream, from https://bugs.webkit.org/show_bug.cgi?id=174425
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index 3d02b9c8553..9511e9e4e51 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -242,7 +242,8 @@
++     || defined(__ARM_ARCH_7S__)
++ #define WTF_ARM_ARCH_VERSION 7
++ 
++-#elif defined(__ARM_ARCH_8__)
+++#elif defined(__ARM_ARCH_8__) \
+++    || defined(__ARM_ARCH_8A__)
++ #define WTF_ARM_ARCH_VERSION 8
++ 
++ /* MSVC sets _M_ARM */
 -- 
 2.13.2
