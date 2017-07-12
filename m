@@ -1,59 +1,68 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 11 Jul 2017 19:40:06 -0700
-Subject: [Buildroot] [PATCH v2 3/6] testing/tests/package/test_python: add
-	TestPython3
+Date: Tue, 11 Jul 2017 19:40:07 -0700
+Subject: [Buildroot] [PATCH v2 4/6] testing/tests/package/test_python: do
+	not hardcode interpreter name
 In-Reply-To: <20170712024009.2366-1-andrew.smirnov@gmail.com>
 References: <20170712024009.2366-1-andrew.smirnov@gmail.com>
-Message-ID: <20170712024009.2366-4-andrew.smirnov@gmail.com>
+Message-ID: <20170712024009.2366-5-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Python3 version of TestPython2 to make sure both versions of
-Python get unit-tested.
-
-Modify the code of libc_time_test() to support that change (convert
-the code to use Python3-style "print").
+In order to be able to leverage the same test code for testing
+different python interpreters (or wrappers around CPython) allow
+classes derivate of TestPythonBase to override the name of the
+executable used to run tests.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- support/testing/tests/package/test_python.py | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_python.py | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index 250827e..218235b 100644
+index 218235b..a3ec31b 100644
 --- a/support/testing/tests/package/test_python.py
 +++ b/support/testing/tests/package/test_python.py
-@@ -26,9 +26,10 @@ BR2_TARGET_ROOTFS_CPIO=y
-         self.assertEqual(exit_code, 0)
+@@ -8,6 +8,8 @@ class TestPythonBase(infra.basetest.BRTest):
+ BR2_TARGET_ROOTFS_CPIO=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ """
++    interpreter = "python"
++
+     def login(self):
+         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+         self.emulator.boot(arch="armv5",
+@@ -16,17 +18,17 @@ BR2_TARGET_ROOTFS_CPIO=y
+         self.emulator.login()
  
-     def libc_time_test(self):
--        cmd = "python -c 'import ctypes;"
-+        cmd = "python -c 'from __future__ import print_function;"
-+        cmd += "import ctypes;"
-         cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
--        cmd += "print libc.time(None)'"
-+        cmd += "print(libc.time(None))'"
+     def version_test(self, version):
+-        cmd = "python --version 2>&1 | grep '^{}'".format(version)
++        cmd = self.interpreter + " --version 2>&1 | grep '^{}'".format(version)
          _, exit_code = self.emulator.run(cmd)
          self.assertEqual(exit_code, 0)
  
-@@ -48,3 +49,15 @@ BR2_PACKAGE_PYTHON=y
-         self.math_floor_test()
-         self.libc_time_test()
-         self.zlib_test()
-+
-+class TestPython3(TestPythonBase):
-+    config = TestPythonBase.config + \
-+"""
-+BR2_PACKAGE_PYTHON3=y
-+"""
-+    def test_run(self):
-+        self.login()
-+        self.version_test("Python 3")
-+        self.math_floor_test()
-+        self.libc_time_test()
-+        self.zlib_test()
+     def math_floor_test(self):
+-        cmd = "python -c 'import math; math.floor(12.3)'"
++        cmd = self.interpreter + " -c 'import math; math.floor(12.3)'"
+         _, exit_code = self.emulator.run(cmd)
+         self.assertEqual(exit_code, 0)
+ 
+     def libc_time_test(self):
+-        cmd = "python -c 'from __future__ import print_function;"
++        cmd = self.interpreter + " -c 'from __future__ import print_function;"
+         cmd += "import ctypes;"
+         cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
+         cmd += "print(libc.time(None))'"
+@@ -34,7 +36,7 @@ BR2_TARGET_ROOTFS_CPIO=y
+         self.assertEqual(exit_code, 0)
+ 
+     def zlib_test(self):
+-        cmd = "python -c 'import zlib'"
++        cmd = self.interpreter + " -c 'import zlib'"
+         _, exit_code = self.emulator.run(cmd)
+         self.assertEqual(exit_code, 1)
+ 
 -- 
 2.9.4
