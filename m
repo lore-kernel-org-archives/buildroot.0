@@ -1,56 +1,63 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 12 Jul 2017 19:05:39 +0200
-Subject: [Buildroot] [PATCH v2 13/13] package/minetest_game: new package
-In-Reply-To: <20170624172932.04b4b03d@windsurf.home>
-References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-13-romain.naour@gmail.com>
- <20170624172932.04b4b03d@windsurf.home>
-Message-ID: <c1d0ad50-2f95-c4fd-4427-df44facd6599@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 12 Jul 2017 12:14:03 -0500
+Subject: [Buildroot] RFC: ASLR
+In-Reply-To: <87inixpsz7.fsf@dell.be.48ers.dk>
+References: <CANQCQpb32H5XF+DtgYcuu=JFdgGCE3gEm+pHffWYk0yno6w0pg@mail.gmail.com>
+ <87inixpsz7.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpZkpHa5NU4HLv0kOZXtBzfhD2S_0-d61Me1XMfMZFEX9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Peter, Yann,
 
-Le 24/06/2017 ? 17:29, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Mon, 12 Jun 2017 22:54:10 +0200, Romain Naour wrote:
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->> v2: update to 0.4.16
->>     update license file
->>     Add a hash file
->>     backport an upstream patch due to regression.
-> 
-> I'm not a big fan of underscores in the name of packages, but I agree
-> it's the upstream name... and we already have a few packages with
-> underscores in their name, so I guess it's more a personal taste than a
-> real rule here.
-> 
->> +define MINETEST_GAME_INSTALL_TARGET_CMDS
->> +	mkdir -p $(TARGET_DIR)/usr/share/minetest/games/minetest_game
->> +	rsync -av $(@D)/* --exclude=".*" $(TARGET_DIR)/usr/share/minetest/games/minetest_game
-> 
-> What about using "cp -dpfr", which we use more commonly in packages to
-> copy entire file/directory hierarchies?
+On Wed, Jul 12, 2017 at 10:36 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>
+>  > Peter,
+>  > I have a patchset we're starting to assemble for enabling hardening
+>  > across specific packages in Buildroot.  I hear you may have already
+>  > looked at this problem/feature?
+>
+> Well, it is on my todo list - But I haven't done any actual work on it
+> yet - So your timing is perfect ;)
 
-I wanted to avoid copying .gitignore   .luacheckrc  .travis.yml to
-$(TARGET_DIR)/usr/share/minetest/games/minetest_game.
+It sounds like Yann has a starting patchset related to ASLR.  He was
+going to retrieve them from a branch when he gets a chance.
 
-But ok, it's small files...
+>
+>
+>  > What I'm seeing is that these changes are considered "optional" at a
+>  > package build level.  Plus I'm not advocating we carry specific
+>  > Buildroot patches for items where it doesn't make sense for the
+>  > package upstream to default to them.  Instead, could we add a
+>  > conditional in the .mk that adds the FLAGS update on specific packages
+>  > which have the ability to enable it? Sort of in a similar way to how
+>  > we enable libcurl and other dependencies automatically in other
+>  > packages if that package/option is enabled.  This would allow us to
+>  > grow support over time and not force all packages to build with the
+>  > option (plus keep it optional in general for those that want it
+>  > enabled).
+>
+> Do you see actual breakage with packages if these flags are added
+> globally to TARGET_CFLAGS? From a quick look at lede, they seem to
+> enable it globally:
+>
+> https://git.lede-project.org/?p=source.git;a=blob;f=config/Config-build.in#l175
+>
 
-Done.
+I'll have to take a look at that project.  When I enable it globally,
+I run (so far, haven't done a complete build) into some busybox and
+libselinux build issues with PIE.
 
-Thanks for the review.
+> There seems to be some some hooks (E.G. PKG_RELRO) to disable this for
+> specific packages, but I don't see it getting used anywhere:
+>
+> https://git.lede-project.org/?p=source.git;a=blob;f=include/hardening.mk
+>
 
-Best regards,
-Romain
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+Thanks for the references!
+Matt
