@@ -1,37 +1,39 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 11 Jul 2017 19:47:37 -0700
-Subject: [Buildroot] [PATCH] package/Makefile.in: Tweak TARGET_ABI for
-	MPC8548
-Message-ID: <20170712024737.21578-1-andrew.smirnov@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 12 Jul 2017 07:37:02 +0300
+Subject: [Buildroot] [PATCH v2] python-systemd: add new package
+In-Reply-To: <20170712024121.2564-1-andrew.smirnov@gmail.com>
+References: <20170712024121.2564-1-andrew.smirnov@gmail.com>
+Message-ID: <20170712043701.frfvmmnf535ukcjk@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mark Hinds <mhinds@spaceflightindustries.com>
+Hi Andrey,
 
-Add -mcpu=8548 -mhard-float to TARGET_ABI so that hardware FP is used
-to build all of the package in the system.
+On Tue, Jul 11, 2017 at 07:41:21PM -0700, Andrey Smirnov wrote:
+> Add package for official python bindings availibe as a part of systemd
+> project at: https://github.com/systemd/python-systemd
+> 
+> Minimal config snippet for utils/test-pkg is as follows (sans
+> backslashes):
+> 
+> \# BR2_INIT_BUSYBOX is not set
+> \# BR2_INIT_SYSV is not set
 
-Signed-off-by: Mark Hinds <zoronic@gmail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You can use the --cleanup=whitespace parameter of the 'git commit' command to 
+skip the removal of lines starting with '#'. That would make config fragments 
+look nicer.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index b95e5e3..958d72c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -78,7 +78,7 @@ ifeq ($(BR2_powerpc_8540),y)
- TARGET_ABI += -mabi=spe -mfloat-gprs=single -Wa,-me500
- endif
- ifeq ($(BR2_powerpc_8548),y)
--TARGET_ABI += -mabi=spe -mfloat-gprs=double -Wa,-me500x2
-+TARGET_ABI += -mabi=spe -mfloat-gprs=double -Wa,-me500x2 -mcpu=8548 -mhard-float
- endif
- ifeq ($(BR2_powerpc_e500mc),y)
- TARGET_ABI += -mabi=spe -mfloat-gprs=double -Wa,-me500mc
+> BR2_INIT_SYSTEMD=y
+> \# BR2_INIT_NONE is not set
+> BR2_PACKAGE_PYTHON3=y
+> BR2_PACKAGE_PYTHON_SYSTEMD=y
+
+baruch
+
 -- 
-2.9.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
