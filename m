@@ -1,48 +1,36 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 12 Jul 2017 16:41:31 +0200
-Subject: [Buildroot] [PATCH 4/4] python-sh: bump to version 1.12.14
-In-Reply-To: <20170712144131.26364-1-yegorslists@googlemail.com>
-References: <20170712144131.26364-1-yegorslists@googlemail.com>
-Message-ID: <20170712144131.26364-4-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 12 Jul 2017 17:03:35 +0200
+Subject: [Buildroot] [PATCH 1/2] olimex_a20_olinuxino_micro: bump to
+	U-Boot 2017.5 and fix build
+In-Reply-To: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 11 Jul 2017 23:38:05 +0200")
+References: <1499809086-3174-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87vamxpuig.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-sh/python-sh.hash | 4 ++--
- package/python-sh/python-sh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > This defconfig does not build anymore since commit
+ > 6cda724efb20682bb98e6d738e5f7c909415ae07 ("package/gcc: switch to gcc
+ > 6.x as the default"). Fix by upgrading to the latest U-Boot version.
 
-diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
-index ab3c4e0fe..cbc6745bd 100644
---- a/package/python-sh/python-sh.hash
-+++ b/package/python-sh/python-sh.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/sh/json, sha256 locally computed
--md5 ddc128a8d943d25afa6e01af11e0063b sh-1.12.9.tar.gz
--sha256 579aa19bae7fe86b607df1afaf4e8537c453d2ce3d84e1d3957e099359a51677 sh-1.12.9.tar.gz
-+md5 a8351aef25d25f707c17e0a7a6280251 sh-1.12.14.tar.gz
-+sha256 b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc sh-1.12.14.tar.gz
-diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
-index ed171cb41..dfe80d562 100644
---- a/package/python-sh/python-sh.mk
-+++ b/package/python-sh/python-sh.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SH_VERSION = 1.12.9
-+PYTHON_SH_VERSION = 1.12.14
- PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
--PYTHON_SH_SITE = https://pypi.python.org/packages/fd/14/6deb4e89cc237ee4bc1c0b0485c77d7868477f96c47962366bc5fabc31fd
-+PYTHON_SH_SITE = https://pypi.python.org/packages/7c/71/199d27d3e7e78bf448bcecae0105a1d5b29173ffd2bbadaa95a74c156770
- PYTHON_SH_SETUP_TYPE = setuptools
- PYTHON_SH_LICENSE = MIT
- PYTHON_SH_LICENSE_FILES = LICENSE.txt
+ > Fixes:
+ >   In file included from include/linux/compiler.h:54:0,
+ >                    from include/linux/bitops.h:5,
+ >                    from ./include/common.h:20:
+ >   include/linux/compiler-gcc.h:114:30: fatal error: linux/compiler-gcc6.h: No such file or directory
+ >    #include gcc_header(__GNUC__)
+ >                                 ^
+ >   compilation terminated.
+
+ > [Build- and run-tested]
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
