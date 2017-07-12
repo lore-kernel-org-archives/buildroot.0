@@ -1,109 +1,180 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 12 Jul 2017 21:43:51 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2017.07
-Message-ID: <20170712194351.20701-1-joerg.krause@embedded.rocks>
+Date: Wed, 12 Jul 2017 21:44:31 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/bananapro: bump Linux kernel to
+	4.12.1
+Message-ID: <20170712194432.21975-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch 0005 which has been fixed upstream in a different way [1] by only
-building the Python libfdt library when needed [2].
-
-[1] https://patchwork.ozlabs.org/patch/757380/
-[2] https://www.mail-archive.com/u-boot at lists.denx.de/msg251051.html
+Drop the board specific patches which has been applied upstream.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...nditionally-disable-python-libfdt-wrapper.patch | 44 ----------------------
- package/uboot-tools/uboot-tools.hash               |  2 +-
- package/uboot-tools/uboot-tools.mk                 |  7 +---
- 3 files changed, 2 insertions(+), 51 deletions(-)
- delete mode 100644 package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+ ...ts-sun7i-Enable-audio-codec-on-Banana-Pro.patch | 35 ---------
+ ...-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch | 85 ----------------------
+ configs/bananapro_defconfig                        |  6 +-
+ 3 files changed, 3 insertions(+), 123 deletions(-)
+ delete mode 100644 board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
+ delete mode 100644 board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
 
-diff --git a/package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch b/package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+diff --git a/board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch b/board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
 deleted file mode 100644
-index e48f72b7b9..0000000000
---- a/package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+index 8552daafc4..0000000000
+--- a/board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
 +++ /dev/null
-@@ -1,44 +0,0 @@
--From 4dc3139cc9fa12882792053bdce7b69aca9b91bf Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Mon, 1 May 2017 22:19:57 -0500
--Subject: [PATCH] tools: conditionally disable python libfdt wrapper
+@@ -1,35 +0,0 @@
+-From 1647fe31882a105cef4c99770e4ec8ea47c5c653 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Wed, 4 Jan 2017 15:22:50 +0100
+-Subject: [PATCH 1/1] ARM: dts: sun7i: Enable audio codec on Banana Pro
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--Not all host systems want the default swig to be
--used when building the tools.  Allow for the
--disabling of the wrapper to enable cross-compiling
--of the tools on a host system with swig.
+-This commit enables the on-chip audio codec present on the A20 SoC
+-on the Banana Pro board.
 -
--Upsteam submission for RFC:
--https://lists.denx.de/pipermail/u-boot/2017-May/289520.html
--
--Workaround for:
--http://autobuild.buildroot.net/results/6d5/6d52ac8bb71012aea6fc4c679691b31a3366728b
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ----
-- tools/Makefile | 2 ++
-- 1 file changed, 2 insertions(+)
+- arch/arm/boot/dts/sun7i-a20-bananapro.dts | 4 ++++
+- 1 file changed, 4 insertions(+)
 -
--diff --git a/tools/Makefile b/tools/Makefile
--index 2fc4a58..7f6c29d 100644
----- a/tools/Makefile
--+++ b/tools/Makefile
--@@ -114,6 +114,7 @@ fit_check_sign-objs   := $(dumpimage-mkimage-objs) fit_check_sign.o
+-diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+-index 19d63d4049de..03799c647e13 100644
+---- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+-+++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+-@@ -104,6 +104,10 @@
+- 	status = "okay";
+- };
 - 
-- # Build a libfdt Python module if swig is available
-- # Use 'sudo apt-get install swig libpython-dev' to enable this
--+ifndef CONFIG_TOOLS_PYTHON_WRAPPER_DISABLE
-- hostprogs-y += \
-- 	$(if $(shell which swig 2> /dev/null),_libfdt.so)
-- _libfdt.so-sharedobjs += $(LIBFDT_OBJS)
--@@ -126,6 +127,7 @@ tools/_libfdt.so: $(patsubst %.o,%.c,$(LIBFDT_OBJS)) tools/libfdt_wrap.c
-- 
-- tools/libfdt_wrap.c: $(srctree)/lib/libfdt/libfdt.swig
-- 	swig -python -o $@ $<
--+endif
-- 
-- # TODO(sjg@chromium.org): Is this correct on Mac OS?
-- 
+-+&codec {
+-+	status = "okay";
+-+};
+-+
+- &ehci0 {
+- 	status = "okay";
+- };
 --- 
--1.9.1
+-2.11.0
 -
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index e11d92ff15..3ba8e34ba0 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  c8373949d7f0de1059e507b83a655d4cea539f75dc66ccdbb27adbd38d83095e  u-boot-2017.05.tar.bz2
-+sha256  5374bfdc8acb9a38c025371b1ff20f45e7533668e84e685d0df5d9e7c0e4feff  u-boot-2017.07.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 1327a06525..4f39f4ad2c 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2017.05
-+UBOOT_TOOLS_VERSION = 2017.07
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
-@@ -21,11 +21,6 @@ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	STRIP=$(TARGET_STRIP)
- 
--# This option was added through an additional patch
--# and allows the disabling of a host python swig
--# detect which as of 2017.5 assumes the host systems swig.
--UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_PYTHON_WRAPPER_DISABLE=y
+diff --git a/board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch b/board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
+deleted file mode 100644
+index 7d514a808c..0000000000
+--- a/board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
++++ /dev/null
+@@ -1,85 +0,0 @@
+-From f2cb904f074bc7e90be475488872a82270e9bae7 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Mon, 9 Jan 2017 21:36:38 +0100
+-Subject: [PATCH 2/2] ARM: dts: sun7i: Add wifi dt node on Banana Pro
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
- UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y
- UBOOT_TOOLS_DEPENDENCIES += dtc
+-The Banana Pro has an AMPAK AP6181 WiFi+Bluetooth module. The WiFi part
+-is a BCM43362 IC connected to MMC3 of the A20 SoC via SDIO. The IC also
+-takes a power enable signal via GPIO.
+-
+-This commit adds a device-tree node to power it up, so the mmc subsys
+-can scan it, and enables the mmc controller which is connected to it.
+-
+-As the wifi enable pin of the AP6181 module is not really a regulator,
+-switch the mmc3 node to the mmc-pwrseq framework for controlling it.
+-This more accurately reflectes how the hardware actually works.
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+----
+- arch/arm/boot/dts/sun7i-a20-bananapro.dts | 29 +++++++++++++++++------------
+- 1 file changed, 17 insertions(+), 12 deletions(-)
+-
+-diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+-index 03799c647e13..83516bc81225 100644
+---- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+-+++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+-@@ -76,6 +76,13 @@
+- 		};
+- 	};
+- 
+-+	wifi_pwrseq: wifi-pwrseq {
+-+		compatible = "mmc-pwrseq-simple";
+-+		pinctrl-names = "default";
+-+		pinctrl-0 = <&vmmc3_pin_bananapro>;
+-+		reset-gpios = <&pio 7 22 GPIO_ACTIVE_LOW>;
+-+	};
+-+
+- 	reg_gmac_3v3: gmac-3v3 {
+- 		compatible = "regulator-fixed";
+- 		pinctrl-names = "default";
+-@@ -87,17 +94,6 @@
+- 		enable-active-high;
+- 		gpio = <&pio 7 23 GPIO_ACTIVE_HIGH>;
+- 	};
+--
+--	reg_vmmc3: vmmc3 {
+--		compatible = "regulator-fixed";
+--		pinctrl-names = "default";
+--		pinctrl-0 = <&vmmc3_pin_bananapro>;
+--		regulator-name = "vmmc3";
+--		regulator-min-microvolt = <3300000>;
+--		regulator-max-microvolt = <3300000>;
+--		enable-active-high;
+--		gpio = <&pio 7 22 GPIO_ACTIVE_HIGH>;
+--	};
+- };
+- 
+- &ahci {
+-@@ -170,10 +166,19 @@
+- &mmc3 {
+- 	pinctrl-names = "default";
+- 	pinctrl-0 = <&mmc3_pins_a>;
+--	vmmc-supply = <&reg_vmmc3>;
+-+	vmmc-supply = <&reg_vcc3v3>;
+-+	mmc-pwrseq = <&wifi_pwrseq>;
+- 	bus-width = <4>;
+- 	non-removable;
+- 	status = "okay";
+-+
+-+	brcmf: bcrmf at 1 {
+-+		reg = <1>;
+-+		compatible = "brcm,bcm4329-fmac";
+-+		interrupt-parent = <&pio>;
+-+		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
+-+		interrupt-names = "host-wake";
+-+	};
+- };
+- 
+- &ohci0 {
+--- 
+-2.11.0
+-
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index 0e6e230df0..5b93823af5 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
++# Linux headers same as kernel, a 4.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ 
+ # Toolchain
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -25,7 +25,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.1"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
 -- 
 2.13.2
