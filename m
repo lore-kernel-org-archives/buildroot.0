@@ -1,49 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Jul 2017 19:50:55 +0200
-Subject: [Buildroot] [PATCH] configs: nexbox_a95x_defconfig: bump to
-	kernel 4.12
-In-Reply-To: <20170712153940.610cae5e@windsurf.lan> (Thomas Petazzoni's
- message of "Wed, 12 Jul 2017 15:39:40 +0200")
-References: <20170712122322.12281-1-peter@korsgaard.com>
- <20170712153940.610cae5e@windsurf.lan>
-Message-ID: <87eftlpmrk.fsf@dell.be.48ers.dk>
+From: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+Date: Wed, 12 Jul 2017 14:31:03 -0400
+Subject: [Buildroot] [PATCH 1/1] configs/arcturus_ucp1020_defconfig
+Message-ID: <20170712183103.30139-1-oleks@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Back to the BR2_GCC_VERSION_4_9_X, because the default/latest GCC fails to build the Linux kernel.
 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+---
+ configs/arcturus_ucp1020_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Since you used this board, perhaps you could remove the bit in the
- > post-build.sh script that generates boot.scr, and use
- > BR2_TARGET_UBOOT_BOOT_SCRIPT instead ? Should be a separate patch of
- > course.
-
-Heh, I also got tricked by this. You would think that could be done, but
-as the defconfig doesn't build u-boot (no public sources) we cannot use
-that option.
-
- > Sadly, this will not allow to remove completely post-build.sh, as it
- > needs a special AArch64 uImage for the kernel. But I wonder why this is
- > done in the post-build.sh script and not the post-image.sh script.
-
-It doesn't really matter as the kernel gets built before the post-build
-script runs (except for initramfs, but the genimage configuration
-expects ext4).
-
-If we are to introduce kconfig options for genimage (which will cause
-genimage to be executed BEFORE the post-image script, then this uImage
-handling must be in post-build so it is available for genimage.
-
-
- > And the post-image.sh script can be refactored to use the common
- > genimage script :)
-
-Correct. I would prefer to first rework the genimage handling to make it
-available in kconfig instead of such in-between solution.
-
+diff --git a/configs/arcturus_ucp1020_defconfig b/configs/arcturus_ucp1020_defconfig
+index cc1297ce1..29e0f766b 100644
+--- a/configs/arcturus_ucp1020_defconfig
++++ b/configs/arcturus_ucp1020_defconfig
+@@ -10,6 +10,7 @@ BR2_TARGET_GENERIC_HOSTNAME="UCP1020"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Arcturus uCP1020 System on Module"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
++BR2_GCC_VERSION_4_9_X=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 -- 
-Bye, Peter Korsgaard
+2.11.0
