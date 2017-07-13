@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 19:27:27 +0200
-Subject: [Buildroot] [git commit] python-twisted: add missing dependency on
-	host-python-incremental
-Message-ID: <20170713172442.8AF2F82133@busybox.osuosl.org>
+Date: Thu, 13 Jul 2017 19:30:59 +0200
+Subject: [Buildroot] [PATCH 1/1] board/arcturus/ppc-ucp1020 new gcc-6.x
+ Linux kernel build fix
+In-Reply-To: <20170713163817.7114-1-oleks@arcturusnetworks.com>
+References: <20170713163817.7114-1-oleks@arcturusnetworks.com>
+Message-ID: <20170713193059.08c08974@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38aef10ee715edb213a6b61c9d19fc74d4e5f1f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The recent change on PYTHONPATH for Python 2.x has revealed a missing
-dependency in the python-twisted package. The incremental Python
-module is listed in both setup_requires and install_requires, so we
-must depend on both its target *and* host variants.
+On Thu, 13 Jul 2017 12:38:17 -0400, Oleksandr Zhadan wrote:
+> Add the Linux-3.18 patch "powerpc/ptrace: Fix out of bounds array access warning" to the board/arcturus/ppc-ucp1020 BSP
+> 
+> " gcc-6 correctly warns about a out of bounds access
+> 
+> arch/powerpc/kernel/ptrace.c:407:24: warning: index 32 denotes an offset greater than size of 'u64[32][1] {aka long long unsigned int[32][1]}' [-Warray-bounds]
+>         offsetof(struct thread_fp_state, fpr[32][0]));
+>                         ^
+> 
+> check the end of array instead of beginning of next element to fix this"
+> 
+> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
 
-Fixes:
+Do you have a good reason to stick with the 4.1 Linux kernel in this
+defconfig, instead of upgrading to a newer kernel version that has
+commit 1e407ee3b21f981140491d5b8a36422979ca246f ? For example, using
+Linux 4.9 would solve this.
 
-  http://autobuild.buildroot.net/results/386bf87abba550b5477d5e15e57981b8c3cef8d6/
+Best regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-twisted/python-twisted.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index b167a0f..9b3ced5 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -10,6 +10,6 @@ PYTHON_TWISTED_SITE = https://pypi.python.org/packages/d2/5d/ed5071740be94da6255
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
--PYTHON_TWISTED_DEPENDENCIES = python-incremental
-+PYTHON_TWISTED_DEPENDENCIES = python-incremental host-python-incremental
- 
- $(eval $(python-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
