@@ -1,54 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Jul 2017 22:52:53 +0200
-Subject: [Buildroot] [git commit] package/samba4: security bump to version
-	4.5.12
-Message-ID: <20170713204923.644F98216D@busybox.osuosl.org>
+Date: Thu, 13 Jul 2017 22:56:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.1.4
+In-Reply-To: <1499948671-11899-1-git-send-email-martin@barkynet.com> (Martin
+ Bark's message of "Thu, 13 Jul 2017 13:24:31 +0100")
+References: <1499948671-11899-1-git-send-email-martin@barkynet.com>
+Message-ID: <87wp7caweh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f97510659f914ee51c0f32e82664179a69ab17ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-Fixes CVE-2017-11103:
+ > See https://nodejs.org/en/blog/release/v8.1.4/
+ > Signed-off-by: Martin Bark <martin@barkynet.com>
 
-All versions of Samba from 4.0.0 onwards using embedded Heimdal
-Kerberos are vulnerable to a man-in-the-middle attack impersonating
-a trusted server, who may gain elevated access to the domain by
-returning malicious replication or authorization data.
+Committed after updating the description to make it clear that this is a
+security bump, thanks.
 
-Samba binaries built against MIT Kerberos are not vulnerable.
-
-https://www.samba.org/samba/history/samba-4.5.12.html
-
-[Peter: add CVE info]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index a16d834..0783b37 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 7cb753f5f6d5527ef40d4c1f47dacafb7c876cb304b4906ccb390c6a18477714  samba-4.5.10.tar.gz
-+sha256 f4c17123e3cc852a5ecc7e38884b00deab57632b9519aebc243e2a94b9b5ace4  samba-4.5.12.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 86546e9..72fbd74 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.5.10
-+SAMBA4_VERSION = 4.5.12
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
