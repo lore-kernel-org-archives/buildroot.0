@@ -1,61 +1,64 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 13 Jul 2017 10:25:13 +0200
-Subject: [Buildroot] [PATCH 5/8] python-json-schema-validator: needs
- versiontools on the host
-In-Reply-To: <20170712162801.31131-6-thomas.petazzoni@free-electrons.com>
-References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
- <20170712162801.31131-6-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_kvtMzM8Qv3B9fnLpnxcFw1t0wV9yVTudEauF-r8SEb4HA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Jul 2017 10:25:41 +0200
+Subject: [Buildroot] [PATCH v2 05/13] package/minetest: add gettext
+ optional dependency
+In-Reply-To: <e1ed833d-77ef-745e-8206-992846efcd04@gmail.com>
+References: <20170612205410.20230-1-romain.naour@gmail.com>
+ <20170612205410.20230-5-romain.naour@gmail.com>
+ <20170624172028.58c971c4@windsurf.home>
+ <e1ed833d-77ef-745e-8206-992846efcd04@gmail.com>
+Message-ID: <20170713102541.276b68d0@windsurf.orange-hotspot.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> python-json-schema-validator does not need versiontools on the target,
-> but only on the host, as it's listed in setup_requires in setup.py.
->
-> This was not noticed so far because host Python interpreter is started
-> with a PYTHONPATH that contains a directory with target Python
-> packages, so versiontools was found there. But as we are about to fix
-> PYTHONPATH to no longer include such a directory,
-> python-json-schema-validator would fail due to versiontools being
-> missed on the host.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hello,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 12 Jul 2017 18:43:01 +0200, Romain Naour wrote:
 
-> ---
->  package/python-json-schema-validator/Config.in                       | 1 -
->  package/python-json-schema-validator/python-json-schema-validator.mk | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/package/python-json-schema-validator/Config.in b/package/python-json-schema-validator/Config.in
-> index dbc5328..e50e8ee 100644
-> --- a/package/python-json-schema-validator/Config.in
-> +++ b/package/python-json-schema-validator/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
->         bool "python-json-schema-validator"
-> -       select BR2_PACKAGE_PYTHON_VERSIONTOOLS
->         help
->           JSON Schema Validator
->
-> diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
-> index 6accbd6..c0a335c 100644
-> --- a/package/python-json-schema-validator/python-json-schema-validator.mk
-> +++ b/package/python-json-schema-validator/python-json-schema-validator.mk
-> @@ -9,6 +9,6 @@ PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE = json-schema-validator-$(PYTHON_JSON_SCHEMA
->  PYTHON_JSON_SCHEMA_VALIDATOR_SITE = https://pypi.python.org/packages/70/46/ba39cb7efad1898cfc89bf3588b8612f24d128f1c25b761994f524a59cef
->  PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPL-3.0
->  PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
-> -PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
-> +PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = host-python-versiontools
->
->  $(eval $(python-package))
-> --
-> 2.9.4
->
+> > On Mon, 12 Jun 2017 22:54:02 +0200, Romain Naour wrote:
+> >   
+> >>  MINETEST_CONF_OPTS = \
+> >>  	-DDEFAULT_RUN_IN_PLACE=OFF \
+> >> -	-DENABLE_GETTEXT=OFF \
+> >>  	-DENABLE_SOUND=OFF \
+> >>  	-DENABLE_GLES=OFF \
+> >>  	-DENABLE_FREETYPE=OFF \
+> >> @@ -40,6 +39,13 @@ else
+> >>  MINETEST_CONF_OPTS += -DBUILD_SERVER=OFF
+> >>  endif
+> >>  
+> >> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
+> >> +MINETEST_DEPENDENCIES += gettext
+> >> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=ON
+> >> +else
+> >> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=OFF
+> >> +endif  
+> > 
+> > What is this ENABLE_GETTEXT=ON/OFF option doing exactly?  
+> 
+> It allows using translations.
+> 
+> When enabled msgfmt tool is used to create *.mo files etc...
+> 
+> https://github.com/minetest/minetest/blob/master/README.txt#L180
+
+Then simply do:
+
+MINETEST_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+
+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ pass -DENABLE_GETTEXT=ON
+else
+ pass -DENABLE_GETTEXT=OFF
+endif
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
