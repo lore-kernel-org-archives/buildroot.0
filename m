@@ -1,48 +1,148 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 13 Jul 2017 21:40:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.19
-Message-ID: <20170713194010.25707-1-bernd.kuhls@t-online.de>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 13 Jul 2017 15:00:05 -0500
+Subject: [Buildroot] [PATCH v2 1/1] br toolchain: gcc4.x/5.x bugfix
+	libsanitizer ppc
+Message-ID: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freeswitch/freeswitch.hash | 12 ++++++------
- package/freeswitch/freeswitch.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Fixes a missing include of signal.h
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 371a55d9e..ccda477a7 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,6 +1,6 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.18.tar.xz.md5
--md5 f3d38422270cc3f2f6ba7a68e074a38b  freeswitch-1.6.18.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.18.tar.xz.sha1
--sha1 36282dfbea11a603a17feb39070f4a63c5e7a380  freeswitch-1.6.18.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.18.tar.xz.sha256
--sha256 ac1b32f61e5c35680c5a2d6f145bc480cf26e6527af07d8b8b9fa2d5280252cd  freeswitch-1.6.18.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.19.tar.xz.md5
-+md5 24b8ee769031ca152b76e6c17edd882b  freeswitch-1.6.19.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.19.tar.xz.sha1
-+sha1 2a48f1f5ca0b24854f93e49a4728f79517a95a24  freeswitch-1.6.19.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.19.tar.xz.sha256
-+sha256 e8d271a0d876ba4cca551682af0a4f5047bfd79438fcebdcc17d00711c04a8ff  freeswitch-1.6.19.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 463a30187..e5c8854e3 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.6.18
-+FREESWITCH_VERSION = 1.6.19
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPL-1.1, \
+Verified to break 4.9.4 / 5.4.0 when using
+target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
+
+../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
+../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
+   return signum == SIGSEGV && common_flags()->handle_segv;
+
+Resolves Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
+
+Upstream: https://patchwork.ozlabs.org/patch/725596/
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+
+Changes v1 -> v2
+[Baruch S
+ - Added bug url and signed off
+
+[Thomas P
+ - Updated comment about applicability to 4.9.x
+---
+ .../942-asan-fix-missing-include-signal-h.patch    | 47 ++++++++++++++++++++++
+ .../942-asan-fix-missing-include-signal-h.patch    | 47 ++++++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100644 package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch
+ create mode 100644 package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch
+
+diff --git a/package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch b/package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch
+new file mode 100644
+index 0000000..398fa7d
+--- /dev/null
++++ b/package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch
+@@ -0,0 +1,47 @@
++From patchwork Wed Feb  8 11:07:16 2017
++Content-Type: text/plain; charset="utf-8"
++MIME-Version: 1.0
++Content-Transfer-Encoding: 7bit
++Subject: asan: fix missing include of signal.h
++From: Rolf Eike Beer <eb@emlix.com>
++X-Patchwork-Id: 725596
++Message-Id: <6824253.3U2boEivI2@devpool21>
++To: gcc-patches at gcc.gnu.org
++Date: Wed, 08 Feb 2017 12:07:16 +0100
++
++>From 205aa8e97bab553e5e6fe45896325e97962de704 Mon Sep 17 00:00:00 2001
++From: Rolf Eike Beer <eb@emlix.com>
++Date: Wed, 8 Feb 2017 11:42:52 +0100
++Subject: [PATCH] asan: fix missing include of signal.h
++
++This breaks when building gcc 4.9.4 / 5.4.0 with
++target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
++
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
++   return signum == SIGSEGV && common_flags()->handle_segv;
++
++This has been verified to apply to at least 4.9.4 and up to 5.4,
++the code has been reworked for gcc 6.
++
++Resolves (Buildroot) Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
++
++Upstream: https://patchwork.ozlabs.org/patch/725596/
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ libsanitizer/asan/asan_linux.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libsanitizer/asan/asan_linux.cc b/libsanitizer/asan/asan_linux.cc
++index c504168..59087b9 100644
++--- a/libsanitizer/asan/asan_linux.cc
+++++ b/libsanitizer/asan/asan_linux.cc
++@@ -29,6 +29,7 @@
++ #include <dlfcn.h>
++ #include <fcntl.h>
++ #include <pthread.h>
+++#include <signal.h>
++ #include <stdio.h>
++ #include <unistd.h>
++ #include <unwind.h>
+diff --git a/package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch b/package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch
+new file mode 100644
+index 0000000..398fa7d
+--- /dev/null
++++ b/package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch
+@@ -0,0 +1,47 @@
++From patchwork Wed Feb  8 11:07:16 2017
++Content-Type: text/plain; charset="utf-8"
++MIME-Version: 1.0
++Content-Transfer-Encoding: 7bit
++Subject: asan: fix missing include of signal.h
++From: Rolf Eike Beer <eb@emlix.com>
++X-Patchwork-Id: 725596
++Message-Id: <6824253.3U2boEivI2@devpool21>
++To: gcc-patches at gcc.gnu.org
++Date: Wed, 08 Feb 2017 12:07:16 +0100
++
++>From 205aa8e97bab553e5e6fe45896325e97962de704 Mon Sep 17 00:00:00 2001
++From: Rolf Eike Beer <eb@emlix.com>
++Date: Wed, 8 Feb 2017 11:42:52 +0100
++Subject: [PATCH] asan: fix missing include of signal.h
++
++This breaks when building gcc 4.9.4 / 5.4.0 with
++target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
++
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
++   return signum == SIGSEGV && common_flags()->handle_segv;
++
++This has been verified to apply to at least 4.9.4 and up to 5.4,
++the code has been reworked for gcc 6.
++
++Resolves (Buildroot) Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
++
++Upstream: https://patchwork.ozlabs.org/patch/725596/
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ libsanitizer/asan/asan_linux.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libsanitizer/asan/asan_linux.cc b/libsanitizer/asan/asan_linux.cc
++index c504168..59087b9 100644
++--- a/libsanitizer/asan/asan_linux.cc
+++++ b/libsanitizer/asan/asan_linux.cc
++@@ -29,6 +29,7 @@
++ #include <dlfcn.h>
++ #include <fcntl.h>
++ #include <pthread.h>
+++#include <signal.h>
++ #include <stdio.h>
++ #include <unistd.h>
++ #include <unwind.h>
 -- 
-2.11.0
+1.9.1
