@@ -1,47 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 13 Jul 2017 15:02:13 -0500
-Subject: [Buildroot] [PATCH 1/1] br toolchain: gcc5.4 bugfix
-	libsanitizer powerpc
-In-Reply-To: <CANQCQpY4MZdnLn=O4jqvDzqNToi_4R8dnQiGw0Re4-cTtr1dow@mail.gmail.com>
-References: <1499918619-27858-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170713040727.rfalp6j5n6dikbjd@tarshish>
- <CANQCQpa0fQDqAUsdPNLz_wKk4qu_YRkNB23hG5rOEedWpnpJ9A@mail.gmail.com>
- <20170713193316.28cc62eb@windsurf>
- <CANQCQpY4MZdnLn=O4jqvDzqNToi_4R8dnQiGw0Re4-cTtr1dow@mail.gmail.com>
-Message-ID: <CANQCQpbW8LjWy-0wAUOtXhhBXgs+SPJK6nyh9bbNxCfoH+Mvnw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 13 Jul 2017 22:03:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump to version
+	4.5.12
+Message-ID: <20170713200348.12476-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Baruch,
+Fixes CVE-2017-11103:
+https://www.samba.org/samba/history/samba-4.5.12.html
 
-On Thu, Jul 13, 2017 at 12:45 PM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Thomas,
->
-> On Thu, Jul 13, 2017 at 12:33 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Thu, 13 Jul 2017 08:29:32 -0500, Matthew Weber wrote:
->>
->>> > > +This applies only to gcc-5-branch, the code has been reworked for gcc 6.
->>> >
->>> > Your sign-off is missing.
->>>
->>>
->>> I had assumed if I used the patch as is I would leave it without mods.
->>> I can add the bug tracker url and my signed off.
->>
->> Please add your SoB and the bug tracker reference.
->>
->> Also, does this issue applies to gcc 4.9 as well ?
->>
->
-> I'll check, we were using earlier versions of 5.4 and the bump broke
-> us.  I'll find the point it was introduced and add a comment.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Superseded by:
-https://patchwork.ozlabs.org/patch/787965/
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index a16d83470..0783b37d0 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 7cb753f5f6d5527ef40d4c1f47dacafb7c876cb304b4906ccb390c6a18477714  samba-4.5.10.tar.gz
++sha256 f4c17123e3cc852a5ecc7e38884b00deab57632b9519aebc243e2a94b9b5ace4  samba-4.5.12.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 86546e975..72fbd7448 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.5.10
++SAMBA4_VERSION = 4.5.12
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.11.0
