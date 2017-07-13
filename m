@@ -1,11 +1,11 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 13 Jul 2017 10:22:56 +0200
-Subject: [Buildroot] [PATCH 2/8] python-pyro: switch to setuptools
+Date: Thu, 13 Jul 2017 10:23:45 +0200
+Subject: [Buildroot] [PATCH 1/8] python-pyasn: switch to setuptools
 	instead of distutils
-In-Reply-To: <20170712162801.31131-3-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <20170712162801.31131-2-thomas.petazzoni@free-electrons.com>
 References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
- <20170712162801.31131-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_ks64R4aAHnWBNn=e_3_C4THOprLsO7cemgSVb1j9htjXw@mail.gmail.com>
+ <20170712162801.31131-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_kudAeZY5R5_bF3Ph3-24yLerLEh_t+qFzg68SM369zTKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,7 @@ To: buildroot@busybox.net
 
 On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> python-pyro can use setuptools instead of distutils, and using
+> python-pyasn can use setuptools instead of distutils, and using
 > setuptools is generally preferred.
 >
 > In addition, using setuptools allows to make sure the package will
@@ -60,19 +60,19 @@ On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  package/python-pyro/python-pyro.mk | 2 +-
+>  package/python-pyasn/python-pyasn.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/package/python-pyro/python-pyro.mk b/package/python-pyro/python-pyro.mk
-> index bf916ba..06b4f45 100644
-> --- a/package/python-pyro/python-pyro.mk
-> +++ b/package/python-pyro/python-pyro.mk
-> @@ -9,6 +9,6 @@ PYTHON_PYRO_SOURCE = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
->  PYTHON_PYRO_SITE = https://pypi.python.org/packages/61/68/0978adae315261b87acd216517c2c7f00780396e4d1426c5412458c6a28f
->  PYTHON_PYRO_LICENSE = MIT
->  PYTHON_PYRO_LICENSE_FILES = LICENSE
-> -PYTHON_PYRO_SETUP_TYPE = distutils
-> +PYTHON_PYRO_SETUP_TYPE = setuptools
+> diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+> index 255341f..f34520f 100644
+> --- a/package/python-pyasn/python-pyasn.mk
+> +++ b/package/python-pyasn/python-pyasn.mk
+> @@ -9,6 +9,6 @@ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
+>  PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
+>  PYTHON_PYASN_LICENSE = BSD-2-Clause
+>  PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
+> -PYTHON_PYASN_SETUP_TYPE = distutils
+> +PYTHON_PYASN_SETUP_TYPE = setuptools
 >
 >  $(eval $(python-package))
 > --
