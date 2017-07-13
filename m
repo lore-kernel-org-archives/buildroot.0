@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 11:24:17 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Sagaert Johan
-In-Reply-To: <3606ea852bd01b29f8084b3cf13c222118d9f0d9.1499915490.git.baruch@tkos.co.il>
-References: <3606ea852bd01b29f8084b3cf13c222118d9f0d9.1499915490.git.baruch@tkos.co.il>
-Message-ID: <20170713112417.349ffc27@windsurf.orange-hotspot.com>
+Date: Thu, 13 Jul 2017 11:25:17 +0200
+Subject: [Buildroot] [PATCH 0/8] Fix the python cffi issue
+In-Reply-To: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170713112517.41c87bfd@windsurf.orange-hotspot.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Jul 2017 06:11:30 +0300, Baruch Siach wrote:
-> The email address of Sagaert Johan is bouncing. Remove his DEVELOPERS entry.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  DEVELOPERS | 8 --------
->  1 file changed, 8 deletions(-)
+On Wed, 12 Jul 2017 18:27:53 +0200, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> Thomas Petazzoni (8):
+>   python-pyasn: switch to setuptools instead of distutils
+>   python-pyro: switch to setuptools instead of distutils
+>   python-u-msgpack: switch to setuptools instead of distutils
+>   python-versiontools: add host variant
+>   python-json-schema-validator: needs versiontools on the host
+>   python-incremental: add host variant
+>   python-treq: needs host-python-incremental
+>   python: remove target Python packages from PYTHONPATH
+
+Following Yegor's review, and tests (reported on IRC), I've applied
+this series. I wanted to apply it quickly to get rid of the noisy
+autobuilder failures on python-cryptography, and see if it doesn't
+introduce problems in other Python packages.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
