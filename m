@@ -1,40 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 10:54:39 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Sagaert Johan
-Message-ID: <20170713085046.E37A5817BB@busybox.osuosl.org>
+Date: Thu, 13 Jul 2017 10:54:10 +0200
+Subject: [Buildroot] [git commit] python-pyasn: switch to setuptools instead
+	of distutils
+Message-ID: <20170713085046.4A26782151@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58e07385cf9c376bfcf5dee87e4537205a5fbf86
+commit: https://git.buildroot.net/buildroot/commit/?id=b40e701ee2f5a87048e97badbc4f1a0a023be960
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The email address of Sagaert Johan is bouncing. Remove his DEVELOPERS entry.
+python-pyasn can use setuptools instead of distutils, and using
+setuptools is generally preferred.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+In addition, using setuptools allows to make sure the package will
+continue to build when we will adjust the PYTHONPATH variable to no
+longer point to target Python modules. Without such a change to
+setuptools, the build would fail with:
+
+=====================================================================
+running install
+Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+/home/test/buildroot/output/host/bin/python -E -c pass
+TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
+error: bad install directory or PYTHONPATH
+
+You are attempting to install a package to a directory that is not
+on PYTHONPATH and which Python does not read ".pth" files from.  The
+installation directory you specified (via --install-dir, --prefix, or
+the distutils default setting) was:
+
+    /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+
+and your PYTHONPATH environment variable currently contains:
+
+    '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
+
+Here are some of your options for correcting the problem:
+
+* You can choose a different installation directory, i.e., one that is
+  on PYTHONPATH or supports .pth files
+
+* You can add the installation directory to the PYTHONPATH environment
+  variable.  (It must then also be on PYTHONPATH whenever you run
+  Python and want to use the package(s) you are installing.)
+
+* You can set up the installation directory to support ".pth" files by
+  using one of the approaches described here:
+
+  https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
+=====================================================================
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 8 --------
- 1 file changed, 8 deletions(-)
+ package/python-pyasn/python-pyasn.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f392838..80c3dd2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1469,14 +1469,6 @@ F:	package/biosdevname/
- N:	R??mi R??rolle <remi.rerolle@gmail.com>
- F:	package/libfreeimage/
+diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+index 255341f..f34520f 100644
+--- a/package/python-pyasn/python-pyasn.mk
++++ b/package/python-pyasn/python-pyasn.mk
+@@ -9,6 +9,6 @@ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
+ PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
+ PYTHON_PYASN_LICENSE = BSD-2-Clause
+ PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYASN_SETUP_TYPE = distutils
++PYTHON_PYASN_SETUP_TYPE = setuptools
  
--N:	Sagaert Johan <sagaert.johan@skynet.be>
--F:	package/git/
--F:	package/gsl/
--F:	package/jquery-mobile/
--F:	package/libgsasl/
--F:	package/qdecoder/
--F:	package/qlibc/
--
- N:	Sam Bobroff <sam.bobroff@au1.ibm.com>
- F:	arch/Config.in.powerpc
- F:	package/librtas/
+ $(eval $(python-package))
