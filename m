@@ -1,11 +1,11 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 13 Jul 2017 10:23:45 +0200
-Subject: [Buildroot] [PATCH 1/8] python-pyasn: switch to setuptools
+Date: Thu, 13 Jul 2017 10:24:12 +0200
+Subject: [Buildroot] [PATCH 3/8] python-u-msgpack: switch to setuptools
 	instead of distutils
-In-Reply-To: <20170712162801.31131-2-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <20170712162801.31131-4-thomas.petazzoni@free-electrons.com>
 References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
- <20170712162801.31131-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_kudAeZY5R5_bF3Ph3-24yLerLEh_t+qFzg68SM369zTKQ@mail.gmail.com>
+ <20170712162801.31131-4-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_ksxEXXhz2zQLPWhSxYZP8bFB-7CDHk9w7KWwBdg6x6FsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,8 @@ To: buildroot@busybox.net
 
 On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> python-pyasn can use setuptools instead of distutils, and using
-> setuptools is generally preferred.
+> python-u-msgpack can use setuptools instead of distutils, and
+> using setuptools is generally preferred.
 >
 > In addition, using setuptools allows to make sure the package will
 > continue to build when we will adjust the PYTHONPATH variable to no
@@ -60,21 +60,22 @@ On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  package/python-pyasn/python-pyasn.mk | 2 +-
+>  package/python-u-msgpack/python-u-msgpack.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
-> index 255341f..f34520f 100644
-> --- a/package/python-pyasn/python-pyasn.mk
-> +++ b/package/python-pyasn/python-pyasn.mk
-> @@ -9,6 +9,6 @@ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
->  PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
->  PYTHON_PYASN_LICENSE = BSD-2-Clause
->  PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
-> -PYTHON_PYASN_SETUP_TYPE = distutils
-> +PYTHON_PYASN_SETUP_TYPE = setuptools
+> diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+> index a88beeb..89240c3 100644
+> --- a/package/python-u-msgpack/python-u-msgpack.mk
+> +++ b/package/python-u-msgpack/python-u-msgpack.mk
+> @@ -7,7 +7,7 @@
+>  PYTHON_U_MSGPACK_VERSION = 2.2
+>  PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+>  PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
+> -PYTHON_U_MSGPACK_SETUP_TYPE = distutils
+> +PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+>  PYTHON_U_MSGPACK_LICENSE = MIT
+>  PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
 >
->  $(eval $(python-package))
 > --
 > 2.9.4
 >
