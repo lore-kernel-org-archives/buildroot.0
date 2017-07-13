@@ -1,74 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Jul 2017 17:32:20 +0200
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
- <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
- <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
-Message-ID: <20170713153220.GA3002@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Jul 2017 17:33:40 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/arcturus_ucp1020_defconfig
+In-Reply-To: <d756418a-69f4-00a2-7aa1-e101a6289b1a@arcturusnetworks.com>
+References: <20170712183103.30139-1-oleks@arcturusnetworks.com>
+ <20170713094219.1750fab7@windsurf.orange-hotspot.com>
+ <c171cf9c-b0f7-e065-e3b9-41ca3678bdff@arcturusnetworks.com>
+ <20170713153809.5d51faba@windsurf.orange-hotspot.com>
+ <d756418a-69f4-00a2-7aa1-e101a6289b1a@arcturusnetworks.com>
+Message-ID: <20170713173340.47f16bde@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Joshua, All,
+Hello,
 
-On 2017-07-13 09:50 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 12 Jul 2017 17:51:38 -0700, Joshua Henderson wrote:
+On Thu, 13 Jul 2017 10:14:41 -0400, Oleksandr G Zhadan wrote:
+
+> > Then could you please backport Linux kernel commit
+> > 1e407ee3b21f981140491d5b8a36422979ca246f instead? It should fix this
+> > build issue.  
 > 
-> > I tested adding hashes for all license files for 5.9.1. It turns out, this breaks the 5.6.2
-> > legal-info because there are files in common between the two versions, but with different hashes.
-> > 
-> >     $ make legal-info
-> > 
-> >     ...
-> > 
-> >     >>> qt5base 5.6.2 Collecting legal info  
-> >     LICENSE.GPLv3: OK (sha256: 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17)
-> >     ERROR: No hash found for LICENSE.LGPLv21
-> >     ERROR: No hash found for LGPL_EXCEPTION.txt
-> >     LICENSE.LGPLv3: OK (sha256: 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35)
-> >     LICENSE.FDL: OK (sha256: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d)
-> >     ERROR: header.BSD has wrong sha256 hash:
-> >     ERROR: expected: 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0
-> >     ERROR: got     : 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e
-> >     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> >     package/qt5/qt5base/qt5base.mk:315: recipe for target 'qt5base-legal-info' failed
-> >     make[1]: *** [qt5base-legal-info] Error 1
-> >     Makefile:79: recipe for target '_all' failed
-> >     make: *** [_all] Error 2
-> > 
-> > In the case you have different license file contents, but with the same name, between different
-> > versions of a package, how should this be handled?
-> 
-> This is a *very* good question,
+> Yes, I can, but we are using public kernel.
 
-Indeed, this is a *very* good question.
+Well, the kernel is downloaded from:
 
-> and I don't think our current support
-> for license file hashes handles this situation properly.
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://www.arcturusnetworks.com/OSS/kernel-ucls1012a-170706-13.tar.gz"
 
-Indeed our current infra does not support this... Dang... :-(
-I'll see what I can do with this...
+and you work for Arcturus Networks, so I guess you could adjust your
+tarball to include the relevant patch, no?
 
-Until then, don't add hashes for Qt license files... :-/
+> Should I add it as an extra patches to my 
+> board/arcturus/ppc-ucp1020/patches/linux/ directory ?
 
-A first idea would be to look for a hash file in the ${VERSION}
-subdirectory, where we are currently only looking for patches. This
-should be safe, as we currently only use *.patch from there.
+If changing the tarball is not possible, then adding the patch in
+Buildroot is indeed the other option.
 
-But I'm not too happy with this... :-/
+Thanks!
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
