@@ -1,81 +1,45 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 13 Jul 2017 10:24:12 +0200
-Subject: [Buildroot] [PATCH 3/8] python-u-msgpack: switch to setuptools
-	instead of distutils
-In-Reply-To: <20170712162801.31131-4-thomas.petazzoni@free-electrons.com>
-References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
- <20170712162801.31131-4-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_ksxEXXhz2zQLPWhSxYZP8bFB-7CDHk9w7KWwBdg6x6FsQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Jul 2017 10:24:27 +0200
+Subject: [Buildroot] [PATCH v2 03/13] package/minetest: new package
+In-Reply-To: <46aba327-97c5-f62d-8100-b3c4957c4576@gmail.com>
+References: <20170612205410.20230-1-romain.naour@gmail.com>
+ <20170612205410.20230-3-romain.naour@gmail.com>
+ <20170624171958.56312346@windsurf.home>
+ <46aba327-97c5-f62d-8100-b3c4957c4576@gmail.com>
+Message-ID: <20170713102427.68ea2e66@windsurf.orange-hotspot.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> python-u-msgpack can use setuptools instead of distutils, and
-> using setuptools is generally preferred.
->
-> In addition, using setuptools allows to make sure the package will
-> continue to build when we will adjust the PYTHONPATH variable to no
-> longer point to target Python modules. Without such a change to
-> setuptools, the build would fail with:
->
-> =====================================================================
-> running install
-> Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
-> /home/test/buildroot/output/host/bin/python -E -c pass
-> TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
-> error: bad install directory or PYTHONPATH
->
-> You are attempting to install a package to a directory that is not
-> on PYTHONPATH and which Python does not read ".pth" files from.  The
-> installation directory you specified (via --install-dir, --prefix, or
-> the distutils default setting) was:
->
->     /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
->
-> and your PYTHONPATH environment variable currently contains:
->
->     '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
->
-> Here are some of your options for correcting the problem:
->
-> * You can choose a different installation directory, i.e., one that is
->   on PYTHONPATH or supports .pth files
->
-> * You can add the installation directory to the PYTHONPATH environment
->   variable.  (It must then also be on PYTHONPATH whenever you run
->   Python and want to use the package(s) you are installing.)
->
-> * You can set up the installation directory to support ".pth" files by
->   using one of the approaches described here:
->
->   https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
-> =====================================================================
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hello,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 12 Jul 2017 18:37:39 +0200, Romain Naour wrote:
 
-> ---
->  package/python-u-msgpack/python-u-msgpack.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-> index a88beeb..89240c3 100644
-> --- a/package/python-u-msgpack/python-u-msgpack.mk
-> +++ b/package/python-u-msgpack/python-u-msgpack.mk
-> @@ -7,7 +7,7 @@
->  PYTHON_U_MSGPACK_VERSION = 2.2
->  PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
->  PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
-> -PYTHON_U_MSGPACK_SETUP_TYPE = distutils
-> +PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
->  PYTHON_U_MSGPACK_LICENSE = MIT
->  PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
->
-> --
-> 2.9.4
->
+> Le 24/06/2017 ? 17:19, Thomas Petazzoni a ?crit :
+> > Hello,
+> > 
+> > On Mon, 12 Jun 2017 22:54:00 +0200, Romain Naour wrote:
+> >   
+> >> + 		message(STATUS "GetText enabled; locales found: ${GETTEXT_AVAILABLE_LOCALES}")
+> >> ++		# On some platforms, such as Linux with GNU libc, the gettext
+> >> ++		# functions are present in the C standard library and libintl
+> >> ++		# is not required. For other libc (uClibc-ng or musl) libintl  
+> > 
+> > Only uClibc-ng in fact. musl has stub gettext functionality.  
+> 
+> So, with your series applied during the summer camp this is not true even with
+> uClibc-ng.
+
+Correct: now all C libraries provide some gettext implementation.
+
+> I think BR2_SYSTEM_ENABLE_NLS should be used in minetest.mk.
+
+Why?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
