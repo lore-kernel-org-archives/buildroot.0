@@ -1,45 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 10:24:27 +0200
-Subject: [Buildroot] [PATCH v2 03/13] package/minetest: new package
-In-Reply-To: <46aba327-97c5-f62d-8100-b3c4957c4576@gmail.com>
-References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-3-romain.naour@gmail.com>
- <20170624171958.56312346@windsurf.home>
- <46aba327-97c5-f62d-8100-b3c4957c4576@gmail.com>
-Message-ID: <20170713102427.68ea2e66@windsurf.orange-hotspot.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 13 Jul 2017 10:24:26 +0200
+Subject: [Buildroot] [PATCH 4/8] python-versiontools: add host variant
+In-Reply-To: <20170712162801.31131-5-thomas.petazzoni@free-electrons.com>
+References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+ <20170712162801.31131-5-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_kvOXpvJgJTLwBra0MRj0sLZ9ixbDqzLvHHQSo00UqgMTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> It will be needed by python-json-schema-validator.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Wed, 12 Jul 2017 18:37:39 +0200, Romain Naour wrote:
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> Le 24/06/2017 ? 17:19, Thomas Petazzoni a ?crit :
-> > Hello,
-> > 
-> > On Mon, 12 Jun 2017 22:54:00 +0200, Romain Naour wrote:
-> >   
-> >> + 		message(STATUS "GetText enabled; locales found: ${GETTEXT_AVAILABLE_LOCALES}")
-> >> ++		# On some platforms, such as Linux with GNU libc, the gettext
-> >> ++		# functions are present in the C standard library and libintl
-> >> ++		# is not required. For other libc (uClibc-ng or musl) libintl  
-> > 
-> > Only uClibc-ng in fact. musl has stub gettext functionality.  
-> 
-> So, with your series applied during the summer camp this is not true even with
-> uClibc-ng.
-
-Correct: now all C libraries provide some gettext implementation.
-
-> I think BR2_SYSTEM_ENABLE_NLS should be used in minetest.mk.
-
-Why?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> ---
+>  package/python-versiontools/python-versiontools.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/python-versiontools/python-versiontools.mk b/package/python-versiontools/python-versiontools.mk
+> index 2170730..fbf1040 100644
+> --- a/package/python-versiontools/python-versiontools.mk
+> +++ b/package/python-versiontools/python-versiontools.mk
+> @@ -11,3 +11,4 @@ PYTHON_VERSIONTOOLS_SETUP_TYPE = setuptools
+>  PYTHON_VERSIONTOOLS_LICENSE = LGPL-3.0
+>
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
+> --
+> 2.9.4
+>
