@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 09:42:19 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/arcturus_ucp1020_defconfig
-In-Reply-To: <20170712183103.30139-1-oleks@arcturusnetworks.com>
-References: <20170712183103.30139-1-oleks@arcturusnetworks.com>
-Message-ID: <20170713094219.1750fab7@windsurf.orange-hotspot.com>
+Date: Thu, 13 Jul 2017 09:44:06 +0200
+Subject: [Buildroot] [PATCH] uboot: bump to version 2017.07
+In-Reply-To: <20170712192903.20486-1-joerg.krause@embedded.rocks>
+References: <20170712192903.20486-1-joerg.krause@embedded.rocks>
+Message-ID: <20170713094406.4663ab54@windsurf.orange-hotspot.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Jul 2017 14:31:03 -0400, Oleksandr Zhadan wrote:
+On Wed, 12 Jul 2017 21:29:03 +0200, J?rg Krause wrote:
 
-> Back to the BR2_GCC_VERSION_4_9_X, because the default/latest GCC fails to build the Linux kernel.
-> 
-> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+> +config BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
+> +	bool "U-Boot needs pylibfdt"
+> +	select BR2_PACKAGE_HOST_PYTHON
+> +	select BR2_PACKAGE_HOST_SWIG
 
-What failure do you have when building the Linux kernel ?
+Can be fixed when applying (no need to respin just for that): none of
+those two options exist in Buildroot, so selecting them is useless.
 
 Thomas
 -- 
