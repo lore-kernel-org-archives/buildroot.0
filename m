@@ -1,74 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 10:54:10 +0200
-Subject: [Buildroot] [git commit] python-pyasn: switch to setuptools instead
-	of distutils
-Message-ID: <20170713085046.4A26782151@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 13 Jul 2017 11:11:48 +0200
+Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
+In-Reply-To: <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
+ <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
+ <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+Message-ID: <f0fba494-7cad-8022-b5db-6417ec32b0ba@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b40e701ee2f5a87048e97badbc4f1a0a023be960
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-python-pyasn can use setuptools instead of distutils, and using
-setuptools is generally preferred.
 
-In addition, using setuptools allows to make sure the package will
-continue to build when we will adjust the PYTHONPATH variable to no
-longer point to target Python modules. Without such a change to
-setuptools, the build would fail with:
+On 12-07-17 17:55, Joshua Henderson wrote:
+> Arnout,
+> 
+> On 07/11/2017 05:45 PM, Arnout Vandecappelle wrote:
+[snip]
+>>  You should keep the original author of this patch, as well as their
+>> Signed-off-by statements. You lost that now, but you can set it back with "git
+>> --amend --author='Brent Sink <brents_3@hotmail.com>'"
+> I am the original author of this patch since 5.9.0-beta, with contributions from
+> Julien and also some preliminary changes based on Julien's feedback.  
 
-=====================================================================
-running install
-Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
-/home/test/buildroot/output/host/bin/python -E -c pass
-TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
-error: bad install directory or PYTHONPATH
+ Sorry, it seems I missed that. I saw a first version by Naoki which was taken
+over by Brent, so I assume you had taken over from Brent.
 
-You are attempting to install a package to a directory that is not
-on PYTHONPATH and which Python does not read ".pth" files from.  The
-installation directory you specified (via --install-dir, --prefix, or
-the distutils default setting) was:
 
-    /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+> Whatever needs
+> to happen I'm fine with it, and I do realize I'm causing some mess by posting this
+> late.  Is the general rule that if somebody else hits the mailing list first they
+> should be the "author" of a similar patch?  How does this work?
 
-and your PYTHONPATH environment variable currently contains:
+ No, if you did not base it on Naoki's and Brent's versions, then you're the
+original author. In that case, just put Naoki and Brent in Cc of the patch.
 
-    '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
+ You can find the old versions back in patchwork:
 
-Here are some of your options for correcting the problem:
+http://patchwork.ozlabs.org/project/buildroot/list/?state=*&q=qt5
 
-* You can choose a different installation directory, i.e., one that is
-  on PYTHONPATH or supports .pth files
+which yields:
 
-* You can add the installation directory to the PYTHONPATH environment
-  variable.  (It must then also be on PYTHONPATH whenever you run
-  Python and want to use the package(s) you are installing.)
+http://patchwork.ozlabs.org/patch/781475/
+http://patchwork.ozlabs.org/patch/783150/
+http://patchwork.ozlabs.org/patch/785366/
+http://patchwork.ozlabs.org/patch/786786/ (yours)
 
-* You can set up the installation directory to support ".pth" files by
-  using one of the approaches described here:
 
-  https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
-=====================================================================
+ Regards,
+ Arnout
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-pyasn/python-pyasn.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[snip]
 
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
-index 255341f..f34520f 100644
---- a/package/python-pyasn/python-pyasn.mk
-+++ b/package/python-pyasn/python-pyasn.mk
-@@ -9,6 +9,6 @@ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
- PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
- PYTHON_PYASN_LICENSE = BSD-2-Clause
- PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
--PYTHON_PYASN_SETUP_TYPE = distutils
-+PYTHON_PYASN_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
