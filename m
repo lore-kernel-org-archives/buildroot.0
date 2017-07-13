@@ -1,75 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 10:54:31 +0200
-Subject: [Buildroot] [git commit] python-u-msgpack: switch to setuptools
-	instead of distutils
-Message-ID: <20170713085046.7DB1181EDA@busybox.osuosl.org>
+Date: Thu, 13 Jul 2017 10:54:39 +0200
+Subject: [Buildroot] [git commit] python-json-schema-validator: needs
+	versiontools on the host
+Message-ID: <20170713085046.9DF7B82151@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0767c6a3079aed9b724dc7e777b48b5996811c94
+commit: https://git.buildroot.net/buildroot/commit/?id=d3921001a9b31a195fd323b7596e9e3c0f412faf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-python-u-msgpack can use setuptools instead of distutils, and
-using setuptools is generally preferred.
+python-json-schema-validator does not need versiontools on the target,
+but only on the host, as it's listed in setup_requires in setup.py.
 
-In addition, using setuptools allows to make sure the package will
-continue to build when we will adjust the PYTHONPATH variable to no
-longer point to target Python modules. Without such a change to
-setuptools, the build would fail with:
-
-=====================================================================
-running install
-Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
-/home/test/buildroot/output/host/bin/python -E -c pass
-TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
-error: bad install directory or PYTHONPATH
-
-You are attempting to install a package to a directory that is not
-on PYTHONPATH and which Python does not read ".pth" files from.  The
-installation directory you specified (via --install-dir, --prefix, or
-the distutils default setting) was:
-
-    /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
-
-and your PYTHONPATH environment variable currently contains:
-
-    '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
-
-Here are some of your options for correcting the problem:
-
-* You can choose a different installation directory, i.e., one that is
-  on PYTHONPATH or supports .pth files
-
-* You can add the installation directory to the PYTHONPATH environment
-  variable.  (It must then also be on PYTHONPATH whenever you run
-  Python and want to use the package(s) you are installing.)
-
-* You can set up the installation directory to support ".pth" files by
-  using one of the approaches described here:
-
-  https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
-=====================================================================
+This was not noticed so far because host Python interpreter is started
+with a PYTHONPATH that contains a directory with target Python
+packages, so versiontools was found there. But as we are about to fix
+PYTHONPATH to no longer include such a directory,
+python-json-schema-validator would fail due to versiontools being
+missed on the host.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-u-msgpack/python-u-msgpack.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-json-schema-validator/Config.in                       | 1 -
+ package/python-json-schema-validator/python-json-schema-validator.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-index a88beeb..89240c3 100644
---- a/package/python-u-msgpack/python-u-msgpack.mk
-+++ b/package/python-u-msgpack/python-u-msgpack.mk
-@@ -7,7 +7,7 @@
- PYTHON_U_MSGPACK_VERSION = 2.2
- PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
- PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
--PYTHON_U_MSGPACK_SETUP_TYPE = distutils
-+PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
- PYTHON_U_MSGPACK_LICENSE = MIT
- PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
+diff --git a/package/python-json-schema-validator/Config.in b/package/python-json-schema-validator/Config.in
+index dbc5328..e50e8ee 100644
+--- a/package/python-json-schema-validator/Config.in
++++ b/package/python-json-schema-validator/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
+ 	bool "python-json-schema-validator"
+-	select BR2_PACKAGE_PYTHON_VERSIONTOOLS
+ 	help
+ 	  JSON Schema Validator
  
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
+index 6accbd6..c0a335c 100644
+--- a/package/python-json-schema-validator/python-json-schema-validator.mk
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
+@@ -9,6 +9,6 @@ PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE = json-schema-validator-$(PYTHON_JSON_SCHEMA
+ PYTHON_JSON_SCHEMA_VALIDATOR_SITE = https://pypi.python.org/packages/70/46/ba39cb7efad1898cfc89bf3588b8612f24d128f1c25b761994f524a59cef
+ PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPL-3.0
+ PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
+-PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
++PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = host-python-versiontools
+ 
+ $(eval $(python-package))
