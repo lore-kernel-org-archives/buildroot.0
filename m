@@ -1,64 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 10:25:41 +0200
-Subject: [Buildroot] [PATCH v2 05/13] package/minetest: add gettext
- optional dependency
-In-Reply-To: <e1ed833d-77ef-745e-8206-992846efcd04@gmail.com>
-References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-5-romain.naour@gmail.com>
- <20170624172028.58c971c4@windsurf.home>
- <e1ed833d-77ef-745e-8206-992846efcd04@gmail.com>
-Message-ID: <20170713102541.276b68d0@windsurf.orange-hotspot.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 13 Jul 2017 10:25:35 +0200
+Subject: [Buildroot] [PATCH 7/8] python-treq: needs
+	host-python-incremental
+In-Reply-To: <20170712162801.31131-8-thomas.petazzoni@free-electrons.com>
+References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+ <20170712162801.31131-8-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_kuNBK4gW=mvGGECjL4YvHLzh=cFW1GSSenS08J_PLJvHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Jul 12, 2017 at 6:28 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> The python-treq package lists the incremental Python module as part of
+> its setup_requires variable in setup.py, so it must be added as a host
+> dependency of the python-treq package to avoid build failures.
+>
+> So far, this issue wasn't visible because python-treq selects
+> python-twisted, which itself selects the target python-incremental
+> package. Because python-incremental was before python-treq in the
+> alphabetic ordering, it was always built before python-treq. And due
+> to the fact that PYTHONPATH currently contains the directory with
+> target Python modules, the host Python interpreter was happily using
+> the target python-incremental while running on the host. But as we are
+> going to clean up PYTHONPATH, this will no longer be the case, and
+> hence python-treq needs to be fixed.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Wed, 12 Jul 2017 18:43:01 +0200, Romain Naour wrote:
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > On Mon, 12 Jun 2017 22:54:02 +0200, Romain Naour wrote:
-> >   
-> >>  MINETEST_CONF_OPTS = \
-> >>  	-DDEFAULT_RUN_IN_PLACE=OFF \
-> >> -	-DENABLE_GETTEXT=OFF \
-> >>  	-DENABLE_SOUND=OFF \
-> >>  	-DENABLE_GLES=OFF \
-> >>  	-DENABLE_FREETYPE=OFF \
-> >> @@ -40,6 +39,13 @@ else
-> >>  MINETEST_CONF_OPTS += -DBUILD_SERVER=OFF
-> >>  endif
-> >>  
-> >> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> >> +MINETEST_DEPENDENCIES += gettext
-> >> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=ON
-> >> +else
-> >> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=OFF
-> >> +endif  
-> > 
-> > What is this ENABLE_GETTEXT=ON/OFF option doing exactly?  
-> 
-> It allows using translations.
-> 
-> When enabled msgfmt tool is used to create *.mo files etc...
-> 
-> https://github.com/minetest/minetest/blob/master/README.txt#L180
-
-Then simply do:
-
-MINETEST_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
-
-ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- pass -DENABLE_GETTEXT=ON
-else
- pass -DENABLE_GETTEXT=OFF
-endif
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> ---
+>  package/python-treq/python-treq.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+> index aa8c191..051b8ff 100644
+> --- a/package/python-treq/python-treq.mk
+> +++ b/package/python-treq/python-treq.mk
+> @@ -10,5 +10,6 @@ PYTHON_TREQ_SITE = https://pypi.python.org/packages/26/4b/303880fb5bab1111654df2
+>  PYTHON_TREQ_LICENSE = MIT
+>  PYTHON_TREQ_LICENSE_FILES = LICENSE
+>  PYTHON_TREQ_SETUP_TYPE = setuptools
+> +PYTHON_TREQ_DEPENDENCIES = host-python-incremental
+>
+>  $(eval $(python-package))
+> --
+> 2.9.4
+>
