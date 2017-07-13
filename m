@@ -1,78 +1,58 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 13 Jul 2017 02:55:30 +0300
-Subject: [Buildroot] [PATCH 3/4] webkitgtk: Add patch to allow Wayland-only
-	builds
-In-Reply-To: <20170712235531.20444-1-aperez@igalia.com>
-References: <20170712235531.20444-1-aperez@igalia.com>
-Message-ID: <20170712235531.20444-4-aperez@igalia.com>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Wed, 12 Jul 2017 17:51:38 -0700
+Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
+In-Reply-To: <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
+ <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
+ <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+Message-ID: <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The added patch allows building WebKitGTK+ with Wayland support enabled,
-and with X11/X.org support disabled. Without this the code includes the
-X11 headers, which are not available in this case. The patch has to be
-adapted from the one attached in the corresponding upstream bug report,
-as it would not apply on top of the 2.16.5 sources.
+Arnout,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- .../webkitgtk/0003-angle-egl-wayland-support.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/webkitgtk/0003-angle-egl-wayland-support.patch
+>>>
+>>> Notes:
+>>>
+>>> Some license file changes are involved, a new dependency on pcre2, and some
+>>> filename changes.  qt5webkit popped back into the picture for 5.9.1 after
+>>> being absent for 5.9.0 "officially."
+>>
+>>  All this should be in the commit message, not just in the notes.
+>>
+>>  Also, it would be nice if you could add hashes for the license files. But that
+>> should be a separate patch then.
+> 
+> I do think this is a separate patch issue.  Worth noting that next version will
+> finish up several missed license file changes that happened in 5.9.0.
+> 
 
-diff --git a/package/webkitgtk/0003-angle-egl-wayland-support.patch b/package/webkitgtk/0003-angle-egl-wayland-support.patch
-new file mode 100644
-index 0000000000..4461e4390a
---- /dev/null
-+++ b/package/webkitgtk/0003-angle-egl-wayland-support.patch
-@@ -0,0 +1,45 @@
-+eglplatform.h does not support Wayland
-+
-+Upstream, adapted from https://bugs.webkit.org/show_bug.cgi?id=163482
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
-+--- a/Source/ThirdParty/ANGLE/include/EGL/eglplatform.h	2017-07-12 13:26:36.222193809 +0300
-++++ b/Source/ThirdParty/ANGLE/include/EGL/eglplatform.h	2017-07-12 13:30:04.071741009 +0300
-+@@ -89,6 +89,12 @@ typedef int   EGLNativeDisplayType;
-+ typedef void *EGLNativeWindowType;
-+ typedef void *EGLNativePixmapType;
-+ 
-++#elif defined(WL_EGL_PLATFORM)
-++
-++typedef struct wl_display    *EGLNativeDisplayType;
-++typedef struct wl_egl_pixmap *EGLNativePixmapType;
-++typedef struct wl_egl_window *EGLNativeWindowType;
-++
-+ #elif defined(__ANDROID__) || defined(ANDROID)
-+ 
-+ #include <android/native_window.h>
-+@@ -107,6 +113,8 @@ typedef intptr_t EGLNativePixmapType;
-+ 
-+ #elif defined(__unix__)
-+ 
-++#if defined(ANGLE_USE_X11)
-++
-+ /* X11 (tentative)  */
-+ #include <X11/Xlib.h>
-+ #include <X11/Xutil.h>
-+@@ -115,6 +123,14 @@ typedef Display *EGLNativeDisplayType;
-+ typedef Pixmap   EGLNativePixmapType;
-+ typedef Window   EGLNativeWindowType;
-+ 
-++#else
-++
-++typedef void             *EGLNativeDisplayType;
-++typedef khronos_uintptr_t EGLNativePixmapType;
-++typedef khronos_uintptr_t EGLNativeWindowType;
-++
-++#endif /* ANGLE_USE_X11 */
-++
-+ #elif defined(__GNUC__) && ( defined(__APPLE_CPP__) || defined(__APPLE_CC__) || defined(__MACOS_CLASSIC__) )
-+ 
-+ #if defined(__OBJC__)
--- 
-2.13.2
+I tested adding hashes for all license files for 5.9.1. It turns out, this breaks the 5.6.2
+legal-info because there are files in common between the two versions, but with different hashes.
+
+    $ make legal-info
+
+    ...
+
+    >>> qt5base 5.6.2 Collecting legal info
+    LICENSE.GPLv3: OK (sha256: 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17)
+    ERROR: No hash found for LICENSE.LGPLv21
+    ERROR: No hash found for LGPL_EXCEPTION.txt
+    LICENSE.LGPLv3: OK (sha256: 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35)
+    LICENSE.FDL: OK (sha256: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d)
+    ERROR: header.BSD has wrong sha256 hash:
+    ERROR: expected: 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0
+    ERROR: got     : 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+    package/qt5/qt5base/qt5base.mk:315: recipe for target 'qt5base-legal-info' failed
+    make[1]: *** [qt5base-legal-info] Error 1
+    Makefile:79: recipe for target '_all' failed
+    make: *** [_all] Error 2
+
+In the case you have different license file contents, but with the same name, between different
+versions of a package, how should this be handled?
+
+Josh
