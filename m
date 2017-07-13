@@ -1,34 +1,41 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 13 Jul 2017 13:41:52 -0400
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
-	file.
-In-Reply-To: <20170713193211.158c47fc@windsurf>
-References: <20170713142549.28078-1-aduskett@gmail.com>
- <20170713193211.158c47fc@windsurf>
-Message-ID: <CAFSsvmopWs57wMPDQn+FeQj5wyb8NGoGXk=AT8w9VjPpaa9cPw@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 13 Jul 2017 12:45:05 -0500
+Subject: [Buildroot] [PATCH 1/1] br toolchain: gcc5.4 bugfix
+	libsanitizer powerpc
+In-Reply-To: <20170713193316.28cc62eb@windsurf>
+References: <1499918619-27858-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170713040727.rfalp6j5n6dikbjd@tarshish>
+ <CANQCQpa0fQDqAUsdPNLz_wKk4qu_YRkNB23hG5rOEedWpnpJ9A@mail.gmail.com>
+ <20170713193316.28cc62eb@windsurf>
+Message-ID: <CANQCQpY4MZdnLn=O4jqvDzqNToi_4R8dnQiGw0Re4-cTtr1dow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-75KB
+Thomas,
 
-On Thu, Jul 13, 2017 at 1:32 PM, Thomas Petazzoni
+On Thu, Jul 13, 2017 at 12:33 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Thu, 13 Jul 2017 10:25:48 -0400, Adam Duskett wrote:
+> On Thu, 13 Jul 2017 08:29:32 -0500, Matthew Weber wrote:
 >
->> Enabling fts support increases the size of uclibc by 75~kb according to
+>> > > +This applies only to gcc-5-branch, the code has been reworked for gcc 6.
+>> >
+>> > Your sign-off is missing.
+>>
+>>
+>> I had assumed if I used the patch as is I would leave it without mods.
+>> I can add the bug tracker url and my signed off.
 >
-> 75 KB, or 5-7 KB ?
+> Please add your SoB and the bug tracker reference.
 >
-Whoops! My bad.
-7.5k according to the menuconfig help.
+> Also, does this issue applies to gcc 4.9 as well ?
+>
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+I'll check, we were using earlier versions of 5.4 and the bump broke
+us.  I'll find the point it was introduced and add a comment.
+
+Matt
