@@ -1,45 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 10:54:39 +0200
-Subject: [Buildroot] [git commit] python-treq: needs host-python-incremental
-Message-ID: <20170713085046.C3CBE817BB@busybox.osuosl.org>
+Date: Thu, 13 Jul 2017 10:54:31 +0200
+Subject: [Buildroot] [git commit] python-u-msgpack: switch to setuptools
+	instead of distutils
+Message-ID: <20170713085046.7DB1181EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc8a18f927e80a7646d496687f03b3e834ef5a31
+commit: https://git.buildroot.net/buildroot/commit/?id=0767c6a3079aed9b724dc7e777b48b5996811c94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The python-treq package lists the incremental Python module as part of
-its setup_requires variable in setup.py, so it must be added as a host
-dependency of the python-treq package to avoid build failures.
+python-u-msgpack can use setuptools instead of distutils, and
+using setuptools is generally preferred.
 
-So far, this issue wasn't visible because python-treq selects
-python-twisted, which itself selects the target python-incremental
-package. Because python-incremental was before python-treq in the
-alphabetic ordering, it was always built before python-treq. And due
-to the fact that PYTHONPATH currently contains the directory with
-target Python modules, the host Python interpreter was happily using
-the target python-incremental while running on the host. But as we are
-going to clean up PYTHONPATH, this will no longer be the case, and
-hence python-treq needs to be fixed.
+In addition, using setuptools allows to make sure the package will
+continue to build when we will adjust the PYTHONPATH variable to no
+longer point to target Python modules. Without such a change to
+setuptools, the build would fail with:
+
+=====================================================================
+running install
+Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+/home/test/buildroot/output/host/bin/python -E -c pass
+TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
+error: bad install directory or PYTHONPATH
+
+You are attempting to install a package to a directory that is not
+on PYTHONPATH and which Python does not read ".pth" files from.  The
+installation directory you specified (via --install-dir, --prefix, or
+the distutils default setting) was:
+
+    /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+
+and your PYTHONPATH environment variable currently contains:
+
+    '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
+
+Here are some of your options for correcting the problem:
+
+* You can choose a different installation directory, i.e., one that is
+  on PYTHONPATH or supports .pth files
+
+* You can add the installation directory to the PYTHONPATH environment
+  variable.  (It must then also be on PYTHONPATH whenever you run
+  Python and want to use the package(s) you are installing.)
+
+* You can set up the installation directory to support ".pth" files by
+  using one of the approaches described here:
+
+  https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
+=====================================================================
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-treq/python-treq.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-u-msgpack/python-u-msgpack.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
-index aa8c191..051b8ff 100644
---- a/package/python-treq/python-treq.mk
-+++ b/package/python-treq/python-treq.mk
-@@ -10,5 +10,6 @@ PYTHON_TREQ_SITE = https://pypi.python.org/packages/26/4b/303880fb5bab1111654df2
- PYTHON_TREQ_LICENSE = MIT
- PYTHON_TREQ_LICENSE_FILES = LICENSE
- PYTHON_TREQ_SETUP_TYPE = setuptools
-+PYTHON_TREQ_DEPENDENCIES = host-python-incremental
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+index a88beeb..89240c3 100644
+--- a/package/python-u-msgpack/python-u-msgpack.mk
++++ b/package/python-u-msgpack/python-u-msgpack.mk
+@@ -7,7 +7,7 @@
+ PYTHON_U_MSGPACK_VERSION = 2.2
+ PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+ PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
+-PYTHON_U_MSGPACK_SETUP_TYPE = distutils
++PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+ PYTHON_U_MSGPACK_LICENSE = MIT
+ PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
  
- $(eval $(python-package))
