@@ -1,71 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 13 Jul 2017 13:18:23 +0200
-Subject: [Buildroot] [PATCH v2 05/13] package/minetest: add gettext
- optional dependency
-In-Reply-To: <20170713102541.276b68d0@windsurf.orange-hotspot.com>
-References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-5-romain.naour@gmail.com>
- <20170624172028.58c971c4@windsurf.home>
- <e1ed833d-77ef-745e-8206-992846efcd04@gmail.com>
- <20170713102541.276b68d0@windsurf.orange-hotspot.com>
-Message-ID: <aea4fe9c-cf32-0eb4-c933-319035a31ce2@gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 13 Jul 2017 13:22:26 +0100
+Subject: [Buildroot] [PATCH 1/7] package/rpi-firmware: bump version
+Message-ID: <1499948552-11324-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le 13/07/2017 ? 10:25, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Wed, 12 Jul 2017 18:43:01 +0200, Romain Naour wrote:
-> 
->>> On Mon, 12 Jun 2017 22:54:02 +0200, Romain Naour wrote:
->>>   
->>>>  MINETEST_CONF_OPTS = \
->>>>  	-DDEFAULT_RUN_IN_PLACE=OFF \
->>>> -	-DENABLE_GETTEXT=OFF \
->>>>  	-DENABLE_SOUND=OFF \
->>>>  	-DENABLE_GLES=OFF \
->>>>  	-DENABLE_FREETYPE=OFF \
->>>> @@ -40,6 +39,13 @@ else
->>>>  MINETEST_CONF_OPTS += -DBUILD_SERVER=OFF
->>>>  endif
->>>>  
->>>> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
->>>> +MINETEST_DEPENDENCIES += gettext
->>>> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=ON
->>>> +else
->>>> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=OFF
->>>> +endif  
->>>
->>> What is this ENABLE_GETTEXT=ON/OFF option doing exactly?  
->>
->> It allows using translations.
->>
->> When enabled msgfmt tool is used to create *.mo files etc...
->>
->> https://github.com/minetest/minetest/blob/master/README.txt#L180
-> 
-> Then simply do:
-> 
-> MINETEST_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
-> 
-> ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
->  pass -DENABLE_GETTEXT=ON
-> else
->  pass -DENABLE_GETTEXT=OFF
-> endif
-
-Yes, that what I wanted to do.
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 11655ee..db26c1e 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 84f44265c7e9bfe3e54a326b95ea7067870cfe08a9aae12f00aec8d47f6fc353 rpi-firmware-4b24a81a2ce94afd4458d1af4ea1e73d58e69848.tar.gz
++sha256 42edea8317869f5a5ed87dfe009ceffce6a784ff40cb5da3e9e8a4fc61d79610 rpi-firmware-685b3ceb0a6d6d6da7b028ee409850e83fb7ede7.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 134fceb..0afdc87 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 4b24a81a2ce94afd4458d1af4ea1e73d58e69848
++RPI_FIRMWARE_VERSION = 685b3ceb0a6d6d6da7b028ee409850e83fb7ede7
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-- 
+2.7.4
