@@ -1,34 +1,74 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 13 Jul 2017 09:55:37 -0500
-Subject: [Buildroot] [PATCH-2017.05.x] uboot-tools: disable libfdt swig
- wrapper for host
-In-Reply-To: <20170713061905.15801-1-joerg.krause@embedded.rocks>
-References: <20170713061905.15801-1-joerg.krause@embedded.rocks>
-Message-ID: <CANQCQpavVt1koCeb4Gm9Uf8idyDFyjePabQqUFrKpT7KS7a1mQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Jul 2017 17:32:20 +0200
+Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
+In-Reply-To: <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
+References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
+ <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
+ <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+ <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
+ <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
+Message-ID: <20170713153220.GA3002@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jorg,
+Thomas, Joshua, All,
 
-On Thu, Jul 13, 2017 at 1:19 AM, J?rg Krause
-<joerg.krause@embedded.rocks> wrote:
-> Commit f4891c398e599f18bbf41eb33885930431f5e1c8 [1] added a workaround to
-> disable the build of the python libfdt module if swig is available on the
-> host.
->
-> This workaround is also necessary when building the host uboot-tools.
->
-> Note, that the issue was introduced in upstream commit
-> 1905c8fc711a527ff10550425498bc77e4db9ac3 [2] and released in version
-> U-Boot version 2017.03 and fixed in version 2017.07 (see [3]).
->
-> [1] https://git.busybox.net/buildroot/commit/package/uboot-tools?h=master&id=f4891c398e599f18bbf41eb33885930431f5e1c8
-> [2] http://git.denx.de/?p=u-boot.git;a=commit;h=1905c8fc711a527ff10550425498bc77e4db9ac3
-> [3] http://patchwork.ozlabs.org/patch/787412/
->
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On 2017-07-13 09:50 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 12 Jul 2017 17:51:38 -0700, Joshua Henderson wrote:
+> 
+> > I tested adding hashes for all license files for 5.9.1. It turns out, this breaks the 5.6.2
+> > legal-info because there are files in common between the two versions, but with different hashes.
+> > 
+> >     $ make legal-info
+> > 
+> >     ...
+> > 
+> >     >>> qt5base 5.6.2 Collecting legal info  
+> >     LICENSE.GPLv3: OK (sha256: 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17)
+> >     ERROR: No hash found for LICENSE.LGPLv21
+> >     ERROR: No hash found for LGPL_EXCEPTION.txt
+> >     LICENSE.LGPLv3: OK (sha256: 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35)
+> >     LICENSE.FDL: OK (sha256: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d)
+> >     ERROR: header.BSD has wrong sha256 hash:
+> >     ERROR: expected: 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0
+> >     ERROR: got     : 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e
+> >     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> >     package/qt5/qt5base/qt5base.mk:315: recipe for target 'qt5base-legal-info' failed
+> >     make[1]: *** [qt5base-legal-info] Error 1
+> >     Makefile:79: recipe for target '_all' failed
+> >     make: *** [_all] Error 2
+> > 
+> > In the case you have different license file contents, but with the same name, between different
+> > versions of a package, how should this be handled?
+> 
+> This is a *very* good question,
 
-Acked-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Indeed, this is a *very* good question.
+
+> and I don't think our current support
+> for license file hashes handles this situation properly.
+
+Indeed our current infra does not support this... Dang... :-(
+I'll see what I can do with this...
+
+Until then, don't add hashes for Qt license files... :-/
+
+A first idea would be to look for a hash file in the ${VERSION}
+subdirectory, where we are currently only looking for patches. This
+should be safe, as we currently only use *.patch from there.
+
+But I'm not too happy with this... :-/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
