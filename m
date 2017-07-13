@@ -1,63 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 23:28:13 +0200
-Subject: [Buildroot] [PATCH] package/lshw: fix the build with glibc
-	without NLS
-In-Reply-To: <20170713210424.18934-1-romain.naour@gmail.com>
-References: <20170713210424.18934-1-romain.naour@gmail.com>
-Message-ID: <20170713232813.4fd0c83e@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Jul 2017 23:45:18 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
+ being sorted alphabetically
+In-Reply-To: <CAGt4E5samrvKY5-kwVHuCh6KsoKnmGZsWiRNgT9xpDF=6fcbUg@mail.gmail.com>
+References: <20170705072538.GE3499@scaer>
+ <fc53112d-c7a3-64c9-74ad-277741161711@mind.be>
+ <5c9f063f-5b5c-226d-ca25-6bcb8ebf7ced@mind.be>
+ <CAGt4E5ueb6x_S4ff=dAeK-x9JnO1SmhnUGz+Q3XKUtj6s24L_Q@mail.gmail.com>
+ <CAGt4E5s1qdysaU2dAeYFJL_16PLxwAYWyi6yhiKsRb6wADW-5A@mail.gmail.com>
+ <20170709081346.GA3196@scaer>
+ <855c5444-80f0-491b-5d70-aef7cd13b110@mind.be>
+ <20170709124124.GC3196@scaer>
+ <CAGt4E5tgfin2Y9tZTYsJR5XH_WwGGJqsdamiDX9m3HrfZrk13Q@mail.gmail.com>
+ <CAGt4E5samrvKY5-kwVHuCh6KsoKnmGZsWiRNgT9xpDF=6fcbUg@mail.gmail.com>
+Message-ID: <20170713214518.GB3002@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Markus, All,
 
-On Thu, 13 Jul 2017 23:04:24 +0200, Romain Naour wrote:
-> Since [1], NONLS is added to LSHW_CFLAGS even for glibc based toolchain.
-> Previously it was not the case since BR2_ENABLE_LOCALE is always
-> selected for glibc based toolchain.
+On 2017-07-13 13:16 -0700, Markus Mayer spake thusly:
+[--SNIP--]
+> I think I may need some help. I started implementing the suggested
+> solution, but I have run into some unexpected problems.
 > 
-> With NONLS, config.h try to redefine two Intl function (textdomain and
-> bindtextdomain) that are used by glibc internally.
+> Specifically, if I move the linux-tool-*.mk files into their own
+> sub-directory, all linux-tools related targets disappear. It won't
+> build any linux-tools during a regular run of 'make' and it will
+> actually say "No rule..." when explicitly asked to build linux-tools:
 > 
-> This break the build with the following error:
-> sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
->  extern char *textdomain (const char *__domainname) __THROW;
+> $ make linux-tools
+> umask 0022 && make -C /home/mmayer/Development/buildroot
+> O=/home/mmayer/Development/output/arm64/. linux-tools
+> make[1]: *** No rule to make target 'linux-tools'.  Stop.
+> Makefile:16: recipe for target '_all' failed
+> make: *** [_all] Error 2
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
+> Here's what I have done:
 > 
-> [1] 3acd9f845de0489071719d52d774aab48d7f9c33
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> (mmayer at lbrmn-mmayer) ~/Development/buildroot$ l package/linux-tools/
+> total 84
+> drwxrwxr-x    3 mmayer mmayer  4096 Jul 13 11:38 .
+> drwxrwxr-x 1843 mmayer mmayer 65536 Jul 10 12:28 ..
+> -rw-rw-r--    1 mmayer mmayer  2577 Jul 10 11:02 Config.in
+> -rw-rw-r--    1 mmayer mmayer  2049 Jul 13 11:20 linux-tools.mk
+> drwxrwxr-x    2 mmayer mmayer  4096 Jul 13 11:20 tools
 
-I also had a look at this issue, and I'm not sure this is the most
-appropriate fix.
+OK, I will attempt a wild gues here... Rename the 'tools' directory to
+'linux-tools' and try again.
 
-Indeed, the NONLS mode is really for cases where the C library does not
-provide *any* gettext implementation, as would be the case with uClibc
-without intl stubs enabled.
+[--SNIP--]
+> Does anybody have any pointers as to why this might be and what to do about it?
 
-But in the context of Buildroot, all C libraries provide a gettext
-implementation. It might be full-featured or minimal, but it always
-exists.
+Yes, this is becasue the last line in package/linux-tools/linux-tools.mk
+is calling to the generic-package infrastructure.
 
-Therefore, I believe the appropriate fix is to in fact never pass
--DNONLS, because we are never in a situation where we don't have any
-NLS support at all. So I believe the right fix is to remove the
-following three lines:
+In turn, that line will at some place evaluate the $(pkgname) macro.
+pkgname is defined as thus:
 
-ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-LSHW_CFLAGS += -DNONLS
-endif
+    pkgname = $(lastword $(subst /, ,$(pkgdir)))
 
-Best regards,
+And in turn, pkgdir is defined as:
 
-Thomas
+    pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+
+So, what this does is get the filename of the last included makefile,
+keep the directopry part of it, and then extract the last component of
+that, to get the package name.
+
+By moving the tools to a sub-directory named 'tools' make that the last
+makefile parsed is in that sub-directory by the time pkgname is called,
+and it then gets 'tools' instead of 'linux-tools'.
+
+We have a similar situation in linux/linux.mk, see line 425 where we
+have an explanation about this:
+
+  423 # Include all our extensions.
+  424 #
+  425 # Note: our package infrastructure uses the full-path of the last-scanned
+  426 # Makefile to determine what package we're currently defining, using the
+  427 # last directory component in the path. As such, including other Makefile,
+  428 # like below, before we call one of the *-package macro is usally not
+  429 # working.
+  430 # However, since the files we include here are in the same directory as
+  431 # the current Makefile, we are OK. But this is a hard requirement: files
+  432 # included here *must* be in the same directory!
+  433 include $(sort $(wildcard linux/linux-ext-*.mk))
+
+So I would argue against the sub-directory, but in favour of renaming
+the files.
+
+Except that is not necessary, is it? IIRC, you confirmed that this was
+in fact not a problem, right?
+
+So, rather than try to fix a problem that does not exist, using fragile
+heuristics, I would recommend we keep the status-quo.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
