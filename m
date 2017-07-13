@@ -1,88 +1,71 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 14 Jul 2017 00:10:39 +0200
-Subject: [Buildroot] [PATCH] package/lshw: fix the build with glibc
-	without NLS
-In-Reply-To: <20170713232813.4fd0c83e@windsurf>
-References: <20170713210424.18934-1-romain.naour@gmail.com>
- <20170713232813.4fd0c83e@windsurf>
-Message-ID: <18d648a6-f276-da68-d99a-62cf2e54d33a@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 14 Jul 2017 00:19:24 +0200
+Subject: [Buildroot] [PATCH] core/legal-info: use hash file from version
+	sub-dir
+Message-ID: <20170713221924.12021-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+When we have multiple versions for a package, and the licensing terms
+depend on the version actually selected (e.g. like Qt5), storing the
+hashes for those license files in the .hash file is broken: the infra
+will ensure that all hashes for a file do match, which would not be the
+case here.
 
-Le 13/07/2017 ? 23:28, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Thu, 13 Jul 2017 23:04:24 +0200, Romain Naour wrote:
->> Since [1], NONLS is added to LSHW_CFLAGS even for glibc based toolchain.
->> Previously it was not the case since BR2_ENABLE_LOCALE is always
->> selected for glibc based toolchain.
->>
->> With NONLS, config.h try to redefine two Intl function (textdomain and
->> bindtextdomain) that are used by glibc internally.
->>
->> This break the build with the following error:
->> sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
->>  extern char *textdomain (const char *__domainname) __THROW;
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
->>
->> [1] 3acd9f845de0489071719d52d774aab48d7f9c33
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> 
-> I also had a look at this issue, and I'm not sure this is the most
-> appropriate fix.
-> 
-> Indeed, the NONLS mode is really for cases where the C library does not
-> provide *any* gettext implementation, as would be the case with uClibc
-> without intl stubs enabled.
-> 
-> But in the context of Buildroot, all C libraries provide a gettext
-> implementation. It might be full-featured or minimal, but it always
-> exists.
-> 
-> Therefore, I believe the appropriate fix is to in fact never pass
-> -DNONLS, because we are never in a situation where we don't have any
-> NLS support at all. So I believe the right fix is to remove the
-> following three lines:
-> 
-> ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> LSHW_CFLAGS += -DNONLS
-> endif
+We fix that by first looking for a hash file in the version sub-dir
+first, and if that directory does not exist, then we use the main hash
+file. Note that if the version sub-dir exists, the main hash file is
+not used even if there is no per-version hash file.
 
-Indeed, that's the first thing I removed during investigation.
+Update the documentation accordingly.
 
-I find misleading that BR2_SYSTEM_ENABLE_NLS not set does not mean NONLS for lshw.
+Reported-by: Joshua Henderson <joshua.henderson@microchip.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Joshua Henderson <joshua.henderson@microchip.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ docs/manual/adding-packages-directory.txt | 4 +++-
+ package/pkg-utils.mk                      | 9 ++++++---
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-I'm wondering if lshw build fine with a toolchain with wchar but without locale
-(ok it's a corner case).
-
-See src/lshw.cc:#ifndef NONLS
-
-#ifndef NONLS
-#include <locale.h>
-#endif
-
-...
-
-#ifndef NONLS
-  setlocale (LC_ALL, "");
-  ...
-#endif
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 804946c504..809cc97389 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -482,7 +482,9 @@ this in a comment line above the hashes.
+ 
+ .Note
+ The hashes for license files are used to detect a license change when a
+-package version is bumped.
++package version is bumped. For a package with multiple versions (like Qt5),
++create the hash file in a subdirectory +<packageversion>+ of that package
++(see also xref:patch-apply-order[]).
+ 
+ .Note
+ The number of spaces does not matter, so one can use spaces (or tabs) to
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index accf48c464..f285395267 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -86,9 +86,12 @@ endef
+ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+ 	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
+ 	{ \
+-		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
+-		ret=$${?}; \
+-		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
++		if [ -d $(3)/$($(PKG)_VERSION) ]; then \
++			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
++		else \
++			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
++		fi; \
++		case $${?} in (0|3) ;; (*) exit 1;; esac; \
+ 	} && \
+ 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+ endef
+-- 
+2.11.0
