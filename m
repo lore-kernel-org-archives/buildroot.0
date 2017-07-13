@@ -1,9 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 13 Jul 2017 14:40:47 +0200
-Subject: [Buildroot] [PATCH v3 05/10] package/minetest: enable sound support
+Date: Thu, 13 Jul 2017 14:40:48 +0200
+Subject: [Buildroot] [PATCH v3 06/10] package/minetest: add postgresql
+	optional dependency
 In-Reply-To: <20170713124052.13708-1-romain.naour@gmail.com>
 References: <20170713124052.13708-1-romain.naour@gmail.com>
-Message-ID: <20170713124052.13708-5-romain.naour@gmail.com>
+Message-ID: <20170713124052.13708-6-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-v3: Add comment in Config.in (ThomasP)
----
- package/minetest/Config.in   | 13 +++++++++++++
- package/minetest/minetest.mk |  8 +++++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ package/minetest/minetest.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-index a76c319..4e8b1d0 100644
---- a/package/minetest/Config.in
-+++ b/package/minetest/Config.in
-@@ -37,6 +37,19 @@ config BR2_PACKAGE_MINETEST_SERVER
- 	help
- 	  Build Minetest server.
- 
-+config BR2_PACKAGE_MINETEST_SOUND
-+	bool "enable sound"
-+	depends on BR2_PACKAGE_MINETEST_CLIENT
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
-+	select BR2_PACKAGE_LIBVORBIS
-+	select BR2_PACKAGE_OPENAL
-+
-+comment "sound support needs a toolchain w/ threads NPTL"
-+	depends on BR2_PACKAGE_MINETEST_CLIENT
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+
- endif
- 
- comment "minetest needs a toolchain w/ C++, gcc >= 4.7, threads"
 diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-index 528f140..44a28ce 100644
+index 44a28ce..ba0bf24 100644
 --- a/package/minetest/minetest.mk
 +++ b/package/minetest/minetest.mk
-@@ -13,7 +13,6 @@ MINETEST_DEPENDENCIES = gmp irrlicht jsoncpp luajit sqlite zlib
- 
- MINETEST_CONF_OPTS = \
- 	-DDEFAULT_RUN_IN_PLACE=OFF \
--	-DENABLE_SOUND=OFF \
+@@ -16,7 +16,6 @@ MINETEST_CONF_OPTS = \
  	-DENABLE_GLES=OFF \
  	-DENABLE_LUAJIT=ON \
  	-DENABLE_CURSES=OFF \
-@@ -38,6 +37,13 @@ else
- MINETEST_CONF_OPTS += -DBUILD_SERVER=OFF
+-	-DENABLE_POSTGRESQL=OFF \
+ 	-DENABLE_LEVELDB=OFF \
+ 	-DENABLE_REDIS=OFF \
+ 	-DENABLE_SPATIAL=OFF \
+@@ -58,6 +57,13 @@ else
+ MINETEST_CONF_OPTS += -DENABLE_CURL=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_MINETEST_SOUND),y)
-+MINETEST_DEPENDENCIES += libvorbis openal
-+MINETEST_CONF_OPTS += -DENABLE_SOUND=ON
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++MINETEST_DEPENDENCIES += postgresql
++MINETEST_CONF_OPTS += -DENABLE_POSTGRESQL=ON
 +else
-+MINETEST_CONF_OPTS += -DENABLE_SOUND=OFF
++MINETEST_CONF_OPTS += -DENABLE_POSTGRESQL=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- MINETEST_DEPENDENCIES += freetype
- MINETEST_CONF_OPTS += -DENABLE_FREETYPE=ON
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ MINETEST_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+ MINETEST_CONF_OPTS += -DENABLE_GETTEXT=ON
 -- 
 2.9.4
