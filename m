@@ -1,103 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 13 Jul 2017 21:17:16 +0300
-Subject: [Buildroot] [PATCH] kvazaar: fix build with gcc 7
-In-Reply-To: <f1fb85ca071785d204c738456570057f70e40add.1499969708.git.baruch@tkos.co.il>
-References: <f1fb85ca071785d204c738456570057f70e40add.1499969708.git.baruch@tkos.co.il>
-Message-ID: <20170713181716.4hggvtfyuun4t4mw@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Jul 2017 18:42:10 +0000
+Subject: [Buildroot] [Bug 9916] qt5 does not build on
+ arm-buildroot-linux-uclibcgnueabihf for ARMv8 cores
+In-Reply-To: <bug-9916-163@https.bugs.busybox.net/>
+References: <bug-9916-163@https.bugs.busybox.net/>
+Message-ID: <bug-9916-163-vfY4UMaf0T@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+https://bugs.busybox.net/show_bug.cgi?id=9916
 
-On Thu, Jul 13, 2017 at 09:15:08PM +0300, Baruch Siach wrote:
-> Add upstream fix for a gcc 7 -Werror build failure.
+--- Comment #2 from Ivan <ivan.nazarenko@gmail.com> ---
+Sorry if I did not get it. I am sort of a newbie.
 
-I forgot to mention,
+Downloaded from git yesterday, selected the default raspberrypi3_defconfig,
+QT5.8, GCC 6.4, musl, binutils 2.28. The built stopped in qt5base in the same
+file above, for apparently the same reason:
 
-Fixes:
-http://autobuild.buildroot.net/results/ea1/ea1495696a0e810adb6695dad6b9f3d3363e81d5/
-http://autobuild.buildroot.net/results/2c1/2c1fba63553afa735c5ac29d7f5de8368c794628/
-http://autobuild.buildroot.net/results/d07/d07bfcb8efcb76cdea3c66e0cc24728f418e3872/
+tools/qhash.cpp:148:54: error: attribute(target("+crc")) is unknown
+ static uint crc32(const Char *ptr, size_t len, uint h)
 
-baruch
+But the patch that you mentions "need to backport" seems already applied in the
+sources in output/build/host-binutils-2.28! At least the files the patch is
+supposed to change are already in the changed form.
 
-> Cc: Alexandre Esse <alexandre.esse.dev@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...use-FILL_ARRAY-macro-to-prevent-warning-o.patch | 56 ++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
-> 
-> diff --git a/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch b/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
-> new file mode 100644
-> index 000000000000..633da8b36d4b
-> --- /dev/null
-> +++ b/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
-> @@ -0,0 +1,56 @@
-> +From 47a9f0de049e77e866ea5bdd4bc7c795ea6dd641 Mon Sep 17 00:00:00 2001
-> +From: Ari Lemmetti <ari.lemmetti@gmail.com>
-> +Date: Tue, 11 Apr 2017 12:57:22 +0300
-> +Subject: [PATCH] Modify and use FILL_ARRAY macro to prevent warning on GCC 7
-> +
-> +Following warning was given and is false positive
-> +
-> +error: 'memset' used with length equal to number of elements without multiplication by element size [-Werror=memset-elt-size]
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream commit 47a9f0de049e7.
-> +
-> + src/global.h | 6 +++++-
-> + src/rdo.c    | 8 ++++----
-> + 2 files changed, 9 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/src/global.h b/src/global.h
-> +index bedcd49c2e02..518167443f35 100644
-> +--- a/src/global.h
-> ++++ b/src/global.h
-> +@@ -219,7 +219,11 @@ typedef int16_t coeff_t;
-> + // Fill a structure or a static array with val bytes.
-> + #define FILL(var, val) memset(&(var), (val), sizeof(var))
-> + // Fill a number of elements in an array with val bytes.
-> +-#define FILL_ARRAY(ar, val, size) memset((ar), (val), (size) * sizeof(*(ar)))
-> ++#define FILL_ARRAY(ar, val, size) \
-> ++{\
-> ++  void *temp_ptr = (void*)(ar);\
-> ++  memset((temp_ptr), (val), (size) * sizeof(*(ar)));\
-> ++}
-> + 
-> + #define FREE_POINTER(pointer) { free((void*)pointer); pointer = NULL; }
-> + #define MOVE_POINTER(dst_pointer,src_pointer) { dst_pointer = src_pointer; src_pointer = NULL; }
-> +diff --git a/src/rdo.c b/src/rdo.c
-> +index 52305fd72fab..2579f2808441 100644
-> +--- a/src/rdo.c
-> ++++ b/src/rdo.c
-> +@@ -558,10 +558,10 @@ void kvz_rdoq(encoder_state_t * const state, coeff_t *coef, coeff_t *dest_coeff,
-> +   // Explicitly tell the only possible numbers of elements to be zeroed.
-> +   // Hope the compiler is able to utilize this information.
-> +   switch (cg_num) {
-> +-    case  1: memset(sig_coeffgroup_flag, 0,  1 * sizeof(sig_coeffgroup_flag[0])); break;
-> +-    case  4: memset(sig_coeffgroup_flag, 0,  4 * sizeof(sig_coeffgroup_flag[0])); break;
-> +-    case 16: memset(sig_coeffgroup_flag, 0, 16 * sizeof(sig_coeffgroup_flag[0])); break;
-> +-    case 64: memset(sig_coeffgroup_flag, 0, 64 * sizeof(sig_coeffgroup_flag[0])); break;
-> ++    case  1: FILL_ARRAY(sig_coeffgroup_flag, 0,  1); break;
-> ++    case  4: FILL_ARRAY(sig_coeffgroup_flag, 0,  4); break;
-> ++    case 16: FILL_ARRAY(sig_coeffgroup_flag, 0, 16); break;
-> ++    case 64: FILL_ARRAY(sig_coeffgroup_flag, 0, 64); break;
-> +     default: assert(0 && "There should be 1, 4, 16 or 64 coefficient groups");
-> +   }
-> + 
-> +-- 
-> +2.13.2
-> +
-> -- 
-> 2.13.2
-> 
+So I did not get what is needed to solve this build issue.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+You are receiving this mail because:
+You are on the CC list for the bug.
