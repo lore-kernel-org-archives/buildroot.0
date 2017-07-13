@@ -1,54 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 09:50:03 +0200
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
- <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
-Message-ID: <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 13 Jul 2017 10:22:56 +0200
+Subject: [Buildroot] [PATCH 2/8] python-pyro: switch to setuptools
+	instead of distutils
+In-Reply-To: <20170712162801.31131-3-thomas.petazzoni@free-electrons.com>
+References: <20170712162801.31131-1-thomas.petazzoni@free-electrons.com>
+ <20170712162801.31131-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_ks64R4aAHnWBNn=e_3_C4THOprLsO7cemgSVb1j9htjXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Jul 12, 2017 at 6:27 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> python-pyro can use setuptools instead of distutils, and using
+> setuptools is generally preferred.
+>
+> In addition, using setuptools allows to make sure the package will
+> continue to build when we will adjust the PYTHONPATH variable to no
+> longer point to target Python modules. Without such a change to
+> setuptools, the build would fail with:
+>
+> =====================================================================
+> running install
+> Checking .pth file support in /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+> /home/test/buildroot/output/host/bin/python -E -c pass
+> TEST FAILED: /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/ does NOT support .pth files
+> error: bad install directory or PYTHONPATH
+>
+> You are attempting to install a package to a directory that is not
+> on PYTHONPATH and which Python does not read ".pth" files from.  The
+> installation directory you specified (via --install-dir, --prefix, or
+> the distutils default setting) was:
+>
+>     /home/test/buildroot/output/target/usr/lib/python2.7/site-packages/
+>
+> and your PYTHONPATH environment variable currently contains:
+>
+>     '/home/test/buildroot/output/target/usr/lib/python2.7/sysconfigdata/'
+>
+> Here are some of your options for correcting the problem:
+>
+> * You can choose a different installation directory, i.e., one that is
+>   on PYTHONPATH or supports .pth files
+>
+> * You can add the installation directory to the PYTHONPATH environment
+>   variable.  (It must then also be on PYTHONPATH whenever you run
+>   Python and want to use the package(s) you are installing.)
+>
+> * You can set up the installation directory to support ".pth" files by
+>   using one of the approaches described here:
+>
+>   https://setuptools.readthedocs.io/en/latest/easy_install.html#custom-installation-locations
+> =====================================================================
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Wed, 12 Jul 2017 17:51:38 -0700, Joshua Henderson wrote:
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> I tested adding hashes for all license files for 5.9.1. It turns out, this breaks the 5.6.2
-> legal-info because there are files in common between the two versions, but with different hashes.
-> 
->     $ make legal-info
-> 
->     ...
-> 
->     >>> qt5base 5.6.2 Collecting legal info  
->     LICENSE.GPLv3: OK (sha256: 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17)
->     ERROR: No hash found for LICENSE.LGPLv21
->     ERROR: No hash found for LGPL_EXCEPTION.txt
->     LICENSE.LGPLv3: OK (sha256: 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35)
->     LICENSE.FDL: OK (sha256: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d)
->     ERROR: header.BSD has wrong sha256 hash:
->     ERROR: expected: 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0
->     ERROR: got     : 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e
->     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
->     package/qt5/qt5base/qt5base.mk:315: recipe for target 'qt5base-legal-info' failed
->     make[1]: *** [qt5base-legal-info] Error 1
->     Makefile:79: recipe for target '_all' failed
->     make: *** [_all] Error 2
-> 
-> In the case you have different license file contents, but with the same name, between different
-> versions of a package, how should this be handled?
-
-This is a *very* good question, and I don't think our current support
-for license file hashes handles this situation properly.
-
-I'm adding Yann and Peter in Cc.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> ---
+>  package/python-pyro/python-pyro.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/python-pyro/python-pyro.mk b/package/python-pyro/python-pyro.mk
+> index bf916ba..06b4f45 100644
+> --- a/package/python-pyro/python-pyro.mk
+> +++ b/package/python-pyro/python-pyro.mk
+> @@ -9,6 +9,6 @@ PYTHON_PYRO_SOURCE = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
+>  PYTHON_PYRO_SITE = https://pypi.python.org/packages/61/68/0978adae315261b87acd216517c2c7f00780396e4d1426c5412458c6a28f
+>  PYTHON_PYRO_LICENSE = MIT
+>  PYTHON_PYRO_LICENSE_FILES = LICENSE
+> -PYTHON_PYRO_SETUP_TYPE = distutils
+> +PYTHON_PYRO_SETUP_TYPE = setuptools
+>
+>  $(eval $(python-package))
+> --
+> 2.9.4
+>
