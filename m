@@ -1,24 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Jul 2017 20:33:44 +0000
-Subject: [Buildroot] [Bug 9916] qt5 does not build on
- arm-buildroot-linux-uclibcgnueabihf for ARMv8 cores
-In-Reply-To: <bug-9916-163@https.bugs.busybox.net/>
-References: <bug-9916-163@https.bugs.busybox.net/>
-Message-ID: <bug-9916-163-4Mi1sZun4n@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Jul 2017 22:52:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump to
+	version 4.5.12
+In-Reply-To: <20170713200348.12476-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 13 Jul 2017 22:03:48 +0200")
+References: <20170713200348.12476-1-bernd.kuhls@t-online.de>
+Message-ID: <871spkcb4w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9916
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #3 from Ivan <ivan.nazarenko@gmail.com> ---
-Just a follow up:
+ > Fixes CVE-2017-11103:
+ > https://www.samba.org/samba/history/samba-4.5.12.html
 
-The patch here: https://patchwork.ozlabs.org/patch/751143/
-solved the build issue.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
