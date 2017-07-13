@@ -1,81 +1,69 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 13 Jul 2017 23:04:24 +0200
-Subject: [Buildroot] [PATCH] package/lshw: fix the build with glibc without
-	NLS
-Message-ID: <20170713210424.18934-1-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Jul 2017 23:26:31 +0200
+Subject: [Buildroot] [PATCH-2017.02.x] nodejs: security bump to version
+	6.11.1
+Message-ID: <20170713212631.22939-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since [1], NONLS is added to LSHW_CFLAGS even for glibc based toolchain.
-Previously it was not the case since BR2_ENABLE_LOCALE is always
-selected for glibc based toolchain.
+Fixes CVE-2017-1000381 - The c-ares function ares_parse_naptr_reply(), which
+is used for parsing NAPTR responses, could be triggered to read memory
+outside of the given input buffer if the passed in DNS response packet was
+crafted in a particular way.  This patch checks that there is enough data
+for the required elements of an NAPTR record (2 int16, 3 bytes for string
+lengths) before processing a record.
 
-With NONLS, config.h try to redefine two Intl function (textdomain and
-bindtextdomain) that are used by glibc internally.
-
-This break the build with the following error:
-sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
- extern char *textdomain (const char *__domainname) __THROW;
-
-Fixes:
-http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
-
-[1] 3acd9f845de0489071719d52d774aab48d7f9c33
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nt-t-try-to-redefine-intl-functions-when-.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch
+ .../{6.11.0 => 6.11.1}/0001-gyp-force-link-command-to-use-CXX.patch   | 0
+ .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
+ .../0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch       | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 5 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/nodejs/{6.11.0 => 6.11.1}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{6.11.0 => 6.11.1}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
+ rename package/nodejs/{6.11.0 => 6.11.1}/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch (100%)
 
-diff --git a/package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch b/package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch
-new file mode 100644
-index 0000000..5618d49
---- /dev/null
-+++ b/package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch
-@@ -0,0 +1,38 @@
-+From e7550f317ac88957a2127cc1bedb7c5b4dd918bd Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 13 Jul 2017 22:44:20 +0200
-+Subject: [PATCH] config.h: dont't try to redefine intl functions when NONLS is
-+ set
-+
-+When NONLS is set and a glibc based toolchain is used to build lshw,
-+config.h try to redefine two Intl function (textdomain and
-+bindtextdomain) that are used by glibc internally.
-+
-+This break the build with the following error:
-+sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
-+ extern char *textdomain (const char *__domainname) __THROW;
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/core/config.h | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/src/core/config.h b/src/core/config.h
-+index 69023fd..e7bdc18 100644
-+--- a/src/core/config.h
-++++ b/src/core/config.h
-+@@ -4,8 +4,6 @@
-+ #ifdef NONLS
-+ #define _(String) (String)
-+ #define N_(String) String
-+-#define textdomain(Domain)
-+-#define bindtextdomain(Package, Directory)
-+ #else
-+ #include <libintl.h>
-+ #define _(String) gettext (String)
-+-- 
-+2.9.4
-+
+diff --git a/package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.11.1/0001-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/6.11.1/0001-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.11.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+similarity index 100%
+rename from package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+rename to package/nodejs/6.11.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+diff --git a/package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch b/package/nodejs/6.11.1/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+similarity index 100%
+rename from package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+rename to package/nodejs/6.11.1/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index be20af56d6..31dcfb67d9 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "6.11.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "6.11.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.48"
+ 
+ config BR2_PACKAGE_NODEJS_NPM
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index ac010ab6d6..2dbbdc7cc2 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
+ sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v6.11.0/SHASUMS256.txt
+-sha256  02ba35391edea2b294c736489af01954ce6e6c39d318f4423ae6617c69ef0a51  node-v6.11.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v6.11.1/SHASUMS256.txt
++sha256  6f6655b85919aa54cb045a6d69a226849802fcc26491d0db4ce59873e41cc2b8  node-v6.11.1.tar.xz
 -- 
-2.9.4
+2.11.0
