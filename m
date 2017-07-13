@@ -1,13 +1,14 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 13 Jul 2017 13:17:05 +0200
-Subject: [Buildroot] [PATCH v2 03/13] package/minetest: new package
-In-Reply-To: <20170713102427.68ea2e66@windsurf.orange-hotspot.com>
+Date: Thu, 13 Jul 2017 13:18:23 +0200
+Subject: [Buildroot] [PATCH v2 05/13] package/minetest: add gettext
+ optional dependency
+In-Reply-To: <20170713102541.276b68d0@windsurf.orange-hotspot.com>
 References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-3-romain.naour@gmail.com>
- <20170624171958.56312346@windsurf.home>
- <46aba327-97c5-f62d-8100-b3c4957c4576@gmail.com>
- <20170713102427.68ea2e66@windsurf.orange-hotspot.com>
-Message-ID: <1d0b11d9-b0d6-2b60-ff62-d9c4e82ed347@gmail.com>
+ <20170612205410.20230-5-romain.naour@gmail.com>
+ <20170624172028.58c971c4@windsurf.home>
+ <e1ed833d-77ef-745e-8206-992846efcd04@gmail.com>
+ <20170713102541.276b68d0@windsurf.orange-hotspot.com>
+Message-ID: <aea4fe9c-cf32-0eb4-c933-319035a31ce2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,41 +17,55 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Le 13/07/2017 ? 10:24, Thomas Petazzoni a ?crit :
+Le 13/07/2017 ? 10:25, Thomas Petazzoni a ?crit :
 > Hello,
 > 
-> On Wed, 12 Jul 2017 18:37:39 +0200, Romain Naour wrote:
+> On Wed, 12 Jul 2017 18:43:01 +0200, Romain Naour wrote:
 > 
->> Le 24/06/2017 ? 17:19, Thomas Petazzoni a ?crit :
->>> Hello,
->>>
->>> On Mon, 12 Jun 2017 22:54:00 +0200, Romain Naour wrote:
+>>> On Mon, 12 Jun 2017 22:54:02 +0200, Romain Naour wrote:
 >>>   
->>>> + 		message(STATUS "GetText enabled; locales found: ${GETTEXT_AVAILABLE_LOCALES}")
->>>> ++		# On some platforms, such as Linux with GNU libc, the gettext
->>>> ++		# functions are present in the C standard library and libintl
->>>> ++		# is not required. For other libc (uClibc-ng or musl) libintl  
+>>>>  MINETEST_CONF_OPTS = \
+>>>>  	-DDEFAULT_RUN_IN_PLACE=OFF \
+>>>> -	-DENABLE_GETTEXT=OFF \
+>>>>  	-DENABLE_SOUND=OFF \
+>>>>  	-DENABLE_GLES=OFF \
+>>>>  	-DENABLE_FREETYPE=OFF \
+>>>> @@ -40,6 +39,13 @@ else
+>>>>  MINETEST_CONF_OPTS += -DBUILD_SERVER=OFF
+>>>>  endif
+>>>>  
+>>>> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
+>>>> +MINETEST_DEPENDENCIES += gettext
+>>>> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=ON
+>>>> +else
+>>>> +MINETEST_CONF_OPTS += -DENABLE_GETTEXT=OFF
+>>>> +endif  
 >>>
->>> Only uClibc-ng in fact. musl has stub gettext functionality.  
+>>> What is this ENABLE_GETTEXT=ON/OFF option doing exactly?  
 >>
->> So, with your series applied during the summer camp this is not true even with
->> uClibc-ng.
+>> It allows using translations.
+>>
+>> When enabled msgfmt tool is used to create *.mo files etc...
+>>
+>> https://github.com/minetest/minetest/blob/master/README.txt#L180
 > 
-> Correct: now all C libraries provide some gettext implementation.
-
-So this patch is not required anymore since gettext stub will be used.
-
+> Then simply do:
 > 
->> I think BR2_SYSTEM_ENABLE_NLS should be used in minetest.mk.
+> MINETEST_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
 > 
-> Why?
+> ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+>  pass -DENABLE_GETTEXT=ON
+> else
+>  pass -DENABLE_GETTEXT=OFF
+> endif
 
-I mean BR2_SYSTEM_ENABLE_NLS should be used for gettext handling, see the
-followup patch.
+Yes, that what I wanted to do.
 
 Best regards,
 Romain
 
+> 
+> Best regards,
 > 
 > Thomas
 > 
