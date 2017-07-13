@@ -1,69 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Jul 2017 23:26:31 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] nodejs: security bump to version
-	6.11.1
-Message-ID: <20170713212631.22939-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Jul 2017 23:28:13 +0200
+Subject: [Buildroot] [PATCH] package/lshw: fix the build with glibc
+	without NLS
+In-Reply-To: <20170713210424.18934-1-romain.naour@gmail.com>
+References: <20170713210424.18934-1-romain.naour@gmail.com>
+Message-ID: <20170713232813.4fd0c83e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-1000381 - The c-ares function ares_parse_naptr_reply(), which
-is used for parsing NAPTR responses, could be triggered to read memory
-outside of the given input buffer if the passed in DNS response packet was
-crafted in a particular way.  This patch checks that there is enough data
-for the required elements of an NAPTR record (2 int16, 3 bytes for string
-lengths) before processing a record.
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../{6.11.0 => 6.11.1}/0001-gyp-force-link-command-to-use-CXX.patch   | 0
- .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
- .../0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch       | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 5 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{6.11.0 => 6.11.1}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{6.11.0 => 6.11.1}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
- rename package/nodejs/{6.11.0 => 6.11.1}/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch (100%)
+On Thu, 13 Jul 2017 23:04:24 +0200, Romain Naour wrote:
+> Since [1], NONLS is added to LSHW_CFLAGS even for glibc based toolchain.
+> Previously it was not the case since BR2_ENABLE_LOCALE is always
+> selected for glibc based toolchain.
+> 
+> With NONLS, config.h try to redefine two Intl function (textdomain and
+> bindtextdomain) that are used by glibc internally.
+> 
+> This break the build with the following error:
+> sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
+>  extern char *textdomain (const char *__domainname) __THROW;
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
+> 
+> [1] 3acd9f845de0489071719d52d774aab48d7f9c33
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.11.1/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.11.1/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.11.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-similarity index 100%
-rename from package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-rename to package/nodejs/6.11.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-diff --git a/package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch b/package/nodejs/6.11.1/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
-similarity index 100%
-rename from package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
-rename to package/nodejs/6.11.1/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index be20af56d6..31dcfb67d9 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.11.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.11.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.48"
- 
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index ac010ab6d6..2dbbdc7cc2 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
- sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.11.0/SHASUMS256.txt
--sha256  02ba35391edea2b294c736489af01954ce6e6c39d318f4423ae6617c69ef0a51  node-v6.11.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.11.1/SHASUMS256.txt
-+sha256  6f6655b85919aa54cb045a6d69a226849802fcc26491d0db4ce59873e41cc2b8  node-v6.11.1.tar.xz
+I also had a look at this issue, and I'm not sure this is the most
+appropriate fix.
+
+Indeed, the NONLS mode is really for cases where the C library does not
+provide *any* gettext implementation, as would be the case with uClibc
+without intl stubs enabled.
+
+But in the context of Buildroot, all C libraries provide a gettext
+implementation. It might be full-featured or minimal, but it always
+exists.
+
+Therefore, I believe the appropriate fix is to in fact never pass
+-DNONLS, because we are never in a situation where we don't have any
+NLS support at all. So I believe the right fix is to remove the
+following three lines:
+
+ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+LSHW_CFLAGS += -DNONLS
+endif
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
