@@ -1,53 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Jul 2017 22:54:53 +0200
-Subject: [Buildroot] [git commit] package/nodejs: security bump to version
-	8.1.4
-Message-ID: <20170713205300.4DC2D82142@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 13 Jul 2017 23:04:24 +0200
+Subject: [Buildroot] [PATCH] package/lshw: fix the build with glibc without
+	NLS
+Message-ID: <20170713210424.18934-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=476ccdb3e49be2349248385dbacf4a72efebe343
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since [1], NONLS is added to LSHW_CFLAGS even for glibc based toolchain.
+Previously it was not the case since BR2_ENABLE_LOCALE is always
+selected for glibc based toolchain.
 
-Fixes CVE-2017-1000381 - The c-ares function ares_parse_naptr_reply(), which
-is used for parsing NAPTR responses, could be triggered to read memory
-outside of the given input buffer if the passed in DNS response packet was
-crafted in a particular way.  This patch checks that there is enough data
-for the required elements of an NAPTR record (2 int16, 3 bytes for string
-lengths) before processing a record.
+With NONLS, config.h try to redefine two Intl function (textdomain and
+bindtextdomain) that are used by glibc internally.
 
-See https://nodejs.org/en/blog/release/v8.1.4/
+This break the build with the following error:
+sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
+ extern char *textdomain (const char *__domainname) __THROW;
 
-[Peter: add CVE info]
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
+
+[1] 3acd9f845de0489071719d52d774aab48d7f9c33
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...nt-t-try-to-redefine-intl-functions-when-.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 989616c..93aa6a1 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From upstream URL: http://nodejs.org/dist/v8.1.2/SHASUMS256.txt
--sha256  ac190c1964ee0c28d4c163c0ccbb47435b2e4bd9b4c065b74a93373105c574b3  node-v8.1.2.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v8.1.4/SHASUMS256.txt
-+sha256  a83c86445f79749c46fd4f2c4e681a3e5bb51b2bde5dc7aed1dc38e4e242c301  node-v8.1.4.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index fdb856c..43c5ff3 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.1.2
-+NODEJS_VERSION = 8.1.4
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+diff --git a/package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch b/package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch
+new file mode 100644
+index 0000000..5618d49
+--- /dev/null
++++ b/package/lshw/0004-config.h-dont-t-try-to-redefine-intl-functions-when-.patch
+@@ -0,0 +1,38 @@
++From e7550f317ac88957a2127cc1bedb7c5b4dd918bd Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 13 Jul 2017 22:44:20 +0200
++Subject: [PATCH] config.h: dont't try to redefine intl functions when NONLS is
++ set
++
++When NONLS is set and a glibc based toolchain is used to build lshw,
++config.h try to redefine two Intl function (textdomain and
++bindtextdomain) that are used by glibc internally.
++
++This break the build with the following error:
++sysroot/usr/include/libintl.h:82:52: error: expected unqualified-id before 'throw'
++ extern char *textdomain (const char *__domainname) __THROW;
++
++Fixes:
++http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa328247d
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/core/config.h | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/src/core/config.h b/src/core/config.h
++index 69023fd..e7bdc18 100644
++--- a/src/core/config.h
+++++ b/src/core/config.h
++@@ -4,8 +4,6 @@
++ #ifdef NONLS
++ #define _(String) (String)
++ #define N_(String) String
++-#define textdomain(Domain)
++-#define bindtextdomain(Package, Directory)
++ #else
++ #include <libintl.h>
++ #define _(String) gettext (String)
++-- 
++2.9.4
++
+-- 
+2.9.4
