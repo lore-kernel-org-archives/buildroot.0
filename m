@@ -1,41 +1,83 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 13 Jul 2017 12:45:05 -0500
-Subject: [Buildroot] [PATCH 1/1] br toolchain: gcc5.4 bugfix
-	libsanitizer powerpc
-In-Reply-To: <20170713193316.28cc62eb@windsurf>
-References: <1499918619-27858-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170713040727.rfalp6j5n6dikbjd@tarshish>
- <CANQCQpa0fQDqAUsdPNLz_wKk4qu_YRkNB23hG5rOEedWpnpJ9A@mail.gmail.com>
- <20170713193316.28cc62eb@windsurf>
-Message-ID: <CANQCQpY4MZdnLn=O4jqvDzqNToi_4R8dnQiGw0Re4-cTtr1dow@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 13 Jul 2017 21:15:08 +0300
+Subject: [Buildroot] [PATCH] kvazaar: fix build with gcc 7
+Message-ID: <f1fb85ca071785d204c738456570057f70e40add.1499969708.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Add upstream fix for a gcc 7 -Werror build failure.
 
-On Thu, Jul 13, 2017 at 12:33 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 13 Jul 2017 08:29:32 -0500, Matthew Weber wrote:
->
->> > > +This applies only to gcc-5-branch, the code has been reworked for gcc 6.
->> >
->> > Your sign-off is missing.
->>
->>
->> I had assumed if I used the patch as is I would leave it without mods.
->> I can add the bug tracker url and my signed off.
->
-> Please add your SoB and the bug tracker reference.
->
-> Also, does this issue applies to gcc 4.9 as well ?
->
+Cc: Alexandre Esse <alexandre.esse.dev@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...use-FILL_ARRAY-macro-to-prevent-warning-o.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
 
-I'll check, we were using earlier versions of 5.4 and the bump broke
-us.  I'll find the point it was introduced and add a comment.
-
-Matt
+diff --git a/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch b/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
+new file mode 100644
+index 000000000000..633da8b36d4b
+--- /dev/null
++++ b/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
+@@ -0,0 +1,56 @@
++From 47a9f0de049e77e866ea5bdd4bc7c795ea6dd641 Mon Sep 17 00:00:00 2001
++From: Ari Lemmetti <ari.lemmetti@gmail.com>
++Date: Tue, 11 Apr 2017 12:57:22 +0300
++Subject: [PATCH] Modify and use FILL_ARRAY macro to prevent warning on GCC 7
++
++Following warning was given and is false positive
++
++error: 'memset' used with length equal to number of elements without multiplication by element size [-Werror=memset-elt-size]
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream commit 47a9f0de049e7.
++
++ src/global.h | 6 +++++-
++ src/rdo.c    | 8 ++++----
++ 2 files changed, 9 insertions(+), 5 deletions(-)
++
++diff --git a/src/global.h b/src/global.h
++index bedcd49c2e02..518167443f35 100644
++--- a/src/global.h
+++++ b/src/global.h
++@@ -219,7 +219,11 @@ typedef int16_t coeff_t;
++ // Fill a structure or a static array with val bytes.
++ #define FILL(var, val) memset(&(var), (val), sizeof(var))
++ // Fill a number of elements in an array with val bytes.
++-#define FILL_ARRAY(ar, val, size) memset((ar), (val), (size) * sizeof(*(ar)))
+++#define FILL_ARRAY(ar, val, size) \
+++{\
+++  void *temp_ptr = (void*)(ar);\
+++  memset((temp_ptr), (val), (size) * sizeof(*(ar)));\
+++}
++ 
++ #define FREE_POINTER(pointer) { free((void*)pointer); pointer = NULL; }
++ #define MOVE_POINTER(dst_pointer,src_pointer) { dst_pointer = src_pointer; src_pointer = NULL; }
++diff --git a/src/rdo.c b/src/rdo.c
++index 52305fd72fab..2579f2808441 100644
++--- a/src/rdo.c
+++++ b/src/rdo.c
++@@ -558,10 +558,10 @@ void kvz_rdoq(encoder_state_t * const state, coeff_t *coef, coeff_t *dest_coeff,
++   // Explicitly tell the only possible numbers of elements to be zeroed.
++   // Hope the compiler is able to utilize this information.
++   switch (cg_num) {
++-    case  1: memset(sig_coeffgroup_flag, 0,  1 * sizeof(sig_coeffgroup_flag[0])); break;
++-    case  4: memset(sig_coeffgroup_flag, 0,  4 * sizeof(sig_coeffgroup_flag[0])); break;
++-    case 16: memset(sig_coeffgroup_flag, 0, 16 * sizeof(sig_coeffgroup_flag[0])); break;
++-    case 64: memset(sig_coeffgroup_flag, 0, 64 * sizeof(sig_coeffgroup_flag[0])); break;
+++    case  1: FILL_ARRAY(sig_coeffgroup_flag, 0,  1); break;
+++    case  4: FILL_ARRAY(sig_coeffgroup_flag, 0,  4); break;
+++    case 16: FILL_ARRAY(sig_coeffgroup_flag, 0, 16); break;
+++    case 64: FILL_ARRAY(sig_coeffgroup_flag, 0, 64); break;
++     default: assert(0 && "There should be 1, 4, 16 or 64 coefficient groups");
++   }
++ 
++-- 
++2.13.2
++
+-- 
+2.13.2
