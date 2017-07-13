@@ -1,56 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Jul 2017 15:38:09 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/arcturus_ucp1020_defconfig
-In-Reply-To: <c171cf9c-b0f7-e065-e3b9-41ca3678bdff@arcturusnetworks.com>
-References: <20170712183103.30139-1-oleks@arcturusnetworks.com>
- <20170713094219.1750fab7@windsurf.orange-hotspot.com>
- <c171cf9c-b0f7-e065-e3b9-41ca3678bdff@arcturusnetworks.com>
-Message-ID: <20170713153809.5d51faba@windsurf.orange-hotspot.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Jul 2017 14:08:32 +0000
+Subject: [Buildroot] [Bug 9566] [kmod] Compilation fails with uclibc
+In-Reply-To: <bug-9566-163@https.bugs.busybox.net/>
+References: <bug-9566-163@https.bugs.busybox.net/>
+Message-ID: <bug-9566-163-cgFRKiyI8t@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9566
 
-On Thu, 13 Jul 2017 09:31:25 -0400, Oleksandr G Zhadan wrote:
+mavik30 at yahoo.com changed:
 
-> >> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>  
-> > What failure do you have when building the Linux kernel ?  
-> 
-> In file included from include/linux/linkage.h:4:0,
->                   from include/linux/kernel.h:6,
->                   from arch/powerpc/kernel/ptrace.c:18:
-> arch/powerpc/kernel/ptrace.c: In function ?fpr_get?:
-> arch/powerpc/kernel/ptrace.c:379:24: error: index 32 denotes an offset 
-> greater than size of ?u64[32][1] {aka long long unsigned int[32][1]}? 
-> [-Werror=array-bounds]
->          offsetof(struct thread_fp_state, fpr[32][0]));
-> ....
-> 
-> arch/powerpc/kernel/ptrace.c: In function ?fpr_set?:
-> arch/powerpc/kernel/ptrace.c:407:24: error: index 32 denotes an offset 
-> greater than size of ?u64[32][1] {aka long long unsigned int[32][1]}? 
-> [-Werror=array-bounds]
->          offsetof(struct thread_fp_state, fpr[32][0]));
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|FIXED                       |---
+             Status|RESOLVED                    |REOPENED
 
-Then could you please backport Linux kernel commit
-1e407ee3b21f981140491d5b8a36422979ca246f instead? It should fix this
-build issue.
+--- Comment #3 from mavik30 at yahoo.com ---
+Hello, 
 
-> > Thomas  
-> P.S.
-> Did you have a chance to look into our "[Buildroot][PATCH v4 1/1] 
-> configs/arcturus_ucls1012a: new defconfig" patch from 07/06/2017 05:13 PM.
+I got the same error, i followed the patch. But still same error.
 
-I had a brief look, it looked good. I'll review more carefully, and
-hopefully apply it as time permits.
+Can any one tell how solve this issue. 
 
-Best regards,
+CCLD     libkmod/libkmod.la
+libkmod/.libs/libkmod-module.o: In function `kmod_module_remove_module':
+libkmod-module.c:(.text.kmod_module_remove_module+0x20): undefined reference to
+`delete_module'
+libkmod/.libs/libkmod-module.o: In function `kmod_module_insert_module':
+libkmod-module.c:(.text.kmod_module_insert_module+0x21c): undefined reference
+to `init_module'
+collect2: error: ld returned 1 exit status
+make[4]: *** [libkmod/libkmod.la] Error 1
+make[3]: *** [all-recursive] Error 1
+make[2]: *** [all] Error 2
+make[1]: *** [/home/marvik/buildroot/output/build/kmod-23/.stamp_built] Error 2
+make: *** [_all] Error 2
 
-Thomas
+
+Thanks
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
