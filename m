@@ -1,58 +1,38 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 12 Jul 2017 17:51:38 -0700
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
-Message-ID: <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 13 Jul 2017 06:11:30 +0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove Sagaert Johan
+Message-ID: <3606ea852bd01b29f8084b3cf13c222118d9f0d9.1499915490.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+The email address of Sagaert Johan is bouncing. Remove his DEVELOPERS entry.
 
->>>
->>> Notes:
->>>
->>> Some license file changes are involved, a new dependency on pcre2, and some
->>> filename changes.  qt5webkit popped back into the picture for 5.9.1 after
->>> being absent for 5.9.0 "officially."
->>
->>  All this should be in the commit message, not just in the notes.
->>
->>  Also, it would be nice if you could add hashes for the license files. But that
->> should be a separate patch then.
-> 
-> I do think this is a separate patch issue.  Worth noting that next version will
-> finish up several missed license file changes that happened in 5.9.0.
-> 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ DEVELOPERS | 8 --------
+ 1 file changed, 8 deletions(-)
 
-I tested adding hashes for all license files for 5.9.1. It turns out, this breaks the 5.6.2
-legal-info because there are files in common between the two versions, but with different hashes.
-
-    $ make legal-info
-
-    ...
-
-    >>> qt5base 5.6.2 Collecting legal info
-    LICENSE.GPLv3: OK (sha256: 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17)
-    ERROR: No hash found for LICENSE.LGPLv21
-    ERROR: No hash found for LGPL_EXCEPTION.txt
-    LICENSE.LGPLv3: OK (sha256: 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35)
-    LICENSE.FDL: OK (sha256: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d)
-    ERROR: header.BSD has wrong sha256 hash:
-    ERROR: expected: 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0
-    ERROR: got     : 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e
-    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-    package/qt5/qt5base/qt5base.mk:315: recipe for target 'qt5base-legal-info' failed
-    make[1]: *** [qt5base-legal-info] Error 1
-    Makefile:79: recipe for target '_all' failed
-    make: *** [_all] Error 2
-
-In the case you have different license file contents, but with the same name, between different
-versions of a package, how should this be handled?
-
-Josh
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ec405a57058..8471d1970bcd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1469,14 +1469,6 @@ F:	package/biosdevname/
+ N:	R?mi R?rolle <remi.rerolle@gmail.com>
+ F:	package/libfreeimage/
+ 
+-N:	Sagaert Johan <sagaert.johan@skynet.be>
+-F:	package/git/
+-F:	package/gsl/
+-F:	package/jquery-mobile/
+-F:	package/libgsasl/
+-F:	package/qdecoder/
+-F:	package/qlibc/
+-
+ N:	Sam Bobroff <sam.bobroff@au1.ibm.com>
+ F:	arch/Config.in.powerpc
+ F:	package/librtas/
+-- 
+2.13.2
