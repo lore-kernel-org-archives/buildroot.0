@@ -1,71 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Jul 2017 00:19:24 +0200
-Subject: [Buildroot] [PATCH] core/legal-info: use hash file from version
-	sub-dir
-Message-ID: <20170713221924.12021-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Jul 2017 00:46:50 +0200
+Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
+In-Reply-To: <20170713153220.GA3002@scaer>
+References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
+ <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
+ <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+ <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
+ <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
+ <20170713153220.GA3002@scaer>
+Message-ID: <2a450d8b-10a6-2be9-b7a7-a659a47bffb0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we have multiple versions for a package, and the licensing terms
-depend on the version actually selected (e.g. like Qt5), storing the
-hashes for those license files in the .hash file is broken: the infra
-will ensure that all hashes for a file do match, which would not be the
-case here.
 
-We fix that by first looking for a hash file in the version sub-dir
-first, and if that directory does not exist, then we use the main hash
-file. Note that if the version sub-dir exists, the main hash file is
-not used even if there is no per-version hash file.
 
-Update the documentation accordingly.
+On 13-07-17 17:32, Yann E. MORIN wrote:
+> Thomas, Joshua, All,
+> 
+> On 2017-07-13 09:50 +0200, Thomas Petazzoni spake thusly:
+>> On Wed, 12 Jul 2017 17:51:38 -0700, Joshua Henderson wrote:
+>>
+>>> I tested adding hashes for all license files for 5.9.1. It turns out, this breaks the 5.6.2
+>>> legal-info because there are files in common between the two versions, but with different hashes.
+>>>
+>>>     $ make legal-info
+>>>
+>>>     ...
+>>>
+>>>     >>> qt5base 5.6.2 Collecting legal info  
+>>>     LICENSE.GPLv3: OK (sha256: 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17)
+>>>     ERROR: No hash found for LICENSE.LGPLv21
+>>>     ERROR: No hash found for LGPL_EXCEPTION.txt
+>>>     LICENSE.LGPLv3: OK (sha256: 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35)
+>>>     LICENSE.FDL: OK (sha256: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d)
+>>>     ERROR: header.BSD has wrong sha256 hash:
+>>>     ERROR: expected: 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0
+>>>     ERROR: got     : 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e
+>>>     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+>>>     package/qt5/qt5base/qt5base.mk:315: recipe for target 'qt5base-legal-info' failed
+>>>     make[1]: *** [qt5base-legal-info] Error 1
+>>>     Makefile:79: recipe for target '_all' failed
+>>>     make: *** [_all] Error 2
+>>>
+>>> In the case you have different license file contents, but with the same name, between different
+>>> versions of a package, how should this be handled?
+>>
+>> This is a *very* good question,
+> 
+> Indeed, this is a *very* good question.
+> 
+>> and I don't think our current support
+>> for license file hashes handles this situation properly.
+> 
+> Indeed our current infra does not support this... Dang... :-(
+> I'll see what I can do with this...
+> 
+> Until then, don't add hashes for Qt license files... :-/
+> 
+> A first idea would be to look for a hash file in the ${VERSION}
+> subdirectory, where we are currently only looking for patches. This
+> should be safe, as we currently only use *.patch from there.
+> 
+> But I'm not too happy with this... :-/
 
-Reported-by: Joshua Henderson <joshua.henderson@microchip.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Joshua Henderson <joshua.henderson@microchip.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
----
- docs/manual/adding-packages-directory.txt | 4 +++-
- package/pkg-utils.mk                      | 9 ++++++---
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ Or we could look for pkg-$(VERSION).hash and fall back to pkg.hash if that
+doesn't exist. But it does complicate the code somewhat.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 804946c504..809cc97389 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -482,7 +482,9 @@ this in a comment line above the hashes.
- 
- .Note
- The hashes for license files are used to detect a license change when a
--package version is bumped.
-+package version is bumped. For a package with multiple versions (like Qt5),
-+create the hash file in a subdirectory +<packageversion>+ of that package
-+(see also xref:patch-apply-order[]).
- 
- .Note
- The number of spaces does not matter, so one can use spaces (or tabs) to
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index accf48c464..f285395267 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -86,9 +86,12 @@ endef
- define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
- 	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
- 	{ \
--		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
--		ret=$${?}; \
--		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
-+		if [ -d $(3)/$($(PKG)_VERSION) ]; then \
-+			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
-+		else \
-+			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
-+		fi; \
-+		case $${?} in (0|3) ;; (*) exit 1;; esac; \
- 	} && \
- 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
- endef
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
