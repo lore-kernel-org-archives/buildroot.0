@@ -1,47 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 11:08:12 +0200
-Subject: [Buildroot] [PATCH] nginx: security bump to version 1.12.1
-Message-ID: <20170714090812.18154-1-peter@korsgaard.com>
+Date: Fri, 14 Jul 2017 11:20:32 +0200
+Subject: [Buildroot] [PATCH] nginx-upload: bump version to fix build against
+	nginx-1.12.x
+Message-ID: <20170714092032.18788-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-7529 - Nginx versions since 0.5.6 up to and including 1.13.2
-are vulnerable to integer overflow vulnerability in nginx range filter
-module resulting into leak of potentially sensitive information triggered by
-specially crafted request.
+Fixes:
+http://autobuild.buildroot.net/results/9ec/9ecf714667736bf61f643ad55588d3d6ebdde603/
+http://autobuild.buildroot.net/results/cea/cea64e30e98543e10c8819f6337babfec6d7ac0f/
 
-For more details, see:
-http://mailman.nginx.org/pipermail/nginx-announce/2017/000200.html
+Bump to the latest commit on the 2.255 branch, which contains pull request
+88 (work with latest nginx versions):
+
+https://github.com/vkholodkov/nginx-upload-module/pull/88
+
+git shortlog aba1e3f34c754551f4f49e572bc86863d535609d..
+Anton (1):
+      Add files via upload
+
+Valery Kholodkov (5):
+      Added tag for version 2.0.8
+      Recreated tag for version 2.0.8
+      Backported to nginx 0.5.37 by Anthony Kholodkov
+      Updated Changelog
+      Merge pull request #88 from antonbarinov/2.255
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
+ package/nginx-upload/nginx-upload.hash | 2 +-
+ package/nginx-upload/nginx-upload.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index ffc5a279c1..22e4007b5f 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
+diff --git a/package/nginx-upload/nginx-upload.hash b/package/nginx-upload/nginx-upload.hash
+index 4fc4347361..3a8dfeddf3 100644
+--- a/package/nginx-upload/nginx-upload.hash
++++ b/package/nginx-upload/nginx-upload.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b4222e26fdb620a8d3c3a3a8b955e08b713672e1bc5198d1e4f462308a795b30	nginx-1.12.0.tar.gz
-+sha256	8793bf426485a30f91021b6b945a9fd8a84d87d17b566562c3797aba8fac76fb	nginx-1.12.1.tar.gz
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 54126ab912..ceb80229d3 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+ #Locally Computed:
+-sha256 8cd1d9d968ffba807de2e546ea9cad5e1ae294ec60b4927b2d60a98bdb4a1144  nginx-upload-aba1e3f34c754551f4f49e572bc86863d535609d.tar.gz
++sha256 5f1c3c2b9858b9cacd877a0f2df9b9263734e9cef8d837b73f0e659c0f7fde2d  nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3.tar.gz
+diff --git a/package/nginx-upload/nginx-upload.mk b/package/nginx-upload/nginx-upload.mk
+index ef67995ad8..738542571e 100644
+--- a/package/nginx-upload/nginx-upload.mk
++++ b/package/nginx-upload/nginx-upload.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.12.0
-+NGINX_VERSION = 1.12.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-NGINX_UPLOAD_VERSION = aba1e3f34c754551f4f49e572bc86863d535609d
++NGINX_UPLOAD_VERSION = 70bee48f1811eecd255ed094ce9f0fb560c390c3
+ NGINX_UPLOAD_SITE = $(call github,vkholodkov,nginx-upload-module,$(NGINX_UPLOAD_VERSION))
+ NGINX_UPLOAD_LICENSE = BSD-3-Clause
+ NGINX_UPLOAD_LICENSE_FILES = LICENCE
 -- 
 2.11.0
