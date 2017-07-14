@@ -1,49 +1,67 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Fri, 14 Jul 2017 16:18:25 -0500
-Subject: [Buildroot] [PATCH] package/Makefile.in: Tweak TARGET_ABI for
-	MPC8548
-In-Reply-To: <20170714225905.6b8b19fe@windsurf>
-References: <20170712024737.21578-1-andrew.smirnov@gmail.com>
- <20170712093218.5a6a20ff@windsurf.lan>
- <CAHQ1cqFpf7ggXb=wWnmqHpoScMe-B8wmWO6az2f7RAx72C72OA@mail.gmail.com>
- <20170714225905.6b8b19fe@windsurf>
-Message-ID: <CAHQ1cqHMcOpfaCjTk7h3Dg-7FZXa22t5b6D_-nfrpvzt8Q=5HQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 14 Jul 2017 23:53:13 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
+ post-build/image scripts for out-of-tree builds
+In-Reply-To: <20170714130417.18857-1-peter@korsgaard.com>
+References: <20170714130417.18857-1-peter@korsgaard.com>
+Message-ID: <20170714215313.GC3373@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 14, 2017 at 3:59 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 14 Jul 2017 14:47:15 -0500, Andrey Smirnov wrote:
->
->> It's been a while, since I investigated this patch, but I believe we
->> were seeing performance improvements on heavily numerical application
->> on our system with "-mhard-float" while using custom built
->> crosstools-ng e500 toolchain. But given how I didn't notice two
->> significant problems with this patch and it is clearly not ready for
->> prime time, let me go back and do more research/double check that I
->> wasn't doing something dumb and missing the obvious.
->>
->> I'll follow up with a separate patch if it's truly useful.
->
-> I think it definitely makes sense to continue work on this patch.
-> PowerPC is not the most well maintained architecture in Buildroot, so
-> it's very good to get contributions from our PowerPC users to improve
-> the support for this architecture.
->
-> If indeed PowerPC needs an explicit -mhard-float to use the FPU, we'll
-> have to fix Buildroot. Could you investigate this a little bit more?
->
+Peter, All,
 
-Absolutely. Sorry for not being very clear, what I was trying to say
-is: I just lost a bit of confidence that this patch is truly
-needed(I've been confuse by simpler things before), so I'll go back
-and investigate more to either build a better case for it or discover
-what I missed.
+On 2017-07-14 15:04 +0200, Peter Korsgaard spake thusly:
+> Sometimes it can be interesting to call back into buildroot from a
+> post-build/image script (E.G. make printvars or similar). For this to work
+> correctly with out-of-tree builds we need to pass O= to make, but this is
+> currently not available in the environment of post-build/image scripts.
+> 
+> In concept, O could be derrived from BUILD_DIR (E.G. by stripping /build),
+> but directly exporting O is cleaner.
+> 
+> O= cannot be exported globally as it interferes with various build systems,
+> so instead add it to EXTRA_ENV.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thanks,
-Andrey Smirnov
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/Makefile.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index b95e5e3fa8..a2b0d90f32 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -309,7 +309,8 @@ HOST_CONFIGURE_OPTS = \
+>  EXTRA_ENV = \
+>  	PATH=$(BR_PATH) \
+>  	BR2_DL_DIR=$(BR2_DL_DIR) \
+> -	BUILD_DIR=$(BUILD_DIR)
+> +	BUILD_DIR=$(BUILD_DIR) \
+> +	O=$(CANONICAL_O)
+>  
+>  ################################################################################
+>  # settings we need to pass to configure
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
