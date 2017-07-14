@@ -1,107 +1,45 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 14 Jul 2017 08:44:31 +0200
-Subject: [Buildroot] [PATCH 1/3] python-greenlet: new package
-In-Reply-To: <20170714053800.20007-1-alexey.roslyakov@gmail.com>
-References: <20170714053800.20007-1-alexey.roslyakov@gmail.com>
-Message-ID: <CAGm1_kv07_ngieu_PATD3NvruWXNCHJOVSXjFXqA4hFfF6qd9A@mail.gmail.com>
+From: Erik Stromdahl <erik.stromdahl@gmail.com>
+Date: Fri, 14 Jul 2017 08:48:49 +0200
+Subject: [Buildroot] [PATCH 2/4] board/raspberrypi/post-image.sh: add VC4
+	DTB overlay support
+In-Reply-To: <1500014931-5599-1-git-send-email-erik.stromdahl@gmail.com>
+References: <1500014931-5599-1-git-send-email-erik.stromdahl@gmail.com>
+Message-ID: <1500014931-5599-2-git-send-email-erik.stromdahl@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+Add option for adding the vc4-fkms-v3d dtoverlay in config.txt.
+This will enable the VC4 GPU.
 
-looks like you didn't use:
+Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
+---
+ board/raspberrypi/post-image.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-./utils/scanpypi greenlet
-
-On Fri, Jul 14, 2017 at 7:37 AM, Alexey Roslyakov
-<alexey.roslyakov@gmail.com> wrote:
-> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-> ---
-
-Please also add an entry to teh DEVELOPERS file.
-
->  package/Config.in                            |  1 +
->  package/python-greenlet/Config.in            |  6 ++++++
->  package/python-greenlet/python-greenlet.hash |  3 +++
->  package/python-greenlet/python-greenlet.mk   | 14 ++++++++++++++
->  4 files changed, 24 insertions(+)
->  create mode 100644 package/python-greenlet/Config.in
->  create mode 100644 package/python-greenlet/python-greenlet.hash
->  create mode 100644 package/python-greenlet/python-greenlet.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index b48ab5e0dd..e09327168b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -738,6 +738,7 @@ menu "External python modules"
->         source "package/python-flup/Config.in"
->         source "package/python-futures/Config.in"
->         source "package/python-gobject/Config.in"
-> +       source "package/python-greenlet/Config.in"
->         source "package/python-gunicorn/Config.in"
->         source "package/python-html5lib/Config.in"
->         source "package/python-httplib2/Config.in"
-> diff --git a/package/python-greenlet/Config.in b/package/python-greenlet/Config.in
-> new file mode 100644
-> index 0000000000..1b24141d5e
-> --- /dev/null
-> +++ b/package/python-greenlet/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_GREENLET
-> +       bool "python-greenlet"
-> +       help
-> +         Lightweight in-process concurrent programming for Python
-
-'.' is missing at the end of the help text.
-
-> +
-> +         https://pypi.python.org/pypi/greenlet/
-> diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-> new file mode 100644
-> index 0000000000..0ad9e41025
-> --- /dev/null
-> +++ b/package/python-greenlet/python-greenlet.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=e8637647d58a26c4a1f51ca393e53c00, sha256 locally computed
-
-comment should look like this:
-
-# md5 from https://pypi.python.org/pypi/greenlet/json, sha256 locally computed
-
-> +md5    e8637647d58a26c4a1f51ca393e53c00 greenlet-0.4.12.tar.gz
-> +sha256 e4c99c6010a5d153d481fdaf63b8a0782825c0721506d880403a3b9b82ae347e greenlet-0.4.12.tar.gz
-> diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-> new file mode 100644
-> index 0000000000..b5b234c7c2
-> --- /dev/null
-> +++ b/package/python-greenlet/python-greenlet.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-greenlet
-> +#
-> +################################################################################
-> +
-> +PYTHON_GREENLET_VERSION = 0.4.12
-> +PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
-> +PYTHON_GREENLET_SITE = https://pypi.python.org/packages/be/76/82af375d98724054b7e273b5d9369346937324f9bcc20980b45b068ef0b0
-> +PYTHON_GREENLET_LICENSE = MIT
-> +PYTHON_GREENLET_LICENSE_FILES = LICENSE
-> +PYTHON_GREENLET_SETUP_TYPE = distutils
-
-use setuptools as setup type
-
-Yegor
-
-> +
-> +$(eval $(python-package))
-> --
-> 2.13.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 4f136f6..be5ed9c 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -38,6 +38,17 @@ enable_uart=1
+ __EOF__
+ 		fi
+ 		;;
++		--add-vc4-fkms-v3d-overlay)
++		# Enable VC4 overlay
++		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
++			echo "Adding 'dtoverlay=vc4-fkms-v3d' to config.txt (fixes ttyAMA0 serial console)."
++			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
++
++# Add VC4 GPU support
++dtoverlay=vc4-fkms-v3d
++__EOF__
++		fi
++		;;
+ esac
+ 
+ done
+-- 
+2.7.4
