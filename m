@@ -1,201 +1,122 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 16:02:03 +0200
-Subject: [Buildroot] [PATCH] spice: add upstream security fixes for
-	CVE-2017-7506
-Message-ID: <20170714140203.19234-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 14 Jul 2017 16:07:01 +0200
+Subject: [Buildroot] [PATCH] strace: Bumps version to 4.18.
+In-Reply-To: <20170714134545.13494-1-didin@synopsys.com>
+References: <20170714134545.13494-1-didin@synopsys.com>
+Message-ID: <a45bb6e7-954f-9eae-2450-d02ac1766fa2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-7506 - Possible buffer overflow via invalid monitor
-configurations.
+Hi Evgeniy,
 
-For more details, see:
-https://marc.info/?l=oss-security&m=150001782924095
+Le 14/07/2017 ? 15:45, Evgeniy Didin a ?crit :
+> This patch bumps strace package to 4.18 upstream version.
+> 
+> Important notes:
+> 	1)0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch has been removed 
+> 	 because it is part of 4.18.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...nect-when-receiving-overly-big-ClientMoni.patch | 75 ++++++++++++++++++++++
- ...integer-overflows-handling-monitor-config.patch | 31 +++++++++
- ...buffer-overflows-handling-monitor-configu.patch | 48 ++++++++++++++
- 3 files changed, 154 insertions(+)
- create mode 100644 package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
- create mode 100644 package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
- create mode 100644 package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
+There is the same issue on arc like the one fixed on nios2, see
+http://autobuild.buildroot.net/results/8be/8be75df1b4d6737b3957cfc57c5a2487f2119fcb/build-end.log
 
-diff --git a/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch b/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
-new file mode 100644
-index 0000000000..e454a30100
---- /dev/null
-+++ b/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
-@@ -0,0 +1,75 @@
-+From f1e7ec03e26ab6b8ca9b7ec060846a5b706a963d Mon Sep 17 00:00:00 2001
-+From: Frediano Ziglio <fziglio@redhat.com>
-+Date: Mon, 15 May 2017 15:57:28 +0100
-+Subject: [PATCH 4/6] reds: Disconnect when receiving overly big
-+ ClientMonitorsConfig
-+
-+Total message size received from the client was unlimited. There is
-+a 2kiB size check on individual agent messages, but the MonitorsConfig
-+message can be split in multiple chunks, and the size of the
-+non-chunked MonitorsConfig message was never checked. This could easily
-+lead to memory exhaustion on the host.
-+
-+Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ server/reds.c | 25 +++++++++++++++++++++++--
-+ 1 file changed, 23 insertions(+), 2 deletions(-)
-+
-+diff --git a/server/reds.c b/server/reds.c
-+index f439a366..7be85fdf 100644
-+--- a/server/reds.c
-++++ b/server/reds.c
-+@@ -993,19 +993,34 @@ static void reds_client_monitors_config_cleanup(void)
-+ static void reds_on_main_agent_monitors_config(
-+         MainChannelClient *mcc, void *message, size_t size)
-+ {
-++    const unsigned int MAX_MONITORS = 256;
-++    const unsigned int MAX_MONITOR_CONFIG_SIZE =
-++       sizeof(VDAgentMonitorsConfig) + MAX_MONITORS * sizeof(VDAgentMonConfig);
-++
-+     VDAgentMessage *msg_header;
-+     VDAgentMonitorsConfig *monitors_config;
-+     RedsClientMonitorsConfig *cmc = &reds->client_monitors_config;
-+ 
-++    // limit size of message sent by the client as this can cause a DoS through
-++    // memory exhaustion, or potentially some integer overflows
-++    if (sizeof(VDAgentMessage) + MAX_MONITOR_CONFIG_SIZE - cmc->buffer_size < size) {
-++        goto overflow;
-++    }
-+     cmc->buffer_size += size;
-+     cmc->buffer = realloc(cmc->buffer, cmc->buffer_size);
-+     spice_assert(cmc->buffer);
-+     cmc->mcc = mcc;
-+     memcpy(cmc->buffer + cmc->buffer_pos, message, size);
-+     cmc->buffer_pos += size;
-++    if (sizeof(VDAgentMessage) > cmc->buffer_size) {
-++        spice_debug("not enough data yet. %d", cmc->buffer_size);
-++        return;
-++    }
-+     msg_header = (VDAgentMessage *)cmc->buffer;
-+-    if (sizeof(VDAgentMessage) > cmc->buffer_size ||
-+-            msg_header->size > cmc->buffer_size - sizeof(VDAgentMessage)) {
-++    if (msg_header->size > MAX_MONITOR_CONFIG_SIZE) {
-++        goto overflow;
-++    }
-++    if (msg_header->size > cmc->buffer_size - sizeof(VDAgentMessage)) {
-+         spice_debug("not enough data yet. %d", cmc->buffer_size);
-+         return;
-+     }
-+@@ -1013,6 +1028,12 @@ static void reds_on_main_agent_monitors_config(
-+     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
-+     red_dispatcher_client_monitors_config(monitors_config);
-+     reds_client_monitors_config_cleanup();
-++    return;
-++
-++overflow:
-++    spice_warning("received invalid MonitorsConfig request from client, disconnecting");
-++    red_channel_client_disconnect(main_channel_client_get_base(mcc));
-++    reds_client_monitors_config_cleanup();
-+ }
-+ 
-+ void reds_on_main_agent_data(MainChannelClient *mcc, void *message, size_t size)
-+-- 
-+2.11.0
-+
-diff --git a/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch b/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
-new file mode 100644
-index 0000000000..a4e5a3fa6d
---- /dev/null
-+++ b/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
-@@ -0,0 +1,31 @@
-+From ec6229c79abe05d731953df5f7e9a05ec9f6df79 Mon Sep 17 00:00:00 2001
-+From: Frediano Ziglio <fziglio@redhat.com>
-+Date: Mon, 15 May 2017 15:57:28 +0100
-+Subject: [PATCH 5/6] reds: Avoid integer overflows handling monitor
-+ configuration
-+
-+Avoid VDAgentMessage::size integer overflows.
-+
-+Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ server/reds.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/server/reds.c b/server/reds.c
-+index 7be85fdf..e1c8c108 100644
-+--- a/server/reds.c
-++++ b/server/reds.c
-+@@ -1024,6 +1024,9 @@ static void reds_on_main_agent_monitors_config(
-+         spice_debug("not enough data yet. %d", cmc->buffer_size);
-+         return;
-+     }
-++    if (msg_header->size < sizeof(VDAgentMonitorsConfig)) {
-++        goto overflow;
-++    }
-+     monitors_config = (VDAgentMonitorsConfig *)(cmc->buffer + sizeof(*msg_header));
-+     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
-+     red_dispatcher_client_monitors_config(monitors_config);
-+-- 
-+2.11.0
-+
-diff --git a/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch b/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
-new file mode 100644
-index 0000000000..0789fdfb08
---- /dev/null
-+++ b/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
-@@ -0,0 +1,48 @@
-+From a957a90baf2c62d31f3547e56bba7d0e812d2331 Mon Sep 17 00:00:00 2001
-+From: Frediano Ziglio <fziglio@redhat.com>
-+Date: Mon, 15 May 2017 15:57:28 +0100
-+Subject: [PATCH 6/6] reds: Avoid buffer overflows handling monitor
-+ configuration
-+
-+It was also possible for a malicious client to set
-+VDAgentMonitorsConfig::num_of_monitors to a number larger
-+than the actual size of VDAgentMOnitorsConfig::monitors.
-+This would lead to buffer overflows, which could allow the guest to
-+read part of the host memory. This might cause write overflows in the
-+host as well, but controlling the content of such buffers seems
-+complicated.
-+
-+Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ server/reds.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/server/reds.c b/server/reds.c
-+index e1c8c108..3a42c375 100644
-+--- a/server/reds.c
-++++ b/server/reds.c
-+@@ -1000,6 +1000,7 @@ static void reds_on_main_agent_monitors_config(
-+     VDAgentMessage *msg_header;
-+     VDAgentMonitorsConfig *monitors_config;
-+     RedsClientMonitorsConfig *cmc = &reds->client_monitors_config;
-++    uint32_t max_monitors;
-+ 
-+     // limit size of message sent by the client as this can cause a DoS through
-+     // memory exhaustion, or potentially some integer overflows
-+@@ -1028,6 +1029,12 @@ static void reds_on_main_agent_monitors_config(
-+         goto overflow;
-+     }
-+     monitors_config = (VDAgentMonitorsConfig *)(cmc->buffer + sizeof(*msg_header));
-++    // limit the monitor number to avoid buffer overflows
-++    max_monitors = (msg_header->size - sizeof(VDAgentMonitorsConfig)) /
-++                   sizeof(VDAgentMonConfig);
-++    if (monitors_config->num_of_monitors > max_monitors) {
-++        goto overflow;
-++    }
-+     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
-+     red_dispatcher_client_monitors_config(monitors_config);
-+     reds_client_monitors_config_cleanup();
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Actually several architecture (or1k, nios2, metag, avr32 and arc) are affected
+by the same issue due to a patch series applied on strace 4.17 (patches named:
+"<arch>: export <arch>_sp_ptr").
+
+If the same fix applied on nios2 is applied for arc, it doesn't allow to build
+with older kernel headers (< 4.1).
+
+Can you take a look ?
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: arc-buildroot at synopsys.com
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  
+> ---
+>  ...os2-arch_regs-fix-nios2_sp_ptr-definition.patch | 43 ----------------------
+>  package/strace/strace.hash                         |  4 +-
+>  package/strace/strace.mk                           |  2 +-
+>  3 files changed, 3 insertions(+), 46 deletions(-)
+>  delete mode 100644 package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+> 
+> diff --git a/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch b/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+> deleted file mode 100644
+> index 7ba03b57e..000000000
+> --- a/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+> +++ /dev/null
+> @@ -1,43 +0,0 @@
+> -From 8a1f47f7963991e5b039282769d0a798d36f9e45 Mon Sep 17 00:00:00 2001
+> -From: Romain Naour <romain.naour@smile.fr>
+> -Date: Tue, 4 Jul 2017 18:06:14 +0200
+> -Subject: [PATCH] nios2/arch_regs: fix nios2_sp_ptr definition
+> -
+> -The patch [1] introduced in strace 1.17s use the old way of accessing
+> -SP register as defined for kernel headers < 4.0. The kernel headers
+> -for nios2 have been changed in commit [2].
+> -
+> -This patch updates strace to use the new kernel/userspace interface.
+> -
+> -Fixes:
+> -http://autobuild.buildroot.net/results/b9f/b9fc25b82f3280872fe1593ac252a8529ba83576
+> -
+> -[1] https://github.com/strace/strace/commit/6117728aacf431a3e3c05761766c776874cc0861
+> -[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=92d5dd8cd6e2b211d32d8fbc6cf4b7470765a09f
+> -
+> -Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ----
+> - linux/nios2/arch_regs.c | 2 +-
+> - linux/nios2/arch_regs.h | 2 +-
+> - 2 files changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/linux/nios2/arch_regs.c b/linux/nios2/arch_regs.c
+> -index 8a668bc..c18a3aa 100644
+> ---- a/linux/nios2/arch_regs.c
+> -+++ b/linux/nios2/arch_regs.c
+> -@@ -1,4 +1,4 @@
+> - static struct user_pt_regs nios2_regs;
+> --unsigned long *const nios2_sp_ptr = &nios2_regs.sp;
+> -+unsigned int *const nios2_sp_ptr = &nios2_regs.regs[PTR_SP];
+> - # define ARCH_REGS_FOR_GETREGSET nios2_regs
+> - #define ARCH_PC_REG nios2_regs.regs[PTR_EA]
+> -diff --git a/linux/nios2/arch_regs.h b/linux/nios2/arch_regs.h
+> -index 7f344b5..c4230ed 100644
+> ---- a/linux/nios2/arch_regs.h
+> -+++ b/linux/nios2/arch_regs.h
+> -@@ -1 +1 @@
+> --extern unsigned long *const nios2_sp_ptr;
+> -+extern unsigned int *const nios2_sp_ptr;
+> --- 
+> -2.9.4
+> -
+> diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+> index fbd93202b..b5c4c7932 100644
+> --- a/package/strace/strace.hash
+> +++ b/package/strace/strace.hash
+> @@ -1,3 +1,3 @@
+>  # From https://sourceforge.net/projects/strace/files/strace/4.17/
+> -md5	8d7eb10eba68bad83a269197e634b626	strace-4.17.tar.xz
+> -sha1	a60558a10757e41a39ee9e357d1d03d91d5d94d8	strace-4.17.tar.xz
+> +md5	3579b3266bb096cebaefbe2cdb1a3a78	strace-4.18.tar.xz
+> +sha1	ac2e6f746260dd71f6d22920d9ca8f4bfbe708a8	strace-4.18.tar.xz
+> diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+> index 119c9f564..c4c45233c 100644
+> --- a/package/strace/strace.mk
+> +++ b/package/strace/strace.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -STRACE_VERSION = 4.17
+> +STRACE_VERSION = 4.18
+>  STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+>  STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+>  STRACE_LICENSE = BSD-3-Clause
+> 
