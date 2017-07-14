@@ -1,200 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jul 2017 19:29:31 +0200
-Subject: [Buildroot] [git commit] spice: add upstream security fixes for
-	CVE-2017-7506
-Message-ID: <20170714172600.0939582195@busybox.osuosl.org>
+Date: Fri, 14 Jul 2017 19:30:46 +0200
+Subject: [Buildroot] [PATCH] spice: add upstream security fixes for
+ CVE-2017-7506
+In-Reply-To: <20170714140203.19234-1-peter@korsgaard.com>
+References: <20170714140203.19234-1-peter@korsgaard.com>
+Message-ID: <20170714193046.5dedfd97@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31bd29fe093a258755929a23d764b02323fcdc46
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes CVE-2017-7506 - Possible buffer overflow via invalid monitor
-configurations.
+On Fri, 14 Jul 2017 16:02:03 +0200, Peter Korsgaard wrote:
+> Fixes CVE-2017-7506 - Possible buffer overflow via invalid monitor
+> configurations.
+> 
+> For more details, see:
+> https://marc.info/?l=oss-security&m=150001782924095
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...nect-when-receiving-overly-big-ClientMoni.patch | 75 ++++++++++++++++++++++
+>  ...integer-overflows-handling-monitor-config.patch | 31 +++++++++
+>  ...buffer-overflows-handling-monitor-configu.patch | 48 ++++++++++++++
+>  3 files changed, 154 insertions(+)
+>  create mode 100644 package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
+>  create mode 100644 package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
+>  create mode 100644 package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
 
-For more details, see:
-https://marc.info/?l=oss-security&m=150001782924095
+Applied to master, thanks. However, you forgot to use "git format-patch
+-N" to generate the patches, so I removed the numbering from the patch
+titles.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...nect-when-receiving-overly-big-ClientMoni.patch | 75 ++++++++++++++++++++++
- ...integer-overflows-handling-monitor-config.patch | 31 +++++++++
- ...buffer-overflows-handling-monitor-configu.patch | 48 ++++++++++++++
- 3 files changed, 154 insertions(+)
+Thanks!
 
-diff --git a/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch b/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
-new file mode 100644
-index 0000000..070259f
---- /dev/null
-+++ b/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
-@@ -0,0 +1,75 @@
-+From f1e7ec03e26ab6b8ca9b7ec060846a5b706a963d Mon Sep 17 00:00:00 2001
-+From: Frediano Ziglio <fziglio@redhat.com>
-+Date: Mon, 15 May 2017 15:57:28 +0100
-+Subject: [PATCH] reds: Disconnect when receiving overly big
-+ ClientMonitorsConfig
-+
-+Total message size received from the client was unlimited. There is
-+a 2kiB size check on individual agent messages, but the MonitorsConfig
-+message can be split in multiple chunks, and the size of the
-+non-chunked MonitorsConfig message was never checked. This could easily
-+lead to memory exhaustion on the host.
-+
-+Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ server/reds.c | 25 +++++++++++++++++++++++--
-+ 1 file changed, 23 insertions(+), 2 deletions(-)
-+
-+diff --git a/server/reds.c b/server/reds.c
-+index f439a366..7be85fdf 100644
-+--- a/server/reds.c
-++++ b/server/reds.c
-+@@ -993,19 +993,34 @@ static void reds_client_monitors_config_cleanup(void)
-+ static void reds_on_main_agent_monitors_config(
-+         MainChannelClient *mcc, void *message, size_t size)
-+ {
-++    const unsigned int MAX_MONITORS = 256;
-++    const unsigned int MAX_MONITOR_CONFIG_SIZE =
-++       sizeof(VDAgentMonitorsConfig) + MAX_MONITORS * sizeof(VDAgentMonConfig);
-++
-+     VDAgentMessage *msg_header;
-+     VDAgentMonitorsConfig *monitors_config;
-+     RedsClientMonitorsConfig *cmc = &reds->client_monitors_config;
-+ 
-++    // limit size of message sent by the client as this can cause a DoS through
-++    // memory exhaustion, or potentially some integer overflows
-++    if (sizeof(VDAgentMessage) + MAX_MONITOR_CONFIG_SIZE - cmc->buffer_size < size) {
-++        goto overflow;
-++    }
-+     cmc->buffer_size += size;
-+     cmc->buffer = realloc(cmc->buffer, cmc->buffer_size);
-+     spice_assert(cmc->buffer);
-+     cmc->mcc = mcc;
-+     memcpy(cmc->buffer + cmc->buffer_pos, message, size);
-+     cmc->buffer_pos += size;
-++    if (sizeof(VDAgentMessage) > cmc->buffer_size) {
-++        spice_debug("not enough data yet. %d", cmc->buffer_size);
-++        return;
-++    }
-+     msg_header = (VDAgentMessage *)cmc->buffer;
-+-    if (sizeof(VDAgentMessage) > cmc->buffer_size ||
-+-            msg_header->size > cmc->buffer_size - sizeof(VDAgentMessage)) {
-++    if (msg_header->size > MAX_MONITOR_CONFIG_SIZE) {
-++        goto overflow;
-++    }
-++    if (msg_header->size > cmc->buffer_size - sizeof(VDAgentMessage)) {
-+         spice_debug("not enough data yet. %d", cmc->buffer_size);
-+         return;
-+     }
-+@@ -1013,6 +1028,12 @@ static void reds_on_main_agent_monitors_config(
-+     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
-+     red_dispatcher_client_monitors_config(monitors_config);
-+     reds_client_monitors_config_cleanup();
-++    return;
-++
-++overflow:
-++    spice_warning("received invalid MonitorsConfig request from client, disconnecting");
-++    red_channel_client_disconnect(main_channel_client_get_base(mcc));
-++    reds_client_monitors_config_cleanup();
-+ }
-+ 
-+ void reds_on_main_agent_data(MainChannelClient *mcc, void *message, size_t size)
-+-- 
-+2.11.0
-+
-diff --git a/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch b/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
-new file mode 100644
-index 0000000..9874052
---- /dev/null
-+++ b/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
-@@ -0,0 +1,31 @@
-+From ec6229c79abe05d731953df5f7e9a05ec9f6df79 Mon Sep 17 00:00:00 2001
-+From: Frediano Ziglio <fziglio@redhat.com>
-+Date: Mon, 15 May 2017 15:57:28 +0100
-+Subject: [PATCH] reds: Avoid integer overflows handling monitor
-+ configuration
-+
-+Avoid VDAgentMessage::size integer overflows.
-+
-+Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ server/reds.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/server/reds.c b/server/reds.c
-+index 7be85fdf..e1c8c108 100644
-+--- a/server/reds.c
-++++ b/server/reds.c
-+@@ -1024,6 +1024,9 @@ static void reds_on_main_agent_monitors_config(
-+         spice_debug("not enough data yet. %d", cmc->buffer_size);
-+         return;
-+     }
-++    if (msg_header->size < sizeof(VDAgentMonitorsConfig)) {
-++        goto overflow;
-++    }
-+     monitors_config = (VDAgentMonitorsConfig *)(cmc->buffer + sizeof(*msg_header));
-+     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
-+     red_dispatcher_client_monitors_config(monitors_config);
-+-- 
-+2.11.0
-+
-diff --git a/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch b/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
-new file mode 100644
-index 0000000..212645b
---- /dev/null
-+++ b/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
-@@ -0,0 +1,48 @@
-+From a957a90baf2c62d31f3547e56bba7d0e812d2331 Mon Sep 17 00:00:00 2001
-+From: Frediano Ziglio <fziglio@redhat.com>
-+Date: Mon, 15 May 2017 15:57:28 +0100
-+Subject: [PATCH] reds: Avoid buffer overflows handling monitor
-+ configuration
-+
-+It was also possible for a malicious client to set
-+VDAgentMonitorsConfig::num_of_monitors to a number larger
-+than the actual size of VDAgentMOnitorsConfig::monitors.
-+This would lead to buffer overflows, which could allow the guest to
-+read part of the host memory. This might cause write overflows in the
-+host as well, but controlling the content of such buffers seems
-+complicated.
-+
-+Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ server/reds.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/server/reds.c b/server/reds.c
-+index e1c8c108..3a42c375 100644
-+--- a/server/reds.c
-++++ b/server/reds.c
-+@@ -1000,6 +1000,7 @@ static void reds_on_main_agent_monitors_config(
-+     VDAgentMessage *msg_header;
-+     VDAgentMonitorsConfig *monitors_config;
-+     RedsClientMonitorsConfig *cmc = &reds->client_monitors_config;
-++    uint32_t max_monitors;
-+ 
-+     // limit size of message sent by the client as this can cause a DoS through
-+     // memory exhaustion, or potentially some integer overflows
-+@@ -1028,6 +1029,12 @@ static void reds_on_main_agent_monitors_config(
-+         goto overflow;
-+     }
-+     monitors_config = (VDAgentMonitorsConfig *)(cmc->buffer + sizeof(*msg_header));
-++    // limit the monitor number to avoid buffer overflows
-++    max_monitors = (msg_header->size - sizeof(VDAgentMonitorsConfig)) /
-++                   sizeof(VDAgentMonConfig);
-++    if (monitors_config->num_of_monitors > max_monitors) {
-++        goto overflow;
-++    }
-+     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
-+     red_dispatcher_client_monitors_config(monitors_config);
-+     reds_client_monitors_config_cleanup();
-+-- 
-+2.11.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
