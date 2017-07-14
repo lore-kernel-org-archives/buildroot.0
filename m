@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 00:07:39 +0200
-Subject: [Buildroot] [PATCH] strace: Bumps version to 4.18.
-In-Reply-To: <20170714134545.13494-1-didin@synopsys.com>
-References: <20170714134545.13494-1-didin@synopsys.com>
-Message-ID: <20170715000739.400c0f03@windsurf>
+Date: Sat, 15 Jul 2017 00:08:52 +0200
+Subject: [Buildroot] [PATCH 02/15] libwebsockets: support libressl
+In-Reply-To: <20170714181537.17479-2-aduskett@gmail.com>
+References: <20170714181537.17479-1-aduskett@gmail.com>
+ <20170714181537.17479-2-aduskett@gmail.com>
+Message-ID: <20170715000852.6a2f8105@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 14 Jul 2017 16:45:45 +0300, Evgeniy Didin wrote:
-> This patch bumps strace package to 4.18 upstream version.
-> 
-> Important notes:
-> 	1)0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch has been removed 
-> 	 because it is part of 4.18.
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  
-> ---
->  ...os2-arch_regs-fix-nios2_sp_ptr-definition.patch | 43 ----------------------
->  package/strace/strace.hash                         |  4 +-
->  package/strace/strace.mk                           |  2 +-
->  3 files changed, 3 insertions(+), 46 deletions(-)
->  delete mode 100644 package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
+On Fri, 14 Jul 2017 14:15:24 -0400, Adam Duskett wrote:
 
-Applied to master, after slightly tweaking the commit log. Thanks!
+> +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+> +LIBWEBSOCKETS_DEPENDENCIES += libressl host-openssl
+> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
+
+I'm wondering: do we want to mix using libressl on the target, and
+openssl on the host?
+
+I don't necessarily see a big problem with this, but I'm just
+wondering, since it might be a bit confusing.
+
+Arnout, what do you think?
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
