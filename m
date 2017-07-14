@@ -1,99 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 16:24:26 +0200
-Subject: [Buildroot] [PATCH] tiff: add upstream security fix for
-	CVE-2017-10688
-Message-ID: <20170714142426.1041-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 14 Jul 2017 17:32:53 +0200
+Subject: [Buildroot] [PATCH] support/tests: fix ext4 runtime test
+Message-ID: <20170714153253.25551-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-10688 - n LibTIFF 4.0.8, there is a assertion abort in the
-TIFFWriteDirectoryTagCheckedLong8Array function in tif_dirwrite.c.  A
-crafted input will lead to a remote denial of service attack.
+The current test fails because of a legacy option, renamed during the
+recent ext overhaul.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- ..._dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
+ support/testing/tests/fs/test_ext.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch b/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
-new file mode 100644
-index 0000000000..2be989b9e7
---- /dev/null
-+++ b/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
-@@ -0,0 +1,70 @@
-+From 6173a57d39e04d68b139f8c1aa499a24dbe74ba1 Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Fri, 30 Jun 2017 17:29:44 +0000
-+Subject: [PATCH] * libtiff/tif_dirwrite.c: in
-+ TIFFWriteDirectoryTagCheckedXXXX() functions associated with LONG8/SLONG8
-+ data type, replace assertion that the file is BigTIFF, by a non-fatal error.
-+ Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2712 Reported by team
-+ OWL337
-+
-+[Peter: drop ChangeLog modification]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ libtiff/tif_dirwrite.c | 20 ++++++++++++++++----
-+ 1 file changed, 23 insertions(+), 4 deletions(-)
-+
-+diff --git a/libtiff/tif_dirwrite.c b/libtiff/tif_dirwrite.c
-+index 2967da58..8d6686ba 100644
-+--- a/libtiff/tif_dirwrite.c
-++++ b/libtiff/tif_dirwrite.c
-+@@ -2111,7 +2111,10 @@ TIFFWriteDirectoryTagCheckedLong8(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, ui
-+ {
-+ 	uint64 m;
-+ 	assert(sizeof(uint64)==8);
-+-	assert(tif->tif_flags&TIFF_BIGTIFF);
-++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
-++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","LONG8 not allowed for ClassicTIFF");
-++		return(0);
-++	}
-+ 	m=value;
-+ 	if (tif->tif_flags&TIFF_SWAB)
-+ 		TIFFSwabLong8(&m);
-+@@ -2124,7 +2127,10 @@ TIFFWriteDirectoryTagCheckedLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* di
-+ {
-+ 	assert(count<0x20000000);
-+ 	assert(sizeof(uint64)==8);
-+-	assert(tif->tif_flags&TIFF_BIGTIFF);
-++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
-++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","LONG8 not allowed for ClassicTIFF");
-++		return(0);
-++	}
-+ 	if (tif->tif_flags&TIFF_SWAB)
-+ 		TIFFSwabArrayOfLong8(value,count);
-+ 	return(TIFFWriteDirectoryTagData(tif,ndir,dir,tag,TIFF_LONG8,count,count*8,value));
-+@@ -2136,7 +2142,10 @@ TIFFWriteDirectoryTagCheckedSlong8(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, u
-+ {
-+ 	int64 m;
-+ 	assert(sizeof(int64)==8);
-+-	assert(tif->tif_flags&TIFF_BIGTIFF);
-++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
-++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","SLONG8 not allowed for ClassicTIFF");
-++		return(0);
-++	}
-+ 	m=value;
-+ 	if (tif->tif_flags&TIFF_SWAB)
-+ 		TIFFSwabLong8((uint64*)(&m));
-+@@ -2149,7 +2158,10 @@ TIFFWriteDirectoryTagCheckedSlong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* d
-+ {
-+ 	assert(count<0x20000000);
-+ 	assert(sizeof(int64)==8);
-+-	assert(tif->tif_flags&TIFF_BIGTIFF);
-++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
-++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","SLONG8 not allowed for ClassicTIFF");
-++		return(0);
-++	}
-+ 	if (tif->tif_flags&TIFF_SWAB)
-+ 		TIFFSwabArrayOfLong8((uint64*)value,count);
-+ 	return(TIFFWriteDirectoryTagData(tif,ndir,dir,tag,TIFF_SLONG8,count,count*8,value));
-+-- 
-+2.11.0
-+
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+index 34321a3995..0832ba4ce2 100644
+--- a/support/testing/tests/fs/test_ext.py
++++ b/support/testing/tests/fs/test_ext.py
+@@ -97,7 +97,7 @@ class TestExt4(infra.basetest.BRTest):
+ """
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=16384
++BR2_TARGET_ROOTFS_EXT2_SIZE="16384"
+ BR2_TARGET_ROOTFS_EXT2_INODES=3000
+ BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
+ # BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.11.0
