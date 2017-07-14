@@ -1,44 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jul 2017 10:35:18 +0200
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <2a450d8b-10a6-2be9-b7a7-a659a47bffb0@mind.be>
-References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
- <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
- <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
- <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
- <20170713153220.GA3002@scaer>
- <2a450d8b-10a6-2be9-b7a7-a659a47bffb0@mind.be>
-Message-ID: <20170714103518.66ca2b7e@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 14 Jul 2017 10:38:01 +0200
+Subject: [Buildroot] [PATCH] core/legal-info: use hash file from version
+	sub-dir
+In-Reply-To: <c5635e76-c4fe-bf03-1215-a77cca5fa143@microchip.com>
+References: <20170713221924.12021-1-yann.morin.1998@free.fr>
+ <c5635e76-c4fe-bf03-1215-a77cca5fa143@microchip.com>
+Message-ID: <20170714083801.GA3373@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Joshua, All,
 
-On Fri, 14 Jul 2017 00:46:50 +0200, Arnout Vandecappelle wrote:
+On 2017-07-13 16:32 -0700, Joshua Henderson spake thusly:
+> On 07/13/2017 03:19 PM, Yann E. MORIN wrote:
+> 
+> > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> > index accf48c464..f285395267 100644
+> > --- a/package/pkg-utils.mk
+> > +++ b/package/pkg-utils.mk
+> > @@ -86,9 +86,12 @@ endef
+> >  define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+> >  	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
+> >  	{ \
+> > -		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
+> > -		ret=$${?}; \
+> > -		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
+> > +		if [ -d $(3)/$($(PKG)_VERSION) ]; then \
+> > +			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
+> > +		else \
+> > +			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
+> > +		fi; \
+> > +		case $${?} in (0|3) ;; (*) exit 1;; esac; \
+> >  	} && \
+> >  	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+> >  endef
+> > 
+> 
+> I think this has unintended side effects.  If there is already a $(PKG)_VERSION directory for patches, 
+> it will look for the hash file there even if there are no hash file differences, which results in missing
+> license file hash.
 
->  Or we could look for pkg-$(VERSION).hash and fall back to pkg.hash if that
-> doesn't exist. But it does complicate the code somewhat.
+This is the intended behaviour, yes: if there is a version choice, then
+we _want_ the license hashes to be per version, even if they are the
+same across versions. We do not want them in the 'main' hash file.
 
-On my side, I continue to think that mixing in the same .hash file the
-hashes for download artefacts (tarballs, patches, etc.) and hashes for
-files that are extracted from the tarball is very confusing.
+Yes, this means duplicated entries.
 
-Shouldn't we have a separate hash files for the license files, and have
-this file in the per-version subdirectory ?
+I was also wondering if we should also move the hashes for the
+downlaoded files to be per-version as well, to keep things together.
 
-There's admittedly a down-side to this: for most packages, we would
-have one hash file containing a single hash for the tarball, and
-another hash file containing a single hash for the single license file.
-Maybe that's a bit too much.
+Ie., we would have something like:
 
-Best regards,
+    package/qt5/qt5base/Config.in
+    package/qt5/qt5base/qt5base.mk
+    package/qt5/qt5base/5.6.2/*.patch
+    package/qt5/qt5base/5.6.2/qt5base.hash
+    package/qt5/qt5base/5.8.0/*.patch
+    package/qt5/qt5base/5.8.0/qt5base.hash
 
-Thomas
+
+
+> I believe it would work if you test -f on the actual .hash file instead of just the directory.
+
+Again, if the directory exists, I intended that the main hash file was
+not used at all.
+
+>  But, do note
+> that if there are multiple license files per package, and only one of them is different, this still results
+> in putting all hashes including duplicate ones in separate hash files.
+
+Yes, this is what I had in mind in this case.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
