@@ -1,29 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 15:17:24 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] nodejs: security bump to version
-	6.11.1
-In-Reply-To: <20170713212631.22939-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 13 Jul 2017 23:26:31 +0200")
-References: <20170713212631.22939-1-peter@korsgaard.com>
-Message-ID: <87379zb1jv.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Jul 2017 15:18:05 +0200
+Subject: [Buildroot] /etc//init.d init scripts in buildroot
+In-Reply-To: <87shhzb3d1.fsf@dell.be.48ers.dk>
+References: <CALtfCQZAis0fX+J6NWTX+u=ZJB-0ZKoKgkBcteAJU4f+c46BJA@mail.gmail.com>
+ <87shhzb3d1.fsf@dell.be.48ers.dk>
+Message-ID: <20170714151805.20514430@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > Fixes CVE-2017-1000381 - The c-ares function ares_parse_naptr_reply(), which
- > is used for parsing NAPTR responses, could be triggered to read memory
- > outside of the given input buffer if the passed in DNS response packet was
- > crafted in a particular way.  This patch checks that there is enough data
- > for the required elements of an NAPTR record (2 int16, 3 bytes for string
- > lengths) before processing a record.
+On Fri, 14 Jul 2017 14:38:18 +0200, Peter Korsgaard wrote:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> If this is not good enough then you need to handle the gpio in a kernel
+> driver instead by registering a reboot notifier.
 
-Committed to 2017.02.x, thanks.
+What about using the gpio-poweroff driver, which already exists in the
+kernel ?
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
