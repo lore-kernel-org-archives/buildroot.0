@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 14 Jul 2017 14:15:30 -0400
-Subject: [Buildroot] [PATCH 08/15] snmppp: support libressl
+Date: Fri, 14 Jul 2017 14:15:32 -0400
+Subject: [Buildroot] [PATCH 10/15] netsnmp: support libressl
 In-Reply-To: <20170714181537.17479-1-aduskett@gmail.com>
 References: <20170714181537.17479-1-aduskett@gmail.com>
-Message-ID: <20170714181537.17479-8-aduskett@gmail.com>
+Message-ID: <20170714181537.17479-10-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/snmppp/Config.in | 2 +-
- package/snmppp/snmppp.mk | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/netsnmp/netsnmp.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
-index 8d284673b..fb3119177 100644
---- a/package/snmppp/Config.in
-+++ b/package/snmppp/Config.in
-@@ -21,7 +21,7 @@ config BR2_PACKAGE_SNMPPP_LOGGING
- config BR2_PACKAGE_SNMPPP_SNMPV3
- 	bool "enable SNMPv3"
- 	default y
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
- 	help
- 	  Enable optional support for SNMP++. This selects OpenSSL.
- 
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 67410d9e4..b333af6e7 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -15,7 +15,12 @@ SNMPPP_LICENSE_FILES = src/v3.cpp
- 
- ifeq ($(BR2_PACKAGE_SNMPPP_SNMPV3),y)
- SNMPPP_CONF_OPTS += --enable-snmpv3
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SNMPPP_DEPENDENCIES += openssl
-+endif
-+ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+SNMPPP_DEPENDENCIES += libressl
-+endif
- else
- SNMPPP_CONF_OPTS += --disable-snmpv3
- endif
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index abcf63d56..405c28781 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -60,6 +60,13 @@ NETSNMP_CONF_OPTS += \
+ 	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
+ 	--with-security-modules="tsm,usm" \
+ 	--with-transports="DTLSUDP,TLSTCP"
++# LibreSSL
++else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++NETSNMP_DEPENDENCIES += libressl
++NETSNMP_CONF_OPTS += \
++	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
++	--with-security-modules="tsm,usm" \
++	--with-transports="DTLSUDP,TLSTCP"
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # openssl uses zlib, so we need to explicitly link with it when static
+ NETSNMP_CONF_ENV += LIBS=-lz
 -- 
 2.13.0
