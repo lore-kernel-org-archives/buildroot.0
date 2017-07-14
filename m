@@ -1,65 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 15:14:39 +0200
-Subject: [Buildroot] [git commit] python-simplejson: bump to version 3.11.1
-Message-ID: <20170714131104.63E7E7F9CE@busybox.osuosl.org>
+Date: Fri, 14 Jul 2017 15:15:22 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] nodejs: security bump to
+	version 6.11.1
+Message-ID: <20170714131309.B8451821B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45c468f6a5980c59252d2e1025f39eee9cf76aa8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=3065f3cf3953262301375ebc6e955880a94aecf2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Remove Python2 only dependency as the package is compatible
-with Python3.
+Fixes CVE-2017-1000381 - The c-ares function ares_parse_naptr_reply(), which
+is used for parsing NAPTR responses, could be triggered to read memory
+outside of the given input buffer if the passed in DNS response packet was
+crafted in a particular way.  This patch checks that there is enough data
+for the required elements of an NAPTR record (2 int16, 3 bytes for string
+lengths) before processing a record.
 
-Add a dot at the end of the help text.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-simplejson/Config.in              | 3 +--
- package/python-simplejson/python-simplejson.hash | 4 ++--
- package/python-simplejson/python-simplejson.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ .../{6.11.0 => 6.11.1}/0001-gyp-force-link-command-to-use-CXX.patch   | 0
+ .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
+ .../0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch       | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 5 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-simplejson/Config.in b/package/python-simplejson/Config.in
-index be0ee8f..c2fd917 100644
---- a/package/python-simplejson/Config.in
-+++ b/package/python-simplejson/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_SIMPLEJSON
- 	bool "python-simplejson"
--	depends on BR2_PACKAGE_PYTHON
- 	help
--	  Simple, fast, extensible JSON encoder/decoder for Python
-+	  Simple, fast, extensible JSON encoder/decoder for Python.
+diff --git a/package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.11.1/0001-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/6.11.1/0001-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.11.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+similarity index 100%
+rename from package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+rename to package/nodejs/6.11.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+diff --git a/package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch b/package/nodejs/6.11.1/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+similarity index 100%
+rename from package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+rename to package/nodejs/6.11.1/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index be20af5..31dcfb6 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
- 	  https://pypi.python.org/pypi/simplejson/
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index 0f7147c..f2a5fce 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/simplejson/json, sha256 locally computed
--md5 426a9631d22851a7a970b1a677368b15 simplejson-3.10.0.tar.gz
--sha256 953be622e88323c6f43fad61ffd05bebe73b9fd9863a46d68b052d2aa7d71ce2 simplejson-3.10.0.tar.gz
-+md5 6e2f1bd5fb0a926facf5d89d217a7183 simplejson-3.11.1.tar.gz
-+sha256 01a22d49ddd9a168b136f26cac87d9a335660ce07aa5c630b8e3607d6f4325e7 simplejson-3.11.1.tar.gz
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 3bf2dda..afc77fe 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "6.11.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "6.11.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.48"
  
--PYTHON_SIMPLEJSON_VERSION = 3.10.0
-+PYTHON_SIMPLEJSON_VERSION = 3.11.1
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/40/ad/52c1f3a562df3b210e8f165e1aa243a178c454ead65476a39fa3ce1847b6
-+PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/08/48/c97b668d6da7d7bebe7ea1817a6f76394b0ec959cb04214ca833c34359df
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
+ config BR2_PACKAGE_NODEJS_NPM
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index ac010ab..2dbbdc7 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
+ sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v6.11.0/SHASUMS256.txt
+-sha256  02ba35391edea2b294c736489af01954ce6e6c39d318f4423ae6617c69ef0a51  node-v6.11.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v6.11.1/SHASUMS256.txt
++sha256  6f6655b85919aa54cb045a6d69a226849802fcc26491d0db4ce59873e41cc2b8  node-v6.11.1.tar.xz
