@@ -1,60 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 11:20:32 +0200
-Subject: [Buildroot] [PATCH] nginx-upload: bump version to fix build against
-	nginx-1.12.x
-Message-ID: <20170714092032.18788-1-peter@korsgaard.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 14 Jul 2017 12:14:18 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix build
+Message-ID: <20170714101418.4529-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add a patch to nginx configuration system fixing misdetected unneeded PCRE
+dependency.
+
+This patch has been submitted upstream [1].
+
 Fixes:
-http://autobuild.buildroot.net/results/9ec/9ecf714667736bf61f643ad55588d3d6ebdde603/
-http://autobuild.buildroot.net/results/cea/cea64e30e98543e10c8819f6337babfec6d7ac0f/
+  http://autobuild.buildroot.net/results/bc7/bc7458b97a88785653845afd30fe9d5f3a69905b/build-end.log
 
-Bump to the latest commit on the 2.255 branch, which contains pull request
-88 (work with latest nginx versions):
+[1] http://mailman.nginx.org/pipermail/nginx-devel/2017-July/010308.html
 
-https://github.com/vkholodkov/nginx-upload-module/pull/88
-
-git shortlog aba1e3f34c754551f4f49e572bc86863d535609d..
-Anton (1):
-      Add files via upload
-
-Valery Kholodkov (5):
-      Added tag for version 2.0.8
-      Recreated tag for version 2.0.8
-      Backported to nginx 0.5.37 by Anthony Kholodkov
-      Updated Changelog
-      Merge pull request #88 from antonbarinov/2.255
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/nginx-upload/nginx-upload.hash | 2 +-
- package/nginx-upload/nginx-upload.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...nf-fix-PCRE-condition-WRT-the-http-and-ht.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch
 
-diff --git a/package/nginx-upload/nginx-upload.hash b/package/nginx-upload/nginx-upload.hash
-index 4fc4347361..3a8dfeddf3 100644
---- a/package/nginx-upload/nginx-upload.hash
-+++ b/package/nginx-upload/nginx-upload.hash
-@@ -1,2 +1,2 @@
- #Locally Computed:
--sha256 8cd1d9d968ffba807de2e546ea9cad5e1ae294ec60b4927b2d60a98bdb4a1144  nginx-upload-aba1e3f34c754551f4f49e572bc86863d535609d.tar.gz
-+sha256 5f1c3c2b9858b9cacd877a0f2df9b9263734e9cef8d837b73f0e659c0f7fde2d  nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3.tar.gz
-diff --git a/package/nginx-upload/nginx-upload.mk b/package/nginx-upload/nginx-upload.mk
-index ef67995ad8..738542571e 100644
---- a/package/nginx-upload/nginx-upload.mk
-+++ b/package/nginx-upload/nginx-upload.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_UPLOAD_VERSION = aba1e3f34c754551f4f49e572bc86863d535609d
-+NGINX_UPLOAD_VERSION = 70bee48f1811eecd255ed094ce9f0fb560c390c3
- NGINX_UPLOAD_SITE = $(call github,vkholodkov,nginx-upload-module,$(NGINX_UPLOAD_VERSION))
- NGINX_UPLOAD_LICENSE = BSD-3-Clause
- NGINX_UPLOAD_LICENSE_FILES = LICENCE
+diff --git a/package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch b/package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch
+new file mode 100644
+index 0000000000..08456511dc
+--- /dev/null
++++ b/package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch
+@@ -0,0 +1,33 @@
++From 9668f0d5ecd2382fd36b7ff6a3a29abd04f6533f Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 14 Jul 2017 11:50:08 +0200
++Subject: [PATCH] auto/lib/conf: fix PCRE condition WRT the http and
++ http_rewrite options
++
++http_rewrite module cannot be selected when http server is disabled, so
++fix the PCRE check condition to avoid irrelevant check failure.
++
++Fixes:
++  http://autobuild.buildroot.net/results/bc7/bc7458b97a88785653845afd30fe9d5f3a69905b/build-end.log
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ auto/lib/conf | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/auto/lib/conf b/auto/lib/conf
++index 0b8545a3..2c7af104 100644
++--- a/auto/lib/conf
+++++ b/auto/lib/conf
++@@ -7,7 +7,7 @@ if [ $USE_PCRE = YES -o $PCRE != NONE ]; then
++     . auto/lib/pcre/conf
++ 
++ else
++-    if [ $USE_PCRE = DISABLED -a $HTTP_REWRITE = YES ]; then
+++    if [ $USE_PCRE = DISABLED -a $HTTP = YES -a $HTTP_REWRITE = YES ]; then
++ 
++ cat << END
++ 
++-- 
++2.13.2
++
 -- 
-2.11.0
+2.13.2
