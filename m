@@ -1,69 +1,98 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Fri, 14 Jul 2017 12:16:36 +0200
-Subject: [Buildroot] /etc//init.d init scripts in buildroot
-Message-ID: <CALtfCQZAis0fX+J6NWTX+u=ZJB-0ZKoKgkBcteAJU4f+c46BJA@mail.gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Fri, 14 Jul 2017 12:58:54 +0200
+Subject: [Buildroot] [PATCH] librtlsdr: backport pull request to fix build
+	with newer compilers
+Message-ID: <20170714105854.17053-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-I'm trying to use init scripts from /etc/init.d to activate one gpio just
-before to halt my HW platform (a raspberry Pi): S00gpioff
+Fix:
+http://autobuild.buildroot.net/results/ece/ece557db739aaad9b53130a8ecb4d98f6f67aedf
 
-I've created a script like this:
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ ...x-builds-with-newer-compilers-C-standards.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
 
-#!/bin/sh
-#
-# S00gpioff
-#
-
-GPIO_CMD_OFF=13
-
-case "$1" in
-start)
-        echo $GPIO_CMD_OFF > /sys/class/gpio/export
-        ;;
-stop)
-        echo "Activated CMD OFF output"
-        echo 1 > /sys/class/gpio$GPIO_CMD_OFF/value
-        ;;
-*)
-exit 1
-;;
-
-esac
-
-The problem is I need to activate the gpio just before halt:
-
-# halt
-# Stopping dropbear sshd: OK
-Stopping network...[  419.714234] smsc95xx 1-1.1:1.0 eth0: hardware isn't
-capable of remote wakeup
-ifdown: interface wlan0 not configured
-Saving random seed... done.
-Stopping logging: OK
-Activated CMD OFF output <--------------------------------------------
-umount: tmpfs busy - remounted read-only
-umount: devpts busy - remounted read-only
-umount: devtmpfs busy - remounted read-only
-[  420.807391] EXT4-fs (mmcblk0p2): re-mounted. Opts: (null)
-The system is g[  420.816829] watchdog watchdog0: Watchdog timer stopped
-oing down NOW!
-Sent SIGTERM to all processes
-Sent SIGKILL to all processes
-Requesting system halt
-[  422.818879] watchdog watchdog0: Watchdog timer stopped
-[  422.824050] reboot: System halted
-
-Does anyone how to delay a bit the activation of the GPIO?
-
-
-Best regards.
-
-Oscar Gomez Fuente.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170714/13266866/attachment.html>
+diff --git a/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
+new file mode 100644
+index 0000000000..b663d08b9f
+--- /dev/null
++++ b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
+@@ -0,0 +1,68 @@
++From ea6a86d8e792430faa3a8161ee99f2bc392875d1 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@chromium.org>
++Date: Fri, 3 Feb 2017 15:44:18 -1000
++Subject: [PATCH] fix builds with newer compilers & C standards
++
++The meaning of "inline" has changed when "static" is not used.
++Since none of these functions are used outside of their respective
++files, mark them as static to avoid build errors where funcs are
++not inlined (based on compiler flags too).
++
++Upstream status: pull request #38
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ src/rtl_adsb.c  | 8 ++++----
++ src/rtl_power.c | 2 +-
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/rtl_adsb.c b/src/rtl_adsb.c
++index e611e78..a3bfa7f 100644
++--- a/src/rtl_adsb.c
+++++ b/src/rtl_adsb.c
++@@ -182,7 +182,7 @@ int magnitute(uint8_t *buf, int len)
++ 	return len/2;
++ }
++ 
++-inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
+++static inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
++ /* takes 4 consecutive real samples, return 0 or 1, BADSAMPLE on error */
++ {
++ 	int bit, bit_p;
++@@ -223,17 +223,17 @@ inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d
++ 	return BADSAMPLE;
++ }
++ 
++-inline uint16_t min16(uint16_t a, uint16_t b)
+++static inline uint16_t min16(uint16_t a, uint16_t b)
++ {
++ 	return a<b ? a : b;
++ }
++ 
++-inline uint16_t max16(uint16_t a, uint16_t b)
+++static inline uint16_t max16(uint16_t a, uint16_t b)
++ {
++ 	return a>b ? a : b;
++ }
++ 
++-inline int preamble(uint16_t *buf, int i)
+++static inline int preamble(uint16_t *buf, int i)
++ /* returns 0/1 for preamble at index i */
++ {
++ 	int i2;
++diff --git a/src/rtl_power.c b/src/rtl_power.c
++index aa7a138..a7a43bb 100644
++--- a/src/rtl_power.c
+++++ b/src/rtl_power.c
++@@ -249,7 +249,7 @@ void sine_table(int size)
++ 	}
++ }
++ 
++-inline int16_t FIX_MPY(int16_t a, int16_t b)
+++static inline int16_t FIX_MPY(int16_t a, int16_t b)
++ /* fixed point multiply and scale */
++ {
++ 	int c = ((int)a * (int)b) >> 14;
++-- 
++2.13.0
++
+-- 
+2.13.0
