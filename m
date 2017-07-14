@@ -1,92 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Jul 2017 10:41:31 +0200
-Subject: [Buildroot] [PATCH] core/legal-info: use hash file from version
-	sub-dir
-In-Reply-To: <ebb72a4e-7e47-1d4a-9a69-1fe05a1e3ec8@lucaceresoli.net>
-References: <20170713221924.12021-1-yann.morin.1998@free.fr>
- <c5635e76-c4fe-bf03-1215-a77cca5fa143@microchip.com>
- <ebb72a4e-7e47-1d4a-9a69-1fe05a1e3ec8@lucaceresoli.net>
-Message-ID: <20170714084131.GB3373@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Jul 2017 11:08:12 +0200
+Subject: [Buildroot] [PATCH] nginx: security bump to version 1.12.1
+Message-ID: <20170714090812.18154-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Fixes CVE-2017-7529 - Nginx versions since 0.5.6 up to and including 1.13.2
+are vulnerable to integer overflow vulnerability in nginx range filter
+module resulting into leak of potentially sensitive information triggered by
+specially crafted request.
 
-On 2017-07-14 09:39 +0200, Luca Ceresoli spake thusly:
-> On 14/07/2017 01:32, Joshua Henderson wrote:
-> > Yann,
-> > 
-> > On 07/13/2017 03:19 PM, Yann E. MORIN wrote:
-> > 
-> >> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> >> index accf48c464..f285395267 100644
-> >> --- a/package/pkg-utils.mk
-> >> +++ b/package/pkg-utils.mk
-> >> @@ -86,9 +86,12 @@ endef
-> >>  define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
-> >>  	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
-> >>  	{ \
-> >> -		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
-> >> -		ret=$${?}; \
-> >> -		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
-> >> +		if [ -d $(3)/$($(PKG)_VERSION) ]; then \
-> >> +			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
-> >> +		else \
-> >> +			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
-> >> +		fi; \
-> >> +		case $${?} in (0|3) ;; (*) exit 1;; esac; \
-> >>  	} && \
-> >>  	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
-> >>  endef
-> >>
-> > 
-> > I think this has unintended side effects.  If there is already a $(PKG)_VERSION directory for patches, 
-> > it will look for the hash file there even if there are no hash file differences, which results in missing
-> > license file hash.
-> > 
-> > I believe it would work if you test -f on the actual .hash file instead of just the directory.  But, do note
-> > that if there are multiple license files per package, and only one of them is different, this still results
-> > in putting all hashes including duplicate ones in separate hash files.
-> 
-> I agree with Josh here.
-> 
-> A cleaner solution would be to put only version-bound hashes in
-> version-named subdirs, and leave all other hashes in the base directory.
-> This would remove all duplication and avoid unintended disabling of all
-> hashes when one <version>/*.hash file is created, which would happen
-> only for those versions that actually have that file.
+For more details, see:
+http://mailman.nginx.org/pipermail/nginx-announce/2017/000200.html
 
-See my reply to Joshua: I would favour the opposite, in fact, to move
-all hashes to the per-version directory, even if there is duplication.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> I think this can be achieved in a simple way by cat-ing together
-> $(3)/$(1).hash and $(3)/$($(PKG)_VERSION)/$(1).hash in a temporary file
-> and feed that to check-hash. Additionally if check-hash were able to
-> read the hashes from stdin, no temporary file would be even needed, but
-> this is not necessarily a good idea.
-
-cat-ing to a temporary file will bneed that we arrange for a trickier
-code, because we need a unique filename for when we want to support
-TLPB.
-
-As for stdin, this would be doable quite easily, we just need to
-recognise '-' as stdin, like almost all of the rest of the world. ;-)
-
-But still, my preference would be to move hashes to the per-version
-directory. All hashes, not just license ones.
-
-In the meantime, I've marked the patch as 'changes requested'.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index ffc5a279c1..22e4007b5f 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	b4222e26fdb620a8d3c3a3a8b955e08b713672e1bc5198d1e4f462308a795b30	nginx-1.12.0.tar.gz
++sha256	8793bf426485a30f91021b6b945a9fd8a84d87d17b566562c3797aba8fac76fb	nginx-1.12.1.tar.gz
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 54126ab912..ceb80229d3 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.12.0
++NGINX_VERSION = 1.12.1
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
