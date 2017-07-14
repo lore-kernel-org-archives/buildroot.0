@@ -1,33 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jul 2017 19:36:42 +0200
-Subject: [Buildroot] [PATCH] tiff: add upstream security fix for
- CVE-2017-10688
-In-Reply-To: <20170714142426.1041-1-peter@korsgaard.com>
-References: <20170714142426.1041-1-peter@korsgaard.com>
-Message-ID: <20170714193642.3cbcdcf6@windsurf>
+Date: Fri, 14 Jul 2017 19:37:14 +0200
+Subject: [Buildroot] [git commit] support/tests: fix ext4 runtime test
+Message-ID: <20170714173307.8D2618214E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3268968cccb5caa91849089a5ad3d15bbec59580
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 14 Jul 2017 16:24:26 +0200, Peter Korsgaard wrote:
-> Fixes CVE-2017-10688 - n LibTIFF 4.0.8, there is a assertion abort in the
-> TIFFWriteDirectoryTagCheckedLong8Array function in tif_dirwrite.c.  A
-> crafted input will lead to a remote denial of service attack.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ..._dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch | 70 ++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
+The current test fails because of a legacy option, renamed during the
+recent ext overhaul.
 
-Applied to master, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/tests/fs/test_ext.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+index 34321a3..0832ba4 100644
+--- a/support/testing/tests/fs/test_ext.py
++++ b/support/testing/tests/fs/test_ext.py
+@@ -97,7 +97,7 @@ class TestExt4(infra.basetest.BRTest):
+ """
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=16384
++BR2_TARGET_ROOTFS_EXT2_SIZE="16384"
+ BR2_TARGET_ROOTFS_EXT2_INODES=3000
+ BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
+ # BR2_TARGET_ROOTFS_TAR is not set
