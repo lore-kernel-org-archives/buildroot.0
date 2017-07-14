@@ -1,142 +1,389 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 14 Jul 2017 10:18:16 +0200
-Subject: [Buildroot] [PATCH 1/3] python-greenlet: new package
-In-Reply-To: <CALFoz4ZVXxuwT_sn5EW0PpBvrVbeXmzhHOKLQ0LTD3J6KKoUCw@mail.gmail.com>
-References: <20170714053800.20007-1-alexey.roslyakov@gmail.com>
- <CAGm1_kv07_ngieu_PATD3NvruWXNCHJOVSXjFXqA4hFfF6qd9A@mail.gmail.com>
- <CALFoz4ZVXxuwT_sn5EW0PpBvrVbeXmzhHOKLQ0LTD3J6KKoUCw@mail.gmail.com>
-Message-ID: <CAGm1_ktbQfVEG24N8yCxzPQY17wgRAi7H+FQ87+kHoJs5VMBqQ@mail.gmail.com>
+From: GitLab <gitlab@mg.gitlab.com>
+Date: Fri, 14 Jul 2017 08:22:24 +0000
+Subject: [Buildroot] buildroot | Pipeline #9867484 has failed for master |
+	815d78f8
+Message-ID: <59687f4017e44_6f293f8e6a5607d8717d4@sidekiq-asap04.mail>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 14, 2017 at 9:33 AM, Alexey Roslyakov
-<alexey.roslyakov@gmail.com> wrote:
-> Hi, Yegor
->
-> Unbelievable, how I could miss it...
-> Thank you indeed.
+Your pipeline has failed.
 
-scanpypi is very helpful. Unfortunately it has one big limitation: it
-fails, when setup.py uses main() routine :-(
-Still have no idea how to solve this.
+Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
+Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
 
-Yegor
+Commit: 815d78f8 ( https://gitlab.com/buildroot.org/buildroot/commit/815d78f8ba78eda7bd9f119d9ce2739bf0ae7af8 )
+Commit Message: fs/squashfs: cleanup if-else cascade
 
-> On 14 July 2017 at 13:44, Yegor Yefremov <yegorslists@googlemail.com> wrote:
->>
->> Hi Alexey,
->>
->> looks like you didn't use:
->>
->> ./utils/scanpypi greenlet
->>
->> On Fri, Jul 14, 2017 at 7:37 AM, Alexey Roslyakov
->> <alexey.roslyakov@gmail.com> wrote:
->> > Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
->> > ---
->>
->> Please also add an entry to teh DEVELOPERS file.
->>
->> >  package/Config.in                            |  1 +
->> >  package/python-greenlet/Config.in            |  6 ++++++
->> >  package/python-greenlet/python-greenlet.hash |  3 +++
->> >  package/python-greenlet/python-greenlet.mk   | 14 ++++++++++++++
->> >  4 files changed, 24 insertions(+)
->> >  create mode 100644 package/python-greenlet/Config.in
->> >  create mode 100644 package/python-greenlet/python-greenlet.hash
->> >  create mode 100644 package/python-greenlet/python-greenlet.mk
->> >
->> > diff --git a/package/Config.in b/package/Config.in
->> > index b48ab5e0dd..e09327168b 100644
->> > --- a/package/Config.in
->> > +++ b/package/Config.in
->> > @@ -738,6 +738,7 @@ menu "External python modules"
->> >         source "package/python-flup/Config.in"
->> >         source "package/python-futures/Config.in"
->> >         source "package/python-gobject/Config.in"
->> > +       source "package/python-greenlet/Config.in"
->> >         source "package/python-gunicorn/Config.in"
->> >         source "package/python-html5lib/Config.in"
->> >         source "package/python-httplib2/Config.in"
->> > diff --git a/package/python-greenlet/Config.in
->> > b/package/python-greenlet/Config.in
->> > new file mode 100644
->> > index 0000000000..1b24141d5e
->> > --- /dev/null
->> > +++ b/package/python-greenlet/Config.in
->> > @@ -0,0 +1,6 @@
->> > +config BR2_PACKAGE_PYTHON_GREENLET
->> > +       bool "python-greenlet"
->> > +       help
->> > +         Lightweight in-process concurrent programming for Python
->>
->> '.' is missing at the end of the help text.
->>
->> > +
->> > +         https://pypi.python.org/pypi/greenlet/
->> > diff --git a/package/python-greenlet/python-greenlet.hash
->> > b/package/python-greenlet/python-greenlet.hash
->> > new file mode 100644
->> > index 0000000000..0ad9e41025
->> > --- /dev/null
->> > +++ b/package/python-greenlet/python-greenlet.hash
->> > @@ -0,0 +1,3 @@
->> > +# md5 from
->> > https://pypi.python.org/pypi?:action=show_md5&digest=e8637647d58a26c4a1f51ca393e53c00,
->> > sha256 locally computed
->>
->> comment should look like this:
->>
->> # md5 from https://pypi.python.org/pypi/greenlet/json, sha256 locally
->> computed
->>
->> > +md5    e8637647d58a26c4a1f51ca393e53c00 greenlet-0.4.12.tar.gz
->> > +sha256 e4c99c6010a5d153d481fdaf63b8a0782825c0721506d880403a3b9b82ae347e
->> > greenlet-0.4.12.tar.gz
->> > diff --git a/package/python-greenlet/python-greenlet.mk
->> > b/package/python-greenlet/python-greenlet.mk
->> > new file mode 100644
->> > index 0000000000..b5b234c7c2
->> > --- /dev/null
->> > +++ b/package/python-greenlet/python-greenlet.mk
->> > @@ -0,0 +1,14 @@
->> >
->> > +################################################################################
->> > +#
->> > +# python-greenlet
->> > +#
->> >
->> > +################################################################################
->> > +
->> > +PYTHON_GREENLET_VERSION = 0.4.12
->> > +PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
->> > +PYTHON_GREENLET_SITE =
->> > https://pypi.python.org/packages/be/76/82af375d98724054b7e273b5d9369346937324f9bcc20980b45b068ef0b0
->> > +PYTHON_GREENLET_LICENSE = MIT
->> > +PYTHON_GREENLET_LICENSE_FILES = LICENSE
->> > +PYTHON_GREENLET_SETUP_TYPE = distutils
->>
->> use setuptools as setup type
->>
->> Yegor
->>
->> > +
->> > +$(eval $(python-package))
->> > --
->> > 2.13.0
->> >
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
->
-> --
-> With best regards,
->   Alexey Roslyakov
-> Email: alexey.roslyakov at gmail.com
+And add m...
+Commit Author: Yann E. MORIN ( https://gitlab.com/ymorin )
+Committed by: Peter Korsgaard ( https://gitlab.com/jacmet )
+
+Pipeline #9867484 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9867484 ) triggered by Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
+had 24 failed builds.
+
+Job #22454423 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454423 )
+
+Stage: test
+Name: beaglebone_qt5_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-52c4aa7cdb93d61f8008f380135beaf7b8fa6593/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454423 responseStatus[0;m=201 Created token[0;m=rUpDxsyj
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454428 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454428 )
+
+Stage: test
+Name: ci40_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-custom/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 2 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454428 responseStatus[0;m=201 Created token[0;m=YB6itdx-
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454380 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454380 )
+
+Stage: test
+Name: armadeus_apf9328_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.18.29/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454380 responseStatus[0;m=201 Created token[0;m=e82shyBM
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454475 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454475 )
+
+Stage: test
+Name: olimex_a20_olinuxino_lime2_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.1.4/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 5 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454475 responseStatus[0;m=201 Created token[0;m=HbfPMZuC
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454436 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454436 )
+
+Stage: test
+Name: firefly_rk3288_demo_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2016.01/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454436 responseStatus[0;m=201 Created token[0;m=_DqhHMwN
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454536 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454536 )
+
+Stage: test
+Name: telit_evk_pro3_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.9.11/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 2 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454536 responseStatus[0;m=201 Created token[0;m=DcyGWK7v
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454467 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454467 )
+
+Stage: test
+Name: nanopi_m1_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2017.07-rc1/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454467 responseStatus[0;m=201 Created token[0;m=3Z34WmPB
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454542 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454542 )
+
+Stage: test
+Name: ts4900_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-70d1e85a22879e27cc9e36384438d5a9793e44b0/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454542 responseStatus[0;m=201 Created token[0;m=YRxFphUX
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454369 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454369 )
+
+Stage: test
+Name: arcturus_ucp1020_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.1.27/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 2 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454369 responseStatus[0;m=201 Created token[0;m=6JxNBLrB
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454538 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454538 )
+
+Stage: test
+Name: toradex_apalis_imx6_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-1ef4a29e8cea0239411dde64f9617ad76248fd02/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454538 responseStatus[0;m=201 Created token[0;m=Q5dcrryo
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454449 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454449 )
+
+Stage: test
+Name: galileo_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-0feded4f96ddca9816c6c1b8a4780cb4065747b9/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 7 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454449 responseStatus[0;m=201 Created token[0;m=QefoZb73
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454478 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454478 )
+
+Stage: test
+Name: olimex_a20_olinuxino_micro_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2016.01/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454478 responseStatus[0;m=201 Created token[0;m=5xfNBh5p
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454427 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454427 )
+
+Stage: test
+Name: ci20_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uclibc-1.0.25/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454427 responseStatus[0;m=201 Created token[0;m=5Sy9xjzS
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454523 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454523 )
+
+Stage: test
+Name: riotboard_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2015.10/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454523 responseStatus[0;m=201 Created token[0;m=isRXCFQ9
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454458 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454458 )
+
+Stage: test
+Name: linksprite_pcduino_defconfig
+Trace: make: *** [target-post-image] Error 139
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 9 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454458 responseStatus[0;m=201 Created token[0;m=DsesYNzz
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454544 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454544 )
+
+Stage: test
+Name: ts5x00_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.17.8/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 3 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454544 responseStatus[0;m=201 Created token[0;m=UsWwfB7a
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454377 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454377 )
+
+Stage: test
+Name: armadeus_apf27_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.18.6/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 2 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454377 responseStatus[0;m=201 Created token[0;m=6yxax8Ac
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454435 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454435 )
+
+Stage: test
+Name: firefly_rk3288_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2016.01/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454435 responseStatus[0;m=201 Created token[0;m=srAARed3
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454447 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454447 )
+
+Stage: test
+Name: freescale_mpc8315erdb_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.5.3/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454447 responseStatus[0;m=201 Created token[0;m=2H-7yMCt
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454448 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454448 )
+
+Stage: test
+Name: freescale_p1010rdb_pa_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.1.4/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454448 responseStatus[0;m=201 Created token[0;m=nkJN5sft
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454473 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454473 )
+
+Stage: test
+Name: odroidc2_defconfig
+Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-eb5d2d16fd45f52ec49e9b4ff9d562630c08e61c/.stamp_built] Error 2
+[32;1m$ exit 1[0;m
+[32;1mUploading artifacts...[0;m
+build.log: found 1 matching files                 [0;m 
+output/images/: found 1 matching files            [0;m 
+output/build/build-time.log: found 1 matching files[0;m 
+output/build/packages-file-list.txt: found 1 matching files[0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454473 responseStatus[0;m=201 Created token[0;m=1vMjedAr
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454576 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454576 )
+
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubInternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 129.351s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454576 responseStatus[0;m=201 Created token[0;m=b6aFYP_Y
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454575 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454575 )
+
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubExternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 85.605s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454575 responseStatus[0;m=201 Created token[0;m=tPvV91N1
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #22454571 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/22454571 )
+
+Stage: test
+Name: tests.fs.test_ext.TestExt4
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 1.753s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=22454571 responseStatus[0;m=201 Created token[0;m=LzkH-qes
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+
+---
+You're receiving this email because of your account on gitlab.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170714/3cfb2853/attachment.html>
