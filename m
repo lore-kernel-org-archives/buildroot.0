@@ -1,67 +1,69 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 14 Jul 2017 12:14:18 +0200
-Subject: [Buildroot] [PATCH] package/nginx: fix build
-Message-ID: <20170714101418.4529-1-s.martin49@gmail.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Fri, 14 Jul 2017 12:16:36 +0200
+Subject: [Buildroot] /etc//init.d init scripts in buildroot
+Message-ID: <CALtfCQZAis0fX+J6NWTX+u=ZJB-0ZKoKgkBcteAJU4f+c46BJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to nginx configuration system fixing misdetected unneeded PCRE
-dependency.
+Hi everyone,
 
-This patch has been submitted upstream [1].
+I'm trying to use init scripts from /etc/init.d to activate one gpio just
+before to halt my HW platform (a raspberry Pi): S00gpioff
 
-Fixes:
-  http://autobuild.buildroot.net/results/bc7/bc7458b97a88785653845afd30fe9d5f3a69905b/build-end.log
+I've created a script like this:
 
-[1] http://mailman.nginx.org/pipermail/nginx-devel/2017-July/010308.html
+#!/bin/sh
+#
+# S00gpioff
+#
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- ...nf-fix-PCRE-condition-WRT-the-http-and-ht.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch
+GPIO_CMD_OFF=13
 
-diff --git a/package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch b/package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch
-new file mode 100644
-index 0000000000..08456511dc
---- /dev/null
-+++ b/package/nginx/0009-auto-lib-conf-fix-PCRE-condition-WRT-the-http-and-ht.patch
-@@ -0,0 +1,33 @@
-+From 9668f0d5ecd2382fd36b7ff6a3a29abd04f6533f Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Fri, 14 Jul 2017 11:50:08 +0200
-+Subject: [PATCH] auto/lib/conf: fix PCRE condition WRT the http and
-+ http_rewrite options
-+
-+http_rewrite module cannot be selected when http server is disabled, so
-+fix the PCRE check condition to avoid irrelevant check failure.
-+
-+Fixes:
-+  http://autobuild.buildroot.net/results/bc7/bc7458b97a88785653845afd30fe9d5f3a69905b/build-end.log
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ auto/lib/conf | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/auto/lib/conf b/auto/lib/conf
-+index 0b8545a3..2c7af104 100644
-+--- a/auto/lib/conf
-++++ b/auto/lib/conf
-+@@ -7,7 +7,7 @@ if [ $USE_PCRE = YES -o $PCRE != NONE ]; then
-+     . auto/lib/pcre/conf
-+ 
-+ else
-+-    if [ $USE_PCRE = DISABLED -a $HTTP_REWRITE = YES ]; then
-++    if [ $USE_PCRE = DISABLED -a $HTTP = YES -a $HTTP_REWRITE = YES ]; then
-+ 
-+ cat << END
-+ 
-+-- 
-+2.13.2
-+
--- 
-2.13.2
+case "$1" in
+start)
+        echo $GPIO_CMD_OFF > /sys/class/gpio/export
+        ;;
+stop)
+        echo "Activated CMD OFF output"
+        echo 1 > /sys/class/gpio$GPIO_CMD_OFF/value
+        ;;
+*)
+exit 1
+;;
+
+esac
+
+The problem is I need to activate the gpio just before halt:
+
+# halt
+# Stopping dropbear sshd: OK
+Stopping network...[  419.714234] smsc95xx 1-1.1:1.0 eth0: hardware isn't
+capable of remote wakeup
+ifdown: interface wlan0 not configured
+Saving random seed... done.
+Stopping logging: OK
+Activated CMD OFF output <--------------------------------------------
+umount: tmpfs busy - remounted read-only
+umount: devpts busy - remounted read-only
+umount: devtmpfs busy - remounted read-only
+[  420.807391] EXT4-fs (mmcblk0p2): re-mounted. Opts: (null)
+The system is g[  420.816829] watchdog watchdog0: Watchdog timer stopped
+oing down NOW!
+Sent SIGTERM to all processes
+Sent SIGKILL to all processes
+Requesting system halt
+[  422.818879] watchdog watchdog0: Watchdog timer stopped
+[  422.824050] reboot: System halted
+
+Does anyone how to delay a bit the activation of the GPIO?
+
+
+Best regards.
+
+Oscar Gomez Fuente.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170714/13266866/attachment.html>
