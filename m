@@ -1,122 +1,99 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 14 Jul 2017 16:07:01 +0200
-Subject: [Buildroot] [PATCH] strace: Bumps version to 4.18.
-In-Reply-To: <20170714134545.13494-1-didin@synopsys.com>
-References: <20170714134545.13494-1-didin@synopsys.com>
-Message-ID: <a45bb6e7-954f-9eae-2450-d02ac1766fa2@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Jul 2017 16:24:26 +0200
+Subject: [Buildroot] [PATCH] tiff: add upstream security fix for
+	CVE-2017-10688
+Message-ID: <20170714142426.1041-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Evgeniy,
+Fixes CVE-2017-10688 - n LibTIFF 4.0.8, there is a assertion abort in the
+TIFFWriteDirectoryTagCheckedLong8Array function in tif_dirwrite.c.  A
+crafted input will lead to a remote denial of service attack.
 
-Le 14/07/2017 ? 15:45, Evgeniy Didin a ?crit :
-> This patch bumps strace package to 4.18 upstream version.
-> 
-> Important notes:
-> 	1)0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch has been removed 
-> 	 because it is part of 4.18.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ..._dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
 
-There is the same issue on arc like the one fixed on nios2, see
-http://autobuild.buildroot.net/results/8be/8be75df1b4d6737b3957cfc57c5a2487f2119fcb/build-end.log
-
-Actually several architecture (or1k, nios2, metag, avr32 and arc) are affected
-by the same issue due to a patch series applied on strace 4.17 (patches named:
-"<arch>: export <arch>_sp_ptr").
-
-If the same fix applied on nios2 is applied for arc, it doesn't allow to build
-with older kernel headers (< 4.1).
-
-Can you take a look ?
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  
-> ---
->  ...os2-arch_regs-fix-nios2_sp_ptr-definition.patch | 43 ----------------------
->  package/strace/strace.hash                         |  4 +-
->  package/strace/strace.mk                           |  2 +-
->  3 files changed, 3 insertions(+), 46 deletions(-)
->  delete mode 100644 package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
-> 
-> diff --git a/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch b/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
-> deleted file mode 100644
-> index 7ba03b57e..000000000
-> --- a/package/strace/0001-nios2-arch_regs-fix-nios2_sp_ptr-definition.patch
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -From 8a1f47f7963991e5b039282769d0a798d36f9e45 Mon Sep 17 00:00:00 2001
-> -From: Romain Naour <romain.naour@smile.fr>
-> -Date: Tue, 4 Jul 2017 18:06:14 +0200
-> -Subject: [PATCH] nios2/arch_regs: fix nios2_sp_ptr definition
-> -
-> -The patch [1] introduced in strace 1.17s use the old way of accessing
-> -SP register as defined for kernel headers < 4.0. The kernel headers
-> -for nios2 have been changed in commit [2].
-> -
-> -This patch updates strace to use the new kernel/userspace interface.
-> -
-> -Fixes:
-> -http://autobuild.buildroot.net/results/b9f/b9fc25b82f3280872fe1593ac252a8529ba83576
-> -
-> -[1] https://github.com/strace/strace/commit/6117728aacf431a3e3c05761766c776874cc0861
-> -[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=92d5dd8cd6e2b211d32d8fbc6cf4b7470765a09f
-> -
-> -Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ----
-> - linux/nios2/arch_regs.c | 2 +-
-> - linux/nios2/arch_regs.h | 2 +-
-> - 2 files changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/linux/nios2/arch_regs.c b/linux/nios2/arch_regs.c
-> -index 8a668bc..c18a3aa 100644
-> ---- a/linux/nios2/arch_regs.c
-> -+++ b/linux/nios2/arch_regs.c
-> -@@ -1,4 +1,4 @@
-> - static struct user_pt_regs nios2_regs;
-> --unsigned long *const nios2_sp_ptr = &nios2_regs.sp;
-> -+unsigned int *const nios2_sp_ptr = &nios2_regs.regs[PTR_SP];
-> - # define ARCH_REGS_FOR_GETREGSET nios2_regs
-> - #define ARCH_PC_REG nios2_regs.regs[PTR_EA]
-> -diff --git a/linux/nios2/arch_regs.h b/linux/nios2/arch_regs.h
-> -index 7f344b5..c4230ed 100644
-> ---- a/linux/nios2/arch_regs.h
-> -+++ b/linux/nios2/arch_regs.h
-> -@@ -1 +1 @@
-> --extern unsigned long *const nios2_sp_ptr;
-> -+extern unsigned int *const nios2_sp_ptr;
-> --- 
-> -2.9.4
-> -
-> diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-> index fbd93202b..b5c4c7932 100644
-> --- a/package/strace/strace.hash
-> +++ b/package/strace/strace.hash
-> @@ -1,3 +1,3 @@
->  # From https://sourceforge.net/projects/strace/files/strace/4.17/
-> -md5	8d7eb10eba68bad83a269197e634b626	strace-4.17.tar.xz
-> -sha1	a60558a10757e41a39ee9e357d1d03d91d5d94d8	strace-4.17.tar.xz
-> +md5	3579b3266bb096cebaefbe2cdb1a3a78	strace-4.18.tar.xz
-> +sha1	ac2e6f746260dd71f6d22920d9ca8f4bfbe708a8	strace-4.18.tar.xz
-> diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-> index 119c9f564..c4c45233c 100644
-> --- a/package/strace/strace.mk
-> +++ b/package/strace/strace.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -STRACE_VERSION = 4.17
-> +STRACE_VERSION = 4.18
->  STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
->  STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
->  STRACE_LICENSE = BSD-3-Clause
-> 
+diff --git a/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch b/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
+new file mode 100644
+index 0000000000..2be989b9e7
+--- /dev/null
++++ b/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
+@@ -0,0 +1,70 @@
++From 6173a57d39e04d68b139f8c1aa499a24dbe74ba1 Mon Sep 17 00:00:00 2001
++From: Even Rouault <even.rouault@spatialys.com>
++Date: Fri, 30 Jun 2017 17:29:44 +0000
++Subject: [PATCH] * libtiff/tif_dirwrite.c: in
++ TIFFWriteDirectoryTagCheckedXXXX() functions associated with LONG8/SLONG8
++ data type, replace assertion that the file is BigTIFF, by a non-fatal error.
++ Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2712 Reported by team
++ OWL337
++
++[Peter: drop ChangeLog modification]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_dirwrite.c | 20 ++++++++++++++++----
++ 1 file changed, 23 insertions(+), 4 deletions(-)
++
++diff --git a/libtiff/tif_dirwrite.c b/libtiff/tif_dirwrite.c
++index 2967da58..8d6686ba 100644
++--- a/libtiff/tif_dirwrite.c
+++++ b/libtiff/tif_dirwrite.c
++@@ -2111,7 +2111,10 @@ TIFFWriteDirectoryTagCheckedLong8(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, ui
++ {
++ 	uint64 m;
++ 	assert(sizeof(uint64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","LONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	m=value;
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabLong8(&m);
++@@ -2124,7 +2127,10 @@ TIFFWriteDirectoryTagCheckedLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* di
++ {
++ 	assert(count<0x20000000);
++ 	assert(sizeof(uint64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","LONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabArrayOfLong8(value,count);
++ 	return(TIFFWriteDirectoryTagData(tif,ndir,dir,tag,TIFF_LONG8,count,count*8,value));
++@@ -2136,7 +2142,10 @@ TIFFWriteDirectoryTagCheckedSlong8(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, u
++ {
++ 	int64 m;
++ 	assert(sizeof(int64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","SLONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	m=value;
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabLong8((uint64*)(&m));
++@@ -2149,7 +2158,10 @@ TIFFWriteDirectoryTagCheckedSlong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* d
++ {
++ 	assert(count<0x20000000);
++ 	assert(sizeof(int64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","SLONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabArrayOfLong8((uint64*)value,count);
++ 	return(TIFFWriteDirectoryTagData(tif,ndir,dir,tag,TIFF_SLONG8,count,count*8,value));
++-- 
++2.11.0
++
+-- 
+2.11.0
