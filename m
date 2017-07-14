@@ -1,52 +1,43 @@
-From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
-Date: Fri, 14 Jul 2017 08:59:55 -0400
-Subject: [Buildroot] [PATCH 1/1] board/arcturus/ppc-ucp1020 new gcc-6.x
- Linux kernel build fix
-In-Reply-To: <20170714092218.3a548944@windsurf>
-References: <20170713163817.7114-1-oleks@arcturusnetworks.com>
- <20170713193059.08c08974@windsurf>
- <940b0331-fb4e-e75d-b747-f9c282491c24@arcturusnetworks.com>
- <20170714092218.3a548944@windsurf>
-Message-ID: <40c89d11-14c3-e961-3259-46161b631f1b@arcturusnetworks.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Jul 2017 15:04:17 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
+	post-build/image scripts for out-of-tree builds
+Message-ID: <20170714130417.18857-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Sometimes it can be interesting to call back into buildroot from a
+post-build/image script (E.G. make printvars or similar). For this to work
+correctly with out-of-tree builds we need to pass O= to make, but this is
+currently not available in the environment of post-build/image scripts.
 
-Thank you Thomas !
-Now will wait for your decision on other path: [Buildroot][PATCH v4 1/1]
-configs/arcturus_ucls1012a: new defconfig
+In concept, O could be derrived from BUILD_DIR (E.G. by stripping /build),
+but directly exporting O is cleaner.
 
-Kind Regards,
+O= cannot be exported globally as it interferes with various build systems,
+so instead add it to EXTRA_ENV.
 
-Oleks
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Makefile.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On 07/14/2017 03:22 AM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu, 13 Jul 2017 15:21:08 -0400, Oleksandr G Zhadan wrote:
->
->> Yes, uprating to newer kernel is on our list. And we know that it is a
->> fix there.
->> But, It will take some time to re-test all ours and our existing
->> customers apps. And as usually we do not have that time now ;-).
->> For now we would like to fix uCP1020 buildroot build in any way: or by
->> downgrading GCC or with that Linux-3.18 patch.
->> Please apply any of the patches and when we will be ready we will send
->> another, new "kernel patch".
-> OK. As long as upgrading to a newer kernel is on your list, I'm fine
-> with having this patch as a temporary solution.
->
-> Thanks!
->
-> Thomas
-
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index b95e5e3fa8..a2b0d90f32 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -309,7 +309,8 @@ HOST_CONFIGURE_OPTS = \
+ EXTRA_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	BR2_DL_DIR=$(BR2_DL_DIR) \
+-	BUILD_DIR=$(BUILD_DIR)
++	BUILD_DIR=$(BUILD_DIR) \
++	O=$(CANONICAL_O)
+ 
+ ################################################################################
+ # settings we need to pass to configure
 -- 
-Oleksandr Zhadan
-Arcturus Networks
-T 416 621-0125 x235
-F 416 621-0190
+2.11.0
