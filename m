@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 14 Jul 2017 14:15:26 -0400
-Subject: [Buildroot] [PATCH 04/15] libcurl: support libressl.
+Date: Fri, 14 Jul 2017 14:15:27 -0400
+Subject: [Buildroot] [PATCH 05/15] libsrtp: support libressl
 In-Reply-To: <20170714181537.17479-1-aduskett@gmail.com>
 References: <20170714181537.17479-1-aduskett@gmail.com>
-Message-ID: <20170714181537.17479-4-aduskett@gmail.com>
+Message-ID: <20170714181537.17479-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +12,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/libcurl/libcurl.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/libsrtp/libsrtp.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 684844919..907121717 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -40,6 +40,16 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
- LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
- LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
- 	--with-ca-path=/etc/ssl/certs
-+else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+LIBCURL_DEPENDENCIES += libressl
-+LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
-+# configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
-+# native stuff during the rest of configure when target == host.
-+# Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
-+# are found first.
-+LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
-+LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
-+	--with-ca-path=/etc/ssl/certs
- else ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
- LIBCURL_DEPENDENCIES += gnutls
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
+index 9e72856c4..e1527da0c 100644
+--- a/package/libsrtp/libsrtp.mk
++++ b/package/libsrtp/libsrtp.mk
+@@ -28,6 +28,9 @@ LIBSRTP_DEPENDENCIES = host-pkgconf
+ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ LIBSRTP_DEPENDENCIES += openssl
+ LIBSRTP_CONF_OPTS += --enable-openssl
++else ifeq ($(BR2_PACKAGE_LIBRESSL)x$(BR2_STATIC_LIBS),yx)
++LIBSRTP_DEPENDENCIES += libressl
++LIBSRTP_CONF_OPTS += --enable-openssl
+ else
+ LIBSRTP_CONF_OPTS += --disable-openssl
+ endif
 -- 
 2.13.0
