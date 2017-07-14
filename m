@@ -1,39 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Jul 2017 09:20:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-07-15
-In-Reply-To: <eb108213-fb03-12bf-bcf8-c33cabca92e4@gmail.com>
-References: <20170716063402.6FE6320DF3@mail.free-electrons.com>
- <eb108213-fb03-12bf-bcf8-c33cabca92e4@gmail.com>
-Message-ID: <20170717092042.56cd394d@windsurf>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 14 Jul 2017 17:43:35 +0200
+Subject: [Buildroot] [PATCH] python-coherence: bump to the latest upstream
+	commit
+Message-ID: <20170714154335.31754-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Sun, 16 Jul 2017 17:57:50 +0200, Romain Naour wrote:
+python-coherence is now orphaned, so unless a new maintainer
+could be found, there is no ETA for the next release.
 
-> >       mipsel | make[1]: *** wait: No child... | NOK | http://autobuild.buildroot.net/results/36d5a4838197bfffcbc8dea84e6cfa5f3a87949d |     
-> >      powerpc | make[1]: *** wait: No child... | NOK | http://autobuild.buildroot.net/results/7e2bd71b2776f9b8d13812b456ffd3181cd86535 |       
-> 
-> efl, trinity maybe other packages are affected by an issue fixed by [1].
-> 
-> Can you rebuild the toolchains used in autobuilders ?
+The setup.py file in the develop branch doesn't import other
+Python packages, so no need for the build time dependencies.
 
-I have rebuilt and deployed new toolchains yesterday:
+This approach also fixes:
 
-  https://git.buildroot.org/buildroot-test/commit/?id=124124b89e8b5cb541d7da3196b28505a63ae9dd
+http://autobuild.buildroot.net/results/675/675721f773795987a2468daa33f299f7dc6ddb8a
+http://autobuild.buildroot.net/results/cd9/cd99ac66af7a0cb24510bee78dd45884a8695776
 
-So all toolchains with the version 2017.05-1078-g95b1dae should no
-longer have this problem.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-coherence/python-coherence.hash | 2 +-
+ package/python-coherence/python-coherence.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/python-coherence/python-coherence.hash b/package/python-coherence/python-coherence.hash
+index f788ca375..533d0c663 100644
+--- a/package/python-coherence/python-coherence.hash
++++ b/package/python-coherence/python-coherence.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  fd5a2db9661994a57232ace4a90d259b6554c43b8bf5bfbf8ec2518c03627922  python-coherence-0.6.6.2.tar.gz
++sha256  97c8b700b3fe73d48eacb259008f410d6567e5d7d1b8e96386f8cc2422135ca5  python-coherence-b7856985fd496689ca1f9024925ae737297c00d1.tar.gz
+diff --git a/package/python-coherence/python-coherence.mk b/package/python-coherence/python-coherence.mk
+index f9df37c32..24da7f70a 100644
+--- a/package/python-coherence/python-coherence.mk
++++ b/package/python-coherence/python-coherence.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_COHERENCE_VERSION = 0.6.6.2
+-PYTHON_COHERENCE_SITE = $(call github,coherence-project,Coherence,Coherence-$(PYTHON_COHERENCE_VERSION))
++PYTHON_COHERENCE_VERSION = b7856985fd496689ca1f9024925ae737297c00d1
++PYTHON_COHERENCE_SITE = $(call github,coherence-project,Coherence,$(PYTHON_COHERENCE_VERSION))
+ PYTHON_COHERENCE_SETUP_TYPE = setuptools
+ PYTHON_COHERENCE_LICENSE = MIT
+ PYTHON_COHERENCE_LICENSE_FILES = LICENCE
+-PYTHON_COHERENCE_DEPENDENCIES = python-twisted python-zope-interface python-pyasn
+ 
+ $(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
