@@ -1,98 +1,65 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 14 Jul 2017 12:58:54 +0200
-Subject: [Buildroot] [PATCH] librtlsdr: backport pull request to fix build
-	with newer compilers
-Message-ID: <20170714105854.17053-1-gwenj@trabucayre.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 14 Jul 2017 14:16:31 +0200
+Subject: [Buildroot] [PATCH] python-simplejson: bump to version 3.11.1
+Message-ID: <20170714121631.14884-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fix:
-http://autobuild.buildroot.net/results/ece/ece557db739aaad9b53130a8ecb4d98f6f67aedf
+Remove Python2 only dependency as the package is compatible
+with Python3.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Add a dot at the end of the help text.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...x-builds-with-newer-compilers-C-standards.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
+ package/python-simplejson/Config.in              | 3 +--
+ package/python-simplejson/python-simplejson.hash | 4 ++--
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
-new file mode 100644
-index 0000000000..b663d08b9f
---- /dev/null
-+++ b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
-@@ -0,0 +1,68 @@
-+From ea6a86d8e792430faa3a8161ee99f2bc392875d1 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@chromium.org>
-+Date: Fri, 3 Feb 2017 15:44:18 -1000
-+Subject: [PATCH] fix builds with newer compilers & C standards
-+
-+The meaning of "inline" has changed when "static" is not used.
-+Since none of these functions are used outside of their respective
-+files, mark them as static to avoid build errors where funcs are
-+not inlined (based on compiler flags too).
-+
-+Upstream status: pull request #38
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ src/rtl_adsb.c  | 8 ++++----
-+ src/rtl_power.c | 2 +-
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/rtl_adsb.c b/src/rtl_adsb.c
-+index e611e78..a3bfa7f 100644
-+--- a/src/rtl_adsb.c
-++++ b/src/rtl_adsb.c
-+@@ -182,7 +182,7 @@ int magnitute(uint8_t *buf, int len)
-+ 	return len/2;
-+ }
-+ 
-+-inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
-++static inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
-+ /* takes 4 consecutive real samples, return 0 or 1, BADSAMPLE on error */
-+ {
-+ 	int bit, bit_p;
-+@@ -223,17 +223,17 @@ inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d
-+ 	return BADSAMPLE;
-+ }
-+ 
-+-inline uint16_t min16(uint16_t a, uint16_t b)
-++static inline uint16_t min16(uint16_t a, uint16_t b)
-+ {
-+ 	return a<b ? a : b;
-+ }
-+ 
-+-inline uint16_t max16(uint16_t a, uint16_t b)
-++static inline uint16_t max16(uint16_t a, uint16_t b)
-+ {
-+ 	return a>b ? a : b;
-+ }
-+ 
-+-inline int preamble(uint16_t *buf, int i)
-++static inline int preamble(uint16_t *buf, int i)
-+ /* returns 0/1 for preamble at index i */
-+ {
-+ 	int i2;
-+diff --git a/src/rtl_power.c b/src/rtl_power.c
-+index aa7a138..a7a43bb 100644
-+--- a/src/rtl_power.c
-++++ b/src/rtl_power.c
-+@@ -249,7 +249,7 @@ void sine_table(int size)
-+ 	}
-+ }
-+ 
-+-inline int16_t FIX_MPY(int16_t a, int16_t b)
-++static inline int16_t FIX_MPY(int16_t a, int16_t b)
-+ /* fixed point multiply and scale */
-+ {
-+ 	int c = ((int)a * (int)b) >> 14;
-+-- 
-+2.13.0
-+
+diff --git a/package/python-simplejson/Config.in b/package/python-simplejson/Config.in
+index be0ee8f92..c2fd91773 100644
+--- a/package/python-simplejson/Config.in
++++ b/package/python-simplejson/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_SIMPLEJSON
+ 	bool "python-simplejson"
+-	depends on BR2_PACKAGE_PYTHON
+ 	help
+-	  Simple, fast, extensible JSON encoder/decoder for Python
++	  Simple, fast, extensible JSON encoder/decoder for Python.
+ 
+ 	  https://pypi.python.org/pypi/simplejson/
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index 0f7147ca7..f2a5fce38 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/simplejson/json, sha256 locally computed
+-md5 426a9631d22851a7a970b1a677368b15 simplejson-3.10.0.tar.gz
+-sha256 953be622e88323c6f43fad61ffd05bebe73b9fd9863a46d68b052d2aa7d71ce2 simplejson-3.10.0.tar.gz
++md5 6e2f1bd5fb0a926facf5d89d217a7183 simplejson-3.11.1.tar.gz
++sha256 01a22d49ddd9a168b136f26cac87d9a335660ce07aa5c630b8e3607d6f4325e7 simplejson-3.11.1.tar.gz
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index 3bf2dda46..afc77fec6 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SIMPLEJSON_VERSION = 3.10.0
++PYTHON_SIMPLEJSON_VERSION = 3.11.1
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/40/ad/52c1f3a562df3b210e8f165e1aa243a178c454ead65476a39fa3ce1847b6
++PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/08/48/c97b668d6da7d7bebe7ea1817a6f76394b0ec959cb04214ca833c34359df
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
 -- 
-2.13.0
+2.11.0
