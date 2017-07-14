@@ -1,69 +1,42 @@
-From: gomsis <tuzaklirefik@gmail.com>
-Date: Fri, 14 Jul 2017 06:26:58 -0700 (PDT)
-Subject: [Buildroot] [RFC 1/3] qt5webengine: new package
-In-Reply-To: <1499510931955-170362.post@n4.nabble.com>
-References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
- <20170322181331.23500-2-gael.portay@savoirfairelinux.com>
- <20170418160420.jhdzh2emcbuk7ef7@gportay>
- <1495503976238-165475.post@n4.nabble.com>
- <1498803551220-168692.post@n4.nabble.com>
- <20170704183945.bnib6pizuriqkyds@gportay>
- <DM5PR03MB29247C6B28F4470FA8F36098BFAA0@DM5PR03MB2924.namprd03.prod.outlook.com>
- <20170707185801.zcyfwym74qatb3bl@gportay>
- <1499510931955-170362.post@n4.nabble.com>
-Message-ID: <1500038818129-170885.post@n4.nabble.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Jul 2017 15:49:15 +0200
+Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
+In-Reply-To: <20170714153641.0e0af325@windsurf> (Thomas Petazzoni's message of
+ "Fri, 14 Jul 2017 15:36:41 +0200")
+References: <1499796056-841-1-git-send-email-joshua.henderson@microchip.com>
+ <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
+ <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+ <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
+ <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
+ <20170713153220.GA3002@scaer>
+ <2a450d8b-10a6-2be9-b7a7-a659a47bffb0@mind.be>
+ <20170714103518.66ca2b7e@windsurf> <87o9snb1ri.fsf@dell.be.48ers.dk>
+ <20170714153641.0e0af325@windsurf>
+Message-ID: <87tw2f9lic.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-error while compiling  
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  File "../build/scripts/rule_bison.py", line 83, in <module>
-    returnCode = subprocess.call([bisonExe, '-d', '-p', prefix, inputFile,
-'-o', outputCpp])
-  File
-"/home/osboxes/Desktop/buildrootl/output/host/usr/lib/python2.7/subprocess.py",
-line 168, in call
-    return Popen(*popenargs, **kwargs).wait()
-  File
-"/home/osboxes/Desktop/buildrootl/output/host/usr/lib/python2.7/subprocess.py",
-line 390, in __init__
-    errread, errwrite)
-  File
-"/home/osboxes/Desktop/buildrootl/output/host/usr/lib/python2.7/subprocess.py",
-line 1024, in _execute_child
-    raise child_exception
-OSError: [Errno 2] No such file or directory
-[2/9493] ACTION Caching PLY lex & yacc lex/parse tables
-ninja: build stopped: subcommand failed.
-Makefile.gyp_run:317: recipe for target 'invoke_ninja' failed
-make[4]: *** [invoke_ninja] Error 1
-make[4]: Leaving directory
-'/home/osboxes/Desktop/buildrootl/output/build/qt5webengine-5.8.0/src/core'
-Makefile:116: recipe for target 'sub-gyp_run-pro-make_first' failed
-make[3]: *** [sub-gyp_run-pro-make_first] Error 2
-make[3]: Leaving directory
-'/home/osboxes/Desktop/buildrootl/output/build/qt5webengine-5.8.0/src/core'
-Makefile:49: recipe for target 'sub-core-make_first' failed
-make[2]: *** [sub-core-make_first] Error 2
-make[2]: Leaving directory
-'/home/osboxes/Desktop/buildrootl/output/build/qt5webengine-5.8.0/src'
-Makefile:44: recipe for target 'sub-src-make_first' failed
-make[1]: *** [sub-src-make_first] Error 2
-make[1]: Leaving directory
-'/home/osboxes/Desktop/buildrootl/output/build/qt5webengine-5.8.0'
-package/pkg-generic.mk:227: recipe for target
-'/home/osboxes/Desktop/buildrootl/output/build/qt5webengine-5.8.0/.stamp_built'
-failed
-make: ***
-[/home/osboxes/Desktop/buildrootl/output/build/qt5webengine-5.8.0/.stamp_built]
-Error 2
+Hi,
 
+ >> As long as we can find a solution for this problem I don't think we
+ >> should move to sperate files for license hashes. We have 2k+ packages
+ >> and only a very small subset of those have a version selection (and only
+ >> a small subset of that subset will change the license text between
+ >> versions), so I prefer a less-clean solution for this special case
+ >> instead of adding 2k+ extra files to the tree.
 
+ > Yes, true.
 
+ > So perhaps the easy solution is to search for a hash file in the
+ > version-specific sub-folder. If it exists, use it (and only this one).
+ > If it doesn't exist, fallback to the one in the package directory.
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/RFC-0-3-Qt-WebEngine-support-tp160642p170885.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Yes, makes sense to me.
+
+-- 
+Bye, Peter Korsgaard
