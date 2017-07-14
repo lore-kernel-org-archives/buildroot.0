@@ -1,61 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Jul 2017 14:38:18 +0200
-Subject: [Buildroot] /etc//init.d init scripts in buildroot
-In-Reply-To: <CALtfCQZAis0fX+J6NWTX+u=ZJB-0ZKoKgkBcteAJU4f+c46BJA@mail.gmail.com>
- (Oscar Gomez Fuente's message of "Fri, 14 Jul 2017 12:16:36 +0200")
-References: <CALtfCQZAis0fX+J6NWTX+u=ZJB-0ZKoKgkBcteAJU4f+c46BJA@mail.gmail.com>
-Message-ID: <87shhzb3d1.fsf@dell.be.48ers.dk>
+From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
+Date: Fri, 14 Jul 2017 08:59:55 -0400
+Subject: [Buildroot] [PATCH 1/1] board/arcturus/ppc-ucp1020 new gcc-6.x
+ Linux kernel build fix
+In-Reply-To: <20170714092218.3a548944@windsurf>
+References: <20170713163817.7114-1-oleks@arcturusnetworks.com>
+ <20170713193059.08c08974@windsurf>
+ <940b0331-fb4e-e75d-b747-f9c282491c24@arcturusnetworks.com>
+ <20170714092218.3a548944@windsurf>
+Message-ID: <40c89d11-14c3-e961-3259-46161b631f1b@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+Hello,
 
- > Hi everyone,
- > I'm trying to use init scripts from /etc/init.d to activate one gpio just
- > before to halt my HW platform (a raspberry Pi): S00gpioff
+Thank you Thomas !
+Now will wait for your decision on other path: [Buildroot][PATCH v4 1/1]
+configs/arcturus_ucls1012a: new defconfig
 
- > I've created a script like this:
+Kind Regards,
 
- > #!/bin/sh
- > #
- > # S00gpioff
- > #
+Oleks
 
- > GPIO_CMD_OFF=13
+On 07/14/2017 03:22 AM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 13 Jul 2017 15:21:08 -0400, Oleksandr G Zhadan wrote:
+>
+>> Yes, uprating to newer kernel is on our list. And we know that it is a
+>> fix there.
+>> But, It will take some time to re-test all ours and our existing
+>> customers apps. And as usually we do not have that time now ;-).
+>> For now we would like to fix uCP1020 buildroot build in any way: or by
+>> downgrading GCC or with that Linux-3.18 patch.
+>> Please apply any of the patches and when we will be ready we will send
+>> another, new "kernel patch".
+> OK. As long as upgrading to a newer kernel is on your list, I'm fine
+> with having this patch as a temporary solution.
+>
+> Thanks!
+>
+> Thomas
 
- > case "$1" in
- > start)
- >         echo $GPIO_CMD_OFF > /sys/class/gpio/export
- >         ;;
- > stop)
- >         echo "Activated CMD OFF output"
- >         echo 1 > /sys/class/gpio$GPIO_CMD_OFF/value
- >         ;;
- > *)
- > exit 1
- > ;;
-
- > esac
-
- > The problem is I need to activate the gpio just before halt:
-
-How late does this need to happen? You cannot do much later than this in
-user space. E.G. the default inittab is:
-
-# Stuff to do before rebooting
-::shutdown:/etc/init.d/rcK
-::shutdown:/sbin/swapoff -a
-::shutdown:/bin/umount -a -r
-
-rcK calls you init script (as the very last one because of S00), and
-then only swapoff + umount gets executed before the kernel is asked to
-power down.
-
-If this is not good enough then you need to handle the gpio in a kernel
-driver instead by registering a reboot notifier.
 
 -- 
-Bye, Peter Korsgaard
+Oleksandr Zhadan
+Arcturus Networks
+T 416 621-0125 x235
+F 416 621-0190
