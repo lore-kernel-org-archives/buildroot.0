@@ -1,44 +1,65 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Jul 2017 19:17:27 +0000
-Subject: [Buildroot] [Bug 10071] New: [PATCH] fakeroot: replace hard-coded
- paths in post install
-Message-ID: <bug-10071-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Jul 2017 21:40:32 +0200
+Subject: [Buildroot] [PATCH] package/lshw: fix the build with glibc
+	without NLS
+In-Reply-To: <18d648a6-f276-da68-d99a-62cf2e54d33a@gmail.com>
+References: <20170713210424.18934-1-romain.naour@gmail.com>
+ <20170713232813.4fd0c83e@windsurf>
+ <18d648a6-f276-da68-d99a-62cf2e54d33a@gmail.com>
+Message-ID: <20170714214032.793cf297@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10071
+Hello,
 
-            Bug ID: 10071
-           Summary: [PATCH] fakeroot: replace hard-coded paths in post
-                    install
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: chemobejk at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Fri, 14 Jul 2017 00:10:39 +0200, Romain Naour wrote:
 
-Created attachment 7116
-  --> https://bugs.busybox.net/attachment.cgi?id=7116&action=edit
-patch for branch master
+> > ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+> > LSHW_CFLAGS += -DNONLS
+> > endif  
+> 
+> Indeed, that's the first thing I removed during investigation.
+> 
+> I find misleading that BR2_SYSTEM_ENABLE_NLS not set does not mean NONLS for lshw.
 
-fakeroot script has the absolute path to the host tools directory encoded in
-it. It will therefore fail if a developer downloads a build e.g. from an
-automated build system and unpacks it at a different location locally.
+I think that's OK. For lshw, NONLS really means "there is absolutely no
+gettext functions provided by the C library", which is never the case
+in the context of Buildroot.
 
-The attached patch for branch "master" adds a host post install step that
-replaces the absolute path with ${HOST_DIR}. The same solution should be easy
-to backport to older branches too.
+Can you send an updated patch that simply removes the -DNONLS ?
 
+> I'm wondering if lshw build fine with a toolchain with wchar but without locale
+> (ok it's a corner case).
+> 
+> See src/lshw.cc:#ifndef NONLS
+> 
+> #ifndef NONLS
+> #include <locale.h>
+> #endif
+> 
+> ...
+> 
+> #ifndef NONLS
+>   setlocale (LC_ALL, "");
+
+Not a problem I believe. From libc/misc/locale/Makefile.in in uClibc-ng:
+
+# multi source locale.c
+CSRC-y := setlocale.c localeconv.c _locale_init.c nl_langinfo.c
+CSRC-$(UCLIBC_HAS_LOCALE) += newlocale.c __locale_mbrtowc_l.c
+CSRC-$(UCLIBC_HAS_XLOCALE) += nl_langinfo_l.c duplocale.c freelocale.c \
+        uselocale.c __curlocale.c
+
+Hence, it seems like a uClibc-ng built with UCLIBC_HAS_LOCALE disabled
+will still have a setlocale() function.
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
