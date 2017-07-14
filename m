@@ -1,39 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Jul 2017 00:09:36 +0200
-Subject: [Buildroot] [PATCH] package/rpi-firmware: install missing library
-Message-ID: <20170714220936.25212-1-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 14 Jul 2017 23:16:19 +0000
+Subject: [Buildroot] [Bug 10076] New: Makefile:4113: recipe for target
+	'all-gcc' failed
+Message-ID: <bug-10076-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The vcdbg utility is linked to a few libraries, which so far were all
-provided by the rpi-userland package.
+https://bugs.busybox.net/show_bug.cgi?id=10076
 
-But a not-so-recent bump of rpi-firmware pulled in a vcdbg that is
-linked to an additional library, which is not privided by rpi-userland,
-so we must install it.
+            Bug ID: 10076
+           Summary: Makefile:4113: recipe for target 'all-gcc' failed
+           Product: buildroot
+           Version: 2017.05.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ptomov at mirion.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Reported-by: cluelessperson on #buildroot
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/rpi-firmware/rpi-firmware.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Hi,
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 134fcebb57..2c5832c963 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -31,6 +31,8 @@ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
- define RPI_FIRMWARE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
- 		$(TARGET_DIR)/usr/sbin/vcdbg
-+	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libelftoolchain.so \
-+		$(TARGET_DIR)/usr/lib/libelftoolchain.so
- endef
- endif # INSTALL_VCDBG
- 
+I got the following error when conducting a new make in Buildroot:
+
+Makefile:4113: recipe for target 'all-gcc' failed
+
+Please advise me how to solve this problem.
+
+The Buildroot version is: 2107.05.01. Buildroot runs in Ubuntu VMWare box.
+
+Thanks,
+
+   Pavel
+
+cho timestamp > s-codes
+build/gentarget-def ../../gcc/common.md ../../gcc/config/arm/arm.md \
+  insn-conditions.md > tmp-target-def.h
+/bin/bash ../../gcc/../move-if-change tmp-config.h insn-config.h
+/bin/bash ../../gcc/../move-if-change tmp-target-def.h insn-target-def.h
+echo timestamp > s-config
+build/genopinit ../../gcc/common.md ../../gcc/config/arm/arm.md \
+  insn-conditions.md -htmp-opinit.h -ctmp-opinit.c
+echo timestamp > s-target-def
+build/genattrtab ../../gcc/common.md ../../gcc/config/arm/arm.md
+insn-conditions.md \
+        -Atmp-attrtab.c -Dtmp-dfatab.c -Ltmp-latencytab.c
+/bin/bash ../../gcc/../move-if-change tmp-opinit.h insn-opinit.h
+/bin/bash ../../gcc/../move-if-change tmp-opinit.c insn-opinit.c
+echo timestamp > s-opinit
+build/genautomata ../../gcc/common.md ../../gcc/config/arm/arm.md \
+  insn-conditions.md > tmp-automata.c
+Makefile:2203: recipe for target 's-attrtab' failed
+make[3]: *** [s-attrtab] Killed
+make[3]: *** Waiting for unfinished jobs....
+/bin/bash ../../gcc/../move-if-change tmp-automata.c insn-automata.c
+echo timestamp > s-automata
+rm gcc.pod
+Makefile:4113: recipe for target 'all-gcc' failed
+make[2]: *** [all-gcc] Error 2
+package/pkg-generic.mk:227: recipe for target
+'/home/ptomov/buildroot/output/build/host-gcc-initial-6.4.0/.stamp_built'
+failed
+make[1]: ***
+[/home/ptomov/buildroot/output/build/host-gcc-initial-6.4.0/.stamp_built] Error
+2
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
