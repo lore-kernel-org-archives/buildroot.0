@@ -1,44 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jul 2017 22:59:05 +0200
-Subject: [Buildroot] [PATCH] package/Makefile.in: Tweak TARGET_ABI for
- MPC8548
-In-Reply-To: <CAHQ1cqFpf7ggXb=wWnmqHpoScMe-B8wmWO6az2f7RAx72C72OA@mail.gmail.com>
-References: <20170712024737.21578-1-andrew.smirnov@gmail.com>
- <20170712093218.5a6a20ff@windsurf.lan>
- <CAHQ1cqFpf7ggXb=wWnmqHpoScMe-B8wmWO6az2f7RAx72C72OA@mail.gmail.com>
-Message-ID: <20170714225905.6b8b19fe@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 14 Jul 2017 20:59:50 +0000
+Subject: [Buildroot] [Bug 10041] Qt5base: examples were not installed
+In-Reply-To: <bug-10041-163@https.bugs.busybox.net/>
+References: <bug-10041-163@https.bugs.busybox.net/>
+Message-ID: <bug-10041-163-8cO7Havwhm@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10041
 
-On Fri, 14 Jul 2017 14:47:15 -0500, Andrey Smirnov wrote:
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Did you rebuild the qt5base package after enabling qt5base examples?
 
-> It's been a while, since I investigated this patch, but I believe we
-> were seeing performance improvements on heavily numerical application
-> on our system with "-mhard-float" while using custom built
-> crosstools-ng e500 toolchain. But given how I didn't notice two
-> significant problems with this patch and it is clearly not ready for
-> prime time, let me go back and do more research/double check that I
-> wasn't doing something dumb and missing the obvious.
-> 
-> I'll follow up with a separate patch if it's truly useful.
+Mind to share your (complete) .config file?
 
-I think it definitely makes sense to continue work on this patch.
-PowerPC is not the most well maintained architecture in Buildroot, so
-it's very good to get contributions from our PowerPC users to improve
-the support for this architecture.
+Regards,
+Peter
 
-If indeed PowerPC needs an explicit -mhard-float to use the FPU, we'll
-have to fix Buildroot. Could you investigate this a little bit more?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
