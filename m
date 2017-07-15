@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 11:36:31 +0200
-Subject: [Buildroot] [PATCH v2 1/1] br toolchain: gcc4.x/5.x bugfix
- libsanitizer ppc
-In-Reply-To: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170715113631.2d71bb27@windsurf>
+Date: Sat, 15 Jul 2017 11:36:55 +0200
+Subject: [Buildroot] [git commit] package/bluez5_utils: bump to version 5.46
+Message-ID: <20170715093253.5B1FE8045C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=248310be748ef51e4679c52f09f72eb8bd0b969b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Jul 2017 15:00:05 -0500, Matt Weber wrote:
-> Fixes a missing include of signal.h
-> 
-> Verified to break 4.9.4 / 5.4.0 when using
-> target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
-> 
-> ../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
-> ../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
->    return signum == SIGSEGV && common_flags()->handle_segv;
-> 
-> Resolves Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
-> 
-> Upstream: https://patchwork.ozlabs.org/patch/725596/
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bluez5_utils/bluez5_utils.hash | 2 +-
+ package/bluez5_utils/bluez5_utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master after tweaking the commit log and the formatting of
-the patches.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index e7a6a89..bc20d22 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256 4cacb00703a6bc149cb09502257d321597d43952374a16f3558766ffa85364e9  bluez-5.45.tar.xz
++sha256 ddab3d3837c1afb8ae228a94ba17709a4650bd4db24211b6771ab735c8908e28  bluez-5.46.tar.xz
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index c69e58b..13658cd 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BLUEZ5_UTILS_VERSION = 5.45
++BLUEZ5_UTILS_VERSION = 5.46
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
