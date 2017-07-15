@@ -1,34 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 15 Jul 2017 07:12:39 +0000
-Subject: [Buildroot] [Bug 10076] Makefile:4113: recipe for target 'all-gcc'
-	failed
-In-Reply-To: <bug-10076-163@https.bugs.busybox.net/>
-References: <bug-10076-163@https.bugs.busybox.net/>
-Message-ID: <bug-10076-163-v9pQPyOvQm@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Jul 2017 09:13:06 +0200
+Subject: [Buildroot] [PATCH 01/15] libressl: bump version to 2.5.5
+In-Reply-To: <20170714181537.17479-1-aduskett@gmail.com>
+References: <20170714181537.17479-1-aduskett@gmail.com>
+Message-ID: <20170715091306.6a31f767@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10076
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Fri, 14 Jul 2017 14:15:23 -0400, Adam Duskett wrote:
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/libressl/libressl.hash | 2 +-
+>  package/libressl/libressl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
+Applied to master, thanks.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-The s-attrtab program is known to require a lot of memory. So in your case,
-your VM most likely doesn't have enough RAM, and therefore the Linux kernel
-running inside the VM kills the s-attrtab program because it tries to consume
-too much memory compared to the available memory.
-
-You can check in /var/log/messages if you see an out of memory message from the
-kernel.
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
