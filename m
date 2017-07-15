@@ -1,13 +1,16 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 15 Jul 2017 13:12:05 +0200
-Subject: [Buildroot] [PATCH] package/lshw: don't use NONLS when
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Jul 2017 14:46:33 +0200
+Subject: [Buildroot] [git commit] package/lshw: don't use NONLS when
 	BR2_SYSTEM_ENABLE_NLS is not set
-Message-ID: <20170715111205.4748-1-romain.naour@gmail.com>
+Message-ID: <20170715124252.E954A81801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=aac99867ce9c4b72e55bb886e9a6600c6407d3eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since [1], NONLS is added to LSHW_CFLAGS even for glibc based toolchain.
 Previously it was not the case since BR2_ENABLE_LOCALE is always
@@ -41,6 +44,7 @@ http://autobuild.buildroot.net/results/9bf/9bf5437b4348ea8077013b80a51ce05fa3282
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/lshw/lshw.mk | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
@@ -64,5 +68,3 @@ index 43b937b..9b52b09 100644
  LSHW_MAKE_ENV = \
  	$(TARGET_MAKE_ENV) \
  	LIBS=$(TARGET_NLS_LIBS)
--- 
-2.9.4
