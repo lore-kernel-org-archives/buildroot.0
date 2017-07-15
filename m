@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 11:36:06 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] nodejs: security bump to version
- 6.11.1
-In-Reply-To: <87379zb1jv.fsf@dell.be.48ers.dk>
-References: <20170713212631.22939-1-peter@korsgaard.com>
- <87379zb1jv.fsf@dell.be.48ers.dk>
-Message-ID: <20170715113606.2fc0047a@windsurf>
+Date: Sat, 15 Jul 2017 11:36:31 +0200
+Subject: [Buildroot] [PATCH v2 1/1] br toolchain: gcc4.x/5.x bugfix
+ libsanitizer ppc
+In-Reply-To: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20170715113631.2d71bb27@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +13,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 14 Jul 2017 15:17:24 +0200, Peter Korsgaard wrote:
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:  
+On Thu, 13 Jul 2017 15:00:05 -0500, Matt Weber wrote:
+> Fixes a missing include of signal.h
 > 
->  > Fixes CVE-2017-1000381 - The c-ares function ares_parse_naptr_reply(), which
->  > is used for parsing NAPTR responses, could be triggered to read memory
->  > outside of the given input buffer if the passed in DNS response packet was
->  > crafted in a particular way.  This patch checks that there is enough data
->  > for the required elements of an NAPTR record (2 int16, 3 bytes for string
->  > lengths) before processing a record.  
+> Verified to break 4.9.4 / 5.4.0 when using
+> target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
 > 
->  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>  
+> ../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
+> ../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
+>    return signum == SIGSEGV && common_flags()->handle_segv;
 > 
-> Committed to 2017.02.x, thanks.
+> Resolves Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
+> 
+> Upstream: https://patchwork.ozlabs.org/patch/725596/
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
 
-For some reason, the status of this patch hadn't been updated to
-"Accepted" in patchwork, so I've done so now.
+Applied to master after tweaking the commit log and the formatting of
+the patches.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
