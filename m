@@ -1,57 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 12:44:32 +0200
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
-In-Reply-To: <20170715120954.68067f9b@windsurf>
-References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
- <20170715120954.68067f9b@windsurf>
-Message-ID: <20170715124432.1573e49b@windsurf>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 15 Jul 2017 12:51:35 +0200
+Subject: [Buildroot] [PATCH] docs/website/support: clarify the bugtracker is
+	for bugs only
+Message-ID: <1500115895-14203-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The bugtracker is intended to be used for bug reports only, so clarify
+it's not meant to be used for "any problem".
 
-On Sat, 15 Jul 2017 12:09:54 +0200, Thomas Petazzoni wrote:
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ docs/website/support.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> This package is causing a large number of timeouts, apparently due to
-> the fetch of submodules failing. It only happens on my autobuilder
-> instance it seems:
-> 
->   http://autobuild.buildroot.net/?reason=azure-iot-sdk-c-2017-06-30
-> 
-> Is there something that can be done about this?
-
-So, the issue is that I am (intentionally) using a very old Linux
-distribution for this autobuilder instance, and the distro is so old
-that OpenSSL+ca-certificates are no longer compatible with the
-requirements of https:// on github.com. But instead of failing with an
-error, it just remains stuck forever.
-
-An "openssl s_client -connect" test clearly reveals that it's never
-going to connect to github.com from my old distro.
-
-So, I'm wondering what to do. Should I give up testing Buildroot on
-Debian Squeeze, and move to Debian Wheezy instead?
-
-I could perhaps backport openssl+ca-certificates, but what's the point
-of testing such an old distro, if random packages have anyway to be
-upgraded for Buildroot to work correctly?
-
-Arnout, Yann, Peter, what do you think?
-
-I've also Cc'ed Thomas DS, who is known to use Buildroot on really old
-Linux distros. Thomas: what are the oldest distro you're still running
-Buildroot on? If it's some RHEL distro, what is the closest Debian
-version? Do you get openssl/ca-certificates updates on this RHEL, which
-allows such machines to continue to connect over HTTPS to modern web
-sites?
-
-Best regards,
-
-Thomas
+diff --git a/docs/website/support.html b/docs/website/support.html
+index a1184c8b673f..23a5db794f95 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -72,7 +72,7 @@
+ 		  <img class="img-responsive" src="images/bug-buddy.png" style="max-width:50px; margin-bottom:10px;">
+ 		</div>
+ 		<div class="col-sm-11">
+-		  <p>If you encounter any problem while using Buildroot, you can use the
++		  <p>If you think you found a bug in Buildroot, you can use the
+ 		    <a href="https://bugs.buildroot.org/">Bug Tracker</a> to post your bugs and/or
+ 		    participate to find solutions to existing problems.</p>
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
