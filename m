@@ -1,39 +1,39 @@
-From: Erik Stromdahl <erik.stromdahl@gmail.com>
-Date: Sat, 15 Jul 2017 14:50:32 +0200
-Subject: [Buildroot] [PATCH v2 4/4] configs: raspberrypi3_64_defconfig:
-	enable uart
-In-Reply-To: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
-References: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
-Message-ID: <1500123032-9198-4-git-send-email-erik.stromdahl@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 15 Jul 2017 10:20:53 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.12.2
+Message-ID: <1500124854-24322-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is necessary to preserve the same behaviour as
-before the --enable-uart option in post-image.sh was
-introduced.
-
-Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
-Changes v1 -> v2:
-  - Fixed bad print in patch 2
-  - Fixed commit comment and removed parenthesis in patch 4
-    (comment from Ricardo Martincoski)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- configs/raspberrypi3_64_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 23db9cc..2e56adb 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -34,4 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --enable-uart"
+diff --git a/linux/Config.in b/linux/Config.in
+index b92bd8b..db03401 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.12.1)"
++	bool "Latest version (4.12.2)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.12.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.12.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.7.4
