@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 12:06:00 +0200
-Subject: [Buildroot] [PATCH] package/rpi-firmware: install missing
- library
-In-Reply-To: <20170715094537.GA3095@scaer>
-References: <20170714220936.25212-1-yann.morin.1998@free.fr>
- <20170715090831.1ed20473@windsurf> <20170715094537.GA3095@scaer>
-Message-ID: <20170715120600.4554beee@windsurf>
+Date: Sat, 15 Jul 2017 12:09:54 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
+In-Reply-To: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
+References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <20170715120954.68067f9b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 15 Jul 2017 11:45:37 +0200, Yann E. MORIN wrote:
+On Wed,  5 Jul 2017 19:53:21 +0200, Andr? Hentschel wrote:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On 2017-07-15 09:08 +0200, Thomas Petazzoni spake thusly:
-> > On Sat, 15 Jul 2017 00:09:36 +0200, Yann E. MORIN wrote:  
-> > > The vcdbg utility is linked to a few libraries, which so far were all
-> > > provided by the rpi-userland package.
-> > > 
-> > > But a not-so-recent bump of rpi-firmware pulled in a vcdbg that is
-> > > linked to an additional library, which is not privided by rpi-userland,
-> > > so we must install it.  
-> > 
-> > Could you qualify "not-so-recent" bump ? It's just to know if this is
-> > applicable to our LTS release.  
-> 
-> The library was added in September 2016, and we bumped since then, so
-> yes, the fix applies to both the LTS branch and the maintenance branch
-> as well.
+This package is causing a large number of timeouts, apparently due to
+the fetch of submodules failing. It only happens on my autobuilder
+instance it seems:
 
-ACK. So Peter: please apply to 2017.02.x and 2017.05.x! :-)
+  http://autobuild.buildroot.net/?reason=azure-iot-sdk-c-2017-06-30
 
-Thanks!
+Is there something that can be done about this?
+
+Thanks,
 
 Thomas
 -- 
