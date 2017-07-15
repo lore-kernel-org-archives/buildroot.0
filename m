@@ -1,32 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 15 Jul 2017 19:28:33 +0200
-Subject: [Buildroot] Updates on http://autobuild.buildroot.net/ broken?
-References: <jc2g1exqk8.ln2@ID-313208.user.individual.net>
- <20170618155512.026451aa@windsurf>
-Message-ID: <1vvp3exgqd.ln2@ID-313208.user.individual.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 15 Jul 2017 13:32:10 -0400
+Subject: [Buildroot] [PATCH 02/15] libwebsockets: support libressl
+In-Reply-To: <20170715000852.6a2f8105@windsurf>
+References: <20170714181537.17479-1-aduskett@gmail.com>
+ <20170714181537.17479-2-aduskett@gmail.com>
+ <20170715000852.6a2f8105@windsurf>
+Message-ID: <CAFSsvmr2fwckB=5L01NEo8mtxz6PCww7eptYULmA0rQ-yXX5oQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 18 Jun 2017 15:55:12 +0200 schrieb Thomas Petazzoni:
+Hello;
 
+On Fri, Jul 14, 2017 at 6:08 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Sat, 17 Jun 2017 18:36:03 +0200, Bernd Kuhls wrote:
-> 
->> the last reported build dates back to 0:54 am today, is there something
->> broken w.r.t. updating the results?
-> 
-> Thanks for reporting the issue. The problem was that the root filesystem
-> was full, in terms of number of inodes, due to lighttpd mod_compress
-> cache having filled in the entire filesystem with a large number of
-> small files. This was preventing the upload of new results.
+>
+> On Fri, 14 Jul 2017 14:15:24 -0400, Adam Duskett wrote:
+>
+>> +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+>> +LIBWEBSOCKETS_DEPENDENCIES += libressl host-openssl
+>> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
+>
+> I'm wondering: do we want to mix using libressl on the target, and
+> openssl on the host?
+>
+> I don't necessarily see a big problem with this, but I'm just
+> wondering, since it might be a bit confusing.
+>
+I know you asked Arnout, but I wanted to throw my two cents in here
+as well.
 
-Hi Thomas,
+If I make libressl a host package, Libwebsockets compiles and works
+just fine with it.  I would personally like to make libressl a host package as
+well.
 
-the last reported build dates back to 9:13am today, did the inode problem 
-occur again?
-
-Regards, Bernd
+> Arnout, what do you think?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
