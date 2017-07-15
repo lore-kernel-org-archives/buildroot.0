@@ -1,41 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Jul 2017 12:35:29 +0200
-Subject: [Buildroot] [PATCH] support/testing: fix TestExt4 after ext2fs
- refactoring
-In-Reply-To: <5969864f1120e_a571321b20566b5@ultri3.mail>
-References: <20170710214531.15758-1-arnout@mind.be>
- <5969864f1120e_a571321b20566b5@ultri3.mail>
-Message-ID: <20170715103529.GB3095@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Jul 2017 12:44:32 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
+In-Reply-To: <20170715120954.68067f9b@windsurf>
+References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
+ <20170715120954.68067f9b@windsurf>
+Message-ID: <20170715124432.1573e49b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, Arnout, All,
+Hello,
 
-On 2017-07-15 00:04 -0300, Ricardo Martincoski spake thusly:
-> On Mon, Jul 10, 2017 at 06:45 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+On Sat, 15 Jul 2017 12:09:54 +0200, Thomas Petazzoni wrote:
+
+> This package is causing a large number of timeouts, apparently due to
+> the fetch of submodules failing. It only happens on my autobuilder
+> instance it seems:
 > 
-> > Commit bee9e881a2d3addd6880b39f3e33a7180d0b1eb4 removed the
-> > BR2_TARGET_ROOTFS_EXT2_BLOCKS but didn't update TestExt4 that uses
-> > (tests) that option.
-> > 
-> > Convert it to BR2_TARGET_ROOTFS_EXT2_SIZE, using 16M so the M gets
-> > tested as well.
+>   http://autobuild.buildroot.net/?reason=azure-iot-sdk-c-2017-06-30
 > 
-> http://patchwork.ozlabs.org/patch/788595/
-> that does not use the M, was applied instead.
+> Is there something that can be done about this?
 
-Oh, sorry Aernout, I did not notice your patch before sending mine...
+So, the issue is that I am (intentionally) using a very old Linux
+distribution for this autobuilder instance, and the distro is so old
+that OpenSSL+ca-certificates are no longer compatible with the
+requirements of https:// on github.com. But instead of failing with an
+error, it just remains stuck forever.
 
-Regards,
-Yann E. MORIN.
+An "openssl s_client -connect" test clearly reveals that it's never
+going to connect to github.com from my old distro.
 
+So, I'm wondering what to do. Should I give up testing Buildroot on
+Debian Squeeze, and move to Debian Wheezy instead?
+
+I could perhaps backport openssl+ca-certificates, but what's the point
+of testing such an old distro, if random packages have anyway to be
+upgraded for Buildroot to work correctly?
+
+Arnout, Yann, Peter, what do you think?
+
+I've also Cc'ed Thomas DS, who is known to use Buildroot on really old
+Linux distros. Thomas: what are the oldest distro you're still running
+Buildroot on? If it's some RHEL distro, what is the closest Debian
+version? Do you get openssl/ca-certificates updates on this RHEL, which
+allows such machines to continue to connect over HTTPS to modern web
+sites?
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
