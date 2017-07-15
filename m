@@ -1,67 +1,80 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 15 Jul 2017 16:09:50 -0400
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
-	file.
-In-Reply-To: <20170715214809.2158c3e2@windsurf>
-References: <20170713142549.28078-1-aduskett@gmail.com>
- <20170715114432.0b01a373@windsurf>
- <87d191afyw.fsf@dell.be.48ers.dk> <20170715214809.2158c3e2@windsurf>
-Message-ID: <CAFSsvmqO_1ghduh7prOqU3cpKDu4Kx-GH7TwdkUgdCmafNX+xA@mail.gmail.com>
+Date: Sat, 15 Jul 2017 16:29:43 -0400
+Subject: [Buildroot] [PATCH 1/1] flip libressl and openssl dependency logic
+Message-ID: <20170715202943.16855-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+As it currently sits, if you have libressl selected and run make,
+you will get this error message:
 
-On Sat, Jul 15, 2017 at 3:48 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat, 15 Jul 2017 17:15:51 +0200, Peter Korsgaard wrote:
->
->>  > Note that contrary to what Adam commit log says, the size increase is
->>  > 7.5 KB.
->>
->> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
->> it is a legacy BSD feature and it also isn't supported by musl.
->
-> Agreed.
->
->> It is easy to enable uClibc options, but difficult to disable them again
->> later (as users of the affected packages get caught).
->>
->> Looking around, it seems we are only talking about 3 packages (if the
->> annotations are correct):
->>
->> git grep -l 'fts.h' **/Config.in
->> package/libcgroup/Config.in
->> package/libselinux/Config.in
->> package/libsemanage/Config.in
->>
->> Do we care enough for selinux users on uClibc (libcgroup seems to only
->> be an optional dependency for gst1-rtsp-server) to let all other
->> uClibc-ng users pay?
->
-> I would personally say no. The driving reason for Adam was to be able
-> to build the SELinux stuff. But indeed, if you're adding all the
-> SELinux overhead on your system, you most likely have the filesystem
-> space needed to switch to glibc.
->
-Not only that, but as stated in the past, uClibc-ng is the default
-toolchain for buildroot.  And as it sits, even if somebody did go in and
-turn fts on in uclibc-ng, they still wouldn't be able to select the SELinux
-packages.
+package/openssl/Config.in:1:error: recursive dependency detected!
+symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_LIBRESSL
+symbol BR2_PACKAGE_LIBRESSL depends on BR2_PACKAGE_OPENSSL
 
-> So I'm fine if we decide to say "no". It should hopefully increase the
-> pressure on the upstream projects to move away from a legacy BSD
-> interface, and use the POSIX interface instead.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+If you instead add "depends on !BR2_PACKAGE_LIBRESSL" to Openssl and remove
+"depends on !BR2_PACKAGE_OPENSSL" from libressl, the error goes away.
+
+This also has the added benefit of putting Libressl below OpenSSL in the
+menuconfig, as Peter originally wanted.
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+ package/Config.in            | 2 +-
+ package/libressl/Config.in   | 1 -
+ package/libressl/libressl.mk | 1 +
+ package/openssl/Config.in    | 2 ++
+ 4 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index b48ab5e..463ed3e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -989,9 +989,9 @@ menu "Crypto"
+ 	source "package/libuecc/Config.in"
+ 	source "package/mbedtls/Config.in"
+ 	source "package/nettle/Config.in"
++	source "package/openssl/Config.in"
+ 	# libressl is a openssl replacement
+ 	source "package/libressl/Config.in"
+-	source "package/openssl/Config.in"
+ 	source "package/rhash/Config.in"
+ 	source "package/tinydtls/Config.in"
+ 	source "package/trousers/Config.in"
+diff --git a/package/libressl/Config.in b/package/libressl/Config.in
+index 0a1c9e2..f827e24 100644
+--- a/package/libressl/Config.in
++++ b/package/libressl/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBRESSL
+ 	bool "libressl"
+-	depends on !BR2_PACKAGE_OPENSSL
+ 	help
+ 	  LibreSSL is a version of the TLS/crypto stack forked from
+ 	  OpenSSL in 2014, with goals of modernizing the codebase,
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index ccd236d..a4d4098 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -18,3 +18,4 @@ LIBRESSL_POST_INSTALL_TARGET_HOOKS += LIBRESSL_REMOVE_BIN
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index e08b648..315a40d 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OPENSSL
+ 	bool "openssl"
++	depends on !BR2_PACKAGE_LIBRESSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A collaborative effort to develop a robust, commercial-grade, fully
+ 	  featured, and Open Source toolkit implementing the Secure Sockets
+-- 
+2.9.4
