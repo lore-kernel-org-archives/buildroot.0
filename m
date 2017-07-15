@@ -1,28 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 09:13:06 +0200
-Subject: [Buildroot] [PATCH 01/15] libressl: bump version to 2.5.5
-In-Reply-To: <20170714181537.17479-1-aduskett@gmail.com>
-References: <20170714181537.17479-1-aduskett@gmail.com>
-Message-ID: <20170715091306.6a31f767@windsurf>
+Date: Sat, 15 Jul 2017 09:17:32 +0200
+Subject: [Buildroot] [git commit] librtlsdr: backport pull request to fix
+	build with newer compilers
+Message-ID: <20170715071343.10EDA819D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d68b83e10ebcda227f4675e664edbc15d8816641
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 14 Jul 2017 14:15:23 -0400, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/libressl/libressl.hash | 2 +-
->  package/libressl/libressl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fix:
+http://autobuild.buildroot.net/results/ece/ece557db739aaad9b53130a8ecb4d98f6f67aedf
 
-Applied to master, thanks.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...x-builds-with-newer-compilers-C-standards.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
+new file mode 100644
+index 0000000..b663d08
+--- /dev/null
++++ b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
+@@ -0,0 +1,68 @@
++From ea6a86d8e792430faa3a8161ee99f2bc392875d1 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@chromium.org>
++Date: Fri, 3 Feb 2017 15:44:18 -1000
++Subject: [PATCH] fix builds with newer compilers & C standards
++
++The meaning of "inline" has changed when "static" is not used.
++Since none of these functions are used outside of their respective
++files, mark them as static to avoid build errors where funcs are
++not inlined (based on compiler flags too).
++
++Upstream status: pull request #38
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ src/rtl_adsb.c  | 8 ++++----
++ src/rtl_power.c | 2 +-
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/rtl_adsb.c b/src/rtl_adsb.c
++index e611e78..a3bfa7f 100644
++--- a/src/rtl_adsb.c
+++++ b/src/rtl_adsb.c
++@@ -182,7 +182,7 @@ int magnitute(uint8_t *buf, int len)
++ 	return len/2;
++ }
++ 
++-inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
+++static inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
++ /* takes 4 consecutive real samples, return 0 or 1, BADSAMPLE on error */
++ {
++ 	int bit, bit_p;
++@@ -223,17 +223,17 @@ inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d
++ 	return BADSAMPLE;
++ }
++ 
++-inline uint16_t min16(uint16_t a, uint16_t b)
+++static inline uint16_t min16(uint16_t a, uint16_t b)
++ {
++ 	return a<b ? a : b;
++ }
++ 
++-inline uint16_t max16(uint16_t a, uint16_t b)
+++static inline uint16_t max16(uint16_t a, uint16_t b)
++ {
++ 	return a>b ? a : b;
++ }
++ 
++-inline int preamble(uint16_t *buf, int i)
+++static inline int preamble(uint16_t *buf, int i)
++ /* returns 0/1 for preamble at index i */
++ {
++ 	int i2;
++diff --git a/src/rtl_power.c b/src/rtl_power.c
++index aa7a138..a7a43bb 100644
++--- a/src/rtl_power.c
+++++ b/src/rtl_power.c
++@@ -249,7 +249,7 @@ void sine_table(int size)
++ 	}
++ }
++ 
++-inline int16_t FIX_MPY(int16_t a, int16_t b)
+++static inline int16_t FIX_MPY(int16_t a, int16_t b)
++ /* fixed point multiply and scale */
++ {
++ 	int c = ((int)a * (int)b) >> 14;
++-- 
++2.13.0
++
