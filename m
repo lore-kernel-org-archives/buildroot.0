@@ -1,41 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 11:36:55 +0200
-Subject: [Buildroot] [git commit] package/bluez5_utils: bump to version 5.46
-Message-ID: <20170715093253.5B1FE8045C@busybox.osuosl.org>
+Date: Sat, 15 Jul 2017 11:36:53 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.1.5
+Message-ID: <20170715093253.356E481E55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=248310be748ef51e4679c52f09f72eb8bd0b969b
+commit: https://git.buildroot.net/buildroot/commit/?id=9a3e677548360c63ed55557f8d5e24f9887a700b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bluez5_utils/bluez5_utils.hash | 2 +-
- package/bluez5_utils/bluez5_utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index e7a6a89..bc20d22 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256 4cacb00703a6bc149cb09502257d321597d43952374a16f3558766ffa85364e9  bluez-5.45.tar.xz
-+sha256 ddab3d3837c1afb8ae228a94ba17709a4650bd4db24211b6771ab735c8908e28  bluez-5.46.tar.xz
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index c69e58b..13658cd 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0cae180..1356c38 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.1.4
++MESA3D_HEADERS_VERSION = 17.1.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 51cc300..fb6427a 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-June/000339.html
+-md5 be2ef7c9edec23b07f74f6512a6a6fa5  mesa-17.1.4.tar.xz
+-sha1 70a6c971125f754b78e502ade668bd02e46074d6  mesa-17.1.4.tar.xz
+-sha256 06f3b0e6a28f0d20b7f3391cf67fe89ae98ecd0a686cd545da76557b6cec9cad  mesa-17.1.4.tar.xz
+-sha512 cb8369f0edd3e17b4eee8da159b9dc487f8144d69fe4b95901e9aa6a924759866f26f91fc2ead7036707eecea41582185e7ce73d54f97bf310f198b72ee0a8e4  mesa-17.1.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-July/000342.html
++md5 6cf936fbcaadd98924298a7009e8265d  mesa-17.1.5.tar.xz
++sha1 709a38eb9ecf54390c303071a016c23c1d4bd64b  mesa-17.1.5.tar.xz
++sha256 378516b171712687aace4c7ea8b37c85895231d7a6d61e1e27362cf6034fded9  mesa-17.1.5.tar.xz
++sha512 a12671afd812b304e1db690b123a9de16332608541f71cc3ee9128a3630c81416d46255e5bdbf19e14e85716b218f447987b555e3bc0081b8b6f392556fa21e2  mesa-17.1.5.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 7b312e3..1654046 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BLUEZ5_UTILS_VERSION = 5.45
-+BLUEZ5_UTILS_VERSION = 5.46
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.1.4
++MESA3D_VERSION = 17.1.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
