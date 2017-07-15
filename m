@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 15 Jul 2017 01:24:40 -0300
-Subject: [Buildroot] [PATCH v2 2/6] testing/tests/package/test_python:
- refactor TestPythonBase
-References: <20170712024009.2366-3-andrew.smirnov@gmail.com>
-Message-ID: <596999087ea8e_a573fd7aa652f2c57244@ultri3.mail>
+Date: Sat, 15 Jul 2017 02:15:11 -0300
+Subject: [Buildroot] [PATCH 4/4] configs: raspberrypi3_64_defconfig:
+ enable uart
+References: <1500014931-5599-4-git-send-email-erik.stromdahl@gmail.com>
+Message-ID: <5969a4dfeb1b5_7fcd130b1a4601dd@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, Jul 11, 2017 at 11:40 PM, Andrey Smirnov wrote:
+On Fri, Jul 14, 2017 at 03:48 AM, Erik Stromdahl wrote:
 
-> Convert TestPythonBase to a true base class that only provides code
-> implementing various tests without definig tests themselves in a
+> This patch is necessary to preserve the same behaviour as
+> before the --uart-enable option in post-image.sh was
 
-s/definig/defining/
+s/--uart-enable/--enable-uart/
 
-> "discoverable" form.
-> 
-> To retain correct testing functionality, add TestPython2 derived class
-> that uses code from TestPythonBase to define actual runnable test.
-> 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> introduced.
 
-with the typo fixed
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[I executed the test and checked the -run.log is equivalent to the old one]
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-Below a note to be read when applying...
+Also, to me it looks like patch 3 and 4 should be merged.
+Let's see what others think.
 
 [snip]
-> +class TestPython2(TestPythonBase):
-
-The runnable test got renamed, so the entry needs to be updated in
-.gitlab-ci.yml
--tests.package.test_python.TestPythonBase: *runtime_test
-+tests.package.test_python.TestPython2: *runtime_test
+> -BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --enable-uart)"
+                                                       ^
+I guess you meant
+BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --enable-uart"
 
 Regards,
 Ricardo
