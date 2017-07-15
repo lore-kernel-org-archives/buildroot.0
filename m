@@ -1,33 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 09:08:31 +0200
-Subject: [Buildroot] [PATCH] package/rpi-firmware: install missing
- library
-In-Reply-To: <20170714220936.25212-1-yann.morin.1998@free.fr>
-References: <20170714220936.25212-1-yann.morin.1998@free.fr>
-Message-ID: <20170715090831.1ed20473@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 15 Jul 2017 07:12:39 +0000
+Subject: [Buildroot] [Bug 10076] Makefile:4113: recipe for target 'all-gcc'
+	failed
+In-Reply-To: <bug-10076-163@https.bugs.busybox.net/>
+References: <bug-10076-163@https.bugs.busybox.net/>
+Message-ID: <bug-10076-163-v9pQPyOvQm@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10076
 
-On Sat, 15 Jul 2017 00:09:36 +0200, Yann E. MORIN wrote:
-> The vcdbg utility is linked to a few libraries, which so far were all
-> provided by the rpi-userland package.
-> 
-> But a not-so-recent bump of rpi-firmware pulled in a vcdbg that is
-> linked to an additional library, which is not privided by rpi-userland,
-> so we must install it.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Could you qualify "not-so-recent" bump ? It's just to know if this is
-applicable to our LTS release.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WONTFIX
+             Status|NEW                         |RESOLVED
 
-Thanks!
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+The s-attrtab program is known to require a lot of memory. So in your case,
+your VM most likely doesn't have enough RAM, and therefore the Linux kernel
+running inside the VM kills the s-attrtab program because it tries to consume
+too much memory compared to the available memory.
 
-Thomas
+You can check in /var/log/messages if you see an out of memory message from the
+kernel.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
