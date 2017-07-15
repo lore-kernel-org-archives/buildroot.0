@@ -1,89 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 10:12:28 +0200
-Subject: [Buildroot] [git commit] kvazaar: fix build with gcc 7
-Message-ID: <20170715080832.25CA681DE8@busybox.osuosl.org>
+Date: Sat, 15 Jul 2017 10:13:02 +0200
+Subject: [Buildroot] [PATCH] kvazaar: fix build with gcc 7
+In-Reply-To: <f1fb85ca071785d204c738456570057f70e40add.1499969708.git.baruch@tkos.co.il>
+References: <f1fb85ca071785d204c738456570057f70e40add.1499969708.git.baruch@tkos.co.il>
+Message-ID: <20170715101302.51f96f25@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=972e55b7db7947ee6c7ce5c0e5ac486df29b7710
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add upstream fix for a gcc 7 -Werror build failure.
+On Thu, 13 Jul 2017 21:15:08 +0300, Baruch Siach wrote:
+> Add upstream fix for a gcc 7 -Werror build failure.
+> 
+> Cc: Alexandre Esse <alexandre.esse.dev@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...use-FILL_ARRAY-macro-to-prevent-warning-o.patch | 56 ++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
 
-Fixes:
-http://autobuild.buildroot.net/results/ea1/ea1495696a0e810adb6695dad6b9f3d3363e81d5/
-http://autobuild.buildroot.net/results/2c1/2c1fba63553afa735c5ac29d7f5de8368c794628/
-http://autobuild.buildroot.net/results/d07/d07bfcb8efcb76cdea3c66e0cc24728f418e3872/
+Applied to master, after adding the references to the autobuilder
+failures that you provided. Thanks!
 
-Cc: Alexandre Esse <alexandre.esse.dev@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...use-FILL_ARRAY-macro-to-prevent-warning-o.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
-
-diff --git a/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch b/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
-new file mode 100644
-index 0000000..633da8b
---- /dev/null
-+++ b/package/kvazaar/0001-Modify-and-use-FILL_ARRAY-macro-to-prevent-warning-o.patch
-@@ -0,0 +1,56 @@
-+From 47a9f0de049e77e866ea5bdd4bc7c795ea6dd641 Mon Sep 17 00:00:00 2001
-+From: Ari Lemmetti <ari.lemmetti@gmail.com>
-+Date: Tue, 11 Apr 2017 12:57:22 +0300
-+Subject: [PATCH] Modify and use FILL_ARRAY macro to prevent warning on GCC 7
-+
-+Following warning was given and is false positive
-+
-+error: 'memset' used with length equal to number of elements without multiplication by element size [-Werror=memset-elt-size]
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream commit 47a9f0de049e7.
-+
-+ src/global.h | 6 +++++-
-+ src/rdo.c    | 8 ++++----
-+ 2 files changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/global.h b/src/global.h
-+index bedcd49c2e02..518167443f35 100644
-+--- a/src/global.h
-++++ b/src/global.h
-+@@ -219,7 +219,11 @@ typedef int16_t coeff_t;
-+ // Fill a structure or a static array with val bytes.
-+ #define FILL(var, val) memset(&(var), (val), sizeof(var))
-+ // Fill a number of elements in an array with val bytes.
-+-#define FILL_ARRAY(ar, val, size) memset((ar), (val), (size) * sizeof(*(ar)))
-++#define FILL_ARRAY(ar, val, size) \
-++{\
-++  void *temp_ptr = (void*)(ar);\
-++  memset((temp_ptr), (val), (size) * sizeof(*(ar)));\
-++}
-+ 
-+ #define FREE_POINTER(pointer) { free((void*)pointer); pointer = NULL; }
-+ #define MOVE_POINTER(dst_pointer,src_pointer) { dst_pointer = src_pointer; src_pointer = NULL; }
-+diff --git a/src/rdo.c b/src/rdo.c
-+index 52305fd72fab..2579f2808441 100644
-+--- a/src/rdo.c
-++++ b/src/rdo.c
-+@@ -558,10 +558,10 @@ void kvz_rdoq(encoder_state_t * const state, coeff_t *coef, coeff_t *dest_coeff,
-+   // Explicitly tell the only possible numbers of elements to be zeroed.
-+   // Hope the compiler is able to utilize this information.
-+   switch (cg_num) {
-+-    case  1: memset(sig_coeffgroup_flag, 0,  1 * sizeof(sig_coeffgroup_flag[0])); break;
-+-    case  4: memset(sig_coeffgroup_flag, 0,  4 * sizeof(sig_coeffgroup_flag[0])); break;
-+-    case 16: memset(sig_coeffgroup_flag, 0, 16 * sizeof(sig_coeffgroup_flag[0])); break;
-+-    case 64: memset(sig_coeffgroup_flag, 0, 64 * sizeof(sig_coeffgroup_flag[0])); break;
-++    case  1: FILL_ARRAY(sig_coeffgroup_flag, 0,  1); break;
-++    case  4: FILL_ARRAY(sig_coeffgroup_flag, 0,  4); break;
-++    case 16: FILL_ARRAY(sig_coeffgroup_flag, 0, 16); break;
-++    case 64: FILL_ARRAY(sig_coeffgroup_flag, 0, 64); break;
-+     default: assert(0 && "There should be 1, 4, 16 or 64 coefficient groups");
-+   }
-+ 
-+-- 
-+2.13.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
