@@ -1,125 +1,115 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 15 Jul 2017 17:56:33 +0200
-Subject: [Buildroot] [PATCH v3 3/3] package/kodi: Add support for more archs
-In-Reply-To: <20170715155633.16705-1-bernd.kuhls@t-online.de>
-References: <20170715155633.16705-1-bernd.kuhls@t-online.de>
-Message-ID: <20170715155633.16705-3-bernd.kuhls@t-online.de>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 15 Jul 2017 13:16:19 -0400
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+	file.
+In-Reply-To: <87d191afyw.fsf@dell.be.48ers.dk>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf>
+ <87d191afyw.fsf@dell.be.48ers.dk>
+Message-ID: <CAFSsvmrO3v-shq_G=yheGVGaJHzUV2-2E2cNq9dwZmq+GX7rLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the autoconf-based build system it was necessary to allow each
-supported architecture separatly:
-https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
+Hello;
 
-For the CMake build system this is not necessary anymore so we only
-blacklist archs in Config.in known to be broken.
+On Sat, Jul 15, 2017 at 11:15 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+>  > Hello,
+>  > On Thu, 13 Jul 2017 10:25:48 -0400, Adam Duskett wrote:
+>  >> currently there are a few packages in buildroot that are set to not
+>  >> be selectable unless the user wishes to use glibc specifically because
+>  >> the package uses fts.h.
+>  >>
+>  >> uClibc actually does have a fts implimentation, and it's selectable in
+>  >> uclib-menuconfig.  However; this has two issues with it:
+>  >>
+>  >> 1) Most users wouldn't know that there is even a uClibc-menuconfig
+>  >> 2) Even if the user does select fts support in uClibc-menuconfig, the
+>  >> packages that would now compile and work would still not be selectable
+>  >> because they explicitly require BR2_TOOLCHAIN_USES_GLIBC.
+>  >>
+>  >> Enabling fts support increases the size of uclibc by 75~kb according to
+>  >> the menuconfig option.  This is a acceptable size increase to fix the
+>  >> few packages that require fts.h support.
+>  >>
+>  >> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>
+>  > Peter, what is your thought on enabling FTS by default in our uClibc-ng
+>  > configuration ?
+>
+>  > Note that contrary to what Adam commit log says, the size increase is
+>  > 7.5 KB.
+>
+> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
+> it is a legacy BSD feature and it also isn't supported by musl.
+>
+Funny enough, musl's wiki is a bit dated.
+http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_fts.h_not_included_.3F
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: fixed "KODI_CXX_FLAGS +=" (Samuel)
-v2: rebased
+"if glibc bug 15838 is fixed by adding an fts64 interface in glibc, we could
+consider supporting it with a matching ABI in musl, but it seems more likely
+that glibc will just deprecate this interface."
 
- package/kodi/Config.in |  6 +++---
- package/kodi/kodi.mk   | 45 +++++++++++++++++++++++++++++++++++----------
- 2 files changed, 38 insertions(+), 13 deletions(-)
+The thing is, bug 15838 WAS fixed a while ago, and fts has had a proper
+64bit variant for a while.  Not sure why they are dragging their feet, but
+that's another topic for another day.
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 00e4fbaef..e0c16fac3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
--	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
--		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
--		&& BR2_TOOLCHAIN_HAS_SYNC_8
- 	depends on BR2_USE_MMU # libcdio, and others
-+# i386: needs sse (see upstream PR 10351)
-+	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
-+		&& !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
- 
- comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 3d6c70bee..07740e616 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -57,6 +57,7 @@ KODI_EXTRA_DOWNLOADS = \
- 	https://github.com/xbmc/libdvdread/archive/$(KODI_LIBDVDREAD_VERSION).tar.gz
- 
- KODI_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(KODI_CXX_FLAGS)" \
- 	-DENABLE_CCACHE=OFF \
- 	-DENABLE_DVDCSS=ON \
- 	-DENABLE_INTERNAL_CROSSGUID=OFF \
-@@ -70,14 +71,34 @@ KODI_CONF_OPTS += \
- 	-DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
- 	-DLIBDVDREAD_URL=$(DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
- 
--ifeq ($(BR2_arm),y)
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
-+KODI_DEPENDENCIES += rpi-userland
-+# These CPU-specific options are only used on rbpi:
-+# https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L13
-+ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
-+KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
-+endif
-+else
-+ifeq ($(BR2_arceb)$(BR2_arcle),y)
-+KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
-+else ifeq ($(BR2_armeb),y)
- KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
--else ifeq ($(BR2_mips),y)
--KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
--else ifeq ($(BR2_i386),y)
--KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
--else ifeq ($(BR2_x86_64),y)
--KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
-+else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-+KODI_CONF_OPTS += \
-+	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
-+	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
-+else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
-+KODI_CONF_OPTS += \
-+	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
-+	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
-+else ifeq ($(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
-+KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
-+else
-+# Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
-+# see project/cmake/scripts/linux/ArchSetup.cmake
-+KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
-+endif
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-@@ -128,6 +149,11 @@ else
- KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
- endif
- 
-+# mips: uses __atomic_load_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+KODI_CXX_FLAGS += -latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
- KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
- KODI_DEPENDENCIES += mysql
-@@ -229,9 +255,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
- KODI_DEPENDENCIES += libegl libgles
--KODI_CONF_OPTS += \
--	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
--	-DENABLE_OPENGLES=ON
-+KODI_CONF_OPTS += -DENABLE_OPENGLES=ON
-+KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
- else
- KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
- endif
--- 
-2.11.0
+
+> It is easy to enable uClibc options, but difficult to disable them again
+> later (as users of the affected packages get caught).
+>
+> Looking around, it seems we are only talking about 3 packages (if the
+> annotations are correct):
+>
+> git grep -l 'fts.h' **/Config.in
+> package/libcgroup/Config.in
+> package/libselinux/Config.in
+> package/libsemanage/Config.in
+>
+
+True, but why should we deny uClibc users extra security?
+
+> Do we care enough for selinux users on uClibc (libcgroup seems to only
+> be an optional dependency for gst1-rtsp-server) to let all other
+> uClibc-ng users pay?
+>
+
+I have a core-i5, 16 gigs of ram, and a 256gig Crucial MX200 SSD
+
+Build times/sizes with all packages necessary to compile
+already download, no compiler cache:
+
+command ran:  time make uclibc
+
+without FTS:
+
+real 7m39.002s
+user 15m30.321s
+sys 2m6.026s
+target: 856k
+output/build/uclibc-1.0.25: 51196
+
+with FTS:
+real 7m18.378s
+user 15m22.944s
+sys 2m4.397s
+target: 864K
+output/build/uclibc-1.0.25: 51244
+
+So, negligable difference in time to compile.
+Negligable size difference.
+The added benefit of being able to use SELinux, which
+allows for better security.
+
+Hardly a payment in my opinion. :)
+
+> --
+> Bye, Peter Korsgaard
+
+Thanks!
+
+Adam
