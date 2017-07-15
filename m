@@ -1,41 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Jul 2017 17:28:56 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.12.2
-Message-ID: <20170715152512.A8FC581F55@busybox.osuosl.org>
+Date: Sat, 15 Jul 2017 17:37:00 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/bananapro: bump Linux kernel to
+	4.12.1
+In-Reply-To: <20170712194432.21975-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Wed, 12 Jul 2017 21:44:31 +0200")
+References: <20170712194432.21975-1-joerg.krause@embedded.rocks>
+Message-ID: <87zic590f7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adb4356d7c037f16c209f51b15f180db195917e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Drop the board specific patches which has been applied upstream.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b92bd8b..db03401 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.12.1)"
-+	bool "Latest version (4.12.2)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.12.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.12.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Committed after also dropping the now unused BR2_GLOBAL_PATCH_DIR
+setting, thanks.
+
+-- 
+Bye, Peter Korsgaard
