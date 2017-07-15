@@ -1,39 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 10:16:12 +0200
-Subject: [Buildroot] [PATCH 1/1] board/arcturus/ppc-ucp1020 new gcc-6.x
- Linux kernel build fix
-In-Reply-To: <20170713163817.7114-1-oleks@arcturusnetworks.com>
-References: <20170713163817.7114-1-oleks@arcturusnetworks.com>
-Message-ID: <20170715101612.41c0b8f9@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 15 Jul 2017 11:16:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.1.5
+Message-ID: <20170715091654.15862-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-On Thu, 13 Jul 2017 12:38:17 -0400, Oleksandr Zhadan wrote:
-> Add the Linux-3.18 patch "powerpc/ptrace: Fix out of bounds array access warning" to the board/arcturus/ppc-ucp1020 BSP
-> 
-> " gcc-6 correctly warns about a out of bounds access
-> 
-> arch/powerpc/kernel/ptrace.c:407:24: warning: index 32 denotes an offset greater than size of 'u64[32][1] {aka long long unsigned int[32][1]}' [-Warray-bounds]
->         offsetof(struct thread_fp_state, fpr[32][0]));
->                         ^
-> 
-> check the end of array instead of beginning of next element to fix this"
-> 
-> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
-> ---
->  ...ce-Fix-out-of-bounds-array-access-warning.patch | 52 ++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 board/arcturus/ppc-ucp1020/patches/linux/0003-powerpc-ptrace-Fix-out-of-bounds-array-access-warning.patch
-
-Applied to master, after tweaking the commit log. Thanks!
-
-Thomas
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0cae1808e..1356c38ef 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.1.4
++MESA3D_HEADERS_VERSION = 17.1.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 51cc3006c..fb6427a55 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-June/000339.html
+-md5 be2ef7c9edec23b07f74f6512a6a6fa5  mesa-17.1.4.tar.xz
+-sha1 70a6c971125f754b78e502ade668bd02e46074d6  mesa-17.1.4.tar.xz
+-sha256 06f3b0e6a28f0d20b7f3391cf67fe89ae98ecd0a686cd545da76557b6cec9cad  mesa-17.1.4.tar.xz
+-sha512 cb8369f0edd3e17b4eee8da159b9dc487f8144d69fe4b95901e9aa6a924759866f26f91fc2ead7036707eecea41582185e7ce73d54f97bf310f198b72ee0a8e4  mesa-17.1.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-July/000342.html
++md5 6cf936fbcaadd98924298a7009e8265d  mesa-17.1.5.tar.xz
++sha1 709a38eb9ecf54390c303071a016c23c1d4bd64b  mesa-17.1.5.tar.xz
++sha256 378516b171712687aace4c7ea8b37c85895231d7a6d61e1e27362cf6034fded9  mesa-17.1.5.tar.xz
++sha512 a12671afd812b304e1db690b123a9de16332608541f71cc3ee9128a3630c81416d46255e5bdbf19e14e85716b218f447987b555e3bc0081b8b6f392556fa21e2  mesa-17.1.5.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 7b312e34e..1654046f0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.1.4
++MESA3D_VERSION = 17.1.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
