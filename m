@@ -1,54 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Jul 2017 17:50:46 +0200
-Subject: [Buildroot] [PATCH] git: fix build with NLS disabled
-In-Reply-To: <77c98152cbd8130d71106a9d5789f7b2472c88a5.1499888223.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 12 Jul 2017 22:37:03 +0300")
-References: <77c98152cbd8130d71106a9d5789f7b2472c88a5.1499888223.git.baruch@tkos.co.il>
-Message-ID: <87r2xh8zs9.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Jul 2017 17:49:28 +0200
+Subject: [Buildroot] [git commit] git: fix build with NLS disabled
+Message-ID: <20170715154700.8A44881DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=de660718500e6c15d6b3ae5d7faf6cdf9dd9ebc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Since commit bbfb02598bf75 (git: use the new gettext logic) host-gettext is no
- > longer an unconditional dependency of git. When NLS is disabled host-gettext
- > is not built. This breaks the build of git, because the git Makefile runs
- > msgfmt unless NO_GETTEXT is defined.
+Since commit bbfb02598bf75 (git: use the new gettext logic) host-gettext is no
+longer an unconditional dependency of git. When NLS is disabled host-gettext
+is not built. This breaks the build of git, because the git Makefile runs
+msgfmt unless NO_GETTEXT is defined.
 
- > Define NO_GETTEXT when NLS is disabled to fix the build.
+Define NO_GETTEXT when NLS is disabled to fix the build.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/c87/c8717619a1307f21cb9fe61196511cea44f72015/
- > http://autobuild.buildroot.net/results/e7a/e7acff51f988c333c3fe0c4a18eed42a273932d3/
- > http://autobuild.buildroot.net/results/153/153b17959847ec2079883c087cee27afbdf9571e/
+Fixes:
+http://autobuild.buildroot.net/results/c87/c8717619a1307f21cb9fe61196511cea44f72015/
+http://autobuild.buildroot.net/results/e7a/e7acff51f988c333c3fe0c4a18eed42a273932d3/
+http://autobuild.buildroot.net/results/153/153b17959847ec2079883c087cee27afbdf9571e/
 
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Sagaert Johan <sagaert.johan@skynet.be>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- >  package/git/git.mk | 6 ++++++
- >  1 file changed, 6 insertions(+)
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- > diff --git a/package/git/git.mk b/package/git/git.mk
- > index 23ace0fd4829..52907a27b738 100644
- > --- a/package/git/git.mk
- > +++ b/package/git/git.mk
- > @@ -57,6 +57,12 @@ else
- >  GIT_CONF_OPTS += --without-tcltk
- >  endif
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 23ace0f..52907a2 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -57,6 +57,12 @@ else
+ GIT_CONF_OPTS += --without-tcltk
+ endif
  
- > +ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
- > +GIT_MAKE_OPTS = NO_GETTEXT=1
- > +endif
- > +
- > +GIT_INSTALL_TARGET_OPTS = $(GIT_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-
-I was hoping we could have just passed it in GIT_MAKE_ENV (which is
-passed to both the build and install steps), but that apparently doesn't
-work - So committed, thanks.
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
++GIT_MAKE_OPTS = NO_GETTEXT=1
++endif
++
++GIT_INSTALL_TARGET_OPTS = $(GIT_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
++
+ # assume yes for these tests, configure will bail out otherwise
+ # saying error: cannot run test program while cross compiling
+ GIT_CONF_ENV += \
