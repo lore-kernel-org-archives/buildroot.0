@@ -1,28 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 23:17:35 +0200
-Subject: [Buildroot] [PATCH 1/7] package/rpi-firmware: bump version
-In-Reply-To: <1499948552-11324-1-git-send-email-martin@barkynet.com>
-References: <1499948552-11324-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170715231735.261bf8d5@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Jul 2017 00:49:49 +0200
+Subject: [Buildroot] [PATCH] support/tests: allow properly indented config
+	fragment
+Message-ID: <20170715224949.25598-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently, defining a config fragment in the runtime test infra requires
+that the fragment not to be indented. This is beark, and causes grievance
+when looking at the code (e.g. to fix it).
 
-On Thu, 13 Jul 2017 13:22:26 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Just strip out all leading spaces/tabs when writing the configuration
+lines into the config file.
 
-Entire series applied. Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/builder.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index a475bb0a30..81735dec96 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -16,7 +16,8 @@ class Builder(object):
+ 
+         config_file = os.path.join(self.builddir, ".config")
+         with open(config_file, "w+") as cf:
+-            cf.write(self.config)
++            for line in self.config.splitlines():
++                cf.write("{}\n".format(line.lstrip()))
+ 
+         cmd = ["make",
+                "O={}".format(self.builddir),
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
