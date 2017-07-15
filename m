@@ -1,40 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jul 2017 00:49:49 +0200
-Subject: [Buildroot] [PATCH] support/tests: allow properly indented config
-	fragment
-Message-ID: <20170715224949.25598-1-yann.morin.1998@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 16 Jul 2017 01:11:46 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix qthash error
+	attribute(target("+crc")) is unknown
+In-Reply-To: <20170715231146.25019-1-ps.report@gmx.net>
+References: <20170715231146.25019-1-ps.report@gmx.net>
+Message-ID: <20170715231146.25019-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, defining a config fragment in the runtime test infra requires
-that the fragment not to be indented. This is beark, and causes grievance
-when looking at the code (e.g. to fix it).
+Add patch 0005-Fix-error-attribute-target-crc-is-unknown.patch.
 
-Just strip out all leading spaces/tabs when writing the configuration
-lines into the config file.
+Upstream: https://codereview.qt-project.org/200171
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes buildroot Bug 9916 ([1]).
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=9916
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- support/testing/infra/builder.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...Fix-error-attribute-target-crc-is-unknown.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
 
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index a475bb0a30..81735dec96 100644
---- a/support/testing/infra/builder.py
-+++ b/support/testing/infra/builder.py
-@@ -16,7 +16,8 @@ class Builder(object):
- 
-         config_file = os.path.join(self.builddir, ".config")
-         with open(config_file, "w+") as cf:
--            cf.write(self.config)
-+            for line in self.config.splitlines():
-+                cf.write("{}\n".format(line.lstrip()))
- 
-         cmd = ["make",
-                "O={}".format(self.builddir),
+diff --git a/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+new file mode 100644
+index 0000000000..92d93a800b
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+@@ -0,0 +1,44 @@
++From f0c02fb22bc277e2015a18e562b551ec7b3eed9e Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 16 Jul 2017 00:05:44 +0200
++Subject: [PATCH] Fix error attribute(target("+crc")) is unknown
++
++Task-number: QTBUG-61975
++Change-Id: I0b1b55c0737dad485b5ace8e6eb7cb842589453d
++---
++ src/corelib/tools/qhash.cpp | 2 ++
++ src/corelib/tools/qsimd_p.h | 3 +++
++ 2 files changed, 5 insertions(+)
++
++diff --git a/src/corelib/tools/qhash.cpp b/src/corelib/tools/qhash.cpp
++index 1f9c05c..bbf6efb 100644
++--- a/src/corelib/tools/qhash.cpp
+++++ b/src/corelib/tools/qhash.cpp
++@@ -144,7 +144,9 @@ static inline bool hasFastCrc32()
++ }
++ 
++ template <typename Char>
+++#if defined(__aarch64__)
++ QT_FUNCTION_TARGET(CRC32)
+++#endif
++ static uint crc32(const Char *ptr, size_t len, uint h)
++ {
++     // The crc32[whbd] instructions on Aarch64/Aarch32 calculate a 32-bit CRC32 checksum
++diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
++index 023a4b0..a85d572 100644
++--- a/src/corelib/tools/qsimd_p.h
+++++ b/src/corelib/tools/qsimd_p.h
++@@ -326,7 +326,10 @@
++ #endif
++ // AArch64/ARM64
++ #if defined(Q_PROCESSOR_ARM_V8) && defined(__ARM_FEATURE_CRC32)
+++#if defined(__aarch64__)
+++// only available on aarch64
++ #define QT_FUNCTION_TARGET_STRING_CRC32      "+crc"
+++#endif
++ #  include <arm_acle.h>
++ #endif
++ 
++-- 
++2.7.4
++
 -- 
 2.11.0
