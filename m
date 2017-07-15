@@ -1,47 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 11:44:32 +0200
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
- file.
-In-Reply-To: <20170713142549.28078-1-aduskett@gmail.com>
-References: <20170713142549.28078-1-aduskett@gmail.com>
-Message-ID: <20170715114432.0b01a373@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 15 Jul 2017 11:45:37 +0200
+Subject: [Buildroot] [PATCH] package/rpi-firmware: install missing
+	library
+In-Reply-To: <20170715090831.1ed20473@windsurf>
+References: <20170714220936.25212-1-yann.morin.1998@free.fr>
+ <20170715090831.1ed20473@windsurf>
+Message-ID: <20170715094537.GA3095@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Thu, 13 Jul 2017 10:25:48 -0400, Adam Duskett wrote:
-> currently there are a few packages in buildroot that are set to not
-> be selectable unless the user wishes to use glibc specifically because
-> the package uses fts.h.
+On 2017-07-15 09:08 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 15 Jul 2017 00:09:36 +0200, Yann E. MORIN wrote:
+> > The vcdbg utility is linked to a few libraries, which so far were all
+> > provided by the rpi-userland package.
+> > 
+> > But a not-so-recent bump of rpi-firmware pulled in a vcdbg that is
+> > linked to an additional library, which is not privided by rpi-userland,
+> > so we must install it.
 > 
-> uClibc actually does have a fts implimentation, and it's selectable in
-> uclib-menuconfig.  However; this has two issues with it:
+> Could you qualify "not-so-recent" bump ? It's just to know if this is
+> applicable to our LTS release.
+
+The library was added in September 2016, and we bumped since then, so
+yes, the fix applies to both the LTS branch and the maintenance branch
+as well.
+
+Regards,
+Yann E. MORIN.
+
+> Thanks!
 > 
-> 1) Most users wouldn't know that there is even a uClibc-menuconfig
-> 2) Even if the user does select fts support in uClibc-menuconfig, the
->    packages that would now compile and work would still not be selectable
->    because they explicitly require BR2_TOOLCHAIN_USES_GLIBC.
-> 
-> Enabling fts support increases the size of uclibc by 75~kb according to
-> the menuconfig option.  This is a acceptable size increase to fix the
-> few packages that require fts.h support.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-Peter, what is your thought on enabling FTS by default in our uClibc-ng
-configuration ?
-
-Note that contrary to what Adam commit log says, the size increase is
-7.5 KB.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
