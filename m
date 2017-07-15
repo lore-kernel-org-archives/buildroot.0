@@ -1,97 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 09:17:32 +0200
-Subject: [Buildroot] [git commit] librtlsdr: backport pull request to fix
-	build with newer compilers
-Message-ID: <20170715071343.10EDA819D3@busybox.osuosl.org>
+Date: Sat, 15 Jul 2017 10:01:05 +0200
+Subject: [Buildroot] Autobuilder reporting old build issues
+Message-ID: <20170715100105.108fb7ab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d68b83e10ebcda227f4675e664edbc15d8816641
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Matt,
 
-Fix:
-http://autobuild.buildroot.net/results/ece/ece557db739aaad9b53130a8ecb4d98f6f67aedf
+Is there something special going on with your autobuilder setup?
+Indeed, it very often reports build results that are based on Buildroot
+versions that are a few days old, as if you're not testing the latest
+Buildroot.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...x-builds-with-newer-compilers-C-standards.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+For example, if you look at the attached screenshot, all autobuilder
+instances reported results based on Buildroot 05827480 (the strace
+commit I made yesterday evening), except your autobuilder results,
+which were based on 704db158 (a commit made on July 10, i.e 4-5 days
+ago).
 
-diff --git a/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
-new file mode 100644
-index 0000000..b663d08
---- /dev/null
-+++ b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
-@@ -0,0 +1,68 @@
-+From ea6a86d8e792430faa3a8161ee99f2bc392875d1 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@chromium.org>
-+Date: Fri, 3 Feb 2017 15:44:18 -1000
-+Subject: [PATCH] fix builds with newer compilers & C standards
-+
-+The meaning of "inline" has changed when "static" is not used.
-+Since none of these functions are used outside of their respective
-+files, mark them as static to avoid build errors where funcs are
-+not inlined (based on compiler flags too).
-+
-+Upstream status: pull request #38
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ src/rtl_adsb.c  | 8 ++++----
-+ src/rtl_power.c | 2 +-
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/rtl_adsb.c b/src/rtl_adsb.c
-+index e611e78..a3bfa7f 100644
-+--- a/src/rtl_adsb.c
-++++ b/src/rtl_adsb.c
-+@@ -182,7 +182,7 @@ int magnitute(uint8_t *buf, int len)
-+ 	return len/2;
-+ }
-+ 
-+-inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
-++static inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
-+ /* takes 4 consecutive real samples, return 0 or 1, BADSAMPLE on error */
-+ {
-+ 	int bit, bit_p;
-+@@ -223,17 +223,17 @@ inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d
-+ 	return BADSAMPLE;
-+ }
-+ 
-+-inline uint16_t min16(uint16_t a, uint16_t b)
-++static inline uint16_t min16(uint16_t a, uint16_t b)
-+ {
-+ 	return a<b ? a : b;
-+ }
-+ 
-+-inline uint16_t max16(uint16_t a, uint16_t b)
-++static inline uint16_t max16(uint16_t a, uint16_t b)
-+ {
-+ 	return a>b ? a : b;
-+ }
-+ 
-+-inline int preamble(uint16_t *buf, int i)
-++static inline int preamble(uint16_t *buf, int i)
-+ /* returns 0/1 for preamble at index i */
-+ {
-+ 	int i2;
-+diff --git a/src/rtl_power.c b/src/rtl_power.c
-+index aa7a138..a7a43bb 100644
-+--- a/src/rtl_power.c
-++++ b/src/rtl_power.c
-+@@ -249,7 +249,7 @@ void sine_table(int size)
-+ 	}
-+ }
-+ 
-+-inline int16_t FIX_MPY(int16_t a, int16_t b)
-++static inline int16_t FIX_MPY(int16_t a, int16_t b)
-+ /* fixed point multiply and scale */
-+ {
-+ 	int c = ((int)a * (int)b) >> 14;
-+-- 
-+2.13.0
-+
+This is annoying because when we solve an issue, your autobuilder
+continues to report the problem for several days.
+
+Have you tweaked your autobuild-run script? Are you caching results
+before reporting them?
+
+Could you see what you can do to address this problem?
+
+Thanks,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
