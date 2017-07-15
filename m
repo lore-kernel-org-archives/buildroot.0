@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 15 Jul 2017 00:04:47 -0300
-Subject: [Buildroot] [PATCH] support/testing: fix TestExt4 after ext2fs
- refactoring
-References: <20170710214531.15758-1-arnout@mind.be>
-Message-ID: <5969864f1120e_a571321b20566b5@ultri3.mail>
+Date: Sat, 15 Jul 2017 00:07:53 -0300
+Subject: [Buildroot] [PATCH 2/2] support/testing: add test of BR2_CCACHE
+ with an external toolchain
+References: <20170710204007.8402-2-arnout@mind.be>
+Message-ID: <59698709710e0_a573fd7a88dac88568f3@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Jul 10, 2017 at 06:45 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+On Mon, Jul 10, 2017 at 05:40 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
 
-> Commit bee9e881a2d3addd6880b39f3e33a7180d0b1eb4 removed the
-> BR2_TARGET_ROOTFS_EXT2_BLOCKS but didn't update TestExt4 that uses
-> (tests) that option.
+> We reuse TestExternalToolchainBuildrootuClibc and add ccache to its
+> configuration.
 > 
-> Convert it to BR2_TARGET_ROOTFS_EXT2_SIZE, using 16M so the M gets
-> tested as well.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[snip]
+> +        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
 
-http://patchwork.ozlabs.org/patch/788595/
-that does not use the M, was applied instead.
-Both generate a rootfs with size 16777216 bytes.
+3 nits:
+- why not += ?
+- usually there are no spaces around parameter equals
+- line is too long (not that much)
+from these I suggest to change to:
+        self.config += self.extraconfig.format(builddir=self.builddir)
+
+> +
+> -- 
+
+nit: This empty line at end of file is not needed.
+
+with the 4 nits fixed
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+[the test passes, host-ccache is built either with or without ccache
+ pre-installed in the host machine, the ccache dir is created inside the
+ builddir and has valid data inside:
+ $ cd ${builddir} && host/bin/ccache -s
+ ...
+ cache size                          13.1 MB
+ max cache size                       5.0 GB]
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Regards,
 Ricardo
