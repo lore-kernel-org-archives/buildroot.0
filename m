@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 21:44:47 +0200
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: use shared c-ares if
- available
-In-Reply-To: <1500140309-26534-1-git-send-email-martin@barkynet.com>
-References: <1500140309-26534-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170715214447.76763605@windsurf>
+Date: Sat, 15 Jul 2017 21:48:09 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+	file.
+In-Reply-To: <87d191afyw.fsf@dell.be.48ers.dk>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf>
+ <87d191afyw.fsf@dell.be.48ers.dk>
+Message-ID: <20170715214809.2158c3e2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +15,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 15 Jul 2017 18:38:27 +0100, Martin Bark wrote:
+On Sat, 15 Jul 2017 17:15:51 +0200, Peter Korsgaard wrote:
 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 43c5ff3..a469153 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -34,6 +34,11 @@ else
->  NODEJS_CONF_OPTS += --with-intl=none
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_C_ARES),y)
-> +NODEJS_DEPENDENCIES += c-ares
-> +NODEJS_CONF_OPTS += --shared-cares
-> +endif
+>  > Note that contrary to what Adam commit log says, the size increase is
+>  > 7.5 KB.  
+> 
+> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
+> it is a legacy BSD feature and it also isn't supported by musl.
 
-So what happens if BR2_PACKAGE_C_ARES is disabled? It is not
-needed/used by nodejs, or some internal/built-in version is used?
+Agreed.
+
+> It is easy to enable uClibc options, but difficult to disable them again
+> later (as users of the affected packages get caught).
+> 
+> Looking around, it seems we are only talking about 3 packages (if the
+> annotations are correct):
+> 
+> git grep -l 'fts.h' **/Config.in
+> package/libcgroup/Config.in
+> package/libselinux/Config.in
+> package/libsemanage/Config.in
+> 
+> Do we care enough for selinux users on uClibc (libcgroup seems to only
+> be an optional dependency for gst1-rtsp-server) to let all other
+> uClibc-ng users pay?
+
+I would personally say no. The driving reason for Adam was to be able
+to build the SELinux stuff. But indeed, if you're adding all the
+SELinux overhead on your system, you most likely have the filesystem
+space needed to switch to glibc.
+
+So I'm fine if we decide to say "no". It should hopefully increase the
+pressure on the upstream projects to move away from a legacy BSD
+interface, and use the POSIX interface instead.
 
 Best regards,
 
