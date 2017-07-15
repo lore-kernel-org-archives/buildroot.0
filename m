@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 15 Jul 2017 00:07:53 -0300
-Subject: [Buildroot] [PATCH 2/2] support/testing: add test of BR2_CCACHE
- with an external toolchain
-References: <20170710204007.8402-2-arnout@mind.be>
-Message-ID: <59698709710e0_a573fd7a88dac88568f3@ultri3.mail>
+Date: Sat, 15 Jul 2017 01:21:57 -0300
+Subject: [Buildroot] [PATCH v2 1/6] testing/infra/emulator: allow to
+ specify pexpect timeout
+References: <20170712024009.2366-2-andrew.smirnov@gmail.com>
+Message-ID: <5969986552e2a_a573fd7a8943328570e7@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Jul 10, 2017 at 05:40 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+On Tue, Jul 11, 2017 at 11:40 PM, Andrey Smirnov wrote:
 
-> We reuse TestExternalToolchainBuildrootuClibc and add ccache to its
-> configuration.
+> Some commands take more than 5 seconds to complete under QEMU, so add
+> provisions to allow individual unit-test to specify different duration
+> to avoid false negative test failures.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[snip]
-> +        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 
-3 nits:
-- why not += ?
-- usually there are no spaces around parameter equals
-- line is too long (not that much)
-from these I suggest to change to:
-        self.config += self.extraconfig.format(builddir=self.builddir)
-
-> +
-> -- 
-
-nit: This empty line at end of file is not needed.
-
-with the 4 nits fixed
 Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-[the test passes, host-ccache is built either with or without ccache
- pre-installed in the host machine, the ccache dir is created inside the
- builddir and has valid data inside:
- $ cd ${builddir} && host/bin/ccache -s
- ...
- cache size                          13.1 MB
- max cache size                       5.0 GB]
+[I executed all tests in the current master with this patch]
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+[snip]
+> -    def run(self, cmd):
+> +    def run(self, cmd, timeout=-1):
+
+Indeed.
+From the docs: "When the keyword argument timeout is -1 (default), then TIMEOUT
+will raise after the default value specified by the class timeout attribute."
 
 Regards,
 Ricardo
