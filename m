@@ -1,79 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Jul 2017 23:16:19 +0000
-Subject: [Buildroot] [Bug 10076] New: Makefile:4113: recipe for target
-	'all-gcc' failed
-Message-ID: <bug-10076-163@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 15 Jul 2017 00:04:47 -0300
+Subject: [Buildroot] [PATCH] support/testing: fix TestExt4 after ext2fs
+ refactoring
+References: <20170710214531.15758-1-arnout@mind.be>
+Message-ID: <5969864f1120e_a571321b20566b5@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10076
+Hello,
 
-            Bug ID: 10076
-           Summary: Makefile:4113: recipe for target 'all-gcc' failed
-           Product: buildroot
-           Version: 2017.05.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ptomov at mirion.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Mon, Jul 10, 2017 at 06:45 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
 
-Hi,
+> Commit bee9e881a2d3addd6880b39f3e33a7180d0b1eb4 removed the
+> BR2_TARGET_ROOTFS_EXT2_BLOCKS but didn't update TestExt4 that uses
+> (tests) that option.
+> 
+> Convert it to BR2_TARGET_ROOTFS_EXT2_SIZE, using 16M so the M gets
+> tested as well.
 
-I got the following error when conducting a new make in Buildroot:
+http://patchwork.ozlabs.org/patch/788595/
+that does not use the M, was applied instead.
+Both generate a rootfs with size 16777216 bytes.
 
-Makefile:4113: recipe for target 'all-gcc' failed
-
-Please advise me how to solve this problem.
-
-The Buildroot version is: 2107.05.01. Buildroot runs in Ubuntu VMWare box.
-
-Thanks,
-
-   Pavel
-
-cho timestamp > s-codes
-build/gentarget-def ../../gcc/common.md ../../gcc/config/arm/arm.md \
-  insn-conditions.md > tmp-target-def.h
-/bin/bash ../../gcc/../move-if-change tmp-config.h insn-config.h
-/bin/bash ../../gcc/../move-if-change tmp-target-def.h insn-target-def.h
-echo timestamp > s-config
-build/genopinit ../../gcc/common.md ../../gcc/config/arm/arm.md \
-  insn-conditions.md -htmp-opinit.h -ctmp-opinit.c
-echo timestamp > s-target-def
-build/genattrtab ../../gcc/common.md ../../gcc/config/arm/arm.md
-insn-conditions.md \
-        -Atmp-attrtab.c -Dtmp-dfatab.c -Ltmp-latencytab.c
-/bin/bash ../../gcc/../move-if-change tmp-opinit.h insn-opinit.h
-/bin/bash ../../gcc/../move-if-change tmp-opinit.c insn-opinit.c
-echo timestamp > s-opinit
-build/genautomata ../../gcc/common.md ../../gcc/config/arm/arm.md \
-  insn-conditions.md > tmp-automata.c
-Makefile:2203: recipe for target 's-attrtab' failed
-make[3]: *** [s-attrtab] Killed
-make[3]: *** Waiting for unfinished jobs....
-/bin/bash ../../gcc/../move-if-change tmp-automata.c insn-automata.c
-echo timestamp > s-automata
-rm gcc.pod
-Makefile:4113: recipe for target 'all-gcc' failed
-make[2]: *** [all-gcc] Error 2
-package/pkg-generic.mk:227: recipe for target
-'/home/ptomov/buildroot/output/build/host-gcc-initial-6.4.0/.stamp_built'
-failed
-make[1]: ***
-[/home/ptomov/buildroot/output/build/host-gcc-initial-6.4.0/.stamp_built] Error
-2
-Makefile:79: recipe for target '_all' failed
-make: *** [_all] Error 2
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Ricardo
