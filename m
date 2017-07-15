@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Jul 2017 11:43:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libglfw: bump version to 3.2.1
-In-Reply-To: <20170713202229.14109-1-bernd.kuhls@t-online.de>
-References: <20170713202229.14109-1-bernd.kuhls@t-online.de>
-Message-ID: <20170715114327.406e19aa@windsurf>
+Date: Sat, 15 Jul 2017 11:44:32 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+ file.
+In-Reply-To: <20170713142549.28078-1-aduskett@gmail.com>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+Message-ID: <20170715114432.0b01a373@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Jul 2017 22:22:29 +0200, Bernd Kuhls wrote:
-> License file was renamed:
-> https://github.com/glfw/glfw/commit/e2ce3026a0ae01ecfeefc5af0b2f834d560303d7
+On Thu, 13 Jul 2017 10:25:48 -0400, Adam Duskett wrote:
+> currently there are a few packages in buildroot that are set to not
+> be selectable unless the user wishes to use glibc specifically because
+> the package uses fts.h.
+> 
+> uClibc actually does have a fts implimentation, and it's selectable in
+> uclib-menuconfig.  However; this has two issues with it:
+> 
+> 1) Most users wouldn't know that there is even a uClibc-menuconfig
+> 2) Even if the user does select fts support in uClibc-menuconfig, the
+>    packages that would now compile and work would still not be selectable
+>    because they explicitly require BR2_TOOLCHAIN_USES_GLIBC.
+> 
+> Enabling fts support increases the size of uclibc by 75~kb according to
+> the menuconfig option.  This is a acceptable size increase to fix the
+> few packages that require fts.h support.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-Did you actually test this change? Because the license file was *not*
-renamed in 3.2.1: it is still named COPYING.txt. This commit is perhaps
-after 3.2.1, but definitely the license file is not LICENSE.md after
-bumping to 3.2.1.
+Peter, what is your thought on enabling FTS by default in our uClibc-ng
+configuration ?
 
-I've applied after fixing this. Thanks!
+Note that contrary to what Adam commit log says, the size increase is
+7.5 KB.
+
+Thanks,
 
 Thomas
 -- 
