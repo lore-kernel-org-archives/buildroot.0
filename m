@@ -1,41 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 10:20:02 +0200
-Subject: [Buildroot] Autobuilder reporting old build issues
-In-Reply-To: <20170715100105.108fb7ab@windsurf>
-References: <20170715100105.108fb7ab@windsurf>
-Message-ID: <20170716102002.6d570790@windsurf>
+From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+Date: Sun, 16 Jul 2017 18:14:25 +0700
+Subject: [Buildroot] [PATCH 3/3] package/python-alsaaudio: bump version
+	to 0.8.4
+In-Reply-To: <20170714053449.19777-3-alexey.roslyakov@gmail.com>
+References: <20170714053449.19777-1-alexey.roslyakov@gmail.com>
+ <20170714053449.19777-3-alexey.roslyakov@gmail.com>
+Message-ID: <CALFoz4YjBYbHPmJ2humi=F=ZOCWOED4jkoQjJZM4KSN4vzqRng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+Please ignore this patch since it has huge problems with cross-compilation.
 
-On Sat, 15 Jul 2017 10:01:05 +0200, Thomas Petazzoni wrote:
+On 14 July 2017 at 12:34, Alexey Roslyakov <alexey.roslyakov@gmail.com>
+wrote:
 
-> Is there something special going on with your autobuilder setup?
-> Indeed, it very often reports build results that are based on Buildroot
-> versions that are a few days old, as if you're not testing the latest
-> Buildroot.
-> 
-> For example, if you look at the attached screenshot, all autobuilder
-> instances reported results based on Buildroot 05827480 (the strace
-> commit I made yesterday evening), except your autobuilder results,
-> which were based on 704db158 (a commit made on July 10, i.e 4-5 days
-> ago).
+> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+> ---
+>  package/python-alsaaudio/python-alsaaudio.hash | 6 +++---
+>  package/python-alsaaudio/python-alsaaudio.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/python-alsaaudio/python-alsaaudio.hash
+> b/package/python-alsaaudio/python-alsaaudio.hash
+> index 92277ec393..79cb775e4c 100644
+> --- a/package/python-alsaaudio/python-alsaaudio.hash
+> +++ b/package/python-alsaaudio/python-alsaaudio.hash
+> @@ -1,4 +1,4 @@
+> -# From https://pypi.python.org/pypi?:action=show_md5&digest=
+> 1f22415a3d8da4b303182ad81c2d062e
+> -md5    1f22415a3d8da4b303182ad81c2d062e        pyalsaaudio-0.8.2.tar.gz
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=
+> b46f69561bc85fc52e698b2440ca251e, sha256 locally computed
+> +md5    b46f69561bc85fc52e698b2440ca251e        pyalsaaudio-0.8.4.tar.gz
+>  # Locally calculated
+> -sha256 b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15
+>       pyalsaaudio-0.8.2.tar.gz
+> +sha256 84e8f8da544d7f4bd96479ce4a237600077984d9be1d7f16c1d9a492ecf50085
+>       pyalsaaudio-0.8.4.tar.gz
+> diff --git a/package/python-alsaaudio/python-alsaaudio.mk
+> b/package/python-alsaaudio/python-alsaaudio.mk
+> index 73a7e74b03..caa53e562e 100644
+> --- a/package/python-alsaaudio/python-alsaaudio.mk
+> +++ b/package/python-alsaaudio/python-alsaaudio.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ############################################################
+> ####################
+>
+> -PYTHON_ALSAAUDIO_VERSION = 0.8.2
+> +PYTHON_ALSAAUDIO_VERSION = 0.8.4
+>  PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
+> -PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/
+> packages/source/p/pyalsaaudio
+> +PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/52/b6/
+> 44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83
+>  PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
+>  PYTHON_ALSAAUDIO_LICENSE = Python-2.0
+>  PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
+> --
+> 2.13.0
+>
+>
 
-Since your autobuilder is still reporting build results that date back
-from commit 704db158, I've disabled your account so that build results
-from your autobuilder are no longer accepted.
 
-Let me know when the problem is fixed, so that I can re-enable your
-account.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+With best regards,
+  Alexey Roslyakov
+Email: alexey.roslyakov at gmail.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170716/228a59c1/attachment.html>
