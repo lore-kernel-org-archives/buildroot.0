@@ -1,53 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jul 2017 19:25:17 +0200
-Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
-In-Reply-To: <87tw2f9lic.fsf@dell.be.48ers.dk>
-References: <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
- <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
- <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
- <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
- <20170713153220.GA3002@scaer>
- <2a450d8b-10a6-2be9-b7a7-a659a47bffb0@mind.be>
- <20170714103518.66ca2b7e@windsurf>
- <87o9snb1ri.fsf@dell.be.48ers.dk>
- <20170714153641.0e0af325@windsurf>
- <87tw2f9lic.fsf@dell.be.48ers.dk>
-Message-ID: <20170716172517.GE30047@scaer>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 16 Jul 2017 13:40:10 -0400
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+	file.
+In-Reply-To: <20170716164353.GI1482@waldemar-brodkorb.de>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf>
+ <87d191afyw.fsf@dell.be.48ers.dk> <20170715214809.2158c3e2@windsurf>
+ <87inis8jjj.fsf@dell.be.48ers.dk> <20170716164353.GI1482@waldemar-brodkorb.de>
+Message-ID: <CAFSsvmptrcijrJEk0=Ghw8EG3vaptir=z6WQ2Evs-xqyZaqo6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, Arnout, Joshua, All,
+All;
 
-On 2017-07-14 15:49 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  >> As long as we can find a solution for this problem I don't think we
->  >> should move to sperate files for license hashes. We have 2k+ packages
->  >> and only a very small subset of those have a version selection (and only
->  >> a small subset of that subset will change the license text between
->  >> versions), so I prefer a less-clean solution for this special case
->  >> instead of adding 2k+ extra files to the tree.
-> 
->  > Yes, true.
-> 
->  > So perhaps the easy solution is to search for a hash file in the
->  > version-specific sub-folder. If it exists, use it (and only this one).
->  > If it doesn't exist, fallback to the one in the package directory.
-> 
-> Yes, makes sense to me.
+On Sun, Jul 16, 2017 at 12:43 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> Hi Peter, Thomas,
+> Peter Korsgaard wrote,
+>
+>> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>
+>>  > Hello,
+>>  > On Sat, 15 Jul 2017 17:15:51 +0200, Peter Korsgaard wrote:
+>>
+>>  >> > Note that contrary to what Adam commit log says, the size increase is
+>>  >> > 7.5 KB.
+>>  >>
+>>  >> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
+>>  >> it is a legacy BSD feature and it also isn't supported by musl.
+>>
+>>  > Agreed.
+>>
+>>  >> It is easy to enable uClibc options, but difficult to disable them again
+>>  >> later (as users of the affected packages get caught).
+>>  >>
+>>  >> Looking around, it seems we are only talking about 3 packages (if the
+>>  >> annotations are correct):
+>>  >>
+>>  >> git grep -l 'fts.h' **/Config.in
+>>  >> package/libcgroup/Config.in
+>>  >> package/libselinux/Config.in
+>>  >> package/libsemanage/Config.in
+>>  >>
+>>  >> Do we care enough for selinux users on uClibc (libcgroup seems to only
+>>  >> be an optional dependency for gst1-rtsp-server) to let all other
+>>  >> uClibc-ng users pay?
+>>
+>>  > I would personally say no. The driving reason for Adam was to be able
+>>  > to build the SELinux stuff. But indeed, if you're adding all the
+>>  > SELinux overhead on your system, you most likely have the filesystem
+>>  > space needed to switch to glibc.
+>>
+>>  > So I'm fine if we decide to say "no". It should hopefully increase the
+>>  > pressure on the upstream projects to move away from a legacy BSD
+>>  > interface, and use the POSIX interface instead.
+>>
+>> Ok, agreed. Adam, sorry but we prefer to keep things as they
+>> are. It should be fairly easy for uClibc-ng users wanting to enable
+>> selinux to notice that they need to change to glibc instead based on the
+>> comment:
+>>
+>> comment "libselinux needs a glibc toolchain w/ threads, dynamic library"
+But that's simply not true.  uClibc-ng compiles it just fine if FTS is
+turned on.
+>
+> But this is not the case, they don't need to switch to glibc.
+> The decision makes me sad, as it goes the opposite way I try to
+> develop in Buildroot. I added a lot of stuff f.e. to uClibc-ng to
+> allow to build and use systemd. The required systemd patches are
+> upstream. I regulary try to enable packages which are disabled for no
+> good reason for uClibc users. AutoFS next version will contain the
+> patch allowing to use uClibc-ng and libtirpc instead of Glibc.
+>
+> And what about the people using an architecture which is not supported
+> by glibc? Like Sparc, ARC, Xtensa and Or1k? Or the no-MMU
+> architectures?
+>
+This is also a good point.  Why would we deny uClibc-ng users security?
+Glibc has a large history of CVE's:
+https://www.cvedetails.com/vulnerability-list/vendor_id-72/product_id-767/GNU-Glibc.html
 
-Done, version 2 sent:
-    http://lists.busybox.net/pipermail/buildroot/2017-July/198080.html
+uClibc is smaller and thus has a smaller attack vector, which is good
+in conjuntion
+with SELinux.
 
-Regards,
-Yann E. MORIN.
+> We enabled Wordexp recently and I would really love to see this
+> enabled, too. Could you rethink about your decision?
+>
+> best regards
+>  Waldemar
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks!
+
+Adam
