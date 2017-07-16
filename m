@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 09:16:20 +0200
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: use shared c-ares if
- available
-In-Reply-To: <CAFGQKxe88yf4EMBxWdkpXBaQxyqG2XRaK=fdbA0Tae81MsU-ZA@mail.gmail.com>
-References: <1500140309-26534-1-git-send-email-martin@barkynet.com>
- <20170715214447.76763605@windsurf>
- <CAFGQKxe88yf4EMBxWdkpXBaQxyqG2XRaK=fdbA0Tae81MsU-ZA@mail.gmail.com>
-Message-ID: <20170716091620.11f40d13@windsurf>
+Date: Sun, 16 Jul 2017 09:18:07 +0200
+Subject: [Buildroot] [PATCH] support/tests: allow properly indented
+ config fragment
+In-Reply-To: <20170715224949.25598-1-yann.morin.1998@free.fr>
+References: <20170715224949.25598-1-yann.morin.1998@free.fr>
+Message-ID: <20170716091807.7ce7e5c5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 16 Jul 2017 00:12:33 +0100, Martin Bark wrote:
+On Sun, 16 Jul 2017 00:49:49 +0200, Yann E. MORIN wrote:
+> Currently, defining a config fragment in the runtime test infra requires
+> that the fragment not to be indented. This is beark, and causes grievance
+> when looking at the code (e.g. to fix it).
+> 
+> Just strip out all leading spaces/tabs when writing the configuration
+> lines into the config file.
 
-> nodejs always uses c-ares, libuv and libhttpparser, it just uses it's own
-> versions by default (see https://github.com/nodejs/node/tree/master/deps).
-> Not setting any options will continue to use the build in versions.
+Seems good in principle, but could you give an example of an indented
+config fragment you intend to use?
 
-Then in this case, we want nodejs to unconditionally select c-ares,
-libuv and libhttpparser. Indeed, like most distributions, we prefer to
-use the external libraries rather than the built-in ones.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
