@@ -1,75 +1,119 @@
-From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-Date: Sun, 16 Jul 2017 18:14:25 +0700
-Subject: [Buildroot] [PATCH 3/3] package/python-alsaaudio: bump version
-	to 0.8.4
-In-Reply-To: <20170714053449.19777-3-alexey.roslyakov@gmail.com>
-References: <20170714053449.19777-1-alexey.roslyakov@gmail.com>
- <20170714053449.19777-3-alexey.roslyakov@gmail.com>
-Message-ID: <CALFoz4YjBYbHPmJ2humi=F=ZOCWOED4jkoQjJZM4KSN4vzqRng@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Jul 2017 13:24:47 +0200
+Subject: [Buildroot] [linux-sunxi] [PATCH v2 1/3] board: Add Bananapi
+	M64 support
+In-Reply-To: <1500124091-21190-1-git-send-email-jteki@openedev.com> (Jagan
+ Teki's message of "Sat, 15 Jul 2017 18:38:09 +0530")
+References: <1500124091-21190-1-git-send-email-jteki@openedev.com>
+Message-ID: <87mv848w00.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please ignore this patch since it has huge problems with cross-compilation.
+>>>>> "Jagan" == Jagan Teki <jagannadh.teki@gmail.com> writes:
 
-On 14 July 2017 at 12:34, Alexey Roslyakov <alexey.roslyakov@gmail.com>
-wrote:
+ > From: Jagan Teki <jagan@amarulasolutions.com>
+ > Add initial support for bananapi M64 board with below features:
+ > - U-Boot 2017.07
+ > - Linux 4.11.5
+ > - Default packages from buildroot
 
-> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-> ---
->  package/python-alsaaudio/python-alsaaudio.hash | 6 +++---
->  package/python-alsaaudio/python-alsaaudio.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/package/python-alsaaudio/python-alsaaudio.hash
-> b/package/python-alsaaudio/python-alsaaudio.hash
-> index 92277ec393..79cb775e4c 100644
-> --- a/package/python-alsaaudio/python-alsaaudio.hash
-> +++ b/package/python-alsaaudio/python-alsaaudio.hash
-> @@ -1,4 +1,4 @@
-> -# From https://pypi.python.org/pypi?:action=show_md5&digest=
-> 1f22415a3d8da4b303182ad81c2d062e
-> -md5    1f22415a3d8da4b303182ad81c2d062e        pyalsaaudio-0.8.2.tar.gz
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=
-> b46f69561bc85fc52e698b2440ca251e, sha256 locally computed
-> +md5    b46f69561bc85fc52e698b2440ca251e        pyalsaaudio-0.8.4.tar.gz
->  # Locally calculated
-> -sha256 b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15
->       pyalsaaudio-0.8.2.tar.gz
-> +sha256 84e8f8da544d7f4bd96479ce4a237600077984d9be1d7f16c1d9a492ecf50085
->       pyalsaaudio-0.8.4.tar.gz
-> diff --git a/package/python-alsaaudio/python-alsaaudio.mk
-> b/package/python-alsaaudio/python-alsaaudio.mk
-> index 73a7e74b03..caa53e562e 100644
-> --- a/package/python-alsaaudio/python-alsaaudio.mk
-> +++ b/package/python-alsaaudio/python-alsaaudio.mk
-> @@ -4,9 +4,9 @@
->  #
->  ############################################################
-> ####################
->
-> -PYTHON_ALSAAUDIO_VERSION = 0.8.2
-> +PYTHON_ALSAAUDIO_VERSION = 0.8.4
->  PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
-> -PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/
-> packages/source/p/pyalsaaudio
-> +PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/52/b6/
-> 44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83
->  PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
->  PYTHON_ALSAAUDIO_LICENSE = Python-2.0
->  PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
-> --
-> 2.13.0
->
->
+ > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
+Odd - For some reason, I don't find these patches in patchwork?
+
+
+ > +image sdcard.img {
+ > +	hdimage {
+ > +	}
+ > +
+ > +	partition spl {
+ > +		in-partition-table = "no"
+ > +		image = "sunxi-spl.bin"
+ > +		offset = 8192
+ > +	}
+ > +
+ > +	partition u-boot {
+ > +		in-partition-table = "no"
+ > +		image = "u-boot.itb"
+ > +		offset = 40K
+ > +	}
+
+No reserved space after the image? Does this platform not use the u-boot
+environment on the SD card?
+
+grep CONFIG_ENV build/uboot-2017.07/.config
+CONFIG_ENV_IS_IN_MMC=y
+# CONFIG_ENV_IS_NOWHERE is not set
+CONFIG_ENV_OFFSET=0x88000
+CONFIG_ENV_SIZE=0x20000
+
+So presumably the boot partition should only start at offset 0xa8000?
+
+The easiest way of handling this is to set the size of the u-boot
+partition like it is done in
+E.G. board/orangepi/orangepi/orangepi-pc/genimage.cfg.
+
+
+ > diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
+ > new file mode 100644
+ > index 0000000..6f22b23
+ > --- /dev/null
+ > +++ b/configs/bananapi_m64_defconfig
+ > @@ -0,0 +1,46 @@
+ > +BR2_aarch64=y
+ > +BR2_cortex_a53=y
+ > +BR2_ARM_FPU_VFPV4=y
+ > +
+ > +# Linux headers same as kernel, a 4.11 series
+ > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ > +
+ > +# Firmware
+ > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+ > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+ > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+ > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="bl31"
+ > +
+ > +# Bootloader
+ > +BR2_TARGET_UBOOT=y
+ > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ > +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+ > +BR2_TARGET_UBOOT_NEEDS_DTC=y
+ > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+
+This is the first time I see the itb format. If I understand things
+correctly, this is a fit image containing both u-boot and atf. How does
+u-boot find the atf image / how do we ensure u-boot is (re)built after
+atf?
+
+Looking at board/sunxi/README.sunxi64, bl31.bin is apparently found in
+the toplevel u-boot directory or at the location specified by the BL31
+environment variable, neither of which are used here.
+
+Looking at u-boot.its, it seems to fallback to /dev/null instead:
+
+grep -A1 Trusted build/uboot-2017.07/u-boot.its
+                        description = "ARM Trusted Firmware";
+                        data = /incbin/("/dev/null");
+
+Checking the generated images seems to confirm this:
+
+strings -n 20 images/bl31.bin | head -n 1
+Built : 12:24:28, Jul 16 2017
+
+strings images/u-boot.itb | grep Built
+
+(no match).
+
+I think a better approach would be to generate the .itb file in the
+post-build script instead.
 
 -- 
-With best regards,
-  Alexey Roslyakov
-Email: alexey.roslyakov at gmail.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170716/228a59c1/attachment.html>
+Bye, Peter Korsgaard
