@@ -1,7 +1,8 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 16 Jul 2017 12:12:59 -0400
-Subject: [Buildroot] [PATCH 1/1] flip libressl and openssl dependency logic
-Message-ID: <20170716161300.4338-1-Adamduskett@outlook.com>
+Date: Sun, 16 Jul 2017 12:13:15 -0400
+Subject: [Buildroot] [PATCH v2 1/1] flip libressl and openssl dependency
+	logic
+Message-ID: <20170716161315.4417-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,6 +24,9 @@ menuconfig, as Peter originally wanted.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
+Changes v1 -> v2:
+  - Remove $(eval $(host-autotools-package)), this wasn't supposed to be
+    included in the patch. (Baruch)
  package/Config.in          | 2 +-
  package/libressl/Config.in | 1 -
  package/openssl/Config.in  | 1 +
