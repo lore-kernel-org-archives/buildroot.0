@@ -1,84 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 16:09:03 +0200
-Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: new
-	package
-Message-ID: <20170716141659.BEE8880DF9@busybox.osuosl.org>
+Date: Sun, 16 Jul 2017 16:21:45 +0200
+Subject: [Buildroot] [git commit] python-zope-interface: bump to version
+	4.4.2
+Message-ID: <20170716141755.4085581D32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cdb958e42286c5b73447bc47cb127f1afe6bbc2
+commit: https://git.buildroot.net/buildroot/commit/?id=14645274a4ee91704a9585e3285ec578337b40c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add setuptools as a runtime dependency because zope-interface
+uses pkg_resources during initialization.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-peripheral-joystick/Config.in                | 11 +++++++++++
- .../kodi-peripheral-joystick.hash                         |  2 ++
- .../kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 15 +++++++++++++++
- package/kodi/Config.in                                    |  4 ++++
- 4 files changed, 32 insertions(+)
+ package/python-zope-interface/Config.in                  | 1 +
+ package/python-zope-interface/python-zope-interface.hash | 4 ++--
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
-new file mode 100644
-index 0000000..f257710
---- /dev/null
-+++ b/package/kodi-peripheral-joystick/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
-+	bool "kodi-peripheral-joystick"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  Kodi joystick support (drivers and button maps)
-+
-+	  https://github.com/xbmc/peripheral.joystick
-+
-+comment "kodi-peripheral-joystick needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-new file mode 100644
-index 0000000..ca2bdc3
---- /dev/null
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 c2025c4ec280b44b5d8bb1c34185a94cc105f66f0b762087804bb7d2d633d999  kodi-peripheral-joystick-v1.3.2.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-new file mode 100644
-index 0000000..f0cad13
---- /dev/null
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# kodi-peripheral-joystick
-+#
-+################################################################################
-+
-+# This cset is on the branch 'Krypton'
-+# When Kodi is updated, then this should be updated to the corresponding branch
-+KODI_PERIPHERAL_JOYSTICK_VERSION = v1.3.2
-+KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
-+KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
-+KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
-+KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6586701..efb613a 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -293,6 +293,10 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
- endmenu
+diff --git a/package/python-zope-interface/Config.in b/package/python-zope-interface/Config.in
+index 01f4a94..c09e7b0 100644
+--- a/package/python-zope-interface/Config.in
++++ b/package/python-zope-interface/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
+ 	bool "python-zope-interface"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+ 	  This package provides an implementation of "object interfaces" for
+ 	  Python. Interfaces are a mechanism for labeling objects as conforming
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 7a46cd3..5ba2e84 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/zope-interface/json, sha256 locally computed
+-md5	ba3f32eacaea66094b7e2ae2788cec89  zope.interface-4.3.3.tar.gz
+-sha256	8780ef68ca8c3fe1abb30c058a59015129d6e04a6b02c2e56b9c7de6078dfa88  zope.interface-4.3.3.tar.gz
++md5	d69131352ef06753388c3da09cd8c8aa  zope.interface-4.4.2.tar.gz
++sha256	4e59e427200201f69ef82956ddf9e527891becf5b7cde8ec3ce39e1d0e262eb0  zope.interface-4.4.2.tar.gz
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index cef86cf..37e8d39 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+menu "Peripheral addons"
-+	source "package/kodi-peripheral-joystick/Config.in"
-+endmenu
-+
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
+-PYTHON_ZOPE_INTERFACE_VERSION = 4.3.3
++PYTHON_ZOPE_INTERFACE_VERSION = 4.4.2
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/44/af/cea1e18bc0d3be0e0824762d3236f0e61088eeed75287e7b854d65ec9916
++PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/c5/88/93373971f893714f0dc15e09696ec4886ee8b4e561ce5ae45612c2c516c4
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
