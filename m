@@ -1,119 +1,165 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Jul 2017 13:24:47 +0200
-Subject: [Buildroot] [linux-sunxi] [PATCH v2 1/3] board: Add Bananapi
-	M64 support
-In-Reply-To: <1500124091-21190-1-git-send-email-jteki@openedev.com> (Jagan
- Teki's message of "Sat, 15 Jul 2017 18:38:09 +0530")
-References: <1500124091-21190-1-git-send-email-jteki@openedev.com>
-Message-ID: <87mv848w00.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 Jul 2017 14:55:33 +0200
+Subject: [Buildroot] [git commit] grub2: bump up version
+Message-ID: <20170716125232.CBE7080ACB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jagan" == Jagan Teki <jagannadh.teki@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5ffafd2353f5d67dc74c7f3784dfe48d4080435e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Jagan Teki <jagan@amarulasolutions.com>
- > Add initial support for bananapi M64 board with below features:
- > - U-Boot 2017.07
- > - Linux 4.11.5
- > - Default packages from buildroot
+After many years since the last release and a long time with grub 2.02
+in beta, there is finally a release and it brings many bug fixes and
+interesting features such as support for ARM.
 
- > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Patch boot/grub2/0001-remove-gets.patch doesn't seem to be required
+anymore as grub-core/gnulib/stdio.in.h has changed significantly since
+"053cfcd Import new gnulib." and has another treatment for gets.
+Patch
+boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
+was a backport which is present after the bump and therefore is also no
+longer necessary.
 
-Odd - For some reason, I don't find these patches in patchwork?
+Since we're adding a Config.in comment, we also introduce a
+BR2_TARGET_GRUB2_ARCH_SUPPORTS hidden boolean, in order to avoid
+repeating the architecture dependencies.
 
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: add BR2_TARGET_GRUB2_ARCH_SUPPORTS, remove bogus dependencies
+on ARM and AArch64, since enabling Grub2 on those architectures is
+done in another commit.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/grub2/0001-remove-gets.patch                  | 21 ------------
+ ...ettext-gettext.c-main_context-secondary_c.patch | 39 ----------------------
+ boot/grub2/Config.in                               | 12 ++++++-
+ boot/grub2/grub2.hash                              |  4 +--
+ boot/grub2/grub2.mk                                |  4 +--
+ 5 files changed, 15 insertions(+), 65 deletions(-)
 
- > +image sdcard.img {
- > +	hdimage {
- > +	}
- > +
- > +	partition spl {
- > +		in-partition-table = "no"
- > +		image = "sunxi-spl.bin"
- > +		offset = 8192
- > +	}
- > +
- > +	partition u-boot {
- > +		in-partition-table = "no"
- > +		image = "u-boot.itb"
- > +		offset = 40K
- > +	}
-
-No reserved space after the image? Does this platform not use the u-boot
-environment on the SD card?
-
-grep CONFIG_ENV build/uboot-2017.07/.config
-CONFIG_ENV_IS_IN_MMC=y
-# CONFIG_ENV_IS_NOWHERE is not set
-CONFIG_ENV_OFFSET=0x88000
-CONFIG_ENV_SIZE=0x20000
-
-So presumably the boot partition should only start at offset 0xa8000?
-
-The easiest way of handling this is to set the size of the u-boot
-partition like it is done in
-E.G. board/orangepi/orangepi/orangepi-pc/genimage.cfg.
-
-
- > diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
- > new file mode 100644
- > index 0000000..6f22b23
- > --- /dev/null
- > +++ b/configs/bananapi_m64_defconfig
- > @@ -0,0 +1,46 @@
- > +BR2_aarch64=y
- > +BR2_cortex_a53=y
- > +BR2_ARM_FPU_VFPV4=y
- > +
- > +# Linux headers same as kernel, a 4.11 series
- > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- > +
- > +# Firmware
- > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
- > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
- > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
- > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="bl31"
- > +
- > +# Bootloader
- > +BR2_TARGET_UBOOT=y
- > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- > +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
- > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
- > +BR2_TARGET_UBOOT_NEEDS_DTC=y
- > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-
-This is the first time I see the itb format. If I understand things
-correctly, this is a fit image containing both u-boot and atf. How does
-u-boot find the atf image / how do we ensure u-boot is (re)built after
-atf?
-
-Looking at board/sunxi/README.sunxi64, bl31.bin is apparently found in
-the toplevel u-boot directory or at the location specified by the BL31
-environment variable, neither of which are used here.
-
-Looking at u-boot.its, it seems to fallback to /dev/null instead:
-
-grep -A1 Trusted build/uboot-2017.07/u-boot.its
-                        description = "ARM Trusted Firmware";
-                        data = /incbin/("/dev/null");
-
-Checking the generated images seems to confirm this:
-
-strings -n 20 images/bl31.bin | head -n 1
-Built : 12:24:28, Jul 16 2017
-
-strings images/u-boot.itb | grep Built
-
-(no match).
-
-I think a better approach would be to generate the .itb file in the
-post-build script instead.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/grub2/0001-remove-gets.patch b/boot/grub2/0001-remove-gets.patch
+deleted file mode 100644
+index 0da71b3..0000000
+--- a/boot/grub2/0001-remove-gets.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-ISO C11 removes the specification of gets() from the C language, eglibc 2.16+ removed it
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Pending
+-Index: grub-1.99/grub-core/gnulib/stdio.in.h
+-===================================================================
+---- grub-1.99.orig/grub-core/gnulib/stdio.in.h	2010-12-01 06:45:43.000000000 -0800
+-+++ grub-1.99/grub-core/gnulib/stdio.in.h	2012-07-04 12:25:02.057099107 -0700
+-@@ -140,8 +140,10 @@
+- /* It is very rare that the developer ever has full control of stdin,
+-    so any use of gets warrants an unconditional warning.  Assume it is
+-    always declared, since it is required by C89.  */
+-+#if defined gets
+- #undef gets
+- _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+-+#endif
+- 
+- #if @GNULIB_FOPEN@
+- # if @REPLACE_FOPEN@
+diff --git a/boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch b/boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
+deleted file mode 100644
+index 94be092..0000000
+--- a/boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f30c692c1f9ef0e93bee2b408a24baa017f1ca9d Mon Sep 17 00:00:00 2001
+-From: Vladimir Serbinenko <phcoder@gmail.com>
+-Date: Thu, 7 Nov 2013 01:01:47 +0100
+-Subject: [PATCH] 	* grub-core/gettext/gettext.c (main_context),
+- (secondary_context): 	Define after defining type and not before.
+-
+-[Thomas: backport from upstream commit
+-f30c692c1f9ef0e93bee2b408a24baa017f1ca9d, and remove ChangeLog
+-modifications to avoid conflicts.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- grub-core/gettext/gettext.c | 4 ++--
+- 2 files changed, 7 insertions(+), 2 deletions(-)
+-
+-diff --git a/grub-core/gettext/gettext.c b/grub-core/gettext/gettext.c
+-index df73570..4880cef 100644
+---- a/grub-core/gettext/gettext.c
+-+++ b/grub-core/gettext/gettext.c
+-@@ -34,8 +34,6 @@ GRUB_MOD_LICENSE ("GPLv3+");
+-    http://www.gnu.org/software/autoconf/manual/gettext/MO-Files.html .
+- */
+- 
+--static struct grub_gettext_context main_context, secondary_context;
+--
+- static const char *(*grub_gettext_original) (const char *s);
+- 
+- struct grub_gettext_msg
+-@@ -69,6 +67,8 @@ struct grub_gettext_context
+-   struct grub_gettext_msg *grub_gettext_msg_list;
+- };
+- 
+-+static struct grub_gettext_context main_context, secondary_context;
+-+
+- #define MO_MAGIC_NUMBER 		0x950412de
+- 
+- static grub_err_t
+--- 
+-2.7.4
+-
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index 2f4a3f0..74f0e79 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -1,6 +1,12 @@
++config BR2_TARGET_GRUB2_ARCH_SUPPORTS
++	bool
++	default y if BR2_i386
++	default y if BR2_x86_64
++
+ config BR2_TARGET_GRUB2
+ 	bool "grub2"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  GNU GRUB is a Multiboot boot loader. It was derived from
+ 	  GRUB, the GRand Unified Bootloader, which was originally
+@@ -167,3 +173,7 @@ config BR2_TARGET_GRUB2_BUILTIN_CONFIG
+ 	  entries cannot be described in this embedded configuration.
+ 
+ endif # BR2_TARGET_GRUB2
++
++comment "grub2 needs a toolchain w/ wchar"
++	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
++	depends on !BR2_USE_WCHAR
+diff --git a/boot/grub2/grub2.hash b/boot/grub2/grub2.hash
+index 8883905..7f0679f 100644
+--- a/boot/grub2/grub2.hash
++++ b/boot/grub2/grub2.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	784ec38e7edc32239ad75b8e66df04dc8bfb26d88681bc9f627133a6eb85c458	grub-2.00.tar.xz
++# Locally computed:
++sha256 810b3798d316394f94096ec2797909dbf23c858e48f7b3830826b8daa06b7b0f grub-2.02.tar.xz
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index eeda6ab..36f27d1 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GRUB2_VERSION = 2.00
+-GRUB2_SITE = $(BR2_GNU_MIRROR)/grub
++GRUB2_VERSION = 2.02
++GRUB2_SITE = http://ftp.gnu.org/gnu/grub
+ GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+ GRUB2_LICENSE = GPL-3.0+
+ GRUB2_LICENSE_FILES = COPYING
