@@ -1,95 +1,81 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Jul 2017 16:35:17 +0200
-Subject: [Buildroot] [PATCH 1/2] package/kodi-inputstream-rtmp: new package
-Message-ID: <20170716143518.31325-1-bernd.kuhls@t-online.de>
+Date: Sun, 16 Jul 2017 16:35:18 +0200
+Subject: [Buildroot] [PATCH 2/2] package/kodi-inputstream-adaptive: new
+	package
+In-Reply-To: <20170716143518.31325-1-bernd.kuhls@t-online.de>
+References: <20170716143518.31325-1-bernd.kuhls@t-online.de>
+Message-ID: <20170716143518.31325-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select the new package by the legacy option for easier update.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v1: rebased http://patchwork.ozlabs.org/patch/756689/
+v1: rebased http://patchwork.ozlabs.org/patch/756682/
 
- Config.in.legacy                                         |  1 +
- package/kodi-inputstream-rtmp/Config.in                  |  7 +++++++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash |  2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 13 +++++++++++++
- package/kodi/Config.in                                   |  4 ++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/kodi-inputstream-rtmp/Config.in
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+ package/kodi-inputstream-adaptive/Config.in                 |  8 ++++++++
+ .../kodi-inputstream-adaptive.hash                          |  2 ++
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-inputstream-adaptive/Config.in
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d801573756..d2e63252e7 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -423,6 +423,7 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "kodi rtmp has been removed"
- 	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
- 	help
- 	  Internal rtmp support was removed from Kodi.
- 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
 new file mode 100644
-index 0000000000..c40bff2d7e
+index 0000000000..d5fe5e61cc
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_RTMPDUMP
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
++	bool "kodi-inputstream-adaptive"
++	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  RTMP input stream add-on for Kodi
++	  Kodi inputstream addon for several manifest types
 +
-+	  https://github.com/notspiff/inputstream.rtmp
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++	  https://github.com/peak3d/inputstream.adaptive
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 new file mode 100644
-index 0000000000..f5a82d2aae
+index 0000000000..e461bd97a9
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++sha256 cb0fa6f8326b439006701890d3fd90621b4f6f2db6055a9abe781b089170d28f  kodi-inputstream-adaptive-1.0.8_k17.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 new file mode 100644
-index 0000000000..414c8dfc39
+index 0000000000..1539924623
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-inputstream-rtmp
++# kodi-inputstream-adaptive
 +#
 +################################################################################
 +
-+KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
-+KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
-+KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 1.0.8_k17
++KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPLv2+
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 545b394d86..39355a7372 100644
+index 39355a7372..68c72e66cc 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -299,6 +299,10 @@ menu "Peripheral addons"
- 	source "package/kodi-peripheral-xarcade/Config.in"
+@@ -300,6 +300,7 @@ menu "Peripheral addons"
  endmenu
  
-+menu "Inputstream addons"
-+	source "package/kodi-inputstream-rtmp/Config.in"
-+endmenu
-+
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
+ menu "Inputstream addons"
++	source "package/kodi-inputstream-adaptive/Config.in"
+ 	source "package/kodi-inputstream-rtmp/Config.in"
+ endmenu
+ 
 -- 
 2.11.0
