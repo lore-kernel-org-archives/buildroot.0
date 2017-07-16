@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jul 2017 10:11:04 +0200
-Subject: [Buildroot] [PATCH] support/tests: allow properly indented
- config fragment
-In-Reply-To: <20170716091807.7ce7e5c5@windsurf>
-References: <20170715224949.25598-1-yann.morin.1998@free.fr>
- <20170716091807.7ce7e5c5@windsurf>
-Message-ID: <20170716081104.GA30047@scaer>
+Date: Sun, 16 Jul 2017 10:15:18 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
+In-Reply-To: <87lgnpal7b.fsf@dell.be.48ers.dk>
+References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
+ <20170715120954.68067f9b@windsurf>
+ <20170715124432.1573e49b@windsurf>
+ <87lgnpal7b.fsf@dell.be.48ers.dk>
+Message-ID: <20170716081518.GB30047@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +15,31 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2017-07-16 09:18 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 16 Jul 2017 00:49:49 +0200, Yann E. MORIN wrote:
-> > Currently, defining a config fragment in the runtime test infra requires
-> > that the fragment not to be indented. This is beark, and causes grievance
-> > when looking at the code (e.g. to fix it).
-> > 
-> > Just strip out all leading spaces/tabs when writing the configuration
-> > lines into the config file.
+On 2017-07-15 15:22 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  > So, I'm wondering what to do. Should I give up testing Buildroot on
+>  > Debian Squeeze, and move to Debian Wheezy instead?
 > 
-> Seems good in principle, but could you give an example of an indented
-> config fragment you intend to use?
+> With stretch out, I indeed think it makes sense to move away from
+> squeeze. According to wikipedia squeeze is no longer supported (since
+> Feb 2016):
+> 
+> https://en.wikipedia.org/wiki/Debian_version_history#Release_table
+> 
+> In general, I don't think it makes sense to test on any distribution no
+> longer supported by their upstream.
 
-Sure. Here's a diff against master, for example:
+We can do our best to support older distros, and not break things on
+purpose, but when time has come, we should not refrain from requiring a
+more uop-to-date system.
 
-    diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-    index b205b6a55a..9fad28f834 100644
-    --- a/support/testing/tests/fs/test_squashfs.py
-    +++ b/support/testing/tests/fs/test_squashfs.py
-    @@ -5,12 +5,12 @@ import infra.basetest
-     
-     class TestSquashfs(infra.basetest.BRTest):
-         config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-    -"""
-    -BR2_TARGET_ROOTFS_SQUASHFS=y
-    -# BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
-    -BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
-    -# BR2_TARGET_ROOTFS_TAR is not set
-    -"""
-    +        """
-    +        BR2_TARGET_ROOTFS_SQUASHFS=y
-    +        # BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
-    +        BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
-    +        # BR2_TARGET_ROOTFS_TAR is not set
-    +        """
-     
-         def test_run(self):
-             unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
+If we accidentally break something, interested parties can try to fix it
+and send patches if that is fixable. If that is not fixable, then there
+is not much we can do.
 
-And here is a big file which is easier to read with indented config
-fragments:
-    https://git.buildroot.org/~ymorin/git/buildroot/tree/support/testing/tests/init/test_systemd.py?h=yem/systemd-skeleton-2
+Except add even more host packages and become a distro... :-/
+
+So, my position is you update your autobuilder.
 
 Regards,
 Yann E. MORIN.
