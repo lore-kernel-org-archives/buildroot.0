@@ -1,58 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Jul 2017 16:23:09 +0200
-Subject: [Buildroot] [PATCH] libosip2: add upstream security fix
-Message-ID: <20170716142309.24699-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 16 Jul 2017 16:35:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/kodi-inputstream-rtmp: new package
+Message-ID: <20170716143518.31325-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2016-10324 - In libosip2 in GNU oSIP 4.1.0, a malformed SIP
-message can lead to a heap buffer overflow in the osip_clrncpy() function
-defined in osipparser2/osip_port.c.
+Select the new package by the legacy option for easier update.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ort-sr-109133-Heap-buffer-overflow-in-uti.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
+v1: rebased http://patchwork.ozlabs.org/patch/756689/
 
-diff --git a/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
+ Config.in.legacy                                         |  1 +
+ package/kodi-inputstream-rtmp/Config.in                  |  7 +++++++
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash |  2 ++
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 13 +++++++++++++
+ package/kodi/Config.in                                   |  4 ++++
+ 5 files changed, 27 insertions(+)
+ create mode 100644 package/kodi-inputstream-rtmp/Config.in
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d801573756..d2e63252e7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -423,6 +423,7 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
+ config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "kodi rtmp has been removed"
+ 	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
+ 	help
+ 	  Internal rtmp support was removed from Kodi.
+ 
+diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
 new file mode 100644
-index 0000000000..7f2c2d46d2
+index 0000000000..c40bff2d7e
 --- /dev/null
-+++ b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
-@@ -0,0 +1,30 @@
-+From 7e0793e15e21f68337e130c67b031ca38edf055f Mon Sep 17 00:00:00 2001
-+From: Aymeric Moizard <amoizard@gmail.com>
-+Date: Mon, 5 Sep 2016 15:01:53 +0200
-+Subject: [PATCH]  * fix bug report: sr #109133: Heap buffer overflow in
-+ utility function *osip_clrncpy*    https://savannah.gnu.org/support/?109133
++++ b/package/kodi-inputstream-rtmp/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
++	bool "kodi-inputstream-rtmp"
++	select BR2_PACKAGE_RTMPDUMP
++	help
++	  RTMP input stream add-on for Kodi
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/osipparser2/osip_port.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++	  https://github.com/notspiff/inputstream.rtmp
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+new file mode 100644
+index 0000000000..f5a82d2aae
+--- /dev/null
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+new file mode 100644
+index 0000000000..414c8dfc39
+--- /dev/null
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-inputstream-rtmp
++#
++################################################################################
 +
-+diff --git a/src/osipparser2/osip_port.c b/src/osipparser2/osip_port.c
-+index 0e64147..d8941b0 100644
-+--- a/src/osipparser2/osip_port.c
-++++ b/src/osipparser2/osip_port.c
-+@@ -1291,8 +1291,10 @@ osip_clrncpy (char *dst, const char *src, size_t len)
-+ 	char *p;
-+ 	size_t spaceless_length;
-+ 
-+-	if (src == NULL)
-++	if (src == NULL || len == 0) {
-++		*dst = '\0';
-+ 		return NULL;
-++	}
-+ 
-+ 	/* find the start of relevant text */
-+	pbeg = src;
-+-- 
-+2.11.0
++KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
++KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
++KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
++KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
++KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
 +
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 545b394d86..39355a7372 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -299,6 +299,10 @@ menu "Peripheral addons"
+ 	source "package/kodi-peripheral-xarcade/Config.in"
+ endmenu
+ 
++menu "Inputstream addons"
++	source "package/kodi-inputstream-rtmp/Config.in"
++endmenu
++
+ menu "PVR addons"
+ 	source "package/kodi-pvr-argustv/Config.in"
+ 	source "package/kodi-pvr-dvblink/Config.in"
 -- 
 2.11.0
