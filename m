@@ -1,110 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jul 2017 17:08:59 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
- being sorted alphabetically
-In-Reply-To: <CAGt4E5txWySKpD0npytd=8yujrcQRQNQXwgYQzGCLdy9hyLTLw@mail.gmail.com>
-Message-ID: <20170716150859.GD30047@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 Jul 2017 17:32:43 +0200
+Subject: [Buildroot] [PATCH v6 2/4] infra: add support for MIPS32 FP mode
+In-Reply-To: <20170628151713.10746-2-Vincent.Riera@imgtec.com>
+References: <20170628151713.10746-1-Vincent.Riera@imgtec.com>
+ <20170628151713.10746-2-Vincent.Riera@imgtec.com>
+Message-ID: <20170716173243.4262f35f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, Arnout, All,
+Hello,
 
-Your position on Markus' (non-)issue?
+On Wed, 28 Jun 2017 16:17:11 +0100, Vicente Olivert Riera wrote:
+> MIPS32 support different FP modes (32,xx,64), so give the user the
+> opportunity to choose between them. That will cause host-gcc to be built
+> using the --with-fp-32=[32|xx|64] configure option. Also the
+> -mfp[32|xx|64] gcc option will be added to TARGET_CFLAGS and to the
+> toolchain wrapper.
+> 
+> FP mode option shouldn't be used for soft-float, so we add logic in the
+> toolchain wrapper if -msoft-float is among the arguments in order to not
+> append the -fp[[32|xx|64] option, otherwise the compilation may fail.
+> 
+> Information about FP modes here:
+> 
+> - https://sourceware.org/binutils/docs/as/MIPS-Options.html
+> - https://dmz-portal.imgtec.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking#5._Generating_modeless_code
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v3 -> v6:
+>  - Nothing.
+> Changes v2 -> v3:
+>  - Change toolchain-wrapper.c to not add FP32 mode option when
+>    -msoft-float is used.
+> Changes v1 -> v2:
+>  - Nothing. Patch introduced in v2.
+> ---
+>  arch/Config.in                                     |  3 +++
+>  arch/Config.in.mips                                | 25 ++++++++++++++++++++++
+>  package/gcc/gcc.mk                                 |  7 ++++++
+>  .../toolchain-external/pkg-toolchain-external.mk   |  5 +++++
+>  toolchain/toolchain-wrapper.c                      | 10 +++++++++
+>  5 files changed, 50 insertions(+)
 
-Do we keep the code as-is, or do we "fix" it so that it is not
-ambiguous?
+I've applied your patch. Here as well, a follow-up patch to improve the
+Config.in help text would be good.
 
-I've checked, and make uses strcmp(3) internally, and strcmp() does not
-use locales at all; it just compares chars.
+Also, the gcc documentation says:
 
-Regards,
-Yann E. MORIN.
+--without-odd-spreg-32
 
-On 2017-07-13 16:59 -0700, Markus Mayer spake thusly:
-> On 13 July 2017 at 14:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Markus, All,
-> >
-> > On 2017-07-13 13:16 -0700, Markus Mayer spake thusly:
-> > [--SNIP--]
-> >> I think I may need some help. I started implementing the suggested
-> >> solution, but I have run into some unexpected problems.
-> >>
-> >> Specifically, if I move the linux-tool-*.mk files into their own
-> >> sub-directory, all linux-tools related targets disappear. It won't
-> >> build any linux-tools during a regular run of 'make' and it will
-> >> actually say "No rule..." when explicitly asked to build linux-tools:
-> >>
-> >> $ make linux-tools
-> >> umask 0022 && make -C /home/mmayer/Development/buildroot
-> >> O=/home/mmayer/Development/output/arm64/. linux-tools
-> >> make[1]: *** No rule to make target 'linux-tools'.  Stop.
-> >> Makefile:16: recipe for target '_all' failed
-> >> make: *** [_all] Error 2
-> >>
-> >> Here's what I have done:
-> >>
-> >> (mmayer at lbrmn-mmayer) ~/Development/buildroot$ l package/linux-tools/
-> >> total 84
-> >> drwxrwxr-x    3 mmayer mmayer  4096 Jul 13 11:38 .
-> >> drwxrwxr-x 1843 mmayer mmayer 65536 Jul 10 12:28 ..
-> >> -rw-rw-r--    1 mmayer mmayer  2577 Jul 10 11:02 Config.in
-> >> -rw-rw-r--    1 mmayer mmayer  2049 Jul 13 11:20 linux-tools.mk
-> >> drwxrwxr-x    2 mmayer mmayer  4096 Jul 13 11:20 tools
-> >
-> > OK, I will attempt a wild gues here... Rename the 'tools' directory to
-> > 'linux-tools' and try again.
-> 
-> Your guess was spot-on. That was exactly it.
-> 
-> [...]
-> 
-> > We have a similar situation in linux/linux.mk, see line 425 where we
-> > have an explanation about this:
-> >
-> >   423 # Include all our extensions.
-> >   424 #
-> >   425 # Note: our package infrastructure uses the full-path of the last-scanned
-> >   426 # Makefile to determine what package we're currently defining, using the
-> >   427 # last directory component in the path. As such, including other Makefile,
-> >   428 # like below, before we call one of the *-package macro is usally not
-> >   429 # working.
-> >   430 # However, since the files we include here are in the same directory as
-> >   431 # the current Makefile, we are OK. But this is a hard requirement: files
-> >   432 # included here *must* be in the same directory!
-> >   433 include $(sort $(wildcard linux/linux-ext-*.mk))
-> >
-> > So I would argue against the sub-directory, but in favour of renaming
-> > the files.
-> >
-> > Except that is not necessary, is it? IIRC, you confirmed that this was
-> > in fact not a problem, right?
-> 
-> Yes, it is not a problem for linux-tool-tmon.mk. I originally thought it was.
-> 
-> > So, rather than try to fix a problem that does not exist, using fragile
-> > heuristics, I would recommend we keep the status-quo.
-> 
-> It was my understanding that the alphabetical sorting of linux-tools
-> has been considered to be not really all that desirable and that a
-> "once and for all" solution that does away with this requirement would
-> be welcomed. That's why I looked into these changes.
-> 
-> I'll leave the decision to the maintainers as to whether this should
-> be changed (either using a sub-directory or an file extension other
-> than .mk) or if it is preferable to keep the alphabetical sorting. My
-> personal take is that relying on alphabetical sorting is more fragile
-> than the alternate solution, but it is up to you guys.
-> 
-> Thanks,
-> -Markus
+    On MIPS targets, set the -mno-odd-spreg option by default when
+    using the o32 ABI. This is normally used in conjunction with
+    --with-fp-32=64 in order to target the o32 FP64A ABI extension.
 
+Should we use this additional option when FP32 mode is 64 ?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
