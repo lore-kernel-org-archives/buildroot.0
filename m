@@ -1,81 +1,63 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 16 Jul 2017 18:43:53 +0200
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
- file.
-In-Reply-To: <87inis8jjj.fsf@dell.be.48ers.dk>
-References: <20170713142549.28078-1-aduskett@gmail.com>
- <20170715114432.0b01a373@windsurf>
- <87d191afyw.fsf@dell.be.48ers.dk>
- <20170715214809.2158c3e2@windsurf>
- <87inis8jjj.fsf@dell.be.48ers.dk>
-Message-ID: <20170716164353.GI1482@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Jul 2017 19:22:34 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] core/legal: support multi-version
+	packages
+Message-ID: <cover.1500225742.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
-Peter Korsgaard wrote,
+Hello All!
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Hello,
->  > On Sat, 15 Jul 2017 17:15:51 +0200, Peter Korsgaard wrote:
-> 
->  >> > Note that contrary to what Adam commit log says, the size increase is
->  >> > 7.5 KB.  
->  >> 
->  >> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
->  >> it is a legacy BSD feature and it also isn't supported by musl.
-> 
->  > Agreed.
-> 
->  >> It is easy to enable uClibc options, but difficult to disable them again
->  >> later (as users of the affected packages get caught).
->  >> 
->  >> Looking around, it seems we are only talking about 3 packages (if the
->  >> annotations are correct):
->  >> 
->  >> git grep -l 'fts.h' **/Config.in
->  >> package/libcgroup/Config.in
->  >> package/libselinux/Config.in
->  >> package/libsemanage/Config.in
->  >> 
->  >> Do we care enough for selinux users on uClibc (libcgroup seems to only
->  >> be an optional dependency for gst1-rtsp-server) to let all other
->  >> uClibc-ng users pay?
-> 
->  > I would personally say no. The driving reason for Adam was to be able
->  > to build the SELinux stuff. But indeed, if you're adding all the
->  > SELinux overhead on your system, you most likely have the filesystem
->  > space needed to switch to glibc.
-> 
->  > So I'm fine if we decide to say "no". It should hopefully increase the
->  > pressure on the upstream projects to move away from a legacy BSD
->  > interface, and use the POSIX interface instead.
-> 
-> Ok, agreed. Adam, sorry but we prefer to keep things as they
-> are. It should be fairly easy for uClibc-ng users wanting to enable
-> selinux to notice that they need to change to glibc instead based on the
-> comment:
-> 
-> comment "libselinux needs a glibc toolchain w/ threads, dynamic library"
+This small series fixes our legal-info license check for packages that
+have different versions and for which the licensing information has
+changed between the versions, but the license files are named the same.
 
-But this is not the case, they don't need to switch to glibc.
-The decision makes me sad, as it goes the opposite way I try to
-develop in Buildroot. I added a lot of stuff f.e. to uClibc-ng to
-allow to build and use systemd. The required systemd patches are
-upstream. I regulary try to enable packages which are disabled for no
-good reason for uClibc users. AutoFS next version will contain the
-patch allowing to use uClibc-ng and libtirpc instead of Glibc.
+This is the case for Qt5 for example, where some license files for 5.6
+are different than for 5.8, but are named the same.
 
-And what about the people using an architecture which is not supported
-by glibc? Like Sparc, ARC, Xtensa and Or1k? Or the no-MMU
-architectures? 
+Also fix checking the hashes of license files for host packages.
 
-We enabled Wordexp recently and I would really love to see this
-enabled, too. Could you rethink about your decision?
+Changes v1 -> v2:
+  - fallback to the main hash file is the per-version file does not
+    exist,
+  - fix checking hashes of host license files
 
-best regards
- Waldemar
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 9a0a0a976bc1094719556065ab5e982c6ca27563
+
+  arch/mips: add support for MIPS32 FP mode (2017-07-16 16:45:22 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 868f6cd4d02b61525edf78c8a11afd2655be3425
+
+  core/legal-info: use hash file from version sub-dir (2017-07-16 19:20:47 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      core/legal-info: properly check hashes of license files for host packages
+      core/legal-info: use hash file from version sub-dir
+
+ docs/manual/adding-packages-directory.txt | 4 +++-
+ package/pkg-generic.mk                    | 2 +-
+ package/pkg-utils.mk                      | 9 ++++++---
+ 3 files changed, 10 insertions(+), 5 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
