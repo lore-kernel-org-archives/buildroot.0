@@ -1,98 +1,94 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Jul 2017 20:41:45 +0300
-Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.2
-Message-ID: <f7cbc676f11d7e779db03578d9fcffd7c34f39d3.1500226905.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Jul 2017 20:46:07 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+ file.
+In-Reply-To: <CAFSsvmptrcijrJEk0=Ghw8EG3vaptir=z6WQ2Evs-xqyZaqo6A@mail.gmail.com>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf>
+ <87d191afyw.fsf@dell.be.48ers.dk>
+ <20170715214809.2158c3e2@windsurf>
+ <87inis8jjj.fsf@dell.be.48ers.dk>
+ <20170716164353.GI1482@waldemar-brodkorb.de>
+ <CAFSsvmptrcijrJEk0=Ghw8EG3vaptir=z6WQ2Evs-xqyZaqo6A@mail.gmail.com>
+Message-ID: <20170716184607.GF30047@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes (security fixes):
+Adam, Waldemar, All,
 
-[MOX-006]      Fix non-NULL parser parameter validation in XML_Parse;
-                 resulted in NULL dereference, previously
+On 2017-07-16 13:40 -0400, Adam Duskett spake thusly:
+> On Sun, Jul 16, 2017 at 12:43 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> > Peter Korsgaard wrote,
+> >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+[--SNIP--]
+> >>  > So I'm fine if we decide to say "no". It should hopefully increase the
+> >>  > pressure on the upstream projects to move away from a legacy BSD
+> >>  > interface, and use the POSIX interface instead.
+> >>
+> >> Ok, agreed. Adam, sorry but we prefer to keep things as they
+> >> are. It should be fairly easy for uClibc-ng users wanting to enable
+> >> selinux to notice that they need to change to glibc instead based on the
+> >> comment:
+> >>
+> >> comment "libselinux needs a glibc toolchain w/ threads, dynamic library"
+> But that's simply not true.  uClibc-ng compiles it just fine if FTS is
+> turned on.
 
-Drop upstream patch.
+I can see two issues there:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ----------------------
- package/expat/expat.hash                           |  8 +++---
- package/expat/expat.mk                             |  4 +--
- 3 files changed, 5 insertions(+), 36 deletions(-)
- delete mode 100644 package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+  - fts() is deprecated, obsoleted; it is not POSIX:
+        http://pubs.opengroup.org/onlinepubs/9699919799/idx/if.html
 
-diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-deleted file mode 100644
-index 44f43e1cb470..000000000000
---- a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 602e6c78ca750c082b72f8cdf4a38839b312959f Mon Sep 17 00:00:00 2001
--From: Sebastian Pipping <sebastian@pipping.org>
--Date: Sun, 18 Jun 2017 18:55:10 +0200
--Subject: [PATCH] configure.ac: Fix mis-detection of getrandom on Debian
-- GNU/kFreeBSD (#50)
--
--There is no such thing but we need to link (not just compile) to realize.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- expat/configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 1357c9a..444c002 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
-- 
-- 
-- AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
---AC_COMPILE_IFELSE([AC_LANG_SOURCE([
--+AC_LINK_IFELSE([AC_LANG_SOURCE([
--   #include <stdlib.h>  /* for NULL */
--   #include <sys/random.h>
--   int main() {
---- 
--2.11.0
--
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 595597b6fd0c..f1e19193e909 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.1/
--md5	d9c3baeab58774cefc2f04faf29f2cf8	expat-2.2.1.tar.bz2
--sha1	f45eb724f182776a9cacec9ed70d549e87198987	expat-2.2.1.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.2/
-+md5	1ede9a41223c78528b8c5d23e69a2667	expat-2.2.2.tar.bz2
-+sha1	891cee988b38d5d66953f62f94c3150b8810a70a	expat-2.2.2.tar.bz2
- # Calculated based on the hashes above
--sha256	1868cadae4c82a018e361e2b2091de103cd820aaacb0d6cfa49bd2cd83978885	expat-2.2.1.tar.bz2
-+sha256	4376911fcf81a23ebd821bbabc26fd933f3ac74833f74924342c29aad2c86046	expat-2.2.2.tar.bz2
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index bb6e627e5b6c..a10f2c974aa6 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.2.1
-+EXPAT_VERSION = 2.2.2
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
-@@ -14,8 +14,6 @@ EXPAT_DEPENDENCIES = host-pkgconf
- HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
- EXPAT_LICENSE_FILES = COPYING
--# for 0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
--EXPAT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+  - external toolchain, uClibc-based: since fts is a deprecated
+    interface, it is most probably that an external toolchain does not
+    have it.
+
+Besides, musl does not provide it, so the SELinux stuff is anyway not
+avbailable to everyone.
+
+People interested in having SELinux with non-glibc will have to provide
+a patch against SELinux to be dsure they are usable, at least with musl,
+which is a C library with good momentum.
+
+[--SNIP--]
+> > And what about the people using an architecture which is not supported
+> > by glibc? Like Sparc, ARC, Xtensa and Or1k? Or the no-MMU
+> > architectures?
+
+*This* is a valid reason to add fts() to our internal uClibc
+configuraiton. If anythong, this should be the only argument exposed to
+add fts().
+
+> This is also a good point.  Why would we deny uClibc-ng users security?
+> Glibc has a large history of CVE's:
+> https://www.cvedetails.com/vulnerability-list/vendor_id-72/product_id-767/GNU-Glibc.html
+> 
+> uClibc is smaller and thus has a smaller attack vector, which is good
+
+But unfortunately, uClibc-ng has far less exposure than glibc, so this
+is also a security concern...
+
+> in conjuntion
+> with SELinux.
+> 
+> > We enabled Wordexp recently and I would really love to see this
+> > enabled, too. Could you rethink about your decision?
+
+I was initially writing this mail to argue in favour of adding fts(),
+and now I am a little bit more suspicious, too. The only killing
+argument for me is the one about archs without a glibc port. Those are
+left out in the cold, and that's not nice...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.13.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
