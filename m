@@ -1,43 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 16:19:01 +0200
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
-In-Reply-To: <87lgnpal7b.fsf@dell.be.48ers.dk>
-References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
- <20170715120954.68067f9b@windsurf>
- <20170715124432.1573e49b@windsurf>
- <87lgnpal7b.fsf@dell.be.48ers.dk>
-Message-ID: <20170716161901.5a88cc27@windsurf>
+Date: Sun, 16 Jul 2017 16:16:01 +0200
+Subject: [Buildroot] [git commit] package/kodi-peripheral-xarcade: new
+	package
+Message-ID: <20170716141700.17BE180DF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fae7573fca49f2fe6b2e705025064b3637e8b58c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Jul 2017 15:22:48 +0200, Peter Korsgaard wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-peripheral-xarcade/Config.in                   |  6 ++++++
+ .../kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash    |  2 ++
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk  | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 4 files changed, 22 insertions(+)
 
->  > So, I'm wondering what to do. Should I give up testing Buildroot on
->  > Debian Squeeze, and move to Debian Wheezy instead?  
-> 
-> With stretch out, I indeed think it makes sense to move away from
-> squeeze. According to wikipedia squeeze is no longer supported (since
-> Feb 2016):
-> 
-> https://en.wikipedia.org/wiki/Debian_version_history#Release_table
-> 
-> In general, I don't think it makes sense to test on any distribution no
-> longer supported by their upstream.
-
-Following your feedback and Yann's feedback, I've updated my chroot
-from Squeeze to Wheezy. I've checked, and now Git clones from
-github.com are working, as are wget downloads from cdn.kernel.org. This
-should hopefully avoid a lot of bogus download failures.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/kodi-peripheral-xarcade/Config.in b/package/kodi-peripheral-xarcade/Config.in
+new file mode 100644
+index 0000000..8d3c678
+--- /dev/null
++++ b/package/kodi-peripheral-xarcade/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_PERIPHERAL_XARCADE
++	bool "kodi-peripheral-xarcade"
++	help
++	  X-Arcade Tankstick support for Kodi
++
++	  https://github.com/kodi-game/peripheral.xarcade
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+new file mode 100644
+index 0000000..48dc5a0
+--- /dev/null
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 cd503e7f1413214693c28b59f19f3fffe0a54cff5c29d43b2eca9bb31c10edeb  kodi-peripheral-xarcade-f1875ba4b7aa6ce85ec40fedf48ed5501c79e5fd.tar.gz
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+new file mode 100644
+index 0000000..c4ddba3
+--- /dev/null
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-peripheral-xarcade
++#
++################################################################################
++
++KODI_PERIPHERAL_XARCADE_VERSION = f1875ba4b7aa6ce85ec40fedf48ed5501c79e5fd
++KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
++KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
++KODI_PERIPHERAL_XARCADE_LICENSE_FILES = src/addon.cpp
++KODI_PERIPHERAL_XARCADE_DEPENDENCIES = kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 50dc2ff..545b394 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -296,6 +296,7 @@ endmenu
+ menu "Peripheral addons"
+ 	source "package/kodi-peripheral-joystick/Config.in"
+ 	source "package/kodi-peripheral-steamcontroller/Config.in"
++	source "package/kodi-peripheral-xarcade/Config.in"
+ endmenu
+ 
+ menu "PVR addons"
