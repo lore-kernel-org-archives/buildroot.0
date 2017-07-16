@@ -1,51 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 09:58:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: fix build with newer gcc
- versions.
-In-Reply-To: <20170715141419.13160-1-bernd.kuhls@t-online.de>
-References: <20170715141419.13160-1-bernd.kuhls@t-online.de>
-Message-ID: <20170716095834.38eaee7a@windsurf>
+Date: Sun, 16 Jul 2017 09:59:15 +0200
+Subject: [Buildroot] [git commit] minnowboard_max: bump to kernel 4.12.2
+Message-ID: <20170716075534.2BF917FFD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d4afb3288b679e34507756ade659690bb19ad4fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Jul 2017 16:14:19 +0200, Bernd Kuhls wrote:
-> Using this defconfig produces a build error with kodi:
-> 
-> BR2_arm=y
-> BR2_cortex_a8=y
-> BR2_ARM_INSTRUCTIONS_THUMB2=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_SUNXI_MALI=y
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PY_ONLY=y
-> 
-> /home/buildroot/buildroot/output/build/kodi-17.3-Krypton/xbmc/filesystem/FTPParse.cpp:37:1:
->  error: ?string? does not name a type
->  string CFTPParse::getName()
->  ^~~~~~
-> /home/buildroot/buildroot/output/build/kodi-17.3-Krypton/xbmc/filesystem/FTPParse.cpp:62:25:
->  error: variable or field ?setTime? declared void
->  void CFTPParse::setTime(string str)
->                          ^~~~~~
-> /home/buildroot/buildroot/output/build/kodi-17.3-Krypton/xbmc/filesystem/FTPParse.cpp:62:25:
->  error: ?string? was not declared in this scope
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../kodi/0003-FTPParse.cpp-use-std-string.patch    | 91 ++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 package/kodi/0003-FTPParse.cpp-use-std-string.patch
+And drop the version number from the linux configuration.
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/minnowboard/{linux-4.8.config => linux.config} | 0
+ configs/minnowboard_max-graphical_defconfig          | 6 +++---
+ configs/minnowboard_max_defconfig                    | 8 ++++----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/minnowboard/linux-4.8.config b/board/minnowboard/linux.config
+similarity index 100%
+rename from board/minnowboard/linux-4.8.config
+rename to board/minnowboard/linux.config
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index 621281b..ef0947c 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -3,7 +3,7 @@ BR2_x86_64=y
+ BR2_x86_atom=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+@@ -21,9 +21,9 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Linux
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.8.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux.config"
+ 
+ # Bootloader
+ BR2_TARGET_GRUB2=y
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index fe43b52..674b144 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -7,8 +7,8 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+ 
+-# Linux headers same as kernel, a 4.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++# Linux headers same as kernel, a 4.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+@@ -20,9 +20,9 @@ BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.8.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux.config"
+ 
+ # Bootloader
+ BR2_TARGET_GRUB2=y
