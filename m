@@ -1,40 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jul 2017 19:22:38 +0200
-Subject: [Buildroot] [PATCH 1/2 v2] core/legal-info: properly check hashes
-	of license files for host packages
-In-Reply-To: <cover.1500225742.git.yann.morin.1998@free.fr>
-References: <cover.1500225742.git.yann.morin.1998@free.fr>
-Message-ID: <4352c0f979c2c09211f80092d881ff84b1df1368.1500225742.git.yann.morin.1998@free.fr>
+Date: Sun, 16 Jul 2017 19:25:17 +0200
+Subject: [Buildroot] [PATCH] package/qt5: bump latest version to 5.9.1
+In-Reply-To: <87tw2f9lic.fsf@dell.be.48ers.dk>
+References: <7248234a-60d3-3bf5-0954-ff0442609136@mind.be>
+ <69cf264e-bb78-3823-e165-5a3378806741@microchip.com>
+ <0db10485-c5ee-5097-97f4-aaadd2535761@microchip.com>
+ <20170713095003.057fb2bc@windsurf.orange-hotspot.com>
+ <20170713153220.GA3002@scaer>
+ <2a450d8b-10a6-2be9-b7a7-a659a47bffb0@mind.be>
+ <20170714103518.66ca2b7e@windsurf>
+ <87o9snb1ri.fsf@dell.be.48ers.dk>
+ <20170714153641.0e0af325@windsurf>
+ <87tw2f9lic.fsf@dell.be.48ers.dk>
+Message-ID: <20170716172517.GE30047@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When called for a host package, we currently miss the hash file, because
-it is named after the target package.
+Peter, Thomas, Arnout, Joshua, All,
 
-Fix that by using the package raw-name.
+On 2017-07-14 15:49 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  >> As long as we can find a solution for this problem I don't think we
+>  >> should move to sperate files for license hashes. We have 2k+ packages
+>  >> and only a very small subset of those have a version selection (and only
+>  >> a small subset of that subset will change the license text between
+>  >> versions), so I prefer a less-clean solution for this special case
+>  >> instead of adding 2k+ extra files to the tree.
+> 
+>  > Yes, true.
+> 
+>  > So perhaps the easy solution is to search for a hash file in the
+>  > version-specific sub-folder. If it exists, use it (and only this one).
+>  > If it doesn't exist, fallback to the one in the package directory.
+> 
+> Yes, makes sense to me.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Done, version 2 sent:
+    http://lists.busybox.net/pipermail/buildroot/2017-July/198080.html
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 2916a7bbad..e4328be4ca 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -851,7 +851,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_NAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_SITE_METHOD),local)
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
