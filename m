@@ -1,51 +1,105 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jul 2017 16:59:47 +0200
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2017-06-30
-In-Reply-To: <20170716161901.5a88cc27@windsurf>
-References: <1499277201-14030-1-git-send-email-nerv@dawncrow.de>
- <20170715120954.68067f9b@windsurf>
- <20170715124432.1573e49b@windsurf>
- <87lgnpal7b.fsf@dell.be.48ers.dk>
- <20170716161901.5a88cc27@windsurf>
-Message-ID: <20170716145947.GC30047@scaer>
+Date: Sun, 16 Jul 2017 17:08:59 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
+ being sorted alphabetically
+In-Reply-To: <CAGt4E5txWySKpD0npytd=8yujrcQRQNQXwgYQzGCLdy9hyLTLw@mail.gmail.com>
+Message-ID: <20170716150859.GD30047@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Peter, Thomas, Arnout, All,
 
-On 2017-07-16 16:19 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 15 Jul 2017 15:22:48 +0200, Peter Korsgaard wrote:
-> 
-> >  > So, I'm wondering what to do. Should I give up testing Buildroot on
-> >  > Debian Squeeze, and move to Debian Wheezy instead?  
-> > 
-> > With stretch out, I indeed think it makes sense to move away from
-> > squeeze. According to wikipedia squeeze is no longer supported (since
-> > Feb 2016):
-> > 
-> > https://en.wikipedia.org/wiki/Debian_version_history#Release_table
-> > 
-> > In general, I don't think it makes sense to test on any distribution no
-> > longer supported by their upstream.
-> 
-> Following your feedback and Yann's feedback, I've updated my chroot
-> from Squeeze to Wheezy. I've checked, and now Git clones from
-> github.com are working, as are wget downloads from cdn.kernel.org. This
-> should hopefully avoid a lot of bogus download failures.
+Your position on Markus' (non-)issue?
 
-Thank you Thomas for having run this old distro for the autobuilders for
-so long, and most importantly for bringing in patches to fix those
-autobuild failures.
+Do we keep the code as-is, or do we "fix" it so that it is not
+ambiguous?
 
-Thanks! :-)
-
-So long, Squeeze, and thanks for all the fish! :-)
+I've checked, and make uses strcmp(3) internally, and strcmp() does not
+use locales at all; it just compares chars.
 
 Regards,
 Yann E. MORIN.
+
+On 2017-07-13 16:59 -0700, Markus Mayer spake thusly:
+> On 13 July 2017 at 14:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Markus, All,
+> >
+> > On 2017-07-13 13:16 -0700, Markus Mayer spake thusly:
+> > [--SNIP--]
+> >> I think I may need some help. I started implementing the suggested
+> >> solution, but I have run into some unexpected problems.
+> >>
+> >> Specifically, if I move the linux-tool-*.mk files into their own
+> >> sub-directory, all linux-tools related targets disappear. It won't
+> >> build any linux-tools during a regular run of 'make' and it will
+> >> actually say "No rule..." when explicitly asked to build linux-tools:
+> >>
+> >> $ make linux-tools
+> >> umask 0022 && make -C /home/mmayer/Development/buildroot
+> >> O=/home/mmayer/Development/output/arm64/. linux-tools
+> >> make[1]: *** No rule to make target 'linux-tools'.  Stop.
+> >> Makefile:16: recipe for target '_all' failed
+> >> make: *** [_all] Error 2
+> >>
+> >> Here's what I have done:
+> >>
+> >> (mmayer at lbrmn-mmayer) ~/Development/buildroot$ l package/linux-tools/
+> >> total 84
+> >> drwxrwxr-x    3 mmayer mmayer  4096 Jul 13 11:38 .
+> >> drwxrwxr-x 1843 mmayer mmayer 65536 Jul 10 12:28 ..
+> >> -rw-rw-r--    1 mmayer mmayer  2577 Jul 10 11:02 Config.in
+> >> -rw-rw-r--    1 mmayer mmayer  2049 Jul 13 11:20 linux-tools.mk
+> >> drwxrwxr-x    2 mmayer mmayer  4096 Jul 13 11:20 tools
+> >
+> > OK, I will attempt a wild gues here... Rename the 'tools' directory to
+> > 'linux-tools' and try again.
+> 
+> Your guess was spot-on. That was exactly it.
+> 
+> [...]
+> 
+> > We have a similar situation in linux/linux.mk, see line 425 where we
+> > have an explanation about this:
+> >
+> >   423 # Include all our extensions.
+> >   424 #
+> >   425 # Note: our package infrastructure uses the full-path of the last-scanned
+> >   426 # Makefile to determine what package we're currently defining, using the
+> >   427 # last directory component in the path. As such, including other Makefile,
+> >   428 # like below, before we call one of the *-package macro is usally not
+> >   429 # working.
+> >   430 # However, since the files we include here are in the same directory as
+> >   431 # the current Makefile, we are OK. But this is a hard requirement: files
+> >   432 # included here *must* be in the same directory!
+> >   433 include $(sort $(wildcard linux/linux-ext-*.mk))
+> >
+> > So I would argue against the sub-directory, but in favour of renaming
+> > the files.
+> >
+> > Except that is not necessary, is it? IIRC, you confirmed that this was
+> > in fact not a problem, right?
+> 
+> Yes, it is not a problem for linux-tool-tmon.mk. I originally thought it was.
+> 
+> > So, rather than try to fix a problem that does not exist, using fragile
+> > heuristics, I would recommend we keep the status-quo.
+> 
+> It was my understanding that the alphabetical sorting of linux-tools
+> has been considered to be not really all that desirable and that a
+> "once and for all" solution that does away with this requirement would
+> be welcomed. That's why I looked into these changes.
+> 
+> I'll leave the decision to the maintainers as to whether this should
+> be changed (either using a sub-directory or an file extension other
+> than .mk) or if it is preferable to keep the alphabetical sorting. My
+> personal take is that relying on alphabetical sorting is more fragile
+> than the alternate solution, but it is up to you guys.
+> 
+> Thanks,
+> -Markus
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
