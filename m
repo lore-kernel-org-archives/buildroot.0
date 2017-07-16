@@ -1,26 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Jul 2017 17:56:04 +0200
-Subject: [Buildroot] [PATCH v4,1/1] boinc: new package
-References: <1499281026-4745-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <ktes3exd09.ln2@ID-313208.user.individual.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 16 Jul 2017 17:57:50 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-07-15
+In-Reply-To: <20170716063402.6FE6320DF3@mail.free-electrons.com>
+References: <20170716063402.6FE6320DF3@mail.free-electrons.com>
+Message-ID: <eb108213-fb03-12bf-bcf8-c33cabca92e4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hi Thomas,
 
-Am Wed, 05 Jul 2017 20:57:06 +0200 schrieb Fabrice Fontaine:
+Le 16/07/2017 ? 08:34, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> Build statistics for 2017-07-15
+> ================================
+> 
+>       successes : 87 
+>        failures : 24 
+>        timeouts : 2  
+>           TOTAL : 113
+> 
+> Classification of failures by reason
+> ====================================
 
-> +BOINC_PATCH += \
-> +	https://github.com/BOINC/boinc/
-commit/25c2f1839753a2695c62cc4d4edb7e88345af8cb.patch \
-> +	https://github.com/BOINC/boinc/commit/
-bf807980c1b217c0f20668a664806d8727df3239.patch
+> make[1]: *** wait: No child... | 2 
+> 
+> 
+> Detail of failures
+> ===================
+> 
+>       mipsel | make[1]: *** wait: No child... | NOK | http://autobuild.buildroot.net/results/36d5a4838197bfffcbc8dea84e6cfa5f3a87949d |     
+>      powerpc | make[1]: *** wait: No child... | NOK | http://autobuild.buildroot.net/results/7e2bd71b2776f9b8d13812b456ffd3181cd86535 |     
 
-please add the patches as files to packages/boinc/, patches from 
-github.com
-are not stable over time, the hashes can change.
+efl, trinity maybe other packages are affected by an issue fixed by [1].
 
-Regards, Bernd
+Can you rebuild the toolchains used in autobuilders ?
+
+Thanks!
+
+Best regards,
+Romain
+
+[1]
+https://git.buildroot.net/buildroot/commit/?id=e91f959e840f94df12d6df19907a8e8c4a067f93
