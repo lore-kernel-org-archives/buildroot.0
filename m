@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 15:41:52 +0200
-Subject: [Buildroot] [PATCH v2 4/8] grub2: enable support for arm and
- aarch64 targets
-In-Reply-To: <20170426213953.14904-5-nunes.erico@gmail.com>
-References: <20170426213953.14904-1-nunes.erico@gmail.com>
- <20170426213953.14904-5-nunes.erico@gmail.com>
-Message-ID: <20170716154152.7a9191ce@windsurf>
+Date: Sun, 16 Jul 2017 16:05:47 +0200
+Subject: [Buildroot] [PATCH next 1/3] ed: add host package
+In-Reply-To: <20170512142848.13956-1-Vincent.Riera@imgtec.com>
+References: <20170512142848.13956-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170716160547.347fade2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Apr 2017 23:39:49 +0200, Erico Nunes wrote:
-
-> These targets have been tested in the following environments:
+On Fri, 12 May 2017 15:28:46 +0100, Vicente Olivert Riera wrote:
+> This will be necessary for updating bc's version in a subsequent patch.
 > 
-> arm-uboot: qemu arm vexpress and BeagleBone
-> arm-efi: BeagleBone
-> aarch64-efi: qemu aarch64 virt and Odroid-C2
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/ed/ed.mk | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 
-It would be nice to create some tests in the runtime tests
-infrastructure to test Grub2 on ARM/ARM64. We already test it on x86
-through the ISO9660 tests.
+I had a look at all of this, and my feeling is the same as the
+OpenEmbedded folks: this really sucks. Why on earth do they need "ed"?
+Why don't they fix their build system to build fbc for the host?
 
-But OK, this can be added at a later point.
+See https://patchwork.openembedded.org/patch/140001/ for the feedback
+from OpenEmbedded people. I really don't think there's a compelling
+reason to upgrade to 1.07.1 for now, so let's keep 1.06 and avoid this
+mess.
+
+I've mailed the submitter of the OE patch, who said he would contact
+the upstream GNU bc maintainer, in order to see if he got some
+feedback. You are in Cc of this e-mail.
+
+In addition, there was an issue in your patch: GNU bc has moved to GNU
+GPLv3+ since this 1.07.1 release, so the licensing details should be
+fixed as well.
 
 Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
