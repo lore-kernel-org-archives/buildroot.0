@@ -1,36 +1,81 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 16 Jul 2017 12:21:52 -0400
-Subject: [Buildroot] [PATCH 1/1] libressl: add host variant
-Message-ID: <20170716162152.5137-1-Adamduskett@outlook.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 16 Jul 2017 18:43:53 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+ file.
+In-Reply-To: <87inis8jjj.fsf@dell.be.48ers.dk>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf>
+ <87d191afyw.fsf@dell.be.48ers.dk>
+ <20170715214809.2158c3e2@windsurf>
+ <87inis8jjj.fsf@dell.be.48ers.dk>
+Message-ID: <20170716164353.GI1482@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If a package can be compiled against libressl, the package can build
-against a host variant as well.
+Hi Peter, Thomas,
+Peter Korsgaard wrote,
 
-We shouldn't be mixing OpenSSL and LibreSSL either, and forcing the
-user to download and build OpenSSL when they selected LibreSSL causes
-confusion and could potentially break things.
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  > Hello,
+>  > On Sat, 15 Jul 2017 17:15:51 +0200, Peter Korsgaard wrote:
+> 
+>  >> > Note that contrary to what Adam commit log says, the size increase is
+>  >> > 7.5 KB.  
+>  >> 
+>  >> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
+>  >> it is a legacy BSD feature and it also isn't supported by musl.
+> 
+>  > Agreed.
+> 
+>  >> It is easy to enable uClibc options, but difficult to disable them again
+>  >> later (as users of the affected packages get caught).
+>  >> 
+>  >> Looking around, it seems we are only talking about 3 packages (if the
+>  >> annotations are correct):
+>  >> 
+>  >> git grep -l 'fts.h' **/Config.in
+>  >> package/libcgroup/Config.in
+>  >> package/libselinux/Config.in
+>  >> package/libsemanage/Config.in
+>  >> 
+>  >> Do we care enough for selinux users on uClibc (libcgroup seems to only
+>  >> be an optional dependency for gst1-rtsp-server) to let all other
+>  >> uClibc-ng users pay?
+> 
+>  > I would personally say no. The driving reason for Adam was to be able
+>  > to build the SELinux stuff. But indeed, if you're adding all the
+>  > SELinux overhead on your system, you most likely have the filesystem
+>  > space needed to switch to glibc.
+> 
+>  > So I'm fine if we decide to say "no". It should hopefully increase the
+>  > pressure on the upstream projects to move away from a legacy BSD
+>  > interface, and use the POSIX interface instead.
+> 
+> Ok, agreed. Adam, sorry but we prefer to keep things as they
+> are. It should be fairly easy for uClibc-ng users wanting to enable
+> selinux to notice that they need to change to glibc instead based on the
+> comment:
+> 
+> comment "libselinux needs a glibc toolchain w/ threads, dynamic library"
 
-Let users who want to use LibreSSL use LibreSSL, and users who want
-to use OpenSSL use OpenSSL.
+But this is not the case, they don't need to switch to glibc.
+The decision makes me sad, as it goes the opposite way I try to
+develop in Buildroot. I added a lot of stuff f.e. to uClibc-ng to
+allow to build and use systemd. The required systemd patches are
+upstream. I regulary try to enable packages which are disabled for no
+good reason for uClibc users. AutoFS next version will contain the
+patch allowing to use uClibc-ng and libtirpc instead of Glibc.
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/libressl/libressl.mk | 1 +
- 1 file changed, 1 insertion(+)
+And what about the people using an architecture which is not supported
+by glibc? Like Sparc, ARC, Xtensa and Or1k? Or the no-MMU
+architectures? 
 
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index ccd236d29..a4d4098f4 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -18,3 +18,4 @@ LIBRESSL_POST_INSTALL_TARGET_HOOKS += LIBRESSL_REMOVE_BIN
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-2.13.3
+We enabled Wordexp recently and I would really love to see this
+enabled, too. Could you rethink about your decision?
+
+best regards
+ Waldemar
