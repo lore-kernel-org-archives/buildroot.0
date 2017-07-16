@@ -1,68 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jul 2017 17:32:43 +0200
-Subject: [Buildroot] [PATCH v6 2/4] infra: add support for MIPS32 FP mode
-In-Reply-To: <20170628151713.10746-2-Vincent.Riera@imgtec.com>
-References: <20170628151713.10746-1-Vincent.Riera@imgtec.com>
- <20170628151713.10746-2-Vincent.Riera@imgtec.com>
-Message-ID: <20170716173243.4262f35f@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Jul 2017 17:53:52 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+	file.
+In-Reply-To: <20170715214809.2158c3e2@windsurf> (Thomas Petazzoni's message of
+ "Sat, 15 Jul 2017 21:48:09 +0200")
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf> <87d191afyw.fsf@dell.be.48ers.dk>
+ <20170715214809.2158c3e2@windsurf>
+Message-ID: <87inis8jjj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 28 Jun 2017 16:17:11 +0100, Vicente Olivert Riera wrote:
-> MIPS32 support different FP modes (32,xx,64), so give the user the
-> opportunity to choose between them. That will cause host-gcc to be built
-> using the --with-fp-32=[32|xx|64] configure option. Also the
-> -mfp[32|xx|64] gcc option will be added to TARGET_CFLAGS and to the
-> toolchain wrapper.
-> 
-> FP mode option shouldn't be used for soft-float, so we add logic in the
-> toolchain wrapper if -msoft-float is among the arguments in order to not
-> append the -fp[[32|xx|64] option, otherwise the compilation may fail.
-> 
-> Information about FP modes here:
-> 
-> - https://sourceware.org/binutils/docs/as/MIPS-Options.html
-> - https://dmz-portal.imgtec.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking#5._Generating_modeless_code
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v3 -> v6:
->  - Nothing.
-> Changes v2 -> v3:
->  - Change toolchain-wrapper.c to not add FP32 mode option when
->    -msoft-float is used.
-> Changes v1 -> v2:
->  - Nothing. Patch introduced in v2.
-> ---
->  arch/Config.in                                     |  3 +++
->  arch/Config.in.mips                                | 25 ++++++++++++++++++++++
->  package/gcc/gcc.mk                                 |  7 ++++++
->  .../toolchain-external/pkg-toolchain-external.mk   |  5 +++++
->  toolchain/toolchain-wrapper.c                      | 10 +++++++++
->  5 files changed, 50 insertions(+)
+ > Hello,
+ > On Sat, 15 Jul 2017 17:15:51 +0200, Peter Korsgaard wrote:
 
-I've applied your patch. Here as well, a follow-up patch to improve the
-Config.in help text would be good.
+ >> > Note that contrary to what Adam commit log says, the size increase is
+ >> > 7.5 KB.  
+ >> 
+ >> Hmm, 7.5KB isn't much - But fts isn't enabled by default in uClibc-nc,
+ >> it is a legacy BSD feature and it also isn't supported by musl.
 
-Also, the gcc documentation says:
+ > Agreed.
 
---without-odd-spreg-32
+ >> It is easy to enable uClibc options, but difficult to disable them again
+ >> later (as users of the affected packages get caught).
+ >> 
+ >> Looking around, it seems we are only talking about 3 packages (if the
+ >> annotations are correct):
+ >> 
+ >> git grep -l 'fts.h' **/Config.in
+ >> package/libcgroup/Config.in
+ >> package/libselinux/Config.in
+ >> package/libsemanage/Config.in
+ >> 
+ >> Do we care enough for selinux users on uClibc (libcgroup seems to only
+ >> be an optional dependency for gst1-rtsp-server) to let all other
+ >> uClibc-ng users pay?
 
-    On MIPS targets, set the -mno-odd-spreg option by default when
-    using the o32 ABI. This is normally used in conjunction with
-    --with-fp-32=64 in order to target the o32 FP64A ABI extension.
+ > I would personally say no. The driving reason for Adam was to be able
+ > to build the SELinux stuff. But indeed, if you're adding all the
+ > SELinux overhead on your system, you most likely have the filesystem
+ > space needed to switch to glibc.
 
-Should we use this additional option when FP32 mode is 64 ?
+ > So I'm fine if we decide to say "no". It should hopefully increase the
+ > pressure on the upstream projects to move away from a legacy BSD
+ > interface, and use the POSIX interface instead.
 
-Thanks!
+Ok, agreed. Adam, sorry but we prefer to keep things as they
+are. It should be fairly easy for uClibc-ng users wanting to enable
+selinux to notice that they need to change to glibc instead based on the
+comment:
 
-Thomas
+comment "libselinux needs a glibc toolchain w/ threads, dynamic library"
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
