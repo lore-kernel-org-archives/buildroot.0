@@ -1,43 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Jul 2017 17:36:07 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
- being sorted alphabetically
-In-Reply-To: <20170717093700.0ed06d45@windsurf>
-References: <CAGt4E5txWySKpD0npytd=8yujrcQRQNQXwgYQzGCLdy9hyLTLw@mail.gmail.com>
- <20170716150859.GD30047@scaer> <20170717093700.0ed06d45@windsurf>
-Message-ID: <20170717153607.GA3518@scaer>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 17 Jul 2017 12:03:20 -0400
+Subject: [Buildroot] [PATCHv2 2/3] qt5webengine: new package
+In-Reply-To: <1499856552195-170662.post@n4.nabble.com>
+References: <20170712021630.31121-1-gael.portay@savoirfairelinux.com>
+ <20170712021630.31121-3-gael.portay@savoirfairelinux.com>
+ <1499856552195-170662.post@n4.nabble.com>
+Message-ID: <20170717160320.mmhtx7t7x52ucyva@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Markus, All,
+Hi,
 
-On 2017-07-17 09:37 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 16 Jul 2017 17:08:59 +0200, Yann E. MORIN wrote:
+On Wed, Jul 12, 2017 at 03:49:12AM -0700, gomsis wrote:
+> Error while compiling
 > 
-> > Your position on Markus' (non-)issue?
-> > 
-> > Do we keep the code as-is, or do we "fix" it so that it is not
-> > ambiguous?
-> > 
-> > I've checked, and make uses strcmp(3) internally, and strcmp() does not
-> > use locales at all; it just compares chars.
+> root at C1VAD58:/home/bsm/Desktop/buildroot# patch -p1
+> <PATCHv2-2-3-qt5webengine-new-package.patch
+> patching file package/qt5/Config.in
+> Hunk #1 succeeded at 78 with fuzz 1 (offset -1 lines).
+> patching file package/qt5/qt5webengine/0001-change-default-ssl-dir.patch
+> patching file package/qt5/qt5webengine/Config.in
+> patching file package/qt5/qt5webengine/chromium.inc
+> patching file package/qt5/qt5webengine/qt5webengine.hash
+> patching file package/qt5/qt5webengine/qt5webengine.mk
 > 
-> I don't have a very strong opinion on this. To me, it would be fine to
-> have linux-tools.mk and then the per-tool files called
-> linux-tool-<foo>.mk.in or something like that.
+> root at C1VAD58:/home/bsm/Desktop/buildroot# make
+> package/qt5/qt5webengine/chromium.inc:13: *** commands commence before first
+> target.  Stop.
+> root at C1VAD58:/home/bsm/Desktop/buildroot#
+> 
 
-Markus, would you want to rework your patch accordingly? Thanks! :-)
+My bad, I submitted the buggy version. I am resending a v3.
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks.
