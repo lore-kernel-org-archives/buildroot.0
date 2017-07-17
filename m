@@ -1,75 +1,131 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Mon, 17 Jul 2017 15:13:08 -0700
-Subject: [Buildroot] [PATCH] package: libglib2: explicitly specify host's
-	PYTHON to be used
-Message-ID: <20170717221308.16711-1-andrew.smirnov@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 17 Jul 2017 23:26:20 +0000
+Subject: [Buildroot] [Bug 10091] gcc7.1 does not build with graphite support
+ due to old isl
+In-Reply-To: <bug-10091-163@https.bugs.busybox.net/>
+References: <bug-10091-163@https.bugs.busybox.net/>
+Message-ID: <bug-10091-163-JetjsIyKKx@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unless explicitly told otherwise, libglib2's ./configure step will
-pick up the first python implementation it finds in ${PATH} as the
-python to use for code generation scripts executed as a part of build
-process. Because [host-]python is not specified in any of the
-_DEPENDENCIES this creates a corner case leading to build failure.
+https://bugs.busybox.net/show_bug.cgi?id=10091
 
-What happens is [host-]libglib2's ./configure, executead after
-[host-]python is already built, ends up picking up python from
-${HOST_DIR}, which, not specified as a dependency will cause partial
-rebuilds executed as:
+--- Comment #7 from Ivan <ivan.nazarenko@gmail.com> ---
+Here are they: The error:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/bin/arm-buildroot-linux-musleabihf-g++
+-c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+--sysroot=/home/ivan/buildroot-git/buildroot/buildroot/output/host/arm-buildroot-linux-musleabihf/sysroot
+-O3 -O3 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden -Wall -W
+-Wvla -Wdate-time -Wshift-overflow=2 -Wduplicated-cond -D_REENTRANT -fPIC
+-DQT_NO_USING_NAMESPACE -DQT_NO_FOREACH -DQT_HAVE_POLL -DQT_HAVE_PPOLL
+-DQT_BUILD_CORE_LIB -DQT_BUILDING_QT -DQT_NO_CAST_TO_ASCII
+-DQT_ASCII_CAST_WARNINGS -DQT_MOC_COMPAT -DQT_USE_QSTRINGBUILDER
+-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050000
+-D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -I. -Iglobal
+-I../3rdparty/harfbuzz/src -I../3rdparty/md5 -I../3rdparty/md4
+-I../3rdparty/sha3 -I../3rdparty/double-conversion/include
+-I../3rdparty/double-conversion/include/double-conversion -I../3rdparty/forkfd
+-I../../include -I../../include/QtCore -I../../include/QtCore/5.8.0
+-I../../include/QtCore/5.8.0/QtCore -I.moc
+-I/home/ivan/buildroot-git/buildroot/buildroot/output/host/arm-buildroot-linux-musleabihf/sysroot/usr/include/glib-2.0
+-I/home/ivan/buildroot-git/buildroot/buildroot/output/host/arm-buildroot-linux-musleabihf/sysroot/usr/lib/glib-2.0/include
+-I/home/ivan/buildroot-git/buildroot/buildroot/output/host/arm-buildroot-linux-musleabihf/sysroot/usr/include
+-I../../mkspecs/devices/linux-buildroot-g++ -o .obj/qreadwritelock.o
+thread/qreadwritelock.cpp
+In file included from
+../../include/QtCore/5.8.0/QtCore/private/../../../../../src/corelib/tools/qsimd_p.h:293:0,
+                 from ../../include/QtCore/5.8.0/QtCore/private/qsimd_p.h:1,
+                 from global/qlogging.cpp:57:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_ldc(unsigned int, unsigned int, const void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:48:49:
+error: invalid conversion from ?const void*? to ?const int*? [-fpermissive]
+   return __builtin_arm_ldc (__coproc, __CRd, __p);
+                                                 ^
+<built-in>: note:   initializing argument 3 of ?void __builtin_arm_ldc(unsigned
+int, unsigned int, const int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_ldcl(unsigned int, unsigned int, const void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:55:50:
+error: invalid conversion from ?const void*? to ?const int*? [-fpermissive]
+   return __builtin_arm_ldcl (__coproc, __CRd, __p);
+                                                  ^
+<built-in>: note:   initializing argument 3 of ?void
+__builtin_arm_ldcl(unsigned int, unsigned int, const int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_stc(unsigned int, unsigned int, void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:62:49:
+error: invalid conversion from ?void*? to ?int*? [-fpermissive]
+   return __builtin_arm_stc (__coproc, __CRd, __p);
+                                                 ^
+<built-in>: note:   initializing argument 3 of ?void __builtin_arm_stc(unsigned
+int, unsigned int, int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_stcl(unsigned int, unsigned int, void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:69:50:
+error: invalid conversion from ?void*? to ?int*? [-fpermissive]
+   return __builtin_arm_stcl (__coproc, __CRd, __p);
+                                                  ^
+<built-in>: note:   initializing argument 3 of ?void
+__builtin_arm_stcl(unsigned int, unsigned int, int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_ldc2(unsigned int, unsigned int, const void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:100:50:
+error: invalid conversion from ?const void*? to ?const int*? [-fpermissive]
+   return __builtin_arm_ldc2 (__coproc, __CRd, __p);
+                                                  ^
+<built-in>: note:   initializing argument 3 of ?void
+__builtin_arm_ldc2(unsigned int, unsigned int, const int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_ldc2l(unsigned int, unsigned int, const void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:107:51:
+error: invalid conversion from ?const void*? to ?const int*? [-fpermissive]
+   return __builtin_arm_ldc2l (__coproc, __CRd, __p);
+                                                   ^
+<built-in>: note:   initializing argument 3 of ?void
+__builtin_arm_ldc2l(unsigned int, unsigned int, const int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_stc2(unsigned int, unsigned int, void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:114:50:
+error: invalid conversion from ?void*? to ?int*? [-fpermissive]
+   return __builtin_arm_stc2 (__coproc, __CRd, __p);
+                                                  ^
+<built-in>: note:   initializing argument 3 of ?void
+__builtin_arm_stc2(unsigned int, unsigned int, int*)?
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:
+In function ?void __arm_stc2l(unsigned int, unsigned int, void*)?:
+/home/ivan/buildroot-git/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.1.0/include/arm_acle.h:121:51:
+error: invalid conversion from ?void*? to ?int*? [-fpermissive]
+   return __builtin_arm_stc2l (__coproc, __CRd, __p);
+                                                   ^
+<built-in>: note:   initializing argument 3 of ?void
+__builtin_arm_stc2l(unsigned int, unsigned int, int*)?
+g++ -Wl,--gc-sections -Wl,-O1 -o ../../../bin/uic .obj/customwidgetsinfo.o
+.obj/databaseinfo.o .obj/driver.o .obj/treewalker.o .obj/ui4.o .obj/validator.o
+.obj/cppextractimages.o .obj/cppwritedeclaration.o .obj/cppwriteicondata.o
+.obj/cppwriteicondeclaration.o .obj/cppwriteiconinitialization.o
+.obj/cppwriteincludes.o .obj/cppwriteinitialization.o .obj/main.o .obj/uic.o  
+-L/home/ivan/buildroot-git/buildroot/buildroot/output/build/qt5base-5.8.0/lib
+-lQt5Bootstrap -lpthread 
+Makefile:11089: recipe for target '.obj/qlogging.o' failed
+make[4]: *** [.obj/qlogging.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+Makefile:163: recipe for target 'sub-corelib-make_first' failed
+make[3]: *** [sub-corelib-make_first] Error 2
+Makefile:46: recipe for target 'sub-src-make_first' failed
+make[2]: *** [sub-src-make_first] Error 2
+package/pkg-generic.mk:227: recipe for target
+'/home/ivan/buildroot-git/buildroot/buildroot/output/build/qt5base-5.8.0/.stamp_built'
+failed
+make[1]: ***
+[/home/ivan/buildroot-git/buildroot/buildroot/output/build/qt5base-5.8.0/.stamp_built]
+Error 2
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-cd ${OUTPUT_DIR}
-find ${BUILD_DIR} -name ".stamp_host_installed" | xargs rm -f
-rm -rf ${HOST_DIR}
-make host-libglib2-install
-
-to fail, becuase python would not be re-installed to ${HOST_DIR}.
-
-To avoid having this problem completely, specify host's python using
---with-python option explicitly.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- package/libglib2/libglib2.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 47d9f6313..fe53f2d3f 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -90,6 +90,12 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
- endif
- 
-+#
-+# We explicitly specify --with-python to point to host's python here
-+# and in LIBGLIB2_CONF_OPTS to make sure that ./configure does not
-+# pick up python from ${HOST_DIR} thus creating a dependency that
-+# would have to be specified in _DEPENDENCIES
-+#
- HOST_LIBGLIB2_CONF_OPTS = \
- 	--disable-coverage \
- 	--disable-dtrace \
-@@ -98,7 +104,8 @@ HOST_LIBGLIB2_CONF_OPTS = \
- 	--disable-selinux \
- 	--disable-systemtap \
- 	--disable-xattr \
--	--with-pcre=system
-+	--with-pcre=system \
-+	--with-python=$$(which python)
- 
- LIBGLIB2_DEPENDENCIES = \
- 	host-pkgconf host-libglib2 host-gettext \
-@@ -114,6 +121,7 @@ HOST_LIBGLIB2_DEPENDENCIES = \
- 
- LIBGLIB2_CONF_OPTS = \
- 	--with-pcre=system
-+	--with-python=$$(which python)
- 
- ifneq ($(BR2_ENABLE_LOCALE),y)
- LIBGLIB2_DEPENDENCIES += libiconv
 -- 
-2.13.3
+You are receiving this mail because:
+You are on the CC list for the bug.
