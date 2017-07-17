@@ -1,63 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Jul 2017 23:34:01 +0200
-Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
- post-build/image scripts for out-of-tree builds
-In-Reply-To: <871spe92ci.fsf@dell.be.48ers.dk>
-References: <20170714130417.18857-1-peter@korsgaard.com>
- <7d2448b0-800c-cb14-657b-907d380787f8@mind.be>
- <871spe92ci.fsf@dell.be.48ers.dk>
-Message-ID: <dca9fa93-e6f8-10d9-f166-02f981b4f0a3@mind.be>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Mon, 17 Jul 2017 15:13:08 -0700
+Subject: [Buildroot] [PATCH] package: libglib2: explicitly specify host's
+	PYTHON to be used
+Message-ID: <20170717221308.16711-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Unless explicitly told otherwise, libglib2's ./configure step will
+pick up the first python implementation it finds in ${PATH} as the
+python to use for code generation scripts executed as a part of build
+process. Because [host-]python is not specified in any of the
+_DEPENDENCIES this creates a corner case leading to build failure.
 
+What happens is [host-]libglib2's ./configure, executead after
+[host-]python is already built, ends up picking up python from
+${HOST_DIR}, which, not specified as a dependency will cause partial
+rebuilds executed as:
 
-On 17-07-17 23:32, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 14-07-17 15:04, Peter Korsgaard wrote:
->  >> Sometimes it can be interesting to call back into buildroot from a
->  >> post-build/image script (E.G. make printvars or similar). For this to work
->  >> correctly with out-of-tree builds we need to pass O= to make, but this is
->  >> currently not available in the environment of post-build/image scripts.
->  >> 
->  >> In concept, O could be derrived from BUILD_DIR (E.G. by stripping /build),
->  >> but directly exporting O is cleaner.
->  >> 
->  >> O= cannot be exported globally as it interferes with various build systems,
->  >> so instead add it to EXTRA_ENV.
-> 
->  >  I'm too late with this comment, but why is BASE_DIR not sufficient? It is
->  > already exported, and it is set to:
-> 
->  > BASE_DIR := $(CANONICAL_O)
-> 
-> Yes, that can also work - Even though it is less obvious that you should
-> run make O=${BASE_DIR} inside the post build/image scripts, instead of
-> make O=$O
+cd ${OUTPUT_DIR}
+find ${BUILD_DIR} -name ".stamp_host_installed" | xargs rm -f
+rm -rf ${HOST_DIR}
+make host-libglib2-install
 
- OK, but having both exported seems a bit silly...
+to fail, becuase python would not be re-installed to ${HOST_DIR}.
 
+To avoid having this problem completely, specify host's python using
+--with-python option explicitly.
 
->  >  O has the problem that it's too risky to lead to conflicts IMO.
-> 
-> Even for post build/image scripts? What use cases do you have in mind
-> where there could be conflicts?
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
+ package/libglib2/libglib2.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
- True, in EXTRA_ENV the risk is minimal - especially since Kbuild and
-derivatives (like Buildroot) ignore an O passed through the environment.
-
- Regards,
- Arnout
-
-
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 47d9f6313..fe53f2d3f 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -90,6 +90,12 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
+ 
++#
++# We explicitly specify --with-python to point to host's python here
++# and in LIBGLIB2_CONF_OPTS to make sure that ./configure does not
++# pick up python from ${HOST_DIR} thus creating a dependency that
++# would have to be specified in _DEPENDENCIES
++#
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	--disable-coverage \
+ 	--disable-dtrace \
+@@ -98,7 +104,8 @@ HOST_LIBGLIB2_CONF_OPTS = \
+ 	--disable-selinux \
+ 	--disable-systemtap \
+ 	--disable-xattr \
+-	--with-pcre=system
++	--with-pcre=system \
++	--with-python=$$(which python)
+ 
+ LIBGLIB2_DEPENDENCIES = \
+ 	host-pkgconf host-libglib2 host-gettext \
+@@ -114,6 +121,7 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ 
+ LIBGLIB2_CONF_OPTS = \
+ 	--with-pcre=system
++	--with-python=$$(which python)
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.3
