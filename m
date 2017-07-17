@@ -1,34 +1,51 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 17 Jul 2017 07:00:49 -0500
-Subject: [Buildroot] Autobuilder reporting old build issues
-In-Reply-To: <20170717132547.239ba12f@windsurf>
-References: <20170715100105.108fb7ab@windsurf>
- <20170716102002.6d570790@windsurf>
- <CANQCQpZtCQzSVZMgt=+qt7DEfMJE3WSPE4EWvM4iA+Rzt=Lh6w@mail.gmail.com>
- <20170717132547.239ba12f@windsurf>
-Message-ID: <CANQCQpaH4=_roZ_7HsZjcdA9imo_Jzd23E-C-pQzG5iTF9KVyQ@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 17 Jul 2017 13:03:05 +0100
+Subject: [Buildroot] [PATCH v6 1/4] infra: add support for MIPS NaN
+In-Reply-To: <20170717113412.6306d69a@windsurf>
+References: <20170628151713.10746-1-Vincent.Riera@imgtec.com>
+ <20170716164000.415ca6f3@windsurf> <20170717113412.6306d69a@windsurf>
+Message-ID: <aea83bb8-c45f-527b-3c38-71b98f50cc50@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello Thomas,
 
-On Mon, Jul 17, 2017 at 6:25 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On 17/07/17 10:34, Thomas Petazzoni wrote:
 > Hello,
->
-> On Mon, 17 Jul 2017 06:18:54 -0500, Matthew Weber wrote:
->
->> I had pointed the Buildroot git  remote at our internal mirror because
->> of network issues fetching (this could lead to a delay of ~12hrs or
->> longer if the mirrors can't fetch).  I'll take a look at the
->> autobuilder script and instead of pointing at the mirror, I'll improve
->> error handling of when the remote fails to fetch.  Once this is tested
->> out, I'll respond back.
->
-> Have you tried using the github.com mirror instead ?
->
+> 
+> On Sun, 16 Jul 2017 16:40:00 +0200, Thomas Petazzoni wrote:
+> 
+>> Applied to master, thanks!
+> 
+> This patch is causing some build failures with external toolchains:
+> 
+>   http://autobuild.buildroot.net/results/ca1/ca1b769709f2566789e0030221c6837af95459f3/build-end.log
+> 
+>   http://autobuild.buildroot.net/results/970/9700c17425c9a10e4f0b72a0932268274068e64a/build-end.log
+> 
+> Is it because the gcc of this external toolchain is too old ?
 
-I could definitely try it.  How often does it sync?
+Yes, the -mnan= option was introduced in gcc 4.9.0 by this commit:
+
+0bd32132d471995f3e333138363d1d928a9dde60
+
+The gcc of that external toolchain is 4.8.2.
+
+> What can we do about this ?
+
+I guess we could use an option called BR2_GCC_SUPPORTS_MNAN in order to
+avoid adding the -mnan option to the CFLAGS and to the tc-wrapper if the
+external toolchain hasn't selected that option. For internal toolchain,
+since the oldest gcc version we support is 4.9.4, then it should be
+always selected.
+
+Vincent
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
