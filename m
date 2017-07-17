@@ -1,108 +1,39 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Mon, 17 Jul 2017 14:07:50 -0700
-Subject: [Buildroot] [PATCH v3] python-systemd: add new package
-Message-ID: <20170717210750.9636-1-andrew.smirnov@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Jul 2017 23:22:44 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix qthash error
+ attribute(target("+crc")) is unknown
+In-Reply-To: <20170715231146.25019-2-ps.report@gmx.net>
+References: <20170715231146.25019-1-ps.report@gmx.net>
+ <20170715231146.25019-2-ps.report@gmx.net>
+Message-ID: <f36abf27-9e64-1d9a-3ce3-aaa1a20560aa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package for official python bindings availibe as a part of systemd
-project at: https://github.com/systemd/python-systemd
 
-Minimal config snippet for utils/test-pkg is as follows (sans
-backslashes):
 
-# BR2_INIT_BUSYBOX is not set
-# BR2_INIT_SYSV is not set
-BR2_INIT_SYSTEMD=y
-# BR2_INIT_NONE is not set
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_SYSTEMD=y
+On 16-07-17 01:11, Peter Seiderer wrote:
+> +From f0c02fb22bc277e2015a18e562b551ec7b3eed9e Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sun, 16 Jul 2017 00:05:44 +0200
+> +Subject: [PATCH] Fix error attribute(target("+crc")) is unknown
+> +
+> +Task-number: QTBUG-61975
+> +Change-Id: I0b1b55c0737dad485b5ace8e6eb7cb842589453d
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-systemd/Config.in           | 10 ++++++++++
- package/python-systemd/python-systemd.hash |  3 +++
- package/python-systemd/python-systemd.mk   | 15 +++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/python-systemd/Config.in
- create mode 100644 package/python-systemd/python-systemd.hash
- create mode 100644 package/python-systemd/python-systemd.mk
+ You forgot your Sob. Care to send a follow-up patch to fix?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1ec405a570..4380cbc191 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -98,6 +98,7 @@ F:	package/python-pathlib2/
- F:	package/python-pickleshare/
- F:	package/python-scandir/
- F:	package/python-simplegeneric/
-+F:	package/python-systemd/
- F:	package/python-traitlets/
- 
- N:	Andrey Yurovsky <yurovsky@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 3f715017ec..a88e3552a6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -865,6 +865,7 @@ menu "External python modules"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
-+	source "package/python-systemd/Config.in"
- 	source "package/python-tempora/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tomako/Config.in"
-diff --git a/package/python-systemd/Config.in b/package/python-systemd/Config.in
-new file mode 100644
-index 0000000000..599b43f717
---- /dev/null
-+++ b/package/python-systemd/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_SYSTEMD
-+	bool "python-systemd"
-+	depends on BR2_PACKAGE_SYSTEMD
-+	help
-+	  Python module for native access to the systemd facilities.
-+
-+	  https://github.com/systemd/python-systemd
-+
-+comment "python-systemd needs systemd"
-+	depends on !BR2_PACKAGE_SYSTEMD
-diff --git a/package/python-systemd/python-systemd.hash b/package/python-systemd/python-systemd.hash
-new file mode 100644
-index 0000000000..a645bec0f2
---- /dev/null
-+++ b/package/python-systemd/python-systemd.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/systemd-python/, sha256 locally computed
-+md5 8438acab31e6f1e3e963d36f3de62faa systemd-python-233.tar.gz
-+sha256 06a3768b744884565d7961b44f4a51d164765bc59692f0f85ea6f11330a17da4 systemd-python-233.tar.gz
-diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
-new file mode 100644
-index 0000000000..242a2ea121
---- /dev/null
-+++ b/package/python-systemd/python-systemd.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-systemd
-+#
-+################################################################################
-+
-+PYTHON_SYSTEMD_VERSION = 233 # Should be kept in sync with $(SYSTEMD_VERSION)
-+PYTHON_SYSTEMD_SOURCE = systemd-python-$(PYTHON_SYSTEMD_VERSION).tar.gz
-+PYTHON_SYSTEMD_SITE = https://pypi.python.org/packages/10/89/d66ae73bdbc2614e4f2e90ddf9ef80d22c28f3cd70071345c3640465c14c
-+PYTHON_SYSTEMD_SETUP_TYPE = distutils
-+PYTHON_SYSTEMD_LICENSE = LGPL-2.1
-+PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
-+PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
-+
-+$(eval $(python-package))
+ Regards,
+ Arnout
+
+> +---
+
 -- 
-2.13.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
