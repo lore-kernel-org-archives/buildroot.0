@@ -1,43 +1,69 @@
-From: Guilherme G. Piccoli <gpiccoli@linux.vnet.ibm.com>
-Date: Mon, 17 Jul 2017 17:19:45 -0300
-Subject: [Buildroot]  [PATCH] nvme-cli: bump to version 1.3
-Message-ID: <20170717201945.9618-1-gpiccoli@linux.vnet.ibm.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Jul 2017 22:52:31 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
+ post-build/image scripts for out-of-tree builds
+In-Reply-To: <20170714130417.18857-1-peter@korsgaard.com>
+References: <20170714130417.18857-1-peter@korsgaard.com>
+Message-ID: <7d2448b0-800c-cb14-657b-907d380787f8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nvme-cli had many bugfixes and improvements over the releases.
-Buildroot still has version 0.3, so this patch bumps it to the
-latest upstream release, version 1.3.
 
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@linux.vnet.ibm.com>
----
- package/nvme/nvme.hash | 2 +-
- package/nvme/nvme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
-index b29904196..92e2bc0ac 100644
---- a/package/nvme/nvme.hash
-+++ b/package/nvme/nvme.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 c631e90dd4d411cdb618b26bc36b06706e6f1f2d3db38874bcfe48f4bc15aac4 nvme-v0.3.tar.gz
-+sha256 52eb45c9ef5a529580a3f6f9e02c067695675ac01b8ab8b8e0398c62e8a8646d nvme-v1.3.tar.gz
-diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
-index 66b3cef1d..27fbde215 100644
---- a/package/nvme/nvme.mk
-+++ b/package/nvme/nvme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NVME_VERSION = v0.3
-+NVME_VERSION = v1.3
- NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
- NVME_LICENSE = GPL-2.0+
- NVME_LICENSE_FILES = LICENSE
+On 14-07-17 15:04, Peter Korsgaard wrote:
+> Sometimes it can be interesting to call back into buildroot from a
+> post-build/image script (E.G. make printvars or similar). For this to work
+> correctly with out-of-tree builds we need to pass O= to make, but this is
+> currently not available in the environment of post-build/image scripts.
+> 
+> In concept, O could be derrived from BUILD_DIR (E.G. by stripping /build),
+> but directly exporting O is cleaner.
+> 
+> O= cannot be exported globally as it interferes with various build systems,
+> so instead add it to EXTRA_ENV.
+
+ I'm too late with this comment, but why is BASE_DIR not sufficient? It is
+already exported, and it is set to:
+
+BASE_DIR := $(CANONICAL_O)
+
+ O has the problem that it's too risky to lead to conflicts IMO.
+
+ IOW I vote for a revert of this patch.
+
+ Regards,
+ Arnout
+
+
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/Makefile.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index b95e5e3fa8..a2b0d90f32 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -309,7 +309,8 @@ HOST_CONFIGURE_OPTS = \
+>  EXTRA_ENV = \
+>  	PATH=$(BR_PATH) \
+>  	BR2_DL_DIR=$(BR2_DL_DIR) \
+> -	BUILD_DIR=$(BUILD_DIR)
+> +	BUILD_DIR=$(BUILD_DIR) \
+> +	O=$(CANONICAL_O)
+>  
+>  ################################################################################
+>  # settings we need to pass to configure
+> 
+
 -- 
-2.13.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
