@@ -1,35 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Jul 2017 15:15:56 +0000
-Subject: [Buildroot] [Bug 10091] gcc7.1 does not build with graphite support
- due to old isl
-In-Reply-To: <bug-10091-163@https.bugs.busybox.net/>
-References: <bug-10091-163@https.bugs.busybox.net/>
-Message-ID: <bug-10091-163-mAxLygPeTP@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Jul 2017 17:36:07 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: don't rely on linux-tools
+ being sorted alphabetically
+In-Reply-To: <20170717093700.0ed06d45@windsurf>
+References: <CAGt4E5txWySKpD0npytd=8yujrcQRQNQXwgYQzGCLdy9hyLTLw@mail.gmail.com>
+ <20170716150859.GD30047@scaer> <20170717093700.0ed06d45@windsurf>
+Message-ID: <20170717153607.GA3518@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10091
+Thomas, Markus, All,
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for your bug report!
+On 2017-07-17 09:37 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 16 Jul 2017 17:08:59 +0200, Yann E. MORIN wrote:
+> 
+> > Your position on Markus' (non-)issue?
+> > 
+> > Do we keep the code as-is, or do we "fix" it so that it is not
+> > ambiguous?
+> > 
+> > I've checked, and make uses strcmp(3) internally, and strcmp() does not
+> > use locales at all; it just compares chars.
+> 
+> I don't have a very strong opinion on this. To me, it would be fine to
+> have linux-tools.mk and then the per-tool files called
+> linux-tool-<foo>.mk.in or something like that.
 
-Do you know which versions of isl are acceptable for gcc 4.9, 5.x, 6.x and 7.x
-? Indeed, Buildroot support all those versions of gcc.
+Markus, would you want to rework your patch accordingly? Thanks! :-)
 
-In addition, isl was originally not updated to 0.15 for the following reasons
-(from package/isl/isl.mk):
-
-# The latest 0.15 version is not yet compatible with cloog 0.18.3, so
-# bumping isl is not possible until a new version of cloog is
-# published.
-ISL_VERSION = 0.14.1
-
-So we would also need to look at which version of cloog is acceptable for the
-different versions of gcc/isl. Is this something you can help us with?
+Regards,
+Yann E. MORIN.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
