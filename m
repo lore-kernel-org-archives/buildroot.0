@@ -1,52 +1,34 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Jul 2017 15:08:57 +0000
-Subject: [Buildroot] [Bug 10096] New: SH4 toolchain does not build Linux
- kernel magicpanelr2_defconfig
-Message-ID: <bug-10096-163@https.bugs.busybox.net/>
+Date: Mon, 17 Jul 2017 15:15:56 +0000
+Subject: [Buildroot] [Bug 10091] gcc7.1 does not build with graphite support
+ due to old isl
+In-Reply-To: <bug-10091-163@https.bugs.busybox.net/>
+References: <bug-10091-163@https.bugs.busybox.net/>
+Message-ID: <bug-10091-163-mAxLygPeTP@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10096
+https://bugs.busybox.net/show_bug.cgi?id=10091
 
-            Bug ID: 10096
-           Summary: SH4 toolchain does not build Linux kernel
-                    magicpanelr2_defconfig
-           Product: buildroot
-           Version: 2016.11
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: thomas.petazzoni at free-electrons.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your bug report!
 
-Found in http://www.spinics.net/lists/linux-sh/msg51060.html, a Buildroot
-generated toolchain for SH4 fails to build the Linux kernel
-magicpanelr2_defconfig:
+Do you know which versions of isl are acceptable for gcc 4.9, 5.x, 6.x and 7.x
+? Indeed, Buildroot support all those versions of gcc.
 
-/opt/cross/kisskb/br-sh4-full-2016.08-613-ge98b4dd/bin/sh4-linux-ld:
-kernel/sched/built-in.o: uses dsp instructions while previous modules use
-floating point instructions
-/opt/cross/kisskb/br-sh4-full-2016.08-613-ge98b4dd/bin/sh4-linux-ld:
-kernel/sched/built-in.o: uses instructions which are incompatible with
-instructions used in previous modules
-/opt/cross/kisskb/br-sh4-full-2016.08-613-ge98b4dd/bin/sh4-linux-ld: failed to
-merge target specific data of file kernel/sched/built-in.o
-/home/kisskb/slave/src/scripts/Makefile.build:380: recipe for target
-'kernel/built-in.o' failed
-make[2]: *** [kernel/built-in.o] Error 1
+In addition, isl was originally not updated to 0.15 for the following reasons
+(from package/isl/isl.mk):
 
-Full build log at http://kisskb.ellerman.id.au/kisskb/buildresult/12857629/log/
+# The latest 0.15 version is not yet compatible with cloog 0.18.3, so
+# bumping isl is not possible until a new version of cloog is
+# published.
+ISL_VERSION = 0.14.1
 
-(Note: this is a bug from January 2017, which I notice only now. Before I
-forget, I fill in a bug report about it, so we can have a look at it later.)
+So we would also need to look at which version of cloog is acceptable for the
+different versions of gcc/isl. Is this something you can help us with?
 
 -- 
 You are receiving this mail because:
