@@ -1,42 +1,54 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 16 Jul 2017 23:31:23 +0200
-Subject: [Buildroot] [PATCH v1] binutils-2.27: backport patch to enable
- CRC instructions on supported ARMv8-A CPUs
-In-Reply-To: <20170716092018.546fa061@windsurf>
-References: <20170715231146.25019-1-ps.report@gmx.net>
- <20170716092018.546fa061@windsurf>
-Message-ID: <20170716233123.5652e111@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 17 Jul 2017 07:11:38 +0300
+Subject: [Buildroot] [PATCH] expat: fix build on and for kernel older than
+	3.17
+Message-ID: <98035abe055ba7ba1c53deaed638844210c094f4.1500264698.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+The expat build system now fails when the getrandom() system call is not
+supported. This affect both host and target builds. Define XML_POOR_ENTROPY
+for target kernels older than 3.17 to fix the build. For the host package
+define XML_POOR_ENTROPY unconditionally since we have no easy way to know the
+host kernel version. Note that expat will still use getrandom() on the host
+when it is available, we don't make security any worse.
 
-On Sun, 16 Jul 2017 09:20:18 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Fixes (host):
+http://autobuild.buildroot.net/results/928/928dc2b56d931da84055fdfe78929d1f956de53b/
+http://autobuild.buildroot.net/results/ee9/ee90d0a456cbce4c7f22e5f61006612bd9ba30d5/
+http://autobuild.buildroot.net/results/dac/dac7231242123ae3dcaa6bbdd65b44fe8d8cb20c/
 
-> Hello,
-> 
-> On Sun, 16 Jul 2017 01:11:45 +0200, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...ly-enable-CRC-instructions-on-supported-A.patch | 88 ++++++++++++++++++++++
-> >  1 file changed, 88 insertions(+)
-> >  create mode 100644 package/binutils/2.27/0907-Automatically-enable-CRC-instructions-on-supported-A.patch
-> 
-> Thanks for this patch. You're adding it to binutils 2.27, what about
-> binutils 2.26.1 ? The bug doesn't exist ?
+Fixes (target):
+http://autobuild.buildroot.net/results/308/308e830219fdfebb5aa6aef51c1dc784254998f6/
+http://autobuild.buildroot.net/results/73f/73fa946b0a2205e946ad414079f88e4bdb416f00/
+http://autobuild.buildroot.net/results/9d7/9d7bad22ace7fa211b31d752a2255e07cede68be/
 
-Bug exists with binutils 2.26.1 but the simple approach to backport (only)
-the same patch did not work:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/expat/expat.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-  ./../include/opcode/arm.h:253:53: error: ?ARM_AEXT2_V8A? undeclared here (not in a function)
-
-Seems more patches are missing...
-
-Regards,
-Peter
-
-> 
-> Thomas
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index a10f2c974aa6..60e6d5b9582e 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -15,5 +15,14 @@ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
+ 
++# Kernel versions older than 3.17 do not support getrandom()
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17),)
++EXPAT_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DXML_POOR_ENTROPY"
++endif
++
++# Make build succeed on host kernel older than 3.17. getrandom() will still
++# be used on newer kernels.
++HOST_EXPAT_CONF_ENV += CPPFLAGS=-DXML_POOR_ENTROPY
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.13.2
