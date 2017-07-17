@@ -1,92 +1,45 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 17 Jul 2017 23:28:59 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: add --repo option
-Message-ID: <20170717212859.12581-1-arnout@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 Jul 2017 23:32:13 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
+	post-build/image scripts for out-of-tree builds
+In-Reply-To: <7d2448b0-800c-cb14-657b-907d380787f8@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 17 Jul 2017 22:52:31 +0200")
+References: <20170714130417.18857-1-peter@korsgaard.com>
+ <7d2448b0-800c-cb14-657b-907d380787f8@mind.be>
+Message-ID: <871spe92ci.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option allows to specify which Buildroot git repository to clone.
-This can be useful in several situations:
-- to use a different mirror in case you don't have a good connection to
-  github;
-- for debugging this script;
-- to point to a local, patched repository you want to test.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Note that the clone/pull will use the currently checked out branch of
-the repository if it is non-bare, which is ideal for testing.
+ > On 14-07-17 15:04, Peter Korsgaard wrote:
+ >> Sometimes it can be interesting to call back into buildroot from a
+ >> post-build/image script (E.G. make printvars or similar). For this to work
+ >> correctly with out-of-tree builds we need to pass O= to make, but this is
+ >> currently not available in the environment of post-build/image scripts.
+ >> 
+ >> In concept, O could be derrived from BUILD_DIR (E.G. by stripping /build),
+ >> but directly exporting O is cleaner.
+ >> 
+ >> O= cannot be exported globally as it interferes with various build systems,
+ >> so instead add it to EXTRA_ENV.
 
-Since switching repositories may also switch branches, we use a git
-fetch/checkout sequence instead of doing a git pull. With git pull, the
-branches would be merged instead of switched. To avoid polluting the
-log with the long git message about a detached head, while still
-getting some useful output from git, pass the --detach option to
-git checkout.
+ >  I'm too late with this comment, but why is BASE_DIR not sufficient? It is
+ > already exported, and it is set to:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Ideally the contents of this commit message would be put somewhere as
-documentation, but I couldn't find a good spot for it.
----
- scripts/autobuild-run | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ > BASE_DIR := $(CANONICAL_O)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index a7d7d4f..523e382 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -68,6 +68,7 @@ defaults = {
-     '--pid-file': '/tmp/buildroot-autobuild.pid',
-     '--http-url': 'http://autobuild.buildroot.org/submit/',
-     '--toolchains-url': 'http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv',
-+    '--repo': 'https://github.com/buildroot/buildroot.git',
- }
- 
- doc = """autobuild-run - run Buildroot autobuilder
-@@ -103,6 +104,8 @@ Options:
-                                  Not set by default.
-   -d, --debug                    Send log output to stdout instead of log file
-   --toolchains-url URL           URL of toolchain configuration file
-+  -r, --repo URL                 URL of Buildroot repository to clone
-+                                 Defaults to %(--repo)s
- 
- Format of the configuration file:
- 
-@@ -329,7 +332,7 @@ def prepare_build(**kwargs):
-     # didn't exist already.
-     srcdir = os.path.join(idir, "buildroot")
-     if not os.path.exists(srcdir):
--        ret = subprocess.call(["git", "clone", "https://github.com/buildroot/buildroot.git", srcdir],
-+        ret = subprocess.call(["git", "clone", kwargs['repo'], srcdir],
-                               stdout=log, stderr=log)
-         if ret != 0:
-             log_write(log, "ERROR: could not clone Buildroot sources")
-@@ -337,9 +340,14 @@ def prepare_build(**kwargs):
- 
-     # Update the Buildroot sources.
-     abssrcdir = os.path.abspath(srcdir)
--    ret = subprocess.call(["git", "pull"], cwd=abssrcdir, stdout=log, stderr=log)
-+    ret = subprocess.call(["git", "fetch", kwargs['repo']], cwd=abssrcdir, stdout=log, stderr=log)
-     if ret != 0:
--        log_write(log, "ERROR: could not pull Buildroot sources")
-+        log_write(log, "ERROR: could not fetch Buildroot sources")
-+        return -1
-+
-+    ret = subprocess.call(["git", "checkout", "--detach", "FETCH_HEAD"], cwd=abssrcdir, stdout=log, stderr=log)
-+    if ret != 0:
-+        log_write(log, "ERROR: could not check out Buildroot sources")
-         return -1
- 
-     # Create an empty output directory. We remove it first, in case a previous build was aborted.
-@@ -948,6 +956,7 @@ def main():
-                 make_opts = (args['--make-opts'] or ''),
-                 nice = (args['--nice'] or 0),
-                 toolchains_url = args['--toolchains-url'],
-+                repo = args['--repo'],
-                 upload = upload,
-                 buildpid = buildpid,
-                 debug = args['--debug']
+Yes, that can also work - Even though it is less obvious that you should
+run make O=${BASE_DIR} inside the post build/image scripts, instead of
+make O=$O
+
+ >  O has the problem that it's too risky to lead to conflicts IMO.
+
+Even for post build/image scripts? What use cases do you have in mind
+where there could be conflicts?
+
 -- 
-2.13.2
+Bye, Peter Korsgaard
