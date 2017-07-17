@@ -1,22 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Jul 2017 18:59:08 +0000
-Subject: [Buildroot] [Bug 10091] gcc7.1 does not build with graphite support
- due to old isl
-In-Reply-To: <bug-10091-163@https.bugs.busybox.net/>
-References: <bug-10091-163@https.bugs.busybox.net/>
-Message-ID: <bug-10091-163-kA5nHFgVSc@https.bugs.busybox.net/>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Mon, 17 Jul 2017 20:59:59 +0200
+Subject: [Buildroot] [PATCH v2] capnproto: new package
+In-Reply-To: <201707121621.v6CGLFiv023177@mx1.sonologic.net>
+References: <201707121621.v6CGLFiv023177@mx1.sonologic.net>
+Message-ID: <71AD12B1-922A-4144-99FA-2706D852B34D@sonologic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10091
 
---- Comment #5 from Ivan <ivan.nazarenko@gmail.com> ---
-Anyway it seems that gcc7.1 is still a bit buggy. I could not finish the build
-of qt5base with it - and the issue was not that "crc" of the other bug report.
+
+On 12 July 2017 18:21:14 CEST, Koen Martens <gmc@sonologic.nl> wrote:
+>Cap'n Proto is an insanely fast data interchange format
+>and capability-based RPC system. Think JSON, except
+>binary. Or think Protocol Buffers, except faster. In
+>fact, in benchmarks, Cap?n Proto is INFINITY TIMES
+>faster than Protocol Buffers.
+>
+>https://capnproto.org/index.html
+>Signed-off-by: Koen Martens <gmc@sonologic.nl>
+
+No takers?
+
+- koen
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
