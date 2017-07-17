@@ -1,89 +1,51 @@
-From: Hugues FRUCHET <hugues.fruchet@st.com>
-Date: Mon, 17 Jul 2017 10:07:07 +0000
-Subject: [Buildroot] [RFC v1] libv4l: build utils only on MMU (with fork
- support) platforms
-In-Reply-To: <20170711172624.7516-1-ps.report@gmx.net>
-References: <20170711172624.7516-1-ps.report@gmx.net>
-Message-ID: <70ff5d21-0466-c470-cac3-e00c524c93b0@st.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 17 Jul 2017 06:18:54 -0500
+Subject: [Buildroot] Autobuilder reporting old build issues
+In-Reply-To: <20170716102002.6d570790@windsurf>
+References: <20170715100105.108fb7ab@windsurf>
+ <20170716102002.6d570790@windsurf>
+Message-ID: <CANQCQpZtCQzSVZMgt=+qt7DEfMJE3WSPE4EWvM4iA+Rzt=Lh6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Thomas,
 
-I have tested on STM32 platform running Cortex F family having no MMU, 
-shared libraries are disabled (no dlopen) and no fork supported on our 
-setup.
+On Sun, Jul 16, 2017 at 3:20 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello Matt,
+>
+> On Sat, 15 Jul 2017 10:01:05 +0200, Thomas Petazzoni wrote:
+>
+>> Is there something special going on with your autobuilder setup?
+>> Indeed, it very often reports build results that are based on Buildroot
+>> versions that are a few days old, as if you're not testing the latest
+>> Buildroot.
+>>
+>> For example, if you look at the attached screenshot, all autobuilder
+>> instances reported results based on Buildroot 05827480 (the strace
+>> commit I made yesterday evening), except your autobuilder results,
+>> which were based on 704db158 (a commit made on July 10, i.e 4-5 days
+>> ago).
+>
+> Since your autobuilder is still reporting build results that date back
+> from commit 704db158, I've disabled your account so that build results
+> from your autobuilder are no longer accepted.
+>
+> Let me know when the problem is fixed, so that I can re-enable your
+> account.
+>
 
-libv4lconvert should not have been built at all, because entire lib/ 
-folder build is conditional to shared library support:
-* configure.ac
-AM_CONDITIONAL([WITH_LIBV4L],       [test x$enable_libv4l    != xno -a 
-x$enable_shared != xno])
-* Makefile.am
-[...]
-+if WITH_LIBV4L
-+SUBDIRS += lib
-+endif
 
-But checking your log I see that --enable-shared is set, so it seems 
-that you are supporting shared libraries on no-MMU platform but without 
-fork() support, is my understanding correct ?
+Apologize for the delay, I was on vacation.
 
-What you can do to fix build is to force disabling of libs inside libv4l 
-package:
+I had pointed the Buildroot git  remote at our internal mirror because
+of network issues fetching (this could lead to a delay of ~12hrs or
+longer if the mirrors can't fetch).  I'll take a look at the
+autobuilder script and instead of pointing at the mirror, I'll improve
+error handling of when the remote fails to fetch.  Once this is tested
+out, I'll respond back.
 
-package/libv4l/libv4l.mk
-+ifeq ($(BR2_USE_MMU),)
-+LIBV4L_CONF_OPTS += --disable-libv4l
-+endif
-
-Hoping that helps.
-
-Best regards,
-Hugues.
-
-On 07/11/2017 07:26 PM, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->      CXXLD    v4l2-compliance
->    .../output/build/libv4l-1.12.5/lib/libv4lconvert/.libs/libv4lconvert.so: undefined reference to `fork'
->    collect2: error: ld returned 1 exit status
-> 
-> [1] http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> The libv4l build for noMMU platforms was enabled with commit 'package/libv4l:
-> allow build of v4l2 utilities on noMMU platforms' (see [2]). But libv4lconvert uses
-> fork internally, so all utils linking against fail to build. Fix this by disabling
-> the utils on noMMU platforms (so keep building all libraries).
-> 
-> Alternatives would be:
-> 
-> - disable libv4l on all noMMU platforms (not only the utils), revert a part
->    of commit [2]
-> 
-> - create a patch to disable only libv4lconvert (and all dependend utils)
->    on noMMU platforms
-> 
-> [2] https://git.buildroot.net/buildroot/commit/?id=f837251785e9389f53d695ddb8a094707865171b
-> ---
->   package/libv4l/Config.in | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-> index e7f78dc70f..61c290f251 100644
-> --- a/package/libv4l/Config.in
-> +++ b/package/libv4l/Config.in
-> @@ -19,6 +19,7 @@ comment "libv4l JPEG support not enabled"
->   
->   config BR2_PACKAGE_LIBV4L_UTILS
->   	bool "v4l-utils tools"
-> +	depends on BR2_USE_MMU # fork(), used in libv4lconvert linked by various utils eg. v4l2-compliance
->   	help
->   	  v4l-utils is a collection of various video4linux and DVB utilities.
->   	  Enable this if you want to build the following tools:
-> 
+Matt
