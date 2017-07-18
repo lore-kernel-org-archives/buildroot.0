@@ -1,59 +1,69 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 18 Jul 2017 11:40:19 +0100
-Subject: [Buildroot] [PATCH v6 1/4] infra: add support for MIPS NaN
-In-Reply-To: <20170717141111.7c200c1d@windsurf>
-References: <20170628151713.10746-1-Vincent.Riera@imgtec.com>
- <20170716164000.415ca6f3@windsurf> <20170717113412.6306d69a@windsurf>
- <aea83bb8-c45f-527b-3c38-71b98f50cc50@imgtec.com>
- <20170717141111.7c200c1d@windsurf>
-Message-ID: <ea6a0b91-c500-463a-5744-08d5554dd957@imgtec.com>
+From: =?UTF-8?Q?Refik_Tuzakl=C4=B1?= <tuzaklirefik@gmail.com>
+Date: Tue, 18 Jul 2017 03:51:25 -0700 (PDT)
+Subject: [Buildroot] [RFC] kernel-module-imx-gpu-viv:compaling error
+In-Reply-To: <20170718110245.1f85dafb@windsurf.lan>
+References: <1500358371269-171162.post@n4.nabble.com>
+ <20170718100720.39028066@windsurf>
+ <CAAMH-ysnm5JMQnAJ4jQJS700o1tDE6tKeW0-niz8eBdRRQXWSQ@mail.gmail.com>
+ <20170718110245.1f85dafb@windsurf.lan>
+Message-ID: <1500375085852-171182.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On 17/07/17 13:11, Thomas Petazzoni wrote:
+Thomas Petazzoni-2 wrote
 > Hello,
 > 
-> On Mon, 17 Jul 2017 13:03:05 +0100, Vicente Olivert Riera wrote:
+> On Tue, 18 Jul 2017 10:33:18 +0200, Gary Bisson wrote:
 > 
->>> Is it because the gcc of this external toolchain is too old ?  
->>
->> Yes, the -mnan= option was introduced in gcc 4.9.0 by this commit:
->>
->> 0bd32132d471995f3e333138363d1d928a9dde60
->>
->> The gcc of that external toolchain is 4.8.2.
+>> > Please indicate the Buildroot version being used, and provide the
+>> > Buildroot .config file that allows to reproduce this issue.
+>> >
+>> > But I believe the answer is pretty simple: you're trying to build the
+>> > i.MX GPU Vivante kernel module against Linux 4.11, and the i.MX GPU
+>> > Vivante kernel module hasn't been modified to work with such a recent
+>> > Linux kernel.
+>> >
+>> > I believe the i.MX GPU Vivante kernel module is most likely designed to
+>> > work with the Linux 4.1 based BSP provided by Freescale/NXP.  
+>> 
+>> Thomas is correct, this GPU module is only meant for NXP-based kernels
+>> from 3.10.x to 4.1.x.
 > 
-> OK, that explains it.
+> Perhaps we should update the Config.in help text of the
+> kernel-module-imx-gpu-viv package to indicate this ?
 > 
->>> What can we do about this ?  
->>
->> I guess we could use an option called BR2_GCC_SUPPORTS_MNAN in order to
->> avoid adding the -mnan option to the CFLAGS and to the tc-wrapper if the
->> external toolchain hasn't selected that option. For internal toolchain,
->> since the oldest gcc version we support is 4.9.4, then it should be
->> always selected.
+> I know people don't read the help text, but at least when it exists, we
+> can point them to the help text, and the fact that they should read the
+> documentation :-)
 > 
-> Sounds good to me. I guess those older gcc versions (4.8 and before)
-> anyway only supported the legacy NaN encoding, and therefore behave as
-> if -mnan=legacy is passed, correct?
-
-Correct.
-
-> You might also want to check if the same problem will happen (or not)
-> for the FP32 mode, and the DSP/MSA options :)
-
-I'll check it out, yes.
-
-Thanks,
-
-Vincent
-
-> Thanks!
+> Best regards,
 > 
 > Thomas
-> 
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+
+> buildroot@
+
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Thanks for your quick replay,
+
+
+how can use Linux 4.1 based BSP provided by Freescale/NXP on buildroot. Is
+it enought to change kernel version to 4.1 under kernel and toolchain in
+Buildroot or should it be more specific like 4.1.15 as in Freescale website?
+
+regards
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/RFC-kernel-module-imx-gpu-viv-compaling-error-tp171162p171182.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
