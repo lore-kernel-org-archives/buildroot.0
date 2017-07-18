@@ -1,103 +1,154 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Jul 2017 19:25:44 +0200
-Subject: [Buildroot] [PATCH 18/20] fs: add pre- and post-command hooks
+Date: Tue, 18 Jul 2017 19:25:45 +0200
+Subject: [Buildroot] [PATCH 19/20] system: make systemd work on a read-only
+	rootfs
 In-Reply-To: <cover.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <c74e8ad5fca764a23b9392af5cb83ecefb4a5817.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases, the directory structure we want in the filesystem is not
-exactly what we have in target/
+When the rootfs is readonly, systemd will expect /var to be writable.
+Because we do not really have a R/W filesystem to mount on /var, we make
+it a tmpfs [*], and use the systemd-tmpfiles feature to populate it with
+"factory" defaults.
 
-For example, when systemd is used on a read-only rootfs, /var must be a
-tmpfs. However, we may have packages that install stuff in there, and
-set important rights (via the permission-table). So, at build time, we
-need /var to be a symlink to the remanent location (/usr/share/factory)
-while at runtime we need /var to be a directory.
+We obtain those factory defaults by redirecting /var to that location at
+build time, using a symlink /var -> /usr/share/factory which is the
+location in which systemd-tmpfiles will look for when instructed to
+"recursively copy" a directory.
 
-One option would have seen to have /var as a real directory even during
-build time, and in a target-finalize hook, move everything out of there
-and into the "factory" location. However, that's not possible because
-it's too early: some packages may want to set ownership and/or acces
-rights on directories or files in /var, and this is only done in the
-fakeroot script, which is called only later during the assembling of the
-filesystem images.
+With a line like:
 
-Also, there would have been no way to undo the tweak (i.e. we need to
-restore the /var symlink so that subsequent builds continue to work) if
-it were done as a target-finalize hook.
+    C /var/something - - - -
 
-The only solution is to allow packages to register pre- and post-hooks
-that are called right before and right after the rootfs commands are
-executed, and inside in the fakeroot script.
+it will look for /usr/share/factory/something and copy it (recursively
+if it is a directory) to /var/something, but only if it does not already
+exist there.
 
-We can however not re-use the BR2_ROOTFS_POST_FAKEROOT_SCRIPT feature
-either because it is done before the filesystem command, but there is
-nothing that is done after. Also, we don't want to add to, and modify a
-user-supplied variable.
+We also mark this copy with the exclamation mark, as it is only safe to
+copy on boot, not when changing targets.
 
-So, we introduce two new variables that packages can set to add the
-commands they need to run to tweak the filesystem right at the last
-moment.
+To be noted: the real format for such lines are:
 
-Those hooks are not documented on-purpose; they are probably going to
-only ever be used by systemd.
+    C /var/something - - - - /from/where/to/copy/something
+
+But if the source is not given, then it is implicitly taken from
+/usr/share/factory (which in our case is as-good a location as whatever
+else, so we use it, and thus we need not specify the source of the
+copy).
+
+Note that we treat symlinks a little bit specially, by creating symlinks
+to the factory defaults rather than copying them.
+
+Finally, /var at build time is a symlink, but at runtime, it must be a
+directory (so we can mount the tmpfs over there). We can't change that
+as a target-finalize hook, because:
+
+  - some packages may want to set ownership and/or access rights on
+    files or directories in /var, and that only happens while assembling
+    the filesystem images; changing /var from a symlink to a (then
+    empty) directory would break this;
+
+  - /var would be a directory on sub-sequent builds (until the next
+    "make clean").
+
+Instead, we use the newly-introduce pre- and post-rootfs command hooks,
+to turn /var into a directory before assembling the image, and back to a
+symlink after assembling the image.
+
+[*] People who want the factory-defaults only on first boot will have
+    to tweak the fstab to mount something else than a tmpfs on /var.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 ---
-Changes v2 -> v3:
-  - add space between >> and $$   (Romain)
+Changes v2 -> v3;
+  - fix typoes in commit log  (Romain)
 ---
- fs/common.mk           | 4 ++++
- package/pkg-generic.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ package/skeleton-systemd/skeleton-systemd.mk | 50 ++++++++++++++++++++++++++--
+ system/Config.in                             |  1 -
+ 2 files changed, 48 insertions(+), 3 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 14e0a6b868..9a7758ff49 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -95,10 +95,14 @@ endif
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
-+	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
- ifeq ($$(BR2_REPRODUCIBLE),y)
- 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
- endif
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b2b3af7d8f..e57aaaeeea 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -612,6 +612,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- $(2)_TARGET_FINALIZE_HOOKS      ?=
-+$(2)_ROOTFS_PRE_CMD_HOOKS       ?=
-+$(2)_ROOTFS_POST_CMD_HOOKS      ?=
+diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+index 384715e1c9..d9c5c76a7f 100644
+--- a/package/skeleton-systemd/skeleton-systemd.mk
++++ b/package/skeleton-systemd/skeleton-systemd.mk
+@@ -15,11 +15,57 @@ SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -931,6 +933,8 @@ ifneq ($$($(2)_USERS),)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
-+ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
-+ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
+ SKELETON_SYSTEMD_PROVIDES = skeleton
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++
++define SKELETON_SYSTEMD_ROOT_RO_OR_RW
++	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
++	mkdir -p $(TARGET_DIR)/var
++endef
++
++else
++
++# On a R/O rootfs, /var is a tmpfs filesystem. So, at build time, we
++# redirect /var to the "factory settings" location. Just before the
++# filesystem gets created, the /var symlink will be replaced with
++# a real (but empty) directory, and the "factory files" will be copied
++# back there by the tmpfiles.d mechanism.
++define SKELETON_SYSTEMD_ROOT_RO_OR_RW
++	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
++	mkdir -p $(TARGET_DIR)/usr/share/factory
++	ln -s usr/share/factory $(TARGET_DIR)/var
++	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
++	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
++endef
++
++define SKELETON_SYSTEMD_PRE_ROOTFS_VAR
++	rm -f $(TARGET_DIR)/var
++	mkdir $(TARGET_DIR)/var
++	for i in $(TARGET_DIR)/usr/share/factory/*; do \
++		j="$${i##*/}"; \
++		if [ -L "$${i}" ]; then \
++			printf "L+! /var/%s - - - - %s\n" \
++				"$${j}" "../usr/share/factory/$${j}" \
++			|| exit 1; \
++		else \
++			printf "C! /var/%s - - - -\n" "$${j}" \
++			|| exit 1; \
++		fi; \
++	done >$(TARGET_DIR)/etc/systemd/tmpfiles.d/var-factory.conf
++endef
++SKELETON_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_SYSTEMD_PRE_ROOTFS_VAR
++
++define SKELETON_SYSTEMD_POST_ROOTFS_VAR
++	rm -rf $(TARGET_DIR)/var
++	ln -s usr/share/factory $(TARGET_DIR)/var
++endef
++SKELETON_SYSTEMD_ROOTFS_POST_CMD_HOOKS += SKELETON_SYSTEMD_POST_ROOTFS_VAR
++
++endif
++
+ define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/home
+ 	mkdir -p $(TARGET_DIR)/srv
+-	mkdir -p $(TARGET_DIR)/var
+-	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
++	$(SKELETON_SYSTEMD_ROOT_RO_OR_RW)
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index 4d417a93b3..0235897735 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -138,7 +138,6 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+-	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ comment "systemd needs a glibc toolchain, headers >= 3.10"
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
 -- 
 2.11.0
