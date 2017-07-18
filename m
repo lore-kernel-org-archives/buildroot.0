@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jul 2017 23:47:23 +0200
-Subject: [Buildroot] [PATCH] kernel-module-imx-gpu-viv: bump revision to
- a05d9b23
-In-Reply-To: <20170718125800.28223-1-gary.bisson@boundarydevices.com>
-References: <20170718125800.28223-1-gary.bisson@boundarydevices.com>
-Message-ID: <20170718234723.33a32f75@windsurf>
+Date: Tue, 18 Jul 2017 23:55:50 +0200
+Subject: [Buildroot] [PATCH] iproute2: bump to version 4.12.0
+In-Reply-To: <47939b206ec286f2ac9226b96a5b65fd2aa75991.1500377145.git.baruch@tkos.co.il>
+References: <47939b206ec286f2ac9226b96a5b65fd2aa75991.1500377145.git.baruch@tkos.co.il>
+Message-ID: <20170718235550.553abccb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Jul 2017 14:58:00 +0200, Gary Bisson wrote:
-> Changelog since previous revision:
-> 6a01dfb fix for memory leak in gc_hal_kernel_os.c
-> f73c35b Add support for PREEMPT_RT kernels
+On Tue, 18 Jul 2017 14:25:45 +0300, Baruch Siach wrote:
+> Drop upstream patch.
 > 
-> Also updating the help text to make sure users know this module won't
-> build with Mainline kernel but only with NXP forks.
+> Add uClibc-ng compatibility fix. This is needed due to missing definition in
+> netinet/in.h.
 > 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> Hi all,
+> Correct the license. Source files license headers include the GPL "or ... any
+> later version" language.
 
-Applied to master, thanks.
+If I'm not mistaken, this change in the license is not related to the
+4.12.0 bump. I looked at the 4.11.0 version, and it already contains
+"or .. any later version".
+
+So it seems like the license change should be in a separate patch,
+which should be backported to our LTS/maintenance branches.
+
+Could you double check this and if you agree send separate patches?
+
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
