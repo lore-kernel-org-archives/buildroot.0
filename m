@@ -1,56 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jul 2017 21:38:39 +0200
-Subject: [Buildroot] [PATCH 02/15] libwebsockets: support libressl
-In-Reply-To: <CAFSsvmr2fwckB=5L01NEo8mtxz6PCww7eptYULmA0rQ-yXX5oQ@mail.gmail.com>
-References: <20170714181537.17479-1-aduskett@gmail.com>
- <20170714181537.17479-2-aduskett@gmail.com>
- <20170715000852.6a2f8105@windsurf>
- <CAFSsvmr2fwckB=5L01NEo8mtxz6PCww7eptYULmA0rQ-yXX5oQ@mail.gmail.com>
-Message-ID: <2977a944-fe19-e3e8-df28-56de74b14182@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 18 Jul 2017 19:42:37 +0000
+Subject: [Buildroot] [Bug 10091] gcc7.1 does not build with graphite support
+ due to old isl
+In-Reply-To: <bug-10091-163@https.bugs.busybox.net/>
+References: <bug-10091-163@https.bugs.busybox.net/>
+Message-ID: <bug-10091-163-l0qm3gqUXb@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=10091
 
-
-On 15-07-17 19:32, Adam Duskett wrote:
-> Hello;
+--- Comment #12 from Arnout Vandecappelle <arnout@mind.be> ---
+(In reply to Ivan from comment #4)
+> Verifying the ChangeLog-2016, 2015, etc files shows that in 2014 the dependency of cloog > was removed. This is true for the last gcc5.x, 6.x and 7.x.
 > 
-> On Fri, Jul 14, 2017 at 6:08 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Fri, 14 Jul 2017 14:15:24 -0400, Adam Duskett wrote:
->>
->>> +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
->>> +LIBWEBSOCKETS_DEPENDENCIES += libressl host-openssl
->>> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
->>
->> I'm wondering: do we want to mix using libressl on the target, and
->> openssl on the host?
->>
->> I don't necessarily see a big problem with this, but I'm just
->> wondering, since it might be a bit confusing.
->>
-> I know you asked Arnout, but I wanted to throw my two cents in here
-> as well.
+> But gcc4.x still depends on cloog.
 > 
-> If I make libressl a host package, Libwebsockets compiles and works
-> just fine with it.  I would personally like to make libressl a host package as
-> well.
+> So the options seems to be either:
+> 
+> - keep cloog, with corresponding old isl, and gcc4.x users have graphite, or
+> - removes cloog, new isl, and gcc7.1 users have graphite.
 
- Sounds good to me. If libressl ever becomes a virtual package, it will go that
-route anyway.
+I would remove cloog, bump isl, and disable graphite support for gcc 4.9. gcc
+4.9 is going away at some point anyway.
 
- Regards,
- Arnout
+BTW Ivan please clone this bug for the Qt5base issue, it has nothing to do with
+graphite support.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
