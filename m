@@ -1,31 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jul 2017 23:56:51 +0200
-Subject: [Buildroot] [PATCH 1/2] python-setuptools-scm: bum to version
- 1.15.6
-In-Reply-To: <20170718101311.30667-1-yegorslists@googlemail.com>
-References: <20170718101311.30667-1-yegorslists@googlemail.com>
-Message-ID: <20170718235651.519a79ae@windsurf>
+Date: Tue, 18 Jul 2017 23:57:13 +0200
+Subject: [Buildroot] [git commit] git: use BR2_KERNEL_MIRROR as download site
+Message-ID: <20170718215312.D347781732@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c1e4a57686baf2b3e0dfe6c0ad4d08525a17acd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 18 Jul 2017 12:13:10 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
->  package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/git/git.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 52907a2..1d81955 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -6,7 +6,7 @@
+ 
+ GIT_VERSION = 2.13.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+-GIT_SITE = https://www.kernel.org/pub/software/scm/git
++GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+ GIT_LICENSE_FILES = COPYING LGPL-2.1
+ GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
