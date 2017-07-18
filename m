@@ -1,132 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Jul 2017 19:25:39 +0200
-Subject: [Buildroot] [PATCH 13/20] package/skeleton: make it a virtual
-	package
+Date: Tue, 18 Jul 2017 19:25:40 +0200
+Subject: [Buildroot] [PATCH 14/20] package/skeleton-common: simplify staging
+	install
 In-Reply-To: <cover.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <3a434b0c0be62999b357b2ad81ab62bfed9e97d7.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <b775d4628225bfdb820b80124374ab6ec584cf0c.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We now have two packages that can act as a skeleton, skeleton-common,
-also known as our default skeleton, and skeleton-custom.
+We don't really care what's going in staging, as long as it is properly
+setup for merged/non-merged /usr, especially for the lib/ directory.
 
-This means that the skeleton package can be a standard virtual package
-now.
+So we can just copy the skeleton as-is.
 
-Well, except that, besides being a virtual package, it also provides
-variables and macros that can be used by the other skeletons and/or the
-init systems.
+This simplify the maintenance, should we ever need to tweak the layout:
+we'd just have to do it once in the skeleton directory to have it
+propagated to both target and staging.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/skeleton-common/Config.in          | 5 ++++-
- package/skeleton-common/skeleton-common.mk | 2 ++
- package/skeleton-custom/Config.in          | 5 ++++-
- package/skeleton-custom/skeleton-custom.mk | 2 ++
- package/skeleton/Config.in                 | 9 +++++++--
- package/skeleton/skeleton.mk               | 8 +-------
- system/Config.in                           | 4 ++++
- 7 files changed, 24 insertions(+), 11 deletions(-)
+ package/skeleton-common/skeleton-common.mk | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
-index 6c094f6466..5675e873cf 100644
---- a/package/skeleton-common/Config.in
-+++ b/package/skeleton-common/Config.in
-@@ -1,3 +1,6 @@
- config BR2_PACKAGE_SKELETON_COMMON
- 	bool
--	select BR2_PACKAGE_SKELETON
-+	select BR2_PACKAGE_HAS_SKELETON
-+
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	default "skeleton-common" if BR2_PACKAGE_SKELETON_COMMON
 diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
-index 788a17dd61..ee44eaf810 100644
+index ee44eaf810..475c07e32d 100644
 --- a/package/skeleton-common/skeleton-common.mk
 +++ b/package/skeleton-common/skeleton-common.mk
-@@ -11,6 +11,8 @@
- SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
+@@ -26,18 +26,14 @@ define SKELETON_COMMON_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR_WARNING_FILE)
+ endef
  
-+SKELETON_COMMON_PROVIDES = skeleton
-+
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_COMMON_INSTALL_STAGING = YES
+-# For the staging dir, we don't really care about /bin and /sbin.
+-# But for consistency with the target dir, and to simplify the code,
+-# we still handle them for the merged or non-merged /usr cases.
+-# Since the toolchain is not yet available, the staging is not yet
+-# populated, so we need to create the directories in /usr
++# We don't care much about what goes in staging, as long as it is
++# correctly setup for merged/non-merged /usr. The simplest is to
++# fill it in with the content of the skeleton.
+ define SKELETON_COMMON_INSTALL_STAGING_CMDS
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
++	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
+ 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
+ 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
+ endef
  
-diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
-index b12bd8f73c..601c3b247e 100644
---- a/package/skeleton-custom/Config.in
-+++ b/package/skeleton-custom/Config.in
-@@ -1,3 +1,6 @@
- config BR2_PACKAGE_SKELETON_CUSTOM
- 	bool
--	select BR2_PACKAGE_SKELETON
-+	select BR2_PACKAGE_HAS_SKELETON
-+
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	default "skeleton-custom" if BR2_PACKAGE_SKELETON_CUSTOM
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index 6f2cd2a42d..9b51fe93c1 100644
---- a/package/skeleton-custom/skeleton-custom.mk
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -7,6 +7,8 @@
- SKELETON_CUSTOM_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_CUSTOM_ADD_SKELETON_DEPENDENCY = NO
- 
-+SKELETON_CUSTOM_PROVIDES = skeleton
-+
- SKELETON_CUSTOM_INSTALL_STAGING = YES
- 
- SKELETON_CUSTOM_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
-diff --git a/package/skeleton/Config.in b/package/skeleton/Config.in
-index b22ac66b35..efaa1e135f 100644
---- a/package/skeleton/Config.in
-+++ b/package/skeleton/Config.in
-@@ -1,4 +1,9 @@
- config BR2_PACKAGE_SKELETON
- 	bool
--	help
--	  The basic skeleton for your rootfs.
-+	default y
-+
-+config BR2_PACKAGE_HAS_SKELETON
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	string
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 1d3e4fbe3c..d380f41649 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -11,10 +11,4 @@
- SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_ADD_SKELETON_DEPENDENCY = NO
- 
--ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
--SKELETON_DEPENDENCIES = skeleton-custom
--else
--SKELETON_DEPENDENCIES = skeleton-common
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
-diff --git a/system/Config.in b/system/Config.in
-index c27b013784..75b6a8edac 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,5 +1,9 @@
- menu "System configuration"
- 
-+# Note: usually, it is not possible to select a provider of a virtual
-+# package. But here we have an exception: there are only two providers
-+# and they only get selected each by separate entries in this choice.
-+# So this is a safe situation.
- choice
- 	prompt "Root FS skeleton"
- 
+ SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
 -- 
 2.11.0
