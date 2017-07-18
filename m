@@ -1,46 +1,72 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 18 Jul 2017 09:50:09 -0300
-Subject: [Buildroot] [RFC] kernel-module-imx-gpu-viv:compaling error
-In-Reply-To: <1500375085852-171182.post@n4.nabble.com>
-References: <1500358371269-171162.post@n4.nabble.com>
- <20170718100720.39028066@windsurf>
- <CAAMH-ysnm5JMQnAJ4jQJS700o1tDE6tKeW0-niz8eBdRRQXWSQ@mail.gmail.com>
- <20170718110245.1f85dafb@windsurf.lan>
- <1500375085852-171182.post@n4.nabble.com>
-Message-ID: <CAOMZO5C23FnwscYL78DZcuaxk36u+ZyD17iBghYwPoR_UYkkZQ@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 18 Jul 2017 14:58:00 +0200
+Subject: [Buildroot] [PATCH] kernel-module-imx-gpu-viv: bump revision to
+	a05d9b23
+Message-ID: <20170718125800.28223-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Refik,
+Changelog since previous revision:
+6a01dfb fix for memory leak in gc_hal_kernel_os.c
+f73c35b Add support for PREEMPT_RT kernels
 
-On Tue, Jul 18, 2017 at 7:51 AM, Refik Tuzakl? <tuzaklirefik@gmail.com> wrote:
+Also updating the help text to make sure users know this module won't
+build with Mainline kernel but only with NXP forks.
 
-> how can use Linux 4.1 based BSP provided by Freescale/NXP on buildroot. Is
-> it enought to change kernel version to 4.1 under kernel and toolchain in
-> Buildroot or should it be more specific like 4.1.15 as in Freescale website?
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+Hi all,
 
-You can do:
+Let me know if the text is explicit enough as-is.
 
-make clean
-make freescale_imx6qsabresd_defconfig
-make
+Also, I'm not sure if you'd rather have two patches for this (one for
+the bump, the other for the help text update).
 
-and this will build an image based on NXP 4.1.15 kernel.
+Regards,
+Gary
+---
+ package/freescale-imx/kernel-module-imx-gpu-viv/Config.in             | 4 +++-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash          | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk            | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-You will still need to manually add the Vivante GPU packages though.
-
-Another alternative is to use a mainline kernel with Etnaviv.
-
-Here is a defconfig patch I sent that installs the graphic packages to
-work with a mainline kernel:
-http://lists.busybox.net/pipermail/buildroot/2017-June/195135.html
-
-Thomas,
-
-Any chances to getting imx6q-sabresd_qt5_defconfig accepted? It will
-make users' life easier :-)
-
-Thanks
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
+index bcc55175bc..9872678623 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV
+ 
+ 	  This package uses an exact copy of the GPU kernel driver source code
+ 	  of the same version as base and include fixes and improvements
+-	  developed by FSL Community
++	  developed by FSL Community.
++
++	  This module is only meant for NXP-based kernel up to 4.1.x.
+ 
+ 	  https://github.com/Freescale/kernel-module-imx-gpu-viv
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 9c43ea39e7..f9d400459e 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	51dd137bd67ae991fa58fff4151c6bd7dd46bafd613f43e83d8403ec37217a90  kernel-module-imx-gpu-viv-bfa78b095a892705a09afe9514fc5d236b3124d2.tar.gz
++sha256	0d45472a967d747bc1948b0332f77c8cd9f6ec1620b0922e82ca5ddd053b40ea  kernel-module-imx-gpu-viv-a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7.tar.gz
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index d23213424e..6dbf9a0271 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = bfa78b095a892705a09afe9514fc5d236b3124d2
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
+-- 
+2.11.0
