@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jul 2017 21:37:53 +0200
-Subject: [Buildroot] [PATCH] support/tests: allow properly indented
- config fragment
-In-Reply-To: <20170715224949.25598-1-yann.morin.1998@free.fr>
-References: <20170715224949.25598-1-yann.morin.1998@free.fr>
-Message-ID: <420f45cf-1f44-d85f-4373-56ca3aded94a@mind.be>
+Date: Tue, 18 Jul 2017 21:38:39 +0200
+Subject: [Buildroot] [PATCH 02/15] libwebsockets: support libressl
+In-Reply-To: <CAFSsvmr2fwckB=5L01NEo8mtxz6PCww7eptYULmA0rQ-yXX5oQ@mail.gmail.com>
+References: <20170714181537.17479-1-aduskett@gmail.com>
+ <20170714181537.17479-2-aduskett@gmail.com>
+ <20170715000852.6a2f8105@windsurf>
+ <CAFSsvmr2fwckB=5L01NEo8mtxz6PCww7eptYULmA0rQ-yXX5oQ@mail.gmail.com>
+Message-ID: <2977a944-fe19-e3e8-df28-56de74b14182@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +15,37 @@ To: buildroot@busybox.net
 
 
 
-On 16-07-17 00:49, Yann E. MORIN wrote:
-> Currently, defining a config fragment in the runtime test infra requires
-> that the fragment not to be indented. This is beark, and causes grievance
-> when looking at the code (e.g. to fix it).
+On 15-07-17 19:32, Adam Duskett wrote:
+> Hello;
 > 
-> Just strip out all leading spaces/tabs when writing the configuration
-> lines into the config file.
+> On Fri, Jul 14, 2017 at 6:08 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Fri, 14 Jul 2017 14:15:24 -0400, Adam Duskett wrote:
+>>
+>>> +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+>>> +LIBWEBSOCKETS_DEPENDENCIES += libressl host-openssl
+>>> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
+>>
+>> I'm wondering: do we want to mix using libressl on the target, and
+>> openssl on the host?
+>>
+>> I don't necessarily see a big problem with this, but I'm just
+>> wondering, since it might be a bit confusing.
+>>
+> I know you asked Arnout, but I wanted to throw my two cents in here
+> as well.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/testing/infra/builder.py | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-> index a475bb0a30..81735dec96 100644
-> --- a/support/testing/infra/builder.py
-> +++ b/support/testing/infra/builder.py
-> @@ -16,7 +16,8 @@ class Builder(object):
->  
->          config_file = os.path.join(self.builddir, ".config")
->          with open(config_file, "w+") as cf:
-> -            cf.write(self.config)
-> +            for line in self.config.splitlines():
-> +                cf.write("{}\n".format(line.lstrip()))
+> If I make libressl a host package, Libwebsockets compiles and works
+> just fine with it.  I would personally like to make libressl a host package as
+> well.
 
- I like nitpicking :-)
-
- I would do this in BRTest instead of down here, so that self.config contains a
-correct config file. In fact, I would do it in its constructor instead of in
-setUp(), so that it is done only once even if a class has two test functions.
-
- I would also do it as a oneliner:
-
-	self.config = '\n'.join(map(str.lstrip, self.config.splitlines()))
-
-but some people don't like oneliners :-)
-
+ Sounds good to me. If libressl ever becomes a virtual package, it will go that
+route anyway.
 
  Regards,
  Arnout
-
->  
->          cmd = ["make",
->                 "O={}".format(self.builddir),
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
