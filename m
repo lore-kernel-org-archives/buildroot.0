@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jul 2017 09:51:13 +0200
-Subject: [Buildroot] [v3 1/3] rpi-userland: fix opengl library symlinks
-In-Reply-To: <20170717160939.3159-2-gael.portay@savoirfairelinux.com>
-References: <20170717160939.3159-1-gael.portay@savoirfairelinux.com>
- <20170717160939.3159-2-gael.portay@savoirfairelinux.com>
-Message-ID: <20170718095113.2cc0b24c@windsurf>
+Date: Tue, 18 Jul 2017 09:53:41 +0200
+Subject: [Buildroot] [PATCH 1/2] arch/mips: improve help text of NaN
+ option
+In-Reply-To: <dfd6e917-4f2a-2d0a-b3d7-1d805f8ddd71@imgtec.com>
+References: <20170717122255.61795-1-Vincent.Riera@imgtec.com>
+ <20170717145613.3c7feb8a@windsurf>
+ <dfd6e917-4f2a-2d0a-b3d7-1d805f8ddd71@imgtec.com>
+Message-ID: <20170718095341.0bd7b437@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +15,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Jul 2017 12:09:37 -0400, Ga?l PORTAY wrote:
-> The Qt WebEngine module loads libEGL.so.1 and libGLESv2.so.2 libraries.
-> Their path are hard-coded [1].
-> 
-> This patch sets up cmake to create those library links.
-> 
-> 	# ls -l /usr/lib/lib*GL*
-> 	lrwxrwxrwx    1 root     root            11 Mar 21 17:24 /usr/lib/libEGL.so -> libEGL.so.1
-> 	lrwxrwxrwx    1 root     root            15 Mar 21 17:24 /usr/lib/libEGL.so.1 -> libEGL.so.1.0.0
-> 	-rwxr-xr-x    1 root     root        163152 Mar 22 14:56 /usr/lib/libEGL.so.1.0.0
-> 	lrwxrwxrwx    1 root     root            14 Mar 21 17:24 /usr/lib/libGLESv2.so -> libGLESv2.so.2
-> 	lrwxrwxrwx    1 root     root            18 Mar 21 17:24 /usr/lib/libGLESv2.so.2 -> libGLESv2.so.2.0.0
-> 	-rwxr-xr-x    1 root     root         78788 Mar 22 14:56 /usr/lib/libGLESv2.so.2.0.0
-> 
-> [1] https://github.com/qt/qtwebengine/blob/5.8/src/core/surface_factory_qt.cpp#L76-L86
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  .../0001-Add-OpenGL-library-versioning.patch       | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
-> 
-> diff --git a/package/rpi-userland/0001-Add-OpenGL-library-versioning.patch b/package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
-> new file mode 100644
-> index 0000000000..ea708f9559
-> --- /dev/null
-> +++ b/package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
-> @@ -0,0 +1,35 @@
-> +From bf388550943afc70798c497e3fc706303394cfdc Mon Sep 17 00:00:00 2001
-> +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-> +Date: Fri, 3 Mar 2017 17:28:41 -0500
-> +Subject: [PATCH] Add OpenGL library versioning
-> +
-> +Some applications like QtWebEngine dynamically load libraries using
-> +dlopen. The library name is hardcoded, and it includes the library
-> +version [1].
-> +
-> +This patch creates symlinks for EGL and GLES libraries.
-> +
-> +	libEGL.so.1 -> libEGL.so
-> +	libGLESv2.so.2 -> libGLESv2.so
-> +
-> +[1] https://github.com/qt/qtwebengine/blob/dev/src/core/surface_factory_qt.cpp#L76-L86
+On Mon, 17 Jul 2017 17:57:22 +0100, Vicente Olivert Riera wrote:
 
-Missing Signed-off-by line here.
+> > Is it useful (and correct?) to say that the Linux kernel, built for
+> > MIPS32r5, by default expect the 2008 NaN encoding?  
+> 
+> It is correct, but since nan2008 is the default I think is not worth
+> mentioning it. If you change the default value is because you know what
+> you are doing, right?
 
-Has this patch been submitted upstream ?
-
-Thanks,
+OK, makes sense. Thanks!
 
 Thomas
 -- 
