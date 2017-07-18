@@ -1,79 +1,56 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 18 Jul 2017 09:06:58 +0200
-Subject: [Buildroot] [PATCH] python-asn1crypto: new package
-Message-ID: <20170718070658.27434-1-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jul 2017 09:24:04 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: add --repo option
+In-Reply-To: <CANQCQpYxLkzMU_GA_-YV90F9R06pkQb30zOLjf1UdwaJQ4GpuA@mail.gmail.com>
+References: <20170717212859.12581-1-arnout@mind.be>
+ <CANQCQpYxLkzMU_GA_-YV90F9R06pkQb30zOLjf1UdwaJQ4GpuA@mail.gmail.com>
+Message-ID: <ff93fccb-be25-023c-7359-eb24e793cb9e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                                |  1 +
- package/python-asn1crypto/Config.in              |  8 ++++++++
- package/python-asn1crypto/python-asn1crypto.hash |  3 +++
- package/python-asn1crypto/python-asn1crypto.mk   | 13 +++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-asn1crypto/Config.in
- create mode 100644 package/python-asn1crypto/python-asn1crypto.hash
- create mode 100644 package/python-asn1crypto/python-asn1crypto.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index b48ab5e0d..28cb6f145 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -685,6 +685,7 @@ menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
- 	source "package/python-arrow/Config.in"
-+	source "package/python-asn1crypto/Config.in"
- 	source "package/python-attrs/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-babel/Config.in"
-diff --git a/package/python-asn1crypto/Config.in b/package/python-asn1crypto/Config.in
-new file mode 100644
-index 000000000..345c73988
---- /dev/null
-+++ b/package/python-asn1crypto/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_ASN1CRYPTO
-+	bool "python-asn1crypto"
-+	help
-+	  Fast ASN.1 parser and serializer with definitions for private keys,
-+	  public keys, certificates, CRL, OCSP, CMS, PKCS#3, PKCS#7, PKCS#8,
-+	  PKCS#12, PKCS#5, X.509 and TSP.
-+
-+	  https://github.com/wbond/asn1crypto
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-new file mode 100644
-index 000000000..ec5d7cfc2
---- /dev/null
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/asn1crypto/json, sha256 locally computed
-+md5	74a8b9402625b38ef19cf3fa69ef8470  asn1crypto-0.22.0.tar.gz
-+sha256	cbbadd640d3165ab24b06ef25d1dca09a3441611ac15f6a6b452474fdf0aed1a  asn1crypto-0.22.0.tar.gz
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-new file mode 100644
-index 000000000..681dfd5c1
---- /dev/null
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-asn1crypto
-+#
-+################################################################################
-+
-+PYTHON_ASN1CRYPTO_VERSION = 0.22.0
-+PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
-+PYTHON_ASN1CRYPTO_SITE = https://pypi.python.org/packages/67/14/5d66588868c4304f804ebaff9397255f6ec5559e46724c2496e0f26e68d6
-+PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
-+PYTHON_ASN1CRYPTO_LICENSE = MIT
-+
-+$(eval $(python-package))
+On 18-07-17 04:45, Matthew Weber wrote:
+> Arnout,
+> 
+> On Mon, Jul 17, 2017 at 4:28 PM, Arnout Vandecappelle (Essensium/Mind)
+> <arnout@mind.be> wrote:
+>> This option allows to specify which Buildroot git repository to clone.
+>> This can be useful in several situations:
+>> - to use a different mirror in case you don't have a good connection to
+>>   github;
+>> - for debugging this script;
+>> - to point to a local, patched repository you want to test.
+>>
+>> Note that the clone/pull will use the currently checked out branch of
+>> the repository if it is non-bare, which is ideal for testing.
+>>
+>> Since switching repositories may also switch branches, we use a git
+>> fetch/checkout sequence instead of doing a git pull. With git pull, the
+>> branches would be merged instead of switched. To avoid polluting the
+>> log with the long git message about a detached head, while still
+>> getting some useful output from git, pass the --detach option to
+>> git checkout.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> I carry some local changes for tailoring the repo for similar reasons
+> (I while back I submitted something similar before the input parsing
+> was cleaned up).  What do you think about also making it a config file
+> option?
+
+ Sounds good to me. Feel free to do that and resubmit together with this one as
+a series, or in a single patch.
+
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
