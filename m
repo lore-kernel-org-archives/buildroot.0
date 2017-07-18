@@ -1,65 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Jul 2017 19:25:35 +0200
-Subject: [Buildroot] [PATCH 09/20] package/skeleton: drop dependency on
-	host-mkpasswd
+Date: Tue, 18 Jul 2017 19:25:36 +0200
+Subject: [Buildroot] [PATCH 10/20] package/skeleton: select it rather than
+	default to y
 In-Reply-To: <cover.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <c3f7830c690ab048cb400bce5133a1d378f8752f.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <197425c9ca54aae186faeff352635f6b7250d8be.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Setting the root pasword is done in a target-finalize hook, so we do not
-need to enforce a dependency from the skeleton onto host-mkpasswd.
+Our current skeleton is tailored to sysv-like init systems; it is not
+fit for systemd-based systems. So, in upcoming changes, we'll add
+another skeleton for systemd.
 
-Dropping that dependency will simplify making skeleton a virtual
-package (in up-coming changes).
+This means we can no longer have the current skeleton default to 'y', or
+it would be enabled also for systemd, which would be incorrect.
 
-This however introduces a slight change in behaviour: previously,
-host-mkpasswd would only be built if we needed to hash the root password
-from its plain-text value. Now, host-mkpasswd is always built as soon as
-the root password is non-empty, even if already pre-hashed.
+So, we remove the default to 'y' but have it selected by the default
+skeleton choice.
 
-Since host-mkpasswd is a really tiny weeny package bundled in Buidlroot,
-with only two C files, built as a single unit with a single gcc call,
-the overhead is really minimal. Compared to the simplifications this
-will allow in the skeleton packages (plural: common, sysv, systemd,
-custom) to come, this overhead is acceptable.
+However, we do not yet have a way to directly build (really, install)
+the custom skeleton, it is built (really, installed) as a dependency of
+the default skeleton. So we must also forcibly select the default
+skeleton when using a custom one.
 
-Yet another simplification, even if small, to ease providing multiple
-skeletons.
+Until we have the mean to do only one or the other; i.e. when we have a
+virtual skeleton.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/skeleton/skeleton.mk | 1 -
- system/Config.in             | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ package/skeleton/Config.in | 1 -
+ system/Config.in           | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 4a66f6ceca..4ec1ecbb51 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -121,7 +121,6 @@ SKELETON_ROOT_PASSWORD =
- else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
- SKELETON_ROOT_PASSWORD = '$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)'
- else
--SKELETON_DEPENDENCIES += host-mkpasswd
- # This variable will only be evaluated in the finalize stage, so we can
- # be sure that host-mkpasswd will have already been built by that time.
- SKELETON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)"`"
+diff --git a/package/skeleton/Config.in b/package/skeleton/Config.in
+index d25147bd92..b22ac66b35 100644
+--- a/package/skeleton/Config.in
++++ b/package/skeleton/Config.in
+@@ -1,5 +1,4 @@
+ config BR2_PACKAGE_SKELETON
+ 	bool
+-	default y
+ 	help
+ 	  The basic skeleton for your rootfs.
 diff --git a/system/Config.in b/system/Config.in
-index ed539dcbe0..5cb921f108 100644
+index 5cb921f108..9b42fbbbac 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -224,6 +224,7 @@ config BR2_ROOTFS_MERGED_USR
- config BR2_TARGET_ENABLE_ROOT_LOGIN
- 	bool "Enable root login with password"
- 	default y
-+	select BR2_PACKAGE_HOST_MKPASSWD if BR2_TARGET_GENERIC_ROOT_PASSWD != ""
+@@ -8,6 +8,7 @@ choice
+ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	bool "default target skeleton"
+ 	depends on !BR2_INIT_NONE
++	select BR2_PACKAGE_SKELETON
  	help
- 	  Allow root to log in with a password.
+ 	  Use default target skeleton
+ 
+@@ -16,6 +17,7 @@ comment "default target skeleton needs an init system"
+ 
+ config BR2_ROOTFS_SKELETON_CUSTOM
+ 	bool "custom target skeleton"
++	select BR2_PACKAGE_SKELETON
+ 	help
+ 	  Use custom target skeleton.
  
 -- 
 2.11.0
