@@ -1,72 +1,60 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 18 Jul 2017 14:58:00 +0200
-Subject: [Buildroot] [PATCH] kernel-module-imx-gpu-viv: bump revision to
-	a05d9b23
-Message-ID: <20170718125800.28223-1-gary.bisson@boundarydevices.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jul 2017 15:18:34 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
+ post-build/image scripts for out-of-tree builds
+In-Reply-To: <87wp757vz6.fsf@dell.be.48ers.dk>
+References: <20170714130417.18857-1-peter@korsgaard.com>
+ <7d2448b0-800c-cb14-657b-907d380787f8@mind.be>
+ <871spe92ci.fsf@dell.be.48ers.dk>
+ <dca9fa93-e6f8-10d9-f166-02f981b4f0a3@mind.be>
+ <87wp757vz6.fsf@dell.be.48ers.dk>
+Message-ID: <5b6d2690-6abf-9ae3-5571-77153a1af6eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog since previous revision:
-6a01dfb fix for memory leak in gc_hal_kernel_os.c
-f73c35b Add support for PREEMPT_RT kernels
 
-Also updating the help text to make sure users know this module won't
-build with Mainline kernel but only with NXP forks.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
-Hi all,
+On 18-07-17 14:47, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >> Yes, that can also work - Even though it is less obvious that you should
+>  >> run make O=${BASE_DIR} inside the post build/image scripts, instead of
+>  >> make O=$O
+> 
+>  >  OK, but having both exported seems a bit silly...
+> 
+> Correct. I would argue that O is somewhat nicer than BASE_DIR, as the
+> user is already using O= (and if they don't use O=, then they also don't
+> need to pass it in post-build/post-image scripts), but we have exported
+> and documented BASE_DIR for some time now, so we cannot really get rid
+> of it.
+> 
+>  >> >  O has the problem that it's too risky to lead to conflicts IMO.
+>  >> 
+>  >> Even for post build/image scripts? What use cases do you have in mind
+>  >> where there could be conflicts?
+> 
+>  >  True, in EXTRA_ENV the risk is minimal - especially since Kbuild and
+>  > derivatives (like Buildroot) ignore an O passed through the environment.
+> 
+> Indeed.
+> 
+> I don't feel strongly pro/con, what do others say?
 
-Let me know if the text is explicit enough as-is.
+ Since it's already committed, leave it in. It's no biggy.
 
-Also, I'm not sure if you'd rather have two patches for this (one for
-the bump, the other for the help text update).
+ Regards,
+ Arnout
 
-Regards,
-Gary
----
- package/freescale-imx/kernel-module-imx-gpu-viv/Config.in             | 4 +++-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash          | 2 +-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk            | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
-index bcc55175bc..9872678623 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV
- 
- 	  This package uses an exact copy of the GPU kernel driver source code
- 	  of the same version as base and include fixes and improvements
--	  developed by FSL Community
-+	  developed by FSL Community.
-+
-+	  This module is only meant for NXP-based kernel up to 4.1.x.
- 
- 	  https://github.com/Freescale/kernel-module-imx-gpu-viv
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index 9c43ea39e7..f9d400459e 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256	51dd137bd67ae991fa58fff4151c6bd7dd46bafd613f43e83d8403ec37217a90  kernel-module-imx-gpu-viv-bfa78b095a892705a09afe9514fc5d236b3124d2.tar.gz
-+sha256	0d45472a967d747bc1948b0332f77c8cd9f6ec1620b0922e82ca5ddd053b40ea  kernel-module-imx-gpu-viv-a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7.tar.gz
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-index d23213424e..6dbf9a0271 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KERNEL_MODULE_IMX_GPU_VIV_VERSION = bfa78b095a892705a09afe9514fc5d236b3124d2
-+KERNEL_MODULE_IMX_GPU_VIV_VERSION = a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7
- KERNEL_MODULE_IMX_GPU_VIV_SITE = \
- 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
- KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
