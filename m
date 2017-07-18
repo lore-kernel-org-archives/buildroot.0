@@ -1,56 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jul 2017 09:24:04 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: add --repo option
-In-Reply-To: <CANQCQpYxLkzMU_GA_-YV90F9R06pkQb30zOLjf1UdwaJQ4GpuA@mail.gmail.com>
-References: <20170717212859.12581-1-arnout@mind.be>
- <CANQCQpYxLkzMU_GA_-YV90F9R06pkQb30zOLjf1UdwaJQ4GpuA@mail.gmail.com>
-Message-ID: <ff93fccb-be25-023c-7359-eb24e793cb9e@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Jul 2017 09:51:13 +0200
+Subject: [Buildroot] [v3 1/3] rpi-userland: fix opengl library symlinks
+In-Reply-To: <20170717160939.3159-2-gael.portay@savoirfairelinux.com>
+References: <20170717160939.3159-1-gael.portay@savoirfairelinux.com>
+ <20170717160939.3159-2-gael.portay@savoirfairelinux.com>
+Message-ID: <20170718095113.2cc0b24c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 18-07-17 04:45, Matthew Weber wrote:
-> Arnout,
+On Mon, 17 Jul 2017 12:09:37 -0400, Ga?l PORTAY wrote:
+> The Qt WebEngine module loads libEGL.so.1 and libGLESv2.so.2 libraries.
+> Their path are hard-coded [1].
 > 
-> On Mon, Jul 17, 2017 at 4:28 PM, Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be> wrote:
->> This option allows to specify which Buildroot git repository to clone.
->> This can be useful in several situations:
->> - to use a different mirror in case you don't have a good connection to
->>   github;
->> - for debugging this script;
->> - to point to a local, patched repository you want to test.
->>
->> Note that the clone/pull will use the currently checked out branch of
->> the repository if it is non-bare, which is ideal for testing.
->>
->> Since switching repositories may also switch branches, we use a git
->> fetch/checkout sequence instead of doing a git pull. With git pull, the
->> branches would be merged instead of switched. To avoid polluting the
->> log with the long git message about a detached head, while still
->> getting some useful output from git, pass the --detach option to
->> git checkout.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> I carry some local changes for tailoring the repo for similar reasons
-> (I while back I submitted something similar before the input parsing
-> was cleaned up).  What do you think about also making it a config file
-> option?
+> This patch sets up cmake to create those library links.
+> 
+> 	# ls -l /usr/lib/lib*GL*
+> 	lrwxrwxrwx    1 root     root            11 Mar 21 17:24 /usr/lib/libEGL.so -> libEGL.so.1
+> 	lrwxrwxrwx    1 root     root            15 Mar 21 17:24 /usr/lib/libEGL.so.1 -> libEGL.so.1.0.0
+> 	-rwxr-xr-x    1 root     root        163152 Mar 22 14:56 /usr/lib/libEGL.so.1.0.0
+> 	lrwxrwxrwx    1 root     root            14 Mar 21 17:24 /usr/lib/libGLESv2.so -> libGLESv2.so.2
+> 	lrwxrwxrwx    1 root     root            18 Mar 21 17:24 /usr/lib/libGLESv2.so.2 -> libGLESv2.so.2.0.0
+> 	-rwxr-xr-x    1 root     root         78788 Mar 22 14:56 /usr/lib/libGLESv2.so.2.0.0
+> 
+> [1] https://github.com/qt/qtwebengine/blob/5.8/src/core/surface_factory_qt.cpp#L76-L86
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+>  .../0001-Add-OpenGL-library-versioning.patch       | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
+> 
+> diff --git a/package/rpi-userland/0001-Add-OpenGL-library-versioning.patch b/package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
+> new file mode 100644
+> index 0000000000..ea708f9559
+> --- /dev/null
+> +++ b/package/rpi-userland/0001-Add-OpenGL-library-versioning.patch
+> @@ -0,0 +1,35 @@
+> +From bf388550943afc70798c497e3fc706303394cfdc Mon Sep 17 00:00:00 2001
+> +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+> +Date: Fri, 3 Mar 2017 17:28:41 -0500
+> +Subject: [PATCH] Add OpenGL library versioning
+> +
+> +Some applications like QtWebEngine dynamically load libraries using
+> +dlopen. The library name is hardcoded, and it includes the library
+> +version [1].
+> +
+> +This patch creates symlinks for EGL and GLES libraries.
+> +
+> +	libEGL.so.1 -> libEGL.so
+> +	libGLESv2.so.2 -> libGLESv2.so
+> +
+> +[1] https://github.com/qt/qtwebengine/blob/dev/src/core/surface_factory_qt.cpp#L76-L86
 
- Sounds good to me. Feel free to do that and resubmit together with this one as
-a series, or in a single patch.
+Missing Signed-off-by line here.
 
- Regards,
- Arnout
+Has this patch been submitted upstream ?
 
+Thanks,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
