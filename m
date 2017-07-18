@@ -1,58 +1,49 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 18 Jul 2017 23:07:04 +0200
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
- file.
-In-Reply-To: <20170718230641.479308e9@windsurf>
-References: <20170713142549.28078-1-aduskett@gmail.com>
- <20170715114432.0b01a373@windsurf>
- <87d191afyw.fsf@dell.be.48ers.dk>
- <20170715214809.2158c3e2@windsurf>
- <87inis8jjj.fsf@dell.be.48ers.dk>
- <20170716164353.GI1482@waldemar-brodkorb.de>
- <246b2393-ffd3-99e5-5de9-db52d73488bb@mind.be>
- <20170718230641.479308e9@windsurf>
-Message-ID: <20170718210704.GO1482@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Jul 2017 23:46:09 +0200
+Subject: [Buildroot] [git commit] support/tests: allow properly indented
+	config fragment
+Message-ID: <20170718214252.54A9781979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf3cd4388a652c9af27ef1c35622e2d0a55b99a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Tue, 18 Jul 2017 21:24:05 +0200, Arnout Vandecappelle wrote:
-> 
-> >  I'm with you on this one. If a package can work with uClibc, we really should
-> > allow it.
-> > 
-> >  However, I don't think the solution is to bloat our default uClibc config with
-> > features that are not useful for 99.82% of our packages. fts.h is not something
-> > like IPv6 that is useful for a large number of packages.
-> > 
-> >  I also don't think we should add more options like BR2_ENABLE_LOCALE that copy
-> > the uClibc config options.
-> > 
-> >  Perhaps the way to go is to have a BR2_TOOLCHAIN_UCLIBC_BLOAT_CONFIG option
-> > that a user can set to indicate he wants to see packages that will not work with
-> > our default uClibc config. That option could give a nice warning that this
-> > configuration is not tested and YMMV.
-> 
-> I have to say I don't like this. If we have an option, it should work,
-> and therefore be tested. It's the worst thing for users to simply tick
-> an option, and discover build failures here and there. If you have an
-> option that explicitly allows to do something, then that something
-> should work.
+Currently, defining a config fragment in the runtime test infra requires
+that the fragment not to be indented. This is beark, and causes grievance
+when looking at the code (e.g. to fix it).
 
-I still don't get it.
-We are not trying to disable fts in glibc, so it is available there.
-Why we can't enable it for uClibc-ng to get more compatibility?
-Just because of the bigger size?
+Just strip out all leading spaces/tabs when writing the configuration
+lines into the config file, allowing in-line indented config fragments,
+like so:
 
-If someone needs a really small system, there is always the
-possibilty to use a really small uClibc-ng config.
+    class TestFoo(bla):
+        config = bla.config + \
+            """
+            FOO=y
+            # BAR is not set
+            """
 
-best regards
- Waldemar
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/basetest.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 1a082bb..07c180e 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -41,6 +41,7 @@ class BRTest(unittest.TestCase):
+         self.testname = self.__class__.__name__
+         self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
+         self.emulator = None
++        self.config = '\n'.join([line.lstrip() for line in self.config.splitlines()])
+ 
+     def show_msg(self, msg):
+         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
