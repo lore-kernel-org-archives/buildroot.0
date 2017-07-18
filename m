@@ -1,187 +1,137 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Jul 2017 19:25:41 +0200
-Subject: [Buildroot] [PATCH 15/20] package/skeleton: introduce sysv- and
-	systemd-specific skeletons
+Date: Tue, 18 Jul 2017 19:25:42 +0200
+Subject: [Buildroot] [PATCH 16/20] system: separate sysv and systemd parts
+	of the skeleton
 In-Reply-To: <cover.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <4cba79eb00daaaea1bd8bdb5a49a2aefd39b390d.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <f797589346d85a6ebba86bb418d6b818051d0da7.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we use the same skeleton for sysv-like init systems and
-systemd, even though systemd has some peculiarities that makes out
-default skeleton unfit.
+systems does not like that the content of /var be symlinks to /tmp,
+especially journald that starts before /tmp is mounted, and thus the
+journal files are hidden from view, which causes wuite a bit if fuss...
 
-So, we'll need to provide different skeletons (really, only part of it)
-for sysv-like and systemd.
+Instead, move the current /var to a sysv-only skeleton.
 
-Introduce two new skeleton packages, aptly named skeleton-sysv and
-skeleton-systemd, one for each, that are both providers of the skeleton
-package, in lieue of the skeleton-common, which is now a simple
-dependency of both the two new skeletons.
-
-Those packages are empty for now. In followup changes:
-  - sysv-specific stuff will be moved out of skeleton-common and into
-    skeleton-sysv;
-  - systemd-specific stuff will be added to skeleton-systemd.
+systemd at install time will create the /var content it needs, so we
+just create an empty /var for systemd. Yet, systemd really requires a
+bunch of extra directories to exist, so we also create those.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in                            |  2 ++
- package/skeleton-common/Config.in            |  4 ----
- package/skeleton-common/skeleton-common.mk   |  2 --
- package/skeleton-systemd/Config.in           |  7 +++++++
- package/skeleton-systemd/skeleton-systemd.mk | 18 ++++++++++++++++++
- package/skeleton-sysv/Config.in              |  7 +++++++
- package/skeleton-sysv/skeleton-sysv.mk       | 18 ++++++++++++++++++
- system/Config.in                             | 10 ++++++----
- 8 files changed, 58 insertions(+), 10 deletions(-)
- create mode 100644 package/skeleton-systemd/Config.in
- create mode 100644 package/skeleton-systemd/skeleton-systemd.mk
- create mode 100644 package/skeleton-sysv/Config.in
- create mode 100644 package/skeleton-sysv/skeleton-sysv.mk
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index bb068b7de8..d830cf743f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -4,6 +4,8 @@ menu "Target packages"
- 	source "package/skeleton/Config.in"
- 	source "package/skeleton-common/Config.in"
- 	source "package/skeleton-custom/Config.in"
-+	source "package/skeleton-systemd/Config.in"
-+	source "package/skeleton-sysv/Config.in"
- 
- menu "Audio and video applications"
- 	source "package/alsa-utils/Config.in"
-diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
-index 5675e873cf..9abed4292a 100644
---- a/package/skeleton-common/Config.in
-+++ b/package/skeleton-common/Config.in
-@@ -1,6 +1,2 @@
- config BR2_PACKAGE_SKELETON_COMMON
- 	bool
--	select BR2_PACKAGE_HAS_SKELETON
--
--config BR2_PACKAGE_PROVIDES_SKELETON
--	default "skeleton-common" if BR2_PACKAGE_SKELETON_COMMON
-diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
-index 475c07e32d..57cee48931 100644
---- a/package/skeleton-common/skeleton-common.mk
-+++ b/package/skeleton-common/skeleton-common.mk
-@@ -11,8 +11,6 @@
- SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
- 
--SKELETON_COMMON_PROVIDES = skeleton
--
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_COMMON_INSTALL_STAGING = YES
- 
-diff --git a/package/skeleton-systemd/Config.in b/package/skeleton-systemd/Config.in
-new file mode 100644
-index 0000000000..c507264598
---- /dev/null
-+++ b/package/skeleton-systemd/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SKELETON_SYSTEMD
-+	bool
-+	select BR2_PACKAGE_HAS_SKELETON
-+	select BR2_PACKAGE_SKELETON_COMMON
-+
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
+---
+Note: /home and /srv will be created at runtime if missing, but it is
+better to create them right now, to simplify supporting systemd on a
+RO filesystem in the (near) future.
+---
+ package/skeleton-systemd/skeleton-systemd.mk              | 7 +++++++
+ package/skeleton-sysv/skeleton-sysv.mk                    | 4 ++++
+ {system => package/skeleton-sysv}/skeleton/dev/log        | 0
+ {system => package/skeleton-sysv}/skeleton/dev/pts/.empty | 0
+ {system => package/skeleton-sysv}/skeleton/dev/shm/.empty | 0
+ {system => package/skeleton-sysv}/skeleton/etc/fstab      | 0
+ {system => package/skeleton-sysv}/skeleton/var/cache      | 0
+ {system => package/skeleton-sysv}/skeleton/var/lib/misc   | 0
+ {system => package/skeleton-sysv}/skeleton/var/lock       | 0
+ {system => package/skeleton-sysv}/skeleton/var/log        | 0
+ {system => package/skeleton-sysv}/skeleton/var/run        | 0
+ {system => package/skeleton-sysv}/skeleton/var/spool      | 0
+ {system => package/skeleton-sysv}/skeleton/var/tmp        | 0
+ system/skeleton/dev/.empty                                | 0
+ 14 files changed, 11 insertions(+)
+ rename {system => package/skeleton-sysv}/skeleton/dev/log (100%)
+ rename {system => package/skeleton-sysv}/skeleton/dev/pts/.empty (100%)
+ rename {system => package/skeleton-sysv}/skeleton/dev/shm/.empty (100%)
+ rename {system => package/skeleton-sysv}/skeleton/etc/fstab (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/cache (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/lib/misc (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/lock (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/log (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/run (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/spool (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/tmp (100%)
+ create mode 100644 system/skeleton/dev/.empty
+
 diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-new file mode 100644
-index 0000000000..cec6359007
---- /dev/null
+index cec6359007..384715e1c9 100644
+--- a/package/skeleton-systemd/skeleton-systemd.mk
 +++ b/package/skeleton-systemd/skeleton-systemd.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# skeleton-systemd
-+#
-+################################################################################
+@@ -15,4 +15,11 @@ SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
+ 
+ SKELETON_SYSTEMD_PROVIDES = skeleton
+ 
++define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/home
++	mkdir -p $(TARGET_DIR)/srv
++	mkdir -p $(TARGET_DIR)/var
++	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
++endef
 +
-+# The skeleton can't depend on the toolchain, since all packages depends on the
-+# skeleton and the toolchain is a target package, as is skeleton.
-+# Hence, skeleton would depends on the toolchain and the toolchain would depend
-+# on skeleton.
-+SKELETON_SYSTEMD_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
-+
-+SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
-+
-+SKELETON_SYSTEMD_PROVIDES = skeleton
-+
-+$(eval $(generic-package))
-diff --git a/package/skeleton-sysv/Config.in b/package/skeleton-sysv/Config.in
-new file mode 100644
-index 0000000000..2f6dbd9673
---- /dev/null
-+++ b/package/skeleton-sysv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SKELETON_SYSV
-+	bool
-+	select BR2_PACKAGE_HAS_SKELETON
-+	select BR2_PACKAGE_SKELETON_COMMON
-+
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	default "skeleton-sysv" if BR2_PACKAGE_SKELETON_SYSV
+ $(eval $(generic-package))
 diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
-new file mode 100644
-index 0000000000..b0c2b6bac1
---- /dev/null
+index b0c2b6bac1..b5fa396ac2 100644
+--- a/package/skeleton-sysv/skeleton-sysv.mk
 +++ b/package/skeleton-sysv/skeleton-sysv.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# skeleton-sysv
-+#
-+################################################################################
-+
-+# The skeleton can't depend on the toolchain, since all packages depends on the
-+# skeleton and the toolchain is a target package, as is skeleton.
-+# Hence, skeleton would depends on the toolchain and the toolchain would depend
-+# on skeleton.
-+SKELETON_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_SYSV_ADD_SKELETON_DEPENDENCY = NO
-+
-+SKELETON_SYSV_DEPENDENCIES = skeleton-common
-+
-+SKELETON_SYSV_PROVIDES = skeleton
-+
-+$(eval $(generic-package))
-diff --git a/system/Config.in b/system/Config.in
-index 75b6a8edac..65139c0bfd 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,9 +1,9 @@
- menu "System configuration"
+@@ -15,4 +15,8 @@ SKELETON_SYSV_DEPENDENCIES = skeleton-common
  
- # Note: usually, it is not possible to select a provider of a virtual
--# package. But here we have an exception: there are only two providers
--# and they only get selected each by separate entries in this choice.
--# So this is a safe situation.
-+# package. But here we have an exception: there are only three providers
-+# and they only get selected by separate entries in this choice and
-+# under different, exclusive conditions. So this is a safe situation.
- choice
- 	prompt "Root FS skeleton"
+ SKELETON_SYSV_PROVIDES = skeleton
  
-@@ -12,7 +12,9 @@ choice
- config BR2_ROOTFS_SKELETON_DEFAULT
- 	bool "default target skeleton"
- 	depends on !BR2_INIT_NONE
--	select BR2_PACKAGE_SKELETON_COMMON
-+	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
-+	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
-+	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
- 	help
- 	  Use default target skeleton
- 
++define SKELETON_SYSV_INSTALL_TARGET_CMDS
++	$(call SYSTEM_RSYNC,$(SKELETON_SYSV_PKGDIR)/skeleton,$(TARGET_DIR))
++endef
++
+ $(eval $(generic-package))
+diff --git a/system/skeleton/dev/log b/package/skeleton-sysv/skeleton/dev/log
+similarity index 100%
+rename from system/skeleton/dev/log
+rename to package/skeleton-sysv/skeleton/dev/log
+diff --git a/system/skeleton/dev/pts/.empty b/package/skeleton-sysv/skeleton/dev/pts/.empty
+similarity index 100%
+rename from system/skeleton/dev/pts/.empty
+rename to package/skeleton-sysv/skeleton/dev/pts/.empty
+diff --git a/system/skeleton/dev/shm/.empty b/package/skeleton-sysv/skeleton/dev/shm/.empty
+similarity index 100%
+rename from system/skeleton/dev/shm/.empty
+rename to package/skeleton-sysv/skeleton/dev/shm/.empty
+diff --git a/system/skeleton/etc/fstab b/package/skeleton-sysv/skeleton/etc/fstab
+similarity index 100%
+rename from system/skeleton/etc/fstab
+rename to package/skeleton-sysv/skeleton/etc/fstab
+diff --git a/system/skeleton/var/cache b/package/skeleton-sysv/skeleton/var/cache
+similarity index 100%
+rename from system/skeleton/var/cache
+rename to package/skeleton-sysv/skeleton/var/cache
+diff --git a/system/skeleton/var/lib/misc b/package/skeleton-sysv/skeleton/var/lib/misc
+similarity index 100%
+rename from system/skeleton/var/lib/misc
+rename to package/skeleton-sysv/skeleton/var/lib/misc
+diff --git a/system/skeleton/var/lock b/package/skeleton-sysv/skeleton/var/lock
+similarity index 100%
+rename from system/skeleton/var/lock
+rename to package/skeleton-sysv/skeleton/var/lock
+diff --git a/system/skeleton/var/log b/package/skeleton-sysv/skeleton/var/log
+similarity index 100%
+rename from system/skeleton/var/log
+rename to package/skeleton-sysv/skeleton/var/log
+diff --git a/system/skeleton/var/run b/package/skeleton-sysv/skeleton/var/run
+similarity index 100%
+rename from system/skeleton/var/run
+rename to package/skeleton-sysv/skeleton/var/run
+diff --git a/system/skeleton/var/spool b/package/skeleton-sysv/skeleton/var/spool
+similarity index 100%
+rename from system/skeleton/var/spool
+rename to package/skeleton-sysv/skeleton/var/spool
+diff --git a/system/skeleton/var/tmp b/package/skeleton-sysv/skeleton/var/tmp
+similarity index 100%
+rename from system/skeleton/var/tmp
+rename to package/skeleton-sysv/skeleton/var/tmp
+diff --git a/system/skeleton/dev/.empty b/system/skeleton/dev/.empty
+new file mode 100644
+index 0000000000..e69de29bb2
 -- 
 2.11.0
