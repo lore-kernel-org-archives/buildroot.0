@@ -1,267 +1,275 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Jul 2017 19:25:37 +0200
-Subject: [Buildroot] [PATCH 11/20] package/skeleton: split out into
-	skeleton-custom
+Date: Tue, 18 Jul 2017 19:25:38 +0200
+Subject: [Buildroot] [PATCH 12/20] package/skeleton: split out into
+	skeleton-common
 In-Reply-To: <cover.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <ca1a0fdf264669754c3c4aa669e162beea5441fa.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <af100c0e2b252ccec7e9e2b8ebc88964c78bb4dc.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the custom skeleton, we practicaly do nothing, except ensure it
-contains the basic, required directories, and that those are properly
-setup wrt. merged /usr.
+Move all the handling of the default skeleton into a new package,
+skeleton-common.
 
-Furthermore, our current skeleton is not fit for systemd, and we'll
-have to split things out into various skeletons.
+We don;t name it skeleton-default, because it will be further split
+later, into a skeleton for sysv and another for systemd, with some parts
+still common between the two. So just name it skeleton-common right now;
+this will save us a rename later.
 
-So, off-load the custom skeleton into its own package.
-
-Thus, the existing skeleton package is now limited to:
-
-  - when using our default skeleton, install and tweak it properly;
-
-  - when using a custom skeleton, do nothing except for depending on
-    the skeleton-custom package.
+We keep in the skeleton package all definitions of macros and variables
+that can be used by other skeleton packages and/or init systems, and
+just offload the actual feeding of the skeleton to the new package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Note: this calls for making skeleton a virtual package. This will come
-in follwup patches, after skeleton has lost all its code to the various
-skeleton packages.
----
- package/Config.in                          |   1 +
- package/skeleton-custom/Config.in          |   3 +
- package/skeleton-custom/skeleton-custom.mk | 105 +++++++++++++++++++++++++++++
- package/skeleton/skeleton.mk               |  51 +-------------
- system/Config.in                           |   2 +-
- 5 files changed, 112 insertions(+), 50 deletions(-)
- create mode 100644 package/skeleton-custom/Config.in
- create mode 100644 package/skeleton-custom/skeleton-custom.mk
+ package/Config.in                          |  1 +
+ package/skeleton-common/Config.in          |  3 +
+ package/skeleton-common/skeleton-common.mk | 96 ++++++++++++++++++++++++++++++
+ package/skeleton/skeleton.mk               | 87 +--------------------------
+ system/Config.in                           |  2 +-
+ 5 files changed, 102 insertions(+), 87 deletions(-)
+ create mode 100644 package/skeleton-common/Config.in
+ create mode 100644 package/skeleton-common/skeleton-common.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b48ab5e0dd..5fb9560ba9 100644
+index 5fb9560ba9..bb068b7de8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -2,6 +2,7 @@ menu "Target packages"
  
  	source "package/busybox/Config.in"
  	source "package/skeleton/Config.in"
-+	source "package/skeleton-custom/Config.in"
++	source "package/skeleton-common/Config.in"
+ 	source "package/skeleton-custom/Config.in"
  
  menu "Audio and video applications"
- 	source "package/alsa-utils/Config.in"
-diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
+diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
 new file mode 100644
-index 0000000000..b12bd8f73c
+index 0000000000..6c094f6466
 --- /dev/null
-+++ b/package/skeleton-custom/Config.in
++++ b/package/skeleton-common/Config.in
 @@ -0,0 +1,3 @@
-+config BR2_PACKAGE_SKELETON_CUSTOM
++config BR2_PACKAGE_SKELETON_COMMON
 +	bool
 +	select BR2_PACKAGE_SKELETON
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
+diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
 new file mode 100644
-index 0000000000..6f2cd2a42d
+index 0000000000..788a17dd61
 --- /dev/null
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -0,0 +1,105 @@
++++ b/package/skeleton-common/skeleton-common.mk
+@@ -0,0 +1,96 @@
 +################################################################################
 +#
-+# skeleton-custom
++# skeleton-common
 +#
 +################################################################################
 +
-+SKELETON_CUSTOM_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_CUSTOM_ADD_SKELETON_DEPENDENCY = NO
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
 +
-+SKELETON_CUSTOM_INSTALL_STAGING = YES
++# The skeleton also handles the merged /usr case in the sysroot
++SKELETON_COMMON_INSTALL_STAGING = YES
 +
-+SKELETON_CUSTOM_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
++SKELETON_COMMON_PATH = system/skeleton
 +
-+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
-+ifeq ($(SKELETON_CUSTOM_PATH),)
-+$(error No path specified for the custom skeleton)
-+endif
-+endif
-+
-+# Extract the inode numbers for all of those directories. In case any is
-+# a symlink, we want to get the inode of the pointed-to directory, so we
-+# append '/.' to be sure we get the target directory. Since the symlinks
-+# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
-+# all of them.
-+#
-+SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/. 2>/dev/null)
-+SKELETON_CUSTOM_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/bin/. 2>/dev/null)
-+SKELETON_CUSTOM_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/sbin/. 2>/dev/null)
-+SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/lib/. 2>/dev/null)
-+SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/. 2>/dev/null)
-+SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/. 2>/dev/null)
-+
-+# Ensure that the custom skeleton has /lib, /bin and /sbin, and their
-+# /usr counterparts
-+ifeq ($(SKELETON_CUSTOM_LIB_INODE),)
-+SKELETON_CUSTOM_MISSING_DIRS += /lib
-+endif
-+ifeq ($(SKELETON_CUSTOM_USR_LIB_INODE),)
-+SKELETON_CUSTOM_MISSING_DIRS += /usr/lib
-+endif
-+ifeq ($(SKELETON_CUSTOM_BIN_INODE),)
-+SKELETON_CUSTOM_MISSING_DIRS += /bin
-+endif
-+ifeq ($(SKELETON_CUSTOM_USR_BIN_INODE),)
-+SKELETON_CUSTOM_MISSING_DIRS += /usr/bin
-+endif
-+ifeq ($(SKELETON_CUSTOM_SBIN_INODE),)
-+SKELETON_CUSTOM_MISSING_DIRS += /sbin
-+endif
-+ifeq ($(SKELETON_CUSTOM_USR_SBIN_INODE),)
-+SKELETON_CUSTOM_MISSING_DIRS += /usr/sbin
-+endif
-+
-+# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
-+# counterparts are appropriately setup as symlinks ones to the others.
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+
-+ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
-+SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /lib
-+endif
-+ifneq ($(SKELETON_CUSTOM_BIN_INODE),$(SKELETON_CUSTOM_USR_BIN_INODE))
-+SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /bin
-+endif
-+ifneq ($(SKELETON_CUSTOM_SBIN_INODE),$(SKELETON_CUSTOM_USR_SBIN_INODE))
-+SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /sbin
-+endif
-+
-+endif # merged /usr
-+
-+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
-+ifneq ($(SKELETON_CUSTOM_MISSING_DIRS),)
-+$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is \
-+	missing those directories or symlinks: \
-+	$(SKELETON_CUSTOM_MISSING_DIRS))
-+endif
-+ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS),)
-+$(error The custom skeleton in $(SKELETON_PATH) is not \
-+       using a merged /usr for the following directories: \
-+       $(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS))
-+endif
-+endif
-+
-+# Provided by the 'skeleton' package:
-+# - SKELETON_RSYNC
-+# - SKELETON_LIB_SYMLINK
-+
-+# The target-dir-warning file is the only thing we customise in the
-+# custom skeleton.
-+define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
++define SKELETON_COMMON_INSTALL_TARGET_CMDS
++	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(TARGET_DIR))
++	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
 +	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
 +	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
 +		$(TARGET_DIR_WARNING_FILE)
 +endef
 +
-+# For the staging dir, we don't really care what we install, but we
-+# need the /lib and /usr/lib appropriately setup. Since we ensure,
-+# above, that they are correct in the skeleton, we can simply copy the
-+# skeleton to staging.
-+define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(STAGING_DIR))
++# For the staging dir, we don't really care about /bin and /sbin.
++# But for consistency with the target dir, and to simplify the code,
++# we still handle them for the merged or non-merged /usr cases.
++# Since the toolchain is not yet available, the staging is not yet
++# populated, so we need to create the directories in /usr
++define SKELETON_COMMON_INSTALL_STAGING_CMDS
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
++	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
 +	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
 +endef
 +
++SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
++SKELETON_COMMON_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
++SKELETON_COMMON_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
++SKELETON_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
++SKELETON_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
++
++ifneq ($(SKELETON_COMMON_HOSTNAME),)
++define SKELETON_COMMON_SET_HOSTNAME
++	mkdir -p $(TARGET_DIR)/etc
++	echo "$(SKELETON_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
++	$(SED) '$$a \127.0.1.1\t$(SKELETON_COMMON_HOSTNAME)' \
++		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
++endef
++SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_HOSTNAME
++endif
++
++ifneq ($(SKELETON_COMMON_ISSUE),)
++define SKELETON_COMMON_SET_ISSUE
++	mkdir -p $(TARGET_DIR)/etc
++	echo "$(SKELETON_COMMON_ISSUE)" > $(TARGET_DIR)/etc/issue
++endef
++SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ISSUE
++endif
++
++ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
++ifeq ($(SKELETON_COMMON_ROOT_PASSWD),)
++SKELETON_ROOT_PASSWORD =
++else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_COMMON_ROOT_PASSWD)),)
++SKELETON_ROOT_PASSWORD = '$(SKELETON_COMMON_ROOT_PASSWD)'
++else
++# This variable will only be evaluated in the finalize stage, so we can
++# be sure that host-mkpasswd will have already been built by that time.
++SKELETON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_COMMON_PASSWD_METHOD)" "$(SKELETON_COMMON_ROOT_PASSWD)"`"
++endif
++else # !BR2_TARGET_ENABLE_ROOT_LOGIN
++SKELETON_ROOT_PASSWORD = "*"
++endif
++define SKELETON_COMMON_SET_ROOT_PASSWD
++	$(SED) s,^root:[^:]*:,root:$(SKELETON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
++endef
++SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ROOT_PASSWD
++
++ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
++define SKELETON_COMMON_BIN_SH
++	rm -f $(TARGET_DIR)/bin/sh
++endef
++else
++ifneq ($(SKELETON_COMMON_BIN_SH),)
++define SKELETON_COMMON_BIN_SH
++	ln -sf $(SKELETON_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
++endef
++endif
++endif
++SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_BIN_SH
++
 +$(eval $(generic-package))
 diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 4ec1ecbb51..717bd65ada 100644
+index 717bd65ada..1d3e4fbe3c 100644
 --- a/package/skeleton/skeleton.mk
 +++ b/package/skeleton/skeleton.mk
-@@ -14,57 +14,14 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_INSTALL_STAGING = YES
+@@ -11,95 +11,10 @@
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+ SKELETON_ADD_SKELETON_DEPENDENCY = NO
  
--ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
-+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
+-# The skeleton also handles the merged /usr case in the sysroot
+-SKELETON_INSTALL_STAGING = YES
+-
+ ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
+-
+ SKELETON_DEPENDENCIES = skeleton-custom
+-
+-else # ! custom skeleton
+-
+-SKELETON_PATH = system/skeleton
+-
+-define SKELETON_INSTALL_TARGET_CMDS
+-	$(call SYSTEM_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
+-	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+-	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
+-	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+-		$(TARGET_DIR_WARNING_FILE)
+-endef
+-
+-# For the staging dir, we don't really care about /bin and /sbin.
+-# But for consistency with the target dir, and to simplify the code,
+-# we still handle them for the merged or non-merged /usr cases.
+-# Since the toolchain is not yet available, the staging is not yet
+-# populated, so we need to create the directories in /usr
+-define SKELETON_INSTALL_STAGING_CMDS
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
+-	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
+-	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
+-	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
+-endef
+-
+-SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+-SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+-SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+-SKELETON_TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+-SKELETON_TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+-
+-ifneq ($(SKELETON_TARGET_GENERIC_HOSTNAME),)
+-define SKELETON_SET_HOSTNAME
+-	mkdir -p $(TARGET_DIR)/etc
+-	echo "$(SKELETON_TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+-	$(SED) '$$a \127.0.1.1\t$(SKELETON_TARGET_GENERIC_HOSTNAME)' \
+-		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
+-endef
+-TARGET_FINALIZE_HOOKS += SKELETON_SET_HOSTNAME
+-endif
+-
+-ifneq ($(SKELETON_TARGET_GENERIC_ISSUE),)
+-define SKELETON_SET_ISSUE
+-	mkdir -p $(TARGET_DIR)/etc
+-	echo "$(SKELETON_TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
+-endef
+-TARGET_FINALIZE_HOOKS += SKELETON_SET_ISSUE
+-endif
+-
+-ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
+-ifeq ($(SKELETON_TARGET_GENERIC_ROOT_PASSWD),)
+-SKELETON_ROOT_PASSWORD =
+-else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
+-SKELETON_ROOT_PASSWORD = '$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)'
+-else
+-# This variable will only be evaluated in the finalize stage, so we can
+-# be sure that host-mkpasswd will have already been built by that time.
+-SKELETON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)"`"
+-endif
+-else # !BR2_TARGET_ENABLE_ROOT_LOGIN
+-SKELETON_ROOT_PASSWORD = "*"
+-endif
+-
+-define SKELETON_SET_ROOT_PASSWD
+-	$(SED) s,^root:[^:]*:,root:$(SKELETON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
+-endef
+-TARGET_FINALIZE_HOOKS += SKELETON_SET_ROOT_PASSWD
+-
+-ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+-define SKELETON_BIN_SH
+-	rm -f $(TARGET_DIR)/bin/sh
+-endef
+ else
+-ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
+-define SKELETON_BIN_SH
+-	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
+-endef
+-endif
++SKELETON_DEPENDENCIES = skeleton-common
+ endif
+-TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
+-
+-endif # BR2_ROOTFS_SKELETON_DEFAULT
  
--SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
--
--ifeq ($(BR_BUILDING),y)
--ifeq ($(SKELETON_PATH),)
--$(error No path specified for the custom skeleton)
--endif
--endif
--
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--
--# Ensure the user has prepared a merged /usr.
--#
--# Extract the inode numbers for all of those directories. In case any is
--# a symlink, we want to get the inode of the pointed-to directory, so we
--# append '/.' to be sure we get the target directory. Since the symlinks
--# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
--# all of them.
--#
--SKELETON_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/lib/.)
--SKELETON_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/bin/.)
--SKELETON_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/sbin/.)
--SKELETON_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/lib/.)
--SKELETON_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/bin/.)
--SKELETON_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/sbin/.)
--
--ifneq ($(SKELETON_LIB_INODE),$(SKELETON_USR_LIB_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR += /lib
--endif
--ifneq ($(SKELETON_BIN_INODE),$(SKELETON_USR_BIN_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR += /bin
--endif
--ifneq ($(SKELETON_SBIN_INODE),$(SKELETON_USR_SBIN_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
--endif
--
--ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
--$(error The custom skeleton in $(SKELETON_PATH) is not \
--	using a merged /usr for the following directories: \
--	$(SKELETON_CUSTOM_NOT_MERGED_USR))
--endif
--
--endif # merged /usr
-+SKELETON_DEPENDENCIES = skeleton-custom
- 
- else # ! custom skeleton
- 
- SKELETON_PATH = system/skeleton
- 
--endif # ! custom skeleton
--
- define SKELETON_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
- 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
-@@ -87,10 +44,6 @@ define SKELETON_INSTALL_STAGING_CMDS
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- endef
- 
--# The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
--# default skeleton.
--ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
--
- SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
- SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+ $(eval $(generic-package))
 diff --git a/system/Config.in b/system/Config.in
-index 9b42fbbbac..5f8770d6c9 100644
+index 5f8770d6c9..c27b013784 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -17,7 +17,7 @@ comment "default target skeleton needs an init system"
- 
- config BR2_ROOTFS_SKELETON_CUSTOM
- 	bool "custom target skeleton"
+@@ -8,7 +8,7 @@ choice
+ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	bool "default target skeleton"
+ 	depends on !BR2_INIT_NONE
 -	select BR2_PACKAGE_SKELETON
-+	select BR2_PACKAGE_SKELETON_CUSTOM
++	select BR2_PACKAGE_SKELETON_COMMON
  	help
- 	  Use custom target skeleton.
+ 	  Use default target skeleton
  
 -- 
 2.11.0
