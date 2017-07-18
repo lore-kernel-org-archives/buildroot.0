@@ -1,57 +1,46 @@
-From: Calin Crisan <ccrisan@gmail.com>
-Date: Tue, 18 Jul 2017 11:55:39 +0300
-Subject: [Buildroot] [PATCH 1/1] pulseaudio: properly enable/disable bluez
-	support based on package selection
-Message-ID: <20170718085547.10828-1-ccrisan@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Jul 2017 11:02:45 +0200
+Subject: [Buildroot] [RFC] kernel-module-imx-gpu-viv:compaling error
+In-Reply-To: <CAAMH-ysnm5JMQnAJ4jQJS700o1tDE6tKeW0-niz8eBdRRQXWSQ@mail.gmail.com>
+References: <1500358371269-171162.post@n4.nabble.com>
+ <20170718100720.39028066@windsurf>
+ <CAAMH-ysnm5JMQnAJ4jQJS700o1tDE6tKeW0-niz8eBdRRQXWSQ@mail.gmail.com>
+Message-ID: <20170718110245.1f85dafb@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of letting the configure script automatically detect the presence of
-bluez package files, the script is now explicitly instructed to enable or
-disable bluez (both 4.x and 5.x) support based on the selection of the
-following packages: bluez_utils, bluez5_utils and sbc.
+Hello,
 
-Signed-off-by: Calin Crisan <ccrisan@gmail dot com>
----
- package/pulseaudio/pulseaudio.mk | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+On Tue, 18 Jul 2017 10:33:18 +0200, Gary Bisson wrote:
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 2f2cfbbed..c627c4b5b 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -31,8 +31,6 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
- 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
- 	$(if $(BR2_PACKAGE_DBUS),dbus) \
--	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils) \
--	$(if $(BR2_PACKAGE_BLUEZ5_UTILS),bluez5_utils) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW),fftw) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
-@@ -81,6 +79,20 @@ else
- PULSEAUDIO_CONF_OPTS += --without-soxr
- endif
- 
-+ifeq ($(BR2_PACKAGE_BLUEZ_UTILS)$(BR2_PACKAGE_SBC),yy)
-+PULSEAUDIO_CONF_OPTS += --enable-bluez4
-+PULSEAUDIO_DEPENDENCIES += bluez_utils sbc
-+else
-+PULSEAUDIO_CONF_OPTS += --disable-bluez4
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
-+PULSEAUDIO_CONF_OPTS += --enable-bluez5
-+PULSEAUDIO_DEPENDENCIES += bluez5_utils sbc
-+else
-+PULSEAUDIO_CONF_OPTS += --disable-bluez5
-+endif
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- PULSEAUDIO_CONF_OPTS += --enable-udev
- PULSEAUDIO_DEPENDENCIES += udev
+> > Please indicate the Buildroot version being used, and provide the
+> > Buildroot .config file that allows to reproduce this issue.
+> >
+> > But I believe the answer is pretty simple: you're trying to build the
+> > i.MX GPU Vivante kernel module against Linux 4.11, and the i.MX GPU
+> > Vivante kernel module hasn't been modified to work with such a recent
+> > Linux kernel.
+> >
+> > I believe the i.MX GPU Vivante kernel module is most likely designed to
+> > work with the Linux 4.1 based BSP provided by Freescale/NXP.  
+> 
+> Thomas is correct, this GPU module is only meant for NXP-based kernels
+> from 3.10.x to 4.1.x.
+
+Perhaps we should update the Config.in help text of the
+kernel-module-imx-gpu-viv package to indicate this ?
+
+I know people don't read the help text, but at least when it exists, we
+can point them to the help text, and the fact that they should read the
+documentation :-)
+
+Best regards,
+
+Thomas
 -- 
-2.13.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
