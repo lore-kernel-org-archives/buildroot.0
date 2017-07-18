@@ -1,7 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 18 Jul 2017 12:13:10 +0200
-Subject: [Buildroot] [PATCH 1/2] python-setuptools-scm: bum to version 1.15.6
-Message-ID: <20170718101311.30667-1-yegorslists@googlemail.com>
+Date: Tue, 18 Jul 2017 12:36:04 +0200
+Subject: [Buildroot] [PATCH] python-typepy: new package
+Message-ID: <20170718103604.7393-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,74 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
- package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                        |  1 +
+ package/python-typepy/Config.in          | 13 +++++++++++++
+ package/python-typepy/python-typepy.hash |  3 +++
+ package/python-typepy/python-typepy.mk   | 14 ++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/python-typepy/Config.in
+ create mode 100644 package/python-typepy/python-typepy.hash
+ create mode 100644 package/python-typepy/python-typepy.mk
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index 075e70d5f..e34e8e2b6 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/setuptools_scm/json, sha256 locally computed
--md5 d91e17693598d8ba84c5b4fed48b015d setuptools_scm-1.15.1rc1.tar.gz
--sha256 24007d8a43c4b43c7ad6c8725cbdfb94212c30f6ab849f21f7bb3809333f105a setuptools_scm-1.15.1rc1.tar.gz
-+md5 f17493d53f0d842bb0152f214775640b setuptools_scm-1.15.6.tar.gz
-+sha256 49ab4685589986a42da85706b3311a2f74f1af567d39fee6cb1e088d7a75fb5f setuptools_scm-1.15.6.tar.gz
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index 5fb48fddf..acde2618c 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.1rc1
-+PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.6
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/b8/4b/c7370d3c54a74ee8abb3c7e0792c6c95f1e9658e959211b5b86eebe4677a
-+PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/03/6d/aafdd01edd227ee879b691455bf19895091872af7e48192bea1758c82032
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+diff --git a/package/Config.in b/package/Config.in
+index 28cb6f145..1775fc162 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -864,6 +864,7 @@ menu "External python modules"
+ 	source "package/python-sortedcontainers//Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-tempora/Config.in"
++	source "package/python-typepy/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+ 	source "package/python-toml/Config.in"
+diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
+new file mode 100644
+index 000000000..f496a20d9
+--- /dev/null
++++ b/package/python-typepy/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_TYPEPY
++	bool "python-typepy"
++	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
++	select BR2_PACKAGE_PYTHON_PYTZ # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  A Python library for variable type checker/validator/converter at a
++	  run time.
++
++	  https://github.com/thombashi/typepy  
+diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
+new file mode 100644
+index 000000000..7700390f7
+--- /dev/null
++++ b/package/python-typepy/python-typepy.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/typepy/json, sha256 locally computed
++md5	a8ab7edcf8f52bb091121e90d21dc113  typepy-0.0.14.tar.gz
++sha256	ef07125b464a6808b7ac052d7ee35873a4424a95dbc9d7db71a380d0135d9981  typepy-0.0.14.tar.gz
+diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
+new file mode 100644
+index 000000000..10270bbfa
+--- /dev/null
++++ b/package/python-typepy/python-typepy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-typepy
++#
++################################################################################
++
++PYTHON_TYPEPY_VERSION = 0.0.14
++PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
++PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/5c/1a/3836e06f2f476e785006bb0f9305160577586a8d4ae2a017fc778f580344
++PYTHON_TYPEPY_SETUP_TYPE = setuptools
++PYTHON_TYPEPY_LICENSE = MIT
++PYTHON_TYPEPY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.11.0
