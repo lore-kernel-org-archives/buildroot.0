@@ -1,85 +1,59 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 18 Jul 2017 12:36:04 +0200
-Subject: [Buildroot] [PATCH] python-typepy: new package
-Message-ID: <20170718103604.7393-1-yegorslists@googlemail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Jul 2017 11:40:19 +0100
+Subject: [Buildroot] [PATCH v6 1/4] infra: add support for MIPS NaN
+In-Reply-To: <20170717141111.7c200c1d@windsurf>
+References: <20170628151713.10746-1-Vincent.Riera@imgtec.com>
+ <20170716164000.415ca6f3@windsurf> <20170717113412.6306d69a@windsurf>
+ <aea83bb8-c45f-527b-3c38-71b98f50cc50@imgtec.com>
+ <20170717141111.7c200c1d@windsurf>
+Message-ID: <ea6a0b91-c500-463a-5744-08d5554dd957@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Thomas,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                        |  1 +
- package/python-typepy/Config.in          | 13 +++++++++++++
- package/python-typepy/python-typepy.hash |  3 +++
- package/python-typepy/python-typepy.mk   | 14 ++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/python-typepy/Config.in
- create mode 100644 package/python-typepy/python-typepy.hash
- create mode 100644 package/python-typepy/python-typepy.mk
+On 17/07/17 13:11, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 17 Jul 2017 13:03:05 +0100, Vicente Olivert Riera wrote:
+> 
+>>> Is it because the gcc of this external toolchain is too old ?  
+>>
+>> Yes, the -mnan= option was introduced in gcc 4.9.0 by this commit:
+>>
+>> 0bd32132d471995f3e333138363d1d928a9dde60
+>>
+>> The gcc of that external toolchain is 4.8.2.
+> 
+> OK, that explains it.
+> 
+>>> What can we do about this ?  
+>>
+>> I guess we could use an option called BR2_GCC_SUPPORTS_MNAN in order to
+>> avoid adding the -mnan option to the CFLAGS and to the tc-wrapper if the
+>> external toolchain hasn't selected that option. For internal toolchain,
+>> since the oldest gcc version we support is 4.9.4, then it should be
+>> always selected.
+> 
+> Sounds good to me. I guess those older gcc versions (4.8 and before)
+> anyway only supported the legacy NaN encoding, and therefore behave as
+> if -mnan=legacy is passed, correct?
 
-diff --git a/package/Config.in b/package/Config.in
-index 28cb6f145..1775fc162 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -864,6 +864,7 @@ menu "External python modules"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-tempora/Config.in"
-+	source "package/python-typepy/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
-diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
-new file mode 100644
-index 000000000..f496a20d9
---- /dev/null
-+++ b/package/python-typepy/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_TYPEPY
-+	bool "python-typepy"
-+	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  A Python library for variable type checker/validator/converter at a
-+	  run time.
-+
-+	  https://github.com/thombashi/typepy  
-diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
-new file mode 100644
-index 000000000..7700390f7
---- /dev/null
-+++ b/package/python-typepy/python-typepy.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/typepy/json, sha256 locally computed
-+md5	a8ab7edcf8f52bb091121e90d21dc113  typepy-0.0.14.tar.gz
-+sha256	ef07125b464a6808b7ac052d7ee35873a4424a95dbc9d7db71a380d0135d9981  typepy-0.0.14.tar.gz
-diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
-new file mode 100644
-index 000000000..10270bbfa
---- /dev/null
-+++ b/package/python-typepy/python-typepy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-typepy
-+#
-+################################################################################
-+
-+PYTHON_TYPEPY_VERSION = 0.0.14
-+PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
-+PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/5c/1a/3836e06f2f476e785006bb0f9305160577586a8d4ae2a017fc778f580344
-+PYTHON_TYPEPY_SETUP_TYPE = setuptools
-+PYTHON_TYPEPY_LICENSE = MIT
-+PYTHON_TYPEPY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.11.0
+Correct.
+
+> You might also want to check if the same problem will happen (or not)
+> for the FP32 mode, and the DSP/MSA options :)
+
+I'll check it out, yes.
+
+Thanks,
+
+Vincent
+
+> Thanks!
+> 
+> Thomas
+> 
