@@ -1,99 +1,197 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Jul 2017 19:27:56 +0300
-Subject: [Buildroot] [PATCH] httping: fix build without host-gettext
-Message-ID: <ebb8a53a68988fedd5c45472799b5b51785b7873.1500395276.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Jul 2017 19:25:41 +0200
+Subject: [Buildroot] [PATCH 00/20] system: properly handle systemd as init
+	system
+Message-ID: <cover.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 654de6512554c (httping: use the new gettext logic), host-gettext
-is not a dependency of httping. This breaks the build because the httping
-Makefile calls msgfmt unconditionally. Add a patch that allows build without
-translation files generation.
+Hello All!
 
-Fixes:
-http://autobuild.buildroot.net/results/73e/73e624775617d1b95da7d4ef666612af5bceef61/
-http://autobuild.buildroot.net/results/2bf/2bff43d7b749b4daf32868bddbae94b510949bf8/
-http://autobuild.buildroot.net/results/8a6/8a69659afa21f467ca5de7915363cebf0fc7aff2/
+This series is a proposal to fix our handling of systemd as an init
+system.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...0002-Makefile-allow-build-without-gettext.patch | 48 ++++++++++++++++++++++
- package/httping/httping.mk                         |  3 +-
- 2 files changed, 50 insertions(+), 1 deletion(-)
- create mode 100644 package/httping/0002-Makefile-allow-build-without-gettext.patch
+Our default skeleton is not well suited for systemd:
 
-diff --git a/package/httping/0002-Makefile-allow-build-without-gettext.patch b/package/httping/0002-Makefile-allow-build-without-gettext.patch
-new file mode 100644
-index 000000000000..aec1de47d1c2
---- /dev/null
-+++ b/package/httping/0002-Makefile-allow-build-without-gettext.patch
-@@ -0,0 +1,48 @@
-+From fe7d6c5a0e5dfe129f228498037393d23d6ae890 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 18 Jul 2017 19:09:03 +0300
-+Subject: [PATCH] Makefile: allow build without gettext
-+
-+The msgfmt command is part of the gettext package, and is used to generate
-+binary translation files. When gettext is not installed, build fails.
-+Translation files are not always needed on size constrained embedded targets.
-+Add an option to disable translation files generation using the NO_GETTEXT
-+variable.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/flok99/httping/pull/36
-+
-+ Makefile | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/Makefile b/Makefile
-+index 46127f4cdde1..160cc1794ec8 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -55,7 +55,9 @@ MKDIR=/bin/mkdir
-+ ARCHIVE=/bin/tar cf -
-+ COMPRESS=/bin/gzip -9
-+ 
-++ifneq ($(NO_GETTEXT),yes)
-+ TRANSLATIONS=nl.mo ru.mo
-++endif
-+ 
-+ OBJS=gen.o http.o io.o error.o utils.o main.o tcp.o res.o socks5.o kalman.o cookies.o help.o colors.o
-+ 
-+@@ -118,10 +120,12 @@ install: $(TARGET) $(TRANSLATIONS)
-+ ifneq ($(DEBUG),yes)
-+ 	$(STRIP) $(DESTDIR)/$(BINDIR)/$(TARGET)
-+ endif
-++ifneq ($(NO_GETTEXT),yes)
-+ 	mkdir -p $(DESTDIR)/$(PREFIX)/share/locale/nl/LC_MESSAGES
-+ 	cp nl.mo $(DESTDIR)/$(PREFIX)/share/locale/nl/LC_MESSAGES/httping.mo
-+ 	mkdir -p $(DESTDIR)/$(PREFIX)/share/locale/ru/LC_MESSAGES
-+ 	cp ru.mo $(DESTDIR)/$(PREFIX)/share/locale/ru/LC_MESSAGES/httping.mo
-++endif
-+ 
-+ 
-+ makefile.inc:
-+-- 
-+2.13.2
-+
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index 649c6439450b..955ee3131bb0 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -22,7 +22,8 @@ HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
- 	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
- 	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
- 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
--	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
-+	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
-+	NO_GETTEXT=$(if $(BR2_SYSTEM_ENABLE_NLS),no,yes)
- 
- define HTTPING_BUILD_CMDS
- 	$(HTTPING_MAKE_OPTS) LDFLAGS="$(HTTPING_LDFLAGS)" \
+  - we have /var/log a symlink to /tmp/log, but the way systemd starts
+    hides the journals:
+    - start systemd-journald, stores journals in /tmp/log/ (because of
+      the redirection above)
+    - mounts a tmpfs over /tmp, thus hidding the journals.
+
+  - on a read-only rootfs, systemd expects /var to be read-write, which
+    we do not provide.
+
+All of this sounds trivial, but fixing it is definitely not.
+
+The overall idea is that we need different skeletons, one for each type
+of init systems: sysv, systemd, others (aka custom).
+
+The skeleton package becomes a virtual package, that is provided by one
+of four implementations:
+
+  - skeleton-sysv or skeleton-systemd, as their names imply, for either
+    SysV- or systemd-based systems, and which depend on skeleton-common;
+
+  - skeleton-common, that provides base files and directories comon to
+    all skeletons (except custom, below); skeleton-common is also a
+    provider for the skeleton virtual package, for use with no-init (aka
+    custom init) systems;
+
+  - skeleton-custom, for user-provided custom skeleton, and of which we
+    expect it is fully prepared; skeleton-custom does not depend on
+    skeleton-common.
+
+A series of runtime tests have also been added, running on the QEMU
+vexpress:
+
+    init system         rootfs      DHCP?
+    -------------------------------------
+    busybox             ext4        no
+    busybox             ext4        eth0
+    busybox             squashfs    no
+    busybox             squashfs    eth0
+  * systemd-ifupdown    ext4        eth0
+    systemd-ifupdown    squashfs    eth0
+ ** systemd-networkd    ext4        eth0
+    systemd-networkd    squashfs    eth0
+*** systemd-full        ext4        eth0
+    systemd-full        squashfs    eth0
+  + no-init             squashfs    no
+
+    *   systemd-networkd: only what gets selected automatically when
+        systemd is used as init system, with all other options unset;
+
+    **  systemd-ifupdown: like systemd-networkd, but with networkd
+        disabled, thus using ifupdown instead;
+
+    *** systemd-full: all systemd options enabled, implies networkd;
+
+    +   a shell is launched as init
+
+Those new tests are not exhaustive, especially the systemd one; instead,
+they just test basic features: what init is being used, and did we get
+an IP adress for eth0? More tests can be added later on.
+
+Changes v2 -> v3:
+  - too much to note, mostly rewriten from scratch
+
+Changes v1 -> v2:
+  - enhance the commit logs
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit bc801efacb298e2297024f83e960eaf8a45dd39f
+
+  python-coherence: bump to the latest upstream commit (2017-07-17 11:28:58 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 95f6965c48dbf2f754818e2bec1f2d3891015475
+
+  support/testing: add runtime testing for init systems (2017-07-18 18:59:05 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (20):
+      support/tests: allow properly indented config fragment
+      core/pkg-generic: add variable to skip skeleton dependency
+      package/skeleton: add macro to rsync skeleton directory
+      package/skeleton: make SKELETON_LIB_SYMLINK a macro
+      system: provide package-wide system variables and macros
+      system: move setting getty to the corresponding init systems
+      system: move remounting / to the corresponding init systems
+      system: with no init system, only allow custom skeleton
+      package/skeleton: drop dependency on host-mkpasswd
+      package/skeleton: select it rather than default to y
+      package/skeleton: split out into skeleton-custom
+      package/skeleton: split out into skeleton-common
+      package/skeleton: make it a virtual package
+      package/skeleton-common: simplify staging install
+      package/skeleton: introduce sysv- and systemd-specific skeletons
+      system: separate sysv and systemd parts of the skeleton
+      sytem: no-init systems may use our default, common skeleton
+      fs: add pre- and post-command hooks
+      system: make systemd work on a read-only rootfs
+      support/testing: add runtime testing for init systems
+
+ Makefile                                           |   1 +
+ fs/common.mk                                       |   4 +
+ package/Config.in                                  |   4 +
+ package/busybox/busybox.mk                         |  15 +-
+ package/pkg-generic.mk                             |  11 +-
+ package/skeleton-common/Config.in                  |  31 ++++
+ package/skeleton-common/skeleton-common.mk         |  92 +++++++++
+ package/skeleton-custom/Config.in                  |   6 +
+ package/skeleton-custom/skeleton-custom.mk         | 107 +++++++++++
+ package/skeleton-systemd/Config.in                 |   7 +
+ package/skeleton-systemd/skeleton-systemd.mk       |  71 +++++++
+ package/skeleton-sysv/Config.in                    |   7 +
+ package/skeleton-sysv/skeleton-sysv.mk             |  22 +++
+ {system => package/skeleton-sysv}/skeleton/dev/log |   0
+ .../skeleton-sysv}/skeleton/dev/pts/.empty         |   0
+ .../skeleton-sysv}/skeleton/dev/shm/.empty         |   0
+ .../skeleton-sysv}/skeleton/etc/fstab              |   0
+ .../skeleton-sysv}/skeleton/var/cache              |   0
+ .../skeleton-sysv}/skeleton/var/lib/misc           |   0
+ .../skeleton-sysv}/skeleton/var/lock               |   0
+ {system => package/skeleton-sysv}/skeleton/var/log |   0
+ {system => package/skeleton-sysv}/skeleton/var/run |   0
+ .../skeleton-sysv}/skeleton/var/spool              |   0
+ {system => package/skeleton-sysv}/skeleton/var/tmp |   0
+ package/skeleton/Config.in                         |   8 +-
+ package/skeleton/skeleton.mk                       | 206 +--------------------
+ package/sysvinit/sysvinit.mk                       |  11 ++
+ support/testing/infra/builder.py                   |   3 +-
+ .../testing/tests/init/__init__.py                 |   0
+ support/testing/tests/init/base.py                 |  47 +++++
+ support/testing/tests/init/test_busybox.py         |  67 +++++++
+ support/testing/tests/init/test_none.py            |  32 ++++
+ support/testing/tests/init/test_systemd.py         | 145 +++++++++++++++
+ system/Config.in                                   |  13 +-
+ system/skeleton/dev/{pts => }/.empty               |   0
+ system/system.mk                                   |  88 +++++++++
+ 36 files changed, 787 insertions(+), 211 deletions(-)
+ create mode 100644 package/skeleton-common/Config.in
+ create mode 100644 package/skeleton-common/skeleton-common.mk
+ create mode 100644 package/skeleton-custom/Config.in
+ create mode 100644 package/skeleton-custom/skeleton-custom.mk
+ create mode 100644 package/skeleton-systemd/Config.in
+ create mode 100644 package/skeleton-systemd/skeleton-systemd.mk
+ create mode 100644 package/skeleton-sysv/Config.in
+ create mode 100644 package/skeleton-sysv/skeleton-sysv.mk
+ rename {system => package/skeleton-sysv}/skeleton/dev/log (100%)
+ copy {system => package/skeleton-sysv}/skeleton/dev/pts/.empty (100%)
+ rename {system => package/skeleton-sysv}/skeleton/dev/shm/.empty (100%)
+ rename {system => package/skeleton-sysv}/skeleton/etc/fstab (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/cache (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/lib/misc (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/lock (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/log (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/run (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/spool (100%)
+ rename {system => package/skeleton-sysv}/skeleton/var/tmp (100%)
+ copy system/skeleton/dev/pts/.empty => support/testing/tests/init/__init__.py (100%)
+ create mode 100644 support/testing/tests/init/base.py
+ create mode 100644 support/testing/tests/init/test_busybox.py
+ create mode 100644 support/testing/tests/init/test_none.py
+ create mode 100644 support/testing/tests/init/test_systemd.py
+ rename system/skeleton/dev/{pts => }/.empty (100%)
+ create mode 100644 system/system.mk
+
 -- 
-2.13.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
