@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jul 2017 23:47:10 +0200
-Subject: [Buildroot] [PATCHv3] support/tests: allow properly indented
- config fragment
-In-Reply-To: <20170718203839.14913-1-yann.morin.1998@free.fr>
-References: <20170718203839.14913-1-yann.morin.1998@free.fr>
-Message-ID: <20170718234710.2759bb07@windsurf>
+Date: Tue, 18 Jul 2017 23:47:23 +0200
+Subject: [Buildroot] [PATCH] kernel-module-imx-gpu-viv: bump revision to
+ a05d9b23
+In-Reply-To: <20170718125800.28223-1-gary.bisson@boundarydevices.com>
+References: <20170718125800.28223-1-gary.bisson@boundarydevices.com>
+Message-ID: <20170718234723.33a32f75@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Jul 2017 22:38:39 +0200, Yann E. MORIN wrote:
-> Currently, defining a config fragment in the runtime test infra requires
-> that the fragment not to be indented. This is beark, and causes grievance
-> when looking at the code (e.g. to fix it).
+On Tue, 18 Jul 2017 14:58:00 +0200, Gary Bisson wrote:
+> Changelog since previous revision:
+> 6a01dfb fix for memory leak in gc_hal_kernel_os.c
+> f73c35b Add support for PREEMPT_RT kernels
 > 
-> Just strip out all leading spaces/tabs when writing the configuration
-> lines into the config file, allowing in-line indented config fragments,
-> like so:
+> Also updating the help text to make sure users know this module won't
+> build with Mainline kernel but only with NXP forks.
 > 
->     class TestFoo(bla):
->         config = bla.config + \
->             """
->             FOO=y
->             # BAR is not set
->             """
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
-> Changes v2 -> v3:
->   - use and fix code snippet provided by Arnout, thanks! ;-)
->   - do it in our base test class, not on the builder class  (Arnout)
+> Hi all,
 
 Applied to master, thanks.
 
