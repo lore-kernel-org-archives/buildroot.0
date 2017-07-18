@@ -1,45 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Jul 2017 15:21:19 +0300
-Subject: [Buildroot] [PATCH 2/2] git: bump to version 2.13.3
-In-Reply-To: <3e2f239c0be8ae7fb4ea970a00826e0ed621a685.1500380479.git.baruch@tkos.co.il>
-References: <3e2f239c0be8ae7fb4ea970a00826e0ed621a685.1500380479.git.baruch@tkos.co.il>
-Message-ID: <53750926eec6369fced1e93e86e71ee894b5cf3d.1500380479.git.baruch@tkos.co.il>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 18 Jul 2017 14:38:03 +0200
+Subject: [Buildroot] [RFC] kernel-module-imx-gpu-viv:compaling error
+In-Reply-To: <1500375085852-171182.post@n4.nabble.com>
+References: <1500358371269-171162.post@n4.nabble.com>
+ <20170718100720.39028066@windsurf>
+ <CAAMH-ysnm5JMQnAJ4jQJS700o1tDE6tKeW0-niz8eBdRRQXWSQ@mail.gmail.com>
+ <20170718110245.1f85dafb@windsurf.lan>
+ <1500375085852-171182.post@n4.nabble.com>
+Message-ID: <CAAMH-ytxV3-GON2BFshFDZ4TvDtFF4yjttXShK7O-K63B+WMCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license files hashes.
+Hi Refik,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/git/git.hash | 4 +++-
- package/git/git.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+On Tue, Jul 18, 2017 at 12:51 PM, Refik Tuzakl? <tuzaklirefik@gmail.com> wrote:
+> Thomas Petazzoni-2 wrote
+>> Hello,
+>>
+>> On Tue, 18 Jul 2017 10:33:18 +0200, Gary Bisson wrote:
+>>
+>>> > Please indicate the Buildroot version being used, and provide the
+>>> > Buildroot .config file that allows to reproduce this issue.
+>>> >
+>>> > But I believe the answer is pretty simple: you're trying to build the
+>>> > i.MX GPU Vivante kernel module against Linux 4.11, and the i.MX GPU
+>>> > Vivante kernel module hasn't been modified to work with such a recent
+>>> > Linux kernel.
+>>> >
+>>> > I believe the i.MX GPU Vivante kernel module is most likely designed to
+>>> > work with the Linux 4.1 based BSP provided by Freescale/NXP.
+>>>
+>>> Thomas is correct, this GPU module is only meant for NXP-based kernels
+>>> from 3.10.x to 4.1.x.
+>>
+>> Perhaps we should update the Config.in help text of the
+>> kernel-module-imx-gpu-viv package to indicate this ?
+>>
+>> I know people don't read the help text, but at least when it exists, we
+>> can point them to the help text, and the fact that they should read the
+>> documentation :-)
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+>> _______________________________________________
+>> buildroot mailing list
+>
+>> buildroot@
+>
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Thanks for your quick replay,
+>
+>
+> how can use Linux 4.1 based BSP provided by Freescale/NXP on buildroot. Is
+> it enought to change kernel version to 4.1 under kernel and toolchain in
+> Buildroot or should it be more specific like 4.1.15 as in Freescale website?
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index efe6225621ed..66bb1367d5ff 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 4bbf2ab6f2341253a38f95306ec7936833eb1c42572da5c1fa61f0abb2191258  git-2.13.0.tar.xz
-+sha256 91aa23be428f67eb19616f43fa0229d567e9acf4f08fba33eb0b627e4d323e62  git-2.13.3.tar.xz
-+sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
-+sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 1d81955040c4..d95c2fec36d6 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.13.0
-+GIT_VERSION = 2.13.3
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
--- 
-2.13.2
+It depends on the platform you are using, but the standard
+NXP/Freescale linux kernel can be found here:
+http://git.freescale.com/git/cgit.cgi/imx/linux-imx.git/
+
+You can have a look at the Freescale SABRE Smart Device Buildroot configuration:
+https://git.buildroot.net/buildroot/tree/configs/freescale_imx6qsabresd_defconfig#n20
+
+Regards,
+Gary
