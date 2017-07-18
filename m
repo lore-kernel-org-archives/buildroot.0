@@ -1,197 +1,147 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Jul 2017 19:25:31 +0200
-Subject: [Buildroot] [PATCH 05/20] system: provide package-wide system
-	variables and macros
+Date: Tue, 18 Jul 2017 19:25:32 +0200
+Subject: [Buildroot] [PATCH 06/20] system: move setting getty to the
+	corresponding init systems
 In-Reply-To: <cover.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <fefad53b6c276a29697d5fa2f4b99907355fbc9b.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <f00f1e7daced126edc573f652b97e9228b347615.1500398733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some macros, soon some variables, currently defined in the skeleton are
-going to be used by other packages.
+Currently, setting the getty is done:
+  - by the skeleton package when the init system is either busybox or
+    sysvinit;
+  - by the systemd package when the init system is systemd;
+both by registering a target-finalize hook.
 
-Some of those variables will be used as Makefile conditions (e.g. in
-ifeq() conditiopns), so they *must* be defined before being used.
+This is not very consistent.
 
-Since the skeleton package, starting with an 's', is included quite
-late, those variables would not be available to most packages.
+Move setting the getty out of the skeleton and into the package that
+provides the init system, by registering a per-package target-fialize
+hook.
 
-Offload the existing macros into the new system/system/mk file, that is
-included early, before any package is. Rename the macros to appropriate
-names.
-
-Future commits will add new macros and variables in that file.
+This offloads yet a bit more out of the skeleton, so that it is easier
+to properly separate the skeletons for the various init systems.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Makefile                     |  1 +
- package/skeleton/skeleton.mk | 53 ++++---------------------------------
- system/system.mk             | 62 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+), 48 deletions(-)
- create mode 100644 system/system.mk
+ package/busybox/busybox.mk   | 12 +++++++++++-
+ package/skeleton/skeleton.mk | 22 ----------------------
+ package/sysvinit/sysvinit.mk |  8 ++++++++
+ system/system.mk             | 11 +++++++++++
+ 4 files changed, 30 insertions(+), 23 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 188ce9adc7..41cae8baa5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -479,6 +479,7 @@ all: world
- # may rely on it.
- include Makefile.legacy
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 2231730aa8..2001c2dbdb 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -181,10 +181,20 @@ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ endef
  
-+include system/system.mk
- include package/Makefile.in
- # arch/arch.mk.* must be after package/Makefile.in because it may need to
- # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
+ ifeq ($(BR2_INIT_BUSYBOX),y)
++
+ define BUSYBOX_SET_INIT
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
+ endef
+-endif
++
++ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
++define BUSYBOX_SET_GETTY
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SYSTEM_GETTY_PORT)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
++		$(TARGET_DIR)/etc/inittab
++endef
++BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
++endif # BR2_TARGET_GENERIC_GETTY
++
++endif # BR2_INIT_BUSYBOX
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
+ BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
 diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 0a8add66dc..3ae37c76a9 100644
+index 3ae37c76a9..7ad2cb1a66 100644
 --- a/package/skeleton/skeleton.mk
 +++ b/package/skeleton/skeleton.mk
-@@ -14,34 +14,6 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_INSTALL_STAGING = YES
+@@ -96,10 +96,6 @@ SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+ SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+ SKELETON_TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+ SKELETON_TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+-SKELETON_TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+-SKELETON_TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+-SKELETON_TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+-SKELETON_TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
  
--############
--# Macros available for use by any skeleton package:
--# - SKELETON_RSYNC
--# - SKELETON_LIB_SYMLINK
--
--# This function rsyncs the skeleton directory in $(1) to the destination
--# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
--define SKELETON_RSYNC
--	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
--		$(1)/ $(2)/
--endef
--
--# Make a symlink lib32->lib or lib64->lib as appropriate.
--# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
--# $(1): base dir (either staging or target)
--ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
--define SKELETON_LIB_SYMLINK
--	ln -snf lib $(1)/lib64
--	ln -snf lib $(1)/usr/lib64
--endef
--else
--define SKELETON_LIB_SYMLINK
--	ln -snf lib $(1)/lib32
--	ln -snf lib $(1)/usr/lib32
--endef
--endif
--
- ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
+ ifneq ($(SKELETON_TARGET_GENERIC_HOSTNAME),)
+ define SKELETON_SET_HOSTNAME
+@@ -152,24 +148,6 @@ endif
+ endif
+ TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
  
- SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
-@@ -93,25 +65,10 @@ SKELETON_PATH = system/skeleton
- 
- endif # ! custom skeleton
- 
--# This function handles the merged or non-merged /usr cases
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--define SKELETON_USR_SYMLINKS_OR_DIRS
--	ln -snf usr/bin $(1)/bin
--	ln -snf usr/sbin $(1)/sbin
--	ln -snf usr/lib $(1)/lib
+-ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+-ifeq ($(BR2_INIT_SYSV),y)
+-# In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
+-# skip the "tty" part and keep only the remaining.
+-define SKELETON_SET_GETTY
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(SKELETON_TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(SKELETON_TARGET_GENERIC_GETTY_OPTIONS) $(SKELETON_TARGET_GENERIC_GETTY_PORT) $(SKELETON_TARGET_GENERIC_GETTY_BAUDRATE) $(SKELETON_TARGET_GENERIC_GETTY_TERM) #~' \
+-		$(TARGET_DIR)/etc/inittab
 -endef
--else
--define SKELETON_USR_SYMLINKS_OR_DIRS
--	$(INSTALL) -d -m 0755 $(1)/bin
--	$(INSTALL) -d -m 0755 $(1)/sbin
--	$(INSTALL) -d -m 0755 $(1)/lib
+-else ifeq ($(BR2_INIT_BUSYBOX),y)
+-# Add getty to busybox inittab
+-define SKELETON_SET_GETTY
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SKELETON_TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(SKELETON_TARGET_GENERIC_GETTY_OPTIONS) $(SKELETON_TARGET_GENERIC_GETTY_PORT) $(SKELETON_TARGET_GENERIC_GETTY_BAUDRATE) $(SKELETON_TARGET_GENERIC_GETTY_TERM) #~' \
+-		$(TARGET_DIR)/etc/inittab
 -endef
 -endif
+-TARGET_FINALIZE_HOOKS += SKELETON_SET_GETTY
+-endif
 -
- define SKELETON_INSTALL_TARGET_CMDS
--	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
--	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
--	$(call SKELETON_LIB_SYMLINK,$(TARGET_DIR))
-+	$(call SYSTEM_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
-+	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
- endef
-@@ -126,8 +83,8 @@ define SKELETON_INSTALL_STAGING_CMDS
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
--	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
--	$(call SKELETON_LIB_SYMLINK,$(STAGING_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
-+	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
+ ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
+ ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+ # Find commented line, if any, and remove leading '#'s
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index ca7d06b61d..e9aa69b27b 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -47,4 +47,12 @@ define SYSVINIT_INSTALL_TARGET_CMDS
+ 	ln -sf killall5 $(TARGET_DIR)/sbin/pidof
  endef
  
- # The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
++ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
++define SYSVINIT_SET_GETTY
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(SYSTEM_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
++		$(TARGET_DIR)/etc/inittab
++endef
++SYSVINIT_TARGET_FINALIZE_HOOKS += SYSVINIT_SET_GETTY
++endif # BR2_TARGET_GENERIC_GETTY
++
+ $(eval $(generic-package))
 diff --git a/system/system.mk b/system/system.mk
-new file mode 100644
-index 0000000000..cab5c1df5d
---- /dev/null
+index cab5c1df5d..7b843dad8e 100644
+--- a/system/system.mk
 +++ b/system/system.mk
-@@ -0,0 +1,62 @@
-+################################################################################
+@@ -22,6 +22,12 @@
+ # - SYSTEM_LIB_SYMLINK
+ #   create the appropriate /lib{32,64} symlinks
+ #
++# - SYSTEM_GETTY_PORT
++# - SYSTEM_GETTY_BAUDRATE
++# - SYSTEM_GETTY_TERM
++# - SYSTEM_GETTY_OPTIONS
++#   the un-quoted getty setting
 +#
-+# system-related variables and macros
-+#
-+################################################################################
+ 
+ # This function handles the merged or non-merged /usr cases
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+@@ -60,3 +66,8 @@ define SYSTEM_LIB_SYMLINK
+ 	ln -snf lib $(1)/usr/lib32
+ endef
+ endif
 +
-+# This file exists to define variables and macros that pertain to the system
-+# settings, like rsyncing a directory for skeletons, or the /lib vs. /usr/lib
-+# symlink handling.
-+#
-+# Some variables may be used as conditions in Makefile code, so they must be
-+# defined properly before they are used; this file is included early, before
-+# any package is.
-+
-+# - SYSTEM_USR_SYMLINKS_OR_DIRS
-+#   create /lib, /bin and /sbin, either as directories or as symlinks to
-+#   their /usr conterparts
-+#
-+# - SYSTEM_RSYNC
-+#   rsync $(1) to $(2), with proper exclusions and rights
-+#
-+# - SYSTEM_LIB_SYMLINK
-+#   create the appropriate /lib{32,64} symlinks
-+#
-+
-+# This function handles the merged or non-merged /usr cases
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+define SYSTEM_USR_SYMLINKS_OR_DIRS
-+	ln -snf usr/bin $(1)/bin
-+	ln -snf usr/sbin $(1)/sbin
-+	ln -snf usr/lib $(1)/lib
-+endef
-+else
-+define SYSTEM_USR_SYMLINKS_OR_DIRS
-+	$(INSTALL) -d -m 0755 $(1)/bin
-+	$(INSTALL) -d -m 0755 $(1)/sbin
-+	$(INSTALL) -d -m 0755 $(1)/lib
-+endef
-+endif
-+
-+# This function rsyncs the skeleton directory in $(1) to the destination
-+# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
-+define SYSTEM_RSYNC
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-+		$(1)/ $(2)/
-+endef
-+
-+# Make a symlink lib32->lib or lib64->lib as appropriate.
-+# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
-+# $(1): base dir (either staging or target)
-+ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
-+define SYSTEM_LIB_SYMLINK
-+	ln -snf lib $(1)/lib64
-+	ln -snf lib $(1)/usr/lib64
-+endef
-+else
-+define SYSTEM_LIB_SYMLINK
-+	ln -snf lib $(1)/lib32
-+	ln -snf lib $(1)/usr/lib32
-+endef
-+endif
++SYSTEM_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
++SYSTEM_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
++SYSTEM_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
++SYSTEM_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
 -- 
 2.11.0
