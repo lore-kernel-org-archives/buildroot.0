@@ -1,45 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jul 2017 23:57:18 +0200
-Subject: [Buildroot] [git commit] git: bump to version 2.13.3
-Message-ID: <20170718215313.0415581732@busybox.osuosl.org>
+Date: Tue, 18 Jul 2017 23:58:04 +0200
+Subject: [Buildroot] [git commit] httping: fix build without host-gettext
+Message-ID: <20170718215402.0887282145@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd6069242718fea7781be8ee07fb9baaf228f3a7
+commit: https://git.buildroot.net/buildroot/commit/?id=807721ea9d8238cb6bd203b1d5495fa888a26653
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add license files hashes.
+Since commit 654de6512554c (httping: use the new gettext logic), host-gettext
+is not a dependency of httping. This breaks the build because the httping
+Makefile calls msgfmt unconditionally. Add a patch that allows build without
+translation files generation.
 
+Fixes:
+http://autobuild.buildroot.net/results/73e/73e624775617d1b95da7d4ef666612af5bceef61/
+http://autobuild.buildroot.net/results/2bf/2bff43d7b749b4daf32868bddbae94b510949bf8/
+http://autobuild.buildroot.net/results/8a6/8a69659afa21f467ca5de7915363cebf0fc7aff2/
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash | 4 +++-
- package/git/git.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ ...0002-Makefile-allow-build-without-gettext.patch | 48 ++++++++++++++++++++++
+ package/httping/httping.mk                         |  3 +-
+ 2 files changed, 50 insertions(+), 1 deletion(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index efe6225..66bb136 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 4bbf2ab6f2341253a38f95306ec7936833eb1c42572da5c1fa61f0abb2191258  git-2.13.0.tar.xz
-+sha256 91aa23be428f67eb19616f43fa0229d567e9acf4f08fba33eb0b627e4d323e62  git-2.13.3.tar.xz
-+sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
-+sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 1d81955..d95c2fe 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/httping/0002-Makefile-allow-build-without-gettext.patch b/package/httping/0002-Makefile-allow-build-without-gettext.patch
+new file mode 100644
+index 0000000..aec1de4
+--- /dev/null
++++ b/package/httping/0002-Makefile-allow-build-without-gettext.patch
+@@ -0,0 +1,48 @@
++From fe7d6c5a0e5dfe129f228498037393d23d6ae890 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 18 Jul 2017 19:09:03 +0300
++Subject: [PATCH] Makefile: allow build without gettext
++
++The msgfmt command is part of the gettext package, and is used to generate
++binary translation files. When gettext is not installed, build fails.
++Translation files are not always needed on size constrained embedded targets.
++Add an option to disable translation files generation using the NO_GETTEXT
++variable.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/flok99/httping/pull/36
++
++ Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 46127f4cdde1..160cc1794ec8 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -55,7 +55,9 @@ MKDIR=/bin/mkdir
++ ARCHIVE=/bin/tar cf -
++ COMPRESS=/bin/gzip -9
++ 
+++ifneq ($(NO_GETTEXT),yes)
++ TRANSLATIONS=nl.mo ru.mo
+++endif
++ 
++ OBJS=gen.o http.o io.o error.o utils.o main.o tcp.o res.o socks5.o kalman.o cookies.o help.o colors.o
++ 
++@@ -118,10 +120,12 @@ install: $(TARGET) $(TRANSLATIONS)
++ ifneq ($(DEBUG),yes)
++ 	$(STRIP) $(DESTDIR)/$(BINDIR)/$(TARGET)
++ endif
+++ifneq ($(NO_GETTEXT),yes)
++ 	mkdir -p $(DESTDIR)/$(PREFIX)/share/locale/nl/LC_MESSAGES
++ 	cp nl.mo $(DESTDIR)/$(PREFIX)/share/locale/nl/LC_MESSAGES/httping.mo
++ 	mkdir -p $(DESTDIR)/$(PREFIX)/share/locale/ru/LC_MESSAGES
++ 	cp ru.mo $(DESTDIR)/$(PREFIX)/share/locale/ru/LC_MESSAGES/httping.mo
+++endif
++ 
++ 
++ makefile.inc:
++-- 
++2.13.2
++
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 649c643..955ee31 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -22,7 +22,8 @@ HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
+ 	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
+ 	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
+ 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+-	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
++	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
++	NO_GETTEXT=$(if $(BR2_SYSTEM_ENABLE_NLS),no,yes)
  
--GIT_VERSION = 2.13.0
-+GIT_VERSION = 2.13.3
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+ define HTTPING_BUILD_CMDS
+ 	$(HTTPING_MAKE_OPTS) LDFLAGS="$(HTTPING_LDFLAGS)" \
