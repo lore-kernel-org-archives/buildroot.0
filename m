@@ -1,60 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jul 2017 15:18:34 +0200
-Subject: [Buildroot] [PATCH] package/Makefile.in: export O= to
- post-build/image scripts for out-of-tree builds
-In-Reply-To: <87wp757vz6.fsf@dell.be.48ers.dk>
-References: <20170714130417.18857-1-peter@korsgaard.com>
- <7d2448b0-800c-cb14-657b-907d380787f8@mind.be>
- <871spe92ci.fsf@dell.be.48ers.dk>
- <dca9fa93-e6f8-10d9-f166-02f981b4f0a3@mind.be>
- <87wp757vz6.fsf@dell.be.48ers.dk>
-Message-ID: <5b6d2690-6abf-9ae3-5571-77153a1af6eb@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 18 Jul 2017 19:27:56 +0300
+Subject: [Buildroot] [PATCH] httping: fix build without host-gettext
+Message-ID: <ebb8a53a68988fedd5c45472799b5b51785b7873.1500395276.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since commit 654de6512554c (httping: use the new gettext logic), host-gettext
+is not a dependency of httping. This breaks the build because the httping
+Makefile calls msgfmt unconditionally. Add a patch that allows build without
+translation files generation.
 
+Fixes:
+http://autobuild.buildroot.net/results/73e/73e624775617d1b95da7d4ef666612af5bceef61/
+http://autobuild.buildroot.net/results/2bf/2bff43d7b749b4daf32868bddbae94b510949bf8/
+http://autobuild.buildroot.net/results/8a6/8a69659afa21f467ca5de7915363cebf0fc7aff2/
 
-On 18-07-17 14:47, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >> Yes, that can also work - Even though it is less obvious that you should
->  >> run make O=${BASE_DIR} inside the post build/image scripts, instead of
->  >> make O=$O
-> 
->  >  OK, but having both exported seems a bit silly...
-> 
-> Correct. I would argue that O is somewhat nicer than BASE_DIR, as the
-> user is already using O= (and if they don't use O=, then they also don't
-> need to pass it in post-build/post-image scripts), but we have exported
-> and documented BASE_DIR for some time now, so we cannot really get rid
-> of it.
-> 
->  >> >  O has the problem that it's too risky to lead to conflicts IMO.
->  >> 
->  >> Even for post build/image scripts? What use cases do you have in mind
->  >> where there could be conflicts?
-> 
->  >  True, in EXTRA_ENV the risk is minimal - especially since Kbuild and
->  > derivatives (like Buildroot) ignore an O passed through the environment.
-> 
-> Indeed.
-> 
-> I don't feel strongly pro/con, what do others say?
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...0002-Makefile-allow-build-without-gettext.patch | 48 ++++++++++++++++++++++
+ package/httping/httping.mk                         |  3 +-
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+ create mode 100644 package/httping/0002-Makefile-allow-build-without-gettext.patch
 
- Since it's already committed, leave it in. It's no biggy.
-
- Regards,
- Arnout
-
+diff --git a/package/httping/0002-Makefile-allow-build-without-gettext.patch b/package/httping/0002-Makefile-allow-build-without-gettext.patch
+new file mode 100644
+index 000000000000..aec1de47d1c2
+--- /dev/null
++++ b/package/httping/0002-Makefile-allow-build-without-gettext.patch
+@@ -0,0 +1,48 @@
++From fe7d6c5a0e5dfe129f228498037393d23d6ae890 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 18 Jul 2017 19:09:03 +0300
++Subject: [PATCH] Makefile: allow build without gettext
++
++The msgfmt command is part of the gettext package, and is used to generate
++binary translation files. When gettext is not installed, build fails.
++Translation files are not always needed on size constrained embedded targets.
++Add an option to disable translation files generation using the NO_GETTEXT
++variable.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/flok99/httping/pull/36
++
++ Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 46127f4cdde1..160cc1794ec8 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -55,7 +55,9 @@ MKDIR=/bin/mkdir
++ ARCHIVE=/bin/tar cf -
++ COMPRESS=/bin/gzip -9
++ 
+++ifneq ($(NO_GETTEXT),yes)
++ TRANSLATIONS=nl.mo ru.mo
+++endif
++ 
++ OBJS=gen.o http.o io.o error.o utils.o main.o tcp.o res.o socks5.o kalman.o cookies.o help.o colors.o
++ 
++@@ -118,10 +120,12 @@ install: $(TARGET) $(TRANSLATIONS)
++ ifneq ($(DEBUG),yes)
++ 	$(STRIP) $(DESTDIR)/$(BINDIR)/$(TARGET)
++ endif
+++ifneq ($(NO_GETTEXT),yes)
++ 	mkdir -p $(DESTDIR)/$(PREFIX)/share/locale/nl/LC_MESSAGES
++ 	cp nl.mo $(DESTDIR)/$(PREFIX)/share/locale/nl/LC_MESSAGES/httping.mo
++ 	mkdir -p $(DESTDIR)/$(PREFIX)/share/locale/ru/LC_MESSAGES
++ 	cp ru.mo $(DESTDIR)/$(PREFIX)/share/locale/ru/LC_MESSAGES/httping.mo
+++endif
++ 
++ 
++ makefile.inc:
++-- 
++2.13.2
++
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 649c6439450b..955ee3131bb0 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -22,7 +22,8 @@ HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
+ 	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
+ 	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
+ 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+-	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
++	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
++	NO_GETTEXT=$(if $(BR2_SYSTEM_ENABLE_NLS),no,yes)
+ 
+ define HTTPING_BUILD_CMDS
+ 	$(HTTPING_MAKE_OPTS) LDFLAGS="$(HTTPING_LDFLAGS)" \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.2
