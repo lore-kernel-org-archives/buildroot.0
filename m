@@ -1,167 +1,112 @@
-From: Hugues FRUCHET <hugues.fruchet@st.com>
-Date: Tue, 18 Jul 2017 09:08:18 +0000
-Subject: [Buildroot] [RFC v1] libv4l: build utils only on MMU (with fork
- support) platforms
-In-Reply-To: <20170717200901.51814cb5@gmx.net>
-References: <20170711172624.7516-1-ps.report@gmx.net>
- <70ff5d21-0466-c470-cac3-e00c524c93b0@st.com>
- <20170717200901.51814cb5@gmx.net>
-Message-ID: <41bd7a05-4254-e7e4-7846-ed5e4d99d0ad@st.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jul 2017 11:38:46 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: add test of BR2_CCACHE
+ with an external toolchain
+In-Reply-To: <59698709710e0_a573fd7a88dac88568f3@ultri3.mail>
+References: <20170710204007.8402-2-arnout@mind.be>
+ <59698709710e0_a573fd7a88dac88568f3@ultri3.mail>
+Message-ID: <2bb2847d-c094-2319-5de2-9ea540acf8bf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
 
-On 07/17/2017 08:09 PM, Peter Seiderer wrote:
-> Hello Hugues,
+
+On 15-07-17 05:07, Ricardo Martincoski wrote:
+> Hello,
 > 
-> On Mon, 17 Jul 2017 10:07:07 +0000, Hugues FRUCHET <hugues.fruchet@st.com> wrote:
+> On Mon, Jul 10, 2017 at 05:40 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
 > 
->> Hi Peter,
+>> We reuse TestExternalToolchainBuildrootuClibc and add ccache to its
+>> configuration.
 >>
->> I have tested on STM32 platform running Cortex F family having no MMU,
->> shared libraries are disabled (no dlopen) and no fork supported on our
->> setup.
->>
->> libv4lconvert should not have been built at all, because entire lib/
->> folder build is conditional to shared library support:
->> * configure.ac
->> AM_CONDITIONAL([WITH_LIBV4L],       [test x$enable_libv4l    != xno -a
->> x$enable_shared != xno])
->> * Makefile.am
->> [...]
->> +if WITH_LIBV4L
->> +SUBDIRS += lib
->> +endif
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> [snip]
+>> +        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
 > 
-> A little bit confused, one of the patches you introduced changed it to:
-> 
-> - without WITH_LIBV4L: no libv4l libraries at all
-> - without WITH_DYN_LIBV4L: only static libraries, no dynamic libraries
-> 
-> And from configure --help:
-> 
->    --disable-libv4l        disable libv4l compilation
->    --disable-dyn-libv4l    disable dynamic libv4l support
+> 3 nits:
+> - why not += ?
 
-This package is named "libv4l" in buildroot but repo name is "v4l-utils" 
-which contains:
-1) some library plugins on top of V4L kernel interface in order to 
-intercept user calls and hook/convert to the appropriate kernel call.
-=> so called "libv4l" and located in "lib/" folder
-2) some utilities located in "utils/" folder, such as the V4L compliancy 
-tool "v4l2-compliance" or the CEC compliancy tool "cec-compliance" which 
-are calling either the libv4l interface (default), the libv4l interface 
-but statically linked inside utilities (--disable-dyn-libv4l) or the V4L 
-kernel interface directly (--disable-libv4l).
-Hope that helps to better understand the options.
+ Because config is initialized as a class member, and += would update the class
+member instead of the instance member like we want. As it happens, this test is
+executed last so it doesn't matter, but if any test comes after it, it would get
+the extraconfig as well...
 
-> 
->>
->> But checking your log I see that --enable-shared is set, so it seems
->> that you are supporting shared libraries on no-MMU platform but without
->> fork() support, is my understanding correct ?
->>
-> 
-> Yes...
-> 
->> What you can do to fix build is to force disabling of libs inside libv4l
->> package:
->>
->> package/libv4l/libv4l.mk
->> +ifeq ($(BR2_USE_MMU),)
->> +LIBV4L_CONF_OPTS += --disable-libv4l
->> +endif
-> 
-> Works, but feels wrong: A package named libv4l enabled and building/installing
-> nothing (except when LIBV4L_UTILS is enabled)...
+ Cfr. the following test:
 
-Right.
-The aim of the no-MMU dependency removal patchset was to enable build of 
-"utils" even on no-MMU platform. This is required to build at least the 
-2 mandatory compliancy tools:
-- v4l-compliance: its test report is required by V4L maintainers and is 
-to be attached to the cover letter of any V4L driver pushed upstream.
-- cec-compliance: the same for CEC drivers.
+In [49]: class Foo:
+    ...:     foo = [0]
+    ...:
+
+In [50]: class Foo1(Foo):
+    ...:     def __init__(self):
+    ...:         self.foo += [1]
+    ...:
+
+In [51]: Foo1().foo
+Out[51]: [0, 1]
+
+In [52]: Foo1().foo
+Out[52]: [0, 1, 1]
+
+In [53]: class Foo2(Foo):
+    ...:     def __init__(self):
+    ...:         self.foo = self.foo + [2]
+    ...:
+
+In [54]: Foo2().foo
+Out[54]: [0, 1, 1, 2]
+
+In [55]: Foo2().foo
+Out[55]: [0, 1, 1, 2]
 
 
-Please note that you cannot use the libv4l plugins mechanism without 
-having fork() support, see libv4lconvert/helper.c, 
-v4lconvert_helper_start().
-Means that only V4L utilities can be currently supported on no-MMU 
-platforms.
+> - usually there are no spaces around parameter equals
+> - line is too long (not that much)
 
-Back to your exact build issue, the best fix on my opinion is to add a 
-dependency on fork() symbol in configure.ac instead of the one proposed 
-in libv4l.mk, find attached a patch proposal.
+ I'll take care of these, and check it with flake8 while I'm at it.
+
+> from these I suggest to change to:
+>         self.config += self.extraconfig.format(builddir=self.builddir)
+> 
+>> +
+>> -- 
+> 
+> nit: This empty line at end of file is not needed.
+
+ Hm, I usually don't make that kind of mistake :-)
+
+> 
+> with the 4 nits fixed
+> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+ Can you confirm that this still stands if I don't do the +=, as long as the
+line stays below 79 characters?
 
 
-Regards,
-Hugues.
+ Regards,
+ Arnout
+
+> 
+> [the test passes, host-ccache is built either with or without ccache
+>  pre-installed in the host machine, the ccache dir is created inside the
+>  builddir and has valid data inside:
+>  $ cd ${builddir} && host/bin/ccache -s
+>  ...
+>  cache size                          13.1 MB
+>  max cache size                       5.0 GB]
+> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > 
 > Regards,
-> Peter
+> Ricardo
 > 
->>
->> Hoping that helps.
->>
->> Best regards,
->> Hugues.
->>
->> On 07/11/2017 07:26 PM, Peter Seiderer wrote:
->>> Fixes [1]:
->>>
->>>       CXXLD    v4l2-compliance
->>>     .../output/build/libv4l-1.12.5/lib/libv4lconvert/.libs/libv4lconvert.so: undefined reference to `fork'
->>>     collect2: error: ld returned 1 exit status
->>>
->>> [1] http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe
->>>
->>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->>> ---
->>> The libv4l build for noMMU platforms was enabled with commit 'package/libv4l:
->>> allow build of v4l2 utilities on noMMU platforms' (see [2]). But libv4lconvert uses
->>> fork internally, so all utils linking against fail to build. Fix this by disabling
->>> the utils on noMMU platforms (so keep building all libraries).
->>>
->>> Alternatives would be:
->>>
->>> - disable libv4l on all noMMU platforms (not only the utils), revert a part
->>>     of commit [2]
->>>
->>> - create a patch to disable only libv4lconvert (and all dependend utils)
->>>     on noMMU platforms
->>>
->>> [2] https://git.buildroot.net/buildroot/commit/?id=f837251785e9389f53d695ddb8a094707865171b
->>> ---
->>>    package/libv4l/Config.in | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
->>> index e7f78dc70f..61c290f251 100644
->>> --- a/package/libv4l/Config.in
->>> +++ b/package/libv4l/Config.in
->>> @@ -19,6 +19,7 @@ comment "libv4l JPEG support not enabled"
->>>    
->>>    config BR2_PACKAGE_LIBV4L_UTILS
->>>    	bool "v4l-utils tools"
->>> +	depends on BR2_USE_MMU # fork(), used in libv4lconvert linked by various utils eg. v4l2-compliance
->>>    	help
->>>    	  v4l-utils is a collection of various video4linux and DVB utilities.
->>>    	  Enable this if you want to build the following tools:
->>>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0010-configure.ac-disable-libv4l-if-no-fork.patch
-Type: text/x-patch
-Size: 1490 bytes
-Desc: 0010-configure.ac-disable-libv4l-if-no-fork.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170718/a60cefe5/attachment.bin>
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
