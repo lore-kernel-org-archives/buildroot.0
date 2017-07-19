@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jul 2017 01:31:21 +0200
-Subject: [Buildroot] [PATCH v7 3/9] core: sanitize RPATH in staging tree
+Date: Thu, 20 Jul 2017 01:34:16 +0200
+Subject: [Buildroot] [PATCH v7 4/9] core: sanitize RPATH in target tree
  at the end of target finalization
-In-Reply-To: <1499273594-12106-4-git-send-email-wg@grandegger.com>
+In-Reply-To: <1499273594-12106-5-git-send-email-wg@grandegger.com>
 References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-4-git-send-email-wg@grandegger.com>
-Message-ID: <1de12c00-3be6-7aed-3ddf-eccd0be0edb4@mind.be>
+ <1499273594-12106-5-git-send-email-wg@grandegger.com>
+Message-ID: <44a9d6b5-3f51-f3b6-94e4-379c459c1b93@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +15,33 @@ To: buildroot@busybox.net
 
 
 On 05-07-17 18:53, Wolfgang Grandegger wrote:
-> We need that pachelf utility for RPATH sanitization.
-> 
 > Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 > ---
->  Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/Makefile b/Makefile
-> index a22e87f..cdc3a64 100644
+> index cdc3a64..1a826fc 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -456,6 +456,9 @@ else
->  export BR_NO_CCACHE
->  endif
+> @@ -725,6 +725,8 @@ endif
 >  
-> +# We need patchelf for RPATH sanitization
-> +PACKAGES += host-patchelf
+>  	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
+>  	$(TOPDIR)/support/scripts/fix-rpath staging
+> +	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+> +	$(TOPDIR)/support/scripts/fix-rpath target
 
- This really should be a separate patch. Also, I would do it differently.
-Instead of adding it explicitly to PACKAGES, add a Config.in.host for patchelf,
-with a hidden symbol BR2_PACKAGE_HOST_PATCHELF, and default it to y. We want to
-create Config.in.host files with hidden symbols for all host packages, so doing
-it that way is already a step in the right direction.
-
-
-> +
->  # Scripts in support/ or post-build scripts may need to reference
->  # these locations, so export them so it is easier to use
->  export BR2_CONFIG
-> @@ -720,6 +723,9 @@ endif
->  		$(call MESSAGE,"Executing post-build script $(s)"); \
->  		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->  
-> +	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
-> +	$(TOPDIR)/support/scripts/fix-rpath staging
-
- I don't think we should do this in target-finalize. But I'll discuss this in
-patch 5.
+ I think we should do this *before* copying the overlay and calling the
+post-build script. Indeed, in my mind, the user is completely responsible for
+what happens there, and it should never be touched by us.
 
 
  Regards,
  Arnout
 
-> +
+>  
 >  .PHONY: target-post-image
 >  target-post-image: $(TARGETS_ROOTFS) target-finalize
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
 > 
 
 -- 
