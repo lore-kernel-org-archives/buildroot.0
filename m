@@ -1,45 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jul 2017 23:59:32 +0200
-Subject: [Buildroot] [git commit] nvme-cli: bump to version 1.3
-Message-ID: <20170719070308.C89B1807C6@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 09:10:44 +0200
+Subject: [Buildroot] [git commit] bwm-ng: update to latest upstream version
+	to fix build issue
+Message-ID: <20170719070656.6D2A28165D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a91b72753b102b1b567196f7f2e661f9d53a711b
+commit: https://git.buildroot.net/buildroot/commit/?id=1d54c8415816a8116185b495822bfc6ec44f4071
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-nvme-cli had many bugfixes and improvements over the releases.
-Buildroot still has version 0.3, so this patch bumps it to the
-latest upstream release, version 1.3.
+The latest upstream version has fixed the build issue.
 
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@linux.vnet.ibm.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/1d9f0b62e4cc387f508b4fe0086621ab9996a085/
+
+Signed-off-by: Keguang Zhang <keguang.zhang@spreadtrum.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nvme/nvme.hash | 2 +-
- package/nvme/nvme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bwm-ng/bwm-ng.hash | 2 +-
+ package/bwm-ng/bwm-ng.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
-index b299041..92e2bc0 100644
---- a/package/nvme/nvme.hash
-+++ b/package/nvme/nvme.hash
+diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
+index 1d3a240..4c12b0d 100644
+--- a/package/bwm-ng/bwm-ng.hash
++++ b/package/bwm-ng/bwm-ng.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 c631e90dd4d411cdb618b26bc36b06706e6f1f2d3db38874bcfe48f4bc15aac4 nvme-v0.3.tar.gz
-+sha256 52eb45c9ef5a529580a3f6f9e02c067695675ac01b8ab8b8e0398c62e8a8646d nvme-v1.3.tar.gz
-diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
-index 66b3cef..27fbde2 100644
---- a/package/nvme/nvme.mk
-+++ b/package/nvme/nvme.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  027cf3c960cd96fc9ffacdf7713df62d0fc55eeef4a1388289f8a62ae5e50df0  bwm-ng-0.6.1.tar.gz
++sha256  4b34a8ac2eae2d204d6dea8258c5e34b37094259086f8c9169391409a9311fb5  bwm-ng-f54b3fad2c80bfe63f920c9b5e7c1d80389c57ef.tar.gz
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+index 85ee689..587ffbe 100644
+--- a/package/bwm-ng/bwm-ng.mk
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--NVME_VERSION = v0.3
-+NVME_VERSION = v1.3
- NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
- NVME_LICENSE = GPL-2.0+
- NVME_LICENSE_FILES = LICENSE
+-BWM_NG_VERSION = 0.6.1
+-BWM_NG_SITE = http://www.gropp.org/bwm-ng
++BWM_NG_VERSION = f54b3fad2c80bfe63f920c9b5e7c1d80389c57ef
++BWM_NG_SITE = $(call github,vgropp,bwm-ng,$(BWM_NG_VERSION))
+ BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
+ BWM_NG_LICENSE = GPL-2.0
+ BWM_NG_LICENSE_FILES = COPYING
++BWM_NG_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ BWM_NG_CONF_OPTS += --with-ncurses
