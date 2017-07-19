@@ -1,69 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 15:50:50 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] irssi: security bump to
-	version 1.0.4
-Message-ID: <20170719204757.DCBD87FF4F@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 16:06:25 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: bump to
+	version 2.16.5
+Message-ID: <20170719204758.EEFC07FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea2fd3c4c48b4f11becc2934ce2a486b8b2808d3
+commit: https://git.buildroot.net/buildroot/commit/?id=f58e4d403fd3ff66a2fc2c17480721f75c0eaf4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-From the advisory:
-https://irssi.org/security/irssi_sa_2017_07.txt
+This simply updates to the latest stable release. WebKitGTK+ versions
+in the 2.1x series avoid bumping the dependencies in order to allow
+distributions to provide updates, therefore no new dependencies are
+needed.
 
-Two vulnerabilities have been located in Irssi.
-
-(a) When receiving messages with invalid time stamps, Irssi would try
-    to dereference a NULL pointer. Found by Brian 'geeknik' Carpenter
-    of Geeknik Labs. (CWE-690)
-
-    CVE-2017-10965 [2] was assigned to this bug
-
-(b) While updating the internal nick list, Irssi may incorrectly use
-    the GHashTable interface and free the nick while updating it. This
-    will then result in use-after-free conditions on each access of
-    the hash table. Found by Brian 'geeknik' Carpenter of Geeknik
-    Labs. (CWE-416 caused by CWE-227)
-
-    CVE-2017-10966 [3] was assigned to this bug
-
-Impact
-------
-
-(a) May result in denial of service (remote crash).
-
-(b) Undefined behaviour.
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9bf78446888ed3b98d893e70ce4f5e4679fd2ebb)
+(cherry picked from commit 23c0872442e025dd2fc6f143c1bbce6a5a7c0964)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index abb4219..7b01902 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	838220297dcbe7c8c42d01005059779a82f5b7b7e7043db37ad13f5966aff581	irssi-1.0.3.tar.xz
-+sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index ef9d0aa..d2b8169 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f01c7f0..5df4ce8 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From http://www.webkitgtk.org/releases/webkitgtk-2.12.5.tar.xz.sha1
+-sha1	2d73fd5b47c68c73aea8b3d7b88acc8e62bdb99c	webkitgtk-2.12.5.tar.xz
+-# Calculated based on the hash above
+-sha256	6b147854b864a5f115fadb97b2b6200b2f696db015216a34e7298d11c88b1c40	webkitgtk-2.12.5.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.16.5.tar.xz.sums
++md5 fce72dc89cd310a663d9eb97133861fe webkitgtk-2.16.5.tar.xz
++sha1 8052fda41b1b666f175baaac787c5cba39ed24a0 webkitgtk-2.16.5.tar.xz
++sha256 8e0396f3428e757898c5856e642eed4fcd5a20ae03d96d3eaa03b76634be7dd4 webkitgtk-2.16.5.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f37aaa6..cc8d960 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 1.0.3
-+IRSSI_VERSION = 1.0.4
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-WEBKITGTK_VERSION = 2.12.5
++WEBKITGTK_VERSION = 2.16.5
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
