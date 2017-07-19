@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 22:39:06 +0200
-Subject: [Buildroot] [PATCH (2017.05.x)] protobuf: don't download patch
-	from Github
-In-Reply-To: <1500496210-2946-1-git-send-email-casantos@datacom.ind.br>
-References: <1500496210-2946-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170719223906.764e5ccf@windsurf>
+Date: Wed, 19 Jul 2017 22:45:18 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/nodejs: use shared c-ares
+In-Reply-To: <1500378343-22978-1-git-send-email-martin@barkynet.com>
+References: <1500378343-22978-1-git-send-email-martin@barkynet.com>
+Message-ID: <20170719224518.6d365642@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 19 Jul 2017 17:30:10 -0300, Carlos Santos wrote:
-> Patches downloaded from Github are not stable, so bring them in the
-> tree.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/protobuf/0001-Fix-freebsd-build.patch | 143 ++++++++++++++++++++++++++
->  package/protobuf/protobuf.hash                |   1 -
->  package/protobuf/protobuf.mk                  |   2 -
->  3 files changed, 143 insertions(+), 3 deletions(-)
->  create mode 100644 package/protobuf/0001-Fix-freebsd-build.patch
-> 
-> diff --git a/package/protobuf/0001-Fix-freebsd-build.patch b/package/protobuf/0001-Fix-freebsd-build.patch
-> new file mode 100644
-> index 0000000..0cdcfa6
-> --- /dev/null
-> +++ b/package/protobuf/0001-Fix-freebsd-build.patch
-> @@ -0,0 +1,143 @@
-> +From 416f90939d4de58fe1a4e2489120010313183291 Mon Sep 17 00:00:00 2001
-> +From: Feng Xiao <xfxyjwf@gmail.com>
-> +Date: Tue, 14 Mar 2017 23:12:52 +0000
-> +Subject: [PATCH] Fix freebsd build.
-> +
-> +It turns out system headers included by generated plugin.pb.h file already contains
-> +major/minor macro definitions when built on FreeBSD and we need to add #undefs to
-> +the generated header file.
-> +
-> +This change also fixes another compile error regarding EXPECT_DEATH on FreeBSD.
+On Tue, 18 Jul 2017 12:45:41 +0100, Martin Bark wrote:
 
-We need your SoB here.
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index 3022f9c..37d63d0 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -25,6 +25,7 @@ config BR2_PACKAGE_NODEJS
+>  	# linking, but that's too much of a corner case to support it.
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_C_ARES
 
-Thanks!
+Alphabetic ordering here and in <pkg>_DEPENDENCIES would have been
+better. I've fixed this and applied all three patches. Thanks!
 
 Thomas
 -- 
