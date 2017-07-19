@@ -1,54 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 19 Jul 2017 16:06:25 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: bump to
-	version 2.16.5
-Message-ID: <20170719204758.EEFC07FF4F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: select
+	libgcrypt
+Message-ID: <20170719204759.2CFCC81F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f58e4d403fd3ff66a2fc2c17480721f75c0eaf4a
+commit: https://git.buildroot.net/buildroot/commit/?id=9597818b5a7845154893bd37abddd9233b9e5a83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-This simply updates to the latest stable release. WebKitGTK+ versions
-in the 2.1x series avoid bumping the dependencies in order to allow
-distributions to provide updates, therefore no new dependencies are
-needed.
+Libgrcrypt is a direct dependency of WebKitGTK+, and as such it
+should be selected.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 23c0872442e025dd2fc6f143c1bbce6a5a7c0964)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: add missing dependency on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+(cherry picked from commit b61c805fcaf8980a3dbcd23c444660f7f5327ecf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/webkitgtk/Config.in    | 2 ++
+ package/webkitgtk/webkitgtk.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f01c7f0..5df4ce8 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.12.5.tar.xz.sha1
--sha1	2d73fd5b47c68c73aea8b3d7b88acc8e62bdb99c	webkitgtk-2.12.5.tar.xz
--# Calculated based on the hash above
--sha256	6b147854b864a5f115fadb97b2b6200b2f696db015216a34e7298d11c88b1c40	webkitgtk-2.12.5.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.16.5.tar.xz.sums
-+md5 fce72dc89cd310a663d9eb97133861fe webkitgtk-2.16.5.tar.xz
-+sha1 8052fda41b1b666f175baaac787c5cba39ed24a0 webkitgtk-2.16.5.tar.xz
-+sha256 8e0396f3428e757898c5856e642eed4fcd5a20ae03d96d3eaa03b76634be7dd4 webkitgtk-2.16.5.tar.xz
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 0e53d06..2885b2f 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	# Disabled on SuperH because of segfault
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+ comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+@@ -30,6 +31,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBSECRET
+ 	select BR2_PACKAGE_LIBSOUP
+ 	select BR2_PACKAGE_LIBXML2
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f37aaa6..cc8d960 100644
+index cc8d960..ef20839 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.12.5
-+WEBKITGTK_VERSION = 2.16.5
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+@@ -13,7 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-APPLE \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
+-	enchant harfbuzz icu jpeg libgtk3 libsecret libsoup \
++	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+ 	libxml2 libxslt sqlite webp
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
