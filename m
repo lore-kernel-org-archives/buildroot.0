@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 21:45:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.82
-In-Reply-To: <20170719193226.22007-1-bernd.kuhls@t-online.de>
-References: <20170719193226.22007-1-bernd.kuhls@t-online.de>
-Message-ID: <20170719214507.746043d5@windsurf>
+Date: Wed, 19 Jul 2017 21:46:40 +0200
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH=5D_DEVELOPERS=3A_Remove_Beno=C3=AE?=
+ =?utf-8?q?t__Allard?=
+In-Reply-To: <1500293256-30433-1-git-send-email-benoit.allard@greenbone.net>
+References: <1500293256-30433-1-git-send-email-benoit.allard@greenbone.net>
+Message-ID: <20170719214640.08f84c77@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 19 Jul 2017 21:32:26 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Mon, 17 Jul 2017 14:07:36 +0200, Beno?t Allard wrote:
+> I'm leaving the company. So removing the entry before the address bounces.
+> 
+> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
 > ---
->  package/libdrm/libdrm.hash | 10 +++++-----
->  package/libdrm/libdrm.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  DEVELOPERS | 4 ----
+>  1 file changed, 4 deletions(-)
 
-Applied to master, thanks.
+Thanks a lot for your contributions to Buildroot, they were really
+appreciated. It was very nice to have someone taking care of the
+syslinux package, and I hope someone else will step up as a maintainer
+for this package.
+
+I wish you all the best for your new professional adventures!
+
+Patch applied, of course. Thanks!
 
 Thomas
 -- 
