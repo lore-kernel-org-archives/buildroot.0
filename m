@@ -1,50 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:02:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] xvisor: fix bogus check
-	on XVISOR_ARCH
-Message-ID: <20170720055507.1572181EB0@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 23:58:05 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libglib2: disable
+	compiler warnings
+Message-ID: <20170720055506.BA674800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76bde2fc305630bf5c1d01de6f4e76216e39c2a8
+commit: https://git.buildroot.net/buildroot/commit/?id=4ef293dfddbd34b9e6d24f6e63bab876ddf0be45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The XVISOR_ARCH check added in commit
-117fd5dfbc756c4f2b4aef97fc2b568528c66df7 ("xvisor: fix build on
-AArch64") broke Buildroot entirely on all architectures except ARM,
-AArch64 and x86-64, because the $(error ...) test was not enclosed
-inside a condition that made sure the xvisor package was enabled.
+By default, libglib enables some fairly aggressive warnings, treated
+as errors. In particular, the -Wformat=2 warning triggers a warning
+due to the return value of the ngettext() macro from uClibc libintl
+stub not being understood as being potentially a format string.
 
-This commit fixes that, and allows Buildroot to be usable again on all
-architectures.
+So, before we enable the stub libintl in uClibc, we disable such
+warnings. A bug will be reported to upstream uClibc to get the actual
+bug fixed, but disabling compiler warnings treated as errors is anyway
+a good thing in the context of Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 27ce235cdb996dc691c28a95f6acc9c479ef1fb8)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit f2800ac57cde2cd71df295d33441faae1b30dd3e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xvisor/xvisor.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/libglib2/libglib2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index 17edc2c..c7afb71 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -30,9 +30,13 @@ ifeq ($(BR2_x86_64),y)
- XVISOR_ARCH = x86
- else ifeq ($(BR2_arm)$(BR2_aarch64),y)
- XVISOR_ARCH = arm
--else
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XVISOR)$(BR_BUILDING),yy)
-+ifeq ($(XVISOR_ARCH),)
- $(error "Architecture not supported by XVisor")
- endif
-+endif
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index ddd1f39..e23c4a2 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -113,7 +113,8 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ 	host-zlib
  
- XVISOR_MAKE_ENV = \
- 	ARCH=$(XVISOR_ARCH) \
+ LIBGLIB2_CONF_OPTS = \
+-	--with-pcre=system
++	--with-pcre=system \
++	--disable-compile-warnings
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
