@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:10:08 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-headers: bump 4.{9,
-	11, 12}.x series
-Message-ID: <20170719204759.AB3A381D8D@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 16:12:37 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] libxml-parser-perl: add
+	LICENSE_FILES
+Message-ID: <20170719204759.BB4C67FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea9c1a8be8590653bd5261eb2686af7bca9d77c7
+commit: https://git.buildroot.net/buildroot/commit/?id=59045b2bb7b24473aca4dcaa230a975fe054e477
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-[Drop 4.12.x change]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+There is copyright information in the top level README file. Use this
+file as the license file which will be included by the `legal-info`
+build rule.
+
+Signed-off-by: Ben Leinweber <bleinweber@spaceflight.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8e95c2e9ca72d39823a0ef72c69590da0ca8b140)
+(cherry picked from commit 730da52edc45f2b72fc1d522ff184276d20c8b0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libxml-parser-perl/libxml-parser-perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index be0799b..19ebbb8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -228,7 +228,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.76"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.36"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.37"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.9"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.10"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 401470d..09a4a7f 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -9,6 +9,7 @@ LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+ LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
++LIBXML_PARSER_PERL_LICENSE_FILES = README
+ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+ 
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
