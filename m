@@ -1,29 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 15:59:51 +0200
-Subject: [Buildroot] [PATCH 1/4 v3] arch/arm: fix -mcpu default values
-	for AArch64
-In-Reply-To: <cbd726c5aa26ea8278c518508ba76efc5b796f7a.1499592591.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 9 Jul 2017 11:29:58 +0200")
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <cbd726c5aa26ea8278c518508ba76efc5b796f7a.1499592591.git.yann.morin.1998@free.fr>
-Message-ID: <871spca5ns.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Jul 2017 16:01:55 +0200
+Subject: [Buildroot] [PATCH] php: security bump to version 7.1.7
+In-Reply-To: <20170711090220.5478-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 11 Jul 2017 11:02:20 +0200")
+References: <20170711090220.5478-1-peter@korsgaard.com>
+Message-ID: <87wp748qzw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > We have to specify the -mcpu value, even in 64-bit mode.
- > For AArch64, +fp and +simd are the default, so they are totally useless.
+ > Fixes the following security issues:
+ > CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
+ > decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
+ > reached with a call to the imagecreatefromstring() function) uses
+ > constant-sized color tables of size 3 * 256, but does not zero-out these
+ > arrays before use.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Baruch Siach <baruch@tkos.co.il>
+ > CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
+ > Out-of-bonds access in oniguruma regexp library.
 
-Is this a candidate for 2017.02.x / 2017.05.x - In other words, what
-does it fix?
+ > CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+ > 7.1.7, the openssl extension PEM sealing code did not check the return value
+ > of the OpenSSL sealing function, which could lead to a crash of the PHP
+ > interpreter, related to an interpretation conflict for a negative number in
+ > ext/openssl/openssl.c, and an OpenSSL documentation omission.
+
+ > CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+ > 7.1.7, lack of a bounds check in the date extension's timelib_meridian
+ > parsing code could be used by attackers able to supply date strings to leak
+ > information from the interpreter, related to an ext/date/lib/parse_date.c
+ > out-of-bounds read affecting the php_parse_date function.
+
+ > CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
+ > through 7.1.7, lack of bounds checks in the date extension's
+ > timelib_meridian parsing code could be used by attackers able to supply date
+ > strings to leak information from the interpreter, related to
+ > ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
+ > function.  NOTE: this vulnerability exists because of an incomplete fix for
+ > CVE-2017-11145.
+
+ > While we're at it, add a hash for the license file.
+
+Committed to 2017.02.x and 2017.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
