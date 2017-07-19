@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Jul 2017 13:49:51 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: add test of BR2_CCACHE
- with an external toolchain
-In-Reply-To: <596ebdb223c47_3a713fbb44b45304469cb@ultri3.mail>
-References: <2bb2847d-c094-2319-5de2-9ea540acf8bf@mind.be>
- <596ebdb223c47_3a713fbb44b45304469cb@ultri3.mail>
-Message-ID: <b9055307-0fa8-b618-509f-9d31416ae66e@mind.be>
+Date: Wed, 19 Jul 2017 14:00:40 +0200
+Subject: [Buildroot] [PATCHv3] support/tests: allow properly indented
+	config fragment
+In-Reply-To: <20170718203839.14913-1-yann.morin.1998@free.fr>
+References: <20170718203839.14913-1-yann.morin.1998@free.fr>
+Message-ID: <00f33a0e-da8e-3d36-ecad-c8b4d02450b5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +13,60 @@ To: buildroot@busybox.net
 
 
 
-On 19-07-17 04:02, Ricardo Martincoski wrote:
-> Hello,
+On 18-07-17 22:38, Yann E. MORIN wrote:
+> Currently, defining a config fragment in the runtime test infra requires
+> that the fragment not to be indented. This is beark, and causes grievance
+> when looking at the code (e.g. to fix it).
 > 
-> On Tue, Jul 18, 2017 at 06:38 AM, Arnout Vandecappelle wrote:
+> Just strip out all leading spaces/tabs when writing the configuration
+> lines into the config file, allowing in-line indented config fragments,
+> like so:
 > 
->> On 15-07-17 05:07, Ricardo Martincoski wrote:
->>> [snip]
->>>> +        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
->>> 3 nits:
->>> - why not += ?
->>  Because config is initialized as a class member, and += would update the class
->> member instead of the instance member like we want.
-[snip]
-> The same does not apply to strings, only to mutable objects.
+>     class TestFoo(bla):
+>         config = bla.config + \
+>             """
+>             FOO=y
+>             # BAR is not set
+>             """
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
- Right, I didn't think of that! I just learned to be wary of using += when the
-left-hand side is a class member (or function argument with a default value), I
-didn't consider mutability.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+> 
+> ---
+> Changes v2 -> v3:
+>   - use and fix code snippet provided by Arnout, thanks! ;-)
+>   - do it in our base test class, not on the builder class  (Arnout)
+> 
+> Changes v1 -> v2:
+>   - add example in commit log  (Thomas)
+> ---
+>  support/testing/infra/basetest.py | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+> index 1a082bb441..07c180e232 100644
+> --- a/support/testing/infra/basetest.py
+> +++ b/support/testing/infra/basetest.py
+> @@ -41,6 +41,7 @@ class BRTest(unittest.TestCase):
+>          self.testname = self.__class__.__name__
+>          self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
+>          self.emulator = None
+> +        self.config = '\n'.join([line.lstrip() for line in self.config.splitlines()])
 
-> But if i.e. for some reason we change the type of config from string to an array
-> of lines the += would need to be changed, while your code would still work.
-
- However, with Yann's change in '[PATCHv3] support/tests: allow properly
-indented config fragment', self.config will already have been updated to be an
-instance member instead of a class member. Therefore, += should be fine.
-
- I'll respin with all your nits applied.
+ It would also be nice to move the setting of jlevel to the constructor. But
+heck, there's probably a lot that would be nice to improve in the testing infra :-)
 
  Regards,
  Arnout
+
+>  
+>      def show_msg(self, msg):
+>          print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
