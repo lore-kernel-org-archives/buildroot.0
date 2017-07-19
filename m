@@ -1,40 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 23:57:41 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/systemd: needs
-	timezone info
-Message-ID: <20170720055506.9753B800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:02:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+	9, 11}.x series
+Message-ID: <20170720055506.E7E2482147@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc0ec5f24f1a04a00ed0bd14e40794ff47a25844
+commit: https://git.buildroot.net/buildroot/commit/?id=711a1eb61a7f71b28e0af15acaadf344cf119b2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-systemd does not like being booted without any timezone info (especially
-on a R/O filesystem), so we forcibly enable that.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-[Thomas: fix alphabetic ordering.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit 81597b82e29d5427ac784c8e6e8dcaee469e0332)
+[Peter: Drop 4.11.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 00b8764f77c78885f234f980e4b6c49de315349a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ac8175c..47d47c6 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -26,6 +26,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
- 	select BR2_PACKAGE_KMOD_TOOLS
-+	select BR2_TARGET_TZ_INFO
- 	help
- 	  systemd is a system and service manager for Linux, compatible with
- 	  SysV and LSB init scripts. systemd provides aggressive parallelization
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 97e8067..db4e18f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.75"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.76"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.33"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.36"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
