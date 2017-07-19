@@ -1,34 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:15:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{9,
-	11, 12}.x series
-Message-ID: <20170720055508.C58E9800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:11:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] php: security bump to
+	version 7.1.7
+Message-ID: <20170720055508.502A1800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=055a6b24aab9ee3b09516c44affb569dd4f9d265
+commit: https://git.buildroot.net/buildroot/commit/?id=5519f5dcd5be0f343a451861bbd581f6dda13626
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Drop 4.11.x/4.12.x change]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8e95c2e9ca72d39823a0ef72c69590da0ca8b140)
+Fixes the following security issues:
+
+CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
+decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
+reached with a call to the imagecreatefromstring() function) uses
+constant-sized color tables of size 3 * 256, but does not zero-out these
+arrays before use.
+
+CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
+Out-of-bonds access in oniguruma regexp library.
+
+CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+7.1.7, the openssl extension PEM sealing code did not check the return value
+of the OpenSSL sealing function, which could lead to a crash of the PHP
+interpreter, related to an interpretation conflict for a negative number in
+ext/openssl/openssl.c, and an OpenSSL documentation omission.
+
+CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+7.1.7, lack of a bounds check in the date extension's timelib_meridian
+parsing code could be used by attackers able to supply date strings to leak
+information from the interpreter, related to an ext/date/lib/parse_date.c
+out-of-bounds read affecting the php_parse_date function.
+
+CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
+through 7.1.7, lack of bounds checks in the date extension's
+timelib_meridian parsing code could be used by attackers able to supply date
+strings to leak information from the interpreter, related to
+ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
+function.  NOTE: this vulnerability exists because of an incomplete fix for
+CVE-2017-11145.
+
+While we're at it, add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 91f4c9d41209a19d16c9b7813facdea2e32e2015)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 5 ++++-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index db4e18f..eea8909 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -224,5 +224,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.76"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.36"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.37"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0c8518b..c724f6d 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
++sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
++
++# License file
++sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ed12dd3..0733bc9 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.6
++PHP_VERSION = 7.1.7
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
