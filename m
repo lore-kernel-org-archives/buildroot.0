@@ -1,38 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 21:35:46 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools: change method for
- including linux-tool sub-makefiles
-In-Reply-To: <20170718181137.23347-1-mmayer@broadcom.com>
-References: <20170718181137.23347-1-mmayer@broadcom.com>
-Message-ID: <20170719213546.5a6209bd@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Jul 2017 21:38:21 +0200
+Subject: [Buildroot] Build failure with 2017.05.1
+In-Reply-To: <20170719210932.59467c37@windsurf> (Thomas Petazzoni's message of
+ "Wed, 19 Jul 2017 21:09:32 +0200")
+References: <1662234505.617742.1500487581506.JavaMail.zimbra@datacom.ind.br>
+ <20170719210932.59467c37@windsurf>
+Message-ID: <87eftc5iaa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 18 Jul 2017 11:11:37 -0700, Markus Mayer wrote:
-> Make inclusion ordering of all linux-tool-*.mk sub-makefiles explicit
-> instead of relying on alphabetical sort order. This is done by
-> renaming the Linux tools sub-makefiles to the format linux-tool-*.mk.in.
-> This causes the top-level Makefile to ignore the Linux tools
-> sub-makefiles.
-> 
-> Until now, the main Makefile included all linux-tool-*.mk files, as
-> well as linux-tools.mk, and it relied on alphabetical sorting to
-> include them in the proper order (linux-tool-*.mk before
-> linux-tools.mk).
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
+Hi,
 
-I've taken into account the improvements suggested by Yann and applied.
-Thanks!
+ > We definitely don't want the bump to v3.3.0 in the maintenance branch,
+ > unless there are security fixes associated.
 
-Thomas
+ > However, I think we want to do in 2017.02.x and 2017.05.x what we did
+ > in master: remove all Github patch downloads, and put the patches in
+ > the tree instead. For most of the packages, I believe the commits can
+ > be cherry-picked from master. A few packages will need specific
+ > adjustments though.
+
+ > Peter, do you agree?
+
+Yes, I'll get to it once I'm done with build testing the current pile of
+backports.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
