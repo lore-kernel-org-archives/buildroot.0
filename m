@@ -1,69 +1,83 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 19 Jul 2017 16:48:46 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/qt5: bump latest version to
- 5.9.1
-In-Reply-To: <20170719233013.43e0d27b@windsurf>
-References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
- <20170719233013.43e0d27b@windsurf>
-Message-ID: <3abfa37d-9376-d7eb-b61d-bd406c02d259@microchip.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Jul 2017 01:51:53 +0200
+Subject: [Buildroot] [PATCH v7 5/9] core: sanitize RPATH in host tree at
+ the very end of the build
+In-Reply-To: <1499273594-12106-6-git-send-email-wg@grandegger.com>
+References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
+ <1499273594-12106-6-git-send-email-wg@grandegger.com>
+Message-ID: <4e228fa3-0126-6752-8a98-e17967b61fb3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/19/2017 02:30 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 13 Jul 2017 09:18:43 -0700, Joshua Henderson wrote:
->> Qt 5.9 is a Long Term Support version [1]. Some license file changes are
->> involved, a new dependency on pcre2, and some filename changes.  qt5webkit
->> popped back into the picture for 5.9.1 after being absent for 5.9.0
->> "officially." QT5_SNAPSHOTS_SITE is removed with this commit as it is not used
->> for qtwebkit anymore.
->>
->> This removes the following patches that have been upstreamed for 5.9.1:
->>
->> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [2]
->> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [3]
->> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [4]
->> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [5]
->> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch [6]
->> - qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch [7]
->>
->> [1] https://www.qt.io/qt5-9/
->> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
->> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
->> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
->> [5] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
->> [6] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=18d49808db46add078d9d4bcffaac5361d5c7269
->> [7] https://code.qt.io/cgit/qt/qtwebkit.git/commit/?id=548380af096f8277e460383c81a4ecdf2b77523f
->>
->> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
->> Cc: Julien Corjon <corjon.j@ecagroup.com>
->> Cc: Brent Sink <brents_3@hotmail.com>
->> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
->>
->> ---
-> 
-> I've applied to master. I just changed two things:
-> 
->  - The remaining qt5base patch was still number 0005-<something>, so I
->    renamed it to 0001-<something>.
-> 
->  - It was a bit odd to have one qt5webkit patch in the 5.6.2/ subdir,
->    and the two other patches outside of the per-version directory.
->    Instead, I've duplicated the patches, so that it's clear what is
->    going on for 5.6.2/ and 5.9.1/.
-> 
-> It would be nice if you could keep an eye on
-> http://autobuild.buildroot.org over the next days and see if there's
-> any failure Qt5 related. It can happen in one of the qt5 packages
-> themselves, but also in other packages using qt5.
 
-OK.  I see it on branch qt-bump only currently.  I will keep an eye out.
 
-Also, please do not apply v2 2/2 of this series (add qt5webkit) as I have found
-several build issues with it already.  I'll break that patch off separately now.
+On 05-07-17 18:53, Wolfgang Grandegger wrote:
+> We introduce the "finalize-host" target for that purpose.
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  Makefile | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 1a826fc..2a265e0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -553,7 +553,12 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+>  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>  
+>  .PHONY: world
+> -world: target-post-image
+> +world: target-post-image host-finalize
+> +
+> +.PHONY: host-finalize
+> +host-finalize:
+> +	@$(call MESSAGE,"Rendering the SDK relocatable")
+> +	$(TOPDIR)/support/scripts/fix-rpath host
 
-Josh
+ I'm not sure why, but this is taking a very long time for me - twice as much as
+target and staging together. Possibly this is because the external toolchain
+(which tends to be large) is also still processed. Passing
+TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR in the environment of this call would help.
+
+ This sanitization takes a non-trivial amount of time. For example, on a config
+with basically just systemd enabled, rebuilding the rootfs tarballs without the
+sanitization takes just 5 seconds. target+staging sanitization adds 10 seconds
+to that. host sanitization adds another 20 seconds. So globally we go from 5 to
+34 seconds as the baseline time to rebuild anything.
+
+ Also, we discussed this before (also with Thomas): I'm not so sure we want to
+do this as part of the normal build. It would make sense to me to have a new
+"sdk" target which is NOT a dependency of world, that should be called
+explicitly to get a relocatable toolchain. That already solves a big part of the
+time issue I mentioned above. But it also means we can later add other things to
+that sdk target, like creating a tarball of it. And anyway the host sanitization
+is only useful if you're actually going to move the sdk somewhere else.
+
+ Also, host-finalize (or sdk) should depend on toolchain, and probably also on
+$(filter host-%,$(PACKAGES)). The latter is currently incomplete, but when we
+get around to selecting BR2_PACKAGE_HOST_* for all host packages, we will make
+sure that 'make sdk' really generates the complete sdk.
+
+ And finally, I think that the staging sanitization fits better here than in
+target-finalize. It has nothing to do with target, and the only reason that we
+do such sanitization is to make the sdk relocatable.
+
+ Regards,
+ Arnout
+
+>  
+>  # When creating HOST_DIR, also symlink usr -> .
+>  $(HOST_DIR):
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
