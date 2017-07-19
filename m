@@ -1,60 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:11:56 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mpg123: security bump to
-	version 1.25.2
-Message-ID: <20170720055508.9252B800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:17:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/samba4: security
+	bump to version 4.5.12
+Message-ID: <20170720055509.367157F8CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=020c65779156d48c463f94cabbf676767ab57b0d
+commit: https://git.buildroot.net/buildroot/commit/?id=ad3d9f8bd6e85f2ddbb03757dddc5b6ac0c6150b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-From the release notes:
+Fixes CVE-2017-11103:
 
- - Extend pow tables for layer III to properly handle files with i-stereo and
-   5-bit scalefactors. Never observed them for real, just as fuzzed input to
-   trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
-   calling remote denial of service. While the accesses are out of bounds for
-   the pow tables, they still are safely within libmpg123's memory (other
-   static tables). Just wrong values are used for computation, no actual crash
-   unless you use something like GCC's AddressSanitizer, nor any information
-   disclosure.
- - Avoid left-shifts of negative integers in layer I decoding.
+All versions of Samba from 4.0.0 onwards using embedded Heimdal
+Kerberos are vulnerable to a man-in-the-middle attack impersonating
+a trusted server, who may gain elevated access to the domain by
+returning malicious replication or authorization data.
 
-While we're at it, add a hash for the license file.
+Samba binaries built against MIT Kerberos are not vulnerable.
 
+https://www.samba.org/samba/history/samba-4.5.12.html
+
+[Peter: add CVE info]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 474daa20f8da2a677250146e8ee1652206923ee8)
+
+(cherry picked from commit f97510659f914ee51c0f32e82664179a69ab17ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash | 5 ++++-
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 69fbef3..cbab6f3 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
-+sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
-+
-+# License file
-+sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 8eaaa62..44218ed 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index a16d834..0783b37 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 7cb753f5f6d5527ef40d4c1f47dacafb7c876cb304b4906ccb390c6a18477714  samba-4.5.10.tar.gz
++sha256 f4c17123e3cc852a5ecc7e38884b00deab57632b9519aebc243e2a94b9b5ace4  samba-4.5.12.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 0ad4b64..3ffe11e 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.25.1
-+MPG123_VERSION = 1.25.2
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+-SAMBA4_VERSION = 4.5.10
++SAMBA4_VERSION = 4.5.12
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
