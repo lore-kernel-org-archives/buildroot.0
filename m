@@ -1,38 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 15:35:12 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-headers: bump 4.{4,
-	9, 11}.x series
-Message-ID: <20170719204757.65D777FF4F@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 14:57:26 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] linux-fusion: fix build
+	issue with Linux >= 4.7
+Message-ID: <20170719204757.2370E81696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29baa5739a63319222a2bf5e44a4cd4fc811de17
+commit: https://git.buildroot.net/buildroot/commit/?id=500b9d0cd03bbb10b1c6e82ffb042a5d718309ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 00b8764f77c78885f234f980e4b6c49de315349a)
+The size parameter from sock_recvmsg() was removed from Linux kernel
+API since 4.7. This commit adjusts the existing
+0004-Port-one-one_udp.c-to-Linux-4.1.patch to fix the build with Linux
+>= 4.7.
+
+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+[Thomas: improved commit title/log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+(cherry picked from commit 0ae2cab4167cb978718dcbfe9fa006b126522b65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3b91c04..be0799b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.75"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.35"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.76"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.36"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.8"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.9"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+index e1bff64..3ee4dac 100644
+--- a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
++++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+@@ -24,12 +24,20 @@ one/one_udp.c: In function 'ksocket_send_iov':
+ one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
+ 
+ Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++
++Kernel commit 2da62906b1e29 dropped the size parameter in sock_recvmsg
++since 4.7
++
++In function 'ksocket_receive'
++one/one_udp.c:235:13: error: too many arguments to function 'sock_recvmsg'
++
++Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+ ---
+- one/one_udp.c | 30 +++++++++++++++---------------
+- 1 file changed, 15 insertions(+), 15 deletions(-)
++ one/one_udp.c | 34 +++++++++++++++++++---------------
++ 1 file changed, 19 insertions(+), 15 deletions(-)
+ 
+ diff --git a/one/one_udp.c b/one/one_udp.c
+-index 26b9e6a1f729..b1daae164cdf 100644
++index 26b9e6a..9b59529 100644
+ --- a/one/one_udp.c
+ +++ b/one/one_udp.c
+ @@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
+@@ -78,7 +86,7 @@ index 26b9e6a1f729..b1daae164cdf 100644
+       struct iovec iov;
+       mm_segment_t oldfs;
+       int size = 0;
+-@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
++@@ -213,18 +215,20 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
+       iov.iov_base = buf;
+       iov.iov_len = len;
+  
+@@ -97,3 +105,14 @@ index 26b9e6a1f729..b1daae164cdf 100644
+  
+       oldfs = get_fs();
+       set_fs(KERNEL_DS);
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,7,0) // commit 2da62906b1e29
++      size = sock_recvmsg(sock,&msg,len,msg.msg_flags);
+++#else
+++     size = sock_recvmsg(sock, &msg,msg.msg_flags);
+++#endif
++      set_fs(oldfs);
++ 
++      return size;
++-- 
++2.11.0
++
