@@ -1,62 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:06:25 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: select
-	libgcrypt
-Message-ID: <20170719204759.2CFCC81F88@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 16:01:36 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] php: security bump to
+	version 7.1.7
+Message-ID: <20170719204758.CB8FB7FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9597818b5a7845154893bd37abddd9233b9e5a83
+commit: https://git.buildroot.net/buildroot/commit/?id=a28f8f15bda11a1f068aa64a998808c9836b16ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Libgrcrypt is a direct dependency of WebKitGTK+, and as such it
-should be selected.
+Fixes the following security issues:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: add missing dependency on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
+decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
+reached with a call to the imagecreatefromstring() function) uses
+constant-sized color tables of size 3 * 256, but does not zero-out these
+arrays before use.
 
-(cherry picked from commit b61c805fcaf8980a3dbcd23c444660f7f5327ecf)
+CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
+Out-of-bonds access in oniguruma regexp library.
+
+CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+7.1.7, the openssl extension PEM sealing code did not check the return value
+of the OpenSSL sealing function, which could lead to a crash of the PHP
+interpreter, related to an interpretation conflict for a negative number in
+ext/openssl/openssl.c, and an OpenSSL documentation omission.
+
+CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
+7.1.7, lack of a bounds check in the date extension's timelib_meridian
+parsing code could be used by attackers able to supply date strings to leak
+information from the interpreter, related to an ext/date/lib/parse_date.c
+out-of-bounds read affecting the php_parse_date function.
+
+CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
+through 7.1.7, lack of bounds checks in the date extension's
+timelib_meridian parsing code could be used by attackers able to supply date
+strings to leak information from the interpreter, related to
+ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
+function.  NOTE: this vulnerability exists because of an incomplete fix for
+CVE-2017-11145.
+
+While we're at it, add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 91f4c9d41209a19d16c9b7813facdea2e32e2015)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in    | 2 ++
- package/webkitgtk/webkitgtk.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/php/php.hash | 5 ++++-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 0e53d06..2885b2f 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	# Disabled on SuperH because of segfault
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0c8518b..c724f6d 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
++sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
++
++# License file
++sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ed12dd3..0733bc9 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-@@ -30,6 +31,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_ICU
- 	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
- 	select BR2_PACKAGE_LIBSOUP
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index cc8d960..ef20839 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -13,7 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-APPLE \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
--	enchant harfbuzz icu jpeg libgtk3 libsecret libsoup \
-+	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libxml2 libxslt sqlite webp
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
+-PHP_VERSION = 7.1.6
++PHP_VERSION = 7.1.7
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
