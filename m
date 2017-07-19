@@ -1,116 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 20:37:01 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] binutils/2.27: backport
-	patch to enable CRC instructions on supported ARMv8-A CPUs
-Message-ID: <20170719204801.1408680337@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 20:42:45 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] expat: fix build on and
+	for kernel older than 3.17
+Message-ID: <20170719204801.7F1937FCEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94a9d40c158118f498c1bfb38d2acf8a90ed65f7
+commit: https://git.buildroot.net/buildroot/commit/?id=7f8e78682748b1880827814da1a84b1b535f4af7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d558ca17138331b1f3a9d780ced07671e0f0a185)
+The expat build system now fails when the getrandom() system call is not
+supported. This affect both host and target builds. Define XML_POOR_ENTROPY
+for target kernels older than 3.17 to fix the build. For the host package
+define XML_POOR_ENTROPY unconditionally since we have no easy way to know the
+host kernel version. Note that expat will still use getrandom() on the host
+when it is available, we don't make security any worse.
+
+Fixes (host):
+http://autobuild.buildroot.net/results/928/928dc2b56d931da84055fdfe78929d1f956de53b/
+http://autobuild.buildroot.net/results/ee9/ee90d0a456cbce4c7f22e5f61006612bd9ba30d5/
+http://autobuild.buildroot.net/results/dac/dac7231242123ae3dcaa6bbdd65b44fe8d8cb20c/
+
+Fixes (target):
+http://autobuild.buildroot.net/results/308/308e830219fdfebb5aa6aef51c1dc784254998f6/
+http://autobuild.buildroot.net/results/73f/73fa946b0a2205e946ad414079f88e4bdb416f00/
+http://autobuild.buildroot.net/results/9d7/9d7bad22ace7fa211b31d752a2255e07cede68be/
+
+[Peter: also use HOST_CPPFLAGS]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+(cherry picked from commit 5242701f3aa8426cdf2cc9a176ef06194db93d5f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ly-enable-CRC-instructions-on-supported-A.patch | 88 ++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
+ package/expat/expat.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/binutils/2.27/0907-Automatically-enable-CRC-instructions-on-supported-A.patch b/package/binutils/2.27/0907-Automatically-enable-CRC-instructions-on-supported-A.patch
-new file mode 100644
-index 0000000..3b7fcfc
---- /dev/null
-+++ b/package/binutils/2.27/0907-Automatically-enable-CRC-instructions-on-supported-A.patch
-@@ -0,0 +1,88 @@
-+From 29a4659015ca7044c2d425d32a0b828e0fbb5ac1 Mon Sep 17 00:00:00 2001
-+From: Richard Earnshaw <Richard.Earnshaw@arm.com>
-+Date: Wed, 7 Sep 2016 17:14:54 +0100
-+Subject: [PATCH] Automatically enable CRC instructions on supported ARMv8-A
-+ CPUs.
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index a10f2c9..a78d326 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -15,5 +15,14 @@ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
+ 
++# Kernel versions older than 3.17 do not support getrandom()
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17),)
++EXPAT_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DXML_POOR_ENTROPY"
++endif
 +
-+2016-09-07  Richard Earnshaw  <rearnsha@arm.com>
++# Make build succeed on host kernel older than 3.17. getrandom() will still
++# be used on newer kernels.
++HOST_EXPAT_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -DXML_POOR_ENTROPY"
 +
-+	* opcode/arm.h (ARM_ARCH_V8A_CRC): New architecture.
-+
-+2016-09-07  Richard Earnshaw  <rearnsha@arm.com>
-+
-+	* config/tc-arm.c ((arm_cpus): Use ARM_ARCH_V8A_CRC for all
-+	ARMv8-A CPUs except xgene1.
-+
-+Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=patch;h=27e5a270962fb92c07e7d476966ba380fa3bb68e
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ gas/config/tc-arm.c  | 18 +++++++++---------
-+ include/opcode/arm.h |  2 ++
-+ 2 files changed, 11 insertions(+), 9 deletions(-)
-+
-+diff --git a/gas/config/tc-arm.c b/gas/config/tc-arm.c
-+index 73d05316..7c86184d 100644
-+--- a/gas/config/tc-arm.c
-++++ b/gas/config/tc-arm.c
-+@@ -25332,17 +25332,17 @@ static const struct arm_cpu_option_table arm_cpus[] =
-+ 								  "Cortex-A15"),
-+   ARM_CPU_OPT ("cortex-a17",	ARM_ARCH_V7VE,   FPU_ARCH_NEON_VFP_V4,
-+ 								  "Cortex-A17"),
-+-  ARM_CPU_OPT ("cortex-a32",    ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("cortex-a32",    ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Cortex-A32"),
-+-  ARM_CPU_OPT ("cortex-a35",    ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("cortex-a35",    ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Cortex-A35"),
-+-  ARM_CPU_OPT ("cortex-a53",    ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("cortex-a53",    ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Cortex-A53"),
-+-  ARM_CPU_OPT ("cortex-a57",    ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("cortex-a57",    ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Cortex-A57"),
-+-  ARM_CPU_OPT ("cortex-a72",    ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("cortex-a72",    ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Cortex-A72"),
-+-  ARM_CPU_OPT ("cortex-a73",    ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("cortex-a73",    ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Cortex-A73"),
-+   ARM_CPU_OPT ("cortex-r4",	ARM_ARCH_V7R,	 FPU_NONE,	  "Cortex-R4"),
-+   ARM_CPU_OPT ("cortex-r4f",	ARM_ARCH_V7R,	 FPU_ARCH_VFP_V3D16,
-+@@ -25361,10 +25361,10 @@ static const struct arm_cpu_option_table arm_cpus[] =
-+   ARM_CPU_OPT ("cortex-m1",	ARM_ARCH_V6SM,	 FPU_NONE,	  "Cortex-M1"),
-+   ARM_CPU_OPT ("cortex-m0",	ARM_ARCH_V6SM,	 FPU_NONE,	  "Cortex-M0"),
-+   ARM_CPU_OPT ("cortex-m0plus",	ARM_ARCH_V6SM,	 FPU_NONE,	  "Cortex-M0+"),
-+-  ARM_CPU_OPT ("exynos-m1",	ARM_ARCH_V8A,	 FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("exynos-m1",	ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Samsung " \
-+ 								  "Exynos M1"),
-+-  ARM_CPU_OPT ("qdf24xx",	ARM_ARCH_V8A,	 FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("qdf24xx",	ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 								  "Qualcomm "
-+ 								  "QDF24XX"),
-+ 
-+@@ -25389,7 +25389,7 @@ static const struct arm_cpu_option_table arm_cpus[] =
-+   /* APM X-Gene family.  */
-+   ARM_CPU_OPT ("xgene1",        ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 	                                                          "APM X-Gene 1"),
-+-  ARM_CPU_OPT ("xgene2",        ARM_ARCH_V8A,    FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-++  ARM_CPU_OPT ("xgene2",        ARM_ARCH_V8A_CRC, FPU_ARCH_CRYPTO_NEON_VFP_ARMV8,
-+ 	                                                          "APM X-Gene 2"),
-+ 
-+   { NULL, 0, ARM_ARCH_NONE, ARM_ARCH_NONE, NULL }
-+diff --git a/include/opcode/arm.h b/include/opcode/arm.h
-+index 60715cf8..feace5cd 100644
-+--- a/include/opcode/arm.h
-++++ b/include/opcode/arm.h
-+@@ -263,6 +263,8 @@
-+ #define ARM_ARCH_V7M	ARM_FEATURE_CORE (ARM_AEXT_V7M, ARM_EXT2_V6T2_V8M)
-+ #define ARM_ARCH_V7EM	ARM_FEATURE_CORE (ARM_AEXT_V7EM, ARM_EXT2_V6T2_V8M)
-+ #define ARM_ARCH_V8A	ARM_FEATURE_CORE (ARM_AEXT_V8A, ARM_AEXT2_V8A)
-++#define ARM_ARCH_V8A_CRC ARM_FEATURE (ARM_AEXT_V8A, ARM_AEXT2_V8A, \
-++				      CRC_EXT_ARMV8)
-+ #define ARM_ARCH_V8_1A	ARM_FEATURE (ARM_AEXT_V8A, ARM_AEXT2_V8_1A,	\
-+ 				     CRC_EXT_ARMV8 | FPU_NEON_EXT_RDMA)
-+ #define ARM_ARCH_V8_2A	ARM_FEATURE (ARM_AEXT_V8A, ARM_AEXT2_V8_2A,	\
-+-- 
-+2.11.0
-+
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
