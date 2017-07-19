@@ -1,79 +1,739 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:01:36 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] php: security bump to
-	version 7.1.7
-Message-ID: <20170719204758.CB8FB7FF4F@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 15:56:54 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] xserver_xorg-server: add
+	upstream security fixes for CVE-2017-10971 / 10972
+Message-ID: <20170719204758.713BF7FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a28f8f15bda11a1f068aa64a998808c9836b16ba
+commit: https://git.buildroot.net/buildroot/commit/?id=193c2589498c0de24567b39460abb39a84fd9477
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes the following security issues:
+Add upstream patches fixing the following security issues:
 
-CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
-decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
-reached with a call to the imagecreatefromstring() function) uses
-constant-sized color tables of size 3 * 256, but does not zero-out these
-arrays before use.
+CVE-2017-10971:
+	The endianess handling for X Events assumed a fixed size of X Event structures and
+	had a specific 32 byte stack buffer for that.
 
-CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
-Out-of-bonds access in oniguruma regexp library.
+	However "GenericEvents" can have any size, so if the events were sent in the wrong
+	endianess, this stack buffer could be overflowed easily.
 
-CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
-7.1.7, the openssl extension PEM sealing code did not check the return value
-of the OpenSSL sealing function, which could lead to a crash of the PHP
-interpreter, related to an interpretation conflict for a negative number in
-ext/openssl/openssl.c, and an OpenSSL documentation omission.
+	So authenticated X users could overflow the stack in the X Server and with the X
+	server usually running as root gaining root prileveges.
 
-CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
-7.1.7, lack of a bounds check in the date extension's timelib_meridian
-parsing code could be used by attackers able to supply date strings to leak
-information from the interpreter, related to an ext/date/lib/parse_date.c
-out-of-bounds read affecting the php_parse_date function.
+CVE-2017-10972:
+	An information leak out of the X server due to an uninitialized stack area when swapping
+	event endianess.
 
-CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
-through 7.1.7, lack of bounds checks in the date extension's
-timelib_meridian parsing code could be used by attackers able to supply date
-strings to leak information from the interpreter, related to
-ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
-function.  NOTE: this vulnerability exists because of an incomplete fix for
-CVE-2017-11145.
+For more details, see the advisory:
 
-While we're at it, add a hash for the license file.
+http://www.openwall.com/lists/oss-security/2017/07/06/6
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 91f4c9d41209a19d16c9b7813facdea2e32e2015)
+(cherry picked from commit 2015d83dd5dbc6832df9d1082a58b7cc0b9fb0ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 5 ++++-
- package/php/php.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ...target-buffer-in-SProcXSendExtensionEvent.patch | 39 ++++++++++++
+ ...isallow-GenericEvent-in-SendEvent-request.patch | 71 ++++++++++++++++++++++
+ ...ify-all-events-in-ProcXSendExtensionEvent.patch | 50 +++++++++++++++
+ .../0005-Xi-Do-not-try-to-swap-GenericEvent.patch  | 45 ++++++++++++++
+ ...target-buffer-in-SProcXSendExtensionEvent.patch | 39 ++++++++++++
+ ...isallow-GenericEvent-in-SendEvent-request.patch | 71 ++++++++++++++++++++++
+ ...ify-all-events-in-ProcXSendExtensionEvent.patch | 50 +++++++++++++++
+ .../0005-Xi-Do-not-try-to-swap-GenericEvent.patch  | 45 ++++++++++++++
+ ...target-buffer-in-SProcXSendExtensionEvent.patch | 39 ++++++++++++
+ ...isallow-GenericEvent-in-SendEvent-request.patch | 71 ++++++++++++++++++++++
+ ...ify-all-events-in-ProcXSendExtensionEvent.patch | 50 +++++++++++++++
+ .../0007-Xi-Do-not-try-to-swap-GenericEvent.patch  | 45 ++++++++++++++
+ 12 files changed, 615 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 0c8518b..c724f6d 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,5 @@
- # From http://php.net/downloads.php
--sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
-+sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+new file mode 100644
+index 0000000..c15dc9f
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+@@ -0,0 +1,39 @@
++From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:39 +0300
++Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
 +
-+# License file
-+sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ed12dd3..0733bc9 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.1.6
-+PHP_VERSION = 7.1.7
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++Make sure that the xEvent eventT is initialized with zeros, the same way as
++in SProcSendEvent.
++
++Some event swapping functions do not overwrite all 32 bytes of xEvent
++structure, for example XSecurityAuthorizationRevoked. Two cooperating
++clients, one swapped and the other not, can send
++XSecurityAuthorizationRevoked event to each other to retrieve old stack data
++from X server. This can be potentialy misused to go around ASLR or
++stack-protector.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 11d82029f..1cf118ab6 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
++ {
++     CARD32 *p;
++     int i;
++-    xEvent eventT;
+++    xEvent eventT = { .u.u.type = 0 };
++     xEvent *eventP;
++     EventSwapPtr proc;
++ 
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+new file mode 100644
+index 0000000..12da5f5
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+@@ -0,0 +1,71 @@
++From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:40 +0300
++Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
++
++The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
++no less. Both ProcSendEvent and SProcSendEvent verify that the received data
++exactly match the request size. However nothing stops the client from passing
++in event with xEvent::type = GenericEvent and any value of
++xGenericEvent::length.
++
++In the case of ProcSendEvent, the event will be eventually passed to
++WriteEventsToClient which will see that it is Generic event and copy the
++arbitrary length from the receive buffer (and possibly past it) and send it to
++the other client. This allows clients to copy unitialized heap memory out of X
++server or to crash it.
++
++In case of SProcSendEvent, it will attempt to swap the incoming event by
++calling a swapping function from the EventSwapVector array. The swapped event
++is written to target buffer, which in this case is local xEvent variable. The
++xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
++expect that the target buffer has size matching the size of the source
++GenericEvent. This allows clients to cause stack buffer overflows.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ dix/events.c  | 6 ++++++
++ dix/swapreq.c | 7 +++++++
++ 2 files changed, 13 insertions(+)
++
++diff --git a/dix/events.c b/dix/events.c
++index 3e3a01ef9..d3a33ea3f 100644
++--- a/dix/events.c
+++++ b/dix/events.c
++@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
++         client->errorValue = stuff->event.u.u.type;
++         return BadValue;
++     }
+++    /* Generic events can have variable size, but SendEvent request holds
+++       exactly 32B of event data. */
+++    if (stuff->event.u.u.type == GenericEvent) {
+++        client->errorValue = stuff->event.u.u.type;
+++        return BadValue;
+++    }
++     if (stuff->event.u.u.type == ClientMessage &&
++         stuff->event.u.u.detail != 8 &&
++         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
++diff --git a/dix/swapreq.c b/dix/swapreq.c
++index 719e9b81c..67850593b 100644
++--- a/dix/swapreq.c
+++++ b/dix/swapreq.c
++@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
++     swapl(&stuff->destination);
++     swapl(&stuff->eventMask);
++ 
+++    /* Generic events can have variable size, but SendEvent request holds
+++       exactly 32B of event data. */
+++    if (stuff->event.u.u.type == GenericEvent) {
+++        client->errorValue = stuff->event.u.u.type;
+++        return BadValue;
+++    }
+++
++     /* Swap event */
++     proc = EventSwapVector[stuff->event.u.u.type & 0177];
++     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+new file mode 100644
+index 0000000..2e65100
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+@@ -0,0 +1,50 @@
++From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:41 +0300
++Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
++
++The requirement is that events have type in range
++EXTENSION_EVENT_BASE..lastEvent, but it was tested
++only for first event of all.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 12 +++++++-----
++ 1 file changed, 7 insertions(+), 5 deletions(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 1cf118ab6..5e63bfcca 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
++ int
++ ProcXSendExtensionEvent(ClientPtr client)
++ {
++-    int ret;
+++    int ret, i;
++     DeviceIntPtr dev;
++     xEvent *first;
++     XEventClass *list;
++@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
++     /* The client's event type must be one defined by an extension. */
++ 
++     first = ((xEvent *) &stuff[1]);
++-    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
++-          (first->u.u.type < lastEvent))) {
++-        client->errorValue = first->u.u.type;
++-        return BadValue;
+++    for (i = 0; i < stuff->num_events; i++) {
+++        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
+++            (first[i].u.u.type < lastEvent))) {
+++            client->errorValue = first[i].u.u.type;
+++            return BadValue;
+++        }
++     }
++ 
++     list = (XEventClass *) (first + stuff->num_events);
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+new file mode 100644
+index 0000000..871e762
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+@@ -0,0 +1,45 @@
++From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:42 +0300
++Subject: [PATCH] Xi: Do not try to swap GenericEvent.
++
++The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
++it is assuming that the event has fixed size and gives the swapping function
++xEvent-sized buffer.
++
++A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 5e63bfcca..5c2e0fc56 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
++ 
++     eventP = (xEvent *) &stuff[1];
++     for (i = 0; i < stuff->num_events; i++, eventP++) {
+++        if (eventP->u.u.type == GenericEvent) {
+++            client->errorValue = eventP->u.u.type;
+++            return BadValue;
+++        }
+++
++         proc = EventSwapVector[eventP->u.u.type & 0177];
++-        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
+++        /* no swapping proc; invalid event type? */
+++        if (proc == NotImplemented) {
+++            client->errorValue = eventP->u.u.type;
++             return BadValue;
+++        }
++         (*proc) (eventP, &eventT);
++         *eventP = eventT;
++     }
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+new file mode 100644
+index 0000000..c15dc9f
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+@@ -0,0 +1,39 @@
++From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:39 +0300
++Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
++
++Make sure that the xEvent eventT is initialized with zeros, the same way as
++in SProcSendEvent.
++
++Some event swapping functions do not overwrite all 32 bytes of xEvent
++structure, for example XSecurityAuthorizationRevoked. Two cooperating
++clients, one swapped and the other not, can send
++XSecurityAuthorizationRevoked event to each other to retrieve old stack data
++from X server. This can be potentialy misused to go around ASLR or
++stack-protector.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 11d82029f..1cf118ab6 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
++ {
++     CARD32 *p;
++     int i;
++-    xEvent eventT;
+++    xEvent eventT = { .u.u.type = 0 };
++     xEvent *eventP;
++     EventSwapPtr proc;
++ 
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+new file mode 100644
+index 0000000..12da5f5
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+@@ -0,0 +1,71 @@
++From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:40 +0300
++Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
++
++The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
++no less. Both ProcSendEvent and SProcSendEvent verify that the received data
++exactly match the request size. However nothing stops the client from passing
++in event with xEvent::type = GenericEvent and any value of
++xGenericEvent::length.
++
++In the case of ProcSendEvent, the event will be eventually passed to
++WriteEventsToClient which will see that it is Generic event and copy the
++arbitrary length from the receive buffer (and possibly past it) and send it to
++the other client. This allows clients to copy unitialized heap memory out of X
++server or to crash it.
++
++In case of SProcSendEvent, it will attempt to swap the incoming event by
++calling a swapping function from the EventSwapVector array. The swapped event
++is written to target buffer, which in this case is local xEvent variable. The
++xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
++expect that the target buffer has size matching the size of the source
++GenericEvent. This allows clients to cause stack buffer overflows.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ dix/events.c  | 6 ++++++
++ dix/swapreq.c | 7 +++++++
++ 2 files changed, 13 insertions(+)
++
++diff --git a/dix/events.c b/dix/events.c
++index 3e3a01ef9..d3a33ea3f 100644
++--- a/dix/events.c
+++++ b/dix/events.c
++@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
++         client->errorValue = stuff->event.u.u.type;
++         return BadValue;
++     }
+++    /* Generic events can have variable size, but SendEvent request holds
+++       exactly 32B of event data. */
+++    if (stuff->event.u.u.type == GenericEvent) {
+++        client->errorValue = stuff->event.u.u.type;
+++        return BadValue;
+++    }
++     if (stuff->event.u.u.type == ClientMessage &&
++         stuff->event.u.u.detail != 8 &&
++         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
++diff --git a/dix/swapreq.c b/dix/swapreq.c
++index 719e9b81c..67850593b 100644
++--- a/dix/swapreq.c
+++++ b/dix/swapreq.c
++@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
++     swapl(&stuff->destination);
++     swapl(&stuff->eventMask);
++ 
+++    /* Generic events can have variable size, but SendEvent request holds
+++       exactly 32B of event data. */
+++    if (stuff->event.u.u.type == GenericEvent) {
+++        client->errorValue = stuff->event.u.u.type;
+++        return BadValue;
+++    }
+++
++     /* Swap event */
++     proc = EventSwapVector[stuff->event.u.u.type & 0177];
++     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+new file mode 100644
+index 0000000..2e65100
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+@@ -0,0 +1,50 @@
++From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:41 +0300
++Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
++
++The requirement is that events have type in range
++EXTENSION_EVENT_BASE..lastEvent, but it was tested
++only for first event of all.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 12 +++++++-----
++ 1 file changed, 7 insertions(+), 5 deletions(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 1cf118ab6..5e63bfcca 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
++ int
++ ProcXSendExtensionEvent(ClientPtr client)
++ {
++-    int ret;
+++    int ret, i;
++     DeviceIntPtr dev;
++     xEvent *first;
++     XEventClass *list;
++@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
++     /* The client's event type must be one defined by an extension. */
++ 
++     first = ((xEvent *) &stuff[1]);
++-    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
++-          (first->u.u.type < lastEvent))) {
++-        client->errorValue = first->u.u.type;
++-        return BadValue;
+++    for (i = 0; i < stuff->num_events; i++) {
+++        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
+++            (first[i].u.u.type < lastEvent))) {
+++            client->errorValue = first[i].u.u.type;
+++            return BadValue;
+++        }
++     }
++ 
++     list = (XEventClass *) (first + stuff->num_events);
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+new file mode 100644
+index 0000000..871e762
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+@@ -0,0 +1,45 @@
++From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:42 +0300
++Subject: [PATCH] Xi: Do not try to swap GenericEvent.
++
++The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
++it is assuming that the event has fixed size and gives the swapping function
++xEvent-sized buffer.
++
++A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 5e63bfcca..5c2e0fc56 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
++ 
++     eventP = (xEvent *) &stuff[1];
++     for (i = 0; i < stuff->num_events; i++, eventP++) {
+++        if (eventP->u.u.type == GenericEvent) {
+++            client->errorValue = eventP->u.u.type;
+++            return BadValue;
+++        }
+++
++         proc = EventSwapVector[eventP->u.u.type & 0177];
++-        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
+++        /* no swapping proc; invalid event type? */
+++        if (proc == NotImplemented) {
+++            client->errorValue = eventP->u.u.type;
++             return BadValue;
+++        }
++         (*proc) (eventP, &eventT);
++         *eventP = eventT;
++     }
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+new file mode 100644
+index 0000000..c15dc9f
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+@@ -0,0 +1,39 @@
++From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:39 +0300
++Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
++
++Make sure that the xEvent eventT is initialized with zeros, the same way as
++in SProcSendEvent.
++
++Some event swapping functions do not overwrite all 32 bytes of xEvent
++structure, for example XSecurityAuthorizationRevoked. Two cooperating
++clients, one swapped and the other not, can send
++XSecurityAuthorizationRevoked event to each other to retrieve old stack data
++from X server. This can be potentialy misused to go around ASLR or
++stack-protector.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 11d82029f..1cf118ab6 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
++ {
++     CARD32 *p;
++     int i;
++-    xEvent eventT;
+++    xEvent eventT = { .u.u.type = 0 };
++     xEvent *eventP;
++     EventSwapPtr proc;
++ 
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+new file mode 100644
+index 0000000..12da5f5
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+@@ -0,0 +1,71 @@
++From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:40 +0300
++Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
++
++The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
++no less. Both ProcSendEvent and SProcSendEvent verify that the received data
++exactly match the request size. However nothing stops the client from passing
++in event with xEvent::type = GenericEvent and any value of
++xGenericEvent::length.
++
++In the case of ProcSendEvent, the event will be eventually passed to
++WriteEventsToClient which will see that it is Generic event and copy the
++arbitrary length from the receive buffer (and possibly past it) and send it to
++the other client. This allows clients to copy unitialized heap memory out of X
++server or to crash it.
++
++In case of SProcSendEvent, it will attempt to swap the incoming event by
++calling a swapping function from the EventSwapVector array. The swapped event
++is written to target buffer, which in this case is local xEvent variable. The
++xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
++expect that the target buffer has size matching the size of the source
++GenericEvent. This allows clients to cause stack buffer overflows.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ dix/events.c  | 6 ++++++
++ dix/swapreq.c | 7 +++++++
++ 2 files changed, 13 insertions(+)
++
++diff --git a/dix/events.c b/dix/events.c
++index 3e3a01ef9..d3a33ea3f 100644
++--- a/dix/events.c
+++++ b/dix/events.c
++@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
++         client->errorValue = stuff->event.u.u.type;
++         return BadValue;
++     }
+++    /* Generic events can have variable size, but SendEvent request holds
+++       exactly 32B of event data. */
+++    if (stuff->event.u.u.type == GenericEvent) {
+++        client->errorValue = stuff->event.u.u.type;
+++        return BadValue;
+++    }
++     if (stuff->event.u.u.type == ClientMessage &&
++         stuff->event.u.u.detail != 8 &&
++         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
++diff --git a/dix/swapreq.c b/dix/swapreq.c
++index 719e9b81c..67850593b 100644
++--- a/dix/swapreq.c
+++++ b/dix/swapreq.c
++@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
++     swapl(&stuff->destination);
++     swapl(&stuff->eventMask);
++ 
+++    /* Generic events can have variable size, but SendEvent request holds
+++       exactly 32B of event data. */
+++    if (stuff->event.u.u.type == GenericEvent) {
+++        client->errorValue = stuff->event.u.u.type;
+++        return BadValue;
+++    }
+++
++     /* Swap event */
++     proc = EventSwapVector[stuff->event.u.u.type & 0177];
++     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+new file mode 100644
+index 0000000..2e65100
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+@@ -0,0 +1,50 @@
++From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:41 +0300
++Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
++
++The requirement is that events have type in range
++EXTENSION_EVENT_BASE..lastEvent, but it was tested
++only for first event of all.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 12 +++++++-----
++ 1 file changed, 7 insertions(+), 5 deletions(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 1cf118ab6..5e63bfcca 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
++ int
++ ProcXSendExtensionEvent(ClientPtr client)
++ {
++-    int ret;
+++    int ret, i;
++     DeviceIntPtr dev;
++     xEvent *first;
++     XEventClass *list;
++@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
++     /* The client's event type must be one defined by an extension. */
++ 
++     first = ((xEvent *) &stuff[1]);
++-    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
++-          (first->u.u.type < lastEvent))) {
++-        client->errorValue = first->u.u.type;
++-        return BadValue;
+++    for (i = 0; i < stuff->num_events; i++) {
+++        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
+++            (first[i].u.u.type < lastEvent))) {
+++            client->errorValue = first[i].u.u.type;
+++            return BadValue;
+++        }
++     }
++ 
++     list = (XEventClass *) (first + stuff->num_events);
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch
+new file mode 100644
+index 0000000..871e762
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch
+@@ -0,0 +1,45 @@
++From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Wed, 24 May 2017 15:54:42 +0300
++Subject: [PATCH] Xi: Do not try to swap GenericEvent.
++
++The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
++it is assuming that the event has fixed size and gives the swapping function
++xEvent-sized buffer.
++
++A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
++
++Signed-off-by: Michal Srb <msrb@suse.com>
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Xi/sendexev.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/Xi/sendexev.c b/Xi/sendexev.c
++index 5e63bfcca..5c2e0fc56 100644
++--- a/Xi/sendexev.c
+++++ b/Xi/sendexev.c
++@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
++ 
++     eventP = (xEvent *) &stuff[1];
++     for (i = 0; i < stuff->num_events; i++, eventP++) {
+++        if (eventP->u.u.type == GenericEvent) {
+++            client->errorValue = eventP->u.u.type;
+++            return BadValue;
+++        }
+++
++         proc = EventSwapVector[eventP->u.u.type & 0177];
++-        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
+++        /* no swapping proc; invalid event type? */
+++        if (proc == NotImplemented) {
+++            client->errorValue = eventP->u.u.type;
++             return BadValue;
+++        }
++         (*proc) (eventP, &eventT);
++         *eventP = eventT;
++     }
++-- 
++2.11.0
++
