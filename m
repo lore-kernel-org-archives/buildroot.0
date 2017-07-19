@@ -1,67 +1,87 @@
-From: Glenn Coombs <glenn.coombs@gmail.com>
-Date: Wed, 19 Jul 2017 17:17:43 +0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Jul 2017 11:35:53 +0200
 Subject: [Buildroot] How to build the qt plugin in gst1-plugins-bad ?
-Message-ID: <CADujc4q8d1AMFmvoD_62qnOkNSntuCCGCe4+Pkatp4P382srfg@mail.gmail.com>
+In-Reply-To: <CADujc4q8d1AMFmvoD_62qnOkNSntuCCGCe4+Pkatp4P382srfg@mail.gmail.com>
+References: <CADujc4q8d1AMFmvoD_62qnOkNSntuCCGCe4+Pkatp4P382srfg@mail.gmail.com>
+Message-ID: <20170719113553.6669def3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I would like to use the gstreamer sink called qmlglsink, which is part of
-the qt plugin in the gst1-plugins-bad package.  My target system is an
-imx6q using EGLFS (so no X11 or Wayland).  When looking at the config.log
-file in the build/gst1-plugins-bad-1.10.4/ directory I can see that the qt
-plugin is not selected for building due to --disable-qt being passed to the
-configure script.
+On Wed, 19 Jul 2017 17:17:43 +0800, Glenn Coombs wrote:
 
-I modified the Config.in and gst1-plugins-bad.mk files in the
-buildroot/package/gstreamer1/gst1-plugins-bad/ directory to add the option
-to pass --enable-qt to the configure script and that got me a bit further.
-The configure script now checks to build the qt plugin but decides against
-it because it can't work out the Qt Windowing system:
+> configure:50774: WARNING: Could not find any Qt Windowing integration
+> 
+> I'm not sure why the qt plugin is explicitly disabled - is there a known
+> issue with building this plugin ?
 
-configure:50115: checking for QT
-configure:50123: $PKG_CONFIG --exists --print-errors "Qt5Core Qt5Gui Qt5Qml
-Qt5Quick >= 5.4.0"
-configure:50126: $? = 0
-configure:50141: $PKG_CONFIG --exists --print-errors "Qt5Core Qt5Gui Qt5Qml
-Qt5Quick >= 5.4.0"
-configure:50144: $? = 0
-configure:50184: result: yes
-configure:50193: checking for moc-qt5
-configure:50226: result: no
-configure:50193: checking for moc
-configure:50211: found
-/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/moc
-configure:50223: result:
-/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/moc
-configure:50239: checking for rcc-qt5
-configure:50272: result: no
-configure:50239: checking for rcc
-configure:50257: found
-/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/rcc
-configure:50269: result:
-/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/rcc
-configure:50285: checking for uic-qt5
-configure:50318: result: no
-configure:50285: checking for uic
-configure:50303: found
-/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/uic
-configure:50315: result:
-/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/uic
-configure:50774: WARNING: Could not find any Qt Windowing integration
+I don't think so, it's probably just that nobody needed it until now,
+and therefore nobody did the effort to see what changes were needed to
+enable it.
 
-I'm not sure why the qt plugin is explicitly disabled - is there a known
-issue with building this plugin ?  Can anybody help with what further
-options I might need to set to get it to build ?
+> Can anybody help with what further options I might need to set to get
+> it to build ?
 
-Thanks,
+You should read the configure.ac script of gst1-plugins-bad, it gives
+all the details of the checks it is doing about Qt. See
+https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/tree/configure.ac?id=1.12.1#n2907.
 
---
-Glenn
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170719/b422d472/attachment.html>
+Since you're using eglfs, I think you should fall into the case where:
+
+        if test "x$GST_GL_HAVE_PLATFORM_EGL" = "x1"; then
+
+then since you're not on Android
+
+          if test "x$GST_GL_HAVE_WINDOW_ANDROID" = "x1"; then
+
+should be false, which brings you to the else case:
+
+          else
+              AC_DEFINE([HAVE_QT_EGLFS], [],
+                [Define if Qt eglfs integration is installed])
+              HAVE_QT_WINDOWING="yes"
+          fi
+
+The error message that you get "Could not find any Qt Windowing
+integration" appears when HAVE_QT_WINDOWING is "no". So obviously
+GST_GL_HAVE_PLATFORM_EGL is not "1" in your situation, and that's the
+problem.
+
+GST_GL_HAVE_PLATFORM_EGL is set to 1 in:
+
+if test "x$USE_EGL" = "xyes"; then
+  GL_PLATFORMS="egl $GL_PLATFORMS"
+  GST_GL_HAVE_PLATFORM_EGL=1
+fi
+
+So we need to understand when USE_EGL is set to "yes". For the Linux
+platform, it is set to yes as follows:
+
+      if test "x$NEED_EGL" != "xno"; then
+        if test "x$HAVE_WINDOW_WAYLAND" = "xyes" -o "x$HAVE_WINDOW_X11" = "xyes" -o "x$HAVE_WINDOW_DISPMANX" = "xyes" -o "x$HAVE_WINDOW_VIV_FB" = "xyes"; then
+          GL_LIBS="$GL_LIBS -lEGL $EGL_LIBS"
+          GL_CFLAGS="$GL_CFLAGS $EGL_CFLAGS"
+          USE_EGL=yes
+        fi
+      fi
+
+So you need to find out why HAVE_WINDOW_VIV_FB is not "yes".
+
+I suggest that you add a bunch of additional echo in the configure
+script to dump the value of the various variables, in order to
+progressively figure out what's going on.
+
+Once you have nailed down the problematic variable, we can probably
+help again to understand what is the problem.
+
+Good luck!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
