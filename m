@@ -1,57 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:32:43 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] package/samba4: security
-	bump to version 4.5.12
-Message-ID: <20170719204759.E522F7FF4F@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 16:06:41 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/apache: security
+	bump to version 2.4.27
+Message-ID: <20170719204759.8BD097FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7acbe4e952f8375e9d2ae80b00e5275fe59e6458
+commit: https://git.buildroot.net/buildroot/commit/?id=e233dc7e0bc59c3fc78ff02bac9b261126e2696c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes CVE-2017-11103:
+Fixes the following security issues:
 
-All versions of Samba from 4.0.0 onwards using embedded Heimdal
-Kerberos are vulnerable to a man-in-the-middle attack impersonating
-a trusted server, who may gain elevated access to the domain by
-returning malicious replication or authorization data.
+CVE-2017-9788 - Uninitialized memory reflection in mod_auth_digest
 
-Samba binaries built against MIT Kerberos are not vulnerable.
+The value placeholder in [Proxy-]Authorization headers of type 'Digest' was
+not initialized or reset before or between successive key=value assignments.
+by mod_auth_digest.
 
-https://www.samba.org/samba/history/samba-4.5.12.html
+Providing an initial key with no '=' assignment could reflect the stale
+value of uninitialized pool memory used by the prior request, leading to
+leakage of potentially confidential information, and a segfault.
 
-[Peter: add CVE info]
+CVE-2017-9789 - Read after free in mod_http2
+
+When under stress, closing many connections, the HTTP/2 handling code would
+sometimes access memory after it has been freed, resulting in potentially
+erratic behaviour.
+
+Announcement: http://www.apache.org/dist/httpd/Announcement2.4.html
+Release notes: http://www.apache.org/dist/httpd/CHANGES_2.4.27
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit f97510659f914ee51c0f32e82664179a69ab17ba)
+(cherry picked from commit cf9b7cedac14de7cf5650589bf4c37635b5438a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index a16d834..0783b37 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index fe7174a..f29ae45 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 7cb753f5f6d5527ef40d4c1f47dacafb7c876cb304b4906ccb390c6a18477714  samba-4.5.10.tar.gz
-+sha256 f4c17123e3cc852a5ecc7e38884b00deab57632b9519aebc243e2a94b9b5ace4  samba-4.5.12.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 93c45da..b370f02 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+-# From http://www.apache.org/dist/httpd/httpd-2.4.26.tar.bz2.sha256
+-sha256 a07eb52fafc879e0149d31882f7da63173e72df4478db4dc69f7a775b663d387 httpd-2.4.26.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
++sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index b276b8d..857e538 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.5.10
-+SAMBA4_VERSION = 4.5.12
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-APACHE_VERSION = 2.4.26
++APACHE_VERSION = 2.4.27
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
