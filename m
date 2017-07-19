@@ -1,48 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 15:23:48 +0200
-Subject: [Buildroot] [git commit] libglib2: disable compiler warnings
-In-Reply-To: <87d18wbmc1.fsf@dell.be.48ers.dk>
-References: <20170704170700.6316E81E06@busybox.osuosl.org>
- <87d18wbmc1.fsf@dell.be.48ers.dk>
-Message-ID: <20170719152348.66d289c3@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Jul 2017 15:31:21 +0200
+Subject: [Buildroot] [PATCH] busybox: disable CONFIG_FEATURE_CLEAN_UP in
+	default configs
+In-Reply-To: <20170705093454.8326-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 5 Jul 2017 11:34:54 +0200")
+References: <20170705093454.8326-1-peter@korsgaard.com>
+Message-ID: <878tjkbljq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Wed, 19 Jul 2017 15:14:22 +0200, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:  
-> 
->  > commit: https://git.buildroot.net/buildroot/commit/?id=f2800ac57cde2cd71df295d33441faae1b30dd3e
->  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master  
-> 
->  > By default, libglib enables some fairly aggressive warnings, treated
->  > as errors. In particular, the -Wformat=2 warning triggers a warning
->  > due to the return value of the ngettext() macro from uClibc libintl
->  > stub not being understood as being potentially a format string.  
-> 
->  > So, before we enable the stub libintl in uClibc, we disable such
->  > warnings. A bug will be reported to upstream uClibc to get the actual
->  > bug fixed, but disabling compiler warnings treated as errors is anyway
->  > a good thing in the context of Buildroot.  
-> 
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> 
-> Committed to 2017.02.x and 2017.05.x, thanks.
+ > FEATURE_CLEAN_UP is a configuration feature to get busybox to explicitly
+ > call free() on dynamic allocated memory just before exiting so memory leak
+ > detectors like valgrind don't get confused.  Upstream explicitly recommends
+ > to NOT enable this option:
 
-Doesn't do much harm, but it wasn't causing any visible issue in
-2017.02/2017.05 I believe. It's really enabling the uClibc-ng intl stub
-that triggered that warning.
+ > config FEATURE_CLEAN_UP
+ > 	bool "Clean up all memory before exiting (usually not needed)"
+ > 	default n
+ > 	help
+ > 	  As a size optimization, busybox normally exits without explicitly
+ > 	  freeing dynamically allocated memory or closing files. This saves
+ > 	  space since the OS will clean up for us, but it can confuse debuggers
+ > 	  like valgrind, which report tons of memory and resource leaks.
 
-Best regards,
+ > 	  Don't enable this unless you have a really good reason to clean
+ > 	  things up manually.
 
-Thomas
+ > Having this option enabled adds a bit of bloat, but more significantly these
+ > cleanup code paths don't get tested very often so some times get out of sync
+ > with the allocation code which can lead to crashes (or security issues from
+ > double frees), so it is safer to disable the option.
+
+ > For people wanting to debug memory leak issues with busybox, the option can
+ > still be enabled with a configuration fragment (or a custom config).
+
+ > The size difference isn't huge (br-arm-full-static):
+
+ > -rwxr-xr-x 1 peko peko 886K Jul  5 10:56 output-busybox1/target/bin/busybox
+ > -rwxr-xr-x 1 peko peko 882K Jul  5 10:53 output-busybox2/target/bin/busybox
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x and 2017.05.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
