@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 18:19:03 +0200
-Subject: [Buildroot] [PATCH] package/rpi-firmware: install missing
-	library
-In-Reply-To: <20170715120600.4554beee@windsurf> (Thomas Petazzoni's message of
- "Sat, 15 Jul 2017 12:06:00 +0200")
-References: <20170714220936.25212-1-yann.morin.1998@free.fr>
- <20170715090831.1ed20473@windsurf> <20170715094537.GA3095@scaer>
- <20170715120600.4554beee@windsurf>
-Message-ID: <87lgnk762w.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Jul 2017 19:45:41 +0200
+Subject: [Buildroot] [PATCH v2 1/1] br toolchain: gcc4.x/5.x bugfix
+	libsanitizer ppc
+In-Reply-To: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 13 Jul 2017 15:00:05 -0500")
+References: <1499976005-36459-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87h8y8722i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > Hello,
- > On Sat, 15 Jul 2017 11:45:37 +0200, Yann E. MORIN wrote:
+ > Fixes a missing include of signal.h
+ > Verified to break 4.9.4 / 5.4.0 when using
+ > target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
 
- >> On 2017-07-15 09:08 +0200, Thomas Petazzoni spake thusly:
- >> > On Sat, 15 Jul 2017 00:09:36 +0200, Yann E. MORIN wrote:  
- >> > > The vcdbg utility is linked to a few libraries, which so far were all
- >> > > provided by the rpi-userland package.
- >> > > 
- >> > > But a not-so-recent bump of rpi-firmware pulled in a vcdbg that is
- >> > > linked to an additional library, which is not privided by rpi-userland,
- >> > > so we must install it.  
- >> > 
- >> > Could you qualify "not-so-recent" bump ? It's just to know if this is
- >> > applicable to our LTS release.  
- >> 
- >> The library was added in September 2016, and we bumped since then, so
- >> yes, the fix applies to both the LTS branch and the maintenance branch
- >> as well.
+ > ../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
+ > ../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
+ >    return signum == SIGSEGV && common_flags()->handle_segv;
 
- > ACK. So Peter: please apply to 2017.02.x and 2017.05.x! :-)
+ > Resolves Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
+
+ > Upstream: https://patchwork.ozlabs.org/patch/725596/
+
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
