@@ -1,27 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:12:54 +0200
-Subject: [Buildroot] [PATCH] libxml-parser-perl: add LICENSE_FILES
-In-Reply-To: <20170712024651.21497-1-andrew.smirnov@gmail.com> (Andrey
- Smirnov's message of "Tue, 11 Jul 2017 19:46:51 -0700")
-References: <20170712024651.21497-1-andrew.smirnov@gmail.com>
-Message-ID: <877ez48qhl.fsf@dell.be.48ers.dk>
+From: Guilherme G. Piccoli <gpiccoli@linux.vnet.ibm.com>
+Date: Wed, 19 Jul 2017 11:28:51 -0300
+Subject: [Buildroot] [PATCH] nvme-cli: bump to version 1.3
+In-Reply-To: <20170719092058.01651f83@windsurf>
+References: <20170717201945.9618-1-gpiccoli@linux.vnet.ibm.com>
+ <20170719092058.01651f83@windsurf>
+Message-ID: <1d09f415-071b-07d5-ee3a-dd9b76c6ad57@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
+On 07/19/2017 04:20 AM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 17 Jul 2017 17:19:45 -0300, Guilherme G. Piccoli wrote:
+>> nvme-cli had many bugfixes and improvements over the releases.
+>> Buildroot still has version 0.3, so this patch bumps it to the
+>> latest upstream release, version 1.3.
+>>
+>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@linux.vnet.ibm.com>
+>> ---
+>>  package/nvme/nvme.hash | 2 +-
+>>  package/nvme/nvme.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Applied to master, thanks.
+> 
 
- > From: Ben Leinweber <bleinweber@spaceflight.com>
- > There is copyright information in the top level README file. Use this
- > file as the license file which will be included by the `legal-info`
- > build rule.
+Thank you Thomas!
 
- > Signed-off-by: Ben Leinweber <bleinweber@spaceflight.com>
- > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-
-Committed to 2017.02.x and 2017.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+> Thomas
+> 
