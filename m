@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 21:46:40 +0200
-Subject: [Buildroot]
- =?utf-8?q?=5BPATCH=5D_DEVELOPERS=3A_Remove_Beno=C3=AE?=
- =?utf-8?q?t__Allard?=
-In-Reply-To: <1500293256-30433-1-git-send-email-benoit.allard@greenbone.net>
-References: <1500293256-30433-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <20170719214640.08f84c77@windsurf>
+Date: Wed, 19 Jul 2017 21:47:04 +0200
+Subject: [Buildroot] [git commit] arch/mips: improve help text of NaN option
+Message-ID: <20170719194306.C1A2882161@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cfc6f1e9b71ae0ade69daeecededc74bb3dde969
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Jul 2017 14:07:36 +0200, Beno?t Allard wrote:
-> I'm leaving the company. So removing the entry before the address bounces.
-> 
-> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
-> ---
->  DEVELOPERS | 4 ----
->  1 file changed, 4 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.mips | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks a lot for your contributions to Buildroot, they were really
-appreciated. It was very nice to have someone taking care of the
-syslinux package, and I hope someone else will step up as a maintainer
-for this package.
-
-I wish you all the best for your new professional adventures!
-
-Patch applied, of course. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 7dd6965..f2b352b 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -169,7 +169,9 @@ choice
+ 	depends on BR2_mips_32r5 || BR2_mips_64r5
+ 	default BR2_MIPS_ENABLE_NAN_2008
+ 	help
+-	  NaN encoding to be used
++	  MIPS supports two different NaN encodings, legacy and 2008.
++	  Information about MIPS NaN encodings can be found here:
++	  https://sourceware.org/binutils/docs/as/MIPS-NaN-Encodings.html
+ 
+ config BR2_MIPS_ENABLE_NAN_LEGACY
+ 	bool "legacy"
