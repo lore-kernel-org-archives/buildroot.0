@@ -1,75 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:02:29 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] xvisor: fix build on
-	AArch64
-Message-ID: <20170720055507.05E7481EB0@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:03:23 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] ccache: make default
+	host-ccache cache dir fit for multi-user setups
+Message-ID: <20170720055507.3B316800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f887589e3ecc92b73a991f5dd52e7bafab302e2c
+commit: https://git.buildroot.net/buildroot/commit/?id=dfcb9416d2da0da4f679ad86d731e0588f992920
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Xvisor was failing to build on AArch64 with:
+While building I noticed:
 
-package/xvisor/xvisor.mk:60: *** No Xvisor defconfig name specified, check your BR2_PACKAGE_XVISOR_DEFCONFIG setting.  Stop.
+>>> host-ccache 3.3.4 Building
+conf.c: In function 'conf_create':
+conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
+  conf->cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
+  ^
 
-The first problem is that the Config.in file had a typo: it was using
-BR2_AARCH64 instead of BR2_aarch64, and therefore the
-BR2_PACKAGE_XVISOR_DEFCONFIG variable had no value.
+As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
+hardcoding the build user homedir isn't really nice for the relocatable
+SDK feature (or simply for a SDK used by multiple users).
 
-Once this is fixed, another problem occurs: the ARCH variable needs to
-be specified as "arm" for XVisor, for both ARM and AArch64. Therefore,
-a XVISOR_ARCH variable is introduced, which is calculated according to
-the Buildroot configuration options. Only x86-64, arm and aarch64 are
-supported by Xvisor currently, so it remains simple.
+As the warning shows, CCache replaces "%s" with the current user home
+directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
+$HOME.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/1719a63ff257f13634a06a14327abfb327984101/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 117fd5dfbc756c4f2b4aef97fc2b568528c66df7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bdca0d05816fec8472b1d32301f55df152b86466)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xvisor/Config.in |  2 +-
- package/xvisor/xvisor.mk | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/ccache/ccache.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
-index 996d37a..44bd461 100644
---- a/package/xvisor/Config.in
-+++ b/package/xvisor/Config.in
-@@ -36,7 +36,7 @@ config BR2_PACKAGE_XVISOR_DEFCONFIG
- 	default "generic-v5" if BR2_ARM_CPU_ARMV5
- 	default "generic-v6" if BR2_ARM_CPU_ARMV6
- 	default "generic-v7" if BR2_ARM_CPU_ARMV7A
--	default "generic-v8" if BR2_AARCH64
-+	default "generic-v8" if BR2_aarch64
- 	default "x86_64_generic" if BR2_x86_64
- 	help
- 	  Name of the Xvisor defconfig file to use, without the
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index a9a5dbf..17edc2c 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -26,8 +26,16 @@ XVISOR_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE))
- endif
- XVISOR_KCONFIG_EDITORS = menuconfig
- 
-+ifeq ($(BR2_x86_64),y)
-+XVISOR_ARCH = x86
-+else ifeq ($(BR2_arm)$(BR2_aarch64),y)
-+XVISOR_ARCH = arm
-+else
-+$(error "Architecture not supported by XVisor")
-+endif
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index f174a5d..55a9132 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -28,9 +28,13 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+ #    BR2_CCACHE_DIR.
+ #  - Change hard-coded last-ditch default to match path in .config, to avoid
+ #    the need to specify BR_CACHE_DIR when invoking ccache directly.
++#    CCache replaces "%s" with the home directory of the current user,
++#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
++HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
 +
- XVISOR_MAKE_ENV = \
--	ARCH=$(if $(BR2_x86_64),x86,$(BR2_ARCH)) \
-+	ARCH=$(XVISOR_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS)
+ define HOST_CCACHE_PATCH_CONFIGURATION
+ 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+-	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
++	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
+ endef
  
- XVISOR_MAKE_OPTS = $(if $(VERBOSE),VERBOSE=1)
+ HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
