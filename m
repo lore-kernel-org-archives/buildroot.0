@@ -1,41 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 15:58:54 +0200
-Subject: [Buildroot] [PATCH] xserver_xorg-server: add upstream security
-	fixes for CVE-2017-10971 / 10972
-In-Reply-To: <20170710070752.16623-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 10 Jul 2017 09:07:52 +0200")
-References: <20170710070752.16623-1-peter@korsgaard.com>
-Message-ID: <8760eoa5pd.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Jul 2017 15:59:51 +0200
+Subject: [Buildroot] [PATCH 1/4 v3] arch/arm: fix -mcpu default values
+	for AArch64
+In-Reply-To: <cbd726c5aa26ea8278c518508ba76efc5b796f7a.1499592591.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 9 Jul 2017 11:29:58 +0200")
+References: <cover.1499592591.git.yann.morin.1998@free.fr>
+ <cbd726c5aa26ea8278c518508ba76efc5b796f7a.1499592591.git.yann.morin.1998@free.fr>
+Message-ID: <871spca5ns.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Add upstream patches fixing the following security issues:
- > CVE-2017-10971:
- > 	The endianess handling for X Events assumed a fixed size of X Event structures and
- > 	had a specific 32 byte stack buffer for that.
+ > We have to specify the -mcpu value, even in 64-bit mode.
+ > For AArch64, +fp and +simd are the default, so they are totally useless.
 
- > 	However "GenericEvents" can have any size, so if the events were sent in the wrong
- > 	endianess, this stack buffer could be overflowed easily.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
 
- > 	So authenticated X users could overflow the stack in the X Server and with the X
- > 	server usually running as root gaining root prileveges.
-
- > CVE-2017-10972:
- > 	An information leak out of the X server due to an uninitialized stack area when swapping
- > 	event endianess.
-
- > For more details, see the advisory:
-
- > http://www.openwall.com/lists/oss-security/2017/07/06/6
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x and 2017.05.x, thanks.
+Is this a candidate for 2017.02.x / 2017.05.x - In other words, what
+does it fix?
 
 -- 
 Bye, Peter Korsgaard
