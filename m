@@ -1,69 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 17:03:07 +0200
-Subject: [Buildroot] /etc//init.d init scripts in buildroot
-In-Reply-To: <CALtfCQYjVE502OVpbTcbhpAGoLXuf-01ZRm+HjAY1hqaMZ4izA@mail.gmail.com>
-References: <CALtfCQZAis0fX+J6NWTX+u=ZJB-0ZKoKgkBcteAJU4f+c46BJA@mail.gmail.com>
- <87shhzb3d1.fsf@dell.be.48ers.dk>
- <CALtfCQYpfbuuyfp7TZ1iXJ-OPmGQTPV1kv0XV6d0ck0AzwMQOw@mail.gmail.com>
- <CALtfCQZQzLtt86OyosfbF8PoVBS=whDfxsN-juHXhwRSjqAcpg@mail.gmail.com>
- <CALtfCQYjVE502OVpbTcbhpAGoLXuf-01ZRm+HjAY1hqaMZ4izA@mail.gmail.com>
-Message-ID: <20170719170307.3b75e0a4@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Jul 2017 18:16:41 +0200
+Subject: [Buildroot] [PATCH] spice: add upstream security fixes for
+	CVE-2017-7506
+In-Reply-To: <20170714140203.19234-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 14 Jul 2017 16:02:03 +0200")
+References: <20170714140203.19234-1-peter@korsgaard.com>
+Message-ID: <87tw28766u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Wed, 19 Jul 2017 17:00:19 +0200, Oscar Gomez Fuente wrote:
+ > Fixes CVE-2017-7506 - Possible buffer overflow via invalid monitor
+ > configurations.
 
-> I need goes high pin 26 at the end of the halt command. I've tried with
-> this .dts:
-> 
-> /dts-v1/;
-> /plugin/;
-> 
-> / {
->     compatible = "brcm,bcm2709";
->     fragment at 0 {
->         target-path = "/";
->         __overlay__ {
->             power_ctrl: power_ctrl {
->                 compatible = "gpio-poweroff";
->                 gpios = <&gpio 26 1>;
->             };
->         };
->     };
-> 
-> };
-> 
-> But it doesn't work and I get this error:
-> 
-> ...
-> [    0.576179] mousedev: PS/2 mouse device common for all mice
-> -->[    0.576225] poweroff-gpio power_ctrl: gpio_poweroff_probe:  
-> pm_power_off function already registered
-> -->[    0.576237] poweroff-gpio: probe of power_ctrl failed with error -16  
-> [    0.576632] bcm2835-cpufreq: min=1200000 max=1200000
-> [    0.576799] sdhci: Secure Digital Host Controller Interface driver
-> ...
-> 
-> I have activated in the kernel config file: CONFIG_POWER_RESET=y and
-> CONFIG_POWER_RESET_GPIO=y
-> 
-> Does anyone any suggestion?
+ > For more details, see:
+ > https://marc.info/?l=oss-security&m=150001782924095
 
-This is no longer a Buildroot question, so not very appropriate on this
-mailing list.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Some other driver or architecture code is registering a pm_power_off
-hook, so you'd have to find which one.
+Committed to 2017.02.x and 2017.05.x, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
