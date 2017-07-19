@@ -1,53 +1,156 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jul 2017 01:34:16 +0200
-Subject: [Buildroot] [PATCH v7 4/9] core: sanitize RPATH in target tree
- at the end of target finalization
-In-Reply-To: <1499273594-12106-5-git-send-email-wg@grandegger.com>
-References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-5-git-send-email-wg@grandegger.com>
-Message-ID: <44a9d6b5-3f51-f3b6-94e4-379c459c1b93@mind.be>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Wed, 19 Jul 2017 16:47:51 -0700
+Subject: [Buildroot] [PATCH v2 2/2] qt5wayland: new package
+In-Reply-To: <1499962724-536-2-git-send-email-joshua.henderson@microchip.com>
+References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
+ <1499962724-536-2-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <e8bb318b-568f-b2de-2ebd-972eb0b3b52d@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+All, Me,
 
-
-On 05-07-17 18:53, Wolfgang Grandegger wrote:
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+On 07/13/2017 09:18 AM, Joshua Henderson wrote:
+> QtWayland is a Qt 5 module that wraps the functionality of Wayland.
+> 
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Brent Sink <brents_3@hotmail.com>
+> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+> 
 > ---
->  Makefile | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Makefile b/Makefile
-> index cdc3a64..1a826fc 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -725,6 +725,8 @@ endif
->  
->  	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
->  	$(TOPDIR)/support/scripts/fix-rpath staging
-> +	@$(call MESSAGE,"Sanitizing RPATH in target tree")
-> +	$(TOPDIR)/support/scripts/fix-rpath target
+> Changes for v2:
+> - Fix config dependency logic.
+> - Add license file hashes.
+> - Fix opengl dependency.
+> - Make enabling the compositor a config option.
+> - This is now part of the QT bump to 5.9.1 series because it depends on it.
+> ---
+>  package/qt5/Config.in                  |  1 +
+>  package/qt5/qt5wayland/Config.in       | 24 ++++++++++++++++++
+>  package/qt5/qt5wayland/qt5wayland.hash |  5 ++++
+>  package/qt5/qt5wayland/qt5wayland.mk   | 45 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 75 insertions(+)
+>  create mode 100644 package/qt5/qt5wayland/Config.in
+>  create mode 100644 package/qt5/qt5wayland/qt5wayland.hash
+>  create mode 100644 package/qt5/qt5wayland/qt5wayland.mk
+> 
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index abaa584..386dcb1 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -82,4 +82,5 @@ source "package/qt5/qt5webkit/Config.in"
+>  source "package/qt5/qt5websockets/Config.in"
+>  source "package/qt5/qt5x11extras/Config.in"
+>  source "package/qt5/qt5xmlpatterns/Config.in"
+> +source "package/qt5/qt5wayland/Config.in"
 
- I think we should do this *before* copying the overlay and calling the
-post-build script. Indeed, in my mind, the user is completely responsible for
-what happens there, and it should never be touched by us.
+This is probably not the right place to put this (alpha sort).
 
+>  endif
+> diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
+> new file mode 100644
+> index 0000000..c83319f
+> --- /dev/null
+> +++ b/package/qt5/qt5wayland/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_QT5WAYLAND
+> +	bool "qt5wayland"
+> +	select BR2_PACKAGE_QT5DECLARATIVE
+> +	depends on BR2_PACKAGE_WAYLAND
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  This package corresponds to the qt5wayland module.
+> +
+> +	  http://qt.io
+> +
+> +comment "qt5wayland needs QT OpenGL/Wayland support"
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_WAYLAND
+> +
+> +if BR2_PACKAGE_QT5WAYLAND
+> +
+> +config BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
+> +	bool "Enable compositor (experimental)"
+> +	help
+> +	  The compositor API is still experimental, and not built by default.
+> +
+> +endif
+> diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
+> new file mode 100644
+> index 0000000..95b8824
+> --- /dev/null
+> +++ b/package/qt5/qt5wayland/qt5wayland.hash
+> @@ -0,0 +1,5 @@
+> +# hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwayland-opensource-src-5.6.2.tar.xz.mirrorlist
+> +sha256 035c3199f4719627b64b7020f0f4574da2b4cb78c6981aba75f27b872d8e6c86	qtwayland-opensource-src-5.6.2.tar.xz
+> +
+> +# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwayland-opensource-src-5.9.1.tar.xz.mirrorlist
+> +sha256 cf0cb1982a7b748bfec8c7834691f13072f104884c61809d0bbd1a01ebda3ffa	qtwayland-opensource-src-5.9.1.tar.xz
+> diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+> new file mode 100644
+> index 0000000..0431374
+> --- /dev/null
+> +++ b/package/qt5/qt5wayland/qt5wayland.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# qt5wayland
+> +#
+> +################################################################################
+> +
+> +QT5WAYLAND_VERSION = $(QT5_VERSION)
+> +QT5WAYLAND_SITE = $(QT5_SITE)
+> +QT5WAYLAND_SOURCE = qtwayland-opensource-src-$(QT5WAYLAND_VERSION).tar.xz
+> +QT5WAYLAND_DEPENDENCIES = qt5base qt5declarative
+> +QT5WAYLAND_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+> +QT5WAYLAND_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+> +QT5WAYLAND_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+> +else
+> +QT5WAYLAND_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+> +QT5WAYLAND_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
+> +QT5WAYLAND_QMAKEFLAGS += CONFIG+=wayland-compositor
+> +endif
+> +
+> +define QT5WAYLAND_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake $(QT5WAYLAND_QMAKEFLAGS))
+> +endef
+> +
+> +define QT5WAYLAND_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QT5WAYLAND_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> +	$(QT5_LA_PRL_FILES_FIXUP)
+> +endef
+> +
+> +define QT5WAYLAND_INSTALL_TARGET_CMDS
+> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandCompositor.so* $(TARGET_DIR)/usr/lib
+> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandClient.so* $(TARGET_DIR)/usr/lib
+> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/wayland* $(TARGET_DIR)/usr/lib/qt/plugins
+> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforms/libqwayland* $(TARGET_DIR)/usr/lib/qt/plugins/platforms
+> +endef
 
- Regards,
- Arnout
+I've uncovered a difference in qt5 versions in the names of .so files
+that needs to be fixed.  Also, this needs to condition on
+BR2_PACKAGE_QT5WAYLAND_COMPOSITOR.
 
->  
->  .PHONY: target-post-image
->  target-post-image: $(TARGETS_ROOTFS) target-finalize
+> +
+> +$(eval $(generic-package))
 > 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+This needs a v3 before applying.
+
+Josh
