@@ -1,44 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:01:09 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] package/php: bump version
-	to 7.1.6
-Message-ID: <20170719204758.B9EE080175@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 15:50:50 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] irssi: security bump to
+	version 1.0.4
+Message-ID: <20170719204757.DCBD87FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d51d7742b561a21bf5f45596e4f24bfc9b5cea19
+commit: https://git.buildroot.net/buildroot/commit/?id=ea2fd3c4c48b4f11becc2934ce2a486b8b2808d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0b5d531e6d6c79d4165d4f8f2d1e1d848bfcf7a6)
+From the advisory:
+https://irssi.org/security/irssi_sa_2017_07.txt
+
+Two vulnerabilities have been located in Irssi.
+
+(a) When receiving messages with invalid time stamps, Irssi would try
+    to dereference a NULL pointer. Found by Brian 'geeknik' Carpenter
+    of Geeknik Labs. (CWE-690)
+
+    CVE-2017-10965 [2] was assigned to this bug
+
+(b) While updating the internal nick list, Irssi may incorrectly use
+    the GHashTable interface and free the nick while updating it. This
+    will then result in use-after-free conditions on each access of
+    the hash table. Found by Brian 'geeknik' Carpenter of Geeknik
+    Labs. (CWE-416 caused by CWE-227)
+
+    CVE-2017-10966 [3] was assigned to this bug
+
+Impact
+------
+
+(a) May result in denial of service (remote crash).
+
+(b) Undefined behaviour.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9bf78446888ed3b98d893e70ce4f5e4679fd2ebb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index d34242f..0c8518b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index abb4219..7b01902 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
 @@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 d149a3c396c45611f5dc6bf14be190f464897145a76a8e5851cf18ff7094f6ac  php-7.1.5.tar.xz
-+sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index cfc6789..ed12dd3 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # Locally calculated after checking pgp signature
+-sha256	838220297dcbe7c8c42d01005059779a82f5b7b7e7043db37ad13f5966aff581	irssi-1.0.3.tar.xz
++sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index ef9d0aa..d2b8169 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.1.5
-+PHP_VERSION = 7.1.6
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-IRSSI_VERSION = 1.0.3
++IRSSI_VERSION = 1.0.4
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
