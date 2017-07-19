@@ -1,49 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 14:13:42 +0200
-Subject: [Buildroot] [PATCHv3] support/tests: allow properly indented
- config fragment
-In-Reply-To: <00f33a0e-da8e-3d36-ecad-c8b4d02450b5@mind.be>
-References: <20170718203839.14913-1-yann.morin.1998@free.fr>
- <00f33a0e-da8e-3d36-ecad-c8b4d02450b5@mind.be>
-Message-ID: <20170719141342.6250b99a@windsurf>
+From: =?UTF-8?Q?Refik_Tuzakl=C4=B1?= <tuzaklirefik@gmail.com>
+Date: Wed, 19 Jul 2017 05:16:01 -0700 (PDT)
+Subject: [Buildroot] [RFC] kernel-module-imx-gpu-viv:compaling error
+In-Reply-To: <CAOMZO5C23FnwscYL78DZcuaxk36u+ZyD17iBghYwPoR_UYkkZQ@mail.gmail.com>
+References: <1500358371269-171162.post@n4.nabble.com>
+ <20170718100720.39028066@windsurf>
+ <CAAMH-ysnm5JMQnAJ4jQJS700o1tDE6tKeW0-niz8eBdRRQXWSQ@mail.gmail.com>
+ <20170718110245.1f85dafb@windsurf.lan>
+ <1500375085852-171182.post@n4.nabble.com>
+ <CAOMZO5C23FnwscYL78DZcuaxk36u+ZyD17iBghYwPoR_UYkkZQ@mail.gmail.com>
+Message-ID: <1500466561292-171268.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Wed, 19 Jul 2017 14:00:40 +0200, Arnout Vandecappelle wrote:
-> On 18-07-17 22:38, Yann E. MORIN wrote:
-> > Currently, defining a config fragment in the runtime test infra requires
-> > that the fragment not to be indented. This is beark, and causes grievance
-> > when looking at the code (e.g. to fix it).
-> > 
-> > Just strip out all leading spaces/tabs when writing the configuration
-> > lines into the config file, allowing in-line indented config fragments,
-> > like so:
-> > 
-> >     class TestFoo(bla):
-> >         config = bla.config + \
-> >             """
-> >             FOO=y
-> >             # BAR is not set
-> >             """
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>  
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+I applied your suggestion and create a config file according to
+freescale_imx6qsabresd_defconfig.
+at my first try, BR2_LINUX_KERNEL_DEFCONFIG [=imx_v7]. there was no error
+while compiling however,
+after flashing imx6 with MFG tool, u-boot does not boot kernel.
 
-I already applied yesterday evening:
-https://git.buildroot.org/buildroot/commit/?id=cf3cd4388a652c9af27ef1c35622e2d0a55b99a9.
+I shifted to BR2_LINUX_KERNEL_DEFCONFIG [=imx_v7_mfg]. It still compiling.
+You can find config file below. what can make the error that u-boot can not
+boot kernel.
 
-Best regards,
+should I compile u-boot, too?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thomas,
+
+At least, I read your help text :) 
+
+Fabian,
+
+I  support your idea, I promise if you add imx6q-sabresd_qt5_defconfig, I
+will be one to try it and I will write a comment about it.
+
+defconfig.defconfig
+<http://buildroot-busybox.2317881.n4.nabble.com/file/n171268/defconfig.defconfig>  
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/RFC-kernel-module-imx-gpu-viv-compaling-error-tp171162p171268.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
