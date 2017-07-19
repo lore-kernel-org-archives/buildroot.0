@@ -1,37 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:10:22 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] php: add version to
-	license string
-Message-ID: <20170720055507.ED681821A0@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:09:26 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] php: bump to version 7.1.2
+Message-ID: <20170720055507.C37F3800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfce4519e847e598ac49860f8401477a7ccbe550
+commit: https://git.buildroot.net/buildroot/commit/?id=466ab1420af9b4941b3cfcaf64ec5eb38d0de6d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-As per LICENSE file, php uses PHP license version 3.01.
+7.1.2 is a bugfix release, fixing a number of issues:
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e066bfa66487f5754ab69a750f49866ace3f4c72)
+http://www.php.net/ChangeLog-7.php#7.1.2
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 34d19a23ad8d46166a83da9cd84910ae1c5b2a43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 9c94b9e..47e99d4 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 b3565b0c1441064eba204821608df1ec7367abff881286898d900c2c2a5ffe70  php-7.1.1.tar.xz
++sha256 d815a0c39fd57bab1434a77ff0610fb507c22f790c66cd6f26e27030c4b3e971  php-7.1.2.tar.xz
 diff --git a/package/php/php.mk b/package/php/php.mk
-index f59a4e8..22eeddd 100644
+index 1379ad5..5b113d1 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -11,7 +11,7 @@ PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
- PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
- PHP_DEPENDENCIES = host-pkgconf
--PHP_LICENSE = PHP
-+PHP_LICENSE = PHP-3.01
- PHP_LICENSE_FILES = LICENSE
- PHP_CONF_OPTS = \
- 	--mandir=/usr/share/man \
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.1
++PHP_VERSION = 7.1.2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
