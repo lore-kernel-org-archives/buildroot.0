@@ -1,51 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 22:46:00 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/nodejs: use shared libuv
-In-Reply-To: <1500378343-22978-3-git-send-email-martin@barkynet.com>
-References: <1500378343-22978-1-git-send-email-martin@barkynet.com>
- <1500378343-22978-3-git-send-email-martin@barkynet.com>
-Message-ID: <20170719224600.6edd899e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Jul 2017 14:36:58 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] syslinux: add missing
+	dependency on host-util-linux
+Message-ID: <20170719204756.8B19582150@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=36b0822dc65126ed338d9eff856fa1e88b72021a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-On Tue, 18 Jul 2017 12:45:43 +0100, Martin Bark wrote:
+If util-linux is not installed system-wide on the host, the build
+fails with:
 
-> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> index f02b9a7..d3cb006 100644
-> --- a/package/nodejs/Config.in
-> +++ b/package/nodejs/Config.in
-> @@ -5,15 +5,17 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
->  	default y if BR2_mipsel && !BR2_MIPS_SOFT_FLOAT
->  	default y if BR2_aarch64 || BR2_i386 || BR2_x86_64
->  
-> -comment "nodejs needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.8, wchar"
-> +comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.8, wchar"
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
-> -	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
->  		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
->  
->  config BR2_PACKAGE_NODEJS
->  	bool "nodejs"
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+/usr/bin/gcc -Wp,-MT,isohybrid.o,-MMD,./.isohybrid.o.d -O2 -I/home/thomas/projets/buildroot/output/host/usr/include -W -Wall -Wstrict-prototypes  -Os -fomit-frame-pointer -D_FILE_OFFSET_BITS=64 -I/home/thomas/projets/buildroot/output/build/syslinux-6.03/utils -c -o isohybrid.o /home/thomas/projets/buildroot/output/build/syslinux-6.03/utils/isohybrid.c
+/home/thomas/projets/buildroot/output/build/syslinux-6.03/utils/isohybrid.c:40:23: fatal error: uuid/uuid.h: No such file or directory
+ #include <uuid/uuid.h>
+                       ^
+compilation terminated.
 
-BR2_TOOLCHAIN_HAS_SYNC_4 really is an architecture dependency (we don't
-show a Config.in comment for it), so I've moved it under
-BR2_PACKAGE_NODEJS_ARCH_SUPPORTS, so it doesn't have to be duplicated.
+Therefore, this commit adds a dependency on host-util-linux, which
+will ensure that libuuid is available. The resulting isohybrid tool is
+really installed, and linked with libuuid:
 
-Thanks!
+$ readelf -d output/host/usr/bin/isohybrid
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Dynamic section at offset 0x3e00 contains 26 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libuuid.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000f (RPATH)              Library rpath: [/home/thomas/projets/buildroot/output/host/usr/lib]
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit d98d7d660eb89ec4e179a5bf54b46fe7bbcb127c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/syslinux/syslinux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 2b3b9a7..5a60388 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -13,7 +13,8 @@ SYSLINUX_LICENSE_FILES = COPYING
+ 
+ SYSLINUX_INSTALL_IMAGES = YES
+ 
+-SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux
++# host-util-linux needed to provide libuuid when building host tools
++SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux host-util-linux
+ 
+ ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
+ SYSLINUX_TARGET += bios
