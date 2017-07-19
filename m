@@ -1,46 +1,89 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 19 Jul 2017 21:32:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.82
-Message-ID: <20170719193226.22007-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Jul 2017 21:32:04 +0200
+Subject: [Buildroot] [git commit] package/linux-tools: add support for
+	building tmon
+Message-ID: <20170719192957.3619F7FDA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=e1779ef23cd78b928d1d93f830bb00ac28143cdf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 247e631819..f864c55766 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-May/142708.html
--md5 d04f3567f0a812188d06f860fded5ab7  libdrm-2.4.81.tar.bz2
--sha1 40f0994b5fb9992e6f55d3a14537def21719d896  libdrm-2.4.81.tar.bz2
--sha256 8cc05c195ac8708199979a94c4e4d1a928c14ec338ecbcb38ead09f54dae11ae  libdrm-2.4.81.tar.bz2
--sha512 5f7a1524acad59890d3f890bed90a660a424e18a88d587ca356223bde4a7446d1c540f97ec11cb10d2e7ed1b4ae86127957634354a1be6d04199295ab24782e5  libdrm-2.4.81.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2017-July/147750.html
-+md5 29867814123c3d23056b1d05aada1b9d  libdrm-2.4.82.tar.bz2
-+sha1 c42ff308db6352eaf009a8209c7aaadbc951a89f  libdrm-2.4.82.tar.bz2
-+sha256 43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c  libdrm-2.4.82.tar.bz2
-+sha512 e69fd8c2b392daabbb3a548179e3a21a555d5174c11d76a288eb2a08850849aa867c7777b67798ec00e026e998a3b128c22698f05a7b44eb24cddc5c8a3a02d0  libdrm-2.4.82.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 9845b244b4..fc9e358b25 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+[Thomas:
+ - tweak Config.in help text as provided by Markus
+ - adjust commit log
+ - add missing select BR2_PACKAGE_NCURSES
+ - add missing dependency on host-pkgconf, used by the tmon Makefile
+   to find ncurses
+ - add logic to disable -fstack-protector when the toolchain doesn't
+   have SSP support.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-tools/Config.in             |  8 +++++++
+ package/linux-tools/linux-tool-tmon.mk.in | 37 +++++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 9d5bf7a..e3ccd85 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -77,4 +77,12 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  
--LIBDRM_VERSION = 2.4.81
-+LIBDRM_VERSION = 2.4.82
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--- 
-2.11.0
++config BR2_PACKAGE_LINUX_TOOLS_TMON
++	bool "tmon"
++	select BR2_PACKAGE_LINUX_TOOLS
++	select BR2_PACKAGE_NCURSES
++	help
++	  tmon is a terminal-based tool (using curses) that allows the
++	  user to access thermal information about the system.
++
+ endmenu
+diff --git a/package/linux-tools/linux-tool-tmon.mk.in b/package/linux-tools/linux-tool-tmon.mk.in
+new file mode 100644
+index 0000000..15931c3
+--- /dev/null
++++ b/package/linux-tools/linux-tool-tmon.mk.in
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# tmon
++#
++################################################################################
++
++LINUX_TOOLS += tmon
++
++TMON_DEPENDENCIES = host-pkgconf ncurses
++TMON_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
++	CC=$(TARGET_CC) \
++	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
++
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++define TMON_DISABLE_STACK_PROTECTOR
++	$(SED) 's%-fstack-protector%%' $(LINUX_DIR)/tools/thermal/tmon/Makefile
++endef
++endif
++
++define TMON_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/thermal/tmon/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have the tmon tool." ; \
++		echo "At least kernel 3.13 must be used." ; \
++		exit 1 ; \
++	fi
++	$(TMON_DISABLE_STACK_PROTECTOR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		$(TMON_MAKE_OPTS) \
++		tmon
++endef
++
++define TMON_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		$(TMON_MAKE_OPTS) \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		tmon_install
++endef
