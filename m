@@ -1,79 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 23:58:15 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] busybox: disable
-	CONFIG_FEATURE_CLEAN_UP in default configs
-Message-ID: <20170720055506.CC03C800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:03:16 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] python-setproctitle:
+	change setup type to setuptools
+Message-ID: <20170720055507.25C1D800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=304750a59dd57fb18604e0942e4b91007446f309
+commit: https://git.buildroot.net/buildroot/commit/?id=33145a32b2aeeb57ffb42b14caa320b6dd434ece
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-FEATURE_CLEAN_UP is a configuration feature to get busybox to explicitly
-call free() on dynamic allocated memory just before exiting so memory leak
-detectors like valgrind don't get confused.  Upstream explicitly recommends
-to NOT enable this option:
+Changing setup type to setuptools avoids installing as zipped .egg
 
-config FEATURE_CLEAN_UP
-	bool "Clean up all memory before exiting (usually not needed)"
-	default n
-	help
-	  As a size optimization, busybox normally exits without explicitly
-	  freeing dynamically allocated memory or closing files. This saves
-	  space since the OS will clean up for us, but it can confuse debuggers
-	  like valgrind, which report tons of memory and resource leaks.
-
-	  Don't enable this unless you have a really good reason to clean
-	  things up manually.
-
-Having this option enabled adds a bit of bloat, but more significantly these
-cleanup code paths don't get tested very often so some times get out of sync
-with the allocation code which can lead to crashes (or security issues from
-double frees), so it is safer to disable the option.
-
-For people wanting to debug memory leak issues with busybox, the option can
-still be enabled with a configuration fragment (or a custom config).
-
-The size difference isn't huge (br-arm-full-static):
-
--rwxr-xr-x 1 peko peko 886K Jul  5 10:56 output-busybox1/target/bin/busybox
--rwxr-xr-x 1 peko peko 882K Jul  5 10:53 output-busybox2/target/bin/busybox
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 15e8e721f6e391c7aa397f3081b7970fe8bbcab9)
+(cherry picked from commit 37cb6e971c77c376b9329cbda93e3d03aa90ce15)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox-minimal.config | 2 +-
- package/busybox/busybox.config         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-setproctitle/python-setproctitle.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index 2abf458..0c8e63e 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
-@@ -22,7 +22,7 @@ CONFIG_FEATURE_INSTALLER=y
- # CONFIG_PAM is not set
- CONFIG_LONG_OPTS=y
- CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
-+# CONFIG_FEATURE_CLEAN_UP is not set
- CONFIG_FEATURE_UTMP=y
- CONFIG_FEATURE_WTMP=y
- # CONFIG_FEATURE_PIDFILE is not set
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index c45de21..508128d 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -22,7 +22,7 @@ CONFIG_FEATURE_INSTALLER=y
- # CONFIG_PAM is not set
- CONFIG_LONG_OPTS=y
- CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
-+# CONFIG_FEATURE_CLEAN_UP is not set
- CONFIG_FEATURE_UTMP=y
- CONFIG_FEATURE_WTMP=y
- # CONFIG_FEATURE_PIDFILE is not set
+diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
+index 36cfec3..c3c6386 100644
+--- a/package/python-setproctitle/python-setproctitle.mk
++++ b/package/python-setproctitle/python-setproctitle.mk
+@@ -9,6 +9,6 @@ PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
+ PYTHON_SETPROCTITLE_SITE = https://pypi.python.org/packages/5a/0d/dc0d2234aacba6cf1a729964383e3452c52096dc695581248b548786f2b3
+ PYTHON_SETPROCTITLE_LICENSE = BSD-3c
+ PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
+-PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
++PYTHON_SETPROCTITLE_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
