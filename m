@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 09:21:05 +0200
-Subject: [Buildroot] [PATCH] bwm-ng: update to latest upstream version
- to fix build issue
-In-Reply-To: <1499250824-26093-1-git-send-email-keguang.zhang@gmail.com>
-References: <1499250824-26093-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <20170719092105.7be1353c@windsurf>
+Date: Wed, 19 Jul 2017 09:20:58 +0200
+Subject: [Buildroot] [PATCH] nvme-cli: bump to version 1.3
+In-Reply-To: <20170717201945.9618-1-gpiccoli@linux.vnet.ibm.com>
+References: <20170717201945.9618-1-gpiccoli@linux.vnet.ibm.com>
+Message-ID: <20170719092058.01651f83@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  5 Jul 2017 18:33:44 +0800, Kelvin Cheung wrote:
-> From: Keguang Zhang <keguang.zhang@spreadtrum.com>
+On Mon, 17 Jul 2017 17:19:45 -0300, Guilherme G. Piccoli wrote:
+> nvme-cli had many bugfixes and improvements over the releases.
+> Buildroot still has version 0.3, so this patch bumps it to the
+> latest upstream release, version 1.3.
 > 
-> The latest upstream version had fixed the build issus.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1d9/1d9f0b62e4cc387f508b4fe0086621ab9996a085/
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@spreadtrum.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@linux.vnet.ibm.com>
 > ---
->  package/bwm-ng/bwm-ng.hash | 2 +-
->  package/bwm-ng/bwm-ng.mk   | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  package/nvme/nvme.hash | 2 +-
+>  package/nvme/nvme.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
