@@ -1,27 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 14:56:19 +0200
-Subject: [Buildroot] [git commit] systemd: don't download patches from
-	Github
-In-Reply-To: <20170702220305.12B3D81EDC@busybox.osuosl.org> (Peter Korsgaard's
- message of "Mon, 3 Jul 2017 00:05:18 +0200")
-References: <20170702220305.12B3D81EDC@busybox.osuosl.org>
-Message-ID: <87pocwbn64.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Jul 2017 14:57:50 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-fusion: fix a build issue
+In-Reply-To: <20170704184157.66a438eb@windsurf> (Thomas Petazzoni's message of
+ "Tue, 4 Jul 2017 18:41:57 +0200")
+References: <20170704031238.14389-1-matthew.shyu.amlogic@gmail.com>
+ <20170704184157.66a438eb@windsurf>
+Message-ID: <87lgnkbn3l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=7ced54845c80ef7ba2e0a710cfed7858e30da09c
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Hello,
+ > On Tue,  4 Jul 2017 11:12:38 +0800, Matthew Shyu wrote:
+ >> From: Matthew Shyu <matthew.shyu@amlogic.com>
+ >> 
+ >> size parameter from sock_recvmsg was removed from kernel API since 4.7
+ >> 
+ >> Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+ >> ---
+ >> .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
+ >> 1 file changed, 23 insertions(+), 4 deletions(-)
 
- > Patches downloaded from Github are not stable, so bring them in the
- > tree.
+ > Thanks, I've applied your patch to the master branch, after improving a
+ > bit the commit title and commit log.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > It's by the way surprising that people are still using DirectFB, even
+ > though the project has been dead for several years.
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
