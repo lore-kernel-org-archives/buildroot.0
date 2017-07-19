@@ -1,38 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 14:52:46 +0200
-Subject: [Buildroot] [PATCH 2/2] boot/syslinux: disable syslinux
-	legacy-BIOS for toolchains affected by binutils bug 19615
-In-Reply-To: <20170704120110.29107-2-romain.naour@smile.fr> (Romain Naour's
- message of "Tue, 4 Jul 2017 14:01:10 +0200")
-References: <20170704120110.29107-1-romain.naour@smile.fr>
- <20170704120110.29107-2-romain.naour@smile.fr>
-Message-ID: <87tw28bnc1.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Jul 2017 14:53:57 +0200
+Subject: [Buildroot] [git commit] syslinux: add missing dependency on
+ host-util-linux
+In-Reply-To: <CACXmViYggxbFoQ5rJcKfGd2TYPFX5Y1nLBXXqOcxERrqhEsiZQ@mail.gmail.com>
+References: <20170611133214.C5BBF816C5@busybox.osuosl.org>
+ <CACXmViYggxbFoQ5rJcKfGd2TYPFX5Y1nLBXXqOcxERrqhEsiZQ@mail.gmail.com>
+Message-ID: <20170719145357.561564e1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+Hello,
 
- > Since [1] syslinux is build with the target toolchain in order to
- > properly build with gnu-efi package.
- > But toolchains built with binutils 2.26 break the syslinux legacy-BIOS
- > build as reported [2].
+On Wed, 19 Jul 2017 14:42:59 +0200, Peter Korsgaard wrote:
 
- > Thanks to Beno?t Allard for the investigation and the link to the
- > binutils bug [3].
+> I don't think this was ever posted on the list?
 
- > [1] 6e432d5ecb46959f3c27dbbca48e41512bb40a70
- > [2] http://lists.busybox.net/pipermail/buildroot/2017-July/196253.html
- > [3] https://sourceware.org/bugzilla/show_bug.cgi?id=19615
+Nope: when the issue to be fixed is quite obvious, I sometimes push
+directly.
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
- > Cc: Beno?t Allard <benoit.allard@greenbone.net>
+> Committed to 2017.05.x, thanks.
 
-Committed to 2017.05.x, thanks.
+Thanks!
 
-I take it that our internal 2.26.1 binutils isn't affected by this?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
