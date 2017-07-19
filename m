@@ -1,102 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 20:42:32 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] expat: security bump to
-	version 2.2.2
-Message-ID: <20170719204801.5DEDC81D8D@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 20:38:24 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] qt5base: fix qthash error
+	attribute(target("+crc")) is unknown
+Message-ID: <20170719204801.3F36880337@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=778403723ea3abd588b859e48232678b6c2af6bc
+commit: https://git.buildroot.net/buildroot/commit/?id=da0f8da25441db470784dce1e98788ca9a003b7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Changes (security fixes):
+Add patch 0005-Fix-error-attribute-target-crc-is-unknown.patch.
 
-[MOX-006]      Fix non-NULL parser parameter validation in XML_Parse;
-                 resulted in NULL dereference, previously
+Upstream: https://codereview.qt-project.org/200171
 
-Drop upstream patch.
+Fixes buildroot Bug 9916 ([1]).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b3eca095003aecde94414fd1f01a831f1af198ec)
+[1] https://bugs.busybox.net/show_bug.cgi?id=9916
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a9e053b5a8b4195aaddd97db98b0ba3dcf788638)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ----------------------
- package/expat/expat.hash                           |  8 +++---
- package/expat/expat.mk                             |  4 +--
- 3 files changed, 5 insertions(+), 36 deletions(-)
+ ...Fix-error-attribute-target-crc-is-unknown.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-deleted file mode 100644
-index 44f43e1..0000000
---- a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 602e6c78ca750c082b72f8cdf4a38839b312959f Mon Sep 17 00:00:00 2001
--From: Sebastian Pipping <sebastian@pipping.org>
--Date: Sun, 18 Jun 2017 18:55:10 +0200
--Subject: [PATCH] configure.ac: Fix mis-detection of getrandom on Debian
-- GNU/kFreeBSD (#50)
--
--There is no such thing but we need to link (not just compile) to realize.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- expat/configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 1357c9a..444c002 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
-- 
-- 
-- AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
---AC_COMPILE_IFELSE([AC_LANG_SOURCE([
--+AC_LINK_IFELSE([AC_LANG_SOURCE([
--   #include <stdlib.h>  /* for NULL */
--   #include <sys/random.h>
--   int main() {
---- 
--2.11.0
--
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 595597b..f1e1919 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.1/
--md5	d9c3baeab58774cefc2f04faf29f2cf8	expat-2.2.1.tar.bz2
--sha1	f45eb724f182776a9cacec9ed70d549e87198987	expat-2.2.1.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.2/
-+md5	1ede9a41223c78528b8c5d23e69a2667	expat-2.2.2.tar.bz2
-+sha1	891cee988b38d5d66953f62f94c3150b8810a70a	expat-2.2.2.tar.bz2
- # Calculated based on the hashes above
--sha256	1868cadae4c82a018e361e2b2091de103cd820aaacb0d6cfa49bd2cd83978885	expat-2.2.1.tar.bz2
-+sha256	4376911fcf81a23ebd821bbabc26fd933f3ac74833f74924342c29aad2c86046	expat-2.2.2.tar.bz2
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index bb6e627..a10f2c9 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.2.1
-+EXPAT_VERSION = 2.2.2
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
-@@ -14,8 +14,6 @@ EXPAT_DEPENDENCIES = host-pkgconf
- HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
- EXPAT_LICENSE_FILES = COPYING
--# for 0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
--EXPAT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+new file mode 100644
+index 0000000..92d93a8
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+@@ -0,0 +1,44 @@
++From f0c02fb22bc277e2015a18e562b551ec7b3eed9e Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 16 Jul 2017 00:05:44 +0200
++Subject: [PATCH] Fix error attribute(target("+crc")) is unknown
++
++Task-number: QTBUG-61975
++Change-Id: I0b1b55c0737dad485b5ace8e6eb7cb842589453d
++---
++ src/corelib/tools/qhash.cpp | 2 ++
++ src/corelib/tools/qsimd_p.h | 3 +++
++ 2 files changed, 5 insertions(+)
++
++diff --git a/src/corelib/tools/qhash.cpp b/src/corelib/tools/qhash.cpp
++index 1f9c05c..bbf6efb 100644
++--- a/src/corelib/tools/qhash.cpp
+++++ b/src/corelib/tools/qhash.cpp
++@@ -144,7 +144,9 @@ static inline bool hasFastCrc32()
++ }
++ 
++ template <typename Char>
+++#if defined(__aarch64__)
++ QT_FUNCTION_TARGET(CRC32)
+++#endif
++ static uint crc32(const Char *ptr, size_t len, uint h)
++ {
++     // The crc32[whbd] instructions on Aarch64/Aarch32 calculate a 32-bit CRC32 checksum
++diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
++index 023a4b0..a85d572 100644
++--- a/src/corelib/tools/qsimd_p.h
+++++ b/src/corelib/tools/qsimd_p.h
++@@ -326,7 +326,10 @@
++ #endif
++ // AArch64/ARM64
++ #if defined(Q_PROCESSOR_ARM_V8) && defined(__ARM_FEATURE_CRC32)
+++#if defined(__aarch64__)
+++// only available on aarch64
++ #define QT_FUNCTION_TARGET_STRING_CRC32      "+crc"
+++#endif
++ #  include <arm_acle.h>
++ #endif
++ 
++-- 
++2.7.4
++
