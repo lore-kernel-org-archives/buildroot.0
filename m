@@ -1,62 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:11:42 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: select
-	libgcrypt
-Message-ID: <20170720055508.7C59A7F999@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:12:10 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/apache: security
+	bump to version 2.4.27
+Message-ID: <20170720055508.AD644800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c2fbc0c5d14d52214f86c8e4437b15142b72b92
+commit: https://git.buildroot.net/buildroot/commit/?id=baf5a9d8c751b16e6c8aa4dee6577751c3d53e94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Libgrcrypt is a direct dependency of WebKitGTK+, and as such it
-should be selected.
+Fixes the following security issues:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: add missing dependency on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CVE-2017-9788 - Uninitialized memory reflection in mod_auth_digest
 
-(cherry picked from commit b61c805fcaf8980a3dbcd23c444660f7f5327ecf)
+The value placeholder in [Proxy-]Authorization headers of type 'Digest' was
+not initialized or reset before or between successive key=value assignments.
+by mod_auth_digest.
+
+Providing an initial key with no '=' assignment could reflect the stale
+value of uninitialized pool memory used by the prior request, leading to
+leakage of potentially confidential information, and a segfault.
+
+CVE-2017-9789 - Read after free in mod_http2
+
+When under stress, closing many connections, the HTTP/2 handling code would
+sometimes access memory after it has been freed, resulting in potentially
+erratic behaviour.
+
+Announcement: http://www.apache.org/dist/httpd/Announcement2.4.html
+Release notes: http://www.apache.org/dist/httpd/CHANGES_2.4.27
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cf9b7cedac14de7cf5650589bf4c37635b5438a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in    | 2 ++
- package/webkitgtk/webkitgtk.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 25f6fad..7b50a13 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	# Disabled on SuperH because of segfault
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index fe7174a..f29ae45 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,2 +1,2 @@
+-# From http://www.apache.org/dist/httpd/httpd-2.4.26.tar.bz2.sha256
+-sha256 a07eb52fafc879e0149d31882f7da63173e72df4478db4dc69f7a775b663d387 httpd-2.4.26.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
++sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index b276b8d..857e538 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-@@ -30,6 +31,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_ICU
- 	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
- 	select BR2_PACKAGE_LIBSOUP
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index e9fb66b..187885a 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -13,7 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-APPLE \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
--	enchant harfbuzz icu jpeg libgtk3 libsecret libsoup \
-+	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libxml2 libxslt sqlite webp
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
+-APACHE_VERSION = 2.4.26
++APACHE_VERSION = 2.4.27
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
