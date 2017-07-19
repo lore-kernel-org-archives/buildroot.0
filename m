@@ -1,56 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 14:36:58 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] syslinux: add missing
-	dependency on host-util-linux
-Message-ID: <20170719204756.8B19582150@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 14:48:51 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] boot/syslinux: disable
+	syslinux legacy-BIOS for broken toolchains
+Message-ID: <20170719204756.DC02F82150@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b0822dc65126ed338d9eff856fa1e88b72021a
+commit: https://git.buildroot.net/buildroot/commit/?id=b24a205b9fbe3dbeeb8688af7ff1785a58bf14e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-If util-linux is not installed system-wide on the host, the build
-fails with:
+Since [1] syslinux is built with the target toolchain in order to
+properly build with gnu-efi package. But toolchains built with
+binutils 2.26 break the syslinux legacy-BIOS build as reported at [2],
+due to binutils bug #19615.
 
-/usr/bin/gcc -Wp,-MT,isohybrid.o,-MMD,./.isohybrid.o.d -O2 -I/home/thomas/projets/buildroot/output/host/usr/include -W -Wall -Wstrict-prototypes  -Os -fomit-frame-pointer -D_FILE_OFFSET_BITS=64 -I/home/thomas/projets/buildroot/output/build/syslinux-6.03/utils -c -o isohybrid.o /home/thomas/projets/buildroot/output/build/syslinux-6.03/utils/isohybrid.c
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/utils/isohybrid.c:40:23: fatal error: uuid/uuid.h: No such file or directory
- #include <uuid/uuid.h>
-                       ^
-compilation terminated.
+Thanks to Beno??t Allard for the investigation and the link to the
+binutils bug [3].
 
-Therefore, this commit adds a dependency on host-util-linux, which
-will ensure that libuuid is available. The resulting isohybrid tool is
-really installed, and linked with libuuid:
+[1] 6e432d5ecb46959f3c27dbbca48e41512bb40a70
+[2] http://lists.busybox.net/pipermail/buildroot/2017-July/196253.html
+[3] https://sourceware.org/bugzilla/show_bug.cgi?id=19615
 
-$ readelf -d output/host/usr/bin/isohybrid
-
-Dynamic section at offset 0x3e00 contains 26 entries:
-  Tag        Type                         Name/Value
- 0x0000000000000001 (NEEDED)             Shared library: [libuuid.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
- 0x000000000000000f (RPATH)              Library rpath: [/home/thomas/projets/buildroot/output/host/usr/lib]
-
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Beno??t Allard <benoit.allard@greenbone.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d98d7d660eb89ec4e179a5bf54b46fe7bbcb127c)
+(cherry picked from commit 42638a1d124faa287bb0ae4e5a5c23df585736d7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/syslinux/syslinux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ boot/syslinux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 2b3b9a7..5a60388 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -13,7 +13,8 @@ SYSLINUX_LICENSE_FILES = COPYING
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index 299a559..da03549 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -35,6 +35,7 @@ config BR2_TARGET_SYSLINUX_PXELINUX
  
- SYSLINUX_INSTALL_IMAGES = YES
- 
--SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux
-+# host-util-linux needed to provide libuuid when building host tools
-+SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux host-util-linux
- 
- ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
- SYSLINUX_TARGET += bios
+ config BR2_TARGET_SYSLINUX_MBR
+ 	bool "install mbr"
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+ 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	help
+ 	  Install the legacy-BIOS 'mbr' image, to boot off a
