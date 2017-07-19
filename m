@@ -1,81 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 23:57:57 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-fusion: fix build
-	issue with Linux >= 4.7
-Message-ID: <20170720055506.A7F59800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:02:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] xvisor: fix bogus check
+	on XVISOR_ARCH
+Message-ID: <20170720055507.1572181EB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=840a4f40ed9e128896bdbe2b2483cec156dd5709
+commit: https://git.buildroot.net/buildroot/commit/?id=76bde2fc305630bf5c1d01de6f4e76216e39c2a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The size parameter from sock_recvmsg() was removed from Linux kernel
-API since 4.7. This commit adjusts the existing
-0004-Port-one-one_udp.c-to-Linux-4.1.patch to fix the build with Linux
->= 4.7.
+The XVISOR_ARCH check added in commit
+117fd5dfbc756c4f2b4aef97fc2b568528c66df7 ("xvisor: fix build on
+AArch64") broke Buildroot entirely on all architectures except ARM,
+AArch64 and x86-64, because the $(error ...) test was not enclosed
+inside a condition that made sure the xvisor package was enabled.
 
-Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
-[Thomas: improved commit title/log.]
+This commit fixes that, and allows Buildroot to be usable again on all
+architectures.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit 0ae2cab4167cb978718dcbfe9fa006b126522b65)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 27ce235cdb996dc691c28a95f6acc9c479ef1fb8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ package/xvisor/xvisor.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-index e1bff64..3ee4dac 100644
---- a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-+++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-@@ -24,12 +24,20 @@ one/one_udp.c: In function 'ksocket_send_iov':
- one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
+diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
+index 17edc2c..c7afb71 100644
+--- a/package/xvisor/xvisor.mk
++++ b/package/xvisor/xvisor.mk
+@@ -30,9 +30,13 @@ ifeq ($(BR2_x86_64),y)
+ XVISOR_ARCH = x86
+ else ifeq ($(BR2_arm)$(BR2_aarch64),y)
+ XVISOR_ARCH = arm
+-else
++endif
++
++ifeq ($(BR2_PACKAGE_XVISOR)$(BR_BUILDING),yy)
++ifeq ($(XVISOR_ARCH),)
+ $(error "Architecture not supported by XVisor")
+ endif
++endif
  
- Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+
-+Kernel commit 2da62906b1e29 dropped the size parameter in sock_recvmsg
-+since 4.7
-+
-+In function 'ksocket_receive'
-+one/one_udp.c:235:13: error: too many arguments to function 'sock_recvmsg'
-+
-+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
- ---
-- one/one_udp.c | 30 +++++++++++++++---------------
-- 1 file changed, 15 insertions(+), 15 deletions(-)
-+ one/one_udp.c | 34 +++++++++++++++++++---------------
-+ 1 file changed, 19 insertions(+), 15 deletions(-)
- 
- diff --git a/one/one_udp.c b/one/one_udp.c
--index 26b9e6a1f729..b1daae164cdf 100644
-+index 26b9e6a..9b59529 100644
- --- a/one/one_udp.c
- +++ b/one/one_udp.c
- @@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
-@@ -78,7 +86,7 @@ index 26b9e6a1f729..b1daae164cdf 100644
-       struct iovec iov;
-       mm_segment_t oldfs;
-       int size = 0;
--@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-+@@ -213,18 +215,20 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-       iov.iov_base = buf;
-       iov.iov_len = len;
-  
-@@ -97,3 +105,14 @@ index 26b9e6a1f729..b1daae164cdf 100644
-  
-       oldfs = get_fs();
-       set_fs(KERNEL_DS);
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,7,0) // commit 2da62906b1e29
-+      size = sock_recvmsg(sock,&msg,len,msg.msg_flags);
-++#else
-++     size = sock_recvmsg(sock, &msg,msg.msg_flags);
-++#endif
-+      set_fs(oldfs);
-+ 
-+      return size;
-+-- 
-+2.11.0
-+
+ XVISOR_MAKE_ENV = \
+ 	ARCH=$(XVISOR_ARCH) \
