@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:05:49 +0200
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: select libgcrypt
-In-Reply-To: <20170705194653.19890-2-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Wed, 5 Jul 2017 22:46:53 +0300")
-References: <20170705194653.19890-1-aperez@igalia.com>
- <20170705194653.19890-2-aperez@igalia.com>
-Message-ID: <87k2348qte.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Jul 2017 16:08:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: bump version to 2.4.27
+In-Reply-To: <20170711182526.25410-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 11 Jul 2017 20:25:26 +0200")
+References: <20170711182526.25410-1-bernd.kuhls@t-online.de>
+Message-ID: <87fuds8qoa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Libgrcrypt is a direct dependency of WebKitGTK+, and as such it
- > should be selected.
+ > Announcement: http://www.apache.org/dist/httpd/Announcement2.4.html
+ > Release notes: http://www.apache.org/dist/httpd/CHANGES_2.4.27
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed to 2017.02.x and 2017.05.x, thanks.
+Committed to 2017.02.x and 2017.05.x after adjusting the commit message
+to make it clear that this is a security bump, thanks.
 
 -- 
 Bye, Peter Korsgaard
