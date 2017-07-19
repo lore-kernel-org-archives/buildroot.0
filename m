@@ -1,56 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 22:54:24 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] syslinux: add missing
-	dependency on host-util-linux
-Message-ID: <20170720055506.1336C82147@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 23:15:11 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] toolchain: CodeSourcery
+	AMD64 affected by PR19615
+Message-ID: <20170720055506.48AAE800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=771aa02d4d9bb6ffe7854c9ba1d37f6d64b7c53c
+commit: https://git.buildroot.net/buildroot/commit/?id=31477ee2799019aa93e28fb4fd50d394afae7a57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-If util-linux is not installed system-wide on the host, the build
-fails with:
-
-/usr/bin/gcc -Wp,-MT,isohybrid.o,-MMD,./.isohybrid.o.d -O2 -I/home/thomas/projets/buildroot/output/host/usr/include -W -Wall -Wstrict-prototypes  -Os -fomit-frame-pointer -D_FILE_OFFSET_BITS=64 -I/home/thomas/projets/buildroot/output/build/syslinux-6.03/utils -c -o isohybrid.o /home/thomas/projets/buildroot/output/build/syslinux-6.03/utils/isohybrid.c
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/utils/isohybrid.c:40:23: fatal error: uuid/uuid.h: No such file or directory
- #include <uuid/uuid.h>
-                       ^
-compilation terminated.
-
-Therefore, this commit adds a dependency on host-util-linux, which
-will ensure that libuuid is available. The resulting isohybrid tool is
-really installed, and linked with libuuid:
-
-$ readelf -d output/host/usr/bin/isohybrid
-
-Dynamic section at offset 0x3e00 contains 26 entries:
-  Tag        Type                         Name/Value
- 0x0000000000000001 (NEEDED)             Shared library: [libuuid.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
- 0x000000000000000f (RPATH)              Library rpath: [/home/thomas/projets/buildroot/output/host/usr/lib]
-
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d98d7d660eb89ec4e179a5bf54b46fe7bbcb127c)
+(cherry picked from commit 73143ab89472504f70f556550ce2d16d489bfbab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/syslinux/syslinux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ toolchain/toolchain-common.in                                        | 5 +++++
+ .../toolchain-external-codesourcery-amd64/Config.in                  | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index a88885b..f07e3b9 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -13,7 +13,8 @@ SYSLINUX_LICENSE_FILES = COPYING
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 96d5709..38baaa9 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -7,6 +7,11 @@ source "package/gdb/Config.in.host"
  
- SYSLINUX_INSTALL_IMAGES = YES
+ comment "Toolchain Generic Options"
  
--SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux
-+# host-util-linux needed to provide libuuid when building host tools
-+SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux host-util-linux
- 
- ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
- SYSLINUX_TARGET += bios
++# https://sourceware.org/bugzilla/show_bug.cgi?id=19615
++# Affect toolchains built with binutils 2.26 (fixed in binutils 2.26.1).
++config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
++	bool
++
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
+ # exception_ptr, nested_exception, and future from libstdc++ are not
+ # available for architectures not supporting always lock-free atomic
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+index 32d79eb..101e227 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+@@ -11,6 +11,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615 # based-on binutils-2.26
+ 	help
+ 	  Sourcery CodeBench toolchain for the amd64 (x86_64)
+ 	  architectures, from Mentor Graphics. It uses gcc 6.2,
