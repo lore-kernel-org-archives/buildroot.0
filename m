@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jul 2017 01:17:31 +0200
-Subject: [Buildroot] [PATCH v7 1/9] package/patchelf: add patch for
- rpath sanitization under a root directory
-In-Reply-To: <1499273594-12106-2-git-send-email-wg@grandegger.com>
+Date: Thu, 20 Jul 2017 01:31:21 +0200
+Subject: [Buildroot] [PATCH v7 3/9] core: sanitize RPATH in staging tree
+ at the end of target finalization
+In-Reply-To: <1499273594-12106-4-git-send-email-wg@grandegger.com>
 References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-2-git-send-email-wg@grandegger.com>
-Message-ID: <7d636c88-385f-63b4-b3af-36bf6309a9e7@mind.be>
+ <1499273594-12106-4-git-send-email-wg@grandegger.com>
+Message-ID: <1de12c00-3be6-7aed-3ddf-eccd0be0edb4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,54 @@ To: buildroot@busybox.net
 
 
 On 05-07-17 18:53, Wolfgang Grandegger wrote:
-> The patch allows to use patchelf to sanitize the rpath of the buildroot
-> libraries and binaries using the option "--make-rpath-relative <rootdir>".
-> Recent versions of patchelf will not built on old Debian and RHEL systems
-> due to C++11 constructs. Therefore we stick with v0.9 for the time being.
+> We need that pachelf utility for RPATH sanitization.
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index a22e87f..cdc3a64 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -456,6 +456,9 @@ else
+>  export BR_NO_CCACHE
+>  endif
+>  
+> +# We need patchelf for RPATH sanitization
+> +PACKAGES += host-patchelf
 
- One more thing (but that can be a completely separate follow-up patch).
+ This really should be a separate patch. Also, I would do it differently.
+Instead of adding it explicitly to PACKAGES, add a Config.in.host for patchelf,
+with a hidden symbol BR2_PACKAGE_HOST_PATCHELF, and default it to y. We want to
+create Config.in.host files with hidden symbols for all host packages, so doing
+it that way is already a step in the right direction.
 
- Currently, in most cases, we clear the rpath completely. But patchelf also has
-functionality to remove the RUNPATH entry in the dynamic section. Although this
-doesn't really make the file smaller (the space for the original string is kept,
-the old string is just overwritten with X's), removing the RUNPATH entry could
-speed up dynamic loading slightly. It's also just weird to see these empty
-RUNPATH strings when you do a readelf.
 
- The code to do that is already there, in the rpRemove section. It's pretty
-simple to factor it out.
+> +
+>  # Scripts in support/ or post-build scripts may need to reference
+>  # these locations, so export them so it is easier to use
+>  export BR2_CONFIG
+> @@ -720,6 +723,9 @@ endif
+>  		$(call MESSAGE,"Executing post-build script $(s)"); \
+>  		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>  
+> +	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
+> +	$(TOPDIR)/support/scripts/fix-rpath staging
+
+ I don't think we should do this in target-finalize. But I'll discuss this in
+patch 5.
+
 
  Regards,
  Arnout
+
+> +
+>  .PHONY: target-post-image
+>  target-post-image: $(TARGETS_ROOTFS) target-finalize
+>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
