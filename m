@@ -1,81 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 14:57:26 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-fusion: fix build
-	issue with Linux >= 4.7
-Message-ID: <20170719204757.2370E81696@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 15:37:07 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] linux: bump default
+	version to 4.11.9
+Message-ID: <20170719204757.731EF7FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=500b9d0cd03bbb10b1c6e82ffb042a5d718309ad
+commit: https://git.buildroot.net/buildroot/commit/?id=803c35057e5a86919d9fb82c0d426fdc09796621
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-The size parameter from sock_recvmsg() was removed from Linux kernel
-API since 4.7. This commit adjusts the existing
-0004-Port-one-one_udp.c-to-Linux-4.1.patch to fix the build with Linux
->= 4.7.
-
-Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
-[Thomas: improved commit title/log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit 0ae2cab4167cb978718dcbfe9fa006b126522b65)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bfe176bbda3d0f3e6982fcdc873a8fb0a59a53a8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-index e1bff64..3ee4dac 100644
---- a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-+++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-@@ -24,12 +24,20 @@ one/one_udp.c: In function 'ksocket_send_iov':
- one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
+diff --git a/linux/Config.in b/linux/Config.in
+index 281c437..c110384 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
- Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+
-+Kernel commit 2da62906b1e29 dropped the size parameter in sock_recvmsg
-+since 4.7
-+
-+In function 'ksocket_receive'
-+one/one_udp.c:235:13: error: too many arguments to function 'sock_recvmsg'
-+
-+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
- ---
-- one/one_udp.c | 30 +++++++++++++++---------------
-- 1 file changed, 15 insertions(+), 15 deletions(-)
-+ one/one_udp.c | 34 +++++++++++++++++++---------------
-+ 1 file changed, 19 insertions(+), 15 deletions(-)
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.11.8)"
++	bool "Latest version (4.11.9)"
  
- diff --git a/one/one_udp.c b/one/one_udp.c
--index 26b9e6a1f729..b1daae164cdf 100644
-+index 26b9e6a..9b59529 100644
- --- a/one/one_udp.c
- +++ b/one/one_udp.c
- @@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
-@@ -78,7 +86,7 @@ index 26b9e6a1f729..b1daae164cdf 100644
-       struct iovec iov;
-       mm_segment_t oldfs;
-       int size = 0;
--@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-+@@ -213,18 +215,20 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-       iov.iov_base = buf;
-       iov.iov_len = len;
-  
-@@ -97,3 +105,14 @@ index 26b9e6a1f729..b1daae164cdf 100644
-  
-       oldfs = get_fs();
-       set_fs(KERNEL_DS);
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,7,0) // commit 2da62906b1e29
-+      size = sock_recvmsg(sock,&msg,len,msg.msg_flags);
-++#else
-++     size = sock_recvmsg(sock, &msg,msg.msg_flags);
-++#endif
-+      set_fs(oldfs);
-+ 
-+      return size;
-+-- 
-+2.11.0
-+
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.11.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.11.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
