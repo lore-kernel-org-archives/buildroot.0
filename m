@@ -1,39 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 20:43:09 +0200
-Subject: [Buildroot] [PATCH] expat: fix build on and for kernel older
-	than 3.17
-In-Reply-To: <98035abe055ba7ba1c53deaed638844210c094f4.1500264698.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 17 Jul 2017 07:11:38 +0300")
-References: <98035abe055ba7ba1c53deaed638844210c094f4.1500264698.git.baruch@tkos.co.il>
-Message-ID: <87r2xc5kua.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 19 Jul 2017 21:43:42 +0300
+Subject: [Buildroot] [PATCH] iproute2: bump to version 4.12.0
+In-Reply-To: <20170718235550.553abccb@windsurf>
+References: <47939b206ec286f2ac9226b96a5b65fd2aa75991.1500377145.git.baruch@tkos.co.il>
+ <20170718235550.553abccb@windsurf>
+Message-ID: <20170719184342.xjgcj6dssd5zlksm@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hi Thomas,
 
- > The expat build system now fails when the getrandom() system call is not
- > supported. This affect both host and target builds. Define XML_POOR_ENTROPY
- > for target kernels older than 3.17 to fix the build. For the host package
- > define XML_POOR_ENTROPY unconditionally since we have no easy way to know the
- > host kernel version. Note that expat will still use getrandom() on the host
- > when it is available, we don't make security any worse.
+On Tue, Jul 18, 2017 at 11:55:50PM +0200, Thomas Petazzoni wrote:
+> On Tue, 18 Jul 2017 14:25:45 +0300, Baruch Siach wrote:
+> > Drop upstream patch.
+> > 
+> > Add uClibc-ng compatibility fix. This is needed due to missing definition in
+> > netinet/in.h.
+> > 
+> > Correct the license. Source files license headers include the GPL "or ... any
+> > later version" language.
+> 
+> If I'm not mistaken, this change in the license is not related to the
+> 4.12.0 bump. I looked at the 4.11.0 version, and it already contains
+> "or .. any later version".
+> 
+> So it seems like the license change should be in a separate patch,
+> which should be backported to our LTS/maintenance branches.
+> 
+> Could you double check this and if you agree send separate patches?
 
- > Fixes (host):
- > http://autobuild.buildroot.net/results/928/928dc2b56d931da84055fdfe78929d1f956de53b/
- > http://autobuild.buildroot.net/results/ee9/ee90d0a456cbce4c7f22e5f61006612bd9ba30d5/
- > http://autobuild.buildroot.net/results/dac/dac7231242123ae3dcaa6bbdd65b44fe8d8cb20c/
+The "any later version" language is there at least since the initial git 
+import. I'll split this change out and repost.
 
- > Fixes (target):
- > http://autobuild.buildroot.net/results/308/308e830219fdfebb5aa6aef51c1dc784254998f6/
- > http://autobuild.buildroot.net/results/73f/73fa946b0a2205e946ad414079f88e4bdb416f00/
- > http://autobuild.buildroot.net/results/9d7/9d7bad22ace7fa211b31d752a2255e07cede68be/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2017.02.x and 2017.05.x, thanks.
+baruch
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
