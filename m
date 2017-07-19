@@ -1,72 +1,59 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 19 Jul 2017 16:55:11 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/qt5: bump latest version to
- 5.9.1
-In-Reply-To: <3abfa37d-9376-d7eb-b61d-bd406c02d259@microchip.com>
-References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
- <20170719233013.43e0d27b@windsurf>
- <3abfa37d-9376-d7eb-b61d-bd406c02d259@microchip.com>
-Message-ID: <cfc3c4be-eb85-552b-7c4b-14f3caed79a2@microchip.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Jul 2017 01:58:17 +0200
+Subject: [Buildroot] [PATCH v7 6/9] core: install relocation script and
+ location at the end of the build
+In-Reply-To: <1499273594-12106-7-git-send-email-wg@grandegger.com>
+References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
+ <1499273594-12106-7-git-send-email-wg@grandegger.com>
+Message-ID: <f55fe1f5-7f21-24af-e242-f31e1f444070@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/19/2017 04:48 PM, Joshua Henderson wrote:
-> On 07/19/2017 02:30 PM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Thu, 13 Jul 2017 09:18:43 -0700, Joshua Henderson wrote:
->>> Qt 5.9 is a Long Term Support version [1]. Some license file changes are
->>> involved, a new dependency on pcre2, and some filename changes.  qt5webkit
->>> popped back into the picture for 5.9.1 after being absent for 5.9.0
->>> "officially." QT5_SNAPSHOTS_SITE is removed with this commit as it is not used
->>> for qtwebkit anymore.
->>>
->>> This removes the following patches that have been upstreamed for 5.9.1:
->>>
->>> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [2]
->>> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [3]
->>> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [4]
->>> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [5]
->>> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch [6]
->>> - qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch [7]
->>>
->>> [1] https://www.qt.io/qt5-9/
->>> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
->>> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
->>> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
->>> [5] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
->>> [6] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=18d49808db46add078d9d4bcffaac5361d5c7269
->>> [7] https://code.qt.io/cgit/qt/qtwebkit.git/commit/?id=548380af096f8277e460383c81a4ecdf2b77523f
->>>
->>> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
->>> Cc: Julien Corjon <corjon.j@ecagroup.com>
->>> Cc: Brent Sink <brents_3@hotmail.com>
->>> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
->>>
->>> ---
->>
->> I've applied to master. I just changed two things:
->>
->>  - The remaining qt5base patch was still number 0005-<something>, so I
->>    renamed it to 0001-<something>.
->>
->>  - It was a bit odd to have one qt5webkit patch in the 5.6.2/ subdir,
->>    and the two other patches outside of the per-version directory.
->>    Instead, I've duplicated the patches, so that it's clear what is
->>    going on for 5.6.2/ and 5.9.1/.
->>
->> It would be nice if you could keep an eye on
->> http://autobuild.buildroot.org over the next days and see if there's
->> any failure Qt5 related. It can happen in one of the qt5 packages
->> themselves, but also in other packages using qt5.
-> 
-> OK.  I see it on branch qt-bump only currently.  I will keep an eye out.
-> 
-> Also, please do not apply v2 2/2 of this series (add qt5webkit) as I have found
 
-s/qt5webkit/qt5wayland/
 
-Josh
+On 05-07-17 18:53, Wolfgang Grandegger wrote:
+> The script "relocate-sdk.sh" is installed into the top directory of
+> the SDK (HOST_DIR) and the SDK location path is stored in the file
+> "HOST_DIR/share/buildroot/sdk-location"-
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ However, while testing this I noticed a problem in relocate-sdk.sh: it uses a
+bashism on line 43: < <(...) but the shebang is /bin/sh. I think the best
+solution is to convert it into a normal pipe, since there is no real reason
+there to use the < <(...) construct.
+
+ Regards,
+ Arnout
+
+> ---
+>  Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 2a265e0..32f85e8 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -559,6 +559,8 @@ world: target-post-image host-finalize
+>  host-finalize:
+>  	@$(call MESSAGE,"Rendering the SDK relocatable")
+>  	$(TOPDIR)/support/scripts/fix-rpath host
+> +	install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)
+> +	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+>  
+>  # When creating HOST_DIR, also symlink usr -> .
+>  $(HOST_DIR):
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
