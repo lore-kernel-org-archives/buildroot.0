@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 22:45:18 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/nodejs: use shared c-ares
-In-Reply-To: <1500378343-22978-1-git-send-email-martin@barkynet.com>
+Date: Wed, 19 Jul 2017 22:46:00 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/nodejs: use shared libuv
+In-Reply-To: <1500378343-22978-3-git-send-email-martin@barkynet.com>
 References: <1500378343-22978-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170719224518.6d365642@windsurf>
+ <1500378343-22978-3-git-send-email-martin@barkynet.com>
+Message-ID: <20170719224600.6edd899e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Jul 2017 12:45:41 +0100, Martin Bark wrote:
+On Tue, 18 Jul 2017 12:45:43 +0100, Martin Bark wrote:
 
 > diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> index 3022f9c..37d63d0 100644
+> index f02b9a7..d3cb006 100644
 > --- a/package/nodejs/Config.in
 > +++ b/package/nodejs/Config.in
-> @@ -25,6 +25,7 @@ config BR2_PACKAGE_NODEJS
->  	# linking, but that's too much of a corner case to support it.
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_C_ARES
+> @@ -5,15 +5,17 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+>  	default y if BR2_mipsel && !BR2_MIPS_SOFT_FLOAT
+>  	default y if BR2_aarch64 || BR2_i386 || BR2_x86_64
+>  
+> -comment "nodejs needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.8, wchar"
+> +comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.8, wchar"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+> -	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+>  		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
+>  
+>  config BR2_PACKAGE_NODEJS
+>  	bool "nodejs"
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
 
-Alphabetic ordering here and in <pkg>_DEPENDENCIES would have been
-better. I've fixed this and applied all three patches. Thanks!
+BR2_TOOLCHAIN_HAS_SYNC_4 really is an architecture dependency (we don't
+show a Config.in comment for it), so I've moved it under
+BR2_PACKAGE_NODEJS_ARCH_SUPPORTS, so it doesn't have to be duplicated.
+
+Thanks!
 
 Thomas
 -- 
