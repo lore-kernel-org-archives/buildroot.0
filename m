@@ -1,54 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jul 2017 10:16:20 +0200
-Subject: [Buildroot] [RFC] best way to fix a valgrind gcc 5 compile
- error on MIPS Octeon2
-In-Reply-To: <88778A28-0DC4-4E6C-ADBC-D2D8E48392E2@exablox.com>
-References: <CAAnoztGZF5pH9jfxt4TN9--HwdvzVus1L+5QNPcQ76H-cbfGqw@mail.gmail.com>
- <20170718100126.3315e58f@windsurf>
- <88778A28-0DC4-4E6C-ADBC-D2D8E48392E2@exablox.com>
-Message-ID: <20170719101620.065670bb@windsurf>
+From: Glenn Coombs <glenn.coombs@gmail.com>
+Date: Wed, 19 Jul 2017 17:17:43 +0800
+Subject: [Buildroot] How to build the qt plugin in gst1-plugins-bad ?
+Message-ID: <CADujc4q8d1AMFmvoD_62qnOkNSntuCCGCe4+Pkatp4P382srfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Adding Vicente in Cc.
+I would like to use the gstreamer sink called qmlglsink, which is part of
+the qt plugin in the gst1-plugins-bad package.  My target system is an
+imx6q using EGLFS (so no X11 or Wayland).  When looking at the config.log
+file in the build/gst1-plugins-bad-1.10.4/ directory I can see that the qt
+plugin is not selected for building due to --disable-qt being passed to the
+configure script.
 
-On Wed, 19 Jul 2017 00:04:39 +0000, Charles Hardin wrote:
-> Looks like pilot error - we were using a gcc compiled toolchain and even though
-> this sets the ?march? to octeon2 - the gcc results and wrappers don?t override the setup
-> for march flags. This just means that in valgrind - our build results in the FLAG_MIPS64
-> getting set to ?-march=mips64? and not in a using a default config with something like
-> BR2_mips_64r2=y.
+I modified the Config.in and gst1-plugins-bad.mk files in the
+buildroot/package/gstreamer1/gst1-plugins-bad/ directory to add the option
+to pass --enable-qt to the configure script and that got me a bit further.
+The configure script now checks to build the qt plugin but decides against
+it because it can't work out the Qt Windowing system:
 
-Sorry, but I don't really understand what you say here. So you added
-additional MIPS architecture variants (octeon, octeon2, octeon3), and
-you were using this new BR2_mips_octeon2=y option. So far so good,
-octeon, octeon2 and octeon3 are valid MIPS architecture variants for
-gcc (and perhaps it would be good to have them in Buildroot).
+configure:50115: checking for QT
+configure:50123: $PKG_CONFIG --exists --print-errors "Qt5Core Qt5Gui Qt5Qml
+Qt5Quick >= 5.4.0"
+configure:50126: $? = 0
+configure:50141: $PKG_CONFIG --exists --print-errors "Qt5Core Qt5Gui Qt5Qml
+Qt5Quick >= 5.4.0"
+configure:50144: $? = 0
+configure:50184: result: yes
+configure:50193: checking for moc-qt5
+configure:50226: result: no
+configure:50193: checking for moc
+configure:50211: found
+/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/moc
+configure:50223: result:
+/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/moc
+configure:50239: checking for rcc-qt5
+configure:50272: result: no
+configure:50239: checking for rcc
+configure:50257: found
+/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/rcc
+configure:50269: result:
+/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/rcc
+configure:50285: checking for uic-qt5
+configure:50318: result: no
+configure:50285: checking for uic
+configure:50303: found
+/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/uic
+configure:50315: result:
+/opt/porky/dev-new-kernel/imx6qdtibrd0208/host/usr/bin/uic
+configure:50774: WARNING: Could not find any Qt Windowing integration
 
-However, did you adjust the BR2_GCC_TARGET_ARCH definition in
-arch/Config.in.mips to properly associate those MIPS cores to the right
--march option? Indeed you must add something like:
+I'm not sure why the qt plugin is explicitly disabled - is there a known
+issue with building this plugin ?  Can anybody help with what further
+options I might need to set to get it to build ?
 
-config BR2_GCC_TARGET_ARCH
-	...
-	default "octeon"	if BR2_mips_octeon
-	default "octeon2"	if BR2_mips_octeon2
-	default "octeon3"	if BR2_mips_octeon3
+Thanks,
 
-This will set --with-arch=octeon2 when building gcc.
-
-Can you try with this? I believe it would be useful to have the Octeon
-family supported in Buildroot, as they seem to be quite popular.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+--
+Glenn
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170719/b422d472/attachment.html>
