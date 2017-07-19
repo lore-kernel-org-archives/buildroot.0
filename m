@@ -1,98 +1,100 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Tue, 18 Jul 2017 15:21:58 -0700
-Subject: [Buildroot] [PATCH] package/linux-tools: add tmon
-In-Reply-To: <1500415831-17747-1-git-send-email-mmayer@broadcom.com>
-References: <1500415831-17747-1-git-send-email-mmayer@broadcom.com>
-Message-ID: <CAGt4E5s8_4cJNQvu2oH-D=9zTiT9c=rYcrzMdp0poBBB8Si7XQ@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 18 Jul 2017 23:02:26 -0300
+Subject: [Buildroot] [PATCH 2/2] support/testing: add test of BR2_CCACHE
+ with an external toolchain
+References: <2bb2847d-c094-2319-5de2-9ea540acf8bf@mind.be>
+Message-ID: <596ebdb223c47_3a713fbb44b45304469cb@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, I made some tweaks after sending this out. I won't re-send now
-and will wait for additional comments before sending the updated
-revision. For now, I'll just mention what I changed.
+Hello,
 
-On 18 July 2017 at 15:10, Markus Mayer <mmayer@broadcom.com> wrote:
-> Add the tmon package to linux-tools.
+On Tue, Jul 18, 2017 at 06:38 AM, Arnout Vandecappelle wrote:
 
-Changed to
+> On 15-07-17 05:07, Ricardo Martincoski wrote:
+>> [snip]
+>>> +        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
+>> 
+>> 3 nits:
+>> - why not += ?
+> 
+>  Because config is initialized as a class member, and += would update the class
+> member instead of the instance member like we want. As it happens, this test is
+> executed last so it doesn't matter, but if any test comes after it, it would get
 
-    Add the tmon kernel tool to linux-tools.
+From command line there is no guarantee on execution order when using -t.
 
-Since "tmon" isn't a package. linux-tools is the package.
+In my tests without -t I observe the testcases being executed in a case
+insensitive reverse alphabetical order, no matter if I move one test to another
+place in the file.
 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->
-> This patch assumes that
-> http://lists.busybox.net/pipermail/buildroot/2017-July/198216.html has
-> already been applied with the tweak mentioned in
-> http://lists.busybox.net/pipermail/buildroot/2017-July/198218.html
->
->  package/linux-tools/Config.in             |  7 +++++++
->  package/linux-tools/linux-tool-tmon.mk.in | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 37 insertions(+)
->  create mode 100644 package/linux-tools/linux-tool-tmon.mk.in
->
-> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-> index 9d5bf7a..a7f8056 100644
-> --- a/package/linux-tools/Config.in
-> +++ b/package/linux-tools/Config.in
-> @@ -77,4 +77,11 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
->         depends on BR2_USE_MMU
->         depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->
-> +config BR2_PACKAGE_LINUX_TOOLS_TMON
-> +       bool "tmon"
-> +       select BR2_PACKAGE_LINUX_TOOLS
-> +       help
-> +         tmon is a terminal-based tool (using curses) that allows access
-> +         thermal information about the system.
+$ support/testing/run-tests -d d -o o -k tests.toolchain.test_external
+22:32:39 TestExternalToolchainSourceryArmv7       Starting
+22:32:43 TestExternalToolchainSourceryArmv7       Cleaning up
+.22:32:43 TestExternalToolchainSourceryArmv5       Starting
+22:32:49 TestExternalToolchainSourceryArmv5       Cleaning up
+.22:32:49 TestExternalToolchainSourceryArmv4       Starting
+22:32:54 TestExternalToolchainSourceryArmv4       Cleaning up
+.22:32:54 TestExternalToolchainLinaroArm           Starting
+22:32:58 TestExternalToolchainLinaroArm           Cleaning up
+.22:32:58 TestExternalToolchainCtngMusl            Starting
+22:33:01 TestExternalToolchainCtngMusl            Cleaning up
+.22:33:01 TestExternalToolchainCCache              Starting
+22:33:04 TestExternalToolchainCCache              Cleaning up
+.22:33:04 TestExternalToolchainBuildrootuClibc     Starting
+22:33:08 TestExternalToolchainBuildrootuClibc     Cleaning up
+.22:33:08 TestExternalToolchainBuildrootMusl       Starting
+22:33:11 TestExternalToolchainBuildrootMusl       Cleaning up
+.
 
-Changed to:
+But I guess you are talking about gitlab. I never used it.
 
-        tmon is a terminal-based tool (using curses) that allows the
-        user to access thermal information about the system.
+> the extraconfig as well...
+> 
+>  Cfr. the following test:
+> 
+> In [49]: class Foo:
+>     ...:     foo = [0]
+>     ...:
+> 
+> In [50]: class Foo1(Foo):
+>     ...:     def __init__(self):
+>     ...:         self.foo += [1]
+>     ...:
+> 
+> In [51]: Foo1().foo
+> Out[51]: [0, 1]
+> 
+> In [52]: Foo1().foo
+> Out[52]: [0, 1, 1]
+> 
+> In [53]: class Foo2(Foo):
+>     ...:     def __init__(self):
+>     ...:         self.foo = self.foo + [2]
+>     ...:
+> 
+> In [54]: Foo2().foo
+> Out[54]: [0, 1, 1, 2]
+> 
+> In [55]: Foo2().foo
+> Out[55]: [0, 1, 1, 2]
 
->  endmenu
-> diff --git a/package/linux-tools/linux-tool-tmon.mk.in b/package/linux-tools/linux-tool-tmon.mk.in
-> new file mode 100644
-> index 0000000..1330ea6
-> --- /dev/null
-> +++ b/package/linux-tools/linux-tool-tmon.mk.in
-> @@ -0,0 +1,30 @@
-> +################################################################################
-> +#
-> +# tmon
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += tmon
-> +
-> +TMON_DEPENDENCIES = ncurses
-> +TMON_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
-> +       CC=$(TARGET_CC) \
-> +       PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
-> +
-> +define TMON_BUILD_CMDS
-> +       $(Q)if ! grep install $(LINUX_DIR)/tools/thermal/tmon/Makefile >/dev/null 2>&1 ; then \
-> +               echo "Your kernel version is too old and does not have the tmon tool." ; \
-> +               echo "At least kernel 3.13 must be used." ; \
-> +               exit 1 ; \
-> +       fi
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-> +               $(TMON_MAKE_OPTS) \
-> +               tmon
-> +endef
-> +
-> +define TMON_INSTALL_TARGET_CMDS
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-> +               $(TMON_MAKE_OPTS) \
-> +               INSTALL_ROOT=$(TARGET_DIR) \
-> +               tmon_install
-> +endef
-> --
-> 2.7.4
->
+The same does not apply to strings, only to mutable objects.
+
+But if i.e. for some reason we change the type of config from string to an array
+of lines the += would need to be changed, while your code would still work.
+
+[snip]
+>> with the 4 nits fixed
+>> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> 
+>  Can you confirm that this still stands if I don't do the +=, as long as the
+> line stays below 79 characters?
+
+Sure. It still stands without += .
+
+Regards,
+Ricardo
