@@ -1,75 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 15:39:12 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] xvisor: fix build on
-	AArch64
-Message-ID: <20170719204757.88E8C81D7D@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 15:39:49 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] xvisor: fix bogus check
+	on XVISOR_ARCH
+Message-ID: <20170719204757.993A97FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6e0807ca1cfa440a28025ad78370b6b12ae3ec5
+commit: https://git.buildroot.net/buildroot/commit/?id=0fcc2c1da98af7f80f8e3baae92078ed99b3d173
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Xvisor was failing to build on AArch64 with:
+The XVISOR_ARCH check added in commit
+117fd5dfbc756c4f2b4aef97fc2b568528c66df7 ("xvisor: fix build on
+AArch64") broke Buildroot entirely on all architectures except ARM,
+AArch64 and x86-64, because the $(error ...) test was not enclosed
+inside a condition that made sure the xvisor package was enabled.
 
-package/xvisor/xvisor.mk:60: *** No Xvisor defconfig name specified, check your BR2_PACKAGE_XVISOR_DEFCONFIG setting.  Stop.
-
-The first problem is that the Config.in file had a typo: it was using
-BR2_AARCH64 instead of BR2_aarch64, and therefore the
-BR2_PACKAGE_XVISOR_DEFCONFIG variable had no value.
-
-Once this is fixed, another problem occurs: the ARCH variable needs to
-be specified as "arm" for XVisor, for both ARM and AArch64. Therefore,
-a XVISOR_ARCH variable is introduced, which is calculated according to
-the Buildroot configuration options. Only x86-64, arm and aarch64 are
-supported by Xvisor currently, so it remains simple.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/1719a63ff257f13634a06a14327abfb327984101/
+This commit fixes that, and allows Buildroot to be usable again on all
+architectures.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 117fd5dfbc756c4f2b4aef97fc2b568528c66df7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 27ce235cdb996dc691c28a95f6acc9c479ef1fb8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xvisor/Config.in |  2 +-
- package/xvisor/xvisor.mk | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/xvisor/xvisor.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
-index 1f8fd1f..c9f7429 100644
---- a/package/xvisor/Config.in
-+++ b/package/xvisor/Config.in
-@@ -35,7 +35,7 @@ config BR2_PACKAGE_XVISOR_DEFCONFIG
- 	default "generic-v5" if BR2_ARM_CPU_ARMV5
- 	default "generic-v6" if BR2_ARM_CPU_ARMV6
- 	default "generic-v7" if BR2_ARM_CPU_ARMV7A
--	default "generic-v8" if BR2_AARCH64
-+	default "generic-v8" if BR2_aarch64
- 	default "x86_64_generic" if BR2_x86_64
- 	depends on BR2_PACKAGE_XVISOR_USE_DEFCONFIG
- 	help
 diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index 141a0e3..8be4be9 100644
+index 8be4be9..addd7e6 100644
 --- a/package/xvisor/xvisor.mk
 +++ b/package/xvisor/xvisor.mk
-@@ -26,8 +26,16 @@ XVISOR_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE))
- endif
- XVISOR_KCONFIG_EDITORS = menuconfig
- 
-+ifeq ($(BR2_x86_64),y)
-+XVISOR_ARCH = x86
-+else ifeq ($(BR2_arm)$(BR2_aarch64),y)
-+XVISOR_ARCH = arm
-+else
-+$(error "Architecture not supported by XVisor")
+@@ -30,9 +30,13 @@ ifeq ($(BR2_x86_64),y)
+ XVISOR_ARCH = x86
+ else ifeq ($(BR2_arm)$(BR2_aarch64),y)
+ XVISOR_ARCH = arm
+-else
 +endif
 +
- XVISOR_MAKE_ENV = \
--	ARCH=$(if $(BR2_x86_64),x86,$(BR2_ARCH)) \
-+	ARCH=$(XVISOR_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS)
++ifeq ($(BR2_PACKAGE_XVISOR)$(BR_BUILDING),yy)
++ifeq ($(XVISOR_ARCH),)
+ $(error "Architecture not supported by XVisor")
+ endif
++endif
  
- XVISOR_MAKE_OPTS = $(if $(VERBOSE),VERBOSE=1)
+ XVISOR_MAKE_ENV = \
+ 	ARCH=$(XVISOR_ARCH) \
