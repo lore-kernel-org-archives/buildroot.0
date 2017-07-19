@@ -1,47 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 23:15:19 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] boot/syslinux: disable
-	syslinux legacy-BIOS for broken toolchains
-Message-ID: <20170720055506.650D3800CC@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 23:57:41 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/systemd: needs
+	timezone info
+Message-ID: <20170720055506.9753B800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d4be770b6919260755f883575d69e9f1de188d0
+commit: https://git.buildroot.net/buildroot/commit/?id=dc0ec5f24f1a04a00ed0bd14e40794ff47a25844
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Since [1] syslinux is built with the target toolchain in order to
-properly build with gnu-efi package. But toolchains built with
-binutils 2.26 break the syslinux legacy-BIOS build as reported at [2],
-due to binutils bug #19615.
+systemd does not like being booted without any timezone info (especially
+on a R/O filesystem), so we forcibly enable that.
 
-Thanks to Beno??t Allard for the investigation and the link to the
-binutils bug [3].
-
-[1] 6e432d5ecb46959f3c27dbbca48e41512bb40a70
-[2] http://lists.busybox.net/pipermail/buildroot/2017-July/196253.html
-[3] https://sourceware.org/bugzilla/show_bug.cgi?id=19615
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Beno??t Allard <benoit.allard@greenbone.net>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[Thomas: fix alphabetic ordering.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 42638a1d124faa287bb0ae4e5a5c23df585736d7)
+
+(cherry picked from commit 81597b82e29d5427ac784c8e6e8dcaee469e0332)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/syslinux/Config.in | 1 +
+ package/systemd/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 299a559..da03549 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -35,6 +35,7 @@ config BR2_TARGET_SYSLINUX_PXELINUX
- 
- config BR2_TARGET_SYSLINUX_MBR
- 	bool "install mbr"
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
- 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index ac8175c..47d47c6 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -26,6 +26,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
++	select BR2_TARGET_TZ_INFO
  	help
- 	  Install the legacy-BIOS 'mbr' image, to boot off a
+ 	  systemd is a system and service manager for Linux, compatible with
+ 	  SysV and LSB init scripts. systemd provides aggressive parallelization
