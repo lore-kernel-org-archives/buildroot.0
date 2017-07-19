@@ -1,100 +1,81 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 18 Jul 2017 23:02:26 -0300
-Subject: [Buildroot] [PATCH 2/2] support/testing: add test of BR2_CCACHE
- with an external toolchain
-References: <2bb2847d-c094-2319-5de2-9ea540acf8bf@mind.be>
-Message-ID: <596ebdb223c47_3a713fbb44b45304469cb@ultri3.mail>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Wed, 19 Jul 2017 14:05:10 +0800
+Subject: [Buildroot] [PATCH] bwm-ng: update to latest upstream version
+ to fix build issue
+In-Reply-To: <CAJhJPsUHg4Jr8jqQpharzZwZEwMpP8YTOD7hH9+Lv0Ju4XNNeA@mail.gmail.com>
+References: <1499250824-26093-1-git-send-email-keguang.zhang@gmail.com>
+ <20170705123836.50903eeb@windsurf>
+ <CAJhJPsUHg4Jr8jqQpharzZwZEwMpP8YTOD7hH9+Lv0Ju4XNNeA@mail.gmail.com>
+Message-ID: <CAJhJPsVhG-Q=xSU-DEgTWmQQ2Z6AQ2g67=BM8bmKSB=Bsw247g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
+The autobuild keeps sending the mail to mek.
+Can this patch be accepted?
+Thanks!
 
-On Tue, Jul 18, 2017 at 06:38 AM, Arnout Vandecappelle wrote:
+2017-07-06 10:00 GMT+08:00 Kelvin Cheung <keguang.zhang@gmail.com>:
 
-> On 15-07-17 05:07, Ricardo Martincoski wrote:
->> [snip]
->>> +        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
->> 
->> 3 nits:
->> - why not += ?
-> 
->  Because config is initialized as a class member, and += would update the class
-> member instead of the instance member like we want. As it happens, this test is
-> executed last so it doesn't matter, but if any test comes after it, it would get
+> Hi Thomas,
+> Since the upstream had fixed the error, we have no reason to keep a patch
+> inside package/bwm-ng/.
+>
+> Moreover, the update contains not only th fix for build issue, but also a
+> improvement
+> https://github.com/vgropp/bwm-ng/commit/e9b980464e1fd72ae1b3d1002afb3b
+> 911daad619.patch.
+>
+> Therefore, I think updating version is better.
+>
+> 2017-07-05 18:38 GMT+08:00 Thomas Petazzoni <thomas.petazzoni@free-
+> electrons.com>:
+>
+>> Hello,
+>>
+>> On Wed,  5 Jul 2017 18:33:44 +0800, Kelvin Cheung wrote:
+>> > From: Keguang Zhang <keguang.zhang@spreadtrum.com>
+>> >
+>> > The latest upstream version had fixed the build issus.
+>> >
+>> > Fixes:
+>> > http://autobuild.buildroot.net/results/1d9/1d9f0b62e4cc387f5
+>> 08b4fe0086621ab9996a085/
+>> >
+>> > Signed-off-by: Keguang Zhang <keguang.zhang@spreadtrum.com>
+>>
+>> Thanks. However, rather than bumping and having to autoreconf, I'm
+>> wondering if simply adding
+>> https://github.com/vgropp/bwm-ng/commit/d5daf15c2098040b8b01
+>> 753d3cdce8c1c79fc528.patch
+>> inside package/bwm-ng/ isn't a simpler solution.
+>>
+>> Peter?
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+>>
+>
+>
+>
+> --
+> Best regards,
+>
+> Kelvin Cheung
+>
 
-From command line there is no guarantee on execution order when using -t.
 
-In my tests without -t I observe the testcases being executed in a case
-insensitive reverse alphabetical order, no matter if I move one test to another
-place in the file.
 
-$ support/testing/run-tests -d d -o o -k tests.toolchain.test_external
-22:32:39 TestExternalToolchainSourceryArmv7       Starting
-22:32:43 TestExternalToolchainSourceryArmv7       Cleaning up
-.22:32:43 TestExternalToolchainSourceryArmv5       Starting
-22:32:49 TestExternalToolchainSourceryArmv5       Cleaning up
-.22:32:49 TestExternalToolchainSourceryArmv4       Starting
-22:32:54 TestExternalToolchainSourceryArmv4       Cleaning up
-.22:32:54 TestExternalToolchainLinaroArm           Starting
-22:32:58 TestExternalToolchainLinaroArm           Cleaning up
-.22:32:58 TestExternalToolchainCtngMusl            Starting
-22:33:01 TestExternalToolchainCtngMusl            Cleaning up
-.22:33:01 TestExternalToolchainCCache              Starting
-22:33:04 TestExternalToolchainCCache              Cleaning up
-.22:33:04 TestExternalToolchainBuildrootuClibc     Starting
-22:33:08 TestExternalToolchainBuildrootuClibc     Cleaning up
-.22:33:08 TestExternalToolchainBuildrootMusl       Starting
-22:33:11 TestExternalToolchainBuildrootMusl       Cleaning up
-.
+-- 
+Best regards,
 
-But I guess you are talking about gitlab. I never used it.
-
-> the extraconfig as well...
-> 
->  Cfr. the following test:
-> 
-> In [49]: class Foo:
->     ...:     foo = [0]
->     ...:
-> 
-> In [50]: class Foo1(Foo):
->     ...:     def __init__(self):
->     ...:         self.foo += [1]
->     ...:
-> 
-> In [51]: Foo1().foo
-> Out[51]: [0, 1]
-> 
-> In [52]: Foo1().foo
-> Out[52]: [0, 1, 1]
-> 
-> In [53]: class Foo2(Foo):
->     ...:     def __init__(self):
->     ...:         self.foo = self.foo + [2]
->     ...:
-> 
-> In [54]: Foo2().foo
-> Out[54]: [0, 1, 1, 2]
-> 
-> In [55]: Foo2().foo
-> Out[55]: [0, 1, 1, 2]
-
-The same does not apply to strings, only to mutable objects.
-
-But if i.e. for some reason we change the type of config from string to an array
-of lines the += would need to be changed, while your code would still work.
-
-[snip]
->> with the 4 nits fixed
->> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> 
->  Can you confirm that this still stands if I don't do the +=, as long as the
-> line stays below 79 characters?
-
-Sure. It still stands without += .
-
-Regards,
-Ricardo
+Kelvin Cheung
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170719/8ea72a14/attachment.html>
