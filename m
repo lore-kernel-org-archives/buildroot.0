@@ -1,60 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:06:25 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] mpg123: security bump to
-	version 1.25.2
-Message-ID: <20170719204759.613B581F88@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 18:18:03 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] tiff: add upstream
+	security fix for CVE-2017-10688
+Message-ID: <20170719204800.211E97FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e23252d6389c277a6238c1f262d6fef5073e272
+commit: https://git.buildroot.net/buildroot/commit/?id=987af6ffb163aa1d17a598f7d7bf3ad6fd95e5ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-From the release notes:
-
- - Extend pow tables for layer III to properly handle files with i-stereo and
-   5-bit scalefactors. Never observed them for real, just as fuzzed input to
-   trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
-   calling remote denial of service. While the accesses are out of bounds for
-   the pow tables, they still are safely within libmpg123's memory (other
-   static tables). Just wrong values are used for computation, no actual crash
-   unless you use something like GCC's AddressSanitizer, nor any information
-   disclosure.
- - Avoid left-shifts of negative integers in layer I decoding.
-
-While we're at it, add a hash for the license file.
+Fixes CVE-2017-10688 - n LibTIFF 4.0.8, there is a assertion abort in the
+TIFFWriteDirectoryTagCheckedLong8Array function in tif_dirwrite.c.  A
+crafted input will lead to a remote denial of service attack.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 474daa20f8da2a677250146e8ee1652206923ee8)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 544ac6bca09edabb587db42ccb3ae51df58a3a56)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash | 5 ++++-
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ..._dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 69fbef3..cbab6f3 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
-+sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
+diff --git a/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch b/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
+new file mode 100644
+index 0000000..2be989b
+--- /dev/null
++++ b/package/tiff/0001-libtiff-tif_dirwrite.c-in-TIFFWriteDirectoryTagCheck.patch
+@@ -0,0 +1,70 @@
++From 6173a57d39e04d68b139f8c1aa499a24dbe74ba1 Mon Sep 17 00:00:00 2001
++From: Even Rouault <even.rouault@spatialys.com>
++Date: Fri, 30 Jun 2017 17:29:44 +0000
++Subject: [PATCH] * libtiff/tif_dirwrite.c: in
++ TIFFWriteDirectoryTagCheckedXXXX() functions associated with LONG8/SLONG8
++ data type, replace assertion that the file is BigTIFF, by a non-fatal error.
++ Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2712 Reported by team
++ OWL337
 +
-+# License file
-+sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 7fc6d7a..01923d7 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.25.1
-+MPG123_VERSION = 1.25.2
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
++[Peter: drop ChangeLog modification]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_dirwrite.c | 20 ++++++++++++++++----
++ 1 file changed, 23 insertions(+), 4 deletions(-)
++
++diff --git a/libtiff/tif_dirwrite.c b/libtiff/tif_dirwrite.c
++index 2967da58..8d6686ba 100644
++--- a/libtiff/tif_dirwrite.c
+++++ b/libtiff/tif_dirwrite.c
++@@ -2111,7 +2111,10 @@ TIFFWriteDirectoryTagCheckedLong8(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, ui
++ {
++ 	uint64 m;
++ 	assert(sizeof(uint64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","LONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	m=value;
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabLong8(&m);
++@@ -2124,7 +2127,10 @@ TIFFWriteDirectoryTagCheckedLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* di
++ {
++ 	assert(count<0x20000000);
++ 	assert(sizeof(uint64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","LONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabArrayOfLong8(value,count);
++ 	return(TIFFWriteDirectoryTagData(tif,ndir,dir,tag,TIFF_LONG8,count,count*8,value));
++@@ -2136,7 +2142,10 @@ TIFFWriteDirectoryTagCheckedSlong8(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, u
++ {
++ 	int64 m;
++ 	assert(sizeof(int64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","SLONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	m=value;
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabLong8((uint64*)(&m));
++@@ -2149,7 +2158,10 @@ TIFFWriteDirectoryTagCheckedSlong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* d
++ {
++ 	assert(count<0x20000000);
++ 	assert(sizeof(int64)==8);
++-	assert(tif->tif_flags&TIFF_BIGTIFF);
+++	if( !(tif->tif_flags&TIFF_BIGTIFF) ) {
+++		TIFFErrorExt(tif->tif_clientdata,"TIFFWriteDirectoryTagCheckedLong8","SLONG8 not allowed for ClassicTIFF");
+++		return(0);
+++	}
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabArrayOfLong8((uint64*)value,count);
++ 	return(TIFFWriteDirectoryTagData(tif,ndir,dir,tag,TIFF_SLONG8,count,count*8,value));
++-- 
++2.11.0
++
