@@ -1,60 +1,159 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 20:42:45 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] expat: fix build on and
-	for kernel older than 3.17
-Message-ID: <20170719204801.7F1937FCEB@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 16:31:53 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/pcre: security
+	bump to version 8.41
+Message-ID: <20170719204759.CF76A7FF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f8e78682748b1880827814da1a84b1b535f4af7
+commit: https://git.buildroot.net/buildroot/commit/?id=4f04881f1b7e1f749964f4f0e3250d6d85d0c47d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-The expat build system now fails when the getrandom() system call is not
-supported. This affect both host and target builds. Define XML_POOR_ENTROPY
-for target kernels older than 3.17 to fix the build. For the host package
-define XML_POOR_ENTROPY unconditionally since we have no easy way to know the
-host kernel version. Note that expat will still use getrandom() on the host
-when it is available, we don't make security any worse.
+Removed patches 0003 & 0004, applied upstream.
 
-Fixes (host):
-http://autobuild.buildroot.net/results/928/928dc2b56d931da84055fdfe78929d1f956de53b/
-http://autobuild.buildroot.net/results/ee9/ee90d0a456cbce4c7f22e5f61006612bd9ba30d5/
-http://autobuild.buildroot.net/results/dac/dac7231242123ae3dcaa6bbdd65b44fe8d8cb20c/
+Fixes the following security issues:
 
-Fixes (target):
-http://autobuild.buildroot.net/results/308/308e830219fdfebb5aa6aef51c1dc784254998f6/
-http://autobuild.buildroot.net/results/73f/73fa946b0a2205e946ad414079f88e4bdb416f00/
-http://autobuild.buildroot.net/results/9d7/9d7bad22ace7fa211b31d752a2255e07cede68be/
+CVE-2017-7244 - The _pcre32_xclass function in pcre_xclass.c in libpcre1 in
+PCRE 8.40 allows remote attackers to cause a denial of service (invalid
+memory read) via a crafted file.
 
-[Peter: also use HOST_CPPFLAGS]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+CVE-2017-7245 - Stack-based buffer overflow in the pcre32_copy_substring
+function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to
+cause a denial of service (WRITE of size 4) or possibly have unspecified
+other impact via a crafted file.
+
+CVE-2017-7246 - Stack-based buffer overflow in the pcre32_copy_substring
+function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to
+cause a denial of service (WRITE of size 268) or possibly have unspecified
+other impact via a crafted file.
+
+[Peter: add CVE info]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-(cherry picked from commit 5242701f3aa8426cdf2cc9a176ef06194db93d5f)
+(cherry picked from commit bc6a84bb3d05e0d752ecf59bb35ac827e9b76185)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expat/expat.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/pcre/0003-CVE-2017-6004.patch | 21 ------------
+ package/pcre/0004-CVE-2017-7186.patch | 60 -----------------------------------
+ package/pcre/pcre.hash                |  2 +-
+ package/pcre/pcre.mk                  |  2 +-
+ 4 files changed, 2 insertions(+), 83 deletions(-)
 
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index a10f2c9..a78d326 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -15,5 +15,14 @@ HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
- EXPAT_LICENSE_FILES = COPYING
+diff --git a/package/pcre/0003-CVE-2017-6004.patch b/package/pcre/0003-CVE-2017-6004.patch
+deleted file mode 100644
+index d0b6d51..0000000
+--- a/package/pcre/0003-CVE-2017-6004.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Description: CVE-2017-6004: crafted regular expression may cause denial of service
+-Origin: upstream, https://vcs.pcre.org/pcre/code/trunk/pcre_jit_compile.c?r1=1676&r2=1680&view=patch
+-Bug: https://bugs.exim.org/show_bug.cgi?id=2035
+-Bug-Debian: https://bugs.debian.org/855405
+-Forwarded: not-needed
+-Author: Salvatore Bonaccorso <carnil@debian.org>
+-Last-Update: 2017-02-17
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+---- a/pcre_jit_compile.c
+-+++ b/pcre_jit_compile.c
+-@@ -8111,7 +8111,7 @@ if (opcode == OP_COND || opcode == OP_SC
+- 
+-     if (*matchingpath == OP_FAIL)
+-       stacksize = 0;
+--    if (*matchingpath == OP_RREF)
+-+    else if (*matchingpath == OP_RREF)
+-       {
+-       stacksize = GET2(matchingpath, 1);
+-       if (common->currententry == NULL)
+diff --git a/package/pcre/0004-CVE-2017-7186.patch b/package/pcre/0004-CVE-2017-7186.patch
+deleted file mode 100644
+index 980923a..0000000
+--- a/package/pcre/0004-CVE-2017-7186.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-Description: Upstream fix for CVE-2017-7186 (Upstream rev 1688)
+- Fix Unicode property crash for 32-bit characters greater than 0x10ffff.
+-Author: Matthew Vernon <matthew@debian.org>
+-X-Dgit-Generated: 2:8.39-3 c4c2c7c4f74d53b263af2471d8e11db88096bd13
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-
+---- pcre3-8.39.orig/pcre_internal.h
+-+++ pcre3-8.39/pcre_internal.h
+-@@ -2772,6 +2772,9 @@ extern const pcre_uint8  PRIV(ucd_stage1
+- extern const pcre_uint16 PRIV(ucd_stage2)[];
+- extern const pcre_uint32 PRIV(ucp_gentype)[];
+- extern const pcre_uint32 PRIV(ucp_gbtable)[];
+-+#ifdef COMPILE_PCRE32
+-+extern const ucd_record  PRIV(dummy_ucd_record)[];
+-+#endif
+- #ifdef SUPPORT_JIT
+- extern const int         PRIV(ucp_typerange)[];
+- #endif
+-@@ -2780,9 +2783,15 @@ extern const int         PRIV(ucp_typera
+- /* UCD access macros */
+- 
+- #define UCD_BLOCK_SIZE 128
+--#define GET_UCD(ch) (PRIV(ucd_records) + \
+-+#define REAL_GET_UCD(ch) (PRIV(ucd_records) + \
+-         PRIV(ucd_stage2)[PRIV(ucd_stage1)[(int)(ch) / UCD_BLOCK_SIZE] * \
+-         UCD_BLOCK_SIZE + (int)(ch) % UCD_BLOCK_SIZE])
+-+        
+-+#ifdef COMPILE_PCRE32
+-+#define GET_UCD(ch) ((ch > 0x10ffff)? PRIV(dummy_ucd_record) : REAL_GET_UCD(ch))
+-+#else
+-+#define GET_UCD(ch) REAL_GET_UCD(ch)
+-+#endif 
+- 
+- #define UCD_CHARTYPE(ch)    GET_UCD(ch)->chartype
+- #define UCD_SCRIPT(ch)      GET_UCD(ch)->script
+---- pcre3-8.39.orig/pcre_ucd.c
+-+++ pcre3-8.39/pcre_ucd.c
+-@@ -38,6 +38,20 @@ const pcre_uint16 PRIV(ucd_stage2)[] = {
+- const pcre_uint32 PRIV(ucd_caseless_sets)[] = {0};
+- #else
+- 
+-+/* If the 32-bit library is run in non-32-bit mode, character values
+-+greater than 0x10ffff may be encountered. For these we set up a
+-+special record. */
+-+
+-+#ifdef COMPILE_PCRE32
+-+const ucd_record PRIV(dummy_ucd_record)[] = {{
+-+  ucp_Common,    /* script */
+-+  ucp_Cn,        /* type unassigned */
+-+  ucp_gbOther,   /* grapheme break property */
+-+  0,             /* case set */
+-+  0,             /* other case */
+-+  }};
+-+#endif
+-+
+- /* When recompiling tables with a new Unicode version, please check the
+- types in this structure definition from pcre_internal.h (the actual
+- field names will be different):
+diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+index 4c3c6c3..b36e130 100644
+--- a/package/pcre/pcre.hash
++++ b/package/pcre/pcre.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	00e27a29ead4267e3de8111fcaa59b132d0533cdfdbdddf4b0604279acbcf4f4	pcre-8.40.tar.bz2
++sha256 e62c7eac5ae7c0e7286db61ff82912e1c0b7a0c13706616e94a7dd729321b530  pcre-8.41.tar.bz2
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 0c145a9..b12b00d 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Kernel versions older than 3.17 do not support getrandom()
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17),)
-+EXPAT_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DXML_POOR_ENTROPY"
-+endif
-+
-+# Make build succeed on host kernel older than 3.17. getrandom() will still
-+# be used on newer kernels.
-+HOST_EXPAT_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -DXML_POOR_ENTROPY"
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-PCRE_VERSION = 8.40
++PCRE_VERSION = 8.41
+ PCRE_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+ PCRE_LICENSE = BSD-3-Clause
