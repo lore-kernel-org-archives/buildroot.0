@@ -1,83 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:04:30 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] efivar: fix build with
-	gcc 7
-Message-ID: <20170720055507.971D8800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 00:02:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] xvisor: fix build on
+	AArch64
+Message-ID: <20170720055507.05E7481EB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9e3b8778465993f7002cfcf26c69d4563b99b5c
+commit: https://git.buildroot.net/buildroot/commit/?id=f887589e3ecc92b73a991f5dd52e7bafab302e2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Add upstream patch fixing a warning that breaks the build because of -Werror.
+Xvisor was failing to build on AArch64 with:
+
+package/xvisor/xvisor.mk:60: *** No Xvisor defconfig name specified, check your BR2_PACKAGE_XVISOR_DEFCONFIG setting.  Stop.
+
+The first problem is that the Config.in file had a typo: it was using
+BR2_AARCH64 instead of BR2_aarch64, and therefore the
+BR2_PACKAGE_XVISOR_DEFCONFIG variable had no value.
+
+Once this is fixed, another problem occurs: the ARCH variable needs to
+be specified as "arm" for XVisor, for both ARM and AArch64. Therefore,
+a XVISOR_ARCH variable is introduced, which is calculated according to
+the Buildroot configuration options. Only x86-64, arm and aarch64 are
+supported by Xvisor currently, so it remains simple.
 
 Fixes:
-http://autobuild.buildroot.net/results/33a/33adc3ef139d6814aef4c92ae0bcc4c810ab0b86/
-http://autobuild.buildroot.net/results/e7d/e7d80e823e13edc6698148244553bd90367bcd03/
-http://autobuild.buildroot.net/results/3b6/3b61246f8b04a332d1c61732f0eb6e50ea8ca366/
 
-Cc: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  http://autobuild.buildroot.net/results/1719a63ff257f13634a06a14327abfb327984101/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0ca30170345a81f5f21e4ef4424b1f186cde1988)
+(cherry picked from commit 117fd5dfbc756c4f2b4aef97fc2b568528c66df7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...some-extra-const-that-gcc-complains-about.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/xvisor/Config.in |  2 +-
+ package/xvisor/xvisor.mk | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch b/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
-new file mode 100644
-index 0000000..6b9f77e
---- /dev/null
-+++ b/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
-@@ -0,0 +1,47 @@
-+From 1c7c0f71c9d22efda4156881eb187b8c69d1cca7 Mon Sep 17 00:00:00 2001
-+From: Peter Jones <pjones@redhat.com>
-+Date: Mon, 6 Feb 2017 14:28:19 -0500
-+Subject: [PATCH] Remove some extra "const" that gcc complains about.
+diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
+index 996d37a..44bd461 100644
+--- a/package/xvisor/Config.in
++++ b/package/xvisor/Config.in
+@@ -36,7 +36,7 @@ config BR2_PACKAGE_XVISOR_DEFCONFIG
+ 	default "generic-v5" if BR2_ARM_CPU_ARMV5
+ 	default "generic-v6" if BR2_ARM_CPU_ARMV6
+ 	default "generic-v7" if BR2_ARM_CPU_ARMV7A
+-	default "generic-v8" if BR2_AARCH64
++	default "generic-v8" if BR2_aarch64
+ 	default "x86_64_generic" if BR2_x86_64
+ 	help
+ 	  Name of the Xvisor defconfig file to use, without the
+diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
+index a9a5dbf..17edc2c 100644
+--- a/package/xvisor/xvisor.mk
++++ b/package/xvisor/xvisor.mk
+@@ -26,8 +26,16 @@ XVISOR_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE))
+ endif
+ XVISOR_KCONFIG_EDITORS = menuconfig
+ 
++ifeq ($(BR2_x86_64),y)
++XVISOR_ARCH = x86
++else ifeq ($(BR2_arm)$(BR2_aarch64),y)
++XVISOR_ARCH = arm
++else
++$(error "Architecture not supported by XVisor")
++endif
 +
-+One of these days I'll get these right.
-+
-+Signed-off-by: Peter Jones <pjones@redhat.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream commit 1c7c0f71c9d22e.
-+
-+ src/include/efivar/efiboot-loadopt.h | 4 ++--
-+ src/loadopt.c                        | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/include/efivar/efiboot-loadopt.h b/src/include/efivar/efiboot-loadopt.h
-+index 07db5c4c53e3..efc29c69d47e 100644
-+--- a/src/include/efivar/efiboot-loadopt.h
-++++ b/src/include/efivar/efiboot-loadopt.h
-+@@ -32,8 +32,8 @@ extern ssize_t efi_loadopt_create(uint8_t *buf, ssize_t size,
-+ 
-+ extern efidp efi_loadopt_path(efi_load_option *opt, ssize_t limit)
-+ 	__attribute__((__nonnull__ (1)));
-+-extern const unsigned char const * efi_loadopt_desc(efi_load_option *opt,
-+-						    ssize_t limit)
-++extern const unsigned char * efi_loadopt_desc(efi_load_option *opt,
-++					      ssize_t limit)
-+ 	__attribute__((__visibility__ ("default")))
-+ 	__attribute__((__nonnull__ (1)));
-+ extern uint32_t efi_loadopt_attrs(efi_load_option *opt)
-+diff --git a/src/loadopt.c b/src/loadopt.c
-+index a63ca792d2dc..ce889867fd29 100644
-+--- a/src/loadopt.c
-++++ b/src/loadopt.c
-+@@ -357,7 +357,7 @@ teardown(void)
-+ 
-+ __attribute__((__nonnull__ (1)))
-+ __attribute__((__visibility__ ("default")))
-+-const unsigned char const *
-++const unsigned char *
-+ efi_loadopt_desc(efi_load_option *opt, ssize_t limit)
-+ {
-+ 	if (last_desc) {
-+-- 
-+2.13.2
-+
+ XVISOR_MAKE_ENV = \
+-	ARCH=$(if $(BR2_x86_64),x86,$(BR2_ARCH)) \
++	ARCH=$(XVISOR_ARCH) \
+ 	CROSS_COMPILE=$(TARGET_CROSS)
+ 
+ XVISOR_MAKE_OPTS = $(if $(VERBOSE),VERBOSE=1)
