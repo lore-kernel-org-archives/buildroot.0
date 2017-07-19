@@ -1,156 +1,69 @@
 From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 19 Jul 2017 16:47:51 -0700
-Subject: [Buildroot] [PATCH v2 2/2] qt5wayland: new package
-In-Reply-To: <1499962724-536-2-git-send-email-joshua.henderson@microchip.com>
+Date: Wed, 19 Jul 2017 16:48:46 -0700
+Subject: [Buildroot] [PATCH v2 1/2] package/qt5: bump latest version to
+ 5.9.1
+In-Reply-To: <20170719233013.43e0d27b@windsurf>
 References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
- <1499962724-536-2-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <e8bb318b-568f-b2de-2ebd-972eb0b3b52d@microchip.com>
+ <20170719233013.43e0d27b@windsurf>
+Message-ID: <3abfa37d-9376-d7eb-b61d-bd406c02d259@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All, Me,
-
-On 07/13/2017 09:18 AM, Joshua Henderson wrote:
-> QtWayland is a Qt 5 module that wraps the functionality of Wayland.
+On 07/19/2017 02:30 PM, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Brent Sink <brents_3@hotmail.com>
-> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+> On Thu, 13 Jul 2017 09:18:43 -0700, Joshua Henderson wrote:
+>> Qt 5.9 is a Long Term Support version [1]. Some license file changes are
+>> involved, a new dependency on pcre2, and some filename changes.  qt5webkit
+>> popped back into the picture for 5.9.1 after being absent for 5.9.0
+>> "officially." QT5_SNAPSHOTS_SITE is removed with this commit as it is not used
+>> for qtwebkit anymore.
+>>
+>> This removes the following patches that have been upstreamed for 5.9.1:
+>>
+>> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [2]
+>> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [3]
+>> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [4]
+>> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [5]
+>> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch [6]
+>> - qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch [7]
+>>
+>> [1] https://www.qt.io/qt5-9/
+>> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
+>> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
+>> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
+>> [5] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
+>> [6] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=18d49808db46add078d9d4bcffaac5361d5c7269
+>> [7] https://code.qt.io/cgit/qt/qtwebkit.git/commit/?id=548380af096f8277e460383c81a4ecdf2b77523f
+>>
+>> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+>> Cc: Julien Corjon <corjon.j@ecagroup.com>
+>> Cc: Brent Sink <brents_3@hotmail.com>
+>> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+>>
+>> ---
 > 
-> ---
+> I've applied to master. I just changed two things:
 > 
-> Changes for v2:
-> - Fix config dependency logic.
-> - Add license file hashes.
-> - Fix opengl dependency.
-> - Make enabling the compositor a config option.
-> - This is now part of the QT bump to 5.9.1 series because it depends on it.
-> ---
->  package/qt5/Config.in                  |  1 +
->  package/qt5/qt5wayland/Config.in       | 24 ++++++++++++++++++
->  package/qt5/qt5wayland/qt5wayland.hash |  5 ++++
->  package/qt5/qt5wayland/qt5wayland.mk   | 45 ++++++++++++++++++++++++++++++++++
->  4 files changed, 75 insertions(+)
->  create mode 100644 package/qt5/qt5wayland/Config.in
->  create mode 100644 package/qt5/qt5wayland/qt5wayland.hash
->  create mode 100644 package/qt5/qt5wayland/qt5wayland.mk
+>  - The remaining qt5base patch was still number 0005-<something>, so I
+>    renamed it to 0001-<something>.
 > 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index abaa584..386dcb1 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -82,4 +82,5 @@ source "package/qt5/qt5webkit/Config.in"
->  source "package/qt5/qt5websockets/Config.in"
->  source "package/qt5/qt5x11extras/Config.in"
->  source "package/qt5/qt5xmlpatterns/Config.in"
-> +source "package/qt5/qt5wayland/Config.in"
-
-This is probably not the right place to put this (alpha sort).
-
->  endif
-> diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-> new file mode 100644
-> index 0000000..c83319f
-> --- /dev/null
-> +++ b/package/qt5/qt5wayland/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_QT5WAYLAND
-> +	bool "qt5wayland"
-> +	select BR2_PACKAGE_QT5DECLARATIVE
-> +	depends on BR2_PACKAGE_WAYLAND
-> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-> +	help
-> +	  Qt is a cross-platform application and UI framework for
-> +	  developers using C++.
-> +
-> +	  This package corresponds to the qt5wayland module.
-> +
-> +	  http://qt.io
-> +
-> +comment "qt5wayland needs QT OpenGL/Wayland support"
-> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_WAYLAND
-> +
-> +if BR2_PACKAGE_QT5WAYLAND
-> +
-> +config BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
-> +	bool "Enable compositor (experimental)"
-> +	help
-> +	  The compositor API is still experimental, and not built by default.
-> +
-> +endif
-> diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
-> new file mode 100644
-> index 0000000..95b8824
-> --- /dev/null
-> +++ b/package/qt5/qt5wayland/qt5wayland.hash
-> @@ -0,0 +1,5 @@
-> +# hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwayland-opensource-src-5.6.2.tar.xz.mirrorlist
-> +sha256 035c3199f4719627b64b7020f0f4574da2b4cb78c6981aba75f27b872d8e6c86	qtwayland-opensource-src-5.6.2.tar.xz
-> +
-> +# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwayland-opensource-src-5.9.1.tar.xz.mirrorlist
-> +sha256 cf0cb1982a7b748bfec8c7834691f13072f104884c61809d0bbd1a01ebda3ffa	qtwayland-opensource-src-5.9.1.tar.xz
-> diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-> new file mode 100644
-> index 0000000..0431374
-> --- /dev/null
-> +++ b/package/qt5/qt5wayland/qt5wayland.mk
-> @@ -0,0 +1,45 @@
-> +################################################################################
-> +#
-> +# qt5wayland
-> +#
-> +################################################################################
-> +
-> +QT5WAYLAND_VERSION = $(QT5_VERSION)
-> +QT5WAYLAND_SITE = $(QT5_SITE)
-> +QT5WAYLAND_SOURCE = qtwayland-opensource-src-$(QT5WAYLAND_VERSION).tar.xz
-> +QT5WAYLAND_DEPENDENCIES = qt5base qt5declarative
-> +QT5WAYLAND_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +QT5WAYLAND_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-> +QT5WAYLAND_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-> +else
-> +QT5WAYLAND_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
-> +QT5WAYLAND_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
-> +QT5WAYLAND_QMAKEFLAGS += CONFIG+=wayland-compositor
-> +endif
-> +
-> +define QT5WAYLAND_CONFIGURE_CMDS
-> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake $(QT5WAYLAND_QMAKEFLAGS))
-> +endef
-> +
-> +define QT5WAYLAND_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define QT5WAYLAND_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-> +	$(QT5_LA_PRL_FILES_FIXUP)
-> +endef
-> +
-> +define QT5WAYLAND_INSTALL_TARGET_CMDS
-> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandCompositor.so* $(TARGET_DIR)/usr/lib
-> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandClient.so* $(TARGET_DIR)/usr/lib
-> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/wayland* $(TARGET_DIR)/usr/lib/qt/plugins
-> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforms/libqwayland* $(TARGET_DIR)/usr/lib/qt/plugins/platforms
-> +endef
-
-I've uncovered a difference in qt5 versions in the names of .so files
-that needs to be fixed.  Also, this needs to condition on
-BR2_PACKAGE_QT5WAYLAND_COMPOSITOR.
-
-> +
-> +$(eval $(generic-package))
+>  - It was a bit odd to have one qt5webkit patch in the 5.6.2/ subdir,
+>    and the two other patches outside of the per-version directory.
+>    Instead, I've duplicated the patches, so that it's clear what is
+>    going on for 5.6.2/ and 5.9.1/.
 > 
+> It would be nice if you could keep an eye on
+> http://autobuild.buildroot.org over the next days and see if there's
+> any failure Qt5 related. It can happen in one of the qt5 packages
+> themselves, but also in other packages using qt5.
 
-This needs a v3 before applying.
+OK.  I see it on branch qt-bump only currently.  I will keep an eye out.
+
+Also, please do not apply v2 2/2 of this series (add qt5webkit) as I have found
+several build issues with it already.  I'll break that patch off separately now.
 
 Josh
