@@ -1,159 +1,202 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 16:31:53 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] package/pcre: security
-	bump to version 8.41
-Message-ID: <20170719204759.CF76A7FF4F@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 18:16:23 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] spice: add upstream
+	security fixes for CVE-2017-7506
+Message-ID: <20170719204759.F340D81D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f04881f1b7e1f749964f4f0e3250d6d85d0c47d
+commit: https://git.buildroot.net/buildroot/commit/?id=63519329c46c741e5dd8bc67a332d602873e2b54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Removed patches 0003 & 0004, applied upstream.
+Fixes CVE-2017-7506 - Possible buffer overflow via invalid monitor
+configurations.
 
-Fixes the following security issues:
+For more details, see:
+https://marc.info/?l=oss-security&m=150001782924095
 
-CVE-2017-7244 - The _pcre32_xclass function in pcre_xclass.c in libpcre1 in
-PCRE 8.40 allows remote attackers to cause a denial of service (invalid
-memory read) via a crafted file.
-
-CVE-2017-7245 - Stack-based buffer overflow in the pcre32_copy_substring
-function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to
-cause a denial of service (WRITE of size 4) or possibly have unspecified
-other impact via a crafted file.
-
-CVE-2017-7246 - Stack-based buffer overflow in the pcre32_copy_substring
-function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to
-cause a denial of service (WRITE of size 268) or possibly have unspecified
-other impact via a crafted file.
-
-[Peter: add CVE info]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit bc6a84bb3d05e0d752ecf59bb35ac827e9b76185)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 31bd29fe093a258755929a23d764b02323fcdc46)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/0003-CVE-2017-6004.patch | 21 ------------
- package/pcre/0004-CVE-2017-7186.patch | 60 -----------------------------------
- package/pcre/pcre.hash                |  2 +-
- package/pcre/pcre.mk                  |  2 +-
- 4 files changed, 2 insertions(+), 83 deletions(-)
+ ...nect-when-receiving-overly-big-ClientMoni.patch | 75 ++++++++++++++++++++++
+ ...integer-overflows-handling-monitor-config.patch | 31 +++++++++
+ ...buffer-overflows-handling-monitor-configu.patch | 48 ++++++++++++++
+ 3 files changed, 154 insertions(+)
 
-diff --git a/package/pcre/0003-CVE-2017-6004.patch b/package/pcre/0003-CVE-2017-6004.patch
-deleted file mode 100644
-index d0b6d51..0000000
---- a/package/pcre/0003-CVE-2017-6004.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Description: CVE-2017-6004: crafted regular expression may cause denial of service
--Origin: upstream, https://vcs.pcre.org/pcre/code/trunk/pcre_jit_compile.c?r1=1676&r2=1680&view=patch
--Bug: https://bugs.exim.org/show_bug.cgi?id=2035
--Bug-Debian: https://bugs.debian.org/855405
--Forwarded: not-needed
--Author: Salvatore Bonaccorso <carnil@debian.org>
--Last-Update: 2017-02-17
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
----- a/pcre_jit_compile.c
--+++ b/pcre_jit_compile.c
--@@ -8111,7 +8111,7 @@ if (opcode == OP_COND || opcode == OP_SC
-- 
--     if (*matchingpath == OP_FAIL)
--       stacksize = 0;
---    if (*matchingpath == OP_RREF)
--+    else if (*matchingpath == OP_RREF)
--       {
--       stacksize = GET2(matchingpath, 1);
--       if (common->currententry == NULL)
-diff --git a/package/pcre/0004-CVE-2017-7186.patch b/package/pcre/0004-CVE-2017-7186.patch
-deleted file mode 100644
-index 980923a..0000000
---- a/package/pcre/0004-CVE-2017-7186.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--Description: Upstream fix for CVE-2017-7186 (Upstream rev 1688)
-- Fix Unicode property crash for 32-bit characters greater than 0x10ffff.
--Author: Matthew Vernon <matthew@debian.org>
--X-Dgit-Generated: 2:8.39-3 c4c2c7c4f74d53b263af2471d8e11db88096bd13
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--
----- pcre3-8.39.orig/pcre_internal.h
--+++ pcre3-8.39/pcre_internal.h
--@@ -2772,6 +2772,9 @@ extern const pcre_uint8  PRIV(ucd_stage1
-- extern const pcre_uint16 PRIV(ucd_stage2)[];
-- extern const pcre_uint32 PRIV(ucp_gentype)[];
-- extern const pcre_uint32 PRIV(ucp_gbtable)[];
--+#ifdef COMPILE_PCRE32
--+extern const ucd_record  PRIV(dummy_ucd_record)[];
--+#endif
-- #ifdef SUPPORT_JIT
-- extern const int         PRIV(ucp_typerange)[];
-- #endif
--@@ -2780,9 +2783,15 @@ extern const int         PRIV(ucp_typera
-- /* UCD access macros */
-- 
-- #define UCD_BLOCK_SIZE 128
---#define GET_UCD(ch) (PRIV(ucd_records) + \
--+#define REAL_GET_UCD(ch) (PRIV(ucd_records) + \
--         PRIV(ucd_stage2)[PRIV(ucd_stage1)[(int)(ch) / UCD_BLOCK_SIZE] * \
--         UCD_BLOCK_SIZE + (int)(ch) % UCD_BLOCK_SIZE])
--+        
--+#ifdef COMPILE_PCRE32
--+#define GET_UCD(ch) ((ch > 0x10ffff)? PRIV(dummy_ucd_record) : REAL_GET_UCD(ch))
--+#else
--+#define GET_UCD(ch) REAL_GET_UCD(ch)
--+#endif 
-- 
-- #define UCD_CHARTYPE(ch)    GET_UCD(ch)->chartype
-- #define UCD_SCRIPT(ch)      GET_UCD(ch)->script
----- pcre3-8.39.orig/pcre_ucd.c
--+++ pcre3-8.39/pcre_ucd.c
--@@ -38,6 +38,20 @@ const pcre_uint16 PRIV(ucd_stage2)[] = {
-- const pcre_uint32 PRIV(ucd_caseless_sets)[] = {0};
-- #else
-- 
--+/* If the 32-bit library is run in non-32-bit mode, character values
--+greater than 0x10ffff may be encountered. For these we set up a
--+special record. */
--+
--+#ifdef COMPILE_PCRE32
--+const ucd_record PRIV(dummy_ucd_record)[] = {{
--+  ucp_Common,    /* script */
--+  ucp_Cn,        /* type unassigned */
--+  ucp_gbOther,   /* grapheme break property */
--+  0,             /* case set */
--+  0,             /* other case */
--+  }};
--+#endif
--+
-- /* When recompiling tables with a new Unicode version, please check the
-- types in this structure definition from pcre_internal.h (the actual
-- field names will be different):
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index 4c3c6c3..b36e130 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	00e27a29ead4267e3de8111fcaa59b132d0533cdfdbdddf4b0604279acbcf4f4	pcre-8.40.tar.bz2
-+sha256 e62c7eac5ae7c0e7286db61ff82912e1c0b7a0c13706616e94a7dd729321b530  pcre-8.41.tar.bz2
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 0c145a9..b12b00d 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE_VERSION = 8.40
-+PCRE_VERSION = 8.41
- PCRE_SITE = https://ftp.pcre.org/pub/pcre
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3-Clause
+diff --git a/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch b/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
+new file mode 100644
+index 0000000..070259f
+--- /dev/null
++++ b/package/spice/0004-reds-Disconnect-when-receiving-overly-big-ClientMoni.patch
+@@ -0,0 +1,75 @@
++From f1e7ec03e26ab6b8ca9b7ec060846a5b706a963d Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Mon, 15 May 2017 15:57:28 +0100
++Subject: [PATCH] reds: Disconnect when receiving overly big
++ ClientMonitorsConfig
++
++Total message size received from the client was unlimited. There is
++a 2kiB size check on individual agent messages, but the MonitorsConfig
++message can be split in multiple chunks, and the size of the
++non-chunked MonitorsConfig message was never checked. This could easily
++lead to memory exhaustion on the host.
++
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 25 +++++++++++++++++++++++--
++ 1 file changed, 23 insertions(+), 2 deletions(-)
++
++diff --git a/server/reds.c b/server/reds.c
++index f439a366..7be85fdf 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -993,19 +993,34 @@ static void reds_client_monitors_config_cleanup(void)
++ static void reds_on_main_agent_monitors_config(
++         MainChannelClient *mcc, void *message, size_t size)
++ {
+++    const unsigned int MAX_MONITORS = 256;
+++    const unsigned int MAX_MONITOR_CONFIG_SIZE =
+++       sizeof(VDAgentMonitorsConfig) + MAX_MONITORS * sizeof(VDAgentMonConfig);
+++
++     VDAgentMessage *msg_header;
++     VDAgentMonitorsConfig *monitors_config;
++     RedsClientMonitorsConfig *cmc = &reds->client_monitors_config;
++ 
+++    // limit size of message sent by the client as this can cause a DoS through
+++    // memory exhaustion, or potentially some integer overflows
+++    if (sizeof(VDAgentMessage) + MAX_MONITOR_CONFIG_SIZE - cmc->buffer_size < size) {
+++        goto overflow;
+++    }
++     cmc->buffer_size += size;
++     cmc->buffer = realloc(cmc->buffer, cmc->buffer_size);
++     spice_assert(cmc->buffer);
++     cmc->mcc = mcc;
++     memcpy(cmc->buffer + cmc->buffer_pos, message, size);
++     cmc->buffer_pos += size;
+++    if (sizeof(VDAgentMessage) > cmc->buffer_size) {
+++        spice_debug("not enough data yet. %d", cmc->buffer_size);
+++        return;
+++    }
++     msg_header = (VDAgentMessage *)cmc->buffer;
++-    if (sizeof(VDAgentMessage) > cmc->buffer_size ||
++-            msg_header->size > cmc->buffer_size - sizeof(VDAgentMessage)) {
+++    if (msg_header->size > MAX_MONITOR_CONFIG_SIZE) {
+++        goto overflow;
+++    }
+++    if (msg_header->size > cmc->buffer_size - sizeof(VDAgentMessage)) {
++         spice_debug("not enough data yet. %d", cmc->buffer_size);
++         return;
++     }
++@@ -1013,6 +1028,12 @@ static void reds_on_main_agent_monitors_config(
++     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
++     red_dispatcher_client_monitors_config(monitors_config);
++     reds_client_monitors_config_cleanup();
+++    return;
+++
+++overflow:
+++    spice_warning("received invalid MonitorsConfig request from client, disconnecting");
+++    red_channel_client_disconnect(main_channel_client_get_base(mcc));
+++    reds_client_monitors_config_cleanup();
++ }
++ 
++ void reds_on_main_agent_data(MainChannelClient *mcc, void *message, size_t size)
++-- 
++2.11.0
++
+diff --git a/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch b/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
+new file mode 100644
+index 0000000..9874052
+--- /dev/null
++++ b/package/spice/0005-reds-Avoid-integer-overflows-handling-monitor-config.patch
+@@ -0,0 +1,31 @@
++From ec6229c79abe05d731953df5f7e9a05ec9f6df79 Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Mon, 15 May 2017 15:57:28 +0100
++Subject: [PATCH] reds: Avoid integer overflows handling monitor
++ configuration
++
++Avoid VDAgentMessage::size integer overflows.
++
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/server/reds.c b/server/reds.c
++index 7be85fdf..e1c8c108 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -1024,6 +1024,9 @@ static void reds_on_main_agent_monitors_config(
++         spice_debug("not enough data yet. %d", cmc->buffer_size);
++         return;
++     }
+++    if (msg_header->size < sizeof(VDAgentMonitorsConfig)) {
+++        goto overflow;
+++    }
++     monitors_config = (VDAgentMonitorsConfig *)(cmc->buffer + sizeof(*msg_header));
++     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
++     red_dispatcher_client_monitors_config(monitors_config);
++-- 
++2.11.0
++
+diff --git a/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch b/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
+new file mode 100644
+index 0000000..212645b
+--- /dev/null
++++ b/package/spice/0006-reds-Avoid-buffer-overflows-handling-monitor-configu.patch
+@@ -0,0 +1,48 @@
++From a957a90baf2c62d31f3547e56bba7d0e812d2331 Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Mon, 15 May 2017 15:57:28 +0100
++Subject: [PATCH] reds: Avoid buffer overflows handling monitor
++ configuration
++
++It was also possible for a malicious client to set
++VDAgentMonitorsConfig::num_of_monitors to a number larger
++than the actual size of VDAgentMOnitorsConfig::monitors.
++This would lead to buffer overflows, which could allow the guest to
++read part of the host memory. This might cause write overflows in the
++host as well, but controlling the content of such buffers seems
++complicated.
++
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/server/reds.c b/server/reds.c
++index e1c8c108..3a42c375 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -1000,6 +1000,7 @@ static void reds_on_main_agent_monitors_config(
++     VDAgentMessage *msg_header;
++     VDAgentMonitorsConfig *monitors_config;
++     RedsClientMonitorsConfig *cmc = &reds->client_monitors_config;
+++    uint32_t max_monitors;
++ 
++     // limit size of message sent by the client as this can cause a DoS through
++     // memory exhaustion, or potentially some integer overflows
++@@ -1028,6 +1029,12 @@ static void reds_on_main_agent_monitors_config(
++         goto overflow;
++     }
++     monitors_config = (VDAgentMonitorsConfig *)(cmc->buffer + sizeof(*msg_header));
+++    // limit the monitor number to avoid buffer overflows
+++    max_monitors = (msg_header->size - sizeof(VDAgentMonitorsConfig)) /
+++                   sizeof(VDAgentMonConfig);
+++    if (monitors_config->num_of_monitors > max_monitors) {
+++        goto overflow;
+++    }
++     spice_debug("%s: %d", __func__, monitors_config->num_of_monitors);
++     red_dispatcher_client_monitors_config(monitors_config);
++     reds_client_monitors_config_cleanup();
++-- 
++2.11.0
++
