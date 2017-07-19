@@ -1,50 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 15:39:49 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] xvisor: fix bogus check
-	on XVISOR_ARCH
-Message-ID: <20170719204757.993A97FF4F@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 15:48:30 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] ccache: make default
+	host-ccache cache dir fit for multi-user setups
+Message-ID: <20170719204757.BF11281696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fcc2c1da98af7f80f8e3baae92078ed99b3d173
+commit: https://git.buildroot.net/buildroot/commit/?id=ab4b00dce659c986696442d3183c65d020809b15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-The XVISOR_ARCH check added in commit
-117fd5dfbc756c4f2b4aef97fc2b568528c66df7 ("xvisor: fix build on
-AArch64") broke Buildroot entirely on all architectures except ARM,
-AArch64 and x86-64, because the $(error ...) test was not enclosed
-inside a condition that made sure the xvisor package was enabled.
+While building I noticed:
 
-This commit fixes that, and allows Buildroot to be usable again on all
-architectures.
+>>> host-ccache 3.3.4 Building
+conf.c: In function 'conf_create':
+conf.c:314:2: warning: too many arguments for format [-Wformat-extra-args]
+  conf->cache_dir = format("/home/peko/.buildroot-ccache", get_home_directory());
+  ^
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+As host-ccache gets installed into $(HOST_DIR) and is part of the SDK,
+hardcoding the build user homedir isn't really nice for the relocatable
+SDK feature (or simply for a SDK used by multiple users).
+
+As the warning shows, CCache replaces "%s" with the current user home
+directory, so rewrite BR_CACHE_DIR to use this feature if it begins with
+$HOME.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 27ce235cdb996dc691c28a95f6acc9c479ef1fb8)
+(cherry picked from commit bdca0d05816fec8472b1d32301f55df152b86466)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xvisor/xvisor.mk | 6 +++++-
+ package/ccache/ccache.mk | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index 8be4be9..addd7e6 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -30,9 +30,13 @@ ifeq ($(BR2_x86_64),y)
- XVISOR_ARCH = x86
- else ifeq ($(BR2_arm)$(BR2_aarch64),y)
- XVISOR_ARCH = arm
--else
-+endif
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 97d66bb..afbec44 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -28,9 +28,13 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+ #    BR2_CCACHE_DIR.
+ #  - Change hard-coded last-ditch default to match path in .config, to avoid
+ #    the need to specify BR_CACHE_DIR when invoking ccache directly.
++#    CCache replaces "%s" with the home directory of the current user,
++#    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
++HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
 +
-+ifeq ($(BR2_PACKAGE_XVISOR)$(BR_BUILDING),yy)
-+ifeq ($(XVISOR_ARCH),)
- $(error "Architecture not supported by XVisor")
- endif
-+endif
+ define HOST_CCACHE_PATCH_CONFIGURATION
+ 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+-	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
++	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
+ endef
  
- XVISOR_MAKE_ENV = \
- 	ARCH=$(XVISOR_ARCH) \
+ HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
