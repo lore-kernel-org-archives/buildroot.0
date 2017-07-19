@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 14:57:50 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-fusion: fix a build issue
-In-Reply-To: <20170704184157.66a438eb@windsurf> (Thomas Petazzoni's message of
- "Tue, 4 Jul 2017 18:41:57 +0200")
-References: <20170704031238.14389-1-matthew.shyu.amlogic@gmail.com>
- <20170704184157.66a438eb@windsurf>
-Message-ID: <87lgnkbn3l.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Jul 2017 15:08:58 +0200
+Subject: [Buildroot] [PATCH] libusb-compat: fix a build issue with
+	undefined PATH_MAX
+In-Reply-To: <CAMRc=Me7p+5rw2tUWK1vkgrm0YPL-=swtSE87c60t3dOSvUOyQ@mail.gmail.com>
+ (Bartosz Golaszewski's message of "Mon, 3 Jul 2017 18:50:35 +0200")
+References: <1499091412-26839-1-git-send-email-brgl@bgdev.pl>
+ <8b198702-d118-0dc0-fe5b-7f56d5145c47@mind.be>
+ <2c1faeab-92de-d158-442e-8ee89965d4cc@mind.be>
+ <CAMRc=Me7p+5rw2tUWK1vkgrm0YPL-=swtSE87c60t3dOSvUOyQ@mail.gmail.com>
+Message-ID: <87h8y8bml1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
 
- > Hello,
- > On Tue,  4 Jul 2017 11:12:38 +0800, Matthew Shyu wrote:
- >> From: Matthew Shyu <matthew.shyu@amlogic.com>
+Hi,
+
+ >> OK so I investigated a little more, and it turns out that -std=c99 is the
+ >> culprit. And apparently people on the 'net are advising to use linux/limits.h to
+ >> get at PATH_MAX. So perhaps this is the right approach after all.
  >> 
- >> size parameter from sock_recvmsg was removed from kernel API since 4.7
- >> 
- >> Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
- >> ---
- >> .../0004-Port-one-one_udp.c-to-Linux-4.1.patch     | 27 ++++++++++++++++++----
- >> 1 file changed, 23 insertions(+), 4 deletions(-)
+ >> What's the upstream status of this patch?
 
- > Thanks, I've applied your patch to the master branch, after improving a
- > bit the commit title and commit log.
+ > Submitted, no answer yet.
 
- > It's by the way surprising that people are still using DirectFB, even
- > though the project has been dead for several years.
-
-Committed to 2017.02.x and 2017.05.x, thanks.
+Out of interest, where did you submit it? I don't seem to find a pull
+request or a patch on the libusb-devel list?
 
 -- 
 Bye, Peter Korsgaard
