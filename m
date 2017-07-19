@@ -1,61 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Jul 2017 20:35:05 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] libosip2: add upstream
-	security fix
-Message-ID: <20170719204801.002CD80337@busybox.osuosl.org>
+Date: Wed, 19 Jul 2017 16:06:25 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] mpg123: security bump to
+	version 1.25.2
+Message-ID: <20170719204759.613B581F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=718e6e94c17ee7937c8e411e39e8c0f4407e567f
+commit: https://git.buildroot.net/buildroot/commit/?id=6e23252d6389c277a6238c1f262d6fef5073e272
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes CVE-2016-10324 - In libosip2 in GNU oSIP 4.1.0, a malformed SIP
-message can lead to a heap buffer overflow in the osip_clrncpy() function
-defined in osipparser2/osip_port.c.
+From the release notes:
+
+ - Extend pow tables for layer III to properly handle files with i-stereo and
+   5-bit scalefactors. Never observed them for real, just as fuzzed input to
+   trigger the read overflow. Note: This one goes on record as CVE-2017-11126,
+   calling remote denial of service. While the accesses are out of bounds for
+   the pow tables, they still are safely within libmpg123's memory (other
+   static tables). Just wrong values are used for computation, no actual crash
+   unless you use something like GCC's AddressSanitizer, nor any information
+   disclosure.
+ - Avoid left-shifts of negative integers in layer I decoding.
+
+While we're at it, add a hash for the license file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d8a806e2b81d6f76fa2636a554cd2fbf2fff38ef)
+(cherry picked from commit 474daa20f8da2a677250146e8ee1652206923ee8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ort-sr-109133-Heap-buffer-overflow-in-uti.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/mpg123/mpg123.hash | 5 ++++-
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
-new file mode 100644
-index 0000000..7f2c2d4
---- /dev/null
-+++ b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
-@@ -0,0 +1,30 @@
-+From 7e0793e15e21f68337e130c67b031ca38edf055f Mon Sep 17 00:00:00 2001
-+From: Aymeric Moizard <amoizard@gmail.com>
-+Date: Mon, 5 Sep 2016 15:01:53 +0200
-+Subject: [PATCH]  * fix bug report: sr #109133: Heap buffer overflow in
-+ utility function *osip_clrncpy*    https://savannah.gnu.org/support/?109133
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 69fbef3..cbab6f3 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
++sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/osipparser2/osip_port.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/osipparser2/osip_port.c b/src/osipparser2/osip_port.c
-+index 0e64147..d8941b0 100644
-+--- a/src/osipparser2/osip_port.c
-++++ b/src/osipparser2/osip_port.c
-+@@ -1291,8 +1291,10 @@ osip_clrncpy (char *dst, const char *src, size_t len)
-+ 	char *p;
-+ 	size_t spaceless_length;
-+ 
-+-	if (src == NULL)
-++	if (src == NULL || len == 0) {
-++		*dst = '\0';
-+ 		return NULL;
-++	}
-+ 
-+ 	/* find the start of relevant text */
-+	pbeg = src;
-+-- 
-+2.11.0
-+
++# License file
++sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 7fc6d7a..01923d7 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.25.1
++MPG123_VERSION = 1.25.2
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
