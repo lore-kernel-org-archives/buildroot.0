@@ -1,36 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 07:39:02 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] iproute2: correct license
-Message-ID: <20170720055510.92D507FD53@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 07:37:58 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] arch/arm: fix -mcpu
+	default values for AArch64
+Message-ID: <20170720055510.81C407FD53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65080e973d686ee34e30644046375d8757c3ba5f
+commit: https://git.buildroot.net/buildroot/commit/?id=e3d33a6a19a49d11776a8eff0298882e6d3d0c82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Source files license headers include the GPL "or ... any later version" language.
+We have to specify the -mcpu value, even in 64-bit mode.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+For AArch64, +fp and +simd are the default, so they are totally useless.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit b1b962274bb363eeba492d3a3f4fc1ff3ea252c1)
+(cherry picked from commit 9d06e91df85a2f02dd10dcac6a37a19da11b13aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iproute2/iproute2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in.arm | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 5ea5299..fefd018 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -9,7 +9,7 @@ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBMNL),libmnl)
--IPROUTE2_LICENSE = GPLv2
-+IPROUTE2_LICENSE = GPLv2+
- IPROUTE2_LICENSE_FILES = COPYING
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 2617976..596921d 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -534,15 +534,9 @@ config BR2_GCC_TARGET_CPU
+ 	default "strongarm"	if BR2_strongarm
+ 	default "xscale"	if BR2_xscale
+ 	default "iwmmxt"	if BR2_iwmmxt
+-	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
+-	default "cortex-a53+fp"		if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
+-	default "cortex-a53+fp+simd" 	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+-	default "cortex-a57"		if (BR2_cortex_a57 && !BR2_ARCH_IS_64)
+-	default "cortex-a57+fp"		if (BR2_cortex_a57 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
+-	default "cortex-a57+fp+simd" 	if (BR2_cortex_a57 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+-	default "cortex-a72"		if (BR2_cortex_a72 && !BR2_ARCH_IS_64)
+-	default "cortex-a72+fp"		if (BR2_cortex_a72 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
+-	default "cortex-a72+fp+simd" 	if (BR2_cortex_a72 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
++	default "cortex-a53"	if BR2_cortex_a53
++	default "cortex-a57"	if BR2_cortex_a57
++	default "cortex-a72"	if BR2_cortex_a72
  
- # If both iproute2 and busybox are selected, make certain we win
+ config BR2_GCC_TARGET_ABI
+ 	default "aapcs-linux"	if BR2_arm || BR2_armeb
