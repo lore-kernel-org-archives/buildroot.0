@@ -1,56 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jul 2017 19:05:46 +0200
-Subject: [Buildroot] [PATCH v7 2/9] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <72b10dae-a067-66dc-4e7e-cc43193d2527@grandegger.com>
-References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-3-git-send-email-wg@grandegger.com>
- <b381421f-9595-ad2d-defb-f94b7d325c09@mind.be>
- <16f616fc-173d-a201-8342-cda48dc102fe@grandegger.com>
- <a8c548d5-d6d0-53bf-2c6b-17e5a5f3101b@mind.be>
- <75ca9a71-aaf5-dd21-f71f-4bcfc2880faa@grandegger.com>
- <6994b7c9-7714-4941-8efc-ffb31f1adbb1@mind.be>
- <ee017453-259f-5e1c-0028-9d3b51b21376@grandegger.com>
- <fae9da71-f806-a64f-042a-dbf3e9c0d068@mind.be>
- <72b10dae-a067-66dc-4e7e-cc43193d2527@grandegger.com>
-Message-ID: <23227ea3-18e1-2543-f551-98bf39d29923@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 20 Jul 2017 21:03:57 +0300
+Subject: [Buildroot] [PATCH] putty: bump to version 0.70
+Message-ID: <b2ac59e7b72811c01b4f352bb1c75e0156230a50.1500573837.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Cc: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/putty/putty.hash | 6 +++---
+ package/putty/putty.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-On 20-07-17 18:50, Wolfgang Grandegger wrote:
-> 
-> 
-> Am 20.07.2017 um 16:19 schrieb Arnout Vandecappelle:
-[snip]
->>   OK good. Might be a good idea to keep track of the things you already tried in
->> the cover letter.
-> 
-> Well, it's already a few month ago that I tried finding a good and fast
-> solution. I tried a lot of things, be can't remember the details. 
-
- That's exactly why I ask to keep track of it in the cover letter. :-)
-
- Since you already posted the series, no need to do it now. But when you post
-patches that speed things up, please try to write down what you tested (at least
-the things that you are sure of).
-
- Regards,
- Arnout
-
-> My time
-> working on this topic is limited! When I have more free time I will take care.
-> 
-> Wolfgang.
-
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 23c6b3d0ede7..e0527105c1d4 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,3 +1,3 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.68/{sha256,sha512}sums
+-sha256 7ba256f46e5a353cafe811ce7914d0e22a52bdfc0e6e2d183ad28b5af44cd09c                                                                 putty-0.68.tar.gz
+-sha512 e3a6e4f45e1fce70d4cbb6d4769ab72b23c10920e48a88bba95b3f4c225b0193ddc1444e69d572bdec5e505d2c56fed365f07d990c156b35f272b56f978ef5d3 putty-0.68.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.70/{sha256,sha512}sums
++sha256 bb8aa49d6e96c5a8e18a057f3150a1695ed99a24eef699e783651d1f24e7b0be                                                                 putty-0.70.tar.gz
++sha512 2aaf4fa2b4ad2d82eb5cdc4419ade79e0c5d8bd3c093db92b3c048e6107f85a5f1647f9d8203cda0906ce2b926725a75319f981cb32e6f1ebf50b1f738564fed putty-0.70.tar.gz
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index a2a731e3ab6c..52f2d4c3dd36 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PUTTY_VERSION = 0.68
++PUTTY_VERSION = 0.70
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_SUBDIR = unix
+ PUTTY_LICENSE = MIT
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.2
