@@ -1,54 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 23:11:44 +0200
-Subject: [Buildroot] buildroot | Pipeline #10045873 has failed for
-	2017.05.x | 786d15a2
-In-Reply-To: <4a565636-d087-b736-c364-7988f6407aa6@mind.be> (Arnout
- Vandecappelle's message of "Thu, 20 Jul 2017 22:41:03 +0200")
-References: <59707d9eeee0a_de2b3fa2d43673cc1423a@sidekiq-asap05.mail>
- <4a565636-d087-b736-c364-7988f6407aa6@mind.be>
-Message-ID: <87fudq4xv3.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Jul 2017 23:11:34 +0200
+Subject: [Buildroot] [PATCH v8 06/10] core: introduce "sdk" target to
+ make a relocatable SDK
+In-Reply-To: <1500561321-6623-7-git-send-email-wg@grandegger.com>
+References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
+ <1500561321-6623-7-git-send-email-wg@grandegger.com>
+Message-ID: <12b29063-e931-6599-32f0-d28f61479378@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > On 20-07-17 11:53, GitLab wrote:
- > [snip]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/s/serf/libserf-1-1_1.3.9-3_amd64.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/s/subversion/libsvn1_1.9.5-1_amd64.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/m/mercurial/mercurial-common_4.0-1_all.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/m/mercurial/mercurial_4.0-1_amd64.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/r/rsync/rsync_3.1.2-1_amd64.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/s/subversion/subversion_1.9.5-1_amd64.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Failed to fetch
- >> http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-21_amd64.deb
- >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
- >> E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
- >> ERROR: Job failed: exit code 1
 
- >  To avoid this in the future, perhaps you should cherry-pick
- > commit d2a151cea0a9066015b9e6c1fb714a84faffec0f
- > Author: Arnout Vandecappelle <arnout@mind.be>
- > Date:   Sun Jul 2 18:24:59 2017
+On 20-07-17 16:35, Wolfgang Grandegger wrote:
+> We use a separate make target to build a relocatable SDK.
+> We first sanitize the RPATH in host tree depending on
+> the toolchain.
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index d4faa02..3019081 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -552,6 +552,11 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>  .PHONY: world
+>  world: target-post-image
+>  
+> +.PHONY: sdk
+> +sdk: toolchain
 
- >     .gitlab-ci.yml: use the Buildroot CI image published on Docker Hub
+ As mentioned by Thomas, this should depend on "world", not just toolchain.
+Indeed, plenty of host packages are built *after* the toolchain. You could add
+${PACKAGES} as a dependency, but that still misses the dependencies of the
+rootfs targets that don't have a Kconfig option. So depending on "world" is the
+easiest.
 
-Good idea. Committed to 2017.05.x, thanks.
+ With that (and updating the commit message accordingly):
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+
+> +	@$(call MESSAGE,"Rendering the SDK relocatable")
+> +	$(TOPDIR)/support/scripts/fix-rpath host
+> +
+>  # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
+>  $(HOST_DIR)/usr: $(HOST_DIR)
+>  	@ln -snf . $@
+> @@ -1001,6 +1006,7 @@ help:
+>  	@echo 'Build:'
+>  	@echo '  all                    - make world'
+>  	@echo '  toolchain              - build toolchain'
+> +	@echo '  sdk                    - build relocatable SDK'
+>  	@echo
+>  	@echo 'Configuration:'
+>  	@echo '  menuconfig             - interactive curses-based configurator'
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
