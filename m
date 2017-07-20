@@ -1,69 +1,79 @@
-From: Diankun Zhang <kundy.zhang@gmail.com>
-Date: Thu, 20 Jul 2017 22:49:08 +0800
-Subject: [Buildroot] [PATCH 1/1] python: fix the _ctype module compiling
- error caused by ffi library
-Message-ID: <CAO6UsjBMM4PUTuY5HK+AJAS2FQTTGOgQHHrSpUmZVSJ5ibQsZA@mail.gmail.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Thu, 20 Jul 2017 18:50:41 +0200
+Subject: [Buildroot] [PATCH v7 2/9] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <fae9da71-f806-a64f-042a-dbf3e9c0d068@mind.be>
+References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
+ <1499273594-12106-3-git-send-email-wg@grandegger.com>
+ <b381421f-9595-ad2d-defb-f94b7d325c09@mind.be>
+ <16f616fc-173d-a201-8342-cda48dc102fe@grandegger.com>
+ <a8c548d5-d6d0-53bf-2c6b-17e5a5f3101b@mind.be>
+ <75ca9a71-aaf5-dd21-f71f-4bcfc2880faa@grandegger.com>
+ <6994b7c9-7714-4941-8efc-ffb31f1adbb1@mind.be>
+ <ee017453-259f-5e1c-0028-9d3b51b21376@grandegger.com>
+ <fae9da71-f806-a64f-042a-dbf3e9c0d068@mind.be>
+Message-ID: <72b10dae-a067-66dc-4e7e-cc43193d2527@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ctype compiling error for python 2 is caused by the mixed
-ifdefs X86_WIN32 and X86_WIN64. The issue is tracked by
-python upstream issue  https://bugs.python.org/issue23042.
-Whereas the patch is not completely applied on python package.
-This additional patch is a supplement for the issue.
-
-Signed-off-by: Diankun Zhang <kundy.zhang@gmail.com>
----
- package/python/0035-fix-ffi-windws-ifdefs.patch | 27
-+++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/python/0035-fix-ffi-windws-ifdefs.patch
-
-diff --git a/package/python/0035-fix-ffi-windws-ifdefs.patch
-b/package/python/0035-fix-ffi-windws-ifdefs.patch
-new file mode 100644
-index 0000000..74511cf
---- /dev/null
-+++ b/package/python/0035-fix-ffi-windws-ifdefs.patch
-@@ -0,0 +1,27 @@
-+ffi.c: fix the compiling error caused by the mixed definition of calls for
-+       different platforms(x86 and x64) in function ffi_prep_closure_loc()
-+
-+The issue is tracked by upstream python bug
-+https://bugs.python.org/issue23042
-+
-+Signed-off-by: Diankun Zhang <kundy.zhang@gmail.com>
-+
-+--- a/Modules/_ctypes/libffi/src/x86/ffi.c     Wed Mar 18 14:39:33 2015
-+0100
-++++ b/Modules/_ctypes/libffi/src/x86/ffi.c     Thu Mar 19 08:39:52 2015
-+0000
-+@@ -673,6 +673,7 @@
-+                            &ffi_closure_SYSV,
-+                            (void*)codeloc);
-+     }
-++#ifdef X86_WIN32
-+   else if (cif->abi == FFI_FASTCALL)
-+     {
-+       FFI_INIT_TRAMPOLINE_STDCALL (&closure->tramp[0],
-+@@ -691,7 +692,6 @@
-+                                    &ffi_closure_STDCALL,
-+                                    (void*)codeloc);
-+     }
-+-#ifdef X86_WIN32
-+   else if (cif->abi == FFI_MS_CDECL)
-+     {
-+       FFI_INIT_TRAMPOLINE (&closure->tramp[0],
-+
---
-2.7.4
 
 
--- 
--Diankun
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170720/56371484/attachment.html>
+Am 20.07.2017 um 16:19 schrieb Arnout Vandecappelle:
+> 
+> 
+> On 20-07-17 16:08, Wolfgang Grandegger wrote:
+>> Hello Arnout,
+>>
+>> Am 20.07.2017 um 15:45 schrieb Arnout Vandecappelle:
+>>>
+>>>
+>>> On 20-07-17 11:03, Wolfgang Grandegger wrote:
+>>>>       case "${tree}" in
+>>>>           host)
+>>>>               ...
+>>>>               # we always want $ORIGIN-based rpaths to make it relocatable.
+>>>
+>>>    Perfect. Just please start the sentence with a capital (it ends with a .)
+>>
+>> Well, I followed the style of the original script... just to be consistent...
+>> otherwise we will have an ugly mix.
+> 
+>   There is no original script, only an original author :-)
+
+I have no problem to adapt the style of the original author(s) ;). It 
+should just be consistent.
+
+>   So indeed, fix it script-wide please.
+> 
+> [snip]
+>>>> As I said, the execution time comes form scanning for ELF files. The rest
+>>>> doesn't
+>>>> matter a lot.
+>>>
+>>>    Instead of the patch you attached, it might actually make more sense to create
+>>> a tiny C file that does this, and execute that as part of the find command. Or
+>>> you could just create support/scripts/elfmagic with those 4 bytes and use "cmp
+>>> -n 4 {} ${0%/*}/elfmagic".
+>>
+>> Yes, I had that idea as well and I have already hacked something. The problem is
+>> that it does not check if it does have an rpath.
+> 
+>   Well, you could do that particular check in the find -exec and keep the
+> --print-rpath check in the while loop.
+> 
+> 
+>> "cmp" is not faster, I already
+>> tried!
+> 
+>   OK good. Might be a good idea to keep track of the things you already tried in
+> the cover letter.
+
+Well, it's already a few month ago that I tried finding a good and fast 
+solution. I tried a lot of things, be can't remember the details. My 
+time working on this topic is limited! When I have more free time I will 
+take care.
+
+Wolfgang.
