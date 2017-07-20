@@ -1,79 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:11:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] php: security bump to
-	version 7.1.7
-Message-ID: <20170720055508.502A1800CC@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 07:35:00 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] expat: security bump to
+	version 2.2.2
+Message-ID: <20170720055510.5FD797F999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5519f5dcd5be0f343a451861bbd581f6dda13626
+commit: https://git.buildroot.net/buildroot/commit/?id=98ffe962a47d54bcf89b44f852f4d7246c8d37e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issues:
+Changes (security fixes):
 
-CVE-2017-7890 - Buffer over-read into uninitialized memory.  The GIF
-decoding function gdImageCreateFromGifCtx in gd_gif_in.c (which can be
-reached with a call to the imagecreatefromstring() function) uses
-constant-sized color tables of size 3 * 256, but does not zero-out these
-arrays before use.
+[MOX-006]      Fix non-NULL parser parameter validation in XML_Parse;
+                 resulted in NULL dereference, previously
 
-CVE-2017-9224, CVE-2017-9226, CVE-2017-9227, CVE-2017-9228, CVE-2017-9229 -
-Out-of-bonds access in oniguruma regexp library.
+Drop upstream patch.
 
-CVE-2017-11144 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
-7.1.7, the openssl extension PEM sealing code did not check the return value
-of the OpenSSL sealing function, which could lead to a crash of the PHP
-interpreter, related to an interpretation conflict for a negative number in
-ext/openssl/openssl.c, and an OpenSSL documentation omission.
-
-CVE-2017-11145 - In PHP before 5.6.31, 7.x before 7.0.21, and 7.1.x before
-7.1.7, lack of a bounds check in the date extension's timelib_meridian
-parsing code could be used by attackers able to supply date strings to leak
-information from the interpreter, related to an ext/date/lib/parse_date.c
-out-of-bounds read affecting the php_parse_date function.
-
-CVE-2017-11146 - In PHP through 5.6.31, 7.x through 7.0.21, and 7.1.x
-through 7.1.7, lack of bounds checks in the date extension's
-timelib_meridian parsing code could be used by attackers able to supply date
-strings to leak information from the interpreter, related to
-ext/date/lib/parse_date.c out-of-bounds reads affecting the php_parse_date
-function.  NOTE: this vulnerability exists because of an incomplete fix for
-CVE-2017-11145.
-
-While we're at it, add a hash for the license file.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 91f4c9d41209a19d16c9b7813facdea2e32e2015)
+(cherry picked from commit b3eca095003aecde94414fd1f01a831f1af198ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 5 ++++-
- package/php/php.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ----------------------
+ package/expat/expat.hash                           |  8 +++---
+ package/expat/expat.mk                             |  4 +--
+ 3 files changed, 5 insertions(+), 36 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 0c8518b..c724f6d 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,5 @@
- # From http://php.net/downloads.php
--sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
-+sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
-+
-+# License file
-+sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ed12dd3..0733bc9 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+deleted file mode 100644
+index 44f43e1..0000000
+--- a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 602e6c78ca750c082b72f8cdf4a38839b312959f Mon Sep 17 00:00:00 2001
+-From: Sebastian Pipping <sebastian@pipping.org>
+-Date: Sun, 18 Jun 2017 18:55:10 +0200
+-Subject: [PATCH] configure.ac: Fix mis-detection of getrandom on Debian
+- GNU/kFreeBSD (#50)
+-
+-There is no such thing but we need to link (not just compile) to realize.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- expat/configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1357c9a..444c002 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
+- 
+- 
+- AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
+--AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+-+AC_LINK_IFELSE([AC_LANG_SOURCE([
+-   #include <stdlib.h>  /* for NULL */
+-   #include <sys/random.h>
+-   int main() {
+--- 
+-2.11.0
+-
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 595597b..f1e1919 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.1/
+-md5	d9c3baeab58774cefc2f04faf29f2cf8	expat-2.2.1.tar.bz2
+-sha1	f45eb724f182776a9cacec9ed70d549e87198987	expat-2.2.1.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.2/
++md5	1ede9a41223c78528b8c5d23e69a2667	expat-2.2.2.tar.bz2
++sha1	891cee988b38d5d66953f62f94c3150b8810a70a	expat-2.2.2.tar.bz2
+ # Calculated based on the hashes above
+-sha256	1868cadae4c82a018e361e2b2091de103cd820aaacb0d6cfa49bd2cd83978885	expat-2.2.1.tar.bz2
++sha256	4376911fcf81a23ebd821bbabc26fd933f3ac74833f74924342c29aad2c86046	expat-2.2.2.tar.bz2
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index bb6e627..a10f2c9 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.1.6
-+PHP_VERSION = 7.1.7
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-EXPAT_VERSION = 2.2.1
++EXPAT_VERSION = 2.2.2
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
+@@ -14,8 +14,6 @@ EXPAT_DEPENDENCIES = host-pkgconf
+ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
+-# for 0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+-EXPAT_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
