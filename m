@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 23:18:54 +0200
-Subject: [Buildroot] [PATCH v8 06/10] core: introduce "sdk" target to
- make a relocatable SDK
-In-Reply-To: <12b29063-e931-6599-32f0-d28f61479378@mind.be>
+Date: Thu, 20 Jul 2017 23:21:31 +0200
+Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
+ buildroot SDK has already been relocated
+In-Reply-To: <1500561321-6623-9-git-send-email-wg@grandegger.com>
 References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-7-git-send-email-wg@grandegger.com>
- <12b29063-e931-6599-32f0-d28f61479378@mind.be>
-Message-ID: <20170720231854.31f919e9@windsurf>
+ <1500561321-6623-9-git-send-email-wg@grandegger.com>
+Message-ID: <20170720232131.02e9a51d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +14,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Jul 2017 23:11:34 +0200, Arnout Vandecappelle wrote:
-
->  As mentioned by Thomas, this should depend on "world", not just toolchain.
-> Indeed, plenty of host packages are built *after* the toolchain. You could add
-> ${PACKAGES} as a dependency, but that still misses the dependencies of the
-> rootfs targets that don't have a Kconfig option. So depending on "world" is the
-> easiest.
+On Thu, 20 Jul 2017 16:35:19 +0200, Wolfgang Grandegger wrote:
+> The location of the buildroot SDK is stored in the file "sdk-location"
+> in "share/buildroot". If it's content does not match the current
+> SDK location, ask the user to run the script "relocate-sdk.sh" in the
+> top directory once. The external toolchain may be a pre-installed one
+> in a directory that is not writeable by us. Therefore, we can't run
+> the script directly.
 > 
->  With that (and updating the commit message accordingly):
->  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  toolchain/helpers.mk                                   | 16 ++++++++++++++++
+>  toolchain/toolchain-external/pkg-toolchain-external.mk |  1 +
+>  2 files changed, 17 insertions(+)
 
-Wolfgang added the dependency on $(PACKAGES) in PATCH 07/10. But
-actually, I think PATCH 06/10 and 07/10 should probably be squashed
-together, and indeed have sdk depend on world.
+Now that I think of it, this is going to be a bit annoying. This means
+that whenever you want to use a Buildroot-generated toolchain as an
+external toolchain in another Buildroot configuration, you have to run
+this relocate script.
 
-In fact even PATCH 09/10 should be squashed with 06/10 and 07/10. Just
-one patch adding the "sdk" target is enough, it's just a few lines
-overall.
+This will break a lot of things, like the autobuilders, the runtime
+test infrastructure, etc. that all rely on pre-built Buildroot
+toolchains, but don't run the relocate-sdk script. In addition, we
+simply can't do it, because it's directly Buildroot itself that
+downloads the toolchain tarball and extracts it, so we don't even get
+the opportunity to run the relocate-sdk script.
+
+Therefore, I cannot apply this as-is, a better solution needs to be
+found.
+
+Best regards,
 
 Thomas
 -- 
