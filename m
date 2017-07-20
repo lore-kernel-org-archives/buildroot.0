@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 22:49:06 +0200
-Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <1500561321-6623-4-git-send-email-wg@grandegger.com>
+Date: Thu, 20 Jul 2017 22:49:24 +0200
+Subject: [Buildroot] [PATCH v8 04/10] patchelf: always build this
+ package required for RPATH sanitization
+In-Reply-To: <1500561321-6623-5-git-send-email-wg@grandegger.com>
 References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-4-git-send-email-wg@grandegger.com>
-Message-ID: <20170720224906.301f524a@windsurf>
+ <1500561321-6623-5-git-send-email-wg@grandegger.com>
+Message-ID: <20170720224924.75cd2bf8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Jul 2017 16:35:14 +0200, Wolfgang Grandegger wrote:
-> From: Samuel Martin <s.martin49@gmail.com>
-> 
-> This commit introduces the script "fix-rpath" able to scan a tree,
-> detect ELF files, check their RPATH and fix it in a proper way.
-> The RPATH fixup is done by the patchelf utility using the option
-> "--make-rpath-relative <root-directory>".
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Thu, 20 Jul 2017 16:35:15 +0200, Wolfgang Grandegger wrote:
 > Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  support/scripts/fix-rpath | 133 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 133 insertions(+)
->  create mode 100755 support/scripts/fix-rpath
+>  package/patchelf/Config.in.host | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/patchelf/Config.in.host b/package/patchelf/Config.in.host
+> index d1c8375..7b19e6a 100644
+> --- a/package/patchelf/Config.in.host
+> +++ b/package/patchelf/Config.in.host
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_HOST_PATCHELF
+> -	bool "host patchelf"
+> +	bool
+> +	default "y"
 
-I've applied to master, after removing trailing slashes.
-
-However, I noticed that when patchelf is not available in HOST_DIR,
-this script does nothing, but doesn't show any error:
-
-thomas at windsurf:~/projets/buildroot (master)$ rm output/host/usr/bin/patchelf 
-thomas at windsurf:~/projets/buildroot (master)$ make
-[...]
->>>   Sanitizing RPATH in target tree
-/home/thomas/projets/buildroot/support/scripts/fix-rpath target
-thomas at windsurf:~/projets/buildroot (master)$
-
-This is a little bit disturbing, so I believe it should be fixed in a
-follow-up patch.
+Double quotes are not needed, so I dropped them and applied.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
