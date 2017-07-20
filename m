@@ -1,80 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 07:34:27 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] qt5base: fix qthash error
-	attribute(target("+crc")) is unknown
-Message-ID: <20170720055510.4F2287F999@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 07:34:10 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libosip2: add upstream
+	security fix
+Message-ID: <20170720055510.2CC3E7F999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85cfc3a3ac747529df586c77abe281666b419e9a
+commit: https://git.buildroot.net/buildroot/commit/?id=2e71e4d7df2d82d878ae20cb965b7c1c722665db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Add patch 0005-Fix-error-attribute-target-crc-is-unknown.patch.
+Fixes CVE-2016-10324 - In libosip2 in GNU oSIP 4.1.0, a malformed SIP
+message can lead to a heap buffer overflow in the osip_clrncpy() function
+defined in osipparser2/osip_port.c.
 
-Upstream: https://codereview.qt-project.org/200171
-
-Fixes buildroot Bug 9916 ([1]).
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=9916
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a9e053b5a8b4195aaddd97db98b0ba3dcf788638)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d8a806e2b81d6f76fa2636a554cd2fbf2fff38ef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Fix-error-attribute-target-crc-is-unknown.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ ...ort-sr-109133-Heap-buffer-overflow-in-uti.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+diff --git a/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
 new file mode 100644
-index 0000000..92d93a8
+index 0000000..7f2c2d4
 --- /dev/null
-+++ b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
-@@ -0,0 +1,44 @@
-+From f0c02fb22bc277e2015a18e562b551ec7b3eed9e Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 16 Jul 2017 00:05:44 +0200
-+Subject: [PATCH] Fix error attribute(target("+crc")) is unknown
++++ b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
+@@ -0,0 +1,30 @@
++From 7e0793e15e21f68337e130c67b031ca38edf055f Mon Sep 17 00:00:00 2001
++From: Aymeric Moizard <amoizard@gmail.com>
++Date: Mon, 5 Sep 2016 15:01:53 +0200
++Subject: [PATCH]  * fix bug report: sr #109133: Heap buffer overflow in
++ utility function *osip_clrncpy*    https://savannah.gnu.org/support/?109133
 +
-+Task-number: QTBUG-61975
-+Change-Id: I0b1b55c0737dad485b5ace8e6eb7cb842589453d
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ src/corelib/tools/qhash.cpp | 2 ++
-+ src/corelib/tools/qsimd_p.h | 3 +++
-+ 2 files changed, 5 insertions(+)
++ src/osipparser2/osip_port.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/corelib/tools/qhash.cpp b/src/corelib/tools/qhash.cpp
-+index 1f9c05c..bbf6efb 100644
-+--- a/src/corelib/tools/qhash.cpp
-++++ b/src/corelib/tools/qhash.cpp
-+@@ -144,7 +144,9 @@ static inline bool hasFastCrc32()
-+ }
++diff --git a/src/osipparser2/osip_port.c b/src/osipparser2/osip_port.c
++index 0e64147..d8941b0 100644
++--- a/src/osipparser2/osip_port.c
+++++ b/src/osipparser2/osip_port.c
++@@ -1291,8 +1291,10 @@ osip_clrncpy (char *dst, const char *src, size_t len)
++ 	char *p;
++ 	size_t spaceless_length;
 + 
-+ template <typename Char>
-++#if defined(__aarch64__)
-+ QT_FUNCTION_TARGET(CRC32)
-++#endif
-+ static uint crc32(const Char *ptr, size_t len, uint h)
-+ {
-+     // The crc32[whbd] instructions on Aarch64/Aarch32 calculate a 32-bit CRC32 checksum
-+diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
-+index 023a4b0..a85d572 100644
-+--- a/src/corelib/tools/qsimd_p.h
-++++ b/src/corelib/tools/qsimd_p.h
-+@@ -326,7 +326,10 @@
-+ #endif
-+ // AArch64/ARM64
-+ #if defined(Q_PROCESSOR_ARM_V8) && defined(__ARM_FEATURE_CRC32)
-++#if defined(__aarch64__)
-++// only available on aarch64
-+ #define QT_FUNCTION_TARGET_STRING_CRC32      "+crc"
-++#endif
-+ #  include <arm_acle.h>
-+ #endif
++-	if (src == NULL)
+++	if (src == NULL || len == 0) {
+++		*dst = '\0';
++ 		return NULL;
+++	}
 + 
++ 	/* find the start of relevant text */
++	pbeg = src;
 +-- 
-+2.7.4
++2.11.0
 +
