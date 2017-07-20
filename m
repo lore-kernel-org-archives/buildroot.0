@@ -1,197 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 15:12:17 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] protobuf: don't download
-	patch from Github
-Message-ID: <20170720130840.BBDBA82194@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jul 2017 15:44:04 +0200
+Subject: [Buildroot] [PATCH v7 5/9] core: sanitize RPATH in host tree at
+ the very end of the build
+In-Reply-To: <4e228fa3-0126-6752-8a98-e17967b61fb3@mind.be>
+References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
+ <1499273594-12106-6-git-send-email-wg@grandegger.com>
+ <4e228fa3-0126-6752-8a98-e17967b61fb3@mind.be>
+Message-ID: <20170720154404.7533bf28@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ba1a590b0b26fb18a4c6267357ec9f0ed972756
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+Hello,
 
-Patches downloaded from Github are not stable, so bring them in the
-tree.
+On Thu, 20 Jul 2017 01:51:53 +0200, Arnout Vandecappelle wrote:
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/protobuf/0001-Fix-freebsd-build.patch | 145 ++++++++++++++++++++++++++
- package/protobuf/protobuf.hash                |   1 -
- package/protobuf/protobuf.mk                  |   2 -
- 3 files changed, 145 insertions(+), 3 deletions(-)
+>  This sanitization takes a non-trivial amount of time. For example, on a config
+> with basically just systemd enabled, rebuilding the rootfs tarballs without the
+> sanitization takes just 5 seconds. target+staging sanitization adds 10 seconds
+> to that. host sanitization adds another 20 seconds. So globally we go from 5 to
+> 34 seconds as the baseline time to rebuild anything.
 
-diff --git a/package/protobuf/0001-Fix-freebsd-build.patch b/package/protobuf/0001-Fix-freebsd-build.patch
-new file mode 100644
-index 0000000..96ce511
---- /dev/null
-+++ b/package/protobuf/0001-Fix-freebsd-build.patch
-@@ -0,0 +1,145 @@
-+From 416f90939d4de58fe1a4e2489120010313183291 Mon Sep 17 00:00:00 2001
-+From: Feng Xiao <xfxyjwf@gmail.com>
-+Date: Tue, 14 Mar 2017 23:12:52 +0000
-+Subject: [PATCH] Fix freebsd build.
-+
-+It turns out system headers included by generated plugin.pb.h file already contains
-+major/minor macro definitions when built on FreeBSD and we need to add #undefs to
-+the generated header file.
-+
-+This change also fixes another compile error regarding EXPECT_DEATH on FreeBSD.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ src/google/protobuf/compiler/cpp/cpp_file.cc      | 46 +++++++++++++++++++++++
-+ src/google/protobuf/compiler/cpp/cpp_file.h       |  9 +++++
-+ src/google/protobuf/compiler/plugin.pb.h          |  6 +++
-+ src/google/protobuf/stubs/stringpiece_unittest.cc |  2 +
-+ 4 files changed, 63 insertions(+)
-+
-+diff --git a/src/google/protobuf/compiler/cpp/cpp_file.cc b/src/google/protobuf/compiler/cpp/cpp_file.cc
-+index 0e5e2f1..f2e013c 100644
-+--- a/src/google/protobuf/compiler/cpp/cpp_file.cc
-++++ b/src/google/protobuf/compiler/cpp/cpp_file.cc
-+@@ -54,6 +54,39 @@ namespace google {
-+ namespace protobuf {
-+ namespace compiler {
-+ namespace cpp {
-++namespace {
-++// The list of names that are defined as macros on some platforms. We need to
-++// #undef them for the generated code to compile.
-++const char* kMacroNames[] = {"major", "minor"};
-++
-++bool IsMacroName(const string& name) {
-++  // Just do a linear search as the number of elements is very small.
-++  for (int i = 0; i < GOOGLE_ARRAYSIZE(kMacroNames); ++i) {
-++    if (name == kMacroNames[i]) return true;
-++  }
-++  return false;
-++}
-++
-++void CollectMacroNames(const Descriptor* message, vector<string>* names) {
-++  for (int i = 0; i < message->field_count(); ++i) {
-++    const FieldDescriptor* field = message->field(i);
-++    if (IsMacroName(field->name())) {
-++      names->push_back(field->name());
-++    }
-++  }
-++  for (int i = 0; i < message->nested_type_count(); ++i) {
-++    CollectMacroNames(message->nested_type(i), names);
-++  }
-++}
-++
-++void CollectMacroNames(const FileDescriptor* file, vector<string>* names) {
-++  for (int i = 0; i < file->message_type_count(); ++i) {
-++    CollectMacroNames(file->message_type(i), names);
-++  }
-++}
-++
-++
-++}  // namespace
-+ 
-+ // ===================================================================
-+ 
-+@@ -103,10 +136,23 @@ FileGenerator::FileGenerator(const FileDescriptor* file, const Options& options)
-+ 
-+ FileGenerator::~FileGenerator() {}
-+ 
-++void FileGenerator::GenerateMacroUndefs(io::Printer* printer) {
-++  vector<string> names_to_undef;
-++  CollectMacroNames(file_, &names_to_undef);
-++  for (int i = 0; i < names_to_undef.size(); ++i) {
-++    printer->Print(
-++        "#ifdef $name$\n"
-++        "#undef $name$\n"
-++        "#endif\n",
-++        "name", names_to_undef[i]);
-++  }
-++}
-++
-+ void FileGenerator::GenerateHeader(io::Printer* printer) {
-+   printer->Print(
-+     "// @@protoc_insertion_point(includes)\n");
-+ 
-++  GenerateMacroUndefs(printer);
-+ 
-+   GenerateForwardDeclarations(printer);
-+ 
-+diff --git a/src/google/protobuf/compiler/cpp/cpp_file.h b/src/google/protobuf/compiler/cpp/cpp_file.h
-+index 25d6eab..e3fbb96 100644
-+--- a/src/google/protobuf/compiler/cpp/cpp_file.h
-++++ b/src/google/protobuf/compiler/cpp/cpp_file.h
-+@@ -133,6 +133,15 @@ class FileGenerator {
-+ 
-+   void GenerateProto2NamespaceEnumSpecializations(io::Printer* printer);
-+ 
-++  // Sometimes the names we use in a .proto file happen to be defined as macros
-++  // on some platforms (e.g., macro/minor used in plugin.proto are defined as
-++  // macros in sys/types.h on FreeBSD and a few other platforms). To make the
-++  // generated code compile on these platforms, we either have to undef the
-++  // macro for these few platforms, or rename the field name for all platforms.
-++  // Since these names are part of protobuf public API, renaming is generally
-++  // a breaking change so we prefer the #undef approach.
-++  void GenerateMacroUndefs(io::Printer* printer);
-++
-+   const FileDescriptor* file_;
-+   const Options options_;
-+ 
-+diff --git a/src/google/protobuf/compiler/plugin.pb.h b/src/google/protobuf/compiler/plugin.pb.h
-+index 1b91dac..d6afb21 100644
-+--- a/src/google/protobuf/compiler/plugin.pb.h
-++++ b/src/google/protobuf/compiler/plugin.pb.h
-+@@ -30,6 +30,12 @@
-+ #include <google/protobuf/unknown_field_set.h>
-+ #include <google/protobuf/descriptor.pb.h>
-+ // @@protoc_insertion_point(includes)
-++#ifdef major
-++#undef major
-++#endif
-++#ifdef minor
-++#undef minor
-++#endif
-+ namespace google {
-+ namespace protobuf {
-+ class DescriptorProto;
-+diff --git a/src/google/protobuf/stubs/stringpiece_unittest.cc b/src/google/protobuf/stubs/stringpiece_unittest.cc
-+index a52d81f..a6a8759 100644
-+--- a/src/google/protobuf/stubs/stringpiece_unittest.cc
-++++ b/src/google/protobuf/stubs/stringpiece_unittest.cc
-+@@ -783,11 +783,13 @@ TEST(FindOneCharTest, EdgeCases) {
-+   EXPECT_EQ(StringPiece::npos, a.rfind('x'));
-+ }
-+ 
-++#ifdef PROTOBUF_HAS_DEATH_TEST
-+ #ifndef NDEBUG
-+ TEST(NonNegativeLenTest, NonNegativeLen) {
-+   EXPECT_DEATH(StringPiece("xyz", -1), "len >= 0");
-+ }
-+ #endif  // ndef DEBUG
-++#endif  // PROTOBUF_HAS_DEATH_TEST
-+ 
-+ }  // namespace
-+ }  // namespace protobuf
-+-- 
-+2.7.5
-+
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 8c2ade3..9ec6bc7 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
- sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
--sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 2cd10eb..bd36ee4 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -23,8 +23,6 @@ endif
- 
- PROTOBUF_INSTALL_STAGING = YES
- 
--PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- PROTOBUF_DEPENDENCIES += zlib
- endif
+This is indeed not good.
+
+>  Also, we discussed this before (also with Thomas): I'm not so sure we want to
+> do this as part of the normal build. It would make sense to me to have a new
+> "sdk" target which is NOT a dependency of world, that should be called
+> explicitly to get a relocatable toolchain. That already solves a big part of the
+> time issue I mentioned above. But it also means we can later add other things to
+> that sdk target, like creating a tarball of it. And anyway the host sanitization
+> is only useful if you're actually going to move the sdk somewhere else.
+
+Yes for "make sdk".
+
+>  Also, host-finalize (or sdk) should depend on toolchain, and probably also on
+> $(filter host-%,$(PACKAGES)). The latter is currently incomplete, but when we
+> get around to selecting BR2_PACKAGE_HOST_* for all host packages, we will make
+> sure that 'make sdk' really generates the complete sdk.
+
+For the SDK, you also need to build all the target packages. The SDK
+contains the sysroot (i.e STAGING_DIR), where the target packages
+install libraries and headers.
+
+Basically, sdk needs to depend on "world".
+
+>  And finally, I think that the staging sanitization fits better here than in
+> target-finalize. It has nothing to do with target, and the only reason that we
+> do such sanitization is to make the sdk relocatable.
+
+The sanitization in staging and target has nothing to do with making
+the SDK relocatable. Why do you think it's related ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
