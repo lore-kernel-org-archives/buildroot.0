@@ -1,88 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 16:06:32 +0200
-Subject: [Buildroot] [PATCH v7 5/9] core: sanitize RPATH in host tree at
- the very end of the build
-In-Reply-To: <2f8b3ab3-b2e6-d444-9981-bd07bfc250b8@mind.be>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Thu, 20 Jul 2017 16:08:34 +0200
+Subject: [Buildroot] [PATCH v7 2/9] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <6994b7c9-7714-4941-8efc-ffb31f1adbb1@mind.be>
 References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-6-git-send-email-wg@grandegger.com>
- <4e228fa3-0126-6752-8a98-e17967b61fb3@mind.be>
- <20170720154404.7533bf28@windsurf>
- <2f8b3ab3-b2e6-d444-9981-bd07bfc250b8@mind.be>
-Message-ID: <20170720160632.37698930@windsurf>
+ <1499273594-12106-3-git-send-email-wg@grandegger.com>
+ <b381421f-9595-ad2d-defb-f94b7d325c09@mind.be>
+ <16f616fc-173d-a201-8342-cda48dc102fe@grandegger.com>
+ <a8c548d5-d6d0-53bf-2c6b-17e5a5f3101b@mind.be>
+ <75ca9a71-aaf5-dd21-f71f-4bcfc2880faa@grandegger.com>
+ <6994b7c9-7714-4941-8efc-ffb31f1adbb1@mind.be>
+Message-ID: <ee017453-259f-5e1c-0028-9d3b51b21376@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-On Thu, 20 Jul 2017 15:58:49 +0200, Arnout Vandecappelle wrote:
-
-> >>  Also, host-finalize (or sdk) should depend on toolchain, and probably also on
-> >> $(filter host-%,$(PACKAGES)). The latter is currently incomplete, but when we
-> >> get around to selecting BR2_PACKAGE_HOST_* for all host packages, we will make
-> >> sure that 'make sdk' really generates the complete sdk.  
-> > 
-> > For the SDK, you also need to build all the target packages. The SDK
-> > contains the sysroot (i.e STAGING_DIR), where the target packages
-> > install libraries and headers.  
+Am 20.07.2017 um 15:45 schrieb Arnout Vandecappelle:
 > 
->  This is what I wrote in an earlier reply to Wolfgang.
-
-Yes, I was replying as I was reading the thread, and saw your other
-reply afterwards.
-
-> > Basically, sdk needs to depend on "world".  
 > 
->  Not really, it doesn't need to depend on target-finalize or the rootfs targets.
-
-Correct, but I am not sure it is really worth being smart here.
-
-> >>  And finally, I think that the staging sanitization fits better here than in
-> >> target-finalize. It has nothing to do with target, and the only reason that we
-> >> do such sanitization is to make the sdk relocatable.  
-> > 
-> > The sanitization in staging and target has nothing to do with making
-> > the SDK relocatable. Why do you think it's related ?  
+> On 20-07-17 11:03, Wolfgang Grandegger wrote:
+>>      case "${tree}" in
+>>          host)
+>>              ...
+>>              # we always want $ORIGIN-based rpaths to make it relocatable.
 > 
->  target indeed has nothing to do with making the SDK relocatable. It is only
-> needed to deal with stupid packages that don't correctly use --prefix/DESTDIR
-> and that end up putting the full absolute build-time directory in rpath.
+>   Perfect. Just please start the sentence with a capital (it ends with a .)
 
-Agreed.
+Well, I followed the style of the original script... just to be 
+consistent... otherwise we will have an ugly mix.
 
->  staging is different. Sanitizing staging is not really needed, in the sense
-> that any rpath in there is simply not going to be used. We want to sanitize
-> staging for the following reasons:
 > 
-> - To avoid leaking references to the original output directory. This way, we can
-> validate that the SDK is relocatable by running a simple "grep -r ${BASE_DIR}
-> ${HOST_DIR}". Obviously RPATH sanitization is not sufficient (e.g. also the
-> references to source files have to be stripped), but it's a step in the right
-> direction. This reason is obviously only relevant for the SDK.
+>>              sanitize_extra_args+=( "--relative-to-file" )
+>>              ;;
+>>
+>>          staging)
+>>              ...
+>>              # should be like for the target tree below
 > 
-> - To make sure that when an executable is copied to target that it actually
-> executes correctly. Since within Buildroot we never copy stuff from staging to
-> target, this is clearly only relevant for the SDK.
+>   s/like/the same as/
+> 
+>>              sanitize_extra_args+=( "--no-standard-lib-dirs" )
+>>              ;;
+>>
+>>          target)
+>>              ...
+>>              # we don't want $ORIGIN-based rpaths but absolute paths without rootdir.
+>>              # we also want to remove rpaths pointing to /lib or /usr/lib.
+> 
+>   Capitalization, otherwise perfect.
+> 
+> [snip]
+>> As I said, the execution time comes form scanning for ELF files. The rest doesn't
+>> matter a lot.
+> 
+>   Instead of the patch you attached, it might actually make more sense to create
+> a tiny C file that does this, and execute that as part of the find command. Or
+> you could just create support/scripts/elfmagic with those 4 bytes and use "cmp
+> -n 4 {} ${0%/*}/elfmagic".
 
-OK, makes sense. I indeed believe having those details in the commit
-log or in the code would be nice.
+Yes, I had that idea as well and I have already hacked something. The 
+problem is that it does not check if it does have an rpath. "cmp" is not 
+faster, I already tried!
 
-So do we agree that:
+>   By the way, I believe filtering with -exec is much faster than doing it with
+> while/if. Unfortunately you can't use that with patchelf --print-rpath because
+> the output of patchelf would be mixed up with the find output.
 
- - target sanitization will be done in target-finalize
+I already tried various other solutions.
 
- - staging sanitization will be done in "make sdk"
+Just preparing v8...
 
- - host sanitization will be done in "make sdk"
-
-Correct ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Wolfgang.
