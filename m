@@ -1,159 +1,123 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 00:16:37 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/pcre: security
-	bump to version 8.41
-Message-ID: <20170720055509.17791821A0@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 07:32:17 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gcc: fix build of
+	libsanitizer in gcc 4.9 and 5.x on PowerPC
+Message-ID: <20170720055509.D77977F999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8318535f0363dd6ae5e1b5a05a9dc5d456d21e1
+commit: https://git.buildroot.net/buildroot/commit/?id=631f617399b69d0933b65416a28aec7f403407d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Removed patches 0003 & 0004, applied upstream.
+libsanitizer in gcc fails to build on PowerPC with gcc versions 4.9
+and 5.x used in conjunction with glibc 2.25, with the following error:
 
-Fixes the following security issues:
+../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
+../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
+   return signum == SIGSEGV && common_flags()->handle_segv;
 
-CVE-2017-7244 - The _pcre32_xclass function in pcre_xclass.c in libpcre1 in
-PCRE 8.40 allows remote attackers to cause a denial of service (invalid
-memory read) via a crafted file.
+This commit adds a patch that has been submitted to upstream gcc
+(https://patchwork.ozlabs.org/patch/725596/) but not merged. The patch
+is no longer needed with gcc 6.x and later because the code has been
+reworked.
 
-CVE-2017-7245 - Stack-based buffer overflow in the pcre32_copy_substring
-function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to
-cause a denial of service (WRITE of size 4) or possibly have unspecified
-other impact via a crafted file.
+Fixes Buildroot bug #10061
 
-CVE-2017-7246 - Stack-based buffer overflow in the pcre32_copy_substring
-function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to
-cause a denial of service (WRITE of size 268) or possibly have unspecified
-other impact via a crafted file.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Thomas: rework commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-[Peter: add CVE info]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit bc6a84bb3d05e0d752ecf59bb35ac827e9b76185)
+(cherry picked from commit 5c90f6a7b68ebdc43ea72b763ec98a0a300c57a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/0003-CVE-2017-6004.patch | 21 ------------
- package/pcre/0004-CVE-2017-7186.patch | 60 -----------------------------------
- package/pcre/pcre.hash                |  2 +-
- package/pcre/pcre.mk                  |  2 +-
- 4 files changed, 2 insertions(+), 83 deletions(-)
+ .../942-asan-fix-missing-include-signal-h.patch    | 36 ++++++++++++++++++++++
+ .../942-asan-fix-missing-include-signal-h.patch    | 36 ++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
-diff --git a/package/pcre/0003-CVE-2017-6004.patch b/package/pcre/0003-CVE-2017-6004.patch
-deleted file mode 100644
-index d0b6d51..0000000
---- a/package/pcre/0003-CVE-2017-6004.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Description: CVE-2017-6004: crafted regular expression may cause denial of service
--Origin: upstream, https://vcs.pcre.org/pcre/code/trunk/pcre_jit_compile.c?r1=1676&r2=1680&view=patch
--Bug: https://bugs.exim.org/show_bug.cgi?id=2035
--Bug-Debian: https://bugs.debian.org/855405
--Forwarded: not-needed
--Author: Salvatore Bonaccorso <carnil@debian.org>
--Last-Update: 2017-02-17
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
----- a/pcre_jit_compile.c
--+++ b/pcre_jit_compile.c
--@@ -8111,7 +8111,7 @@ if (opcode == OP_COND || opcode == OP_SC
-- 
--     if (*matchingpath == OP_FAIL)
--       stacksize = 0;
---    if (*matchingpath == OP_RREF)
--+    else if (*matchingpath == OP_RREF)
--       {
--       stacksize = GET2(matchingpath, 1);
--       if (common->currententry == NULL)
-diff --git a/package/pcre/0004-CVE-2017-7186.patch b/package/pcre/0004-CVE-2017-7186.patch
-deleted file mode 100644
-index 980923a..0000000
---- a/package/pcre/0004-CVE-2017-7186.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--Description: Upstream fix for CVE-2017-7186 (Upstream rev 1688)
-- Fix Unicode property crash for 32-bit characters greater than 0x10ffff.
--Author: Matthew Vernon <matthew@debian.org>
--X-Dgit-Generated: 2:8.39-3 c4c2c7c4f74d53b263af2471d8e11db88096bd13
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--
----- pcre3-8.39.orig/pcre_internal.h
--+++ pcre3-8.39/pcre_internal.h
--@@ -2772,6 +2772,9 @@ extern const pcre_uint8  PRIV(ucd_stage1
-- extern const pcre_uint16 PRIV(ucd_stage2)[];
-- extern const pcre_uint32 PRIV(ucp_gentype)[];
-- extern const pcre_uint32 PRIV(ucp_gbtable)[];
--+#ifdef COMPILE_PCRE32
--+extern const ucd_record  PRIV(dummy_ucd_record)[];
--+#endif
-- #ifdef SUPPORT_JIT
-- extern const int         PRIV(ucp_typerange)[];
-- #endif
--@@ -2780,9 +2783,15 @@ extern const int         PRIV(ucp_typera
-- /* UCD access macros */
-- 
-- #define UCD_BLOCK_SIZE 128
---#define GET_UCD(ch) (PRIV(ucd_records) + \
--+#define REAL_GET_UCD(ch) (PRIV(ucd_records) + \
--         PRIV(ucd_stage2)[PRIV(ucd_stage1)[(int)(ch) / UCD_BLOCK_SIZE] * \
--         UCD_BLOCK_SIZE + (int)(ch) % UCD_BLOCK_SIZE])
--+        
--+#ifdef COMPILE_PCRE32
--+#define GET_UCD(ch) ((ch > 0x10ffff)? PRIV(dummy_ucd_record) : REAL_GET_UCD(ch))
--+#else
--+#define GET_UCD(ch) REAL_GET_UCD(ch)
--+#endif 
-- 
-- #define UCD_CHARTYPE(ch)    GET_UCD(ch)->chartype
-- #define UCD_SCRIPT(ch)      GET_UCD(ch)->script
----- pcre3-8.39.orig/pcre_ucd.c
--+++ pcre3-8.39/pcre_ucd.c
--@@ -38,6 +38,20 @@ const pcre_uint16 PRIV(ucd_stage2)[] = {
-- const pcre_uint32 PRIV(ucd_caseless_sets)[] = {0};
-- #else
-- 
--+/* If the 32-bit library is run in non-32-bit mode, character values
--+greater than 0x10ffff may be encountered. For these we set up a
--+special record. */
--+
--+#ifdef COMPILE_PCRE32
--+const ucd_record PRIV(dummy_ucd_record)[] = {{
--+  ucp_Common,    /* script */
--+  ucp_Cn,        /* type unassigned */
--+  ucp_gbOther,   /* grapheme break property */
--+  0,             /* case set */
--+  0,             /* other case */
--+  }};
--+#endif
--+
-- /* When recompiling tables with a new Unicode version, please check the
-- types in this structure definition from pcre_internal.h (the actual
-- field names will be different):
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index 4c3c6c3..b36e130 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	00e27a29ead4267e3de8111fcaa59b132d0533cdfdbdddf4b0604279acbcf4f4	pcre-8.40.tar.bz2
-+sha256 e62c7eac5ae7c0e7286db61ff82912e1c0b7a0c13706616e94a7dd729321b530  pcre-8.41.tar.bz2
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index e302ed7..5734fce 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE_VERSION = 8.40
-+PCRE_VERSION = 8.41
- PCRE_SITE = https://ftp.pcre.org/pub/pcre
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3c
+diff --git a/package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch b/package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch
+new file mode 100644
+index 0000000..5f00c04
+--- /dev/null
++++ b/package/gcc/4.9.4/942-asan-fix-missing-include-signal-h.patch
+@@ -0,0 +1,36 @@
++From 205aa8e97bab553e5e6fe45896325e97962de704 Mon Sep 17 00:00:00 2001
++From: Rolf Eike Beer <eb@emlix.com>
++Date: Wed, 8 Feb 2017 11:42:52 +0100
++Subject: [PATCH] asan: fix missing include of signal.h
++
++This breaks when building gcc 4.9.4 / 5.4.0 with
++target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
++
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
++   return signum == SIGSEGV && common_flags()->handle_segv;
++
++This has been verified to apply to at least 4.9.4 and up to 5.4,
++the code has been reworked for gcc 6.
++
++Resolves (Buildroot) Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
++
++Upstream: https://patchwork.ozlabs.org/patch/725596/
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ libsanitizer/asan/asan_linux.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libsanitizer/asan/asan_linux.cc b/libsanitizer/asan/asan_linux.cc
++index c504168..59087b9 100644
++--- a/libsanitizer/asan/asan_linux.cc
+++++ b/libsanitizer/asan/asan_linux.cc
++@@ -29,6 +29,7 @@
++ #include <dlfcn.h>
++ #include <fcntl.h>
++ #include <pthread.h>
+++#include <signal.h>
++ #include <stdio.h>
++ #include <unistd.h>
++ #include <unwind.h>
+diff --git a/package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch b/package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch
+new file mode 100644
+index 0000000..5f00c04
+--- /dev/null
++++ b/package/gcc/5.4.0/942-asan-fix-missing-include-signal-h.patch
+@@ -0,0 +1,36 @@
++From 205aa8e97bab553e5e6fe45896325e97962de704 Mon Sep 17 00:00:00 2001
++From: Rolf Eike Beer <eb@emlix.com>
++Date: Wed, 8 Feb 2017 11:42:52 +0100
++Subject: [PATCH] asan: fix missing include of signal.h
++
++This breaks when building gcc 4.9.4 / 5.4.0 with
++target_platform=powerpc-unknown-linux-gnu with glibc 2.25:
++
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc: In function 'bool __asan::AsanInterceptsSignal(int)':
++../../../../gcc-host/libsanitizer/asan/asan_linux.cc:222:20: error: 'SIGSEGV' was not declared in this scope
++   return signum == SIGSEGV && common_flags()->handle_segv;
++
++This has been verified to apply to at least 4.9.4 and up to 5.4,
++the code has been reworked for gcc 6.
++
++Resolves (Buildroot) Bug: https://bugs.busybox.net/show_bug.cgi?id=10061
++
++Upstream: https://patchwork.ozlabs.org/patch/725596/
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ libsanitizer/asan/asan_linux.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libsanitizer/asan/asan_linux.cc b/libsanitizer/asan/asan_linux.cc
++index c504168..59087b9 100644
++--- a/libsanitizer/asan/asan_linux.cc
+++++ b/libsanitizer/asan/asan_linux.cc
++@@ -29,6 +29,7 @@
++ #include <dlfcn.h>
++ #include <fcntl.h>
++ #include <pthread.h>
+++#include <signal.h>
++ #include <stdio.h>
++ #include <unistd.h>
++ #include <unwind.h>
