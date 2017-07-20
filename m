@@ -1,60 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 07:35:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] expat: fix build on and
-	for kernel older than 3.17
-Message-ID: <20170720055510.708EF807BB@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 07:34:27 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] qt5base: fix qthash error
+	attribute(target("+crc")) is unknown
+Message-ID: <20170720055510.4F2287F999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6114c0b25f090c8928d85c49e6dd74bc943f9ae0
+commit: https://git.buildroot.net/buildroot/commit/?id=85cfc3a3ac747529df586c77abe281666b419e9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The expat build system now fails when the getrandom() system call is not
-supported. This affect both host and target builds. Define XML_POOR_ENTROPY
-for target kernels older than 3.17 to fix the build. For the host package
-define XML_POOR_ENTROPY unconditionally since we have no easy way to know the
-host kernel version. Note that expat will still use getrandom() on the host
-when it is available, we don't make security any worse.
+Add patch 0005-Fix-error-attribute-target-crc-is-unknown.patch.
 
-Fixes (host):
-http://autobuild.buildroot.net/results/928/928dc2b56d931da84055fdfe78929d1f956de53b/
-http://autobuild.buildroot.net/results/ee9/ee90d0a456cbce4c7f22e5f61006612bd9ba30d5/
-http://autobuild.buildroot.net/results/dac/dac7231242123ae3dcaa6bbdd65b44fe8d8cb20c/
+Upstream: https://codereview.qt-project.org/200171
 
-Fixes (target):
-http://autobuild.buildroot.net/results/308/308e830219fdfebb5aa6aef51c1dc784254998f6/
-http://autobuild.buildroot.net/results/73f/73fa946b0a2205e946ad414079f88e4bdb416f00/
-http://autobuild.buildroot.net/results/9d7/9d7bad22ace7fa211b31d752a2255e07cede68be/
+Fixes buildroot Bug 9916 ([1]).
 
-[Peter: also use HOST_CPPFLAGS]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] https://bugs.busybox.net/show_bug.cgi?id=9916
 
-(cherry picked from commit 5242701f3aa8426cdf2cc9a176ef06194db93d5f)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a9e053b5a8b4195aaddd97db98b0ba3dcf788638)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expat/expat.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ ...Fix-error-attribute-target-crc-is-unknown.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index a10f2c9..a78d326 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -15,5 +15,14 @@ HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
- EXPAT_LICENSE_FILES = COPYING
- 
-+# Kernel versions older than 3.17 do not support getrandom()
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17),)
-+EXPAT_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DXML_POOR_ENTROPY"
-+endif
+diff --git a/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+new file mode 100644
+index 0000000..92d93a8
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0005-Fix-error-attribute-target-crc-is-unknown.patch
+@@ -0,0 +1,44 @@
++From f0c02fb22bc277e2015a18e562b551ec7b3eed9e Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 16 Jul 2017 00:05:44 +0200
++Subject: [PATCH] Fix error attribute(target("+crc")) is unknown
 +
-+# Make build succeed on host kernel older than 3.17. getrandom() will still
-+# be used on newer kernels.
-+HOST_EXPAT_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -DXML_POOR_ENTROPY"
++Task-number: QTBUG-61975
++Change-Id: I0b1b55c0737dad485b5ace8e6eb7cb842589453d
++---
++ src/corelib/tools/qhash.cpp | 2 ++
++ src/corelib/tools/qsimd_p.h | 3 +++
++ 2 files changed, 5 insertions(+)
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++diff --git a/src/corelib/tools/qhash.cpp b/src/corelib/tools/qhash.cpp
++index 1f9c05c..bbf6efb 100644
++--- a/src/corelib/tools/qhash.cpp
+++++ b/src/corelib/tools/qhash.cpp
++@@ -144,7 +144,9 @@ static inline bool hasFastCrc32()
++ }
++ 
++ template <typename Char>
+++#if defined(__aarch64__)
++ QT_FUNCTION_TARGET(CRC32)
+++#endif
++ static uint crc32(const Char *ptr, size_t len, uint h)
++ {
++     // The crc32[whbd] instructions on Aarch64/Aarch32 calculate a 32-bit CRC32 checksum
++diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
++index 023a4b0..a85d572 100644
++--- a/src/corelib/tools/qsimd_p.h
+++++ b/src/corelib/tools/qsimd_p.h
++@@ -326,7 +326,10 @@
++ #endif
++ // AArch64/ARM64
++ #if defined(Q_PROCESSOR_ARM_V8) && defined(__ARM_FEATURE_CRC32)
+++#if defined(__aarch64__)
+++// only available on aarch64
++ #define QT_FUNCTION_TARGET_STRING_CRC32      "+crc"
+++#endif
++ #  include <arm_acle.h>
++ #endif
++ 
++-- 
++2.7.4
++
