@@ -1,15 +1,17 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jul 2017 16:16:24 +0200
-Subject: [Buildroot] [PATCH v7 5/9] core: sanitize RPATH in host tree at
- the very end of the build
-In-Reply-To: <20170720160632.37698930@windsurf>
+Date: Thu, 20 Jul 2017 16:19:45 +0200
+Subject: [Buildroot] [PATCH v7 2/9] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <ee017453-259f-5e1c-0028-9d3b51b21376@grandegger.com>
 References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-6-git-send-email-wg@grandegger.com>
- <4e228fa3-0126-6752-8a98-e17967b61fb3@mind.be>
- <20170720154404.7533bf28@windsurf>
- <2f8b3ab3-b2e6-d444-9981-bd07bfc250b8@mind.be>
- <20170720160632.37698930@windsurf>
-Message-ID: <fead33c9-6f0a-b5bb-6410-afd42a424a3f@mind.be>
+ <1499273594-12106-3-git-send-email-wg@grandegger.com>
+ <b381421f-9595-ad2d-defb-f94b7d325c09@mind.be>
+ <16f616fc-173d-a201-8342-cda48dc102fe@grandegger.com>
+ <a8c548d5-d6d0-53bf-2c6b-17e5a5f3101b@mind.be>
+ <75ca9a71-aaf5-dd21-f71f-4bcfc2880faa@grandegger.com>
+ <6994b7c9-7714-4941-8efc-ffb31f1adbb1@mind.be>
+ <ee017453-259f-5e1c-0028-9d3b51b21376@grandegger.com>
+Message-ID: <fae9da71-f806-a64f-042a-dbf3e9c0d068@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,43 +20,66 @@ To: buildroot@busybox.net
 
 
 
-On 20-07-17 16:06, Thomas Petazzoni wrote:
-> Hello,
+On 20-07-17 16:08, Wolfgang Grandegger wrote:
+> Hello Arnout,
 > 
-> On Thu, 20 Jul 2017 15:58:49 +0200, Arnout Vandecappelle wrote:
-[snip]
->>> Basically, sdk needs to depend on "world".  
+> Am 20.07.2017 um 15:45 schrieb Arnout Vandecappelle:
 >>
->>  Not really, it doesn't need to depend on target-finalize or the rootfs targets.
+>>
+>> On 20-07-17 11:03, Wolfgang Grandegger wrote:
+>>>      case "${tree}" in
+>>>          host)
+>>>              ...
+>>>              # we always want $ORIGIN-based rpaths to make it relocatable.
+>>
+>>   Perfect. Just please start the sentence with a capital (it ends with a .)
 > 
-> Correct, but I am not sure it is really worth being smart here.
+> Well, I followed the style of the original script... just to be consistent...
+> otherwise we will have an ugly mix.
 
- Indeed it isn't. And having
+ There is no original script, only an original author :-)
 
-sdk: world
-
-will discourage anyone trying to add
-
-world: sdk
-
-:-)
+ So indeed, fix it script-wide please.
 
 [snip]
-> So do we agree that:
+>>> As I said, the execution time comes form scanning for ELF files. The rest
+>>> doesn't
+>>> matter a lot.
+>>
+>>   Instead of the patch you attached, it might actually make more sense to create
+>> a tiny C file that does this, and execute that as part of the find command. Or
+>> you could just create support/scripts/elfmagic with those 4 bytes and use "cmp
+>> -n 4 {} ${0%/*}/elfmagic".
 > 
->  - target sanitization will be done in target-finalize
-> 
->  - staging sanitization will be done in "make sdk"
-> 
->  - host sanitization will be done in "make sdk"
-> 
-> Correct ?
+> Yes, I had that idea as well and I have already hacked something. The problem is
+> that it does not check if it does have an rpath.
 
- Yes! And also other sanitization (like stripping references to the build
-directories) will be done in "make sdk".
+ Well, you could do that particular check in the find -exec and keep the
+--print-rpath check in the while loop.
+
+
+> "cmp" is not faster, I already
+> tried!
+
+ OK good. Might be a good idea to keep track of the things you already tried in
+the cover letter.
+
 
  Regards,
  Arnout
+
+
+> 
+>>   By the way, I believe filtering with -exec is much faster than doing it with
+>> while/if. Unfortunately you can't use that with patchelf --print-rpath because
+>> the output of patchelf would be mixed up with the find output.
+> 
+> I already tried various other solutions.
+> 
+> Just preparing v8...
+> 
+> Wolfgang.
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
