@@ -1,99 +1,42 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Wed, 19 Jul 2017 23:18:36 -0400
-Subject: [Buildroot] [PATCH] support/download: print dl hash if not provided
-Message-ID: <20170720031836.977-1-gael.portay@savoirfairelinux.com>
+From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+Date: Thu, 20 Jul 2017 12:26:37 +0700
+Subject: [Buildroot] [PATCH 1/2] scanpypi: don't pass any arguments to main()
+Message-ID: <20170720052638.32122-1-alexey.roslyakov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a hash file exists but the hash is not provided, the script exits
-without any information about the hash of the downloaded file.
+'if __name__ == "__main__"' idiom typically calls main function that
+doesn't take any arguments in most cases. We shouldn't pass any tuple to
+it.
+I've tested the script with python-idna-2.5 and now it works with this
+little change.
 
-        ERROR: No hash found for rpi-userland-771a9aa7155442615bbe4cd6cf87b29b90cd228a.tar.gz
-
-Now, the script hashes the downloaded file and suggests its sha256 to
-the user.
-
-	$ make
-	...
-	>>> rpi-userland 771a9aa7155442615bbe4cd6cf87b29b90cd228a Downloading
-	--2017-07-19 21:38:39--  https://github.com/raspberrypi/userland/archive/771a9aa7155442615bbe4cd6cf87b29b90cd228a/rpi-userland-771a9aa7155442615bbe4cd6cf87b29b90cd228a.tar.gz
-	...
-	ERROR: No hash found for rpi-userland-771a9aa7155442615bbe4cd6cf87b29b90cd228a.tar.gz
-	ERROR: If the source is trusted, consider adding these lines to package/rpi-userland//rpi-userland.hash
-	# Locally calculated from download
-	sha256 771fb1be53414b00a9213f24bd9c88059cf76b72c5e21ac613b267d3e58d3715 rpi-userland-771a9aa7155442615bbe4cd6cf87b29b90cd228a.tar.gz
-	...
-
-It also fixes check_one_hash description. check_one_hash() takes three
-arguments:
- - algo hash
- - known hash
- - file to hash
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
 ---
- support/download/check-hash | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ utils/scanpypi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index c1ff53c02..b18447f86 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -41,13 +41,12 @@ if [ ! -f "${h_file}" ]; then
-     exit 0
- fi
- 
--# Check one hash for a file
--# $1: known hash
-+# Compute hash for a file
-+# $1: algo hash
- # $2: file (full path)
--check_one_hash() {
-+compute_hash() {
-     _h="${1}"
--    _known="${2}"
--    _file="${3}"
-+    _file="${2}"
- 
-     # Note: md5 is supported, but undocumented on purpose.
-     # Note: sha3 is not supported, since there is currently no implementation
-@@ -66,8 +65,20 @@ check_one_hash() {
-             ;;
-     esac
- 
-+    ${_h}sum "${_file}" |cut -d ' ' -f 1
-+}
-+
-+# Check one hash for a file
-+# $1: algo hash
-+# $2: known hash
-+# $3: file (full path)
-+check_one_hash() {
-+    _h="${1}"
-+    _known="${2}"
-+    _file="${3}"
-+
-     # Do the hashes match?
--    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
-+    _hash=$( compute_hash "${_h}" "${_file}" )
-     if [ "${_hash}" = "${_known}" ]; then
-         printf "%s: OK (%s: %s)\n" "${base}" "${_h}" "${_hash}"
-         return 0
-@@ -105,6 +116,12 @@ if [ ${nb_checks} -eq 0 ]; then
-         exit 0
-         ;;
-     esac
-+
-+    h="sha256"
-+    hash=$( compute_hash "${h}" "${file}" )
-     printf "ERROR: No hash found for %s\n" "${base}" >&2
-+    printf "ERROR: If the source is trusted, consider adding these lines to ${h_file}\n" >&2
-+    printf "# Locally calculated from download\n" >&2
-+    printf "${h} ${hash} ${base}\n" >&2
-     exit 3
- fi
+diff --git a/utils/scanpypi b/utils/scanpypi
+index bb3899241b..9abf3c4139 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -255,12 +255,12 @@ class BuildrootPackage():
+             # called through the if __name__ == '__main__' directive.
+             # In this case, we can only pray that it is called through a
+             # function called main() in setup.py.
+-            setup.main([]) # Will raise AttributeError if not found
++            setup.main() # Will raise AttributeError if not found
+             self.setup_metadata = self.setup_args[self.metadata_name]
+         # Here we must remove the module the hard way.
+         # We must do this because of a very specific case: if a package calls
+         # setup from the __main__ but does not come with a 'main()' function,
+-        # for some reason setup.main([]) will successfully call the main
++        # for some reason setup.main() will successfully call the main
+         # function of a previous package...
+         sys.modules.pop('setup',None)
+         del setup
 -- 
-2.13.2
+2.13.0
