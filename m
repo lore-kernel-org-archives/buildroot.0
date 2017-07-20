@@ -1,51 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 23:11:29 +0200
-Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-4-git-send-email-wg@grandegger.com>
- <20170720224906.301f524a@windsurf>
- <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
-Message-ID: <20170720231129.35f31a46@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Jul 2017 23:11:44 +0200
+Subject: [Buildroot] buildroot | Pipeline #10045873 has failed for
+	2017.05.x | 786d15a2
+In-Reply-To: <4a565636-d087-b736-c364-7988f6407aa6@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 20 Jul 2017 22:41:03 +0200")
+References: <59707d9eeee0a_de2b3fa2d43673cc1423a@sidekiq-asap05.mail>
+ <4a565636-d087-b736-c364-7988f6407aa6@mind.be>
+Message-ID: <87fudq4xv3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Thu, 20 Jul 2017 23:05:59 +0200, Arnout Vandecappelle wrote:
+ > On 20-07-17 11:53, GitLab wrote:
+ > [snip]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/s/serf/libserf-1-1_1.3.9-3_amd64.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/s/subversion/libsvn1_1.9.5-1_amd64.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/m/mercurial/mercurial-common_4.0-1_all.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/m/mercurial/mercurial_4.0-1_amd64.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/r/rsync/rsync_3.1.2-1_amd64.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/s/subversion/subversion_1.9.5-1_amd64.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Failed to fetch
+ >> http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-21_amd64.deb
+ >> 503 Service Temporarily Unavailable [IP: 52.84.26.51 80]
+ >> E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+ >> ERROR: Job failed: exit code 1
 
-> >>  support/scripts/fix-rpath | 133 ++++++++++++++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 133 insertions(+)
-> >>  create mode 100755 support/scripts/fix-rpath  
-> > 
-> > I've applied to master, after removing trailing slashes.  
-> 
->  Which trailing slashes?
+ >  To avoid this in the future, perhaps you should cherry-pick
+ > commit d2a151cea0a9066015b9e6c1fb714a84faffec0f
+ > Author: Arnout Vandecappelle <arnout@mind.be>
+ > Date:   Sun Jul 2 18:24:59 2017
 
-Gaah, I wanted to say "trailing spaces".
+ >     .gitlab-ci.yml: use the Buildroot CI image published on Docker Hub
 
-> > This is a little bit disturbing, so I believe it should be fixed in a
-> > follow-up patch.  
-> 
->  Right! That's because the "if ${PATCHELF} ..." just fails and the error is
-> redirected to /dev/null.
-> 
->  Better check if ${PATCHELF} is executable somewhere in the beginning.
-> 
->  However, there is never a guarantee. If e.g. it would be missing a shared
-> library, it would still fail in the same way. To be really sure, you'd have do
-> e.g. call patchelf on itself to verify it is actually working.
+Good idea. Committed to 2017.05.x, thanks.
 
-Perhaps patchelf --help is sufficient?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
