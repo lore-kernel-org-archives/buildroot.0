@@ -1,76 +1,56 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 20 Jul 2017 16:35:21 +0200
-Subject: [Buildroot] [PATCH v8 10/10] package/qt5base: provide "qt.conf" to
-	make "qmake" relocatable
+Date: Thu, 20 Jul 2017 16:35:18 +0200
+Subject: [Buildroot] [PATCH v8 07/10] core: sanitize RPATH in staging tree
+	to make a relocatable SDK
 In-Reply-To: <1500561321-6623-1-git-send-email-wg@grandegger.com>
 References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
-Message-ID: <1500561321-6623-11-git-send-email-wg@grandegger.com>
+Message-ID: <1500561321-6623-8-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The file "qt.conf" can be used to override the hard-coded paths that
-are compiled into the Qt library. This is required to make "qmake"
-relocatable. Actually, we need to specify all variables to overwrite
-the compiled in values.
+When calling "make sdk" we also sanitize the staging tree. Therefore
+"sdk" must depend on all packages.
 
-CC: Julien Corjon <corjon.j@ecagroup.com>
-CC: Peter Seiderer <ps.report@gmx.net>
+Sanitizing staging is not really needed, in the sense that any rpath
+in there is simply not going to be used. We want to sanitize staging
+for the following reasons:
+
+- To avoid leaking references to the original output directory. This
+  way, we can validate that the SDK is relocatable by running a simple
+  "grep -r ${BASE_DIR} ${HOST_DIR}". Obviously RPATH sanitization is
+  not sufficient (e.g. also the references to source files have to be
+  stripped), but it's a step in the right direction. This reason is
+  obviously only relevant for the SDK.
+
+- To make sure that when an executable is copied to target that it
+  actually executes correctly. Since within Buildroot we never copy
+  stuff from staging to target, this is clearly only relevant for
+  the SDK.
+
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- package/qt5/qt5base/qt.conf.in | 19 +++++++++++++++++++
- package/qt5/qt5base/qt5base.mk |  8 ++++++++
- 2 files changed, 27 insertions(+)
- create mode 100644 package/qt5/qt5base/qt.conf.in
+ Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
-new file mode 100644
-index 0000000..9a0b9cd
---- /dev/null
-+++ b/package/qt5/qt5base/qt.conf.in
-@@ -0,0 +1,19 @@
-+[Paths]
-+Prefix=@@HOST_DIR@@
-+Sysroot=@@STAGING_DIR@@
-+Headers=/usr/include/qt5
-+Libraries=/usr/lib
-+LibraryExecutables=/usr/libexec
-+Binaries=/usr/bin
-+Plugins=/usr/lib/qt/plugins
-+Examples=/usr/lib/qt/examples
-+Qml2Imports=/usr/qml
-+Imports=/usr/imports
-+Translations=/usr/translations
-+Examples=/usr/lib/qt/examples
-+Demos=/usr/lib/qt/examples
-+Tests=/usr/tests
-+Settings=/usr
-+Documentation=/usr/doc
-+ArchData=/usr
-+Data=/usr
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 92633af..bbbdd41 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -264,9 +264,17 @@ define QT5BASE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+diff --git a/Makefile b/Makefile
+index 3019081..c54c420 100644
+--- a/Makefile
++++ b/Makefile
+@@ -553,9 +553,11 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ world: target-post-image
  
-+# The file "qt.conf" can be used to override the hard-coded paths that are
-+# compiled into the Qt library. We need it to make "qmake" relocatable.
-+define QT5BASE_INSTALL_QT_CONF
-+	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
-+		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
-+endef
-+
- define QT5BASE_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- 	$(QT5_LA_PRL_FILES_FIXUP)
-+	$(QT5BASE_INSTALL_QT_CONF)
- endef
+ .PHONY: sdk
+-sdk: toolchain
++sdk: toolchain $(PACKAGES)
+ 	@$(call MESSAGE,"Rendering the SDK relocatable")
+ 	$(TOPDIR)/support/scripts/fix-rpath host
++	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
++	$(TOPDIR)/support/scripts/fix-rpath staging
  
- define QT5BASE_INSTALL_TARGET_LIBS
+ # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
+ $(HOST_DIR)/usr: $(HOST_DIR)
 -- 
 2.7.4
