@@ -1,75 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jul 2017 23:05:59 +0200
-Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <20170720224906.301f524a@windsurf>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-4-git-send-email-wg@grandegger.com>
- <20170720224906.301f524a@windsurf>
-Message-ID: <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jul 2017 23:06:22 +0200
+Subject: [Buildroot] [git commit] pulseaudio: improve enabling/disabling of
+	Bluez4/Bluez5
+Message-ID: <20170720210334.F2C2A7FC94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5defa77123bb2f5bc63c0c44e1fa6ce516026de6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Instead of letting the configure script automatically detect the
+presence of bluez package files, the script is now explicitly
+instructed to enable or disable bluez (both 4.x and 5.x) support based
+on the selection of the following packages: bluez_utils, bluez5_utils
+and sbc.
 
-On 20-07-17 22:49, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 20 Jul 2017 16:35:14 +0200, Wolfgang Grandegger wrote:
->> From: Samuel Martin <s.martin49@gmail.com>
->>
->> This commit introduces the script "fix-rpath" able to scan a tree,
->> detect ELF files, check their RPATH and fix it in a proper way.
->> The RPATH fixup is done by the patchelf utility using the option
->> "--make-rpath-relative <root-directory>".
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>  support/scripts/fix-rpath | 133 ++++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 133 insertions(+)
->>  create mode 100755 support/scripts/fix-rpath
-> 
-> I've applied to master, after removing trailing slashes.
+Indeed, the bluez_utils or bluez5_utils packages were not sufficient
+to enable Bluetooth support, the sbc package is also needed, but when
+no --enable option is passed, the configure script silently disables
+Bluetooth support if one of the dependencies is missing.
 
- Which trailing slashes?
+Signed-off-by: Calin Crisan <ccrisan@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pulseaudio/pulseaudio.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-
-> However, I noticed that when patchelf is not available in HOST_DIR,
-> this script does nothing, but doesn't show any error:
-> 
-> thomas at windsurf:~/projets/buildroot (master)$ rm output/host/usr/bin/patchelf 
-> thomas at windsurf:~/projets/buildroot (master)$ make
-> [...]
->>>>   Sanitizing RPATH in target tree
-> /home/thomas/projets/buildroot/support/scripts/fix-rpath target
-> thomas at windsurf:~/projets/buildroot (master)$
-> 
-> This is a little bit disturbing, so I believe it should be fixed in a
-> follow-up patch.
-
- Right! That's because the "if ${PATCHELF} ..." just fails and the error is
-redirected to /dev/null.
-
- Better check if ${PATCHELF} is executable somewhere in the beginning.
-
- However, there is never a guarantee. If e.g. it would be missing a shared
-library, it would still fail in the same way. To be really sure, you'd have do
-e.g. call patchelf on itself to verify it is actually working.
-
- Regards,
- Arnout
-
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 2f2cfbb..c627c4b 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -31,8 +31,6 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
+-	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils) \
+-	$(if $(BR2_PACKAGE_BLUEZ5_UTILS),bluez5_utils) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_FFTW),fftw) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+@@ -81,6 +79,20 @@ else
+ PULSEAUDIO_CONF_OPTS += --without-soxr
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BLUEZ_UTILS)$(BR2_PACKAGE_SBC),yy)
++PULSEAUDIO_CONF_OPTS += --enable-bluez4
++PULSEAUDIO_DEPENDENCIES += bluez_utils sbc
++else
++PULSEAUDIO_CONF_OPTS += --disable-bluez4
++endif
++
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
++PULSEAUDIO_CONF_OPTS += --enable-bluez5
++PULSEAUDIO_DEPENDENCIES += bluez5_utils sbc
++else
++PULSEAUDIO_CONF_OPTS += --disable-bluez5
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ PULSEAUDIO_CONF_OPTS += --enable-udev
+ PULSEAUDIO_DEPENDENCIES += udev
