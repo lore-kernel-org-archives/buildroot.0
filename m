@@ -1,38 +1,53 @@
 From: GitLab <gitlab@mg.gitlab.com>
-Date: Thu, 20 Jul 2017 09:53:34 +0000
-Subject: [Buildroot] buildroot | Pipeline #10045873 has failed for 2017.05.x
-	| 786d15a2
-Message-ID: <59707d9eeee0a_de2b3fa2d43673cc1423a@sidekiq-asap05.mail>
+Date: Thu, 20 Jul 2017 10:07:43 +0000
+Subject: [Buildroot] buildroot | Pipeline #10045872 has failed for master |
+	854b9337
+Message-ID: <597080ef52022_de2b3fa2c7afbf50187949@sidekiq-asap05.mail>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 
 Your pipeline has failed.
 
 Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
-Branch: 2017.05.x ( https://gitlab.com/buildroot.org/buildroot/commits/2017.05.x )
+Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
 
-Commit: 786d15a2 ( https://gitlab.com/buildroot.org/buildroot/commit/786d15a2b4eaa219c7a38098177e6943d39ae979 )
-Commit Message: iproute2: correct license
+Commit: 854b9337 ( https://gitlab.com/buildroot.org/buildroot/commit/854b933705fa42952ab64a3e0b068520a5bca10f )
+Commit Message: package/qt5: bump latest version to 5.9.1
 
-Source files license...
-Commit Author: Baruch Siach ( https://gitlab.com/baruchsi )
-Committed by: Peter Korsgaard ( https://gitlab.com/jacmet )
+Qt 5...
+Commit Author: Joshua Henderson
+Committed by: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
 
-Pipeline #10045873 ( https://gitlab.com/buildroot.org/buildroot/pipelines/10045873 ) triggered by arnout ( https://gitlab.com/arnout )
-had 1 failed build.
+Pipeline #10045872 ( https://gitlab.com/buildroot.org/buildroot/pipelines/10045872 ) triggered by arnout ( https://gitlab.com/arnout )
+had 2 failed builds.
 
-Job #23338890 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23338890 )
+Job #23338908 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23338908 )
 
 Stage: test
-Name: check-gitlab-ci.yml
-Trace: E: Failed to fetch http://deb.debian.org/debian/pool/main/s/serf/libserf-1-1_1.3.9-3_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/libsvn1_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial-common_4.0-1_all.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial_4.0-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Failed to fetch http://deb.debian.org/debian/pool/main/r/rsync/rsync_3.1.2-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/subversion_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Failed to fetch http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-21_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
-E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+Name: tests.fs.test_iso9660.TestIso9660GrubInternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 149.549s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=23338908 responseStatus[0;m=201 Created token[0;m=UiQsstyz
+[31;1mERROR: Job failed: exit code 1
+[0;m
+
+Job #23338906 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23338906 )
+
+Stage: test
+Name: tests.fs.test_iso9660.TestIso9660GrubExternal
+Trace: 
+----------------------------------------------------------------------
+Ran 1 test in 84.850s
+
+FAILED (errors=1)
+[32;1mUploading artifacts...[0;m
+test-output/*.log: found 1 matching files         [0;m 
+Uploading artifacts to coordinator... ok          [0;m  id[0;m=23338906 responseStatus[0;m=201 Created token[0;m=Vs_Ez9YE
 [31;1mERROR: Job failed: exit code 1
 [0;m
 
@@ -41,4 +56,4 @@ E: Unable to fetch some archives, maybe run apt-get update or try with --fix-mis
 You're receiving this email because of your account on gitlab.com.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170720/51af5ebe/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170720/592b5c2f/attachment.html>
