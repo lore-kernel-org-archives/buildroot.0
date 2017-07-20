@@ -1,37 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 22:57:10 +0200
-Subject: [Buildroot] Using linux-zigbee ?
-Message-ID: <20170720225710.076f8086@windsurf>
+Date: Thu, 20 Jul 2017 23:02:46 +0200
+Subject: [Buildroot] [git commit] package/qt5base: provide "qt.conf" to make
+	"qmake" relocatable
+Message-ID: <20170720205851.C902F821E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxime,
+commit: https://git.buildroot.net/buildroot/commit/?id=3aaea7ace2a24d0d577b553613a86013c384b1c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Back in 2014, you added the linux-zigbee package in Buildroot. However,
-this project is no longer maintained, and the replacement project is
-wpan-tools, for which we already have a Buildroot package.
+The file "qt.conf" can be used to override the hard-coded paths that
+are compiled into the Qt library. This is required to make "qmake"
+relocatable. Actually, we need to specify all variables to overwrite
+the compiled in values.
 
-linux-zigbee has seen no updates since 2014
-(https://sourceforge.net/p/linux-zigbee/linux-zigbee/ci/38f42dbfce9e13629263db3bd3b81f14c69bb733/log/?path=).
-The fork at https://github.com/linux-wpan/lowpan-tools, which only
-contains two additional commits, also from 2014, clearly mentions that
-this is deprecated.
+CC: Julien Corjon <corjon.j@ecagroup.com>
+CC: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/qt.conf.in | 19 +++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk |  8 ++++++++
+ 2 files changed, 27 insertions(+)
 
-In addition, linux-zigbee now fails to build with gcc 7.x:
-http://autobuild.buildroot.net/results/29c/29c72bc38042305310576be945c721b2fad95894/build-end.log.
-
-Do you still use linux-zigbee ? Or could we remove it from Buildroot in
-favor of wpan-tools ?
-
-Are there other people using linux-zigbee and not wpan-tools ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
+new file mode 100644
+index 0000000..9a0b9cd
+--- /dev/null
++++ b/package/qt5/qt5base/qt.conf.in
+@@ -0,0 +1,19 @@
++[Paths]
++Prefix=@@HOST_DIR@@
++Sysroot=@@STAGING_DIR@@
++Headers=/usr/include/qt5
++Libraries=/usr/lib
++LibraryExecutables=/usr/libexec
++Binaries=/usr/bin
++Plugins=/usr/lib/qt/plugins
++Examples=/usr/lib/qt/examples
++Qml2Imports=/usr/qml
++Imports=/usr/imports
++Translations=/usr/translations
++Examples=/usr/lib/qt/examples
++Demos=/usr/lib/qt/examples
++Tests=/usr/tests
++Settings=/usr
++Documentation=/usr/doc
++ArchData=/usr
++Data=/usr
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 92633af..bbbdd41 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -264,9 +264,17 @@ define QT5BASE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
++# The file "qt.conf" can be used to override the hard-coded paths that are
++# compiled into the Qt library. We need it to make "qmake" relocatable.
++define QT5BASE_INSTALL_QT_CONF
++	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
++		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
++endef
++
+ define QT5BASE_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ 	$(QT5_LA_PRL_FILES_FIXUP)
++	$(QT5BASE_INSTALL_QT_CONF)
+ endef
+ 
+ define QT5BASE_INSTALL_TARGET_LIBS
