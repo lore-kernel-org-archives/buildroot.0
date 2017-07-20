@@ -1,70 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Jul 2017 00:30:52 +0200
-Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
- buildroot SDK has already been relocated
-In-Reply-To: <20170720232131.02e9a51d@windsurf>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-9-git-send-email-wg@grandegger.com>
- <20170720232131.02e9a51d@windsurf>
-Message-ID: <9cca1b92-5e7e-2788-8370-59b12078396f@mind.be>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Thu, 20 Jul 2017 16:33:29 -0700
+Subject: [Buildroot] [PATCH] package/qt5location: handle plugins being
+	conditionally built
+Message-ID: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This fixes a build issue where the qt5location plugins are not built, but are
+attempted to be installed.
 
+The qt5location plugins have dependencies that are automatically resolved
+causing plugins to conditionaly be built. This change checks for the existance
+of the plugins prior to trying to install them.
 
-On 20-07-17 23:21, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 20 Jul 2017 16:35:19 +0200, Wolfgang Grandegger wrote:
->> The location of the buildroot SDK is stored in the file "sdk-location"
->> in "share/buildroot". If it's content does not match the current
->> SDK location, ask the user to run the script "relocate-sdk.sh" in the
->> top directory once. The external toolchain may be a pre-installed one
->> in a directory that is not writeable by us. Therefore, we can't run
->> the script directly.
->>
->> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->> ---
->>  toolchain/helpers.mk                                   | 16 ++++++++++++++++
->>  toolchain/toolchain-external/pkg-toolchain-external.mk |  1 +
->>  2 files changed, 17 insertions(+)
-> 
-> Now that I think of it, this is going to be a bit annoying. This means
-> that whenever you want to use a Buildroot-generated toolchain as an
-> external toolchain in another Buildroot configuration, you have to run
-> this relocate script.
-> 
-> This will break a lot of things, like the autobuilders, the runtime
-> test infrastructure, etc. that all rely on pre-built Buildroot
-> toolchains, but don't run the relocate-sdk script. In addition, we
-> simply can't do it, because it's directly Buildroot itself that
-> downloads the toolchain tarball and extracts it, so we don't even get
-> the opportunity to run the relocate-sdk script.
+Fixes:
 
- Well, we could run the script directly for downloaded toolchains, and do the
-check for pre-installed toolchains. Does that sound acceptable?
+    http://autobuild.buildroot.net/results/bc1/bc13abf3bb2fe1c991aec2334ee658c9641d1fd5/build-end.log
 
- I'm probably forgetting something though :-)
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+---
+ package/qt5/qt5location/qt5location.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- Regards,
- Arnout
-
-> 
-> Therefore, I cannot apply this as-is, a better solution needs to be
-> found.
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
+diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
+index e9f1e4d..fcd9fc8 100644
+--- a/package/qt5/qt5location/qt5location.mk
++++ b/package/qt5/qt5location/qt5location.mk
+@@ -48,7 +48,9 @@ endif
+ 
+ define QT5LOCATION_INSTALL_TARGET_POSITION
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Positioning.so.* $(TARGET_DIR)/usr/lib
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/position $(TARGET_DIR)/usr/lib/qt/plugins/
++	if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/position ] ; then \
++		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/position $(TARGET_DIR)/usr/lib/qt/plugins/ ; \
++	fi
+ endef
+ 
+ define QT5LOCATION_INSTALL_TARGET_CMDS
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
