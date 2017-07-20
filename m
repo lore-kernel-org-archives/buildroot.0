@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 22:49:28 +0200
-Subject: [Buildroot] [PATCH v8 05/10] core: sanitize RPATH in target
- tree before copying the overlay
-In-Reply-To: <1500561321-6623-6-git-send-email-wg@grandegger.com>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-6-git-send-email-wg@grandegger.com>
-Message-ID: <20170720224928.70c0c834@windsurf>
+Date: Thu, 20 Jul 2017 22:57:10 +0200
+Subject: [Buildroot] Using linux-zigbee ?
+Message-ID: <20170720225710.076f8086@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Maxime,
 
-On Thu, 20 Jul 2017 16:35:16 +0200, Wolfgang Grandegger wrote:
-> We sanitize the RPATH of ELF files in the target tree to deal
-> with stupid packages that don't correctly use --prefix/DESTDIR
-> and that end up putting the full absolute build-time directory
-> in the RPATH.
-> 
-> We do it before copying the overlay and calling the post-build
-> script. The user is completely responsible for what happens
-> in the last two steps, and it should never be touched by us.
-> 
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
->  Makefile | 3 +++
->  1 file changed, 3 insertions(+)
+Back in 2014, you added the linux-zigbee package in Buildroot. However,
+this project is no longer maintained, and the replacement project is
+wpan-tools, for which we already have a Buildroot package.
 
-Applied to master, thanks.
+linux-zigbee has seen no updates since 2014
+(https://sourceforge.net/p/linux-zigbee/linux-zigbee/ci/38f42dbfce9e13629263db3bd3b81f14c69bb733/log/?path=).
+The fork at https://github.com/linux-wpan/lowpan-tools, which only
+contains two additional commits, also from 2014, clearly mentions that
+this is deprecated.
+
+In addition, linux-zigbee now fails to build with gcc 7.x:
+http://autobuild.buildroot.net/results/29c/29c72bc38042305310576be945c721b2fad95894/build-end.log.
+
+Do you still use linux-zigbee ? Or could we remove it from Buildroot in
+favor of wpan-tools ?
+
+Are there other people using linux-zigbee and not wpan-tools ?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
