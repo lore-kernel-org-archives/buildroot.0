@@ -1,44 +1,37 @@
-From: kundy <kundy.zhang@gmail.com>
-Date: Thu, 20 Jul 2017 15:09:27 +0800
-Subject: [Buildroot] [buildroot] [PATCH 1/1] package/python: fix building
-	_hashlib of host-python
-Message-ID: <CAO6UsjDYgPoxTKrL5W51MCxgCEfiNaJKnFpyYn8CsFkofBTrhw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jul 2017 09:19:50 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/qt5: bump latest version to
+ 5.9.1
+In-Reply-To: <3abfa37d-9376-d7eb-b61d-bd406c02d259@microchip.com>
+References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
+ <20170719233013.43e0d27b@windsurf>
+ <3abfa37d-9376-d7eb-b61d-bd406c02d259@microchip.com>
+Message-ID: <20170720091950.55ad7384@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The python buildin module _hashlib has dependency on library
-libcrypto.so to provide the SHA-224, SHA-256, SHA-384, SHA-512
-hash algorithms in addition to platform optimized versions
-of MD5 and SHA1. Adding host package dependency on host-openssl
-to support the building of _hashlib module for host-python.
+Hello,
 
-Signed-off-by: Diankun Zhang <kundy.zhang@gmail.com>
----
- package/python/python.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 19 Jul 2017 16:48:46 -0700, Joshua Henderson wrote:
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index cf1ddfb..248393c 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -56,7 +56,7 @@ HOST_PYTHON_MAKE = $(MAKE1)
+> OK.  I see it on branch qt-bump only currently.  I will keep an eye out.
 
- PYTHON_DEPENDENCIES = host-python libffi $(TARGET_NLS_DEPENDENCIES)
+Gah, I messed up, my bad. Will apply to master right now.
 
--HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
-+HOST_PYTHON_DEPENDENCIES = host-expat host-zlib host-openssl
+> Also, please do not apply v2 2/2 of this series (add qt5webkit) as I have found
+> several build issues with it already.  I'll break that patch off separately now.
 
- PYTHON_INSTALL_STAGING = YES
+Ah, I was about to apply it. One thing to change it to "select
+BR2_PACKAGE_WAYLAND" instead of "depends on BR2_PACKAGE_WAYLAND". Can
+you fix that up in your next iteration?
 
---
-2.7.4
+Thanks!
 
-
+Thomas
 -- 
--Diankun
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170720/ccd7c451/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
