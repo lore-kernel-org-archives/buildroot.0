@@ -1,47 +1,41 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 20 Jul 2017 10:25:29 +0200
-Subject: [Buildroot] [PATCH v7 4/9] core: sanitize RPATH in target tree
- at the end of target finalization
-In-Reply-To: <44a9d6b5-3f51-f3b6-94e4-379c459c1b93@mind.be>
-References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-5-git-send-email-wg@grandegger.com>
- <44a9d6b5-3f51-f3b6-94e4-379c459c1b93@mind.be>
-Message-ID: <771a7a36-ab54-461f-34da-d3f459e7b55c@grandegger.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jul 2017 10:27:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python: fix building _hashlib
+ of host-python
+In-Reply-To: <CAO6UsjBm0q9_g8_dpuA=7kPcFuzhouvM_8GV1J=+76PDfVykSw@mail.gmail.com>
+References: <CAO6UsjCZQUKvmA-a0votPq5AFZ6ESkwpNbLvfEymU5uy_SdggA@mail.gmail.com>
+ <20170720095636.72423497@windsurf>
+ <CAO6UsjBm0q9_g8_dpuA=7kPcFuzhouvM_8GV1J=+76PDfVykSw@mail.gmail.com>
+Message-ID: <20170720102733.2d606f02@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Thu, 20 Jul 2017 16:21:51 +0800, Diankun Zhang wrote:
 
-Am 20.07.2017 um 01:34 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 05-07-17 18:53, Wolfgang Grandegger wrote:
->> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->> ---
->>   Makefile | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/Makefile b/Makefile
->> index cdc3a64..1a826fc 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -725,6 +725,8 @@ endif
->>   
->>   	@$(call MESSAGE,"Sanitizing RPATH in staging tree")
->>   	$(TOPDIR)/support/scripts/fix-rpath staging
->> +	@$(call MESSAGE,"Sanitizing RPATH in target tree")
->> +	$(TOPDIR)/support/scripts/fix-rpath target
-> 
->   I think we should do this *before* copying the overlay and calling the
-> post-build script. Indeed, in my mind, the user is completely responsible for
-> what happens there, and it should never be touched by us.
+> According to HOST_PYTHON_CONF_OPTS defined in python.mk, --disable-hashlib
+> is not specified.
+> That means _hashlib should be enabled by default, right?
 
-Well, the user will usually not care about the rpath. Therefore he might 
-profit from the sanitization as well. Actually, the sanitization does 
-usually not harm. The only thing I can think of is copying libraries at 
-runtime to a dir set in an rpath. How is stripping handled?
+Well, no, not necessarily. We simply forgot to add --disable-hashlib.
 
-Wolfgang.
+Again: why do you need this? If you could answer this question it would
+make the discussion a lot more productive :-)
+
+It is very possible that there are legitimate use cases for having
+the hashlib module built in the host Python interpreter. If we
+understand those use cases, then we can come up with a solution. But if
+you keep being silent about the *why* you need this, we won't move very
+far.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
