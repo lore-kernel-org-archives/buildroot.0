@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 23:12:27 +0200
-Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <686a296f-488a-1cb9-cdf0-af949349b7d7@mind.be>
+Date: Thu, 20 Jul 2017 23:18:54 +0200
+Subject: [Buildroot] [PATCH v8 06/10] core: introduce "sdk" target to
+ make a relocatable SDK
+In-Reply-To: <12b29063-e931-6599-32f0-d28f61479378@mind.be>
 References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-4-git-send-email-wg@grandegger.com>
- <686a296f-488a-1cb9-cdf0-af949349b7d7@mind.be>
-Message-ID: <20170720231227.611eb85b@windsurf>
+ <1500561321-6623-7-git-send-email-wg@grandegger.com>
+ <12b29063-e931-6599-32f0-d28f61479378@mind.be>
+Message-ID: <20170720231854.31f919e9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +15,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Jul 2017 23:03:34 +0200, Arnout Vandecappelle wrote:
-> On 20-07-17 16:35, Wolfgang Grandegger wrote:
-> [snip]
-> 
->  You forgot:
-> > +    This script scans a tree and sanitize ELF files' RPATH found in there.  
->                                             ^s
-> > +
-> > +    Sanitization behaves the same whatever the kind of the processed tree,
-> > +    but the resulting RPATH differs. The rpath sanitization is done using
-> > +    "patchelf --make-rpath-relazive".  
->                                   ^t
-> 
-> [snip]
-> > +            for excludepath in ${HOST_EXCLUDEPATHS}; do
-> > +                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" );  
-> 
->  Unneeded ;
+On Thu, 20 Jul 2017 23:11:34 +0200, Arnout Vandecappelle wrote:
 
-Please send follow-up patches. Thanks!
+>  As mentioned by Thomas, this should depend on "world", not just toolchain.
+> Indeed, plenty of host packages are built *after* the toolchain. You could add
+> ${PACKAGES} as a dependency, but that still misses the dependencies of the
+> rootfs targets that don't have a Kconfig option. So depending on "world" is the
+> easiest.
+> 
+>  With that (and updating the commit message accordingly):
+>  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-I've applied 1 to 5 and 10 tonight. I won't apply 6 to 9 today, so
-there's more time to review/adjust them if needed.
+Wolfgang added the dependency on $(PACKAGES) in PATCH 07/10. But
+actually, I think PATCH 06/10 and 07/10 should probably be squashed
+together, and indeed have sdk depend on world.
 
-Thanks!
+In fact even PATCH 09/10 should be squashed with 06/10 and 07/10. Just
+one patch adding the "sdk" target is enough, it's just a few lines
+overall.
 
 Thomas
 -- 
