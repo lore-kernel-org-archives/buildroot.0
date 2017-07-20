@@ -1,38 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jul 2017 08:01:52 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.{2,
-	10, 18}.x series
-Message-ID: <20170720055826.ACE8E82135@busybox.osuosl.org>
+Date: Thu, 20 Jul 2017 08:05:52 +0200
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: bump to version 2.16.5
+In-Reply-To: <87o9sg8qu7.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Wed, 19 Jul 2017 16:05:20 +0200")
+References: <20170705143303.26282-1-aperez@igalia.com>
+ <87o9sg8qu7.fsf@dell.be.48ers.dk>
+Message-ID: <871spb63sv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06eb06ad6deaa60ba87880e37435f2f7cfdcda72
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+ >> This simply updates to the latest stable release. WebKitGTK+ versions
+ >> in the 2.1x series avoid bumping the dependencies in order to allow
+ >> distributions to provide updates, therefore no new dependencies are
+ >> needed.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2b82eb5..6b6b6ea 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,11 +214,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.89"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.91"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "3.18.59"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.61"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
+ >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+ > Committed to 2017.02.x and 2017.05.x, thanks.
+
+While backporting I noticed that webkitgtk doesn't seem to build without
+the BR2_PACKAGE_WEBKITGTK_MULTIMEDIA option. I reproduced it with master
+as well.
+
+The build error I get is this. Do you have any idea how to fix?
+
+/home/peko/buildroot/output/build/webkitgtk-2.16.5/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp:3100:207:   required from here
+/home/peko/buildroot/output/build/webkitgtk-2.16.5/Source/WTF/wtf/PassRefPtr.h:40:13: error: invalid use of incomplete type ?class WebCore::HTMLVideoElement?
+             ptr->deref();
+             ^
+In file included from /home/peko/buildroot/output/build/webkitgtk-2.16.5/Source/WebCore/html/canvas/WebGLRenderingContextBase.h:32:0,
+                 from /home/peko/buildroot/output/build/webkitgtk-2.16.5/DerivedSources/WebCore/JSWebGLRenderingContextBase.h:26,
+                 from /home/peko/buildroot/output/build/webkitgtk-2.16.5/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp:25:
+/home/peko/buildroot/output/build/webkitgtk-2.16.5/Source/WebCore/html/canvas/CanvasRenderingContext.h:40:7: note: forward declaration of ?class WebCore::HTMLVideoElement?
+ class HTMLVideoElement;
+       ^
+[ 39%] Building CXX object Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/__/__/DerivedSources/WebCore/FetchInternalsBuiltins.cpp.o
+Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/build.make:16034: recipe for target 'Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/__/__/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp.o' failed
+make[3]: *** [Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/__/__/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[3]: Leaving directory '/home/peko/buildroot/output/build/webkitgtk-2.16.5'
+CMakeFiles/Makefile2:685: recipe for target 'Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/all' failed
+make[2]: *** [Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/all] Error 2
+make[2]: Leaving directory '/home/peko/buildroot/output/build/webkitgtk-2.16.5'
+Makefile:151: recipe for target 'all' failed
+make[1]: *** [all] Error 2
+make[1]: Leaving directory '/home/peko/buildroot/output/build/webkitgtk-2.16.5'
+
+-- 
+Bye, Peter Korsgaard
