@@ -1,14 +1,13 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 20 Jul 2017 10:05:28 +0200
-Subject: [Buildroot] [PATCH v7 1/9] package/patchelf: add patch for
- rpath sanitization under a root directory
-In-Reply-To: <7168d5d2-c8ad-ea3f-efee-ed1377b198f0@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Jul 2017 10:15:19 +0200
+Subject: [Buildroot] [PATCH v7 2/9] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <16f616fc-173d-a201-8342-cda48dc102fe@grandegger.com>
 References: <1499273594-12106-1-git-send-email-wg@grandegger.com>
- <1499273594-12106-2-git-send-email-wg@grandegger.com>
- <3efb1d74-0f29-4c98-3b51-7dd24f21aabb@mind.be>
- <cae36672-baf1-5a57-64be-17a99cf9c061@grandegger.com>
- <7168d5d2-c8ad-ea3f-efee-ed1377b198f0@mind.be>
-Message-ID: <84c38eab-2274-628f-63dd-bca9e24bf207@grandegger.com>
+ <1499273594-12106-3-git-send-email-wg@grandegger.com>
+ <b381421f-9595-ad2d-defb-f94b7d325c09@mind.be>
+ <16f616fc-173d-a201-8342-cda48dc102fe@grandegger.com>
+Message-ID: <a8c548d5-d6d0-53bf-2c6b-17e5a5f3101b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,97 +16,110 @@ To: buildroot@busybox.net
 
 
 
-Am 20.07.2017 um 09:55 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 20-07-17 08:55, Wolfgang Grandegger wrote:
->> Hello Arnout,
+On 20-07-17 09:31, Wolfgang Grandegger wrote:
+> Am 20.07.2017 um 01:02 schrieb Arnout Vandecappelle:
 >>
->> Am 19.07.2017 um 23:08 schrieb Arnout Vandecappelle:
->>>    Hi Wolfgang,
->>>
->>> On 05-07-17 18:53, Wolfgang Grandegger wrote:
->>>> The patch allows to use patchelf to sanitize the rpath of the buildroot
->>>> libraries and binaries using the option "--make-rpath-relative <rootdir>".
->>>> Recent versions of patchelf will not built on old Debian and RHEL systems
->>>> due to C++11 constructs. Therefore we stick with v0.9 for the time being.
->>>>
->>>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->>>
->>>    I still have a bunch of comments, but they're solidly in the nitpicking
->>> category. We definitely want this series (or at least part of it) in
->>> 2017.08-rc1, so if you don't respin in time, it will be applied. In that case,
->>> however, feel free to fix my nitpicks in follow-up patches. That said:
 >>
->> OK. I will concentrate on the important (and trivial) issues.
+>> On 05-07-17 18:53, Wolfgang Grandegger wrote:
+[snip]
+>>> +Environment:
+>>> +
+>>> +    PATCHELF    patchelf program to use
+>>> +        (default: HOST_DIR/bin/patchelf)
 >>
->>> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->>
->> Should I also add your "Acked-by" to the patchelf patches itself?
+>>   And also HOST_DIR, TARGET_DIR, STAGING_DIR, and
+>> TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
 > 
->   No, not to the patchelf patches. That doesn't make sense, since it's
-> meaningless for upstream, and for Buildroot the ack is already in the Buildroot
-> patch.
-> 
->   The Sob needs to be there because its meaning is different for the Buildroot
-> patch and for the package patch. For the package patch, it means "I vouch that
-> it's OK to distribute this change under the license of the package", and the
-> license of the package is different from the license of Buildroot.
+> PATCHELF points to the patchelf utility! Or what do you mean here?
 
-OK, makes sense.
+ I mean, also these environment variables are used by the script. Moreover, the
+_DIR variables are not optional.
 
+[snip]
+>>> +    target)
+>>> +        rootdir="${TARGET_DIR}"
+>>> +        sanitize_extra_args+=( "--no-standard-lib-dirs" "--relative-to-file" )
 >>
->>>> diff --git
->>>> a/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->>>> b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->>>> new file mode 100644
->>>> index 0000000..eda32e8
->>>> --- /dev/null
->>>> +++ b/package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->>>> @@ -0,0 +1,52 @@
->>>> +From a365bcb7d7025da51b33165ef7ebc7180199a05e Mon Sep 17 00:00:00 2001
->>>> +From: Eelco Dolstra <eelco.dolstra@logicblox.com>
->>>> +Date: Mon, 19 Sep 2016 17:31:37 +0200
->>>> +Subject: [PATCH] Remove apparently incorrect usage of "static"
->>>
->>>    I was going to say: we don't really need this patch. However, we do need it
->>> because it removes the DT_INIT symbols from needed_libs (DT_INIT points to
->>> library initialisation function, not to needed libraries...). So perhaps that
->>> bit should be added to the patch message.
->>
->> Added to the [] comment. I think the original messages should bot be touched.
+>>   I thought we decided that target and staging should NOT be relative-to-file,
+>> but should be absolute paths without rootdir? Or was this a problem for staging,
+>> because the linker would add the RUNPATH to the library search path and this
+>> would point to the system libs instead of target libs? According to the man page
+>> this should only be the case for a native linker, so not for a cross linker.
 > 
->   ACK that.
-> 
->>
->>>> +
->>>> +[Upstream-commit:
->>>> https://github.com/NixOS/patchelf/commit/a365bcb7d7025da51b33165ef7ebc7180199a05e]
->>>>
->>>> +Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->>>> +
->>>> +---
->>>> + src/patchelf.cc | 8 +++-----
->>>> + 1 file changed, 3 insertions(+), 5 deletions(-)
->>>> +
->>>> +Index: patchelf-0.9.old/src/patchelf.cc
->>>
->>>    Looks like you didn't really generate this with git-format-patch, although the
->>> header looks like it... It's not very important, but we really like to be able
->>> to regenerate exactly the same patches with the following procedure:
->>>
->>> cd patchelf
->>> git checkout -b buildroot 0.9
->>> git am ../buildroot/package/patchelf/*.patch
->>> git format-patch -N --no-renames -o ../buildroot/package/patchelf 0.9..
->>
->> This is generate with quilt against patchelf-0.9.tag.bz2. Will fix.
-> 
->   Ah, that makes sense as well. Again, it's not very important. Do you find using
-> quilt to manage package patches easier than using git?
+> Grrr, that's wrong, cut an paste error :(. Fixed!
 
-Well, with both, "git rebase -i" and "quilt" you have to be careful not 
-mixing up things. If I don't have git, I use quilt. I have now switched 
-to git to maintain the patchelf patches.
+ But staging stays the same as target, right?
 
-Wolfgang.
+ And did you add comments everywhere to explain why these options are chosen?
+
+> 
+>>   I don't really like having $ORIGIN-based rpaths in target, but it's no big
+>> deal.
+>>
+>>   Regardless, the reasoning behind the choice we make should be documented here
+>> in comments. So for host, add something to the effect that we always want
+>> $ORIGIN-based rpaths to make it relocatable. For staging, say that we want it to
+>> be the same as target. And for target, explain the choice you made.
+>>
+>>
+>>> +    while read file ; do
+>>> +    # check if it's an ELF file
+>>
+>>   Indentation is inconsistent: sometimes 4 spaces, sometimes 2 spaces (inside the
+> 
+> That's due to 8 spaces replaced by one tab.
+
+ Fix your editor not to do that.
+
+> 
+>> case, and in the condition below). And here, you're switching from spaces to
+>> tabs!
+> 
+> I use the default indention from emacs "Shell-script[bash]" which is usually not
+> a bad choice. I'm going to replace all tabs with spaces.
+
+ Since emacs, vim and kate all have compatible mode-settings lines, feel free to
+add a mode-setting line below the shebang of the script. Do test it with vim please.
+
+> 
+>>> +    if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
+>>
+>>   It might be good to check if the file actually has a non-empty rpath. When
+>> processing a second time, most rpaths are empty so they can be skipped.
+> 
+> I already tried that. It will make the check slower, meaning it costs more that
+> calling patchelf a second time.
+> 
+>>   Maybe even add another patch to patchelf to exit early and quietly with just 0
+>> or 1 depending on rpath presence.
+> 
+> Optimization of the execution time needs more careful analysis. I have a
+> patchelf patch which just open and reads the patchelf header to check quickly if
+> it's an ELF file. But that does not help a lot. readelf is still faster and I
+> guess that's because it's written in C (and not C++).
+
+ I have a few speedup suggestions for patchelf (but all should be in follow-up
+patches, not as part of patch 1/9).
+
+- Add a --has-rpath option that is quiet and just exits 0 or 1.
+- Instead of reading into a string, mmap the file. Since in most cases the file
+size isn't changed, that works *very* efficiently. Note that this needs a
+configure.ac check (mmap is not always available, e.g. not on nommu). With mmap,
+it's not needed to first read the header only, since it will just pull in a page
+when needed. It will be slower on NFS and some FUSE filesystems though.
+- Remove empty RUNPATH entries, so a second run doesn't even start.
+- Link patchelf statically, preferably with -flto as well. This will probably
+just speed things up with a few %, but it's also on the "empty" calls so could
+be significant.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
