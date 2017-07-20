@@ -1,40 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 22:30:30 +0200
-Subject: [Buildroot] [PATCH v8 02/10] package/patchelf: add patch for
- rpath sanitization under a root directory
-In-Reply-To: <1500561321-6623-3-git-send-email-wg@grandegger.com>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-3-git-send-email-wg@grandegger.com>
-Message-ID: <20170720223030.2f8f126e@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Jul 2017 22:41:03 +0200
+Subject: [Buildroot] buildroot | Pipeline #10045873 has failed for
+ 2017.05.x | 786d15a2
+In-Reply-To: <59707d9eeee0a_de2b3fa2d43673cc1423a@sidekiq-asap05.mail>
+References: <59707d9eeee0a_de2b3fa2d43673cc1423a@sidekiq-asap05.mail>
+Message-ID: <4a565636-d087-b736-c364-7988f6407aa6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Thu, 20 Jul 2017 16:35:13 +0200, Wolfgang Grandegger wrote:
-> The patch allows to use patchelf to sanitize the rpath of the buildroot
-> libraries and binaries using the option "--make-rpath-relative <rootdir>".
-> Recent versions of patchelf will not built on old Debian and RHEL systems
-> due to C++11 constructs. Therefore we stick with v0.9 for the time being.
+
+On 20-07-17 11:53, GitLab wrote:
+[snip]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/s/serf/libserf-1-1_1.3.9-3_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/libsvn1_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial-common_4.0-1_all.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial_4.0-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/r/rsync/rsync_3.1.2-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/subversion_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Failed to fetch http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-21_amd64.deb  503  Service Temporarily Unavailable [IP: 52.84.26.51 80]
+> E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+> ERROR: Job failed: exit code 1
+
+ To avoid this in the future, perhaps you should cherry-pick
+commit d2a151cea0a9066015b9e6c1fb714a84faffec0f
+Author: Arnout Vandecappelle <arnout@mind.be>
+Date:   Sun Jul 2 18:24:59 2017
+
+    .gitlab-ci.yml: use the Buildroot CI image published on Docker Hub
+
+ Regards,
+ Arnout
+
 > 
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...move-apparently-incorrect-usage-of-static.patch |  56 ++++
->  ...unction-for-splitting-a-colon-separated-s.patch |  63 ++++
->  ...to-make-the-rpath-relative-under-a-specif.patch | 332 +++++++++++++++++++++
->  3 files changed, 451 insertions(+)
->  create mode 100644 package/patchelf/0001-Remove-apparently-incorrect-usage-of-static.patch
->  create mode 100644 package/patchelf/0002-Extract-a-function-for-splitting-a-colon-separated-s.patch
->  create mode 100644 package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+> GitLab
+> Manage all notifications <https://gitlab.com/profile/notifications> ? Help
+> <https://gitlab.com/help>
+> You're receiving this email because of your account on gitlab.com
+> <https://gitlab.com/>.
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
