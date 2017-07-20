@@ -1,69 +1,58 @@
-From: Diankun Zhang <kundy.zhang@gmail.com>
-Date: Thu, 20 Jul 2017 19:20:16 +0800
-Subject: [Buildroot] [PATCH 1/1] package/python: fix building _hashlib
-	of host-python
-In-Reply-To: <20170720130939.1b22a471@windsurf>
-References: <CAO6UsjCZQUKvmA-a0votPq5AFZ6ESkwpNbLvfEymU5uy_SdggA@mail.gmail.com>
- <20170720095636.72423497@windsurf>
- <CAO6UsjBm0q9_g8_dpuA=7kPcFuzhouvM_8GV1J=+76PDfVykSw@mail.gmail.com>
- <20170720102733.2d606f02@windsurf>
- <CAO6UsjAcBxW=sxOtPyGAY823uNk8QuZFSTjxGMqEMaVMbvg1uQ@mail.gmail.com>
- <20170720111913.0d9c9c77@windsurf>
- <CAO6UsjD3rv0Vg2GJM0JwELO_TnT2gt-DEt0hsTxRxvu5faTVNw@mail.gmail.com>
- <20170720130939.1b22a471@windsurf>
-Message-ID: <CAO6UsjAtLVapEx8L-o6+17kCGt+TzgM5m7+DrtEa8gVFfxYmug@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jul 2017 13:21:19 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/qt5: bump latest version to
+ 5.9.1
+In-Reply-To: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
+References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20170720132119.67d83618@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks, Thomas, I would send out a new patch as you suggested.
+Hello,
 
-On Thu, Jul 20, 2017 at 7:09 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+On Thu, 13 Jul 2017 09:18:43 -0700, Joshua Henderson wrote:
+> Qt 5.9 is a Long Term Support version [1]. Some license file changes are
+> involved, a new dependency on pcre2, and some filename changes.  qt5webkit
+> popped back into the picture for 5.9.1 after being absent for 5.9.0
+> "officially." QT5_SNAPSHOTS_SITE is removed with this commit as it is not used
+> for qtwebkit anymore.
+> 
+> This removes the following patches that have been upstreamed for 5.9.1:
+> 
+> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [2]
+> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [3]
+> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [4]
+> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [5]
+> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch [6]
+> - qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch [7]
+> 
+> [1] https://www.qt.io/qt5-9/
+> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
+> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
+> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
+> [5] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
+> [6] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=18d49808db46add078d9d4bcffaac5361d5c7269
+> [7] https://code.qt.io/cgit/qt/qtwebkit.git/commit/?id=548380af096f8277e460383c81a4ecdf2b77523f
+> 
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Brent Sink <brents_3@hotmail.com>
+> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
 
-> Hello,
->
-> On Thu, 20 Jul 2017 18:59:31 +0800, Diankun Zhang wrote:
->
-> > From https://packages.ubuntu.com/xenial/amd64/openssl/filelist, we can
-> see
-> > the openssl package  on ubuntu 16.04 does not cotain the libssl or
-> > licrypto.so,
-> > instead they are in package libssl1.0.0,
-> > https://packages.ubuntu.com/xenial/amd64/libssl1.0.0/filelist.
->
-> libssl is a *binary* package that is produced from the source package
-> openssl.
->
-> > In most of systems nowadays, openssl (and libssl ) is installed since the
-> > hash algorithms are needed to meet kinds of requirements.
->
-> Yes, the libraries, but not necessarily the development files.
->
-> > Yes, I'm using the pyang tool on my host to compile some YANG files. The
-> > compiled YANG files are platform independent ideally.
->
-> OK.
->
-> So, again what is needed is a hidden BR2_PACKAGE_HOST_PYTHON_OPENSSL
-> that enables OpenSSL support in host-python, which the pyang package
-> could select.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
+This patch caused a build failure:
 
+  http://autobuild.buildroot.net/results/bc1/bc13abf3bb2fe1c991aec2334ee658c9641d1fd5/build-end.log
 
+It seems to be a new build failure, because it never occurred with the
+5.8.0 version.
 
+Best regards,
+
+Thomas Petazzoni
 -- 
--Diankun
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170720/34cb0ecf/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
