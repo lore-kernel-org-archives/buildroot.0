@@ -1,64 +1,69 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 20 Jul 2017 16:35:19 +0200
-Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
-	buildroot SDK has already been relocated
-In-Reply-To: <1500561321-6623-1-git-send-email-wg@grandegger.com>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
-Message-ID: <1500561321-6623-9-git-send-email-wg@grandegger.com>
+From: Diankun Zhang <kundy.zhang@gmail.com>
+Date: Thu, 20 Jul 2017 22:49:08 +0800
+Subject: [Buildroot] [PATCH 1/1] python: fix the _ctype module compiling
+ error caused by ffi library
+Message-ID: <CAO6UsjBMM4PUTuY5HK+AJAS2FQTTGOgQHHrSpUmZVSJ5ibQsZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The location of the buildroot SDK is stored in the file "sdk-location"
-in "share/buildroot". If it's content does not match the current
-SDK location, ask the user to run the script "relocate-sdk.sh" in the
-top directory once. The external toolchain may be a pre-installed one
-in a directory that is not writeable by us. Therefore, we can't run
-the script directly.
+The ctype compiling error for python 2 is caused by the mixed
+ifdefs X86_WIN32 and X86_WIN64. The issue is tracked by
+python upstream issue  https://bugs.python.org/issue23042.
+Whereas the patch is not completely applied on python package.
+This additional patch is a supplement for the issue.
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Signed-off-by: Diankun Zhang <kundy.zhang@gmail.com>
 ---
- toolchain/helpers.mk                                   | 16 ++++++++++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk |  1 +
- 2 files changed, 17 insertions(+)
+ package/python/0035-fix-ffi-windws-ifdefs.patch | 27
++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/python/0035-fix-ffi-windws-ifdefs.patch
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index e9e36d2..96fc4c8 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -484,3 +484,19 @@ define simplify_symlink
- 	ln -sf "$${DOTS}$${REL_DEST}" "$${FULL_SRC}" ; \
- )
- endef
+diff --git a/package/python/0035-fix-ffi-windws-ifdefs.patch
+b/package/python/0035-fix-ffi-windws-ifdefs.patch
+new file mode 100644
+index 0000000..74511cf
+--- /dev/null
++++ b/package/python/0035-fix-ffi-windws-ifdefs.patch
+@@ -0,0 +1,27 @@
++ffi.c: fix the compiling error caused by the mixed definition of calls for
++       different platforms(x86 and x64) in function ffi_prep_closure_loc()
 +
-+#
-+# Check if it's a buildroot toolchain and if it's already relocatable by
-+# reading and testing the toolchain location file
-+#
-+# $1: toolchain installation directory
-+#
-+define check_buildroot_sdk_relocated
-+	if [ -r $(1)/share/buildroot/sdk-location ]; then \
-+		sdkroot="$(1)"; \
-+		if [ "`cat $(1)/share/buildroot/sdk-location`" != "$${sdkroot}" ]; then \
-+			echo "Please relocate the buildroot SDK by executing \"$${sdkroot}/relocate-sdk.sh\" once!" ; \
-+			exit 1 ; \
-+		fi \
-+	fi
-+endef
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 3263199..9762e81 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -529,6 +529,7 @@ endif
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # kernel headers version, type of C library and all C library features.
- define $(2)_CONFIGURE_CMDS
-+	$$(Q)$$(call check_buildroot_sdk_relocated,$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
- 	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
--- 
++The issue is tracked by upstream python bug
++https://bugs.python.org/issue23042
++
++Signed-off-by: Diankun Zhang <kundy.zhang@gmail.com>
++
++--- a/Modules/_ctypes/libffi/src/x86/ffi.c     Wed Mar 18 14:39:33 2015
++0100
+++++ b/Modules/_ctypes/libffi/src/x86/ffi.c     Thu Mar 19 08:39:52 2015
++0000
++@@ -673,6 +673,7 @@
++                            &ffi_closure_SYSV,
++                            (void*)codeloc);
++     }
+++#ifdef X86_WIN32
++   else if (cif->abi == FFI_FASTCALL)
++     {
++       FFI_INIT_TRAMPOLINE_STDCALL (&closure->tramp[0],
++@@ -691,7 +692,6 @@
++                                    &ffi_closure_STDCALL,
++                                    (void*)codeloc);
++     }
++-#ifdef X86_WIN32
++   else if (cif->abi == FFI_MS_CDECL)
++     {
++       FFI_INIT_TRAMPOLINE (&closure->tramp[0],
++
+--
 2.7.4
+
+
+-- 
+-Diankun
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170720/56371484/attachment.html>
