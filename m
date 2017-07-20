@@ -1,169 +1,42 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 20 Jul 2017 16:35:14 +0200
-Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath script
-	to sanitize the rpath
+Date: Thu, 20 Jul 2017 16:35:12 +0200
+Subject: [Buildroot] [PATCH v8 01/10] support/scripts: relocate-sdk.sh now
+	uses a normal pipe to find strings
 In-Reply-To: <1500561321-6623-1-git-send-email-wg@grandegger.com>
 References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
-Message-ID: <1500561321-6623-4-git-send-email-wg@grandegger.com>
+Message-ID: <1500561321-6623-2-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+The normal shell does not support the bashism "< <(...)". Therefore
+we use a normal pipe to find files containing a specific string.
 
-This commit introduces the script "fix-rpath" able to scan a tree,
-detect ELF files, check their RPATH and fix it in a proper way.
-The RPATH fixup is done by the patchelf utility using the option
-"--make-rpath-relative <root-directory>".
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/scripts/fix-rpath | 133 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 133 insertions(+)
- create mode 100755 support/scripts/fix-rpath
+ support/misc/relocate-sdk.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-new file mode 100755
-index 0000000..3d5ee43
---- /dev/null
-+++ b/support/scripts/fix-rpath
-@@ -0,0 +1,133 @@
-+#!/usr/bin/env bash
-+
-+# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
-+# Copyright (C) 2017 Wolfgang Grandegger <wg@grandegger.com>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+
-+usage() {
-+  cat <<EOF >&2
-+Usage:  ${0} TREE_KIND
-+
-+Description:
-+
-+    This script scans a tree and sanitize ELF files' RPATH found in there.
-+
-+    Sanitization behaves the same whatever the kind of the processed tree,
-+    but the resulting RPATH differs. The rpath sanitization is done using
-+    "patchelf --make-rpath-relazive".
-+
-+Arguments:
-+
-+    TREE_KIND    Kind of tree to be processed.
-+                 Allowed values: host, target, staging
-+
-+Environment:
-+
-+    PATCHELF     patchelf program to use
-+                 (default: HOST_DIR/bin/patchelf)
-+
-+    HOST_DIR     host directory
-+    STAGING_DIR  staging directory
-+    TARGET_DIR   target directory
-+
-+    TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
-+                 (default HOST_DIR/opt/ext-toolchain)              
-+EOF
-+}
-+
-+: ${PATCHELF:=${HOST_DIR}/bin/patchelf}
-+
-+# ELF files should not be in these sub-directories
-+HOST_EXCLUDEPATHS="/share/terminfo"
-+STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
-+
-+main() {
-+    local rootdir
-+    local tree="${1}"
-+    local find_args=( )
-+    local sanitize_extra_args=( )
-+
-+    case "${tree}" in
-+        host)
-+            rootdir="${HOST_DIR}"
-+
-+            # do not process the sysroot (only contains target binaries)
-+            find_args+=( "-path" "${STAGING_DIR}" "-prune" "-o" )
-+
-+            # do not process the external toolchain installation directory to
-+            # avoid breaking it.
-+            test "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" != "" && \
-+                find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
-+
-+            for excludepath in ${HOST_EXCLUDEPATHS}; do
-+                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" );
-+            done
-+
-+            # do not process the patchelf binary but a copy to work-around "file in use"
-+            find_args+=( "-path" "${PATCHELF}" "-prune" "-o" )
-+            cp "${PATCHELF}" "${PATCHELF}.__to_be_patched"
-+
-+            # we always want $ORIGIN-based rpaths to make it relocatable.
-+            sanitize_extra_args+=( "--relative-to-file" )
-+            ;;
-+
-+        staging)
-+            rootdir="${STAGING_DIR}"
-+
-+            # ELF files should not be in these sub-directories
-+            for excludepath in ${STAGING_EXCLUDEPATHS}; do
-+                find_args+=( "-path" "${STAGING_DIR}""${excludepath}" "-prune" "-o" )
-+            done
-+
-+            # should be like for the target tree below
-+            sanitize_extra_args+=( "--no-standard-lib-dirs" )
-+            ;;
-+
-+        target)
-+            rootdir="${TARGET_DIR}"
-+            # we don't want $ORIGIN-based rpaths but absolute paths without rootdir.
-+            # we also want to remove rpaths pointing to /lib or /usr/lib. 
-+            sanitize_extra_args+=( "--no-standard-lib-dirs" )
-+            ;;
-+
-+        *)
-+            usage
-+            exit 1
-+            ;;
-+    esac
-+
-+    find_args+=( "-type" "f" "-print" )
-+
-+    while read file ; do
-+        # check if it's an ELF file
-+        if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
-+            # make files writable if necessary
-+            changed=$(chmod -c u+w "${file}")
-+            # call patchelf to sanitize the rpath
-+            ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-+            # restore the original permission
-+            test "${changed}" != "" && chmod u-w "${file}"
-+        fi
-+    done < <(find "${rootdir}" ${find_args[@]})
-+
-+    # Restore patched patchelf utility
-+    test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
-+
-+    # ignore errors
-+    return 0
-+}
-+
-+main ${@}
+diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
+index 729353a..caabeaa 100755
+--- a/support/misc/relocate-sdk.sh
++++ b/support/misc/relocate-sdk.sh
+@@ -35,12 +35,12 @@ echo "Relocating the buildroot SDK from ${OLDPATH} to ${NEWPATH} ..."
+ # Make sure file uses the right language
+ export LC_ALL=C
+ # Replace the old path with the new one in all text files
+-while read -r FILE ; do
++grep -lr "${OLDPATH}" . | while read -r FILE ; do
+     if file -b --mime-type "${FILE}" | grep -q '^text/' && [ "${FILE}" != "${LOCFILE}" ]
+     then
+         sed -i "s|${OLDPATH}|${NEWPATH}|g" "${FILE}"
+     fi
+-done < <(grep -lr "${OLDPATH}" .)
++done
+ 
+ # At the very end, we update the location file to not break the
+ # SDK if this script gets interruted.
 -- 
 2.7.4
