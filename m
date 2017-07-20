@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jul 2017 23:07:54 +0200
-Subject: [Buildroot] [PATCH 1/1] pulseaudio: properly enable/disable
- bluez support based on package selection
-In-Reply-To: <20170718085547.10828-1-ccrisan@gmail.com>
-References: <20170718085547.10828-1-ccrisan@gmail.com>
-Message-ID: <20170720230754.183d3c6d@windsurf>
+Date: Thu, 20 Jul 2017 23:11:29 +0200
+Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
+References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
+ <1500561321-6623-4-git-send-email-wg@grandegger.com>
+ <20170720224906.301f524a@windsurf>
+ <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
+Message-ID: <20170720231129.35f31a46@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +16,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Jul 2017 11:55:39 +0300, Calin Crisan wrote:
-> Instead of letting the configure script automatically detect the presence of
-> bluez package files, the script is now explicitly instructed to enable or
-> disable bluez (both 4.x and 5.x) support based on the selection of the
-> following packages: bluez_utils, bluez5_utils and sbc.
-> 
-> Signed-off-by: Calin Crisan <ccrisan@gmail dot com>
-> ---
->  package/pulseaudio/pulseaudio.mk | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+On Thu, 20 Jul 2017 23:05:59 +0200, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+> >>  support/scripts/fix-rpath | 133 ++++++++++++++++++++++++++++++++++++++++++++++
+> >>  1 file changed, 133 insertions(+)
+> >>  create mode 100755 support/scripts/fix-rpath  
+> > 
+> > I've applied to master, after removing trailing slashes.  
+> 
+>  Which trailing slashes?
+
+Gaah, I wanted to say "trailing spaces".
+
+> > This is a little bit disturbing, so I believe it should be fixed in a
+> > follow-up patch.  
+> 
+>  Right! That's because the "if ${PATCHELF} ..." just fails and the error is
+> redirected to /dev/null.
+> 
+>  Better check if ${PATCHELF} is executable somewhere in the beginning.
+> 
+>  However, there is never a guarantee. If e.g. it would be missing a shared
+> library, it would still fail in the same way. To be really sure, you'd have do
+> e.g. call patchelf on itself to verify it is actually working.
+
+Perhaps patchelf --help is sufficient?
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
