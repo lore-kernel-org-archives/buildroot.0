@@ -1,118 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:08:48 +0200
-Subject: [Buildroot] [git commit] collectd: fix build with gcc 7.x
-Message-ID: <20170721210531.12B4281D8D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 21 Jul 2017 23:09:45 +0200
+Subject: [Buildroot] [PATCH v9 1/3] core: introduce "sdk" target to make
+ a relocatable SDK
+In-Reply-To: <1500642853-5565-2-git-send-email-wg@grandegger.com>
+References: <1500642853-5565-1-git-send-email-wg@grandegger.com>
+ <1500642853-5565-2-git-send-email-wg@grandegger.com>
+Message-ID: <6bccb30e-455a-502f-2115-ff704e00ae69@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ac88f318a9cdc4cdc1bcfe6a190b46b650cb3cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit backports an upstream collectd patch that fixes a build
-issue with gcc 7.x.
 
-Fixes:
+On 21-07-17 15:14, Wolfgang Grandegger wrote:
+> We use a separate make target to build a relocatable SDK. We first
+> sanitize the RPATH in host tree. Next we also sanitize the
+> staging tree. Therefore "sdk" must depend world.
+                                           ^on
 
-  http://autobuild.buildroot.net/results/2441e2a69d013a6376a90d375e15991e8cb816bd/
+> 
+> Sanitizing staging is not really needed, in the sense that any rpath
+> in there is simply not going to be used. We want to sanitize staging
+> for the following reasons:
+> 
+> - To avoid leaking references to the original output directory. This
+>   way, we can validate that the SDK is relocatable by running a simple
+>   "grep -r ${BASE_DIR} ${HOST_DIR}". Obviously RPATH sanitization is
+>   not sufficient (e.g. also the references to source files have to be
+>   stripped), but it's a step in the right direction. This reason is
+>   obviously only relevant for the SDK.
+> 
+> - To make sure that when an executable is copied to target that it
+>   actually executes correctly. Since within Buildroot we never copy
+>   stuff from staging to target, this is clearly only relevant for
+>   the SDK.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...1-libcollectdclient-increase-error-buffer.patch | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ Great explanation :-P
 
-diff --git a/package/collectd/0001-libcollectdclient-increase-error-buffer.patch b/package/collectd/0001-libcollectdclient-increase-error-buffer.patch
-new file mode 100644
-index 0000000..247d32b
---- /dev/null
-+++ b/package/collectd/0001-libcollectdclient-increase-error-buffer.patch
-@@ -0,0 +1,87 @@
-+From e170f3559fcda6d37a012aba187a96b1f42e8f9d Mon Sep 17 00:00:00 2001
-+From: Ruben Kerkhof <ruben@rubenkerkhof.com>
-+Date: Sun, 2 Jul 2017 21:52:14 +0200
-+Subject: [PATCH] libcollectdclient: increase error buffer
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=utf8
-+Content-Transfer-Encoding: 8bit
-+
-+make[1]: Entering directory '/home/ruben/src/collectd'
-+  CC       src/libcollectdclient/libcollectdclient_la-client.lo
-+src/libcollectdclient/client.c: In function ??????lcc_getval??????:
-+src/libcollectdclient/client.c:621:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+                       ^                   ~
-+src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+                                                ^~~~~~~~~~~
-+src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+src/libcollectdclient/client.c:621:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+     ^~~~~~~~~~~~~~
-+src/libcollectdclient/client.c: In function ??????lcc_putval??????:
-+src/libcollectdclient/client.c:754:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+                       ^                   ~
-+src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+                                                ^~~~~~~~~~~
-+src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+src/libcollectdclient/client.c:754:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+     ^~~~~~~~~~~~~~
-+src/libcollectdclient/client.c: In function ??????lcc_flush??????:
-+src/libcollectdclient/client.c:802:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+                       ^                   ~
-+src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+                                                ^~~~~~~~~~~
-+src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+src/libcollectdclient/client.c:802:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+     ^~~~~~~~~~~~~~
-+src/libcollectdclient/client.c: In function ??????lcc_listval??????:
-+src/libcollectdclient/client.c:834:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+                       ^                   ~
-+src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+                                                ^~~~~~~~~~~
-+src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
-+     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
-+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+src/libcollectdclient/client.c:834:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
-+     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
-+     ^~~~~~~~~~~~~~
-+
-+Fixes #2200
-+
-+[Upstream commit: https://git.octo.it/?p=collectd.git;a=commitdiff;h=e170f3559fcda6d37a012aba187a96b1f42e8f9d]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/libcollectdclient/client.c |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/libcollectdclient/client.c b/src/libcollectdclient/client.c
-+index 51a4ab2..3ae2e71 100644
-+--- a/src/libcollectdclient/client.c
-++++ b/src/libcollectdclient/client.c
-+@@ -99,7 +99,7 @@
-+  */
-+ struct lcc_connection_s {
-+   FILE *fh;
-+-  char errbuf[1024];
-++  char errbuf[2048];
-+ };
-+ 
-+ struct lcc_response_s {
-+-- 
-+1.7.10.4
-+
+> 
+> Finally we install the script "relocate-sdk.sh" into the top directory
+> of the SDK (HOST_DIR) and the SDK location path is stored in the file
+> "HOST_DIR/share/buildroot/sdk-location"-
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ This is actually a case where you changed a little too much to carry the
+Rev-by. But it's a bit borderline and still OK.
+
+> ---
+>  Makefile | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index d4faa02..4e432dd 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -552,6 +552,14 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>  .PHONY: world
+>  world: target-post-image
+>  
+> +.PHONY: sdk
+> +sdk: world
+> +	@$(call MESSAGE,"Rendering the SDK relocatable")
+> +	$(TOPDIR)/support/scripts/fix-rpath host
+
+ So, what about exporting TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR? Ah, not
+needed because the default in the script is already OK.
+
+> +	$(TOPDIR)/support/scripts/fix-rpath staging
+> +	install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)
+
+ We almost always use an explicit -m and an explicit target file name. But
+that's just nitpicking again :-)
+
+ Regards,
+ Arnout
+
+> +	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+> +
+>  # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
+>  $(HOST_DIR)/usr: $(HOST_DIR)
+>  	@ln -snf . $@
+> @@ -1001,6 +1009,7 @@ help:
+>  	@echo 'Build:'
+>  	@echo '  all                    - make world'
+>  	@echo '  toolchain              - build toolchain'
+> +	@echo '  sdk                    - build relocatable SDK'
+>  	@echo
+>  	@echo 'Configuration:'
+>  	@echo '  menuconfig             - interactive curses-based configurator'
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
