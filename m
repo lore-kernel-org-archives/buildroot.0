@@ -1,59 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Jul 2017 23:13:48 +0200
-Subject: [Buildroot] [PATCH v9 3/3] support/scripts/fix-rpath: typo fix
- and unneeded "; " removed
-In-Reply-To: <1500642853-5565-4-git-send-email-wg@grandegger.com>
-References: <1500642853-5565-1-git-send-email-wg@grandegger.com>
- <1500642853-5565-4-git-send-email-wg@grandegger.com>
-Message-ID: <390f1289-3b37-fb16-9abe-a7f440329253@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Jul 2017 23:22:47 +0200
+Subject: [Buildroot] [git commit] libmemcached: fix build with gcc 7.x
+Message-ID: <20170721211945.D8B148163D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=8786ac28058aa553cfa8adc176952143af630af6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This commit adds a patch to the libmemcached package that fixes the
+build with gcc 7.x. Since libmemcached is barely maintained upstream,
+the patch comes from the Fedora packages.
 
-On 21-07-17 15:14, Wolfgang Grandegger wrote:
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Fixes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  http://autobuild.buildroot.net/results/872b8e0e6a24cbc96e3ad9e0b8b47acdf6160ce0/
 
- Regards,
- Arnout
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0005-fix-pointer-comparaison.patch             | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-> ---
->  support/scripts/fix-rpath | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-> index 9272d2d..5a30207 100755
-> --- a/support/scripts/fix-rpath
-> +++ b/support/scripts/fix-rpath
-> @@ -27,7 +27,7 @@ Description:
->  
->      Sanitization behaves the same whatever the kind of the processed tree,
->      but the resulting RPATH differs. The rpath sanitization is done using
-> -    "patchelf --make-rpath-relazive".
-> +    "patchelf --make-rpath-relative".
->  
->  Arguments:
->  
-> @@ -81,7 +81,7 @@ main() {
->                  find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
->  
->              for excludepath in ${HOST_EXCLUDEPATHS}; do
-> -                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" );
-> +                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" )
->              done
->  
->              # do not process the patchelf binary but a copy to work-around "file in use"
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/libmemcached/0005-fix-pointer-comparaison.patch b/package/libmemcached/0005-fix-pointer-comparaison.patch
+new file mode 100644
+index 0000000..c9f8dd1
+--- /dev/null
++++ b/package/libmemcached/0005-fix-pointer-comparaison.patch
+@@ -0,0 +1,30 @@
++Fix pointer comparaison
++
++opt_servers is a pointer, not a boolean, so testing against false to
++know if the pointer is NULL no longer works with the more strict gcc
++7.x checks.
++
++[Taken from http://pkgs.fedoraproject.org/cgit/rpms/libmemcached.git/plain/libmemcached-build.patch.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++diff -up ./clients/memflush.cc.old ./clients/memflush.cc
++--- ./clients/memflush.cc.old	2017-02-12 10:12:59.615209225 +0100
+++++ ./clients/memflush.cc	2017-02-12 10:13:39.998382783 +0100
++@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
++ {
++   options_parse(argc, argv);
++ 
++-  if (opt_servers == false)
+++  if (!opt_servers)
++   {
++     char *temp;
++ 
++@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
++       opt_servers= strdup(temp);
++     }
++ 
++-    if (opt_servers == false)
+++    if (!opt_servers)
++     {
++       std::cerr << "No Servers provided" << std::endl;
++       exit(EXIT_FAILURE);
