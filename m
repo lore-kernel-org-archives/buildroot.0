@@ -1,47 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:04:50 +0200
-Subject: [Buildroot] [git commit] python-flask: bump to version 0.12.2
-Message-ID: <20170721210346.C906B80169@busybox.osuosl.org>
+Date: Fri, 21 Jul 2017 23:04:48 +0200
+Subject: [Buildroot] [git commit] python-pathvalidate: bump to version 0.16.0
+Message-ID: <20170721210346.B58F27F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0f01e77fe16f4fbf1913556669274b29b72aceb
+commit: https://git.buildroot.net/buildroot/commit/?id=86752349991755ab754776da589d91d55f772898
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Upstream project has dropped all runtime dependencies.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-flask/python-flask.hash | 6 +++---
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pathvalidate/Config.in                | 3 ---
+ package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
+ package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 919b075..ca11721 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
+diff --git a/package/python-pathvalidate/Config.in b/package/python-pathvalidate/Config.in
+index 60163fb..8606696 100644
+--- a/package/python-pathvalidate/Config.in
++++ b/package/python-pathvalidate/Config.in
+@@ -1,8 +1,5 @@
+ config BR2_PACKAGE_PYTHON_PATHVALIDATE
+ 	bool "python-pathvalidate"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+-	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+ 	help
+ 	  pathvalidate is a python library to validate/sanitize a string
+ 	  such as filename/variable-name.
+diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
+index 30e36d2..734d449 100644
+--- a/package/python-pathvalidate/python-pathvalidate.hash
++++ b/package/python-pathvalidate/python-pathvalidate.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
--md5	c1d30f51cff4a38f9454b23328a15c5a  Flask-0.12.tar.gz
--sha256	93e803cdbe326a61ebd5c5d353959397c85f829bec610d59cb635c9f97d7ca8b  Flask-0.12.tar.gz
-+# md5 from https://pypi.python.org/pypi/Flask/json, sha256 locally computed
-+md5	97278dfdafda98ba7902e890b0289177  Flask-0.12.2.tar.gz
-+sha256	49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1  Flask-0.12.2.tar.gz
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index 856fa06..06b1b4d 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
+ # md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
+-md5 869d111f587836920f5ae36751d422fc  pathvalidate-0.15.0.tar.gz
+-sha256 5d0bb777b4a6b95426d4a4ac47dcf6a2c8173a78b4019e94b8e8a0d59b0095ed  pathvalidate-0.15.0.tar.gz
++md5	fa119fcdbc744dc3a9de11185437992c  pathvalidate-0.16.0.tar.gz
++sha256	81c665a16e41203dc7698caf4f7ee15b7da97e36368e30e76e76e968ce77f468  pathvalidate-0.16.0.tar.gz
+diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
+index 36ab6a4..c25f4ce 100644
+--- a/package/python-pathvalidate/python-pathvalidate.mk
++++ b/package/python-pathvalidate/python-pathvalidate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 0.12
-+PYTHON_FLASK_VERSION = 0.12.2
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://pypi.python.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a
-+PYTHON_FLASK_SITE = https://pypi.python.org/packages/eb/12/1c7bd06fcbd08ba544f25bf2c6612e305a70ea51ca0eda8007344ec3f123
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE
+-PYTHON_PATHVALIDATE_VERSION = 0.15.0
++PYTHON_PATHVALIDATE_VERSION = 0.16.0
+ PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
+-PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/a6/7b/2c3026ead121829ed27eba4fba7b4cd6ec8c210f76b0601119a915918f6c
++PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/d8/c5/37474d872ca29510a10d93b103920fad551f577b696104a3574a89093e5f
+ PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
+ PYTHON_PATHVALIDATE_LICENSE = MIT
+ PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
