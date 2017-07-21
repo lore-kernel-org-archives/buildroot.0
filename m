@@ -1,59 +1,158 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Fri, 21 Jul 2017 20:29:23 +0200
-Subject: [Buildroot] [PATCH v4 2/3] qt5webengine: new package
-In-Reply-To: <20170721155145.zm2gauvqgoqvxsmy@gportay>
-References: <20170720010527.5359-1-gael.portay@savoirfairelinux.com>
- <20170720010527.5359-3-gael.portay@savoirfairelinux.com>
- <f54d8e9c-aede-ebd1-32b0-a3129333293b@gmail.com>
- <20170721155145.zm2gauvqgoqvxsmy@gportay>
-Message-ID: <e8073840-27ae-ff2f-7cbd-2082ba66b5b8@gmail.com>
+From: RJ Ascani <rj.ascani@gmail.com>
+Date: Fri, 21 Jul 2017 12:11:40 -0700
+Subject: [Buildroot] [PATCH] azmq: Add new package
+Message-ID: <20170721191140.29980-1-rj.ascani@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ga?l,
+The azmq library provides Boost Asio style bindings for ZeroMQ. This
+library is built on top of ZeroMQ's standard C interface and is intended
+to work well with C++ applications which use the Boost libraries in
+general, and Asio in particular.
 
-On 07/21/2017 05:51 PM, Ga?l PORTAY wrote:
->
-> No hash entry for qtwebengine-opensource-src-5.9.1.tar.xz
-> That is because you applied my patch after the bump to 5.9.1.
->
-> 	854b93370 package/qt5: bump latest version to 5.9.1
+Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+---
+ package/Config.in                                  |  1 +
+ ...Conditionally-disable-test-and-doc-builds.patch | 43 ++++++++++++++++++++++
+ package/azmq/Config.in                             | 28 ++++++++++++++
+ package/azmq/azmq.hash                             |  3 ++
+ package/azmq/azmq.mk                               | 18 +++++++++
+ 5 files changed, 93 insertions(+)
+ create mode 100644 package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
+ create mode 100644 package/azmq/Config.in
+ create mode 100644 package/azmq/azmq.hash
+ create mode 100644 package/azmq/azmq.mk
 
-Oh, i see, sorry for the noise, i blindly assumed it's against the
-current master.
-
->
-> I am working on bumping Qt WebEngine to 5.9.1; but I met the following error
-> when I build it for a rpi3.
->
-> It concerns the opus codec which is build by chromium through Qt WebEngine.
->
-> 	In file included from ../../3rdparty/chromium/third_party/opus/src/silk/arm/NSQ_neon.c:31:0:
-> 	/home/gportay/src/buildroot/output-rpi-5.9-7/host/lib/gcc/arm-buildroot-linux-gnueabihf/7.1.0/include/arm_neon.h:10369:1: error: inlining failed in call to always_inline ?vld1q_s32?: target specific option mismatch
-> 	 vld1q_s32 (const int32_t * __a)
-> 	 ^~~~~~~~~
-> 	../../3rdparty/chromium/third_party/opus/src/silk/arm/NSQ_neon.c:40:15: note: called from here
-> 	     int32x4_t coef0 = vld1q_s32(coef32);
-> 		       ^~~~~
-> 	../../3rdparty/chromium/third_party/opus/src/silk/arm/NSQ_neon.c: At top level:
-> 	cc1: warning: unrecognized command line option ?-Wno-#pragma-messages?
-> 	[11/12339] CC obj/third_party/ffmpeg/ffmpeg_internal/autorename_libavcodec_flacdec.o
-> 	ninja: build stopped: subcommand failed.
->
-> Now, I am enabling the WEBENGINE_CONFIG+=use_system_ffmpeg by default; building
-> the buildroot copy of opus, and it seems to compile.
-Please feel free to send your patch with this config, i'll build and
-test it as well. (although i only have a RaspberryPi3 to test this atm,
-i'll check what other relevant HW i have around...)
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170721/0197075d/attachment.asc>
+diff --git a/package/Config.in b/package/Config.in
+index d830cf743..38c196685 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1274,6 +1274,7 @@ menu "Networking"
+ 	source "package/alljoyn-base/Config.in"
+ 	source "package/alljoyn-tcl/Config.in"
+ 	source "package/alljoyn-tcl-base/Config.in"
++	source "package/azmq/Config.in"
+ 	source "package/azure-iot-sdk-c/Config.in"
+ 	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
+new file mode 100644
+index 000000000..2e6016a05
+--- /dev/null
++++ b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
+@@ -0,0 +1,43 @@
++From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
++From: RJ Ascani <rj.ascani@gmail.com>
++Date: Thu, 20 Jul 2017 15:53:40 -0700
++Subject: [PATCH] Conditionally disable test and doc builds
++
++Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
++---
++ CMakeLists.txt | 12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 5b5b9cc..97006a4 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
++                     ${ZeroMQ_INCLUDE_DIRS}
++                     ${PROJECT_SOURCE_DIR})
++ 
++-enable_testing()
+++if (BUILD_TESTING)
+++    enable_testing()
+++endif()
++ 
++ macro(add_catch_test name)
++     if (TEST_REPORT_FORMAT)
++@@ -59,8 +61,12 @@ macro(add_catch_test name)
++     endif()
++ endmacro()
++ 
++-add_subdirectory(test)
++-add_subdirectory(doc)
+++if (BUILD_TESTING)
+++    add_subdirectory(test)
+++endif()
+++if (BUILD_DOC)
+++    add_subdirectory(doc)
+++endif()
++ 
++ install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
++         DESTINATION include)
++-- 
++2.13.3
++
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+new file mode 100644
+index 000000000..422a05883
+--- /dev/null
++++ b/package/azmq/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_AZMQ
++	bool "azmq"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_USE_WCHAR # boost
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
++	select BR2_PACKAGE_ZEROMQ
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_CHRONO
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_LOG
++	select BR2_PACKAGE_BOOST_RANDOM
++	select BR2_PACKAGE_BOOST_REGEX
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	help
++	  This library provides Boost Asio style bindings for ZeroMQ.
++
++	  https://github.com/zeromq/azmq
++
++comment "azmq needs a toolchain w/ C++11, wchar and threads"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
++
++comment "azmq needs exception_ptr"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
+new file mode 100644
+index 000000000..d3993f498
+--- /dev/null
++++ b/package/azmq/azmq.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
++sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
+diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
+new file mode 100644
+index 000000000..427ad0f5b
+--- /dev/null
++++ b/package/azmq/azmq.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# azmq
++#
++################################################################################
++
++AZMQ_VERSION = v1.0
++AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
++AZMQ_DEPENDENCIES = boost zeromq
++AZMQ_LICENSE = BSL-1.0
++AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
++
++# AZMQ is a header only library, so it does not need to be installed on the
++# target.
++AZMQ_INSTALL_STAGING = YES
++AZMQ_INSTALL_TARGET = NO
++
++$(eval $(cmake-package))
+-- 
+2.13.3
