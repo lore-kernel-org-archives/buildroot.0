@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Jul 2017 23:13:32 +0200
-Subject: [Buildroot] [PATCH v9 2/3] support/scripts/fix-rpath: check if
- the patchelf utility exists
-In-Reply-To: <1500642853-5565-3-git-send-email-wg@grandegger.com>
+Date: Fri, 21 Jul 2017 23:13:48 +0200
+Subject: [Buildroot] [PATCH v9 3/3] support/scripts/fix-rpath: typo fix
+ and unneeded "; " removed
+In-Reply-To: <1500642853-5565-4-git-send-email-wg@grandegger.com>
 References: <1500642853-5565-1-git-send-email-wg@grandegger.com>
- <1500642853-5565-3-git-send-email-wg@grandegger.com>
-Message-ID: <540b59e4-54b2-6db3-e48b-7b26737d194f@mind.be>
+ <1500642853-5565-4-git-send-email-wg@grandegger.com>
+Message-ID: <390f1289-3b37-fb16-9abe-a7f440329253@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,49 +16,38 @@ To: buildroot@busybox.net
 
 On 21-07-17 15:14, Wolfgang Grandegger wrote:
 > Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
->  support/scripts/fix-rpath | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-> index f7c70b7..9272d2d 100755
-> --- a/support/scripts/fix-rpath
-> +++ b/support/scripts/fix-rpath
-> @@ -45,6 +45,9 @@ Environment:
->  
->      TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
->                   (default HOST_DIR/opt/ext-toolchain)
-> +
-> +Returns:         0 if success or 1 in case of error
-> +
->  EOF
->  }
->  
-> @@ -60,6 +63,11 @@ main() {
->      local find_args=( )
->      local sanitize_extra_args=( )
->  
-> +    if [ ! -x "${PATCHELF}" ]; then
-
- This is not fully failsafe; it's still possible that some shared library used
-by patchelf is not available anymore. So to be really sure (as suggested by Thomas):
-
-    if [ ! "${PATCHELF}" --help > /dev/null 2>&1 ]; then
-
- But that's really borderline stuff so
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> +	echo "Error: patchelf utility '${PATCHELF}' not found"
-> +	exit 1
-> +    fi
-> +
->      case "${tree}" in
->          host)
->              rootdir="${HOST_DIR}"
+> ---
+>  support/scripts/fix-rpath | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+> index 9272d2d..5a30207 100755
+> --- a/support/scripts/fix-rpath
+> +++ b/support/scripts/fix-rpath
+> @@ -27,7 +27,7 @@ Description:
+>  
+>      Sanitization behaves the same whatever the kind of the processed tree,
+>      but the resulting RPATH differs. The rpath sanitization is done using
+> -    "patchelf --make-rpath-relazive".
+> +    "patchelf --make-rpath-relative".
+>  
+>  Arguments:
+>  
+> @@ -81,7 +81,7 @@ main() {
+>                  find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
+>  
+>              for excludepath in ${HOST_EXCLUDEPATHS}; do
+> -                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" );
+> +                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" )
+>              done
+>  
+>              # do not process the patchelf binary but a copy to work-around "file in use"
 > 
 
 -- 
