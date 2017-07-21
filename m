@@ -1,80 +1,83 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Fri, 21 Jul 2017 13:44:56 -0700
-Subject: [Buildroot] [PATCH] package/qt5location: handle plugins being
- conditionally built
-In-Reply-To: <trinity-2e3bcfb2-19ec-4b5f-af7f-1c84a5d187d3-1500620201526@3capp-gmx-bs73>
-References: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
- <trinity-2e3bcfb2-19ec-4b5f-af7f-1c84a5d187d3-1500620201526@3capp-gmx-bs73>
-Message-ID: <130adce5-41c1-0c79-5c31-33f87bcc4055@microchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Jul 2017 22:43:36 +0200
+Subject: [Buildroot] [git commit] uboot: bump to version 2017.07
+Message-ID: <20170721204204.6CD497FAFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=14b1b5b54e7bfa4eb60a04ed3c88483595a14dcb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 07/20/2017 11:56 PM, Peter Seiderer wrote:
-> Hello Joshua,
-> 
->> Gesendet: Freitag, 21. Juli 2017 um 01:33 Uhr
->> Von: "Joshua Henderson" <joshua.henderson@microchip.com>
->> An: buildroot at buildroot.org
->> Cc: "Peter Seiderer" <ps.report@gmx.net>, "Julien Corjon" <corjon.j@ecagroup.com>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
->> Betreff: [PATCH] package/qt5location: handle plugins being conditionally built
->>
->> This fixes a build issue where the qt5location plugins are not built, but are
->> attempted to be installed.
->>
->> The qt5location plugins have dependencies that are automatically resolved
->> causing plugins to conditionaly be built. This change checks for the existance
->> of the plugins prior to trying to install them.
->>
-> 
-> No, the dependencies of the position plugins are only on module positioning (one purpose of the qt5location
-> package):
+Add a new config option BR2_TARGET_UBOOT_NEEDS_PYLIBFDT for U-Boot
+targets, like sunxi, needing the Python libfdt library.
 
-Ahhh.  You are correct and that statement means I should see some dependency on position for
-positioning. Something like this covers it:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+[Thomas: drop bogus selects on BR2_PACKAGE_HOST_{PYTHON,SWIG}.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in  | 10 ++++++++--
+ boot/uboot/uboot.hash |  2 +-
+ boot/uboot/uboot.mk   |  4 ++++
+ 3 files changed, 13 insertions(+), 3 deletions(-)
 
-    plugins.depends += positioning
-
-And I do see that.  The problem is that the above line only happens in src/src.pro if we have the 
-quick module with qtHaveModule(quick).  This is a qt5location change [1] that happened between qt
-5.8.0 and qt 5.9.1, which moved the above line as a dependency on quick,  which is why this issue
-did not show up in 5.8.0.
-
-This is also why I see the root problem come and go only with a different buildroot config
-(availability of quick or not).  I was led down this erroneous path when I took the src.pro for
-its word and assumed a dependency on quick in v1 of this patch.
-
-[1] https://code.qt.io/cgit/qt/qtlocation.git/commit/?id=c54ee74acdb9757989004005baf79e99be4c9417
-
-> 
->     $  cat src/plugins/plugins.pro 
-> TEMPLATE = subdirs
-> qtHaveModule(positioning): SUBDIRS +=  position
-> qtHaveModule(location): SUBDIRS += geoservices
-> 
-> 
-> The problem is a build-ordering, the right fix is to enable ordering in src/src.pro:
-> 
-> diff --git a/src/src.pro b/src/src.pro
-> index d0a1ee4..d45ddb8 100644
-> --- a/src/src.pro
-> +++ b/src/src.pro
-> @@ -1,5 +1,6 @@
->  TEMPLATE = subdirs
-> -
-> +CONFIG += ordered
-> + 
->  SUBDIRS += 3rdparty/clip2tri 3rdparty/clipper 3rdparty/poly2tri
->  3rdparty/clip2tri.depends = 3rdparty/clipper 3rdparty/poly2tri
-> 
-> Buildroot patch follows...
-
-Isn't there some saying about every time "ordered" is used a kitten dies?  Wouldn't the proper fix be to
-address the dependency instead? I did not see your patch.  So, I have submitted a v2 to this patch and
-also submitted the patch to the Qt bug tracker going about fixing the dependency instead.
-
-Josh
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 52f3a32..2ae38e9 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2017.05"
++	bool "2017.07"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2017.05"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2017.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+@@ -138,6 +138,12 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
+ 	  Select this option if your U-Boot board configuration
+ 	  requires the Device Tree compiler to be available.
+ 
++config BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
++	bool "U-Boot needs pylibfdt"
++	help
++	  Select this option if your U-Boot board configuration
++	  requires the Python libfdt library to be available.
++
+ config BR2_TARGET_UBOOT_NEEDS_OPENSSL
+ 	bool "U-Boot needs OpenSSL"
+ 	help
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index e11d92f..3ba8e34 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  c8373949d7f0de1059e507b83a655d4cea539f75dc66ccdbb27adbd38d83095e  u-boot-2017.05.tar.bz2
++sha256  5374bfdc8acb9a38c025371b1ff20f45e7533668e84e685d0df5d9e7c0e4feff  u-boot-2017.07.tar.bz2
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 73d7263..14a8cc9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -138,6 +138,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
++UBOOT_DEPENDENCIES += host-python host-swig
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
+ UBOOT_DEPENDENCIES += host-openssl
+ endif
