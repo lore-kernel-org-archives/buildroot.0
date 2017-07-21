@@ -1,54 +1,52 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 21 Jul 2017 21:42:50 +0200
-Subject: [Buildroot] img layout
-In-Reply-To: <87r2x9pytc.fsf@dell.be.48ers.dk>
-References: <trinity-526790e5-6239-4ac3-8df7-331d1a974560-1500619716190@3capp-mailcom-bs08>
- <20170721092626.57bf9db2@windsurf>
- <trinity-6a261bc1-46e9-4b2a-9e53-ec32e5d148b0-1500628795781@3capp-mailcom-bs09>
- <87vammoyqg.fsf@dell.be.48ers.dk>
- <trinity-87e7b58a-c039-4b11-8d40-18e2768a46c0-1500634784758@3capp-mailcom-bs02>
- <87r2x9pytc.fsf@dell.be.48ers.dk>
-Message-ID: <trinity-7123c9ba-e38a-437e-9401-408b541f3e4d-1500666170296@3capp-mailcom-bs11>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 21 Jul 2017 21:56:31 +0200
+Subject: [Buildroot] Gmail bounces
+In-Reply-To: <747473427.1074021.1500661380566.JavaMail.zimbra@datacom.ind.br>
+References: <3d3a1098-24c3-d125-f433-04a9c1654b3e@gmail.com>
+ <747473427.1074021.1500661380566.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <3752e758-9b08-2e44-3024-7f08c29397ed@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Peter,
 
-> Sent: Friday, July 21, 2017 at 6:57 PM
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: daggs <daggs@gmx.com>
-> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, buildroot at buildroot.org
-> Subject: Re: [Buildroot] img layout
->
-> >>>>> "daggs" == daggs  <daggs@gmx.com> writes:
-> 
->  >> That looks very similar to the logic we already have in
->  >> board/hardkernel/odroid2c2/post-image.sh, isn't that working for you?
->  >> 
->  >> -- 
->  >> Bye, Peter Korsgaard
-> 
->  > the original script won't work because it doesn't needs to address the signed bins because they are included.
->  > it uses a uboot 2005 based git fork that already includes it. without
->  > adding the signed bins, the system will not boot.
-> 
-> Ehh, ok - That I get, but the lines you pasted before are pretty similar to what
-> we're already doing.
-> 
-> Looking at board/amlogic/odroid-c2/README in u-boot it looks like we
-> need to package the hardkernel host utilities and binary ATF builds - Or
-> perhaps we can use Andreas' meson-tools for (some of) the tasks:
-> 
-> https://github.com/afaerber/meson-tools
-> 
-> And then postprocess u-boot.bin with them and add it to the sdcard.img
-> like we do today.
-> 
 
-my current implementation checks out the hk uboot repo and prepares it in the post install stage.
-the offsets are known now (asked at their forums). first I'll get it to work, then the fixes will come.
+On 21-07-17 20:23, Ricardo Martincoski wrote:
+> Hello,
+> 
+> ----- Original Message -----
+>> From: "Ryan Coe" <bluemrp9@gmail.com>
+> 
+>> Recently, I have received notification that my email address is bouncing
+>> mail.  I'm using Gmail as my provider.  Is any else having any issues?
+> 
+> Same here. Today I had to reenable by membership for my Gmail account due to
+> bouncing e-mails.
+> 
+> In my professional account I receive e-mails from gitlab:
+> From: "GitLab" <gitlab@mg.gitlab.com>
+> Sent: Friday, July 21, 2017 5:40:49 AM
+> Subject: [Buildroot] buildroot | Pipeline #10076109 has failed for master | e9a6a104
+> 
+> In my personal account (gmail) I don't receive such e-mails.
 
-Dagg.
+
+ Are you suggesting that the gitlab mails could be the cause of this? I can turn
+them off and see if that improves things...
+
+ Which reminds me, I still have to file an issue with gitlab about these mails -
+the lack of To: line is apparently problematic for a lot of people.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
