@@ -1,345 +1,99 @@
-From: GitLab <gitlab@mg.gitlab.com>
-Date: Fri, 21 Jul 2017 08:40:49 +0000
-Subject: [Buildroot] buildroot | Pipeline #10076109 has failed for master |
-	e9a6a104
-Message-ID: <5971be11cc02a_23bd3fa33a5a0f9c23712f@sidekiq-asap02.mail>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 21 Jul 2017 11:10:26 +0200
+Subject: [Buildroot] [PATCH] configs: nitrogen*: bump kernel and u-boot
+	revisions
+Message-ID: <20170721091026.22364-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Your pipeline has failed.
+Here are the main U-Boot modifications:
+- Rebase on top of mainline 2017.03 release
+- Fix sparse image flashing issues
 
-Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
-Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
+Here are the main Linux modifications:
+- Add mma8451 driver support
+- Fix possible TiWi spurious interrupts issue
+- Fix Ethernet interrupt parent issue
+- Add USB Type C TUSB320 controller support
+- Add SOM2 i.MX6DL and i.MX6QP variants
 
-Commit: e9a6a104 ( https://gitlab.com/buildroot.org/buildroot/commit/e9a6a104bc82fe6425dfcf9344f560904793c8f1 )
-Commit Message: python-systemd: add new package
-
-Add package fo...
-Commit Author: Andrey Smirnov
-Committed by: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
-
-Pipeline #10076109 ( https://gitlab.com/buildroot.org/buildroot/pipelines/10076109 ) triggered by Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
-had 21 failed builds.
-
-Job #23508560 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508560 )
-
-Stage: test
-Name: beaglebone_qt5_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-52c4aa7cdb93d61f8008f380135beaf7b8fa6593/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508560 responseStatus[0;m=201 Created token[0;m=Ke7gsTug
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508571 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508571 )
-
-Stage: test
-Name: firefly_rk3288_demo_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2016.01/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508571 responseStatus[0;m=201 Created token[0;m=vS5LAffQ
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508672 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508672 )
-
-Stage: test
-Name: toradex_apalis_imx6_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-1ef4a29e8cea0239411dde64f9617ad76248fd02/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508672 responseStatus[0;m=201 Created token[0;m=LShvvf2Y
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508595 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508595 )
-
-Stage: test
-Name: minnowboard_max_defconfig
-Trace: make: *** [target-post-image] Error 1
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 4 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508595 responseStatus[0;m=201 Created token[0;m=5x-cvBYW
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508563 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508563 )
-
-Stage: test
-Name: ci40_defconfig
-Trace: make[1]: Leaving directory '/builds/buildroot.org/buildroot/output/build/uboot-custom'
-package/pkg-generic.mk:227: recipe for target '/builds/buildroot.org/buildroot/output/build/uboot-custom/.stamp_built' failed
-make: *** [/builds/buildroot.org/buildroot/output/build/uboot-custom/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 2 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508563 responseStatus[0;m=201 Created token[0;m=mQNqG2m5
-
-
-Job #23508593 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508593 )
-
-Stage: test
-Name: linksprite_pcduino_defconfig
-Trace: make: *** [target-post-image] Error 139
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 9 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508593 responseStatus[0;m=201 Created token[0;m=Rh5awqe9
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508534 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508534 )
-
-Stage: test
-Name: armadeus_apf27_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.18.6/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 2 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508534 responseStatus[0;m=201 Created token[0;m=yB-2kjPH
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508610 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508610 )
-
-Stage: test
-Name: olimex_a20_olinuxino_lime2_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.1.4/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 5 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508610 responseStatus[0;m=201 Created token[0;m=qPTV__ot
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508570 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508570 )
-
-Stage: test
-Name: firefly_rk3288_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2016.01/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508570 responseStatus[0;m=201 Created token[0;m=rT-MT3KR
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508585 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508585 )
-
-Stage: test
-Name: galileo_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-0feded4f96ddca9816c6c1b8a4780cb4065747b9/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508585 responseStatus[0;m=201 Created token[0;m=ghxbKFMz
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508659 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508659 )
-
-Stage: test
-Name: riotboard_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2015.10/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508659 responseStatus[0;m=201 Created token[0;m=hv_dD9BD
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508562 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508562 )
-
-Stage: test
-Name: ci20_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uclibc-1.0.25/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508562 responseStatus[0;m=201 Created token[0;m=oxbY42k_
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508675 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508675 )
-
-Stage: test
-Name: ts5x00_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.17.8/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 3 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508675 responseStatus[0;m=201 Created token[0;m=WPHhzsro
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508584 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508584 )
-
-Stage: test
-Name: freescale_p1010rdb_pa_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.1.4/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508584 responseStatus[0;m=201 Created token[0;m=xbjPgDLM
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508583 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508583 )
-
-Stage: test
-Name: freescale_mpc8315erdb_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-4.5.3/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508583 responseStatus[0;m=201 Created token[0;m=72Tvg1F2
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508674 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508674 )
-
-Stage: test
-Name: ts4900_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-70d1e85a22879e27cc9e36384438d5a9793e44b0/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508674 responseStatus[0;m=201 Created token[0;m=R5jrD98Z
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508537 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508537 )
-
-Stage: test
-Name: armadeus_apf9328_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.18.29/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508537 responseStatus[0;m=201 Created token[0;m=K_qivcsm
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508671 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508671 )
-
-Stage: test
-Name: telit_evk_pro3_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/linux-3.9.11/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 2 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508671 responseStatus[0;m=201 Created token[0;m=UFfoEqiJ
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508602 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508602 )
-
-Stage: test
-Name: nanopi_m1_defconfig
-Trace: make: *** [/builds/buildroot.org/buildroot/output/build/uboot-2017.07-rc1/.stamp_built] Error 2
-[32;1m$ exit 1[0;m
-[32;1mUploading artifacts...[0;m
-build.log: found 1 matching files                 [0;m 
-output/images/: found 1 matching files            [0;m 
-output/build/build-time.log: found 1 matching files[0;m 
-output/build/packages-file-list.txt: found 1 matching files[0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508602 responseStatus[0;m=201 Created token[0;m=HazEQZ5t
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508696 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508696 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660GrubInternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 140.128s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508696 responseStatus[0;m=201 Created token[0;m=px9bRnec
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-Job #23508695 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/23508695 )
-
-Stage: test
-Name: tests.fs.test_iso9660.TestIso9660GrubExternal
-Trace: 
-----------------------------------------------------------------------
-Ran 1 test in 134.050s
-
-FAILED (errors=1)
-[32;1mUploading artifacts...[0;m
-test-output/*.log: found 1 matching files         [0;m 
-Uploading artifacts to coordinator... ok          [0;m  id[0;m=23508695 responseStatus[0;m=201 Created token[0;m=puXxFQax
-[31;1mERROR: Job failed: exit code 1
-[0;m
-
-
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-You're receiving this email because of your account on gitlab.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170721/74540fac/attachment.html>
+ configs/nitrogen6sx_defconfig | 6 +++---
+ configs/nitrogen6x_defconfig  | 8 ++++----
+ configs/nitrogen7_defconfig   | 6 +++---
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 6bb9953a85..fc568fbbd2 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -25,14 +25,14 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/9cbdb79a.tar.gz"
++# Last version of branch boundary-v2017.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/4280a700.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/3c1c6149.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 48bb114af3..43ff7088a7 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -25,15 +25,15 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/9cbdb79a.tar.gz"
++# Last version of branch boundary-v2017.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/4280a700.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/3c1c6149.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_som2 imx6q-nitrogen6_max imx6qp-nitrogen6_max imx6q-sabrelite"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6dl-nitrogen6_som2 imx6q-nitrogen6_som2 imx6qp-nitrogen6_som2 imx6q-nitrogen6_max imx6qp-nitrogen6_max imx6q-sabrelite"
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index b027fb7c3c..da5938b09c 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -24,14 +24,14 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/9cbdb79a.tar.gz"
++# Last version of branch boundary-v2017.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/4280a700.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/3c1c6149.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.11.0
