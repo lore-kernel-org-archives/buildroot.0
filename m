@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 21 Jul 2017 10:12:29 +0200
-Subject: [Buildroot] [PATCH 6/7] python-flask: bump to version 0.12.2
+Date: Fri, 21 Jul 2017 10:12:30 +0200
+Subject: [Buildroot] [PATCH 7/7] python-requests: bump to version 2.18.1
 In-Reply-To: <20170721081230.5584-1-yegorslists@googlemail.com>
 References: <20170721081230.5584-1-yegorslists@googlemail.com>
-Message-ID: <20170721081230.5584-6-yegorslists@googlemail.com>
+Message-ID: <20170721081230.5584-7-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,56 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Add new runtime dependencies and select Python SSL support.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-flask/python-flask.hash | 6 +++---
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-requests/Config.in            | 6 ++++++
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 919b07598..ca117218e 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
+diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
+index 23ab3092d..d2726fb26 100644
+--- a/package/python-requests/Config.in
++++ b/package/python-requests/Config.in
+@@ -1,5 +1,11 @@
+ config BR2_PACKAGE_PYTHON_REQUESTS
+ 	bool "python-requests"
++	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PYTHON_CHARDET # runtime
++	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 8faa9d0e8..2f182ea3b 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
--md5	c1d30f51cff4a38f9454b23328a15c5a  Flask-0.12.tar.gz
--sha256	93e803cdbe326a61ebd5c5d353959397c85f829bec610d59cb635c9f97d7ca8b  Flask-0.12.tar.gz
-+# md5 from https://pypi.python.org/pypi/Flask/json, sha256 locally computed
-+md5	97278dfdafda98ba7902e890b0289177  Flask-0.12.2.tar.gz
-+sha256	49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1  Flask-0.12.2.tar.gz
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index 856fa0653..06b1b4d9d 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
+ # md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
+-md5 921ec6b48f2ddafc8bb6160957baf444 requests-2.13.0.tar.gz
+-sha256 5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8 requests-2.13.0.tar.gz
++md5	40f723ed01dddeaf990d0609d073f021  requests-2.18.1.tar.gz
++sha256	c6f3bdf4a4323ac7b45d01e04a6f6c20e32a052cd04de81e05103abc049ad9b9  requests-2.18.1.tar.gz
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 13bbdfb5a..504eb8d0a 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 0.12
-+PYTHON_FLASK_VERSION = 0.12.2
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://pypi.python.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a
-+PYTHON_FLASK_SITE = https://pypi.python.org/packages/eb/12/1c7bd06fcbd08ba544f25bf2c6612e305a70ea51ca0eda8007344ec3f123
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_VERSION = 2.13.0
++PYTHON_REQUESTS_VERSION = 2.18.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/16/09/37b69de7c924d318e51ece1c4ceb679bf93be9d05973bb30c35babd596e2
++PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2c/b5/2b6e8ef8dd18203b6399e9f28c7d54f6de7b7549853fe36d575bd31e29a7
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.11.0
