@@ -1,11 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 09:09:47 +0200
-Subject: [Buildroot] [PATCH 4/4] webkitgtk: Ensure that Mesa headers do
- not include X11 headers on Wayland builds
-In-Reply-To: <20170712235531.20444-5-aperez@igalia.com>
-References: <20170712235531.20444-1-aperez@igalia.com>
- <20170712235531.20444-5-aperez@igalia.com>
-Message-ID: <20170721090947.2670fb7c@windsurf>
+Date: Fri, 21 Jul 2017 09:24:01 +0200
+Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
+ buildroot SDK has already been relocated
+In-Reply-To: <5dabf921-90d5-5f82-4e6b-34bcff1e2023@grandegger.com>
+References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
+ <1500561321-6623-9-git-send-email-wg@grandegger.com>
+ <20170720232131.02e9a51d@windsurf>
+ <9cca1b92-5e7e-2788-8370-59b12078396f@mind.be>
+ <20170721083636.5442a2df@windsurf>
+ <5dabf921-90d5-5f82-4e6b-34bcff1e2023@grandegger.com>
+Message-ID: <20170721092401.121b48b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +18,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Jul 2017 02:55:31 +0300, Adrian Perez de Castro wrote:
+On Fri, 21 Jul 2017 08:52:56 +0200, Wolfgang Grandegger wrote:
 
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index ef20839f92..09781c2318 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -84,6 +84,9 @@ endif
->  ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
->  WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
->  endif
-> +WEBKITGTK_CONF_OPTS += \
-> +	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -DMESA_EGL_NO_X11_HEADERS' \
-> +	-DCMAKE_CXX_FLAGS='$(TARGET_CXXFLAGS) -DMESA_EGL_NO_X11_HEADERS'
+> > Therefore, I would suggest to simply drop this check.  
+> 
+> If you make a toolchain with "make toolchain" the check will not harm. 
+> If it's created with "make sdk" it will do the check because
+> "share/buildroot/sdk-location" does exist. "make sdk" will never create 
+> just the toolchain.
 
-I am not happy with this: such CFLAGS should be provided by the OpenGL
-provider, through its pkg-config file, and consumers of the OpenGL
-implementation should get those flags using pkg-config.
+"make sdk" will definitely create just the toolchain if what you have
+in your configuration is... just the toolchain, which is exactly how I
+build Buildroot toolchains, such as the ones used by the autobuilders
+or on toolchains.free-electrons.com.
 
-If we don't do this, then we need to add -DMESA_EGL_NO_X11_HEADERS
-everywhere in all OpenGL consumers, which isn't nice.
+Doing "make toolchain" doesn't work for this use case, because you
+definitely want the RPATH sanitization of host binaries done in "make
+sdk".
 
-We already have a few OpenGL providers that define these flags in
-their .pc file:
+Again, I think this additional check in the external toolchain code is
+useless. For a SDK to be usable as an external toolchain, it has to be
+a SDK that contains *just* a toolchain and *nothing* else. If its
+sysroot is polluted with additional libraries than the C library, it
+cannot be used as an external toolchain. And therefore, the
+relocate-sdk procedure is useless, because there's nothing to relocate
+in an SDK that is just a toolchain.
 
-package/mali-t76x/egl.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-package/mali-t76x/glesv2.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-package/nvidia-driver/gl.pc:Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-package/odroid-mali/odroid-mali.mk:     $(SED) "s/Cflags: /Cflags: -DMESA_EGL_NO_X11_HEADERS /" \
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
