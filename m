@@ -1,158 +1,54 @@
-From: RJ Ascani <rj.ascani@gmail.com>
-Date: Fri, 21 Jul 2017 12:11:40 -0700
-Subject: [Buildroot] [PATCH] azmq: Add new package
-Message-ID: <20170721191140.29980-1-rj.ascani@gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Fri, 21 Jul 2017 21:42:50 +0200
+Subject: [Buildroot] img layout
+In-Reply-To: <87r2x9pytc.fsf@dell.be.48ers.dk>
+References: <trinity-526790e5-6239-4ac3-8df7-331d1a974560-1500619716190@3capp-mailcom-bs08>
+ <20170721092626.57bf9db2@windsurf>
+ <trinity-6a261bc1-46e9-4b2a-9e53-ec32e5d148b0-1500628795781@3capp-mailcom-bs09>
+ <87vammoyqg.fsf@dell.be.48ers.dk>
+ <trinity-87e7b58a-c039-4b11-8d40-18e2768a46c0-1500634784758@3capp-mailcom-bs02>
+ <87r2x9pytc.fsf@dell.be.48ers.dk>
+Message-ID: <trinity-7123c9ba-e38a-437e-9401-408b541f3e4d-1500666170296@3capp-mailcom-bs11>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The azmq library provides Boost Asio style bindings for ZeroMQ. This
-library is built on top of ZeroMQ's standard C interface and is intended
-to work well with C++ applications which use the Boost libraries in
-general, and Asio in particular.
+Greetings Peter,
 
-Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
----
- package/Config.in                                  |  1 +
- ...Conditionally-disable-test-and-doc-builds.patch | 43 ++++++++++++++++++++++
- package/azmq/Config.in                             | 28 ++++++++++++++
- package/azmq/azmq.hash                             |  3 ++
- package/azmq/azmq.mk                               | 18 +++++++++
- 5 files changed, 93 insertions(+)
- create mode 100644 package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
- create mode 100644 package/azmq/Config.in
- create mode 100644 package/azmq/azmq.hash
- create mode 100644 package/azmq/azmq.mk
+> Sent: Friday, July 21, 2017 at 6:57 PM
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: daggs <daggs@gmx.com>
+> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, buildroot at buildroot.org
+> Subject: Re: [Buildroot] img layout
+>
+> >>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+> 
+>  >> That looks very similar to the logic we already have in
+>  >> board/hardkernel/odroid2c2/post-image.sh, isn't that working for you?
+>  >> 
+>  >> -- 
+>  >> Bye, Peter Korsgaard
+> 
+>  > the original script won't work because it doesn't needs to address the signed bins because they are included.
+>  > it uses a uboot 2005 based git fork that already includes it. without
+>  > adding the signed bins, the system will not boot.
+> 
+> Ehh, ok - That I get, but the lines you pasted before are pretty similar to what
+> we're already doing.
+> 
+> Looking at board/amlogic/odroid-c2/README in u-boot it looks like we
+> need to package the hardkernel host utilities and binary ATF builds - Or
+> perhaps we can use Andreas' meson-tools for (some of) the tasks:
+> 
+> https://github.com/afaerber/meson-tools
+> 
+> And then postprocess u-boot.bin with them and add it to the sdcard.img
+> like we do today.
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index d830cf743..38c196685 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1274,6 +1274,7 @@ menu "Networking"
- 	source "package/alljoyn-base/Config.in"
- 	source "package/alljoyn-tcl/Config.in"
- 	source "package/alljoyn-tcl-base/Config.in"
-+	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
-diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-new file mode 100644
-index 000000000..2e6016a05
---- /dev/null
-+++ b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-@@ -0,0 +1,43 @@
-+From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
-+From: RJ Ascani <rj.ascani@gmail.com>
-+Date: Thu, 20 Jul 2017 15:53:40 -0700
-+Subject: [PATCH] Conditionally disable test and doc builds
-+
-+Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
-+---
-+ CMakeLists.txt | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 5b5b9cc..97006a4 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
-+                     ${ZeroMQ_INCLUDE_DIRS}
-+                     ${PROJECT_SOURCE_DIR})
-+ 
-+-enable_testing()
-++if (BUILD_TESTING)
-++    enable_testing()
-++endif()
-+ 
-+ macro(add_catch_test name)
-+     if (TEST_REPORT_FORMAT)
-+@@ -59,8 +61,12 @@ macro(add_catch_test name)
-+     endif()
-+ endmacro()
-+ 
-+-add_subdirectory(test)
-+-add_subdirectory(doc)
-++if (BUILD_TESTING)
-++    add_subdirectory(test)
-++endif()
-++if (BUILD_DOC)
-++    add_subdirectory(doc)
-++endif()
-+ 
-+ install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
-+         DESTINATION include)
-+-- 
-+2.13.3
-+
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-new file mode 100644
-index 000000000..422a05883
---- /dev/null
-+++ b/package/azmq/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_AZMQ
-+	bool "azmq"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_USE_WCHAR # boost
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	select BR2_PACKAGE_ZEROMQ
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_LOG
-+	select BR2_PACKAGE_BOOST_RANDOM
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	help
-+	  This library provides Boost Asio style bindings for ZeroMQ.
-+
-+	  https://github.com/zeromq/azmq
-+
-+comment "azmq needs a toolchain w/ C++11, wchar and threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+
-+comment "azmq needs exception_ptr"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
-new file mode 100644
-index 000000000..d3993f498
---- /dev/null
-+++ b/package/azmq/azmq.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
-+sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
-diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-new file mode 100644
-index 000000000..427ad0f5b
---- /dev/null
-+++ b/package/azmq/azmq.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# azmq
-+#
-+################################################################################
-+
-+AZMQ_VERSION = v1.0
-+AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
-+AZMQ_DEPENDENCIES = boost zeromq
-+AZMQ_LICENSE = BSL-1.0
-+AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
-+
-+# AZMQ is a header only library, so it does not need to be installed on the
-+# target.
-+AZMQ_INSTALL_STAGING = YES
-+AZMQ_INSTALL_TARGET = NO
-+
-+$(eval $(cmake-package))
--- 
-2.13.3
+my current implementation checks out the hk uboot repo and prepares it in the post install stage.
+the offsets are known now (asked at their forums). first I'll get it to work, then the fixes will come.
+
+Dagg.
