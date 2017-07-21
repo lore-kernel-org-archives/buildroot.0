@@ -1,64 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 22:40:46 +0200
-Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
- buildroot SDK has already been relocated
-In-Reply-To: <5146353d-87cc-cea2-0529-a07919d1f8a2@mind.be>
-References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-9-git-send-email-wg@grandegger.com>
- <20170720232131.02e9a51d@windsurf>
- <9cca1b92-5e7e-2788-8370-59b12078396f@mind.be>
- <20170721083636.5442a2df@windsurf>
- <5dabf921-90d5-5f82-4e6b-34bcff1e2023@grandegger.com>
- <20170721092401.121b48b1@windsurf>
- <5954a27f-ac93-99ee-5216-2cc73b15385b@grandegger.com>
- <20170721100526.7e014194@windsurf>
- <5146353d-87cc-cea2-0529-a07919d1f8a2@mind.be>
-Message-ID: <20170721224046.45ac9e84@windsurf>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Fri, 21 Jul 2017 13:44:02 -0700
+Subject: [Buildroot] [PATCH v2] package/qt5location: handle plugins being
+	conditionally built
+Message-ID: <1500669842-22691-1-git-send-email-joshua.henderson@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This fixes a build issue where the qt5location plugins are not built, but are
+attempted to be installed.
 
-On Fri, 21 Jul 2017 22:31:48 +0200, Arnout Vandecappelle wrote:
+The qt5location plugins have dependencies that are automatically and incorrectly
+resolved causing plugins to conditionaly be built based on whether quick is
+available. This change adds a patch that makes the plugins directory properly
+depending on the positioning module irrelevent of quick.
 
->  This is not true. I already regularly use a Buildroot SDK in projects by
-> setting BR2_HOST_DIR=/opt/... and packaging that. This SDK is then used to
-> create a rootfs+kernel with Buildroot, and separately to build applications.
-> Since the applications need some additional libraries, these libraries are
-> included in the SDK. They are not used by Buildroot, so it's double work (they
-> are included in the SDK, and built again for the target rootfs).
+Fixes:
 
-This is really horrible, because it means that some libraries that
-Buildroot doesn't know about may be present in the toolchain sysroot,
-be detected by packages, etc.
+    http://autobuild.buildroot.net/results/bc1/bc13abf3bb2fe1c991aec2334ee658c9641d1fd5/build-end.log
 
->  Admittedly it's not perfect, but it works. At least, as long as you don't go
-> and update Buildroot (thus putting new versions of the libraries on the target)
-> without updating the SDK as well.
-> 
->  However...
-> 
-> >>> And therefore, the
-> >>> relocate-sdk procedure is useless, because there's nothing to relocate
-> >>> in an SDK that is just a toolchain.    
-> >>
-> >> OK. I see. Then I will drop this patch.  
-> > 
-> > Let's see if Arnout agrees with my reasoning. Quite often he points me
-> > at details I have missed :-)  
-> 
->  relocate-sdk is still useless when using it as an external toolchain. You could
-> say it makes sense for a pre-installed toolchain, but then only if you're using
-> that SDK outside of Buildroot. Buildroot is not going to use any of the
-> additional stuff.
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
-Sorry, but I did not understand this paragraph :/
+--
 
-Thomas
+Changes for v2:
+- Instead of skipping missing files, fix the root cause of improper dependency
+  on quick when building the position plugin.
+---
+ ...001-Fix-plugins-build-dependency-tracking.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch
+
+diff --git a/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch b/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch
+new file mode 100644
+index 0000000..6be54a7
+--- /dev/null
++++ b/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch
+@@ -0,0 +1,40 @@
++From 415558af5b7f8b8681726a171c75a4cc9d46ed81 Mon Sep 17 00:00:00 2001
++From: Joshua Henderson <joshua.henderson@microchip.com>
++Date: Fri, 21 Jul 2017 13:05:03 -0700
++Subject: [PATCH] Fix plugins build dependency tracking
++
++This fixes an issue introduced by c54ee74acdb9757989004005baf79e99be4c9417
++where plugins only depends on positioning if quick is available. The
++plugins/position SUBDIR will build without the dependency on quick, so move
++the dependency back outside.
++
++Upstream-Status: https://bugreports.qt.io/browse/QTBUG-62098
++Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
++---
++ src/src.pro | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/src/src.pro b/src/src.pro
++index d0a1ee4..a0e6adb 100644
++--- a/src/src.pro
+++++ b/src/src.pro
++@@ -7,8 +7,6 @@ SUBDIRS += positioning
++ positioning.depends = 3rdparty/clip2tri
++ 
++ qtHaveModule(quick) {
++-    plugins.depends += positioning
++-
++     SUBDIRS += location
++     location.depends += positioning 3rdparty/clip2tri
++ 
++@@ -19,6 +17,7 @@ qtHaveModule(quick) {
++ }
++ 
++ SUBDIRS += plugins
+++qtHaveModule(positioning): plugins.depends += positioning
++ 
++ !android:contains(QT_CONFIG, private_tests) {
++     SUBDIRS += positioning_doc_snippets
++-- 
++2.7.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
