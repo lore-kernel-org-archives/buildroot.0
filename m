@@ -1,57 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 09:40:02 +0200
-Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <a92d7a30-8892-a99f-2165-268c4a3a06d6@grandegger.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Fri, 21 Jul 2017 09:44:00 +0200
+Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
+ buildroot SDK has already been relocated
+In-Reply-To: <20170721092401.121b48b1@windsurf>
 References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
- <1500561321-6623-4-git-send-email-wg@grandegger.com>
- <20170720224906.301f524a@windsurf>
- <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
- <a92d7a30-8892-a99f-2165-268c4a3a06d6@grandegger.com>
-Message-ID: <20170721094002.388f4698@windsurf>
+ <1500561321-6623-9-git-send-email-wg@grandegger.com>
+ <20170720232131.02e9a51d@windsurf>
+ <9cca1b92-5e7e-2788-8370-59b12078396f@mind.be>
+ <20170721083636.5442a2df@windsurf>
+ <5dabf921-90d5-5f82-4e6b-34bcff1e2023@grandegger.com>
+ <20170721092401.121b48b1@windsurf>
+Message-ID: <5954a27f-ac93-99ee-5216-2cc73b15385b@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 21 Jul 2017 09:35:14 +0200, Wolfgang Grandegger wrote:
 
-> >>>>>    Sanitizing RPATH in target tree  
-> >> /home/thomas/projets/buildroot/support/scripts/fix-rpath target
-> >> thomas at windsurf:~/projets/buildroot (master)$
-> >>
-> >> This is a little bit disturbing, so I believe it should be fixed in a
-> >> follow-up patch.  
-> > 
-> >   Right! That's because the "if ${PATCHELF} ..." just fails and the error is
-> > redirected to /dev/null.
-> > 
-> >   Better check if ${PATCHELF} is executable somewhere in the beginning.
-> > 
-> >   However, there is never a guarantee. If e.g. it would be missing a shared
-> > library, it would still fail in the same way. To be really sure, you'd have do
-> > e.g. call patchelf on itself to verify it is actually working.  
+Am 21.07.2017 um 09:24 schrieb Thomas Petazzoni:
+> Hello,
 > 
-> Or you can set "PATCHELF_DEBUG=1" to check what patchelf is doing.
+> On Fri, 21 Jul 2017 08:52:56 +0200, Wolfgang Grandegger wrote:
+> 
+>>> Therefore, I would suggest to simply drop this check.
+>>
+>> If you make a toolchain with "make toolchain" the check will not harm.
+>> If it's created with "make sdk" it will do the check because
+>> "share/buildroot/sdk-location" does exist. "make sdk" will never create
+>> just the toolchain.
+> 
+> "make sdk" will definitely create just the toolchain if what you have
+> in your configuration is... just the toolchain, which is exactly how I
+> build Buildroot toolchains, such as the ones used by the autobuilders
+> or on toolchains.free-electrons.com.
+> 
+> Doing "make toolchain" doesn't work for this use case, because you
+> definitely want the RPATH sanitization of host binaries done in "make
+> sdk".
+> 
+> Again, I think this additional check in the external toolchain code is
+> useless. For a SDK to be usable as an external toolchain, it has to be
+> a SDK that contains *just* a toolchain and *nothing* else. If its
+> sysroot is polluted with additional libraries than the C library, it
+> cannot be used as an external toolchain. And therefore, the
+> relocate-sdk procedure is useless, because there's nothing to relocate
+> in an SDK that is just a toolchain.
 
-We're not interested in knowing what patchelf is doing. My initial
-report is that if the patchelf binary doesn't exist, the script runs
-without reporting any error:
+OK. I see. Then I will drop this patch.
 
- - Nothing on stdout/stderr
- - The script has an exit code of 0
-
-This is not good: the script should at the very least return a non-zero
-error code if patchelf isn't available, and should probably display an
-error as well.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Wolfgang.
