@@ -1,86 +1,80 @@
 From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Fri, 21 Jul 2017 13:44:02 -0700
-Subject: [Buildroot] [PATCH v2] package/qt5location: handle plugins being
-	conditionally built
-Message-ID: <1500669842-22691-1-git-send-email-joshua.henderson@microchip.com>
+Date: Fri, 21 Jul 2017 13:44:56 -0700
+Subject: [Buildroot] [PATCH] package/qt5location: handle plugins being
+ conditionally built
+In-Reply-To: <trinity-2e3bcfb2-19ec-4b5f-af7f-1c84a5d187d3-1500620201526@3capp-gmx-bs73>
+References: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
+ <trinity-2e3bcfb2-19ec-4b5f-af7f-1c84a5d187d3-1500620201526@3capp-gmx-bs73>
+Message-ID: <130adce5-41c1-0c79-5c31-33f87bcc4055@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a build issue where the qt5location plugins are not built, but are
-attempted to be installed.
+Peter, Thomas,
 
-The qt5location plugins have dependencies that are automatically and incorrectly
-resolved causing plugins to conditionaly be built based on whether quick is
-available. This change adds a patch that makes the plugins directory properly
-depending on the positioning module irrelevent of quick.
+On 07/20/2017 11:56 PM, Peter Seiderer wrote:
+> Hello Joshua,
+> 
+>> Gesendet: Freitag, 21. Juli 2017 um 01:33 Uhr
+>> Von: "Joshua Henderson" <joshua.henderson@microchip.com>
+>> An: buildroot at buildroot.org
+>> Cc: "Peter Seiderer" <ps.report@gmx.net>, "Julien Corjon" <corjon.j@ecagroup.com>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>> Betreff: [PATCH] package/qt5location: handle plugins being conditionally built
+>>
+>> This fixes a build issue where the qt5location plugins are not built, but are
+>> attempted to be installed.
+>>
+>> The qt5location plugins have dependencies that are automatically resolved
+>> causing plugins to conditionaly be built. This change checks for the existance
+>> of the plugins prior to trying to install them.
+>>
+> 
+> No, the dependencies of the position plugins are only on module positioning (one purpose of the qt5location
+> package):
 
-Fixes:
+Ahhh.  You are correct and that statement means I should see some dependency on position for
+positioning. Something like this covers it:
 
-    http://autobuild.buildroot.net/results/bc1/bc13abf3bb2fe1c991aec2334ee658c9641d1fd5/build-end.log
+    plugins.depends += positioning
 
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+And I do see that.  The problem is that the above line only happens in src/src.pro if we have the 
+quick module with qtHaveModule(quick).  This is a qt5location change [1] that happened between qt
+5.8.0 and qt 5.9.1, which moved the above line as a dependency on quick,  which is why this issue
+did not show up in 5.8.0.
 
---
+This is also why I see the root problem come and go only with a different buildroot config
+(availability of quick or not).  I was led down this erroneous path when I took the src.pro for
+its word and assumed a dependency on quick in v1 of this patch.
 
-Changes for v2:
-- Instead of skipping missing files, fix the root cause of improper dependency
-  on quick when building the position plugin.
----
- ...001-Fix-plugins-build-dependency-tracking.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch
+[1] https://code.qt.io/cgit/qt/qtlocation.git/commit/?id=c54ee74acdb9757989004005baf79e99be4c9417
 
-diff --git a/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch b/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch
-new file mode 100644
-index 0000000..6be54a7
---- /dev/null
-+++ b/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency-tracking.patch
-@@ -0,0 +1,40 @@
-+From 415558af5b7f8b8681726a171c75a4cc9d46ed81 Mon Sep 17 00:00:00 2001
-+From: Joshua Henderson <joshua.henderson@microchip.com>
-+Date: Fri, 21 Jul 2017 13:05:03 -0700
-+Subject: [PATCH] Fix plugins build dependency tracking
-+
-+This fixes an issue introduced by c54ee74acdb9757989004005baf79e99be4c9417
-+where plugins only depends on positioning if quick is available. The
-+plugins/position SUBDIR will build without the dependency on quick, so move
-+the dependency back outside.
-+
-+Upstream-Status: https://bugreports.qt.io/browse/QTBUG-62098
-+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-+---
-+ src/src.pro | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/src/src.pro b/src/src.pro
-+index d0a1ee4..a0e6adb 100644
-+--- a/src/src.pro
-++++ b/src/src.pro
-+@@ -7,8 +7,6 @@ SUBDIRS += positioning
-+ positioning.depends = 3rdparty/clip2tri
-+ 
-+ qtHaveModule(quick) {
-+-    plugins.depends += positioning
-+-
-+     SUBDIRS += location
-+     location.depends += positioning 3rdparty/clip2tri
-+ 
-+@@ -19,6 +17,7 @@ qtHaveModule(quick) {
-+ }
-+ 
-+ SUBDIRS += plugins
-++qtHaveModule(positioning): plugins.depends += positioning
-+ 
-+ !android:contains(QT_CONFIG, private_tests) {
-+     SUBDIRS += positioning_doc_snippets
-+-- 
-+2.7.4
-+
--- 
-2.7.4
+> 
+>     $  cat src/plugins/plugins.pro 
+> TEMPLATE = subdirs
+> qtHaveModule(positioning): SUBDIRS +=  position
+> qtHaveModule(location): SUBDIRS += geoservices
+> 
+> 
+> The problem is a build-ordering, the right fix is to enable ordering in src/src.pro:
+> 
+> diff --git a/src/src.pro b/src/src.pro
+> index d0a1ee4..d45ddb8 100644
+> --- a/src/src.pro
+> +++ b/src/src.pro
+> @@ -1,5 +1,6 @@
+>  TEMPLATE = subdirs
+> -
+> +CONFIG += ordered
+> + 
+>  SUBDIRS += 3rdparty/clip2tri 3rdparty/clipper 3rdparty/poly2tri
+>  3rdparty/clip2tri.depends = 3rdparty/clipper 3rdparty/poly2tri
+> 
+> Buildroot patch follows...
+
+Isn't there some saying about every time "ordered" is used a kitten dies?  Wouldn't the proper fix be to
+address the dependency instead? I did not see your patch.  So, I have submitted a v2 to this patch and
+also submitted the patch to the Qt bug tracker going about fixing the dependency instead.
+
+Josh
