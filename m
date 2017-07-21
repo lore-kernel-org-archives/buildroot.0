@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:04:46 +0200
-Subject: [Buildroot] [git commit] python-werkzeug: bump to version 0.12.2
-Message-ID: <20170721210346.980C582193@busybox.osuosl.org>
+Date: Fri, 21 Jul 2017 23:04:50 +0200
+Subject: [Buildroot] [git commit] python-flask: bump to version 0.12.2
+Message-ID: <20170721210346.C906B80169@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f4ce889b6bb63f34907f3707124b56af68b34c7
+commit: https://git.buildroot.net/buildroot/commit/?id=c0f01e77fe16f4fbf1913556669274b29b72aceb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ package/python-flask/python-flask.hash | 6 +++---
+ package/python-flask/python-flask.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index a1c44f4..4b20750 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
+diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+index 919b075..ca11721 100644
+--- a/package/python-flask/python-flask.hash
++++ b/package/python-flask/python-flask.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/werkzeug/json, sha256 locally computed
--md5 cb4010478dd33905f95920e4880204a2 Werkzeug-0.11.15.tar.gz
--sha256 455d7798ac263266dbd38d4841f7534dd35ca9c3da4a8df303f8488f38f3bcc0 Werkzeug-0.11.15.tar.gz
-+# md5 from https://pypi.python.org/pypi/Werkzeug/json, sha256 locally computed
-+md5	e385b2c5a7193cff24c689b31e1124dc  Werkzeug-0.12.2.tar.gz
-+sha256	903a7b87b74635244548b30d30db4c8947fe64c5198f58899ddcd3a13c23bb26  Werkzeug-0.12.2.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index dfa657c..6d478f7 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
+-# md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
+-md5	c1d30f51cff4a38f9454b23328a15c5a  Flask-0.12.tar.gz
+-sha256	93e803cdbe326a61ebd5c5d353959397c85f829bec610d59cb635c9f97d7ca8b  Flask-0.12.tar.gz
++# md5 from https://pypi.python.org/pypi/Flask/json, sha256 locally computed
++md5	97278dfdafda98ba7902e890b0289177  Flask-0.12.2.tar.gz
++sha256	49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1  Flask-0.12.2.tar.gz
+diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+index 856fa06..06b1b4d 100644
+--- a/package/python-flask/python-flask.mk
++++ b/package/python-flask/python-flask.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.11.15
-+PYTHON_WERKZEUG_VERSION = 0.12.2
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/fe/7f/6d70f765ce5484e07576313897793cb49333dd34e462488ee818d17244af
-+PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/56/41/c095a77eb2dd69bf278dd664a97d3416af04e9ba1a00b8c138f772741d31
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
+-PYTHON_FLASK_VERSION = 0.12
++PYTHON_FLASK_VERSION = 0.12.2
+ PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
+-PYTHON_FLASK_SITE = https://pypi.python.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a
++PYTHON_FLASK_SITE = https://pypi.python.org/packages/eb/12/1c7bd06fcbd08ba544f25bf2c6612e305a70ea51ca0eda8007344ec3f123
+ PYTHON_FLASK_SETUP_TYPE = setuptools
+ PYTHON_FLASK_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_LICENSE_FILES = LICENSE
