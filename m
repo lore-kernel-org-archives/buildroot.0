@@ -1,62 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:22:47 +0200
-Subject: [Buildroot] [git commit] libmemcached: fix build with gcc 7.x
-Message-ID: <20170721211945.D8B148163D@busybox.osuosl.org>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sat, 22 Jul 2017 00:15:04 +0200
+Subject: [Buildroot] [PATCH 00/20] system: properly handle systemd as
+ init system
+In-Reply-To: <20170720093228.19139327@windsurf>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <CAAkeqgVMVSspUdMnPNWi_RQyLPhyf-1bys=d2btKrStEk34VMg@mail.gmail.com>
+ <20170719225332.560a9a06@windsurf>
+ <CAAkeqgWk1ywyCT027eGPtXfQO_qd5b7dEJSOZek8eMx1R1Ey+Q@mail.gmail.com>
+ <20170720093228.19139327@windsurf>
+Message-ID: <45bb5a90-e48a-3edc-43ff-8cf9eefd20e6@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8786ac28058aa553cfa8adc176952143af630af6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hey,
 
-This commit adds a patch to the libmemcached package that fixes the
-build with gcc 7.x. Since libmemcached is barely maintained upstream,
-the patch comes from the Fedora packages.
+On 20.07.2017 09:32, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 19 Jul 2017 15:17:21 -0700, Andrey Yurovsky wrote:
+> 
+>>> Thanks a lot for testing, very useful to get some feedback!
+>>>
+>>> Can you confirm that it fixes the journald issue reported in bug
+>>> https://bugs.busybox.net/show_bug.cgi?id=7892 ?  
+>>
+>> It does.
+> 
+> Awesome, thanks.
+> 
+>>> Also, it would be useful if someone interested in systemd could look at
+>>> bugs https://bugs.busybox.net/show_bug.cgi?id=9881 and  
+>>
+>> I did an ARMv7 build with networkd+resolvd and couldn't reproduce the
+>> described problem with these patches applied.
+> 
+> Can you reproduce the problem *without* the patches ?
 
-Fixes:
+We are experiencing this problem. I'll try to test it with this patch
+series on Monday.
 
-  http://autobuild.buildroot.net/results/872b8e0e6a24cbc96e3ad9e0b8b47acdf6160ce0/
+> 
+>> /etc/resolv.conf points
+>> to ../tmp/resolv.conf which in turn is properly populated and names do
+>> resolve. systemd-hostnamed is acting like it does on Fedora (for what
+>> it's worth), I'm still learning about how to test it properly (that
+>> is, I just have a static hostname at the moment).
+>>
+>>> https://bugs.busybox.net/show_bug.cgi?id=9926.  
+>>
+>> Ok, I'll do a clean rebuild without networkd and with NetworkManager.
+> 
+> Thanks a lot!
+> 
+> BTW, for these bugs, if there is something easy we can add to the
+> testing infrastructure to make sure it keeps working, it would be nice!
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0005-fix-pointer-comparaison.patch             | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
 
-diff --git a/package/libmemcached/0005-fix-pointer-comparaison.patch b/package/libmemcached/0005-fix-pointer-comparaison.patch
-new file mode 100644
-index 0000000..c9f8dd1
---- /dev/null
-+++ b/package/libmemcached/0005-fix-pointer-comparaison.patch
-@@ -0,0 +1,30 @@
-+Fix pointer comparaison
-+
-+opt_servers is a pointer, not a boolean, so testing against false to
-+know if the pointer is NULL no longer works with the more strict gcc
-+7.x checks.
-+
-+[Taken from http://pkgs.fedoraproject.org/cgit/rpms/libmemcached.git/plain/libmemcached-build.patch.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+diff -up ./clients/memflush.cc.old ./clients/memflush.cc
-+--- ./clients/memflush.cc.old	2017-02-12 10:12:59.615209225 +0100
-++++ ./clients/memflush.cc	2017-02-12 10:13:39.998382783 +0100
-+@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
-+ {
-+   options_parse(argc, argv);
-+ 
-+-  if (opt_servers == false)
-++  if (!opt_servers)
-+   {
-+     char *temp;
-+ 
-+@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
-+       opt_servers= strdup(temp);
-+     }
-+ 
-+-    if (opt_servers == false)
-++    if (!opt_servers)
-+     {
-+       std::cerr << "No Servers provided" << std::endl;
-+       exit(EXIT_FAILURE);
+Best wishes,
+Marcus
