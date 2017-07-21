@@ -1,90 +1,81 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 21 Jul 2017 03:05:22 +0200
-Subject: [Buildroot] [PATCH v7 15/23] genrandconfig: use minimal.config
+Date: Fri, 21 Jul 2017 03:05:24 +0200
+Subject: [Buildroot] [PATCH v7 17/23] test-pkg: get configs from in-tree
+	toolchain-configs.csv
 In-Reply-To: <20170721010530.4747-1-arnout@mind.be>
 References: <20170721010530.4747-1-arnout@mind.be>
-Message-ID: <20170721010530.4747-16-arnout@mind.be>
+Message-ID: <20170721010530.4747-18-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This has a number of side-effects which must be handled.
-
-The lines in minimal.config may be overridden by the random lines added
-by amending the configuration, so is_toolchain_usable() shouldn't take
-those into account, or indeed the random lines added. Therefore, make
-a copy of the config before appending minimal.config and the random
-lines. While we're at it, rename the variable to the more appropriate
-toolchainconfig.
-
-minimal.config sets BR2_INIT_NONE=y, but we really also want to test
-with BR2_INIT_BUSYBOX=y. Therefore, add a random line to use the
-busybox init system. We set its probability rather high. The
-probabilities of systemd and eudev are increased since they're now
-in the else branch of BR2_INIT_BUSYBOX, which halves the probability
-that we even get there.
-
-We now also generate configurations without busybox. Previously,
-busybox was almost always selected due to BR2_INIT_BUSYBOX=y. Only if
-systemd is selected there was a chance to build without busybox.
-
-We now set BR2_SYSTEM_BIN_SH_NONE=y, the other /bin/sh options are
-never tested. However, this is not really something that is relevant
-to test in the autobuilders.
+Now we have the toolchain config fragments in the buildroot directory
+itself, it is no longer necessary to fetch it from the toolchain URL.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v7: new patch
+v7: Still use CSV file (instead of listing directory contents), but
+    use the in-tree one. Don't bother adding an option to specify an
+    alternative CSV file.
+v6: Moved configs to support/config-fragments/autobuild
+v5: first version
 ---
- utils/genrandconfig | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ utils/test-pkg | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 4ff7deb26a..d397b23f36 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -332,19 +332,24 @@ def gen_config(args):
-     configs = get_toolchain_configs(args.toolchains_url)
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 25a25e2048..8c60649b32 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
+ set -e
  
-     i = randint(0, len(configs) - 1)
--    config = configs[i]
-+    toolchainconfig = configs[i]
+-TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
++TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
  
--    configlines = config
-+    configlines = list(toolchainconfig)
-+
-+    # Combine with the minimal configuration
-+    minimalconfigfile = os.path.join(args.buildrootdir,
-+                                     'support/config-fragments/minimal.config')
-+    with open(minimalconfigfile) as minimalf:
-+        configlines += minimalf.readlines()
+ main() {
+     local o O opts
+@@ -50,8 +50,7 @@ main() {
+     # Extract the URLs of the toolchains; drop internal toolchains
+     # E.g.: http://server/path/to/name.config,arch,libc
+     #  -->  http://server/path/to/name.config
+-    toolchains=($(curl -s "${TOOLCHAINS_URL}" \
+-                  |sed -r -e 's/,.*//; /internal/d;' \
++    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${TOOLCHAINS_CSV}" \
+                   |if [ ${random} -gt 0 ]; then \
+                       sort -R |head -n ${random}
+                    else
+@@ -71,7 +70,6 @@ main() {
+     nb_legal=0
+     for toolchainconfig in "${toolchains[@]}"; do
+         : $((nb++))
+-        # Using basename(1) on a URL works nicely
+         toolchain="$(basename "${toolchainconfig}" .config)"
+         build_dir="${dir}/${toolchain}"
+         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
+@@ -90,17 +88,13 @@ main() {
  
-     # Amend the configuration with a few things.
--    configlines.append("BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y\n")
--    configlines.append("# BR2_TARGET_ROOTFS_TAR is not set\n")
--    configlines.append("BR2_COMPILER_PARANOID_UNSAFE_PATH=y\n")
-     if randint(0, 20) == 0:
-         configlines.append("BR2_ENABLE_DEBUG=y\n")
--    if randint(0, 30) == 0:
-+    if randint(0, 1) == 0:
-+        configlines.append("BR2_INIT_BUSYBOX=y\n")
-+    elif randint(0, 15) == 0:
-         configlines.append("BR2_INIT_SYSTEMD=y\n")
--    elif randint(0, 20) == 0:
-+    elif randint(0, 10) == 0:
-         configlines.append("BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y\n")
-     if randint(0, 20) == 0:
-         configlines.append("BR2_STATIC_LIBS=y\n")
-@@ -364,7 +369,7 @@ def gen_config(args):
-     subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-                            "olddefconfig"])
+ build_one() {
+     local dir="${1}"
+-    local url="${2}"
++    local toolchainconfig="${2}"
+     local cfg="${3}"
+     local pkg="${4}"
  
--    if not is_toolchain_usable(configfile, config):
-+    if not is_toolchain_usable(configfile, toolchainconfig):
+     mkdir -p "${dir}"
+ 
+-    if ! curl -s "${url}" >"${dir}/.config"; then
+-        return 2
+-    fi
+-
+-    cat "support/config-fragments/minimal.config" "${cfg}" >>"${dir}/.config"
++    cat "${toolchainconfig}" "support/config-fragments/minimal.config" "${cfg}" >>"${dir}/.config"
+ 
+     if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
          return 2
- 
-     # Now, generate the random selection of packages, and fixup
 -- 
 2.13.2
