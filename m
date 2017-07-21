@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 09:00:00 +0200
-Subject: [Buildroot] [PATCH] linux-zigbee: fix build with gcc 7
-In-Reply-To: <dec68ad1059ce87fa42de8b4c15f44d532ad6201.1500588272.git.baruch@tkos.co.il>
-References: <dec68ad1059ce87fa42de8b4c15f44d532ad6201.1500588272.git.baruch@tkos.co.il>
-Message-ID: <20170721090000.1ca3afcd@windsurf>
+Date: Fri, 21 Jul 2017 09:00:44 +0200
+Subject: [Buildroot] [git commit] minimal.config: add
+	BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+Message-ID: <20170721065642.C45BD82158@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b6c98b3549d822b791f80c1cf78a18e4e7461054
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Jul 2017 01:04:32 +0300, Baruch Siach wrote:
-> Disable -Werror to avoid the fatal result of new gcc 7 format string warnings.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/29c/29c72bc38042305310576be945c721b2fad95894/
-> http://autobuild.buildroot.net/results/a7d/a7d38d72834b94291eaff159da277b11e2f9d63a/
-> http://autobuild.buildroot.net/results/cfe/cfed5176075f0cb9e2f56ebef10f5d6c352baf10/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/linux-zigbee/linux-zigbee.mk | 1 +
->  1 file changed, 1 insertion(+)
+We really want test-pkg to do the test with a paranoid unsafe path.
 
-Applied to master, thanks.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/config-fragments/minimal.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/config-fragments/minimal.config b/support/config-fragments/minimal.config
+index 0f20847..43fef06 100644
+--- a/support/config-fragments/minimal.config
++++ b/support/config-fragments/minimal.config
+@@ -4,3 +4,4 @@ BR2_INIT_NONE=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ # BR2_TARGET_ROOTFS_TAR is not set
++BR2_COMPILER_PARANOID_UNSAFE_PATH=y
