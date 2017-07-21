@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 09:06:54 +0200
-Subject: [Buildroot] [PATCH 2/4] webkitgtk: Add patches which allow
- building for ARMv8-A
-In-Reply-To: <20170712235531.20444-3-aperez@igalia.com>
+Date: Fri, 21 Jul 2017 09:09:47 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: Ensure that Mesa headers do
+ not include X11 headers on Wayland builds
+In-Reply-To: <20170712235531.20444-5-aperez@igalia.com>
 References: <20170712235531.20444-1-aperez@igalia.com>
- <20170712235531.20444-3-aperez@igalia.com>
-Message-ID: <20170721090654.5eb8e26b@windsurf>
+ <20170712235531.20444-5-aperez@igalia.com>
+Message-ID: <20170721090947.2670fb7c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Jul 2017 02:55:29 +0300, Adrian Perez de Castro wrote:
-> The two added patches allow building WebKitGTK+ when the compiler
-> scpecifically targets ARMv8-A, and reports as such be pre-defining
-> __ARCH_ARM_8A__ instead of just __ARCH_ARM_8__. Both patches were
-> pulled from the corresponding upstream bug reports and edited to
-> remove the conflicting parts which edit the ChangeLog files.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  ...ailure-to-build-when-the-compiler-specifica.patch | 20 ++++++++++++++++++++
->  ...re-to-build-when-the-compiler-specifically-.patch | 20 ++++++++++++++++++++
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
->  create mode 100644 package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
+On Thu, 13 Jul 2017 02:55:31 +0300, Adrian Perez de Castro wrote:
 
-Since the webkitgtk project is maintained upstream under Git, can we
-get Git formatted patches instead? Please use "git format-patch -N" to
-generate them, as we don't want patch numbering inside the patches,
-only in the filenames.
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index ef20839f92..09781c2318 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
+> @@ -84,6 +84,9 @@ endif
+>  ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
+>  WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
+>  endif
+> +WEBKITGTK_CONF_OPTS += \
+> +	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -DMESA_EGL_NO_X11_HEADERS' \
+> +	-DCMAKE_CXX_FLAGS='$(TARGET_CXXFLAGS) -DMESA_EGL_NO_X11_HEADERS'
 
-This is obviously also valid for PATCH 3/4 in your series.
+I am not happy with this: such CFLAGS should be provided by the OpenGL
+provider, through its pkg-config file, and consumers of the OpenGL
+implementation should get those flags using pkg-config.
+
+If we don't do this, then we need to add -DMESA_EGL_NO_X11_HEADERS
+everywhere in all OpenGL consumers, which isn't nice.
+
+We already have a few OpenGL providers that define these flags in
+their .pc file:
+
+package/mali-t76x/egl.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
+package/mali-t76x/glesv2.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
+package/nvidia-driver/gl.pc:Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
+package/odroid-mali/odroid-mali.mk:     $(SED) "s/Cflags: /Cflags: -DMESA_EGL_NO_X11_HEADERS /" \
 
 Thanks!
 
