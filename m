@@ -1,62 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:04:48 +0200
-Subject: [Buildroot] [git commit] python-pathvalidate: bump to version 0.16.0
-Message-ID: <20170721210346.B58F27F87B@busybox.osuosl.org>
+Date: Fri, 21 Jul 2017 23:04:52 +0200
+Subject: [Buildroot] [git commit] python-requests: bump to version 2.18.1
+Message-ID: <20170721210346.D846680169@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86752349991755ab754776da589d91d55f772898
+commit: https://git.buildroot.net/buildroot/commit/?id=8c4bc5a5288ddc9e98390526128e4f74a0bcb5b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream project has dropped all runtime dependencies.
+Add new runtime dependencies and select Python SSL support.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pathvalidate/Config.in                | 3 ---
- package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ package/python-requests/Config.in            | 6 ++++++
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathvalidate/Config.in b/package/python-pathvalidate/Config.in
-index 60163fb..8606696 100644
---- a/package/python-pathvalidate/Config.in
-+++ b/package/python-pathvalidate/Config.in
-@@ -1,8 +1,5 @@
- config BR2_PACKAGE_PYTHON_PATHVALIDATE
- 	bool "python-pathvalidate"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
+index 23ab309..d2726fb 100644
+--- a/package/python-requests/Config.in
++++ b/package/python-requests/Config.in
+@@ -1,5 +1,11 @@
+ config BR2_PACKAGE_PYTHON_REQUESTS
+ 	bool "python-requests"
++	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PYTHON_CHARDET # runtime
++	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
  	help
- 	  pathvalidate is a python library to validate/sanitize a string
- 	  such as filename/variable-name.
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index 30e36d2..734d449 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 8faa9d0..2f182ea 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
--md5 869d111f587836920f5ae36751d422fc  pathvalidate-0.15.0.tar.gz
--sha256 5d0bb777b4a6b95426d4a4ac47dcf6a2c8173a78b4019e94b8e8a0d59b0095ed  pathvalidate-0.15.0.tar.gz
-+md5	fa119fcdbc744dc3a9de11185437992c  pathvalidate-0.16.0.tar.gz
-+sha256	81c665a16e41203dc7698caf4f7ee15b7da97e36368e30e76e76e968ce77f468  pathvalidate-0.16.0.tar.gz
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index 36ab6a4..c25f4ce 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
+ # md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
+-md5 921ec6b48f2ddafc8bb6160957baf444 requests-2.13.0.tar.gz
+-sha256 5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8 requests-2.13.0.tar.gz
++md5	40f723ed01dddeaf990d0609d073f021  requests-2.18.1.tar.gz
++sha256	c6f3bdf4a4323ac7b45d01e04a6f6c20e32a052cd04de81e05103abc049ad9b9  requests-2.18.1.tar.gz
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 13bbdfb..504eb8d 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHVALIDATE_VERSION = 0.15.0
-+PYTHON_PATHVALIDATE_VERSION = 0.16.0
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/a6/7b/2c3026ead121829ed27eba4fba7b4cd6ec8c210f76b0601119a915918f6c
-+PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/d8/c5/37474d872ca29510a10d93b103920fad551f577b696104a3574a89093e5f
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_VERSION = 2.13.0
++PYTHON_REQUESTS_VERSION = 2.18.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/16/09/37b69de7c924d318e51ece1c4ceb679bf93be9d05973bb30c35babd596e2
++PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2c/b5/2b6e8ef8dd18203b6399e9f28c7d54f6de7b7549853fe36d575bd31e29a7
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
