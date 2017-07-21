@@ -1,88 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 09:44:15 +0200
-Subject: [Buildroot] How to build the qt plugin in gst1-plugins-bad ?
-In-Reply-To: <CADujc4oPL-onF043v64kvhyUP7SUxEu6Jc6ArGg_PKj6ohTD_Q@mail.gmail.com>
-References: <CADujc4q8d1AMFmvoD_62qnOkNSntuCCGCe4+Pkatp4P382srfg@mail.gmail.com>
- <20170719113553.6669def3@windsurf>
- <CADujc4o_1XZLQymNx3fQk5n9FOhg=9xNKw5U2GPSsGBCxHyhSA@mail.gmail.com>
- <20170719120113.62df8762@windsurf>
- <CADujc4oPL-onF043v64kvhyUP7SUxEu6Jc6ArGg_PKj6ohTD_Q@mail.gmail.com>
-Message-ID: <20170721094415.0cc6cab2@windsurf>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Fri, 21 Jul 2017 09:45:26 +0200
+Subject: [Buildroot] [PATCH v8 03/10] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <20170721094002.388f4698@windsurf>
+References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
+ <1500561321-6623-4-git-send-email-wg@grandegger.com>
+ <20170720224906.301f524a@windsurf>
+ <53db2a2d-2211-b173-8e37-19f55afe49de@mind.be>
+ <a92d7a30-8892-a99f-2165-268c4a3a06d6@grandegger.com>
+ <20170721094002.388f4698@windsurf>
+Message-ID: <c5ff07a9-386d-f033-791f-17bb26073e32@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 21 Jul 2017 15:39:35 +0800, Glenn Coombs wrote:
 
-> Thanks for all your help.  I have now succeeded in building this plugin.
-
-Great!
-
-> The last of these required me to modify the Config.in and
-> gst1-plugins-bad.mk files in the gst1-plugins-bad directory to create the
-> new "qt" setting.  The diff for these changes is as follows:
+Am 21.07.2017 um 09:40 schrieb Thomas Petazzoni:
+> Hello,
 > 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in
-> b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index 0c97899..22aacb3 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -349,6 +349,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
->         help
->           PNM plugin
+> On Fri, 21 Jul 2017 09:35:14 +0200, Wolfgang Grandegger wrote:
 > 
-> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_QT
-> +       bool "qt"
-> +       help
-> +         Qt plugin
-> +
->  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
->         bool "rawparse"
->         help
-> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> index 2e9e6f1..1caca13 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> @@ -58,8 +58,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
->         --disable-schro \
->         --disable-zbar \
->         --disable-spandsp \
-> -       --disable-gtk3 \
-> -       --disable-qt
-> +       --disable-gtk3
+>>>>>>>     Sanitizing RPATH in target tree
+>>>> /home/thomas/projets/buildroot/support/scripts/fix-rpath target
+>>>> thomas at windsurf:~/projets/buildroot (master)$
+>>>>
+>>>> This is a little bit disturbing, so I believe it should be fixed in a
+>>>> follow-up patch.
+>>>
+>>>    Right! That's because the "if ${PATCHELF} ..." just fails and the error is
+>>> redirected to /dev/null.
+>>>
+>>>    Better check if ${PATCHELF} is executable somewhere in the beginning.
+>>>
+>>>    However, there is never a guarantee. If e.g. it would be missing a shared
+>>> library, it would still fail in the same way. To be really sure, you'd have do
+>>> e.g. call patchelf on itself to verify it is actually working.
+>>
+>> Or you can set "PATCHELF_DEBUG=1" to check what patchelf is doing.
 > 
->  GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
+> We're not interested in knowing what patchelf is doing. My initial
+> report is that if the patchelf binary doesn't exist, the script runs
+> without reporting any error:
 > 
-> @@ -403,6 +402,12 @@ else
->  GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
->  endif
+>   - Nothing on stdout/stderr
+>   - The script has an exit code of 0
 > 
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_QT),y)
-> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-qt
-> +else
-> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-qt
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
->  GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
->  else
-> 
-> Hopefully those changes can be incorporated into buildroot so that other
-> people will be able to make use of this package.
+> This is not good: the script should at the very least return a non-zero
+> error code if patchelf isn't available, and should probably display an
+> error as well.
 
-Could you instead submit this as a proper patch to Buildroot? See
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
-for details on how to contribute a patch to Buildroot.
+Yes, I already got that point.
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Wolfgang.
