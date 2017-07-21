@@ -1,88 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 21 Jul 2017 08:56:41 +0200
-Subject: [Buildroot] [PATCH] package/qt5location: handle plugins being
- conditionally built
-In-Reply-To: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
-References: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <trinity-2e3bcfb2-19ec-4b5f-af7f-1c84a5d187d3-1500620201526@3capp-gmx-bs73>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Jul 2017 08:59:44 +0200
+Subject: [Buildroot] [git commit] psplash: bump to latest version
+Message-ID: <20170721065542.7170682144@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joshua,
+commit: https://git.buildroot.net/buildroot/commit/?id=112790512f5c94279f49c6056868329bd77205fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Gesendet: Freitag, 21. Juli 2017 um 01:33 Uhr
-> Von: "Joshua Henderson" <joshua.henderson@microchip.com>
-> An: buildroot at buildroot.org
-> Cc: "Peter Seiderer" <ps.report@gmx.net>, "Julien Corjon" <corjon.j@ecagroup.com>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Betreff: [PATCH] package/qt5location: handle plugins being conditionally built
->
-> This fixes a build issue where the qt5location plugins are not built, but are
-> attempted to be installed.
-> 
-> The qt5location plugins have dependencies that are automatically resolved
-> causing plugins to conditionaly be built. This change checks for the existance
-> of the plugins prior to trying to install them.
-> 
+Fixes:
+http://autobuild.buildroot.net/results/6c2/6c2b77ad710ae95f2c2e126a536542ad00bc2913/
+http://autobuild.buildroot.net/results/ca0/ca0c07ffdc930b9fd8bb1eb42544a48470bb9d59/
 
-No, the dependencies of the position plugins are only on module positioning (one purpose of the qt5location
-package):
+Cc: Phil Eichinger <phil.eichinger@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/psplash/psplash.hash | 2 +-
+ package/psplash/psplash.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    $  cat src/plugins/plugins.pro 
-TEMPLATE = subdirs
-qtHaveModule(positioning): SUBDIRS +=  position
-qtHaveModule(location): SUBDIRS += geoservices
-
-
-The problem is a build-ordering, the right fix is to enable ordering in src/src.pro:
-
-diff --git a/src/src.pro b/src/src.pro
-index d0a1ee4..d45ddb8 100644
---- a/src/src.pro
-+++ b/src/src.pro
-@@ -1,5 +1,6 @@
- TEMPLATE = subdirs
--
-+CONFIG += ordered
-+ 
- SUBDIRS += 3rdparty/clip2tri 3rdparty/clipper 3rdparty/poly2tri
- 3rdparty/clip2tri.depends = 3rdparty/clipper 3rdparty/poly2tri
-
-Buildroot patch follows...
-
-Regards,
-Peter
-
-> Fixes:
-> 
->     http://autobuild.buildroot.net/results/bc1/bc13abf3bb2fe1c991aec2334ee658c9641d1fd5/build-end.log
-> 
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> ---
->  package/qt5/qt5location/qt5location.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
-> index e9f1e4d..fcd9fc8 100644
-> --- a/package/qt5/qt5location/qt5location.mk
-> +++ b/package/qt5/qt5location/qt5location.mk
-> @@ -48,7 +48,9 @@ endif
->  
->  define QT5LOCATION_INSTALL_TARGET_POSITION
->  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Positioning.so.* $(TARGET_DIR)/usr/lib
-> -	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/position $(TARGET_DIR)/usr/lib/qt/plugins/
-> +	if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/position ] ; then \
-> +		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/position $(TARGET_DIR)/usr/lib/qt/plugins/ ; \
-> +	fi
->  endef
->  
->  define QT5LOCATION_INSTALL_TARGET_CMDS
-> -- 
-> 2.7.4
-> 
-> 
+diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
+index 8c84f67..68c6ffa 100644
+--- a/package/psplash/psplash.hash
++++ b/package/psplash/psplash.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 a119cced0dab49dce0726ceda533f74ff8252731fcc36c3a53f876acb6e13c46  psplash-14c8f7b705de944beb4de3f296506d80871e410f.tar.gz
++sha256 aaddb20ef892dfb03d4e046cc634159bbcdfe555f7291652dde2b7d4cf491289  psplash-5b3c1cc28f5abdc2c33830150b48b278cc4f7bca.tar.gz
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index 0bd985f..fe00978 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PSPLASH_VERSION = 14c8f7b705de944beb4de3f296506d80871e410f
++PSPLASH_VERSION = 5b3c1cc28f5abdc2c33830150b48b278cc4f7bca
+ PSPLASH_SITE = git://git.yoctoproject.org/psplash
+ PSPLASH_LICENSE = GPL-2.0+
+ PSPLASH_AUTORECONF = YES
