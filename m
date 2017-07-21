@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 22:59:45 +0200
-Subject: [Buildroot] [PATCH 1/5] arch/mips: add option for toolchains
- supporting -mnan
-In-Reply-To: <20170721170635.41202-1-Vincent.Riera@imgtec.com>
+Date: Fri, 21 Jul 2017 23:00:13 +0200
+Subject: [Buildroot] [PATCH 2/5] arch/mips: add option for toolchains
+ supporting -mfpxx
+In-Reply-To: <20170721170635.41202-2-Vincent.Riera@imgtec.com>
 References: <20170721170635.41202-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170721225945.4568bb11@windsurf>
+ <20170721170635.41202-2-Vincent.Riera@imgtec.com>
+Message-ID: <20170721230013.0f8f9111@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Jul 2017 18:06:31 +0100, Vicente Olivert Riera wrote:
-> -mnan option was added in gcc-4.9.0 so make sure that users cannot
-> select the NaN mode when using toolchains that have a gcc older
-> than 4.9.0, and also make sure that the -mnan option is not passed at
-> all to the toolchain-wrapper and target cflags.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  arch/Config.in.mips                                    | 1 +
->  toolchain/toolchain-common.in                          | 4 ++++
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
->  3 files changed, 7 insertions(+)
+On Fri, 21 Jul 2017 18:06:32 +0100, Vicente Olivert Riera wrote:
 
-Applied to master, thanks.
+>  config BR2_MIPS_FP32_MODE_XX
+> +	depends on BR2_TOOLCHAIN_HAS_MFPXX_OPTION
+>  	bool "xx"
+
+The "depends on" line should have been after the "bool" line, so I
+fixed that and applied. Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
