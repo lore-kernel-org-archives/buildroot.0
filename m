@@ -1,38 +1,38 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Fri, 21 Jul 2017 16:07:23 +0200
-Subject: [Buildroot] [PATCH] package/openal: bump version to 1.18.0
-In-Reply-To: <20170721155528.018481e1@windsurf>
-References: <1500644031-25581-1-git-send-email-nerv@dawncrow.de>
- <20170721155528.018481e1@windsurf>
-Message-ID: <6c493237-ef86-7f7b-2fbd-7bf014ffda30@dawncrow.de>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Fri, 21 Jul 2017 11:29:24 -0300
+Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 11,
+	12}.x series
+In-Reply-To: <1500647364-3765-1-git-send-email-fabio.estevam@nxp.com>
+References: <1500647364-3765-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1500647364-3765-2-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 21.07.2017 um 15:55 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Fri, 21 Jul 2017 15:33:51 +0200, Andr? Hentschel wrote:
->> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
->> ---
->>  .../0001-Build-NEON-code-with-mfpu-neon.patch      | 29 ----------
->>  ...heck-for-run-time-NEON-support-by-reading.patch | 67 ----------------------
->>  ...003-Properly-check-if-proc-cpuinfo-opened.patch | 24 --------
->>  ...k-if-mfpu-neon-is-available-for-compiling.patch | 47 ---------------
->>  .../openal/0005-Fix-detection-of-C11-atomics.patch | 53 -----------------
-> 
-> When you drop patches, it's nice to have a slightly more descriptive
-> commit log that says why those patches are dropped. For some of them,
-> it's quite obvious, since they were backports from upstream commits
-> (0001, 0002, 0003 and 0004), but for some others, it's not really
-> obvious (patch 0005).
-> 
-> Is the patch 0005 now upstream and part of 1.18.0 ?
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Hi,
-
-yes it is: https://github.com/kcat/openal-soft/blob/master/CMakeLists.txt#L211
-
-Thx!
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2cb2d1e..50d0c20 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -235,9 +235,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.77"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.38"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.78"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.39"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+-	default "4.11.11"	if BR2_KERNEL_HEADERS_4_11
+-	default "4.12.2"		if BR2_KERNEL_HEADERS_4_12
++	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
++	default "4.12.3"	if BR2_KERNEL_HEADERS_4_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.7.4
