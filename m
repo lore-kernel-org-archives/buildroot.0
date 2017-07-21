@@ -1,61 +1,71 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Fri, 21 Jul 2017 13:55:44 -0700
-Subject: [Buildroot] [PATCH] package/qt5location: handle plugins being
- conditionally built
-In-Reply-To: <20170721082639.2c98c0fb@windsurf>
-References: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
- <20170721082639.2c98c0fb@windsurf>
-Message-ID: <d8101825-eb91-6f16-2add-2e6f281cbd67@microchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Jul 2017 22:48:51 +0200
+Subject: [Buildroot] [git commit] arch/mips: add option for toolchains
+	supporting -mnan
+Message-ID: <20170721205511.C0E1E82144@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=0af741187f6e273664da202936e79082071866f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 07/20/2017 11:26 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 20 Jul 2017 16:33:29 -0700, Joshua Henderson wrote:
->> This fixes a build issue where the qt5location plugins are not built, but are
->> attempted to be installed.
->>
->> The qt5location plugins have dependencies that are automatically resolved
->> causing plugins to conditionaly be built. This change checks for the existance
->> of the plugins prior to trying to install them.
-> 
-> Thanks for the fix. Do you know under which condition the plugins will
-> be built vs. not built ?
-> 
+-mnan option was added in gcc-4.9.0 so make sure that users cannot
+select the NaN mode when using toolchains that have a gcc older
+than 4.9.0, and also make sure that the -mnan option is not passed at
+all to the toolchain-wrapper and target cflags.
 
-See my reply to Peter on this issue and v2 of this patch.  This is not the right fix.
-It appears that qtlocation improperly has a dependency on the quick module in order to
-establish build dependencies for the plugin in question.  It is probably better to hit
-this issue head on instead of just making buildroot install whatever is built.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.mips                                    | 1 +
+ toolchain/toolchain-common.in                          | 4 ++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
+ 3 files changed, 7 insertions(+)
 
-> If it's related to one or several dependencies being available, then I
-> would prefer something like:
-> 
-> ifeq ($(BR2...dependencies needed for plugins),y)
-> define QT5LOCATION_INSTALL_PLUGINS
-> 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/position $(TARGET_DIR)/usr/lib/qt/plugins/
-> endef
-> endif
-> 
-> define QT5LOCATION_INSTALL_TARGET_POSITION
-> 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Positioning.so.* $(TARGET_DIR)/usr/lib
-> 	$(QT5LOCATION_INSTALL_PLUGINS)
-> endef
-> 
-
-Good to know.  I actually looked into doing this, but then I started questioning having
-dependency tracking of this sort in both buildroot and the application itself.
-
-Food for thought on this topic of copying installed files from staging to target.  Why
-not abstract it out and simply provide a list of files and directories to a single
-package variable that would handle this automatically?  It won't work for every case,
-but it seems like it would work most of the time and be a bit simpler to create and
-clearer to read what is being installed.
-
-Josh
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index de71110..3d2dfe3 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -169,6 +169,7 @@ config BR2_MIPS_NAN_2008
+ 
+ choice
+ 	prompt "Target NaN"
++	depends on BR2_TOOLCHAIN_HAS_MNAN_OPTION
+ 	depends on BR2_mips_32r5 || BR2_mips_64r5
+ 	default BR2_MIPS_ENABLE_NAN_2008
+ 	help
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 932eeca..0002682 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -342,6 +342,10 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	default "4.4"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+ 	default "4.3"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
++config BR2_TOOLCHAIN_HAS_MNAN_OPTION
++	bool
++	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
+ config BR2_TOOLCHAIN_HAS_SYNC_1
+ 	bool
+ 	default y
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 3263199..23cdf30 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -178,10 +178,12 @@ ifneq ($(CC_TARGET_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+ endif
++ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
+ ifneq ($(CC_TARGET_NAN_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(CC_TARGET_NAN_)
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(CC_TARGET_NAN_)"'
+ endif
++endif
+ ifneq ($(CC_TARGET_FP32_MODE_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(CC_TARGET_FP32_MODE_)
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(CC_TARGET_FP32_MODE_)"'
