@@ -1,46 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 21 Jul 2017 03:05:18 +0200
-Subject: [Buildroot] [PATCH v7 11/23] genrandconfig: fix the case when
-	outputdir is 'output'
+Date: Fri, 21 Jul 2017 03:05:19 +0200
+Subject: [Buildroot] [PATCH v7 12/23] support/test-pkg: move minimal.config
+	into a separate file
 In-Reply-To: <20170721010530.4747-1-arnout@mind.be>
 References: <20170721010530.4747-1-arnout@mind.be>
-Message-ID: <20170721010530.4747-12-arnout@mind.be>
+Message-ID: <20170721010530.4747-13-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When outputdir is 'output' (the default), genrandconfig didn't work
-correctly because it expects the configfile in outputdir, while
-Buildroot puts it in the buildroot directory.
-
-Fix this by explicitly checking if outputdir == buildrootdir/output.
-Because abspath is used for both paths, string comparison works
-reliably.
+This minimal configuration is also very useful outside test-pkg. In
+addition, it will simplify the config merge in a later patch.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v7: new patch
+v7: Re-ordered the patch
+v6: Use support/config-fragments instead of support/misc
+v5: First version
 ---
- utils/genrandconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ support/config-fragments/minimal.config | 6 ++++++
+ utils/test-pkg                          | 8 +-------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+ create mode 100644 support/config-fragments/minimal.config
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index eaca6cff8c..4ff7deb26a 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -354,7 +354,10 @@ def gen_config(args):
-     # Write out the configuration file
-     if not os.path.exists(args.outputdir):
-         os.makedirs(args.outputdir)
--    configfile = os.path.join(args.outputdir, ".config")
-+    if args.outputdir == os.path.abspath(os.path.join(args.buildrootdir, "output")):
-+        configfile = os.path.join(args.buildrootdir, ".config")
-+    else:
-+        configfile = os.path.join(args.outputdir, ".config")
-     with open(configfile, "w+") as configf:
-         configf.writelines(configlines)
+diff --git a/support/config-fragments/minimal.config b/support/config-fragments/minimal.config
+new file mode 100644
+index 0000000000..0f20847f6d
+--- /dev/null
++++ b/support/config-fragments/minimal.config
+@@ -0,0 +1,6 @@
++# This config fragment disables Buildroot options that are turned on by
++# default, in order to arrive at minimal build time.
++BR2_INIT_NONE=y
++BR2_SYSTEM_BIN_SH_NONE=y
++# BR2_PACKAGE_BUSYBOX is not set
++# BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 7633a21e53..25a25e2048 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -100,13 +100,7 @@ build_one() {
+         return 2
+     fi
  
+-    cat >>"${dir}/.config" <<-_EOF_
+-	BR2_INIT_NONE=y
+-	BR2_SYSTEM_BIN_SH_NONE=y
+-	# BR2_PACKAGE_BUSYBOX is not set
+-	# BR2_TARGET_ROOTFS_TAR is not set
+-	_EOF_
+-    cat "${cfg}" >>"${dir}/.config"
++    cat "support/config-fragments/minimal.config" "${cfg}" >>"${dir}/.config"
+ 
+     if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
+         return 2
 -- 
 2.13.2
