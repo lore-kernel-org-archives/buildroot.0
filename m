@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 22:46:59 +0200
-Subject: [Buildroot] [PATCH] uboot: bump to version 2017.07
-In-Reply-To: <20170712192903.20486-1-joerg.krause@embedded.rocks>
-References: <20170712192903.20486-1-joerg.krause@embedded.rocks>
-Message-ID: <20170721224659.1f0da013@windsurf>
+Date: Fri, 21 Jul 2017 22:47:03 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2017.07
+In-Reply-To: <20170712194351.20701-1-joerg.krause@embedded.rocks>
+References: <20170712194351.20701-1-joerg.krause@embedded.rocks>
+Message-ID: <20170721224703.65dd3e04@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Jul 2017 21:29:03 +0200, J?rg Krause wrote:
-> Add a new config option BR2_TARGET_UBOOT_NEEDS_PYLIBFDT for U-Boot
-> targets, like sunxi, needing the Python libfdt library.
+On Wed, 12 Jul 2017 21:43:51 +0200, J?rg Krause wrote:
+> Drop patch 0005 which has been fixed upstream in a different way [1] by only
+> building the Python libfdt library when needed [2].
+> 
+> [1] https://patchwork.ozlabs.org/patch/757380/
+> [2] https://www.mail-archive.com/u-boot at lists.denx.de/msg251051.html
 > 
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  boot/uboot/Config.in  | 12 ++++++++++--
->  boot/uboot/uboot.hash |  2 +-
->  boot/uboot/uboot.mk   |  4 ++++
->  3 files changed, 15 insertions(+), 3 deletions(-)
+>  ...nditionally-disable-python-libfdt-wrapper.patch | 44 ----------------------
+>  package/uboot-tools/uboot-tools.hash               |  2 +-
+>  package/uboot-tools/uboot-tools.mk                 |  7 +---
+>  3 files changed, 2 insertions(+), 51 deletions(-)
+>  delete mode 100644 package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
 
-Applied to master after dropping the bogus selects on HOST_PYTHON and
-HOST_SWIG.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
