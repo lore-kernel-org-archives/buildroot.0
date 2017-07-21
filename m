@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 22:47:03 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2017.07
-In-Reply-To: <20170712194351.20701-1-joerg.krause@embedded.rocks>
-References: <20170712194351.20701-1-joerg.krause@embedded.rocks>
-Message-ID: <20170721224703.65dd3e04@windsurf>
+Date: Fri, 21 Jul 2017 22:47:19 +0200
+Subject: [Buildroot] [git commit] configs/bananapro: bump U-Boot to version
+	2017.07
+Message-ID: <20170721204322.C279482148@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1ddd41f231861bb28cfd56be55f7647fde3dd93d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Jul 2017 21:43:51 +0200, J?rg Krause wrote:
-> Drop patch 0005 which has been fixed upstream in a different way [1] by only
-> building the Python libfdt library when needed [2].
-> 
-> [1] https://patchwork.ozlabs.org/patch/757380/
-> [2] https://www.mail-archive.com/u-boot at lists.denx.de/msg251051.html
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...nditionally-disable-python-libfdt-wrapper.patch | 44 ----------------------
->  package/uboot-tools/uboot-tools.hash               |  2 +-
->  package/uboot-tools/uboot-tools.mk                 |  7 +---
->  3 files changed, 2 insertions(+), 51 deletions(-)
->  delete mode 100644 package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+Note, that since version 2017.07 the sunxi targets needs the Python
+libfdt library on the host. Therefore, additionally select the U-Boot
+config option BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
 
-Applied to master, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/bananapro_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index d3768bf..538e3e2 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -39,9 +39,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
