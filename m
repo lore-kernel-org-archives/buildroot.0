@@ -1,50 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Jul 2017 06:53:11 +0300
-Subject: [Buildroot] Using linux-zigbee ?
-In-Reply-To: <20170720225710.076f8086@windsurf>
-References: <20170720225710.076f8086@windsurf>
-Message-ID: <20170721035311.lj4g7b4fugewmr55@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Jul 2017 08:26:39 +0200
+Subject: [Buildroot] [PATCH] package/qt5location: handle plugins being
+ conditionally built
+In-Reply-To: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
+References: <1500593609-5610-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20170721082639.2c98c0fb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Thu, Jul 20, 2017 at 10:57:10PM +0200, Thomas Petazzoni wrote:
-> Back in 2014, you added the linux-zigbee package in Buildroot. However,
-> this project is no longer maintained, and the replacement project is
-> wpan-tools, for which we already have a Buildroot package.
+On Thu, 20 Jul 2017 16:33:29 -0700, Joshua Henderson wrote:
+> This fixes a build issue where the qt5location plugins are not built, but are
+> attempted to be installed.
 > 
-> linux-zigbee has seen no updates since 2014
-> (https://sourceforge.net/p/linux-zigbee/linux-zigbee/ci/38f42dbfce9e13629263db3bd3b81f14c69bb733/log/?path=).
-> The fork at https://github.com/linux-wpan/lowpan-tools, which only
-> contains two additional commits, also from 2014, clearly mentions that
-> this is deprecated.
-> 
-> In addition, linux-zigbee now fails to build with gcc 7.x:
-> http://autobuild.buildroot.net/results/29c/29c72bc38042305310576be945c721b2fad95894/build-end.log.
+> The qt5location plugins have dependencies that are automatically resolved
+> causing plugins to conditionaly be built. This change checks for the existance
+> of the plugins prior to trying to install them.
 
-The fix[1] for that (remove -Werror) is quite easy, you don't even need to 
-patch the code.
+Thanks for the fix. Do you know under which condition the plugins will
+be built vs. not built ?
 
-> Do you still use linux-zigbee ? Or could we remove it from Buildroot in
-> favor of wpan-tools ?
+If it's related to one or several dependencies being available, then I
+would prefer something like:
 
-Buildroot carries packages that are deprecated/abandoned for much longer than 
-that (e.g. wireless_tools). The command line interface difference between 
-linux-zigbee and wpan-tools is a good enough reason to keep linux-zigbee, IMO.
+ifeq ($(BR2...dependencies needed for plugins),y)
+define QT5LOCATION_INSTALL_PLUGINS
+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/position $(TARGET_DIR)/usr/lib/qt/plugins/
+endef
+endif
 
-> Are there other people using linux-zigbee and not wpan-tools ?
+define QT5LOCATION_INSTALL_TARGET_POSITION
+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Positioning.so.* $(TARGET_DIR)/usr/lib
+	$(QT5LOCATION_INSTALL_PLUGINS)
+endef
 
-I use neither.
+Thanks!
 
-[1] http://patchwork.ozlabs.org/patch/791782/
-
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
