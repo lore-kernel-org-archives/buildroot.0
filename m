@@ -1,49 +1,102 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 21 Jul 2017 10:12:27 +0200
-Subject: [Buildroot] [PATCH 4/7] python-werkzeug: bump to version 0.12.2
-In-Reply-To: <20170721081230.5584-1-yegorslists@googlemail.com>
-References: <20170721081230.5584-1-yegorslists@googlemail.com>
-Message-ID: <20170721081230.5584-4-yegorslists@googlemail.com>
+From: Glenn Coombs <glenn.coombs@gmail.com>
+Date: Fri, 21 Jul 2017 16:35:42 +0800
+Subject: [Buildroot] How to build the qt plugin in gst1-plugins-bad ?
+In-Reply-To: <20170721094415.0cc6cab2@windsurf>
+References: <CADujc4q8d1AMFmvoD_62qnOkNSntuCCGCe4+Pkatp4P382srfg@mail.gmail.com>
+ <20170719113553.6669def3@windsurf>
+ <CADujc4o_1XZLQymNx3fQk5n9FOhg=9xNKw5U2GPSsGBCxHyhSA@mail.gmail.com>
+ <20170719120113.62df8762@windsurf>
+ <CADujc4oPL-onF043v64kvhyUP7SUxEu6Jc6ArGg_PKj6ohTD_Q@mail.gmail.com>
+ <20170721094415.0cc6cab2@windsurf>
+Message-ID: <CADujc4qkL6vK5os_M+WhhGA-Wf_7B4YdEcywM==QK1txq=TCOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+No problems - I will submit it as a proper patch.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+--
+Glenn
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index a1c44f492..4b2075071 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/werkzeug/json, sha256 locally computed
--md5 cb4010478dd33905f95920e4880204a2 Werkzeug-0.11.15.tar.gz
--sha256 455d7798ac263266dbd38d4841f7534dd35ca9c3da4a8df303f8488f38f3bcc0 Werkzeug-0.11.15.tar.gz
-+# md5 from https://pypi.python.org/pypi/Werkzeug/json, sha256 locally computed
-+md5	e385b2c5a7193cff24c689b31e1124dc  Werkzeug-0.12.2.tar.gz
-+sha256	903a7b87b74635244548b30d30db4c8947fe64c5198f58899ddcd3a13c23bb26  Werkzeug-0.12.2.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index dfa657cb7..6d478f7c1 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WERKZEUG_VERSION = 0.11.15
-+PYTHON_WERKZEUG_VERSION = 0.12.2
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/fe/7f/6d70f765ce5484e07576313897793cb49333dd34e462488ee818d17244af
-+PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/56/41/c095a77eb2dd69bf278dd664a97d3416af04e9ba1a00b8c138f772741d31
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
--- 
-2.11.0
+On 21 July 2017 at 15:44, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Fri, 21 Jul 2017 15:39:35 +0800, Glenn Coombs wrote:
+>
+> > Thanks for all your help.  I have now succeeded in building this plugin.
+>
+> Great!
+>
+> > The last of these required me to modify the Config.in and
+> > gst1-plugins-bad.mk files in the gst1-plugins-bad directory to create
+> the
+> > new "qt" setting.  The diff for these changes is as follows:
+> >
+> > diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in
+> > b/package/gstreamer1/gst1-plugins-bad/Config.in
+> > index 0c97899..22aacb3 100644
+> > --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> > +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> > @@ -349,6 +349,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
+> >         help
+> >           PNM plugin
+> >
+> > +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_QT
+> > +       bool "qt"
+> > +       help
+> > +         Qt plugin
+> > +
+> >  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
+> >         bool "rawparse"
+> >         help
+> > diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> > b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> > index 2e9e6f1..1caca13 100644
+> > --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> > +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> > @@ -58,8 +58,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+> >         --disable-schro \
+> >         --disable-zbar \
+> >         --disable-spandsp \
+> > -       --disable-gtk3 \
+> > -       --disable-qt
+> > +       --disable-gtk3
+> >
+> >  GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
+> >
+> > @@ -403,6 +402,12 @@ else
+> >  GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
+> >  endif
+> >
+> > +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_QT),y)
+> > +GST1_PLUGINS_BAD_CONF_OPTS += --enable-qt
+> > +else
+> > +GST1_PLUGINS_BAD_CONF_OPTS += --disable-qt
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
+> >  GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
+> >  else
+> >
+> > Hopefully those changes can be incorporated into buildroot so that other
+> > people will be able to make use of this package.
+>
+> Could you instead submit this as a proper patch to Buildroot? See
+> https://buildroot.org/downloads/manual/manual.html#submitting-patches
+> for details on how to contribute a patch to Buildroot.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170721/685fc053/attachment.html>
