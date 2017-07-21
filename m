@@ -1,53 +1,29 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 21 Jul 2017 12:59:44 +0200
-Subject: [Buildroot] img layout
-In-Reply-To: <87vammoyqg.fsf@dell.be.48ers.dk>
-References: <trinity-526790e5-6239-4ac3-8df7-331d1a974560-1500619716190@3capp-mailcom-bs08>
- <20170721092626.57bf9db2@windsurf>
- <trinity-6a261bc1-46e9-4b2a-9e53-ec32e5d148b0-1500628795781@3capp-mailcom-bs09>
- <87vammoyqg.fsf@dell.be.48ers.dk>
-Message-ID: <trinity-87e7b58a-c039-4b11-8d40-18e2768a46c0-1500634784758@3capp-mailcom-bs02>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 Jul 2017 12:19:01 +0000
+Subject: [Buildroot] [Bug 10091] gcc7.1 does not build with graphite support
+ due to old isl
+In-Reply-To: <bug-10091-163@https.bugs.busybox.net/>
+References: <bug-10091-163@https.bugs.busybox.net/>
+Message-ID: <bug-10091-163-RzMy1wdJ2A@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Peter,
+https://bugs.busybox.net/show_bug.cgi?id=10091
 
-> Sent: Friday, July 21, 2017 at 1:44 PM
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: daggs <daggs@gmx.com>
-> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, buildroot at buildroot.org
-> Subject: Re: [Buildroot] img layout
->
-> >>>>> "daggs" == daggs  <daggs@gmx.com> writes:
-> 
-> Hi,
-> 
->  > well latest uboot supports the odroidc2 boards but there is a need to
->  > insert their signed blobs into the image.
->  > as I don't know how the image's layout is, I'm not sure the dd
->  > specified in the uboot docs will work. I've never got it to boot. it
->  > maybe something else.
-> 
->  > this is what they write:
->  > DEV=/dev/your_sd_device
->  > dd if=$BL1 of=$DEV conv=fsync bs=1 count=442
->  > dd if=$BL1 of=$DEV conv=fsync bs=512 skip=1 seek=1
->  > dd if=$DIR/u-boot.gxbb of=$DEV conv=fsync bs=512 seek=97
-> 
->  > how can I be sure that the offsets above are the same in uboot generated image?
-> 
-> That looks very similar to the logic we already have in
-> board/hardkernel/odroid2c2/post-image.sh, isn't that working for you?
-> 
-> -- 
-> Bye, Peter Korsgaard
+--- Comment #14 from Ivan <ivan.nazarenko@gmail.com> ---
+> BTW Ivan please clone this bug for the Qt5base issue, it has nothing to do with
+> graphite support.
 
-the original script won't work because it doesn't needs to address the signed bins because they are included.
-it uses a uboot 2005 based git fork that already includes it. without adding the signed bins, the system will not boot.
+Reported it to the gcc people:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81497
 
-Thanks,
+Though I did not understand their comment. I would fix it simply type casting
+the third parameter. But in this case I am sure I do not know what I am talking
+about.
 
-Dagg.
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
