@@ -1,50 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:04:45 +0200
-Subject: [Buildroot] [git commit] python-hyperlink: bump to version 17.3.0
-Message-ID: <20170721210346.7FDFB82148@busybox.osuosl.org>
+Date: Fri, 21 Jul 2017 23:04:46 +0200
+Subject: [Buildroot] [git commit] python-werkzeug: bump to version 0.12.2
+Message-ID: <20170721210346.980C582193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1708fa00f071168627eed0cc7c791528ecb0435
+commit: https://git.buildroot.net/buildroot/commit/?id=4f4ce889b6bb63f34907f3707124b56af68b34c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add license file.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-hyperlink/python-hyperlink.hash | 4 ++--
- package/python-hyperlink/python-hyperlink.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-werkzeug/python-werkzeug.hash | 6 +++---
+ package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-hyperlink/python-hyperlink.hash b/package/python-hyperlink/python-hyperlink.hash
-index 5ff5e7a..565a34d 100644
---- a/package/python-hyperlink/python-hyperlink.hash
-+++ b/package/python-hyperlink/python-hyperlink.hash
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index a1c44f4..4b20750 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/hyperlink/json, sha256 locally computed
--md5	717dae425baa7b6f6d9d590666ec8472  hyperlink-17.2.1.tar.gz
--sha256	2c74b35662416f44823d50e59305f761a933723ae6528cc5b0d711361453f28b  hyperlink-17.2.1.tar.gz
-+md5	7a86b09d80b8f0c89f6b61efa0ebaab9  hyperlink-17.3.0.tar.gz
-+sha256	ddadbbdda2b94182da14be1b5d26ec3188dfdf9687b9b8c8d810f52f79b7af1a  hyperlink-17.3.0.tar.gz
-diff --git a/package/python-hyperlink/python-hyperlink.mk b/package/python-hyperlink/python-hyperlink.mk
-index 21f784e..7b48e36 100644
---- a/package/python-hyperlink/python-hyperlink.mk
-+++ b/package/python-hyperlink/python-hyperlink.mk
-@@ -4,10 +4,11 @@
+-# md5 from https://pypi.python.org/pypi/werkzeug/json, sha256 locally computed
+-md5 cb4010478dd33905f95920e4880204a2 Werkzeug-0.11.15.tar.gz
+-sha256 455d7798ac263266dbd38d4841f7534dd35ca9c3da4a8df303f8488f38f3bcc0 Werkzeug-0.11.15.tar.gz
++# md5 from https://pypi.python.org/pypi/Werkzeug/json, sha256 locally computed
++md5	e385b2c5a7193cff24c689b31e1124dc  Werkzeug-0.12.2.tar.gz
++sha256	903a7b87b74635244548b30d30db4c8947fe64c5198f58899ddcd3a13c23bb26  Werkzeug-0.12.2.tar.gz
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index dfa657c..6d478f7 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HYPERLINK_VERSION = 17.2.1
-+PYTHON_HYPERLINK_VERSION = 17.3.0
- PYTHON_HYPERLINK_SOURCE = hyperlink-$(PYTHON_HYPERLINK_VERSION).tar.gz
--PYTHON_HYPERLINK_SITE = https://pypi.python.org/packages/a2/d9/56b6a007a643d6511e616a2be74f67c3703e2aea4e9eaa44bdf48bc78c82
-+PYTHON_HYPERLINK_SITE = https://pypi.python.org/packages/61/9c/69aa5d6942271961ad1fff910db77706623423d054ecb647da963efdf49a
- PYTHON_HYPERLINK_SETUP_TYPE = setuptools
- PYTHON_HYPERLINK_LICENSE = MIT
-+PYTHON_HYPERLINK_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_WERKZEUG_VERSION = 0.11.15
++PYTHON_WERKZEUG_VERSION = 0.12.2
+ PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/fe/7f/6d70f765ce5484e07576313897793cb49333dd34e462488ee818d17244af
++PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/56/41/c095a77eb2dd69bf278dd664a97d3416af04e9ba1a00b8c138f772741d31
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
