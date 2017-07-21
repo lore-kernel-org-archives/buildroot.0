@@ -1,58 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 21 Jul 2017 03:05:29 +0200
-Subject: [Buildroot] [PATCH v7 22/23] Makefile: add alldefconfig target
+Date: Fri, 21 Jul 2017 03:05:30 +0200
+Subject: [Buildroot] [PATCH v7 23/23] test-pkg: use merge_config.sh to merge
+	the fragments
 In-Reply-To: <20170721010530.4747-1-arnout@mind.be>
 References: <20170721010530.4747-1-arnout@mind.be>
-Message-ID: <20170721010530.4747-23-arnout@mind.be>
+Message-ID: <20170721010530.4747-24-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is used by Kconfig's merge_config.sh.
-
-No alldefpackageconfig is added, since it's rather pointless: it would
-only enable busybox.
+It is supposedly more robust than just concatenating.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v7: No changes
-v6: No changes
+v7: Rebased
+v6: Rebased
 v5: First version
 ---
- Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ utils/test-pkg | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index c8912c9da4..66b62e2a18 100644
---- a/Makefile
-+++ b/Makefile
-@@ -128,7 +128,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 7eb9c535c3..6899d44f7c 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -98,11 +98,9 @@ build_one() {
  
- # List of targets and target patterns for which .config doesn't need to be read in
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
-+	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	print-version olddefconfig distclean manual manual-%
+     mkdir -p "${dir}"
  
-@@ -877,7 +877,7 @@ config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- # no values are set for the legacy options so a subsequent oldconfig
- # will query them. Therefore, run an additional olddefconfig.
- 
--randconfig allyesconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
-+randconfig allyesconfig alldefconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --$@ $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
-@@ -986,6 +986,7 @@ help:
- 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
-+	@echo '  alldefconfig           - New config where all options are set to default'
- 	@echo '  randpackageconfig      - New config with random answer to package options'
- 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
- 	@echo '  allnopackageconfig     - New config where package options are answered with no'
+-    cat "${toolchainconfig}" "support/config-fragments/minimal.config" "${cfg}" >>"${dir}/.config"
+-
+-    if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
+-        return 2
+-    fi
++    support/kconfig/merge_config.sh -O "${dir}" \
++        "${toolchainconfig}" "support/config-fragments/minimal.config" "${cfg}" \
++        > /dev/null
+     # We want all the options from the snippet to be present as-is (set
+     # or not set) in the actual .config; if one of them is not, it means
+     # some dependency from the toolchain or arch is not available, in
 -- 
 2.13.2
