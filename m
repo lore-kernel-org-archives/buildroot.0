@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jul 2017 23:00:13 +0200
-Subject: [Buildroot] [PATCH 2/5] arch/mips: add option for toolchains
- supporting -mfpxx
-In-Reply-To: <20170721170635.41202-2-Vincent.Riera@imgtec.com>
-References: <20170721170635.41202-1-Vincent.Riera@imgtec.com>
- <20170721170635.41202-2-Vincent.Riera@imgtec.com>
-Message-ID: <20170721230013.0f8f9111@windsurf>
+Date: Fri, 21 Jul 2017 23:03:17 +0200
+Subject: [Buildroot] [git commit] wine: Bump to version 2.0.2
+Message-ID: <20170721205910.307D480745@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04647c01d524c652a15a9ca95f9fbe307e4174c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Jul 2017 18:06:32 +0100, Vicente Olivert Riera wrote:
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  config BR2_MIPS_FP32_MODE_XX
-> +	depends on BR2_TOOLCHAIN_HAS_MFPXX_OPTION
->  	bool "xx"
-
-The "depends on" line should have been after the "bool" line, so I
-fixed that and applied. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 3490c7e..2b22a4a 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 6cfb4eaae566dc7afb7ac0f1f2db2c0d69969952acab0debf084ee8f7b071583 wine-2.0.1.tar.xz
++sha256 f71884f539928877f4b415309f582825d3d3c9976104e43d566944c710713c9a wine-2.0.2.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 68ebd48..b733952 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 2.0.1
++WINE_VERSION = 2.0.2
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+ WINE_SITE = https://dl.winehq.org/wine/source/2.0
+ WINE_LICENSE = LGPL-2.1+
