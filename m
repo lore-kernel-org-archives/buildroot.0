@@ -1,109 +1,112 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 21 Jul 2017 03:05:26 +0200
-Subject: [Buildroot] [PATCH v7 19/23] genrandconfig: get configs from
-	in-tree toolchain-configs.csv
+Date: Fri, 21 Jul 2017 03:05:25 +0200
+Subject: [Buildroot] [PATCH v7 18/23] support/test-pkg: add option to use an
+	alternate toolchains CSV file
 In-Reply-To: <20170721010530.4747-1-arnout@mind.be>
 References: <20170721010530.4747-1-arnout@mind.be>
-Message-ID: <20170721010530.4747-20-arnout@mind.be>
+Message-ID: <20170721010530.4747-19-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now we have the toolchain config fragments in the buildroot directory
-itself, it is no longer necessary to fetch it from the toolchain URL.
+For now, testing a package requires network access. However, there are
+situations where everything is already cached locally (especially the
+toolchains tarballs) and network is not available (e.g. in the train,
+travelling back from FOSDEM...)
 
-The --toolchains-url option is renamed to --toolchains-csv.
+Alternatively, one may also want to test against a subset of the default
+toolchains (e.g. the ones known to have a specific issue), or against
+additional toolchains (e.g. the ones used within the company).
 
-The paths in the toolchains_csv file should be either absolute, or
-relative to buildrootdir.
+Add an option to use an alternate CSV file containing the config
+fragments of toolchains to try.
 
-After this change, the script should be called from autobuild-run as:
-
-    subprocess.call([os.path.join(srcdir, "utils/genrandconfig"),
-                     "-o", outputdir, "-b", srcdir,
-                     "--toolchains-csv", kwargs['toolchains_csv']],
-                    stdout=devnull, stderr=log)
-
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-v7: new patch
----
- utils/genrandconfig | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+v7: CSV file instead of directory
+v6: s/defconfig/config fragment/g
+v5: First version
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index d397b23f36..a67d46fad9 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -118,15 +118,15 @@ class SystemInfo:
-         return not missing_requirements
+Loosely based on http://patchwork.ozlabs.org/patch/728395/ but with a
+CSV file instead of URL, and completely rewritten help text.
+---
+ utils/test-pkg | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 8c60649b32..7eb9c535c3 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -5,16 +5,17 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
  
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchain
++    local cfg dir pkg random toolchains_dir toolchain
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+     local -a toolchains
  
--def get_toolchain_configs(toolchains_url):
-+def get_toolchain_configs(toolchains_csv, buildrootdir):
-     """Fetch and return the possible toolchain configurations
+-    o='hc:d:p:r:'
+-    O='help,config-snippet:build-dir:package:,random:'
++    o='hc:d:p:r:t:'
++    O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
  
-     This function returns an array of toolchain configurations. Each
-     toolchain configuration is itself an array of lines of the defconfig.
-     """
+     random=0
++    toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+         (-h|--help)
+@@ -32,6 +33,9 @@ main() {
+         (-r|--random)
+             random="${2}"; shift 2
+             ;;
++        (-t|--toolchains-csv)
++            toolchains_csv="${2}"; shift 2
++            ;;
+         (--)
+             shift; break
+             ;;
+@@ -50,7 +54,7 @@ main() {
+     # Extract the URLs of the toolchains; drop internal toolchains
+     # E.g.: http://server/path/to/name.config,arch,libc
+     #  -->  http://server/path/to/name.config
+-    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${TOOLCHAINS_CSV}" \
++    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${toolchains_csv}" \
+                   |if [ ${random} -gt 0 ]; then \
+                       sort -R |head -n ${random}
+                    else
+@@ -146,8 +150,13 @@ In case failures are noticed, you can fix the package and just re-run the
+ same command again; it will re-run the test where it failed. If you did
+ specify a package (with -p), the package build dir will be removed first.
  
--    with urlopen_closing(toolchains_url) as r:
--        toolchains_csv = decode_byte_list(r.readlines())
-+    with open(toolchains_csv) as r:
-+        toolchains = decode_byte_list(r.readlines())
-     configs = []
+-The list of toolchains is retrieved from the Buildroot autobuilders, available
+-at ${TOOLCHAINS_URL}.
++The list of toolchains is retrieved from ${TOOLCHAINS_CSV}.
++Only the external toolchains are tried, because building a Buildroot toolchain
++would take too long. An alternative toolchains CSV file can be specified with
++the -t option. This file should have lines consisting of the path to the
++toolchain config fragment and the required host architecture, separated by a
++comma. The config fragments should contain only the toolchain and architecture
++settings.
  
-     (_, _, _, _, hostarch) = os.uname()
-@@ -134,9 +134,9 @@ def get_toolchain_configs(toolchains_url):
-     if hostarch == 'i686' or hostarch == 'i386' or hostarch == 'x86':
-         hostarch = 'x86'
+ Options:
  
--    for row in csv.reader(toolchains_csv):
-+    for row in csv.reader(toolchains):
-         config = {}
--        url = row[0]
-+        configfile = row[0]
-         config_hostarch = row[1]
-         keep = False
+@@ -169,6 +178,11 @@ Options:
+         Limit the tests to the N randomly selected toolchains, instead of
+         building with all toolchains.
  
-@@ -158,8 +158,11 @@ def get_toolchain_configs(toolchains_url):
-         if not keep:
-             continue
- 
--        with urlopen_closing(url) as r:
--            config = decode_byte_list(r.readlines())
-+        if not os.path.isabs(configfile):
-+            configfile = os.path.join(buildrootdir, configfile)
++    -t CSVFILE, --toolchains-csv CSVFILE
++        CSV file containing the paths to config fragments of toolchains to
++        try. If not specified, the toolchains in ${TOOLCHAINS_CSV} will be
++        used.
 +
-+        with open(configfile) as r:
-+            config = r.readlines()
-         configs.append(config)
-     return configs
+ Example:
  
-@@ -329,7 +332,7 @@ def gen_config(args):
-     """
- 
-     # Select a random toolchain configuration
--    configs = get_toolchain_configs(args.toolchains_url)
-+    configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
- 
-     i = randint(0, len(configs) - 1)
-     toolchainconfig = configs[i]
-@@ -408,10 +411,10 @@ if __name__ == '__main__':
-     parser.add_argument("--buildrootdir", "-b",
-                         help="Buildroot directory (relative to current directory)",
-                         type=str, default='.')
--    parser.add_argument("--toolchains-url",
--                        help="URL of toolchain configuration file",
-+    parser.add_argument("--toolchains-csv",
-+                        help="Path of the toolchain configuration file",
-                         type=str,
--                        default="http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv")
-+                        default="support/config-fragments/autobuild/toolchain-configs.csv")
-     args = parser.parse_args()
- 
-     # We need the absolute path to use with O=, because the relative
+     Testing libcec would require a config snippet that contains:
 -- 
 2.13.2
