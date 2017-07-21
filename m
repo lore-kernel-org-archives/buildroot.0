@@ -1,61 +1,42 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Thu, 20 Jul 2017 16:35:52 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/qt5: bump latest version to
- 5.9.1
-In-Reply-To: <20170720132119.67d83618@windsurf>
-References: <1499962724-536-1-git-send-email-joshua.henderson@microchip.com>
- <20170720132119.67d83618@windsurf>
-Message-ID: <797635a2-a0f6-136b-b212-3e7378aa4807@microchip.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 21 Jul 2017 03:05:09 +0200
+Subject: [Buildroot] [PATCH v7 02/23] genrandconfig: use
+	subprocess.check_output instead of Popen
+In-Reply-To: <20170721010530.4747-1-arnout@mind.be>
+References: <20170721010530.4747-1-arnout@mind.be>
+Message-ID: <20170721010530.4747-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Popen is more complicated and more difficult to understand.
 
-On 07/20/2017 04:21 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 13 Jul 2017 09:18:43 -0700, Joshua Henderson wrote:
->> Qt 5.9 is a Long Term Support version [1]. Some license file changes are
->> involved, a new dependency on pcre2, and some filename changes.  qt5webkit
->> popped back into the picture for 5.9.1 after being absent for 5.9.0
->> "officially." QT5_SNAPSHOTS_SITE is removed with this commit as it is not used
->> for qtwebkit anymore.
->>
->> This removes the following patches that have been upstreamed for 5.9.1:
->>
->> - qt5base/5.8.0/0001-fix-parallel-builds-with-qt-freetype-system-libpng.patch [2]
->> - qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch [3]
->> - qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch [4]
->> - qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch [5]
->> - qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch [6]
->> - qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch [7]
->>
->> [1] https://www.qt.io/qt5-9/
->> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
->> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
->> [4] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=5cc0de2e084cb887a75b076b82cf470ecdcd4dd3
->> [5] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=e9a7739e77f79baeb5452189b6d17e63de5b341d
->> [6] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=18d49808db46add078d9d4bcffaac5361d5c7269
->> [7] https://code.qt.io/cgit/qt/qtwebkit.git/commit/?id=548380af096f8277e460383c81a4ecdf2b77523f
->>
->> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
->> Cc: Julien Corjon <corjon.j@ecagroup.com>
->> Cc: Brent Sink <brents_3@hotmail.com>
->> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-> 
-> This patch caused a build failure:
-> 
->   http://autobuild.buildroot.net/results/bc1/bc13abf3bb2fe1c991aec2334ee658c9641d1fd5/build-end.log
-> 
-> It seems to be a new build failure, because it never occurred with the
-> 5.8.0 version.
+check_output raises an exception if the exit code is non-zero, but
+that's probably what we want if ldd can't be executed.
 
-There appears to be a dependency on quick that causes the plugin directory to conditionally
-be built.  I submitted a patch [1] for one way to fix this.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+This is actually part of the following patch, to reduce the line length :-)
+---
+v7: new patch
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1] https://patchwork.ozlabs.org/patch/791799/
-
-Josh
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 6d3269225d..a7fe7ceca9 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -184,7 +184,7 @@ def is_toolchain_usable(**kwargs):
+         if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
+-            ldd_version_output = subprocess.Popen(['ldd', '--version'], stdout=subprocess.PIPE).communicate()[0]
++            ldd_version_output = subprocess.check_output(['ldd', '--version'])
+             glibc_version = ldd_version_output.splitlines()[0].split()[-1]
+             if StrictVersion('2.14') > StrictVersion(glibc_version):
+                 log_write(log, "WARN: ignoring the Linaro ARM toolchains becausee too old host glibc")
+-- 
+2.13.2
