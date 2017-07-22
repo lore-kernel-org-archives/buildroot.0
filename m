@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 22:41:17 +0200
-Subject: [Buildroot] [PATCH v2 2/6] testing/tests/package/test_python:
- refactor TestPythonBase
-In-Reply-To: <20170712024009.2366-3-andrew.smirnov@gmail.com>
-References: <20170712024009.2366-1-andrew.smirnov@gmail.com>
- <20170712024009.2366-3-andrew.smirnov@gmail.com>
-Message-ID: <20170722224117.4736a00e@windsurf>
+Date: Sat, 22 Jul 2017 22:41:25 +0200
+Subject: [Buildroot] [PATCH] cppcms: fix build with ICU
+In-Reply-To: <20170722202426.29171-1-thomas.petazzoni@free-electrons.com>
+References: <20170722202426.29171-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170722224125.7480ab1c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 11 Jul 2017 19:40:05 -0700, Andrey Smirnov wrote:
-> Convert TestPythonBase to a true base class that only provides code
-> implementing various tests without definig tests themselves in a
-> "discoverable" form.
+On Sat, 22 Jul 2017 22:24:26 +0200, Thomas Petazzoni wrote:
+> Since the bump of ICU to 59.1, it needs C++11. cppcms has been updated
+> with the appropriate dependency on gcc >= 4.8, but it also needs
+> -std=c++11. Therefore, this patch complements the CXXFLAGS passed to
+> cppcms by adding what icu-config reports, in a manner similar to what
+> was done to fix the same issue in the PHP package in commit
+> 214a76d045f906c1a8d687b7c7e7bc85c5b09906 ("package/php: fix icu
+> support").
 > 
-> To retain correct testing functionality, add TestPython2 derived class
-> that uses code from TestPythonBase to define actual runnable test.
+> Fixes:
 > 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+>   http://autobuild.buildroot.net/results/f05d9999f1f3248b6a50f14de476108028ed047e/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  support/testing/tests/package/test_python.py | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
+>  package/cppcms/cppcms.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Applied to master, after fixing the two issues pointed by Ricardo.
-
-BTW Ricardo: you seem to be following the changes on the test
-infrastructure, and contributing to it. Would you be willing to be
-listed in DEVELOPERS for this support/testing/ folder ? Your review and
-testing of the testing infrastructure patches are definitely very
-useful.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
