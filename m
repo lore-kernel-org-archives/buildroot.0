@@ -1,43 +1,214 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Sat, 22 Jul 2017 13:15:42 +0200
-Subject: [Buildroot] [PATCH v10 3/3] support/scripts/fix-rpath: typo fix and
-	unneeded "; " removed
-In-Reply-To: <1500722142-20420-1-git-send-email-wg@grandegger.com>
-References: <1500722142-20420-1-git-send-email-wg@grandegger.com>
-Message-ID: <1500722142-20420-4-git-send-email-wg@grandegger.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 Jul 2017 14:12:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: security bump to version
+	1.0.2
+Message-ID: <20170722121249.14618-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/scripts/fix-rpath | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Fixes CVE-2017-8779:
+http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commitdiff;h=dd9c7cf4f8f375c6d641b760d124650c418c2ce3
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index f92e601..15705a3 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -27,7 +27,7 @@ Description:
+Rebased patches 0001, 0002 & 0006.
+Removed patch 0007, applied upstream:
+http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=4f1503e84b2f7bd229a097335e52fb8203f5bb0b
+Renumbered patch 0008.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |  6 ++-
+ ...upport-and-musl-does-not-install-rpcent.h.patch |  4 +-
+ ...0006-Disable-DES-authentification-support.patch | 12 ++---
+ ...d-missing-rwlock_unlocks-in-xprt_register.patch | 63 ----------------------
+ ...h => 0007-include-stdint.h-for-uintptr_t.patch} |  0
+ package/libtirpc/libtirpc.hash                     |  4 +-
+ package/libtirpc/libtirpc.mk                       |  2 +-
+ 7 files changed, 13 insertions(+), 78 deletions(-)
+ delete mode 100644 package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
+ rename package/libtirpc/{0008-include-stdint.h-for-uintptr_t.patch => 0007-include-stdint.h-for-uintptr_t.patch} (100%)
+
+diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+index e51c5a44b..eb1bef3dc 100644
+--- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
++++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+@@ -13,6 +13,8 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ [peda at axentia.se: update for 1.0.1]
+ Signed-off-by: Peter Rosin <peda@axentia.se>
++[bernd.kuhls at t-online.de: update for 1.0.2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  src/Makefile.am | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
+@@ -25,8 +27,8 @@ index 6cc567a..9834f9a 100644
+          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+  	svc_auth_des.c \
+          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+--        auth_time.c auth_des.c authdes_prot.c debug.c
+-+        auth_des.c authdes_prot.c debug.c
++-        auth_time.c auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
+++        auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
+  
+  ## XDR
+  libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c xdr_sizeof.c
+diff --git a/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch b/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
+index 643a57ed5..51229a024 100644
+--- a/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
++++ b/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
+@@ -8,6 +8,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ [joerg.krause at embedded.rocks: musl fix]
+ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++[bernd.kuhls at t-online.de: update for 1.0.2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  tirpc/rpc/rpcent.h | 5 +++--
+  1 file changed, 3 insertions(+), 2 deletions(-)
+@@ -21,7 +23,7 @@ index 147f909..4a58180 100644
+  #endif
+  
+ -/* These are defined in /usr/include/rpc/netdb.h */
+--#if !defined(__GLIBC__)
++-#if !defined(__GLIBC__) || defined(__UCLIBC__)
+ +/* These are defined in /usr/include/rpc/netdb.h, unless we are using
+ +   the C library without RPC support. */
+ +#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_RPC__) || !defined(__GLIBC__)
+diff --git a/package/libtirpc/0006-Disable-DES-authentification-support.patch b/package/libtirpc/0006-Disable-DES-authentification-support.patch
+index 59a77ffc1..0c6547240 100644
+--- a/package/libtirpc/0006-Disable-DES-authentification-support.patch
++++ b/package/libtirpc/0006-Disable-DES-authentification-support.patch
+@@ -11,6 +11,8 @@ uClibc and musl does not provide DES authentication.
+ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ [peda at axentia.se: update for 1.0.1]
+ Signed-off-by: Peter Rosin <peda@axentia.se>
++[bernd.kuhls at t-online.de: update for 1.0.2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  src/Makefile.am |  2 +-
+  src/rpc_soc.c   | 32 --------------------------------
+@@ -26,7 +28,7 @@ index 960a522..3a88e31 100644
+          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+ -	svc_auth_des.c \
+          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+--        auth_des.c authdes_prot.c debug.c
++-        auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
+ +        debug.c
+  
+  ## XDR
+@@ -48,14 +50,6 @@ diff --git a/src/rpc_soc.c b/src/rpc_soc.c
+ index e146ed4..161a1ec 100644
+ --- a/src/rpc_soc.c
+ +++ b/src/rpc_soc.c
+-@@ -61,7 +61,6 @@ #ifdef PORTMAP
+- #include <string.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+--#include <rpcsvc/nis.h>
+- 
+- #include "rpc_com.h"
+- 
+ @@ -522,86 +521,6 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
+  }
+  
+diff --git a/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch b/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
+deleted file mode 100644
+index 56b5bf839..000000000
+--- a/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 4f1503e84b2f7bd229a097335e52fb8203f5bb0b Mon Sep 17 00:00:00 2001
+-From: Michael Forney <mforney@mforney.org>
+-Date: Wed, 4 Nov 2015 13:58:06 -0500
+-Subject: [PATCH] Add missing rwlock_unlocks in xprt_register
+-
+-It looks like in b2c9430f46c4ac848957fb8adaac176a3f6ac03f when svc_run
+-switched to poll, an early return was added, but the rwlock was not
+-unlocked.
+-
+-I observed that rpcbind built against libtirpc-1.0.1 would handle only
+-one request before hanging, and tracked it down to a missing
+-rwlock_unlock here.
+-
+-Fixes: b2c9430f46c4 ('Use poll() instead of select() in svc_run()')
+-Signed-off-by: Michael Forney <mforney@mforney.org>
+-Signed-off-by: Steve Dickson <steved@redhat.com>
+-[peda at axentia.se: backport from upstream]
+-Signed-off-by: Peter Rosin <peda@axentia.se>
+----
+- src/svc.c | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/svc.c b/src/svc.c
+-index 9c41445..b59467b 100644
+---- a/src/svc.c
+-+++ b/src/svc.c
+-@@ -99,7 +99,7 @@ xprt_register (xprt)
+-     {
+-       __svc_xports = (SVCXPRT **) calloc (_rpc_dtablesize(), sizeof (SVCXPRT *));
+-       if (__svc_xports == NULL)
+--	return;
+-+            goto unlock;
+-     }
+-   if (sock < _rpc_dtablesize())
+-     {
+-@@ -120,14 +120,14 @@ xprt_register (xprt)
+-             svc_pollfd[i].fd = sock;
+-             svc_pollfd[i].events = (POLLIN | POLLPRI |
+-                                     POLLRDNORM | POLLRDBAND);
+--            return;
+-+            goto unlock;
+-           }
+- 
+-       new_svc_pollfd = (struct pollfd *) realloc (svc_pollfd,
+-                                                   sizeof (struct pollfd)
+-                                                   * (svc_max_pollfd + 1));
+-       if (new_svc_pollfd == NULL) /* Out of memory */
+--        return;
+-+        goto unlock;
+-       svc_pollfd = new_svc_pollfd;
+-       ++svc_max_pollfd;
+- 
+-@@ -135,6 +135,7 @@ xprt_register (xprt)
+-       svc_pollfd[svc_max_pollfd - 1].events = (POLLIN | POLLPRI |
+-                                                POLLRDNORM | POLLRDBAND);
+-     }
+-+unlock:
+-   rwlock_unlock (&svc_fd_lock);
+- }
+- 
+--- 
+-2.5.3
+-
+diff --git a/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0007-include-stdint.h-for-uintptr_t.patch
+similarity index 100%
+rename from package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
+rename to package/libtirpc/0007-include-stdint.h-for-uintptr_t.patch
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+index cd65164cb..35ac6a227 100644
+--- a/package/libtirpc/libtirpc.hash
++++ b/package/libtirpc/libtirpc.hash
+@@ -1,4 +1,4 @@
+ # From sourceforge's info on download page:
+-sha1   8da1636f98b5909c0d587e7534bc1e91f5c1a970  libtirpc-1.0.1.tar.bz2
++sha1 2a8dc0e6eecc45be6597c8287b1d8e15cbee46e3  libtirpc-1.0.2.tar.bz2
+ # Locally computed
+-sha256 5156974f31be7ccbc8ab1de37c4739af6d9d42c87b1d5caf4835dda75fcbb89e  libtirpc-1.0.1.tar.bz2
++sha256 723c5ce92706cbb601a8db09110df1b4b69391643158f20ff587e20e7c5f90f5  libtirpc-1.0.2.tar.bz2
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 7747a1aa8..d9bf22b83 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     Sanitization behaves the same whatever the kind of the processed tree,
-     but the resulting RPATH differs. The rpath sanitization is done using
--    "patchelf --make-rpath-relazive".
-+    "patchelf --make-rpath-relative".
- 
- Arguments:
- 
-@@ -81,7 +81,7 @@ main() {
-                 find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
- 
-             for excludepath in ${HOST_EXCLUDEPATHS}; do
--                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" );
-+                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" )
-             done
- 
-             # do not process the patchelf binary but a copy to work-around "file in use"
+-LIBTIRPC_VERSION = 1.0.1
++LIBTIRPC_VERSION = 1.0.2
+ LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+ LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+ LIBTIRPC_LICENSE = BSD-3-Clause
 -- 
-1.9.1
+2.11.0
