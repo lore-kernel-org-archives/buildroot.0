@@ -1,13 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 23:13:26 +0200
-Subject: [Buildroot] [PATCH 06/20] system: move setting getty to the
- corresponding init systems
-In-Reply-To: <20170722215730.782162ca@windsurf>
+Date: Sat, 22 Jul 2017 23:18:53 +0200
+Subject: [Buildroot] [PATCH 08/20] system: with no init system,
+ only allow custom skeleton
+In-Reply-To: <20170722135322.GB9929@scaer>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <f00f1e7daced126edc573f652b97e9228b347615.1500398733.git.yann.morin.1998@free.fr>
- <f248e93e-1454-009c-29c5-000c04ef2221@mind.be>
- <20170722215730.782162ca@windsurf>
-Message-ID: <e7cb4e85-830e-1a4f-57fc-9e27efca28df@mind.be>
+ <005008f3ac1cdbd8de65006d578d43c555355d0f.1500398733.git.yann.morin.1998@free.fr>
+ <3bd7e441-4317-20f9-9e7f-9a06168ced61@mind.be> <20170722135322.GB9929@scaer>
+Message-ID: <9d4545cd-27a2-39dc-65e5-9f669f28db52@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,54 +15,44 @@ To: buildroot@busybox.net
 
 
 
-On 22-07-17 21:57, Thomas Petazzoni wrote:
-> Hello,
+On 22-07-17 15:53, Yann E. MORIN wrote:
+> Ranout, All,
 > 
-> On Sat, 22 Jul 2017 15:11:57 +0200, Arnout Vandecappelle wrote:
-[snip]
->>  The only difference between these two is that for sysvinit we have to make sure
->> it's only 4 characters. But it actually doesn't hurt to do the same for busybox
->> as well. So perhaps we can factor the two in a single SYSTEM_SET_GETTY ?
+> On 2017-07-22 15:28 +0200, Arnout Vandecappelle spake thusly:
+>> On 18-07-17 19:25, Yann E. MORIN wrote:
+>>> When there is no init system (i.e. a custom one), our bundled default
+>>> skeleton is most probably un-fit for that (non-)init system.
+>>>
+>>> This will be the case when we introduce per init system skeletons. The
+>>> systemd skeleton will be unfit except for a systemd init; the sysv
+>>> skeleton will be unfit except for a sysv-like init system.
+>>>
+>>> In case they are using no init system (really, a custom one), the user
+>>> should be responsible for providing their own, custom skeleton as well.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+>>  NACK on this one. Our skeleton (as in, the contents of system/skeleton) is
+>> already init-agnostic. If you use another init system (shell script, or no init
+>> at all because you just use it as a chroot, or whatever), you will *still* need
+>> that skelecton. Indeed, the skeleton contains things like the /sys and /dev
+>> directories, a passwd file, ....
+>>
+>>  If there are things in that skeleton that you don't need for a custom init
+>> system, then they probably shouldn't even be in the skeleton.
 > 
-> I am not sure if that works, because the semantic of the first field is
-> not the same between sysvinit and Busybox init.
+> This patch is reverted later in the series, once all the types of
+> skeleton are in place. I could not see how to do it sanely and cleanly
+> otherwise.
 
- Right! I thought busybox init just ignored it, I forgot about the controlling
-terminal.
+ OK, in that case
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ I trust that you looked for a way to avoid this temporary workaround.
 
  Regards,
  Arnout
-
-> 
-> For sysvinit (http://www.manpages.info/linux/inittab.5.html)
-> 
->        id     is a unique sequence of 1-4 characters which identifies an entry
-> 	      in inittab (for versions of sysvinit compiled with  libraries  <
-> 	      5.2.18 or a.out libraries the limit is 2 characters).
-> 
-> 	      Note:  For  gettys or other login processes, the id field should
-> 	      be the tty suffix of the corresponding tty,  e.g.	 1  for	 tty1.
-> 	      Otherwise, the login accounting might not work correctly.
-> 
-> For Busybox init:
-> 
-> # <id>: WARNING: This field has a non-traditional meaning for BusyBox init!
-> #
-> #       The id field is used by BusyBox init to specify the controlling tty for
-> #       the specified process to run on.  The contents of this field are
-> #       appended to "/dev/" and used as-is.  There is no need for this field to
-> #       be unique, although if it isn't you may have strange results.  If this
-> #       field is left blank, then the init's stdin/out will be used.
-> 
-> Hence, with Busybox init, if you pass a truncated "id", the command
-> might fail to run as it will try to open a /dev/<something> that
-> doesn't exist. So, if you truncate ttyAMA0, it will be just ttyA,
-> Busybox will try to open /dev/ttyA and it will fail.
-> 
-> Best regards,
-> 
-> Thomas
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
