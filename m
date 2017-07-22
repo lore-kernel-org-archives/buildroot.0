@@ -1,72 +1,140 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Sat, 22 Jul 2017 13:15:40 +0200
-Subject: [Buildroot] [PATCH v10 1/3] core: introduce "sdk" target to make a
-	relocatable SDK
-In-Reply-To: <1500722142-20420-1-git-send-email-wg@grandegger.com>
-References: <1500722142-20420-1-git-send-email-wg@grandegger.com>
-Message-ID: <1500722142-20420-2-git-send-email-wg@grandegger.com>
+Date: Sat, 22 Jul 2017 13:15:39 +0200
+Subject: [Buildroot] [PATCH v10 0/3] Make the SDK relocatable
+Message-ID: <1500722142-20420-1-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We use a separate make target to build a relocatable SDK. We first
-sanitize the RPATH in host tree. Next we also sanitize the
-staging tree. Therefore "sdk" must depend on world.
+Hello,
 
-Sanitizing staging is not really needed, in the sense that any rpath
-in there is simply not going to be used. We want to sanitize staging
-for the following reasons:
+this is v10 of my patch series to make the buildroot SDK (HOST_DIR)
+relocatable. It sanitizes the RPATH of all ELF files in the "target",
+"staging" and "host" tree using "patchelf --make-rpath-relative". We
+now use patchelf v0.9 to still support old Debian and RHEL systems.
 
-- To avoid leaking references to the original output directory. This
-  way, we can validate that the SDK is relocatable by running a simple
-  "grep -r ${BASE_DIR} ${HOST_DIR}". Obviously RPATH sanitization is
-  not sufficient (e.g. also the references to source files have to be
-  stripped), but it's a step in the right direction. This reason is
-  obviously only relevant for the SDK.
+v5 did RPATH sanitization per package after package installation into
+the host, staging or target tree using GLOBAL_INSTRUMENTATION_HOOKS.
+This approach got more and more complex and inefficient. Therefore
+it was abandoned in favor of global sanititation at the end of the
+host, staging and target build (see changes since v5).
 
-- To make sure that when an executable is copied to target that it
-  actually executes correctly. Since within Buildroot we never copy
-  stuff from staging to target, this is clearly only relevant for
-  the SDK.
+Furthermore this patch creates the script "relocate-sdk.sh" in the top
+directory of the "host" tree allowing to relocate the SDK after it has
+been moved to a new location. It replaces the old path with the new
+one in all text files identified by "file --mime-type". The location
+is stored in "share/buildroot/sdk-location". This patch is already
+upstream.
 
-Finally we install the script "relocate-sdk.sh" into the top directory
-of the SDK (HOST_DIR) and the SDK location path is stored in the file
-"HOST_DIR/share/buildroot/sdk-location"-
+Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
+libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Makefile | 9 +++++++++
- 1 file changed, 9 insertions(+)
+v8 now creates a relocatable SDK with "make sdk". The normal "make"
+only sanitizes the RPATH in the target tree.
 
-diff --git a/Makefile b/Makefile
-index d4faa02..f9ff963 100644
---- a/Makefile
-+++ b/Makefile
-@@ -552,6 +552,14 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- .PHONY: world
- world: target-post-image
- 
-+.PHONY: sdk
-+sdk: world
-+	@$(call MESSAGE,"Rendering the SDK relocatable")
-+	$(TOPDIR)/support/scripts/fix-rpath host
-+	$(TOPDIR)/support/scripts/fix-rpath staging
-+	install -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-+	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-+
- # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
- $(HOST_DIR)/usr: $(HOST_DIR)
- 	@ln -snf . $@
-@@ -1001,6 +1009,7 @@ help:
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
- 	@echo '  toolchain              - build toolchain'
-+	@echo '  sdk                    - build relocatable SDK'
- 	@echo
- 	@echo 'Configuration:'
- 	@echo '  menuconfig             - interactive curses-based configurator'
+In the meantime, various patches have been accepted. v9 will provide
+the rest and fixes some minor issues.
+
+Wolfgang.
+
+Changes since v9:
+
+- install "relocate-sdk.sh" with "-m" and explicit target file name.
+- execute the patchelf utility to check if it's working
+- minor comment fixes
+
+Changes since v8:
+
+- patch "external-toolchain: check if a buildroot SDK has
+  already been relocated"" dropped. The SDK is not an external
+  toolchain and should therefore not used for that purpose.
+- patches for the "sdk" target squashed together
+- "sdk" now depends on "world"
+- "fix-rpath" now checks if executable patchelf utility exists.
+- some ninor fixes (typos, coding style, etc.).
+
+Changes since v7:
+- patchelf patches are now created with git (base on v0.9)
+- the target tree is now sanitized before the overlay files are copied
+- "make sdk" sanitizes the staging and host tree and adds relocate.sh
+- relocate.sh does not use basism an longer
+- fix-rpath now uses absolute path without rootdir for staging and
+  target dir
+- various other minor fixes (doc, indention, etc.)
+
+Changes since v6:
+- patchelf patches: update patch header with upstream commit, etc.
+- ${HOST_DIR}/usr is gone which required various fixes
+- Proper qt.conf.in added
+
+Changes since v5:
+- switch back to v4
+- patchelf patches are now based on v0.9
+- patchelf now calculates minimal relative path to the ELF file
+  (and not to the rootdir as before).
+- patchelf: neededLibFound is now passed to libFoundInRPath
+- Makefile: the "host-finalize" target has been added for SDK relocation
+- fix-rpath now uses variables to define the list of dirs to be pruned
+- fix-rpath: the staging tree is sanitized like the target tree
+- various minor fixes (typos)
+
+Changes since v4:
+
+- RPATH sanitation is now done per package and installation step
+  in "pkg-generic.mk".
+- After the installation step, the list of the installed files is
+  stored in "<package-build-dir>/.br_[host|staging|target]_filelist".
+- The GLOBAL_INSTRUMENTATION_HOOKS "step_sanitize_rpath" then calls
+  "fix-rpath" to do the sanitation.
+- DEPENDENCIES_HOST_PREREQ += host-patchelf is set early in the
+  Makefile as we need it for RPATH sanitation. As soon it's available
+  sanitation can start (currently missing some packages).
+- The patchelf "file busy" issue is now worked-around differently.
+
+Changes since v3:
+
+- The patchelf patch implementing " --make-rpath-relative" now supports
+  the option "--relative-to-file" instructing to use "$ORIGIN" in
+  RPATHs. Otherwise an absolute path relative to the root directory will
+  be used.
+- The staging tree is now sanitized as well using the options
+  "--relative-to-file" and "--no-standard-libs".
+- For the "target" tree, relative RPATHs do not use "$ORIGIN" any
+  longer. An absolute path relative to the root directory is used
+  instead.
+
+Changes since v2:
+
+- provide "qt.conf" to make "qmake" relocatable
+- sed now uses the separator "\" to substitute the directory path.
+  It's one of the few characters not allowed in file names. To
+  avoid interpreting it as escape character, the "read -r" is used.
+- The paranoia substituion check is done before doing the real
+  substituion.
+
+Changes since v1:
+
+- The name SDK has been chosen for the relocatabed "HOST_DIR" (instead
+  of toolchanin).
+- The patchelf version bump and patching are now done by 2 patches
+- No more helper functions are used in the Makefile to call "fix-rpath"
+  but added directly.
+- The staging tree is not touched any more... until we have a good
+  reason to do so. 
+- The sanitation is now performed by an optimized "fix-rpath" script.
+- The relocate-sdk script is now copied for support/misc to the
+  top directory of the host tree.
+
+Wolfgang Grandegger (3):
+  core: introduce "sdk" target to make a relocatable SDK
+  support/scripts/fix-rpath: check if the patchelf utility is executable
+  support/scripts/fix-rpath: typo fix and unneeded ";" removed
+
+ Makefile                  |  9 +++++++++
+ support/scripts/fix-rpath | 12 ++++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
 -- 
 1.9.1
