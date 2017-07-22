@@ -1,79 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 21:34:43 +0200
-Subject: [Buildroot] [PATCH 1/1] brcm-patchram-plus: new package
-In-Reply-To: <20170722152511.4ffc8dd3@windsurf>
-References: <20170721144520.14683-1-alexey.roslyakov@gmail.com>
- <20170722152511.4ffc8dd3@windsurf>
-Message-ID: <116942c7-9781-f00a-bcb9-37633d2a03ac@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Jul 2017 21:37:56 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: disable build of nvidia
+	hardware acceleration support
+Message-ID: <20170722193351.D17ED81F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=3b6fa452f6ee20f54e47fdc3106620ff258f13b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+ffmpeg always enables support for nvenc/cuda even if their support
+libraries are not present:
 
-On 22-07-17 15:25, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 21 Jul 2017 21:45:20 +0700, Alexey Roslyakov wrote:
-[snip]
->> +config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
->> +	bool "brcm-patchram-plus"
->> +	help
->> +		Utility's to configure and test Broadcom Bluetooth chips on Linux.
-                Utilities
+External libraries providing hardware acceleration:
+cuda cuvid nvenc
+[...]
+Enabled hwaccels:
+h264_cuvid mjpeg_cuvid mpeg2_cuvid vc1_cuvid vp9_cuvid
+hevc_cuvid mpeg1_cuvid mpeg4_cuvid vp8_cuvid
 
- As I understand it, recent kernels should be able to load the firmware directly
-from the driver, and recent bluez should be able to issue the other HCI
-commands. Is that correct or not?
+This leads to a crash in freeswitch git master when transcoding video
+streams on a system without nvidia hardware:
 
->> +
->> +		https://code.google.com/archive/p/broadcom-bluetooth/
-> 
-> Indentation for the help text is one tab + two spaces. I would
-> recommend you to run utils/check-package on your new package to catch
-> such coding style issues.
-> 
->> +BRCM_PATCHRAM_PLUS_VERSION = 0.1.1
->> +BRCM_PATCHRAM_PLUS_SOURCE = brcm-patchram-plus_$(BRCM_PATCHRAM_PLUS_VERSION).tar.gz
->> +BRCM_PATCHRAM_PLUS_SITE = https://launchpad.net/ubuntu/+archive/primary/+files
-> 
-> Perhaps using the git repository at
-> https://chromium.googlesource.com/chromiumos/third_party/broadcom would
-> be a more "official" upstream ?
+2017-07-22 15:06:27.306760 [INFO] avcodec.c:1077 initializing encoder 352x288
+2017-07-22 15:06:27.306760 [NOTICE] avcodec.c:828 NVENC HW CODEC ENABLED
 
- Indeed, that's what's used by openembedded. It also has an additional feature
---enable_bt_rfkill.
+This patch disables the support of nvidia hardware acceleration support
+for now until the needed packages are added to buildroot. For details
+about this please refer to https://developer.nvidia.com/ffmpeg
 
- There is also https://github.com/MarkMendelsohn/brcm_patchram - certainly less
-official, but possibly better maintained. Well, it doesn't have --enable_bt_rfkill.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
- Regards,
- Arnout
-
->> +define BRCM_PATCHRAM_PLUS_BUILD_CMDS
->> +	$(TARGET_CC) -o $(@D)/brcm_patchram_plus $(@D)/brcm_patchram_plus.c
->> +endef
->> +
->> +define BRCM_PATCHRAM_PLUS_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -D -m 0755 $(@D)/brcm_patchram_plus $(TARGET_DIR)/usr/bin/brcm_patchram_plus
->> +endef
-> 
-> What about using the Makefile that comes inside the package ? At least
-> in the Git repository I pointed to, there is a Makefile that seems
-> suitable.
-> 
-> Thanks!
-> 
-> Thoma
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index d41670d..6dfc62e 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -42,6 +42,9 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-mipsdspr2 \
+ 	--disable-msa \
+ 	--enable-hwaccels \
++	--disable-cuda \
++	--disable-cuvid \
++	--disable-nvenc \
+ 	--disable-avisynth \
+ 	--disable-frei0r \
+ 	--disable-libopencore-amrnb \
