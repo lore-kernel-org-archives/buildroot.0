@@ -1,73 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 23:26:44 +0200
-Subject: [Buildroot] [git commit] package/kvm-unit-tests: introduce
-	_ARCH_SUPPORTS
-Message-ID: <20170722212426.29D84818CC@busybox.osuosl.org>
+Date: Sat, 22 Jul 2017 23:28:26 +0200
+Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
+ _ARCH_SUPPORTS
+In-Reply-To: <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
+References: <cover.1499592591.git.yann.morin.1998@free.fr>
+ <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
+Message-ID: <20170722232826.68061aec@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e734c633875ae22e2baebe0d8e76d6e10686d804
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Move all architecture options to their own symbol, so that it is easier
-to add more variants in the future.
+On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
 
-The dependency on cross-gcc >= 4.5 is only valid for i386, as we use the
-host gcc for x86_64. Adapt the dependency accordingly.
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 if BR2_i386
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_5 if BR2_x86_64
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Cyril Bur <cyrilbur@gmail.com>
-[Thomas:
- - add comment about host gcc >= 4.5 dependency on x86-64
- - remove bogus "depends on ... if ..." construct.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kvm-unit-tests/Config.in | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+Did you actually test this? "make menuconfig" complains:
 
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index 7eab0c2..5c1c04b 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -1,15 +1,19 @@
-+config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
-+	bool
-+	# On ARM, it uses virtualization extensions
-+	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
-+		BR2_cortex_a15 || BR2_cortex_a17
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_powerpc64 || BR2_powerpc64le
-+
- config BR2_PACKAGE_KVM_UNIT_TESTS
- 	bool "kvm-unit-tests"
-+	depends on BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
- 	# on i386 and x86-64, __builtin_reachable is used, so we need
- 	# gcc 4.5 at least. on i386, we use the target gcc, while on
- 	# x86-64 we use the host gcc (see .mk file for details)
--	# On ARM, it uses virtualization extensions
--	depends on BR2_cortex_a7 || BR2_cortex_a12 || \
--		BR2_cortex_a15 || BR2_cortex_a17 || \
--		(BR2_i386 && BR2_TOOLCHAIN_GCC_AT_LEAST_4_5) || \
--		BR2_powerpc64 || \
--		BR2_powerpc64le || \
--		(BR2_x86_64 && BR2_HOST_GCC_AT_LEAST_4_5)
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
-+	depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
- 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
- 	help
- 	  kvm-unit-tests is a project as old as KVM. As its name
-@@ -28,3 +32,11 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
- 	  features are submitted with accompanying unit tests.
- 
- 	  http://www.linux-kvm.org/page/KVM-unit-tests
-+
-+comment "kvm-unit-tests needs a toolchain w/ gcc >= 4.5"
-+	depends on BR2_i386
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+
-+comment "kvm-unit-tests needs a host gcc >= 4.5"
-+	depends on BR2_x86_64
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_5
+thomas at windsurf:~/projets/buildroot (master)$ make menuconfig
+package/kvm-unit-tests/Config.in:16: syntax error
+package/kvm-unit-tests/Config.in:15: invalid option
+package/kvm-unit-tests/Config.in:17: syntax error
+package/kvm-unit-tests/Config.in:16: invalid option
+Makefile:876: recipe for target 'menuconfig' failed
+
+So I've replaced them with the more usual:
+
++       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
++       depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
+
+I've also re-add the Config.in comment about the host gcc >= 4.5
+dependency.
+
+Applied with those changes. Thanks!	
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
