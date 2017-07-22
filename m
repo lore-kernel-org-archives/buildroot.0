@@ -1,72 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 14:35:13 +0200
-Subject: [Buildroot] [git commit] core: introduce "sdk" target to make a
-	relocatable SDK
-Message-ID: <20170722123439.6F467807A7@busybox.osuosl.org>
+Date: Sat, 22 Jul 2017 14:35:55 +0200
+Subject: [Buildroot] [git commit] support/scripts/fix-rpath: check if the
+	patchelf utility is executable
+Message-ID: <20170722123439.D0A1C8028A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=994301a26f977953549a7330aa6dca239dc2f4d3
+commit: https://git.buildroot.net/buildroot/commit/?id=17dd0d49da96e8043ed244a480de0a48b0b116fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We use a separate make target to build a relocatable SDK. We first
-sanitize the RPATH in host tree. Next we also sanitize the
-staging tree. Therefore "sdk" must depend on world.
-
-Sanitizing staging is not really needed, in the sense that any rpath
-in there is simply not going to be used. We want to sanitize staging
-for the following reasons:
-
-- To avoid leaking references to the original output directory. This
-  way, we can validate that the SDK is relocatable by running a simple
-  "grep -r ${BASE_DIR} ${HOST_DIR}". Obviously RPATH sanitization is
-  not sufficient (e.g. also the references to source files have to be
-  stripped), but it's a step in the right direction. This reason is
-  obviously only relevant for the SDK.
-
-- To make sure that when an executable is copied to target that it
-  actually executes correctly. Since within Buildroot we never copy
-  stuff from staging to target, this is clearly only relevant for
-  the SDK.
-
-Finally we install the script "relocate-sdk.sh" into the top directory
-of the SDK (HOST_DIR) and the SDK location path is stored in the file
-"HOST_DIR/share/buildroot/sdk-location"-
 
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ support/scripts/fix-rpath | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index d4faa02..fc86a70 100644
---- a/Makefile
-+++ b/Makefile
-@@ -552,6 +552,14 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- .PHONY: world
- world: target-post-image
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index f7c70b7..f92e601 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -45,6 +45,9 @@ Environment:
  
-+.PHONY: sdk
-+sdk: world
-+	@$(call MESSAGE,"Rendering the SDK relocatable")
-+	$(TOPDIR)/support/scripts/fix-rpath host
-+	$(TOPDIR)/support/scripts/fix-rpath staging
-+	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-+	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+     TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
+                  (default HOST_DIR/opt/ext-toolchain)
 +
- # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
- $(HOST_DIR)/usr: $(HOST_DIR)
- 	@ln -snf . $@
-@@ -1001,6 +1009,7 @@ help:
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
- 	@echo '  toolchain              - build toolchain'
-+	@echo '  sdk                    - build relocatable SDK'
- 	@echo
- 	@echo 'Configuration:'
- 	@echo '  menuconfig             - interactive curses-based configurator'
++Returns:         0 if success or 1 in case of error
++
+ EOF
+ }
+ 
+@@ -60,6 +63,11 @@ main() {
+     local find_args=( )
+     local sanitize_extra_args=( )
+ 
++    if ! "${PATCHELF}" --version > /dev/null 2>&1; then
++	echo "Error: can't execute patchelf utility '${PATCHELF}'"
++	exit 1
++    fi
++
+     case "${tree}" in
+         host)
+             rootdir="${HOST_DIR}"
