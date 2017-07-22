@@ -1,60 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 15:16:42 +0200
-Subject: [Buildroot] [PATCH 07/20] system: move remounting / to the
- corresponding init systems
-In-Reply-To: <db57282a925ddcf70a8fca8631ae62347b04c175.1500398733.git.yann.morin.1998@free.fr>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <db57282a925ddcf70a8fca8631ae62347b04c175.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <244717f2-3858-c927-c6d9-999489607eb3@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Jul 2017 15:17:58 +0200
+Subject: [Buildroot] [git commit] configs/nitrogen*: bump kernel and u-boot
+	revisions
+Message-ID: <20170722131401.EAC177FBE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0401a61eb6e94453fcc8156a8b78ed233cadcf07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Here are the main U-Boot modifications:
+- Rebase on top of mainline 2017.03 release
+- Fix sparse image flashing issues
 
-On 18-07-17 19:25, Yann E. MORIN wrote:
-> Currently, remounting / read-write (or not) is done by the skeleton
-> package when the init system is eitehr busybox or sysvinit, by
-                                  either
-> registering a target-finalize hook; it is not done at all for systemd.
-> 
-> Move registering this target-finalize hook to both of busybox and
-> sysvinit. Leave systemd alone, we'll take care of it later.
-> 
-> Rename the macro to a more meaningful name, and move it to system.mk
-> with the other such macros.
-> 
-> Yet a little bit less init-system knowledge in the skeleton.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Here are the main Linux modifications:
+- Add mma8451 driver support
+- Fix possible TiWi spurious interrupts issue
+- Fix Ethernet interrupt parent issue
+- Add USB Type C TUSB320 controller support
+- Add SOM2 i.MX6DL and i.MX6QP variants
 
- Small details to fix...
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/nitrogen6sx_defconfig | 6 +++---
+ configs/nitrogen6x_defconfig  | 8 ++++----
+ configs/nitrogen7_defconfig   | 6 +++---
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-[snip]
-> +# Provided by the skeleton package
-
- Not really, it's provided by system.mk - which is kind of obvious from the
-name. So I'd just remove this comment.
-
-> +BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
-
- Excellent choice in variable name!
-
-[snip]
-> +# Provided by the skeleton package
-
- Same here of course.
-
-> +SYSVINIT_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
-> +
-[snip]
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 6bb9953..fc568fb 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -25,14 +25,14 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/9cbdb79a.tar.gz"
++# Last version of branch boundary-v2017.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/4280a700.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/3c1c6149.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 48bb114..43ff708 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -25,15 +25,15 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/9cbdb79a.tar.gz"
++# Last version of branch boundary-v2017.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/4280a700.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/3c1c6149.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_som2 imx6q-nitrogen6_max imx6qp-nitrogen6_max imx6q-sabrelite"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6dl-nitrogen6_som2 imx6q-nitrogen6_som2 imx6qp-nitrogen6_som2 imx6q-nitrogen6_max imx6qp-nitrogen6_max imx6q-sabrelite"
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index b027fb7..da5938b 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -24,14 +24,14 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/9cbdb79a.tar.gz"
++# Last version of branch boundary-v2017.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/4280a700.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/3c1c6149.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
