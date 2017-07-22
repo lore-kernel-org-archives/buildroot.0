@@ -1,45 +1,177 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 23:28:26 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
-Message-ID: <20170722232826.68061aec@windsurf>
+Date: Sat, 22 Jul 2017 23:29:24 +0200
+Subject: [Buildroot] [git commit] arch/arm: add big.LITTLE cpu variants
+Message-ID: <20170722212525.5AEBA81DE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=78c2a9f763de82746c9eb688d8e16400eb2c1730
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
+The big.LITTLE configurations can be optimised for by gcc, and a few
+users wonder what they should choose when they have such CPUs.
 
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 if BR2_i386
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_5 if BR2_x86_64
+Add new entries for those big.LITTLE configurations.
 
-Did you actually test this? "make menuconfig" complains:
+Note: the various combos were added in various gcc versions, but only
+really worked in later versions:
 
-thomas at windsurf:~/projets/buildroot (master)$ make menuconfig
-package/kvm-unit-tests/Config.in:16: syntax error
-package/kvm-unit-tests/Config.in:15: invalid option
-package/kvm-unit-tests/Config.in:17: syntax error
-package/kvm-unit-tests/Config.in:16: invalid option
-Makefile:876: recipe for target 'menuconfig' failed
+    Variant   | Introduced in | First built in
+    ----------+---------------+----------------
+    a15-a7    | 4.9           | 4.9
+    a17-a7    | 5             | 5
+    a57-a53   | 4.9           | 6
+    a72-a53   | 5             | 6
 
-So I've replaced them with the more usual:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm                                 | 38 ++++++++++++++++++++++
+ package/gcc/Config.in.host                         |  5 ++-
+ .../Config.in                                      |  2 ++
+ .../toolchain-external-codesourcery-arm/Config.in  |  4 +++
+ 4 files changed, 48 insertions(+), 1 deletion(-)
 
-+       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
-+       depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
-
-I've also re-add the Config.in comment about the host gcc >= 4.5
-dependency.
-
-Applied with those changes. Thanks!	
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 3cafe21..09916df 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -182,6 +182,15 @@ config BR2_cortex_a15
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	depends on !BR2_ARCH_IS_64
++config BR2_cortex_a15_a7
++	bool "cortex-A15/A7 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARM_CPU_HAS_VFPV4
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a17
+ 	bool "cortex-A17"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -191,6 +200,15 @@ config BR2_cortex_a17
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	depends on !BR2_ARCH_IS_64
++config BR2_cortex_a17_a7
++	bool "cortex-A17/A7 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARM_CPU_HAS_VFPV4
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a53
+ 	bool "cortex-A53"
+ 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+@@ -207,6 +225,14 @@ config BR2_cortex_a57
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_cortex_a57_a53
++	bool "cortex-A57/A53 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a72
+ 	bool "cortex-A72"
+ 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+@@ -215,6 +241,14 @@ config BR2_cortex_a72
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_cortex_a72_a53
++	bool "cortex-A72/A53 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+@@ -526,7 +560,9 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a9"	if BR2_cortex_a9
+ 	default "cortex-a12"	if BR2_cortex_a12
+ 	default "cortex-a15"	if BR2_cortex_a15
++	default "cortex-a15.cortex-a7"	if BR2_cortex_a15_a7
+ 	default "cortex-a17"	if BR2_cortex_a17
++	default "cortex-a17.cortex-a7"	if BR2_cortex_a17_a7
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "cortex-m4"	if BR2_cortex_m4
+ 	default "fa526"		if BR2_fa526
+@@ -536,7 +572,9 @@ config BR2_GCC_TARGET_CPU
+ 	default "iwmmxt"	if BR2_iwmmxt
+ 	default "cortex-a53"	if BR2_cortex_a53
+ 	default "cortex-a57"	if BR2_cortex_a57
++	default "cortex-a57.cortex-a53"	if BR2_cortex_a57_a53
+ 	default "cortex-a72"	if BR2_cortex_a72
++	default "cortex-a72.cortex-a53"	if BR2_cortex_a72_a53
+ 
+ config BR2_GCC_TARGET_ABI
+ 	default "aapcs-linux"	if BR2_arm || BR2_armeb
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 8eaf307..768dc17 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -25,7 +25,8 @@ config BR2_GCC_VERSION_4_9_X
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc && !BR2_bfin && !BR2_or1k
+ 	# Broken or unsupported ARM cores
+-	depends on !BR2_cortex_a17 && !BR2_cortex_a72
++	depends on !BR2_cortex_a17 && !BR2_cortex_a17_a7
++	depends on !BR2_cortex_a72 && !BR2_cortex_a72_a53
+ 	# Unsupported MIPS cores
+ 	depends on !BR2_mips_interaptiv
+ 	# Unsupported for MIPS R5
+@@ -45,6 +46,8 @@ config BR2_GCC_VERSION_5_X
+ 	bool "gcc 5.x"
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc && !BR2_bfin && !BR2_or1k
++	# Broken or unsupported ARM cores
++	depends on !BR2_cortex_a57_a53 && !BR2_cortex_a72_a53
+ 	# musl ppc64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 	# Unsupported MIPS cores
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+index 2fbb218..66a032e 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	bool "CodeSourcery AArch64 2014.11"
+ 	depends on BR2_aarch64
++	# a57/a53 and a72/a53 appeared in gcc-6 or were broken before
++	depends on !BR2_cortex_a57_a53 && !BR2_cortex_a72_a53
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+index 6331873..e1a7891 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ 	bool "Sourcery CodeBench ARM 2014.05"
+ 	depends on BR2_arm
++	# a15/a7 appeared in gcc-4.9, a17/a7 in gcc-5, a57/a53 and a72/a53
++	# in gcc-6, or they each were broken earlier than that.
++	depends on !BR2_cortex_a15_a7 && !BR2_cortex_a17_a7
++	depends on !BR2_cortex_a57_53 && !BR2_cortex_a72_53
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABI
+ 	# Unsupported ARM cores
