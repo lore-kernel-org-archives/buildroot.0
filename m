@@ -1,43 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 14:38:43 +0200
-Subject: [Buildroot] [git commit] support/scripts/fix-rpath: typo fix and
-	unneeded "; " removed
-Message-ID: <20170722123439.EEB7481F0B@busybox.osuosl.org>
+Date: Sat, 22 Jul 2017 14:41:46 +0200
+Subject: [Buildroot] [PATCH v10 0/3] Make the SDK relocatable
+In-Reply-To: <1500722142-20420-1-git-send-email-wg@grandegger.com>
+References: <1500722142-20420-1-git-send-email-wg@grandegger.com>
+Message-ID: <20170722144146.28f826b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc81f528bcc136b65d73e60a05993526704c0b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/fix-rpath | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat, 22 Jul 2017 13:15:39 +0200, Wolfgang Grandegger wrote:
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index f92e601..15705a3 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -27,7 +27,7 @@ Description:
- 
-     Sanitization behaves the same whatever the kind of the processed tree,
-     but the resulting RPATH differs. The rpath sanitization is done using
--    "patchelf --make-rpath-relazive".
-+    "patchelf --make-rpath-relative".
- 
- Arguments:
- 
-@@ -81,7 +81,7 @@ main() {
-                 find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
- 
-             for excludepath in ${HOST_EXCLUDEPATHS}; do
--                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" );
-+                find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" )
-             done
- 
-             # do not process the patchelf binary but a copy to work-around "file in use"
+> Wolfgang Grandegger (3):
+>   core: introduce "sdk" target to make a relocatable SDK
+>   support/scripts/fix-rpath: check if the patchelf utility is executable
+>   support/scripts/fix-rpath: typo fix and unneeded ";" removed
+
+Thanks a lot, I've applied those remaining 3 patches!
+
+I would like to take this opportunity to thank you for your patience
+and your dedication in pushing this SDK topic. It's been long overdue
+in Buildroot, and the fact that you have taken all comments into
+account and sent quickly new iterations was really instrumental to
+getting the all thing finally merged. So: many thanks!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
