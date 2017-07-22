@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 23:29:53 +0200
-Subject: [Buildroot] [PATCH 4/4 v3] package/kvm-unit-test: available for
- big.LITTLE arm cores too
-In-Reply-To: <e9a53f9e66ea0d124e8c4ab028f01b41d694910d.1499592591.git.yann.morin.1998@free.fr>
-References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <e9a53f9e66ea0d124e8c4ab028f01b41d694910d.1499592591.git.yann.morin.1998@free.fr>
-Message-ID: <20170722232953.40f3d5ab@windsurf>
+Date: Sat, 22 Jul 2017 23:30:33 +0200
+Subject: [Buildroot] [git commit] package/gnuradio: link with libatomic when
+	needed
+Message-ID: <20170722212628.1FE15803E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=83ce8070b4f11c833026771f72916b423c444eb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Jul 2017 11:30:01 +0200, Yann E. MORIN wrote:
-> Since it supports each variants individually, it should also supports
-> the big.LITTLE configurations.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Cyril Bur <cyrilbur@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/kvm-unit-tests/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Fixes
+http://autobuild.buildroot.net/results/528/52825918bf65b23241cd68d99513350703469294/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnuradio/gnuradio.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 6407dd4..a55c116 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -30,6 +30,10 @@ GNURADIO_CONF_OPTS = \
+ # compile time.
+ GNURADIO_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++GNURADIO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ # Yes, this is silly, because -march is already known by the compiler
+ # with the internal toolchain, and passed by the external wrapper for
+ # external toolchains. Nonetheless, gnuradio does some matching on the
