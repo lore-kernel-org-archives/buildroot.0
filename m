@@ -1,95 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 14:34:02 +0200
-Subject: [Buildroot] [PATCH 03/20] package/skeleton: add macro to rsync
- skeleton directory
-In-Reply-To: <05879dad2f97f99ddce2b01753aae0e3111f4a43.1500398733.git.yann.morin.1998@free.fr>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <05879dad2f97f99ddce2b01753aae0e3111f4a43.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <8452eb57-948f-9a36-ab28-a41b3a01d9cf@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Jul 2017 14:35:13 +0200
+Subject: [Buildroot] [git commit] core: introduce "sdk" target to make a
+	relocatable SDK
+Message-ID: <20170722123439.6F467807A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=994301a26f977953549a7330aa6dca239dc2f4d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We use a separate make target to build a relocatable SDK. We first
+sanitize the RPATH in host tree. Next we also sanitize the
+staging tree. Therefore "sdk" must depend on world.
 
-On 18-07-17 19:25, Yann E. MORIN wrote:
-> The rsync command is currently called from a single location. In
-> follow-up patches, it will be called from various places then.
-> 
-> It will be easier to update and fix this command if it is defined in a
-> single location, rather than if duplicated in many places.
-> 
-> Define a macro that skeleton packages can call to install their skeleton
-> directories. Since at least one occurence of it will want to install in
-> staging, the macro must accept a destination path, rather than hard-code
-> target as the destination.
-> 
-> Since it is to be used by other skeleton packages, define it early,
-> outside of any conditional block.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/skeleton/skeleton.mk | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 9b7407a236..017479a990 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -14,6 +14,18 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
->  # The skeleton also handles the merged /usr case in the sysroot
->  SKELETON_INSTALL_STAGING = YES
->  
-> +############
-> +# Macros available for use by any skeleton package:
-> +# - SKELETON_RSYNC
-> +
-> +# This function rsyncs the skeleton directory in $(1) to the destination
-> +# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
-> +define SKELETON_RSYNC
-> +	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> +		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-> +		$(1)/ $(2)/
-> +endef
+Sanitizing staging is not really needed, in the sense that any rpath
+in there is simply not going to be used. We want to sanitize staging
+for the following reasons:
 
- Another thing I hate is make functions - they're difficult to understand. So
-instead, I'd just define
+- To avoid leaking references to the original output directory. This
+  way, we can validate that the SDK is relocatable by running a simple
+  "grep -r ${BASE_DIR} ${HOST_DIR}". Obviously RPATH sanitization is
+  not sufficient (e.g. also the references to source files have to be
+  stripped), but it's a step in the right direction. This reason is
+  obviously only relevant for the SDK.
 
-SKELETON_RSYNC_ARGS = -a --ignore-times ...
+- To make sure that when an executable is copied to target that it
+  actually executes correctly. Since within Buildroot we never copy
+  stuff from staging to target, this is clearly only relevant for
+  the SDK.
 
- Adding the / after $(1) and $(2) is the only reason to claim this should be a
-macro, but really I don't think that that's enough.
+Finally we install the script "relocate-sdk.sh" into the top directory
+of the SDK (HOST_DIR) and the SDK location path is stored in the file
+"HOST_DIR/share/buildroot/sdk-location"-
 
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- The above is bikeshedding though, so feel free to commit the current solution.
-
- Regards,
- Arnout
-
-> +
->  ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
->  
->  SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
-> @@ -89,9 +101,7 @@ SKELETON_LIB_SYMLINK = lib32
->  endif
->  
->  define SKELETON_INSTALL_TARGET_CMDS
-> -	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> -		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-> -		$(SKELETON_PATH)/ $(TARGET_DIR)/
-> +	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
->  	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
->  	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
->  	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/Makefile b/Makefile
+index d4faa02..fc86a70 100644
+--- a/Makefile
++++ b/Makefile
+@@ -552,6 +552,14 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ .PHONY: world
+ world: target-post-image
+ 
++.PHONY: sdk
++sdk: world
++	@$(call MESSAGE,"Rendering the SDK relocatable")
++	$(TOPDIR)/support/scripts/fix-rpath host
++	$(TOPDIR)/support/scripts/fix-rpath staging
++	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
++	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
++
+ # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
+ $(HOST_DIR)/usr: $(HOST_DIR)
+ 	@ln -snf . $@
+@@ -1001,6 +1009,7 @@ help:
+ 	@echo 'Build:'
+ 	@echo '  all                    - make world'
+ 	@echo '  toolchain              - build toolchain'
++	@echo '  sdk                    - build relocatable SDK'
+ 	@echo
+ 	@echo 'Configuration:'
+ 	@echo '  menuconfig             - interactive curses-based configurator'
