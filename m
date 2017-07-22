@@ -1,80 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 15:25:11 +0200
-Subject: [Buildroot] [PATCH 1/1] brcm-patchram-plus: new package
-In-Reply-To: <20170721144520.14683-1-alexey.roslyakov@gmail.com>
-References: <20170721144520.14683-1-alexey.roslyakov@gmail.com>
-Message-ID: <20170722152511.4ffc8dd3@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 22 Jul 2017 15:28:35 +0200
+Subject: [Buildroot] [PATCH 08/20] system: with no init system,
+ only allow custom skeleton
+In-Reply-To: <005008f3ac1cdbd8de65006d578d43c555355d0f.1500398733.git.yann.morin.1998@free.fr>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <005008f3ac1cdbd8de65006d578d43c555355d0f.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <3bd7e441-4317-20f9-9e7f-9a06168ced61@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 21 Jul 2017 21:45:20 +0700, Alexey Roslyakov wrote:
-> Many of Broadcom BCM43XX WiFi/Bluetooth combo chips have pretty tricky initialization.
-> Broadcom patchram utility has been released to address the issue.
+
+On 18-07-17 19:25, Yann E. MORIN wrote:
+> When there is no init system (i.e. a custom one), our bundled default
+> skeleton is most probably un-fit for that (non-)init system.
 > 
-> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+> This will be the case when we introduce per init system skeletons. The
+> systemd skeleton will be unfit except for a systemd init; the sysv
+> skeleton will be unfit except for a sysv-like init system.
+> 
+> In case they are using no init system (really, a custom one), the user
+> should be responsible for providing their own, custom skeleton as well.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks for this contribution! See a few comments below.
+ NACK on this one. Our skeleton (as in, the contents of system/skeleton) is
+already init-agnostic. If you use another init system (shell script, or no init
+at all because you just use it as a chroot, or whatever), you will *still* need
+that skelecton. Indeed, the skeleton contains things like the /sys and /dev
+directories, a passwd file, ....
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 7b7c5ab4e6..45466591da 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -73,6 +73,9 @@ N:	Alexandre Esse <alexandre.esse.dev@gmail.com>
->  F:	package/kvazaar/
->  F:	package/v4l2loopback/
+ If there are things in that skeleton that you don't need for a custom init
+system, then they probably shouldn't even be in the skeleton.
+
+ Regards,
+ Arnout
+
+> ---
+>  system/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 828df4217e..ed539dcbe0 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -3,11 +3,17 @@ menu "System configuration"
+>  choice
+>  	prompt "Root FS skeleton"
 >  
-> +N:	Alexey Roslyakov <alexey.roslyakov@gmail.com>
-> +F:	package/brcm-patchram-plus
-
-Please end the package path with a /, like all other entries in the
-DEVELOPERS file.
-
-> diff --git a/package/brcm-patchram-plus/Config.in b/package/brcm-patchram-plus/Config.in
-> new file mode 100644
-> index 0000000000..f7df21d2b2
-> --- /dev/null
-> +++ b/package/brcm-patchram-plus/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
-> +	bool "brcm-patchram-plus"
-> +	help
-> +		Utility's to configure and test Broadcom Bluetooth chips on Linux.
+> +# When not using an init system (i.e. a custom one), our default skeleton
+> +# is most probably unfit; so, allow only the custom skeleton in that case.
+>  config BR2_ROOTFS_SKELETON_DEFAULT
+>  	bool "default target skeleton"
+> +	depends on !BR2_INIT_NONE
+>  	help
+>  	  Use default target skeleton
+>  
+> +comment "default target skeleton needs an init system"
+> +	depends on BR2_INIT_NONE
 > +
-> +		https://code.google.com/archive/p/broadcom-bluetooth/
+>  config BR2_ROOTFS_SKELETON_CUSTOM
+>  	bool "custom target skeleton"
+>  	help
+> 
 
-Indentation for the help text is one tab + two spaces. I would
-recommend you to run utils/check-package on your new package to catch
-such coding style issues.
-
-> +BRCM_PATCHRAM_PLUS_VERSION = 0.1.1
-> +BRCM_PATCHRAM_PLUS_SOURCE = brcm-patchram-plus_$(BRCM_PATCHRAM_PLUS_VERSION).tar.gz
-> +BRCM_PATCHRAM_PLUS_SITE = https://launchpad.net/ubuntu/+archive/primary/+files
-
-Perhaps using the git repository at
-https://chromium.googlesource.com/chromiumos/third_party/broadcom would
-be a more "official" upstream ?
-
-> +define BRCM_PATCHRAM_PLUS_BUILD_CMDS
-> +	$(TARGET_CC) -o $(@D)/brcm_patchram_plus $(@D)/brcm_patchram_plus.c
-> +endef
-> +
-> +define BRCM_PATCHRAM_PLUS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/brcm_patchram_plus $(TARGET_DIR)/usr/bin/brcm_patchram_plus
-> +endef
-
-What about using the Makefile that comes inside the package ? At least
-in the Git repository I pointed to, there is a Makefile that seems
-suitable.
-
-Thanks!
-
-Thoma
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
