@@ -1,197 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 21:51:17 +0200
-Subject: [Buildroot] [git commit] system: provide package-wide system
-	variables and macros
-Message-ID: <20170722194727.4F7E081DDB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 22 Jul 2017 21:53:38 +0200
+Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
+ for init systems
+In-Reply-To: <20170722144552.GE9929@scaer>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
+ <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be> <20170722144552.GE9929@scaer>
+Message-ID: <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2de968f03a76c3feb5c7693cfc05a6342fcc12ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some macros, soon some variables, currently defined in the skeleton are
-going to be used by other packages.
 
-Some of those variables will be used as Makefile conditions (e.g. in
-ifeq() conditions), so they *must* be defined before being used.
+On 22-07-17 16:45, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2017-07-22 16:32 +0200, Arnout Vandecappelle spake thusly:
+>>  I think this patch should go in right away, even before the skeleton/systemd
+>> fixes. Yes, that may make some tests fail, but that's fine.
+> 
+> I am not so sure. We don;t know how long it will take this series to get
+> in in its entirety.
+> 
+> OTOH, ahving the tests in right now would be quite an incentive to get
+> the rest in. ;-]
 
-Since the skeleton package, starting with an 's', is included quite
-late, those variables would not be available to most packages.
+ Well, we already have two tests failing and nobody seems to fix them...
 
-Offload the existing macros into the new system/system.mk file, that is
-included early, before any package is. Rename the macros to appropriate
-names.
+[snip]
+>>> +    def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
+>>
+>>  PEP8 says snake-case for functions. I'm not sure if the rest of the testing
+>> infra satisfies this, but let's try to not make things worse.
+> 
+> We already have BRTest.setUp() and BRTest.tearDown(), so I mimicked
+> that.
 
-Future commits will add new macros and variables in that file.
+ Well, that's because python unittest predates PEP8 and it already had these
+names, so they couldn't be changed.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile                     |  1 +
- package/skeleton/skeleton.mk | 53 ++++---------------------------------
- system/system.mk             | 62 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+), 48 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index fc86a70..7cab6fa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -479,6 +479,7 @@ all: world
- # may rely on it.
- include Makefile.legacy
- 
-+include system/system.mk
- include package/Makefile.in
- # arch/arch.mk.* must be after package/Makefile.in because it may need to
- # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 0a8add6..3ae37c7 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -14,34 +14,6 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_INSTALL_STAGING = YES
- 
--############
--# Macros available for use by any skeleton package:
--# - SKELETON_RSYNC
--# - SKELETON_LIB_SYMLINK
--
--# This function rsyncs the skeleton directory in $(1) to the destination
--# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
--define SKELETON_RSYNC
--	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
--		$(1)/ $(2)/
--endef
--
--# Make a symlink lib32->lib or lib64->lib as appropriate.
--# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
--# $(1): base dir (either staging or target)
--ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
--define SKELETON_LIB_SYMLINK
--	ln -snf lib $(1)/lib64
--	ln -snf lib $(1)/usr/lib64
--endef
--else
--define SKELETON_LIB_SYMLINK
--	ln -snf lib $(1)/lib32
--	ln -snf lib $(1)/usr/lib32
--endef
--endif
--
- ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
- 
- SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
-@@ -93,25 +65,10 @@ SKELETON_PATH = system/skeleton
- 
- endif # ! custom skeleton
- 
--# This function handles the merged or non-merged /usr cases
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--define SKELETON_USR_SYMLINKS_OR_DIRS
--	ln -snf usr/bin $(1)/bin
--	ln -snf usr/sbin $(1)/sbin
--	ln -snf usr/lib $(1)/lib
--endef
--else
--define SKELETON_USR_SYMLINKS_OR_DIRS
--	$(INSTALL) -d -m 0755 $(1)/bin
--	$(INSTALL) -d -m 0755 $(1)/sbin
--	$(INSTALL) -d -m 0755 $(1)/lib
--endef
--endif
--
- define SKELETON_INSTALL_TARGET_CMDS
--	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
--	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
--	$(call SKELETON_LIB_SYMLINK,$(TARGET_DIR))
-+	$(call SYSTEM_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
-+	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
- endef
-@@ -126,8 +83,8 @@ define SKELETON_INSTALL_STAGING_CMDS
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
--	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
--	$(call SKELETON_LIB_SYMLINK,$(STAGING_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
-+	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- endef
- 
- # The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
-diff --git a/system/system.mk b/system/system.mk
-new file mode 100644
-index 0000000..cab5c1d
---- /dev/null
-+++ b/system/system.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# system-related variables and macros
-+#
-+################################################################################
-+
-+# This file exists to define variables and macros that pertain to the system
-+# settings, like rsyncing a directory for skeletons, or the /lib vs. /usr/lib
-+# symlink handling.
-+#
-+# Some variables may be used as conditions in Makefile code, so they must be
-+# defined properly before they are used; this file is included early, before
-+# any package is.
-+
-+# - SYSTEM_USR_SYMLINKS_OR_DIRS
-+#   create /lib, /bin and /sbin, either as directories or as symlinks to
-+#   their /usr conterparts
-+#
-+# - SYSTEM_RSYNC
-+#   rsync $(1) to $(2), with proper exclusions and rights
-+#
-+# - SYSTEM_LIB_SYMLINK
-+#   create the appropriate /lib{32,64} symlinks
-+#
-+
-+# This function handles the merged or non-merged /usr cases
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+define SYSTEM_USR_SYMLINKS_OR_DIRS
-+	ln -snf usr/bin $(1)/bin
-+	ln -snf usr/sbin $(1)/sbin
-+	ln -snf usr/lib $(1)/lib
-+endef
-+else
-+define SYSTEM_USR_SYMLINKS_OR_DIRS
-+	$(INSTALL) -d -m 0755 $(1)/bin
-+	$(INSTALL) -d -m 0755 $(1)/sbin
-+	$(INSTALL) -d -m 0755 $(1)/lib
-+endef
-+endif
-+
-+# This function rsyncs the skeleton directory in $(1) to the destination
-+# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
-+define SYSTEM_RSYNC
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-+		$(1)/ $(2)/
-+endef
-+
-+# Make a symlink lib32->lib or lib64->lib as appropriate.
-+# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
-+# $(1): base dir (either staging or target)
-+ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
-+define SYSTEM_LIB_SYMLINK
-+	ln -snf lib $(1)/lib64
-+	ln -snf lib $(1)/usr/lib64
-+endef
-+else
-+define SYSTEM_LIB_SYMLINK
-+	ln -snf lib $(1)/lib32
-+	ln -snf lib $(1)/usr/lib32
-+endef
-+endif
+ There are two tools, pep8 and flake8, that help checking PEP8 compliance.
+
+[snip]
+>>  These you could also run automatically, and request the arguments from the
+>> instance:
+>>
+>>     def test_run(self):
+>>         self.startEmulator(self.fs_type())
+>>         self.checkInit(self.init_path())
+>>         if self.have_network():
+>>             self.checkNetwork("eth0")
+>>         else:
+>>             self.checkNetwork("eth0", 1)
+>>
+>>  Ideally you'd then make this an ABC class and declare those callbacks as
+>> @abstractmethod, but perhaps that's going too far for you :-)
+> 
+> Is it really necessary that we go this route? It is much more complex,
+> for a dubious gain, if at all.
+
+ That's why I said "ideally".
+
+ The callbacks (or they could be class members as well, like we have with
+config) are indeed useful I think.
+
+
+> I'd prefer we keep with simple, plain code, so that everyone can
+> contribute more easily...
+
+ Fair enough.
+
+ Regards,
+ Arnout
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
