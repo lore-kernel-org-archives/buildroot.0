@@ -1,43 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 23:36:47 +0200
-Subject: [Buildroot] [git commit] pkg-generic: make PKG_DL_DIR equal to
-	DL_DIR
-Message-ID: <20170722213537.6584781673@busybox.osuosl.org>
+Date: Sat, 22 Jul 2017 23:40:14 +0200
+Subject: [Buildroot] [git commit] ndisc6: patch no longer required
+Message-ID: <20170722213728.A196381DDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=827fa4f917b1b4abc126e22631d0b98dd2293aed
+commit: https://git.buildroot.net/buildroot/commit/?id=94d5820fa7a57b5eedb9acb5b2187f62dc4e4b55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This variable is currently not used by anyone.
-The value is changed to match the path to DL_DIR.
+Now that we have 0001-remove-__FAVOR_BSD.patch in uClibc-ng (which is
+upstream and will be part of uClibc-ng 1.0.26), we no longer need the
+work-around patch in the ndisc6 package.
 
-The next patch will introduce the use of PKG_DL_DIR for packages that
-use specific EXTRACT_CMDS.
-
-And then we will be able to change the value of PKG_DL_DIR to create a
-new directory structure in DL_DIR with a subdirectory for each package.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch | 64 ----------------------
+ 1 file changed, 64 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b2b3af7..130fd67 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -434,7 +434,7 @@ endif
- 
- $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
- $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
--$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
-+$(2)_DL_DIR	=  $$(DL_DIR)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
- 
- ifndef $(2)_SUBDIR
+diff --git a/package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch b/package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch
+deleted file mode 100644
+index f84719c..0000000
+--- a/package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 0be2fe3a750b62cafca9794e37f040624d3a59de Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Thu, 26 Apr 2012 23:45:25 +0200
+-Subject: [PATCH] trace-{tcp,udp}.c: fix build on uClibc
+-
+-Selection of the BSD variant of struct tcphdr/udphdr on uClibc fails
+-because of config.h. This is caused by config.h setting _GNU_SOURCE
+-and the compat handling (uClibc doesn't have inet6_rth_*) including
+-sys/types.h which in term includes features.h, which figures out
+-what bsd/gnu/posix variant to use because of:
+-
+- /* If _BSD_SOURCE was defined by the user, favor BSD over POSIX.  */
+- #if defined _BSD_SOURCE && \
+-    !(defined _POSIX_SOURCE || defined _POSIX_C_SOURCE || \
+-      defined _XOPEN_SOURCE || defined _XOPEN_SOURCE_EXTENDED || \
+-      defined _GNU_SOURCE || defined _SVID_SOURCE)
+- # define __FAVOR_BSD    1
+- #endif
+-
+-The current workaround of undefining _GNU_SOURCE after config.h doesn't
+-work as features.h has already been evaluated by then. Instead, simply
+-don't include config.h as it isn't needed in these two files.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/trace-tcp.c |    5 -----
+- src/trace-udp.c |    5 -----
+- 2 files changed, 10 deletions(-)
+-
+-diff --git a/src/trace-tcp.c b/src/trace-tcp.c
+-index 6a7732d..91b64c2 100644
+---- a/src/trace-tcp.c
+-+++ b/src/trace-tcp.c
+-@@ -17,11 +17,6 @@
+-  *  along with this program. If not, see <http://www.gnu.org/licenses/>. *
+-  *************************************************************************/
+- 
+--#ifdef HAVE_CONFIG_H
+--# include <config.h>
+--#endif
+--
+--#undef _GNU_SOURCE
+- #define _BSD_SOURCE 1
+- 
+- #include <string.h>
+-diff --git a/src/trace-udp.c b/src/trace-udp.c
+-index 821c24c..1754338 100644
+---- a/src/trace-udp.c
+-+++ b/src/trace-udp.c
+-@@ -17,11 +17,6 @@
+-  *  along with this program. If not, see <http://www.gnu.org/licenses/>. *
+-  *************************************************************************/
+- 
+--#ifdef HAVE_CONFIG_H
+--# include <config.h>
+--#endif
+--
+--#undef _GNU_SOURCE
+- #define _BSD_SOURCE 1
+- 
+- #include <string.h>
+--- 
+-1.7.10
+-
