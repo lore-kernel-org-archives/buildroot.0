@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Jul 2017 23:49:46 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
- _ARCH_SUPPORTS
-In-Reply-To: <20170722232826.68061aec@windsurf>
+Date: Sat, 22 Jul 2017 23:50:52 +0200
+Subject: [Buildroot] [PATCH 4/4 v3] package/kvm-unit-test: available for
+ big.LITTLE arm cores too
+In-Reply-To: <20170722232953.40f3d5ab@windsurf>
 References: <cover.1499592591.git.yann.morin.1998@free.fr>
- <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
- <20170722232826.68061aec@windsurf>
-Message-ID: <20170722214946.GF9929@scaer>
+ <e9a53f9e66ea0d124e8c4ab028f01b41d694910d.1499592591.git.yann.morin.1998@free.fr>
+ <20170722232953.40f3d5ab@windsurf>
+Message-ID: <20170722215052.GG9929@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,30 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2017-07-22 23:28 +0200, Thomas Petazzoni spake thusly:
-> On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
-> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 if BR2_i386
-> > +	depends on BR2_HOST_GCC_AT_LEAST_4_5 if BR2_x86_64
+On 2017-07-22 23:29 +0200, Thomas Petazzoni spake thusly:
+> On Sun,  9 Jul 2017 11:30:01 +0200, Yann E. MORIN wrote:
+> > Since it supports each variants individually, it should also supports
+> > the big.LITTLE configurations.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Cyril Bur <cyrilbur@gmail.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/kvm-unit-tests/Config.in | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Did you actually test this? "make menuconfig" complains:
-> 
-> thomas at windsurf:~/projets/buildroot (master)$ make menuconfig
-> package/kvm-unit-tests/Config.in:16: syntax error
-> package/kvm-unit-tests/Config.in:15: invalid option
-> package/kvm-unit-tests/Config.in:17: syntax error
-> package/kvm-unit-tests/Config.in:16: invalid option
-> Makefile:876: recipe for target 'menuconfig' failed
+> Applied to master, thanks.
 
-I am really surprised, because I am sure I did test it, yes. But
-apparently, I did not.
+Alas, this is also causing kconfig issues:
 
-I have no idea about what hapenned... :-/
+    package/kvm-unit-tests/Config.in:5: syntax error
+    package/kvm-unit-tests/Config.in:4: invalid option
 
-> So I've replaced them with the more usual:
-> 
-> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
-> +       depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
-> 
-> I've also re-add the Config.in comment about the host gcc >= 4.5
-> dependency.
-> 
-> Applied with those changes. Thanks!	
+I've sent a fix:
+    https://patchwork.ozlabs.org/patch/792481/
 
-Thanks!
+Sorry about that. There realyl is something that I miossed in that
+series... :-/
 
 Regards,
 Yann E. MORIN.
