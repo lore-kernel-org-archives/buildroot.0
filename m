@@ -1,88 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 21:53:38 +0200
-Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
- for init systems
-In-Reply-To: <20170722144552.GE9929@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Jul 2017 21:57:30 +0200
+Subject: [Buildroot] [PATCH 06/20] system: move setting getty to the
+ corresponding init systems
+In-Reply-To: <f248e93e-1454-009c-29c5-000c04ef2221@mind.be>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
- <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be> <20170722144552.GE9929@scaer>
-Message-ID: <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
+ <f00f1e7daced126edc573f652b97e9228b347615.1500398733.git.yann.morin.1998@free.fr>
+ <f248e93e-1454-009c-29c5-000c04ef2221@mind.be>
+Message-ID: <20170722215730.782162ca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 22-07-17 16:45, Yann E. MORIN wrote:
-> Arnout, All,
+On Sat, 22 Jul 2017 15:11:57 +0200, Arnout Vandecappelle wrote:
+> [snip]
+> > +define BUSYBOX_SET_GETTY
+> > +	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SYSTEM_GETTY_PORT)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
+> > +		$(TARGET_DIR)/etc/inittab
+> > +endef  
+> [snip]
+> > +define SYSVINIT_SET_GETTY
+> > +	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(SYSTEM_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
+> > +		$(TARGET_DIR)/etc/inittab
+> > +endef  
 > 
-> On 2017-07-22 16:32 +0200, Arnout Vandecappelle spake thusly:
->>  I think this patch should go in right away, even before the skeleton/systemd
->> fixes. Yes, that may make some tests fail, but that's fine.
-> 
-> I am not so sure. We don;t know how long it will take this series to get
-> in in its entirety.
-> 
-> OTOH, ahving the tests in right now would be quite an incentive to get
-> the rest in. ;-]
+>  The only difference between these two is that for sysvinit we have to make sure
+> it's only 4 characters. But it actually doesn't hurt to do the same for busybox
+> as well. So perhaps we can factor the two in a single SYSTEM_SET_GETTY ?
 
- Well, we already have two tests failing and nobody seems to fix them...
+I am not sure if that works, because the semantic of the first field is
+not the same between sysvinit and Busybox init.
 
-[snip]
->>> +    def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
->>
->>  PEP8 says snake-case for functions. I'm not sure if the rest of the testing
->> infra satisfies this, but let's try to not make things worse.
-> 
-> We already have BRTest.setUp() and BRTest.tearDown(), so I mimicked
-> that.
+For sysvinit (http://www.manpages.info/linux/inittab.5.html)
 
- Well, that's because python unittest predates PEP8 and it already had these
-names, so they couldn't be changed.
+       id     is a unique sequence of 1-4 characters which identifies an entry
+	      in inittab (for versions of sysvinit compiled with  libraries  <
+	      5.2.18 or a.out libraries the limit is 2 characters).
 
+	      Note:  For  gettys or other login processes, the id field should
+	      be the tty suffix of the corresponding tty,  e.g.	 1  for	 tty1.
+	      Otherwise, the login accounting might not work correctly.
 
- There are two tools, pep8 and flake8, that help checking PEP8 compliance.
+For Busybox init:
 
-[snip]
->>  These you could also run automatically, and request the arguments from the
->> instance:
->>
->>     def test_run(self):
->>         self.startEmulator(self.fs_type())
->>         self.checkInit(self.init_path())
->>         if self.have_network():
->>             self.checkNetwork("eth0")
->>         else:
->>             self.checkNetwork("eth0", 1)
->>
->>  Ideally you'd then make this an ABC class and declare those callbacks as
->> @abstractmethod, but perhaps that's going too far for you :-)
-> 
-> Is it really necessary that we go this route? It is much more complex,
-> for a dubious gain, if at all.
+# <id>: WARNING: This field has a non-traditional meaning for BusyBox init!
+#
+#       The id field is used by BusyBox init to specify the controlling tty for
+#       the specified process to run on.  The contents of this field are
+#       appended to "/dev/" and used as-is.  There is no need for this field to
+#       be unique, although if it isn't you may have strange results.  If this
+#       field is left blank, then the init's stdin/out will be used.
 
- That's why I said "ideally".
+Hence, with Busybox init, if you pass a truncated "id", the command
+might fail to run as it will try to open a /dev/<something> that
+doesn't exist. So, if you truncate ttyAMA0, it will be just ttyA,
+Busybox will try to open /dev/ttyA and it will fail.
 
- The callbacks (or they could be class members as well, like we have with
-config) are indeed useful I think.
+Best regards,
 
-
-> I'd prefer we keep with simple, plain code, so that everyone can
-> contribute more easily...
-
- Fair enough.
-
- Regards,
- Arnout
-
-[snip]
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
