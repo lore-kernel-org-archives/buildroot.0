@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 15:18:18 +0200
-Subject: [Buildroot] [PATCH] configs: nitrogen*: bump kernel and u-boot
- revisions
-In-Reply-To: <20170721091026.22364-1-gary.bisson@boundarydevices.com>
-References: <20170721091026.22364-1-gary.bisson@boundarydevices.com>
-Message-ID: <20170722151818.1e75a682@windsurf>
+Date: Sat, 22 Jul 2017 15:25:11 +0200
+Subject: [Buildroot] [PATCH 1/1] brcm-patchram-plus: new package
+In-Reply-To: <20170721144520.14683-1-alexey.roslyakov@gmail.com>
+References: <20170721144520.14683-1-alexey.roslyakov@gmail.com>
+Message-ID: <20170722152511.4ffc8dd3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Jul 2017 11:10:26 +0200, Gary Bisson wrote:
-> Here are the main U-Boot modifications:
-> - Rebase on top of mainline 2017.03 release
-> - Fix sparse image flashing issues
+On Fri, 21 Jul 2017 21:45:20 +0700, Alexey Roslyakov wrote:
+> Many of Broadcom BCM43XX WiFi/Bluetooth combo chips have pretty tricky initialization.
+> Broadcom patchram utility has been released to address the issue.
 > 
-> Here are the main Linux modifications:
-> - Add mma8451 driver support
-> - Fix possible TiWi spurious interrupts issue
-> - Fix Ethernet interrupt parent issue
-> - Add USB Type C TUSB320 controller support
-> - Add SOM2 i.MX6DL and i.MX6QP variants
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
->  configs/nitrogen6sx_defconfig | 6 +++---
->  configs/nitrogen6x_defconfig  | 8 ++++----
->  configs/nitrogen7_defconfig   | 6 +++---
->  3 files changed, 10 insertions(+), 10 deletions(-)
+> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
 
-Applied to master, thanks.
+Thanks for this contribution! See a few comments below.
 
-Thomas
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7b7c5ab4e6..45466591da 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -73,6 +73,9 @@ N:	Alexandre Esse <alexandre.esse.dev@gmail.com>
+>  F:	package/kvazaar/
+>  F:	package/v4l2loopback/
+>  
+> +N:	Alexey Roslyakov <alexey.roslyakov@gmail.com>
+> +F:	package/brcm-patchram-plus
+
+Please end the package path with a /, like all other entries in the
+DEVELOPERS file.
+
+> diff --git a/package/brcm-patchram-plus/Config.in b/package/brcm-patchram-plus/Config.in
+> new file mode 100644
+> index 0000000000..f7df21d2b2
+> --- /dev/null
+> +++ b/package/brcm-patchram-plus/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
+> +	bool "brcm-patchram-plus"
+> +	help
+> +		Utility's to configure and test Broadcom Bluetooth chips on Linux.
+> +
+> +		https://code.google.com/archive/p/broadcom-bluetooth/
+
+Indentation for the help text is one tab + two spaces. I would
+recommend you to run utils/check-package on your new package to catch
+such coding style issues.
+
+> +BRCM_PATCHRAM_PLUS_VERSION = 0.1.1
+> +BRCM_PATCHRAM_PLUS_SOURCE = brcm-patchram-plus_$(BRCM_PATCHRAM_PLUS_VERSION).tar.gz
+> +BRCM_PATCHRAM_PLUS_SITE = https://launchpad.net/ubuntu/+archive/primary/+files
+
+Perhaps using the git repository at
+https://chromium.googlesource.com/chromiumos/third_party/broadcom would
+be a more "official" upstream ?
+
+> +define BRCM_PATCHRAM_PLUS_BUILD_CMDS
+> +	$(TARGET_CC) -o $(@D)/brcm_patchram_plus $(@D)/brcm_patchram_plus.c
+> +endef
+> +
+> +define BRCM_PATCHRAM_PLUS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/brcm_patchram_plus $(TARGET_DIR)/usr/bin/brcm_patchram_plus
+> +endef
+
+What about using the Makefile that comes inside the package ? At least
+in the Git repository I pointed to, there is a Makefile that seems
+suitable.
+
+Thanks!
+
+Thoma
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
