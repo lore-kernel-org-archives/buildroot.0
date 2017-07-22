@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 01:36:53 +0200
-Subject: [Buildroot] [PATCH 13/20] package/skeleton: make it a virtual
- package
-In-Reply-To: <3a434b0c0be62999b357b2ad81ab62bfed9e97d7.1500398733.git.yann.morin.1998@free.fr>
+Date: Sun, 23 Jul 2017 01:38:35 +0200
+Subject: [Buildroot] [PATCH 14/20] package/skeleton-common: simplify
+ staging install
+In-Reply-To: <b775d4628225bfdb820b80124374ab6ec584cf0c.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <3a434b0c0be62999b357b2ad81ab62bfed9e97d7.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <b922d29e-33d5-3310-feca-70fbc6ac93a7@mind.be>
+ <b775d4628225bfdb820b80124374ab6ec584cf0c.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <0d50bda3-1cf0-8ce5-21c3-94b7f60d3ec5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +15,57 @@ To: buildroot@busybox.net
 
 
 On 18-07-17 19:25, Yann E. MORIN wrote:
-> We now have two packages that can act as a skeleton, skeleton-common,
-> also known as our default skeleton, and skeleton-custom.
+> We don't really care what's going in staging, as long as it is properly
+> setup for merged/non-merged /usr, especially for the lib/ directory.
 > 
-> This means that the skeleton package can be a standard virtual package
-> now.
+> So we can just copy the skeleton as-is.
 > 
-> Well, except that, besides being a virtual package, it also provides
-> variables and macros that can be used by the other skeletons and/or the
-> init systems.
+> This simplify the maintenance, should we ever need to tweak the layout:
+> we'd just have to do it once in the skeleton directory to have it
+> propagated to both target and staging.
 
- I guess this is a left-over from when you hadn't moved everything to system.mk
-yet...
+ Yes, very nice, I like it!
 
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- On this patch, I do have kind of big comments.
-
-[snip]
-> diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
-> index b12bd8f73c..601c3b247e 100644
-> --- a/package/skeleton-custom/Config.in
-> +++ b/package/skeleton-custom/Config.in
-> @@ -1,3 +1,6 @@
->  config BR2_PACKAGE_SKELETON_CUSTOM
->  	bool
-> -	select BR2_PACKAGE_SKELETON
-> +	select BR2_PACKAGE_HAS_SKELETON
-> +
-> +config BR2_PACKAGE_PROVIDES_SKELETON
-> +	default "skeleton-custom" if BR2_PACKAGE_SKELETON_CUSTOM
-
- In almost all virtual package providers, we do it like:
-
-if BR2_PACKAGE_SKELETON_CUSTOM
-config BR2_PACKAGE_PROVIDES_SKELETON
-	default "skeleton-custom"
-endif
-
-[snip]
->  config BR2_PACKAGE_SKELETON
->  	bool
-> -	help
-> -	  The basic skeleton for your rootfs.
-> +	default y
-
- For most virtual packages, we don't define the Kconfig symbol (e.g. there is no
-BR2_PACKAGE_EGL). Do we need it for skeleton?
-
-> +
-> +config BR2_PACKAGE_HAS_SKELETON
-> +	bool
-
- We also don't really need this. It is used by packages that need the virtual
-package to check if there is a provider for it. But no package 'depends on'
-skeleton (or rather, all of them do), so we don't need this.
-
-> +
-> +config BR2_PACKAGE_PROVIDES_SKELETON
-> +	string
-
- This one we do need :-)
-
-[snip]
-> diff --git a/system/Config.in b/system/Config.in
-> index c27b013784..75b6a8edac 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -1,5 +1,9 @@
->  menu "System configuration"
->  
-> +# Note: usually, it is not possible to select a provider of a virtual
-> +# package.
-
- This is not true cryptodev, jpeg and mysql do exactly that. libressl/openssl
-will also do it that way. In fact, a choice is in a way the better way to do it,
-because then you're guaranteed not to have conflicting providers.
-
- So this entire comment is wrong and can be removed. IMO.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> But here we have an exception: there are only two providers
-> +# and they only get selected each by separate entries in this choice.
-> +# So this is a safe situation.
->  choice
->  	prompt "Root FS skeleton"
+> ---
+>  package/skeleton-common/skeleton-common.mk | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
+> index ee44eaf810..475c07e32d 100644
+> --- a/package/skeleton-common/skeleton-common.mk
+> +++ b/package/skeleton-common/skeleton-common.mk
+> @@ -26,18 +26,14 @@ define SKELETON_COMMON_INSTALL_TARGET_CMDS
+>  		$(TARGET_DIR_WARNING_FILE)
+>  endef
 >  
+> -# For the staging dir, we don't really care about /bin and /sbin.
+> -# But for consistency with the target dir, and to simplify the code,
+> -# we still handle them for the merged or non-merged /usr cases.
+> -# Since the toolchain is not yet available, the staging is not yet
+> -# populated, so we need to create the directories in /usr
+> +# We don't care much about what goes in staging, as long as it is
+> +# correctly setup for merged/non-merged /usr. The simplest is to
+> +# fill it in with the content of the skeleton.
+>  define SKELETON_COMMON_INSTALL_STAGING_CMDS
+> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
+> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
+> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
+> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
+> +	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
+>  	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
+>  	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
+> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
+>  endef
+>  
+>  SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
 > 
 
 -- 
