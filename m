@@ -1,69 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 15:40:35 +0200
-Subject: [Buildroot] [git commit] package/skeleton: add macro to rsync
-	skeleton directory
-Message-ID: <20170722133658.8E1F280DB3@busybox.osuosl.org>
+Date: Sat, 22 Jul 2017 15:41:21 +0200
+Subject: [Buildroot] [PATCH 02/20] core/pkg-generic: add variable to
+ skip skeleton dependency
+In-Reply-To: <85a6c3a598a517fd0fad2cba0b7c42d746c7830e.1500398733.git.yann.morin.1998@free.fr>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <85a6c3a598a517fd0fad2cba0b7c42d746c7830e.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <20170722154121.4a770035@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cabba017d350c14e05c6cce0f435a8eb6fd40473
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The rsync command is currently called from a single location. In
-follow-up patches, it will be called from various places then.
+On Tue, 18 Jul 2017 19:25:28 +0200, Yann E. MORIN wrote:
+> We currently skip the skeleton dependency by checking if the current
+> package is the skeleton.
+> 
+> We are going to introduce more skeleton-related packages, so we
+> need a way to exclude the skeleton dependency for those, or we'd
+> get a circular dependency, for the same reason we need to skip
+> the toolchain dependency.
+> 
+> Instead of checking for all the skeleton-providing packages in the core
+> infra, add a new package options so that packages can express they do
+> not need the dependency on the skeleton, like we have an option to avoid
+> the depednency on the toolchain. The only packages that will use that
+> option are probably the skeletons, so we need not document this
+> variable, like we did not document the option to exclude the dependency
+> on the toolchain.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/pkg-generic.mk       | 7 +++++--
+>  package/skeleton/skeleton.mk | 1 +
+>  2 files changed, 6 insertions(+), 2 deletions(-)
 
-It will be easier to update and fix this command if it is defined in a
-single location, rather than if duplicated in many places.
+Applied to master, thanks.
 
-Define a macro that skeleton packages can call to install their skeleton
-directories. Since at least one occurrence of it will want to install in
-staging, the macro must accept a destination path, rather than hard-code
-target as the destination.
-
-Since it is to be used by other skeleton packages, define it early,
-outside of any conditional block.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/skeleton/skeleton.mk | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 9b7407a..017479a 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -14,6 +14,18 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_INSTALL_STAGING = YES
- 
-+############
-+# Macros available for use by any skeleton package:
-+# - SKELETON_RSYNC
-+
-+# This function rsyncs the skeleton directory in $(1) to the destination
-+# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
-+define SKELETON_RSYNC
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-+		$(1)/ $(2)/
-+endef
-+
- ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
- 
- SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
-@@ -89,9 +101,7 @@ SKELETON_LIB_SYMLINK = lib32
- endif
- 
- define SKELETON_INSTALL_TARGET_CMDS
--	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
--		$(SKELETON_PATH)/ $(TARGET_DIR)/
-+	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
- 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
- 	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
- 	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
