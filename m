@@ -1,94 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 23:47:10 +0200
-Subject: [Buildroot] [PATCH 10/20] package/skeleton: select it rather
- than default to y
-In-Reply-To: <197425c9ca54aae186faeff352635f6b7250d8be.1500398733.git.yann.morin.1998@free.fr>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <197425c9ca54aae186faeff352635f6b7250d8be.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <c007a7b8-7412-505c-004e-0bbbd3de7e61@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Jul 2017 23:49:46 +0200
+Subject: [Buildroot] [PATCH 2/4 v3] package/kvm-unit-tests: introduce
+ _ARCH_SUPPORTS
+In-Reply-To: <20170722232826.68061aec@windsurf>
+References: <cover.1499592591.git.yann.morin.1998@free.fr>
+ <996d1d52c27da1a7725ed425ac895c3a7b5b7301.1499592591.git.yann.morin.1998@free.fr>
+ <20170722232826.68061aec@windsurf>
+Message-ID: <20170722214946.GF9929@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
-
-On 18-07-17 19:25, Yann E. MORIN wrote:
-> Our current skeleton is tailored to sysv-like init systems; it is not
-> fit for systemd-based systems. So, in upcoming changes, we'll add
-> another skeleton for systemd.
+On 2017-07-22 23:28 +0200, Thomas Petazzoni spake thusly:
+> On Sun,  9 Jul 2017 11:29:59 +0200, Yann E. MORIN wrote:
+> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 if BR2_i386
+> > +	depends on BR2_HOST_GCC_AT_LEAST_4_5 if BR2_x86_64
 > 
-> This means we can no longer have the current skeleton default to 'y', or
-> it would be enabled also for systemd, which would be incorrect.
+> Did you actually test this? "make menuconfig" complains:
 > 
-> So, we remove the default to 'y' but have it selected by the default
-> skeleton choice.
+> thomas at windsurf:~/projets/buildroot (master)$ make menuconfig
+> package/kvm-unit-tests/Config.in:16: syntax error
+> package/kvm-unit-tests/Config.in:15: invalid option
+> package/kvm-unit-tests/Config.in:17: syntax error
+> package/kvm-unit-tests/Config.in:16: invalid option
+> Makefile:876: recipe for target 'menuconfig' failed
+
+I am really surprised, because I am sure I did test it, yes. But
+apparently, I did not.
+
+I have no idea about what hapenned... :-/
+
+> So I've replaced them with the more usual:
 > 
-> However, we do not yet have a way to directly build (really, install)
-> the custom skeleton, it is built (really, installed) as a dependency of
-> the default skeleton. So we must also forcibly select the default
-> skeleton when using a custom one.
+> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
+> +       depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
 > 
-> Until we have the mean to do only one or the other; i.e. when we have a
-                    means
-
-> virtual skeleton.
+> I've also re-add the Config.in comment about the host gcc >= 4.5
+> dependency.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Applied with those changes. Thanks!	
 
- You're going about it in a pretty complicated way. I think it would have been
-simpler to rename skeleton to skeleton-common and introducing the skeleton
-virtual package in one commit, and then start splitting them up. However, you've
-done it this way now, and it works, so
+Thanks!
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-
-> ---
->  package/skeleton/Config.in | 1 -
->  system/Config.in           | 2 ++
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/skeleton/Config.in b/package/skeleton/Config.in
-> index d25147bd92..b22ac66b35 100644
-> --- a/package/skeleton/Config.in
-> +++ b/package/skeleton/Config.in
-> @@ -1,5 +1,4 @@
->  config BR2_PACKAGE_SKELETON
->  	bool
-> -	default y
->  	help
->  	  The basic skeleton for your rootfs.
-> diff --git a/system/Config.in b/system/Config.in
-> index 5cb921f108..9b42fbbbac 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -8,6 +8,7 @@ choice
->  config BR2_ROOTFS_SKELETON_DEFAULT
->  	bool "default target skeleton"
->  	depends on !BR2_INIT_NONE
-> +	select BR2_PACKAGE_SKELETON
->  	help
->  	  Use default target skeleton
->  
-> @@ -16,6 +17,7 @@ comment "default target skeleton needs an init system"
->  
->  config BR2_ROOTFS_SKELETON_CUSTOM
->  	bool "custom target skeleton"
-> +	select BR2_PACKAGE_SKELETON
->  	help
->  	  Use custom target skeleton.
->  
-> 
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
