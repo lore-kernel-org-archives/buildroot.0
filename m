@@ -1,72 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jul 2017 12:07:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/heimdal: security bump to version
-	7.4.0
-Message-ID: <20170722100736.25753-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 22 Jul 2017 12:49:18 +0200
+Subject: [Buildroot] [PATCH v8 08/10] external-toolchain: check if a
+ buildroot SDK has already been relocated
+In-Reply-To: <20170721224046.45ac9e84@windsurf>
+References: <1500561321-6623-1-git-send-email-wg@grandegger.com>
+ <1500561321-6623-9-git-send-email-wg@grandegger.com>
+ <20170720232131.02e9a51d@windsurf>
+ <9cca1b92-5e7e-2788-8370-59b12078396f@mind.be>
+ <20170721083636.5442a2df@windsurf>
+ <5dabf921-90d5-5f82-4e6b-34bcff1e2023@grandegger.com>
+ <20170721092401.121b48b1@windsurf>
+ <5954a27f-ac93-99ee-5216-2cc73b15385b@grandegger.com>
+ <20170721100526.7e014194@windsurf>
+ <5146353d-87cc-cea2-0529-a07919d1f8a2@mind.be>
+ <20170721224046.45ac9e84@windsurf>
+Message-ID: <dd4f09ce-0643-969d-0041-dfcb31a2f9c7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes security bugs CVE-2017-11103 & CVE-2017-6594
 
-Changed upstream tarball location as noted in the release notes:
-http://www.h5l.org/releases.html?show=7.4.0
 
---with-db-type-preference= is needed to fix a build error:
+On 21-07-17 22:40, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 21 Jul 2017 22:31:48 +0200, Arnout Vandecappelle wrote:
+> 
+>>  This is not true. I already regularly use a Buildroot SDK in projects by
+>> setting BR2_HOST_DIR=/opt/... and packaging that. This SDK is then used to
+>> create a rootfs+kernel with Buildroot, and separately to build applications.
+>> Since the applications need some additional libraries, these libraries are
+>> included in the SDK. They are not used by Buildroot, so it's double work (they
+>> are included in the SDK, and built again for the target rootfs).
+> 
+> This is really horrible, because it means that some libraries that
+> Buildroot doesn't know about may be present in the toolchain sysroot,
+> be detected by packages, etc.
 
-  CCLD     otp
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_get_internal':
-otp_db.c:(.text+0x32): undefined reference to `__roken_dbm_fetch'
-otp_db.c:(.text+0xd9): undefined reference to `__roken_dbm_store'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_open':
-otp_db.c:(.text+0x1c9): undefined reference to `__roken_dbm_open'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_close':
-otp_db.c:(.text+0x205): undefined reference to `__roken_dbm_close'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_delete':
-otp_db.c:(.text+0x23e): undefined reference to `__roken_dbm_delete'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_put':
-otp_db.c:(.text+0x388): undefined reference to `__roken_dbm_store'
-collect2: error: ld returned 1 exit status
+ No it doesn't. Buildroot doesn't use the external toolchain as-is; the relevant
+files are copied to STAGING_DIR. Only the gcc related includes are still used
+from HOST_DIR/opt/ext-toolchain. Just do a gcc -v link and you'll see.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/heimdal/heimdal.hash | 4 ++--
- package/heimdal/heimdal.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+[snip]
+>>  relocate-sdk is still useless when using it as an external toolchain. You could
+>> say it makes sense for a pre-installed toolchain, but then only if you're using
+>> that SDK outside of Buildroot. Buildroot is not going to use any of the
+>> additional stuff.
+> 
+> Sorry, but I did not understand this paragraph :/
 
-diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
-index 12770e17f..a0e0f3f1b 100644
---- a/package/heimdal/heimdal.hash
-+++ b/package/heimdal/heimdal.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	cee58ab3a4ce79f243a3e73f465dac19fe2b93ef1c5ff244d6f1d689fedbde2d	heimdal-7.1.0.tar.gz
-+# Locally calculated
-+sha256 3de14ecd36ad21c1694a13da347512b047f4010d176fe412820664cb5d1429ad  heimdal-7.4.0.tar.gz
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index 5af792685..57325564c 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--HEIMDAL_VERSION = 7.1.0
--HEIMDAL_SITE = http://www.h5l.org/dist/src
-+HEIMDAL_VERSION = 7.4.0
-+HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
- HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
- HEIMDAL_INSTALL_STAGING = YES
- HEIMDAL_MAKE = $(MAKE1)
-@@ -15,6 +15,7 @@ HOST_HEIMDAL_CONF_OPTS = \
- 	--enable-static \
- 	--without-openldap \
- 	--without-capng \
-+	--with-db-type-preference= \
- 	--without-sqlite3 \
- 	--without-libintl \
- 	--without-openssl \
+ Since Buildroot doesn't use anything from HOSTDIR/opt/ext-toolchain,
+"relocating" it isn't relevant.
+
+ Bottom line: indeed this patch should be dropped.
+
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
