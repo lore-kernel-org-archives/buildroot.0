@@ -1,47 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 22:36:17 +0200
-Subject: [Buildroot] [PATCH 07/20] system: move remounting / to the
- corresponding init systems
-In-Reply-To: <db57282a925ddcf70a8fca8631ae62347b04c175.1500398733.git.yann.morin.1998@free.fr>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <db57282a925ddcf70a8fca8631ae62347b04c175.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <20170722223617.06af2b1e@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 22 Jul 2017 22:37:18 +0200
+Subject: [Buildroot] [PATCH] cppcms: fix build with ICU
+In-Reply-To: <20170722202426.29171-1-thomas.petazzoni@free-electrons.com>
+References: <20170722202426.29171-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <f66a7271-9c37-787c-e9da-59d9d194ff2c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 18 Jul 2017 19:25:33 +0200, Yann E. MORIN wrote:
-> Currently, remounting / read-write (or not) is done by the skeleton
-> package when the init system is eitehr busybox or sysvinit, by
-> registering a target-finalize hook; it is not done at all for systemd.
+
+On 22-07-17 22:24, Thomas Petazzoni wrote:
+> Since the bump of ICU to 59.1, it needs C++11. cppcms has been updated
+> with the appropriate dependency on gcc >= 4.8, but it also needs
+> -std=c++11. Therefore, this patch complements the CXXFLAGS passed to
+> cppcms by adding what icu-config reports, in a manner similar to what
+> was done to fix the same issue in the PHP package in commit
+> 214a76d045f906c1a8d687b7c7e7bc85c5b09906 ("package/php: fix icu
+> support").
 > 
-> Move registering this target-finalize hook to both of busybox and
-> sysvinit. Leave systemd alone, we'll take care of it later.
+> Fixes:
 > 
-> Rename the macro to a more meaningful name, and move it to system.mk
-> with the other such macros.
+>   http://autobuild.buildroot.net/results/f05d9999f1f3248b6a50f14de476108028ed047e/
 > 
-> Yet a little bit less init-system knowledge in the skeleton.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
 > ---
->  package/busybox/busybox.mk   |  3 +++
->  package/skeleton/skeleton.mk | 15 ---------------
->  package/sysvinit/sysvinit.mk |  3 +++
->  system/system.mk             | 15 +++++++++++++++
->  4 files changed, 21 insertions(+), 15 deletions(-)
+>  package/cppcms/cppcms.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+> index 4b4a2c6..e72acb2 100644
+> --- a/package/cppcms/cppcms.mk
+> +++ b/package/cppcms/cppcms.mk
+> @@ -10,16 +10,20 @@ CPPCMS_LICENSE = LGPL-3.0
+>  CPPCMS_LICENSE_FILES = COPYING.TXT
+>  CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+>  CPPCMS_INSTALL_STAGING = YES
+> +CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
+>  
+>  # disable rpath to avoid getting /usr/lib added to the link search
+>  # path
+> -CPPCMS_CONF_OPTS = -DCMAKE_SKIP_RPATH=ON
+> +CPPCMS_CONF_OPTS = \
+> +	-DCMAKE_SKIP_RPATH=ON \
+> +	-DCMAKE_CXX_FLAGS="$(CPPCMS_CXXFLAGS)"
+>  
+>  CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+>  
+>  ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
+>  CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON
+>  CPPCMS_DEPENDENCIES += icu
+> +CPPCMS_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
+>  endif
+>  
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> 
 
-Applied to master, after dropping the two comments, as pointed by
-Arnout.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
