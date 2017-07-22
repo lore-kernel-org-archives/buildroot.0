@@ -1,66 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jul 2017 00:50:16 +0200
-Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
- for init systems
-In-Reply-To: <20170722221014.672f9eb2@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 23 Jul 2017 01:06:57 +0200
+Subject: [Buildroot] [PATCH 12/20] package/skeleton: split out into
+ skeleton-common
+In-Reply-To: <af100c0e2b252ccec7e9e2b8ebc88964c78bb4dc.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
- <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be>
- <20170722144552.GE9929@scaer>
- <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
- <20170722221014.672f9eb2@windsurf>
-Message-ID: <20170722225016.GK9929@scaer>
+ <af100c0e2b252ccec7e9e2b8ebc88964c78bb4dc.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <6bcf485a-e334-33d6-4fb1-17553670d2fb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2017-07-22 22:10 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 22 Jul 2017 21:53:38 +0200, Arnout Vandecappelle wrote:
-> 
-> > > OTOH, ahving the tests in right now would be quite an incentive to get
-> > > the rest in. ;-]  
-> > 
-> >  Well, we already have two tests failing and nobody seems to fix them...
-> 
-> The patches fixing them are here:
-> 
->   http://patchwork.ozlabs.org/patch/783135/
->   http://patchwork.ozlabs.org/patch/783137/
->   http://patchwork.ozlabs.org/patch/783136/
-> 
-> and nobody reviews them.
 
-I gave them a spin here, and they indeed fix the build, but the tests
-are still broken because qemu can't boot the resulting system...
-
-I'll investigate that tomorrow...
-
-Regards,
-Yann E. MORIN.
-
-> (Actually only the first patch of the series is needed to fix the
-> tests)
+On 18-07-17 19:25, Yann E. MORIN wrote:
+> Move all the handling of the default skeleton into a new package,
+> skeleton-common.
 > 
-> I made those on July 1st, pretty much the day we started running the
-> tests in Gitlab CI. So it's a bit hard to now read your complaint that
-> nobody cares about the failing tests...
+> We don;t name it skeleton-default, because it will be further split
+     don't
+
+> later, into a skeleton for sysv and another for systemd, with some parts
+> still common between the two. So just name it skeleton-common right now;
+> this will save us a rename later.
 > 
-> Best regards,
+> We keep in the skeleton package all definitions of macros and variables
+> that can be used by other skeleton packages and/or init systems, and
+> just offload the actual feeding of the skeleton to the new package.
 > 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+[snip]
+> +# The skeleton can't depend on the toolchain, since all packages depends on the
+> +# skeleton and the toolchain is a target package, as is skeleton.
+> +# Hence, skeleton would depends on the toolchain and the toolchain would depend
+> +# on skeleton.
+
+ I don't think this comment is very useful - it's pretty obvious. Actually, it
+would make sense for SKELETON_COMMON_ADD_SKELETON_DEPENDENCY=NO to imply
+SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY=NO, but really we don't need to
+complicate the infra for that...
+
+ You can't have too many comments though, so let's not block the patch for that.
+
+> +SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
+> +
+> +# The skeleton also handles the merged /usr case in the sysroot
+
+ This comment, on the other hand, *is* very useful.
+
+> +SKELETON_COMMON_INSTALL_STAGING = YES
+> +
+> +SKELETON_COMMON_PATH = system/skeleton
+
+ Not for this patch of course, but I think it would make sense to also move that
+here. But you probably thought of that already :-)
+
+
+ Regards,
+ Arnout
+
+[snip]
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
