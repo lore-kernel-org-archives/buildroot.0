@@ -1,48 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 22:10:14 +0200
-Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
- for init systems
-In-Reply-To: <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
- <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be>
- <20170722144552.GE9929@scaer>
- <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
-Message-ID: <20170722221014.672f9eb2@windsurf>
+Date: Sat, 22 Jul 2017 22:24:26 +0200
+Subject: [Buildroot] [PATCH] cppcms: fix build with ICU
+Message-ID: <20170722202426.29171-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since the bump of ICU to 59.1, it needs C++11. cppcms has been updated
+with the appropriate dependency on gcc >= 4.8, but it also needs
+-std=c++11. Therefore, this patch complements the CXXFLAGS passed to
+cppcms by adding what icu-config reports, in a manner similar to what
+was done to fix the same issue in the PHP package in commit
+214a76d045f906c1a8d687b7c7e7bc85c5b09906 ("package/php: fix icu
+support").
 
-On Sat, 22 Jul 2017 21:53:38 +0200, Arnout Vandecappelle wrote:
+Fixes:
 
-> > OTOH, ahving the tests in right now would be quite an incentive to get
-> > the rest in. ;-]  
-> 
->  Well, we already have two tests failing and nobody seems to fix them...
+  http://autobuild.buildroot.net/results/f05d9999f1f3248b6a50f14de476108028ed047e/
 
-The patches fixing them are here:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cppcms/cppcms.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-  http://patchwork.ozlabs.org/patch/783135/
-  http://patchwork.ozlabs.org/patch/783137/
-  http://patchwork.ozlabs.org/patch/783136/
-
-and nobody reviews them.
-
-(Actually only the first patch of the series is needed to fix the
-tests)
-
-I made those on July 1st, pretty much the day we started running the
-tests in Gitlab CI. So it's a bit hard to now read your complaint that
-nobody cares about the failing tests...
-
-Best regards,
-
-Thomas
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index 4b4a2c6..e72acb2 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -10,16 +10,20 @@ CPPCMS_LICENSE = LGPL-3.0
+ CPPCMS_LICENSE_FILES = COPYING.TXT
+ CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+ CPPCMS_INSTALL_STAGING = YES
++CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+ # disable rpath to avoid getting /usr/lib added to the link search
+ # path
+-CPPCMS_CONF_OPTS = -DCMAKE_SKIP_RPATH=ON
++CPPCMS_CONF_OPTS = \
++	-DCMAKE_SKIP_RPATH=ON \
++	-DCMAKE_CXX_FLAGS="$(CPPCMS_CXXFLAGS)"
+ 
+ CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+ 
+ ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
+ CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON
+ CPPCMS_DEPENDENCIES += icu
++CPPCMS_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.4
