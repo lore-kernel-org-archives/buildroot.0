@@ -1,57 +1,72 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Sat, 22 Jul 2017 12:59:34 +0200
-Subject: [Buildroot] [PATCH v9 2/3] support/scripts/fix-rpath: check if
- the patchelf utility exists
-In-Reply-To: <540b59e4-54b2-6db3-e48b-7b26737d194f@mind.be>
-References: <1500642853-5565-1-git-send-email-wg@grandegger.com>
- <1500642853-5565-3-git-send-email-wg@grandegger.com>
- <540b59e4-54b2-6db3-e48b-7b26737d194f@mind.be>
-Message-ID: <1e6ed455-f002-245f-9142-86cc6fb0d0d5@grandegger.com>
+Date: Sat, 22 Jul 2017 13:15:40 +0200
+Subject: [Buildroot] [PATCH v10 1/3] core: introduce "sdk" target to make a
+	relocatable SDK
+In-Reply-To: <1500722142-20420-1-git-send-email-wg@grandegger.com>
+References: <1500722142-20420-1-git-send-email-wg@grandegger.com>
+Message-ID: <1500722142-20420-2-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We use a separate make target to build a relocatable SDK. We first
+sanitize the RPATH in host tree. Next we also sanitize the
+staging tree. Therefore "sdk" must depend on world.
 
+Sanitizing staging is not really needed, in the sense that any rpath
+in there is simply not going to be used. We want to sanitize staging
+for the following reasons:
 
-Am 21.07.2017 um 23:13 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 21-07-17 15:14, Wolfgang Grandegger wrote:
->> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->> ---
->>   support/scripts/fix-rpath | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
->> index f7c70b7..9272d2d 100755
->> --- a/support/scripts/fix-rpath
->> +++ b/support/scripts/fix-rpath
->> @@ -45,6 +45,9 @@ Environment:
->>   
->>       TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
->>                    (default HOST_DIR/opt/ext-toolchain)
->> +
->> +Returns:         0 if success or 1 in case of error
->> +
->>   EOF
->>   }
->>   
->> @@ -60,6 +63,11 @@ main() {
->>       local find_args=( )
->>       local sanitize_extra_args=( )
->>   
->> +    if [ ! -x "${PATCHELF}" ]; then
-> 
->   This is not fully failsafe; it's still possible that some shared library used
-> by patchelf is not available anymore. So to be really sure (as suggested by Thomas):
-> 
->      if [ ! "${PATCHELF}" --help > /dev/null 2>&1 ]; then
-> 
->   But that's really borderline stuff so
+- To avoid leaking references to the original output directory. This
+  way, we can validate that the SDK is relocatable by running a simple
+  "grep -r ${BASE_DIR} ${HOST_DIR}". Obviously RPATH sanitization is
+  not sufficient (e.g. also the references to source files have to be
+  stripped), but it's a step in the right direction. This reason is
+  obviously only relevant for the SDK.
 
-Ah,  I missed that point. Will send a hopefully final v10 after some 
-basic testing...
+- To make sure that when an executable is copied to target that it
+  actually executes correctly. Since within Buildroot we never copy
+  stuff from staging to target, this is clearly only relevant for
+  the SDK.
 
-Wolfgang.
+Finally we install the script "relocate-sdk.sh" into the top directory
+of the SDK (HOST_DIR) and the SDK location path is stored in the file
+"HOST_DIR/share/buildroot/sdk-location"-
+
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index d4faa02..f9ff963 100644
+--- a/Makefile
++++ b/Makefile
+@@ -552,6 +552,14 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ .PHONY: world
+ world: target-post-image
+ 
++.PHONY: sdk
++sdk: world
++	@$(call MESSAGE,"Rendering the SDK relocatable")
++	$(TOPDIR)/support/scripts/fix-rpath host
++	$(TOPDIR)/support/scripts/fix-rpath staging
++	install -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
++	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
++
+ # Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
+ $(HOST_DIR)/usr: $(HOST_DIR)
+ 	@ln -snf . $@
+@@ -1001,6 +1009,7 @@ help:
+ 	@echo 'Build:'
+ 	@echo '  all                    - make world'
+ 	@echo '  toolchain              - build toolchain'
++	@echo '  sdk                    - build relocatable SDK'
+ 	@echo
+ 	@echo 'Configuration:'
+ 	@echo '  menuconfig             - interactive curses-based configurator'
+-- 
+1.9.1
