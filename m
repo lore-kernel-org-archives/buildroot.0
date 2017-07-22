@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 15:41:21 +0200
-Subject: [Buildroot] [PATCH 02/20] core/pkg-generic: add variable to
- skip skeleton dependency
-In-Reply-To: <85a6c3a598a517fd0fad2cba0b7c42d746c7830e.1500398733.git.yann.morin.1998@free.fr>
+Date: Sat, 22 Jul 2017 15:42:17 +0200
+Subject: [Buildroot] [PATCH 03/20] package/skeleton: add macro to rsync
+ skeleton directory
+In-Reply-To: <05879dad2f97f99ddce2b01753aae0e3111f4a43.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <85a6c3a598a517fd0fad2cba0b7c42d746c7830e.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <20170722154121.4a770035@windsurf>
+ <05879dad2f97f99ddce2b01753aae0e3111f4a43.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <20170722154217.07e08c36@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Jul 2017 19:25:28 +0200, Yann E. MORIN wrote:
-> We currently skip the skeleton dependency by checking if the current
-> package is the skeleton.
+On Tue, 18 Jul 2017 19:25:29 +0200, Yann E. MORIN wrote:
+> The rsync command is currently called from a single location. In
+> follow-up patches, it will be called from various places then.
 > 
-> We are going to introduce more skeleton-related packages, so we
-> need a way to exclude the skeleton dependency for those, or we'd
-> get a circular dependency, for the same reason we need to skip
-> the toolchain dependency.
+> It will be easier to update and fix this command if it is defined in a
+> single location, rather than if duplicated in many places.
 > 
-> Instead of checking for all the skeleton-providing packages in the core
-> infra, add a new package options so that packages can express they do
-> not need the dependency on the skeleton, like we have an option to avoid
-> the depednency on the toolchain. The only packages that will use that
-> option are probably the skeletons, so we need not document this
-> variable, like we did not document the option to exclude the dependency
-> on the toolchain.
+> Define a macro that skeleton packages can call to install their skeleton
+> directories. Since at least one occurence of it will want to install in
+> staging, the macro must accept a destination path, rather than hard-code
+> target as the destination.
+> 
+> Since it is to be used by other skeleton packages, define it early,
+> outside of any conditional block.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Reviewed-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/pkg-generic.mk       | 7 +++++--
->  package/skeleton/skeleton.mk | 1 +
->  2 files changed, 6 insertions(+), 2 deletions(-)
+>  package/skeleton/skeleton.mk | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+I know Arnout was not entirely happy about this solution, but Arnout
+comments can be addressed later on, they were not really crucial, and I
+want to move forward with applying the rest of the series. Therefore:
+patch applied, after fixing the typo pointed by Arnout in the commit
+log.
+
+Best regards,
 
 Thomas
 -- 
