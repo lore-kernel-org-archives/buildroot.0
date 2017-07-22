@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 01:38:35 +0200
-Subject: [Buildroot] [PATCH 14/20] package/skeleton-common: simplify
- staging install
-In-Reply-To: <b775d4628225bfdb820b80124374ab6ec584cf0c.1500398733.git.yann.morin.1998@free.fr>
+Date: Sun, 23 Jul 2017 01:49:58 +0200
+Subject: [Buildroot] [PATCH 15/20] package/skeleton: introduce sysv- and
+ systemd-specific skeletons
+In-Reply-To: <4cba79eb00daaaea1bd8bdb5a49a2aefd39b390d.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <b775d4628225bfdb820b80124374ab6ec584cf0c.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <0d50bda3-1cf0-8ce5-21c3-94b7f60d3ec5@mind.be>
+ <4cba79eb00daaaea1bd8bdb5a49a2aefd39b390d.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <0f62a3f9-76f0-75ed-762b-d5fbae224fad@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,57 +15,71 @@ To: buildroot@busybox.net
 
 
 On 18-07-17 19:25, Yann E. MORIN wrote:
-> We don't really care what's going in staging, as long as it is properly
-> setup for merged/non-merged /usr, especially for the lib/ directory.
+> Currently, we use the same skeleton for sysv-like init systems and
+> systemd, even though systemd has some peculiarities that makes out
+                                                                 our
+> default skeleton unfit.
 > 
-> So we can just copy the skeleton as-is.
+> So, we'll need to provide different skeletons (really, only part of it)
+> for sysv-like and systemd.
 > 
-> This simplify the maintenance, should we ever need to tweak the layout:
-> we'd just have to do it once in the skeleton directory to have it
-> propagated to both target and staging.
-
- Yes, very nice, I like it!
-
+> Introduce two new skeleton packages, aptly named skeleton-sysv and
+> skeleton-systemd, one for each, that are both providers of the skeleton
+> package, in lieue of the skeleton-common, which is now a simple
+> dependency of both the two new skeletons.
+> 
+> Those packages are empty for now. In followup changes:
+>   - sysv-specific stuff will be moved out of skeleton-common and into
+>     skeleton-sysv;
+>   - systemd-specific stuff will be added to skeleton-systemd.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ But...
+
+[snip]
+> +config BR2_PACKAGE_SKELETON_SYSTEMD
+> +	bool
+> +	select BR2_PACKAGE_HAS_SKELETON
+> +	select BR2_PACKAGE_SKELETON_COMMON
+> +
+> +config BR2_PACKAGE_PROVIDES_SKELETON
+> +	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
+
+ Again, we usually do it with if...config...endif. Same for sysv, obviously.
+
+[snip]
+> @@ -12,7 +12,9 @@ choice
+>  config BR2_ROOTFS_SKELETON_DEFAULT
+>  	bool "default target skeleton"
+>  	depends on !BR2_INIT_NONE
+> -	select BR2_PACKAGE_SKELETON_COMMON
+> +	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
+> +	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
+> +	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
+
+ This works, but I'm thinking of an alternative, let's see if it flies:
+
+ Instead of choosing the different skeletons here, we could do it in the select
+of BR2_INIT_*. Indeed, you have a skeleton for each init option. Of course, all
+the selects there would have to look like
+
+	select BR2_PACKAGE_SKELETON_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
+
+
+ I'm not entirely sure if it's an improvement, but I have the feeling it's
+easier to follow if the different skeleton options are put together with the
+different init options.
+
  Regards,
  Arnout
 
-> ---
->  package/skeleton-common/skeleton-common.mk | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
-> index ee44eaf810..475c07e32d 100644
-> --- a/package/skeleton-common/skeleton-common.mk
-> +++ b/package/skeleton-common/skeleton-common.mk
-> @@ -26,18 +26,14 @@ define SKELETON_COMMON_INSTALL_TARGET_CMDS
->  		$(TARGET_DIR_WARNING_FILE)
->  endef
+
+>  	help
+>  	  Use default target skeleton
 >  
-> -# For the staging dir, we don't really care about /bin and /sbin.
-> -# But for consistency with the target dir, and to simplify the code,
-> -# we still handle them for the merged or non-merged /usr cases.
-> -# Since the toolchain is not yet available, the staging is not yet
-> -# populated, so we need to create the directories in /usr
-> +# We don't care much about what goes in staging, as long as it is
-> +# correctly setup for merged/non-merged /usr. The simplest is to
-> +# fill it in with the content of the skeleton.
->  define SKELETON_COMMON_INSTALL_STAGING_CMDS
-> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
-> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
-> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
-> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
-> +	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
->  	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
->  	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
-> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
->  endef
->  
->  SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
 > 
 
 -- 
