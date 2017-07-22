@@ -1,51 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 15:35:34 +0200
-Subject: [Buildroot] [PATCH v3 1/1] paxtest: new package
-In-Reply-To: <1499427897-36149-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1499427897-36149-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170722153534.16f24300@windsurf>
+Date: Sat, 22 Jul 2017 15:34:01 +0200
+Subject: [Buildroot] [git commit] core/pkg-generic: add variable to skip
+	skeleton dependency
+Message-ID: <20170722133504.EB81E7FE08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3e5eb710673dc78645239b0905933e273eb0b62a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  7 Jul 2017 06:44:57 -0500, Matt Weber wrote:
-> PaX regression test suite
-> 
-> Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Changes v2 -> v3
-> [Arnout V
->  - Add Config.in comment when glibc toolchain not used
->  - Removed PAXTEST_SOURCE assignment as it was default
->  - Updated ARMv# patch to be anything less then v7 instead of
->    a range from 4-7
->  - Tested that TARGET_CONFIGURE_OPTS could be used and added it in
->  - Updated LD= to use TARGET_CC and enclosed in quotes
+We currently skip the skeleton dependency by checking if the current
+package is the skeleton.
 
-Applied to master, thanks. However, I have to say I very much dislike
-the fact that a bunch of executable programs are installed right
-into /usr/lib and not /usr/lib/paxtest or something like that. But
-apparently RUNDIR is used to install both an actual shared library
-(which must be in /usr/lib) and those executable programs.
+We are going to introduce more skeleton-related packages, so we
+need a way to exclude the skeleton dependency for those, or we'd
+get a circular dependency, for the same reason we need to skip
+the toolchain dependency.
 
-Perhaps we could set RUNDIR=/usr/lib/paxtest, and as a post install
-hook, move the single shared library being installed back
-into /usr/lib ?
+Instead of checking for all the skeleton-providing packages in the core
+infra, add a new package options so that packages can express they do
+not need the dependency on the skeleton, like we have an option to avoid
+the depednency on the toolchain. The only packages that will use that
+option are probably the skeletons, so we need not document this
+variable, like we did not document the option to exclude the dependency
+on the toolchain.
 
-Could you test doing this ?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk       | 7 +++++--
+ package/skeleton/skeleton.mk | 1 +
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Since I've applied the patch, it should obviously be done by follow-up
-patches, based on the latest master.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2916a7b..b2b3af7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -542,11 +542,14 @@ $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)
+ 
+ # When a target package is a toolchain dependency set this variable to
+ # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+-# dependency
++# dependency.
++# Similarly for the skeleton.
+ $(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
++$(2)_ADD_SKELETON_DEPENDENCY	?= YES
++
+ 
+ ifeq ($(4),target)
+-ifneq ($(1),skeleton)
++ifeq ($$($(2)_ADD_SKELETON_DEPENDENCY),YES)
+ $(2)_DEPENDENCIES += skeleton
+ endif
+ ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index a310a31..9b7407a 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -9,6 +9,7 @@
+ # Hence, skeleton would depends on the toolchain and the toolchain would depend
+ # on skeleton.
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_ADD_SKELETON_DEPENDENCY = NO
+ 
+ # The skeleton also handles the merged /usr case in the sysroot
+ SKELETON_INSTALL_STAGING = YES
