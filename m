@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jul 2017 21:39:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: disable build of nvidia
- hardware acceleration support
-In-Reply-To: <20170722151306.22870-1-bernd.kuhls@t-online.de>
-References: <20170722151306.22870-1-bernd.kuhls@t-online.de>
-Message-ID: <20170722213918.30c3f282@windsurf>
+Date: Sat, 22 Jul 2017 21:44:25 +0200
+Subject: [Buildroot] [RFC v1] libv4l: build utils only on MMU (with fork
+ support) platforms
+In-Reply-To: <41bd7a05-4254-e7e4-7846-ed5e4d99d0ad@st.com>
+References: <20170711172624.7516-1-ps.report@gmx.net>
+ <70ff5d21-0466-c470-cac3-e00c524c93b0@st.com>
+ <20170717200901.51814cb5@gmx.net>
+ <41bd7a05-4254-e7e4-7846-ed5e4d99d0ad@st.com>
+Message-ID: <20170722214425.5c9ab5a8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +16,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Jul 2017 17:13:06 +0200, Bernd Kuhls wrote:
-> ffmpeg always enables support for nvenc/cuda even if their support
-> libraries are not present:
-> 
-> External libraries providing hardware acceleration:
-> cuda cuvid nvenc
-> [...]
-> Enabled hwaccels:
-> h264_cuvid mjpeg_cuvid mpeg2_cuvid vc1_cuvid vp9_cuvid
-> hevc_cuvid mpeg1_cuvid mpeg4_cuvid vp8_cuvid
-> 
-> This leads to a crash in freeswitch git master when transcoding video
-> streams on a system without nvidia hardware:
-> 
-> 2017-07-22 15:06:27.306760 [INFO] avcodec.c:1077 initializing encoder 352x288
-> 2017-07-22 15:06:27.306760 [NOTICE] avcodec.c:828 NVENC HW CODEC ENABLED
-> 
-> This patch disables the support of nvidia hardware acceleration support
-> for now until the needed packages are added to buildroot. For details
-> about this please refer to https://developer.nvidia.com/ffmpeg
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/ffmpeg.mk | 3 +++
->  1 file changed, 3 insertions(+)
+On Tue, 18 Jul 2017 09:08:18 +0000, Hugues FRUCHET wrote:
 
-Applied to master, thanks.
+> Back to your exact build issue, the best fix on my opinion is to add a 
+> dependency on fork() symbol in configure.ac instead of the one proposed 
+> in libv4l.mk, find attached a patch proposal.
+
+Does your patch actually work? A lot of the utils in utils/ do require
+the libraries, won't they fail to build if the libraries are not built ?
+
+Could you make a clean patch submission to resolve this issue ?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
