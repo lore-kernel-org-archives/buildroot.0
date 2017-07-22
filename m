@@ -1,80 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Jul 2017 23:54:22 +0200
-Subject: [Buildroot] [PATCH 05/13] packages: use new $($PKG)_DL_DIR)
- variable
-In-Reply-To: <20170722233936.1172006e@windsurf>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-6-maxime.hadjinlian@gmail.com>
- <20170722233936.1172006e@windsurf>
-Message-ID: <20170722215422.GH9929@scaer>
+Date: Sun, 23 Jul 2017 00:12:16 +0200
+Subject: [Buildroot] [PATCH 08/20] system: with no init system,
+ only allow custom skeleton
+In-Reply-To: <9d4545cd-27a2-39dc-65e5-9f669f28db52@mind.be>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <005008f3ac1cdbd8de65006d578d43c555355d0f.1500398733.git.yann.morin.1998@free.fr>
+ <3bd7e441-4317-20f9-9e7f-9a06168ced61@mind.be>
+ <20170722135322.GB9929@scaer>
+ <9d4545cd-27a2-39dc-65e5-9f669f28db52@mind.be>
+Message-ID: <20170722221216.GI9929@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Maxime, All,
+Arnout,  All,
 
-On 2017-07-22 23:39 +0200, Thomas Petazzoni spake thusly:
-> Hello,
-> 
-> On Tue,  4 Jul 2017 18:22:03 +0200, Maxime Hadjinlian wrote:
-> > Instead of DL_DIR, the package should now use $(PKG)_DL_DIR to ease the
-> > transition into a new directory structure for DL_DIR.
+On 2017-07-22 23:18 +0200, Arnout Vandecappelle spake thusly:
+> On 22-07-17 15:53, Yann E. MORIN wrote:
+> > Ranout, All,
 > > 
-> > This commit has been generated with the following scripts:
+> > On 2017-07-22 15:28 +0200, Arnout Vandecappelle spake thusly:
+> >> On 18-07-17 19:25, Yann E. MORIN wrote:
+> >>> When there is no init system (i.e. a custom one), our bundled default
+> >>> skeleton is most probably un-fit for that (non-)init system.
+> >>>
+> >>> This will be the case when we introduce per init system skeletons. The
+> >>> systemd skeleton will be unfit except for a systemd init; the sysv
+> >>> skeleton will be unfit except for a sysv-like init system.
+> >>>
+> >>> In case they are using no init system (really, a custom one), the user
+> >>> should be responsible for providing their own, custom skeleton as well.
+> >>>
+> >>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >>
+> >>  NACK on this one. Our skeleton (as in, the contents of system/skeleton) is
+> >> already init-agnostic. If you use another init system (shell script, or no init
+> >> at all because you just use it as a chroot, or whatever), you will *still* need
+> >> that skelecton. Indeed, the skeleton contains things like the /sys and /dev
+> >> directories, a passwd file, ....
+> >>
+> >>  If there are things in that skeleton that you don't need for a custom init
+> >> system, then they probably shouldn't even be in the skeleton.
 > > 
-> > for i in package/*/*.mk; do
-> > 	if ! grep -q "\$(DL_DIR)" ${i}; then
-> > 		continue
-> > 	fi
-> > 	pkg_name="$(basename $(dirname ${i}))"
-> > 	raw_pkg_name=$(echo ${pkg_name} | tr [a-z] [A-Z] | tr '-' '_')
-> > 	pkg_dl_dir="${raw_pkg_name}_DL_DIR"
-> > 	sed -i "s/\$(DL_DIR)/\$($pkg_dl_dir)/" ${i}
-> > done
-> > 
-> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > This patch is reverted later in the series, once all the types of
+> > skeleton are in place. I could not see how to do it sanely and cleanly
+> > otherwise.
 > 
-> I wanted to apply this one, but I believe there is a problem, see below:
+>  OK, in that case
 > 
-> > diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> > index b52f9456b3..64fcfc70e7 100644
-> > --- a/package/gcc/gcc.mk
-> > +++ b/package/gcc/gcc.mk
-> > @@ -289,7 +289,7 @@ HOST_GCC_COMMON_MAKE_OPTS = \
-> >  	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-> >  
-> >  ifeq ($(BR2_CCACHE),y)
-> > -HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
-> > +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(GCC_DL_DIR)/$(GCC_SOURCE)
-> 
-> I'm not sure this one works. Indeed, there is no package named just
-> "gcc". There are two packages named gcc-initial and gcc-final, but no
-> package named "gcc", so GCC_DL_DIR doesn't exist. Only
-> GCC_INITIAL_DL_DIR and GCC_FINAL_DL_DIR exist.
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Indeed, it does not exist;
+Thanks.
 
-    $ make -s printvars VARS=GCC_DL_DIR
-    [nothing]
+>  I trust that you looked for a way to avoid this temporary workaround.
+
+I tried, but I could not see a simple, clean and quick solution...
 
 Regards,
 Yann E. MORIN.
 
-> Am I missing something here ?
+>  Regards,
+>  Arnout
 > 
-> Thanks!
-> 
-> Thomas
 > -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
