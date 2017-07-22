@@ -1,49 +1,30 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 22 Jul 2017 16:42:45 -0500
-Subject: [Buildroot] [PATCH v3 1/1] paxtest: new package
-In-Reply-To: <20170722153534.16f24300@windsurf>
-References: <1499427897-36149-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170722153534.16f24300@windsurf>
-Message-ID: <CANQCQpbcDe37x4wUh15OYoNSodeYXCdyN0skPfF+TYq53pHQxw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Jul 2017 23:47:28 +0200
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: fix syntax
+Message-ID: <20170722214728.31536-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/kvm-unit-tests/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat, Jul 22, 2017 at 8:35 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri,  7 Jul 2017 06:44:57 -0500, Matt Weber wrote:
->> PaX regression test suite
->>
->> Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
->> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->> ---
->> Changes v2 -> v3
->> [Arnout V
->>  - Add Config.in comment when glibc toolchain not used
->>  - Removed PAXTEST_SOURCE assignment as it was default
->>  - Updated ARMv# patch to be anything less then v7 instead of
->>    a range from 4-7
->>  - Tested that TARGET_CONFIGURE_OPTS could be used and added it in
->>  - Updated LD= to use TARGET_CC and enclosed in quotes
->
-> Applied to master, thanks. However, I have to say I very much dislike
-> the fact that a bunch of executable programs are installed right
-> into /usr/lib and not /usr/lib/paxtest or something like that. But
-> apparently RUNDIR is used to install both an actual shared library
-> (which must be in /usr/lib) and those executable programs.
->
-> Perhaps we could set RUNDIR=/usr/lib/paxtest, and as a post install
-> hook, move the single shared library being installed back
-> into /usr/lib ?
->
-> Could you test doing this ?
->
-
-Sure, will take a look.
-Matt
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index 8b172c3f21..d0d9e2ef96 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
+ 	bool
+ 	# On ARM, it uses virtualization extensions
+ 	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
+-		BR2_cortex_a15 || BR2_cortex_a15_a7 \
++		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
+ 		BR2_cortex_a17 || BR2_cortex_a17_a7
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc64 || BR2_powerpc64le
+-- 
+2.11.0
