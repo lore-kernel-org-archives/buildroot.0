@@ -1,63 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Jul 2017 23:18:53 +0200
-Subject: [Buildroot] [PATCH 08/20] system: with no init system,
- only allow custom skeleton
-In-Reply-To: <20170722135322.GB9929@scaer>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <005008f3ac1cdbd8de65006d578d43c555355d0f.1500398733.git.yann.morin.1998@free.fr>
- <3bd7e441-4317-20f9-9e7f-9a06168ced61@mind.be> <20170722135322.GB9929@scaer>
-Message-ID: <9d4545cd-27a2-39dc-65e5-9f669f28db52@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Jul 2017 23:19:53 +0200
+Subject: [Buildroot] [git commit] efibootmgr: fix build with gcc 7.x
+Message-ID: <20170722211552.1074E81ED9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=cefdd6546010e160985de2daa2ef70a952d081f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Now that the build of efivar with gcc 7.x has been fixed by commit
+0ca30170345a81f5f21e4ef4424b1f186cde1988 ("efivar: fix build with gcc
+7"), efibootmgr fails similarly with gcc 7.x.
 
-On 22-07-17 15:53, Yann E. MORIN wrote:
-> Ranout, All,
-> 
-> On 2017-07-22 15:28 +0200, Arnout Vandecappelle spake thusly:
->> On 18-07-17 19:25, Yann E. MORIN wrote:
->>> When there is no init system (i.e. a custom one), our bundled default
->>> skeleton is most probably un-fit for that (non-)init system.
->>>
->>> This will be the case when we introduce per init system skeletons. The
->>> systemd skeleton will be unfit except for a systemd init; the sysv
->>> skeleton will be unfit except for a sysv-like init system.
->>>
->>> In case they are using no init system (really, a custom one), the user
->>> should be responsible for providing their own, custom skeleton as well.
->>>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->>  NACK on this one. Our skeleton (as in, the contents of system/skeleton) is
->> already init-agnostic. If you use another init system (shell script, or no init
->> at all because you just use it as a chroot, or whatever), you will *still* need
->> that skelecton. Indeed, the skeleton contains things like the /sys and /dev
->> directories, a passwd file, ....
->>
->>  If there are things in that skeleton that you don't need for a custom init
->> system, then they probably shouldn't even be in the skeleton.
-> 
-> This patch is reverted later in the series, once all the types of
-> skeleton are in place. I could not see how to do it sanely and cleanly
-> otherwise.
+This commit backports an upstream patch that fixes this issue.
 
- OK, in that case
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...e-extra-const-keywords-gcc-7-gripes-about.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- I trust that you looked for a way to avoid this temporary workaround.
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
+new file mode 100644
+index 0000000..8bc6f01
+--- /dev/null
++++ b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
+@@ -0,0 +1,51 @@
++From a542b169003c2ef95ce6c00d40050eb10568b612 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 6 Feb 2017 16:34:54 -0500
++Subject: [PATCH] Remove extra const keywords gcc 7 gripes about.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++[Backported from upstream commit a542b169003c2ef95ce6c00d40050eb10568b612]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/efibootdump.c | 2 +-
++ src/efibootmgr.c  | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/efibootdump.c b/src/efibootdump.c
++index 6ff8360..30a1943 100644
++--- a/src/efibootdump.c
+++++ b/src/efibootdump.c
++@@ -39,7 +39,7 @@ print_boot_entry(efi_load_option *loadopt, size_t data_size)
++ 	uint8_t *optional_data = NULL;
++ 	size_t optional_data_len = 0;
++ 	uint16_t pathlen;
++-	const unsigned char const *desc;
+++	const unsigned char *desc;
++ 	char *raw;
++ 	size_t raw_len;
++ 
++diff --git a/src/efibootmgr.c b/src/efibootmgr.c
++index 493f2cf..90a0998 100644
++--- a/src/efibootmgr.c
+++++ b/src/efibootmgr.c
++@@ -221,7 +221,7 @@ warn_duplicate_name(list_t *var_list)
++ 	list_t *pos;
++ 	var_entry_t *entry;
++ 	efi_load_option *load_option;
++-	const unsigned char const *desc;
+++	const unsigned char *desc;
++ 
++ 	list_for_each(pos, var_list) {
++ 		entry = list_entry(pos, var_entry_t, list);
++@@ -873,7 +873,7 @@ show_vars(const char *prefix)
++ {
++ 	list_t *pos;
++ 	var_entry_t *boot;
++-	const unsigned char const *description;
+++	const unsigned char *description;
++ 	efi_load_option *load_option;
++ 	efidp dp = NULL;
++ 	unsigned char *optional_data = NULL;
++-- 
++2.9.4
++
