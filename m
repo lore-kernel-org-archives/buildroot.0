@@ -1,41 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 23 Jul 2017 22:03:39 +0200
-Subject: [Buildroot] [PATCH 2/2] package/x265: bump version to 2.5
-In-Reply-To: <20170723200339.12575-1-bernd.kuhls@t-online.de>
-References: <20170723200339.12575-1-bernd.kuhls@t-online.de>
-Message-ID: <20170723200339.12575-2-bernd.kuhls@t-online.de>
+Date: Sun, 23 Jul 2017 22:08:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libressl: needs MMU
+Message-ID: <20170723200844.13004-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+http://autobuild.buildroot.net/results/074/07429d3016c900894fa0ca19b7dad0a928e32e3f/
+http://autobuild.buildroot.net/results/1c1/1c1325d1a7a7aa98172d2d93d30322165af62348/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libressl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 1ad81700a..3e44b0369 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729  x265_2.4.tar.gz
-+sha256 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17  x265_2.5.tar.gz
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 2facf2c1d..ae570e6e4 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X265_VERSION = 2.4
-+X265_VERSION = 2.5
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPL-2.0+
+diff --git a/package/libressl/Config.in b/package/libressl/Config.in
+index 0a1c9e273..d13b2068c 100644
+--- a/package/libressl/Config.in
++++ b/package/libressl/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBRESSL
+ 	bool "libressl"
+ 	depends on !BR2_PACKAGE_OPENSSL
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  LibreSSL is a version of the TLS/crypto stack forked from
+ 	  OpenSSL in 2014, with goals of modernizing the codebase,
 -- 
 2.11.0
