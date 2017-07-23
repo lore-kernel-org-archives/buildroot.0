@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jul 2017 12:15:59 +0200
-Subject: [Buildroot] [PATCH 15/20] package/skeleton: introduce sysv- and
- systemd-specific skeletons
-In-Reply-To: <0f62a3f9-76f0-75ed-762b-d5fbae224fad@mind.be>
+Date: Sun, 23 Jul 2017 12:24:53 +0200
+Subject: [Buildroot] [PATCH 16/20] system: separate sysv and systemd
+ parts of the skeleton
+In-Reply-To: <430c46f8-bb5d-a2bf-3695-6822609e0a2c@mind.be>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <4cba79eb00daaaea1bd8bdb5a49a2aefd39b390d.1500398733.git.yann.morin.1998@free.fr>
- <0f62a3f9-76f0-75ed-762b-d5fbae224fad@mind.be>
-Message-ID: <20170723101559.GD26998@scaer>
+ <f797589346d85a6ebba86bb418d6b818051d0da7.1500398733.git.yann.morin.1998@free.fr>
+ <430c46f8-bb5d-a2bf-3695-6822609e0a2c@mind.be>
+Message-ID: <20170723102453.GE26998@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,69 +15,82 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2017-07-23 01:49 +0200, Arnout Vandecappelle spake thusly:
+On 2017-07-23 02:08 +0200, Arnout Vandecappelle spake thusly:
 > On 18-07-17 19:25, Yann E. MORIN wrote:
-> > Currently, we use the same skeleton for sysv-like init systems and
-> > systemd, even though systemd has some peculiarities that makes out
->                                                                  our
-> > default skeleton unfit.
+> > systems does not like that the content of /var be symlinks to /tmp,
+>   systemd
+> 
+> > especially journald that starts before /tmp is mounted, and thus the
+> > journal files are hidden from view, which causes wuite a bit if fuss...
+>                                                    quite
 > > 
-> > So, we'll need to provide different skeletons (really, only part of it)
-> > for sysv-like and systemd.
+> > Instead, move the current /var to a sysv-only skeleton.
 > > 
-> > Introduce two new skeleton packages, aptly named skeleton-sysv and
-> > skeleton-systemd, one for each, that are both providers of the skeleton
-> > package, in lieue of the skeleton-common, which is now a simple
-> > dependency of both the two new skeletons.
-> > 
-> > Those packages are empty for now. In followup changes:
-> >   - sysv-specific stuff will be moved out of skeleton-common and into
-> >     skeleton-sysv;
-> >   - systemd-specific stuff will be added to skeleton-systemd.
+> > systemd at install time will create the /var content it needs, so we
+> 
+>  I guess systemd will also create a tmpfs on /var?
+
+No it does not. But so far we do not support systemd on a read-only
+root filesystem anyway (see the depends on for systemd).
+
+In a later patch, we add support for a read-only rootfs, and then we add
+an explicit tmpfs mont on /var, which systemd does not do on its own,
+which is the reason for 886f3109bc (system: systemd only really supports
+a R/W rootfs)
+
+> > just create an empty /var for systemd. Yet, systemd really requires a
+> > bunch of extra directories to exist, so we also create those.
 > > 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > 
+>  Commit message needs to be improved (see also below), but with that
 > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
->  But...
+> > 
+> > ---
+> > Note: /home and /srv will be created at runtime if missing, but it is
+> > better to create them right now, to simplify supporting systemd on a
+> > RO filesystem in the (near) future.
+> > ---
+> >  package/skeleton-systemd/skeleton-systemd.mk              | 7 +++++++
+> >  package/skeleton-sysv/skeleton-sysv.mk                    | 4 ++++
+> >  {system => package/skeleton-sysv}/skeleton/dev/log        | 0
+> >  {system => package/skeleton-sysv}/skeleton/dev/pts/.empty | 0
+> >  {system => package/skeleton-sysv}/skeleton/dev/shm/.empty | 0
 > 
-> [snip]
-> > +config BR2_PACKAGE_SKELETON_SYSTEMD
-> > +	bool
-> > +	select BR2_PACKAGE_HAS_SKELETON
-> > +	select BR2_PACKAGE_SKELETON_COMMON
-> > +
-> > +config BR2_PACKAGE_PROVIDES_SKELETON
-> > +	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
+>  I guess indeed the /dev stuff is not needed for systemd because there is anyway
+> a devtmpfs mounted over it. Which makes me wonder: shouldn't these be moved to
+> the device-table? Only the static devices case needs these to be present... Of
+> course, such a change is not for this patch, but I'd say that we can just leave
+> this /dev stuff in the common part - systemd has no less use of it than sysv.
 > 
->  Again, we usually do it with if...config...endif. Same for sysv, obviously.
+> >  {system => package/skeleton-sysv}/skeleton/etc/fstab      | 0
 > 
-> [snip]
-> > @@ -12,7 +12,9 @@ choice
-> >  config BR2_ROOTFS_SKELETON_DEFAULT
-> >  	bool "default target skeleton"
-> >  	depends on !BR2_INIT_NONE
-> > -	select BR2_PACKAGE_SKELETON_COMMON
-> > +	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
-> > +	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
-> > +	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
-> 
->  This works, but I'm thinking of an alternative, let's see if it flies:
-> 
->  Instead of choosing the different skeletons here, we could do it in the select
-> of BR2_INIT_*. Indeed, you have a skeleton for each init option. Of course, all
-> the selects there would have to look like
-> 
-> 	select BR2_PACKAGE_SKELETON_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
-> 
-> 
->  I'm not entirely sure if it's an improvement, but I have the feeling it's
-> easier to follow if the different skeleton options are put together with the
-> different init options.
+>  Why? systemd does use fstab, so it seems weird not to have an fstab in the
+> systemd case.
 
-I also tried that, but I found it uglier, because it is split away in
-various options, while here it is fully concentrated in a single one, so
-it is (arguably) easier to maintain...
+We do have one, it is created in the skeleton-systemd.mk file:
+
+    define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
+            mkdir -p $(TARGET_DIR)/home
+            mkdir -p $(TARGET_DIR)/srv
+            mkdir -p $(TARGET_DIR)/var
+            echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+    endef
+
+> Well, I guess our skeleton fstab doesn't contain anything relevant
+> for systemd because all of that is handled already by tmpfiles.
+
+Exactly.
+
+> But the commit log should at least explain this.
+
+Like so, maybe?
+
+    For systemd, we only ever need an entry for /, because all the rest
+    is totally irrelevant for systemd (it automatically mounts what it
+    needs where it needs it).
 
 Regards,
 Yann E. MORIN.
