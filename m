@@ -1,45 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Jul 2017 09:58:39 +0200
-Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
- for init systems
-In-Reply-To: <20170722225016.GK9929@scaer>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
- <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be>
- <20170722144552.GE9929@scaer>
- <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
- <20170722221014.672f9eb2@windsurf> <20170722225016.GK9929@scaer>
-Message-ID: <20170723095839.0d11b971@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Jul 2017 10:10:22 +0200
+Subject: [Buildroot] [PATCH v10 0/3] Make the SDK relocatable
+In-Reply-To: <20170722144146.28f826b1@windsurf> (Thomas Petazzoni's message of
+ "Sat, 22 Jul 2017 14:41:46 +0200")
+References: <1500722142-20420-1-git-send-email-wg@grandegger.com>
+ <20170722144146.28f826b1@windsurf>
+Message-ID: <8760ejpo9d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
+ > Hello,
+ > On Sat, 22 Jul 2017 13:15:39 +0200, Wolfgang Grandegger wrote:
 
-> > The patches fixing them are here:
-> > 
-> >   http://patchwork.ozlabs.org/patch/783135/
-> >   http://patchwork.ozlabs.org/patch/783137/
-> >   http://patchwork.ozlabs.org/patch/783136/
-> > 
-> > and nobody reviews them.  
-> 
-> I gave them a spin here, and they indeed fix the build, but the tests
-> are still broken because qemu can't boot the resulting system...
-> 
-> I'll investigate that tomorrow...
+ >> Wolfgang Grandegger (3):
+ >> core: introduce "sdk" target to make a relocatable SDK
+ >> support/scripts/fix-rpath: check if the patchelf utility is executable
+ >> support/scripts/fix-rpath: typo fix and unneeded ";" removed
 
-Hum, weird, because I'm pretty sure I tested the test cases with those
-patches. I'll test again, maybe I missed something.
+ > Thanks a lot, I've applied those remaining 3 patches!
 
-Best regards,
+ > I would like to take this opportunity to thank you for your patience
+ > and your dedication in pushing this SDK topic. It's been long overdue
+ > in Buildroot, and the fact that you have taken all comments into
+ > account and sent quickly new iterations was really instrumental to
+ > getting the all thing finally merged. So: many thanks!
 
-Thomas
+Yes, from me as well - Thanks a lot!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
