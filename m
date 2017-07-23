@@ -1,155 +1,62 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 23 Jul 2017 16:00:36 +0200
-Subject: [Buildroot] [Patch v7 02/10] rust-bin: new package
-In-Reply-To: <20170723081206.7774-3-eric.le.bihan.dev@free.fr>
-References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
- <20170723081206.7774-3-eric.le.bihan.dev@free.fr>
-Message-ID: <1500818436.12674.1.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Jul 2017 16:04:01 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-07-22
+In-Reply-To: <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
+ (Matthew Weber's message of "Sun, 23 Jul 2017 07:35:55 -0500")
+References: <20170723063052.1CB8521DBF@mail.free-electrons.com>
+ <CANQCQpa0--xE+_YtXVqfJr78i==sY0gj3fECTBKm7g-eByd9=Q@mail.gmail.com>
+ <CANQCQpbvJMypP2s5rwTBPNsnhQ_akammE-ci4wpUqN=5mLeHRQ@mail.gmail.com>
+ <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
+Message-ID: <87lgnfntbi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2017-07-23 at 10:11 +0200, Eric Le Bihan wrote:
-> This package provides a pre-built version of rustc, the compiler for the
-> Rust programming language, fetched from the upstream project.
-> 
-> A pre-built version of the standard library for the host as well as one
-> for the chosen target are also fetched and installed.
-> 
-> Only the host variant is provided to allow the user to cross-compile
-> Rust programs and run them on the target.
-> 
-> The menuconfig entry for rustc is also updated to expose this provider.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  DEVELOPERS                     |  1 +
->  package/rust-bin/rust-bin.hash | 30 ++++++++++++++++++++++++++++++
->  package/rust-bin/rust-bin.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
->  package/rustc/Config.in.host   | 41 +++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 113 insertions(+)
->  create mode 100644 package/rust-bin/rust-bin.hash
->  create mode 100644 package/rust-bin/rust-bin.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0c22ffc..312b176 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -493,6 +493,7 @@ F:	package/execline/
->  F:	package/hicolor-icon-theme/
->  F:	package/jemalloc/
->  F:	package/ninja/
-> +F:	package/rust-bin/
->  F:	package/s6/
->  F:	package/s6-dns/
->  F:	package/s6-linux-init/
-> diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-> new file mode 100644
-> index 0000000..538f376
-> --- /dev/null
-> +++ b/package/rust-bin/rust-bin.hash
-> @@ -0,0 +1,30 @@
-> +# From https://static.rust-lang.org/dist/rustc-1.19.0-i686-unknown-linux-gnu.tar.xz.sha256
-> +sha256 458404eeac5439c7de35eb15b5922835401918935874672c07eb0f579a85fa40  rustc-1.19.0-i686-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rustc-1.19.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-> +sha256 023f1b63b77eab1e19e900ed6c15f144914bec82de96d644a20f428be1e565b1  rustc-1.19.0-x86_64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-aarch64-unknown-linux-gnu.tar.xz.sha256
-> +sha256 bcadc15e62aa1e919409fd61212d2cde1b63c065afa4f001b8a33300a06a67ab  rust-std-1.19.0-aarch64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-arm-unknown-linux-gnueabi.tar.xz.sha256
-> +sha256 458af663cbd06262bcc1bd3eea741a1ccb3a0b794329542fc81e83891b7291b2  rust-std-1.19.0-arm-unknown-linux-gnueabi.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
-> +sha256 6e845a4c2b87f3764c42fbad835fd7deb6a872bfbe5fecdc4412d7344064b07d  rust-std-1.19.0-arm-unknown-linux-gnueabihf.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
-> +sha256 5f45d5e4f4b2cf2a91818c68d4fe463745c9133a6d85edb518b77f175eea2065  rust-std-1.19.0-armv7-unknown-linux-gnueabihf.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-i686-unknown-linux-gnu.tar.xz.sha256
-> +sha256 f5dffacc264fb82b605dc66180cd327628caadedd4dca0c2115652f1933c6d93  rust-std-1.19.0-i686-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mips-unknown-linux-gnu.tar.xz.sha256
-> +sha256 a74d1d91d28cb09d13b90451f59939ac01fcbb33eb3087e90b45eff76d5ab9ae  rust-std-1.19.0-mips-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
-> +sha256 eeb6d00d24ce9250219cb019cf08b64c2b629dec8e3e70546ddd103df5c8b9dc  rust-std-1.19.0-mips64-unknown-linux-gnuabi64.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
-> +sha256 745fc612c64bb43f26be5240333842280c6aacfd5acafe3c279ab9ac1da77a46  rust-std-1.19.0-mips64el-unknown-linux-gnuabi64.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mipsel-unknown-linux-gnu.tar.xz.sha256
-> +sha256 fabb4d203019eefcca2200cf1d519de47a376e71cdca6faa527e94d86b66ecd6  rust-std-1.19.0-mipsel-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-powerpc-unknown-linux-gnu.tar.xz.sha256
-> +sha256 0c0a6aad87c97b1777c43386c17a8a0dea4ebe774adcae563768cabb0a039bbf  rust-std-1.19.0-powerpc-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
-> +sha256 ddb66ff250ebdaab4593634236dcefe707918a424f3f5d2650a3b8e726d8081d  rust-std-1.19.0-powerpc64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-> +sha256 5ca6c0943c883606c43c11d32c35382f019109544a7820d4279d479ce2393a3c  rust-std-1.19.0-powerpc64le-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-> +sha256 da67633a1447656c4c9907776fc473b208737f4ed521727eb37a59177d1ae296  rust-std-1.19.0-x86_64-unknown-linux-gnu.tar.xz
-> diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-> new file mode 100644
-> index 0000000..900cc69
-> --- /dev/null
-> +++ b/package/rust-bin/rust-bin.mk
-> @@ -0,0 +1,41 @@
-> +################################################################################
-> +#
-> +# rust-bin
-> +#
-> +################################################################################
-> +
-> +RUST_BIN_VERSION = 1.19.0
-> +RUST_BIN_SITE = https://static.rust-lang.org/dist
-> +RUST_BIN_LICENSE = Apache-2.0 or MIT
-> +RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> +
-> +HOST_RUST_BIN_PROVIDES = host-rustc
-> +
-> +HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz
-> +HOST_RUST_BIN_LIBSTD_SOURCES = \
-> +	rust-std-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz \
-> +	rust-std-$(RUST_BIN_VERSION)-$(RUST_TARGET_NAME).tar.xz
-> +
-> +HOST_RUST_BIN_EXTRA_DOWNLOADS = $(HOST_RUST_BIN_LIBSTD_SOURCES)
-> +
-> +define HOST_RUST_BIN_LIBSTD_EXTRACT
-> +	mkdir -p $(@D)/std
-> +	for file in $(addprefix $(DL_DIR)/,$(HOST_RUST_BIN_LIBSTD_SOURCES)); do \
-> +		$(TAR) -C $(@D)/std -xJf $${file}; \
-> +	done
-> +endef
-> +
-> +HOST_RUST_BIN_POST_EXTRACT_HOOKS += HOST_RUST_BIN_LIBSTD_EXTRACT
-> +
-> +define HOST_RUST_BIN_INSTALL_CMDS
-> +	for exe in $$(find $(@D) -name install.sh -executable); do \
-> +		$${exe} \
-> +			--prefix=$(HOST_DIR) \
-> +			--docdir=$(HOST_DIR)/share/doc/rust \
-> +			--libdir=$(HOST_DIR)/lib \
-> +			--mandir=$(HOST_DIR)/share/man \
-> +			--disable-ldconfig; \
-> +	done
-> +endef
-> +
-> +$(eval $(host-generic-package))
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-> index fef78a7..7f2c276 100644
-> --- a/package/rustc/Config.in.host
-> +++ b/package/rustc/Config.in.host
-> @@ -1,5 +1,46 @@
-> +config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-> +	bool
-> +	default y
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	depends on  BR2_i386 || BR2_x86_64 \
-> +		|| BR2_arm  || BR2_aarch64 \
-> +		|| BR2_powerpc  || BR2_powerpc64 \
-> +		|| BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> +	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
-> +	depends on !BR2_MIPS_NABI32
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-The dependency on the architecture is only true for the available pre-
-built std libraries. If we want to support custom targets or building
-without std, the architecture depends on the support in LLVM.
+Hi,
 
-So, I really think it's best to untie rustc and std. 
+ > It looks like all of the downloads of
+ > https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz on "gcc20"
+ > and "free electrons server" consistently have a
+ > GnuTLS: A TLS fatal alert has been received.
+ > Unable to establish SSL connection.
 
-Best regards,
-J?rg
+ > That link is using HTTPS redirects.
+
+ > I tested downloading "wget
+ > https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz" on my home
+ > machine and a webbrowser, both seem to work ok.
+ > My wget was "GNU Wget 1.17.1 ".
+
+ > What OS version and/or wget/gnutls are those two machines using?
+ > Google seems to note some issues with wget having a bug preventing
+ > HTTPS redirections from working around the time of Debian7?
+
+gcc20 is running Debian 7:
+
+peko at gcc20:/tmp$ cat /etc/os-release
+PRETTY_NAME="Debian GNU/Linux 7 (wheezy)"
+NAME="Debian GNU/Linux"
+VERSION_ID="7"
+VERSION="7 (wheezy)"
+ID=debian
+ANSI_COLOR="1;31"
+HOME_URL="http://www.debian.org/"
+SUPPORT_URL="http://www.debian.org/support/"
+BUG_REPORT_URL="http://bugs.debian.org/"
+peko at gcc20:/tmp$ wget https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz
+--2017-07-23 16:01:25--  https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz
+Resolving www.grsecurity.net (www.grsecurity.net)... 50.251.85.49
+Connecting to www.grsecurity.net (www.grsecurity.net)|50.251.85.49|:443... connected.
+GnuTLS: A TLS fatal alert has been received.
+Unable to establish SSL connection.
+
+But there's now a copy of the tarball on sources.buildroot.org, so these
+older systems should just fall back to getting it from there.
+
+-- 
+Bye, Peter Korsgaard
