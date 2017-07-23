@@ -1,66 +1,69 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 23 Jul 2017 07:35:55 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-07-22
-In-Reply-To: <CANQCQpbvJMypP2s5rwTBPNsnhQ_akammE-ci4wpUqN=5mLeHRQ@mail.gmail.com>
-References: <20170723063052.1CB8521DBF@mail.free-electrons.com>
- <CANQCQpa0--xE+_YtXVqfJr78i==sY0gj3fECTBKm7g-eByd9=Q@mail.gmail.com>
- <CANQCQpbvJMypP2s5rwTBPNsnhQ_akammE-ci4wpUqN=5mLeHRQ@mail.gmail.com>
-Message-ID: <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 23 Jul 2017 14:56:37 +0200
+Subject: [Buildroot] [PATCH 1/1] nginx-upload-module: add openssl lib
+ dependency
+In-Reply-To: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <f36d741d-93ac-a9ca-1301-186742c2700f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas/Peter,
 
-On Sun, Jul 23, 2017 at 7:21 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Thomas/Peter,
->
-> On Sun, Jul 23, 2017 at 7:19 AM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->> All,
->>
->> On Sun, Jul 23, 2017 at 1:30 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> Hello,
->>>
->>
->> [snip]
->>
->>>       xtensa |                   nginx-1.12.1 | NOK | http://autobuild.buildroot.net/results/a09a4449beae2f78ea47585f4dfeb0b8b8b9853e |
->>>  powerpc64le |                   nginx-1.12.1 | NOK | http://autobuild.buildroot.net/results/d853a1eb3d03b63825331dc899a61356dfae1a33 |
->>>     mips64el |                   nginx-1.12.1 | NOK | http://autobuild.buildroot.net/results/1b98300088335056d9c409070bcc87435a42eeef |
->>
->> Fixed by: https://patchwork.ozlabs.org/patch/792520/
->>
->> [snip]
->>
->>>     mips64el |                 paxtest-0.9.15 | NOK | http://autobuild.buildroot.net/results/450c5388aa26d81eccb462014bee520b6e42b06b |
->>>     mips64el |                 paxtest-0.9.15 | NOK | http://autobuild.buildroot.net/results/635a988e61f5820ad8fd94bda0615b9436e6ae83 |
->>
->
-> Looks like these two were download failures
 
-Sorry that last email accidentally got sent.
+On 23-07-17 06:00, Matt Weber wrote:
+[snip]
+> +From dcfb052988b333382fc7696fd811eb547734797a Mon Sep 17 00:00:00 2001
+> +From: Matt Weber <matthew.weber@rockwellcollins.com>
+> +Date: Sat, 22 Jul 2017 22:24:50 -0500
+> +Subject: [PATCH 1/1] nginx-upload-module: add openssl lib dependency
 
-It looks like all of the downloads of
-https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz on "gcc20"
-and "free electrons server" consistently have a
-GnuTLS: A TLS fatal alert has been received.
-Unable to establish SSL connection.
+ Please use git format-patch -N
 
-That link is using HTTPS redirects.
+[snip]
+> +diff --git a/config b/config
+> +index cabd4f1..4a77858 100644
+> +--- a/config
+> ++++ b/config
+> +@@ -1,14 +1,13 @@
+> +-USE_MD5=YES
+> +-USE_SHA1=YES
+> + ngx_addon_name=ngx_http_upload_module
+> + 
+> + if test -n "$ngx_module_link"; then
+> +     ngx_module_type=HTTP
+> +     ngx_module_name=$ngx_addon_name
+> +     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
+> ++    ngx_module_libs=-lcrypto
 
-I tested downloading "wget
-https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz" on my home
-machine and a webbrowser, both seem to work ok.
-My wget was "GNU Wget 1.17.1 ".
+ Is there any reason not to use pkg-config, like we do in nginx itself (in
+0006-auto-lib-openssl-conf-use-pkg-config.patch)?
 
-What OS version and/or wget/gnutls are those two machines using?
-Google seems to note some issues with wget having a bug preventing
-HTTPS redirections from working around the time of Debian7?
+> + 
+> +     . auto/module
+> + else
+> +     HTTP_MODULES="$HTTP_MODULES ngx_http_upload_module"
+> +     NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_upload_module.c"
+> +-fi
+> +\ No newline at end of file
+> ++fi
 
-Matt
+ This hunk is not needed.
+
+ Regards,
+ Arnout
+
+> +-- 
+> +1.9.1
+> +
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
