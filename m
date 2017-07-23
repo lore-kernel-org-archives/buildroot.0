@@ -1,52 +1,61 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 22 Jul 2017 20:53:03 -0500
-Subject: [Buildroot] [PATCH 1/1] paxtest: use RUNDIR
-Message-ID: <1500774783-21428-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 22 Jul 2017 21:03:18 -0500
+Subject: [Buildroot] [PATCH v3 1/1] paxtest: new package
+In-Reply-To: <CANQCQpbcDe37x4wUh15OYoNSodeYXCdyN0skPfF+TYq53pHQxw@mail.gmail.com>
+References: <1499427897-36149-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170722153534.16f24300@windsurf>
+ <CANQCQpbcDe37x4wUh15OYoNSodeYXCdyN0skPfF+TYq53pHQxw@mail.gmail.com>
+Message-ID: <CANQCQpZwZDS18rK96Pm_mRGODAXPR395EcC3DfBqwJ-143eD6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-RUNDIR installs the test applications and shared libraries
-into a different folder then /usr/lib.  This is desired as
-there are a lot of test apps which would get installed into
-/usr/lib without organization.  Instead, set RUNDIR=/usr/lib/paxtest
-to install the test apps and libraries in a sub folder.
-The genpaxtest script accounts for this path and handles
-a LD_LIBRARY_PATH update as part of the paxtest script's exeuction.
+Thomas,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/paxtest/paxtest.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On Sat, Jul 22, 2017 at 4:42 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Thomas,
+>
+> On Sat, Jul 22, 2017 at 8:35 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Fri,  7 Jul 2017 06:44:57 -0500, Matt Weber wrote:
+>>> PaX regression test suite
+>>>
+>>> Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
+>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>>> ---
+>>> Changes v2 -> v3
+>>> [Arnout V
+>>>  - Add Config.in comment when glibc toolchain not used
+>>>  - Removed PAXTEST_SOURCE assignment as it was default
+>>>  - Updated ARMv# patch to be anything less then v7 instead of
+>>>    a range from 4-7
+>>>  - Tested that TARGET_CONFIGURE_OPTS could be used and added it in
+>>>  - Updated LD= to use TARGET_CC and enclosed in quotes
+>>
+>> Applied to master, thanks. However, I have to say I very much dislike
+>> the fact that a bunch of executable programs are installed right
+>> into /usr/lib and not /usr/lib/paxtest or something like that. But
+>> apparently RUNDIR is used to install both an actual shared library
+>> (which must be in /usr/lib) and those executable programs.
+>>
+>> Perhaps we could set RUNDIR=/usr/lib/paxtest, and as a post install
+>> hook, move the single shared library being installed back
+>> into /usr/lib ?
+>>
+>> Could you test doing this ?
+>>
+>
 
-diff --git a/package/paxtest/paxtest.mk b/package/paxtest/paxtest.mk
-index 5eaee86..e632e22 100644
---- a/package/paxtest/paxtest.mk
-+++ b/package/paxtest/paxtest.mk
-@@ -11,15 +11,20 @@ PAXTEST_LICENSE_FILES = README
- 
- define PAXTEST_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
-+		RUNDIR="/usr/lib/paxtest" CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
- endef
- 
-+# The files installed to RUNDIR include test apps and shared libs.
-+# Assuming /usr/bin/paxtest script solely uses these libs and apps, the
-+# genpaxtest script updates LD_LIBRARY_PATH in the paxtest script
-+# as part of the paxtest's creation to include the RUNDIR path for shared
-+# library use.
- define PAXTEST_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
- 		DESTDIR=$(TARGET_DIR) \
- 		BINDIR="usr/bin" \
--		RUNDIR="usr/lib" -f Makefile.psm install
-+		RUNDIR="/usr/lib/paxtest" -f Makefile.psm install
- endef
- 
- $(eval $(generic-package))
--- 
-1.9.1
+Looks like the /usr/bin/paxtest script (which uses the items installed
+into RUNDIR) includes handling for LD_LIBRARY_PATH.  So we can just
+update the RUNDIR location and everything falls into place for test
+apps and shared libs.
+
+https://patchwork.ozlabs.org/patch/792516/
+
+Matt
