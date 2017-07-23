@@ -1,145 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jul 2017 12:13:17 +0200
-Subject: [Buildroot] [PATCH 13/20] package/skeleton: make it a virtual
- package
-In-Reply-To: <b922d29e-33d5-3310-feca-70fbc6ac93a7@mind.be>
+Date: Sun, 23 Jul 2017 12:15:59 +0200
+Subject: [Buildroot] [PATCH 15/20] package/skeleton: introduce sysv- and
+ systemd-specific skeletons
+In-Reply-To: <0f62a3f9-76f0-75ed-762b-d5fbae224fad@mind.be>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <3a434b0c0be62999b357b2ad81ab62bfed9e97d7.1500398733.git.yann.morin.1998@free.fr>
- <b922d29e-33d5-3310-feca-70fbc6ac93a7@mind.be>
-Message-ID: <20170723101317.GC26998@scaer>
+ <4cba79eb00daaaea1bd8bdb5a49a2aefd39b390d.1500398733.git.yann.morin.1998@free.fr>
+ <0f62a3f9-76f0-75ed-762b-d5fbae224fad@mind.be>
+Message-ID: <20170723101559.GD26998@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-07-23 01:36 +0200, Arnout Vandecappelle spake thusly:
-> 
-> 
+Arnout, All,
+
+On 2017-07-23 01:49 +0200, Arnout Vandecappelle spake thusly:
 > On 18-07-17 19:25, Yann E. MORIN wrote:
-> > We now have two packages that can act as a skeleton, skeleton-common,
-> > also known as our default skeleton, and skeleton-custom.
+> > Currently, we use the same skeleton for sysv-like init systems and
+> > systemd, even though systemd has some peculiarities that makes out
+>                                                                  our
+> > default skeleton unfit.
 > > 
-> > This means that the skeleton package can be a standard virtual package
-> > now.
+> > So, we'll need to provide different skeletons (really, only part of it)
+> > for sysv-like and systemd.
 > > 
-> > Well, except that, besides being a virtual package, it also provides
-> > variables and macros that can be used by the other skeletons and/or the
-> > init systems.
-> 
->  I guess this is a left-over from when you hadn't moved everything to system.mk
-> yet...
-
-Arg, yes...
-
+> > Introduce two new skeleton packages, aptly named skeleton-sysv and
+> > skeleton-systemd, one for each, that are both providers of the skeleton
+> > package, in lieue of the skeleton-common, which is now a simple
+> > dependency of both the two new skeletons.
+> > 
+> > Those packages are empty for now. In followup changes:
+> >   - sysv-specific stuff will be moved out of skeleton-common and into
+> >     skeleton-sysv;
+> >   - systemd-specific stuff will be added to skeleton-systemd.
+> > 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
->  On this patch, I do have kind of big comments.
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  But...
 > 
 > [snip]
-> > diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
-> > index b12bd8f73c..601c3b247e 100644
-> > --- a/package/skeleton-custom/Config.in
-> > +++ b/package/skeleton-custom/Config.in
-> > @@ -1,3 +1,6 @@
-> >  config BR2_PACKAGE_SKELETON_CUSTOM
-> >  	bool
-> > -	select BR2_PACKAGE_SKELETON
-> > +	select BR2_PACKAGE_HAS_SKELETON
-> > +
-> > +config BR2_PACKAGE_PROVIDES_SKELETON
-> > +	default "skeleton-custom" if BR2_PACKAGE_SKELETON_CUSTOM
-> 
->  In almost all virtual package providers, we do it like:
-> 
-> if BR2_PACKAGE_SKELETON_CUSTOM
-> config BR2_PACKAGE_PROVIDES_SKELETON
-> 	default "skeleton-custom"
-> endif
-
-> [snip]
-> >  config BR2_PACKAGE_SKELETON
-> >  	bool
-> > -	help
-> > -	  The basic skeleton for your rootfs.
-> > +	default y
-> 
->  For most virtual packages, we don't define the Kconfig symbol (e.g. there is no
-> BR2_PACKAGE_EGL). Do we need it for skeleton?
-
-We have it already for toolchain, another 'speical' package.
-
-Having a package options ensures that:
-  - the package is always enabled, even if none selects it,
-  - the package appears in the graph-depends.
-
-> > +
-> > +config BR2_PACKAGE_HAS_SKELETON
+> > +config BR2_PACKAGE_SKELETON_SYSTEMD
 > > +	bool
-> 
->  We also don't really need this. It is used by packages that need the virtual
-> package to check if there is a provider for it. But no package 'depends on'
-> skeleton (or rather, all of them do), so we don't need this.
-
-Technically, we do not need it. But I want to avoid scratching my head
-if/when I have to revisit the virtual package infra, and the skeleton
-stuff suddenly breaks for no reason.
-
-This is a virtual package, let's make it a real virtual package. Let's
-try not to be subtle.
-
+> > +	select BR2_PACKAGE_HAS_SKELETON
+> > +	select BR2_PACKAGE_SKELETON_COMMON
 > > +
 > > +config BR2_PACKAGE_PROVIDES_SKELETON
-> > +	string
+> > +	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
 > 
->  This one we do need :-)
+>  Again, we usually do it with if...config...endif. Same for sysv, obviously.
 > 
 > [snip]
-> > diff --git a/system/Config.in b/system/Config.in
-> > index c27b013784..75b6a8edac 100644
-> > --- a/system/Config.in
-> > +++ b/system/Config.in
-> > @@ -1,5 +1,9 @@
-> >  menu "System configuration"
-> >  
-> > +# Note: usually, it is not possible to select a provider of a virtual
-> > +# package.
+> > @@ -12,7 +12,9 @@ choice
+> >  config BR2_ROOTFS_SKELETON_DEFAULT
+> >  	bool "default target skeleton"
+> >  	depends on !BR2_INIT_NONE
+> > -	select BR2_PACKAGE_SKELETON_COMMON
+> > +	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
+> > +	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
+> > +	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
 > 
->  This is not true cryptodev, jpeg and mysql do exactly that. libressl/openssl
-> will also do it that way. In fact, a choice is in a way the better way to do it,
-> because then you're guaranteed not to have conflicting providers.
+>  This works, but I'm thinking of an alternative, let's see if it flies:
+> 
+>  Instead of choosing the different skeletons here, we could do it in the select
+> of BR2_INIT_*. Indeed, you have a skeleton for each init option. Of course, all
+> the selects there would have to look like
+> 
+> 	select BR2_PACKAGE_SKELETON_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
+> 
+> 
+>  I'm not entirely sure if it's an improvement, but I have the feeling it's
+> easier to follow if the different skeleton options are put together with the
+> different init options.
 
-But then you disallow implementations from a br2-external tree, for
-example for jpeg, a provider that has a hardware-accelerated libjpeg.
-
->  So this entire comment is wrong and can be removed. IMO.
-
-No, the comment is true, when you look at a virtual package definition
-in the manual. The way we do it for jpeg, cryptodev and mysql is that
-we have a real package and a virtual package both in one, which have a
-choice, and thus lift the limitation.
+I also tried that, but I found it uglier, because it is split away in
+various options, while here it is fully concentrated in a single one, so
+it is (arguably) easier to maintain...
 
 Regards,
 Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > But here we have an exception: there are only two providers
-> > +# and they only get selected each by separate entries in this choice.
-> > +# So this is a safe situation.
-> >  choice
-> >  	prompt "Root FS skeleton"
-> >  
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
