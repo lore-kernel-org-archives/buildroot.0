@@ -1,10 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Jul 2017 09:57:25 +0200
-Subject: [Buildroot] [git commit] python-systemd: add new package
-In-Reply-To: <87a83vppud.fsf@dell.be.48ers.dk>
-References: <20170720211905.D06A28027F@busybox.osuosl.org>
- <87a83vppud.fsf@dell.be.48ers.dk>
-Message-ID: <20170723095725.62316c1a@windsurf>
+Date: Sun, 23 Jul 2017 09:58:39 +0200
+Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
+ for init systems
+In-Reply-To: <20170722225016.GK9929@scaer>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
+ <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be>
+ <20170722144552.GE9929@scaer>
+ <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
+ <20170722221014.672f9eb2@windsurf> <20170722225016.GK9929@scaer>
+Message-ID: <20170723095839.0d11b971@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +18,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Jul 2017 09:36:10 +0200, Peter Korsgaard wrote:
+On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
 
->  > commit: https://git.buildroot.net/buildroot/commit/?id=e9a6a104bc82fe6425dfcf9344f560904793c8f1
->  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master  
+> > The patches fixing them are here:
+> > 
+> >   http://patchwork.ozlabs.org/patch/783135/
+> >   http://patchwork.ozlabs.org/patch/783137/
+> >   http://patchwork.ozlabs.org/patch/783136/
+> > 
+> > and nobody reviews them.  
 > 
->  > Add package for official python bindings availibe as a part of systemd
->  > project at: https://github.com/systemd/python-systemd  
+> I gave them a spin here, and they indeed fix the build, but the tests
+> are still broken because qemu can't boot the resulting system...
 > 
->  > Minimal config snippet for utils/test-pkg is as follows (sans
->  > backslashes):  
-> 
->  > BR2_INIT_SYSTEMD=y
->  > BR2_PACKAGE_PYTHON3=y
->  > BR2_PACKAGE_PYTHON_SYSTEMD=y  
-> 
-> So the # lines still got dropped :/
+> I'll investigate that tomorrow...
 
-Might have been dropped by the git pwam process, or perhaps I did a git
-commit --amend to fixup something in the patch or commit log.
+Hum, weird, because I'm pretty sure I tested the test cases with those
+patches. I'll test again, maybe I missed something.
+
+Best regards,
 
 Thomas
 -- 
