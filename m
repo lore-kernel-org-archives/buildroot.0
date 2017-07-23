@@ -1,50 +1,74 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 23 Jul 2017 22:13:21 +0200
-Subject: [Buildroot] [PATCH v3] support/testing: add test of BR2_CCACHE with
-	an external toolchain
-Message-ID: <20170723201321.13594-1-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Jul 2017 22:28:16 +0200
+Subject: [Buildroot] TestIso9660GrubExternal and TestIso9660GrubInternal
+ failing
+In-Reply-To: <20170723200237.GJ26998@scaer>
+References: <20170723092643.GE2917@scaer>
+ <5974e7554c7c_30a1600b705951e@ultri3.mail>
+ <20170723200237.GJ26998@scaer>
+Message-ID: <20170723202816.GK26998@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We reuse TestExternalToolchainBuildrootuClibc and add ccache to its
-configuration.
+Ricardo, All,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-v3:
-- += instead of ... = ... + ... [Ricardo]
-- remove spaces around parameter equals [Ricardo]
-- remove empty line at end of file [Ricardo]
+On 2017-07-23 22:02 +0200, Yann E. MORIN spake thusly:
+> On 2017-07-23 15:13 -0300, Ricardo Martincoski spake thusly:
+> > On Sun, Jul 23, 2017 at 06:26 AM, Yann E. MORIN wrote:
+> > > On 2017-07-23 09:58 +0200, Thomas Petazzoni spake thusly:
+> > >> On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
+> > >> > > The patches fixing them are here:
+> > >> > > 
+> > >> > >   http://patchwork.ozlabs.org/patch/783135/
+> > >> > >   http://patchwork.ozlabs.org/patch/783137/
+> > >> > >   http://patchwork.ozlabs.org/patch/783136/
+> > >> > > 
+> > >> > > and nobody reviews them.  
+> > >> > 
+> > >> > I gave them a spin here, and they indeed fix the build, but the tests
+> > >> > are still broken because qemu can't boot the resulting system...
+> > >> > 
+> > >> > I'll investigate that tomorrow...
+> > >> 
+> > >> Hum, weird, because I'm pretty sure I tested the test cases with those
+> > >> patches. I'll test again, maybe I missed something.
+> > > 
+> > > So, to rule out any sleep-deprivation issue while testign yesterday
+> > > evening, I re-spawn the tests here this morning, and they still do not
+> > > run.
+> > > 
+> > > Maybe it is my qemu version?
+> > > 
+> > > I'll try and bisect them between July the 1st and now.
+> > 
+> > Since you are investigating this, let me provide some data I hope is useful.
+[--SNIP--]
+> I plan on doign those tests;
+> 
+>   - build on 16.04, run on 16.04
+>   - build on 16.04, run on 17.04
+>   - build on 17.04, run on 16.04
 
-v2: separate test instead of hijacking BuildrootuClibc test
----
- support/testing/tests/toolchain/test_external.py | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+So, even before the tests are all done, I already noticed an issue here:
+on my machine, the iso images are about 1GiB large, while on my server,
+they are only a bit less than 5MiB.
 
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index afb4bb0b50..57e2f11451 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -229,3 +229,15 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
-                            kernel="builtin",
-                            options=["-initrd", img])
-         self.emulator.login()
-+
-+class TestExternalToolchainCCache(TestExternalToolchainBuildrootuClibc):
-+    extraconfig = \
-+"""
-+BR2_CCACHE=y
-+BR2_CCACHE_DIR="{builddir}/ccache-dir"
-+"""
-+
-+    def __init__(self, names):
-+        super(TestExternalToolchainBuildrootuClibc, self).__init__(names)
-+        self.config = self.config + self.extraconfig.format(builddir = self.builddir)
-+
+So, it looks like this is a binutils issue, with objdump being the
+culprit (it very much look like older similar issues).
+I'll continue investigating...
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.13.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
