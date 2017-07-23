@@ -1,29 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Jul 2017 13:45:49 +0000
-Subject: [Buildroot] [Bug 10121] webkit without the multimedia option causes
-	build error
-In-Reply-To: <bug-10121-163@https.bugs.busybox.net/>
-References: <bug-10121-163@https.bugs.busybox.net/>
-Message-ID: <bug-10121-163-P0MflOoj1y@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Jul 2017 15:54:32 +0200
+Subject: [Buildroot] [git commit] configs/nanopi_m1_*: bump to final u-boot
+	2017.07
+Message-ID: <20170723135100.5A7EC81DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10121
+commit: https://git.buildroot.net/buildroot/commit/?id=a57484ac383813b8d0e5c05b07434361ed82045e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/nanopi_m1_defconfig      | 2 +-
+ configs/nanopi_m1_plus_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Correct, a fix is in progress:
-
-http://lists.busybox.net/pipermail/buildroot/2017-July/198467.html
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/configs/nanopi_m1_defconfig b/configs/nanopi_m1_defconfig
+index d00a9b8..23a5e60 100644
+--- a/configs/nanopi_m1_defconfig
++++ b/configs/nanopi_m1_defconfig
+@@ -14,7 +14,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi M1"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_m1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/configs/nanopi_m1_plus_defconfig b/configs/nanopi_m1_plus_defconfig
+index e76bc05..a1ae00e 100644
+--- a/configs/nanopi_m1_plus_defconfig
++++ b/configs/nanopi_m1_plus_defconfig
+@@ -14,7 +14,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi M1 Plus"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc3"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_m1_plus"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
