@@ -1,48 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 02:32:17 +0200
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: fix syntax
-In-Reply-To: <20170722214728.31536-1-yann.morin.1998@free.fr>
-References: <20170722214728.31536-1-yann.morin.1998@free.fr>
-Message-ID: <1f4febd9-d9ec-59df-b2d2-c3631ca338c3@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 22 Jul 2017 20:53:03 -0500
+Subject: [Buildroot] [PATCH 1/1] paxtest: use RUNDIR
+Message-ID: <1500774783-21428-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+RUNDIR installs the test applications and shared libraries
+into a different folder then /usr/lib.  This is desired as
+there are a lot of test apps which would get installed into
+/usr/lib without organization.  Instead, set RUNDIR=/usr/lib/paxtest
+to install the test apps and libraries in a sub folder.
+The genpaxtest script accounts for this path and handles
+a LD_LIBRARY_PATH update as part of the paxtest script's exeuction.
 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/paxtest/paxtest.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-On 22-07-17 23:47, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  package/kvm-unit-tests/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-> index 8b172c3f21..d0d9e2ef96 100644
-> --- a/package/kvm-unit-tests/Config.in
-> +++ b/package/kvm-unit-tests/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
->  	bool
->  	# On ARM, it uses virtualization extensions
->  	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
-> -		BR2_cortex_a15 || BR2_cortex_a15_a7 \
-> +		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
->  		BR2_cortex_a17 || BR2_cortex_a17_a7
->  	default y if BR2_i386 || BR2_x86_64
->  	default y if BR2_powerpc64 || BR2_powerpc64le
-> 
-
+diff --git a/package/paxtest/paxtest.mk b/package/paxtest/paxtest.mk
+index 5eaee86..e632e22 100644
+--- a/package/paxtest/paxtest.mk
++++ b/package/paxtest/paxtest.mk
+@@ -11,15 +11,20 @@ PAXTEST_LICENSE_FILES = README
+ 
+ define PAXTEST_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
++		RUNDIR="/usr/lib/paxtest" CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
+ endef
+ 
++# The files installed to RUNDIR include test apps and shared libs.
++# Assuming /usr/bin/paxtest script solely uses these libs and apps, the
++# genpaxtest script updates LD_LIBRARY_PATH in the paxtest script
++# as part of the paxtest's creation to include the RUNDIR path for shared
++# library use.
+ define PAXTEST_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		BINDIR="usr/bin" \
+-		RUNDIR="usr/lib" -f Makefile.psm install
++		RUNDIR="/usr/lib/paxtest" -f Makefile.psm install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
