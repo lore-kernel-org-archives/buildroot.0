@@ -1,53 +1,43 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 23 Jul 2017 15:44:20 -0300
-Subject: [Buildroot] [PATCH 2/4] testing/infra/builder: dump config to
-	log
-References: <20170723091441.GB2917@scaer>
-Message-ID: <5974ee846d043_586e1244f2c29434@ultri3.mail>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Jul 2017 20:50:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/heimdal: security bump to
+	version 7.4.0
+In-Reply-To: <20170722100736.25753-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 22 Jul 2017 12:07:36 +0200")
+References: <20170722100736.25753-1-bernd.kuhls@t-online.de>
+Message-ID: <87379n0yy7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Sun, Jul 23, 2017 at 06:14 AM, Yann E. MORIN wrote:
+ > Fixes security bugs CVE-2017-11103 & CVE-2017-6594
+ > Changed upstream tarball location as noted in the release notes:
+ > http://www.h5l.org/releases.html?show=7.4.0
 
-> On 2017-07-23 01:20 -0300, Ricardo Martincoski spake thusly:
-[snip]
->>          with open(config_file, "w+") as cf:
->>              cf.write(self.config)
->> +        # dump the config to the logfile for easy debugging
->> +        self.logfile.write("> config:\n" + self.config)
->> +        self.logfile.flush()
-> 
-> Although the variable is named 'comfig', it is in fact a defconfig.
+ > --with-db-type-preference= is needed to fix a build error:
 
-Good point. I will rename it (not the variable, of course) in the commit log and
-in the logfile.
+ >   CCLD     otp
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_get_internal':
+ > otp_db.c:(.text+0x32): undefined reference to `__roken_dbm_fetch'
+ > otp_db.c:(.text+0xd9): undefined reference to `__roken_dbm_store'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_open':
+ > otp_db.c:(.text+0x1c9): undefined reference to `__roken_dbm_open'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_close':
+ > otp_db.c:(.text+0x205): undefined reference to `__roken_dbm_close'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_delete':
+ > otp_db.c:(.text+0x23e): undefined reference to `__roken_dbm_delete'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_put':
+ > otp_db.c:(.text+0x388): undefined reference to `__roken_dbm_store'
+ > collect2: error: ld returned 1 exit status
 
-> Also, it is easy to miss exactly where the end of the config is, so
-> maybe:
-> 
->   - prefix all lines with 'config: ',
-> or
->   - add 'start config' and 'end config'.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-The second one seems nicer to me, I will use '> start defconfig' and
-'> end defconfig'.
+As heimdal is only a host package the security risk is quite minimal,
+but ok - Committed, thanks.
 
-> 
-> Otherwise;
-> 
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-This is the only tag I won't keep, since I am changing this patch.
-
-I will also account for your comment on the last patch. Thank you for the hint.
-
-I am marking patches 2 to 4 as Changes Requested.
-Patch 1 (developers file only) I will keep in patchwork as-is.
-
-Regards,
-Ricardo
+-- 
+Bye, Peter Korsgaard
