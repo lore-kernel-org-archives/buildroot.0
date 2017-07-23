@@ -1,151 +1,66 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 23 Jul 2017 18:05:47 +0200
-Subject: [Buildroot] [PATCH 1/1] xvisor: bump version to 0.29
-Message-ID: <20170723160547.14988-1-eric.le.bihan.dev@free.fr>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 23 Jul 2017 15:13:41 -0300
+Subject: [Buildroot] TestIso9660GrubExternal and TestIso9660GrubInternal
+	failing
+References: <20170723092643.GE2917@scaer>
+Message-ID: <5974e7554c7c_30a1600b705951e@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 0.29, drop deprecated patch and update dependencies.
+Hello,
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- .../0001-Makefile-Fix-oldconfig-make-target.patch  | 30 -----------
- .../xvisor/0002-openconf-do-not-check-stdin.patch  | 58 ----------------------
- package/xvisor/xvisor.hash                         |  2 +-
- package/xvisor/xvisor.mk                           |  3 +-
- 4 files changed, 3 insertions(+), 90 deletions(-)
- delete mode 100644 package/xvisor/0001-Makefile-Fix-oldconfig-make-target.patch
- delete mode 100644 package/xvisor/0002-openconf-do-not-check-stdin.patch
+I renamed the e-mail thread from:
+[PATCH 20/20] support/testing: add runtime testing for init systems
 
-diff --git a/package/xvisor/0001-Makefile-Fix-oldconfig-make-target.patch b/package/xvisor/0001-Makefile-Fix-oldconfig-make-target.patch
-deleted file mode 100644
-index f056625..0000000
---- a/package/xvisor/0001-Makefile-Fix-oldconfig-make-target.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 99bbdc042ee4c92a13edcfeaf336aa755a199d0f Mon Sep 17 00:00:00 2001
--From: Anup Patel <anup@brainfault.org>
--Date: Sun, 11 Sep 2016 19:53:40 +0530
--Subject: [PATCH] Makefile: Fix oldconfig make target
--
--Use "-s" instead of "-o" option of "openconf/conf" tool because
--the "-o" option does not generate all required openconf files.
--
--Signed-off-by: Anup Patel <anup@brainfault.org>
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 149a682..e05e801 100644
----- a/Makefile
--+++ b/Makefile
--@@ -434,7 +434,7 @@ menuconfig:
-- oldconfig:
-- 	$(V)mkdir -p $(OPENCONF_TMPDIR)
-- 	$(V)$(MAKE) -C tools/openconf oldconfig
---	./tools/openconf/conf -o $(OPENCONF_INPUT)
--+	./tools/openconf/conf -s $(OPENCONF_INPUT)
-- 
-- # Rule for "make savedefconfig"
-- .PHONY: savedefconfig
---- 
--2.4.11
--
-diff --git a/package/xvisor/0002-openconf-do-not-check-stdin.patch b/package/xvisor/0002-openconf-do-not-check-stdin.patch
-deleted file mode 100644
-index 34b350d..0000000
---- a/package/xvisor/0002-openconf-do-not-check-stdin.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 6b49c1dbe0ac43e39eec97a7e79cf5fb995747dc Mon Sep 17 00:00:00 2001
--From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
--Date: Mon, 12 Sep 2016 21:49:55 +0530
--Subject: [PATCH] openconf: do not check stdin
--
--Do not check if stdin is redirected when ask_silent is true, so the
--`yes` program can be used to answer the questions about new values.
--
--Example:
--
--  yes "" | make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- oldconfig
--
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
--Signed-off-by: Anup Patel <anup@brainfault.org>
-----
-- tools/openconf/conf.c | 12 ------------
-- 1 file changed, 12 deletions(-)
--
--diff --git a/tools/openconf/conf.c b/tools/openconf/conf.c
--index a428058..711cf0b 100644
----- a/tools/openconf/conf.c
--+++ b/tools/openconf/conf.c
--@@ -65,16 +65,6 @@ static void strip(char *str)
-- 		*p-- = 0;
-- }
-- 
---static void check_stdin(void)
---{
---	if (!valid_stdin) {
---		printf("aborted!\n\n");
---		printf("Console input/output is redirected. ");
---		printf("Run 'make oldconfig' to update configuration.\n\n");
---		exit(1);
---	}
---}
---
-- static int conf_askvalue(struct symbol *sym, const char *def)
-- {
-- 	char *ret;
--@@ -100,7 +90,6 @@ static int conf_askvalue(struct symbol *sym, const char *def)
-- 			printf("%s\n", def);
-- 			return 0;
-- 		}
---		check_stdin();
-- 	case ask_all:
-- 		fflush(stdout);
-- 		ret = fgets(line, 128, stdin);
--@@ -306,7 +295,6 @@ static int conf_choice(struct menu *menu)
-- 				printf("%d\n", cnt);
-- 				break;
-- 			}
---			check_stdin();
-- 		case ask_all:
-- 			fflush(stdout);
-- 			ret = fgets(line, 128, stdin);
---- 
--2.4.11
--
-diff --git a/package/xvisor/xvisor.hash b/package/xvisor/xvisor.hash
-index 13335be..c170fdb 100644
---- a/package/xvisor/xvisor.hash
-+++ b/package/xvisor/xvisor.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 9347080c3481fb8586d196dd51a580a57084bfea1bc425e89f7fa0da7170708a xvisor-0.2.8.tar.gz
-+sha256 29b3b830380dde4f596611abd34487fb753e120ce462dbb0056f3025b88ef14f  xvisor-0.2.9.tar.gz
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index addd7e6..f75175a 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
- 
--XVISOR_VERSION = 0.2.8
-+XVISOR_VERSION = 0.2.9
- XVISOR_SITE = http://www.xhypervisor.org/tarball
- XVISOR_LICENSE = GPL-2.0+
- XVISOR_LICENSE_FILES = COPYING
- XVISOR_INSTALL_IMAGES = YES
- XVISOR_INSTALL_TARGET = NO
-+XVISOR_DEPENDENCIES = host-bison host-flex
- 
- XVISOR_MAKE_TARGETS = all
- 
--- 
-2.9.4
+On Sun, Jul 23, 2017 at 06:26 AM, Yann E. MORIN wrote:
+
+> On 2017-07-23 09:58 +0200, Thomas Petazzoni spake thusly:
+>> On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
+>> > > The patches fixing them are here:
+>> > > 
+>> > >   http://patchwork.ozlabs.org/patch/783135/
+>> > >   http://patchwork.ozlabs.org/patch/783137/
+>> > >   http://patchwork.ozlabs.org/patch/783136/
+>> > > 
+>> > > and nobody reviews them.  
+>> > 
+>> > I gave them a spin here, and they indeed fix the build, but the tests
+>> > are still broken because qemu can't boot the resulting system...
+>> > 
+>> > I'll investigate that tomorrow...
+>> 
+>> Hum, weird, because I'm pretty sure I tested the test cases with those
+>> patches. I'll test again, maybe I missed something.
+> 
+> So, to rule out any sleep-deprivation issue while testign yesterday
+> evening, I re-spawn the tests here this morning, and they still do not
+> run.
+> 
+> Maybe it is my qemu version?
+> 
+> I'll try and bisect them between July the 1st and now.
+
+Since you are investigating this, let me provide some data I hope is useful.
+
+My local computer has:
+binutils 2.26.1
+qemu 2.5.0
+
+Using my local computer the tests TestIso9660GrubExternal and
+TestIso9660GrubInternal always pass, in current master and also with the 3 grub
+patches applied.
+
+Using the image buildroot/base I can reproduce the problems:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23825707
+GRUB requires a working absolute objcopy; upgrade your binutils
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23831270
+==> System does not boot
+
+If you need me to check versions for other tools in my local computer (Ubuntu
+16.04.2, not plain vanilla), feel free to ask.
+
+Regards,
+Ricardo
