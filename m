@@ -1,97 +1,68 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 23 Jul 2017 15:14:24 +0200
-Subject: [Buildroot] [Patch v7 01/10] rustc: new virtual package
-In-Reply-To: <20170723081206.7774-2-eric.le.bihan.dev@free.fr>
-References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
- <20170723081206.7774-2-eric.le.bihan.dev@free.fr>
-Message-ID: <1500815664.2333.5.camel@embedded.rocks>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 23 Jul 2017 08:19:51 -0500
+Subject: [Buildroot] [PATCH 1/1] nginx-upload-module: add openssl lib
+	dependency
+In-Reply-To: <f36d741d-93ac-a9ca-1301-186742c2700f@mind.be>
+References: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <f36d741d-93ac-a9ca-1301-186742c2700f@mind.be>
+Message-ID: <CANQCQpYyEg4kHTAVARQWsc39U+nhhcCirAn_z4==+tUHBuJ+rA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Arnout,
 
-On Sun, 2017-07-23 at 10:11 +0200, Eric Le Bihan wrote:
-> The compiler for the Rust programming language is called rustc.
-> 
-> There is only one reference implementation for it, based on LLVM, from
-> the Rust project [1]. It can generate code for various architectures so
-> it can be labeled as a cross-compiler. But, as for GCC, building it
-> from source takes time.
-> 
-> So it would be sensible to have at least one package which provides it
-> as a pre-built version, fetched from the upstream project. Later another
-> package can be added, to build it from source code.
-> 
-> In addition to the compiler, the standard library for the host and/or
-> the target should also be fetched/built.
-> 
-> So, add a virtual package named rustc to enable support for multiple
-> providers.
-> 
-> Currently, only the host variant will be available to allow the user to
-> cross-compile Rust programs for the target.
-> 
-> [1] http://rust-lang.org
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/rustc/Config.in.host |  5 +++++
->  package/rustc/rustc.mk       | 25 +++++++++++++++++++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 package/rustc/Config.in.host
->  create mode 100644 package/rustc/rustc.mk
-> 
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-> new file mode 100644
-> index 0000000..fef78a7
-> --- /dev/null
-> +++ b/package/rustc/Config.in.host
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_HAS_HOST_RUSTC
-> +	bool
-> +
-> +config BR2_PACKAGE_PROVIDES_HOST_RUSTC
-> +	string
+On Sun, Jul 23, 2017 at 7:56 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 23-07-17 06:00, Matt Weber wrote:
+> [snip]
+>> +From dcfb052988b333382fc7696fd811eb547734797a Mon Sep 17 00:00:00 2001
+>> +From: Matt Weber <matthew.weber@rockwellcollins.com>
+>> +Date: Sat, 22 Jul 2017 22:24:50 -0500
+>> +Subject: [PATCH 1/1] nginx-upload-module: add openssl lib dependency
+>
+>  Please use git format-patch -N
+>
 
-According to the manual about the virtual package a "depends on
-BR2_PACKAGE_HAS_SOMETHING_VIRTUAL" should be added here.
+Sure.
 
-> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-> new file mode 100644
-> index 0000000..9bbe29f
-> --- /dev/null
-> +++ b/package/rustc/rustc.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# rustc
-> +#
-> +################################################################################
-> +
-> +RUST_TARGET_NAME := $(subst buildroot,unknown,$(GNU_TARGET_NAME))
-> +
-> +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-> +RUST_TARGET_NAME := $(subst arm-,armv7-,$(RUST_TARGET_NAME))
-> +endif
-> +
-> +ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-> +RUST_TARGET_NAME := $(subst -gnu,-gnuabi64,$(RUST_TARGET_NAME))
-> +endif
-> +
-> +ifeq ($(HOSTARCH),x86_64)
-> +RUST_HOST_ARCH = x86_64
-> +else ifeq ($(HOSTARCH),x86)
-> +RUST_HOST_ARCH = i686
-> +endif
-> +
-> +RUST_HOST_NAME = $(RUST_HOST_ARCH)-unknown-linux-gnu
-> 
-> +$(eval $(host-virtual-package))
+> [snip]
+>> +diff --git a/config b/config
+>> +index cabd4f1..4a77858 100644
+>> +--- a/config
+>> ++++ b/config
+>> +@@ -1,14 +1,13 @@
+>> +-USE_MD5=YES
+>> +-USE_SHA1=YES
+>> + ngx_addon_name=ngx_http_upload_module
+>> +
+>> + if test -n "$ngx_module_link"; then
+>> +     ngx_module_type=HTTP
+>> +     ngx_module_name=$ngx_addon_name
+>> +     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
+>> ++    ngx_module_libs=-lcrypto
+>
+>  Is there any reason not to use pkg-config, like we do in nginx itself (in
+> 0006-auto-lib-openssl-conf-use-pkg-config.patch)?
 
-Considering this commit as adding a virtual package for the Rust
-compiler, I would expect only the last line to be present and
-RUST_TARGET_NAME and RUST_HOST_ARCH to be added later be a follow up
-patch of the series.
+Yeah that should work, I'll rework and test.
+
+>
+>> +
+>> +     . auto/module
+>> + else
+>> +     HTTP_MODULES="$HTTP_MODULES ngx_http_upload_module"
+>> +     NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_upload_module.c"
+>> +-fi
+>> +\ No newline at end of file
+>> ++fi
+>
+>  This hunk is not needed.
+
+Sure.
+
+Thanks for the review,
+Matt
