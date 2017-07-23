@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 14:56:37 +0200
-Subject: [Buildroot] [PATCH 1/1] nginx-upload-module: add openssl lib
- dependency
-In-Reply-To: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <f36d741d-93ac-a9ca-1301-186742c2700f@mind.be>
+Date: Sun, 23 Jul 2017 14:58:51 +0200
+Subject: [Buildroot] [PATCH v10 0/3] Make the SDK relocatable
+In-Reply-To: <8760ejpo9d.fsf@dell.be.48ers.dk>
+References: <1500722142-20420-1-git-send-email-wg@grandegger.com>
+ <20170722144146.28f826b1@windsurf> <8760ejpo9d.fsf@dell.be.48ers.dk>
+Message-ID: <6d6a2f76-7105-4d12-ab38-bd2f8d40a33b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,34 @@ To: buildroot@busybox.net
 
 
 
-On 23-07-17 06:00, Matt Weber wrote:
-[snip]
-> +From dcfb052988b333382fc7696fd811eb547734797a Mon Sep 17 00:00:00 2001
-> +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> +Date: Sat, 22 Jul 2017 22:24:50 -0500
-> +Subject: [PATCH 1/1] nginx-upload-module: add openssl lib dependency
+On 23-07-17 10:10, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  > Hello,
+>  > On Sat, 22 Jul 2017 13:15:39 +0200, Wolfgang Grandegger wrote:
+> 
+>  >> Wolfgang Grandegger (3):
+>  >> core: introduce "sdk" target to make a relocatable SDK
+>  >> support/scripts/fix-rpath: check if the patchelf utility is executable
+>  >> support/scripts/fix-rpath: typo fix and unneeded ";" removed
+> 
+>  > Thanks a lot, I've applied those remaining 3 patches!
+> 
+>  > I would like to take this opportunity to thank you for your patience
+>  > and your dedication in pushing this SDK topic. It's been long overdue
+>  > in Buildroot, and the fact that you have taken all comments into
+>  > account and sent quickly new iterations was really instrumental to
+>  > getting the all thing finally merged. So: many thanks!
+> 
+> Yes, from me as well - Thanks a lot!
 
- Please use git format-patch -N
+ And me - thanks again!
 
-[snip]
-> +diff --git a/config b/config
-> +index cabd4f1..4a77858 100644
-> +--- a/config
-> ++++ b/config
-> +@@ -1,14 +1,13 @@
-> +-USE_MD5=YES
-> +-USE_SHA1=YES
-> + ngx_addon_name=ngx_http_upload_module
-> + 
-> + if test -n "$ngx_module_link"; then
-> +     ngx_module_type=HTTP
-> +     ngx_module_name=$ngx_addon_name
-> +     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
-> ++    ngx_module_libs=-lcrypto
-
- Is there any reason not to use pkg-config, like we do in nginx itself (in
-0006-auto-lib-openssl-conf-use-pkg-config.patch)?
-
-> + 
-> +     . auto/module
-> + else
-> +     HTTP_MODULES="$HTTP_MODULES ngx_http_upload_module"
-> +     NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_upload_module.c"
-> +-fi
-> +\ No newline at end of file
-> ++fi
-
- This hunk is not needed.
+ Do you happen to go to ELC-E in October, or to FOSDEM in February? It would be
+nice to meet at a BR developer meeting.
 
  Regards,
  Arnout
-
-> +-- 
-> +1.9.1
-> +
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
