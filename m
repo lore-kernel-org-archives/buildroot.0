@@ -1,92 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 02:18:28 +0200
-Subject: [Buildroot] [PATCH 17/20] sytem: no-init systems may use our
- default, common skeleton
-In-Reply-To: <1df0016f5de4edda2fc57e3c5a2cc26e2838d239.1500398733.git.yann.morin.1998@free.fr>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <1df0016f5de4edda2fc57e3c5a2cc26e2838d239.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <e2c4710c-9f86-7b37-2628-3242c0bf5d63@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 23 Jul 2017 02:26:53 +0200
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: fix syntax
+Message-ID: <20170723002744.1121B80842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=dae8c70a8db47d8cb24f1bca22e12fde33ce892b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/kvm-unit-tests/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 18-07-17 19:25, Yann E. MORIN wrote:
-> Requiring that no-init system indeed provide their own custom skeletons
-                         systems
-
-> is a bit too-high a burden, especially for quick one-off tests when
-> testing our packages.
-> 
-> Allow no-init systems to use our default skeleton, but only use the
-> common part, for the specific sysv or systemd ones are unfit.
-
- For people who use BR2_INIT_NONE to create a chroot-able rootfs, this entails
-an important change: the /var stuff (e.g. /var/run symlink) is no longer there.
-This could have implications for some use cases. So I think a comment about this
-should be added to the release notes.
-
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/skeleton-common/Config.in | 29 +++++++++++++++++++++++++++++
->  system/Config.in                  |  5 +----
->  2 files changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
-> index 9abed4292a..ba0abe9d35 100644
-> --- a/package/skeleton-common/Config.in
-> +++ b/package/skeleton-common/Config.in
-> @@ -1,2 +1,31 @@
-> +# Normally, skeleton-common is a dependency of either the sysv or
-> +# the systemd ones, so it should not declare itself as a provider
-> +# for the skeleton virtual package.
-> +#
-> +# However, when one uses a no-init system (BR2_INIT_NONE), neither
-> +# the sysv not the systemd skeleton are enabled, so skeleton-common
-> +# is the one and only skeleton available, so it must declare itself
-> +# as a provider.
-> +#
-> +# We can safely select _HAS_SKELETON, because either we are the only
-> +# provider (in which case we must select it) or we were selected by
-> +# another skeleton which would have selected it by itself (in which
-> +# case us selecting _HAS_SKELETON is harmless).
-> +#
->  config BR2_PACKAGE_SKELETON_COMMON
->  	bool
-> +	select BR2_PACKAGE_HAS_SKELETON
-
- Instead of putting it here...
-
-> +
-> +if BR2_PACKAGE_SKELETON_COMMON
-> +
-> +config BR2_PACKAGE_SKELETON_COMMON_ONLY
-> +	bool
-> +	default y
-> +	depends on !BR2_PACKAGE_SKELETON_SYSV
-> +	depends on !BR2_PACKAGE_SKELETON_SYSTEMD
-> +	depends on !BR2_PACKAGE_SKELETON_CUSTOM
-
- ... put it here. Then you don't need the comment above, there will always be
-just one symbol that selects skeleton.
-
- But as I wrote in an earlier reply, we don't even need to select
-BR2_PACKAGE_HAS_SKELETON, so the point is moot.
-
-
- Regards,
- Arnout
-
-[snip]
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index 8b172c3..d0d9e2e 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
+ 	bool
+ 	# On ARM, it uses virtualization extensions
+ 	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
+-		BR2_cortex_a15 || BR2_cortex_a15_a7 \
++		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
+ 		BR2_cortex_a17 || BR2_cortex_a17_a7
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc64 || BR2_powerpc64le
