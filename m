@@ -1,44 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jul 2017 11:21:44 +0200
-Subject: [Buildroot] [PATCH 02/20] core/pkg-generic: add variable to
- skip skeleton dependency
-In-Reply-To: <871sp7pldt.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jul 2017 11:26:43 +0200
+Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
+ for init systems
+In-Reply-To: <20170723095839.0d11b971@windsurf>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <85a6c3a598a517fd0fad2cba0b7c42d746c7830e.1500398733.git.yann.morin.1998@free.fr>
- <e507f13d-b54b-9205-d3e6-853b072744d5@mind.be>
- <871sp7pldt.fsf@dell.be.48ers.dk>
-Message-ID: <20170723092144.GD2917@scaer>
+ <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
+ <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be>
+ <20170722144552.GE9929@scaer>
+ <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
+ <20170722221014.672f9eb2@windsurf> <20170722225016.GK9929@scaer>
+ <20170723095839.0d11b971@windsurf>
+Message-ID: <20170723092643.GE2917@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Thomas, All,
 
-On 2017-07-23 11:12 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On 2017-07-23 09:58 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
+> > > The patches fixing them are here:
+> > > 
+> > >   http://patchwork.ozlabs.org/patch/783135/
+> > >   http://patchwork.ozlabs.org/patch/783137/
+> > >   http://patchwork.ozlabs.org/patch/783136/
+> > > 
+> > > and nobody reviews them.  
+> > 
+> > I gave them a spin here, and they indeed fix the build, but the tests
+> > are still broken because qemu can't boot the resulting system...
+> > 
+> > I'll investigate that tomorrow...
 > 
->  >> Instead of checking for all the skeleton-providing packages in the core
->  >> infra, add a new package options so that packages can express they do
->  >> not need the dependency on the skeleton, like we have an option to avoid
->  >> the depednency on the toolchain. The only packages that will use that
->  >> option are probably the skeletons, so we need not document this
->  >> variable, like we did not document the option to exclude the dependency
->  >> on the toolchain.
->  >> 
->  >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  >> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-> 
->  >  I absolutely hate adding additional variables that are used for only a few
->  > packages, but I have no better ideas, so
-> 
-> An alternative could be to enforce a naming convention for these
-> packages, E.G. skeleton-*, and then use $(filter skeleton%,$(1)) in the
-> check, but I'm not sure that really is much nicer.
+> Hum, weird, because I'm pretty sure I tested the test cases with those
+> patches. I'll test again, maybe I missed something.
 
-We also talked about that possibility on IRC, and came to the conclusion
-that it was not nice to hard-code magic values in the infra.
+So, to rule out any sleep-deprivation issue while testign yesterday
+evening, I re-spawn the tests here this morning, and they still do not
+run.
+
+Maybe it is my qemu version?
+
+I'll try and bisect them between July the 1st and now.
 
 Regards,
 Yann E. MORIN.
