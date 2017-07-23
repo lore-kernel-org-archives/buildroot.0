@@ -1,100 +1,77 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 23 Jul 2017 09:30:57 -0500
-Subject: [Buildroot] [PATCH v2] nginx-upload-module: add openssl lib
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 23 Jul 2017 09:31:54 -0500
+Subject: [Buildroot] [PATCH 1/1] nginx-upload-module: add openssl lib
 	dependency
-Message-ID: <1500820257-33827-1-git-send-email-matthew.weber@rockwellcollins.com>
+In-Reply-To: <CANQCQpYyEg4kHTAVARQWsc39U+nhhcCirAn_z4==+tUHBuJ+rA@mail.gmail.com>
+References: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <f36d741d-93ac-a9ca-1301-186742c2700f@mind.be>
+ <CANQCQpYyEg4kHTAVARQWsc39U+nhhcCirAn_z4==+tUHBuJ+rA@mail.gmail.com>
+Message-ID: <CANQCQpZ_GrbtvZYKqDQ8NbMTaPd_ZG3mnNf2hf8xG=ci-VGfPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building against nginx 1.11.2+, requires additional
--lcrypto dependency. (Nginx changed crypto approach
-and dependencies for openssl are no longer default)
+Arnout/All,
 
-Upstream pull request:
-https://github.com/vkholodkov/nginx-upload-module/pull/93
+On Sun, Jul 23, 2017 at 8:19 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Arnout,
+>
+> On Sun, Jul 23, 2017 at 7:56 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>> On 23-07-17 06:00, Matt Weber wrote:
+>> [snip]
+>>> +From dcfb052988b333382fc7696fd811eb547734797a Mon Sep 17 00:00:00 2001
+>>> +From: Matt Weber <matthew.weber@rockwellcollins.com>
+>>> +Date: Sat, 22 Jul 2017 22:24:50 -0500
+>>> +Subject: [PATCH 1/1] nginx-upload-module: add openssl lib dependency
+>>
+>>  Please use git format-patch -N
+>>
+>
+> Sure.
+>
+>> [snip]
+>>> +diff --git a/config b/config
+>>> +index cabd4f1..4a77858 100644
+>>> +--- a/config
+>>> ++++ b/config
+>>> +@@ -1,14 +1,13 @@
+>>> +-USE_MD5=YES
+>>> +-USE_SHA1=YES
+>>> + ngx_addon_name=ngx_http_upload_module
+>>> +
+>>> + if test -n "$ngx_module_link"; then
+>>> +     ngx_module_type=HTTP
+>>> +     ngx_module_name=$ngx_addon_name
+>>> +     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
+>>> ++    ngx_module_libs=-lcrypto
+>>
+>>  Is there any reason not to use pkg-config, like we do in nginx itself (in
+>> 0006-auto-lib-openssl-conf-use-pkg-config.patch)?
+>
+> Yeah that should work, I'll rework and test.
+>
+>>
+>>> +
+>>> +     . auto/module
+>>> + else
+>>> +     HTTP_MODULES="$HTTP_MODULES ngx_http_upload_module"
+>>> +     NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_upload_module.c"
+>>> +-fi
+>>> +\ No newline at end of file
+>>> ++fi
+>>
+>>  This hunk is not needed.
+>
+> Sure.
+>
 
-Fixes:
-http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
-http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
-http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
+Superseded by:
+https://patchwork.ozlabs.org/patch/792562/
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
----
-v1->v2
-[Arnout
- - Regenerated patch without endline change and format-patch -N
- - Updated openssl lib dependency to use pkg-config similar to
-   package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
----
- ...-upload-module-add-openssl-lib-dependency.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-
-diff --git a/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-new file mode 100644
-index 0000000..1161751
---- /dev/null
-+++ b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-@@ -0,0 +1,56 @@
-+From 600d0a36c2af785c8284acadeb062d73247281af Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Sun, 23 Jul 2017 09:21:23 -0500
-+Subject: [PATCH] nginx-upload-module: add openssl lib dependency
-+
-+When building against nginx 1.11.2+, requires additional
-+-lcrypto dependency. (Nginx changed crypto approach
-+and dependencies for openssl are no longer default)
-+
-+More details found here:
-+https://github.com/vkholodkov/nginx-upload-module/issues/79
-+
-+Upstream pull request:
-+https://github.com/vkholodkov/nginx-upload-module/pull/93
-+
-+Resolves build failure:
-+objs/addon/nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3/ngx_http_upload_module.o \
-+objs/ngx_modules.o \
-+-ldl -lpthread -lpthread -lpcre -lz -latomic_ops \
-+-Wl,-E
-+ngx_http_upload_module.o: In function `ngx_http_upload_flush_output_buffer':
-+ngx_http_upload_module.c:1625: undefined reference to `MD5_Update'
-+ngx_http_upload_module.c:1628: undefined reference to `SHA1_Update'
-+ngx_http_upload_module.c:1631: undefined reference to `SHA256_Update'
-+ngx_http_upload_module.c:1634: undefined reference to `SHA512_Update'
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
-+http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
-+http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ config | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/config b/config
-+index cabd4f1..293529f 100644
-+--- a/config
-++++ b/config
-+@@ -1,11 +1,10 @@
-+-USE_MD5=YES
-+-USE_SHA1=YES
-+ ngx_addon_name=ngx_http_upload_module
-+ 
-+ if test -n "$ngx_module_link"; then
-+     ngx_module_type=HTTP
-+     ngx_module_name=$ngx_addon_name
-+     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
-++    ngx_module_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
-+ 
-+     . auto/module
-+ else
-+-- 
-+1.9.1
-+
--- 
-1.9.1
+Thanks!
