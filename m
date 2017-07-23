@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 23:51:16 +0200
-Subject: [Buildroot] [PATCH 18/20] fs: add pre- and post-command hooks
-In-Reply-To: <20170723141744.GI26998@scaer>
+Date: Mon, 24 Jul 2017 00:18:19 +0200
+Subject: [Buildroot] [PATCH 19/20] system: make systemd work on a
+ read-only rootfs
+In-Reply-To: <c74e8ad5fca764a23b9392af5cb83ecefb4a5817.1500398733.git.yann.morin.1998@free.fr>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
- <1a767f33-47a3-5ab6-ed40-00e2bfa31da8@mind.be> <20170723141744.GI26998@scaer>
-Message-ID: <d549596f-af21-640b-4196-fcc96557c14c@mind.be>
+ <c74e8ad5fca764a23b9392af5cb83ecefb4a5817.1500398733.git.yann.morin.1998@free.fr>
+Message-ID: <f137feaf-3cb1-4a9a-0331-d51bca014f50@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,90 +14,53 @@ To: buildroot@busybox.net
 
 
 
-On 23-07-17 16:17, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2017-07-23 15:42 +0200, Arnout Vandecappelle spake thusly:
+On 18-07-17 19:25, Yann E. MORIN wrote:
 [snip]
->> 	$$(call PRINTF,$$(ROOTFS_SKELETON_PRE_CMD_HOOK)) >> $$(FAKEROOT_SCRIPT)
->>
->>  You may want to change the variable name, obviously.
+> With a line like:
 > 
-> And it also means that the declaration of ROOTFS_SKELETON_PRE_CMD_HOOK
-> be conditional in the skeleton-systemd package, like:
+>     C /var/something - - - -
 > 
->     ifeq ($(BR2_PACKAGE_SKELETON_SYSTEMD),y)
->     define ROOTFS_SKELETON_PRE_CMD_HOOK
->         blabla
->     endef
->     endif
-> 
-> But I do not like these kind of constructs in the packages themselves,
-> because they are too easy to miss...
+> it will look for /usr/share/factory/something and copy it (recursively
+> if it is a directory) to /var/something, but only if it does not already
+> exist there.
 
- I'm not sure if it's that hard to miss. You just grep for
-ROOTFS_SKELETON_PRE_CMD_HOOK to get the context.
+ So we could just have a line
 
+C /var - - - -
 
-> Alternatively, I would rather move that logic into the filesystem code
-> itself, because after all that is its responsibility, and guard its use
-> with something like (with a proper variable name, of course):
-> 
->     ifeq ($(ROOTFS_VAR_FACTORY_BLABLA),YES)
->         blabla...
->     endif
-> 
-> And then have the packages that need it just set:
->     ROOTFS_VAR_FACTORY_BLABLA = YES
+and be done with it?
 
- I'm not so sure I like that better...
+[snip]
+> Note that we treat symlinks a little bit specially, by creating symlinks
+> to the factory defaults rather than copying them.
 
+ You forgot to explain why. I guess because a relative symlink that was created
+based on the /usr/share/factory location wouldn't work any more.
 
-> All that, because Thomas already suggested (last year in Toulouse) that
-> we could re-use the same factory mechanism for the other init systems as
-> well (on read-only rootfs). In this case, the code would then be guarded
-> by an test against an empty $(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),
-> because then there would be no relation to an init system at all.
+ However, it is possible that a package creates a relative symlink based on the
+/var location. Most symlinks that we create in Buildroot stupidly assume that
+all the path components are not symlinks. So a package could for example do
 
- You completely lost me here.
+ln -sf ../srv/www $DESTDIR/var/www
 
-> But the tmpfiles format is very specific to systemd; we'd have to write
-> our own parser for that (not too difficult, I think, but it'd run on
-> the target so it'd have to be really dead-simple).
-> 
-> So in the end, I'd remove the hooks and move the code to the fs
-> handling, protected by a conditional that so far only systemd would set.
-> 
-> OK with this new approach?
+This will now create a broken symlink. It's fine as long as it is copied as-is
+to /var, but not with your approach...
 
- I'm not so convinced. I mean, if you're putting systemd-specific code into
-ROOTFS_TARGET_INTERNAL, you might just as well make that bit depend on
-BR2_INIT_SYSTEMD directly. But then it becomes really too intertwined for my
-liking. I think my ROOTFS_SKELETON_PRE_CMD_HOOK proposal is a better middle
-ground between complexity and abstraction. If you really don't like that, I
-prefer the original ROOTFS_PRE_CMD_HOOKS approach. I just think that giving the
-possibility of defining more than one hook is useless. Particularly since the
-systemd hook hinges on being the very last thing before rootfs creation.
+[snip]
+> +define SKELETON_SYSTEMD_ROOT_RO_OR_RW
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
+> +	mkdir -p $(TARGET_DIR)/usr/share/factory
+> +	ln -s usr/share/factory $(TARGET_DIR)/var
 
-
-> Still, there is yet ine thing that I dislike in this solution, whether
-> it be with hooks or the variable, and that noone has seen so far: it is
-> not atomic and the target/ directory will be broken if the filesystem
-> command fails right in the middle, before the var symlink was restored.
-
- Can we create the symlink early in the build process, every time? I.e. run
-SKELETON_SYSTEMD_POST_ROOTFS_VAR somehwere at the start of the build as well?
-Only, I'm not sure where we could put it.
-
+ Since other stuff may also want to put things in /usr/share/factory, I think it
+should be
+	mkdir -p $(TARGET_DIR)/usr/share/factory/var
+	ln -s usr/share/factory/var $(TARGET_DIR)/var
 
  Regards,
  Arnout
 
-
-> I have seen no solution to this issue, except doing a copy of target
-> first, right before assembling the image(s), becasue in that case, we
-> wouldn't care about restoring the previous status, so we would no longer
-> need atomicity.
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
