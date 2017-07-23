@@ -1,77 +1,64 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 23 Jul 2017 09:31:54 -0500
-Subject: [Buildroot] [PATCH 1/1] nginx-upload-module: add openssl lib
-	dependency
-In-Reply-To: <CANQCQpYyEg4kHTAVARQWsc39U+nhhcCirAn_z4==+tUHBuJ+rA@mail.gmail.com>
-References: <1500782443-1515-1-git-send-email-matthew.weber@rockwellcollins.com>
- <f36d741d-93ac-a9ca-1301-186742c2700f@mind.be>
- <CANQCQpYyEg4kHTAVARQWsc39U+nhhcCirAn_z4==+tUHBuJ+rA@mail.gmail.com>
-Message-ID: <CANQCQpZ_GrbtvZYKqDQ8NbMTaPd_ZG3mnNf2hf8xG=ci-VGfPg@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 23 Jul 2017 16:33:00 +0200
+Subject: [Buildroot] [PATCH 1/1] s6-networking: enable SSL if libressl
+ is selected
+In-Reply-To: <8bff027c-d80c-1820-69dc-826ee3edf23e@mind.be>
+References: <20170723081602.10562-1-eric.le.bihan.dev@free.fr>
+ <8bff027c-d80c-1820-69dc-826ee3edf23e@mind.be>
+Message-ID: <20170723143300.GA17343@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout/All,
+Hi!
 
-On Sun, Jul 23, 2017 at 8:19 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Arnout,
+On 17-07-23 15:00:34, Arnout Vandecappelle wrote:
 >
-> On Sun, Jul 23, 2017 at 7:56 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->> On 23-07-17 06:00, Matt Weber wrote:
->> [snip]
->>> +From dcfb052988b333382fc7696fd811eb547734797a Mon Sep 17 00:00:00 2001
->>> +From: Matt Weber <matthew.weber@rockwellcollins.com>
->>> +Date: Sat, 22 Jul 2017 22:24:50 -0500
->>> +Subject: [PATCH 1/1] nginx-upload-module: add openssl lib dependency
->>
->>  Please use git format-patch -N
->>
 >
-> Sure.
+> On 23-07-17 10:16, Eric Le Bihan wrote:
+> > If LibreSSL is selected, enable the associated backend to build the
+> > s6-tls* tools.
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> >  package/s6-networking/s6-networking.mk | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
+> > index ffaf8bc..6463f5d 100644
+> > --- a/package/s6-networking/s6-networking.mk
+> > +++ b/package/s6-networking/s6-networking.mk
+> > @@ -23,6 +23,11 @@ S6_NETWORKING_CONF_OPTS = \
+> >  	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
+> >  	$(SHARED_STATIC_LIBS_OPTS)
+> >
+> > +ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+> > +S6_NETWORKING_CONF_OPTS += --enable-ssl=libressl
 >
->> [snip]
->>> +diff --git a/config b/config
->>> +index cabd4f1..4a77858 100644
->>> +--- a/config
->>> ++++ b/config
->>> +@@ -1,14 +1,13 @@
->>> +-USE_MD5=YES
->>> +-USE_SHA1=YES
->>> + ngx_addon_name=ngx_http_upload_module
->>> +
->>> + if test -n "$ngx_module_link"; then
->>> +     ngx_module_type=HTTP
->>> +     ngx_module_name=$ngx_addon_name
->>> +     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
->>> ++    ngx_module_libs=-lcrypto
->>
->>  Is there any reason not to use pkg-config, like we do in nginx itself (in
->> 0006-auto-lib-openssl-conf-use-pkg-config.patch)?
->
-> Yeah that should work, I'll rework and test.
->
->>
->>> +
->>> +     . auto/module
->>> + else
->>> +     HTTP_MODULES="$HTTP_MODULES ngx_http_upload_module"
->>> +     NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_upload_module.c"
->>> +-fi
->>> +\ No newline at end of file
->>> ++fi
->>
->>  This hunk is not needed.
->
-> Sure.
->
+>  Does it also support openssl?
 
-Superseded by:
-https://patchwork.ozlabs.org/patch/792562/
+No. It only supports LibreSSL and BearSSL [1], as stated in the
+documentation [2].
 
+>  Is there a corresponding --disable-ssl option?
 
-Thanks!
+No. The custom build system used in skarnet softwares follows roughly
+the autotools conventions, but for a "--enable-foo" option, there is no
+matching "--disable-foo".
+
+> > +S6_NETWORKING_DEPENDENCIES = libressl
+> > +endif
+> > +
+> >  define S6_NETWORKING_CONFIGURE_CMDS
+> >  	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_NETWORKING_CONF_OPTS))
+> >  endef
+
+[1] https://bearssl.org/
+[2] http://skarnet.org/software/s6-networking/
+
+Regards,
+
+--
+ELB
