@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 22:48:00 +0200
-Subject: [Buildroot] [PATCH 13/20] package/skeleton: make it a virtual
- package
-In-Reply-To: <20170723101317.GC26998@scaer>
+Date: Sun, 23 Jul 2017 23:51:16 +0200
+Subject: [Buildroot] [PATCH 18/20] fs: add pre- and post-command hooks
+In-Reply-To: <20170723141744.GI26998@scaer>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <3a434b0c0be62999b357b2ad81ab62bfed9e97d7.1500398733.git.yann.morin.1998@free.fr>
- <b922d29e-33d5-3310-feca-70fbc6ac93a7@mind.be> <20170723101317.GC26998@scaer>
-Message-ID: <3d40a4b2-b101-5161-dad7-1dbc54f8f8f6@mind.be>
+ <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
+ <1a767f33-47a3-5ab6-ed40-00e2bfa31da8@mind.be> <20170723141744.GI26998@scaer>
+Message-ID: <d549596f-af21-640b-4196-fcc96557c14c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,58 +14,90 @@ To: buildroot@busybox.net
 
 
 
-On 23-07-17 12:13, Yann E. MORIN wrote:
-> On 2017-07-23 01:36 +0200, Arnout Vandecappelle spake thusly:
->>
->>
->> On 18-07-17 19:25, Yann E. MORIN wrote:
+On 23-07-17 16:17, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2017-07-23 15:42 +0200, Arnout Vandecappelle spake thusly:
 [snip]
->>>  config BR2_PACKAGE_SKELETON
->>>  	bool
->>> -	help
->>> -	  The basic skeleton for your rootfs.
->>> +	default y
+>> 	$$(call PRINTF,$$(ROOTFS_SKELETON_PRE_CMD_HOOK)) >> $$(FAKEROOT_SCRIPT)
 >>
->>  For most virtual packages, we don't define the Kconfig symbol (e.g. there is no
->> BR2_PACKAGE_EGL). Do we need it for skeleton?
+>>  You may want to change the variable name, obviously.
 > 
-> We have it already for toolchain, another 'speical' package.
-
- However, why don't we have it for other virtual packages?
-
- Or maybe I should ask: why do we have a separate BR2_PACKAGE_SKELETON and
-BR2_PACKAGE_HAS_SKELETON?
-
- Indeed for consistency it's better to add all these Kconfig symbols for
-skeleton now.
-
-[snip]
->>> +# Note: usually, it is not possible to select a provider of a virtual
->>> +# package.
->>
->>  This is not true cryptodev, jpeg and mysql do exactly that. libressl/openssl
->> will also do it that way. In fact, a choice is in a way the better way to do it,
->> because then you're guaranteed not to have conflicting providers.
+> And it also means that the declaration of ROOTFS_SKELETON_PRE_CMD_HOOK
+> be conditional in the skeleton-systemd package, like:
 > 
-> But then you disallow implementations from a br2-external tree, for
-> example for jpeg, a provider that has a hardware-accelerated libjpeg.
-
- There are pros and cons to the choice.
-
+>     ifeq ($(BR2_PACKAGE_SKELETON_SYSTEMD),y)
+>     define ROOTFS_SKELETON_PRE_CMD_HOOK
+>         blabla
+>     endef
+>     endif
 > 
->>  So this entire comment is wrong and can be removed. IMO.
+> But I do not like these kind of constructs in the packages themselves,
+> because they are too easy to miss...
+
+ I'm not sure if it's that hard to miss. You just grep for
+ROOTFS_SKELETON_PRE_CMD_HOOK to get the context.
+
+
+> Alternatively, I would rather move that logic into the filesystem code
+> itself, because after all that is its responsibility, and guard its use
+> with something like (with a proper variable name, of course):
 > 
-> No, the comment is true, when you look at a virtual package definition
-> in the manual. The way we do it for jpeg, cryptodev and mysql is that
-> we have a real package and a virtual package both in one, which have a
-> choice, and thus lift the limitation.
+>     ifeq ($(ROOTFS_VAR_FACTORY_BLABLA),YES)
+>         blabla...
+>     endif
+> 
+> And then have the packages that need it just set:
+>     ROOTFS_VAR_FACTORY_BLABLA = YES
 
- Well, IMO skeleton is similar to jpeg, cryptodev and mysql in that respect.
+ I'm not so sure I like that better...
 
- But let's not discuss about adding or removing a comment :-)
+
+> All that, because Thomas already suggested (last year in Toulouse) that
+> we could re-use the same factory mechanism for the other init systems as
+> well (on read-only rootfs). In this case, the code would then be guarded
+> by an test against an empty $(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),
+> because then there would be no relation to an init system at all.
+
+ You completely lost me here.
+
+> But the tmpfiles format is very specific to systemd; we'd have to write
+> our own parser for that (not too difficult, I think, but it'd run on
+> the target so it'd have to be really dead-simple).
+> 
+> So in the end, I'd remove the hooks and move the code to the fs
+> handling, protected by a conditional that so far only systemd would set.
+> 
+> OK with this new approach?
+
+ I'm not so convinced. I mean, if you're putting systemd-specific code into
+ROOTFS_TARGET_INTERNAL, you might just as well make that bit depend on
+BR2_INIT_SYSTEMD directly. But then it becomes really too intertwined for my
+liking. I think my ROOTFS_SKELETON_PRE_CMD_HOOK proposal is a better middle
+ground between complexity and abstraction. If you really don't like that, I
+prefer the original ROOTFS_PRE_CMD_HOOKS approach. I just think that giving the
+possibility of defining more than one hook is useless. Particularly since the
+systemd hook hinges on being the very last thing before rootfs creation.
+
+
+> Still, there is yet ine thing that I dislike in this solution, whether
+> it be with hooks or the variable, and that noone has seen so far: it is
+> not atomic and the target/ directory will be broken if the filesystem
+> command fails right in the middle, before the var symlink was restored.
+
+ Can we create the symlink early in the build process, every time? I.e. run
+SKELETON_SYSTEMD_POST_ROOTFS_VAR somehwere at the start of the build as well?
+Only, I'm not sure where we could put it.
+
 
  Regards,
  Arnout
+
+
+> I have seen no solution to this issue, except doing a copy of target
+> first, right before assembling the image(s), becasue in that case, we
+> wouldn't care about restoring the previous status, so we would no longer
+> need atomicity.
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
