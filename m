@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 23 Jul 2017 15:13:41 -0300
-Subject: [Buildroot] TestIso9660GrubExternal and TestIso9660GrubInternal
-	failing
-References: <20170723092643.GE2917@scaer>
-Message-ID: <5974e7554c7c_30a1600b705951e@ultri3.mail>
+Date: Sun, 23 Jul 2017 15:44:20 -0300
+Subject: [Buildroot] [PATCH 2/4] testing/infra/builder: dump config to
+	log
+References: <20170723091441.GB2917@scaer>
+Message-ID: <5974ee846d043_586e1244f2c29434@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +12,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-I renamed the e-mail thread from:
-[PATCH 20/20] support/testing: add runtime testing for init systems
+On Sun, Jul 23, 2017 at 06:14 AM, Yann E. MORIN wrote:
 
-On Sun, Jul 23, 2017 at 06:26 AM, Yann E. MORIN wrote:
-
-> On 2017-07-23 09:58 +0200, Thomas Petazzoni spake thusly:
->> On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
->> > > The patches fixing them are here:
->> > > 
->> > >   http://patchwork.ozlabs.org/patch/783135/
->> > >   http://patchwork.ozlabs.org/patch/783137/
->> > >   http://patchwork.ozlabs.org/patch/783136/
->> > > 
->> > > and nobody reviews them.  
->> > 
->> > I gave them a spin here, and they indeed fix the build, but the tests
->> > are still broken because qemu can't boot the resulting system...
->> > 
->> > I'll investigate that tomorrow...
->> 
->> Hum, weird, because I'm pretty sure I tested the test cases with those
->> patches. I'll test again, maybe I missed something.
+> On 2017-07-23 01:20 -0300, Ricardo Martincoski spake thusly:
+[snip]
+>>          with open(config_file, "w+") as cf:
+>>              cf.write(self.config)
+>> +        # dump the config to the logfile for easy debugging
+>> +        self.logfile.write("> config:\n" + self.config)
+>> +        self.logfile.flush()
 > 
-> So, to rule out any sleep-deprivation issue while testign yesterday
-> evening, I re-spawn the tests here this morning, and they still do not
-> run.
+> Although the variable is named 'comfig', it is in fact a defconfig.
+
+Good point. I will rename it (not the variable, of course) in the commit log and
+in the logfile.
+
+> Also, it is easy to miss exactly where the end of the config is, so
+> maybe:
 > 
-> Maybe it is my qemu version?
+>   - prefix all lines with 'config: ',
+> or
+>   - add 'start config' and 'end config'.
+
+The second one seems nicer to me, I will use '> start defconfig' and
+'> end defconfig'.
+
 > 
-> I'll try and bisect them between July the 1st and now.
+> Otherwise;
+> 
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Since you are investigating this, let me provide some data I hope is useful.
+This is the only tag I won't keep, since I am changing this patch.
 
-My local computer has:
-binutils 2.26.1
-qemu 2.5.0
+I will also account for your comment on the last patch. Thank you for the hint.
 
-Using my local computer the tests TestIso9660GrubExternal and
-TestIso9660GrubInternal always pass, in current master and also with the 3 grub
-patches applied.
-
-Using the image buildroot/base I can reproduce the problems:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23825707
-GRUB requires a working absolute objcopy; upgrade your binutils
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23831270
-==> System does not boot
-
-If you need me to check versions for other tools in my local computer (Ubuntu
-16.04.2, not plain vanilla), feel free to ask.
+I am marking patches 2 to 4 as Changes Requested.
+Patch 1 (developers file only) I will keep in patchwork as-is.
 
 Regards,
 Ricardo
