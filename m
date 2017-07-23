@@ -1,52 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jul 2017 11:26:43 +0200
-Subject: [Buildroot] [PATCH 20/20] support/testing: add runtime testing
- for init systems
-In-Reply-To: <20170723095839.0d11b971@windsurf>
+Date: Sun, 23 Jul 2017 11:45:28 +0200
+Subject: [Buildroot] [PATCH 11/20] package/skeleton: split out into
+ skeleton-custom
+In-Reply-To: <bcfcf21a-b459-1dea-ea89-fcad5ac82283@mind.be>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <95f6965c48dbf2f754818e2bec1f2d3891015475.1500398733.git.yann.morin.1998@free.fr>
- <e1b95878-e58f-c884-4265-8a1dcae14583@mind.be>
- <20170722144552.GE9929@scaer>
- <26a88450-f1cb-a870-136a-936f0e5c9ec7@mind.be>
- <20170722221014.672f9eb2@windsurf> <20170722225016.GK9929@scaer>
- <20170723095839.0d11b971@windsurf>
-Message-ID: <20170723092643.GE2917@scaer>
+ <ca1a0fdf264669754c3c4aa669e162beea5441fa.1500398733.git.yann.morin.1998@free.fr>
+ <6929bbc3-48c2-4041-a1bb-2e3602c92e4a@mind.be>
+ <bcfcf21a-b459-1dea-ea89-fcad5ac82283@mind.be>
+Message-ID: <20170723094528.GA26998@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2017-07-23 09:58 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 23 Jul 2017 00:50:16 +0200, Yann E. MORIN wrote:
-> > > The patches fixing them are here:
-> > > 
-> > >   http://patchwork.ozlabs.org/patch/783135/
-> > >   http://patchwork.ozlabs.org/patch/783137/
-> > >   http://patchwork.ozlabs.org/patch/783136/
-> > > 
-> > > and nobody reviews them.  
-> > 
-> > I gave them a spin here, and they indeed fix the build, but the tests
-> > are still broken because qemu can't boot the resulting system...
-> > 
-> > I'll investigate that tomorrow...
+On 2017-07-23 00:38 +0200, Arnout Vandecappelle spake thusly:
+>  On second thought...
 > 
-> Hum, weird, because I'm pretty sure I tested the test cases with those
-> patches. I'll test again, maybe I missed something.
+> On 23-07-17 00:31, Arnout Vandecappelle wrote:
+> >> +define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
+> >> +	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(STAGING_DIR))
+> >> +	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
+> 
+>  In skeleton-common, we also have:
+> 
+> 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
+> 
+> Shouldn't we do that here as well?
 
-So, to rule out any sleep-deprivation issue while testign yesterday
-evening, I re-spawn the tests here this morning, and they still do not
-run.
+In fact, I argue that we should not have this mkdir at all:
+    https://patchwork.ozlabs.org/patch/710672/
 
-Maybe it is my qemu version?
-
-I'll try and bisect them between July the 1st and now.
+I propagated it here because the patch is just about moving stuff, not
+cleaning up.
 
 Regards,
 Yann E. MORIN.
+
+>  Regards,
+>  Arnout
+> 
+> >> +endef
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
