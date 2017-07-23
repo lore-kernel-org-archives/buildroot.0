@@ -1,102 +1,206 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Jul 2017 15:42:02 +0200
-Subject: [Buildroot] [PATCH 18/20] fs: add pre- and post-command hooks
-In-Reply-To: <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
-Message-ID: <1a767f33-47a3-5ab6-ed40-00e2bfa31da8@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 23 Jul 2017 15:44:09 +0200
+Subject: [Buildroot] [Patch v7 02/10] rust-bin: new package
+In-Reply-To: <20170723081206.7774-3-eric.le.bihan.dev@free.fr>
+References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
+ <20170723081206.7774-3-eric.le.bihan.dev@free.fr>
+Message-ID: <1500817449.2333.7.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
-
-On 18-07-17 19:25, Yann E. MORIN wrote:
-> In some cases, the directory structure we want in the filesystem is not
-> exactly what we have in target/
+On Sun, 2017-07-23 at 10:11 +0200, Eric Le Bihan wrote:
+> This package provides a pre-built version of rustc, the compiler for the
+> Rust programming language, fetched from the upstream project.
 > 
-> For example, when systemd is used on a read-only rootfs, /var must be a
-> tmpfs. However, we may have packages that install stuff in there, and
-> set important rights (via the permission-table). So, at build time, we
-> need /var to be a symlink to the remanent location (/usr/share/factory)
-> while at runtime we need /var to be a directory.
+> A pre-built version of the standard library for the host as well as one
+> for the chosen target are also fetched and installed.
+
+As this series of patches adds support for fetching a pre-built
+compiler or build the compiler from source, we should allow this for
+the Rust standard library (std), too:
+
+1) Rust allows to compile crates without using the std library [1]
+2) The std library can be build from source, e.g. for non-supported
+targets by using a custom target configuration [2].
+
+> Only the host variant is provided to allow the user to cross-compile
+> Rust programs and run them on the target.
 > 
-> One option would have seen to have /var as a real directory even during
-> build time, and in a target-finalize hook, move everything out of there
-> and into the "factory" location. However, that's not possible because
-> it's too early: some packages may want to set ownership and/or acces
-> rights on directories or files in /var, and this is only done in the
-> fakeroot script, which is called only later during the assembling of the
-> filesystem images.
+> The menuconfig entry for rustc is also updated to expose this provider.
 > 
-> Also, there would have been no way to undo the tweak (i.e. we need to
-> restore the /var symlink so that subsequent builds continue to work) if
-> it were done as a target-finalize hook.
-> 
-> The only solution is to allow packages to register pre- and post-hooks
-> that are called right before and right after the rootfs commands are
-> executed, and inside in the fakeroot script.
-> 
-> We can however not re-use the BR2_ROOTFS_POST_FAKEROOT_SCRIPT feature
-> either because it is done before the filesystem command, but there is
-> nothing that is done after. Also, we don't want to add to, and modify a
-> user-supplied variable.
-
- I completely agree with this approach.
-
-> 
-> So, we introduce two new variables that packages can set to add the
-> commands they need to run to tweak the filesystem right at the last
-> moment.
-
- But not with this.
-
-
-> Those hooks are not documented on-purpose; they are probably going to
-> only ever be used by systemd.
-
- If systemd is the only one ever to use it, then the approach with a list of
-hooks is just too much over the top. Why not hardcode it? Like so:
-
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > ---
-> Changes v2 -> v3:
->   - add space between >> and $$   (Romain)
-> ---
->  fs/common.mk           | 4 ++++
->  package/pkg-generic.mk | 4 ++++
->  2 files changed, 8 insertions(+)
+>  DEVELOPERS                     |  1 +
+>  package/rust-bin/rust-bin.hash | 30 ++++++++++++++++++++++++++++++
+>  package/rust-bin/rust-bin.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
+>  package/rustc/Config.in.host   | 41 +++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 113 insertions(+)
+>  create mode 100644 package/rust-bin/rust-bin.hash
+>  create mode 100644 package/rust-bin/rust-bin.mk
 > 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 14e0a6b868..9a7758ff49 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -95,10 +95,14 @@ endif
->  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
->  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
->  		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
-> +	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-> +		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 0c22ffc..312b176 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -493,6 +493,7 @@ F:	package/execline/
+>  F:	package/hicolor-icon-theme/
+>  F:	package/jemalloc/
+>  F:	package/ninja/
+> +F:	package/rust-bin/
+>  F:	package/s6/
+>  F:	package/s6-dns/
+>  F:	package/s6-linux-init/
+> diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+> new file mode 100644
+> index 0000000..538f376
+> --- /dev/null
+> +++ b/package/rust-bin/rust-bin.hash
+> @@ -0,0 +1,30 @@
+> +# From https://static.rust-lang.org/dist/rustc-1.19.0-i686-unknown-linux-gnu.tar.xz.sha256
+> +sha256 458404eeac5439c7de35eb15b5922835401918935874672c07eb0f579a85fa40  rustc-1.19.0-i686-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rustc-1.19.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+> +sha256 023f1b63b77eab1e19e900ed6c15f144914bec82de96d644a20f428be1e565b1  rustc-1.19.0-x86_64-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+> +sha256 bcadc15e62aa1e919409fd61212d2cde1b63c065afa4f001b8a33300a06a67ab  rust-std-1.19.0-aarch64-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-arm-unknown-linux-gnueabi.tar.xz.sha256
+> +sha256 458af663cbd06262bcc1bd3eea741a1ccb3a0b794329542fc81e83891b7291b2  rust-std-1.19.0-arm-unknown-linux-gnueabi.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
+> +sha256 6e845a4c2b87f3764c42fbad835fd7deb6a872bfbe5fecdc4412d7344064b07d  rust-std-1.19.0-arm-unknown-linux-gnueabihf.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+> +sha256 5f45d5e4f4b2cf2a91818c68d4fe463745c9133a6d85edb518b77f175eea2065  rust-std-1.19.0-armv7-unknown-linux-gnueabihf.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-i686-unknown-linux-gnu.tar.xz.sha256
+> +sha256 f5dffacc264fb82b605dc66180cd327628caadedd4dca0c2115652f1933c6d93  rust-std-1.19.0-i686-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mips-unknown-linux-gnu.tar.xz.sha256
+> +sha256 a74d1d91d28cb09d13b90451f59939ac01fcbb33eb3087e90b45eff76d5ab9ae  rust-std-1.19.0-mips-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
+> +sha256 eeb6d00d24ce9250219cb019cf08b64c2b629dec8e3e70546ddd103df5c8b9dc  rust-std-1.19.0-mips64-unknown-linux-gnuabi64.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
+> +sha256 745fc612c64bb43f26be5240333842280c6aacfd5acafe3c279ab9ac1da77a46  rust-std-1.19.0-mips64el-unknown-linux-gnuabi64.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-mipsel-unknown-linux-gnu.tar.xz.sha256
+> +sha256 fabb4d203019eefcca2200cf1d519de47a376e71cdca6faa527e94d86b66ecd6  rust-std-1.19.0-mipsel-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+> +sha256 0c0a6aad87c97b1777c43386c17a8a0dea4ebe774adcae563768cabb0a039bbf  rust-std-1.19.0-powerpc-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+> +sha256 ddb66ff250ebdaab4593634236dcefe707918a424f3f5d2650a3b8e726d8081d  rust-std-1.19.0-powerpc64-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+> +sha256 5ca6c0943c883606c43c11d32c35382f019109544a7820d4279d479ce2393a3c  rust-std-1.19.0-powerpc64le-unknown-linux-gnu.tar.xz
+> +# From https://static.rust-lang.org/dist/rust-std-1.19.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+> +sha256 da67633a1447656c4c9907776fc473b208737f4ed521727eb37a59177d1ae296  rust-std-1.19.0-x86_64-unknown-linux-gnu.tar.xz
+> diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+> new file mode 100644
+> index 0000000..900cc69
+> --- /dev/null
+> +++ b/package/rust-bin/rust-bin.mk
+> @@ -0,0 +1,41 @@
+> +################################################################################
+> +#
+> +# rust-bin
+> +#
+> +################################################################################
+> +
+> +RUST_BIN_VERSION = 1.19.0
+> +RUST_BIN_SITE = https://static.rust-lang.org/dist
+> +RUST_BIN_LICENSE = Apache-2.0 or MIT
+> +RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> +
+> +HOST_RUST_BIN_PROVIDES = host-rustc
+> +
+> +HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz
+> +HOST_RUST_BIN_LIBSTD_SOURCES = \
+> +	rust-std-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz \
+> +	rust-std-$(RUST_BIN_VERSION)-$(RUST_TARGET_NAME).tar.xz
+> +
+> +HOST_RUST_BIN_EXTRA_DOWNLOADS = $(HOST_RUST_BIN_LIBSTD_SOURCES)
+> +
+> +define HOST_RUST_BIN_LIBSTD_EXTRACT
+> +	mkdir -p $(@D)/std
+> +	for file in $(addprefix $(DL_DIR)/,$(HOST_RUST_BIN_LIBSTD_SOURCES)); do \
+> +		$(TAR) -C $(@D)/std -xJf $${file}; \
+> +	done
+> +endef
+> +
+> +HOST_RUST_BIN_POST_EXTRACT_HOOKS += HOST_RUST_BIN_LIBSTD_EXTRACT
+> +
+> +define HOST_RUST_BIN_INSTALL_CMDS
+> +	for exe in $$(find $(@D) -name install.sh -executable); do \
+> +		$${exe} \
+> +			--prefix=$(HOST_DIR) \
+> +			--docdir=$(HOST_DIR)/share/doc/rust \
+> +			--libdir=$(HOST_DIR)/lib \
+> +			--mandir=$(HOST_DIR)/share/man \
+> +			--disable-ldconfig; \
+> +	done
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+> index fef78a7..7f2c276 100644
+> --- a/package/rustc/Config.in.host
+> +++ b/package/rustc/Config.in.host
+> @@ -1,5 +1,46 @@
+> +config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> +	bool
+> +	default y
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	depends on  BR2_i386 || BR2_x86_64 \
+                  ^^
+Nitpick, two spaces.
 
-	$$(call PRINTF,$$(ROOTFS_SKELETON_PRE_CMD_HOOK)) >> $$(FAKEROOT_SCRIPT)
+> +		|| BR2_arm  || BR2_aarch64 \
+> +		|| BR2_powerpc  || BR2_powerpc64 \
+> +		|| BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> +	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+> +	depends on !BR2_MIPS_NABI32
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 
- You may want to change the variable name, obviously.
+At least for ARMv6 and ARMv7 pre-built libraries for the musl toolchain
+are available for download.
 
- Regards,
- Arnout
+> +config BR2_PACKAGE_HOST_RUSTC
+> +	bool "host rustc"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> +	help
+> +	  Select the desired provider for the Rust compiler.
+> +
+> +	  http://www.rust-lang.org
+> +
+> +if BR2_PACKAGE_HOST_RUSTC
+> +
+> +choice
+> +	prompt "Rust compiler variant"
+> +	default BR2_PACKAGE_HOST_RUST_BIN
+> +	help
+> +	  Choose a provider for the Rust compiler.
 
+Better not use the word "provider" here. Maybe just "Select a Rust
+compiler"? Or change the text later into something more meaningful?
 
-[snip]
+> +config BR2_PACKAGE_HOST_RUST_BIN
+> +	bool "host rust (pre-built)"
+> +	select BR2_PACKAGE_HAS_HOST_RUSTC
+> +	help
+> +	  This package will install pre-built versions of the compiler
+> +	  for the host and the Rust standard library for the target.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Maybe add a description that the libraries for the target are installed
+in the Buildroot host directory, too.
+
+> +endchoice
+> +
+>  config BR2_PACKAGE_HAS_HOST_RUSTC
+>  	bool
+>  
+>  config BR2_PACKAGE_PROVIDES_HOST_RUSTC
+>  	string
+> +	default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
+> +
+> +endif
+> +
+
+[1] https://doc.rust-lang.org/book/first-edition/using-rust-without-the
+-standard-library.html
+[2] https://doc.rust-lang.org/1.1.0/rustc_back/target/index.html#using-
+custom-targets
