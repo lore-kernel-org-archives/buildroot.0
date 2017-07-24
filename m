@@ -1,101 +1,89 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 24 Jul 2017 23:07:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libressl: needs MMU
-In-Reply-To: <20170724180723.4786fad5@windsurf.lan>
-References: <20170723200844.13004-1-bernd.kuhls@t-online.de>
- <20170724180723.4786fad5@windsurf.lan>
-Message-ID: <20170724210702.GM12791@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Jul 2017 00:23:48 +0200
+Subject: [Buildroot] [PATCH 18/20] fs: add pre- and post-command hooks
+In-Reply-To: <20170724160123.GE2918@scaer>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
+ <1a767f33-47a3-5ab6-ed40-00e2bfa31da8@mind.be> <20170723141744.GI26998@scaer>
+ <d549596f-af21-640b-4196-fcc96557c14c@mind.be> <20170724160123.GE2918@scaer>
+Message-ID: <69f1e791-65e9-2e22-59f1-d5959e569d88@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
 
-> Hello,
+
+On 24-07-17 18:01, Yann E. MORIN wrote:
+> On 2017-07-23 23:51 +0200, Arnout Vandecappelle spake thusly:
+
+[snip]
+> So Thomas suggested that we apply the factory feature to all init
+> systems. With systemd, it would be built-in (by mean of tmpfiles),
+> while for the others we'd need some extra startup scripts to mount a
+> tmpfs on /var and populate it.
+
+ Hum-hum, I thought that the Buildroot rule was: we don't add features. If
+someone needs the factory feature, they should use systemd (or s6 I believe also
+has some kind of factory feature).
+
+[snip]
+>>  Can we create the symlink early in the build process, every time? I.e. run
+>> SKELETON_SYSTEMD_POST_ROOTFS_VAR somehwere at the start of the build as well?
+>> Only, I'm not sure where we could put it.
 > 
-> On Sun, 23 Jul 2017 22:08:44 +0200, Bernd Kuhls wrote:
-> > Fixes
-> > http://autobuild.buildroot.net/results/074/07429d3016c900894fa0ca19b7dad0a928e32e3f/
-> > http://autobuild.buildroot.net/results/1c1/1c1325d1a7a7aa98172d2d93d30322165af62348/
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/libressl/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/libressl/Config.in b/package/libressl/Config.in
-> > index 0a1c9e273..d13b2068c 100644
-> > --- a/package/libressl/Config.in
-> > +++ b/package/libressl/Config.in
-> > @@ -1,6 +1,7 @@
-> >  config BR2_PACKAGE_LIBRESSL
-> >  	bool "libressl"
-> >  	depends on !BR2_PACKAGE_OPENSSL
-> > +	depends on BR2_USE_MMU # fork()
-> >  	help
-> >  	  LibreSSL is a version of the TLS/crypto stack forked from
-> >  	  OpenSSL in 2014, with goals of modernizing the codebase,
+> Hmm... Good point. I'll try to find a place. But I'm not sure that would
+> be possible.
+
+ "dependencies" is an option, but that's *really* dirty.
+
+ Perhaps we can add a stamp file to TARGET_DIR/usr/share/factory, and then add
+TARGET_DIR/var/stampfile as a dependency of dirs. If TARGET_DIR/var is an
+(empty) directory, then TARGET_DIR/var/stampfile will not exist so the rule will
+trigger.
+
+ But there are a few problems with that:
+
+- dirs is also "called" for legal-info, but legal-info doesn't otherwise create
+a target directory;
+
+- it would be natural for this stampfile to depend on skeleton-systemd (which
+can then create the stampfile), but that would give a circular dependency.
+
+
+> Maybe with the step-hooks, that are called very early for all steps, and
+> then we'd use that to create the symlink if missing. But I do not like
+> that too much...
+
+ Meh, no, that would repeat the check for *every* package...
+
+
+> I'll investigate.
 > 
-> On this one, I'd like to have the feedback from Waldemar. Indeed,
-> libressl is not using fork(), but __register_atfork(), which uClibc
-> does not implement, and I've not found why it doesn't exist for noMMU
-> platforms.
+> In the meantime, I'll drop the read-only patches from the series, to
+> avoid too much noise for now, and so we concentrate on the skeleton
+> stuff for this release.
 
-From the comment in the header:
-"Register handlers to execute before and after `fork'"
+ I think it's better if you still include them:
 
-As this is a feature only available when fork() is there, this isn't
-available for noMMU platforms. So pthread_fork() is available as described
-in POSIX here:
-http://pubs.opengroup.org/onlinepubs/9699919799/functions/pthread_atfork.html
+- it doesn't hurt if they are part of the series but don't get applied;
+- it gives some context about the direction in which we are going;
+- it gives an opportunity to continue discussion on these patches.
 
-I think we no longer define pthread_atfork for noMMU architectures
-since Romain reported an issue with Xenomai and Blackfin some time
-ago. It was then fixed on both sides:
-https://git.xenomai.org/xenomai-2.6.git/commit/?id=917dcebb26ec492f276cdc3b55867aa90e01fa12
-https://cgit.openadk.org/cgi/cgit/uclibc-ng.git/commit/libpthread/linuxthreads?id=79c4017f3518cd30afb59a170717c1e754eedadf
+ Even if you re-post with some changes NOT applied, just say so in the commit
+message. Perhaps remove your Sob to make sure it doesn't get applied by
+accident. Or remove it from patchwork.
 
-Xenomai uses a dummy for pthread_fork:
-https://git.xenomai.org/xenomai-2.6.git/tree/include/asm-blackfin/syscall.h#n137
 
-__register_atfork() seems a LSB extension to allow to unregister
-functions when a shared object is unloaded.
-See:
-http://refspecs.linuxbase.org/LSB_3.1.0/LSB-Core-generic/LSB-Core-generic/baselib--register-atfork.html
+ Regards,
+ Arnout
 
-As uClibc inherits NPTL from glibc, it is available for all
-architectures supporting NPTL. Checked with ARM cross-compilation.
- 
-> In addition, libressl interestingly has a special case for __GLIBC__
-> (which gets used for uclibc, because uclibc defines __GLIBC__):
-> 
-> #ifdef __GLIBC__
-> extern void *__dso_handle;
-> extern int __register_atfork(void (*)(void), void(*)(void), void (*)(void), void *);
-> #define _ARC4_ATFORK(f) __register_atfork(NULL, NULL, (f), __dso_handle)
-> #else
-> #define _ARC4_ATFORK(f) pthread_atfork(NULL, NULL, (f))
-> #endif
-> 
-> Waldemar, what do you think ?
 
-It was added in this commit:
-https://github.com/libressl-portable/portable/commit/32d9eeeecf4e951e1566d5f4a42b36ea37b60f35
-
-But I think the commit log isn't correct, as pthread_atfork can be
-used for glibc, musl and uClibc-ng. (for glibc -lpthread must be
-added)
-
-One possible solution might be, to check for __register_atfork, if
-it does not exist, fallback to pthread_atfork, if it does not exist
-provide a pthread_atfork dummy (noMMU case).
-
-Another solution would be to enhance uClibc-ng included arc4random.c
-and sync with OpenBSD code and use that instead of the compat code
-included in libressl.
-
-best regards
- Waldemar
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
