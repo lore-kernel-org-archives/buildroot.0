@@ -1,31 +1,48 @@
-From: Linux Edwin K <linux.edwin.k@gmail.com>
-Date: Mon, 24 Jul 2017 13:48:16 +0530
-Subject: [Buildroot] Makefile for iotivity-1.1.1 build under buildroot
-Message-ID: <CAL6UhvSj4kKS4E0VhFSfD+E2_K_ese8r_ubktdBPTotgOQsCRA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Jul 2017 11:16:10 +0200
+Subject: [Buildroot] [PATCH] bind: bump version to bugfix release 9.11.1-P3
+Message-ID: <20170724091610.12852-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi buildroot,
+BIND 9.11.1-P3 addresses a TSIG regression introduced in the 9.11.1-P2
+security bump:
 
-I have done a specific project on buildroot environment and I wanted to add
-*ioTivity-1.1.1* as a /buildroot/package/iotivity/
+https://lists.isc.org/pipermail/bind-announce/2017-July/001057.html
 
-Either OCF or buildroot were not given official support for iotivity build
-under buildroot.
+Also add a hash for the license file while we're at it.
 
-Since my project completion time is shorter, am finding difficulty to write
-my own *iotivity.mk <http://iotivity.mk>* file.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.hash | 5 +++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Will I get help ?
-
--
-
-Regards
-
-Edwin   |   Chennai   |   India
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170724/098e90eb/attachment.html>
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 5dd15cb86b..3a631def65 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,3 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
+-sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
++sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
++sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index fd5369a3ea..988f40e1c2 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.1-P2
++BIND_VERSION = 9.11.1-P3
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+-- 
+2.11.0
