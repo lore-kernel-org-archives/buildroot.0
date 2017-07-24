@@ -1,92 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Jul 2017 19:54:58 +0200
-Subject: [Buildroot] [git commit] support/testing: add test of
- BR2_CCACHE with an external toolchain
-In-Reply-To: <20170724163121.A64CB81DD3@busybox.osuosl.org>
-References: <20170724163121.A64CB81DD3@busybox.osuosl.org>
-Message-ID: <20170724175458.GF2918@scaer>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 24 Jul 2017 20:16:26 +0200
+Subject: [Buildroot] Makefile for iotivity-1.1.1 build under buildroot
+In-Reply-To: <CAL6UhvSj4kKS4E0VhFSfD+E2_K_ese8r_ubktdBPTotgOQsCRA@mail.gmail.com>
+References: <CAL6UhvSj4kKS4E0VhFSfD+E2_K_ese8r_ubktdBPTotgOQsCRA@mail.gmail.com>
+Message-ID: <20170724181626.GA4226@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi!
 
-On 2017-07-24 18:35 +0200, Thomas Petazzoni spake thusly:
-> commit: https://git.buildroot.net/buildroot/commit/?id=6355ec2768c486de318b76835af73fdcb894b311
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> We reuse TestExternalToolchainBuildrootuClibc and add ccache to its
-> configuration.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  .gitlab-ci.yml                                   |  1 +
->  support/testing/tests/toolchain/test_external.py | 11 +++++++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 57710ab..42707ad 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -233,6 +233,7 @@ tests.package.test_python.TestPython2: *runtime_test
->  tests.package.test_python.TestPython3: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
-> +tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainCtngMusl: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainLinaroArm: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainSourceryArmv4: *runtime_test
+On 17-07-24 13:48:16, Linux Edwin K wrote:
+> Hi buildroot,
+>
+> I have done a specific project on buildroot environment and I wanted to add
+> *ioTivity-1.1.1* as a /buildroot/package/iotivity/
+>
+> Either OCF or buildroot were not given official support for iotivity build
+> under buildroot.
+>
+> Since my project completion time is shorter, am finding difficulty to write
+> my own *iotivity.mk <http://iotivity.mk>* file.
+>
+> Will I get help ?
 
-You don't need to list all tests in there, if you want to execute all
-of them.i
+Out of curiosity, I briefly looked at iotivity [1]. It uses Scons as its
+build system. So if you want to add a new Buildroot package for
+iotivity, you can take package/mongodb/mongodb.mk as an example, as this
+package also uses Scons.
 
-Instead, you can just list 'tests' and all sub-tests will be run by
-nose2. This way we need not update this file with every new test that we
-add. And in fact I think we should not even need to list it, and make
-the runtime-test entry just run everything...
+Scons is not used directly, as a wrapper script named `auto_build.py` is
+provided. It may have to be invoked from IOTIVITY_BUILD_CMDS in the
+package Makefile.
 
-I think it is even possible to mark some tests with 'test campaign tag'
-so that they are only executed under some conditions that we define
-ourselves (like, 'nightly', 'weekly', but also like 'arm', 'mips' or
-whatever 'tag' we're interested in). If you think it might be usefull,
-I can research that further...
+I also noticed it relies on some external libraries, like Boost,
+tinycbor or gtest. Some are available in Buildroot, others are not. So
+you may have to add additional packages for the missing ones and list
+them in the package dependencies (surprisingly, depending on the missing
+library, it either asks the user to perform the clone manually or does
+it on its own when building).
+
+Hope this helps.
+
+[1] https://wiki.iotivity.org/build_for_your_system
 
 Regards,
-Yann E. MORIN.
 
-> diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-> index afb4bb0..394fa17 100644
-> --- a/support/testing/tests/toolchain/test_external.py
-> +++ b/support/testing/tests/toolchain/test_external.py
-> @@ -229,3 +229,14 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
->                             kernel="builtin",
->                             options=["-initrd", img])
->          self.emulator.login()
-> +
-> +class TestExternalToolchainCCache(TestExternalToolchainBuildrootuClibc):
-> +    extraconfig = \
-> +"""
-> +BR2_CCACHE=y
-> +BR2_CCACHE_DIR="{builddir}/ccache-dir"
-> +"""
-> +
-> +    def __init__(self, names):
-> +        super(TestExternalToolchainBuildrootuClibc, self).__init__(names)
-> +        self.config += self.extraconfig.format(builddir=self.builddir)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--
+ELB
