@@ -1,13 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jul 2017 09:16:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-07-22
-In-Reply-To: <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
-References: <20170723063052.1CB8521DBF@mail.free-electrons.com>
- <CANQCQpa0--xE+_YtXVqfJr78i==sY0gj3fECTBKm7g-eByd9=Q@mail.gmail.com>
- <CANQCQpbvJMypP2s5rwTBPNsnhQ_akammE-ci4wpUqN=5mLeHRQ@mail.gmail.com>
- <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
-Message-ID: <20170724091608.294156f1@windsurf>
+Date: Mon, 24 Jul 2017 09:19:54 +0200
+Subject: [Buildroot] [PATCH 12/20] package/skeleton: split out into
+ skeleton-common
+In-Reply-To: <93d18b26-049a-6172-9804-a655fc1bd32e@mind.be>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <af100c0e2b252ccec7e9e2b8ebc88964c78bb4dc.1500398733.git.yann.morin.1998@free.fr>
+ <6bcf485a-e334-33d6-4fb1-17553670d2fb@mind.be>
+ <20170723094855.GB26998@scaer>
+ <93d18b26-049a-6172-9804-a655fc1bd32e@mind.be>
+Message-ID: <20170724091954.6bc28c19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,43 +17,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Jul 2017 07:35:55 -0500, Matthew Weber wrote:
+On Sun, 23 Jul 2017 22:32:24 +0200, Arnout Vandecappelle wrote:
 
-> Sorry that last email accidentally got sent.
+> >>  Not for this patch of course, but I think it would make sense to also move that
+> >> here. But you probably thought of that already :-)  
+> > 
+> > Yes, that's is what I did in the first iteration, but Thomas was against
+> > moving it, so I left it alone to stay there.  
 > 
-> It looks like all of the downloads of
-> https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz on "gcc20"
-> and "free electrons server" consistently have a
-> GnuTLS: A TLS fatal alert has been received.
-> Unable to establish SSL connection.
-> 
-> That link is using HTTPS redirects.
-> 
-> I tested downloading "wget
-> https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz" on my home
-> machine and a webbrowser, both seem to work ok.
-> My wget was "GNU Wget 1.17.1 ".
-> 
-> What OS version and/or wget/gnutls are those two machines using?
-> Google seems to note some issues with wget having a bug preventing
-> HTTPS redirections from working around the time of Debian7?
+>  Thomas, do you remember why you were against moving the skeleton to
+> package/skeleton-common?
 
-I'm using:
+I honestly don't remember. I believe it might be that I thought that
+system/skeleton/ was a more "obvious" place to look for the skeleton,
+rather than buried in package/skeleton-common/. But this argument feels
+a bit fishy, so I'm not sure if that was that or something else.
 
-$ wget --version
-GNU Wget 1.13.4 built on linux-gnu.
-
-on:
-
-$ cat /etc/issue
-Debian GNU/Linux 7 \n \l
-
-Normally what happens in such situations is that after a while, Peter's
-sources.buildroot.net fetches the tarball, it appears on
-sources.buildroot.net, and that resolves the download issue. And it is
-now the case: http://sources.buildroot.net/paxtest-0.9.15.tar.gz, so
-the downloads should no longer fail, as all autobuilders will fall back
-to sources.b.net.
+I don't currently see a problem with having the base skeleton moved to
+package/skeleton-common/.
 
 Best regards,
 
