@@ -1,50 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Jul 2017 20:26:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jpeg-turbo: bump version to 1.5.2
-Message-ID: <20170724182603.31781-1-bernd.kuhls@t-online.de>
+Date: Mon, 24 Jul 2017 20:30:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: bump version to 1.8.1
+Message-ID: <20170724183047.5506-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE to https.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
- package/jpeg-turbo/jpeg-turbo.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/jsoncpp/jsoncpp.hash | 2 +-
+ package/jsoncpp/jsoncpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 93b245ebd..320bbb2a9 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/libjpeg-turbo/files/1.5.1/
--sha1	ebb3f9e94044c77831a3e8c809c7ea7506944622	libjpeg-turbo-1.5.1.tar.gz
--md5	55deb139b0cac3c8200b75d485fc13f3	libjpeg-turbo-1.5.1.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.2/
-+sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
-+md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index ba5d64467..34d76f157 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256 41429d3d253017433f66e3d472b8c7d998491d2f41caa7306b8d9a6f2a2c666c  libjpeg-turbo-1.5.1.tar.gz
-+sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index c8c174712..bb1278f8b 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,9 +4,9 @@
+-sha256 5deb2462cbf0c0121c9d6c9823ec72fe71417e34242e3509bc7c003d526465bc  jsoncpp-1.8.0.tar.gz
++sha256 858db2faf348f89fdf1062bd3e79256772e897e7f17df73e0624edf004f2f9ac  jsoncpp-1.8.1.tar.gz
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index b1e64dd30..b4aea56ef 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JPEG_TURBO_VERSION = 1.5.1
-+JPEG_TURBO_VERSION = 1.5.2
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
--JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
-+JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = jpeg-license (BSD-3-Clause-like)
- JPEG_TURBO_LICENSE_FILES = LICENSE.md
- JPEG_TURBO_INSTALL_STAGING = YES
+-JSONCPP_VERSION = 1.8.0
++JSONCPP_VERSION = 1.8.1
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
 -- 
 2.11.0
