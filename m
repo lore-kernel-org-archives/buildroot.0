@@ -1,106 +1,92 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 24 Jul 2017 19:51:23 +0200
-Subject: [Buildroot] [RFC v1] libv4l: build utils only on MMU (with fork
- support) platforms
-In-Reply-To: <20170724193822.3630bc8c@gmx.net>
-References: <20170711172624.7516-1-ps.report@gmx.net>
- <70ff5d21-0466-c470-cac3-e00c524c93b0@st.com>
- <20170717200901.51814cb5@gmx.net>
- <41bd7a05-4254-e7e4-7846-ed5e4d99d0ad@st.com>
- <20170722233627.4b8091bd@gmx.net>
- <62b07a98-ef76-b3cc-1ce0-227ceeb06519@st.com>
- <20170724193822.3630bc8c@gmx.net>
-Message-ID: <20170724195123.463603b8@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Jul 2017 19:54:58 +0200
+Subject: [Buildroot] [git commit] support/testing: add test of
+ BR2_CCACHE with an external toolchain
+In-Reply-To: <20170724163121.A64CB81DD3@busybox.osuosl.org>
+References: <20170724163121.A64CB81DD3@busybox.osuosl.org>
+Message-ID: <20170724175458.GF2918@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Hugues,
+Thomas, All,
 
-On Mon, 24 Jul 2017 19:38:22 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+On 2017-07-24 18:35 +0200, Thomas Petazzoni spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=6355ec2768c486de318b76835af73fdcb894b311
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> We reuse TestExternalToolchainBuildrootuClibc and add ccache to its
+> configuration.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .gitlab-ci.yml                                   |  1 +
+>  support/testing/tests/toolchain/test_external.py | 11 +++++++++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 57710ab..42707ad 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -233,6 +233,7 @@ tests.package.test_python.TestPython2: *runtime_test
+>  tests.package.test_python.TestPython3: *runtime_test
+>  tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
+>  tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
+> +tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
+>  tests.toolchain.test_external.TestExternalToolchainCtngMusl: *runtime_test
+>  tests.toolchain.test_external.TestExternalToolchainLinaroArm: *runtime_test
+>  tests.toolchain.test_external.TestExternalToolchainSourceryArmv4: *runtime_test
 
-> Hello Hugues,
-> 
-> On Mon, 24 Jul 2017 08:08:45 +0000, Hugues FRUCHET <hugues.fruchet@st.com> wrote:
-> 
-> > Hi Peter,
-> > 
-> > Sorry, typo in patch, this one should work as expected.
-> > 
-> > Best regards,
-> > Hugues.
-> > 
-> 
-> Yes, the new version of the patch works:
-> 
-> 	$ make libv4l
-> [...]
-> Applying 0010-configure.ac-disable-libv4l-if-no-fork.patch using patch:
-> [...]
-> compile time options summary
-> ============================
-> 
->     Host OS                    : linux-uclibc
->     X11                        : no
->     GL                         : no
->     glu                        : no
->     libjpeg                    :
->     libudev                    : no
->     pthread                    : yes
->     fork                       : no
->     QT version                 : none
->     ALSA support               : no
-> 
->     build dynamic libs         : yes
->     build static libs          : no
-> 
->     gconv                      : no
-> 
->     libv4l                     : no
->     dynamic libv4l             : yes
->     v4l_plugins                : yes
->     v4l_wrappers               : yes
->     libdvbv5                   : no
->     dvbv5-daemon               : no
->     v4lutils                   : yes
->     qv4l2                      : no
->     v4l2-ctl uses libv4l       : yes
->     v4l2-compliance uses libv4l: yes
-> [...]
-> 
-> 	$ ls -ltr target/usr/bin/
-> [...]
-> -rwxr-xr-x 1 seiderer users 259172 Jul 24 19:29 decode_tm6000
-> -rwxr-xr-x 1 seiderer users  13988 Jul 24 19:29 ivtv-ctl
-> -rwxr-xr-x 1 seiderer users 198868 Jul 24 19:29 ir-ctl
-> -rwxr-xr-x 1 seiderer users  12240 Jul 24 19:29 cx18-ctl
-> -rwxr-xr-x 1 seiderer users 215068 Jul 24 19:29 ir-keytable
-> -rwxr-xr-x 1 seiderer users  53452 Jul 24 19:29 media-ctl
-> -rwxr-xr-x 1 seiderer users 206532 Jul 24 19:29 v4l2-compliance
-> -rwxr-xr-x 1 seiderer users 265676 Jul 24 19:29 v4l2-ctl
-> -rwxr-xr-x 1 seiderer users 188496 Jul 24 19:29 v4l2-sysfs-path
-> -rwxr-xr-x 1 seiderer users 154228 Jul 24 19:29 cec-ctl
-> -rwxr-xr-x 1 seiderer users 122344 Jul 24 19:29 cec-compliance
-> -rwxr-xr-x 1 seiderer users  69860 Jul 24 19:29 cec-follower
-> 
-> 	$ ls -ltr target/usr/lib
-> drwxr-xr-x 3 seiderer users    4096 Jul 11 19:06 libv4l
-> -rwxr-xr-x 1 seiderer users   39408 Jul 11 19:06 libv4l2.so.0.0.0
-> -rwxr-xr-x 1 seiderer users   17032 Jul 11 19:06 libv4l1.so.0.0.0
-> -rwxr-xr-x 1 seiderer users  105432 Jul 11 19:06 libv4lconvert.so.0.0.0
-> -rwxr-xr-x 1 seiderer users   18384 Jul 11 19:06 libv4l2rds.so.0.0.0
-> 
+You don't need to list all tests in there, if you want to execute all
+of them.i
 
-Ups, mind the timestamps, libraries are from a previous build...with your
-patch no libraries are build/installed...
+Instead, you can just list 'tests' and all sub-tests will be run by
+nose2. This way we need not update this file with every new test that we
+add. And in fact I think we should not even need to list it, and make
+the runtime-test entry just run everything...
+
+I think it is even possible to mark some tests with 'test campaign tag'
+so that they are only executed under some conditions that we define
+ourselves (like, 'nightly', 'weekly', but also like 'arm', 'mips' or
+whatever 'tag' we're interested in). If you think it might be usefull,
+I can research that further...
 
 Regards,
-Peter
+Yann E. MORIN.
 
-> Thanks for your efforts...
-> 
-> Regards,
-> Peter
-> 
+> diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
+> index afb4bb0..394fa17 100644
+> --- a/support/testing/tests/toolchain/test_external.py
+> +++ b/support/testing/tests/toolchain/test_external.py
+> @@ -229,3 +229,14 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>                             kernel="builtin",
+>                             options=["-initrd", img])
+>          self.emulator.login()
+> +
+> +class TestExternalToolchainCCache(TestExternalToolchainBuildrootuClibc):
+> +    extraconfig = \
+> +"""
+> +BR2_CCACHE=y
+> +BR2_CCACHE_DIR="{builddir}/ccache-dir"
+> +"""
+> +
+> +    def __init__(self, names):
+> +        super(TestExternalToolchainBuildrootuClibc, self).__init__(names)
+> +        self.config += self.extraconfig.format(builddir=self.builddir)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
