@@ -1,153 +1,460 @@
 From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon, 24 Jul 2017 09:44:26 -0400
-Subject: [Buildroot] [PATCH v5 0/3] Qt WebEngine support
-Message-ID: <20170724134429.22816-1-gael.portay@savoirfairelinux.com>
+Date: Mon, 24 Jul 2017 09:44:28 -0400
+Subject: [Buildroot] [v5 2/3] qt5webengine: new package
+In-Reply-To: <20170724134429.22816-1-gael.portay@savoirfairelinux.com>
+References: <20170724134429.22816-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170724134429.22816-3-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The purpose of this patch series is to continue the integration of Qt5 WebEngine
-in buildroot; started long time ago by Akihiko Odaki [1] and Julien Corjon [2].
+This patch is based on works [1] and [2].
 
-The first patch adds the rpi-userland OpenGL libraries symlinks. WebEngine
-eglfs backend loads dynamically libEGL.so.1 and libGLESv2.so.2 [3].
+[1]: http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+[2]: https://patchwork.ozlabs.org/patch/640633/
 
-	# ls -l /usr/lib/lib*GL*
-	lrwxrwxrwx    1 root     root            11 Mar 21 17:24 /usr/lib/libEGL.so -> libEGL.so.1
-	lrwxrwxrwx    1 root     root            15 Mar 21 17:24 /usr/lib/libEGL.so.1 -> libEGL.so.1.0.0
-	-rwxr-xr-x    1 root     root        163152 Mar 22 14:56 /usr/lib/libEGL.so.1.0.0
-	lrwxrwxrwx    1 root     root            14 Mar 21 17:24 /usr/lib/libGLESv2.so -> libGLESv2.so.2
-	lrwxrwxrwx    1 root     root            18 Mar 21 17:24 /usr/lib/libGLESv2.so.2 -> libGLESv2.so.2.0.0
-	-rwxr-xr-x    1 root     root         78788 Mar 22 14:56 /usr/lib/libGLESv2.so.2.0.0
-
-A PR has been made [4].
-
-The second patch provides the Qt WebEngine package. The additionnal patch fixes
-a build issue when samples are compiled without the support of printing [5].
-This patch is already merged [6] and concerns only 5.9.1.
-
-It fixes the error below.
-
-	.obj/browsermainwindow.o: In function `BrowserMainWindow::printRequested(QWebEnginePage*)': browsermainwindow.cpp:(.text+0x2cc0): undefined reference to `QWebEnginePage::print(QPrinter*, QWebEngineCallback<bool> const&)'
-
-The last patch is a special defconfig that provides a Qt WebEngine setup on
-raspberrypi3.
-
-With this patchset, one can run the Qt quicknanobrowser sample on a rpi3 with
-the following options:
-  - BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc" and
-    BR2_TOOLCHAIN_BUILDROOT_CXX=y (Qt 5 needs a toolchain w/ wchar, NPTL, C++,
-    dynamic library)
-  - BR2_PACKAGE_LIBERATION (Qt 5.8 requires a least one font)
-  - BR2_PACKAGE_RPI_USERLAND (to enable OpenGL backend)
-  - BR2_PACKAGE_QT5BASE_EXAMPLES (to install quicknanobrowser sample)
-  - BR2_PACKAGE_QT5QUICKCONTROLS (needed by quicknanobrowser)
-  - BR2_PACKAGE_QT5WEBENGINE (because it is what we want :))
-
-To browse for HTTPS websites, please consider adding the following options as
-well:
-  - BR2_PACKAGE_CA_CERT (for certificates)
-  - BR2_PACKAGE_NTPD (to sync date)
-
-To run quicknanobrowser:
-	# cd /usr/lib/qt/examples/webengine/quicknanobrowser/
-	# ./quicknanobrowser
-
-I have tested it with a rpi 3; and I will be glad if someone else has another
-EGL platform to test it.
-
-Enjoy ;)
-
-Note: For now, quicknanobrowser will just display the qt website without any
-input backend.
-
-Note 2: Since bump to 5.9.1, the chromium's copy of opus fails with neon [7].
-BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG option allows one to use buildroot copy
-(which compiles fine).
-
-	In file included from ../../3rdparty/chromium/third_party/opus/src/silk/arm/NSQ_neon.c:31:0:
-	/home/gportay/src/buildroot/output-rpi3-qt5.9/host/lib/gcc/arm-buildroot-linux-gnueabihf/6.4.0/include/arm_neon.h:8997:1: error: inlining failed in call to always_inline ?vld1q_s32?: target specific option mismatch
-	 vld1q_s32 (const int32_t * __a)
-	 ^~~~~~~~~
-	../../3rdparty/chromium/third_party/opus/src/silk/arm/NSQ_neon.c:40:15: note: called from here
-	     int32x4_t coef0 = vld1q_s32(coef32);
-		       ^~~~~
-	../../3rdparty/chromium/third_party/opus/src/silk/arm/NSQ_neon.c: At top level:
-	cc1: warning: unrecognized command line option ?-Wno-#pragma-messages?
-
-Note 3: Since bump to 5.9.1, chromium requires udev.
-
-Note 4: Tested against:
-        - GCC 6.x and binutils 2.27 on rpi 3.
-        - GCC 7.x and binutils 2.28 on rpi 3.
-
-Note 5: Version 5.6.2 causes a build issue while building chromium. I disabled
-        the build against this version and am waiting for the release 5.6.3.
-
-[1] https://patchwork.ozlabs.org/patch/640633/
-[2] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
-[3] https://github.com/qt/qtwebengine/blob/5.9/src/core/surface_factory_qt.cpp#L76-L86
-[4] https://github.com/raspberrypi/userland/pull/379
-[5] https://bugreports.qt.io/browse/QTBUG-61510
-[6] https://codereview.qt-project.org/#/c/198041/
-[7] https://patchwork.ozlabs.org/patch/791332/
-
-Changes since RFC:
- - rebase to master (use SPDX licenses, remove license approved, update
-   qt5_defconfig...)
- - remove the patch "prefer arm tune"
- - disable build with Qt 5.6 LTS (not working, waiting for 5.6.3 in August)
- - re-order patches
-
-Changes since v1:
- - manually create symlinks to preserve SONAME
- - add my signed-off-by to the qt webengine patch
- - make qtwe package depends on supported architectures
- - fix Kconfig comment about Qt 5.6
- - sort alphabetically chromium licenses
-
-Changes since v2:
- - fix build issue when I sorted alphabetically the chromium licenses
- - replace legacy option BR2_TARGET_ROOTFS_EXT2_BLOCK to
-   new option BR2_TARGET_ROOTFS_EXT2_SIZE
-
-Changes since v3:
- - add my signed-off-by and the PR link to the rpi-userland patch
- - move rpi patch index from 0001 to 0007
-
-Changes since v4:
- - bump to Qt WebEngine to 5.9.1
- - added the mainlined patch that fixes the build issue with samples when print
-   is not supported
- - udev is selected (required by chromium)
- - add config entry to use system ffmpeg and set it to yes by default
- - the patch concerning the path to CA certificates has been removed since it is
-   no more relevant in 5.9.x
- - increase BR2_TARGET_ROOTFS_EXT2_SIZE to 360MB to support
-   $ du -sk target/
-   312480	target/
-
-Ga?l PORTAY (3):
-  rpi-userland: fix opengl library symlinks
-  qt5webengine: new package
-  configs: new raspberrypi3 qt5 config
-
- configs/raspberrypi3_qt5_defconfig                 |  49 +++++
- package/qt5/Config.in                              |   1 +
- package/qt5/qt5webengine/Config.in                 |  64 ++++++
- package/qt5/qt5webengine/chromium.inc              | 239 +++++++++++++++++++++
- package/qt5/qt5webengine/qt5webengine.hash         |   5 +
- package/qt5/qt5webengine/qt5webengine.mk           |  82 +++++++
- .../0007-Add-OpenGL-library-versioning.patch       |  37 ++++
- 7 files changed, 477 insertions(+)
- create mode 100644 configs/raspberrypi3_qt5_defconfig
+Cc: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ package/qt5/Config.in                      |   1 +
+ package/qt5/qt5webengine/Config.in         |  64 ++++++++
+ package/qt5/qt5webengine/chromium.inc      | 239 +++++++++++++++++++++++++++++
+ package/qt5/qt5webengine/qt5webengine.hash |   5 +
+ package/qt5/qt5webengine/qt5webengine.mk   |  82 ++++++++++
+ 5 files changed, 391 insertions(+)
  create mode 100644 package/qt5/qt5webengine/Config.in
  create mode 100644 package/qt5/qt5webengine/chromium.inc
  create mode 100644 package/qt5/qt5webengine/qt5webengine.hash
  create mode 100644 package/qt5/qt5webengine/qt5webengine.mk
- create mode 100644 package/rpi-userland/0007-Add-OpenGL-library-versioning.patch
 
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index abaa58499..f2a1f378c 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -79,6 +79,7 @@ source "package/qt5/qt5tools/Config.in"
+ source "package/qt5/qt5virtualkeyboard/Config.in"
+ source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
++source "package/qt5/qt5webengine/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+new file mode 100644
+index 000000000..8b52bbdfa
+--- /dev/null
++++ b/package/qt5/qt5webengine/Config.in
+@@ -0,0 +1,64 @@
++comment "qt5webengine needs an Open(E)GL-capable backend"
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mips64
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_HAS_LIBEGL
++
++comment "qt5webengine is not yet buildable with Qt 5.6"
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mips64
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_QT5_VERSION_5_6
++
++config BR2_PACKAGE_QT5WEBENGINE
++	bool "qt5webengine"
++	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mips64
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_QT5_VERSION_5_6
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_DBUS
++	select BR2_PACKAGE_QT5BASE_FONTCONFIG
++	select BR2_PACKAGE_QT5BASE_ICU
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_EGLFS
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	select BR2_PACKAGE_QT5WEBCHANNEL
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_QT5BASE_XCB
++	select BR2_PACKAGE_XLIB_LIBXCURSOR if BR2_PACKAGE_QT5BASE_XCB
++	select BR2_PACKAGE_XLIB_LIBXI if BR2_PACKAGE_QT5BASE_XCB
++	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_QT5BASE_XCB
++	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_QT5BASE_XCB
++	select BR2_PACKAGE_XLIB_LIBXTST if BR2_PACKAGE_QT5BASE_XCB
++	help
++	  The Qt WebEngine module provides a web browser engine that makes it
++	  easy to embed content from the World Wide Web into your Qt application
++	  on platforms that do not have a native web engine.
++
++	  Qt WebEngine provides C++ classes and QML types for rendering HTML,
++	  XHTML, and SVG documents, styled using Cascading Style Sheets (CSS)
++	  and scripted with JavaScript. HTML documents can be made fully
++	  editable by the user through the use of the contenteditable attribute
++	  on HTML elements.
++
++if BR2_PACKAGE_QT5WEBENGINE
++
++config BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS
++	bool "proprietary codecs"
++	help
++	  Qt WebEngine supports the MPEG-4 Part 14 (MP4) file format; which
++	  includes required proprietary audio and video codecs, such as H.264
++	  and MPEG layer-3 (MP3).
++
++config BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG
++	bool "use system ffmpeg"
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_LIBVPX
++	select BR2_PACKAGE_WEBP
++	select BR2_PACKAGE_WEBP_DEMUX
++	default y
++	help
++	  If this option is enabled, it uses buildroot's copy.
++
++endif
+diff --git a/package/qt5/qt5webengine/chromium.inc b/package/qt5/qt5webengine/chromium.inc
+new file mode 100644
+index 000000000..5e1756817
+--- /dev/null
++++ b/package/qt5/qt5webengine/chromium.inc
+@@ -0,0 +1,239 @@
++CHROMIUM_LICENSE_FILES = \
++	src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE \
++	src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE \
++	src/3rdparty/chromium/base/third_party/icu/LICENSE \
++	src/3rdparty/chromium/base/third_party/libevent/LICENSE \
++	src/3rdparty/chromium/base/third_party/nspr/LICENSE \
++	src/3rdparty/chromium/base/third_party/superfasthash/LICENSE \
++	src/3rdparty/chromium/base/third_party/symbolize/LICENSE \
++	src/3rdparty/chromium/base/third_party/valgrind/LICENSE \
++	src/3rdparty/chromium/base/third_party/xdg_mime/LICENSE \
++	src/3rdparty/chromium/base/third_party/xdg_user_dirs/LICENSE \
++	src/3rdparty/chromium/buildtools/LICENSE \
++	src/3rdparty/chromium/buildtools/third_party/libc++abi/trunk/LICENSE.TXT \
++	src/3rdparty/chromium/buildtools/third_party/libc++/trunk/LICENSE.TXT \
++	src/3rdparty/chromium/chrome/third_party/chromevox/LICENSE \
++	src/3rdparty/chromium/chrome/third_party/chromevox/third_party/closure-library/LICENSE \
++	src/3rdparty/chromium/LICENSE \
++	src/3rdparty/chromium/LICENSE.chromium_os \
++	src/3rdparty/chromium/mojo/public/LICENSE \
++	src/3rdparty/chromium/net/third_party/mozilla_security_manager/LICENSE \
++	src/3rdparty/chromium/net/third_party/nss/LICENSE \
++	src/3rdparty/chromium/ppapi/LICENSE \
++	src/3rdparty/chromium/testing/gmock/LICENSE \
++	src/3rdparty/chromium/testing/gmock/scripts/generator/LICENSE \
++	src/3rdparty/chromium/testing/gtest/LICENSE \
++	src/3rdparty/chromium/third_party/accessibility_test_framework/LICENSE \
++	src/3rdparty/chromium/third_party/angle/LICENSE \
++	src/3rdparty/chromium/third_party/angle/src/third_party/compiler/LICENSE \
++	src/3rdparty/chromium/third_party/angle/src/third_party/libXNVCtrl/LICENSE \
++	src/3rdparty/chromium/third_party/angle/src/third_party/murmurhash/LICENSE \
++	src/3rdparty/chromium/third_party/apache-portable-runtime/LICENSE \
++	src/3rdparty/chromium/third_party/apache_velocity/LICENSE \
++	src/3rdparty/chromium/third_party/apple_apsl/LICENSE \
++	src/3rdparty/chromium/third_party/appurify-python/LICENSE \
++	src/3rdparty/chromium/third_party/bintrees/LICENSE.txt \
++	src/3rdparty/chromium/third_party/blanketjs/LICENSE \
++	src/3rdparty/chromium/third_party/blimp_fonts/LICENSE \
++	src/3rdparty/chromium/third_party/blimp_fonts/LICENSE.Apache \
++	src/3rdparty/chromium/third_party/blimp_fonts/LICENSE.OFL \
++	src/3rdparty/chromium/third_party/boringssl/src/LICENSE \
++	src/3rdparty/chromium/third_party/boringssl/src/third_party/android-cmake/LICENSE \
++	src/3rdparty/chromium/third_party/bouncycastle/LICENSE \
++	src/3rdparty/chromium/third_party/brotli/LICENSE \
++	src/3rdparty/chromium/third_party/bspatch/LICENSE \
++	src/3rdparty/chromium/third_party/cardboard-java/LICENSE \
++	src/3rdparty/chromium/third_party/catapult/third_party/py_vulcanize/third_party/rcssmin/bench/LICENSE.cssmin \
++	src/3rdparty/chromium/third_party/catapult/third_party/py_vulcanize/third_party/rcssmin/LICENSE \
++	src/3rdparty/chromium/third_party/catapult/third_party/py_vulcanize/third_party/rjsmin/LICENSE \
++	src/3rdparty/chromium/third_party/catapult/tracing/third_party/chai/LICENSE \
++	src/3rdparty/chromium/third_party/catapult/tracing/third_party/css-element-queries/LICENSE \
++	src/3rdparty/chromium/third_party/catapult/tracing/third_party/d3/LICENSE \
++	src/3rdparty/chromium/third_party/catapult/tracing/third_party/gl-matrix/LICENSE.md \
++	src/3rdparty/chromium/third_party/catapult/tracing/third_party/jszip/LICENSE.markdown \
++	src/3rdparty/chromium/third_party/catapult/tracing/third_party/mocha/LICENSE \
++	src/3rdparty/chromium/third_party/ced/LICENSE \
++	src/3rdparty/chromium/third_party/ced/src/LICENSE \
++	src/3rdparty/chromium/third_party/chaijs/LICENSE \
++	src/3rdparty/chromium/third_party/checkstyle/LICENSE \
++	src/3rdparty/chromium/third_party/checkstyle/LICENSE.apache20 \
++	src/3rdparty/chromium/third_party/class-dump/LICENSE \
++	src/3rdparty/chromium/third_party/closure_compiler/LICENSE \
++	src/3rdparty/chromium/third_party/closure_linter/LICENSE \
++	src/3rdparty/chromium/third_party/crashpad/crashpad/LICENSE \
++	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cctools/cctools/APPLE_LICENSE \
++	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cf/APPLE_LICENSE \
++	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/getopt/LICENSE \
++	src/3rdparty/chromium/third_party/cros_system_api/LICENSE \
++	src/3rdparty/chromium/third_party/cros_system_api/MODULE_LICENSE_BSD \
++	src/3rdparty/chromium/third_party/custom_tabs_client/LICENSE \
++	src/3rdparty/chromium/third_party/d3/src/LICENSE \
++	src/3rdparty/chromium/third_party/decklink/LICENSE \
++	src/3rdparty/chromium/third_party/dom_distiller_js/LICENSE \
++	src/3rdparty/chromium/third_party/drmemory/LICENSE \
++	src/3rdparty/chromium/third_party/errorprone/LICENSE \
++	src/3rdparty/chromium/third_party/espresso/LICENSE \
++	src/3rdparty/chromium/third_party/ffmpeg/LICENSE.md \
++	src/3rdparty/chromium/third_party/flatbuffers/LICENSE \
++	src/3rdparty/chromium/third_party/flatbuffers/src/LICENSE.txt \
++	src/3rdparty/chromium/third_party/flot/LICENSE.txt \
++	src/3rdparty/chromium/third_party/fontconfig/LICENSE \
++	src/3rdparty/chromium/third_party/freetype2/src/docs/LICENSE.TXT \
++	src/3rdparty/chromium/third_party/freetype-android/src/docs/LICENSE.TXT \
++	src/3rdparty/chromium/third_party/gardiner_mod/LICENSE \
++	src/3rdparty/chromium/third_party/gif_player/LICENSE \
++	src/3rdparty/chromium/third_party/glslang/LICENSE \
++	src/3rdparty/chromium/third_party/grpc/LICENSE \
++	src/3rdparty/chromium/third_party/grpc/src/php/ext/grpc/LICENSE \
++	src/3rdparty/chromium/third_party/grpc/third_party/rake-compiler-dock/LICENSE.txt \
++	src/3rdparty/chromium/third_party/guava/LICENSE \
++	src/3rdparty/chromium/third_party/haha/LICENSE \
++	src/3rdparty/chromium/third_party/hamcrest/LICENSE \
++	src/3rdparty/chromium/third_party/hwcplus/LICENSE \
++	src/3rdparty/chromium/third_party/iaccessible2/LICENSE \
++	src/3rdparty/chromium/third_party/iccjpeg/LICENSE \
++	src/3rdparty/chromium/third_party/icu4j/LICENSE \
++	src/3rdparty/chromium/third_party/icu/LICENSE \
++	src/3rdparty/chromium/third_party/icu/scripts/LICENSE \
++	src/3rdparty/chromium/third_party/ijar/LICENSE \
++	src/3rdparty/chromium/third_party/isimpledom/LICENSE \
++	src/3rdparty/chromium/third_party/javax_inject/LICENSE \
++	src/3rdparty/chromium/third_party/jinja2/LICENSE \
++	src/3rdparty/chromium/third_party/jmake/LICENSE \
++	src/3rdparty/chromium/third_party/jsoncpp/LICENSE \
++	src/3rdparty/chromium/third_party/khronos/LICENSE \
++	src/3rdparty/chromium/third_party/leakcanary/LICENSE \
++	src/3rdparty/chromium/third_party/leveldatabase/src/LICENSE \
++	src/3rdparty/chromium/third_party/libaddressinput/LICENSE \
++	src/3rdparty/chromium/third_party/libaddressinput/src/cpp/LICENSE.chromium \
++	src/3rdparty/chromium/third_party/libaddressinput/src/LICENSE \
++	src/3rdparty/chromium/third_party/libFuzzer/LICENSE.TXT \
++	src/3rdparty/chromium/third_party/libjpeg/LICENSE \
++	src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.md \
++	src/3rdparty/chromium/third_party/libpng/LICENSE \
++	src/3rdparty/chromium/third_party/libsecret/LICENSE \
++	src/3rdparty/chromium/third_party/libsrtp/srtp/LICENSE \
++	src/3rdparty/chromium/third_party/libsync/LICENSE \
++	src/3rdparty/chromium/third_party/libudev/LICENSE \
++	src/3rdparty/chromium/third_party/libvpx/source/libvpx/LICENSE \
++	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/googletest/src/LICENSE \
++	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/libwebm/LICENSE.TXT \
++	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/x86inc/LICENSE \
++	src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT \
++	src/3rdparty/chromium/third_party/libwebp/LICENSE \
++	src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE \
++	src/3rdparty/chromium/third_party/libyuv/LICENSE \
++	src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY \
++	src/3rdparty/chromium/third_party/libyuv/third_party/gflags/LICENSE \
++	src/3rdparty/chromium/third_party/lzma_sdk/LICENSE \
++	src/3rdparty/chromium/third_party/mach_override/LICENSE \
++	src/3rdparty/chromium/third_party/markupsafe/LICENSE \
++	src/3rdparty/chromium/third_party/mesa/LICENSE \
++	src/3rdparty/chromium/third_party/mesa/src/src/gallium/drivers/radeon/LICENSE.TXT \
++	src/3rdparty/chromium/third_party/minigbm/LICENSE \
++	src/3rdparty/chromium/third_party/mocha/LICENSE \
++	src/3rdparty/chromium/third_party/mockito/LICENSE \
++	src/3rdparty/chromium/third_party/modp_b64/LICENSE \
++	src/3rdparty/chromium/third_party/molokocacao/LICENSE \
++	src/3rdparty/chromium/third_party/motemplate/LICENSE \
++	src/3rdparty/chromium/third_party/mozilla/LICENSE \
++	src/3rdparty/chromium/third_party/mt19937ar/LICENSE \
++	src/3rdparty/chromium/third_party/netty4/LICENSE \
++	src/3rdparty/chromium/third_party/netty-tcnative/LICENSE \
++	src/3rdparty/chromium/third_party/openh264/src/LICENSE \
++	src/3rdparty/chromium/third_party/openmax_dl/LICENSE \
++	src/3rdparty/chromium/third_party/opus/src/LICENSE_PLEASE_READ.txt \
++	src/3rdparty/chromium/third_party/ots/LICENSE \
++	src/3rdparty/chromium/third_party/ow2_asm/LICENSE \
++	src/3rdparty/chromium/third_party/pdfium/LICENSE \
++	src/3rdparty/chromium/third_party/pdfium/third_party/bigint/LICENSE \
++	src/3rdparty/chromium/third_party/pdfium/third_party/pymock/LICENSE.txt \
++	src/3rdparty/chromium/third_party/pexpect/LICENSE \
++	src/3rdparty/chromium/third_party/ply/LICENSE \
++	src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer/LICENSE.txt \
++	src/3rdparty/chromium/third_party/proguard/LICENSE \
++	src/3rdparty/chromium/third_party/protobuf/LICENSE \
++	src/3rdparty/chromium/third_party/pycoverage/LICENSE \
++	src/3rdparty/chromium/third_party/pyelftools/elftools/construct/LICENSE \
++	src/3rdparty/chromium/third_party/pyelftools/LICENSE \
++	src/3rdparty/chromium/third_party/pyftpdlib/src/LICENSE \
++	src/3rdparty/chromium/third_party/pymock/LICENSE.txt \
++	src/3rdparty/chromium/third_party/Python-Markdown/LICENSE.md \
++	src/3rdparty/chromium/third_party/py_trace_event/src/LICENSE \
++	src/3rdparty/chromium/third_party/pywebsocket/src/LICENSE \
++	src/3rdparty/chromium/third_party/qunit/LICENSE \
++	src/3rdparty/chromium/third_party/re2/LICENSE \
++	src/3rdparty/chromium/third_party/re2/src/LICENSE \
++	src/3rdparty/chromium/third_party/requests/LICENSE \
++	src/3rdparty/chromium/third_party/robolectric/LICENSE \
++	src/3rdparty/chromium/third_party/shaderc/LICENSE \
++	src/3rdparty/chromium/third_party/shaderc/src/LICENSE \
++	src/3rdparty/chromium/third_party/shaderc/src/third_party/LICENSE.glslang \
++	src/3rdparty/chromium/third_party/shaderc/src/third_party/LICENSE.spirv-tools \
++	src/3rdparty/chromium/third_party/simplejson/LICENSE.txt \
++	src/3rdparty/chromium/third_party/sinonjs/LICENSE \
++	src/3rdparty/chromium/third_party/skia/LICENSE \
++	src/3rdparty/chromium/third_party/skia/platform_tools/android/third_party/ashmem/LICENSE \
++	src/3rdparty/chromium/third_party/skia/third_party/etc1/LICENSE \
++	src/3rdparty/chromium/third_party/skia/third_party/libpng/LICENSE \
++	src/3rdparty/chromium/third_party/smhasher/LICENSE \
++	src/3rdparty/chromium/third_party/SPIRV-Tools/LICENSE \
++	src/3rdparty/chromium/third_party/SPIRV-Tools/src/LICENSE \
++	src/3rdparty/chromium/third_party/sqlite4java/LICENSE \
++	src/3rdparty/chromium/third_party/sqlite/LICENSE \
++	src/3rdparty/chromium/third_party/sudden_motion_sensor/LICENSE \
++	src/3rdparty/chromium/third_party/swiftshader/LICENSE \
++	src/3rdparty/chromium/third_party/tcmalloc/LICENSE \
++	src/3rdparty/chromium/third_party/tlslite/LICENSE \
++	src/3rdparty/chromium/third_party/typ/LICENSE \
++	src/3rdparty/chromium/third_party/ub-uiautomator/LICENSE \
++	src/3rdparty/chromium/third_party/usb_ids/LICENSE \
++	src/3rdparty/chromium/third_party/usrsctp/LICENSE \
++	src/3rdparty/chromium/third_party/usrsctp/usrsctplib/LICENSE.md \
++	src/3rdparty/chromium/third_party/v4l2capture/LICENSE \
++	src/3rdparty/chromium/third_party/vulkan/LICENSE \
++	src/3rdparty/chromium/third_party/wayland/LICENSE \
++	src/3rdparty/chromium/third_party/wayland-protocols/LICENSE \
++	src/3rdparty/chromium/third_party/wds/LICENSE \
++	src/3rdparty/chromium/third_party/web-animations-js/LICENSE \
++	src/3rdparty/chromium/third_party/webdriver/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS \
++	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE \
++	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2 \
++	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1 \
++	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/acorn/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE_python \
++	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm_modes/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/gonzales/MIT-LICENSE.txt \
++	src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/LICENSE \
++	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/wptserve/LICENSE \
++	src/3rdparty/chromium/third_party/webpagereplay/third_party/dns/LICENSE \
++	src/3rdparty/chromium/third_party/webpagereplay/third_party/ipfw_win32/LICENSE \
++	src/3rdparty/chromium/third_party/webpagereplay/third_party/jsmin/LICENSE.txt \
++	src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE \
++	src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE.md \
++	src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCDemo/third_party/SocketRocket/LICENSE \
++	src/3rdparty/chromium/third_party/webrtc/LICENSE \
++	src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY \
++	src/3rdparty/chromium/third_party/woff2/LICENSE \
++	src/3rdparty/chromium/third_party/x86inc/LICENSE \
++	src/3rdparty/chromium/third_party/xdg-utils/LICENSE \
++	src/3rdparty/chromium/third_party/zlib/LICENSE \
++	src/3rdparty/chromium/tools/gyp/LICENSE \
++	src/3rdparty/chromium/tools/origin_trials/third_party/ed25519/LICENSE \
++	src/3rdparty/chromium/tools/page_cycler/acid3/LICENSE \
++	src/3rdparty/chromium/tools/win/ChromeDebug/ChromeDebug/LICENSE \
++	src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt \
++	src/3rdparty/chromium/v8/LICENSE \
++	src/3rdparty/chromium/v8/LICENSE.fdlibm \
++	src/3rdparty/chromium/v8/LICENSE.strongtalk \
++	src/3rdparty/chromium/v8/LICENSE.v8 \
++	src/3rdparty/chromium/v8/LICENSE.valgrind \
++	src/3rdparty/chromium/v8/src/third_party/fdlibm/LICENSE \
++	src/3rdparty/chromium/v8/src/third_party/valgrind/LICENSE \
++	src/3rdparty/chromium/v8/src/third_party/vtune/LICENSE \
++
+diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
+new file mode 100644
+index 000000000..a7f10b1ce
+--- /dev/null
++++ b/package/qt5/qt5webengine/qt5webengine.hash
+@@ -0,0 +1,5 @@
++# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwebengine-opensource-src-5.6.2.tar.xz.mirrorlist
++sha256 2f0a1648e1a8b22bad0134f2b37d69d185074393c398c1a3c6a83b910ff39740  qtwebengine-opensource-src-5.6.2.tar.xz
++
++# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebengine-opensource-src-5.9.1.tar.xz.mirrorlist
++sha256 f6a37eeb9188474a16d29ede498fce959396ab80329a0a83eaeb925251686401  qtwebengine-opensource-src-5.9.1.tar.xz
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+new file mode 100644
+index 000000000..49abc11b3
+--- /dev/null
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -0,0 +1,82 @@
++################################################################################
++#
++# qt5webengine
++#
++################################################################################
++
++QT5WEBENGINE_VERSION = $(QT5_VERSION)
++QT5WEBENGINE_SITE = $(QT5_SITE)
++QT5WEBENGINE_SOURCE = qtwebengine-opensource-src-$(QT5WEBENGINE_VERSION).tar.xz
++QT5WEBENGINE_DEPENDENCIES = qt5base qt5declarative qt5webchannel host-gperf \
++	host-python
++QT5WEBENGINE_INSTALL_STAGING = YES
++
++include package/qt5/qt5webengine/chromium.inc
++QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
++QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
++	LICENSE.GPLv3 LICENSE.LGPL3 $(CHROMIUM_LICENSE_FILES)
++
++ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
++QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
++	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst
++endif
++
++ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
++QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
++endif
++
++ifeq ($(BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG),y)
++QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
++QT5WEBENGINE_DEPENDENCIES += ffmpeg
++endif
++
++# QtWebengine's build system uses python, but only supports python2. We work
++# around this by forcing python2 early in the PATH, via a python->python2
++# symlink.
++QT5WEBENGINE_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
++define QT5WEBENGINE_PYTHON2_SYMLINK
++	mkdir -p $(@D)/host-bin
++	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/host-bin/python
++endef
++QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
++
++define QT5WEBENGINE_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(HOST_DIR)/usr/bin/qmake $(QMAKEFLAGS))
++endef
++
++define QT5WEBENGINE_BUILD_CMDS
++	$(QT5WEBENGINE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5WEBENGINE_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++define QT5WEBENGINE_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebEngine $(TARGET_DIR)/usr/qml/
++endef
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5WEBENGINE_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webengine* $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
++ifneq ($(BR2_STATIC_LIBS),y)
++define QT5WEBENGINE_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebEngine*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/libexec/QtWebEngineProcess $(TARGET_DIR)/usr/libexec/
++	cp -dpfr $(STAGING_DIR)/usr/resources/ $(TARGET_DIR)/usr/
++	mkdir -p $(TARGET_DIR)/usr/translations/qtwebengine_locales/
++	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/qtwebengine_locales/
++endef
++endif
++
++define QT5WEBENGINE_INSTALL_TARGET_CMDS
++	$(QT5WEBENGINE_INSTALL_TARGET_LIBS)
++	$(QT5WEBENGINE_INSTALL_TARGET_QMLS)
++	$(QT5WEBENGINE_INSTALL_TARGET_EXAMPLES)
++endef
++
++$(eval $(generic-package))
 -- 
 2.13.2
