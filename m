@@ -1,70 +1,45 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 23 Jul 2017 18:44:18 -0300
-Subject: [Buildroot] [PATCH v2 3/3] testing/infra/basetest: move jlevel
-	logic to constructor
-In-Reply-To: <20170723214418.7130-1-ricardo.martincoski@gmail.com>
-References: <20170723214418.7130-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170723214418.7130-3-ricardo.martincoski@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 24 Jul 2017 06:59:53 +0300
+Subject: [Buildroot] [PATCH 2/3] grep: standardise pcre optional dependency
+In-Reply-To: <b8bec6b0782f9808f59be046aea03648733417fa.1500868794.git.baruch@tkos.co.il>
+References: <b8bec6b0782f9808f59be046aea03648733417fa.1500868794.git.baruch@tkos.co.il>
+Message-ID: <12b9226a3f84e63fc6f91409bebec0a2bca766d7.1500868794.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Arnout in [1].
+Add the 'disable' config option in the 'else' clause of the optional
+dependency as is the common pattern.
 
-While at it, simplify the logic by always appending the BR2_JLEVEL and
-defaulting to 0 (the value copied from Config.in is used for 5 years now
-and is very unlikely to change).
-
-[1] http://patchwork.ozlabs.org/patch/790525/
-
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
-  - no functional change;
-  - keep Cc: in commit log (Yann E. MORIN);
-  - patch renumbered since I kept the old patch 1 (developers file only)
-    in the patchwork as-is;
----
- support/testing/infra/basetest.py | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/grep/grep.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 29e7872572..431605b23f 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -34,7 +34,7 @@ class BRTest(unittest.TestCase):
-     outputdir = None
-     logtofile = True
-     keepbuilds = False
--    jlevel = None
-+    jlevel = 0
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index cfbf2ec7b537..06d84ed5b96f 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -9,8 +9,7 @@ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+-GREP_CONF_OPTS = --disable-perl-regexp \
+-	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
++GREP_CONF_OPTS = $(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
+ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
  
-     def __init__(self, names):
-         super(BRTest, self).__init__(names)
-@@ -43,16 +43,14 @@ class BRTest(unittest.TestCase):
-         self.emulator = None
-         self.config = '\n'.join([line.lstrip() for line in
-                                  self.config.splitlines()]) + '\n'
-+        self.config += "BR2_JLEVEL={}\n".format(self.jlevel)
+ # link with iconv if enabled
+@@ -23,6 +22,8 @@ endif
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ GREP_CONF_OPTS += --enable-perl-regexp
+ GREP_DEPENDENCIES += pcre
++else
++GREP_CONF_OPTS += --disable-perl-regexp
+ endif
  
-     def show_msg(self, msg):
-         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
-                                     self.testname, msg)
-     def setUp(self):
-         self.show_msg("Starting")
--        config = self.config
--        if self.jlevel:
--            config += "BR2_JLEVEL={}\n".format(self.jlevel)
--        self.b = Builder(config, self.builddir, self.logtofile)
-+        self.b = Builder(self.config, self.builddir, self.logtofile)
- 
-         if not self.keepbuilds:
-             self.b.delete()
+ # Full grep preferred over busybox grep
 -- 
-2.13.0
+2.13.2
