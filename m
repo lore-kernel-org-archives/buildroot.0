@@ -1,67 +1,39 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Mon, 24 Jul 2017 12:26:13 -0700
-Subject: [Buildroot] Update to python pillow 4.0.0 is missing a dependency
-	on olefile?
-Message-ID: <CAAnoztFVLseke==FBxceaw=C3iU=GjxXGsGLN9UgKsbGDu0QLA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 24 Jul 2017 21:46:25 +0200
+Subject: [Buildroot] [PATCH v1 01/10] gstreamer1: bump version to 1.12.2
+Message-ID: <20170724194634.5565-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After running the later 2017.02.x we ran across this on the python-pillow
-installs.
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-Traceback (most recent call last):
-
-  File "/opt/exablox/bin/configsrv", line 5, in <module>
-
-    from pkg_resources import load_entry_point
-
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line
-3138, in <module>
-
-    @_call_aside
-
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line
-3124, in call_aside
-
-    f(/*args, /*/*kwargs)
-
-  File "/usr/lib/python2.7/site-packages/pkg_resources/_init__.py", line
-3151, in initialize_master_working_set
-
-    working_set = WorkingSet._build_master()
-
-  File "/usr/lib/python2.7/site-packages/pkg_resources/_init__.py", line
-661, in build_master
-
-    ws.require(requires)
-
-  File "/usr/lib/python2.7/site-packages/pkg_resources/_init__.py", line
-962, in require
-
-    needed = self.resolve(parse_requirements(requirements))
-
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line
-849, in resolve
-
-    raise DistributionNotFound(req, requirers)
-
-pkg_resources.DistributionNotFound: The 'olefile' distribution was not
-found and is required by pillow
-
-
-
-And the updates to python-pillow 4.0.0 seem to have gone in without a
-corresponding package for olefile being added? Did I miss that commit in
-another branch?
-
-
-Thanks in advance,
-
-Charles
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170724/a56df1cf/attachment.html>
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 992b9eca11..4bb65f2151 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.1.tar.xz.sha256sum
+-sha256 9044b9d8b3ff44457fa9e36faa59c56684b587b34dee449bfe15ec0c32a3a6d2  gstreamer-1.12.1.tar.xz
++From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.2.tar.xz.sha256sum
++sha256 9fde3f39a2ea984f9e07ce09250285ce91f6e3619d186889f75b5154ecf994ba gstreamer-1.12.2.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 84b2e2a259..1b8a932046 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.12.1
++GSTREAMER1_VERSION = 1.12.2
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+-- 
+2.11.0
