@@ -1,12 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Jul 2017 17:18:53 +0200
-Subject: [Buildroot] TestIso9660GrubExternal and TestIso9660GrubInternal
-	failing
-In-Reply-To: <20170724091321.3bc29dcc@windsurf>
-References: <20170723092643.GE2917@scaer>
- <5974e7554c7c_30a1600b705951e@ultri3.mail>
- <20170724091321.3bc29dcc@windsurf>
-Message-ID: <20170724151853.GA2918@scaer>
+Date: Mon, 24 Jul 2017 17:19:51 +0200
+Subject: [Buildroot] [PATCH 12/20] package/skeleton: split out into
+ skeleton-common
+In-Reply-To: <20170724091954.6bc28c19@windsurf>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <af100c0e2b252ccec7e9e2b8ebc88964c78bb4dc.1500398733.git.yann.morin.1998@free.fr>
+ <6bcf485a-e334-33d6-4fb1-17553670d2fb@mind.be>
+ <20170723094855.GB26998@scaer>
+ <93d18b26-049a-6172-9804-a655fc1bd32e@mind.be>
+ <20170724091954.6bc28c19@windsurf>
+Message-ID: <20170724151951.GB2918@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +18,29 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2017-07-24 09:13 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 23 Jul 2017 15:13:41 -0300, Ricardo Martincoski wrote:
+On 2017-07-24 09:19 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 23 Jul 2017 22:32:24 +0200, Arnout Vandecappelle wrote:
 > 
-> > My local computer has:
-> > binutils 2.26.1
-> > qemu 2.5.0
+> > >>  Not for this patch of course, but I think it would make sense to also move that
+> > >> here. But you probably thought of that already :-)  
+> > > 
+> > > Yes, that's is what I did in the first iteration, but Thomas was against
+> > > moving it, so I left it alone to stay there.  
 > > 
-> > Using my local computer the tests TestIso9660GrubExternal and
-> > TestIso9660GrubInternal always pass, in current master and also with the 3 grub
-> > patches applied.
-> > 
-> > Using the image buildroot/base I can reproduce the problems:
-> > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23825707
-> > GRUB requires a working absolute objcopy; upgrade your binutils
-> > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23831270
-> > ==> System does not boot  
+> >  Thomas, do you remember why you were against moving the skeleton to
+> > package/skeleton-common?
 > 
-> And my patches did not fix this problem ?
+> I honestly don't remember. I believe it might be that I thought that
+> system/skeleton/ was a more "obvious" place to look for the skeleton,
+> rather than buried in package/skeleton-common/. But this argument feels
+> a bit fishy, so I'm not sure if that was that or something else.
+> 
+> I don't currently see a problem with having the base skeleton moved to
+> package/skeleton-common/.
 
-Not really, no.
+OK, I'll move that when I respin later tonight.
 
-Without your patches, the build breaks, because objdump fails, and we
-catch a build failure.
-
-With your patches, the build seems to succeed, because it does not fail.
-However, the generated iso images are about 1GiB in size (instead of
-less than 5MiB), and they do not boot. See the summary I've written in:
-    http://lists.busybox.net/pipermail/buildroot/2017-July/198940.html
-
-So no, your patches are not sufficient to solve the run-time test.
+Thanks!
 
 Regards,
 Yann E. MORIN.
