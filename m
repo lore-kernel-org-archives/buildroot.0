@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jul 2017 17:55:26 +0200
-Subject: [Buildroot] [PATCH v2 1/3] testing/infra/builder: dump
- defconfig to log
-In-Reply-To: <20170723214418.7130-1-ricardo.martincoski@gmail.com>
-References: <20170723042019.10323-2-ricardo.martincoski@gmail.com>
- <20170723214418.7130-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170724175526.34c4d2e3@windsurf.lan>
+Date: Mon, 24 Jul 2017 17:56:14 +0200
+Subject: [Buildroot] [git commit] package/x265: disable altivec on ppc64
+Message-ID: <20170724155219.1F9D38190F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4f3fd7460c7cb004cc4f7f75451d3901098910af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 23 Jul 2017 18:44:16 -0300, Ricardo Martincoski wrote:
-> The defconfig is composed on-the-fly by test infra + tests.
-> 
-> Dump it to the logfile before running 'make olddefconfig' so it can
-> easily analysed when debugging.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> Changes v1 -> v2:
->   - it's really a defconfig, not a config (Yann E. MORIN);
->   - make clear on the logfile where the defconfig ends (Yann E. MORIN);
->   - remove tested-by tag since I changed the patch;
->   - patch renumbered since I kept the old patch 1 (developers file only)
->     in the patchwork as-is;
-> ---
->  support/testing/infra/builder.py | 4 ++++
->  1 file changed, 4 insertions(+)
+Disable altivec support until gcc problems are fixed:
+https://bitbucket.org/multicoreware/x265/issues/320/fail-to-build-on-power8-le#comment-34076791
 
-Series applied. Thanks!
+Fixes
+http://autobuild.buildroot.net/results/419/41910d44ff98c60a6bb9fd3b6a10bd4d0b98d646/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x265/x265.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 2907ba3..2facf2c 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -16,6 +16,12 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X265_DEPENDENCIES += host-yasm
+ endif
+ 
++# disable altivec, it has build issues
++# https://bitbucket.org/multicoreware/x265/issues/320/
++ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
++X265_CONF_OPTS += -DENABLE_ALTIVEC=OFF
++endif
++
+ ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ X265_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_PIC=ON
+ else
