@@ -1,93 +1,67 @@
 From: Charles Hardin <ckhardin@exablox.com>
-Date: Mon, 24 Jul 2017 12:25:29 -0700
-Subject: [Buildroot] Bump on python service identity is missing python attrs
-	dependency
-Message-ID: <CAAnoztEx0PwsjO6nnG=AADr43xHTf-J2HEFi+SZyYpTCRkOMyA@mail.gmail.com>
+Date: Mon, 24 Jul 2017 12:26:13 -0700
+Subject: [Buildroot] Update to python pillow 4.0.0 is missing a dependency
+	on olefile?
+Message-ID: <CAAnoztFVLseke==FBxceaw=C3iU=GjxXGsGLN9UgKsbGDu0QLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit f28c92f05fd2ffd8e1892a005f994fa41952574b
-
-Author: Charles Hardin <ckhardin@exablox.com>
-
-Date:   Sun Jul 23 21:40:52 2017 -0700
+After running the later 2017.02.x we ran across this on the python-pillow
+installs.
 
 
-    package/python-service-identity: the attrs distribution is required
+Traceback (most recent call last):
+
+  File "/opt/exablox/bin/configsrv", line 5, in <module>
+
+    from pkg_resources import load_entry_point
+
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line
+3138, in <module>
+
+    @_call_aside
+
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line
+3124, in call_aside
+
+    f(/*args, /*/*kwargs)
+
+  File "/usr/lib/python2.7/site-packages/pkg_resources/_init__.py", line
+3151, in initialize_master_working_set
+
+    working_set = WorkingSet._build_master()
+
+  File "/usr/lib/python2.7/site-packages/pkg_resources/_init__.py", line
+661, in build_master
+
+    ws.require(requires)
+
+  File "/usr/lib/python2.7/site-packages/pkg_resources/_init__.py", line
+962, in require
+
+    needed = self.resolve(parse_requirements(requirements))
+
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line
+849, in resolve
+
+    raise DistributionNotFound(req, requirers)
+
+pkg_resources.DistributionNotFound: The 'olefile' distribution was not
+found and is required by pillow
 
 
 
-    Apparently the service identify code requires the python attrs
-
-    to be availabe:
-
-
-
-    Traceback (most recent call last):
-
-      File "/opt/exablox/bin/configsrv", line 5, in <module>
-
-        from pkg_resources import load_entry_point
-
-      File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py",
-line 3138, in <module>
-
-        @_call_aside
-
-      File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py",
-line 3124, in _call_aside
-
-        f(*args, **kwargs)
-
-      File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py",
-line 3151, in _initialize_master_working_set
-
-        working_set = WorkingSet._build_master()
-
-      File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py",
-line 661, in _build_master
-
-        ws.require(__requires__)
-
-      File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py",
-line 962, in require
-
-        needed = self.resolve(parse_requirements(requirements))
-
-      File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py",
-line 849, in resolve
-
-        raise DistributionNotFound(req, requirers)
-
-    pkg_resources.DistributionNotFound: The 'attrs' distribution was not
-found and is required by service-identity
+And the updates to python-pillow 4.0.0 seem to have gone in without a
+corresponding package for olefile being added? Did I miss that commit in
+another branch?
 
 
-*diff --git a/package/python-service-identity/Config.in
-b/package/python-service-identity/Config.in*
+Thanks in advance,
 
-*index c9cbb6c..eaabf33 100644*
-
-*--- a/package/python-service-identity/Config.in*
-
-*+++ b/package/python-service-identity/Config.in*
-
-@@ -1,5 +1,6 @@
-
- config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
-
-        bool "python-service-identity"
-
-+       select BR2_PACKAGE_PYTHON_ATTRS # runtime
-
-        select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
-
-        select BR2_PACKAGE_PYTHON_PYASN # runtime
-
-        select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+Charles
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170724/83248c43/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170724/a56df1cf/attachment.html>
