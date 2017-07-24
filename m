@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jul 2017 09:13:21 +0200
-Subject: [Buildroot] TestIso9660GrubExternal and TestIso9660GrubInternal
-	failing
-In-Reply-To: <5974e7554c7c_30a1600b705951e@ultri3.mail>
-References: <20170723092643.GE2917@scaer>
- <5974e7554c7c_30a1600b705951e@ultri3.mail>
-Message-ID: <20170724091321.3bc29dcc@windsurf>
+Date: Mon, 24 Jul 2017 09:16:08 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-07-22
+In-Reply-To: <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
+References: <20170723063052.1CB8521DBF@mail.free-electrons.com>
+ <CANQCQpa0--xE+_YtXVqfJr78i==sY0gj3fECTBKm7g-eByd9=Q@mail.gmail.com>
+ <CANQCQpbvJMypP2s5rwTBPNsnhQ_akammE-ci4wpUqN=5mLeHRQ@mail.gmail.com>
+ <CANQCQpb64q5cPLin8zVD9X0CinUiERF05xcf0kjrzXHrNMkkPw@mail.gmail.com>
+Message-ID: <20170724091608.294156f1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +16,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Jul 2017 15:13:41 -0300, Ricardo Martincoski wrote:
+On Sun, 23 Jul 2017 07:35:55 -0500, Matthew Weber wrote:
 
-> My local computer has:
-> binutils 2.26.1
-> qemu 2.5.0
+> Sorry that last email accidentally got sent.
 > 
-> Using my local computer the tests TestIso9660GrubExternal and
-> TestIso9660GrubInternal always pass, in current master and also with the 3 grub
-> patches applied.
+> It looks like all of the downloads of
+> https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz on "gcc20"
+> and "free electrons server" consistently have a
+> GnuTLS: A TLS fatal alert has been received.
+> Unable to establish SSL connection.
 > 
-> Using the image buildroot/base I can reproduce the problems:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23825707
-> GRUB requires a working absolute objcopy; upgrade your binutils
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23831270
-> ==> System does not boot  
+> That link is using HTTPS redirects.
+> 
+> I tested downloading "wget
+> https://www.grsecurity.net/~spender/paxtest-0.9.15.tar.gz" on my home
+> machine and a webbrowser, both seem to work ok.
+> My wget was "GNU Wget 1.17.1 ".
+> 
+> What OS version and/or wget/gnutls are those two machines using?
+> Google seems to note some issues with wget having a bug preventing
+> HTTPS redirections from working around the time of Debian7?
 
-And my patches did not fix this problem ?
+I'm using:
+
+$ wget --version
+GNU Wget 1.13.4 built on linux-gnu.
+
+on:
+
+$ cat /etc/issue
+Debian GNU/Linux 7 \n \l
+
+Normally what happens in such situations is that after a while, Peter's
+sources.buildroot.net fetches the tarball, it appears on
+sources.buildroot.net, and that resolves the download issue. And it is
+now the case: http://sources.buildroot.net/paxtest-0.9.15.tar.gz, so
+the downloads should no longer fail, as all autobuilders will fall back
+to sources.b.net.
 
 Best regards,
 
-Thomas Petazoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
