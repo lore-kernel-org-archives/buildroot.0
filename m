@@ -1,74 +1,269 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jul 2017 08:31:19 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-07-23
-Message-ID: <20170724063119.7BAA52090F@mail.free-electrons.com>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Mon, 24 Jul 2017 15:13:35 +0900
+Subject: [Buildroot] Build error of BR2_PACKAGE_E2FSPROGS
+Message-ID: <CAK7LNATiQ+xpXQ=2dE52+6NHyGp9Msce_vkQ+jWv7R-_JBXQnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi.
 
-Build statistics for 2017-07-23
-================================
+If BR2_PACKAGE_E2FSPROGS is enabled,
+building e2fsprogs seems to fail.
 
-      successes : 142
-       failures : 25 
-       timeouts : 1  
-          TOTAL : 168
+I have not taken a close look at it.
 
-Classification of failures by reason
-====================================
-
-                libressl-2.5.5 | 3 
-                paxtest-0.9.15 | 3 
-                      x265-2.4 | 3 
-                  cppcms-1.0.5 | 2 
-                     gpsd-3.16 | 2 
-                 libssh2-1.8.0 | 2 
-                busybox-1.26.2 | 1 
-                  cc-tool-0.26 | 1 
-gmrender-resurrect-33600ab6... | 1 
-                 libpng-1.6.29 | 1 
-             lttng-tools-2.9.5 | 1 
-                  nginx-1.12.1 | 1 
-           oracle-mysql-5.1.73 | 1 
-     python-cryptography-1.7.2 | 1 
-                      qt-4.8.7 | 1 
-             qt5location-5.9.1 | 1 
-             transmission-2.92 | 1 
+Anybody who can take care of it?
 
 
-Detail of failures
-===================
 
-       sparc |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/e992acdeff20dc185eadede60ad027cd4d753cf8 | ORPH
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/ae5711d0503cf949492f5e392890119d2a597b08 |     
-    mips64el |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/6ae1a49f58100a88465dd29c00fefc94b1439e70 | ORPH
-         arm |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/9fb67828c3ff36b880e057982670243c8f924f26 | ORPH
-         arm | gmrender-resurrect-33600ab6... | NOK | http://autobuild.buildroot.net/results/846c423d2ec98a7f7cc996213ab51c61e903853a |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/a4ef25fee5ec043f846973ca4e8238993512da20 |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/3bcbfd887b288a437ea8740345fff4fe0b1d84a4 |     
-        i686 |                  libpng-1.6.29 | TIM | http://autobuild.buildroot.net/results/54364e5394fcea39f7f10cb6924769fe2d8aa7ba |     
-         arm |                 libressl-2.5.5 | NOK | http://autobuild.buildroot.net/results/22da379f1fcdf7bea5e995ec48bd5a35ddbc305a |     
-         arm |                 libressl-2.5.5 | NOK | http://autobuild.buildroot.net/results/07429d3016c900894fa0ca19b7dad0a928e32e3f |     
-        bfin |                 libressl-2.5.5 | NOK | http://autobuild.buildroot.net/results/1c1325d1a7a7aa98172d2d93d30322165af62348 |     
-      x86_64 |                  libssh2-1.8.0 | NOK | http://autobuild.buildroot.net/results/d8b700117f7a3138fd7a7d10402a4d99e693114b | ORPH
-         arm |                  libssh2-1.8.0 | NOK | http://autobuild.buildroot.net/results/362b1018c0296760c7c7e1bc602eb8bb7350887a | ORPH
-     powerpc |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/8fcd2257fbacc5b5527857a9e40291fa9f1249ce |     
-         arm |                   nginx-1.12.1 | NOK | http://autobuild.buildroot.net/results/feb19961b5ceb98bfad2350e75d6ca8d5c8773e6 |     
-         arm |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/839324e8d8e1e27563bceef8ed21fbdadc8234db | ORPH
-   powerpc64 |                 paxtest-0.9.15 | NOK | http://autobuild.buildroot.net/results/dd99092de3da38e646c1df301a52573f0079d3d8 |     
-     sparc64 |                 paxtest-0.9.15 | NOK | http://autobuild.buildroot.net/results/c636bc027d12e6d20e20acb84730f0d5dc397afc |     
-         arm |                 paxtest-0.9.15 | NOK | http://autobuild.buildroot.net/results/01031422c33f4f007a953e19b8b000747b9dbccd |     
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/f7fa482cbd5b7f8bac0c00242d483c1fe43beb05 |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a72f98862b98cf9714b7d5bcd8ef3386cf99d8e0 | ORPH
-     aarch64 |              qt5location-5.9.1 | NOK | http://autobuild.buildroot.net/results/3f696a082cc867a95436628078254ce988911919 |     
-       nios2 |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/b8fdaf37698bcfef6b7198a62ab835c15faf50cc |     
- powerpc64le |                       x265-2.4 | NOK | http://autobuild.buildroot.net/results/41910d44ff98c60a6bb9fd3b6a10bd4d0b98d646 |     
- powerpc64le |                       x265-2.4 | NOK | http://autobuild.buildroot.net/results/907e2ac277c2018805a758d7a1b8ba51c7bdd350 |     
- powerpc64le |                       x265-2.4 | NOK | http://autobuild.buildroot.net/results/cfb91581cc38c97d96a5d3b2a306c1ad524d26bf |     
+
+>>> e2fsprogs 1.43.4 Building
+PATH="/home/masahiro/workspace/bsp/build/buildroot-arm64/host/bin:/home/masahiro/workspace/bsp/build/buildroot-arm64/host/sbin:/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/bin:/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/sbin:/home/masahiro/diag/diag_common.arm_v8_gcc/gcc-linaro-aarch64-none-elf-4.8-2014.04_linux/bin:/home/masahiro/toolchains/clang-4.0.0/clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-16.04/bin:/home/masahiro/toolchains/arm-buildroot-7.1/usr/bin:/home/masahiro/toolchains/aarch64-buildroot-7.1/usr/bin:/home/masahiro/toolchains/arm-linaro-7.1/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabihf/bin:/home/masahiro/toolchains/aarch64-linaro-7.1/gcc-linaro-7.1.1-2017.05-x86_64_aarch64-linux-gnu/bin:/home/masahiro/toolchains/xtensa/gcc-4.9.0-nolibc/xtensa-linux/bin:/home/masahiro/toolchains/x86/gcc-4.9.0-nolibc/i386-linux/bin:/home/masahiro/toolchains/tile/gcc-4.6.2-nolibc/tilegx-linux/bin:/home/masahiro/toolchains/sparc/gcc-4.9.0-nolibc/sparc-linux/bin:/home/masahiro/toolchains/sh/renesas-2012.09/bin:/home/masahiro/toolchains/powerpc/gcc-4.9.0-nolibc/powerpc-linux/bin:/home/masahiro/toolchains/openrisc/or1k-elf/bin:/home/masahiro/toolchains/nios2/sourceryg++-2016.05/bin:/home/masahiro/toolchains/nds32/nds32le-linux-glibc-v1/bin:/home/masahiro/toolchains/mips/gcc-4.9.0-nolibc/mips-linux/bin:/home/masahiro/toolchains/microblaze/gcc-4.9.0-nolibc/microblaze-linux/bin:/home/masahiro/toolchains/m68k/gcc-4.9.0-nolibc/m68k-linux/bin:/home/masahiro/toolchains/ia64/gcc-4.9.0-nolibc/ia64-linux/bin:/home/masahiro/toolchains/h8300/gcc-4.9.0-nolibc/h8300-elf/bin:/home/masahiro/toolchains/frv/gcc-4.9.0-nolibc/frv-linux/bin:/home/masahiro/toolchains/cris/gcc-4.6.3-nolibc/crisv32-linux/bin:/home/masahiro/toolchains/blackfin/opt/uClinux/bfin-elf/bin:/home/masahiro/toolchains/avr32/gcc-4.2.4-nolibc/avr32-linux/bin:/home/masahiro/toolchains/arm/gcc-4.9.0-nolibc/arm-unknown-linux-gnueabi/bin:/home/masahiro/toolchains/arceb/arc_gnu_2016.09-rc1_prebuilt_uclibc_be_arc700_linux_install/bin:/home/masahiro/toolchains/arc/arc_gnu_2016.09-rc1_prebuilt_uclibc_le_arc700_linux_install/bin:/home/masahiro/toolchains/alpha/gcc-4.9.0-nolibc/alpha-linux/bin:/home/masahiro/toolchains/aarch64/gcc-4.9.0-nolibc/aarch64-linux/bin:/home/masahiro/workspace/junkbox/bin:/home/masahiro/bin:/home/masahiro/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+ /home/masahiro/bin/make -j9 LDCONFIG=true -C
+/home/masahiro/workspace/bsp/build/buildroot-arm64/build/e2fsprogs-1.43.4/
+cd ./util ; /home/masahiro/bin/make subst
+CREATE dirpaths.h
+CC subst.c
+LD subst
+make[4]: 'util/subst.conf' is up to date.
+make[4]: 'lib/config.h' is up to date.
+SUBST lib/dirpaths.h
+cd .; CONFIG_FILES=./lib/ext2fs/ext2_types.h ./config.status
+config.status: creating ./lib/ext2fs/ext2_types.h
+config.status: creating lib/config.h
+config.status: lib/config.h is unchanged
+config.status: executing po-directories commands
+cd .; CONFIG_FILES=./lib/blkid/blkid_types.h ./config.status
+config.status: creating ./lib/blkid/blkid_types.h
+config.status: creating lib/config.h
+config.status: lib/config.h is unchanged
+config.status: executing po-directories commands
+cd .; CONFIG_FILES=./lib/uuid/uuid_types.h ./config.status
+config.status: creating ./lib/uuid/uuid_types.h
+config.status: creating lib/config.h
+config.status: lib/config.h is unchanged
+config.status: executing po-directories commands
+SUBST compile_et
+SUBST ext2_err.et
+COMPILE_ET ext2_err.et
+COMPILE_ET prof_err.et
+/home/masahiro/bin/make libs
+make[5]: 'util/subst.conf' is up to date.
+make[5]: 'lib/config.h' is up to date.
+make[5]: 'lib/dirpaths.h' is up to date.
+make[5]: 'lib/ext2fs/ext2_types.h' is up to date.
+make[5]: 'lib/blkid/blkid_types.h' is up to date.
+make[5]: 'lib/uuid/uuid_types.h' is up to date.
+make[5]: 'compile_et' is up to date.
+make[5]: 'ext2_err.h' is up to date.
+make[5]: 'prof_err.h' is up to date.
+making all in lib/et
+MKDIR elfshared
+CC error_message.c
+CC et_name.c
+CC init_et.c
+CC com_err.c
+CC com_right.c
+GEN_LIB libcom_err.a
+making all in lib/ss
+SUBST mk_cmds
+making all in lib/e2p
+MKDIR elfshared
+CC feature.c
+CC fgetflags.c
+CC fsetflags.c
+CC fgetversion.c
+CC fsetversion.c
+CC getflags.c
+CC getversion.c
+CC hashstr.c
+CC iod.c
+CC ls.c
+CC mntopts.c
+CC parse_num.c
+CC pe.c
+CC pf.c
+CC ps.c
+CC setflags.c
+CC setversion.c
+CC uuid.c
+CC ostype.c
+CC percent.c
+CC crypto_mode.c
+CC fgetproject.c
+CC fsetproject.c
+GEN_LIB libe2p.a
+making all in lib/support
+CC cstring.c
+CC mkquota.c
+CC plausible.c
+CC profile.c
+CC parse_qtype.c
+CC profile_helpers.c
+CC prof_err.c
+CC quotaio.c
+CC quotaio_v2.c
+CC quotaio_tree.c
+CC dict.c
+GEN_LIB libsupport.a
+making all in lib/ext2fs
+CC gen_crc32ctable
+MKDIR elfshared
+CC ext2_err.c
+CC alloc.c
+CC alloc_sb.c
+CC alloc_stats.c
+CC alloc_tables.c
+CC atexit.c
+CC badblocks.c
+CC bb_inode.c
+CC bitmaps.c
+CC bitops.c
+CC blkmap64_ba.c
+CC blkmap64_rb.c
+CC blknum.c
+CC block.c
+CC bmap.c
+CC check_desc.c
+CC closefs.c
+CC crc16.c
+GEN32CTABLE crc32c_table.h
+CC csum.c
+CC dblist.c
+CC dblist_dir.c
+CC dirblock.c
+CC dirhash.c
+CC dir_iterate.c
+CC expanddir.c
+CC ext_attr.c
+CC extent.c
+CC fallocate.c
+CC fileio.c
+CC finddev.c
+CC flushb.c
+CC freefs.c
+CC gen_bitmap.c
+CC gen_bitmap64.c
+CC get_num_dirs.c
+CC get_pathname.c
+CC getsize.c
+CC getsectsize.c
+CC i_block.c
+CC icount.c
+CC ind_block.c
+CC initialize.c
+CC inline.c
+CC inline_data.c
+CC inode.c
+CC io_manager.c
+CC ismounted.c
+In file included from ext2_fs.h:19:0,
+                 from ismounted.c:53:
+../../lib/ext2fs/ext2_types.h:186:0: warning: "__bitwise" redefined
+ #define __bitwise
+ ^
+In file included from
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/loop.h:28:0,
+                 from ismounted.c:33:
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/types.h:21:0:
+note: this is the location of the previous definition
+ #define __bitwise __bitwise__
+ ^
+CC link.c
+CC llseek.c
+In file included from ext2_fs.h:19:0,
+                 from ismounted.c:53:
+../../lib/ext2fs/ext2_types.h:186:0: warning: "__bitwise" redefined
+ #define __bitwise
+ ^
+In file included from
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/loop.h:28:0,
+                 from ismounted.c:33:
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/types.h:21:0:
+note: this is the location of the previous definition
+ #define __bitwise __bitwise__
+ ^
+CC lookup.c
+CC mkdir.c
+CC mkjournal.c
+CC mmp.c
+CC namei.c
+CC native.c
+CC newdir.c
+CC openfs.c
+CC progress.c
+CC punch.c
+CC qcow2.c
+CC read_bb.c
+CC read_bb_file.c
+CC res_gdt.c
+CC rw_bitmaps.c
+CC sha512.c
+CC swapfs.c
+CC symlink.c
+CC tdb.c
+CC undo_io.c
+CC unix_io.c
+CC unlink.c
+In file included from ext2_fs.h:19:0,
+                 from unix_io.c:77:
+../../lib/ext2fs/ext2_types.h:186:0: warning: "__bitwise" redefined
+ #define __bitwise
+ ^
+In file included from
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/prctl.h:4:0,
+                 from
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/sys/prctl.h:22,
+                 from unix_io.c:57:
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/types.h:21:0:
+note: this is the location of the previous definition
+ #define __bitwise __bitwise__
+ ^
+CC valid_blk.c
+CC version.c
+CC rbtree.c
+CC crc32c.c
+In file included from ext2_fs.h:19:0,
+                 from unix_io.c:77:
+../../lib/ext2fs/ext2_types.h:186:0: warning: "__bitwise" redefined
+ #define __bitwise
+ ^
+In file included from
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/prctl.h:4:0,
+                 from
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/sys/prctl.h:22,
+                 from unix_io.c:57:
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/aarch64-buildroot-linux-uclibc/sysroot/usr/include/linux/types.h:21:0:
+note: this is the location of the previous definition
+ #define __bitwise __bitwise__
+ ^
+GEN_LIB libext2fs.a
+GEN_ELF_SOLIB libext2fs.so.2.4
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/lib/gcc/aarch64-buildroot-linux-uclibc/5.4.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+../../../lib/libcom_err.a(com_err.o): relocation
+R_AARCH64_ADR_PREL_PG_HI21 against external symbol `stderr' can not be
+used when making a shared object; recompile with -fPIC
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/lib/gcc/aarch64-buildroot-linux-uclibc/5.4.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+../../../lib/libcom_err.a(com_err.o)(.text+0x14): unresolvable
+R_AARCH64_ADR_PREL_PG_HI21 relocation against symbol `stderr'
+/home/masahiro/workspace/bsp/build/buildroot-arm64/host/usr/lib/gcc/aarch64-buildroot-linux-uclibc/5.4.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+final link failed: Bad value
+collect2: error: ld returned 1 exit status
+make[5]: *** [Makefile:605: libext2fs.so.2.4] Error 1
+make[4]: *** [Makefile:417: all-libs-recursive] Error 1
+make[3]: *** [Makefile:340: all] Error 2
+make[2]: *** [package/pkg-generic.mk:230:
+/home/masahiro/workspace/bsp/build/buildroot-arm64/build/e2fsprogs-1.43.4/.stamp_built]
+Error 2
+make[1]: *** [Makefile:79: _all] Error 2
+make[1]: Leaving directory '/home/masahiro/workspace/bsp/buildroot'
+make: *** [Makefile:219: buildroot] Error 2
+
+
 
 -- 
-http://autobuild.buildroot.net
+Best Regards
+Masahiro Yamada
