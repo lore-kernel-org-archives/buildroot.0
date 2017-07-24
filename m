@@ -1,48 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jul 2017 11:16:10 +0200
-Subject: [Buildroot] [PATCH] bind: bump version to bugfix release 9.11.1-P3
-Message-ID: <20170724091610.12852-1-peter@korsgaard.com>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Date: Mon, 24 Jul 2017 08:07:36 -0300 (BRT)
+Subject: [Buildroot] TestIso9660GrubExternal and
+	TestIso9660GrubInternal	failing
+In-Reply-To: <20170724091321.3bc29dcc@windsurf>
+References: <20170723092643.GE2917@scaer>
+ <5974e7554c7c_30a1600b705951e@ultri3.mail> <20170724091321.3bc29dcc@windsurf>
+Message-ID: <1811138435.1205713.1500894456449.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BIND 9.11.1-P3 addresses a TSIG regression introduced in the 9.11.1-P2
-security bump:
+Hello,
 
-https://lists.isc.org/pipermail/bind-announce/2017-July/001057.html
+----- Original Message -----
+> From: "Thomas Petazzoni"
+> Sent: Monday, July 24, 2017 4:13:21 AM
 
-Also add a hash for the license file while we're at it.
+> On Sun, 23 Jul 2017 15:13:41 -0300, Ricardo Martincoski wrote:
+> 
+>> My local computer has:
+>> binutils 2.26.1
+>> qemu 2.5.0
+>> 
+>> Using my local computer the tests TestIso9660GrubExternal and
+>> TestIso9660GrubInternal always pass, in current master and also with the 3 grub
+>> patches applied.
+>> 
+>> Using the image buildroot/base I can reproduce the problems:
+>> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23825707
+>> GRUB requires a working absolute objcopy; upgrade your binutils
+>> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/23831270
+>> ==> System does not boot
+> 
+> And my patches did not fix this problem ?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash | 5 +++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Your patches fix the build problem with newer binutils.
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 5dd15cb86b..3a631def65 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,3 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
--sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
-+sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
-+sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index fd5369a3ea..988f40e1c2 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.1-P2
-+BIND_VERSION = 9.11.1-P3
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
--- 
-2.11.0
+But the runtime problem remains, according to Yann's analysis related to
+binutils-2.28 installed in the host machine.
+The second url above (ending in 270) are the tests running with your 3 patches
+applied.
+
+Regards,
+--
+Ricardo Martincoski
+DATACOM 
+Ethernet Switches 
+Rua Am?rica, 1000 - Eldorado do Sul, RS - 92990-000 - Brasil
++55 51 3933 3000 - Ramal 3307
+ricardo.martincoski at datacom.ind.br
+www.datacom.ind.br
