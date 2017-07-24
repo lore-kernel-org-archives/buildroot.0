@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jul 2017 17:57:27 +0200
-Subject: [Buildroot] [PATCH 1/1] xvisor: bump version to 0.29
-In-Reply-To: <20170723160547.14988-1-eric.le.bihan.dev@free.fr>
-References: <20170723160547.14988-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170724175727.1c38b613@windsurf.lan>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 24 Jul 2017 16:50:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.2.1
+Message-ID: <20170724155032.29471-1-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://nodejs.org/en/blog/release/v8.2.1/
 
-On Sun, 23 Jul 2017 18:05:47 +0200, Eric Le Bihan wrote:
-> Bump version to 0.29, drop deprecated patch and update dependencies.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  .../0001-Makefile-Fix-oldconfig-make-target.patch  | 30 -----------
->  .../xvisor/0002-openconf-do-not-check-stdin.patch  | 58 ----------------------
->  package/xvisor/xvisor.hash                         |  2 +-
->  package/xvisor/xvisor.mk                           |  3 +-
->  4 files changed, 3 insertions(+), 90 deletions(-)
->  delete mode 100644 package/xvisor/0001-Makefile-Fix-oldconfig-make-target.patch
->  delete mode 100644 package/xvisor/0002-openconf-do-not-check-stdin.patch
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 93aa6a1d02..6a79f022cd 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v8.1.4/SHASUMS256.txt
+-sha256  a83c86445f79749c46fd4f2c4e681a3e5bb51b2bde5dc7aed1dc38e4e242c301  node-v8.1.4.tar.xz
++# From upstream URL: http://nodejs.org/dist/v8.2.1/SHASUMS256.txt
++sha256  02c46d8914540eea73d0ad33bf9f371a28aa0dc8c5d740948491fef044ad8c8b  node-v8.2.1.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index bb4f984fcc..3b80371901 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.1.4
++NODEJS_VERSION = 8.2.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.13.3
