@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Jul 2017 00:23:48 +0200
-Subject: [Buildroot] [PATCH 18/20] fs: add pre- and post-command hooks
-In-Reply-To: <20170724160123.GE2918@scaer>
+Date: Tue, 25 Jul 2017 00:44:41 +0200
+Subject: [Buildroot] [PATCH 19/20] system: make systemd work on a
+ read-only rootfs
+In-Reply-To: <20170724154552.GC2918@scaer>
 References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <9ad47b5d1b91f4c74c62b01fb37b75d85c23a9ca.1500398733.git.yann.morin.1998@free.fr>
- <1a767f33-47a3-5ab6-ed40-00e2bfa31da8@mind.be> <20170723141744.GI26998@scaer>
- <d549596f-af21-640b-4196-fcc96557c14c@mind.be> <20170724160123.GE2918@scaer>
-Message-ID: <69f1e791-65e9-2e22-59f1-d5959e569d88@mind.be>
+ <c74e8ad5fca764a23b9392af5cb83ecefb4a5817.1500398733.git.yann.morin.1998@free.fr>
+ <f137feaf-3cb1-4a9a-0331-d51bca014f50@mind.be> <20170724154552.GC2918@scaer>
+Message-ID: <a5838b47-f369-1f47-f74d-5741284fde51@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,70 +15,98 @@ To: buildroot@busybox.net
 
 
 
-On 24-07-17 18:01, Yann E. MORIN wrote:
-> On 2017-07-23 23:51 +0200, Arnout Vandecappelle spake thusly:
+On 24-07-17 17:45, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2017-07-24 00:18 +0200, Arnout Vandecappelle spake thusly:
+>> On 18-07-17 19:25, Yann E. MORIN wrote:
+>> [snip]
+>>> With a line like:
+>>>
+>>>     C /var/something - - - -
+>>>
+>>> it will look for /usr/share/factory/something and copy it (recursively
+>>> if it is a directory) to /var/something, but only if it does not already
+>>> exist there.
+>>
+>>  So we could just have a line
+>>
+>> C /var - - - -
+>>
+>> and be done with it?
+> 
+> No, because systemd-tmpfiles will only act if the entry does not exist.
+> But our case, /var does exist, and it is a mount point. We must have
+> /var to exist, because / is read-only.
+
+ Right! I knew that, actually... You even wrote it there :-)
+
+ Thinking out of the box: can we make /var a symlink to /tmp/var, and avoid
+creating a tmpfs on /var at all? Since /tmp/var doesn't exist, "C! /tmp/var"
+should work, no? Or did that cause journald to bail out?
+
 
 [snip]
-> So Thomas suggested that we apply the factory feature to all init
-> systems. With systemd, it would be built-in (by mean of tmpfiles),
-> while for the others we'd need some extra startup scripts to mount a
-> tmpfs on /var and populate it.
+>>  However, it is possible that a package creates a relative symlink based on the
+>> /var location. Most symlinks that we create in Buildroot stupidly assume that
+>> all the path components are not symlinks. So a package could for example do
+>>
+>> ln -sf ../srv/www $DESTDIR/var/www
+>>
+>> This will now create a broken symlink. It's fine as long as it is copied as-is
+>> to /var, but not with your approach...
 
- Hum-hum, I thought that the Buildroot rule was: we don't add features. If
-someone needs the factory feature, they should use systemd (or s6 I believe also
-has some kind of factory feature).
+ Note that this is *NOT* fine anymore if /var is a symlink to /tmp/var ...
 
-[snip]
->>  Can we create the symlink early in the build process, every time? I.e. run
->> SKELETON_SYSTEMD_POST_ROOTFS_VAR somehwere at the start of the build as well?
->> Only, I'm not sure where we could put it.
+
+> Hmm... I'll have to think about that a bit more, even though I think I
+> have taken that into account...
+
+ There is unfortunately no way to fix this. If the package is smart, it does
+calculates the relative path based on the real path of the source and
+destination. If the package is stupid, it just assumes ../something. Whatever we
+do, one of them will break... The only safe approach would be to put stuff in
+/factory instead of /usr/share/factory.
+
+
+> At least I did see no breakage so far, but the set of packages I built
+> was arguably rather limited...
 > 
-> Hmm... Good point. I'll try to find a place. But I'm not sure that would
-> be possible.
-
- "dependencies" is an option, but that's *really* dirty.
-
- Perhaps we can add a stamp file to TARGET_DIR/usr/share/factory, and then add
-TARGET_DIR/var/stampfile as a dependency of dirs. If TARGET_DIR/var is an
-(empty) directory, then TARGET_DIR/var/stampfile will not exist so the rule will
-trigger.
-
- But there are a few problems with that:
-
-- dirs is also "called" for legal-info, but legal-info doesn't otherwise create
-a target directory;
-
-- it would be natural for this stampfile to depend on skeleton-systemd (which
-can then create the stampfile), but that would give a circular dependency.
-
-
-> Maybe with the step-hooks, that are called very early for all steps, and
-> then we'd use that to create the symlink if missing. But I do not like
-> that too much...
-
- Meh, no, that would repeat the check for *every* package...
-
-
-> I'll investigate.
+>> [snip]
+>>> +define SKELETON_SYSTEMD_ROOT_RO_OR_RW
+>>> +	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
+>>> +	mkdir -p $(TARGET_DIR)/usr/share/factory
+>>> +	ln -s usr/share/factory $(TARGET_DIR)/var
+>>
+>>  Since other stuff may also want to put things in /usr/share/factory, I think it
+>> should be
+>> 	mkdir -p $(TARGET_DIR)/usr/share/factory/var
+>> 	ln -s usr/share/factory/var $(TARGET_DIR)/var
 > 
-> In the meantime, I'll drop the read-only patches from the series, to
-> avoid too much noise for now, and so we concentrate on the skeleton
-> stuff for this release.
+> Not really, because systemd-tmpfile will look in exactly the factory
+> path to find the source of the copy/link. See the exerpt I pasted above.
+> 
+> So, given this entry, for example:
+> 
+>     C /var/foo - - - -
+> 
+> systemd-tmpfiles will see if it can find /usr/share/factory/foo not
+> /usr/share/factory/var/foo
 
- I think it's better if you still include them:
+ Weird, the way I read both the man page and the source code seem to suggest
+that "C /var/something" will copy from /usr/share/factory/var/something... But I
+guess you tested that so I must be misreading the source code.
 
-- it doesn't hurt if they are part of the series but don't get applied;
-- it gives some context about the direction in which we are going;
-- it gives an opportunity to continue discussion on these patches.
 
- Even if you re-post with some changes NOT applied, just say so in the commit
-message. Perhaps remove your Sob to make sure it doesn't get applied by
-accident. Or remove it from patchwork.
+> And if other packages install things in factory, they would most
+> probably install their own tmpfile description to copy it in place on
+> boot, becasue factory *is* for factory settings.
+
+ Yes but you could have a name collision.
 
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
