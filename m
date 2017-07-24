@@ -1,242 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Jul 2017 19:09:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump version to 1.64.0
-Message-ID: <20170724170900.12639-1-bernd.kuhls@t-online.de>
+Date: Mon, 24 Jul 2017 19:19:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jo: bump version to 1.1
+Message-ID: <20170724171957.15655-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patches applied upstream.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ted-register-usage-in-x86-DCAS-asm-blocks.patch |  65 -----------
- package/boost/0005-fix-test-of-fpe-support.patch   | 119 ---------------------
- package/boost/boost.hash                           |   4 +-
- package/boost/boost.mk                             |   2 +-
- 4 files changed, 3 insertions(+), 187 deletions(-)
- delete mode 100644 package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch
- delete mode 100644 package/boost/0005-fix-test-of-fpe-support.patch
+ package/jo/jo.hash | 2 +-
+ package/jo/jo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch b/package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch
-deleted file mode 100644
-index a955c1e2d8..0000000000
---- a/package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From a67cc1b055cf09f371e2eca544884634a1ccc886 Mon Sep 17 00:00:00 2001
--From: Andrey Semashev <andrey.semashev@gmail.com>
--Date: Sun, 8 Jan 2017 18:09:12 +0300
--Subject: [PATCH] Corrected register usage in x86 DCAS asm blocks.
--
--In some of the asm blocks eax was modified as a result of cmpxchg8b but that
--was not reflected in the register constraints. This could cause incorrect code
--being generated.
--
--Fetch from:
--https://github.com/boostorg/atomic/commit/a67cc1b055cf09f371e2eca544884634a1ccc886
--
--[Adjust github patch to tarball release]
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-----
-- boost/atomic/detail/ops_gcc_x86_dcas.hpp | 14 ++++++++------
-- 1 file changed, 8 insertions(+), 6 deletions(-)
--
--diff --git a/boost/atomic/detail/ops_gcc_x86_dcas.hpp b/boost/atomic/detail/ops_gcc_x86_dcas.hpp
--index 2f51182..e356e8c 100644
----- a/boost/atomic/detail/ops_gcc_x86_dcas.hpp
--+++ b/boost/atomic/detail/ops_gcc_x86_dcas.hpp
--@@ -73,6 +73,7 @@ struct gcc_dcas_x86
--         {
-- #if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-- #if defined(__PIC__)
--+            uint32_t v_lo = (uint32_t)v;
--             uint32_t scratch;
--             __asm__ __volatile__
--             (
--@@ -84,8 +85,8 @@ struct gcc_dcas_x86
--                 "1: lock; cmpxchg8b %[dest]\n\t"
--                 "jne 1b\n\t"
--                 "movl %[scratch], %%ebx\n\t"
---                : [scratch] "=m" (scratch), [dest] "=o" (storage)
---                : [value_lo] "a" ((uint32_t)v), "c" ((uint32_t)(v >> 32))
--+                : [scratch] "=m" (scratch), [dest] "=o" (storage), [value_lo] "+a" (v_lo)
--+                : "c" ((uint32_t)(v >> 32))
--                 : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA "edx", "memory"
--             );
-- #else // defined(__PIC__)
--@@ -103,6 +104,7 @@ struct gcc_dcas_x86
-- #endif // defined(__PIC__)
-- #else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-- #if defined(__PIC__)
--+            uint32_t v_lo = (uint32_t)v;
--             uint32_t scratch;
--             __asm__ __volatile__
--             (
--@@ -115,11 +117,11 @@ struct gcc_dcas_x86
--                 "jne 1b\n\t"
--                 "movl %[scratch], %%ebx\n\t"
-- #if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
---                : [scratch] "=m,m" (scratch)
---                : [value_lo] "a,a" ((uint32_t)v), "c,c" ((uint32_t)(v >> 32)), [dest] "D,S" (&storage)
--+                : [scratch] "=m,m" (scratch), [value_lo] "+a,a" (v_lo)
--+                : "c,c" ((uint32_t)(v >> 32)), [dest] "D,S" (&storage)
-- #else
---                : [scratch] "=m" (scratch)
---                : [value_lo] "a" ((uint32_t)v), "c" ((uint32_t)(v >> 32)), [dest] "D" (&storage)
--+                : [scratch] "=m" (scratch), [value_lo] "+a" (v_lo)
--+                : "c" ((uint32_t)(v >> 32)), [dest] "D" (&storage)
-- #endif
--                 : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA "edx", "memory"
--             );
-diff --git a/package/boost/0005-fix-test-of-fpe-support.patch b/package/boost/0005-fix-test-of-fpe-support.patch
-deleted file mode 100644
-index 4d8f827e5f..0000000000
---- a/package/boost/0005-fix-test-of-fpe-support.patch
-+++ /dev/null
-@@ -1,119 +0,0 @@
--From 066e28ccecb4bad5c0477606a138591f1da1963e Mon Sep 17 00:00:00 2001
--From: Raffi Enficiaud <raffi.enficiaud@free.fr>
--Date: Mon, 30 Jan 2017 22:09:12 +0100
--Subject: [PATCH] Preventing the compilation of floating points with GCC when
-- glibc is not in use
--
--- Gathering the support of FPE in one place/several macros and using those in both
--  execution_monitor.hpp and execution_monitor.ipp in a more coherent way
--- Updating the support of the floating point exceptions: fenableexcept/fdisableexcept are
--  GLIBC extensions and the definition of FENV does not imply the existance of those functions
--
--Fetch from:
--https://github.com/boostorg/test/commit/066e28ccecb4bad5c0477606a138591f1da1963e
--
--[Adjust github patch to tarball release]
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-----
-- boost/test/execution_monitor.hpp      | 17 +++++++++++++++--
-- boost/test/impl/execution_monitor.ipp | 21 +++++++--------------
-- 2 files changed, 22 insertions(+), 16 deletions(-)
--
--diff --git a/boost/test/execution_monitor.hpp b/boost/test/execution_monitor.hpp
--index f53348a..12c5644 100644
----- a/boost/test/execution_monitor.hpp
--+++ b/boost/test/execution_monitor.hpp
--@@ -66,6 +66,19 @@
-- 
-- #endif
-- 
--+#if defined(BOOST_SEH_BASED_SIGNAL_HANDLING) && !defined(UNDER_CE)
--+  //! Indicates tha the floating point exception handling is supported
--+  //! through SEH
--+  #define BOOST_TEST_FPE_SUPPORT_WITH_SEH__
--+#elif !defined(BOOST_SEH_BASED_SIGNAL_HANDLING) && !defined(UNDER_CE)
--+  #if !defined(BOOST_NO_FENV_H) && !defined(BOOST_CLANG) && \
--+      (defined(__GLIBC__) && defined(__USE_GNU))
--+  //! Indicates that floating point exception handling is supported for the
--+  //! non SEH version of it, for the GLIBC extensions only
--+  #define BOOST_TEST_FPE_SUPPORT_WITH_GLIBC_EXTENSIONS__
--+  #endif
--+#endif
--+
-- 
-- // Additional macro documentations not being generated without this hack
-- #ifdef BOOST_TEST_DOXYGEN_DOC__
--@@ -489,7 +502,7 @@ namespace fpe {
-- enum masks {
--     BOOST_FPE_OFF       = 0,
-- 
---#ifdef BOOST_SEH_BASED_SIGNAL_HANDLING /* *** */
--+#if defined(BOOST_TEST_FPE_SUPPORT_WITH_SEH__) /* *** */
--     BOOST_FPE_DIVBYZERO = EM_ZERODIVIDE,
--     BOOST_FPE_INEXACT   = EM_INEXACT,
--     BOOST_FPE_INVALID   = EM_INVALID,
--@@ -498,7 +511,7 @@ enum masks {
-- 
--     BOOST_FPE_ALL       = MCW_EM,
-- 
---#elif defined(BOOST_NO_FENV_H) || defined(BOOST_CLANG) /* *** */
--+#elif !defined(BOOST_TEST_FPE_SUPPORT_WITH_GLIBC_EXTENSIONS__)/* *** */
--     BOOST_FPE_ALL       = BOOST_FPE_OFF,
-- 
-- #else /* *** */
--diff --git a/boost/test/impl/execution_monitor.ipp b/boost/test/impl/execution_monitor.ipp
--index 416004d..0c5690c 100644
----- a/boost/test/impl/execution_monitor.ipp
--+++ b/boost/test/impl/execution_monitor.ipp
--@@ -1354,11 +1354,7 @@ unsigned
-- enable( unsigned mask )
-- {
--     boost::ignore_unused(mask);
---
---#if defined(UNDER_CE)
---    /* Not Implemented in Windows CE */
---    return BOOST_FPE_OFF;
---#elif defined(BOOST_SEH_BASED_SIGNAL_HANDLING)
--+#if defined(BOOST_TEST_FPE_SUPPORT_WITH_SEH__)
--     _clearfp();
-- 
-- #if BOOST_WORKAROUND( BOOST_MSVC, <= 1310)
--@@ -1373,9 +1369,10 @@ enable( unsigned mask )
--     if( ::_controlfp_s( 0, old_cw & ~mask, BOOST_FPE_ALL ) != 0 )
--         return BOOST_FPE_INV;
-- #endif
---
--     return ~old_cw & BOOST_FPE_ALL;
---#elif defined(__GLIBC__) && defined(__USE_GNU)
--+
--+#elif defined(BOOST_TEST_FPE_SUPPORT_WITH_GLIBC_EXTENSIONS__)
--+    // same macro definition as in execution_monitor.hpp
--     if (BOOST_FPE_ALL == BOOST_FPE_OFF)
--         /* Not Implemented */
--         return BOOST_FPE_OFF;
--@@ -1395,12 +1392,8 @@ disable( unsigned mask )
-- {
--     boost::ignore_unused(mask);
-- 
---#if defined(UNDER_CE)
---    /* Not Implemented in Windows CE */
---    return BOOST_FPE_INV;
---#elif defined(BOOST_SEH_BASED_SIGNAL_HANDLING)
--+#if defined(BOOST_TEST_FPE_SUPPORT_WITH_SEH__)
--     _clearfp();
---
-- #if BOOST_WORKAROUND( BOOST_MSVC, <= 1310)
--     unsigned old_cw = ::_controlfp( 0, 0 );
--     ::_controlfp( old_cw | mask, BOOST_FPE_ALL );
--@@ -1413,9 +1406,9 @@ disable( unsigned mask )
--     if( ::_controlfp_s( 0, old_cw | mask, BOOST_FPE_ALL ) != 0 )
--         return BOOST_FPE_INV;
-- #endif
---
--     return ~old_cw & BOOST_FPE_ALL;
---#elif defined(__GLIBC__) && defined(__USE_GNU)
--+
--+#elif defined(BOOST_TEST_FPE_SUPPORT_WITH_GLIBC_EXTENSIONS__)
--     if (BOOST_FPE_ALL == BOOST_FPE_OFF)
--         /* Not Implemented */
--         return BOOST_FPE_INV;
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index 7acb059ba0..7494c0cb26 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
+diff --git a/package/jo/jo.hash b/package/jo/jo.hash
+index 429f1e4a9..736b0fb8f 100644
+--- a/package/jo/jo.hash
++++ b/package/jo/jo.hash
 @@ -1,2 +1,2 @@
--# From http://www.boost.org/users/history/version_1_63_0.html
--sha256  beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0  boost_1_63_0.tar.bz2
-+# From http://www.boost.org/users/history/version_1_64_0.html
-+sha256 7bcc5caace97baa948931d712ea5f37038dbb1c5d89b43ad4def4ed7cb683332  boost_1_64_0.tar.bz2
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 035fa029b6..e515faf1f9 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
+ # Locally computed
+-sha256	d66ec97258d1afad15643fb2d5b5e807153a732ba45c2417adc66669acbde52e  jo-1.0.tar.gz
++sha256 63ed4766c2e0fcb5391a14033930329369f437d7060a11d82874e57e278bda5f  jo-1.1.tar.gz
+diff --git a/package/jo/jo.mk b/package/jo/jo.mk
+index c325c5cea..ad085b29f 100644
+--- a/package/jo/jo.mk
++++ b/package/jo/jo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOST_VERSION = 1.63.0
-+BOOST_VERSION = 1.64.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
+-JO_VERSION = 1.0
++JO_VERSION = 1.1
+ JO_SITE = https://github.com/jpmens/jo/releases/download/v$(JO_VERSION)
+ JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
+ JO_LICENSE_FILES = COPYING
 -- 
 2.11.0
