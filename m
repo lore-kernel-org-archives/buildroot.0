@@ -1,39 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jul 2017 23:44:15 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-headers: bump 4.{4,
-	9, 11, 12}.x series
-Message-ID: <20170725222210.2A32882147@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:46:37 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] libtirpc: Fix build error
+	due to missing stdint.h inclusion
+Message-ID: <20170725222211.5F3C182147@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bcd6fa5d51c4715eef3f5bf33fd4bda54796426
+commit: https://git.buildroot.net/buildroot/commit/?id=9a6a9a3ad8aa16435e4c63d6d45c3fe71cf4b8cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-[Peter: Drop 4.12.x bump]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Add patch to fix following error:
+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
+|   if (len < (uintptr_t)xdrs->x_base) {
+|              ^~~~~~~~~
+
+This error occurs with the latest glibc master version (during the testing I had
+glibc commit 92bd70fb85bce57ac47ba5d8af008736832c955a), but doesn't occur with
+version 2.25.
+
+Patch includes stdint.h to provide uintptr_t.
+
+It has been submitted upstream:
+https://sourceforge.net/p/libtirpc/mailman/message/35850276/
+
+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
+[Thomas: reformat as Git formatted patch.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6e97747666a4e9b73fba332437a1b9a3f6472b1b)
+
+(cherry picked from commit b3998dc00ff26c4848b4439ba301502faf8f1995)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../0008-include-stdint.h-for-uintptr_t.patch      | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8a74c00..a992b0d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.77"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.38"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.78"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.39"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.11"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
+new file mode 100644
+index 0000000..6203161
+--- /dev/null
++++ b/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
+@@ -0,0 +1,31 @@
++From 18f8a605e176f0362da22fd1203eb7cedb136aaf Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Tue, 20 Jun 2017 22:06:35 +0200
++Subject: [PATCH] include stdint.h for uintptr_t
++
++Fixes
++| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
++|   if (len < (uintptr_t)xdrs->x_base) {
++|              ^~~~~~~~~
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
++---
++ src/xdr_sizeof.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
++index d23fbd1..79d6707 100644
++--- a/src/xdr_sizeof.c
+++++ b/src/xdr_sizeof.c
++@@ -39,6 +39,7 @@
++ #include <rpc/xdr.h>
++ #include <sys/types.h>
++ #include <stdlib.h>
+++#include <stdint.h>
++ #include "un-namespace.h"
++ 
++ /* ARGSUSED */
++-- 
++2.9.4
++
