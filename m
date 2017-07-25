@@ -1,28 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 21:50:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: bump version to 1.8.1
-In-Reply-To: <20170724183047.5506-1-bernd.kuhls@t-online.de>
-References: <20170724183047.5506-1-bernd.kuhls@t-online.de>
-Message-ID: <20170725215035.42304596@windsurf.home>
+Date: Tue, 25 Jul 2017 21:48:52 +0200
+Subject: [Buildroot] [git commit] package/jo: bump version to 1.1
+Message-ID: <20170725194628.39F48819A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e08b2bd7b3cdcc235f0d209549bbec58e418dce8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 24 Jul 2017 20:30:47 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/jsoncpp/jsoncpp.hash | 2 +-
->  package/jsoncpp/jsoncpp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jo/jo.hash | 2 +-
+ package/jo/jo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jo/jo.hash b/package/jo/jo.hash
+index 429f1e4..736b0fb 100644
+--- a/package/jo/jo.hash
++++ b/package/jo/jo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	d66ec97258d1afad15643fb2d5b5e807153a732ba45c2417adc66669acbde52e  jo-1.0.tar.gz
++sha256 63ed4766c2e0fcb5391a14033930329369f437d7060a11d82874e57e278bda5f  jo-1.1.tar.gz
+diff --git a/package/jo/jo.mk b/package/jo/jo.mk
+index c325c5c..ad085b2 100644
+--- a/package/jo/jo.mk
++++ b/package/jo/jo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JO_VERSION = 1.0
++JO_VERSION = 1.1
+ JO_SITE = https://github.com/jpmens/jo/releases/download/v$(JO_VERSION)
+ JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
+ JO_LICENSE_FILES = COPYING
