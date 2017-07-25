@@ -1,40 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:36:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/leptonica: bump version to
- 1.74.4
-In-Reply-To: <20170725202333.14537-1-bernd.kuhls@t-online.de>
-References: <20170725202333.14537-1-bernd.kuhls@t-online.de>
-Message-ID: <20170725223635.08437da8@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Jul 2017 22:42:41 +0200
+Subject: [Buildroot] [PATCH] linux: Fix URL for release candidate
+	versions
+In-Reply-To: <20170725202131.jmubvr27xrllhwp5@sapphire.tkos.co.il>
+References: <CAHbBuxpYiGXzfB_xUwNzUFkhDcCc9qi1sySP_aN2Co5S5vvOjg@mail.gmail.com>
+ <20170725202131.jmubvr27xrllhwp5@sapphire.tkos.co.il>
+Message-ID: <dab97786-d9af-e052-6567-057ffa12fdc8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 25 Jul 2017 22:23:33 +0200, Bernd Kuhls wrote:
-> Removed patch 0001, not needed anymore after
-> https://github.com/DanBloomberg/leptonica/commit/4476d162cc191a0fefb2ce434153e12bbf188664
-> fixes the problem in a similar way.
+
+On 25-07-17 22:21, Baruch Siach wrote:
+> Hi Luis,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch | 42 ----------------------
->  package/leptonica/leptonica.hash                   |  2 +-
->  package/leptonica/leptonica.mk                     |  7 +---
->  3 files changed, 2 insertions(+), 49 deletions(-)
->  delete mode 100644 package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
+> On Tue, Jul 25, 2017 at 10:28:48AM -0400, Luis Araneda wrote:
+>> On Tue, Jul 25, 2017 at 4:37 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>>> On Mon, Jul 24, 2017 at 11:14:01PM -0400, Luis Araneda wrote:
+[snip]
+>>>> -LINUX_SITE := $(LINUX_SITE)/testing
+>>>> +LINUX_SITE := https://git.kernel.org/torvalds/t
+>>>> +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.gz
+>>>
+>>> Why do you need to add this? It should be the default value.
+>>>
+>>>>  endif # -rc
+>>>>  endif
+>>
+>> I didn't fully understand what you mean, but I will try to answer the ones
+> 
+> What I meant to say is that <PKG>_SOURCE defaults to 
+> <pkg>-$(<PKG>_VERSION).tar.gz (see package/pkg-generic.mk). So the 
+> LINUX_SOURCE assignment seems to be redundant.
 
-Applied to master, thanks.
+ LINUX_SOURCE is set a few lines higher so is no longer the default.
 
-Are you doing runtime testing for all of those packages ?
+ However, I think this warrants a little refactoring. The condition for release
+candidates should go before all the rest, so LINUX_SOURCE is set only for non-rc
+kernels.
 
-We already have > 180 patches waiting in patchwork. What we really need
-is people reviewing patches, much more than tons of version bumps.
 
-Thomas
+ Regards,
+ Arnout
+
+[snip]
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
