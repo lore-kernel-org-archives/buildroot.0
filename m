@@ -1,57 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 20:41:22 +0200
-Subject: [Buildroot] [PATCH] cppcms: fix build with ICU enabled,
-	but CPPCMS_ICU disabled
-Message-ID: <20170725184122.13076-1-thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Jul 2017 20:44:27 +0200
+Subject: [Buildroot] [git commit] configs/warp7: Bump U-Boot and kernel
+	versions
+Message-ID: <20170725184018.6422F8215C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the ICU package is enabled (BR2_PACKAGE_ICU=y) but ICU support in
-cppcms is disabled (BR2_PACKAGE_CPPCMS_ICU is disabled), cppcms still
-detects ICU, but it fails to build since we don't get the proper ICU
-CXXFLAGS.
+commit: https://git.buildroot.net/buildroot/commit/?id=e4ceb3e0783b98ec12f4ab4f73842ea3a9ce2148
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition, this is not the intended behavior: when
-BR2_PACKAGE_CPPCMS_ICU is disabled, we except cppcms to be built
-without ICU support.
+Bump U-Boot to 2017.07 and kernel to version 4.12.3.
 
-To achieve this, we pass -DDISABLE_ICU_LOCALE=ON when
-BR2_PACKAGE_CPPCMS_ICU is disabled (yes DISABLE_ICU_LOCALE means the
-logic is inverted).
+As imx_v6_v7_defconfig in 4.12 selects CONFIG_CFG80211_WEXT=y,
+remove the linux.fragment file.
 
-While at it, we pass DISABLE_ICU_LOCALE=OFF when ICU support is
-enabled, and not DISABLE_ICONV=ON. The latter has been passed in this
-condition since the cppcms package was introduced in Buildroot, but it
-doesn't seem to make sense.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/b6a8c7000c5742efc9d8e13507dab86e36b62840/
-
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cppcms/cppcms.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ board/warp7/linux.fragment | 1 -
+ configs/warp7_defconfig    | 9 ++++-----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index e72acb2..f3ea2628 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -21,9 +21,11 @@ CPPCMS_CONF_OPTS = \
- CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+diff --git a/board/warp7/linux.fragment b/board/warp7/linux.fragment
+deleted file mode 100644
+index 892d0cb..0000000
+--- a/board/warp7/linux.fragment
++++ /dev/null
+@@ -1 +0,0 @@
+-CONFIG_CFG80211_WEXT=y
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index c18a782..7de4bb5 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
- ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
--CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON
-+CPPCMS_CONF_OPTS += -DDISABLE_ICU_LOCALE=OFF
- CPPCMS_DEPENDENCIES += icu
- CPPCMS_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
-+else
-+CPPCMS_CONF_OPTS += -DDISABLE_ICU_LOCALE=ON
- endif
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
  
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--- 
-2.9.4
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,9 +15,8 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/warp7/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ 
+@@ -25,7 +24,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # wifi firmware for brcm43430
