@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 21:48:52 +0200
-Subject: [Buildroot] [git commit] package/jo: bump version to 1.1
-Message-ID: <20170725194628.39F48819A4@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 21:49:48 +0200
+Subject: [Buildroot] [git commit] package/jsoncpp: bump version to 1.8.1
+Message-ID: <20170725194628.5C62F7FCAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e08b2bd7b3cdcc235f0d209549bbec58e418dce8
+commit: https://git.buildroot.net/buildroot/commit/?id=7c31aafcd4fe28f244410fc6e64f7d3f73b4c400
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jo/jo.hash | 2 +-
- package/jo/jo.mk   | 2 +-
+ package/jsoncpp/jsoncpp.hash | 2 +-
+ package/jsoncpp/jsoncpp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jo/jo.hash b/package/jo/jo.hash
-index 429f1e4..736b0fb 100644
---- a/package/jo/jo.hash
-+++ b/package/jo/jo.hash
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index ba5d644..34d76f1 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256	d66ec97258d1afad15643fb2d5b5e807153a732ba45c2417adc66669acbde52e  jo-1.0.tar.gz
-+sha256 63ed4766c2e0fcb5391a14033930329369f437d7060a11d82874e57e278bda5f  jo-1.1.tar.gz
-diff --git a/package/jo/jo.mk b/package/jo/jo.mk
-index c325c5c..ad085b2 100644
---- a/package/jo/jo.mk
-+++ b/package/jo/jo.mk
+-sha256 5deb2462cbf0c0121c9d6c9823ec72fe71417e34242e3509bc7c003d526465bc  jsoncpp-1.8.0.tar.gz
++sha256 858db2faf348f89fdf1062bd3e79256772e897e7f17df73e0624edf004f2f9ac  jsoncpp-1.8.1.tar.gz
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index b1e64dd..b4aea56 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JO_VERSION = 1.0
-+JO_VERSION = 1.1
- JO_SITE = https://github.com/jpmens/jo/releases/download/v$(JO_VERSION)
- JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
- JO_LICENSE_FILES = COPYING
+-JSONCPP_VERSION = 1.8.0
++JSONCPP_VERSION = 1.8.1
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
