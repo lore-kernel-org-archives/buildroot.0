@@ -1,107 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 23:05:29 +0200
-Subject: [Buildroot] [git commit] genrandconfig: get configs from in-tree
-	toolchain-configs.csv
-Message-ID: <20170725210435.620068017B@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:06:58 +0200
+Subject: [Buildroot] [git commit] Makefile: add alldefconfig target
+Message-ID: <20170725210435.C3A888022D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84929a53a47f12c98de84ea894e53cc21a033623
+commit: https://git.buildroot.net/buildroot/commit/?id=dab80981d15979eab3aea28a33694396635a52a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now we have the toolchain config fragments in the buildroot directory
-itself, it is no longer necessary to fetch it from the toolchain URL.
+It is used by Kconfig's merge_config.sh.
 
-The --toolchains-url option is renamed to --toolchains-csv.
-
-The paths in the toolchains_csv file should be either absolute, or
-relative to buildrootdir.
-
-After this change, the script should be called from autobuild-run as:
-
-    subprocess.call([os.path.join(srcdir, "utils/genrandconfig"),
-                     "-o", outputdir, "-b", srcdir,
-                     "--toolchains-csv", kwargs['toolchains_csv']],
-                    stdout=devnull, stderr=log)
+No alldefpackageconfig is added, since it's rather pointless: it would
+only enable busybox.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- utils/genrandconfig | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+ Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index d397b23..a67d46f 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -118,15 +118,15 @@ class SystemInfo:
-         return not missing_requirements
+diff --git a/Makefile b/Makefile
+index 3712e47..4251803 100644
+--- a/Makefile
++++ b/Makefile
+@@ -128,7 +128,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
  
+ # List of targets and target patterns for which .config doesn't need to be read in
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+-	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
++	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+ 	print-version olddefconfig distclean manual manual-%
  
--def get_toolchain_configs(toolchains_url):
-+def get_toolchain_configs(toolchains_csv, buildrootdir):
-     """Fetch and return the possible toolchain configurations
+@@ -886,7 +886,7 @@ config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ # no values are set for the legacy options so a subsequent oldconfig
+ # will query them. Therefore, run an additional olddefconfig.
  
-     This function returns an array of toolchain configurations. Each
-     toolchain configuration is itself an array of lines of the defconfig.
-     """
+-randconfig allyesconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++randconfig allyesconfig alldefconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --$@ $(CONFIG_CONFIG_IN)
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
  
--    with urlopen_closing(toolchains_url) as r:
--        toolchains_csv = decode_byte_list(r.readlines())
-+    with open(toolchains_csv) as r:
-+        toolchains = decode_byte_list(r.readlines())
-     configs = []
- 
-     (_, _, _, _, hostarch) = os.uname()
-@@ -134,9 +134,9 @@ def get_toolchain_configs(toolchains_url):
-     if hostarch == 'i686' or hostarch == 'i386' or hostarch == 'x86':
-         hostarch = 'x86'
- 
--    for row in csv.reader(toolchains_csv):
-+    for row in csv.reader(toolchains):
-         config = {}
--        url = row[0]
-+        configfile = row[0]
-         config_hostarch = row[1]
-         keep = False
- 
-@@ -158,8 +158,11 @@ def get_toolchain_configs(toolchains_url):
-         if not keep:
-             continue
- 
--        with urlopen_closing(url) as r:
--            config = decode_byte_list(r.readlines())
-+        if not os.path.isabs(configfile):
-+            configfile = os.path.join(buildrootdir, configfile)
-+
-+        with open(configfile) as r:
-+            config = r.readlines()
-         configs.append(config)
-     return configs
- 
-@@ -329,7 +332,7 @@ def gen_config(args):
-     """
- 
-     # Select a random toolchain configuration
--    configs = get_toolchain_configs(args.toolchains_url)
-+    configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
- 
-     i = randint(0, len(configs) - 1)
-     toolchainconfig = configs[i]
-@@ -408,10 +411,10 @@ if __name__ == '__main__':
-     parser.add_argument("--buildrootdir", "-b",
-                         help="Buildroot directory (relative to current directory)",
-                         type=str, default='.')
--    parser.add_argument("--toolchains-url",
--                        help="URL of toolchain configuration file",
-+    parser.add_argument("--toolchains-csv",
-+                        help="Path of the toolchain configuration file",
-                         type=str,
--                        default="http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv")
-+                        default="support/config-fragments/autobuild/toolchain-configs.csv")
-     args = parser.parse_args()
- 
-     # We need the absolute path to use with O=, because the relative
+@@ -996,6 +996,7 @@ help:
+ 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
+ 	@echo '  allyesconfig           - New config where all options are accepted with yes'
+ 	@echo '  allnoconfig            - New config where all options are answered with no'
++	@echo '  alldefconfig           - New config where all options are set to default'
+ 	@echo '  randpackageconfig      - New config with random answer to package options'
+ 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
+ 	@echo '  allnopackageconfig     - New config where package options are answered with no'
