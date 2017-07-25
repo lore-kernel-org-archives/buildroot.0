@@ -1,53 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:09:59 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] bind: bump version to
-	bugfix release 9.11.1-P3
-Message-ID: <20170725222142.B69BD81E9E@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:42:24 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] linux-zigbee: fix build
+	with gcc 7
+Message-ID: <20170725222209.EA6B782147@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0964469afb22ead61dc33d34e48a10287e109e75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1650abdfe3895482848d0ba02fc16cf15ce57b7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-BIND 9.11.1-P3 addresses a TSIG regression introduced in the 9.11.1-P2
-security bump:
+Disable -Werror to avoid the fatal result of new gcc 7 format string warnings.
 
-https://lists.isc.org/pipermail/bind-announce/2017-July/001057.html
+Fixes:
+http://autobuild.buildroot.net/results/29c/29c72bc38042305310576be945c721b2fad95894/
+http://autobuild.buildroot.net/results/a7d/a7d38d72834b94291eaff159da277b11e2f9d63a/
+http://autobuild.buildroot.net/results/cfe/cfed5176075f0cb9e2f56ebef10f5d6c352baf10/
 
-Also add a hash for the license file while we're at it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c237f1d1c5447af3b967304d7929cf115ea1aa5d)
+(cherry picked from commit e1bebe18e54ad634bd6151445f009aa53038d765)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 5 +++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/linux-zigbee/linux-zigbee.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 5dd15cb..3a631de 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,3 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
--sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
-+sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
-+sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ee7621c..acc0911 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-zigbee/linux-zigbee.mk b/package/linux-zigbee/linux-zigbee.mk
+index 9450ca4..8d3248f 100644
+--- a/package/linux-zigbee/linux-zigbee.mk
++++ b/package/linux-zigbee/linux-zigbee.mk
+@@ -15,6 +15,7 @@ LINUX_ZIGBEE_AUTORECONF = YES
  
--BIND_VERSION = 9.11.1-P2
-+BIND_VERSION = 9.11.1-P3
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+ LINUX_ZIGBEE_CONF_OPTS = \
+ 	--disable-manpages \
++	--disable-werror \
+ 	--with-leasefile="$(call qstrip,$(BR2_PACKAGE_LINUX_ZIGBEE_LEASEFILE))"
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_ZIGBEE_TESTS),y)
