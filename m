@@ -1,109 +1,46 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 25 Jul 2017 23:36:12 +0200
-Subject: [Buildroot] [PATCH 1/2] utils/test-pkg: add option to use an
-	alternate toolchains CSV file
-Message-ID: <20170725213613.6714-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Jul 2017 23:39:13 +0200
+Subject: [Buildroot] [PATCH] busybox: fix build on SPARC and SPARC64
+In-Reply-To: <20170714211204.25823-1-thomas.petazzoni@free-electrons.com>
+References: <20170714211204.25823-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170725233913.5ddf1d92@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When testing a package with test-pkg, it may be useful to override the
-set of toolchains used. For example:
-- to test with toolchains used in your company;
-- to test agains a subset that is known to be problematic;
-- to use only toolchains you already have available locally when you
-  have no network access.
+Hello,
 
-Add an option to use an alternate CSV file containing the config
-fragments of toolchains to try.
+On Fri, 14 Jul 2017 23:12:04 +0200, Thomas Petazzoni wrote:
+> Since we introduced the support for building Busybox as individual
+> binaries, Busybox started failing to build on SPARC/SPARC64 with this
+> feature enabled:
+> 
+> appletlib.c:(.text.find_applet_by_name+0x14): relocation truncated to fit: R_SPARC_GOT13 against symbol `applet_nameofs' defined in .rodata.applet_nameofs section in libbb/lib.a(appletlib.o)
+> appletlib.c:(.text.find_applet_by_name+0x18): relocation truncated to fit: R_SPARC_GOT13 against symbol `applet_names' defined in .rodata.applet_names section in libbb/lib.a(appletlib.o)
+> [...]
+> 
+> This commit adds two patches to Busybox to fix this issue, by adding
+> -fPIC to CFLAGS when building on SPARC/SPARC64. The patches have been
+> submitted upstream.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/90144369ccea8c41ec7643a79a7ebfaa9b7db95c/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...clude-per-arch-Makefile-before-Makefile.f.patch | 46 +++++++++++++
+>  ...h-sparc-sparc64-Makefile-define-ARCH_FPIC.patch | 79 ++++++++++++++++++++++
+>  2 files changed, 125 insertions(+)
+>  create mode 100644 package/busybox/0003-Makefile-include-per-arch-Makefile-before-Makefile.f.patch
+>  create mode 100644 package/busybox/0004-arch-sparc-sparc64-Makefile-define-ARCH_FPIC.patch
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v8: reformulate commit message
-v7: CSV file instead of directory
-v6: s/defconfig/config fragment/g
-v5: First version
+Applied to master, thanks.
 
-Loosely based on http://patchwork.ozlabs.org/patch/728395/ but with a
-CSV file instead of URL, and completely rewritten help text.
----
- utils/test-pkg | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/utils/test-pkg b/utils/test-pkg
-index f951eda563..6899d44f7c 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -5,16 +5,17 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
- 
- main() {
-     local o O opts
--    local cfg dir pkg random toolchain
-+    local cfg dir pkg random toolchains_dir toolchain
-     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
-     local -a toolchains
- 
--    o='hc:d:p:r:'
--    O='help,config-snippet:build-dir:package:,random:'
-+    o='hc:d:p:r:t:'
-+    O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
-     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
-     eval set -- "${opts}"
- 
-     random=0
-+    toolchains_csv="${TOOLCHAINS_CSV}"
-     while [ ${#} -gt 0 ]; do
-         case "${1}" in
-         (-h|--help)
-@@ -32,6 +33,9 @@ main() {
-         (-r|--random)
-             random="${2}"; shift 2
-             ;;
-+        (-t|--toolchains-csv)
-+            toolchains_csv="${2}"; shift 2
-+            ;;
-         (--)
-             shift; break
-             ;;
-@@ -50,7 +54,7 @@ main() {
-     # Extract the URLs of the toolchains; drop internal toolchains
-     # E.g.: http://server/path/to/name.config,arch,libc
-     #  -->  http://server/path/to/name.config
--    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${TOOLCHAINS_CSV}" \
-+    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${toolchains_csv}" \
-                   |if [ ${random} -gt 0 ]; then \
-                       sort -R |head -n ${random}
-                    else
-@@ -144,8 +148,13 @@ In case failures are noticed, you can fix the package and just re-run the
- same command again; it will re-run the test where it failed. If you did
- specify a package (with -p), the package build dir will be removed first.
- 
--The list of toolchains is retrieved from the Buildroot autobuilders, available
--at ${TOOLCHAINS_URL}.
-+The list of toolchains is retrieved from ${TOOLCHAINS_CSV}.
-+Only the external toolchains are tried, because building a Buildroot toolchain
-+would take too long. An alternative toolchains CSV file can be specified with
-+the -t option. This file should have lines consisting of the path to the
-+toolchain config fragment and the required host architecture, separated by a
-+comma. The config fragments should contain only the toolchain and architecture
-+settings.
- 
- Options:
- 
-@@ -167,6 +176,11 @@ Options:
-         Limit the tests to the N randomly selected toolchains, instead of
-         building with all toolchains.
- 
-+    -t CSVFILE, --toolchains-csv CSVFILE
-+        CSV file containing the paths to config fragments of toolchains to
-+        try. If not specified, the toolchains in ${TOOLCHAINS_CSV} will be
-+        used.
-+
- Example:
- 
-     Testing libcec would require a config snippet that contains:
+Thomas
 -- 
-2.13.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
