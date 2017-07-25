@@ -1,166 +1,44 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 25 Jul 2017 09:56:03 -0700
-Subject: [Buildroot] [PATCH v4] zstd: add new package
-Message-ID: <20170725165603.27626-1-andrew.smirnov@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 25 Jul 2017 21:28:15 +0300
+Subject: [Buildroot] [PATCH] squashfs: fix build with gcc 7
+Message-ID: <51890a64ced8a223b72a52bdb0e98fc31f539a30.1501007295.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package to provide Zstandard compression tools
-(see https://facebook.github.io/zstd)
+gcc 7 with -Os (optimize for size) takes the liberty to remove the code of
+inline function entirely. This leads to undefined function references at link
+time. Restore gcc original inline behaviour to fix this issue.
 
-Minimal config snippet for utils/test-pkg is as follows:
+Fixes:
+http://autobuild.buildroot.net/results/3c5/3c5b1d799dce3ba361d618330c242bf4eba76019/
+http://autobuild.buildroot.net/results/09f/09f350b62e2486404b78222dce211400bb233000/
+http://autobuild.buildroot.net/results/693/693960ed7c01622c756dcc929e83b3b713c16ccc/
 
-BR2_PACKAGE_ZSTD=y
-
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+The gcc doc[1] doesn't mention that feature of C99. A gcc bug, maybe?
 
-Changes since [v3]:
+[1] https://gcc.gnu.org/onlinedocs/gcc/Inline.html
+---
+ package/squashfs/squashfs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    - Add license files' hashes and move URL to the end of help text
-      as per feedback from Baruch Siach
-
-Changes since [v2]:
-
-    - Bump package version to the latest release: 1.3.0
-
-Changes since [v1]:
-
-    - Remove all excessive configuration options and simplify
-      installation rules to just calling "make install"
-
-    - Add support for HAVE_LZ4
-
-    - Add missing hash file
-
-[v1] http://lists.busybox.net/pipermail/buildroot/2017-July/196739.html
-[v2] http://lists.busybox.net/pipermail/buildroot/2017-July/197641.html
-[v3] http://lists.busybox.net/pipermail/buildroot/2017-July/199044.html
-
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/zstd/Config.in | 13 +++++++++++++
- package/zstd/zstd.hash |  7 +++++++
- package/zstd/zstd.mk   | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 71 insertions(+)
- create mode 100644 package/zstd/Config.in
- create mode 100644 package/zstd/zstd.hash
- create mode 100644 package/zstd/zstd.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7c9b5ed6e3..7e5c878a81 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -100,6 +100,7 @@ F:	package/python-scandir/
- F:	package/python-simplegeneric/
- F:	package/python-systemd/
- F:	package/python-traitlets/
-+F:	package/zstd/
- 
- N:	Andrey Yurovsky <yurovsky@gmail.com>
- F:	package/rauc/
-diff --git a/package/Config.in b/package/Config.in
-index 59db51e20c..390477072d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -73,6 +73,7 @@ menu "Compressors and decompressors"
- 	source "package/unzip/Config.in"
- 	source "package/xz/Config.in"
- 	source "package/zip/Config.in"
-+	source "package/zstd/Config.in"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-diff --git a/package/zstd/Config.in b/package/zstd/Config.in
-new file mode 100644
-index 0000000000..340a06969a
---- /dev/null
-+++ b/package/zstd/Config.in
-@@ -0,0 +1,13 @@
-+menuconfig BR2_PACKAGE_ZSTD
-+	bool "zstd"
-+	help
-+	  Zstandard, or zstd as short version, is a fast lossless
-+	  compression algorithm, targeting real-time compression
-+	  scenarios at zlib-level and better compression ratios
-+
-+	  The selection of other packages will enable some features:
-+
-+	  - xz, lz4 and/or zlib will enable support for corresponding
-+	    compression formats
-+
-+	  https://facebook.github.io/zstd
-\ No newline at end of file
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-new file mode 100644
-index 0000000000..f8c56fbced
---- /dev/null
-+++ b/package/zstd/zstd.hash
-@@ -0,0 +1,7 @@
-+# Locally computed
-+sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
-+
-+# License files (locally computed as well)
-+sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-+sha256 3a508245dd3c486bb9d78a8269091322359443ea54612c3648327a0b3512f23f PATENTS
-+
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-new file mode 100644
-index 0000000000..ad26bae6fd
---- /dev/null
-+++ b/package/zstd/zstd.mk
-@@ -0,0 +1,49 @@
-+################################################################################
-+#
-+# zstd
-+#
-+################################################################################
-+
-+ZSTD_VERSION = v1.3.0
-+ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
-+ZSTD_LICENSE = BSD-3-Clause
-+ZSTD_LICENSE_FILES = LICENSE PATENTS
-+
-+ZSTD_OPTS = DESTDIR=$(TARGET_DIR)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ZSTD_OPTS += HAVE_THREAD=1
-+else
-+ZSTD_OPTS += HAVE_THREAD=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+ZSTD_DEPENDENCIES += zlib
-+ZSTD_OPTS += HAVE_ZLIB=1
-+else
-+ZSTD_OPTS += HAVE_ZLIB=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+ZSTD_DEPENDENCIES += xz
-+ZSTD_OPTS += HAVE_LZMA=1
-+else
-+ZSTD_OPTS += HAVE_LZMA=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+ZSTD_DEPENDENCIES += lz4
-+ZSTD_OPTS += HAVE_LZ4=1
-+else
-+ZSTD_OPTS += HAVE_LZ4=0
-+endif
-+
-+define ZSTD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D) zstd
-+endef
-+
-+define ZSTD_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D)/programs install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index db3f27648eb6..9599d892b261 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -59,7 +59,7 @@ HOST_SQUASHFS_MAKE_ARGS = \
+ define SQUASHFS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) \
+ 		CC="$(TARGET_CC)" \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		EXTRA_CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline" \
+ 		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		$(SQUASHFS_MAKE_ARGS) \
+ 		-C $(@D)/squashfs-tools/
 -- 
-2.13.3
+2.13.2
