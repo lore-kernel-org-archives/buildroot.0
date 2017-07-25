@@ -1,41 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jul 2017 23:42:24 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-zigbee: fix build
-	with gcc 7
-Message-ID: <20170725222209.EA6B782147@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:43:14 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: Remove patch
+	uneeded for the current version
+Message-ID: <20170725222210.0C10681D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1650abdfe3895482848d0ba02fc16cf15ce57b7f
+commit: https://git.buildroot.net/buildroot/commit/?id=0fda8befb7dd6643ae09d338260911faa170cdc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Disable -Werror to avoid the fatal result of new gcc 7 format string warnings.
+Version 2.16.5 of WebKitGTK+ already includes the fix added by the
+removed patch, which is now unneeded.
 
-Fixes:
-http://autobuild.buildroot.net/results/29c/29c72bc38042305310576be945c721b2fad95894/
-http://autobuild.buildroot.net/results/a7d/a7d38d72834b94291eaff159da277b11e2f9d63a/
-http://autobuild.buildroot.net/results/cfe/cfed5176075f0cb9e2f56ebef10f5d6c352baf10/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e1bebe18e54ad634bd6151445f009aa53038d765)
+(cherry picked from commit 6b2804f396ad27e1d99079a8d1fbe1f51cb4cf5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-zigbee/linux-zigbee.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/webkitgtk/0001-fix-gcc6-builds.patch | 53 ----------------------------
+ 1 file changed, 53 deletions(-)
 
-diff --git a/package/linux-zigbee/linux-zigbee.mk b/package/linux-zigbee/linux-zigbee.mk
-index 9450ca4..8d3248f 100644
---- a/package/linux-zigbee/linux-zigbee.mk
-+++ b/package/linux-zigbee/linux-zigbee.mk
-@@ -15,6 +15,7 @@ LINUX_ZIGBEE_AUTORECONF = YES
- 
- LINUX_ZIGBEE_CONF_OPTS = \
- 	--disable-manpages \
-+	--disable-werror \
- 	--with-leasefile="$(call qstrip,$(BR2_PACKAGE_LINUX_ZIGBEE_LEASEFILE))"
- 
- ifeq ($(BR2_PACKAGE_LINUX_ZIGBEE_TESTS),y)
+diff --git a/package/webkitgtk/0001-fix-gcc6-builds.patch b/package/webkitgtk/0001-fix-gcc6-builds.patch
+deleted file mode 100644
+index 35487ad..0000000
+--- a/package/webkitgtk/0001-fix-gcc6-builds.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-[CMake] Build failure with GCC 6 (fatal error: stdlib.h: No such file or directory)
+-
+-https://bugs.webkit.org/show_bug.cgi?id=161697
+-
+-Reviewed by Michael Catanzaro.
+-
+-Get the list of system includes from GCC and add it to the CMake
+-list of implicit includes. This way, CMake will filter any of this
+-directories from the list of includes when calling the compiler.
+-
+-This avoids an issue with GCC 6 that causes build failures when
+-including the default include path as a system include (-isystem).
+-
+-Upstream, from: https://trac.webkit.org/changeset/205672
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-Index: trunk/Source/cmake/OptionsCommon.cmake
+-===================================================================
+---- trunk/Source/cmake/OptionsCommon.cmake	(revision 204084)
+-+++ trunk/Source/cmake/OptionsCommon.cmake	(revision 205672)
+-@@ -36,4 +36,31 @@
+-     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcolor-diagnostics")
+-     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
+-+endif ()
+-+
+-+# Ensure that the default include system directories are added to the list of CMake implicit includes.
+-+# This workarounds an issue that happens when using GCC 6 and using system includes (-isystem).
+-+# For more details check: https://bugs.webkit.org/show_bug.cgi?id=161697
+-+macro(DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang _compiler _flags _result)
+-+    file(WRITE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy" "\n")
+-+    separate_arguments(_buildFlags UNIX_COMMAND "${_flags}")
+-+    execute_process(COMMAND ${_compiler} ${_buildFlags} -v -E -x ${_lang} -dD dummy
+-+                    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles OUTPUT_QUIET
+-+                    ERROR_VARIABLE _gccOutput)
+-+    file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy")
+-+    if ("${_gccOutput}" MATCHES "> search starts here[^\n]+\n *(.+) *\n *End of (search) list")
+-+        set(${_result} ${CMAKE_MATCH_1})
+-+        string(REPLACE "\n" " " ${_result} "${${_result}}")
+-+        separate_arguments(${_result})
+-+    endif ()
+-+endmacro()
+-+
+-+if (CMAKE_COMPILER_IS_GNUCC)
+-+   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c" "${CMAKE_C_COMPILER}" "${CMAKE_C_FLAGS}" SYSTEM_INCLUDE_DIRS)
+-+   set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
+-+endif ()
+-+
+-+if (CMAKE_COMPILER_IS_GNUCXX)
+-+   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c++" "${CMAKE_CXX_COMPILER}" "${CMAKE_CXX_FLAGS}" SYSTEM_INCLUDE_DIRS)
+-+   set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
+- endif ()
+- 
