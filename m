@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:07:44 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/joe: bump version to 4.4
-In-Reply-To: <20170725200205.23260-1-bernd.kuhls@t-online.de>
-References: <20170725200205.23260-1-bernd.kuhls@t-online.de>
-Message-ID: <20170725220744.553b3c5b@windsurf.home>
+Date: Tue, 25 Jul 2017 22:10:46 +0200
+Subject: [Buildroot] [PATCH v4] zstd: add new package
+In-Reply-To: <20170725165603.27626-1-andrew.smirnov@gmail.com>
+References: <20170725165603.27626-1-andrew.smirnov@gmail.com>
+Message-ID: <20170725221046.2dab7ae1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Jul 2017 22:02:05 +0200, Bernd Kuhls wrote:
-> Removed patch 0001 after bessel functions in uClibc were enabled by
-> default:
-> https://git.buildroot.net/buildroot/commit/package/uclibc?id=de56d58e5d26d78161ca3b7a1a2a4decfe4e89db
+On Tue, 25 Jul 2017 09:56:03 -0700, Andrey Smirnov wrote:
+> Add package to provide Zstandard compression tools
+> (see https://facebook.github.io/zstd)
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Minimal config snippet for utils/test-pkg is as follows:
+> 
+> BR2_PACKAGE_ZSTD=y
+> 
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 > ---
-> v2: updated JOE_INSTALL_TARGET_CMDS (Peter)
 
-Applied to master, thanks.
+Applied with the following changes:
+
+    [Thomas:
+     - use "config" instead of "menuconfig" in Config.in
+     - add missing final newline in Config.in
+     - pass DESTDIR=$(TARGET_DIR) only at install time
+     - wrap too long lines in the .mk file
+     - remove useless empty newline at end of .hash file.]
+
+Thanks!
 
 Thomas
 -- 
