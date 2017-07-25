@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 20:45:19 +0200
-Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.25
-In-Reply-To: <20170725140256.1941-1-bluemrp9@gmail.com>
-References: <20170725140256.1941-1-bluemrp9@gmail.com>
-Message-ID: <20170725204519.602a639b@windsurf>
+Date: Tue, 25 Jul 2017 20:46:41 +0200
+Subject: [Buildroot] [PATCH v1 1/2] orc: bump version to 0.4.27
+In-Reply-To: <20170724201442.6500-1-ps.report@gmx.net>
+References: <20170724201442.6500-1-ps.report@gmx.net>
+Message-ID: <20170725204641.588ecc19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Jul 2017 07:02:56 -0700, Ryan Coe wrote:
-> release notes: https://mariadb.com/kb/en/mariadb-10125-release-notes/
-> changelog: https://mariadb.com/kb/en/mariadb-10125-changelog/
-> 
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+On Mon, 24 Jul 2017 22:14:41 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/mariadb/mariadb.hash | 8 ++++++--
->  package/mariadb/mariadb.mk   | 2 +-
->  2 files changed, 7 insertions(+), 3 deletions(-)
+>  package/orc/orc.hash | 4 ++--
+>  package/orc/orc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both patches applied. Thanks!
 
 Thomas
 -- 
