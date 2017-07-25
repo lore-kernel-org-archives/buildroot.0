@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:18:56 +0200
-Subject: [Buildroot] [git commit] package/lbreakout2: bump version to 2.6.5
-Message-ID: <20170725201452.3125282150@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 22:19:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] dieharder: fix link issue with
+ inline function not declared static
+In-Reply-To: <1500901174-12582-1-git-send-email-julien@vdg.name>
+References: <1500901174-12582-1-git-send-email-julien@vdg.name>
+Message-ID: <20170725221948.205598dd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82a7409c7af7ff83b5d1d4b39788928c169eed5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Changed _SITE to https, added upstream md5 & sha1 hashes.
+On Mon, 24 Jul 2017 14:59:34 +0200, Julien Viard de Galbert wrote:
+> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> 
+> ---
+> Changes V1 -> V2
+>  - Clarified the reason for the patch c99 std for inline + gcc7
+>  - Since 2017-06-23 ? received the following reports all with the same failure:
+> http://autobuild.buildroot.net/results/b629754c6a820446ff38df8202ea1ed0041bc4ac
+> http://autobuild.buildroot.net/results/e02325e06866618d9d3ee90600dc3326465c56a1
+> http://autobuild.buildroot.net/results/c1db73dcb25ea1db4be0f9d6ce2bf2d02f5bd5bb
+> http://autobuild.buildroot.net/results/bd93120ee7cbfeb4fe7cbcd7f845f131743caf05
+> http://autobuild.buildroot.net/results/273ba504de31bc17fd41e91ee5d6c0b34797a4f9
+> http://autobuild.buildroot.net/results/37920b26f9c4853a0d620eb4a33b50b53e548888
+> http://autobuild.buildroot.net/results/ee668405ed234fbbd644a01d49e8d9d41d216cf6
+> http://autobuild.buildroot.net/results/5b76d62ad03d0cbe483792b32ea14ce7d7432983
+> http://autobuild.buildroot.net/results/cf08d42be8fcb659d59288e2cedf3f18b660e8a6
+> http://autobuild.buildroot.net/results/e1309fd2eea5daf854f4314b92ec441092239cd5
+> ---
+>  .../0004-Add-static-to-inline-functions.patch      | 65 ++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 package/dieharder/0004-Add-static-to-inline-functions.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lbreakout2/lbreakout2.hash | 5 ++++-
- package/lbreakout2/lbreakout2.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Applied to master after putting the autobuilder references in the
+commit log. Could you also submit the patch to the upstream project ?
 
-diff --git a/package/lbreakout2/lbreakout2.hash b/package/lbreakout2/lbreakout2.hash
-index d9638b4..0d305dc 100644
---- a/package/lbreakout2/lbreakout2.hash
-+++ b/package/lbreakout2/lbreakout2.hash
-@@ -1,2 +1,5 @@
-+# From https://sourceforge.net/projects/lgames/files/lbreakout2/2.6/
-+md5 1a9238b83f9f13f09b7a4d53e00b4e84  lbreakout2-2.6.5.tar.gz
-+sha1 d92326499165fd368be04378d633e13d42b4d2d7  lbreakout2-2.6.5.tar.gz
- # Locally computed:
--sha256  0b90716d52e67c27ff41ab7aa5c09dad4f5f19a78076cc57dd4b4d7ed2c1dbd9  lbreakout2-2.6.4.tar.gz
-+sha256 9104d6175553da3442dc6a5fc407a669e2f5aff3eedc5d30409eb003b7a78d6f  lbreakout2-2.6.5.tar.gz
-diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
-index 274c534..49db8d5 100644
---- a/package/lbreakout2/lbreakout2.mk
-+++ b/package/lbreakout2/lbreakout2.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- LBREAKOUT2_VERSION_MAJOR = 2.6
--LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).4
--LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
-+LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).5
-+LBREAKOUT2_SITE = https://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
- LBREAKOUT2_LICENSE = GPL-2.0+
- LBREAKOUT2_LICENSE_FILES = COPYING
- 
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
