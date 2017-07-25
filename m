@@ -1,145 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:10:52 +0200
-Subject: [Buildroot] [git commit] zstd: new package
-Message-ID: <20170725200645.D2E5781F7B@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 25 Jul 2017 22:15:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lbreakout2: bump version to 2.6.5
+Message-ID: <20170725201505.3620-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e751df23ab68f32fbbde1568f3a565ac24caaff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Changed _SITE to https, added upstream md5 & sha1 hashes.
 
-Add package to provide Zstandard compression tools
-(see https://facebook.github.io/zstd)
-
-Minimal config snippet for utils/test-pkg is as follows:
-
-BR2_PACKAGE_ZSTD=y
-
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-[Thomas:
- - use "config" instead of "menuconfig" in Config.in
- - add missing final newline in Config.in
- - pass DESTDIR=$(TARGET_DIR) only at install time
- - wrap too long lines in the .mk file
- - remove useless empty newline at end of .hash file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/zstd/Config.in | 12 ++++++++++++
- package/zstd/zstd.hash |  6 ++++++
- package/zstd/zstd.mk   | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 69 insertions(+)
+ package/lbreakout2/lbreakout2.hash | 5 ++++-
+ package/lbreakout2/lbreakout2.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7c9b5ed..7e5c878 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -100,6 +100,7 @@ F:	package/python-scandir/
- F:	package/python-simplegeneric/
- F:	package/python-systemd/
- F:	package/python-traitlets/
-+F:	package/zstd/
+diff --git a/package/lbreakout2/lbreakout2.hash b/package/lbreakout2/lbreakout2.hash
+index d9638b47b..0d305dcd7 100644
+--- a/package/lbreakout2/lbreakout2.hash
++++ b/package/lbreakout2/lbreakout2.hash
+@@ -1,2 +1,5 @@
++# From https://sourceforge.net/projects/lgames/files/lbreakout2/2.6/
++md5 1a9238b83f9f13f09b7a4d53e00b4e84  lbreakout2-2.6.5.tar.gz
++sha1 d92326499165fd368be04378d633e13d42b4d2d7  lbreakout2-2.6.5.tar.gz
+ # Locally computed:
+-sha256  0b90716d52e67c27ff41ab7aa5c09dad4f5f19a78076cc57dd4b4d7ed2c1dbd9  lbreakout2-2.6.4.tar.gz
++sha256 9104d6175553da3442dc6a5fc407a669e2f5aff3eedc5d30409eb003b7a78d6f  lbreakout2-2.6.5.tar.gz
+diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
+index 274c53466..49db8d546 100644
+--- a/package/lbreakout2/lbreakout2.mk
++++ b/package/lbreakout2/lbreakout2.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- N:	Andrey Yurovsky <yurovsky@gmail.com>
- F:	package/rauc/
-diff --git a/package/Config.in b/package/Config.in
-index 618bcf5..484c753 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -69,6 +69,7 @@ menu "Compressors and decompressors"
- 	source "package/unzip/Config.in"
- 	source "package/xz/Config.in"
- 	source "package/zip/Config.in"
-+	source "package/zstd/Config.in"
- endmenu
+ LBREAKOUT2_VERSION_MAJOR = 2.6
+-LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).4
+-LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
++LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).5
++LBREAKOUT2_SITE = https://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
+ LBREAKOUT2_LICENSE = GPL-2.0+
+ LBREAKOUT2_LICENSE_FILES = COPYING
  
- menu "Debugging, profiling and benchmark"
-diff --git a/package/zstd/Config.in b/package/zstd/Config.in
-new file mode 100644
-index 0000000..9fa70c6
---- /dev/null
-+++ b/package/zstd/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_ZSTD
-+	bool "zstd"
-+	help
-+	  Zstandard, or zstd as short version, is a fast lossless
-+	  compression algorithm, targeting real-time compression
-+	  scenarios at zlib-level and better compression ratios
-+
-+	  The selection of other packages will enable some features:
-+	  xz, lz4 and/or zlib will enable support for corresponding
-+	  compression formats
-+
-+	  https://facebook.github.io/zstd
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-new file mode 100644
-index 0000000..60641aa
---- /dev/null
-+++ b/package/zstd/zstd.hash
-@@ -0,0 +1,6 @@
-+# Locally computed
-+sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
-+
-+# License files (locally computed as well)
-+sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-+sha256 3a508245dd3c486bb9d78a8269091322359443ea54612c3648327a0b3512f23f PATENTS
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-new file mode 100644
-index 0000000..cad8068
---- /dev/null
-+++ b/package/zstd/zstd.mk
-@@ -0,0 +1,49 @@
-+################################################################################
-+#
-+# zstd
-+#
-+################################################################################
-+
-+ZSTD_VERSION = v1.3.0
-+ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
-+ZSTD_LICENSE = BSD-3-Clause
-+ZSTD_LICENSE_FILES = LICENSE PATENTS
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ZSTD_OPTS += HAVE_THREAD=1
-+else
-+ZSTD_OPTS += HAVE_THREAD=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+ZSTD_DEPENDENCIES += zlib
-+ZSTD_OPTS += HAVE_ZLIB=1
-+else
-+ZSTD_OPTS += HAVE_ZLIB=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+ZSTD_DEPENDENCIES += xz
-+ZSTD_OPTS += HAVE_LZMA=1
-+else
-+ZSTD_OPTS += HAVE_LZMA=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+ZSTD_DEPENDENCIES += lz4
-+ZSTD_OPTS += HAVE_LZ4=1
-+else
-+ZSTD_OPTS += HAVE_LZ4=0
-+endif
-+
-+define ZSTD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		-C $(@D) zstd
-+endef
-+
-+define ZSTD_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		DESTDIR=$(TARGET_DIR) -C $(@D)/programs install
-+endef
-+
-+$(eval $(generic-package))
+-- 
+2.11.0
