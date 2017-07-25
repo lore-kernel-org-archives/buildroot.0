@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 23:05:10 +0200
-Subject: [Buildroot] [PATCH v7 18/23] support/test-pkg: add option to
- use an alternate toolchains CSV file
-In-Reply-To: <20170721010530.4747-19-arnout@mind.be>
-References: <20170721010530.4747-1-arnout@mind.be>
- <20170721010530.4747-19-arnout@mind.be>
-Message-ID: <20170725230510.0282a9ea@windsurf.home>
+Date: Tue, 25 Jul 2017 22:41:57 +0200
+Subject: [Buildroot] [git commit] genrandconfig: use subprocess.check_output
+	instead of Popen
+Message-ID: <20170725210433.D16E380093@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=59419cdac1af86abbd780305b33136d28f11d3ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Jul 2017 03:05:25 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> For now, testing a package requires network access. However, there are
+Popen is more complicated and more difficult to understand.
 
-I don't see what network access has to do with this. Thanks to your
-previous commit, the toolchain config CSV file is local, so there is no
-longer the need for network access.
+check_output raises an exception if the exit code is non-zero, but
+that's probably what we want if ldd can't be executed.
 
-Isn't that part of the commit log somewhat outdated ?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 6d32692..a7fe7ce 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -184,7 +184,7 @@ def is_toolchain_usable(**kwargs):
+         if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
+-            ldd_version_output = subprocess.Popen(['ldd', '--version'], stdout=subprocess.PIPE).communicate()[0]
++            ldd_version_output = subprocess.check_output(['ldd', '--version'])
+             glibc_version = ldd_version_output.splitlines()[0].split()[-1]
+             if StrictVersion('2.14') > StrictVersion(glibc_version):
+                 log_write(log, "WARN: ignoring the Linaro ARM toolchains becausee too old host glibc")
