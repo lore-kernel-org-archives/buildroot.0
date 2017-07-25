@@ -1,11 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Jul 2017 22:42:41 +0200
-Subject: [Buildroot] [PATCH] linux: Fix URL for release candidate
-	versions
-In-Reply-To: <20170725202131.jmubvr27xrllhwp5@sapphire.tkos.co.il>
-References: <CAHbBuxpYiGXzfB_xUwNzUFkhDcCc9qi1sySP_aN2Co5S5vvOjg@mail.gmail.com>
- <20170725202131.jmubvr27xrllhwp5@sapphire.tkos.co.il>
-Message-ID: <dab97786-d9af-e052-6567-057ffa12fdc8@mind.be>
+Date: Tue, 25 Jul 2017 22:51:54 +0200
+Subject: [Buildroot] [.config file] Generating buildroot-like .config
+ file from "linux-like" .config file
+In-Reply-To: <20170725195518.weotlgmo37zfwl2k@latitude>
+References: <CAB_D2Uz6n6zdA2C3_Pbx6uV39_Zs=J=VfLOzs0Mtfi-agUocKQ@mail.gmail.com>
+ <20170725141319.lrbqod4juauli3dd@latitude>
+ <CAB_D2UzwSwa6SXs9fW1Eg-A+EziOEg58Daa=PXjtK2ZWs1q4Sw@mail.gmail.com>
+ <CAB_D2UwsHdCsfcOm2BZXrzW6AB12n+tqWkVj3KubbSpSnXPZvA@mail.gmail.com>
+ <20170725195518.weotlgmo37zfwl2k@latitude>
+Message-ID: <849d1913-2cde-4ee0-1777-59f80edfdef8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +17,59 @@ To: buildroot@busybox.net
 
 
 
-On 25-07-17 22:21, Baruch Siach wrote:
-> Hi Luis,
-> 
-> On Tue, Jul 25, 2017 at 10:28:48AM -0400, Luis Araneda wrote:
->> On Tue, Jul 25, 2017 at 4:37 AM, Baruch Siach <baruch@tkos.co.il> wrote:
->>> On Mon, Jul 24, 2017 at 11:14:01PM -0400, Luis Araneda wrote:
-[snip]
->>>> -LINUX_SITE := $(LINUX_SITE)/testing
->>>> +LINUX_SITE := https://git.kernel.org/torvalds/t
->>>> +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.gz
->>>
->>> Why do you need to add this? It should be the default value.
->>>
->>>>  endif # -rc
->>>>  endif
+On 25-07-17 21:55, Jonathan Neusch?fer wrote:
+> On Tue, Jul 25, 2017 at 05:03:03PM +0200, vr roriz wrote:
+>> I found a possible path for this procedure. On menuconfig, under Kernel
+>> config, I can define a custom config file (for the Kernel). Then I can save
+>> this "mirroring" with a savedefconfig. I will test.
 >>
->> I didn't fully understand what you mean, but I will try to answer the ones
+>> Source:
+>> https://stackoverflow.com/questions/1414968/how-do-i-configure-the-linux-kernel-within-buildroot
+>>
+>> Is that the way people usually do that?
 > 
-> What I meant to say is that <PKG>_SOURCE defaults to 
-> <pkg>-$(<PKG>_VERSION).tar.gz (see package/pkg-generic.mk). So the 
-> LINUX_SOURCE assignment seems to be redundant.
+> I think it usually works in the following way:
+> 
+> 1) You create a Linux defconfig, and store it under
+>    arch/<architecture>/configs/<board>_defconfig, if it doesn't exist
+>    already.
+> 2) You use a kernel branch or patch that contains this Linux defconfig.
+> 3) You let BR2_LINUX_KERNEL_DEFCONFIG point to this defconfig.
+> 4) Optionally, you create a *buildroot* defconfig that contains the
+>    relevant BR2_LINUX_KERNEL_DEFCONFIG line.
 
- LINUX_SOURCE is set a few lines higher so is no longer the default.
+ If you already have a custom linux .config file, the procedure is more like this:
 
- However, I think this warrants a little refactoring. The condition for release
-candidates should go before all the rest, so LINUX_SOURCE is set only for non-rc
-kernels.
+1) Copy your linux .config to some safe place (i.e. which will be put under
+version control), e.g. my_ext_dir/board/myboard/linux.config
 
+2) In Buildroot's config, set BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y and
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/.../my_ext_dir/board/myboard/linux.config"
+(or better yet, define my_ext_dir as an external and use
+$(BR2_EXTERNAL_MY_EXT_PATH)/board/myboard/linux.config)
+
+3) If you need to change something in the kernel config, run (from Buildroot)
+"make linux-menuconfig", then (if it is OK) "make linux-update-defconfig".
+
+
+> It's important to know which defconfig is a kernel defconfig and which
+> one is a buildroot defconfig.
+
+ Absolutely!
+
+
+> For project specific modifications of the kernel config, there are also
+> some other mechanisms, like BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES and
+> those listed at http://nightly.buildroot.org/manual.html#outside-br-custom.
+
+ Yes, if you can start from an existing in-kernel defconfig, that can be handy.
+The problem with the fragment files, unfortunately, is that it is not easy to
+update them. You have to run "make linux-update-defconfig" and split the changes
+over the different fragments... AFAIK no Kconfig fragment extractor tool exists.
 
  Regards,
  Arnout
 
-[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
