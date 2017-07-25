@@ -1,103 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:25:35 +0200
-Subject: [Buildroot] [git commit] package/leptonica: bump version to 1.74.4
-Message-ID: <20170725202212.8DD8181DE8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Jul 2017 22:34:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/joe: bump version to 4.4
+In-Reply-To: <1nkk4ex84b.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Tue, 25 Jul 2017 22:02:09 +0200")
+References: <20170724182544.31732-1-bernd.kuhls@t-online.de>
+ <87pocozjr2.fsf@dell.be.48ers.dk>
+ <1nkk4ex84b.ln2@ID-313208.user.individual.net>
+Message-ID: <87d18oz25p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24d828b25ad6963d30948ad73b1f81a29d4cb7bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Removed patch 0001, not needed anymore after
-https://github.com/DanBloomberg/leptonica/commit/4476d162cc191a0fefb2ce434153e12bbf188664
-fixes the problem in a similar way.
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch | 42 ----------------------
- package/leptonica/leptonica.hash                   |  2 +-
- package/leptonica/leptonica.mk                     |  7 +---
- 3 files changed, 2 insertions(+), 49 deletions(-)
+ > Ah, now I see the difference, BR2_PACKAGE_JOE_FULL has "default y" and 
+ > was part of my defconfig. When deactivating BR2_PACKAGE_JOE_FULL I can 
+ > reproduce the error, sent v2.
 
-diff --git a/package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch b/package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
-deleted file mode 100644
-index 5b48341..0000000
---- a/package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 40427bd4ec62fe12e6dc3a8cc61b9d644be98c96 Mon Sep 17 00:00:00 2001
--From: Gilles Talis <gilles.talis@gmail.com>
--Date: Sun, 26 Mar 2017 10:18:22 +0200
--Subject: [PATCH] configure.ac: Use PKG_CHECK_MODULES to check libtiff
-- availability
--
--When built statically, leptonica is not able to find specified
--libtiff function that will determine whether library is available
--or not.
--Using PKG_CHECK_MODULES fixes the issue.
--
--Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-----
-- configure.ac | 11 +++++------
-- 1 file changed, 5 insertions(+), 6 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index e64cde6..52a9e0e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -66,13 +66,12 @@ AS_IF([test "x$with_giflib" != xno],
-- 
-- AM_CONDITIONAL([HAVE_LIBGIF], [test "x$ac_cv_lib_gif_DGifOpenFileHandle" = xyes])
-- 
---AS_IF([test "x$with_libtiff" != xno],
---  AC_CHECK_LIB([tiff], [TIFFOpen],
---    AC_DEFINE([HAVE_LIBTIFF], 1, [Define to 1 if you have libtiff.]) AC_SUBST([LIBTIFF_LIBS], [-ltiff]),
---    AS_IF([test "x$with_libtiff" = xyes], AC_MSG_ERROR([libtiff support requested but library not found])),
---    ${LIBM} ${ZLIB_LIBS} ${JPEG_LIBS}
--+if test "x$with_libtiff" != xno; then
--+  PKG_CHECK_MODULES([LIBTIFF], [libtiff-4],
--+    AC_DEFINE([HAVE_LIBTIFF], 1, [Define to 1 if you have libtiff.]),
--+    AS_IF([test "x$with_libtiff" = xyes], AC_MSG_ERROR([libtiff support requested but library not found]))
--   )
---)
--+fi
-- 
-- AS_IF([test "x$with_libwebp" != xno],
--   AC_CHECK_LIB([webp], [WebPGetInfo],
---- 
--2.5.0
--
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-index 48da06b..f67f2b8 100644
---- a/package/leptonica/leptonica.hash
-+++ b/package/leptonica/leptonica.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 746a517a47a3bd2a90bc8d581ca6464c10f30e91a60209735efe45b3778bec62  leptonica-1.74.1.tar.gz
-+sha256 29c35426a416bf454413c6fec24c24a0b633e26144a17e98351b6dffaa4a833b  leptonica-1.74.4.tar.gz
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-index 11680e1..6a958a3 100644
---- a/package/leptonica/leptonica.mk
-+++ b/package/leptonica/leptonica.mk
-@@ -4,16 +4,11 @@
- #
- ################################################################################
- 
--LEPTONICA_VERSION = 1.74.1
-+LEPTONICA_VERSION = 1.74.4
- LEPTONICA_SITE = http://www.leptonica.org/source
- LEPTONICA_LICENSE = BSD-2-Clause
- LEPTONICA_LICENSE_FILES = leptonica-license.txt
- LEPTONICA_INSTALL_STAGING = YES
--
--# we patch configure.ac
--LEPTONICA_AUTORECONF = YES
--
--# PKG_CHECK_MODULES() is used in configure.ac patch
- LEPTONICA_DEPENDENCIES = host-pkgconf
- 
- LEPTONICA_CONF_OPTS += --disable-programs
+Ok, thanks.
+
+ >> I'm not quite sure why we use a custom install step instead of just make
+ >> install. This is what joe installs:
+
+ > "make install" installs everything while custom JOE_INSTALL_TARGET_CMDS 
+ > only installs the binary when BR2_PACKAGE_JOE_FULL is disabled.
+
+Ahh yes.
+
+-- 
+Bye, Peter Korsgaard
