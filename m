@@ -1,58 +1,188 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Jul 2017 23:14:28 +0200
-Subject: [Buildroot] [PATCH 07/14 v4] package/skeleton-common: simplify
-	staging install
+Date: Tue, 25 Jul 2017 23:14:29 +0200
+Subject: [Buildroot] [PATCH 08/14 v4] package/skeleton: introduce sysv- and
+	systemd-specific skeletons
 In-Reply-To: <cover.1501017251.git.yann.morin.1998@free.fr>
 References: <cover.1501017251.git.yann.morin.1998@free.fr>
-Message-ID: <4ee2c2678c18a8b38ac882f3ea7d64d78b91578e.1501017251.git.yann.morin.1998@free.fr>
+Message-ID: <dad75fa56bd1adae1c727a8fcf393639f74c5bbf.1501017251.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't really care what's going in staging, as long as it is properly
-setup for merged/non-merged /usr, especially for the lib/ directory.
+Currently, we use the same skeleton for sysv-like init systems and
+systemd, even though systemd has some peculiarities that makes out
+default skeleton unfit.
 
-So we can just copy the skeleton as-is.
+So, we'll need to provide different skeletons (really, only part of it)
+for sysv-like and systemd.
 
-This simplify the maintenance, should we ever need to tweak the layout:
-we'd just have to do it once in the skeleton directory to have it
-propagated to both target and staging.
+Introduce two new skeleton packages, aptly named skeleton-sysv and
+skeleton-systemd, one for each, that are both providers of the skeleton
+package, in lieue of the skeleton-common, which is now a simple
+dependency of both the two new skeletons.
+
+Those packages are empty for now. In followup changes:
+  - sysv-specific stuff will be moved out of skeleton-common and into
+    skeleton-sysv;
+  - systemd-specific stuff will be added to skeleton-systemd.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/skeleton-common/skeleton-common.mk | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ package/Config.in                            |  2 ++
+ package/skeleton-common/Config.in            |  4 ----
+ package/skeleton-common/skeleton-common.mk   |  2 --
+ package/skeleton-systemd/Config.in           |  7 +++++++
+ package/skeleton-systemd/skeleton-systemd.mk | 18 ++++++++++++++++++
+ package/skeleton-sysv/Config.in              |  7 +++++++
+ package/skeleton-sysv/skeleton-sysv.mk       | 18 ++++++++++++++++++
+ system/Config.in                             | 10 ++++++----
+ 8 files changed, 58 insertions(+), 10 deletions(-)
+ create mode 100644 package/skeleton-systemd/Config.in
+ create mode 100644 package/skeleton-systemd/skeleton-systemd.mk
+ create mode 100644 package/skeleton-sysv/Config.in
+ create mode 100644 package/skeleton-sysv/skeleton-sysv.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 8a67e86d7e..390477072d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -4,6 +4,8 @@ menu "Target packages"
+ 	source "package/skeleton/Config.in"
+ 	source "package/skeleton-common/Config.in"
+ 	source "package/skeleton-custom/Config.in"
++	source "package/skeleton-systemd/Config.in"
++	source "package/skeleton-sysv/Config.in"
+ 
+ menu "Audio and video applications"
+ 	source "package/alsa-utils/Config.in"
+diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
+index 5675e873cf..9abed4292a 100644
+--- a/package/skeleton-common/Config.in
++++ b/package/skeleton-common/Config.in
+@@ -1,6 +1,2 @@
+ config BR2_PACKAGE_SKELETON_COMMON
+ 	bool
+-	select BR2_PACKAGE_HAS_SKELETON
+-
+-config BR2_PACKAGE_PROVIDES_SKELETON
+-	default "skeleton-common" if BR2_PACKAGE_SKELETON_COMMON
 diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
-index ee44eaf810..475c07e32d 100644
+index 475c07e32d..57cee48931 100644
 --- a/package/skeleton-common/skeleton-common.mk
 +++ b/package/skeleton-common/skeleton-common.mk
-@@ -26,18 +26,14 @@ define SKELETON_COMMON_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR_WARNING_FILE)
- endef
+@@ -11,8 +11,6 @@
+ SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
+ SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
  
--# For the staging dir, we don't really care about /bin and /sbin.
--# But for consistency with the target dir, and to simplify the code,
--# we still handle them for the merged or non-merged /usr cases.
--# Since the toolchain is not yet available, the staging is not yet
--# populated, so we need to create the directories in /usr
-+# We don't care much about what goes in staging, as long as it is
-+# correctly setup for merged/non-merged /usr. The simplest is to
-+# fill it in with the content of the skeleton.
- define SKELETON_COMMON_INSTALL_STAGING_CMDS
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
-+	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
- 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
- endef
+-SKELETON_COMMON_PROVIDES = skeleton
+-
+ # The skeleton also handles the merged /usr case in the sysroot
+ SKELETON_COMMON_INSTALL_STAGING = YES
  
- SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+diff --git a/package/skeleton-systemd/Config.in b/package/skeleton-systemd/Config.in
+new file mode 100644
+index 0000000000..c507264598
+--- /dev/null
++++ b/package/skeleton-systemd/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SKELETON_SYSTEMD
++	bool
++	select BR2_PACKAGE_HAS_SKELETON
++	select BR2_PACKAGE_SKELETON_COMMON
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
+diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+new file mode 100644
+index 0000000000..cec6359007
+--- /dev/null
++++ b/package/skeleton-systemd/skeleton-systemd.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# skeleton-systemd
++#
++################################################################################
++
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_SYSTEMD_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
++
++SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
++
++SKELETON_SYSTEMD_PROVIDES = skeleton
++
++$(eval $(generic-package))
+diff --git a/package/skeleton-sysv/Config.in b/package/skeleton-sysv/Config.in
+new file mode 100644
+index 0000000000..2f6dbd9673
+--- /dev/null
++++ b/package/skeleton-sysv/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SKELETON_SYSV
++	bool
++	select BR2_PACKAGE_HAS_SKELETON
++	select BR2_PACKAGE_SKELETON_COMMON
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	default "skeleton-sysv" if BR2_PACKAGE_SKELETON_SYSV
+diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
+new file mode 100644
+index 0000000000..b0c2b6bac1
+--- /dev/null
++++ b/package/skeleton-sysv/skeleton-sysv.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# skeleton-sysv
++#
++################################################################################
++
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_SYSV_ADD_SKELETON_DEPENDENCY = NO
++
++SKELETON_SYSV_DEPENDENCIES = skeleton-common
++
++SKELETON_SYSV_PROVIDES = skeleton
++
++$(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index 75b6a8edac..65139c0bfd 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -1,9 +1,9 @@
+ menu "System configuration"
+ 
+ # Note: usually, it is not possible to select a provider of a virtual
+-# package. But here we have an exception: there are only two providers
+-# and they only get selected each by separate entries in this choice.
+-# So this is a safe situation.
++# package. But here we have an exception: there are only three providers
++# and they only get selected by separate entries in this choice and
++# under different, exclusive conditions. So this is a safe situation.
+ choice
+ 	prompt "Root FS skeleton"
+ 
+@@ -12,7 +12,9 @@ choice
+ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	bool "default target skeleton"
+ 	depends on !BR2_INIT_NONE
+-	select BR2_PACKAGE_SKELETON_COMMON
++	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
++	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
++	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
+ 	help
+ 	  Use default target skeleton
+ 
 -- 
 2.11.0
