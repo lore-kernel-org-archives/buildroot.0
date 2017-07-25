@@ -1,76 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jul 2017 23:53:25 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] package/heimdal: security
-	bump to version 7.4.0
-Message-ID: <20170725222212.04D3981D5C@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:55:05 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] bind: bump version to
+	bugfix release 9.11.1-P3
+Message-ID: <20170725222212.305C381D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=577cff321b5ad8e1a18633933aa74077158a3cd9
+commit: https://git.buildroot.net/buildroot/commit/?id=d87d0ce1af62d0fd1f2ed0e9cafb27a2a1d19c5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes security bugs CVE-2017-11103 & CVE-2017-6594
+BIND 9.11.1-P3 addresses a TSIG regression introduced in the 9.11.1-P2
+security bump:
 
-Changed upstream tarball location as noted in the release notes:
-http://www.h5l.org/releases.html?show=7.4.0
+https://lists.isc.org/pipermail/bind-announce/2017-July/001057.html
 
---with-db-type-preference= is needed to fix a build error:
+Also add a hash for the license file while we're at it.
 
-  CCLD     otp
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_get_internal':
-otp_db.c:(.text+0x32): undefined reference to `__roken_dbm_fetch'
-otp_db.c:(.text+0xd9): undefined reference to `__roken_dbm_store'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_open':
-otp_db.c:(.text+0x1c9): undefined reference to `__roken_dbm_open'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_close':
-otp_db.c:(.text+0x205): undefined reference to `__roken_dbm_close'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_delete':
-otp_db.c:(.text+0x23e): undefined reference to `__roken_dbm_delete'
-../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_put':
-otp_db.c:(.text+0x388): undefined reference to `__roken_dbm_store'
-collect2: error: ld returned 1 exit status
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 02770ce47d6c358c959410e87c5218170d2e08e7)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit c237f1d1c5447af3b967304d7929cf115ea1aa5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heimdal/heimdal.hash | 4 ++--
- package/heimdal/heimdal.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/bind/bind.hash | 5 +++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
-index 12770e1..a0e0f3f 100644
---- a/package/heimdal/heimdal.hash
-+++ b/package/heimdal/heimdal.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	cee58ab3a4ce79f243a3e73f465dac19fe2b93ef1c5ff244d6f1d689fedbde2d	heimdal-7.1.0.tar.gz
-+# Locally calculated
-+sha256 3de14ecd36ad21c1694a13da347512b047f4010d176fe412820664cb5d1429ad  heimdal-7.4.0.tar.gz
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index d819731..83f9db4 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 5dd15cb..3a631de 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,3 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
+-sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
++sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
++sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index fd5369a..988f40e 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HEIMDAL_VERSION = 7.1.0
--HEIMDAL_SITE = http://www.h5l.org/dist/src
-+HEIMDAL_VERSION = 7.4.0
-+HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
- HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
- HEIMDAL_INSTALL_STAGING = YES
- HEIMDAL_MAKE = $(MAKE1)
-@@ -15,6 +15,7 @@ HOST_HEIMDAL_CONF_OPTS = \
- 	--enable-static \
- 	--without-openldap \
- 	--without-capng \
-+	--with-db-type-preference= \
- 	--without-sqlite3 \
- 	--without-libintl \
- 	--without-openssl \
+-BIND_VERSION = 9.11.1-P2
++BIND_VERSION = 9.11.1-P3
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
