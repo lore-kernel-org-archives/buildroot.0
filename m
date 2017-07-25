@@ -1,90 +1,68 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 25 Jul 2017 09:26:51 -0700
-Subject: [Buildroot] [PATCH v3] zstd: add new package
-In-Reply-To: <20170725084853.55xc6n3bro72qt5y@tarshish>
-References: <20170725000700.19035-1-andrew.smirnov@gmail.com>
- <20170725084853.55xc6n3bro72qt5y@tarshish>
-Message-ID: <CAHQ1cqGg+sNTDs4URksfz4yNe1Mc5VwSEirPVkin-bOAkj6--Q@mail.gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Tue, 25 Jul 2017 13:47:49 -0300
+Subject: [Buildroot] [PATCH] configs/warp7: Bump U-Boot and kernel versions
+Message-ID: <1501001269-2452-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 25, 2017 at 1:48 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Andrey,
->
-> On Mon, Jul 24, 2017 at 05:07:00PM -0700, Andrey Smirnov wrote:
->
-> [...]
->
->> diff --git a/package/zstd/Config.in b/package/zstd/Config.in
->> new file mode 100644
->> index 0000000000..0e97c64e0a
->> --- /dev/null
->> +++ b/package/zstd/Config.in
->> @@ -0,0 +1,13 @@
->> +menuconfig BR2_PACKAGE_ZSTD
->> +     bool "zstd"
->> +     help
->> +       Zstandard, or zstd as short version, is a fast lossless
->> +       compression algorithm, targeting real-time compression
->> +       scenarios at zlib-level and better compression ratios
->> +
->> +       For more info see https://facebook.github.io/zstd
->
-> The homepage link should come below ...
->
+From: Fabio Estevam <festevam@gmail.com>
 
-OK, will fix in v4.
+Bump U-Boot to 2017.07 and kernel to version 4.12.3.
 
->> +
->> +       The selection of other packages will enable some features:
->> +
->> +       - xz, lz4 and/or zlib will enable support for corresponding
->> +         compression formats
->> \ No newline at end of file
->
-> ... here. It should be in a separate like that contains only the URL.
->
->> diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
->> new file mode 100644
->> index 0000000000..d09e6b46f4
->> --- /dev/null
->> +++ b/package/zstd/zstd.hash
->> @@ -0,0 +1,3 @@
->> +# Locally computed
->> +sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
->
-> Please add hashes for the license files.
->
+As imx_v6_v7_defconfig in 4.12 selects CONFIG_CFG80211_WEXT=y,
+remove the linux.fragment file.
 
-OK. Will add in v4.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ board/warp7/linux.fragment | 1 -
+ configs/warp7_defconfig    | 9 ++++-----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+ delete mode 100644 board/warp7/linux.fragment
 
->> +
->> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
->> new file mode 100644
->> index 0000000000..ad26bae6fd
->> --- /dev/null
->> +++ b/package/zstd/zstd.mk
->> @@ -0,0 +1,49 @@
->> +################################################################################
->> +#
->> +# zstd
->> +#
->> +################################################################################
->> +
->> +ZSTD_VERSION = v1.3.0
->> +ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
->> +ZSTD_LICENSE = BSD-3-Clause
->
-> Maybe also mention the Facebook patents grant? I'm not sure about that because
-> it is not strictly a code license, AFAIK, but it is related to "legal info".
->
-
-I am more than happy to add that, but I am not sure what it should
-look like. If we decide we should do that, please give me an example
-of what's expected.
-
-Thanks,
-Andrey Smirnov
+diff --git a/board/warp7/linux.fragment b/board/warp7/linux.fragment
+deleted file mode 100644
+index 892d0cb..0000000
+--- a/board/warp7/linux.fragment
++++ /dev/null
+@@ -1 +0,0 @@
+-CONFIG_CFG80211_WEXT=y
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index c18a782..7de4bb5 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,9 +15,8 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/warp7/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ 
+@@ -25,7 +24,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # wifi firmware for brcm43430
+-- 
+2.7.4
