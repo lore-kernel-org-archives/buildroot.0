@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:23:02 +0200
-Subject: [Buildroot] [PATCH 1/1] paxtest: use RUNDIR
-In-Reply-To: <1500774783-21428-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1500774783-21428-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170725222302.7dfa32c6@windsurf.home>
+Date: Tue, 25 Jul 2017 22:24:58 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: add --repo option
+In-Reply-To: <20170717212859.12581-1-arnout@mind.be>
+References: <20170717212859.12581-1-arnout@mind.be>
+Message-ID: <20170725222458.53c4992b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Jul 2017 20:53:03 -0500, Matt Weber wrote:
-> RUNDIR installs the test applications and shared libraries
-> into a different folder then /usr/lib.  This is desired as
-> there are a lot of test apps which would get installed into
-> /usr/lib without organization.  Instead, set RUNDIR=/usr/lib/paxtest
-> to install the test apps and libraries in a sub folder.
-> The genpaxtest script accounts for this path and handles
-> a LD_LIBRARY_PATH update as part of the paxtest script's exeuction.
+On Mon, 17 Jul 2017 23:28:59 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> This option allows to specify which Buildroot git repository to clone.
+> This can be useful in several situations:
+> - to use a different mirror in case you don't have a good connection to
+>   github;
+> - for debugging this script;
+> - to point to a local, patched repository you want to test.
 > 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Note that the clone/pull will use the currently checked out branch of
+> the repository if it is non-bare, which is ideal for testing.
+> 
+> Since switching repositories may also switch branches, we use a git
+> fetch/checkout sequence instead of doing a git pull. With git pull, the
+> branches would be merged instead of switched. To avoid polluting the
+> log with the long git message about a detached head, while still
+> getting some useful output from git, pass the --detach option to
+> git checkout.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  package/paxtest/paxtest.mk | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> Ideally the contents of this commit message would be put somewhere as
+> documentation, but I couldn't find a good spot for it.
+> ---
+>  scripts/autobuild-run | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Applied to buildroot-test, thanks.
 
 Thomas
 -- 
