@@ -1,311 +1,103 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Jul 2017 23:14:32 +0200
-Subject: [Buildroot] [PATCH 11/14 v4] support/testing: add runtime testing
-	for init systems
+Date: Tue, 25 Jul 2017 23:14:33 +0200
+Subject: [Buildroot] [PATCH 12/14 v4] fs: add pre- and post-command hooks
 In-Reply-To: <cover.1501017251.git.yann.morin.1998@free.fr>
 References: <cover.1501017251.git.yann.morin.1998@free.fr>
-Message-ID: <d81db99852ba3ff9587ec9adc37657b5d2c3d41a.1501017251.git.yann.morin.1998@free.fr>
+Message-ID: <ae657e5988933fd18eb4887c37ab8f9199cf2f05.1501017251.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The "builtin" kernel does not boot a systemd-based system, so
-we resort to building the same one as currently used by our
-qemu_arm_vexpress_defconfig.
+In some cases, the directory structure we want in the filesystem is not
+exactly what we have in target/
 
-We test the 8 following combinations:
+For example, when systemd is used on a read-only rootfs, /var must be a
+tmpfs. However, we may have packages that install stuff in there, and
+set important rights (via the permission-table). So, at build time, we
+need /var to be a symlink to the remanent location (/usr/share/factory)
+while at runtime we need /var to be a directory.
 
-  - busybox, read-only, without network
-  - busybox, read-only, with network
-  - busybox, read-write, without network
-  - busybox, read-write, with network
+One option would have seen to have /var as a real directory even during
+build time, and in a target-finalize hook, move everything out of there
+and into the "factory" location. However, that's not possible because
+it's too early: some packages may want to set ownership and/or acces
+rights on directories or files in /var, and this is only done in the
+fakeroot script, which is called only later during the assembling of the
+filesystem images.
 
-  - basic systemd, read-write, network w/ ifupdown
-  - basic systemd, read-write, network w/ networkd
-  - full systemd, read-write, network w/ networkd
+Also, there would have been no way to undo the tweak (i.e. we need to
+restore the /var symlink so that subsequent builds continue to work) if
+it were done as a target-finalize hook.
 
-  - no init system, read-only, without network
+The only solution is to allow packages to register pre- and post-hooks
+that are called right before and right after the rootfs commands are
+executed, and inside in the fakeroot script.
 
-The tests just verify what the /sbin/init binary is, and that we were
-able to grab an IP address. More tests can be added later, for example
-to check each systemd features (journal, tmpfiles...)
+We can however not re-use the BR2_ROOTFS_POST_FAKEROOT_SCRIPT feature
+either because it is done before the filesystem command, but there is
+nothing that is done after. Also, we don't want to add to, and modify a
+user-supplied variable.
+
+So, we introduce two new variables that packages can set to add the
+commands they need to run to tweak the filesystem right at the last
+moment.
+
+Those hooks are not documented on-purpose; they are probably going to
+only ever be used by systemd.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 ---
-Changes v3 -> v4:
-  - drop the systemd read-only tests for now, we do not support it yet.
+Changes v2 -> v3:
+  - add space between >> and $$   (Romain)
 ---
- support/testing/tests/init/__init__.py     |  0
- support/testing/tests/init/base.py         | 47 +++++++++++++++++
- support/testing/tests/init/test_busybox.py | 67 ++++++++++++++++++++++++
- support/testing/tests/init/test_none.py    | 32 ++++++++++++
- support/testing/tests/init/test_systemd.py | 82 ++++++++++++++++++++++++++++++
- 5 files changed, 228 insertions(+)
- create mode 100644 support/testing/tests/init/__init__.py
- create mode 100644 support/testing/tests/init/base.py
- create mode 100644 support/testing/tests/init/test_busybox.py
- create mode 100644 support/testing/tests/init/test_none.py
- create mode 100644 support/testing/tests/init/test_systemd.py
+ fs/common.mk           | 4 ++++
+ package/pkg-generic.mk | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/support/testing/tests/init/__init__.py b/support/testing/tests/init/__init__.py
-new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
-new file mode 100644
-index 0000000000..a261d7dd46
---- /dev/null
-+++ b/support/testing/tests/init/base.py
-@@ -0,0 +1,47 @@
-+import os
-+import subprocess
-+import infra.basetest
-+
-+class InitSystemBase(infra.basetest.BRTest):
-+
-+    def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
-+        img = os.path.join(self.builddir, "images", "rootfs.{}".format(fs_type))
-+        subprocess.call(["truncate", "-s", "%1M", img])
-+
-+        options = ["-drive",
-+                   "file={},if=sd,format=raw".format(img),
-+                   "-M", "vexpress-a9"]
-+
-+        if kernel is None:
-+            kernel = "builtin"
-+        else:
-+            kernel = os.path.join(self.builddir, "images", kernel)
-+            options.extend(["-dtb", os.path.join(self.builddir, "images",
-+                                             "{}.dtb".format(dtb))])
-+
-+        kernel_cmdline = ["root=/dev/mmcblk0",
-+                          "rootfstype={}".format(fs_type),
-+                          "rootwait",
-+                          "ro",
-+                          "console=ttyAMA0"]
-+
-+        if not init is None:
-+            kernel_cmdline.extend(["init={}".format(init)])
-+
-+        self.emulator.boot(arch="armv7",
-+                           kernel=kernel,
-+                           kernel_cmdline=kernel_cmdline,
-+                           options=options)
-+
-+        if init is None:
-+            self.emulator.login()
-+
-+    def checkInit(self, path):
-+        cmd = "cmp /proc/1/exe {}".format(path)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+    def checkNetwork(self, interface, exitCode=0):
-+        cmd = "ip addr show {} |grep inet".format(interface)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, exitCode)
-diff --git a/support/testing/tests/init/test_busybox.py b/support/testing/tests/init/test_busybox.py
-new file mode 100644
-index 0000000000..c3e425bf5d
---- /dev/null
-+++ b/support/testing/tests/init/test_busybox.py
-@@ -0,0 +1,67 @@
-+import infra.basetest
-+from tests.init.base import InitSystemBase as InitSystemBase
-+
-+class InitSystemBusyboxBase(InitSystemBase):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def checkInit(self):
-+        super(InitSystemBusyboxBase, self).checkInit("/bin/busybox")
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemBusyboxRo(InitSystemBusyboxBase):
-+    config = InitSystemBusyboxBase.config + \
-+        """
-+        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+        BR2_TARGET_ROOTFS_SQUASHFS=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("squashfs")
-+        self.checkInit()
-+        self.checkNetwork("eth0", 1)
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemBusyboxRw(InitSystemBusyboxBase):
-+    config = InitSystemBusyboxBase.config + \
-+        """
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("ext2")
-+        self.checkInit()
-+        self.checkNetwork("eth0", 1)
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemBusyboxRoNet(InitSystemBusyboxBase):
-+    config = InitSystemBusyboxBase.config + \
-+        """
-+        BR2_SYSTEM_DHCP="eth0"
-+        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+        BR2_TARGET_ROOTFS_SQUASHFS=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("squashfs")
-+        self.checkInit()
-+        self.checkNetwork("eth0")
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemBusyboxRwNet(InitSystemBusyboxBase):
-+    config = InitSystemBusyboxBase.config + \
-+        """
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("ext2")
-+        self.checkInit()
-+        self.checkNetwork("eth0")
-diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
-new file mode 100644
-index 0000000000..f55db5d3e0
---- /dev/null
-+++ b/support/testing/tests/init/test_none.py
-@@ -0,0 +1,32 @@
-+import pexpect
-+
-+import infra.basetest
-+from tests.init.base import InitSystemBase as InitSystemBase
-+
-+class TestInitSystemNone(InitSystemBase):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_INIT_NONE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_TARGET_ROOTFS_SQUASHFS=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator(fs_type="squashfs", init="/bin/sh")
-+        index = self.emulator.qemu.expect(["/bin/sh: can't access tty; job control turned off", pexpect.TIMEOUT], timeout=60)
-+        if index != 0:
-+            self.emulator.logfile.write("==> System does not boot")
-+            raise SystemError("System does not boot")
-+        index = self.emulator.qemu.expect(["#", pexpect.TIMEOUT], timeout=60)
-+        if index != 0:
-+            self.emulator.logfile.write("==> System does not boot")
-+            raise SystemError("System does not boot")
-+
-+        out, exit_code = self.emulator.run("sh -c 'echo $PPID'")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "1")
-+
-+        _, exit_code = self.emulator.run("mount -t proc none /proc")
-+        self.assertEqual(exit_code, 0)
-+
-+        self.checkInit("/bin/sh")
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-new file mode 100644
-index 0000000000..7a80aa1145
---- /dev/null
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -0,0 +1,82 @@
-+import infra.basetest
-+from tests.init.base import InitSystemBase as InitSystemBase
-+
-+class InitSystemSystemdBase(InitSystemBase):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_INIT_SYSTEMD=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def checkInit(self):
-+        super(InitSystemSystemdBase, self).checkInit("/lib/systemd/systemd")
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
-+    config = InitSystemSystemdBase.config + \
-+        """
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
-+        self.checkInit()
-+        self.checkNetwork("eth0")
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-+    config = InitSystemSystemdBase.config + \
-+        """
-+        BR2_SYSTEM_DHCP="eth0"
-+        # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
-+        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
-+        self.checkInit()
-+        self.checkNetwork("eth0")
-+
-+
-+#-------------------------------------------------------------------------------
-+class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
-+    config = InitSystemSystemdBase.config + \
-+        """
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
-+        BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
-+        BR2_PACKAGE_SYSTEMD_BINFMT=y
-+        BR2_PACKAGE_SYSTEMD_COREDUMP=y
-+        BR2_PACKAGE_SYSTEMD_FIRSTBOOT=y
-+        BR2_PACKAGE_SYSTEMD_HIBERNATE=y
-+        BR2_PACKAGE_SYSTEMD_IMPORTD=y
-+        BR2_PACKAGE_SYSTEMD_LOCALED=y
-+        BR2_PACKAGE_SYSTEMD_LOGIND=y
-+        BR2_PACKAGE_SYSTEMD_MACHINED=y
-+        BR2_PACKAGE_SYSTEMD_POLKIT=y
-+        BR2_PACKAGE_SYSTEMD_QUOTACHECK=y
-+        BR2_PACKAGE_SYSTEMD_RANDOMSEED=y
-+        BR2_PACKAGE_SYSTEMD_RFKILL=y
-+        BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT=y
-+        BR2_PACKAGE_SYSTEMD_SYSUSERS=y
-+        BR2_PACKAGE_SYSTEMD_VCONSOLE=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        """
-+
-+    def test_run(self):
-+        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
-+        self.checkInit()
-+        self.checkNetwork("eth0")
+diff --git a/fs/common.mk b/fs/common.mk
+index 14e0a6b868..9a7758ff49 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -95,10 +95,14 @@ endif
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
++	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
+ ifeq ($$(BR2_REPRODUCIBLE),y)
+ 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
+ endif
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
++	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 130fd67560..90bd8517f9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -612,6 +612,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+ $(2)_POST_LEGAL_INFO_HOOKS      ?=
+ $(2)_TARGET_FINALIZE_HOOKS      ?=
++$(2)_ROOTFS_PRE_CMD_HOOKS       ?=
++$(2)_ROOTFS_POST_CMD_HOOKS      ?=
+ 
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -931,6 +933,8 @@ ifneq ($$($(2)_USERS),)
+ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
++ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
++ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
 2.11.0
