@@ -1,68 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 20:44:27 +0200
-Subject: [Buildroot] [git commit] configs/warp7: Bump U-Boot and kernel
-	versions
-Message-ID: <20170725184018.6422F8215C@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 20:45:00 +0200
+Subject: [Buildroot] [git commit] mariadb: bump version to 10.1.25
+Message-ID: <20170725184050.D2FCB81D56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4ceb3e0783b98ec12f4ab4f73842ea3a9ce2148
+commit: https://git.buildroot.net/buildroot/commit/?id=5ec9bd15f7ef9c9e38e281be85377090d1d4f76e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2017.07 and kernel to version 4.12.3.
+release notes: https://mariadb.com/kb/en/mariadb-10125-release-notes/
+changelog: https://mariadb.com/kb/en/mariadb-10125-changelog/
 
-As imx_v6_v7_defconfig in 4.12 selects CONFIG_CFG80211_WEXT=y,
-remove the linux.fragment file.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/warp7/linux.fragment | 1 -
- configs/warp7_defconfig    | 9 ++++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/mariadb/mariadb.hash | 8 ++++++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/board/warp7/linux.fragment b/board/warp7/linux.fragment
-deleted file mode 100644
-index 892d0cb..0000000
---- a/board/warp7/linux.fragment
-+++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_CFG80211_WEXT=y
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index c18a782..7de4bb5 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 580fe98..4ef3551 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,2 +1,6 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.23/
+-sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.25/
++sha256 7205ecaa6f1bc16335ad88faa5c46be52b3ac628a5e795cb942a3f4335b2a0d6  mariadb-10.1.25.tar.gz
++
++# Hash for license files
++sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 757352b..1d6c2bc 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.12 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -15,9 +15,8 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/warp7/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
- 
-@@ -25,7 +24,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # wifi firmware for brcm43430
+-MARIADB_VERSION = 10.1.23
++MARIADB_VERSION = 10.1.25
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
