@@ -1,53 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jul 2017 23:55:05 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] bind: bump version to
-	bugfix release 9.11.1-P3
-Message-ID: <20170725222212.305C381D5C@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:52:36 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/Makefile.in: add
+	host-cc-option macro
+Message-ID: <20170725222211.C99D681D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d87d0ce1af62d0fd1f2ed0e9cafb27a2a1d19c5d
+commit: https://git.buildroot.net/buildroot/commit/?id=b65e90afe3951bfeb50c6e472792c0ab7b246e63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-BIND 9.11.1-P3 addresses a TSIG regression introduced in the 9.11.1-P2
-security bump:
+This macro allows to test if HOSTCC supports a specific option. It is
+needed to pass '-no-pie' on recent Debian, Ubuntu and Gentoo hosts.
 
-https://lists.isc.org/pipermail/bind-announce/2017-July/001057.html
-
-Also add a hash for the license file while we're at it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c237f1d1c5447af3b967304d7929cf115ea1aa5d)
+(cherry picked from commit 91a08ecc998ae232ea6f3525540ed129d8176d18)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 5 +++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/Makefile.in | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 5dd15cb..3a631de 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,3 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
--sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
-+sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
-+sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index fd5369a..988f40e 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c1dc714..b32ad8e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -223,6 +223,27 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
  
--BIND_VERSION = 9.11.1-P2
-+BIND_VERSION = 9.11.1-P3
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
++# The macros below are taken from linux 4.11 and adapted slightly.
++# Copy more when needed.
++
++# try-run
++# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
++# Exit code chooses option. "$$TMP" is can be used as temporary file and
++# is automatically cleaned up.
++try-run = $(shell set -e;               \
++	TMP="$$(tempfile)";             \
++	if ($(1)) >/dev/null 2>&1;      \
++	then echo "$(2)";               \
++	else echo "$(3)";               \
++	fi;                             \
++	rm -f "$$TMP")
++
++# host-cc-option
++# Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
++host-cc-option = $(call try-run,\
++        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
++
++
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
+ # might get installed into $(HOST_DIR)/usr/bin and therefore appears
