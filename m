@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 20:45:07 +0200
-Subject: [Buildroot] [PATCH] configs/warp7: Bump U-Boot and kernel
- versions
-In-Reply-To: <1501001269-2452-1-git-send-email-fabio.estevam@nxp.com>
-References: <1501001269-2452-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20170725204507.0500ddb1@windsurf>
+Date: Tue, 25 Jul 2017 20:45:19 +0200
+Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.25
+In-Reply-To: <20170725140256.1941-1-bluemrp9@gmail.com>
+References: <20170725140256.1941-1-bluemrp9@gmail.com>
+Message-ID: <20170725204519.602a639b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Jul 2017 13:47:49 -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@gmail.com>
+On Tue, 25 Jul 2017 07:02:56 -0700, Ryan Coe wrote:
+> release notes: https://mariadb.com/kb/en/mariadb-10125-release-notes/
+> changelog: https://mariadb.com/kb/en/mariadb-10125-changelog/
 > 
-> Bump U-Boot to 2017.07 and kernel to version 4.12.3.
-> 
-> As imx_v6_v7_defconfig in 4.12 selects CONFIG_CFG80211_WEXT=y,
-> remove the linux.fragment file.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 > ---
->  board/warp7/linux.fragment | 1 -
->  configs/warp7_defconfig    | 9 ++++-----
->  2 files changed, 4 insertions(+), 6 deletions(-)
->  delete mode 100644 board/warp7/linux.fragment
+>  package/mariadb/mariadb.hash | 8 ++++++--
+>  package/mariadb/mariadb.mk   | 2 +-
+>  2 files changed, 7 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
