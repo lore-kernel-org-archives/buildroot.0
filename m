@@ -1,87 +1,102 @@
-From: vr roriz <v.r.roriz@gmail.com>
-Date: Tue, 25 Jul 2017 17:03:03 +0200
-Subject: [Buildroot] [.config file] Generating buildroot-like .config
- file from "linux-like" .config file
-In-Reply-To: <CAB_D2UzwSwa6SXs9fW1Eg-A+EziOEg58Daa=PXjtK2ZWs1q4Sw@mail.gmail.com>
-References: <CAB_D2Uz6n6zdA2C3_Pbx6uV39_Zs=J=VfLOzs0Mtfi-agUocKQ@mail.gmail.com>
- <20170725141319.lrbqod4juauli3dd@latitude>
- <CAB_D2UzwSwa6SXs9fW1Eg-A+EziOEg58Daa=PXjtK2ZWs1q4Sw@mail.gmail.com>
-Message-ID: <CAB_D2UwsHdCsfcOm2BZXrzW6AB12n+tqWkVj3KubbSpSnXPZvA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Jul 2017 18:07:26 +0200
+Subject: [Buildroot] [PATCH 19/20] system: make systemd work on a
+ read-only rootfs
+In-Reply-To: <a5838b47-f369-1f47-f74d-5741284fde51@mind.be>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <c74e8ad5fca764a23b9392af5cb83ecefb4a5817.1500398733.git.yann.morin.1998@free.fr>
+ <f137feaf-3cb1-4a9a-0331-d51bca014f50@mind.be>
+ <20170724154552.GC2918@scaer>
+ <a5838b47-f369-1f47-f74d-5741284fde51@mind.be>
+Message-ID: <20170725160726.GA2773@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I found a possible path for this procedure. On menuconfig, under Kernel
-config, I can define a custom config file (for the Kernel). Then I can save
-this "mirroring" with a savedefconfig. I will test.
+Arnout, All,
 
-Source:
-https://stackoverflow.com/questions/1414968/how-do-i-configure-the-linux-kernel-within-buildroot
+On 2017-07-25 00:44 +0200, Arnout Vandecappelle spake thusly:
+> On 24-07-17 17:45, Yann E. MORIN wrote:
+> > On 2017-07-24 00:18 +0200, Arnout Vandecappelle spake thusly:
+> >> On 18-07-17 19:25, Yann E. MORIN wrote:
+[--SNIP--]
+>  Thinking out of the box: can we make /var a symlink to /tmp/var, and avoid
+> creating a tmpfs on /var at all? Since /tmp/var doesn't exist, "C! /tmp/var"
+> should work, no? Or did that cause journald to bail out?
 
-Is that the way people usually do that?
+Worth a try, of course. But still we'd need hoks of some kind to allow
+package to install in /var at build time, and move that to factory at
+the end of the build, while still preserving the ability to be able to
+rebuild stuff without requiring a 'make clean'.
 
-BR,
+[--SNIP symlinks in /var--]
+>  There is unfortunately no way to fix this. If the package is smart, it does
+> calculates the relative path based on the real path of the source and
+> destination. If the package is stupid, it just assumes ../something. Whatever we
+> do, one of them will break... The only safe approach would be to put stuff in
+> /factory instead of /usr/share/factory.
 
-Vitor Roriz
+But that is not where systemd-tmpfiles will look at...
 
-2017-07-25 16:30 GMT+02:00 vr roriz <v.r.roriz@gmail.com>:
+Unless you meant we have /factory during the build, then move it at the
+moment we aggregaate the images, and move it back (moving the problem
+from handling /var to handling /factory instead) ?
 
-> Thanks for answering Mr. Neusch?fer,
->
-> I've got your point. Then, I would add to my original issue: Would you
-> have a suggestion about the best approach to mirror an existent .config
-> file (from Linux source tree), without having to keep scanning strings in
-> "make linux-menuconfig" and editing it manually? How do buildroot users
-> usually do that? I know I can redefine the defconfig file for the target
-> board after creating a .config file, but I am referring to the first-time
-> process.
->
-> BR,
-> Vitor Roriz
->
-> 2017-07-25 16:13 GMT+02:00 Jonathan Neusch?fer <j.neuschaefer@gmx.net>:
->
->> On Tue, Jul 25, 2017 at 11:28:08AM +0200, vr roriz wrote:
->> > Dear all,
->> >
->> > I'd like to know what is the best approach to generate a buildroot-like
->> > .config file (Using BR2) from an existent linux-like .config file. By
->> > linux-like I mean, the .config files with the native syntax, generated
->> by
->> > make menuconfig in the Linux Source Tree, like the ones that are
->> generated
->> > in the output dir of buildroot after building.
->>
->> Buildroot .config files and Linux .config files are not compatible
->> because they refer to completely different settings, but if you want to
->> convert the *syntax*, a simple sed command should do (in both directions):
->>
->>   $ sed -e 's/CONFIG_/BR2_/' .config
->>   #
->>   # Automatically generated file; DO NOT EDIT.
->>   # Linux/powerpc 4.11.8 Kernel Configuration
->>   #
->>   # BR2_PPC64 is not set
->>
->>   #
->>   # Processor support
->>   #
->>   BR2_PPC_BOOK3S_32=y
->>   # BR2_PPC_85xx is not set
->>   # BR2_PPC_8xx is not set
->>   # BR2_40x is not set
->>   # BR2_44x is not set
->>   # BR2_E200 is not set
->>   ...
->>
->>
->> I hope that helps,
->> Jonathan Neusch?fer
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170725/25adec72/attachment.html>
+[--SNIP--]
+> > Not really, because systemd-tmpfile will look in exactly the factory
+> > path to find the source of the copy/link. See the exerpt I pasted above.
+> > 
+> > So, given this entry, for example:
+> > 
+> >     C /var/foo - - - -
+> > 
+> > systemd-tmpfiles will see if it can find /usr/share/factory/foo not
+> > /usr/share/factory/var/foo
+> 
+>  Weird, the way I read both the man page and the source code seem to suggest
+> that "C /var/something" will copy from /usr/share/factory/var/something... But I
+> guess you tested that so I must be misreading the source code.
+
+And of course you are right.
+
+It just happened that my testing was borked because systemd (or one of
+its minions like journald) would create the required directory structure
+and files they need, so I did not see mine were not copied over. Now I
+have another test that does not use those "standard" files, and I'll add
+it to the testing infra.
+
+So yes, it should be /usr/share/factory/var/foo to populate /var/foo.
+
+Which led to another bug, which is that tmpfiles should be in
+/etc/tmpfiles.d/ and not in /etc/systemd/tmpfiles.d/
+
+I've now fixed that.
+
+However (thinking aloud now), I have another tentative to do, which
+instead of creating a symlink for /var at runtime, would just creat it
+as a direcotry as expected.
+
+Then the hooks would simply "mv /var /usr/share/factory/var; mkdir /var",
+create the tmpfiles entries, aggregate the image(s), the rm -rf /var; mv
+/usr/share/factory/var /var".
+
+This is probably much simpler than moving the entries one by one.
+
+The only drawback in this case would be a package that already creates a
+factory/var/foo entry. It would end up in /var/foo afterwards... :-/
+So I think the /var symlink is better, in fact, so I'll keep that.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
