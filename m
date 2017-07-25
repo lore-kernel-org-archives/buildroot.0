@@ -1,51 +1,216 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:09:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/ffmpeg: add
-	optional support for alsa-lib
-Message-ID: <20170725222142.4532581E9E@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 00:08:55 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/libtirpc:
+	security bump to version 1.0.2
+Message-ID: <20170725222142.36E0E81E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05f13baaf3557b3815de329aded5394054bea642
+commit: https://git.buildroot.net/buildroot/commit/?id=5fc13e3a2c32f6a987759801be8e49b2032a280e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-ffmpeg has optional support for alsa as input and/or output device:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=23823e3b7012d847b614bd43316fb614676bedb2;hb=refs/heads/release/3.3#l2987
+Fixes CVE-2017-8779:
+http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commitdiff;h=dd9c7cf4f8f375c6d641b760d124650c418c2ce3
 
-Problem was found while fixing
-http://autobuild.buildroot.net/results/7ba/7ba485532fcab74928246a8f95dba7e5eea9d4a5/
+Rebased patches 0001, 0002 & 0006.
+Removed patch 0007, applied upstream:
+http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=4f1503e84b2f7bd229a097335e52fb8203f5bb0b
+Renumbered patch 0008.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit ca06ba2d2a673cf750ac92a4e61e7cba037a339e)
+(cherry picked from commit 49a2bb396c95ba9ae66cd11fc175bb687449364c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |  6 ++-
+ ...upport-and-musl-does-not-install-rpcent.h.patch |  4 +-
+ ...0006-Disable-DES-authentification-support.patch | 12 ++---
+ ...d-missing-rwlock_unlocks-in-xprt_register.patch | 63 ----------------------
+ ...h => 0007-include-stdint.h-for-uintptr_t.patch} |  0
+ package/libtirpc/libtirpc.hash                     |  4 +-
+ package/libtirpc/libtirpc.mk                       |  2 +-
+ 7 files changed, 13 insertions(+), 78 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 6540d41..4494612 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -159,12 +159,18 @@ endif
+diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+index e51c5a4..eb1bef3 100644
+--- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
++++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+@@ -13,6 +13,8 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+ [peda at axentia.se: update for 1.0.1]
+ Signed-off-by: Peter Rosin <peda@axentia.se>
++[bernd.kuhls at t-online.de: update for 1.0.2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  src/Makefile.am | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
+@@ -25,8 +27,8 @@ index 6cc567a..9834f9a 100644
+          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+  	svc_auth_des.c \
+          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+--        auth_time.c auth_des.c authdes_prot.c debug.c
+-+        auth_des.c authdes_prot.c debug.c
++-        auth_time.c auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
+++        auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
+  
+  ## XDR
+  libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c xdr_sizeof.c
+diff --git a/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch b/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
+index 643a57e..51229a0 100644
+--- a/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
++++ b/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
+@@ -8,6 +8,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ [joerg.krause at embedded.rocks: musl fix]
+ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++[bernd.kuhls at t-online.de: update for 1.0.2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  tirpc/rpc/rpcent.h | 5 +++--
+  1 file changed, 3 insertions(+), 2 deletions(-)
+@@ -21,7 +23,7 @@ index 147f909..4a58180 100644
+  #endif
+  
+ -/* These are defined in /usr/include/rpc/netdb.h */
+--#if !defined(__GLIBC__)
++-#if !defined(__GLIBC__) || defined(__UCLIBC__)
+ +/* These are defined in /usr/include/rpc/netdb.h, unless we are using
+ +   the C library without RPC support. */
+ +#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_RPC__) || !defined(__GLIBC__)
+diff --git a/package/libtirpc/0006-Disable-DES-authentification-support.patch b/package/libtirpc/0006-Disable-DES-authentification-support.patch
+index 59a77ff..0c65472 100644
+--- a/package/libtirpc/0006-Disable-DES-authentification-support.patch
++++ b/package/libtirpc/0006-Disable-DES-authentification-support.patch
+@@ -11,6 +11,8 @@ uClibc and musl does not provide DES authentication.
+ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+ [peda at axentia.se: update for 1.0.1]
+ Signed-off-by: Peter Rosin <peda@axentia.se>
++[bernd.kuhls at t-online.de: update for 1.0.2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  src/Makefile.am |  2 +-
+  src/rpc_soc.c   | 32 --------------------------------
+@@ -26,7 +28,7 @@ index 960a522..3a88e31 100644
+          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+ -	svc_auth_des.c \
+          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+--        auth_des.c authdes_prot.c debug.c
++-        auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
+ +        debug.c
+  
+  ## XDR
+@@ -48,14 +50,6 @@ diff --git a/src/rpc_soc.c b/src/rpc_soc.c
+ index e146ed4..161a1ec 100644
+ --- a/src/rpc_soc.c
+ +++ b/src/rpc_soc.c
+-@@ -61,7 +61,6 @@ #ifdef PORTMAP
+- #include <string.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+--#include <rpcsvc/nis.h>
+- 
+- #include "rpc_com.h"
+- 
+ @@ -522,86 +521,6 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
+  }
+  
+diff --git a/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch b/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
+deleted file mode 100644
+index 56b5bf8..0000000
+--- a/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 4f1503e84b2f7bd229a097335e52fb8203f5bb0b Mon Sep 17 00:00:00 2001
+-From: Michael Forney <mforney@mforney.org>
+-Date: Wed, 4 Nov 2015 13:58:06 -0500
+-Subject: [PATCH] Add missing rwlock_unlocks in xprt_register
+-
+-It looks like in b2c9430f46c4ac848957fb8adaac176a3f6ac03f when svc_run
+-switched to poll, an early return was added, but the rwlock was not
+-unlocked.
+-
+-I observed that rpcbind built against libtirpc-1.0.1 would handle only
+-one request before hanging, and tracked it down to a missing
+-rwlock_unlock here.
+-
+-Fixes: b2c9430f46c4 ('Use poll() instead of select() in svc_run()')
+-Signed-off-by: Michael Forney <mforney@mforney.org>
+-Signed-off-by: Steve Dickson <steved@redhat.com>
+-[peda at axentia.se: backport from upstream]
+-Signed-off-by: Peter Rosin <peda@axentia.se>
+----
+- src/svc.c | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/svc.c b/src/svc.c
+-index 9c41445..b59467b 100644
+---- a/src/svc.c
+-+++ b/src/svc.c
+-@@ -99,7 +99,7 @@ xprt_register (xprt)
+-     {
+-       __svc_xports = (SVCXPRT **) calloc (_rpc_dtablesize(), sizeof (SVCXPRT *));
+-       if (__svc_xports == NULL)
+--	return;
+-+            goto unlock;
+-     }
+-   if (sock < _rpc_dtablesize())
+-     {
+-@@ -120,14 +120,14 @@ xprt_register (xprt)
+-             svc_pollfd[i].fd = sock;
+-             svc_pollfd[i].events = (POLLIN | POLLPRI |
+-                                     POLLRDNORM | POLLRDBAND);
+--            return;
+-+            goto unlock;
+-           }
+- 
+-       new_svc_pollfd = (struct pollfd *) realloc (svc_pollfd,
+-                                                   sizeof (struct pollfd)
+-                                                   * (svc_max_pollfd + 1));
+-       if (new_svc_pollfd == NULL) /* Out of memory */
+--        return;
+-+        goto unlock;
+-       svc_pollfd = new_svc_pollfd;
+-       ++svc_max_pollfd;
+- 
+-@@ -135,6 +135,7 @@ xprt_register (xprt)
+-       svc_pollfd[svc_max_pollfd - 1].events = (POLLIN | POLLPRI |
+-                                                POLLRDNORM | POLLRDBAND);
+-     }
+-+unlock:
+-   rwlock_unlock (&svc_fd_lock);
+- }
+- 
+--- 
+-2.5.3
+-
+diff --git a/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0007-include-stdint.h-for-uintptr_t.patch
+similarity index 100%
+rename from package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
+rename to package/libtirpc/0007-include-stdint.h-for-uintptr_t.patch
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+index cd65164..35ac6a2 100644
+--- a/package/libtirpc/libtirpc.hash
++++ b/package/libtirpc/libtirpc.hash
+@@ -1,4 +1,4 @@
+ # From sourceforge's info on download page:
+-sha1   8da1636f98b5909c0d587e7534bc1e91f5c1a970  libtirpc-1.0.1.tar.bz2
++sha1 2a8dc0e6eecc45be6597c8287b1d8e15cbee46e3  libtirpc-1.0.2.tar.bz2
+ # Locally computed
+-sha256 5156974f31be7ccbc8ab1de37c4739af6d9d42c87b1d5caf4835dda75fcbb89e  libtirpc-1.0.1.tar.bz2
++sha256 723c5ce92706cbb601a8db09110df1b4b69391643158f20ff587e20e7c5f90f5  libtirpc-1.0.2.tar.bz2
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 70a31ac..a11e49a 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_FFMPEG_INDEVS),y)
- FFMPEG_CONF_OPTS += --enable-indevs
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+FFMPEG_DEPENDENCIES += alsa-lib
-+endif
- else
- FFMPEG_CONF_OPTS += --disable-indevs
- endif
- 
- ifeq ($(BR2_PACKAGE_FFMPEG_OUTDEVS),y)
- FFMPEG_CONF_OPTS += --enable-outdevs
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+FFMPEG_DEPENDENCIES += alsa-lib
-+endif
- else
- FFMPEG_CONF_OPTS += --disable-outdevs
- endif
+-LIBTIRPC_VERSION = 1.0.1
++LIBTIRPC_VERSION = 1.0.2
+ LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+ LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+ LIBTIRPC_LICENSE = BSD-3c
