@@ -1,31 +1,27 @@
-From: Eli Arad <easp13@gmail.com>
-Date: Tue, 25 Jul 2017 13:35:21 +0300
-Subject: [Buildroot] beaglebone with buildroot not working
-Message-ID: <CAC3KuC7f8g_JZ5nJgrzP2rXi_6sSWqa5_o38KZ5hQt4MQ4wiDQ@mail.gmail.com>
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Tue, 25 Jul 2017 15:29:29 +0200
+Subject: [Buildroot] [PATCH v1] package/libv4l: disable libraries build if
+	no fork() support
+Message-ID: <1500989370-5353-1-git-send-email-hugues.fruchet@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Some no-MMU platforms have shared libraries support
+but no fork() support, which is required by libv4lconvert.
+Fix this by disabling libv4l libraries build in case of
+no fork() support.
+This fix the build issue reported here:
+http://lists.buildroot.org/pipermail/buildroot/2017-July/197571.html
 
-Has anyone checked the sdcard.img produce by beaglebone_defconfig?
-I tried it and it does not work for me.
-I am using beaglebone black wireless, could be that's the problem?
+Hugues Fruchet (1):
+  package/libv4l: disable libraries build if no fork() support
 
-What are the correct kernel sources ?  processor sdk or beaglebone from
-github?
-what should be the image type , uImage or zImage?
+ ...c-disable-libv4l-build-if-no-fork-support.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/libv4l/0010-configure.ac-disable-libv4l-build-if-no-fork-support.patch
 
-For u-boot , does it should be u-boot.img or u-boot.bin?
-
-I found so many references about different kernel , different def configs
-and so on, but none of then working.
-Only the official angstrom , debian and ubuntu.
-
-Thanks,
-Eli
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170725/7f1f8ba8/attachment.html>
+-- 
+1.9.1
