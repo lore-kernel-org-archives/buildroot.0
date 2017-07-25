@@ -1,28 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:20:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lcdapi: bump version to 0.11
-In-Reply-To: <20170725201643.8611-1-bernd.kuhls@t-online.de>
-References: <20170725201643.8611-1-bernd.kuhls@t-online.de>
-Message-ID: <20170725222003.7d734880@windsurf.home>
+Date: Tue, 25 Jul 2017 22:20:16 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Ricardo Martincoski for
+	support/testing
+Message-ID: <20170725201609.8AACA81F03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dd3f8369a291dfc727e5831549f6e31c1c90d60f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Jul 2017 22:16:43 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/lcdapi/lcdapi.hash | 2 +-
->  package/lcdapi/lcdapi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+While at it, also move my professional entry near my personal one.
 
-Applied to master, thanks.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7e5c878..e01c1ba 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1401,13 +1401,14 @@ F:	package/ustream-ssl/
+ N:	Renaud Aubin <root@renaud.io>
+ F:	package/libhttpparser/
+ 
+-N:	Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+-F:	package/atop/
+-
+ N:	Rhys Williams <github@wilberforce.co.nz>
+ F:	package/lirc-tools/
+ 
++N:	Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
++F:	package/atop/
++
+ N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
++F:	support/testing/
+ F:	utils/check-package
+ F:	utils/checkpackagelib/
+ 
