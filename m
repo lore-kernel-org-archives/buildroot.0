@@ -1,45 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:09:53 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/x265: disable
-	altivec on ppc64
-Message-ID: <20170725222142.A7B6C81E9E@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 00:09:59 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] bind: bump version to
+	bugfix release 9.11.1-P3
+Message-ID: <20170725222142.B69BD81E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de2ffb62a255da7794618b3c0f420ae7e1d95cae
+commit: https://git.buildroot.net/buildroot/commit/?id=0964469afb22ead61dc33d34e48a10287e109e75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Disable altivec support until gcc problems are fixed:
-https://bitbucket.org/multicoreware/x265/issues/320/fail-to-build-on-power8-le#comment-34076791
+BIND 9.11.1-P3 addresses a TSIG regression introduced in the 9.11.1-P2
+security bump:
 
-Fixes
-http://autobuild.buildroot.net/results/419/41910d44ff98c60a6bb9fd3b6a10bd4d0b98d646/
+https://lists.isc.org/pipermail/bind-announce/2017-July/001057.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also add a hash for the license file while we're at it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4f3fd7460c7cb004cc4f7f75451d3901098910af)
+(cherry picked from commit c237f1d1c5447af3b967304d7929cf115ea1aa5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x265/x265.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/bind/bind.hash | 5 +++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 0fbdb01..8ffec80 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -16,6 +16,12 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
- X265_DEPENDENCIES += host-yasm
- endif
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 5dd15cb..3a631de 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,3 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
+-sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
++sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
++sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index ee7621c..acc0911 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# disable altivec, it has build issues
-+# https://bitbucket.org/multicoreware/x265/issues/320/
-+ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
-+X265_CONF_OPTS += -DENABLE_ALTIVEC=OFF
-+endif
-+
- ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
- X265_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_PIC=ON
- else
+-BIND_VERSION = 9.11.1-P2
++BIND_VERSION = 9.11.1-P3
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
