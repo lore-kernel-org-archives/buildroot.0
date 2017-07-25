@@ -1,40 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:10:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: disable build of nvidia
-	hardware acceleration support
-In-Reply-To: <20170722151306.22870-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 22 Jul 2017 17:13:06 +0200")
-References: <20170722151306.22870-1-bernd.kuhls@t-online.de>
-Message-ID: <87inigxj51.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Jul 2017 00:11:22 +0200
+Subject: [Buildroot] [PATCH 1/3] efibootmgr: fix build with gcc 7.x
+In-Reply-To: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 11 Jul 2017 17:59:55 +0200")
+References: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <87eft4xj3p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > ffmpeg always enables support for nvenc/cuda even if their support
- > libraries are not present:
+ > Now that the build of efivar with gcc 7.x has been fixed by commit
+ > 0ca30170345a81f5f21e4ef4424b1f186cde1988 ("efivar: fix build with gcc
+ > 7"), efibootmgr fails similarly with gcc 7.x.
 
- > External libraries providing hardware acceleration:
- > cuda cuvid nvenc
- > [...]
- > Enabled hwaccels:
- > h264_cuvid mjpeg_cuvid mpeg2_cuvid vc1_cuvid vp9_cuvid
- > hevc_cuvid mpeg1_cuvid mpeg4_cuvid vp8_cuvid
+ > This commit backports an upstream patch that fixes this issue.
 
- > This leads to a crash in freeswitch git master when transcoding video
- > streams on a system without nvidia hardware:
-
- > 2017-07-22 15:06:27.306760 [INFO] avcodec.c:1077 initializing encoder 352x288
- > 2017-07-22 15:06:27.306760 [NOTICE] avcodec.c:828 NVENC HW CODEC ENABLED
-
- > This patch disables the support of nvidia hardware acceleration support
- > for now until the needed packages are added to buildroot. For details
- > about this please refer to https://developer.nvidia.com/ffmpeg
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
