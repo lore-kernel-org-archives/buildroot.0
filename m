@@ -1,44 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Jul 2017 21:28:15 +0300
-Subject: [Buildroot] [PATCH] squashfs: fix build with gcc 7
-Message-ID: <51890a64ced8a223b72a52bdb0e98fc31f539a30.1501007295.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Jul 2017 20:41:22 +0200
+Subject: [Buildroot] [PATCH] cppcms: fix build with ICU enabled,
+	but CPPCMS_ICU disabled
+Message-ID: <20170725184122.13076-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc 7 with -Os (optimize for size) takes the liberty to remove the code of
-inline function entirely. This leads to undefined function references at link
-time. Restore gcc original inline behaviour to fix this issue.
+When the ICU package is enabled (BR2_PACKAGE_ICU=y) but ICU support in
+cppcms is disabled (BR2_PACKAGE_CPPCMS_ICU is disabled), cppcms still
+detects ICU, but it fails to build since we don't get the proper ICU
+CXXFLAGS.
+
+In addition, this is not the intended behavior: when
+BR2_PACKAGE_CPPCMS_ICU is disabled, we except cppcms to be built
+without ICU support.
+
+To achieve this, we pass -DDISABLE_ICU_LOCALE=ON when
+BR2_PACKAGE_CPPCMS_ICU is disabled (yes DISABLE_ICU_LOCALE means the
+logic is inverted).
+
+While at it, we pass DISABLE_ICU_LOCALE=OFF when ICU support is
+enabled, and not DISABLE_ICONV=ON. The latter has been passed in this
+condition since the cppcms package was introduced in Buildroot, but it
+doesn't seem to make sense.
 
 Fixes:
-http://autobuild.buildroot.net/results/3c5/3c5b1d799dce3ba361d618330c242bf4eba76019/
-http://autobuild.buildroot.net/results/09f/09f350b62e2486404b78222dce211400bb233000/
-http://autobuild.buildroot.net/results/693/693960ed7c01622c756dcc929e83b3b713c16ccc/
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  http://autobuild.buildroot.net/results/b6a8c7000c5742efc9d8e13507dab86e36b62840/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-The gcc doc[1] doesn't mention that feature of C99. A gcc bug, maybe?
+ package/cppcms/cppcms.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-[1] https://gcc.gnu.org/onlinedocs/gcc/Inline.html
----
- package/squashfs/squashfs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index db3f27648eb6..9599d892b261 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -59,7 +59,7 @@ HOST_SQUASHFS_MAKE_ARGS = \
- define SQUASHFS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) \
- 		CC="$(TARGET_CC)" \
--		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline" \
- 		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		$(SQUASHFS_MAKE_ARGS) \
- 		-C $(@D)/squashfs-tools/
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index e72acb2..f3ea2628 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -21,9 +21,11 @@ CPPCMS_CONF_OPTS = \
+ CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+ 
+ ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
+-CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON
++CPPCMS_CONF_OPTS += -DDISABLE_ICU_LOCALE=OFF
+ CPPCMS_DEPENDENCIES += icu
+ CPPCMS_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
++else
++CPPCMS_CONF_OPTS += -DDISABLE_ICU_LOCALE=ON
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
 -- 
-2.13.2
+2.9.4
