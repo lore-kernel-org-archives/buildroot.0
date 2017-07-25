@@ -1,75 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:08:48 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libtirpc: Fix build error
-	due to missing stdint.h inclusion
-Message-ID: <20170725222142.281B881E9E@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 00:09:31 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/Makefile.in: add
+	host-cc-option macro
+Message-ID: <20170725222142.78A4D7FBDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c98eba1ccefe4b594e3bf5e7ea6d8b3a0ddf14cb
+commit: https://git.buildroot.net/buildroot/commit/?id=77604f73362030573ee951639ac71289e95e72a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Add patch to fix following error:
-| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-|   if (len < (uintptr_t)xdrs->x_base) {
-|              ^~~~~~~~~
+This macro allows to test if HOSTCC supports a specific option. It is
+needed to pass '-no-pie' on recent Debian, Ubuntu and Gentoo hosts.
 
-This error occurs with the latest glibc master version (during the testing I had
-glibc commit 92bd70fb85bce57ac47ba5d8af008736832c955a), but doesn't occur with
-version 2.25.
-
-Patch includes stdint.h to provide uintptr_t.
-
-It has been submitted upstream:
-https://sourceforge.net/p/libtirpc/mailman/message/35850276/
-
-Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-[Thomas: reformat as Git formatted patch.]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit b3998dc00ff26c4848b4439ba301502faf8f1995)
+(cherry picked from commit 91a08ecc998ae232ea6f3525540ed129d8176d18)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0008-include-stdint.h-for-uintptr_t.patch      | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/Makefile.in | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
-new file mode 100644
-index 0000000..6203161
---- /dev/null
-+++ b/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
-@@ -0,0 +1,31 @@
-+From 18f8a605e176f0362da22fd1203eb7cedb136aaf Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Tue, 20 Jun 2017 22:06:35 +0200
-+Subject: [PATCH] include stdint.h for uintptr_t
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c1dc714..b32ad8e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -223,6 +223,27 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+ 
++# The macros below are taken from linux 4.11 and adapted slightly.
++# Copy more when needed.
 +
-+Fixes
-+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-+|   if (len < (uintptr_t)xdrs->x_base) {
-+|              ^~~~~~~~~
++# try-run
++# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
++# Exit code chooses option. "$$TMP" is can be used as temporary file and
++# is automatically cleaned up.
++try-run = $(shell set -e;               \
++	TMP="$$(tempfile)";             \
++	if ($(1)) >/dev/null 2>&1;      \
++	then echo "$(2)";               \
++	else echo "$(3)";               \
++	fi;                             \
++	rm -f "$$TMP")
 +
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-+---
-+ src/xdr_sizeof.c | 1 +
-+ 1 file changed, 1 insertion(+)
++# host-cc-option
++# Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
++host-cc-option = $(call try-run,\
++        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
 +
-+diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
-+index d23fbd1..79d6707 100644
-+--- a/src/xdr_sizeof.c
-++++ b/src/xdr_sizeof.c
-+@@ -39,6 +39,7 @@
-+ #include <rpc/xdr.h>
-+ #include <sys/types.h>
-+ #include <stdlib.h>
-++#include <stdint.h>
-+ #include "un-namespace.h"
-+ 
-+ /* ARGSUSED */
-+-- 
-+2.9.4
 +
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
+ # might get installed into $(HOST_DIR)/usr/bin and therefore appears
