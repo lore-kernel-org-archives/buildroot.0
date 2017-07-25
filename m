@@ -1,216 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:08:55 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/libtirpc:
-	security bump to version 1.0.2
-Message-ID: <20170725222142.36E0E81E9E@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 00:09:43 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/heimdal: security
+	bump to version 7.4.0
+Message-ID: <20170725222142.966F47FBDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fc13e3a2c32f6a987759801be8e49b2032a280e
+commit: https://git.buildroot.net/buildroot/commit/?id=26573a3cc7babf6b9584fbcc0bb1ece90c30d28c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-8779:
-http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commitdiff;h=dd9c7cf4f8f375c6d641b760d124650c418c2ce3
+Fixes security bugs CVE-2017-11103 & CVE-2017-6594
 
-Rebased patches 0001, 0002 & 0006.
-Removed patch 0007, applied upstream:
-http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=4f1503e84b2f7bd229a097335e52fb8203f5bb0b
-Renumbered patch 0008.
+Changed upstream tarball location as noted in the release notes:
+http://www.h5l.org/releases.html?show=7.4.0
+
+--with-db-type-preference= is needed to fix a build error:
+
+  CCLD     otp
+../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_get_internal':
+otp_db.c:(.text+0x32): undefined reference to `__roken_dbm_fetch'
+otp_db.c:(.text+0xd9): undefined reference to `__roken_dbm_store'
+../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_open':
+otp_db.c:(.text+0x1c9): undefined reference to `__roken_dbm_open'
+../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_close':
+otp_db.c:(.text+0x205): undefined reference to `__roken_dbm_close'
+../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_delete':
+otp_db.c:(.text+0x23e): undefined reference to `__roken_dbm_delete'
+../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_put':
+otp_db.c:(.text+0x388): undefined reference to `__roken_dbm_store'
+collect2: error: ld returned 1 exit status
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 49a2bb396c95ba9ae66cd11fc175bb687449364c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 02770ce47d6c358c959410e87c5218170d2e08e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...able-parts-of-TIRPC-requiring-NIS-support.patch |  6 ++-
- ...upport-and-musl-does-not-install-rpcent.h.patch |  4 +-
- ...0006-Disable-DES-authentification-support.patch | 12 ++---
- ...d-missing-rwlock_unlocks-in-xprt_register.patch | 63 ----------------------
- ...h => 0007-include-stdint.h-for-uintptr_t.patch} |  0
- package/libtirpc/libtirpc.hash                     |  4 +-
- package/libtirpc/libtirpc.mk                       |  2 +-
- 7 files changed, 13 insertions(+), 78 deletions(-)
+ package/heimdal/heimdal.hash | 4 ++--
+ package/heimdal/heimdal.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-index e51c5a4..eb1bef3 100644
---- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-+++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-@@ -13,6 +13,8 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
- [peda at axentia.se: update for 1.0.1]
- Signed-off-by: Peter Rosin <peda@axentia.se>
-+[bernd.kuhls at t-online.de: update for 1.0.2]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  src/Makefile.am | 6 +++---
-  1 file changed, 3 insertions(+), 3 deletions(-)
-@@ -25,8 +27,8 @@ index 6cc567a..9834f9a 100644
-          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
-  	svc_auth_des.c \
-          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
---        auth_time.c auth_des.c authdes_prot.c debug.c
--+        auth_des.c authdes_prot.c debug.c
-+-        auth_time.c auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
-++        auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
-  
-  ## XDR
-  libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c xdr_sizeof.c
-diff --git a/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch b/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
-index 643a57e..51229a0 100644
---- a/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
-+++ b/package/libtirpc/0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch
-@@ -8,6 +8,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- [joerg.krause at embedded.rocks: musl fix]
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+[bernd.kuhls at t-online.de: update for 1.0.2]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  tirpc/rpc/rpcent.h | 5 +++--
-  1 file changed, 3 insertions(+), 2 deletions(-)
-@@ -21,7 +23,7 @@ index 147f909..4a58180 100644
-  #endif
-  
- -/* These are defined in /usr/include/rpc/netdb.h */
---#if !defined(__GLIBC__)
-+-#if !defined(__GLIBC__) || defined(__UCLIBC__)
- +/* These are defined in /usr/include/rpc/netdb.h, unless we are using
- +   the C library without RPC support. */
- +#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_RPC__) || !defined(__GLIBC__)
-diff --git a/package/libtirpc/0006-Disable-DES-authentification-support.patch b/package/libtirpc/0006-Disable-DES-authentification-support.patch
-index 59a77ff..0c65472 100644
---- a/package/libtirpc/0006-Disable-DES-authentification-support.patch
-+++ b/package/libtirpc/0006-Disable-DES-authentification-support.patch
-@@ -11,6 +11,8 @@ uClibc and musl does not provide DES authentication.
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
- [peda at axentia.se: update for 1.0.1]
- Signed-off-by: Peter Rosin <peda@axentia.se>
-+[bernd.kuhls at t-online.de: update for 1.0.2]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  src/Makefile.am |  2 +-
-  src/rpc_soc.c   | 32 --------------------------------
-@@ -26,7 +28,7 @@ index 960a522..3a88e31 100644
-          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
- -	svc_auth_des.c \
-          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
---        auth_des.c authdes_prot.c debug.c
-+-        auth_des.c authdes_prot.c debug.c des_crypt.c des_impl.c
- +        debug.c
-  
-  ## XDR
-@@ -48,14 +50,6 @@ diff --git a/src/rpc_soc.c b/src/rpc_soc.c
- index e146ed4..161a1ec 100644
- --- a/src/rpc_soc.c
- +++ b/src/rpc_soc.c
--@@ -61,7 +61,6 @@ #ifdef PORTMAP
-- #include <string.h>
-- #include <unistd.h>
-- #include <fcntl.h>
---#include <rpcsvc/nis.h>
-- 
-- #include "rpc_com.h"
-- 
- @@ -522,86 +521,6 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
-  }
-  
-diff --git a/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch b/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
-deleted file mode 100644
-index 56b5bf8..0000000
---- a/package/libtirpc/0007-Add-missing-rwlock_unlocks-in-xprt_register.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From 4f1503e84b2f7bd229a097335e52fb8203f5bb0b Mon Sep 17 00:00:00 2001
--From: Michael Forney <mforney@mforney.org>
--Date: Wed, 4 Nov 2015 13:58:06 -0500
--Subject: [PATCH] Add missing rwlock_unlocks in xprt_register
--
--It looks like in b2c9430f46c4ac848957fb8adaac176a3f6ac03f when svc_run
--switched to poll, an early return was added, but the rwlock was not
--unlocked.
--
--I observed that rpcbind built against libtirpc-1.0.1 would handle only
--one request before hanging, and tracked it down to a missing
--rwlock_unlock here.
--
--Fixes: b2c9430f46c4 ('Use poll() instead of select() in svc_run()')
--Signed-off-by: Michael Forney <mforney@mforney.org>
--Signed-off-by: Steve Dickson <steved@redhat.com>
--[peda at axentia.se: backport from upstream]
--Signed-off-by: Peter Rosin <peda@axentia.se>
-----
-- src/svc.c | 7 ++++---
-- 1 file changed, 4 insertions(+), 3 deletions(-)
--
--diff --git a/src/svc.c b/src/svc.c
--index 9c41445..b59467b 100644
----- a/src/svc.c
--+++ b/src/svc.c
--@@ -99,7 +99,7 @@ xprt_register (xprt)
--     {
--       __svc_xports = (SVCXPRT **) calloc (_rpc_dtablesize(), sizeof (SVCXPRT *));
--       if (__svc_xports == NULL)
---	return;
--+            goto unlock;
--     }
--   if (sock < _rpc_dtablesize())
--     {
--@@ -120,14 +120,14 @@ xprt_register (xprt)
--             svc_pollfd[i].fd = sock;
--             svc_pollfd[i].events = (POLLIN | POLLPRI |
--                                     POLLRDNORM | POLLRDBAND);
---            return;
--+            goto unlock;
--           }
-- 
--       new_svc_pollfd = (struct pollfd *) realloc (svc_pollfd,
--                                                   sizeof (struct pollfd)
--                                                   * (svc_max_pollfd + 1));
--       if (new_svc_pollfd == NULL) /* Out of memory */
---        return;
--+        goto unlock;
--       svc_pollfd = new_svc_pollfd;
--       ++svc_max_pollfd;
-- 
--@@ -135,6 +135,7 @@ xprt_register (xprt)
--       svc_pollfd[svc_max_pollfd - 1].events = (POLLIN | POLLPRI |
--                                                POLLRDNORM | POLLRDBAND);
--     }
--+unlock:
--   rwlock_unlock (&svc_fd_lock);
-- }
-- 
---- 
--2.5.3
--
-diff --git a/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0007-include-stdint.h-for-uintptr_t.patch
-similarity index 100%
-rename from package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
-rename to package/libtirpc/0007-include-stdint.h-for-uintptr_t.patch
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index cd65164..35ac6a2 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,4 +1,4 @@
- # From sourceforge's info on download page:
--sha1   8da1636f98b5909c0d587e7534bc1e91f5c1a970  libtirpc-1.0.1.tar.bz2
-+sha1 2a8dc0e6eecc45be6597c8287b1d8e15cbee46e3  libtirpc-1.0.2.tar.bz2
- # Locally computed
--sha256 5156974f31be7ccbc8ab1de37c4739af6d9d42c87b1d5caf4835dda75fcbb89e  libtirpc-1.0.1.tar.bz2
-+sha256 723c5ce92706cbb601a8db09110df1b4b69391643158f20ff587e20e7c5f90f5  libtirpc-1.0.2.tar.bz2
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 70a31ac..a11e49a 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
+index 12770e1..a0e0f3f 100644
+--- a/package/heimdal/heimdal.hash
++++ b/package/heimdal/heimdal.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	cee58ab3a4ce79f243a3e73f465dac19fe2b93ef1c5ff244d6f1d689fedbde2d	heimdal-7.1.0.tar.gz
++# Locally calculated
++sha256 3de14ecd36ad21c1694a13da347512b047f4010d176fe412820664cb5d1429ad  heimdal-7.4.0.tar.gz
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 5376a6c..2d4b826 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.0.1
-+LIBTIRPC_VERSION = 1.0.2
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3c
+-HEIMDAL_VERSION = 7.1.0
+-HEIMDAL_SITE = http://www.h5l.org/dist/src
++HEIMDAL_VERSION = 7.4.0
++HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
+ HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
+ HEIMDAL_MAKE = $(MAKE1)
+@@ -15,6 +15,7 @@ HOST_HEIMDAL_CONF_OPTS = \
+ 	--enable-static \
+ 	--without-openldap \
+ 	--without-capng \
++	--with-db-type-preference= \
+ 	--without-sqlite3 \
+ 	--without-libintl \
+ 	--without-openssl \
