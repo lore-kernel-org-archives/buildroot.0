@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:06:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: security bump to
-	version 1.0.2
-In-Reply-To: <20170722121249.14618-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 22 Jul 2017 14:12:49 +0200")
-References: <20170722121249.14618-1-bernd.kuhls@t-online.de>
-Message-ID: <87mv7sxjc5.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Jul 2017 00:10:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: disable build of nvidia
+	hardware acceleration support
+In-Reply-To: <20170722151306.22870-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 22 Jul 2017 17:13:06 +0200")
+References: <20170722151306.22870-1-bernd.kuhls@t-online.de>
+Message-ID: <87inigxj51.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,25 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes CVE-2017-8779:
- > http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commitdiff;h=dd9c7cf4f8f375c6d641b760d124650c418c2ce3
+ > ffmpeg always enables support for nvenc/cuda even if their support
+ > libraries are not present:
 
- > Rebased patches 0001, 0002 & 0006.
- > Removed patch 0007, applied upstream:
- > http://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=4f1503e84b2f7bd229a097335e52fb8203f5bb0b
- > Renumbered patch 0008.
+ > External libraries providing hardware acceleration:
+ > cuda cuvid nvenc
+ > [...]
+ > Enabled hwaccels:
+ > h264_cuvid mjpeg_cuvid mpeg2_cuvid vc1_cuvid vp9_cuvid
+ > hevc_cuvid mpeg1_cuvid mpeg4_cuvid vp8_cuvid
+
+ > This leads to a crash in freeswitch git master when transcoding video
+ > streams on a system without nvidia hardware:
+
+ > 2017-07-22 15:06:27.306760 [INFO] avcodec.c:1077 initializing encoder 352x288
+ > 2017-07-22 15:06:27.306760 [NOTICE] avcodec.c:828 NVENC HW CODEC ENABLED
+
+ > This patch disables the support of nvidia hardware acceleration support
+ > for now until the needed packages are added to buildroot. For details
+ > about this please refer to https://developer.nvidia.com/ffmpeg
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
