@@ -1,84 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jul 2017 23:43:14 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: Remove patch
-	uneeded for the current version
-Message-ID: <20170725222210.0C10681D5C@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:45:34 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] libmemcached: fix build
+	with gcc 7.x
+Message-ID: <20170725222211.45C3682147@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fda8befb7dd6643ae09d338260911faa170cdc7
+commit: https://git.buildroot.net/buildroot/commit/?id=96e67282fc7958937794d43dacaf285df5516e7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Version 2.16.5 of WebKitGTK+ already includes the fix added by the
-removed patch, which is now unneeded.
+This commit adds a patch to the libmemcached package that fixes the
+build with gcc 7.x. Since libmemcached is barely maintained upstream,
+the patch comes from the Fedora packages.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/872b8e0e6a24cbc96e3ad9e0b8b47acdf6160ce0/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6b2804f396ad27e1d99079a8d1fbe1f51cb4cf5d)
+(cherry picked from commit 8786ac28058aa553cfa8adc176952143af630af6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/0001-fix-gcc6-builds.patch | 53 ----------------------------
- 1 file changed, 53 deletions(-)
+ .../0005-fix-pointer-comparaison.patch             | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/webkitgtk/0001-fix-gcc6-builds.patch b/package/webkitgtk/0001-fix-gcc6-builds.patch
-deleted file mode 100644
-index 35487ad..0000000
---- a/package/webkitgtk/0001-fix-gcc6-builds.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--[CMake] Build failure with GCC 6 (fatal error: stdlib.h: No such file or directory)
--
--https://bugs.webkit.org/show_bug.cgi?id=161697
--
--Reviewed by Michael Catanzaro.
--
--Get the list of system includes from GCC and add it to the CMake
--list of implicit includes. This way, CMake will filter any of this
--directories from the list of includes when calling the compiler.
--
--This avoids an issue with GCC 6 that causes build failures when
--including the default include path as a system include (-isystem).
--
--Upstream, from: https://trac.webkit.org/changeset/205672
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: trunk/Source/cmake/OptionsCommon.cmake
--===================================================================
----- trunk/Source/cmake/OptionsCommon.cmake	(revision 204084)
--+++ trunk/Source/cmake/OptionsCommon.cmake	(revision 205672)
--@@ -36,4 +36,31 @@
--     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcolor-diagnostics")
--     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
--+endif ()
--+
--+# Ensure that the default include system directories are added to the list of CMake implicit includes.
--+# This workarounds an issue that happens when using GCC 6 and using system includes (-isystem).
--+# For more details check: https://bugs.webkit.org/show_bug.cgi?id=161697
--+macro(DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang _compiler _flags _result)
--+    file(WRITE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy" "\n")
--+    separate_arguments(_buildFlags UNIX_COMMAND "${_flags}")
--+    execute_process(COMMAND ${_compiler} ${_buildFlags} -v -E -x ${_lang} -dD dummy
--+                    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles OUTPUT_QUIET
--+                    ERROR_VARIABLE _gccOutput)
--+    file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy")
--+    if ("${_gccOutput}" MATCHES "> search starts here[^\n]+\n *(.+) *\n *End of (search) list")
--+        set(${_result} ${CMAKE_MATCH_1})
--+        string(REPLACE "\n" " " ${_result} "${${_result}}")
--+        separate_arguments(${_result})
--+    endif ()
--+endmacro()
--+
--+if (CMAKE_COMPILER_IS_GNUCC)
--+   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c" "${CMAKE_C_COMPILER}" "${CMAKE_C_FLAGS}" SYSTEM_INCLUDE_DIRS)
--+   set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
--+endif ()
--+
--+if (CMAKE_COMPILER_IS_GNUCXX)
--+   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c++" "${CMAKE_CXX_COMPILER}" "${CMAKE_CXX_FLAGS}" SYSTEM_INCLUDE_DIRS)
--+   set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
-- endif ()
-- 
+diff --git a/package/libmemcached/0005-fix-pointer-comparaison.patch b/package/libmemcached/0005-fix-pointer-comparaison.patch
+new file mode 100644
+index 0000000..c9f8dd1
+--- /dev/null
++++ b/package/libmemcached/0005-fix-pointer-comparaison.patch
+@@ -0,0 +1,30 @@
++Fix pointer comparaison
++
++opt_servers is a pointer, not a boolean, so testing against false to
++know if the pointer is NULL no longer works with the more strict gcc
++7.x checks.
++
++[Taken from http://pkgs.fedoraproject.org/cgit/rpms/libmemcached.git/plain/libmemcached-build.patch.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++diff -up ./clients/memflush.cc.old ./clients/memflush.cc
++--- ./clients/memflush.cc.old	2017-02-12 10:12:59.615209225 +0100
+++++ ./clients/memflush.cc	2017-02-12 10:13:39.998382783 +0100
++@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
++ {
++   options_parse(argc, argv);
++ 
++-  if (opt_servers == false)
+++  if (!opt_servers)
++   {
++     char *temp;
++ 
++@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
++       opt_servers= strdup(temp);
++     }
++ 
++-    if (opt_servers == false)
+++    if (!opt_servers)
++     {
++       std::cerr << "No Servers provided" << std::endl;
++       exit(EXIT_FAILURE);
