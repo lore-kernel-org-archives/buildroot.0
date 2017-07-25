@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:11:22 +0200
-Subject: [Buildroot] [PATCH 1/3] efibootmgr: fix build with gcc 7.x
-In-Reply-To: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 11 Jul 2017 17:59:55 +0200")
-References: <20170711155957.10815-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <87eft4xj3p.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Jul 2017 00:13:46 +0200
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: add host-cc-option
+	macro
+In-Reply-To: <20170703084107.5620-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Mon, 3 Jul 2017 10:41:06 +0200")
+References: <20170703084107.5620-1-arnout@mind.be>
+Message-ID: <87a83sxizp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Now that the build of efivar with gcc 7.x has been fixed by commit
- > 0ca30170345a81f5f21e4ef4424b1f186cde1988 ("efivar: fix build with gcc
- > 7"), efibootmgr fails similarly with gcc 7.x.
+ > This macro allows to test if HOSTCC supports a specific option. It is
+ > needed to pass '-no-pie' on recent Debian, Ubuntu and Gentoo hosts.
 
- > This commit backports an upstream patch that fixes this issue.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
