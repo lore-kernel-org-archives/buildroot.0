@@ -1,50 +1,156 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Jul 2017 00:54:30 +0200
-Subject: [Buildroot] [git commit] support/testing: add test of
- BR2_CCACHE with an external toolchain
-In-Reply-To: <20170724175458.GF2918@scaer>
-References: <20170724163121.A64CB81DD3@busybox.osuosl.org>
- <20170724175458.GF2918@scaer>
-Message-ID: <86ba6b0f-662b-ebd9-868f-a422e46821cc@mind.be>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Mon, 24 Jul 2017 17:07:00 -0700
+Subject: [Buildroot] [PATCH v3] zstd: add new package
+Message-ID: <20170725000700.19035-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add package to provide Zstandard compression tools
+(see https://facebook.github.io/zstd)
 
+Minimal config snippet for utils/test-pkg is as follows:
 
-On 24-07-17 19:54, Yann E. MORIN wrote:
-[snip]
-> You don't need to list all tests in there, if you want to execute all
-> of them.i
+BR2_PACKAGE_ZSTD=y
 
- I think Thomas first implemented it that way. But then gitlab-CI just reports a
-single pass/fail for the entire test suite, without details about what failed.
-AFAIK gitlab-CI reporting doesn't have xUnit integration that could be used to
-report detailed results from a single run.
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
 
+Changes since [v2]:
 
- Regards,
- Arnout
+    - Bump package version to the latest release: 1.3.0
 
-> Instead, you can just list 'tests' and all sub-tests will be run by
-> nose2. This way we need not update this file with every new test that we
-> add. And in fact I think we should not even need to list it, and make
-> the runtime-test entry just run everything...
-> 
-> I think it is even possible to mark some tests with 'test campaign tag'
-> so that they are only executed under some conditions that we define
-> ourselves (like, 'nightly', 'weekly', but also like 'arm', 'mips' or
-> whatever 'tag' we're interested in). If you think it might be usefull,
-> I can research that further...
+Changes since [v1]:
 
-[snip]
+    - Remove all excessive configuration options and simplify
+      installation rules to just calling "make install"
 
+    - Add support for HAVE_LZ4
+
+    - Add missing hash file
+
+[v1] http://lists.busybox.net/pipermail/buildroot/2017-July/196739.html
+[v2] http://lists.busybox.net/pipermail/buildroot/2017-July/197641.html
+
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/zstd/Config.in | 13 +++++++++++++
+ package/zstd/zstd.hash |  3 +++
+ package/zstd/zstd.mk   | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 67 insertions(+)
+ create mode 100644 package/zstd/Config.in
+ create mode 100644 package/zstd/zstd.hash
+ create mode 100644 package/zstd/zstd.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7c9b5ed6e3..7e5c878a81 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -100,6 +100,7 @@ F:	package/python-scandir/
+ F:	package/python-simplegeneric/
+ F:	package/python-systemd/
+ F:	package/python-traitlets/
++F:	package/zstd/
+ 
+ N:	Andrey Yurovsky <yurovsky@gmail.com>
+ F:	package/rauc/
+diff --git a/package/Config.in b/package/Config.in
+index 59db51e20c..390477072d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -73,6 +73,7 @@ menu "Compressors and decompressors"
+ 	source "package/unzip/Config.in"
+ 	source "package/xz/Config.in"
+ 	source "package/zip/Config.in"
++	source "package/zstd/Config.in"
+ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
+diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+new file mode 100644
+index 0000000000..0e97c64e0a
+--- /dev/null
++++ b/package/zstd/Config.in
+@@ -0,0 +1,13 @@
++menuconfig BR2_PACKAGE_ZSTD
++	bool "zstd"
++	help
++	  Zstandard, or zstd as short version, is a fast lossless
++	  compression algorithm, targeting real-time compression
++	  scenarios at zlib-level and better compression ratios
++
++	  For more info see https://facebook.github.io/zstd
++
++	  The selection of other packages will enable some features:
++
++	  - xz, lz4 and/or zlib will enable support for corresponding
++	    compression formats
+\ No newline at end of file
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+new file mode 100644
+index 0000000000..d09e6b46f4
+--- /dev/null
++++ b/package/zstd/zstd.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
++
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+new file mode 100644
+index 0000000000..ad26bae6fd
+--- /dev/null
++++ b/package/zstd/zstd.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# zstd
++#
++################################################################################
++
++ZSTD_VERSION = v1.3.0
++ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
++ZSTD_LICENSE = BSD-3-Clause
++ZSTD_LICENSE_FILES = LICENSE PATENTS
++
++ZSTD_OPTS = DESTDIR=$(TARGET_DIR)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ZSTD_OPTS += HAVE_THREAD=1
++else
++ZSTD_OPTS += HAVE_THREAD=0
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++ZSTD_DEPENDENCIES += zlib
++ZSTD_OPTS += HAVE_ZLIB=1
++else
++ZSTD_OPTS += HAVE_ZLIB=0
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++ZSTD_DEPENDENCIES += xz
++ZSTD_OPTS += HAVE_LZMA=1
++else
++ZSTD_OPTS += HAVE_LZMA=0
++endif
++
++ifeq ($(BR2_PACKAGE_LZ4),y)
++ZSTD_DEPENDENCIES += lz4
++ZSTD_OPTS += HAVE_LZ4=1
++else
++ZSTD_OPTS += HAVE_LZ4=0
++endif
++
++define ZSTD_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D) zstd
++endef
++
++define ZSTD_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D)/programs install
++endef
++
++$(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.3
