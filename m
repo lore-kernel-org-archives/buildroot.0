@@ -1,55 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:20:59 +0200
-Subject: [Buildroot] [git commit] paxtest: install helper applications/libs
-	to /usr/lib/paxtest
-Message-ID: <20170725201844.692D282156@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 25 Jul 2017 22:23:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/leptonica: bump version to 1.74.4
+Message-ID: <20170725202333.14537-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e29061a9e657ecbc4d9b25e1d643bd06b27c0b15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Removed patch 0001, not needed anymore after
+https://github.com/DanBloomberg/leptonica/commit/4476d162cc191a0fefb2ce434153e12bbf188664
+fixes the problem in a similar way.
 
-RUNDIR installs the test applications and shared libraries into a
-different folder then /usr/lib. This is desired as there are a lot of
-test apps which would get installed into /usr/lib without
-organization. Instead, set RUNDIR=/usr/lib/paxtest to install the test
-apps and libraries in a sub folder. The genpaxtest script accounts for
-this path and handles a LD_LIBRARY_PATH update as part of the paxtest
-script's exeuction.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/paxtest/paxtest.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ ...ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch | 42 ----------------------
+ package/leptonica/leptonica.hash                   |  2 +-
+ package/leptonica/leptonica.mk                     |  7 +---
+ 3 files changed, 2 insertions(+), 49 deletions(-)
+ delete mode 100644 package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
 
-diff --git a/package/paxtest/paxtest.mk b/package/paxtest/paxtest.mk
-index 5eaee86..e632e22 100644
---- a/package/paxtest/paxtest.mk
-+++ b/package/paxtest/paxtest.mk
-@@ -11,15 +11,20 @@ PAXTEST_LICENSE_FILES = README
+diff --git a/package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch b/package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
+deleted file mode 100644
+index 5b483418a..000000000
+--- a/package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 40427bd4ec62fe12e6dc3a8cc61b9d644be98c96 Mon Sep 17 00:00:00 2001
+-From: Gilles Talis <gilles.talis@gmail.com>
+-Date: Sun, 26 Mar 2017 10:18:22 +0200
+-Subject: [PATCH] configure.ac: Use PKG_CHECK_MODULES to check libtiff
+- availability
+-
+-When built statically, leptonica is not able to find specified
+-libtiff function that will determine whether library is available
+-or not.
+-Using PKG_CHECK_MODULES fixes the issue.
+-
+-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+----
+- configure.ac | 11 +++++------
+- 1 file changed, 5 insertions(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index e64cde6..52a9e0e 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -66,13 +66,12 @@ AS_IF([test "x$with_giflib" != xno],
+- 
+- AM_CONDITIONAL([HAVE_LIBGIF], [test "x$ac_cv_lib_gif_DGifOpenFileHandle" = xyes])
+- 
+--AS_IF([test "x$with_libtiff" != xno],
+--  AC_CHECK_LIB([tiff], [TIFFOpen],
+--    AC_DEFINE([HAVE_LIBTIFF], 1, [Define to 1 if you have libtiff.]) AC_SUBST([LIBTIFF_LIBS], [-ltiff]),
+--    AS_IF([test "x$with_libtiff" = xyes], AC_MSG_ERROR([libtiff support requested but library not found])),
+--    ${LIBM} ${ZLIB_LIBS} ${JPEG_LIBS}
+-+if test "x$with_libtiff" != xno; then
+-+  PKG_CHECK_MODULES([LIBTIFF], [libtiff-4],
+-+    AC_DEFINE([HAVE_LIBTIFF], 1, [Define to 1 if you have libtiff.]),
+-+    AS_IF([test "x$with_libtiff" = xyes], AC_MSG_ERROR([libtiff support requested but library not found]))
+-   )
+--)
+-+fi
+- 
+- AS_IF([test "x$with_libwebp" != xno],
+-   AC_CHECK_LIB([webp], [WebPGetInfo],
+--- 
+-2.5.0
+-
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 48da06b3f..f67f2b88f 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 746a517a47a3bd2a90bc8d581ca6464c10f30e91a60209735efe45b3778bec62  leptonica-1.74.1.tar.gz
++sha256 29c35426a416bf454413c6fec24c24a0b633e26144a17e98351b6dffaa4a833b  leptonica-1.74.4.tar.gz
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 11680e161..6a958a356 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -4,16 +4,11 @@
+ #
+ ################################################################################
  
- define PAXTEST_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
-+		RUNDIR="/usr/lib/paxtest" CC="$(TARGET_CC)" LD="$(TARGET_CC)" linux
- endef
+-LEPTONICA_VERSION = 1.74.1
++LEPTONICA_VERSION = 1.74.4
+ LEPTONICA_SITE = http://www.leptonica.org/source
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
+ LEPTONICA_INSTALL_STAGING = YES
+-
+-# we patch configure.ac
+-LEPTONICA_AUTORECONF = YES
+-
+-# PKG_CHECK_MODULES() is used in configure.ac patch
+ LEPTONICA_DEPENDENCIES = host-pkgconf
  
-+# The files installed to RUNDIR include test apps and shared libs.
-+# Assuming /usr/bin/paxtest script solely uses these libs and apps, the
-+# genpaxtest script updates LD_LIBRARY_PATH in the paxtest script
-+# as part of the paxtest's creation to include the RUNDIR path for shared
-+# library use.
- define PAXTEST_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
- 		DESTDIR=$(TARGET_DIR) \
- 		BINDIR="usr/bin" \
--		RUNDIR="usr/lib" -f Makefile.psm install
-+		RUNDIR="/usr/lib/paxtest" -f Makefile.psm install
- endef
- 
- $(eval $(generic-package))
+ LEPTONICA_CONF_OPTS += --disable-programs
+-- 
+2.11.0
