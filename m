@@ -1,59 +1,44 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 25 Jul 2017 23:58:44 +0200
-Subject: [Buildroot] [git commit] cppcms: fix build with ICU enabled,
-	but CPPCMS_ICU disabled
-Message-ID: <20170725220042.81B40817D4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Jul 2017 00:05:28 +0200
+Subject: [Buildroot] [PATCH] fs/ext2: hint about setting the filesystem size
+	on error
+Message-ID: <20170725220528.314-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26b22b85a4bb6608a0fab5dd319d96c86fe7ea76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since we now request that the user sets the exact size of the ext2/3/4
+filesystem, we've had quite a few users wondering what was going on when
+they enable too much and the default 60M are no longer enough.
 
-When the ICU package is enabled (BR2_PACKAGE_ICU=y) but ICU support in
-cppcms is disabled (BR2_PACKAGE_CPPCMS_ICU is disabled), cppcms still
-detects ICU, but it fails to build since we don't get the proper ICU
-CXXFLAGS.
+When mkfs.ext2 fails, print a hint that the user should check the size
+setting.
 
-In addition, this is not the intended behavior: when
-BR2_PACKAGE_CPPCMS_ICU is disabled, we expect cppcms to be built
-without ICU support.
-
-To achieve this, we pass -DDISABLE_ICU_LOCALE=ON when
-BR2_PACKAGE_CPPCMS_ICU is disabled (yes DISABLE_ICU_LOCALE means the
-logic is inverted).
-
-While at it, we pass DISABLE_ICU_LOCALE=OFF when ICU support is
-enabled, and not DISABLE_ICONV=ON. The latter has been passed in this
-condition since the cppcms package was introduced in Buildroot, but it
-doesn't seem to make sense.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/b6a8c7000c5742efc9d8e13507dab86e36b62840/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/cppcms/cppcms.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/ext2/ext2.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index e72acb2..f3ea2628 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -21,9 +21,11 @@ CPPCMS_CONF_OPTS = \
- CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 902e6639ee..6a992747c6 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -29,7 +29,11 @@ ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+ define ROOTFS_EXT2_CMD
+ 	rm -f $@
+ 	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
+-		"$(EXT2_SIZE)"
++		"$(EXT2_SIZE)" \
++	|| { ret=$$?; \
++	     echo "Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)"; \
++	     exit $$ret; \
++	}
+ endef
  
- ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
--CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON
-+CPPCMS_CONF_OPTS += -DDISABLE_ICU_LOCALE=OFF
- CPPCMS_DEPENDENCIES += icu
- CPPCMS_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
-+else
-+CPPCMS_CONF_OPTS += -DDISABLE_ICU_LOCALE=ON
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ rootfs-ext2-symlink:
+-- 
+2.11.0
