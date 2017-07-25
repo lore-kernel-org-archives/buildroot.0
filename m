@@ -1,94 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 21:58:00 +0200
-Subject: [Buildroot] [git commit] nginx-upload-module: add openssl lib
-	dependency
-Message-ID: <20170725195358.9F8E182156@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 25 Jul 2017 22:02:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/joe: bump version to 4.4
+Message-ID: <20170725200205.23260-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c90b9732391b3eec2a8cb9af273585a17fb2cece
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Removed patch 0001 after bessel functions in uClibc were enabled by
+default:
+https://git.buildroot.net/buildroot/commit/package/uclibc?id=de56d58e5d26d78161ca3b7a1a2a4decfe4e89db
 
-When building against nginx 1.11.2+, requires additional
--lcrypto dependency. (Nginx changed crypto approach
-and dependencies for openssl are no longer default)
-
-Upstream pull request:
-https://github.com/vkholodkov/nginx-upload-module/pull/93
-
-Fixes:
-http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
-http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
-http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...-upload-module-add-openssl-lib-dependency.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+v2: updated JOE_INSTALL_TARGET_CMDS (Peter)
 
-diff --git a/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-new file mode 100644
-index 0000000..1161751
---- /dev/null
-+++ b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-@@ -0,0 +1,56 @@
-+From 600d0a36c2af785c8284acadeb062d73247281af Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Sun, 23 Jul 2017 09:21:23 -0500
-+Subject: [PATCH] nginx-upload-module: add openssl lib dependency
-+
-+When building against nginx 1.11.2+, requires additional
-+-lcrypto dependency. (Nginx changed crypto approach
-+and dependencies for openssl are no longer default)
-+
-+More details found here:
-+https://github.com/vkholodkov/nginx-upload-module/issues/79
-+
-+Upstream pull request:
-+https://github.com/vkholodkov/nginx-upload-module/pull/93
-+
-+Resolves build failure:
-+objs/addon/nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3/ngx_http_upload_module.o \
-+objs/ngx_modules.o \
-+-ldl -lpthread -lpthread -lpcre -lz -latomic_ops \
-+-Wl,-E
-+ngx_http_upload_module.o: In function `ngx_http_upload_flush_output_buffer':
-+ngx_http_upload_module.c:1625: undefined reference to `MD5_Update'
-+ngx_http_upload_module.c:1628: undefined reference to `SHA1_Update'
-+ngx_http_upload_module.c:1631: undefined reference to `SHA256_Update'
-+ngx_http_upload_module.c:1634: undefined reference to `SHA512_Update'
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
-+http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
-+http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ config | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/config b/config
-+index cabd4f1..293529f 100644
-+--- a/config
-++++ b/config
-+@@ -1,11 +1,10 @@
-+-USE_MD5=YES
-+-USE_SHA1=YES
-+ ngx_addon_name=ngx_http_upload_module
-+ 
-+ if test -n "$ngx_module_link"; then
-+     ngx_module_type=HTTP
-+     ngx_module_name=$ngx_addon_name
-+     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
-++    ngx_module_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
-+ 
-+     . auto/module
-+ else
-+-- 
-+1.9.1
-+
+ .../0001-disable-bessel-functions-on-uclibc.patch  | 50 ----------------------
+ package/joe/joe.hash                               |  5 ++-
+ package/joe/joe.mk                                 |  4 +-
+ 3 files changed, 6 insertions(+), 53 deletions(-)
+ delete mode 100644 package/joe/0001-disable-bessel-functions-on-uclibc.patch
+
+diff --git a/package/joe/0001-disable-bessel-functions-on-uclibc.patch b/package/joe/0001-disable-bessel-functions-on-uclibc.patch
+deleted file mode 100644
+index 9f7b72c17..000000000
+--- a/package/joe/0001-disable-bessel-functions-on-uclibc.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-[PATCH] uClibc can be (and by default is) configured without bessel functions
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- umath.c |   10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-Index: joe-3.7/umath.c
+-===================================================================
+---- joe-3.7.orig/umath.c
+-+++ joe-3.7/umath.c
+-@@ -7,6 +7,12 @@
+-  */
+- #include "types.h"
+- 
+-+/* uClibc can be configured without bessel functions */
+-+#include <features.h>
+-+#if defined (__UCLIBC__) && !defined(__DO_XSI_MATH__)
+-+#define NO_BESSEL
+-+#endif
+-+
+- unsigned char *merr;
+- 
+- int mode_hex;
+-@@ -396,10 +402,12 @@
+- double m_fabs(double n) { return fabs(n); }
+- double m_erf(double n) { return erf(n); }
+- double m_erfc(double n) { return erfc(n); }
+-+#ifndef NO_BESSEL
+- double m_j0(double n) { return j0(n); }
+- double m_j1(double n) { return j1(n); }
+- double m_y0(double n) { return y0(n); }
+- double m_y1(double n) { return y1(n); }
+-+#endif
+- 
+- double calc(BW *bw, unsigned char *s)
+- {
+-@@ -434,10 +442,12 @@
+- 		v = get(USTR "abs"); v->func = m_fabs;
+- 		v = get(USTR "erf"); v->func = m_erf;
+- 		v = get(USTR "erfc"); v->func = m_erfc;
+-+#ifndef NO_BESSEL
+- 		v = get(USTR "j0"); v->func = m_j0;
+- 		v = get(USTR "j1"); v->func = m_j1;
+- 		v = get(USTR "y0"); v->func = m_y0;
+- 		v = get(USTR "y1"); v->func = m_y1;
+-+#endif
+- 	}
+- 
+- 	v = get(USTR "top");
+diff --git a/package/joe/joe.hash b/package/joe/joe.hash
+index 664410d19..0a9c1fb8d 100644
+--- a/package/joe/joe.hash
++++ b/package/joe/joe.hash
+@@ -1,2 +1,5 @@
++# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.4/
++sha1 aedf1ac9e6b91053aa26c70e7bba5bbd8136f033  joe-4.4.tar.gz
++md5 59e63debe60b456a6ee5c0c27a756a47  joe-4.4.tar.gz
+ # Locally computed:
+-sha256  cae456e1ad5a8c1d3c94920a3416c2347277739b260e3494d3bc0f2b9b73106f  joe-3.7.tar.gz
++sha256 a5704828bbca29acb9e200414fef522c66cdf9ce28150f402d6767da43460979  joe-4.4.tar.gz
+diff --git a/package/joe/joe.mk b/package/joe/joe.mk
+index e19cae121..3d0e9f776 100644
+--- a/package/joe/joe.mk
++++ b/package/joe/joe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JOE_VERSION = 3.7
++JOE_VERSION = 4.4
+ JOE_SITE = http://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-$(JOE_VERSION)
+ JOE_LICENSE = GPL-1.0+
+ JOE_LICENSE_FILES = COPYING
+@@ -18,7 +18,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_JOE_FULL),y)
+ define JOE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/joe $(TARGET_DIR)/usr/bin/joe
++	$(INSTALL) -m 0755 -D $(@D)/joe/joe $(TARGET_DIR)/usr/bin/joe
+ endef
+ endif
+ 
+-- 
+2.11.0
