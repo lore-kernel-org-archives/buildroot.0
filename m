@@ -1,58 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:09:36 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/aespipe: fix host
-	compile
-Message-ID: <20170725222142.874E481E9E@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 00:09:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/ffmpeg: add
+	optional support for alsa-lib
+Message-ID: <20170725222142.4532581E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2573e725ea553927557d01edd5cd8669ca591ea0
+commit: https://git.buildroot.net/buildroot/commit/?id=05f13baaf3557b3815de329aded5394054bea642
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Building host-aespipe fails on Debian stretch at linking stage:
+ffmpeg has optional support for alsa as input and/or output device:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=23823e3b7012d847b614bd43316fb614676bedb2;hb=refs/heads/release/3.3#l2987
 
-/usr/bin/gcc -L/home/buildroot/br6/output/host/lib -L/home/buildroot/br6/output/host/usr/lib -Wl,-rpath,/home/buildroot/br6/output/host/usr/lib -o aespipe aespipe.o aes-amd64.o md5-amd64.o md5-2x-amd64.o aes-intel64.o sha512.o rmd160.o
-/usr/bin/ld: aes-amd64.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
+Problem was found while fixing
+http://autobuild.buildroot.net/results/7ba/7ba485532fcab74928246a8f95dba7e5eea9d4a5/
 
-The same problem apparently exists on recent Ubuntu and Gentoo.
-
-Fix is also used in Debian:
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-
-[Peter: add comment explaining why]
-[Arnout: use host-cc-option to discover if -no-pie is available;
- cfr. 57b628a932b9b4a3c4bf80f4c82a81da5adcb173]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit 00ecd72c28f103fc7d166f718db81a8b6c4919fa)
+(cherry picked from commit ca06ba2d2a673cf750ac92a4e61e7cba037a339e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aespipe/aespipe.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/ffmpeg/ffmpeg.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-index 6a38556..5ef95d5 100644
---- a/package/aespipe/aespipe.mk
-+++ b/package/aespipe/aespipe.mk
-@@ -9,5 +9,15 @@ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
- AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
- AESPIPE_LICENSE = GPL
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 6540d41..4494612 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -159,12 +159,18 @@ endif
  
-+# Recent Debian, Gentoo and Ubuntu enable -fPIE by default, breaking the build:
-+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835148
-+# Older gcc versions however don't support the -no-pie flag, so we have to
-+# check its availability.
-+HOST_AESPIPE_NO_PIE_FLAG = $(call host-cc-option,-no-pie)
-+HOST_AESPIPE_CONF_ENV = \
-+	CFLAGS="$(HOST_CFLAGS) $(HOST_AESPIPE_NO_PIE_FLAG)" \
-+	LDFLAGS="$(HOST_LDFLAGS) $(HOST_AESPIPE_NO_PIE_FLAG)"
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_FFMPEG_INDEVS),y)
+ FFMPEG_CONF_OPTS += --enable-indevs
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FFMPEG_DEPENDENCIES += alsa-lib
++endif
+ else
+ FFMPEG_CONF_OPTS += --disable-indevs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG_OUTDEVS),y)
+ FFMPEG_CONF_OPTS += --enable-outdevs
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FFMPEG_DEPENDENCIES += alsa-lib
++endif
+ else
+ FFMPEG_CONF_OPTS += --disable-outdevs
+ endif
