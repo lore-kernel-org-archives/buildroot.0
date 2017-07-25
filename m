@@ -1,30 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 21:47:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kismet: bump version to
- 2016-07-R1
-In-Reply-To: <20170724200655.32491-1-bernd.kuhls@t-online.de>
-References: <20170724200655.32491-1-bernd.kuhls@t-online.de>
-Message-ID: <20170725214745.022b7538@windsurf.home>
+Date: Tue, 25 Jul 2017 20:46:08 +0200
+Subject: [Buildroot] [git commit] orc: update project url
+Message-ID: <20170725194356.395357FC8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=036d235ade6a7577493385c97c63c599cdbcb735
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 24 Jul 2017 22:06:55 +0200, Bernd Kuhls wrote:
-> Changed _SITE from git clone to tarball provided by upstream.
-> Rebased patches 0003 & 0004.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Partly tested by test-pkg using this defconfig
+The original url http://code.entropywave.com/orc is dead (server not found).
 
-Applied to master, thanks.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/orc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/orc/Config.in b/package/orc/Config.in
+index 2470d99..7943ecf 100644
+--- a/package/orc/Config.in
++++ b/package/orc/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_ORC
+ 	  Orc is a library and set of tools for compiling and executing
+ 	  very simple programs that operate on arrays of data.
+ 
+-	  http://code.entropywave.com/projects/orc/
++	  https://gstreamer.freedesktop.org/projects/orc.html
+ 
+ comment "orc needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
