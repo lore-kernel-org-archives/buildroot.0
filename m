@@ -1,182 +1,225 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 22:42:45 +0200
-Subject: [Buildroot] [git commit] genrandconfig: replace kwargs with
-	explicit arguments
-Message-ID: <20170725210434.352F97FC08@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 22:42:15 +0200
+Subject: [Buildroot] [git commit] genrandconfig: fix (some) pep8 warnings
+Message-ID: <20170725210434.114B47F963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22978c7399ee7cd76dbb3d57cdc6f018a68c326c
+commit: https://git.buildroot.net/buildroot/commit/?id=30f7fec0a8590604d4d481f0b8e9db826f2b8af7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-kwargs is a left-over from the use of docopt, it's better to use
-argparse's Namespace object directly.
-
-In addition, most functions use just one or two fields of args, so
-these can just as well be passed directly as arguments to the function.
-Particularly for outputdir it doesn't make sense to reconstruct it all
-the time.
+Warnings fixed:
+E731 do not assign a lambda expression, use a def
+ -> urlopen_closing is defined with a def. urlopen is not used
+    elsewhere so inlined.
+E302 expected 2 blank lines
+E501 line too long
+ -> long lines due to a long string are NOT split
+E701 multiple statements on one line (colon)
+E722 do not use bare except'
+ -> use "except Exception", so KeyInterrupt and SystemExit are still
+    passed. We never intended to catch those.
+E741 ambiguous variable name 'l'
+ -> variable name is replaced with the much more descriptive
+    toolchains_csv
+E271 multiple spaces after keyword
+E231 missing whitespace after ','
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- utils/genrandconfig | 44 ++++++++++++++++----------------------------
- 1 file changed, 16 insertions(+), 28 deletions(-)
+ utils/genrandconfig | 53 ++++++++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 36 insertions(+), 17 deletions(-)
 
 diff --git a/utils/genrandconfig b/utils/genrandconfig
-index fad60cd..a9519b5 100755
+index a7fe7ce..fad60cd 100755
 --- a/utils/genrandconfig
 +++ b/utils/genrandconfig
-@@ -125,13 +125,12 @@ class SystemInfo:
+@@ -35,8 +35,10 @@ if sys.hexversion >= 0x3000000:
+ else:
+     import urllib2 as _urllib
+ 
+-urlopen = _urllib.urlopen
+-urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
++
++def urlopen_closing(uri):
++    return contextlib.closing(_urllib.urlopen(uri))
++
+ 
+ if sys.hexversion >= 0x3000000:
+     def decode_byte_list(bl):
+@@ -45,10 +47,13 @@ else:
+     def decode_byte_list(e):
+         return e
+ 
++
+ def log_write(logf, msg):
+-    logf.write("[%s] %s\n" % (strftime("%a, %d %b %Y %H:%M:%S", localtime()), msg))
++    logf.write("[%s] %s\n" % (strftime("%a, %d %b %Y %H:%M:%S", localtime()),
++                              msg))
+     logf.flush()
+ 
++
+ class SystemInfo:
+     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
+     DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
+@@ -59,7 +64,8 @@ class SystemInfo:
+         self.progs = {}
+ 
+     def find_prog(self, name, flags=os.X_OK, env=os.environ):
+-        if not name or name[0] == os.sep: raise ValueError(name)
++        if not name or name[0] == os.sep:
++            raise ValueError(name)
+ 
+         prog_path = env.get("PATH", None)
+         # for windows compatibility, we'd need to take PATHEXT into account
+@@ -78,7 +84,8 @@ class SystemInfo:
+         """Checks whether a program is available.
+         Lazily evaluates missing entries.
+ 
+-        Returns: None if prog not found, else path to the program [evaluates to True]
++        Returns: None if prog not found, else path to the program [evaluates
++        to True]
+         """
+         try:
+             return self.progs[prog]
+@@ -89,7 +96,8 @@ class SystemInfo:
+         # java[c] needs special care
+         if have_it and prog in ('java', 'javac'):
+             with open(os.devnull, "w") as devnull:
+-                if subprocess.call("%s -version | grep gcj" % prog, shell=True,
++                if subprocess.call("%s -version | grep gcj" % prog,
++                                   shell=True,
+                                    stdout=devnull, stderr=devnull) != 1:
+                     have_it = False
+         # --
+@@ -116,6 +124,7 @@ class SystemInfo:
+ 
          return not missing_requirements
  
- 
--def get_toolchain_configs(**kwargs):
-+def get_toolchain_configs(toolchains_url):
++
+ def get_toolchain_configs(**kwargs):
      """Fetch and return the possible toolchain configurations
  
-     This function returns an array of toolchain configurations. Each
-     toolchain configuration is itself an array of lines of the defconfig.
-     """
--    toolchains_url = kwargs['toolchains_url']
+@@ -125,7 +134,7 @@ def get_toolchain_configs(**kwargs):
+     toolchains_url = kwargs['toolchains_url']
  
      with urlopen_closing(toolchains_url) as r:
-         toolchains_csv = decode_byte_list(r.readlines())
-@@ -172,19 +171,14 @@ def get_toolchain_configs(**kwargs):
+-        l = decode_byte_list(r.readlines())
++        toolchains_csv = decode_byte_list(r.readlines())
+     configs = []
+ 
+     (_, _, _, _, hostarch) = os.uname()
+@@ -133,7 +142,7 @@ def get_toolchain_configs(**kwargs):
+     if hostarch == 'i686' or hostarch == 'i386' or hostarch == 'x86':
+         hostarch = 'x86'
+ 
+-    for row in csv.reader(l):
++    for row in csv.reader(toolchains_csv):
+         config = {}
+         url = row[0]
+         config_hostarch = row[1]
+@@ -162,6 +171,7 @@ def get_toolchain_configs(**kwargs):
+         configs.append(config)
      return configs
  
- 
--def is_toolchain_usable(**kwargs):
-+def is_toolchain_usable(outputdir, config):
++
+ def is_toolchain_usable(**kwargs):
      """Check if the toolchain is actually usable."""
  
--    idir = "instance-%d" % kwargs['instance']
--    sysinfo = kwargs['sysinfo']
--    log = kwargs['log']
--
--    outputdir = os.path.join(idir, "output")
-     with open(os.path.join(outputdir, ".config")) as configf:
-         configlines = configf.readlines()
+@@ -187,11 +197,12 @@ def is_toolchain_usable(**kwargs):
+             ldd_version_output = subprocess.check_output(['ldd', '--version'])
+             glibc_version = ldd_version_output.splitlines()[0].split()[-1]
+             if StrictVersion('2.14') > StrictVersion(glibc_version):
+-                log_write(log, "WARN: ignoring the Linaro ARM toolchains becausee too old host glibc")
++                log_write(log, "WARN: ignoring the Linaro ARM toolchains because too old host glibc")
+                 return False
  
-     # Check that the toolchain configuration is still present
--    for toolchainline in kwargs['config']:
-+    for toolchainline in config:
-         if toolchainline not in configlines:
-             return False
- 
-@@ -203,7 +197,7 @@ def is_toolchain_usable(**kwargs):
      return True
  
- 
--def fixup_config(**kwargs):
-+def fixup_config(outputdir, sysinfo):
++
+ def fixup_config(**kwargs):
      """Finalize the configuration and reject any problematic combinations
  
-     This function returns 'True' when the configuration has been
-@@ -212,10 +206,6 @@ def fixup_config(**kwargs):
-     generated).
-     """
+@@ -222,7 +233,8 @@ def fixup_config(**kwargs):
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain tigger an assembler error with guile package when compiled with -Os (same issue as for CS ARM 2014.05-29)
+-    if 'BR2_PACKAGE_GUILE=y\n' in configlines and 'BR2_OPTIMIZE_S=y\n' in configlines and \
++    if 'BR2_PACKAGE_GUILE=y\n' in configlines and \
++       'BR2_OPTIMIZE_S=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain is affected by PR58854
+@@ -252,9 +264,11 @@ def fixup_config(**kwargs):
+     # libffi not available on sh2a and ARMv7-M, but propagating libffi
+     # arch dependencies in Buildroot is really too much work, so we
+     # handle this here.
+-    if 'BR2_sh2a=y\n' in configlines and  'BR2_PACKAGE_LIBFFI=y\n' in configlines:
++    if 'BR2_sh2a=y\n' in configlines and \
++       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+         return False
+-    if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and  'BR2_PACKAGE_LIBFFI=y\n' in configlines:
++    if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
++       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+         return False
+     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
+         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
+@@ -319,6 +333,7 @@ def fixup_config(**kwargs):
  
--    idir = "instance-%d" % kwargs['instance']
--    sysinfo = kwargs['sysinfo']
--
--    outputdir = os.path.join(idir, "output")
-     with open(os.path.join(outputdir, ".config")) as configf:
-         configlines = configf.readlines()
- 
-@@ -334,7 +324,7 @@ def fixup_config(**kwargs):
      return True
  
- 
--def gen_config(**kwargs):
-+def gen_config(args):
++
+ def gen_config(**kwargs):
      """Generate a new random configuration
  
-     This function generates the configuration, by choosing a random
-@@ -342,8 +332,7 @@ def gen_config(**kwargs):
-     packages.
-     """
- 
--    idir = "instance-%d" % kwargs['instance']
--    log = kwargs['log']
-+    idir = "instance-%d" % args.instance
- 
-     # We need the absolute path to use with O=, because the relative
-     # path to the output directory here is not relative to the
-@@ -352,11 +341,11 @@ def gen_config(**kwargs):
-     outputdir = os.path.abspath(os.path.join(idir, "output"))
-     srcdir = os.path.join(idir, "buildroot")
- 
--    log_write(log, "INFO: generate the configuration")
-+    log_write(args.log, "INFO: generate the configuration")
- 
+@@ -342,7 +357,7 @@ def gen_config(**kwargs):
      # Select a random toolchain configuration
      try:
--        configs = get_toolchain_configs(**kwargs)
-+        configs = get_toolchain_configs(args.toolchains_url)
-     except Exception:
+         configs = get_toolchain_configs(**kwargs)
+-    except:
++    except Exception:
          return -1
  
-@@ -390,10 +379,10 @@ def gen_config(**kwargs):
-                            "olddefconfig"],
+     i = randint(0, len(configs) - 1)
+@@ -371,7 +386,8 @@ def gen_config(**kwargs):
+ 
+     devnull = open(os.devnull, "w")
+ 
+-    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "olddefconfig"],
++    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir,
++                           "olddefconfig"],
                            stdout=devnull, stderr=devnull)
      if ret != 0:
--        log_write(log, "ERROR: cannot oldconfig")
-+        log_write(args.log, "ERROR: cannot oldconfig")
-         return -1
- 
--    if not is_toolchain_usable(config=config, **kwargs):
-+    if not is_toolchain_usable(outputdir, config):
-         return -1
- 
-     # Now, generate the random selection of packages, and fixup
-@@ -403,7 +392,7 @@ def gen_config(**kwargs):
-     bounded_loop = 100
-     while True:
-         if bounded_loop == 0:
--            log_write(log, "ERROR: cannot generate random configuration after 100 iterations")
-+            log_write(args.log, "ERROR: cannot generate random configuration after 100 iterations")
+         log_write(log, "ERROR: cannot oldconfig")
+@@ -391,7 +407,8 @@ def gen_config(**kwargs):
              return -1
          bounded_loop -= 1
          ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir,
-@@ -411,23 +400,23 @@ def gen_config(**kwargs):
-                                "randpackageconfig"],
+-                               "KCONFIG_PROBABILITY=%d" % randint(1,30), "randpackageconfig"],
++                               "KCONFIG_PROBABILITY=%d" % randint(1, 30),
++                               "randpackageconfig"],
                                stdout=devnull, stderr=devnull)
          if ret != 0:
--            log_write(log, "ERROR: cannot generate random configuration")
-+            log_write(args.log, "ERROR: cannot generate random configuration")
-             return -1
--        if fixup_config(**kwargs):
-+        if fixup_config(outputdir, args.sysinfo):
+             log_write(log, "ERROR: cannot generate random configuration")
+@@ -399,13 +416,15 @@ def gen_config(**kwargs):
+         if fixup_config(**kwargs):
              break
  
-     ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir,
-                            "olddefconfig"],
+-    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "olddefconfig"],
++    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir,
++                           "olddefconfig"],
                            stdout=devnull, stderr=devnull)
      if ret != 0:
--        log_write(log, "ERROR: cannot oldconfig")
-+        log_write(args.log, "ERROR: cannot oldconfig")
+         log_write(log, "ERROR: cannot oldconfig")
          return -1
  
-     ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir,
-                            "savedefconfig"],
+-    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "savedefconfig"],
++    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir,
++                           "savedefconfig"],
                            stdout=devnull, stderr=devnull)
      if ret != 0:
--        log_write(log, "ERROR: cannot savedefconfig")
-+        log_write(args.log, "ERROR: cannot savedefconfig")
-         return -1
- 
-     return 0
-@@ -457,8 +446,7 @@ if __name__ == '__main__':
-         # gen_config expects "buildroot" directory under idir
-         os.symlink("..", os.path.join(idir, "buildroot"))
- 
--    # gen_config expects a dict, but args is a class object
--    ret = gen_config(**args.__dict__)
-+    ret = gen_config(args)
- 
-     if ret != 0:
-         parser.exit(1)
+         log_write(log, "ERROR: cannot savedefconfig")
