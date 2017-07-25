@@ -1,45 +1,94 @@
-From: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Date: Tue, 25 Jul 2017 21:55:18 +0200
-Subject: [Buildroot] [.config file] Generating buildroot-like .config
- file from "linux-like" .config file
-In-Reply-To: <CAB_D2UwsHdCsfcOm2BZXrzW6AB12n+tqWkVj3KubbSpSnXPZvA@mail.gmail.com>
-References: <CAB_D2Uz6n6zdA2C3_Pbx6uV39_Zs=J=VfLOzs0Mtfi-agUocKQ@mail.gmail.com>
- <20170725141319.lrbqod4juauli3dd@latitude>
- <CAB_D2UzwSwa6SXs9fW1Eg-A+EziOEg58Daa=PXjtK2ZWs1q4Sw@mail.gmail.com>
- <CAB_D2UwsHdCsfcOm2BZXrzW6AB12n+tqWkVj3KubbSpSnXPZvA@mail.gmail.com>
-Message-ID: <20170725195518.weotlgmo37zfwl2k@latitude>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Jul 2017 21:58:00 +0200
+Subject: [Buildroot] [git commit] nginx-upload-module: add openssl lib
+	dependency
+Message-ID: <20170725195358.9F8E182156@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 25, 2017 at 05:03:03PM +0200, vr roriz wrote:
-> I found a possible path for this procedure. On menuconfig, under Kernel
-> config, I can define a custom config file (for the Kernel). Then I can save
-> this "mirroring" with a savedefconfig. I will test.
-> 
-> Source:
-> https://stackoverflow.com/questions/1414968/how-do-i-configure-the-linux-kernel-within-buildroot
-> 
-> Is that the way people usually do that?
+commit: https://git.buildroot.net/buildroot/commit/?id=c90b9732391b3eec2a8cb9af273585a17fb2cece
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I think it usually works in the following way:
+When building against nginx 1.11.2+, requires additional
+-lcrypto dependency. (Nginx changed crypto approach
+and dependencies for openssl are no longer default)
 
-1) You create a Linux defconfig, and store it under
-   arch/<architecture>/configs/<board>_defconfig, if it doesn't exist
-   already.
-2) You use a kernel branch or patch that contains this Linux defconfig.
-3) You let BR2_LINUX_KERNEL_DEFCONFIG point to this defconfig.
-4) Optionally, you create a *buildroot* defconfig that contains the
-   relevant BR2_LINUX_KERNEL_DEFCONFIG line.
+Upstream pull request:
+https://github.com/vkholodkov/nginx-upload-module/pull/93
 
-It's important to know which defconfig is a kernel defconfig and which
-one is a buildroot defconfig.
+Fixes:
+http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
+http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
+http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
 
-For project specific modifications of the kernel config, there are also
-some other mechanisms, like BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES and
-those listed at http://nightly.buildroot.org/manual.html#outside-br-custom.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-upload-module-add-openssl-lib-dependency.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-
-Jonathan Neusch?fer
+diff --git a/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
+new file mode 100644
+index 0000000..1161751
+--- /dev/null
++++ b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
+@@ -0,0 +1,56 @@
++From 600d0a36c2af785c8284acadeb062d73247281af Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Sun, 23 Jul 2017 09:21:23 -0500
++Subject: [PATCH] nginx-upload-module: add openssl lib dependency
++
++When building against nginx 1.11.2+, requires additional
++-lcrypto dependency. (Nginx changed crypto approach
++and dependencies for openssl are no longer default)
++
++More details found here:
++https://github.com/vkholodkov/nginx-upload-module/issues/79
++
++Upstream pull request:
++https://github.com/vkholodkov/nginx-upload-module/pull/93
++
++Resolves build failure:
++objs/addon/nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3/ngx_http_upload_module.o \
++objs/ngx_modules.o \
++-ldl -lpthread -lpthread -lpcre -lz -latomic_ops \
++-Wl,-E
++ngx_http_upload_module.o: In function `ngx_http_upload_flush_output_buffer':
++ngx_http_upload_module.c:1625: undefined reference to `MD5_Update'
++ngx_http_upload_module.c:1628: undefined reference to `SHA1_Update'
++ngx_http_upload_module.c:1631: undefined reference to `SHA256_Update'
++ngx_http_upload_module.c:1634: undefined reference to `SHA512_Update'
++
++Fixes:
++http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
++http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
++http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ config | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/config b/config
++index cabd4f1..293529f 100644
++--- a/config
+++++ b/config
++@@ -1,11 +1,10 @@
++-USE_MD5=YES
++-USE_SHA1=YES
++ ngx_addon_name=ngx_http_upload_module
++ 
++ if test -n "$ngx_module_link"; then
++     ngx_module_type=HTTP
++     ngx_module_name=$ngx_addon_name
++     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
+++    ngx_module_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
++ 
++     . auto/module
++ else
++-- 
++1.9.1
++
