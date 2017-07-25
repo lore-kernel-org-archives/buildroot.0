@@ -1,68 +1,166 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue, 25 Jul 2017 13:47:49 -0300
-Subject: [Buildroot] [PATCH] configs/warp7: Bump U-Boot and kernel versions
-Message-ID: <1501001269-2452-1-git-send-email-fabio.estevam@nxp.com>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Tue, 25 Jul 2017 09:56:03 -0700
+Subject: [Buildroot] [PATCH v4] zstd: add new package
+Message-ID: <20170725165603.27626-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <festevam@gmail.com>
+Add package to provide Zstandard compression tools
+(see https://facebook.github.io/zstd)
 
-Bump U-Boot to 2017.07 and kernel to version 4.12.3.
+Minimal config snippet for utils/test-pkg is as follows:
 
-As imx_v6_v7_defconfig in 4.12 selects CONFIG_CFG80211_WEXT=y,
-remove the linux.fragment file.
+BR2_PACKAGE_ZSTD=y
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- board/warp7/linux.fragment | 1 -
- configs/warp7_defconfig    | 9 ++++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
- delete mode 100644 board/warp7/linux.fragment
 
-diff --git a/board/warp7/linux.fragment b/board/warp7/linux.fragment
-deleted file mode 100644
-index 892d0cb..0000000
---- a/board/warp7/linux.fragment
-+++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_CFG80211_WEXT=y
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index c18a782..7de4bb5 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+Changes since [v3]:
+
+    - Add license files' hashes and move URL to the end of help text
+      as per feedback from Baruch Siach
+
+Changes since [v2]:
+
+    - Bump package version to the latest release: 1.3.0
+
+Changes since [v1]:
+
+    - Remove all excessive configuration options and simplify
+      installation rules to just calling "make install"
+
+    - Add support for HAVE_LZ4
+
+    - Add missing hash file
+
+[v1] http://lists.busybox.net/pipermail/buildroot/2017-July/196739.html
+[v2] http://lists.busybox.net/pipermail/buildroot/2017-July/197641.html
+[v3] http://lists.busybox.net/pipermail/buildroot/2017-July/199044.html
+
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/zstd/Config.in | 13 +++++++++++++
+ package/zstd/zstd.hash |  7 +++++++
+ package/zstd/zstd.mk   | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 71 insertions(+)
+ create mode 100644 package/zstd/Config.in
+ create mode 100644 package/zstd/zstd.hash
+ create mode 100644 package/zstd/zstd.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7c9b5ed6e3..7e5c878a81 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -100,6 +100,7 @@ F:	package/python-scandir/
+ F:	package/python-simplegeneric/
+ F:	package/python-systemd/
+ F:	package/python-traitlets/
++F:	package/zstd/
  
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.12 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ N:	Andrey Yurovsky <yurovsky@gmail.com>
+ F:	package/rauc/
+diff --git a/package/Config.in b/package/Config.in
+index 59db51e20c..390477072d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -73,6 +73,7 @@ menu "Compressors and decompressors"
+ 	source "package/unzip/Config.in"
+ 	source "package/xz/Config.in"
+ 	source "package/zip/Config.in"
++	source "package/zstd/Config.in"
+ endmenu
  
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -15,9 +15,8 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/warp7/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
- 
-@@ -25,7 +24,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # wifi firmware for brcm43430
+ menu "Debugging, profiling and benchmark"
+diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+new file mode 100644
+index 0000000000..340a06969a
+--- /dev/null
++++ b/package/zstd/Config.in
+@@ -0,0 +1,13 @@
++menuconfig BR2_PACKAGE_ZSTD
++	bool "zstd"
++	help
++	  Zstandard, or zstd as short version, is a fast lossless
++	  compression algorithm, targeting real-time compression
++	  scenarios at zlib-level and better compression ratios
++
++	  The selection of other packages will enable some features:
++
++	  - xz, lz4 and/or zlib will enable support for corresponding
++	    compression formats
++
++	  https://facebook.github.io/zstd
+\ No newline at end of file
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+new file mode 100644
+index 0000000000..f8c56fbced
+--- /dev/null
++++ b/package/zstd/zstd.hash
+@@ -0,0 +1,7 @@
++# Locally computed
++sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
++
++# License files (locally computed as well)
++sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
++sha256 3a508245dd3c486bb9d78a8269091322359443ea54612c3648327a0b3512f23f PATENTS
++
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+new file mode 100644
+index 0000000000..ad26bae6fd
+--- /dev/null
++++ b/package/zstd/zstd.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# zstd
++#
++################################################################################
++
++ZSTD_VERSION = v1.3.0
++ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
++ZSTD_LICENSE = BSD-3-Clause
++ZSTD_LICENSE_FILES = LICENSE PATENTS
++
++ZSTD_OPTS = DESTDIR=$(TARGET_DIR)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ZSTD_OPTS += HAVE_THREAD=1
++else
++ZSTD_OPTS += HAVE_THREAD=0
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++ZSTD_DEPENDENCIES += zlib
++ZSTD_OPTS += HAVE_ZLIB=1
++else
++ZSTD_OPTS += HAVE_ZLIB=0
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++ZSTD_DEPENDENCIES += xz
++ZSTD_OPTS += HAVE_LZMA=1
++else
++ZSTD_OPTS += HAVE_LZMA=0
++endif
++
++ifeq ($(BR2_PACKAGE_LZ4),y)
++ZSTD_DEPENDENCIES += lz4
++ZSTD_OPTS += HAVE_LZ4=1
++else
++ZSTD_OPTS += HAVE_LZ4=0
++endif
++
++define ZSTD_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D) zstd
++endef
++
++define ZSTD_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) -C $(@D)/programs install
++endef
++
++$(eval $(generic-package))
 -- 
-2.7.4
+2.13.3
