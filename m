@@ -1,75 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jul 2017 23:46:37 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] libtirpc: Fix build error
-	due to missing stdint.h inclusion
-Message-ID: <20170725222211.5F3C182147@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:51:03 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] efibootmgr: fix build
+	with gcc 7.x
+Message-ID: <20170725222211.BC13481D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a6a9a3ad8aa16435e4c63d6d45c3fe71cf4b8cc
+commit: https://git.buildroot.net/buildroot/commit/?id=c4ae64c3074bf34f45ecfde4fc0733c2f0bcbd58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Add patch to fix following error:
-| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-|   if (len < (uintptr_t)xdrs->x_base) {
-|              ^~~~~~~~~
+Now that the build of efivar with gcc 7.x has been fixed by commit
+0ca30170345a81f5f21e4ef4424b1f186cde1988 ("efivar: fix build with gcc
+7"), efibootmgr fails similarly with gcc 7.x.
 
-This error occurs with the latest glibc master version (during the testing I had
-glibc commit 92bd70fb85bce57ac47ba5d8af008736832c955a), but doesn't occur with
-version 2.25.
+This commit backports an upstream patch that fixes this issue.
 
-Patch includes stdint.h to provide uintptr_t.
-
-It has been submitted upstream:
-https://sourceforge.net/p/libtirpc/mailman/message/35850276/
-
-Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-[Thomas: reformat as Git formatted patch.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit b3998dc00ff26c4848b4439ba301502faf8f1995)
+(cherry picked from commit cefdd6546010e160985de2daa2ef70a952d081f6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0008-include-stdint.h-for-uintptr_t.patch      | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ ...e-extra-const-keywords-gcc-7-gripes-about.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
+diff --git a/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
 new file mode 100644
-index 0000000..6203161
+index 0000000..8bc6f01
 --- /dev/null
-+++ b/package/libtirpc/0008-include-stdint.h-for-uintptr_t.patch
-@@ -0,0 +1,31 @@
-+From 18f8a605e176f0362da22fd1203eb7cedb136aaf Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Tue, 20 Jun 2017 22:06:35 +0200
-+Subject: [PATCH] include stdint.h for uintptr_t
++++ b/package/efibootmgr/0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch
+@@ -0,0 +1,51 @@
++From a542b169003c2ef95ce6c00d40050eb10568b612 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 6 Feb 2017 16:34:54 -0500
++Subject: [PATCH] Remove extra const keywords gcc 7 gripes about.
 +
-+Fixes
-+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-+|   if (len < (uintptr_t)xdrs->x_base) {
-+|              ^~~~~~~~~
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
++Signed-off-by: Peter Jones <pjones@redhat.com>
++[Backported from upstream commit a542b169003c2ef95ce6c00d40050eb10568b612]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/xdr_sizeof.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/efibootdump.c | 2 +-
++ src/efibootmgr.c  | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
-+index d23fbd1..79d6707 100644
-+--- a/src/xdr_sizeof.c
-++++ b/src/xdr_sizeof.c
-+@@ -39,6 +39,7 @@
-+ #include <rpc/xdr.h>
-+ #include <sys/types.h>
-+ #include <stdlib.h>
-++#include <stdint.h>
-+ #include "un-namespace.h"
++diff --git a/src/efibootdump.c b/src/efibootdump.c
++index 6ff8360..30a1943 100644
++--- a/src/efibootdump.c
+++++ b/src/efibootdump.c
++@@ -39,7 +39,7 @@ print_boot_entry(efi_load_option *loadopt, size_t data_size)
++ 	uint8_t *optional_data = NULL;
++ 	size_t optional_data_len = 0;
++ 	uint16_t pathlen;
++-	const unsigned char const *desc;
+++	const unsigned char *desc;
++ 	char *raw;
++ 	size_t raw_len;
 + 
-+ /* ARGSUSED */
++diff --git a/src/efibootmgr.c b/src/efibootmgr.c
++index 493f2cf..90a0998 100644
++--- a/src/efibootmgr.c
+++++ b/src/efibootmgr.c
++@@ -221,7 +221,7 @@ warn_duplicate_name(list_t *var_list)
++ 	list_t *pos;
++ 	var_entry_t *entry;
++ 	efi_load_option *load_option;
++-	const unsigned char const *desc;
+++	const unsigned char *desc;
++ 
++ 	list_for_each(pos, var_list) {
++ 		entry = list_entry(pos, var_entry_t, list);
++@@ -873,7 +873,7 @@ show_vars(const char *prefix)
++ {
++ 	list_t *pos;
++ 	var_entry_t *boot;
++-	const unsigned char const *description;
+++	const unsigned char *description;
++ 	efi_load_option *load_option;
++ 	efidp dp = NULL;
++ 	unsigned char *optional_data = NULL;
 +-- 
 +2.9.4
 +
