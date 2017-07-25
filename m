@@ -1,75 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 23:03:28 +0200
-Subject: [Buildroot] [git commit] test-pkg: get configs from in-tree
+Date: Tue, 25 Jul 2017 23:05:29 +0200
+Subject: [Buildroot] [git commit] genrandconfig: get configs from in-tree
 	toolchain-configs.csv
-Message-ID: <20170725210435.4919D8022D@busybox.osuosl.org>
+Message-ID: <20170725210435.620068017B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7b9afa70a2fe643ffc28151b382e41218a106b8
+commit: https://git.buildroot.net/buildroot/commit/?id=84929a53a47f12c98de84ea894e53cc21a033623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Now we have the toolchain config fragments in the buildroot directory
 itself, it is no longer necessary to fetch it from the toolchain URL.
 
+The --toolchains-url option is renamed to --toolchains-csv.
+
+The paths in the toolchains_csv file should be either absolute, or
+relative to buildrootdir.
+
+After this change, the script should be called from autobuild-run as:
+
+    subprocess.call([os.path.join(srcdir, "utils/genrandconfig"),
+                     "-o", outputdir, "-b", srcdir,
+                     "--toolchains-csv", kwargs['toolchains_csv']],
+                    stdout=devnull, stderr=log)
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- utils/test-pkg | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ utils/genrandconfig | 25 ++++++++++++++-----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index 25a25e2..8c60649 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -1,7 +1,7 @@
- #!/usr/bin/env bash
- set -e
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index d397b23..a67d46f 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -118,15 +118,15 @@ class SystemInfo:
+         return not missing_requirements
  
--TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
-+TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
  
- main() {
-     local o O opts
-@@ -50,8 +50,7 @@ main() {
-     # Extract the URLs of the toolchains; drop internal toolchains
-     # E.g.: http://server/path/to/name.config,arch,libc
-     #  -->  http://server/path/to/name.config
--    toolchains=($(curl -s "${TOOLCHAINS_URL}" \
--                  |sed -r -e 's/,.*//; /internal/d;' \
-+    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${TOOLCHAINS_CSV}" \
-                   |if [ ${random} -gt 0 ]; then \
-                       sort -R |head -n ${random}
-                    else
-@@ -71,7 +70,6 @@ main() {
-     nb_legal=0
-     for toolchainconfig in "${toolchains[@]}"; do
-         : $((nb++))
--        # Using basename(1) on a URL works nicely
-         toolchain="$(basename "${toolchainconfig}" .config)"
-         build_dir="${dir}/${toolchain}"
-         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
-@@ -90,17 +88,13 @@ main() {
+-def get_toolchain_configs(toolchains_url):
++def get_toolchain_configs(toolchains_csv, buildrootdir):
+     """Fetch and return the possible toolchain configurations
  
- build_one() {
-     local dir="${1}"
--    local url="${2}"
-+    local toolchainconfig="${2}"
-     local cfg="${3}"
-     local pkg="${4}"
+     This function returns an array of toolchain configurations. Each
+     toolchain configuration is itself an array of lines of the defconfig.
+     """
  
-     mkdir -p "${dir}"
+-    with urlopen_closing(toolchains_url) as r:
+-        toolchains_csv = decode_byte_list(r.readlines())
++    with open(toolchains_csv) as r:
++        toolchains = decode_byte_list(r.readlines())
+     configs = []
  
--    if ! curl -s "${url}" >"${dir}/.config"; then
--        return 2
--    fi
--
--    cat "support/config-fragments/minimal.config" "${cfg}" >>"${dir}/.config"
-+    cat "${toolchainconfig}" "support/config-fragments/minimal.config" "${cfg}" >>"${dir}/.config"
+     (_, _, _, _, hostarch) = os.uname()
+@@ -134,9 +134,9 @@ def get_toolchain_configs(toolchains_url):
+     if hostarch == 'i686' or hostarch == 'i386' or hostarch == 'x86':
+         hostarch = 'x86'
  
-     if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
-         return 2
+-    for row in csv.reader(toolchains_csv):
++    for row in csv.reader(toolchains):
+         config = {}
+-        url = row[0]
++        configfile = row[0]
+         config_hostarch = row[1]
+         keep = False
+ 
+@@ -158,8 +158,11 @@ def get_toolchain_configs(toolchains_url):
+         if not keep:
+             continue
+ 
+-        with urlopen_closing(url) as r:
+-            config = decode_byte_list(r.readlines())
++        if not os.path.isabs(configfile):
++            configfile = os.path.join(buildrootdir, configfile)
++
++        with open(configfile) as r:
++            config = r.readlines()
+         configs.append(config)
+     return configs
+ 
+@@ -329,7 +332,7 @@ def gen_config(args):
+     """
+ 
+     # Select a random toolchain configuration
+-    configs = get_toolchain_configs(args.toolchains_url)
++    configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
+ 
+     i = randint(0, len(configs) - 1)
+     toolchainconfig = configs[i]
+@@ -408,10 +411,10 @@ if __name__ == '__main__':
+     parser.add_argument("--buildrootdir", "-b",
+                         help="Buildroot directory (relative to current directory)",
+                         type=str, default='.')
+-    parser.add_argument("--toolchains-url",
+-                        help="URL of toolchain configuration file",
++    parser.add_argument("--toolchains-csv",
++                        help="Path of the toolchain configuration file",
+                         type=str,
+-                        default="http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv")
++                        default="support/config-fragments/autobuild/toolchain-configs.csv")
+     args = parser.parse_args()
+ 
+     # We need the absolute path to use with O=, because the relative
