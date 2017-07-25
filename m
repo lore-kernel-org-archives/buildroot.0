@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:14:16 +0200
-Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
-In-Reply-To: <20170703084107.5620-2-arnout@mind.be> (Arnout Vandecappelle's
- message of "Mon, 3 Jul 2017 10:41:07 +0200")
-References: <20170703084107.5620-1-arnout@mind.be>
- <20170703084107.5620-2-arnout@mind.be>
-Message-ID: <8760egxiyv.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Jul 2017 00:16:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/heimdal: security bump to
+	version 7.4.0
+In-Reply-To: <20170722100736.25753-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 22 Jul 2017 12:07:36 +0200")
+References: <20170722100736.25753-1-bernd.kuhls@t-online.de>
+Message-ID: <871sp4xivs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > From: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Building host-aespipe fails on Debian stretch at linking stage:
+ > Fixes security bugs CVE-2017-11103 & CVE-2017-6594
+ > Changed upstream tarball location as noted in the release notes:
+ > http://www.h5l.org/releases.html?show=7.4.0
 
- > /usr/bin/gcc -L/home/buildroot/br6/output/host/lib
- > -L/home/buildroot/br6/output/host/usr/lib
- > -Wl,-rpath,/home/buildroot/br6/output/host/usr/lib -o aespipe
- > aespipe.o aes-amd64.o md5-amd64.o md5-2x-amd64.o aes-intel64.o
- > sha512.o rmd160.o
- > /usr/bin/ld: aes-amd64.o: relocation R_X86_64_32S against `.rodata'
- > can not be used when making a shared object; recompile with -fPIC
+ > --with-db-type-preference= is needed to fix a build error:
 
- > The same problem apparently exists on recent Ubuntu and Gentoo.
+ >   CCLD     otp
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_get_internal':
+ > otp_db.c:(.text+0x32): undefined reference to `__roken_dbm_fetch'
+ > otp_db.c:(.text+0xd9): undefined reference to `__roken_dbm_store'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_open':
+ > otp_db.c:(.text+0x1c9): undefined reference to `__roken_dbm_open'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_db_close':
+ > otp_db.c:(.text+0x205): undefined reference to `__roken_dbm_close'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_delete':
+ > otp_db.c:(.text+0x23e): undefined reference to `__roken_dbm_delete'
+ > ../../lib/otp/.libs/libotp.a(otp_db.o): In function `otp_put':
+ > otp_db.c:(.text+0x388): undefined reference to `__roken_dbm_store'
+ > collect2: error: ld returned 1 exit status
 
- > Fix is also used in Debian:
- > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-
- > [Peter: add comment explaining why]
- > [Arnout: use host-cc-option to discover if -no-pie is available;
- >  cfr. 57b628a932b9b4a3c4bf80f4c82a81da5adcb173]
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
