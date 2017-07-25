@@ -1,54 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jul 2017 23:06:58 +0200
-Subject: [Buildroot] [git commit] Makefile: add alldefconfig target
-Message-ID: <20170725210435.C3A888022D@busybox.osuosl.org>
+Date: Tue, 25 Jul 2017 23:05:41 +0200
+Subject: [Buildroot] [git commit] toolchain-configs.csv: remove unused libc
+	column
+Message-ID: <20170725210435.8229A7FAFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dab80981d15979eab3aea28a33694396635a52a1
+commit: https://git.buildroot.net/buildroot/commit/?id=5fc29ec2a76fc3a629a71cf3596b7253db6b7ea0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It is used by Kconfig's merge_config.sh.
-
-No alldefpackageconfig is added, since it's rather pointless: it would
-only enable busybox.
+This column is not used by either genrandconfig or test-pkg, so remove
+it.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../autobuild/toolchain-configs.csv                | 104 ++++++++++-----------
+ 1 file changed, 52 insertions(+), 52 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 3712e47..4251803 100644
---- a/Makefile
-+++ b/Makefile
-@@ -128,7 +128,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- 
- # List of targets and target patterns for which .config doesn't need to be read in
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
-+	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	print-version olddefconfig distclean manual manual-%
- 
-@@ -886,7 +886,7 @@ config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- # no values are set for the legacy options so a subsequent oldconfig
- # will query them. Therefore, run an additional olddefconfig.
- 
--randconfig allyesconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
-+randconfig allyesconfig alldefconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --$@ $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
-@@ -996,6 +996,7 @@ help:
- 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
-+	@echo '  alldefconfig           - New config where all options are set to default'
- 	@echo '  randpackageconfig      - New config with random answer to package options'
- 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
- 	@echo '  allnopackageconfig     - New config where package options are answered with no'
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 15f6546..80a6d04 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -1,52 +1,52 @@
+-support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86,glibc
+-support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86,glibc
+-support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-arc-full-internal.config,any,uclibc
+-support/config-fragments/autobuild/br-arcle-hs38.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-arm-basic.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-arm-cortex-a9-musl.config,x86_64,musl
+-support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-arm-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-arm-full-static.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-arm-internal-full.config,any,uclibc
+-support/config-fragments/autobuild/br-bfin-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64,musl
+-support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-m68k-68040-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-microblazeel-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-microblazeel-full-internal.config,any,glibc
+-support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-mipsel-o32-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-nios2-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-openrisc-uclibc.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-powerpc-internal-full.config,any,uclibc
+-support/config-fragments/autobuild/br-sh4-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64,glibc
+-support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-x86-64-musl.config,x86_64,musl
+-support/config-fragments/autobuild/br-xtensa-full.config,x86_64,uclibc
+-support/config-fragments/autobuild/br-xtensa-full-internal.config,any,uclibc
+-support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86,glibc
+-support/config-fragments/autobuild/linaro-aarch64.config,x86,glibc
+-support/config-fragments/autobuild/linaro-arm.config,x86,glibc
+-support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86,glibc
+-support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86,glibc
+-support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-arm-armv4t.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-arm.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-mips64.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-mips.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-nios2.config,x86,glibc
+-support/config-fragments/autobuild/sourcery-x86-64.config,x86,glibc
+-support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config,x86,glibc
++support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
++support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
++support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
++support/config-fragments/autobuild/br-arc-full-internal.config,any
++support/config-fragments/autobuild/br-arcle-hs38.config,x86_64
++support/config-fragments/autobuild/br-arm-basic.config,x86_64
++support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
++support/config-fragments/autobuild/br-arm-cortex-a9-musl.config,x86_64
++support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
++support/config-fragments/autobuild/br-arm-full.config,x86_64
++support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
++support/config-fragments/autobuild/br-arm-full-static.config,x86_64
++support/config-fragments/autobuild/br-arm-internal-full.config,any
++support/config-fragments/autobuild/br-bfin-full.config,x86_64
++support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
++support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
++support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64
++support/config-fragments/autobuild/br-m68k-68040-full.config,x86_64
++support/config-fragments/autobuild/br-microblazeel-full.config,x86_64
++support/config-fragments/autobuild/br-microblazeel-full-internal.config,any
++support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64
++support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config,x86_64
++support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
++support/config-fragments/autobuild/br-mipsel-o32-full.config,x86_64
++support/config-fragments/autobuild/br-nios2-glibc.config,x86_64
++support/config-fragments/autobuild/br-openrisc-uclibc.config,x86_64
++support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64
++support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
++support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
++support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
++support/config-fragments/autobuild/br-powerpc-internal-full.config,any
++support/config-fragments/autobuild/br-sh4-full.config,x86_64
++support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
++support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
++support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
++support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
++support/config-fragments/autobuild/br-xtensa-full.config,x86_64
++support/config-fragments/autobuild/br-xtensa-full-internal.config,any
++support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
++support/config-fragments/autobuild/linaro-aarch64.config,x86
++support/config-fragments/autobuild/linaro-arm.config,x86
++support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86
++support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86
++support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config,x86
++support/config-fragments/autobuild/sourcery-arm-armv4t.config,x86
++support/config-fragments/autobuild/sourcery-arm.config,x86
++support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
++support/config-fragments/autobuild/sourcery-mips64.config,x86
++support/config-fragments/autobuild/sourcery-mips.config,x86
++support/config-fragments/autobuild/sourcery-nios2.config,x86
++support/config-fragments/autobuild/sourcery-x86-64.config,x86
++support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config,x86
