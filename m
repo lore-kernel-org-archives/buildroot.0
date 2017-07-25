@@ -1,102 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Jul 2017 18:07:26 +0200
-Subject: [Buildroot] [PATCH 19/20] system: make systemd work on a
- read-only rootfs
-In-Reply-To: <a5838b47-f369-1f47-f74d-5741284fde51@mind.be>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <c74e8ad5fca764a23b9392af5cb83ecefb4a5817.1500398733.git.yann.morin.1998@free.fr>
- <f137feaf-3cb1-4a9a-0331-d51bca014f50@mind.be>
- <20170724154552.GC2918@scaer>
- <a5838b47-f369-1f47-f74d-5741284fde51@mind.be>
-Message-ID: <20170725160726.GA2773@scaer>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Tue, 25 Jul 2017 09:26:51 -0700
+Subject: [Buildroot] [PATCH v3] zstd: add new package
+In-Reply-To: <20170725084853.55xc6n3bro72qt5y@tarshish>
+References: <20170725000700.19035-1-andrew.smirnov@gmail.com>
+ <20170725084853.55xc6n3bro72qt5y@tarshish>
+Message-ID: <CAHQ1cqGg+sNTDs4URksfz4yNe1Mc5VwSEirPVkin-bOAkj6--Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On Tue, Jul 25, 2017 at 1:48 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Andrey,
+>
+> On Mon, Jul 24, 2017 at 05:07:00PM -0700, Andrey Smirnov wrote:
+>
+> [...]
+>
+>> diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+>> new file mode 100644
+>> index 0000000000..0e97c64e0a
+>> --- /dev/null
+>> +++ b/package/zstd/Config.in
+>> @@ -0,0 +1,13 @@
+>> +menuconfig BR2_PACKAGE_ZSTD
+>> +     bool "zstd"
+>> +     help
+>> +       Zstandard, or zstd as short version, is a fast lossless
+>> +       compression algorithm, targeting real-time compression
+>> +       scenarios at zlib-level and better compression ratios
+>> +
+>> +       For more info see https://facebook.github.io/zstd
+>
+> The homepage link should come below ...
+>
 
-On 2017-07-25 00:44 +0200, Arnout Vandecappelle spake thusly:
-> On 24-07-17 17:45, Yann E. MORIN wrote:
-> > On 2017-07-24 00:18 +0200, Arnout Vandecappelle spake thusly:
-> >> On 18-07-17 19:25, Yann E. MORIN wrote:
-[--SNIP--]
->  Thinking out of the box: can we make /var a symlink to /tmp/var, and avoid
-> creating a tmpfs on /var at all? Since /tmp/var doesn't exist, "C! /tmp/var"
-> should work, no? Or did that cause journald to bail out?
+OK, will fix in v4.
 
-Worth a try, of course. But still we'd need hoks of some kind to allow
-package to install in /var at build time, and move that to factory at
-the end of the build, while still preserving the ability to be able to
-rebuild stuff without requiring a 'make clean'.
+>> +
+>> +       The selection of other packages will enable some features:
+>> +
+>> +       - xz, lz4 and/or zlib will enable support for corresponding
+>> +         compression formats
+>> \ No newline at end of file
+>
+> ... here. It should be in a separate like that contains only the URL.
+>
+>> diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+>> new file mode 100644
+>> index 0000000000..d09e6b46f4
+>> --- /dev/null
+>> +++ b/package/zstd/zstd.hash
+>> @@ -0,0 +1,3 @@
+>> +# Locally computed
+>> +sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
+>
+> Please add hashes for the license files.
+>
 
-[--SNIP symlinks in /var--]
->  There is unfortunately no way to fix this. If the package is smart, it does
-> calculates the relative path based on the real path of the source and
-> destination. If the package is stupid, it just assumes ../something. Whatever we
-> do, one of them will break... The only safe approach would be to put stuff in
-> /factory instead of /usr/share/factory.
+OK. Will add in v4.
 
-But that is not where systemd-tmpfiles will look at...
+>> +
+>> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+>> new file mode 100644
+>> index 0000000000..ad26bae6fd
+>> --- /dev/null
+>> +++ b/package/zstd/zstd.mk
+>> @@ -0,0 +1,49 @@
+>> +################################################################################
+>> +#
+>> +# zstd
+>> +#
+>> +################################################################################
+>> +
+>> +ZSTD_VERSION = v1.3.0
+>> +ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+>> +ZSTD_LICENSE = BSD-3-Clause
+>
+> Maybe also mention the Facebook patents grant? I'm not sure about that because
+> it is not strictly a code license, AFAIK, but it is related to "legal info".
+>
 
-Unless you meant we have /factory during the build, then move it at the
-moment we aggregaate the images, and move it back (moving the problem
-from handling /var to handling /factory instead) ?
+I am more than happy to add that, but I am not sure what it should
+look like. If we decide we should do that, please give me an example
+of what's expected.
 
-[--SNIP--]
-> > Not really, because systemd-tmpfile will look in exactly the factory
-> > path to find the source of the copy/link. See the exerpt I pasted above.
-> > 
-> > So, given this entry, for example:
-> > 
-> >     C /var/foo - - - -
-> > 
-> > systemd-tmpfiles will see if it can find /usr/share/factory/foo not
-> > /usr/share/factory/var/foo
-> 
->  Weird, the way I read both the man page and the source code seem to suggest
-> that "C /var/something" will copy from /usr/share/factory/var/something... But I
-> guess you tested that so I must be misreading the source code.
-
-And of course you are right.
-
-It just happened that my testing was borked because systemd (or one of
-its minions like journald) would create the required directory structure
-and files they need, so I did not see mine were not copied over. Now I
-have another test that does not use those "standard" files, and I'll add
-it to the testing infra.
-
-So yes, it should be /usr/share/factory/var/foo to populate /var/foo.
-
-Which led to another bug, which is that tmpfiles should be in
-/etc/tmpfiles.d/ and not in /etc/systemd/tmpfiles.d/
-
-I've now fixed that.
-
-However (thinking aloud now), I have another tentative to do, which
-instead of creating a symlink for /var at runtime, would just creat it
-as a direcotry as expected.
-
-Then the hooks would simply "mv /var /usr/share/factory/var; mkdir /var",
-create the tmpfiles entries, aggregate the image(s), the rm -rf /var; mv
-/usr/share/factory/var /var".
-
-This is probably much simpler than moving the entries one by one.
-
-The only drawback in this case would be a package that already creates a
-factory/var/foo entry. It would end up in /var/foo afterwards... :-/
-So I think the /var symlink is better, in fact, so I'll keep that.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Andrey Smirnov
