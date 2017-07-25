@@ -1,57 +1,121 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 00:09:31 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/Makefile.in: add
-	host-cc-option macro
-Message-ID: <20170725222142.78A4D7FBDC@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 00:08:33 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] collectd: fix build with
+	gcc 7.x
+Message-ID: <20170725222142.0DD9D7FBDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77604f73362030573ee951639ac71289e95e72a8
+commit: https://git.buildroot.net/buildroot/commit/?id=fbce4d82ff8f4cfe8c6be473e5f854c3177021c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This macro allows to test if HOSTCC supports a specific option. It is
-needed to pass '-no-pie' on recent Debian, Ubuntu and Gentoo hosts.
+This commit backports an upstream collectd patch that fixes a build
+issue with gcc 7.x.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
+
+  http://autobuild.buildroot.net/results/2441e2a69d013a6376a90d375e15991e8cb816bd/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 91a08ecc998ae232ea6f3525540ed129d8176d18)
+(cherry picked from commit 9ac88f318a9cdc4cdc1bcfe6a190b46b650cb3cc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ ...1-libcollectdclient-increase-error-buffer.patch | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c1dc714..b32ad8e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -223,6 +223,27 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
- HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
- 
-+# The macros below are taken from linux 4.11 and adapted slightly.
-+# Copy more when needed.
+diff --git a/package/collectd/0001-libcollectdclient-increase-error-buffer.patch b/package/collectd/0001-libcollectdclient-increase-error-buffer.patch
+new file mode 100644
+index 0000000..247d32b
+--- /dev/null
++++ b/package/collectd/0001-libcollectdclient-increase-error-buffer.patch
+@@ -0,0 +1,87 @@
++From e170f3559fcda6d37a012aba187a96b1f42e8f9d Mon Sep 17 00:00:00 2001
++From: Ruben Kerkhof <ruben@rubenkerkhof.com>
++Date: Sun, 2 Jul 2017 21:52:14 +0200
++Subject: [PATCH] libcollectdclient: increase error buffer
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf8
++Content-Transfer-Encoding: 8bit
 +
-+# try-run
-+# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
-+# Exit code chooses option. "$$TMP" is can be used as temporary file and
-+# is automatically cleaned up.
-+try-run = $(shell set -e;               \
-+	TMP="$$(tempfile)";             \
-+	if ($(1)) >/dev/null 2>&1;      \
-+	then echo "$(2)";               \
-+	else echo "$(3)";               \
-+	fi;                             \
-+	rm -f "$$TMP")
++make[1]: Entering directory '/home/ruben/src/collectd'
++  CC       src/libcollectdclient/libcollectdclient_la-client.lo
++src/libcollectdclient/client.c: In function ??????lcc_getval??????:
++src/libcollectdclient/client.c:621:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++                       ^                   ~
++src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++                                                ^~~~~~~~~~~
++src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++src/libcollectdclient/client.c:621:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++     ^~~~~~~~~~~~~~
++src/libcollectdclient/client.c: In function ??????lcc_putval??????:
++src/libcollectdclient/client.c:754:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++                       ^                   ~
++src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++                                                ^~~~~~~~~~~
++src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++src/libcollectdclient/client.c:754:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++     ^~~~~~~~~~~~~~
++src/libcollectdclient/client.c: In function ??????lcc_flush??????:
++src/libcollectdclient/client.c:802:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++                       ^                   ~
++src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++                                                ^~~~~~~~~~~
++src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++src/libcollectdclient/client.c:802:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++     ^~~~~~~~~~~~~~
++src/libcollectdclient/client.c: In function ??????lcc_listval??????:
++src/libcollectdclient/client.c:834:23: warning: ??????%s?????? directive output may be truncated writing up to 1023 bytes into a region of size 1010 [-Wformat-truncation=]
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++                       ^                   ~
++src/libcollectdclient/client.c:94:48: note: in definition of macro ??????LCC_SET_ERRSTR??????
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++                                                ^~~~~~~~~~~
++src/libcollectdclient/client.c:94:5: note: ??????snprintf?????? output between 15 and 1038 bytes into a destination of size 1024
++     snprintf((c)->errbuf, sizeof((c)->errbuf), __VA_ARGS__);                   \
++     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++src/libcollectdclient/client.c:834:5: note: in expansion of macro ??????LCC_SET_ERRSTR??????
++     LCC_SET_ERRSTR(c, "Server error: %s", res.message);
++     ^~~~~~~~~~~~~~
 +
-+# host-cc-option
-+# Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
-+host-cc-option = $(call try-run,\
-+        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
++Fixes #2200
 +
++[Upstream commit: https://git.octo.it/?p=collectd.git;a=commitdiff;h=e170f3559fcda6d37a012aba187a96b1f42e8f9d]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/libcollectdclient/client.c |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
- # host-intltool should be executed with the system perl, so we save
- # the path to the system perl, before a host-perl built by Buildroot
- # might get installed into $(HOST_DIR)/usr/bin and therefore appears
++diff --git a/src/libcollectdclient/client.c b/src/libcollectdclient/client.c
++index 51a4ab2..3ae2e71 100644
++--- a/src/libcollectdclient/client.c
+++++ b/src/libcollectdclient/client.c
++@@ -99,7 +99,7 @@
++  */
++ struct lcc_connection_s {
++   FILE *fh;
++-  char errbuf[1024];
+++  char errbuf[2048];
++ };
++ 
++ struct lcc_response_s {
++-- 
++1.7.10.4
++
