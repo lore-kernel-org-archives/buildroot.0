@@ -1,81 +1,146 @@
-From: Hugues FRUCHET <hugues.fruchet@st.com>
-Date: Wed, 26 Jul 2017 12:13:16 +0000
-Subject: [Buildroot] [PATCH v1] package/libv4l: no libv4lconvert helper
- support if no fork()
-In-Reply-To: <20170726132048.32bf249d@windsurf.lan>
-References: <1501064391-32685-1-git-send-email-hugues.fruchet@st.com>
- <1501064391-32685-2-git-send-email-hugues.fruchet@st.com>
- <20170726132048.32bf249d@windsurf.lan>
-Message-ID: <889c2456-5e86-c1d1-16aa-5986552aabb9@st.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 26 Jul 2017 15:24:51 +0300
+Subject: [Buildroot] [PATCH] webkitgtk: security bump to version 2.16.6
+In-Reply-To: <20170726085040.20516-1-peter@korsgaard.com>
+References: <20170726085040.20516-1-peter@korsgaard.com>
+Message-ID: <20170726152451.GB7852@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-V2 sent, hope this is fine this time.
+You have been faster than me sending this one, thanks!  ;-)
 
-BR,
-Hugues.
+On Wed, 26 Jul 2017 10:50:40 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> Fixes the following security issues:
+> 
+> CVE-2017-7018 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7030 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7034 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7037 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7039 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7046 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7048 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7055 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7056 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7061 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+> It allows remote attackers to execute arbitrary code or cause a denial of
+> service (memory corruption and application crash) via a crafted web site.
+> 
+> CVE-2017-7064 - An issue was discovered in certain Apple products.  iOS
+> before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+> 6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+> The issue involves the "WebKit" component.  It allows attackers to bypass
+> intended memory-read restrictions via a crafted app.
+> 
+> For more details, see the announcement:
+> https://webkitgtk.org/2017/07/24/webkitgtk2.16.6-released.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-On 07/26/2017 01:20 PM, Thomas Petazzoni wrote:
-> Hello,
+Reviewed-by: "Adrian Perez de Castro" <aperez@igalia.com>
+
+> ---
+>  package/webkitgtk/webkitgtk.hash | 8 ++++----
+>  package/webkitgtk/webkitgtk.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> Thanks for picking up my proposal!
-> 
-> On Wed, 26 Jul 2017 12:19:51 +0200, Hugues Fruchet wrote:
->> Build libv4lconvert helper support only when fork()
->> is available.
->> This fix the build issue reported here:
->> http://lists.buildroot.org/pipermail/buildroot/2017-July/197571.html
-> 
-> Don't use a mailing list link for references to build failures.
-> Instead, you should point to the appropriate build result on
-> http://autobuild.buildroot.org
-> 
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> I haven't Signed-off-by on this commit, so this shouldn't be there.
-> 
->> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
->> ---
->>   ...lconvert-helper-support-only-when-fork-is.patch | 101 +++++++++++++++++++++
->>   1 file changed, 101 insertions(+)
->>   create mode 100644 package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
->>
->> diff --git a/package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch b/package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
->> new file mode 100644
->> index 0000000..705dea4
->> --- /dev/null
->> +++ b/package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
->> @@ -0,0 +1,101 @@
->> +From 30b3692ccb590407f35b43bbae3e3a4298cdbe52 Mon Sep 17 00:00:00 2001
->> +From: Hugues Fruchet <hugues.fruchet@st.com>
-> 
-> If you are the author...
-> 
->> +Date: Wed, 26 Jul 2017 12:17:08 +0200
->> +Subject: [PATCH 10/10] Build libv4lconvert helper support only when fork() is
->> + available
->> +
->> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> +Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-> 
-> ... then you should be the first person in the Signed-off-by list. And
-> if you keep yourself as the author, then remove my name from the
-> Signed-off-by list.
-> 
-> Signed-off-by is used when:
-> 
->   - I am the author (first Signed-off-by)
-> 
->   - I am passing the patch (because I'm taking it from another project,
->     or because I'm a maintainer applying the patch contributed by
->     someone else)
-> 
-> Best regards,
-> 
-> Thomas
-> 
+> diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+> index 5df4ce8df3..2c0fc50611 100644
+> --- a/package/webkitgtk/webkitgtk.hash
+> +++ b/package/webkitgtk/webkitgtk.hash
+> @@ -1,4 +1,4 @@
+> -# From https://webkitgtk.org/releases/webkitgtk-2.16.5.tar.xz.sums
+> -md5 fce72dc89cd310a663d9eb97133861fe webkitgtk-2.16.5.tar.xz
+> -sha1 8052fda41b1b666f175baaac787c5cba39ed24a0 webkitgtk-2.16.5.tar.xz
+> -sha256 8e0396f3428e757898c5856e642eed4fcd5a20ae03d96d3eaa03b76634be7dd4 webkitgtk-2.16.5.tar.xz
+> +# From https://webkitgtk.org/releases/webkitgtk-2.16.6.tar.xz.sums
+> +md5  0e2d142a586e4ff79cf0324f4fdbf20c webkitgtk-2.16.6.tar.xz
+> +sha1 f7fca3fbac3dc99e39f353a6df250635e684c922 webkitgtk-2.16.6.tar.xz
+> +sha256 fc23650df953123c59b9c0edf3855e7bd55bd107820997fc72375811e1ea4b21 webkitgtk-2.16.6.tar.xz
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index ef20839f92..b200d23262 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -WEBKITGTK_VERSION = 2.16.5
+> +WEBKITGTK_VERSION = 2.16.6
+>  WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+>  WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+>  WEBKITGTK_INSTALL_STAGING = YES
+> -- 
+> 2.11.0
+
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170726/0ac11077/attachment.asc>
