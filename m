@@ -1,75 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jul 2017 13:20:48 +0200
-Subject: [Buildroot] [PATCH v1] package/libv4l: no libv4lconvert helper
- support if no fork()
-In-Reply-To: <1501064391-32685-2-git-send-email-hugues.fruchet@st.com>
-References: <1501064391-32685-1-git-send-email-hugues.fruchet@st.com>
- <1501064391-32685-2-git-send-email-hugues.fruchet@st.com>
-Message-ID: <20170726132048.32bf249d@windsurf.lan>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 26 Jul 2017 13:49:17 +0200
+Subject: [Buildroot] [PATCH 04/14 v4] package/skeleton: split out into
+ skeleton-custom
+In-Reply-To: <65699c6d-b520-b932-45dc-bf9e98bede7b@mind.be>
+References: <cover.1501017251.git.yann.morin.1998@free.fr>
+ <af2a3c603d857f4012889fb60931a514bdbd93a8.1501017251.git.yann.morin.1998@free.fr>
+ <65699c6d-b520-b932-45dc-bf9e98bede7b@mind.be>
+Message-ID: <e095a88e-5e31-29d3-54de-4102990304e7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Thanks for picking up my proposal!
 
-On Wed, 26 Jul 2017 12:19:51 +0200, Hugues Fruchet wrote:
-> Build libv4lconvert helper support only when fork()
-> is available.
-> This fix the build issue reported here:
-> http://lists.buildroot.org/pipermail/buildroot/2017-July/197571.html
+On 26-07-17 02:16, Arnout Vandecappelle wrote:
+>  I've fixed all that and was going to apply, but then I noticed that patch 1
+> breaks our tests, so I refrained from pushing it. You can fetch it from
+> https://gitlab.com/arnout/buildroot (master branch; will be rebased away in a
+> couple of days).
 
-Don't use a mailing list link for references to build failures.
-Instead, you should point to the appropriate build result on
-http://autobuild.buildroot.org
+ So I pushed this commit with the runtime testing patch 11 on top of to gitlab
+to see what would happen, and the systemd test fails. It seems the getty on
+ttyAMA0 can't be started. Is that to be expected, due to the /var/log->/tmp symlink?
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ You can inspect the output on [1], but it's not saying much.
 
-I haven't Signed-off-by on this commit, so this shouldn't be there.
+ Regards,
+ Arnout
 
-> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-> ---
->  ...lconvert-helper-support-only-when-fork-is.patch | 101 +++++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
-> 
-> diff --git a/package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch b/package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
-> new file mode 100644
-> index 0000000..705dea4
-> --- /dev/null
-> +++ b/package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
-> @@ -0,0 +1,101 @@
-> +From 30b3692ccb590407f35b43bbae3e3a4298cdbe52 Mon Sep 17 00:00:00 2001
-> +From: Hugues Fruchet <hugues.fruchet@st.com>
+[1]
+https://gitlab.com/arnout/buildroot/-/jobs/24489865/artifacts/raw/test-output/TestInitSystemSystemdRwFull-run.log
 
-If you are the author...
-
-> +Date: Wed, 26 Jul 2017 12:17:08 +0200
-> +Subject: [PATCH 10/10] Build libv4lconvert helper support only when fork() is
-> + available
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-
-... then you should be the first person in the Signed-off-by list. And
-if you keep yourself as the author, then remove my name from the
-Signed-off-by list.
-
-Signed-off-by is used when:
-
- - I am the author (first Signed-off-by)
-
- - I am passing the patch (because I'm taking it from another project,
-   or because I'm a maintainer applying the patch contributed by
-   someone else)
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
