@@ -1,49 +1,65 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Wed, 26 Jul 2017 11:41:04 +0200
-Subject: [Buildroot] [PATCH] tcpdump: security bump to 4.9.1
-Message-ID: <20170726094104.GL26551@argentina>
+From: Hugues FRUCHET <hugues.fruchet@st.com>
+Date: Wed, 26 Jul 2017 09:46:58 +0000
+Subject: [Buildroot] [PATCH v1] package/libv4l: disable libraries build
+ if no fork() support
+In-Reply-To: <20170725213424.7688452c@windsurf.home>
+References: <1500989370-5353-1-git-send-email-hugues.fruchet@st.com>
+ <1500989370-5353-2-git-send-email-hugues.fruchet@st.com>
+ <20170725213424.7688452c@windsurf.home>
+Message-ID: <2a4c59f3-d385-07dd-fee3-7a0543e3d0e6@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-11108/Fix bounds checking for STP
+Hi Thomas,
 
-Changelog: http://www.tcpdump.org/tcpdump-changes.txt
+Your patch is definitely better for sure ;)
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
+Tested OK on my side, I will push it on media list.
+Peter, could you test on your side to be sure that build issue is fixed 
+on your side ?
 
-Could someone please double-check the hash? I checked the PGP key but do not
-have the full trust mechanism so cannot be sure that the server public key is
-valid.
+Best regards,
+Hugues.
 
-
- package/tcpdump/tcpdump.hash | 2 +-
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 966db1f3aa..ecd02275fe 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 eae98121cbb1c9adbedd9a777bf2eae9fa1c1c676424a54740311c8abcee5a5e  tcpdump-4.9.0.tar.gz
-+sha256 f9448cf4deb2049acf713655c736342662e652ef40dbe0a8f6f8d5b9ce5bd8f3  tcpdump-4.9.1.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 0e779a53c3..8349748ceb 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPDUMP_VERSION = 4.9.0
-+TCPDUMP_VERSION = 4.9.1
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3-Clause
- TCPDUMP_LICENSE_FILES = LICENSE
--- 
-2.13.0
+On 07/25/2017 09:34 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 25 Jul 2017 15:29:30 +0200, Hugues Fruchet wrote:
+>> Some no-MMU platforms have shared libraries support
+>> but no fork() support, which is required by libv4lconvert.
+>> Fix this by disabling libv4l libraries build in case of
+>> no fork() support.
+>> This fix the build issue reported here:
+>> http://lists.buildroot.org/pipermail/buildroot/2017-July/197571.html
+>>
+>> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+> 
+> I'm sorry, but I'm not sure this is the right solution. Indeed, this
+> entirely disables the build of all libv4l libraries.
+> 
+> Therefore, if you for example re-enable the v4l2grab package by
+> dropping its BR2_USE_MMU dependency, it fails to build with:
+> 
+> v4l2grab.c:59:21: fatal error: libv4l2.h: No such file or directory
+>   #include <libv4l2.h>
+> 
+> So things work today because the libv4l package used to have a
+> BR2_USE_MMU dependency, which was propagated to its reverse
+> dependencies. But as you can see, it doesn't really work properly.
+> 
+> I believe the attached patch for libv4l is better. It keeps building
+> all libraries, and only disables the one specific libv4lconvert feature
+> that needs fork(): using external helpers for decompressing frames.
+> This is only needed for the OV511 and OV518 formats, so only for very
+> specific webcams if I understood correctly.
+> 
+> If you're happy with this patch, could you submit it upstream, and
+> submit it to Buildroot as well ?
+> 
+> Thanks!
+> 
+> Thomas
+> 
