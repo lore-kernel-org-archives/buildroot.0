@@ -1,65 +1,27 @@
-From: Hugues FRUCHET <hugues.fruchet@st.com>
-Date: Wed, 26 Jul 2017 09:46:58 +0000
-Subject: [Buildroot] [PATCH v1] package/libv4l: disable libraries build
- if no fork() support
-In-Reply-To: <20170725213424.7688452c@windsurf.home>
-References: <1500989370-5353-1-git-send-email-hugues.fruchet@st.com>
- <1500989370-5353-2-git-send-email-hugues.fruchet@st.com>
- <20170725213424.7688452c@windsurf.home>
-Message-ID: <2a4c59f3-d385-07dd-fee3-7a0543e3d0e6@st.com>
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Wed, 26 Jul 2017 12:19:50 +0200
+Subject: [Buildroot] [PATCH v1] package/libv4l: no libv4lconvert helper
+	support if no fork()
+Message-ID: <1501064391-32685-1-git-send-email-hugues.fruchet@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Build libv4lconvert helper support only when fork() is available.
+This fix the build issue reported here:
+http://lists.buildroot.org/pipermail/buildroot/2017-July/197571.html
 
-Your patch is definitely better for sure ;)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 
-Tested OK on my side, I will push it on media list.
-Peter, could you test on your side to be sure that build issue is fixed 
-on your side ?
+Hugues Fruchet (1):
+  package/libv4l: no libv4lconvert helper support if no fork()
 
-Best regards,
-Hugues.
+ ...lconvert-helper-support-only-when-fork-is.patch | 101 +++++++++++++++++++++
+ 1 file changed, 101 insertions(+)
+ create mode 100644 package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
 
-On 07/25/2017 09:34 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 25 Jul 2017 15:29:30 +0200, Hugues Fruchet wrote:
->> Some no-MMU platforms have shared libraries support
->> but no fork() support, which is required by libv4lconvert.
->> Fix this by disabling libv4l libraries build in case of
->> no fork() support.
->> This fix the build issue reported here:
->> http://lists.buildroot.org/pipermail/buildroot/2017-July/197571.html
->>
->> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-> 
-> I'm sorry, but I'm not sure this is the right solution. Indeed, this
-> entirely disables the build of all libv4l libraries.
-> 
-> Therefore, if you for example re-enable the v4l2grab package by
-> dropping its BR2_USE_MMU dependency, it fails to build with:
-> 
-> v4l2grab.c:59:21: fatal error: libv4l2.h: No such file or directory
->   #include <libv4l2.h>
-> 
-> So things work today because the libv4l package used to have a
-> BR2_USE_MMU dependency, which was propagated to its reverse
-> dependencies. But as you can see, it doesn't really work properly.
-> 
-> I believe the attached patch for libv4l is better. It keeps building
-> all libraries, and only disables the one specific libv4lconvert feature
-> that needs fork(): using external helpers for decompressing frames.
-> This is only needed for the OV511 and OV518 formats, so only for very
-> specific webcams if I understood correctly.
-> 
-> If you're happy with this patch, could you submit it upstream, and
-> submit it to Buildroot as well ?
-> 
-> Thanks!
-> 
-> Thomas
-> 
+-- 
+1.9.1
