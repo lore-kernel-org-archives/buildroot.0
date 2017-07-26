@@ -1,81 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Jul 2017 02:16:12 +0200
-Subject: [Buildroot] [PATCH 04/14 v4] package/skeleton: split out into
- skeleton-custom
-In-Reply-To: <af2a3c603d857f4012889fb60931a514bdbd93a8.1501017251.git.yann.morin.1998@free.fr>
+Date: Wed, 26 Jul 2017 02:19:55 +0200
+Subject: [Buildroot] [PATCH 01/14 v4] system: with no init system,
+ only allow custom skeleton
+In-Reply-To: <291153589ecb2247033d5b23ae6bc9b852eef7f3.1501017251.git.yann.morin.1998@free.fr>
 References: <cover.1501017251.git.yann.morin.1998@free.fr>
- <af2a3c603d857f4012889fb60931a514bdbd93a8.1501017251.git.yann.morin.1998@free.fr>
-Message-ID: <65699c6d-b520-b932-45dc-bf9e98bede7b@mind.be>
+ <291153589ecb2247033d5b23ae6bc9b852eef7f3.1501017251.git.yann.morin.1998@free.fr>
+Message-ID: <54457986-8fca-7e1f-6569-ab7689509d15@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
+
 
 On 25-07-17 23:14, Yann E. MORIN wrote:
-> For the custom skeleton, we practicaly do nothing, except ensure it
-                              do practically
+> When there is no init system (i.e. a custom one), our bundled default
+> skeleton is most probably un-fit for that (non-)init system.
+> 
+> This will be the case when we introduce per init system skeletons. The
+> systemd skeleton will be unfit except for a systemd init; the sysv
+> skeleton will be unfit except for a sysv-like init system.
+> 
+> In case they are using no init system (really, a custom one), the user
+> should be responsible for providing their own, custom skeleton as well.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> contains the basic, required directories, and that those are properly
-> setup wrt. merged /usr.
-[snip]
+ There is actually a problem with this one. A lot of our tests in
+support/testing, as well as the test-pkg script and the autobuilders, will build
+with BR2_INIT_NONE=y but without specifying a custom skeleton. That makes this
+series essentially non-bisectable.
 
- I don't like this: you are doing *a whole lot* more than just moving stuff from
-skeleton to skeleton-custom (and renaming the variables):
+ Thomas, Peter, how bad a problem do you think this is?
 
-> +SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/. 2>/dev/null)
-> -SKELETON_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/lib/.)
-
-> +# Ensure that the custom skeleton has /lib, /bin and /sbin, and their
-> +# /usr counterparts
-> +ifeq ($(SKELETON_CUSTOM_LIB_INODE),)
-> +SKELETON_CUSTOM_MISSING_DIRS += /lib
-> +endif
-
-> +# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
-> +# counterparts are appropriately setup as symlinks ones to the others.
-
-> +ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
-> +SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /lib
-> +endif
-> -ifneq ($(SKELETON_LIB_INODE),$(SKELETON_USR_LIB_INODE))
-> -SKELETON_CUSTOM_NOT_MERGED_USR += /lib
-> -endif
-
-> +ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
-> +ifneq ($(SKELETON_CUSTOM_MISSING_DIRS),)
-> +$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is \
-> +	missing those directories or symlinks: \
-> +	$(SKELETON_CUSTOM_MISSING_DIRS))
-> +endif
-
- Now, I understand that it's tricky to rebase things correctly, and splitting
-this up is anyway mainly relevant for review, so I've just updated the commit
-message to reflect all these changes.
-
-> +$(error The custom skeleton in $(SKELETON_PATH) is not \
-> +       using a merged /usr for the following directories: \
-> +       $(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS))
-
- Spaces should be tab.
-
-> +# Provided by the 'skeleton' package:
-> +# - SKELETON_RSYNC
-> +# - SKELETON_LIB_SYMLINK
-
- As mentioned in an earlier review, this is in system now and it's quite clear
-that SYSTEM_RSYNC comes from system.mk, so I've removed this.
-
-
- I've fixed all that and was going to apply, but then I noticed that patch 1
-breaks our tests, so I refrained from pushing it. You can fetch it from
-https://gitlab.com/arnout/buildroot (master branch; will be rebased away in a
-couple of days).
+ Yann, how bad would it be to rebase the series without this patch? At first
+sight, up to patch 7 should be independent of it...
 
  Regards,
  Arnout
+
+> ---
+>  system/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 828df4217e..ed539dcbe0 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -3,11 +3,17 @@ menu "System configuration"
+>  choice
+>  	prompt "Root FS skeleton"
+>  
+> +# When not using an init system (i.e. a custom one), our default skeleton
+> +# is most probably unfit; so, allow only the custom skeleton in that case.
+>  config BR2_ROOTFS_SKELETON_DEFAULT
+>  	bool "default target skeleton"
+> +	depends on !BR2_INIT_NONE
+>  	help
+>  	  Use default target skeleton
+>  
+> +comment "default target skeleton needs an init system"
+> +	depends on BR2_INIT_NONE
+> +
+>  config BR2_ROOTFS_SKELETON_CUSTOM
+>  	bool "custom target skeleton"
+>  	help
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
