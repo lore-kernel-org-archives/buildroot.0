@@ -1,47 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Jul 2017 16:53:32 +0200
-Subject: [Buildroot] [git commit] tcpdump: security bump to 4.9.1
-Message-ID: <20170726145004.2E5D581941@busybox.osuosl.org>
+Date: Wed, 26 Jul 2017 16:48:30 +0200
+Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.16.6
+Message-ID: <20170726145004.0BA868213E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e58888571416c78eb3fad74e364418e33acbd94e
+commit: https://git.buildroot.net/buildroot/commit/?id=b5582d54a4e0035cf3b9cee57f10906276e8f4d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-11108/Fix bounds checking for STP
+Fixes the following security issues:
 
-Changelog: http://www.tcpdump.org/tcpdump-changes.txt
+CVE-2017-7018 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
 
-[Peter: add signature link as suggested by Baruch]
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+CVE-2017-7030 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7034 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7037 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7039 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7046 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7048 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7055 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7056 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7061 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7064 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+The issue involves the "WebKit" component.  It allows attackers to bypass
+intended memory-read restrictions via a crafted app.
+
+For more details, see the announcement:
+https://webkitgtk.org/2017/07/24/webkitgtk2.16.6-released.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Adrian Perez de Castro" <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpdump/tcpdump.hash | 4 ++--
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 966db1f..4eedc1c 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256 eae98121cbb1c9adbedd9a777bf2eae9fa1c1c676424a54740311c8abcee5a5e  tcpdump-4.9.0.tar.gz
-+# Locally calculated after checking pgp signature at http://www.tcpdump.org/release/tcpdump-4.9.1.tar.gz.sig
-+sha256 f9448cf4deb2049acf713655c736342662e652ef40dbe0a8f6f8d5b9ce5bd8f3  tcpdump-4.9.1.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 0e779a5..8349748 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 5df4ce8..2c0fc50 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.16.5.tar.xz.sums
+-md5 fce72dc89cd310a663d9eb97133861fe webkitgtk-2.16.5.tar.xz
+-sha1 8052fda41b1b666f175baaac787c5cba39ed24a0 webkitgtk-2.16.5.tar.xz
+-sha256 8e0396f3428e757898c5856e642eed4fcd5a20ae03d96d3eaa03b76634be7dd4 webkitgtk-2.16.5.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.16.6.tar.xz.sums
++md5  0e2d142a586e4ff79cf0324f4fdbf20c webkitgtk-2.16.6.tar.xz
++sha1 f7fca3fbac3dc99e39f353a6df250635e684c922 webkitgtk-2.16.6.tar.xz
++sha256 fc23650df953123c59b9c0edf3855e7bd55bd107820997fc72375811e1ea4b21 webkitgtk-2.16.6.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index ef20839..b200d23 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPDUMP_VERSION = 4.9.0
-+TCPDUMP_VERSION = 4.9.1
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3-Clause
- TCPDUMP_LICENSE_FILES = LICENSE
+-WEBKITGTK_VERSION = 2.16.5
++WEBKITGTK_VERSION = 2.16.6
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
