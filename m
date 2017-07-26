@@ -1,42 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Jul 2017 13:49:17 +0200
-Subject: [Buildroot] [PATCH 04/14 v4] package/skeleton: split out into
- skeleton-custom
-In-Reply-To: <65699c6d-b520-b932-45dc-bf9e98bede7b@mind.be>
-References: <cover.1501017251.git.yann.morin.1998@free.fr>
- <af2a3c603d857f4012889fb60931a514bdbd93a8.1501017251.git.yann.morin.1998@free.fr>
- <65699c6d-b520-b932-45dc-bf9e98bede7b@mind.be>
-Message-ID: <e095a88e-5e31-29d3-54de-4102990304e7@mind.be>
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Wed, 26 Jul 2017 14:11:36 +0200
+Subject: [Buildroot] [PATCH v2] package/libv4l: no libv4lconvert helper
+	support if no fork()
+Message-ID: <1501071097-6301-1-git-send-email-hugues.fruchet@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Build libv4lconvert helper support only when fork() is available.
+This fix the build issue reported here:
+http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe/build-end.log
 
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 
-On 26-07-17 02:16, Arnout Vandecappelle wrote:
->  I've fixed all that and was going to apply, but then I noticed that patch 1
-> breaks our tests, so I refrained from pushing it. You can fetch it from
-> https://gitlab.com/arnout/buildroot (master branch; will be rebased away in a
-> couple of days).
+---
+Changes v1 -> v2:
+  - point to http://autobuild.buildroot.org build result
+  - revisit Author & Signed-off-by
 
- So I pushed this commit with the runtime testing patch 11 on top of to gitlab
-to see what would happen, and the systemd test fails. It seems the getty on
-ttyAMA0 can't be started. Is that to be expected, due to the /var/log->/tmp symlink?
+Hugues Fruchet (1):
+  package/libv4l: no libv4lconvert helper support if no fork()
 
- You can inspect the output on [1], but it's not saying much.
-
- Regards,
- Arnout
-
-[1]
-https://gitlab.com/arnout/buildroot/-/jobs/24489865/artifacts/raw/test-output/TestInitSystemSystemdRwFull-run.log
+ ...lconvert-helper-support-only-when-fork-is.patch | 100 +++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+ create mode 100644 package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
