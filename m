@@ -1,50 +1,131 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Wed, 26 Jul 2017 11:59:56 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-service-identity: the attrs
-	distribution is required
-Message-ID: <20170726185956.49090-1-ckhardin@exablox.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Jul 2017 22:51:01 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] webkitgtk: security bump
+	to version 2.16.6
+Message-ID: <20170726204753.8F5F98216D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apparently the service identify code requires the python attrs
-to be availabe:
+commit: https://git.buildroot.net/buildroot/commit/?id=23540e54f2b7377debfd5814fd9ec4cf0421b21f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Traceback (most recent call last):
-  File "/opt/exablox/bin/configsrv", line 5, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3138, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3124, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3151, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 661, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 962, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 849, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The 'attrs' distribution was not found and is required by service-identity
+Fixes the following security issues:
 
-Signed-off-by: Charles Hardin <ckhardin@exablox.com>
+CVE-2017-7018 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7030 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7034 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7037 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7039 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7046 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7048 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7055 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7056 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7061 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+tvOS before 10.2.2 is affected.  The issue involves the "WebKit" component.
+It allows remote attackers to execute arbitrary code or cause a denial of
+service (memory corruption and application crash) via a crafted web site.
+
+CVE-2017-7064 - An issue was discovered in certain Apple products.  iOS
+before 10.3.3 is affected.  Safari before 10.1.2 is affected.  iCloud before
+6.2.2 on Windows is affected.  iTunes before 12.6.2 on Windows is affected.
+The issue involves the "WebKit" component.  It allows attackers to bypass
+intended memory-read restrictions via a crafted app.
+
+For more details, see the announcement:
+https://webkitgtk.org/2017/07/24/webkitgtk2.16.6-released.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Adrian Perez de Castro" <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b5582d54a4e0035cf3b9cee57f10906276e8f4d6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-service-identity/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
-index 304b38acde..73593b0d61 100644
---- a/package/python-service-identity/Config.in
-+++ b/package/python-service-identity/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
- 	bool "python-service-identity"
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
--- 
-2.11.0 (Apple Git-81)
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 5df4ce8..2c0fc50 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.16.5.tar.xz.sums
+-md5 fce72dc89cd310a663d9eb97133861fe webkitgtk-2.16.5.tar.xz
+-sha1 8052fda41b1b666f175baaac787c5cba39ed24a0 webkitgtk-2.16.5.tar.xz
+-sha256 8e0396f3428e757898c5856e642eed4fcd5a20ae03d96d3eaa03b76634be7dd4 webkitgtk-2.16.5.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.16.6.tar.xz.sums
++md5  0e2d142a586e4ff79cf0324f4fdbf20c webkitgtk-2.16.6.tar.xz
++sha1 f7fca3fbac3dc99e39f353a6df250635e684c922 webkitgtk-2.16.6.tar.xz
++sha256 fc23650df953123c59b9c0edf3855e7bd55bd107820997fc72375811e1ea4b21 webkitgtk-2.16.6.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index ef20839..b200d23 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.16.5
++WEBKITGTK_VERSION = 2.16.6
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
