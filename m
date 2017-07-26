@@ -1,34 +1,86 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 25 Jul 2017 17:16:01 -0700
-Subject: [Buildroot] [PATCH] python-toml: add host variant of the package
-In-Reply-To: <9493c681-b429-552a-9be4-463c77131596@mind.be>
-References: <20170725045132.363-1-andrew.smirnov@gmail.com>
- <20170725214647.51f5a3b0@windsurf.home>
- <c6b0876d-b5af-a2d8-a70f-6971c1680bce@mind.be>
- <CAHQ1cqHcHShsK7YTbXsKS4JP3ueY08mTSRdscKQxALLNmzayVw@mail.gmail.com>
- <9493c681-b429-552a-9be4-463c77131596@mind.be>
-Message-ID: <CAHQ1cqE4bfJSwo-GoCWT295kxUQKyxV=iah84rABYUcwRyQsqw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 26 Jul 2017 02:16:12 +0200
+Subject: [Buildroot] [PATCH 04/14 v4] package/skeleton: split out into
+ skeleton-custom
+In-Reply-To: <af2a3c603d857f4012889fb60931a514bdbd93a8.1501017251.git.yann.morin.1998@free.fr>
+References: <cover.1501017251.git.yann.morin.1998@free.fr>
+ <af2a3c603d857f4012889fb60931a514bdbd93a8.1501017251.git.yann.morin.1998@free.fr>
+Message-ID: <65699c6d-b520-b932-45dc-bf9e98bede7b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 25, 2017 at 5:06 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 26-07-17 01:13, Andrey Smirnov wrote:
-> [snip]
->> Anyway, this is a trivial patch for me to carry around, so it's no big
->> deal, but if it can be acceptable upstream in any shape or form I'd
->> love to get it there.
->
->  In fact, you can even keep this particular one in your BR2_EXTERNAL. Just
-> create a file package/python-toml/python-toml.mk with just the eval line and it
-> should work. And of course make sure that that file gets included.
->
+ Hi Yann,
 
-Yeah, I was thinking about that as well. Sounds like the best option.
+On 25-07-17 23:14, Yann E. MORIN wrote:
+> For the custom skeleton, we practicaly do nothing, except ensure it
+                              do practically
 
-Thanks
-Andrey Smirnov
+> contains the basic, required directories, and that those are properly
+> setup wrt. merged /usr.
+[snip]
+
+ I don't like this: you are doing *a whole lot* more than just moving stuff from
+skeleton to skeleton-custom (and renaming the variables):
+
+> +SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/. 2>/dev/null)
+> -SKELETON_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/lib/.)
+
+> +# Ensure that the custom skeleton has /lib, /bin and /sbin, and their
+> +# /usr counterparts
+> +ifeq ($(SKELETON_CUSTOM_LIB_INODE),)
+> +SKELETON_CUSTOM_MISSING_DIRS += /lib
+> +endif
+
+> +# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+> +# counterparts are appropriately setup as symlinks ones to the others.
+
+> +ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
+> +SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /lib
+> +endif
+> -ifneq ($(SKELETON_LIB_INODE),$(SKELETON_USR_LIB_INODE))
+> -SKELETON_CUSTOM_NOT_MERGED_USR += /lib
+> -endif
+
+> +ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
+> +ifneq ($(SKELETON_CUSTOM_MISSING_DIRS),)
+> +$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is \
+> +	missing those directories or symlinks: \
+> +	$(SKELETON_CUSTOM_MISSING_DIRS))
+> +endif
+
+ Now, I understand that it's tricky to rebase things correctly, and splitting
+this up is anyway mainly relevant for review, so I've just updated the commit
+message to reflect all these changes.
+
+> +$(error The custom skeleton in $(SKELETON_PATH) is not \
+> +       using a merged /usr for the following directories: \
+> +       $(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS))
+
+ Spaces should be tab.
+
+> +# Provided by the 'skeleton' package:
+> +# - SKELETON_RSYNC
+> +# - SKELETON_LIB_SYMLINK
+
+ As mentioned in an earlier review, this is in system now and it's quite clear
+that SYSTEM_RSYNC comes from system.mk, so I've removed this.
+
+
+ I've fixed all that and was going to apply, but then I noticed that patch 1
+breaks our tests, so I refrained from pushing it. You can fetch it from
+https://gitlab.com/arnout/buildroot (master branch; will be rebased away in a
+couple of days).
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
