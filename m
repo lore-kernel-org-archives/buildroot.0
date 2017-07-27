@@ -1,9 +1,9 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 27 Jul 2017 11:45:26 +0200
-Subject: [Buildroot] [PATCH v2 1/3] meson: new package
-In-Reply-To: <20170727094528.10745-1-joerg.krause@embedded.rocks>
-References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
-Message-ID: <20170727094528.10745-2-joerg.krause@embedded.rocks>
+Date: Thu, 27 Jul 2017 11:55:25 +0200
+Subject: [Buildroot] [PATCH v3 1/3] meson: new package
+In-Reply-To: <20170727095527.14324-1-joerg.krause@embedded.rocks>
+References: <20170727095527.14324-1-joerg.krause@embedded.rocks>
+Message-ID: <20170727095527.14324-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,12 +29,16 @@ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
  * use explicit tarball release instead of github helper
  * use explicit sed
  * pass BR2_GCC_TARGET_CPU to cross file]
+
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+v3:
+ * fix missing mkdir
 ---
  package/meson/cross-compilation.conf.in | 15 +++++++++++++++
  package/meson/meson.hash                |  2 ++
- package/meson/meson.mk                  | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
+ package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
  create mode 100644 package/meson/cross-compilation.conf.in
  create mode 100644 package/meson/meson.hash
  create mode 100644 package/meson/meson.mk
@@ -70,10 +74,10 @@ index 0000000000..7f0de1d437
 +sha256  074dd24fd068be0893e2e45bcc35c919d8e12777e9d6a7efdf72d4dc300867ca  meson-0.41.2.tar.gz
 diff --git a/package/meson/meson.mk b/package/meson/meson.mk
 new file mode 100644
-index 0000000000..7cf287df82
+index 0000000000..e9f1ffe4d4
 --- /dev/null
 +++ b/package/meson/meson.mk
-@@ -0,0 +1,30 @@
+@@ -0,0 +1,31 @@
 +################################################################################
 +#
 +# meson
@@ -92,6 +96,7 @@ index 0000000000..7cf287df82
 +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
 +
 +define HOST_MESON_INSTALL_CROSS_CONF
++	mkdir -p $(HOST_DIR)/etc/meson
 +	sed -e 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
 +	    -e 's;@TARGET_ARCH@;$(ARCH);g' \
 +	    -e 's;@TARGET_CPU@;$(BR2_GCC_TARGET_CPU);g' \
