@@ -1,59 +1,58 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 28 Jul 2017 01:12:03 +0300
-Subject: [Buildroot] [PATCH 2/4] webkitgtk: Add patches which allow
- building for ARMv8-A
-In-Reply-To: <20170721090654.5eb8e26b@windsurf>
-References: <20170712235531.20444-1-aperez@igalia.com>
- <20170712235531.20444-3-aperez@igalia.com>	<20170721090654.5eb8e26b@windsurf>
-Message-ID: <20170728011203.GD32202@momiji>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 27 Jul 2017 18:34:52 -0400
+Subject: [Buildroot] [PATCH 1/1] host-mariadb: add host-openssl
+	dependency
+In-Reply-To: <20170727171043.076dd40d@windsurf.lan>
+References: <20170727133548.30285-1-aduskett@gmail.com>
+ <20170727171043.076dd40d@windsurf.lan>
+Message-ID: <CAFSsvmoJFa01=6uQzaS6YvXoE6Zs=05D1RxW42Ws+4EL6Gmtmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello;
 
-On Fri, 21 Jul 2017 09:06:54 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Thu, Jul 27, 2017 at 11:10 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 27 Jul 2017 09:35:48 -0400, Adam Duskett wrote:
+>> On Fedora26, openssl 1.1.x is included by default.  This causes build errors
+>> when building the host variant of mariadb. Adding host-openssl as a dependency
+>> fixes this issue.
+>>
+>> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>
+> I don't think this is the correct fix. Indeed, host-mariadb builds just
+> fine on a system where the OpenSSL headers/development files are *NOT*
+> installed.
+>
+> This means that host-mariadb does not require host-openssl, but uses
+> OpenSSL if available. So the proper solution is to pass some option at
+> configure time to tell host-mariadb to not attempt to use OpenSSL.
+> Indeed, we are not really interested in having OpenSSL support in
+> host-mariadb.
+>
+True; what about if host-openssl is already selected?
 
-> On Thu, 13 Jul 2017 02:55:29 +0300, Adrian Perez de Castro wrote:
-> > The two added patches allow building WebKitGTK+ when the compiler
-> > scpecifically targets ARMv8-A, and reports as such be pre-defining
-> > __ARCH_ARM_8A__ instead of just __ARCH_ARM_8__. Both patches were
-> > pulled from the corresponding upstream bug reports and edited to
-> > remove the conflicting parts which edit the ChangeLog files.
-> > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > ---
-> >  ...ailure-to-build-when-the-compiler-specifica.patch | 20 ++++++++++++++++++++
-> >  ...re-to-build-when-the-compiler-specifically-.patch | 20 ++++++++++++++++++++
-> >  2 files changed, 40 insertions(+)
-> >  create mode 100644 package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
-> >  create mode 100644 package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
-
-This patch is not needed anymore. The changes are already included in the
-WebKitGTK+ 2.16.6 release.
-
-> Since the webkitgtk project is maintained upstream under Git, can we
-> get Git formatted patches instead? Please use "git format-patch -N" to
-> generate them, as we don't want patch numbering inside the patches,
-> only in the filenames.
-
-I will take this into account for the next time, thanks.
-
-(Technically upstream is Subversion, but most of the developers use the Git
-mirror... dunno how that would affect the preferred patch format ? personally
-I prefer to use Git, too!)
-
-Cheers,
-
-
---
- Adri?n ?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170728/2a693e7d/attachment.asc>
+> It apparently needs an SSL implementation, but has a small bundled one
+> based on yassl. Can you try:
+>
+> HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
+>
+> and see if it fixes the problem for you ?
+This works and properly builds mariadb.  That being said; should is there
+a way to check if host-openssl is already selected? Or does it not matter?
+>
+> You can try to compare the build time of host-mariadb + host-openssl
+> vs. host-maria-db + bundled SSL.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
