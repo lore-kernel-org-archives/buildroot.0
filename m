@@ -1,37 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jul 2017 11:06:39 +0200
-Subject: [Buildroot] Gmail bounces
-In-Reply-To: <20170721222143.219ca087@windsurf> (Thomas Petazzoni's message of
- "Fri, 21 Jul 2017 22:21:43 +0200")
-References: <3d3a1098-24c3-d125-f433-04a9c1654b3e@gmail.com>
- <747473427.1074021.1500661380566.JavaMail.zimbra@datacom.ind.br>
- <3752e758-9b08-2e44-3024-7f08c29397ed@mind.be>
- <20170721222143.219ca087@windsurf>
-Message-ID: <87lgnauu3k.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 27 Jul 2017 11:45:25 +0200
+Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
+Message-ID: <20170727094528.10745-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Last year, Eric Le Bihan already proposed patches to support the Meson build
+system [1], but the patches were rejected, as no package in Buildroot
+required a Meson build.
 
- > Hello,
- > On Fri, 21 Jul 2017 21:56:31 +0200, Arnout Vandecappelle wrote:
+This has changed, as the libmpdclient package has switched from autotools to
+Meson.
 
- >> Are you suggesting that the gitlab mails could be the cause of this? I can turn
- >> them off and see if that improves things...
+Therefore, the patches from Eric are resubmitted with some changes as suggested
+by Yann E. Morin.
 
- > I'm honestly not sure if it's related to the gitlab e-mails. Indeed, as
- > several people said in this thread, it already happened to them a few
- > months ago. And a few months ago, we did not had those gitlab e-mails.
+[1] http://patchwork.ozlabs.org/patch/646685/
 
- > But OK, let's disable the gitlab e-mails for now, just to see if it
- > improves things. In parallel, perhaps we should report an issue to
- > gitlab and ask them to fix this?
+Eric Le Bihan (2):
+  meson: new package
+  docs/manual: document meson-based packages
 
-I today received notifications about 17 people getting removed from the
-list, so it doesn't seem to have fixed the issue :/
+J?rg Krause (1):
+  libmpdclient: bump to version 2.13
+
+ docs/manual/adding-packages-meson.txt   | 80 +++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt         |  2 +
+ package/libmpdclient/libmpdclient.hash  |  4 +-
+ package/libmpdclient/libmpdclient.mk    | 26 +++++++++--
+ package/meson/cross-compilation.conf.in | 15 +++++++
+ package/meson/meson.hash                |  2 +
+ package/meson/meson.mk                  | 30 +++++++++++++
+ 7 files changed, 154 insertions(+), 5 deletions(-)
+ create mode 100644 docs/manual/adding-packages-meson.txt
+ create mode 100644 package/meson/cross-compilation.conf.in
+ create mode 100644 package/meson/meson.hash
+ create mode 100644 package/meson/meson.mk
 
 -- 
-Bye, Peter Korsgaard
+2.13.3
