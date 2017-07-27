@@ -1,62 +1,65 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 27 Jul 2017 19:45:13 +0300
-Subject: [Buildroot] [PATCH 4/4] webkitgtk: Ensure that Mesa headers do
- not include X11 headers on Wayland builds
-In-Reply-To: <20170721090947.2670fb7c@windsurf>
-References: <20170712235531.20444-1-aperez@igalia.com>
- <20170712235531.20444-5-aperez@igalia.com>	<20170721090947.2670fb7c@windsurf>
-Message-ID: <20170727194513.GB5762@momiji.helsinki.igalia.com>
+From: Henrique Marks <henrique.marks@datacom.ind.br>
+Date: Thu, 27 Jul 2017 13:58:42 -0300 (BRT)
+Subject: [Buildroot] How to add a new board to buildroot
+In-Reply-To: <1501170608.440004909@f502.i.mail.ru>
+References: <1501170608.440004909@f502.i.mail.ru>
+Message-ID: <1109478333.2167086.1501174722386.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello, 
 
-On Fri, 21 Jul 2017 09:09:47 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->
-> On Thu, 13 Jul 2017 02:55:31 +0300, Adrian Perez de Castro wrote:
-> 
-> > diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> > index ef20839f92..09781c2318 100644
-> > --- a/package/webkitgtk/webkitgtk.mk
-> > +++ b/package/webkitgtk/webkitgtk.mk
-> > @@ -84,6 +84,9 @@ endif
-> >  ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
-> >  WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
-> >  endif
-> > +WEBKITGTK_CONF_OPTS += \
-> > +	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -DMESA_EGL_NO_X11_HEADERS' \
-> > +	-DCMAKE_CXX_FLAGS='$(TARGET_CXXFLAGS) -DMESA_EGL_NO_X11_HEADERS'
-> 
-> I am not happy with this: such CFLAGS should be provided by the OpenGL
-> provider, through its pkg-config file, and consumers of the OpenGL
-> implementation should get those flags using pkg-config.
-> 
-> If we don't do this, then we need to add -DMESA_EGL_NO_X11_HEADERS
-> everywhere in all OpenGL consumers, which isn't nice.
-> 
-> We already have a few OpenGL providers that define these flags in
-> their .pc file:
-> 
-> package/mali-t76x/egl.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-> package/mali-t76x/glesv2.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-> package/nvidia-driver/gl.pc:Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-> package/odroid-mali/odroid-mali.mk:     $(SED) "s/Cflags: /Cflags: -DMESA_EGL_NO_X11_HEADERS /" \
+> De: "????????? ?????????" <naka_sml@mail.ru>
+> Para: buildroot at busybox.net
+> Enviadas: Quinta-feira, 27 de julho de 2017 12:50:08
+> Assunto: [Buildroot] How to add a new board to buildroot
 
-Good point. I will make instead a patch for having Mesa's ?egl.pc? include
-the ?-DMESA_EGL_NO_X11_HEADERS? when X11 support is disabled.
+> Good day!
+> I have some problems with addind a new my_board to buildroot.
+> I've tried to develop linux kernel to special mips-32 processor.
+> May be you have some manual how to do it.
+> Thats what I've done:
+> 1. download buildroot 2016-08
+> 2. choose malta board (at least I need to add my_own_board, but i choose malta
+> board because it is similar to mine board)
+> 3. make
+> 4. in folder arch/mips create folder my_board with needed files(Timers,
+> initions, uart, exeptions), in uncludes also create folder my_board
+> 5. copy changed folder linux-3-4-2 on local server
+> 6. try to make buildroot using local linux.
+> 7. at the end I have many errors: part of it because with my_board also
+> malta-board is making...
+> May be you have manual or another paper how to add new_board to buildroot.
+> I'll be greatful if there is someone who can help me to add this new board.
+> Best regards, Anastasia.
 
-Cheers,
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
+Maybe steps 4 or 5 are incorrect: 
 
---
- Adri?n ?
+Use OVERRIDE_SRCDIR for local development (see usage in buildroot manual): 
+
+1 - create a file local.mk in buildroot output folder 
+2 - My local.mk contains 
+
+LINUX_OVERRIDE_SRCDIR=/opt/devel/repos/my-kernel 
+
+my-kernel folder contains the kernel source-code, of course. 
+
+Try this first. Maybe you have some additional problems that can be solved running "make menuconfig", in the kernel part (use a custom repo, use an in-tree kerel defconfig, etc.) 
+
+-- 
+Dr. Henrique Marks 
+henrique.marks at datacom.ind.br 
+R. Am?rica, 1000 - Eldorado do Sul - RS 
+CEP: 92990-000 - Brasil 
+Fone: +55 51 3933 3000 - Ramal 3466 
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170727/8b32cbfb/attachment.asc>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170727/0bc96a6b/attachment.html>
