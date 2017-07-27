@@ -1,131 +1,72 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 27 Jul 2017 11:55:26 +0200
-Subject: [Buildroot] [PATCH v3 2/3] docs/manual: document meson-based
-	packages
+Date: Thu, 27 Jul 2017 11:55:27 +0200
+Subject: [Buildroot] [PATCH v2 3/3] libmpdclient: bump to version 2.13
 In-Reply-To: <20170727095527.14324-1-joerg.krause@embedded.rocks>
 References: <20170727095527.14324-1-joerg.krause@embedded.rocks>
-Message-ID: <20170727095527.14324-3-joerg.krause@embedded.rocks>
+Message-ID: <20170727095527.14324-4-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
-Add instructions for adding a package which uses the Meson build system.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-[J?rg Krause:
- * use one-liner for buildtype]
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
-v3:
+v2:
  * none
 ---
- docs/manual/adding-packages-meson.txt | 80 +++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt       |  2 +
- 2 files changed, 82 insertions(+)
- create mode 100644 docs/manual/adding-packages-meson.txt
+ package/libmpdclient/libmpdclient.hash |  4 ++--
+ package/libmpdclient/libmpdclient.mk   | 26 +++++++++++++++++++++++---
+ 2 files changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-new file mode 100644
-index 0000000000..697f2520c7
---- /dev/null
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -0,0 +1,80 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+=== Integration of Meson-based packages
-+
-+[[meson-package-tutorial]]
-+
-+==== +meson-package+ tutorial
-+
-+http://mesonbuild.com[Meson] is an open source build system meant to be both
-+extremely fast, and, even more importantly, as user friendly as possible.
-+
-+Buildroot does not (yet) provide a dedicated package infrastructure for
-+meson-based packages. So, we will explain how to write a +.mk+ file for such a
-+package. Let's start with an example:
-+
-+------------------------------
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_VERSION = 1.0
-+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
-+09: FOO_SITE = http://www.foosoftware.org/download
-+10: FOO_LICENSE = GPLv3+
-+11: FOO_LICENSE_FILES = COPYING
-+12:
-+13: FOO_DEPENDENCIES = host-meson host-pkgconf bar
-+14:
-+15: FOO_MESON_OPTS += \
-+16: 	--prefix=/usr \
-+17: 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
-+18: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
-+19:
-+20: define FOO_CONFIGURE_CMDS
-+21: 	rm -rf $(@D)/build
-+22: 	mkdir -p $(@D)/build
-+23: 	$(TARGET_MAKE_ENV) meson.py $(FOO_MESON_OPTS) $(@D) $(@D)/build
-+24: endef
-+25:
-+26: define FOO_BUILD_CMDS
-+27: 	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
-+28: endef
-+29:
-+30: define FOO_INSTALL_TARGET_CMDS
-+31: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
-+32: endef
-+33:
-+34: $(eval $(generic-package))
-+--------------------------------
-+
-+The Makefile starts with the definition of the standard variables for package
-+declaration (lines 7 to 11).
-+
-+As seen in line 34, it is based on the
-+xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
-+the variables required by this particular infrastructure, where Meson and its
-+companion tool, Ninja, are invoked:
-+
-+* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
-+  Meson is invoked to generate the Ninja build file. The options required to
-+  configure the cross-compilation of the package are passed via
-+  +FOO_MESON_OPTS+.
-+
-+* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
-+
-+* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
-+  during the build step.
-+
-+In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
-+contain +host-meson+. In the example, +host-pkgconf+ and +bar+ are also
-+declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
-+to determine the compilation flags and libraries of package +bar+.
-+
-+To sum it up, to add a new meson-based package, the Makefile example can be
-+copied verbatim then edited to replace all occurences of +FOO+ with the
-+uppercase name of the new package and update the values of the standard
-+variables.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index d577ff030e..e542124cf9 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -34,6 +34,8 @@ include::adding-packages-rebar.txt[]
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+index 2fd20a41fb..aa9434098f 100644
+--- a/package/libmpdclient/libmpdclient.hash
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -1,2 +1,2 @@
+-# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig, sha256 locally computed
+-sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
++# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.13.tar.xz.sig, sha256 locally computed
++sha256  5115bd52bc20a707c1ecc7587e6389c17305348e2132a66cf767c62fc55ed45d  libmpdclient-2.13.tar.xz
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 691aba9f71..9cd4f2bd2e 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -5,12 +5,32 @@
+ ################################################################################
  
- include::adding-packages-waf.txt[]
+ LIBMPDCLIENT_VERSION_MAJOR = 2
+-LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
++LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).13
+ LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
+ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
+-LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ LIBMPDCLIENT_INSTALL_STAGING = YES
+ LIBMPDCLIENT_LICENSE = BSD-3-Clause
+ LIBMPDCLIENT_LICENSE_FILES = COPYING
  
-+include::adding-packages-meson.txt[]
+-$(eval $(autotools-package))
++LIBMPDCLIENT_DEPENDENCIES = host-meson host-pkgconf
 +
- include::adding-packages-kernel-module.txt[]
- 
- include::adding-packages-asciidoc.txt[]
++LIBMPDCLIENT_MESON_OPTS += \
++	--prefix=/usr \
++	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
++	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
++
++define LIBMPDCLIENT_CONFIGURE_CMDS
++	rm -rf $(@D)/build
++	mkdir -p $(@D)/build
++	$(TARGET_MAKE_ENV) meson $(LIBMPDCLIENT_MESON_OPTS) $(@D) $(@D)/build
++endef
++
++define LIBMPDCLIENT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
++endef
++
++define LIBMPDCLIENT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
++endef
++
++$(eval $(generic-package))
 -- 
 2.13.3
