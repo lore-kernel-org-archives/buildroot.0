@@ -1,100 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jul 2017 08:40:40 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.05.2
-Message-ID: <20170727063755.E626D821DC@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 27 Jul 2017 09:09:16 +0200
+Subject: [Buildroot] [PATCH v3] package/qt5location: handle plugins
+ being conditionally built
+In-Reply-To: <20170725215220.6d447778@windsurf.home>
+References: <1500925803-3453-1-git-send-email-joshua.henderson@microchip.com>
+ <20170725215220.6d447778@windsurf.home>
+Message-ID: <trinity-8a980cb9-66d2-4be0-a688-0ff6f1e041fe-1501139356950@3capp-gmx-bs67>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=542460e62033d6a710e6746b86f1cb096e8a45bf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas, Joshua,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+> 
+> Thanks, but Peter had sent an almost identical patch a few hours
+> before, and I've applied his patch.
+> 
+> Thanks a lot for all this work on Qt5, much appreciated! Note that we
+> still have a build failure of qt5webkit 5.6.1:
+> 
+>   http://autobuild.buildroot.net/results/2f3/2f381967c82775ad911a246a9607034ef489c1ce/build-end.log
+> 
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 4c5e9d4..1be375c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2017.05.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2017.05.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.05.1.tar.gz">buildroot-2017.05.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.05.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.05.2.tar.gz">buildroot-2017.05.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.05.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.05.1.tar.bz2">buildroot-2017.05.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.05.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.05.2.tar.bz2">buildroot-2017.05.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.05.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index c25ae61..0d282c7 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.05.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 July 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.05.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.05.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.05.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-July/199284.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.05.2.tar.bz2">2017.05.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+From the build-end.log:
+
+  The WebKit build was disabled for the following reasons:
+      * ICU is required.
+
+
+ICU depends on BR2_HOST_GCC_AT_LEAST_4_8 and BR2_TOOLCHAIN_GCC_AT_LEAST_4_8, this dependency is propagated to
+qt5webkit but not to qt-webkit-kiosk (which selects qt5webkit circumventing the icu prerequisite)...
+
+Patch (propagating the icu dependencies to qt-webkit-kiosk) will follow...
+
+Regards,
+Peter
+
+
+> Thanks!
+> 
+> Thomas
