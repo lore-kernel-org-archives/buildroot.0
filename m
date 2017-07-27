@@ -1,100 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 27 Jul 2017 08:37:14 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.5
-Message-ID: <20170727063755.9A0EE81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2017.02.5
+Message-ID: <20170727063755.B061F821E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c97b128dd4f2533c9c6ce9ddd07da9841177ed7c
+commit: https://git.buildroot.net/buildroot/commit/?id=386dd28a3e27485111f6ba4ed9cfaed833643d9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a2818c7cfa3b7efef41ed85215db60e23cc0876a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index e9d1e33..4c5e9d4 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index a530e8f..f693c82 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -261,6 +261,29 @@
+ 	#9846: musl libc not installed correctly in target folder
+ 	#9856: build libubox failed on ubuntu 17.04 64bit
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.4</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.5</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.02.4.tar.gz">buildroot-2017.02.4.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.4.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.5.tar.gz">buildroot-2017.02.5.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.5.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.02.4.tar.bz2">buildroot-2017.02.4.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.4.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.5.tar.bz2">buildroot-2017.02.5.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.5.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 9913285..c25ae61 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.5 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 July 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.5 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.4 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.5">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-July/199281.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.5.tar.bz2">2017.02.5 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2017.02.5, Released July 27th, 2017
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Webkitgtk bumped to the 2.16.x series, fixing a large number
++	of security issues.
++
++	host-aespipe compile fix for Debian/Gentoo/Ubuntu toolchains
++	which default to PIE mode.
++
++	Updated/fixed packages: aespipe, apache, bind, binutils,
++	busybox, ccache, collectd, efibootmgr, efivar, expat, ffmpeg,
++	gcc, heimdal, iproute2, irssi, libglib2, libmemcached,
++	libosip2, libtirpc, libxml-parser-perl, linux-fusion,
++	linux-zigbee, mpg123, nodejs, orc, pcre, php, pulseaudio,
++	python-setproctitle, qt5base, rpi-firmware, samba4, syslinux,
++	systemd, spice, tcpdump, tiff, webkitgtk, x265, xen,
++	xserver_xorg-server, xvisor
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#10061: gcc5.4 buildroot toolchain for powerpc libsanitizer...
++
+ 2017.02.4, Released July 4th, 2017
+ 
+ 	Important / security related fixes.
