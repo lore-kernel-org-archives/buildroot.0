@@ -1,41 +1,41 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Thu, 27 Jul 2017 07:10:05 -0700
-Subject: [Buildroot] [PATCH 1/1] host-mariadb: add host-openssl
-	dependency
-In-Reply-To: <20170727133548.30285-1-aduskett@gmail.com>
-References: <20170727133548.30285-1-aduskett@gmail.com>
-Message-ID: <81789c43-8791-0078-80ef-4c036c9a18df@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 Jul 2017 16:50:26 +0200
+Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
+In-Reply-To: <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
+References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
+ <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
+ <1501150411.21202.1.camel@embedded.rocks>
+ <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
+Message-ID: <20170727165026.4a5f59a1@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Hello,
 
+On Thu, 27 Jul 2017 11:19:02 +0100, Vicente Olivert Riera wrote:
 
-On 7/27/2017 6:35 AM, Adam Duskett wrote:
-> On Fedora26, openssl 1.1.x is included by default.  This causes build errors
-> when building the host variant of mariadb. Adding host-openssl as a dependency
-> fixes this issue.
->
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->   package/mariadb/mariadb.mk | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-> index 1d6c2bcc4..8004709c7 100644
-> --- a/package/mariadb/mariadb.mk
-> +++ b/package/mariadb/mariadb.mk
-> @@ -22,6 +22,9 @@ MARIADB_DEPENDENCIES = \
->   	libxml2 \
->   	readline
->   
-> +HOST_MARIADB_DEPENDENCIES = \
-> +	host-openssl
-> +
->   # We won't need unit tests
->   MARIADB_CONF_OPTS += -DWITH_UNIT_TESTS=0
->   
-Acked-by: Ryan Coe <bluemrp9@gmail.com>
+> >> shouldn't we add a "package/pkg-meson.mk" file and then use "$(eval
+> >> $(meson-package))" for Meson packages?  
+> > 
+> > Maybe, if there are more than one package. At least, that was the
+> > opinion of Yann when he reviewed the patch last year.  
+> 
+> There will be more packages moving to Meson, and some of them quite
+> important: http://mesonbuild.com/Users.html
+> 
+> I think we should add proper Meson support in BR infra from the beginning.
+
+No, let's wait to have a few Meson-based packages in Buildroot, and
+then we'll have a package infrastructure. This will allow us to see
+what are the commonalities, what are the differences, etc.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
