@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 27 Jul 2017 09:48:09 -0400
-Subject: [Buildroot] [PATCH 1/1] python-mysqlclient: new package
-Message-ID: <20170727134809.32401-1-aduskett@gmail.com>
+Date: Thu, 27 Jul 2017 09:51:28 -0400
+Subject: [Buildroot] [PATCH v2 1/1] python-mysqlclient: new package
+Message-ID: <20170727135128.1033-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,11 +22,15 @@ MySQL-5.1 through 5.7 and Python 2.7, 3.3+ are currently supported.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
+Changes v1 -> v2:
+  - Add package/Config.in to patch.
+
  DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
  package/python-mysqlclient/Config.in               | 18 ++++++++++++++++++
  package/python-mysqlclient/python-mysqlclient.hash |  3 +++
  package/python-mysqlclient/python-mysqlclient.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 44 insertions(+)
+ 5 files changed, 45 insertions(+)
  create mode 100644 package/python-mysqlclient/Config.in
  create mode 100644 package/python-mysqlclient/python-mysqlclient.hash
  create mode 100644 package/python-mysqlclient/python-mysqlclient.mk
@@ -43,6 +47,18 @@ index e01c1bade..2e4f45a80 100644
  F:	package/refpolicy/
  F:	package/sepolgen/
  F:	package/setools/
+diff --git a/package/Config.in b/package/Config.in
+index 484c75327..8ce9b6814 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -777,6 +777,7 @@ menu "External python modules"
+ 	source "package/python-mwclient/Config.in"
+ 	source "package/python-mwscrape/Config.in"
+ 	source "package/python-mwscrape2slob/Config.in"
++	source "package/python-mysqlclient/Config.in"
+ 	source "package/python-netaddr/Config.in"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
 diff --git a/package/python-mysqlclient/Config.in b/package/python-mysqlclient/Config.in
 new file mode 100644
 index 000000000..2af8c5c27
