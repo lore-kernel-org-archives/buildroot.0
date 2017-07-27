@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Jul 2017 16:50:26 +0200
-Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
-In-Reply-To: <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
-References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
- <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
- <1501150411.21202.1.camel@embedded.rocks>
- <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
-Message-ID: <20170727165026.4a5f59a1@windsurf.lan>
+Date: Thu, 27 Jul 2017 17:10:43 +0200
+Subject: [Buildroot] [PATCH 1/1] host-mariadb: add host-openssl
+ dependency
+In-Reply-To: <20170727133548.30285-1-aduskett@gmail.com>
+References: <20170727133548.30285-1-aduskett@gmail.com>
+Message-ID: <20170727171043.076dd40d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +13,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 27 Jul 2017 11:19:02 +0100, Vicente Olivert Riera wrote:
-
-> >> shouldn't we add a "package/pkg-meson.mk" file and then use "$(eval
-> >> $(meson-package))" for Meson packages?  
-> > 
-> > Maybe, if there are more than one package. At least, that was the
-> > opinion of Yann when he reviewed the patch last year.  
+On Thu, 27 Jul 2017 09:35:48 -0400, Adam Duskett wrote:
+> On Fedora26, openssl 1.1.x is included by default.  This causes build errors
+> when building the host variant of mariadb. Adding host-openssl as a dependency
+> fixes this issue.
 > 
-> There will be more packages moving to Meson, and some of them quite
-> important: http://mesonbuild.com/Users.html
-> 
-> I think we should add proper Meson support in BR infra from the beginning.
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-No, let's wait to have a few Meson-based packages in Buildroot, and
-then we'll have a package infrastructure. This will allow us to see
-what are the commonalities, what are the differences, etc.
+I don't think this is the correct fix. Indeed, host-mariadb builds just
+fine on a system where the OpenSSL headers/development files are *NOT*
+installed.
+
+This means that host-mariadb does not require host-openssl, but uses
+OpenSSL if available. So the proper solution is to pass some option at
+configure time to tell host-mariadb to not attempt to use OpenSSL.
+Indeed, we are not really interested in having OpenSSL support in
+host-mariadb.
+
+It apparently needs an SSL implementation, but has a small bundled one
+based on yassl. Can you try:
+
+HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
+
+and see if it fixes the problem for you ?
+
+You can try to compare the build time of host-mariadb + host-openssl
+vs. host-maria-db + bundled SSL.
 
 Best regards,
 
