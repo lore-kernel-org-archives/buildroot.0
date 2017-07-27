@@ -1,55 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jul 2017 08:41:38 +0200
-Subject: [Buildroot] [git commit] Update for 2017.05.2
-Message-ID: <20170727063756.1902B81979@busybox.osuosl.org>
+Date: Thu, 27 Jul 2017 08:40:40 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2017.05.2
+Message-ID: <20170727063755.E626D821DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0b7d387e4842102bff3684d7a366da25c55c852
+commit: https://git.buildroot.net/buildroot/commit/?id=542460e62033d6a710e6746b86f1cb096e8a45bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 84eee43369a1afae6905f4a8f2c2b0afc23098f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index f693c82..ce3ea23 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -24,6 +24,29 @@
- 	  externally used toolchain. For compatibility with existing
- 	  scripts, a link usr -> . is still added.
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 4c5e9d4..1be375c 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
-+2017.05.2, Released July 27th, 2017
-+
-+	Important / security related fixes.
-+
-+	Webkitgtk bumped to the 2.16.x series, fixing a large number
-+	of security issues.
-+
-+	host-aespipe compile fix for Debian/Gentoo/Ubuntu toolchains
-+	which default to PIE mode.
-+
-+	Updated/fixed packages: aespipe, apache, bind, binutils,
-+	busybox, ccache, collectd, dieharder, efibootmgr, efivar,
-+	expat, ffmpeg, gcc, heimdal, iproute2, irssi, libglib2,
-+	libmemcached, libosip2, libtirpc, libxml-parser-perl,
-+	linux-fusion, linux-zigbee, mpg123, orc, pcre, php, protobuf,
-+	pulseaudio, python-setproctitle, qt5base, rpi-firmware,
-+	samba4, syslinux, systemd, spice, tcpdump, tiff, uboot-tools,
-+	webkitgtk, x265, xserver_xorg-server, xvisor
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#10061: gcc5.4 buildroot toolchain for powerpc libsanitizer...
-+
- 2017.05.1, Released July 4th, 2017
+-      <h3 style="text-align: center;">Latest stable release: <b>2017.05.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2017.05.2</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2017.05.1.tar.gz">buildroot-2017.05.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.05.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.05.2.tar.gz">buildroot-2017.05.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2017.05.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.05.1.tar.bz2">buildroot-2017.05.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.05.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.05.2.tar.bz2">buildroot-2017.05.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2017.05.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c25ae61..0d282c7 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2017.05.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 July 2017</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2017.05.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2017.05.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.05.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-July/199284.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2017.05.2.tar.bz2">2017.05.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
