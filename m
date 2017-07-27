@@ -1,74 +1,37 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 27 Jul 2017 10:45:15 +0200
-Subject: [Buildroot] [PATCH] python-libconfig: fix Python3 build
-Message-ID: <20170727084515.19623-1-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Jul 2017 11:06:39 +0200
+Subject: [Buildroot] Gmail bounces
+In-Reply-To: <20170721222143.219ca087@windsurf> (Thomas Petazzoni's message of
+ "Fri, 21 Jul 2017 22:21:43 +0200")
+References: <3d3a1098-24c3-d125-f433-04a9c1654b3e@gmail.com>
+ <747473427.1074021.1500661380566.JavaMail.zimbra@datacom.ind.br>
+ <3752e758-9b08-2e44-3024-7f08c29397ed@mind.be>
+ <20170721222143.219ca087@windsurf>
+Message-ID: <87lgnauu3k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-boost_python library is named boost_python3, if boost is built
-under Python3 environment. The patch fixes setup.py accordingly.
+ > Hello,
+ > On Fri, 21 Jul 2017 21:56:31 +0200, Arnout Vandecappelle wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/975/97533965180436c2f7a99de07fdc360ef57f84b0
-http://autobuild.buildroot.net/results/b49/b49de32704f0f7ce5a610cf4363c6dcc2d8bafa1
-http://autobuild.buildroot.net/results/e26/e26b4b9b486c582fb55826817a3428569968320f
+ >> Are you suggesting that the gitlab mails could be the cause of this? I can turn
+ >> them off and see if that improves things...
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...oost_python-name-depending-on-current-Pyt.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+ > I'm honestly not sure if it's related to the gitlab e-mails. Indeed, as
+ > several people said in this thread, it already happened to them a few
+ > months ago. And a few months ago, we did not had those gitlab e-mails.
 
-diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-new file mode 100644
-index 000000000..b30efc124
---- /dev/null
-+++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-@@ -0,0 +1,40 @@
-+From 3bc4b9c0d60a735b1d63e52f74492ace39f02824 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Thu, 27 Jul 2017 09:46:07 +0200
-+Subject: [PATCH] Determine boost_python name depending on current Python
-+ version
-+
-+Python2 requires boost_python and Python3 requires boost_python3.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ setup.py | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index fdf5c27..4b38569 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -3,6 +3,10 @@
-+ from setuptools import setup, find_packages, Extension
-+ import sys, os
-+ 
-++boostlib = "boost_python3"
-++if sys.version_info < (3, 0):
-++    boostlib = "boost_python"
-++
-+ setup(
-+     name				= 'pylibconfig',
-+     description			= "libconfig bindings for Python",
-+@@ -19,7 +23,7 @@ setup(
-+         Extension(
-+             "pylibconfig",
-+             ["src/pylibconfig.cc"],
-+-            libraries=["boost_python", "config++"]
-++            libraries=[boostlib, "config++"]
-+             #include_dirs=includes,
-+             #extra_link_args=lflags
-+                  )
-+-- 
-+2.11.0
-+
+ > But OK, let's disable the gitlab e-mails for now, just to see if it
+ > improves things. In parallel, perhaps we should report an issue to
+ > gitlab and ask them to fix this?
+
+I today received notifications about 17 people getting removed from the
+list, so it doesn't seem to have fixed the issue :/
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
