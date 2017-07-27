@@ -1,71 +1,108 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 27 Jul 2017 11:45:28 +0200
-Subject: [Buildroot] [PATCH 3/3] libmpdclient: bump to version 2.13
+Date: Thu, 27 Jul 2017 11:45:26 +0200
+Subject: [Buildroot] [PATCH v2 1/3] meson: new package
 In-Reply-To: <20170727094528.10745-1-joerg.krause@embedded.rocks>
 References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
-Message-ID: <20170727094528.10745-4-joerg.krause@embedded.rocks>
+Message-ID: <20170727094528.10745-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmpdclient has switched from autotools to meson.
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
+This new package provides the host variant of the Meson Build System, an
+open source build system meant to be both extremely fast, and as user
+friendly as possible.
+
+More precisely, Meson creates configuration files for the Ninja build
+system.
+
+Besides building Meson, it generates a configuration file
+("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
+cross-compiling a Meson-based project.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[J?rg Krause:
+ * bump to version 0.41.2
+ * use explicit tarball release instead of github helper
+ * use explicit sed
+ * pass BR2_GCC_TARGET_CPU to cross file]
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libmpdclient/libmpdclient.hash |  4 ++--
- package/libmpdclient/libmpdclient.mk   | 26 +++++++++++++++++++++++---
- 2 files changed, 25 insertions(+), 5 deletions(-)
+ package/meson/cross-compilation.conf.in | 15 +++++++++++++++
+ package/meson/meson.hash                |  2 ++
+ package/meson/meson.mk                  | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+)
+ create mode 100644 package/meson/cross-compilation.conf.in
+ create mode 100644 package/meson/meson.hash
+ create mode 100644 package/meson/meson.mk
 
-diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
-index 2fd20a41fb..aa9434098f 100644
---- a/package/libmpdclient/libmpdclient.hash
-+++ b/package/libmpdclient/libmpdclient.hash
-@@ -1,2 +1,2 @@
--# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig, sha256 locally computed
--sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
-+# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.13.tar.xz.sig, sha256 locally computed
-+sha256  5115bd52bc20a707c1ecc7587e6389c17305348e2132a66cf767c62fc55ed45d  libmpdclient-2.13.tar.xz
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 691aba9f71..9cd4f2bd2e 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -5,12 +5,32 @@
- ################################################################################
- 
- LIBMPDCLIENT_VERSION_MAJOR = 2
--LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
-+LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).13
- LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
- LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
--LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- LIBMPDCLIENT_INSTALL_STAGING = YES
- LIBMPDCLIENT_LICENSE = BSD-3-Clause
- LIBMPDCLIENT_LICENSE_FILES = COPYING
- 
--$(eval $(autotools-package))
-+LIBMPDCLIENT_DEPENDENCIES = host-meson host-pkgconf
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+new file mode 100644
+index 0000000000..d38fbb03cc
+--- /dev/null
++++ b/package/meson/cross-compilation.conf.in
+@@ -0,0 +1,15 @@
++# Note: in Meson terminology, what Buildroot calls the "host" system is the
++# "build" system and the "target" system is called the "host" system.
 +
-+LIBMPDCLIENT_MESON_OPTS += \
-+	--prefix=/usr \
-+	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
-+	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
++[binaries]
++c = '@TARGET_CROSS at gcc'
++cpp = '@TARGET_CROSS at g++'
++ar = '@TARGET_CROSS at ar'
++strip = '@TARGET_CROSS at strip'
++pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
 +
-+define LIBMPDCLIENT_CONFIGURE_CMDS
-+	rm -rf $(@D)/build
-+	mkdir -p $(@D)/build
-+	$(TARGET_MAKE_ENV) meson $(LIBMPDCLIENT_MESON_OPTS) $(@D) $(@D)/build
++[host_machine]
++system = 'linux'
++cpu_family ='@TARGET_ARCH@'
++cpu = '@TARGET_CPU@'
++endian = '@TARGET_ENDIAN@'
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+new file mode 100644
+index 0000000000..7f0de1d437
+--- /dev/null
++++ b/package/meson/meson.hash
+@@ -0,0 +1,2 @@
++# Locally generated
++sha256  074dd24fd068be0893e2e45bcc35c919d8e12777e9d6a7efdf72d4dc300867ca  meson-0.41.2.tar.gz
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+new file mode 100644
+index 0000000000..7cf287df82
+--- /dev/null
++++ b/package/meson/meson.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# meson
++#
++################################################################################
++
++MESON_VERSION = 0.41.2
++MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
++MESON_LICENSE = Apache-2.0
++MESON_LICENSE_FILES = COPYING
++MESON_SETUP_TYPE = setuptools
++
++HOST_MESON_DEPENDENCIES = host-ninja
++HOST_MESON_NEEDS_HOST_PYTHON = python3
++
++HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
++
++define HOST_MESON_INSTALL_CROSS_CONF
++	sed -e 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
++	    -e 's;@TARGET_ARCH@;$(ARCH);g' \
++	    -e 's;@TARGET_CPU@;$(BR2_GCC_TARGET_CPU);g' \
++	    -e 's;@TARGET_ENDIAN@;$(HOST_MESON_TARGET_ENDIAN);g' \
++	    -e 's;@HOST_DIR@;$(HOST_DIR);g' \
++	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
++	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
 +endef
 +
-+define LIBMPDCLIENT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
-+endef
++HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
 +
-+define LIBMPDCLIENT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(host-python-package))
 -- 
 2.13.3
