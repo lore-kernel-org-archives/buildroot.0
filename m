@@ -1,41 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Jul 2017 22:54:26 +0200
-Subject: [Buildroot] [PATCH 00/20] system: properly handle systemd as
- init system
-In-Reply-To: <18557b86-2ac3-9545-064c-a54d025de773@cartelsol.com>
-References: <cover.1500398733.git.yann.morin.1998@free.fr>
- <CAAkeqgVMVSspUdMnPNWi_RQyLPhyf-1bys=d2btKrStEk34VMg@mail.gmail.com>
- <20170719225332.560a9a06@windsurf>
- <CAAkeqgWk1ywyCT027eGPtXfQO_qd5b7dEJSOZek8eMx1R1Ey+Q@mail.gmail.com>
- <20170720093228.19139327@windsurf>
- <45bb5a90-e48a-3edc-43ff-8cf9eefd20e6@cartelsol.com>
- <18557b86-2ac3-9545-064c-a54d025de773@cartelsol.com>
-Message-ID: <20170728225426.23fd8b8c@windsurf.lan>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 28 Jul 2017 23:17:12 +0200
+Subject: [Buildroot] [PATCH v3] package/qt5location: handle plugins
+ being conditionally built
+In-Reply-To: <49674504-df74-e429-b49f-eacf299ef15b@microchip.com>
+References: <1500925803-3453-1-git-send-email-joshua.henderson@microchip.com>
+ <20170725215220.6d447778@windsurf.home>
+ <49674504-df74-e429-b49f-eacf299ef15b@microchip.com>
+Message-ID: <619ea4cf-4911-7702-3c88-4e860ed15c85@mind.be>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 28 Jul 2017 22:41:07 +0200, Marcus Hoffmann wrote:
 
-> >> BTW, for these bugs, if there is something easy we can add to the
-> >> testing infrastructure to make sure it keeps working, it would be nice!  
+On 28-07-17 18:31, Joshua Henderson wrote:
+> Thomas, Peter,
 > 
-> I'm not yet familiar with the the testing infrastructure. Would that be
-> something like providing a certain set of defconfigs, booting into the
-> generated filesystems and testing if dns works?
+> On 07/25/2017 12:52 PM, Thomas Petazzoni wrote:
+[snip]
+>> Thanks, but Peter had sent an almost identical patch a few hours
+>> before, and I've applied his patch.
+> 
+> It wasn't exactly identical.  The applied patch now causes a build failure for 5.6.2:
 
-Exactly that. The testing infrastructure makes it very easy to provide
-a defconfig fragment, build it, boot it under Qemu, and run arbitrary
-commands.
+ If you noticed that Peter's patch was wrong, you could have mentioned it in the
+commit message of your patch (below the --- line). Then Thomas might have seen
+the difference and applied your patch instead.
 
-Best regards,
 
-Thomas
+>     qt5location 5.6.2 Patching
+>     Applying 0001-Fix-plugins-build-dependency.patch using patch: 
+>     patching file src/src.pro
+>     Hunk #1 FAILED at 7.
+>     Hunk #2 succeeded at 14 (offset -4 lines).
+>     1 out of 2 hunks FAILED -- saving rejects to file src/src.pro.rej
+
+ Care to send a fix (I guess just moving the patch to the right directory)?
+
+ When you do, please also add a reference to the autobuilder failure:
+
+http://autobuild.buildroot.net/results/676abe008c9c4bddfddd7b041d8db9999e9e899d
+
+>>
+>> Thanks a lot for all this work on Qt5, much appreciated! Note that we
+>> still have a build failure of qt5webkit 5.6.1:
+>>
+>>   http://autobuild.buildroot.net/results/2f3/2f381967c82775ad911a246a9607034ef489c1ce/build-end.log
+>>
+> 
+> I also have several other patches to rev (add qt5wayland and license hashes for all of qt5).
+
+ For the qt5wayland patch, since you wrote yourself "This needs a v3 before
+applying.", it's been marked as Changes Requested in patchwork so it won't be
+applied and probably won't be reviewed either.
+
+ Regards,
+ Arnout
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
