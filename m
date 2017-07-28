@@ -1,109 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 29 Jul 2017 00:22:55 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: bump version to 234
-In-Reply-To: <20170728113516.17944-1-aduskett@gmail.com>
-References: <20170728113516.17944-1-aduskett@gmail.com>
-Message-ID: <294dfd60-ae61-9003-def5-1a7ce08eadde@mind.be>
+Date: Sat, 29 Jul 2017 00:38:06 +0200
+Subject: [Buildroot] [PATCH 1/1] libpng: bump version to 1.6.31
+In-Reply-To: <20170728115949.8204-1-aduskett@gmail.com>
+References: <20170728115949.8204-1-aduskett@gmail.com>
+Message-ID: <75cfd5f4-14da-a768-24f0-a2e7d6fcad20@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adam,
-
-On 28-07-17 13:35, Adam Duskett wrote:
-> Other changes:
-> - Removed the following patches due to being merged upstream:
->     - resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
->     - resolved-simplify-alloc-size-calculation.patch
->     - resolved-do-not-allocate-packets-with-minimum-size.patch
-> - Updated the following patches to work with 234:
->     - fix-getty-unit.patch
->     - build-check-for-ln-relative.patch
->     - fix-am-path-libgcrypt-no-found.patch
-> - Updated ordering of remaining patches.
-> - Reformatted remaining patches as git style patches.
-> - Updated Upstream-Status comment in "build-check-for-ln-relative.patch" to
->   "Denied [No desire to support building on old distributions]"
-
- This is a pretty darn big patch to review. It would have been nice to split it
-a little, e.g. split off the reformatting to git style. Also, before sending,
-it's nice to check if git has detected the renames correctly, and if not give an
-argument to -M so it tries harder.
 
 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[snip]
-> diff --git a/package/systemd/0001-fix-getty-unit.patch b/package/systemd/0001-fix-getty-unit.patch
-> new file mode 100644
-> index 000000000..c8d53d04a
-> --- /dev/null
-> +++ b/package/systemd/0001-fix-getty-unit.patch
-> @@ -0,0 +1,43 @@
-> +From 82dc074213122ef32c7a9cbfc406a827e5afed64 Mon Sep 17 00:00:00 2001
-> +From: Maxime Ripard <maxime.ripard@free-electrons.com>
-> +Date: Fri, 28 Jul 2017 06:58:45 -0400
-> +Subject: [PATCH] Prefer getty to agetty in console setup systemd units
+On 28-07-17 13:59, Adam Duskett wrote:
+> sourceforge doesn't host the latest version and doesn't seem
+> to be updated.  Change the URL to osl.osuosl.org, which does
+> host the latest version.
 
- You apparently didn't *really* create it with git format-patch, otherwise the
-file name would have been 0001-Prefer-getty-to-agetty-...
+ This is really no good, because apparently the osuosl.org location only stores
+the latest release.
 
-> +
-> +Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +Refresh for 234
+ The .31 release is also not mentioned on the home page.
 
- The usual way to do this is:
+ Since this release is very fresh, perhaps wait a couple of days until it is
+there? And perhaps notify upstream of this discrepancy?
 
-[Adam: Refresh for 234]
-Signed-off-by: Adam
+ Actually... apparently it has appeared on sourceforge now...
 
-> +---
-> + units/getty at .service.m4        | 2 +-
-> + units/serial-getty at .service.m4 | 2 +-
-> + 2 files changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/units/getty at .service.m4 b/units/getty at .service.m4
-> +index 2a84061..e6e8685 100644
-> +--- a/units/getty at .service.m4
-> ++++ b/units/getty at .service.m4
-> +@@ -36,7 +36,7 @@ ConditionPathExists=/dev/tty0
-> + # The '-o' option value tells agetty to replace 'login' arguments with an
-> + # option to preserve environment (-p), followed by '--' for safety, and then
-> + # the entered username.
+ Can you respin?
 
- Please also remove the comment above, otherwise it looks really weird to anyone
-looking into this file on the target.
-
-> +-ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
-> ++ExecStart=-/sbin/getty -L %I 115200 vt100
-> + Type=idle
-> + Restart=always
-> + RestartSec=0
+> 
+> While we are at it, add a hash for the License file.
 
 [snip]
-> @@ -8,17 +11,25 @@ development files are available. Though libgcrypt support is optional in
->  systemd, this macro should be available whenever autoreconf is used, otherwise
->  the re-configuration will fail with:
->  
-> -  configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
-> +configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
+> diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+> index 279420a70..65efaa128 100644
+> --- a/package/libpng/libpng.hash
+> +++ b/package/libpng/libpng.hash
+> @@ -1,4 +1,5 @@
+> -# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.29/
+> -sha1 7dbe6a5088b938545fc0857c507d4e0cf5d9023e  libpng-1.6.29.tar.xz
 
- Why do you remove the indentation here?
+ Please keep the sourceforge sha1: de695064363df331734466981ef7f6546ef516bf
 
  Regards,
  Arnout
 
+>  # Locally computed:
+> -sha256 4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239  libpng-1.6.29.tar.xz
+> +sha256 232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41  libpng-1.6.31.tar.xz
+> +
+> +# License file
+> +sha256 434a58adb33d5a3af601ee74e444eaf4bad89453d55c42965a3270e988d71745  LICENSE
+> diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+> index c82c4efff..d84d4833b 100644
+> --- a/package/libpng/libpng.mk
+> +++ b/package/libpng/libpng.mk
+> @@ -4,10 +4,10 @@
+>  #
+>  ################################################################################
 >  
->  As asking the user to install the development package of libgcrypt on the host
->  machine or adding libgcrypt as a build dependency to systemd is not
->  acceptable, the required file is added to the m4 directory.
->  
->  Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
-[snip]
+> -LIBPNG_VERSION = 1.6.29
+> +LIBPNG_VERSION = 1.6.31
+>  LIBPNG_SERIES = 16
+>  LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+> -LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+> +LIBPNG_SITE = https://ftp-osl.osuosl.org/pub/libpng/src/libpng${LIBPNG_SERIES}
+>  LIBPNG_LICENSE = Libpng
+>  LIBPNG_LICENSE_FILES = LICENSE
+>  LIBPNG_INSTALL_STAGING = YES
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
