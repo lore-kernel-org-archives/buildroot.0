@@ -1,91 +1,114 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 29 Jul 2017 00:08:38 +0200
-Subject: [Buildroot] [PATCH v3] package/qt5location: handle plugins
- being conditionally built
-In-Reply-To: <e4f07131-c47e-f3f6-e0fc-a96a1defb6c6@microchip.com>
-References: <1500925803-3453-1-git-send-email-joshua.henderson@microchip.com>
- <20170725215220.6d447778@windsurf.home>
- <49674504-df74-e429-b49f-eacf299ef15b@microchip.com>
- <619ea4cf-4911-7702-3c88-4e860ed15c85@mind.be>
- <e4f07131-c47e-f3f6-e0fc-a96a1defb6c6@microchip.com>
-Message-ID: <20170729000838.487a69cd@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 29 Jul 2017 00:22:55 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bump version to 234
+In-Reply-To: <20170728113516.17944-1-aduskett@gmail.com>
+References: <20170728113516.17944-1-aduskett@gmail.com>
+Message-ID: <294dfd60-ae61-9003-def5-1a7ce08eadde@mind.be>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joshua,
+ Hi Adam,
 
-On Fri, 28 Jul 2017 14:54:06 -0700, Joshua Henderson <joshua.henderson@microchip.com> wrote:
+On 28-07-17 13:35, Adam Duskett wrote:
+> Other changes:
+> - Removed the following patches due to being merged upstream:
+>     - resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
+>     - resolved-simplify-alloc-size-calculation.patch
+>     - resolved-do-not-allocate-packets-with-minimum-size.patch
+> - Updated the following patches to work with 234:
+>     - fix-getty-unit.patch
+>     - build-check-for-ln-relative.patch
+>     - fix-am-path-libgcrypt-no-found.patch
+> - Updated ordering of remaining patches.
+> - Reformatted remaining patches as git style patches.
+> - Updated Upstream-Status comment in "build-check-for-ln-relative.patch" to
+>   "Denied [No desire to support building on old distributions]"
 
-> Arnout,
-> 
-> On 07/28/2017 02:17 PM, Arnout Vandecappelle wrote:
-> > 
-> > 
-> > On 28-07-17 18:31, Joshua Henderson wrote:
-> >> Thomas, Peter,
-> >>
-> >> On 07/25/2017 12:52 PM, Thomas Petazzoni wrote:
-> > [snip]
-> >>> Thanks, but Peter had sent an almost identical patch a few hours
-> >>> before, and I've applied his patch.
-> >>
-> >> It wasn't exactly identical.  The applied patch now causes a build failure for 5.6.2:
-> > 
-> >  If you noticed that Peter's patch was wrong, you could have mentioned it in the
-> > commit message of your patch (below the --- line). Then Thomas might have seen
-> > the difference and applied your patch instead.
-> 
-> It was caught last night by a local build server.  Didn't notice it previously.  I
-> have actually been flying right along using his patch, but only with 5.9.1.  This
-> is only an issue with 5.6.2.
-> 
+ This is a pretty darn big patch to review. It would have been nice to split it
+a little, e.g. split off the reformatting to git style. Also, before sending,
+it's nice to check if git has detected the renames correctly, and if not give an
+argument to -M so it tries harder.
 
-Ups, my fault...
 
-> > 
-> > 
-> >>     qt5location 5.6.2 Patching
-> >>     Applying 0001-Fix-plugins-build-dependency.patch using patch: 
-> >>     patching file src/src.pro
-> >>     Hunk #1 FAILED at 7.
-> >>     Hunk #2 succeeded at 14 (offset -4 lines).
-> >>     1 out of 2 hunks FAILED -- saving rejects to file src/src.pro.rej
-> > 
-> >  Care to send a fix (I guess just moving the patch to the right directory)?
-> 
-> That should do it.  Done.
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+[snip]
+> diff --git a/package/systemd/0001-fix-getty-unit.patch b/package/systemd/0001-fix-getty-unit.patch
+> new file mode 100644
+> index 000000000..c8d53d04a
+> --- /dev/null
+> +++ b/package/systemd/0001-fix-getty-unit.patch
+> @@ -0,0 +1,43 @@
+> +From 82dc074213122ef32c7a9cbfc406a827e5afed64 Mon Sep 17 00:00:00 2001
+> +From: Maxime Ripard <maxime.ripard@free-electrons.com>
+> +Date: Fri, 28 Jul 2017 06:58:45 -0400
+> +Subject: [PATCH] Prefer getty to agetty in console setup systemd units
 
-Thanks...
+ You apparently didn't *really* create it with git format-patch, otherwise the
+file name would have been 0001-Prefer-getty-to-agetty-...
 
-> 
-> > 
-> >  When you do, please also add a reference to the autobuilder failure:
-> > 
-> > http://autobuild.buildroot.net/results/676abe008c9c4bddfddd7b041d8db9999e9e899d
-> 
-> OK.  Is there any way to subscribe to these failures?  Even better, for specific packages?
-> 
+> +
+> +Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +Refresh for 234
 
-The DEVELOPERS file in the buildroot root directory, send a patch adding yourself
-for packages you contributed to/interested in...
+ The usual way to do this is:
 
-> > 
-> 
-> ...
-> 
-> >>
-> >> I also have several other patches to rev (add qt5wayland and license hashes for all of qt5).
+[Adam: Refresh for 234]
+Signed-off-by: Adam
 
-Did not find time for testing the qt5wayland patch yet and missed the license hash patch...
+> +---
+> + units/getty at .service.m4        | 2 +-
+> + units/serial-getty at .service.m4 | 2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/units/getty at .service.m4 b/units/getty at .service.m4
+> +index 2a84061..e6e8685 100644
+> +--- a/units/getty at .service.m4
+> ++++ b/units/getty at .service.m4
+> +@@ -36,7 +36,7 @@ ConditionPathExists=/dev/tty0
+> + # The '-o' option value tells agetty to replace 'login' arguments with an
+> + # option to preserve environment (-p), followed by '--' for safety, and then
+> + # the entered username.
 
-Regards,
-Peter
+ Please also remove the comment above, otherwise it looks really weird to anyone
+looking into this file on the target.
 
-> > 
-> >  For the qt5wayland patch, since you wrote yourself "This needs a v3 before
-> > applying.", it's been marked as Changes Requested in patchwork so it won't be
-> > applied and probably won't be reviewed either.
-> 
-> OK.
-> 
-> Josh
+> +-ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
+> ++ExecStart=-/sbin/getty -L %I 115200 vt100
+> + Type=idle
+> + Restart=always
+> + RestartSec=0
+
+[snip]
+> @@ -8,17 +11,25 @@ development files are available. Though libgcrypt support is optional in
+>  systemd, this macro should be available whenever autoreconf is used, otherwise
+>  the re-configuration will fail with:
+>  
+> -  configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
+> +configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
+
+ Why do you remove the indentation here?
+
+ Regards,
+ Arnout
+
+>  
+>  As asking the user to install the development package of libgcrypt on the host
+>  machine or adding libgcrypt as a build dependency to systemd is not
+>  acceptable, the required file is added to the m4 directory.
+>  
+>  Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
