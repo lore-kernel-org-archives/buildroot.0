@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 29 Jul 2017 00:43:38 +0200
-Subject: [Buildroot] [PATCH 1/1] host-mariadb: compile against bundled
- yassl
-In-Reply-To: <20170728104440.12303-1-aduskett@gmail.com>
-References: <20170728104440.12303-1-aduskett@gmail.com>
-Message-ID: <a0203a79-5534-4285-0afa-836dcd8f7bfe@mind.be>
+Date: Sat, 29 Jul 2017 00:44:25 +0200
+Subject: [Buildroot] [PATCH] package/qt5location: isolate patch to qt
+ 5.9.1
+In-Reply-To: <1501278799-22827-1-git-send-email-joshua.henderson@microchip.com>
+References: <1501278799-22827-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <10be2393-0325-def3-479c-ff62a4deacca@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,16 @@ To: buildroot@busybox.net
 
 
 
-On 28-07-17 12:44, Adam Duskett wrote:
-> On Fedora26, openssl 1.1.x is included by default.  This causes build errors
-> when building the host variant of mariadb.
+On 28-07-17 23:53, Joshua Henderson wrote:
+> Fixes a build issue [1] where the qt5location upstream patch should only be
+> applied to 5.9.1.  This moves the patch into the appropriate directory.
 > 
-> Addings -DWITH_SSL=bundled fixes this issue.
+> [1] http://autobuild.buildroot.net/results/676abe008c9c4bddfddd7b041d8db9999e9e899d
 > 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
  Applied to master, thanks.
 
