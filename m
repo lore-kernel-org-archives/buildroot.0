@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 29 Jul 2017 00:49:35 +0200
-Subject: [Buildroot] [PATCH 1/2] fs/ext2: fix typo
-In-Reply-To: <20170727230227.1097-1-m.hoffmann@cartelsol.com>
-References: <20170727230227.1097-1-m.hoffmann@cartelsol.com>
-Message-ID: <e1468f0c-7dcc-e8f1-8d2c-76c1b40624ea@mind.be>
+Date: Sat, 29 Jul 2017 00:54:37 +0200
+Subject: [Buildroot] [PATCH v3] package/libv4l: no libv4lconvert helper
+ support if no fork()
+In-Reply-To: <1501239707-18765-2-git-send-email-hugues.fruchet@st.com>
+References: <1501239707-18765-1-git-send-email-hugues.fruchet@st.com>
+ <1501239707-18765-2-git-send-email-hugues.fruchet@st.com>
+Message-ID: <925e2f45-5856-d35c-e2aa-985db6b5768c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +14,31 @@ To: buildroot@busybox.net
 
 
 
-On 28-07-17 01:02, Marcus Hoffmann wrote:
-> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+On 28-07-17 13:01, Hugues Fruchet wrote:
+> Build libv4lconvert helper support only when fork()
+> is available.
+> 
+> Fixes [1]:
+>     CXXLD    v4l2-compliance
+>    .../build/libv4l-1.12.5/lib/libv4lconvert/.libs/libv4lconvert.so: undefined reference to `fork'
+>   collect2: error: ld returned 1 exit status
+> 
+> [1] http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe
+> 
+> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+> Tested-by: Peter Seiderer <ps.report@gmx.net>
 
+ Applied to master, thanks.
 
- Both applied to master, thanks.
+ Note that for a series of a single patch, there is really no need to have a
+cover letter. Also it's more convenient to read the patch history directly in
+the patch itself rather than in a separate mail.
 
  Regards,
  Arnout
 
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
