@@ -1,35 +1,40 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 28 Jul 2017 06:44:40 -0400
-Subject: [Buildroot] [PATCH 1/1] host-mariadb: compile against bundled yassl
-Message-ID: <20170728104440.12303-1-aduskett@gmail.com>
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Fri, 28 Jul 2017 13:01:46 +0200
+Subject: [Buildroot] [PATCH v3] package/libv4l: no libv4lconvert helper
+	support if no fork()
+Message-ID: <1501239707-18765-1-git-send-email-hugues.fruchet@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fedora26, openssl 1.1.x is included by default.  This causes build errors
-when building the host variant of mariadb.
+Build libv4lconvert helper support only when fork() is available.
 
-Addings -DWITH_SSL=bundled fixes this issue.
+Fixes [1]:
+    CXXLD    v4l2-compliance
+   .../build/libv4l-1.12.5/lib/libv4lconvert/.libs/libv4lconvert.so: undefined reference to `fork'
+  collect2: error: ld returned 1 exit status
+    
+[1] http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/mariadb/mariadb.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Changes v2 -> v3:
+  - revisit build error message as per Peter's comment
+  - revisit patch suject as per Peter's comment
+  - add Tested-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 1d6c2bcc4..db538fd0f 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -67,6 +67,8 @@ MARIADB_CONF_OPTS += \
- 	-DMYSQL_DATADIR=/var/lib/mysql \
- 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
- 
-+HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
-+
- # Some helpers must be compiled for host in order to crosscompile mariadb for
- # the target. They are then included by import_executables.cmake which is
- # generated during the build of the host helpers. It is not necessary to build
+Changes v1 -> v2:
+  - point to http://autobuild.buildroot.org build result
+  - revisit Author & Signed-off-by
+
+
+Hugues Fruchet (1):
+  package/libv4l: no libv4lconvert helper support if no fork()
+
+ ...lconvert-helper-support-only-when-fork-is.patch | 102 +++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+ create mode 100644 package/libv4l/0010-Build-libv4lconvert-helper-support-only-when-fork-is.patch
+
 -- 
-2.13.3
+1.9.1
