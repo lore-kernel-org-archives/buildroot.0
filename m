@@ -1,41 +1,78 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 28 Jul 2017 08:50:26 -0400
-Subject: [Buildroot] [PATCH 1/1] dbus: bump version to 1.10.22
-Message-ID: <20170728125026.21684-1-aduskett@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 28 Jul 2017 17:09:25 +0300
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: bump to version 2.16.5
+In-Reply-To: <871spb63sv.fsf@dell.be.48ers.dk>
+References: <20170705143303.26282-1-aperez@igalia.com>
+ <87o9sg8qu7.fsf@dell.be.48ers.dk> <871spb63sv.fsf@dell.be.48ers.dk>
+Message-ID: <20170728170925.GC9019@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi there,
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 3c45de2a9..b0052422c 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.20.tar.gz.asc
--sha256	e574b9780b5425fde4d973bb596e7ea0f09e00fe2edd662da9016e976c460b48  dbus-1.10.20.tar.gz
-+# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz.asc
-+sha256	e2b1401e3eedc7b5c9a2034d31254c886e1fcbc7858006e0a1c59158fe4b7b97  dbus-1.10.22.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index b794db455..1e3b46229 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.20
-+DBUS_VERSION = 1.10.22
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
--- 
-2.13.3
+On Thu, 20 Jul 2017 08:05:52 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> 
+> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>  >> This simply updates to the latest stable release. WebKitGTK+ versions
+>  >> in the 2.1x series avoid bumping the dependencies in order to allow
+>  >> distributions to provide updates, therefore no new dependencies are
+>  >> needed.
+> 
+>  >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+>  > Committed to 2017.02.x and 2017.05.x, thanks.
+> 
+> While backporting I noticed that webkitgtk doesn't seem to build without
+> the BR2_PACKAGE_WEBKITGTK_MULTIMEDIA option. I reproduced it with master
+> as well.
+> 
+> The build error I get is this. Do you have any idea how to fix?
+> 
+> /home/peko/buildroot/output/build/webkitgtk-2.16.5/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp:3100:207:   required from here
+> /home/peko/buildroot/output/build/webkitgtk-2.16.5/Source/WTF/wtf/PassRefPtr.h:40:13: error: invalid use of incomplete type ?class WebCore::HTMLVideoElement?
+>              ptr->deref();
+>              ^
+> In file included from /home/peko/buildroot/output/build/webkitgtk-2.16.5/Source/WebCore/html/canvas/WebGLRenderingContextBase.h:32:0,
+>                  from /home/peko/buildroot/output/build/webkitgtk-2.16.5/DerivedSources/WebCore/JSWebGLRenderingContextBase.h:26,
+>                  from /home/peko/buildroot/output/build/webkitgtk-2.16.5/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp:25:
+> /home/peko/buildroot/output/build/webkitgtk-2.16.5/Source/WebCore/html/canvas/CanvasRenderingContext.h:40:7: note: forward declaration of ?class WebCore::HTMLVideoElement?
+>  class HTMLVideoElement;
+>        ^
+> [ 39%] Building CXX object Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/__/__/DerivedSources/WebCore/FetchInternalsBuiltins.cpp.o
+> Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/build.make:16034: recipe for target 'Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/__/__/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp.o' failed
+> make[3]: *** [Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/__/__/DerivedSources/WebCore/JSWebGLRenderingContextBase.cpp.o] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> make[3]: Leaving directory '/home/peko/buildroot/output/build/webkitgtk-2.16.5'
+> CMakeFiles/Makefile2:685: recipe for target 'Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/all' failed
+> make[2]: *** [Source/WebCore/CMakeFiles/WebCoreDerivedSources.dir/all] Error 2
+> make[2]: Leaving directory '/home/peko/buildroot/output/build/webkitgtk-2.16.5'
+> Makefile:151: recipe for target 'all' failed
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory '/home/peko/buildroot/output/build/webkitgtk-2.16.5'
+
+The issue is also present in ?trunk? upstream, I can also reproduce it with an
+updated checkout. It seems that there is a missing feature dependency in the
+CMake files: ENABLE_MEDIA_STREAM is not depending on ENABLE_VIDEO, so it
+remains enabled when passing -DENABLE_VIDEO=OFF. I'll be submitting a patch
+upstream.
+
+I am making now a build to check whether passing -DENABLE_MEDIA_STREAM=OFF
+when video support is disabled is enough for the Buildroot recipe while the
+feature dependency is not properly handled by the WebKitGTK+ CMake files.
+
+Cheers,
+
+
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170728/b8117305/attachment.asc>
