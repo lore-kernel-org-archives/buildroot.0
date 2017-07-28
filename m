@@ -1,49 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 29 Jul 2017 00:54:37 +0200
-Subject: [Buildroot] [PATCH v3] package/libv4l: no libv4lconvert helper
- support if no fork()
-In-Reply-To: <1501239707-18765-2-git-send-email-hugues.fruchet@st.com>
-References: <1501239707-18765-1-git-send-email-hugues.fruchet@st.com>
- <1501239707-18765-2-git-send-email-hugues.fruchet@st.com>
-Message-ID: <925e2f45-5856-d35c-e2aa-985db6b5768c@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 29 Jul 2017 00:55:43 +0200
+Subject: [Buildroot] [git commit] qt-webkit-kiosk: fix icu/qt5webkit
+	dependecy propagation
+Message-ID: <20170728230724.A33FB7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5d9d2744f5b570326763b76ac957b37bd5ff0729
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+ICU depends on BR2_HOST_GCC_AT_LEAST_4_8 and
+BR2_TOOLCHAIN_GCC_AT_LEAST_4_8, these dependencies are propagated to
+qt5webkit but were not propagated to qt-webkit-kiosk.
 
-On 28-07-17 13:01, Hugues Fruchet wrote:
-> Build libv4lconvert helper support only when fork()
-> is available.
-> 
-> Fixes [1]:
->     CXXLD    v4l2-compliance
->    .../build/libv4l-1.12.5/lib/libv4lconvert/.libs/libv4lconvert.so: undefined reference to `fork'
->   collect2: error: ld returned 1 exit status
-> 
-> [1] http://autobuild.buildroot.net/results/7e8/7e8fbd99a8c091d7bbeedd16066297682bbe29fe
-> 
-> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-> Tested-by: Peter Seiderer <ps.report@gmx.net>
+Fixes [1]:
 
- Applied to master, thanks.
+  The WebKit build was disabled for the following reasons:
+      * ICU is required.
+  [...]
+  cp -dpf .../host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libQt5WebKit*.so.* .../target/usr/lib
+  cp: cannot stat `.../host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libQt5WebKit*.so.*': No such file or directory
 
- Note that for a series of a single patch, there is really no need to have a
-cover letter. Also it's more convenient to read the patch history directly in
-the patch itself rather than in a separate mail.
+[1] http://autobuild.buildroot.net/results/2f3/2f381967c82775ad911a246a9607034ef489c1ce
 
- Regards,
- Arnout
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Arnout:
+ - rewrap commit message
+ - fix spelling mistakes in commit message
+ - reformulate the dependency comments]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/qt-webkit-kiosk/Config.in | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-
-[snip]
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+index 703f128..c613a8e 100644
+--- a/package/qt-webkit-kiosk/Config.in
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -3,7 +3,9 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_STATIC_LIBS # qt5webkit
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
+-	depends on !BR2_BINFMT_FLAT # qt5webkit
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu/qt5webkit
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu/qt5webkit
++	depends on !BR2_BINFMT_FLAT # icu/qt5webkit
+ 	depends on !BR2_MIPS_SOFT_FLOAT # qt5webkit
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+@@ -21,3 +23,10 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
+ 	  Deploy browser sound files on target
+ 
+ endif
++
++comment "qt-webkit-kiosk needs a toolchain w/ dynamic library, gcc >= 4.8, host gcc >= 4.8"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_HOST_GCC_AT_LEAST_4_8
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
++	depends on !BR2_BINFMT_FLAT
++	depends on !BR2_MIPS_SOFT_FLOAT
