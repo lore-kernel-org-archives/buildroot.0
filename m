@@ -1,54 +1,163 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 28 Jul 2017 07:59:49 -0400
-Subject: [Buildroot] [PATCH 1/1] libpng: bump version to 1.6.31
-Message-ID: <20170728115949.8204-1-aduskett@gmail.com>
+Date: Fri, 28 Jul 2017 08:25:28 -0400
+Subject: [Buildroot] [PATCH 1/1] libgsm: bump version to 1.0.17
+Message-ID: <20170728122528.17801-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sourceforge doesn't host the latest version and doesn't seem
-to be updated.  Change the URL to osl.osuosl.org, which does
-host the latest version.
-
-While we are at it, add a hash for the License file.
+Other changes:
+- Refresh 0001-misc.patch to work with 1.0.17.
+- Reformat 0001-misc.patch to git style patch.
+- Rename 0001-misc.patch to 0001-misc-fixes-from-archlinux.patch.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/libpng/libpng.hash | 7 ++++---
- package/libpng/libpng.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ ....patch => 0001-misc-fixes-from-archlinux.patch} | 41 ++++++++++++++--------
+ package/libgsm/libgsm.hash                         |  2 +-
+ package/libgsm/libgsm.mk                           |  2 +-
+ 3 files changed, 29 insertions(+), 16 deletions(-)
+ rename package/libgsm/{0001-misc.patch => 0001-misc-fixes-from-archlinux.patch} (81%)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 279420a70..65efaa128 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,4 +1,5 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.29/
--sha1 7dbe6a5088b938545fc0857c507d4e0cf5d9023e  libpng-1.6.29.tar.xz
- # Locally computed:
--sha256 4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239  libpng-1.6.29.tar.xz
-+sha256 232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41  libpng-1.6.31.tar.xz
+diff --git a/package/libgsm/0001-misc.patch b/package/libgsm/0001-misc-fixes-from-archlinux.patch
+similarity index 81%
+rename from package/libgsm/0001-misc.patch
+rename to package/libgsm/0001-misc-fixes-from-archlinux.patch
+index 735d74449..86f4d42b6 100644
+--- a/package/libgsm/0001-misc.patch
++++ b/package/libgsm/0001-misc-fixes-from-archlinux.patch
+@@ -1,22 +1,32 @@
+-Misc fixes from Archlinux
++From e8f43832d401ad1e071e6860b2bf4a1e796d4356 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Fri, 28 Jul 2017 08:18:22 -0400
++Subject: [PATCH] Misc fixes from Archlinux
+ 
+ Patch from:
+     https://git.archlinux.org/svntogit/packages.git/plain/gsm/trunk/gsm.patch
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++Refresh for 1.0.17
++---
++ Makefile | 84 ++++++++++++++++++++++++++++++++--------------------------------
++ 1 file changed, 42 insertions(+), 42 deletions(-)
+ 
+---- a/Makefile	2006-04-26 15:14:26.000000000 -0400
+-+++ b/Makefile	2010-06-19 16:53:25.000000000 -0400
+-@@ -44,7 +44,7 @@
++diff --git a/Makefile b/Makefile
++index d5c0c90..ef61bd5 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -44,7 +44,7 @@ WAV49	= -DWAV49
+  # CCFLAGS 	= -c -O
+  
+  CC		= gcc -ansi -pedantic
+--CCFLAGS 	= -c -O2 -DNeedFunctionPrototypes=1
+-+CCFLAGS 	= -c -O2 -fPIC -DNeedFunctionPrototypes=1
++-CCFLAGS 	= -c -O2 -DNeedFunctionPrototypes=1 -Wall -Wno-comment
+++CCFLAGS 	= -c -O2 -fPIC -DNeedFunctionPrototypes=1 -Wall -Wno-comment
+  
+  LD 		= $(CC)
+  
+-@@ -96,11 +96,11 @@
++@@ -96,11 +96,11 @@ TOAST_INSTALL_MAN = $(TOAST_INSTALL_ROOT)/man/man1
+  #  Other tools
+  
+  SHELL		= /bin/sh
+@@ -30,7 +40,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  FIND		= find
+  COMPRESS 	= compress
+  COMPRESSFLAGS 	= 
+-@@ -139,7 +139,7 @@
++@@ -139,7 +139,7 @@ LFLAGS	= $(LDFLAGS) $(LDINC)
+  
+  # Targets
+  
+@@ -39,7 +49,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  
+  TOAST	= $(BIN)/toast
+  UNTOAST	= $(BIN)/untoast
+-@@ -257,7 +257,7 @@
++@@ -257,7 +257,7 @@ STUFF = 	ChangeLog			\
+  # Install targets
+  
+  GSM_INSTALL_TARGETS =	\
+@@ -48,7 +58,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  		$(GSM_INSTALL_INC)/gsm.h		\
+  		$(GSM_INSTALL_MAN)/gsm.3		\
+  		$(GSM_INSTALL_MAN)/gsm_explode.3	\
+-@@ -279,7 +279,7 @@
++@@ -279,7 +279,7 @@ TOAST_INSTALL_TARGETS =	\
+  
+  # Target rules
+  
+@@ -57,7 +67,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  		@-echo $(ROOT): Done.
+  
+  tst:		$(TST)/lin2cod $(TST)/cod2lin $(TOAST) $(TST)/test-result
+-@@ -299,24 +299,23 @@
++@@ -299,24 +299,23 @@ install:	toastinstall gsminstall
+  
+  # The basic API: libgsm
+  
+@@ -90,7 +100,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  
+  
+  # The local bin and lib directories
+-@@ -351,53 +350,54 @@
++@@ -351,53 +350,54 @@ toastuninstall:
+  		fi
+  
+  $(TOAST_INSTALL_BIN)/toast:	$(TOAST)
+@@ -161,7 +171,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  
+  # Distribution
+  
+-@@ -425,7 +425,7 @@
++@@ -425,7 +425,7 @@ semi-clean:
+  			-print | xargs rm $(RMFLAGS)
+  
+  clean:	semi-clean
+@@ -170,7 +180,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  			$(TOAST) $(TCAT) $(UNTOAST)	\
+  			$(ROOT)/gsm-1.0.tar.Z
+  
+-@@ -473,22 +473,22 @@
++@@ -473,22 +473,22 @@ $(ADDTST)/add:	$(ADDTST)/add_test.o
+  $(TST)/test-result:	$(TST)/lin2cod $(TST)/cod2lin $(TOAST) $(TST)/run
+  			( cd $(TST); ./run ) 
+  
+@@ -203,3 +213,6 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  			$(LD) $(LFLAGS) -o $(TST)/cod2lin \
+ -				$(TST)/cod2lin.o $(LIBGSM) $(LDLIB)
+ +				$(TST)/cod2lin.o $(LIBGSMSO) $(LDLIB)
++-- 
++2.13.3
 +
-+# License file
-+sha256 434a58adb33d5a3af601ee74e444eaf4bad89453d55c42965a3270e988d71745  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index c82c4efff..d84d4833b 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/libgsm/libgsm.hash b/package/libgsm/libgsm.hash
+index bcfb6505c..a73359d65 100644
+--- a/package/libgsm/libgsm.hash
++++ b/package/libgsm/libgsm.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  725a3768a1e23ab8648b4df9d470aed38eb1635af3cbc8d0b64fef077236f4ce  gsm-1.0.16.tar.gz
++sha256  855a57d1694941ddf3c73cb79b8d0b3891e9c9e7870b4981613b734e1ad07601  gsm-1.0.17.tar.gz
+diff --git a/package/libgsm/libgsm.mk b/package/libgsm/libgsm.mk
+index 8e8335a03..0add45c5e 100644
+--- a/package/libgsm/libgsm.mk
++++ b/package/libgsm/libgsm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.29
-+LIBPNG_VERSION = 1.6.31
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
--LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
-+LIBPNG_SITE = https://ftp-osl.osuosl.org/pub/libpng/src/libpng${LIBPNG_SERIES}
- LIBPNG_LICENSE = Libpng
- LIBPNG_LICENSE_FILES = LICENSE
- LIBPNG_INSTALL_STAGING = YES
+-LIBGSM_VERSION = 1.0.16
++LIBGSM_VERSION = 1.0.17
+ LIBGSM_SOURCE = gsm-$(LIBGSM_VERSION).tar.gz
+ LIBGSM_SITE = http://www.quut.com/gsm
+ LIBGSM_LICENSE = gsm
 -- 
 2.13.3
