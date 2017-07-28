@@ -1,32 +1,31 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 29 Jul 2017 00:47:26 +0200
-Subject: [Buildroot] [git commit] package/pkg-kconfig.mk: fix typo in comment
-Message-ID: <20170728224459.B62657F9AA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 29 Jul 2017 00:49:35 +0200
+Subject: [Buildroot] [PATCH 1/2] fs/ext2: fix typo
+In-Reply-To: <20170727230227.1097-1-m.hoffmann@cartelsol.com>
+References: <20170727230227.1097-1-m.hoffmann@cartelsol.com>
+Message-ID: <e1468f0c-7dcc-e8f1-8d2c-76c1b40624ea@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=412a872e217e1e6569afb65b5113199f30b199ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pkg-kconfig.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 215f01b..0402f81 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -189,7 +189,7 @@ $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
- # which in turn depends on the (newly-set an non-existent) custom
- # defconfig file.
- #
--# Instead, we use an PHONY rule that will catch that situation.
-+# Instead, we use a PHONY rule that will catch that situation.
- #
- $(1)-check-configuration-done:
- 	@if [ ! -f $$($(2)_DIR)/.stamp_kconfig_fixup_done ]; then \
+On 28-07-17 01:02, Marcus Hoffmann wrote:
+> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+
+
+ Both applied to master, thanks.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
