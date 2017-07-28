@@ -1,80 +1,98 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Fri, 28 Jul 2017 11:45:17 -0700
-Subject: [Buildroot] [PATCH] package/xen: Include linux/limits.h when
-	building QEMU inside of Xen
-Message-ID: <20170728184517.31465-1-alistair.francis@xilinx.com>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Fri, 28 Jul 2017 22:41:07 +0200
+Subject: [Buildroot] [PATCH 00/20] system: properly handle systemd as
+ init system
+In-Reply-To: <45bb5a90-e48a-3edc-43ff-8cf9eefd20e6@cartelsol.com>
+References: <cover.1500398733.git.yann.morin.1998@free.fr>
+ <CAAkeqgVMVSspUdMnPNWi_RQyLPhyf-1bys=d2btKrStEk34VMg@mail.gmail.com>
+ <20170719225332.560a9a06@windsurf>
+ <CAAkeqgWk1ywyCT027eGPtXfQO_qd5b7dEJSOZek8eMx1R1Ey+Q@mail.gmail.com>
+ <20170720093228.19139327@windsurf>
+ <45bb5a90-e48a-3edc-43ff-8cf9eefd20e6@cartelsol.com>
+Message-ID: <18557b86-2ac3-9545-064c-a54d025de773@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If building Xen and not using glibc (using musl for example) the QEMU
-project inside of Xen fails to build as it relys on the XATTR_SIZE_MAX
-macro which is defined in <linux/limits.h>.
+Hey,
 
-Glibc includes this header indirectly but as that is not part of the
-POSIX standard other libraries don't neccessearily have this. To fix the
-issue we explicitly include <linux/limits.h> to ensure the build works
-for all libc libraries.
+On 22.07.2017 00:15, Marcus Hoffmann wrote:
+> Hey,
+> 
+> On 20.07.2017 09:32, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Wed, 19 Jul 2017 15:17:21 -0700, Andrey Yurovsky wrote:
+>>
+>>>> Thanks a lot for testing, very useful to get some feedback!
+>>>>
+>>>> Can you confirm that it fixes the journald issue reported in bug
+>>>> https://bugs.busybox.net/show_bug.cgi?id=7892 ?  
+>>>
+>>> It does.
+>>
+>> Awesome, thanks.
+>>
+>>>> Also, it would be useful if someone interested in systemd could look at
+>>>> bugs https://bugs.busybox.net/show_bug.cgi?id=9881 and  
+>>>
+>>> I did an ARMv7 build with networkd+resolvd and couldn't reproduce the
+>>> described problem with these patches applied.
+>>
+>> Can you reproduce the problem *without* the patches ?
+> 
+> We are experiencing this problem. I'll try to test it with this patch
+> series on Monday.
 
-Fixes:
-  http://autobuild.buildroot.net/results/bb1/bb1310eb1464d880a357ae5e491fd168361d25a0
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
----
- ...include-linux-limits.h-for-XATTR_SIZE_MAX.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
+I tested this with Yanns latest series on top of master (well, a few
+days back, where it applied cleanly.) and I still see this problem.
 
-diff --git a/package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch b/package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
-new file mode 100644
-index 0000000000..b681b941f7
---- /dev/null
-+++ b/package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
-@@ -0,0 +1,43 @@
-+Message-Id: <07010a2ad79559c412949f0005dbe3cb03d8416e.1498504812.git.ps@pks.im>
-+From: Patrick Steinhardt <ps@pks.im>
-+Date: Mon, 26 Jun 2017 21:20:45 +0200
-+Subject: [PATCH] 9pfs: include <linux/limits.h> for XATTR_SIZE_MAX
-+
-+The function `v9fs_xattrcreate` makes use of the define `XATTR_SIZE_MAX`
-+to reject attempts of creating xattrs with an invalid size, which is
-+defined in <linux/limits.h>. On glibc-based systems, this header is
-+indirectly included via <limits.h>, <bits/posix1_lim.h>,
-+<bitts/local_lim.h>, but on other platforms this is not guaranteed due
-+to not being part of the POSIX standard. One examples are systems based
-+on musl libc, which do not include the <linux/limits.h> indirectly,
-+which leads to `XATTR_SIZE_MAX` being undefined.
-+
-+Fix this error by directly include <linux/limits.h>. As the 9P fs code
-+is being Linux-based either way, we can simply do so without breaking
-+other platforms. This enables building 9pfs on musl-based systems.
-+
-+Signed-off-by: Patrick Steinhardt <ps@pks.im>
-+[ Changes by AF
-+ - Apply to the QEMU tree inside of Xen
-+]
-+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-+---
-+Upstream Status: Pending review and acceptance
-+
-+ tools/qemu-xen/hw/9pfs/9p.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tools/qemu-xen/hw/9pfs/9p.c b/tools/qemu-xen/hw/9pfs/9p.c
-+index 96d2683348..48cd558e96 100644
-+--- a/tools/qemu-xen/hw/9pfs/9p.c
-++++ b/tools/qemu-xen/hw/9pfs/9p.c
-+@@ -13,6 +13,7 @@
-+ 
-+ #include "qemu/osdep.h"
-+ #include <glib/gprintf.h>
-++#include <linux/limits.h>
-+ #include "hw/virtio/virtio.h"
-+ #include "qapi/error.h"
-+ #include "qemu/error-report.h"
-+-- 
-+2.13.2
--- 
-2.11.0
+/etc/resolv.conf -> ../run/systemd/resolve/resolv.conf
+
+And there is no /run/systemd/resolve because systemd-resolved is not
+selected.
+
+I guess in packages/systemd/systemd.mk:292
+
+define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+	ln -sf ../run/systemd/resolve/resolv.conf \
+		$(TARGET_DIR)/etc/resolv.conf
+endef
+
+This should be in the BR2_PACKAGE_SYSTEMD_RESOLVED and not in the
+BR2_PACKAGE_SYSTEMD_NETWORKD branch? Will test what happens in that case.
+
+
+> 
+>>
+>>> /etc/resolv.conf points
+>>> to ../tmp/resolv.conf which in turn is properly populated and names do
+>>> resolve. systemd-hostnamed is acting like it does on Fedora (for what
+>>> it's worth), I'm still learning about how to test it properly (that
+>>> is, I just have a static hostname at the moment).
+>>>
+>>>> https://bugs.busybox.net/show_bug.cgi?id=9926.  
+>>>
+>>> Ok, I'll do a clean rebuild without networkd and with NetworkManager.
+>>
+>> Thanks a lot!
+>>
+>> BTW, for these bugs, if there is something easy we can add to the
+>> testing infrastructure to make sure it keeps working, it would be nice!
+
+I'm not yet familiar with the the testing infrastructure. Would that be
+something like providing a certain set of defconfigs, booting into the
+generated filesystems and testing if dns works?
+
+>>
+>> Best regards,
+>>
+>> Thomas
+>>
+> 
+
+Best wishes,
+Marcus
