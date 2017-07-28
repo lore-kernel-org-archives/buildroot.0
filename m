@@ -1,43 +1,35 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 29 Jul 2017 00:38:44 +0200
-Subject: [Buildroot] [git commit] dbus: bump version to 1.10.22
-Message-ID: <20170728223914.C5F3D82122@busybox.osuosl.org>
+Date: Sat, 29 Jul 2017 00:06:43 +0200
+Subject: [Buildroot] [git commit] package/qt5location: isolate patch to
+	qt5location 5.9.1
+Message-ID: <20170728223914.9B1417FCEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29f0bd345bde90fcf0060c33623ade34fa9c288c
+commit: https://git.buildroot.net/buildroot/commit/?id=2697543f9e0e09ce631c34cc46d6d46dc3818dbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+The patch only applies to the 5.9.1 version, not 5.6.*.  This moves the
+patch into the appropriate directory.
+
+Fixes:
+http://autobuild.buildroot.net/results/676abe008c9c4bddfddd7b041d8db9999e9e899d
+
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+[Arnout: slightly edit commit message]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../qt5/qt5location/{ => 5.9.1}/0001-Fix-plugins-build-dependency.patch   | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 3c45de2..b005242 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.20.tar.gz.asc
--sha256	e574b9780b5425fde4d973bb596e7ea0f09e00fe2edd662da9016e976c460b48  dbus-1.10.20.tar.gz
-+# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz.asc
-+sha256	e2b1401e3eedc7b5c9a2034d31254c886e1fcbc7858006e0a1c59158fe4b7b97  dbus-1.10.22.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index b794db4..1e3b462 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.20
-+DBUS_VERSION = 1.10.22
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+diff --git a/package/qt5/qt5location/0001-Fix-plugins-build-dependency.patch b/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
+similarity index 100%
+rename from package/qt5/qt5location/0001-Fix-plugins-build-dependency.patch
+rename to package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
