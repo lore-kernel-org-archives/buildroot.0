@@ -1,40 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jul 2017 22:29:53 +0200
-Subject: [Buildroot] [PATCH 1/1] util-linux: bump to v2.30.1
-In-Reply-To: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
-References: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
-Message-ID: <20170729222953.1b62c952@windsurf.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Jul 2017 22:32:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cc-tool: link with libatomic when
+	needed
+Message-ID: <20170729203220.20024-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Detecting the boost program_options library is broken:
 
-On Sat, 29 Jul 2017 17:36:02 +0200, Marcus Hoffmann wrote:
-> - Drop patch 0002-column-fix-compilation-when-libc-lacks-wide-characte.patch
-> as it has been applied upstream
-> - Patch 0001-Revert-build-sys-ncurses-headers-cleanup.patch is still
-> required to fix ncursesw support.
-> 
-> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-> Cc: "Carlos Santos" <casantos@datacom.ind.br>
-> ---
-> @Carlos: As far as I could find no upstream discussion has taken place
-> regarding the 0001 patch right? Do you want to send an email to the list
-> describing the problem?
-> ---
->  ...compilation-when-libc-lacks-wide-characte.patch | 53 ----------------------
->  package/util-linux/util-linux.hash                 |  2 +-
->  package/util-linux/util-linux.mk                   |  3 +-
->  3 files changed, 3 insertions(+), 55 deletions(-)
->  delete mode 100644 package/util-linux/0002-column-fix-compilation-when-libc-lacks-wide-characte.patch
+checking for the Boost program_options library... no
+configure: error: cannot find the flags to link with Boost program_options
 
-Applied to master, thanks.
+config.log shows the reason, libatomic is missing:
 
-Thomas
+conftest.o: In function `boost::detail::sp_counted_base::release()':
+conftest.cpp:(.text._ZN5boost6detail15sp_counted_base7releaseEv[_ZN5boost6detail15sp_counted_base7releaseEv]+0xc):
+ undefined reference to `__atomic_fetch_sub_4'
+conftest.cpp:(.text._ZN5boost6detail15sp_counted_base7releaseEv[_ZN5boost6detail15sp_counted_base7releaseEv]+0x38):
+ undefined reference to `__atomic_fetch_sub_4'
+/home/buildroot/br4/output/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libboost_program_options.so:
+ undefined reference to `__atomic_fetch_add_4'
+
+Please note that using LIBS=-latomic is not enough, although it fixes
+the configure check the bug reoccurs when linking cc-tool:
+
+  CXXLD    cc-tool
+src/application/cc_flasher.o: In function `boost::detail::sp_counted_base::weak_release()':
+cc_flasher.cpp:(.text._ZN5boost6detail15sp_counted_base12weak_releaseEv[_ZN5boost6detail15sp_counted_base12weak_releaseEv]+0xc):
+ undefined reference to `__atomic_fetch_sub_4'
+
+We need to add -latomic to CXXFLAGS to both fix configure and linking.
+
+Fixes
+http://autobuild.buildroot.net/results/596/596f97364bb2c7598b0646da8160939356f0d2c6/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/cc-tool/cc-tool.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
+index b9209ced3..37ac57e49 100644
+--- a/package/cc-tool/cc-tool.mk
++++ b/package/cc-tool/cc-tool.mk
+@@ -23,4 +23,8 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ CC_TOOL_CONF_ENV += LIBS="-lpthread"
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++CC_TOOL_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -latomic"
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
