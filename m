@@ -1,58 +1,243 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 29 Jul 2017 21:59:09 +0300
-Subject: [Buildroot] [PATCH v2 1/1] libpng: bump to version 1.6.31
-In-Reply-To: <20170729153154.597-1-Adamduskett@outlook.com>
-References: <20170729153154.597-1-Adamduskett@outlook.com>
-Message-ID: <20170729185909.56s46oh5t5ajy3yl@tarshish>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sat, 29 Jul 2017 22:27:05 +0300
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: Add upstream patch needed for
+	builds with ENABLE_VIDEO=OFF
+Message-ID: <20170729192705.19493-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+This includes a slightly modified version of the patch for bug
+https://bugs.webkit.org/show_bug.cgi?id=174940
 
-On Sat, Jul 29, 2017 at 11:31:54AM -0400, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
-> Changes v1 -> v2
->   - Reverted to sourceforge. (Arnout)
-> 
->  package/libpng/libpng.hash | 4 ++--
->  package/libpng/libpng.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-> index 279420a70..58304032a 100644
-> --- a/package/libpng/libpng.hash
-> +++ b/package/libpng/libpng.hash
-> @@ -1,4 +1,4 @@
->  # From http://sourceforge.net/projects/libpng/files/libpng16/1.6.29/
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...roken-build-when-ENABLE_VIDEO-is-disabled.patch | 207 +++++++++++++++++++++
+ 1 file changed, 207 insertions(+)
+ create mode 100644 package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
 
-Please update the link.
+---
+This is a follow-up to https://patchwork.ozlabs.org/patch/795207/ which should
+have included the patch added by this commit, but I sent it too early without
+waiting for a build to finish. With this added, builds with ENABLE_VIDEO=OFF
+(as made when BR2_PACKAGE_WEBKITGTK_MULTIMEDIA is unset). And this time I did
+wait for a full clean build to complete.
 
-> -sha1 7dbe6a5088b938545fc0857c507d4e0cf5d9023e  libpng-1.6.29.tar.xz
-> +sha1 de695064363df331734466981ef7f6546ef516bf  libpng-1.6.31.tar.xz
->  # Locally computed:
-> -sha256 4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239  libpng-1.6.29.tar.xz
-> +sha256 232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41  libpng-1.6.31.tar.xz
-> diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-> index c82c4efff..0c19b29c1 100644
-> --- a/package/libpng/libpng.mk
-> +++ b/package/libpng/libpng.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBPNG_VERSION = 1.6.29
-> +LIBPNG_VERSION = 1.6.31
->  LIBPNG_SERIES = 16
->  LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
->  LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
 
-baruch
-
+diff --git a/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch b/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
+new file mode 100644
+index 0000000000..b460b0c924
+--- /dev/null
++++ b/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
+@@ -0,0 +1,207 @@
++From c054224e551547c3e3593b60ca1226fa4ac41c01 Mon Sep 17 00:00:00 2001
++From: "timothy at hatcher.name"
++ <timothy@hatcher.name@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
++Date: Tue, 11 Jul 2017 18:07:24 +0000
++Subject: [PATCH] Fix broken build when ENABLE_VIDEO is disabled.
++ https://bugs.webkit.org/show_bug.cgi?id=174368
++
++Reviewed by Alex Christensen.
++
++* dom/Document.cpp:
++* html/canvas/WebGLRenderingContextBase.cpp:
++(WebCore::WebGLRenderingContextBase::texSubImage2D):
++(WebCore::WebGLRenderingContextBase::texImage2D):
++* html/canvas/WebGLRenderingContextBase.h:
++* html/canvas/WebGLRenderingContextBase.idl:
++* testing/Internals.cpp:
++(WebCore::Internals::mediaResponseSources):
++(WebCore::Internals::mediaResponseContentRanges):
++* testing/Internals.h:
++* testing/Internals.idl:
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++
++git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219343 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++---
++ .../html/canvas/WebGLRenderingContextBase.cpp      | 16 +++++++++++----
++ .../html/canvas/WebGLRenderingContextBase.h        | 12 ++++++++++-
++ .../html/canvas/WebGLRenderingContextBase.idl      |  4 ++++
++ Source/WebCore/testing/Internals.cpp               | 24 ++++++++++++++++++++++
++ Source/WebCore/testing/Internals.h                 |  2 ++
++ Source/WebCore/testing/Internals.idl               |  2 ++
++ 6 files changed, 55 insertions(+), 5 deletions(-)
++
++diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp b/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
++index f8fd63f7d87..a76a44ff06b 100644
++--- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
+++++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
++@@ -3597,7 +3597,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texSubImage2D(GC3Denum target, GC3D
++         else
++             texSubImage2DImpl(target, level, xoffset, yoffset, format, type, canvas->copiedImage(), GraphicsContext3D::HtmlDomCanvas, m_unpackFlipY, m_unpackPremultiplyAlpha);
++         return { };
++-    }, [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
+++    }
+++#if ENABLE(VIDEO)
+++    , [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
++         ExceptionCode ec = 0;
++         if (isContextLostOrPending() || !validateHTMLVideoElement("texSubImage2D", video.get(), ec))
++             return ec ? Exception { ec } : ExceptionOr<void> { };
++@@ -3620,7 +3622,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texSubImage2D(GC3Denum target, GC3D
++             return { };
++         texSubImage2DImpl(target, level, xoffset, yoffset, format, type, image.get(), GraphicsContext3D::HtmlDomVideo, m_unpackFlipY, m_unpackPremultiplyAlpha);
++         return { };
++-    });
+++    }
+++#endif
+++    );
++ 
++     return WTF::visit(visitor, source.value());
++ }
++@@ -4107,7 +4111,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texImage2D(GC3Denum target, GC3Dint
++         else
++             texImage2DImpl(target, level, internalformat, format, type, canvas->copiedImage(), GraphicsContext3D::HtmlDomCanvas, m_unpackFlipY, m_unpackPremultiplyAlpha);
++         return { };
++-    }, [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
+++    }
+++#if ENABLE(VIDEO)
+++    , [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
++         ExceptionCode ec = 0;
++         if (isContextLostOrPending() || !validateHTMLVideoElement("texImage2D", video.get(), ec)
++             || !validateTexFunc("texImage2D", TexImage, SourceHTMLVideoElement, target, level, internalformat, video->videoWidth(), video->videoHeight(), 0, format, type, 0, 0))
++@@ -4137,7 +4143,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texImage2D(GC3Denum target, GC3Dint
++             return { };
++         texImage2DImpl(target, level, internalformat, format, type, image.get(), GraphicsContext3D::HtmlDomVideo, m_unpackFlipY, m_unpackPremultiplyAlpha);
++         return { };
++-    });
+++    }
+++#endif
+++    );
++ 
++     return WTF::visit(visitor, source.value());
++ }
++diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.h b/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
++index 31e5542e612..d4738e834a1 100644
++--- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
+++++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
++@@ -57,7 +57,6 @@ class EXTShaderTextureLOD;
++ class EXTsRGB;
++ class EXTFragDepth;
++ class HTMLImageElement;
++-class HTMLVideoElement;
++ class ImageData;
++ class IntSize;
++ class OESStandardDerivatives;
++@@ -85,6 +84,10 @@ class WebGLSharedObject;
++ class WebGLShaderPrecisionFormat;
++ class WebGLUniformLocation;
++ 
+++#if ENABLE(VIDEO)
+++class HTMLVideoElement;
+++#endif
+++
++ inline void clip1D(GC3Dint start, GC3Dsizei range, GC3Dsizei sourceRange, GC3Dint* clippedStart, GC3Dsizei* clippedRange)
++ {
++     ASSERT(clippedStart && clippedRange);
++@@ -244,7 +247,12 @@ public:
++ 
++     void texImage2D(GC3Denum target, GC3Dint level, GC3Denum internalformat, GC3Dsizei width, GC3Dsizei height, GC3Dint border, GC3Denum format, GC3Denum type, RefPtr<ArrayBufferView>&&);
++ 
+++#if ENABLE(VIDEO)
++     using TexImageSource = WTF::Variant<RefPtr<ImageData>, RefPtr<HTMLImageElement>, RefPtr<HTMLCanvasElement>, RefPtr<HTMLVideoElement>>;
+++#else
+++    using TexImageSource = WTF::Variant<RefPtr<ImageData>, RefPtr<HTMLImageElement>, RefPtr<HTMLCanvasElement>>;
+++#endif
+++
++     ExceptionOr<void> texImage2D(GC3Denum target, GC3Dint level, GC3Denum internalformat, GC3Denum format, GC3Denum type, std::optional<TexImageSource>);
++ 
++     void texParameterf(GC3Denum target, GC3Denum pname, GC3Dfloat param);
++@@ -677,7 +685,9 @@ protected:
++         SourceImageData,
++         SourceHTMLImageElement,
++         SourceHTMLCanvasElement,
+++#if ENABLE(VIDEO)
++         SourceHTMLVideoElement,
+++#endif
++     };
++ 
++     // Helper function for tex{Sub}Image2D to check if the input format/type/level/target/width/height/border/xoffset/yoffset are valid.
++diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl b/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
++index 63b64cdebd2..3111e798a89 100644
++--- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
+++++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
++@@ -42,7 +42,11 @@ typedef (Float32Array or sequence<GLfloat>) Float32List;
++ typedef (Int32Array or sequence<GLint>) Int32List;
++ 
++ // FIXME: Should allow ImageBitmap too.
+++#ifdef ENABLE_VIDEO
++ typedef (ImageData or HTMLImageElement or HTMLCanvasElement or HTMLVideoElement) TexImageSource;
+++#else
+++typedef (ImageData or HTMLImageElement or HTMLCanvasElement) TexImageSource;
+++#endif
++ 
++ [
++     Conditional=WEBGL,
++diff --git a/Source/WebCore/testing/Internals.cpp b/Source/WebCore/testing/Internals.cpp
++index 6d26d556e33..6d64845fd27 100644
++--- a/Source/WebCore/testing/Internals.cpp
+++++ b/Source/WebCore/testing/Internals.cpp
++@@ -2765,6 +2765,30 @@ String Internals::getImageSourceURL(Element& element)
++ 
++ #if ENABLE(VIDEO)
++ 
+++Vector<String> Internals::mediaResponseSources(HTMLMediaElement& media)
+++{
+++    auto* resourceLoader = media.lastMediaResourceLoaderForTesting();
+++    if (!resourceLoader)
+++        return { };
+++    Vector<String> result;
+++    auto responses = resourceLoader->responsesForTesting();
+++    for (auto& response : responses)
+++        result.append(responseSourceToString(response));
+++    return result;
+++}
+++
+++Vector<String> Internals::mediaResponseContentRanges(HTMLMediaElement& media)
+++{
+++    auto* resourceLoader = media.lastMediaResourceLoaderForTesting();
+++    if (!resourceLoader)
+++        return { };
+++    Vector<String> result;
+++    auto responses = resourceLoader->responsesForTesting();
+++    for (auto& response : responses)
+++        result.append(response.httpHeaderField(HTTPHeaderName::ContentRange));
+++    return result;
+++}
+++
++ void Internals::simulateAudioInterruption(HTMLMediaElement& element)
++ {
++ #if USE(GSTREAMER)
++diff --git a/Source/WebCore/testing/Internals.h b/Source/WebCore/testing/Internals.h
++index f5c08a87dfd..d35f651e452 100644
++--- a/Source/WebCore/testing/Internals.h
+++++ b/Source/WebCore/testing/Internals.h
++@@ -401,6 +401,8 @@ public:
++     String getImageSourceURL(Element&);
++ 
++ #if ENABLE(VIDEO)
+++    Vector<String> mediaResponseSources(HTMLMediaElement&);
+++    Vector<String> mediaResponseContentRanges(HTMLMediaElement&);
++     void simulateAudioInterruption(HTMLMediaElement&);
++     ExceptionOr<bool> mediaElementHasCharacteristic(HTMLMediaElement&, const String&);
++ #endif
++diff --git a/Source/WebCore/testing/Internals.idl b/Source/WebCore/testing/Internals.idl
++index 155b70b4abf..3fe6885d362 100644
++--- a/Source/WebCore/testing/Internals.idl
+++++ b/Source/WebCore/testing/Internals.idl
++@@ -386,6 +386,8 @@ enum EventThrottlingBehavior {
++ 
++     void enableAutoSizeMode(boolean enabled, long minimumWidth, long minimumHeight, long maximumWidth, long maximumHeight);
++ 
+++    [Conditional=VIDEO] sequence<DOMString> mediaResponseSources(HTMLMediaElement media);
+++    [Conditional=VIDEO] sequence<DOMString> mediaResponseContentRanges(HTMLMediaElement media);
++     [Conditional=VIDEO] void simulateAudioInterruption(HTMLMediaElement element);
++     [Conditional=VIDEO, MayThrowException] boolean mediaElementHasCharacteristic(HTMLMediaElement element, DOMString characteristic);
++ 
++-- 
++2.13.3
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.13.3
