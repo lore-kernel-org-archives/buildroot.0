@@ -1,73 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jul 2017 15:13:20 +0200
-Subject: [Buildroot] [git commit] python-libconfig: fix Python3 build
-Message-ID: <20170729130914.BF9417FA57@busybox.osuosl.org>
+Date: Sat, 29 Jul 2017 15:16:22 +0200
+Subject: [Buildroot] [PATCH] ninja: bump to version 1.7.2
+In-Reply-To: <20170727100121.18025-1-joerg.krause@embedded.rocks>
+References: <20170727100121.18025-1-joerg.krause@embedded.rocks>
+Message-ID: <20170729151622.0bfd5e98@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cd8023c73cef082ccaca86d7bb43ec7ec7ce56e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-boost_python library is named boost_python3, if boost is built
-under Python3 environment. The patch fixes setup.py accordingly.
+On Thu, 27 Jul 2017 12:01:21 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/ninja/ninja.hash | 2 +-
+>  package/ninja/ninja.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixes:
-http://autobuild.buildroot.net/results/975/97533965180436c2f7a99de07fdc360ef57f84b0
-http://autobuild.buildroot.net/results/b49/b49de32704f0f7ce5a610cf4363c6dcc2d8bafa1
-http://autobuild.buildroot.net/results/e26/e26b4b9b486c582fb55826817a3428569968320f
+Applied to master, thanks.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...oost_python-name-depending-on-current-Pyt.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-new file mode 100644
-index 0000000..b30efc1
---- /dev/null
-+++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-@@ -0,0 +1,40 @@
-+From 3bc4b9c0d60a735b1d63e52f74492ace39f02824 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Thu, 27 Jul 2017 09:46:07 +0200
-+Subject: [PATCH] Determine boost_python name depending on current Python
-+ version
-+
-+Python2 requires boost_python and Python3 requires boost_python3.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ setup.py | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index fdf5c27..4b38569 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -3,6 +3,10 @@
-+ from setuptools import setup, find_packages, Extension
-+ import sys, os
-+ 
-++boostlib = "boost_python3"
-++if sys.version_info < (3, 0):
-++    boostlib = "boost_python"
-++
-+ setup(
-+     name				= 'pylibconfig',
-+     description			= "libconfig bindings for Python",
-+@@ -19,7 +23,7 @@ setup(
-+         Extension(
-+             "pylibconfig",
-+             ["src/pylibconfig.cc"],
-+-            libraries=["boost_python", "config++"]
-++            libraries=[boostlib, "config++"]
-+             #include_dirs=includes,
-+             #extra_link_args=lflags
-+                  )
-+-- 
-+2.11.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
