@@ -1,485 +1,66 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 29 Jul 2017 04:56:20 +0200
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.26
-Message-ID: <20170729025620.GA21116@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Jul 2017 08:31:37 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-07-28
+Message-ID: <20170729063137.2FB8721F34@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Both patches applied upstream.
-The release contains mostly bugfixes and a basic sparc64
-port. As the sparc64 port only contains support for static
-binaries, it will be not enabled in buildroot yet.
+Hello,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/uclibc/0001-remove-__FAVOR_BSD.patch       | 373 ---------------------
- ...-udp.h-sync-completely-with-GNU-C-library.patch |  52 ---
- package/uclibc/uclibc.hash                         |   2 +-
- package/uclibc/uclibc.mk                           |   2 +-
- 4 files changed, 2 insertions(+), 427 deletions(-)
- delete mode 100644 package/uclibc/0001-remove-__FAVOR_BSD.patch
- delete mode 100644 package/uclibc/0002-udp.h-sync-completely-with-GNU-C-library.patch
+Build statistics for 2017-07-28
+================================
 
-diff --git a/package/uclibc/0001-remove-__FAVOR_BSD.patch b/package/uclibc/0001-remove-__FAVOR_BSD.patch
-deleted file mode 100644
-index d65c36d..0000000
---- a/package/uclibc/0001-remove-__FAVOR_BSD.patch
-+++ /dev/null
-@@ -1,373 +0,0 @@
--From 58a5ba12bffad5916d9897c2870fc483f1db8282 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Thu, 22 Jun 2017 22:20:20 +0200
--Subject: [PATCH] remove __FAVOR_BSD
--
--Remove __FAVOR_BSD and sync with GNU C library
--
--Some issues compiling knock application fixed.
--
--Reported-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-----
-- include/features.h    |  10 ----
-- include/netinet/tcp.h | 123 ++++++++++++++++++++++++++------------------------
-- include/netinet/udp.h |  33 +++++++-------
-- include/setjmp.h      |  10 +---
-- include/signal.h      |  18 ++------
-- include/unistd.h      |  30 ++----------
-- 6 files changed, 88 insertions(+), 136 deletions(-)
--
--diff --git a/include/features.h b/include/features.h
--index 3a99593..7dc913f 100644
----- a/include/features.h
--+++ b/include/features.h
--@@ -78,7 +78,6 @@
--    __USE_GNU		Define GNU extensions.
--    __USE_REENTRANT	Define reentrant/thread-safe *_r functions.
--    __USE_FORTIFY_LEVEL	Additional security measures used, according to level.
---   __FAVOR_BSD		Favor 4.3BSD things in cases of conflict.
-- 
--    The macros `__GNU_LIBRARY__', `__GLIBC__', and `__GLIBC_MINOR__' are
--    defined by this file unconditionally.  `__GNU_LIBRARY__' is provided
--@@ -115,7 +114,6 @@
-- #undef	__USE_GNU
-- #undef	__USE_REENTRANT
-- #undef	__USE_FORTIFY_LEVEL
---#undef	__FAVOR_BSD
-- #undef	__KERNEL_STRICT_NAMES
-- 
-- /* Suppress kernel-name space pollution unless user expressedly asks
--@@ -155,14 +153,6 @@
-- # define _DEFAULT_SOURCE	1
-- #endif
-- 
---/* If _BSD_SOURCE was defined by the user, favor BSD over POSIX.  */
---#if defined _BSD_SOURCE && \
---    !(defined _POSIX_SOURCE || defined _POSIX_C_SOURCE || \
---      defined _XOPEN_SOURCE || defined _XOPEN_SOURCE_EXTENDED || \
---      defined _GNU_SOURCE || defined _SVID_SOURCE)
---# define __FAVOR_BSD	1
---#endif
---
-- /* If _GNU_SOURCE was defined by the user, turn on all the other features.  */
-- #ifdef _GNU_SOURCE
-- # undef  _ISOC99_SOURCE
--diff --git a/include/netinet/tcp.h b/include/netinet/tcp.h
--index 04032bb..ade01cd 100644
----- a/include/netinet/tcp.h
--+++ b/include/netinet/tcp.h
--@@ -65,75 +65,78 @@
-- #ifdef __USE_MISC
-- # include <sys/types.h>
-- # include <sys/socket.h>
--+# include <stdint.h>
-- 
---# ifdef __FAVOR_BSD
---typedef	u_int32_t tcp_seq;
--+typedef	uint32_t tcp_seq;
-- /*
--  * TCP header.
--  * Per RFC 793, September, 1981.
--  */
-- struct tcphdr
--   {
---    u_int16_t th_sport;		/* source port */
---    u_int16_t th_dport;		/* destination port */
---    tcp_seq th_seq;		/* sequence number */
---    tcp_seq th_ack;		/* acknowledgement number */
---#  if __BYTE_ORDER == __LITTLE_ENDIAN
---    u_int8_t th_x2:4;		/* (unused) */
---    u_int8_t th_off:4;		/* data offset */
---#  endif
---#  if __BYTE_ORDER == __BIG_ENDIAN
---    u_int8_t th_off:4;		/* data offset */
---    u_int8_t th_x2:4;		/* (unused) */
---#  endif
---    u_int8_t th_flags;
---#  define TH_FIN	0x01
---#  define TH_SYN	0x02
---#  define TH_RST	0x04
---#  define TH_PUSH	0x08
---#  define TH_ACK	0x10
---#  define TH_URG	0x20
---    u_int16_t th_win;		/* window */
---    u_int16_t th_sum;		/* checksum */
---    u_int16_t th_urp;		/* urgent pointer */
--+    __extension__ union
--+    {
--+      struct
--+      {
--+	uint16_t th_sport;	/* source port */
--+	uint16_t th_dport;	/* destination port */
--+	tcp_seq th_seq;		/* sequence number */
--+	tcp_seq th_ack;		/* acknowledgement number */
--+# if __BYTE_ORDER == __LITTLE_ENDIAN
--+	uint8_t th_x2:4;	/* (unused) */
--+	uint8_t th_off:4;	/* data offset */
--+# endif
--+# if __BYTE_ORDER == __BIG_ENDIAN
--+	uint8_t th_off:4;	/* data offset */
--+	uint8_t th_x2:4;	/* (unused) */
--+# endif
--+	uint8_t th_flags;
--+# define TH_FIN	0x01
--+# define TH_SYN	0x02
--+# define TH_RST	0x04
--+# define TH_PUSH	0x08
--+# define TH_ACK	0x10
--+# define TH_URG	0x20
--+	uint16_t th_win;	/* window */
--+	uint16_t th_sum;	/* checksum */
--+	uint16_t th_urp;	/* urgent pointer */
--+      };
--+      struct
--+      {
--+	uint16_t source;
--+	uint16_t dest;
--+	uint32_t seq;
--+	uint32_t ack_seq;
--+# if __BYTE_ORDER == __LITTLE_ENDIAN
--+	uint16_t res1:4;
--+	uint16_t doff:4;
--+	uint16_t fin:1;
--+	uint16_t syn:1;
--+	uint16_t rst:1;
--+	uint16_t psh:1;
--+	uint16_t ack:1;
--+	uint16_t urg:1;
--+	uint16_t res2:2;
--+# elif __BYTE_ORDER == __BIG_ENDIAN
--+	uint16_t doff:4;
--+	uint16_t res1:4;
--+	uint16_t res2:2;
--+	uint16_t urg:1;
--+	uint16_t ack:1;
--+	uint16_t psh:1;
--+	uint16_t rst:1;
--+	uint16_t syn:1;
--+	uint16_t fin:1;
--+# else
--+#  error "Adjust your <bits/endian.h> defines"
--+# endif
--+	uint16_t window;
--+	uint16_t check;
--+	uint16_t urg_ptr;
--+      };
--+    };
-- };
-- 
---# else /* !__FAVOR_BSD */
---struct tcphdr
---  {
---    u_int16_t source;
---    u_int16_t dest;
---    u_int32_t seq;
---    u_int32_t ack_seq;
---#  if __BYTE_ORDER == __LITTLE_ENDIAN
---    u_int16_t res1:4;
---    u_int16_t doff:4;
---    u_int16_t fin:1;
---    u_int16_t syn:1;
---    u_int16_t rst:1;
---    u_int16_t psh:1;
---    u_int16_t ack:1;
---    u_int16_t urg:1;
---    u_int16_t res2:2;
---#  elif __BYTE_ORDER == __BIG_ENDIAN
---    u_int16_t doff:4;
---    u_int16_t res1:4;
---    u_int16_t res2:2;
---    u_int16_t urg:1;
---    u_int16_t ack:1;
---    u_int16_t psh:1;
---    u_int16_t rst:1;
---    u_int16_t syn:1;
---    u_int16_t fin:1;
---#  else
---#   error "Adjust your <bits/endian.h> defines"
---#  endif
---    u_int16_t window;
---    u_int16_t check;
---    u_int16_t urg_ptr;
---};
---# endif /* __FAVOR_BSD */
---
-- enum
-- {
--   TCP_ESTABLISHED = 1,
--diff --git a/include/netinet/udp.h b/include/netinet/udp.h
--index 7d49768..ac6f234 100644
----- a/include/netinet/udp.h
--+++ b/include/netinet/udp.h
--@@ -52,27 +52,28 @@
-- 
-- 
-- /* UDP header as specified by RFC 768, August 1980. */
---#ifdef __FAVOR_BSD
-- 
-- struct udphdr
-- {
---  u_int16_t uh_sport;		/* source port */
---  u_int16_t uh_dport;		/* destination port */
---  u_int16_t uh_ulen;		/* udp length */
---  u_int16_t uh_sum;		/* udp checksum */
--+  __extension__ union
--+  {
--+    struct
--+    {
--+      uint16_t uh_sport;	/* source port */
--+      uint16_t uh_dport;	/* destination port */
--+      uint16_t uh_ulen;		/* udp length */
--+      uint16_t uh_sum;		/* udp checksum */
--+    };
--+    struct
--+    {
--+      uint16_t source;
--+      uint16_t dest;
--+      uint16_t len;
--+      uint16_t check;
--+    };
--+  };
-- };
-- 
---#else
---
---struct udphdr
---{
---  u_int16_t source;
---  u_int16_t dest;
---  u_int16_t len;
---  u_int16_t check;
---};
---#endif
---
-- /* UDP socket options */
-- #define UDP_CORK	1	/* Never send partially complete segments.  */
-- #define UDP_ENCAP	100	/* Set the socket to accept
--diff --git a/include/setjmp.h b/include/setjmp.h
--index 71c1d35..27cac95 100644
----- a/include/setjmp.h
--+++ b/include/setjmp.h
--@@ -59,21 +59,13 @@ __END_NAMESPACE_STD
-- extern int __sigsetjmp (struct __jmp_buf_tag __env[1], int __savemask)
--     __THROWNL;
-- 
---#ifndef	__FAVOR_BSD
-- /* Store the calling environment in ENV, not saving the signal mask.
--    Return 0.  */
-- extern int _setjmp (struct __jmp_buf_tag __env[1]) __THROWNL;
-- 
-- /* Do not save the signal mask.  This is equivalent to the `_setjmp'
--    BSD function.  */
---# define setjmp(env)	_setjmp (env)
---#else
---/* We are in 4.3 BSD-compatibility mode in which `setjmp'
---   saves the signal mask like `sigsetjmp (ENV, 1)'.  We have to
---   define a macro since ISO C says `setjmp' is one.  */
---# define setjmp(env)	setjmp (env)
---#endif /* Favor BSD.  */
---
--+#define setjmp(env)	_setjmp (env)
-- 
-- __BEGIN_NAMESPACE_STD
-- 
--diff --git a/include/signal.h b/include/signal.h
--index 38292a7..d2d5e4a 100644
----- a/include/signal.h
--+++ b/include/signal.h
--@@ -191,27 +191,15 @@ extern void psiginfo (const siginfo_t *__pinfo, const char *__s);
-- /* The `sigpause' function has two different interfaces.  The original
--    BSD definition defines the argument as a mask of the signal, while
--    the more modern interface in X/Open defines it as the signal
---   number.  We go with the BSD version unless the user explicitly
---   selects the X/Open version.
--+   number.  We go with the X/Open version.
-- 
--    This function is a cancellation point and therefore not marked with
--    __THROW.  */
---/*extern int __sigpause (int __sig_or_mask, int __is_sig);*/
---
---#ifdef __FAVOR_BSD
---/* Set the mask of blocked signals to MASK,
---   wait for a signal to arrive, and then restore the mask.  */
---/*extern int sigpause (int __mask) __THROW __attribute_deprecated__;
---# define sigpause(mask) __sigpause ((mask), 0)*/
---/* uClibc note: BSD sigpause is available as __bsd_sigpause.
--- * It is intentionally not prototyped */
---#else
---# ifdef __USE_XOPEN
--+
--+# ifdef __USE_XOPEN_EXTENDED
-- /* Remove a signal from the signal mask and suspend the process.  */
-- extern int sigpause(int __sig);
---/*#  define sigpause(sig) __sigpause ((sig), 1)*/
-- # endif
---#endif
-- #endif /* __UCLIBC_SUSV4_LEGACY__ */
-- 
-- #if 0 /*def __USE_BSD*/
--diff --git a/include/unistd.h b/include/unistd.h
--index 8e4daf6..f48ce21 100644
----- a/include/unistd.h
--+++ b/include/unistd.h
--@@ -673,17 +673,8 @@ libc_hidden_proto(getpid)
-- /* Get the process ID of the calling process's parent.  */
-- extern __pid_t getppid (void) __THROW;
-- 
---/* Get the process group ID of the calling process.
---   This function is different on old BSD. */
---#ifndef __FAVOR_BSD
--+/* Get the process group ID of the calling process.  */
-- extern __pid_t getpgrp (void) __THROW;
---#else
---# ifdef __REDIRECT_NTH
---extern __pid_t __REDIRECT_NTH (getpgrp, (__pid_t __pid), __getpgid);
---# else
---#  define getpgrp __getpgid
---# endif
---#endif
-- 
-- /* Get the process group ID of process PID.  */
-- extern __pid_t __getpgid (__pid_t __pid) __THROW;
--@@ -698,7 +689,7 @@ extern __pid_t getpgid (__pid_t __pid) __THROW;
-- extern int setpgid (__pid_t __pid, __pid_t __pgid) __THROW;
-- libc_hidden_proto(setpgid)
-- 
---#if defined __USE_SVID || defined __USE_BSD || defined __USE_XOPEN_EXTENDED
--+#if defined __USE_MISC || defined __USE_XOPEN_EXTENDED
-- /* Both System V and BSD have `setpgrp' functions, but with different
--    calling conventions.  The BSD function is the same as POSIX.1 `setpgid'
--    (above).  The System V function takes no arguments and puts the calling
--@@ -706,26 +697,13 @@ libc_hidden_proto(setpgid)
-- 
--    New programs should always use `setpgid' instead.
-- 
---   The default in GNU is to provide the System V function.  The BSD
---   function is available under -D_BSD_SOURCE.  */
---
---# ifndef __FAVOR_BSD
--+   GNU provides the POSIX.1 function.  */
-- 
-- /* Set the process group ID of the calling process to its own PID.
--    This is exactly the same as `setpgid (0, 0)'.  */
-- extern int setpgrp (void) __THROW;
-- 
---# else
---
---/* Another name for `setpgid' (above).  */
---#  ifdef __REDIRECT_NTH
---extern int __REDIRECT_NTH (setpgrp, (__pid_t __pid, __pid_t __pgrp), setpgid);
---#  else
---#   define setpgrp setpgid
---#  endif
---
---# endif	/* Favor BSD.  */
---#endif	/* Use SVID or BSD.  */
--+#endif	/* Use misc or X/Open.  */
-- 
-- /* Create a new session with the calling process as its leader.
--    The process group IDs of the session and the calling process
---- 
--2.1.4
--
-diff --git a/package/uclibc/0002-udp.h-sync-completely-with-GNU-C-library.patch b/package/uclibc/0002-udp.h-sync-completely-with-GNU-C-library.patch
-deleted file mode 100644
-index 2eb2a27..0000000
---- a/package/uclibc/0002-udp.h-sync-completely-with-GNU-C-library.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From fcf3a1950dbdbcf7a600cf8ae0e4ea92c20f5af1 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Wed, 5 Jul 2017 23:02:59 +0200
--Subject: [PATCH] udp.h: sync completely with GNU C library
--
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-----
-- include/netinet/udp.h | 11 ++++++++---
-- 1 file changed, 8 insertions(+), 3 deletions(-)
--
--diff --git a/include/netinet/udp.h b/include/netinet/udp.h
--index ac6f23413..a4eb32d76 100644
----- a/include/netinet/udp.h
--+++ b/include/netinet/udp.h
--@@ -1,4 +1,4 @@
---/* Copyright (C) 1991-1993,1995-1997,2004,2009 Free Software Foundation, Inc.
--+/* Copyright (C) 1991-2017 Free Software Foundation, Inc.
--    This file is part of the GNU C Library.
-- 
--    The GNU C Library is free software; you can redistribute it and/or
--@@ -47,9 +47,8 @@
-- #ifndef __NETINET_UDP_H
-- #define __NETINET_UDP_H    1
-- 
---#include <features.h>
-- #include <sys/types.h>
---
--+#include <stdint.h>
-- 
-- /* UDP header as specified by RFC 768, August 1980. */
-- 
--@@ -78,11 +77,17 @@ struct udphdr
-- #define UDP_CORK	1	/* Never send partially complete segments.  */
-- #define UDP_ENCAP	100	/* Set the socket to accept
-- 				   encapsulated packets.  */
--+#define UDP_NO_CHECK6_TX 101	/* Disable sending checksum for UDP
--+				   over IPv6.  */
--+#define UDP_NO_CHECK6_RX 102	/* Disable accepting checksum for UDP
--+				   over IPv6.  */
-- 
-- /* UDP encapsulation types */
-- #define UDP_ENCAP_ESPINUDP_NON_IKE 1	/* draft-ietf-ipsec-nat-t-ike-00/01 */
-- #define UDP_ENCAP_ESPINUDP	2	/* draft-ietf-ipsec-udp-encaps-06 */
-- #define UDP_ENCAP_L2TPINUDP	3	/* rfc2661 */
--+#define UDP_ENCAP_GTP0		4	/* GSM TS 09.60 */
--+#define UDP_ENCAP_GTP1U		5	/* 3GPP TS 29.060 */
-- 
-- #define SOL_UDP            17      /* sockopt level for UDP */
-- 
---- 
--2.11.0
--
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 946d44c..fcba474 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,2 +1,2 @@
- # From https://uclibc-ng.org/
--sha256  a1208bd54fd8cbcc716140d985e228cf2f7e6265aa694c7f516fa6cb598808b2        uClibc-ng-1.0.25.tar.xz
-+sha256  d88470775192b01d278633953ccc9fecacd090e52f401d506a71add3e47d4694        uClibc-ng-1.0.26.tar.xz
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index f22d078..f235070 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.25
-+UCLIBC_VERSION = 1.0.26
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+      successes : 167
+       failures : 23 
+       timeouts : 0  
+          TOTAL : 190
+
+Classification of failures by reason
+====================================
+
+python-libconfig-b271c3d9da... | 6 
+                     gpsd-3.16 | 3 
+     python-cryptography-1.7.2 | 3 
+                 qt5base-5.9.1 | 3 
+                  cc-tool-0.26 | 1 
+                dbus-cpp-0.9.0 | 1 
+kvmtool-bed2bd9e1fbef581909... | 1 
+        ltp-testsuite-20170516 | 1 
+          mediastreamer-2.14.0 | 1 
+                      qt-4.8.7 | 1 
+              webkitgtk-2.16.6 | 1 
+               wireshark-2.2.7 | 1 
+
+
+Detail of failures
+===================
+
+       sparc |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/4f62662609eeaf849513f609b0095ffff7f4e804 |     
+         arm |                 dbus-cpp-0.9.0 | NOK | http://autobuild.buildroot.net/results/fb9b9d5b88ac1165a3ffff8d2d29ecc6329a0a26 |     
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/9a78e039f2a07d425845216a7a65a790f6471b03 |     
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/a2ae5e79c21bd73a2ab80d32894a2aa9426ffcce |     
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/0b29afa63dc7302c6f328f776c0a0885cd857c17 |     
+      x86_64 | kvmtool-bed2bd9e1fbef581909... | NOK | http://autobuild.buildroot.net/results/b750d95b9de5c4483e71b69fd837a531dd077499 |     
+         arm |         ltp-testsuite-20170516 | NOK | http://autobuild.buildroot.net/results/341eb311e41d8afb1ccabb424d9e9d2dcfe6fc3c |     
+         arm |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/8fbe355d9e2105946648abde3e7d26841d8fd349 | ORPH
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/8f3c5f049d417526332cbf0ef7dfba3c29a58667 |     
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/6829f788b79490d8ab254879c2eaefbd6ca57176 |     
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/9c70fa75d5266ea1983f3b20cd2c8b50159acf33 |     
+   powerpc64 | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/0916e18c13cd04ccacffeccc22520065aca5edef |     
+      x86_64 | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/875872997bb585d149e66b6ea90d9a6f552013d5 |     
+      mipsel | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/d92b4e6eff0ce069bc54934df6da0edc079584a2 |     
+     powerpc | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/844fbe5f0da7361f8f9f7c46a920d98afe2a414f |     
+        or1k | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/720d3b332e91842f0d5ca4ea9c5be8489358f1cf |     
+      xtensa | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/2307b3bbd7b1a38c4205b557890b1efedc420126 |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/b71750865c7f42f96c1f7ad4506f35e4c163cb3c | ORPH
+         arm |                  qt5base-5.9.1 | NOK | http://autobuild.buildroot.net/results/e5760b7c678aeafa4f687cf1a152d497d901e1d9 |     
+         sh4 |                  qt5base-5.9.1 | NOK | http://autobuild.buildroot.net/results/2a117b5aeb7b8c046c30f37c6521398b7e1f901d |     
+    mips64el |                  qt5base-5.9.1 | NOK | http://autobuild.buildroot.net/results/18c99dff9119b569a1cd23e85f3b737ed5f7bec2 |     
+      x86_64 |               webkitgtk-2.16.6 | NOK | http://autobuild.buildroot.net/results/31052ca9341e67a027ca736509a9e3a00e8ceeee |     
+      x86_64 |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/2d998ac64fa43683e27d87e65a116080c4f036a9 |     
+
 -- 
-2.1.4
+http://autobuild.buildroot.net
