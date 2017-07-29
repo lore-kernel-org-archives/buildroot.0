@@ -1,10 +1,11 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 29 Jul 2017 20:15:54 +0200
-Subject: [Buildroot] [PATCH 2/4] binutils: add support for binutils 2.29
-In-Reply-To: <20170729130906.2140-3-thomas.petazzoni@free-electrons.com>
-References: <20170729130906.2140-1-thomas.petazzoni@free-electrons.com>
- <20170729130906.2140-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170729181554.GF28707@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 29 Jul 2017 21:31:29 +0300
+Subject: [Buildroot] [PATCH] libssh2: fix build with libgcrypt and
+ mbedtls enabled
+In-Reply-To: <20170729155242.3a67c438@windsurf.lan>
+References: <aee7e0b01fec4b43854973bba5a967f438d6dcb4.1501216093.git.baruch@tkos.co.il>
+ <20170729155242.3a67c438@windsurf.lan>
+Message-ID: <20170729183129.q7iwi5lhxnzaz5ij@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
-Thomas Petazzoni wrote,
 
-> All patches from binutils 2.28 are kept, except patch
-> 0906-microblaze-pr21180.patch, because it has been merged upstream as
-> of commit bd757ca7bf5886a4025ca02093fca1b8c5ce11a2. Other patches are
-> slightly adapted to differences that appeared in binutils 2.29.
+On Sat, Jul 29, 2017 at 03:52:42PM +0200, Thomas Petazzoni wrote:
+> On Fri, 28 Jul 2017 07:28:13 +0300, Baruch Siach wrote:
+> > The --without-libgcrypt configure parameter is not enough to disable the
+> > libgcrypt back-end. This breaks the build when mbedtls (default backend) is
+> > enabled, and libgcrypt builds before libssh2. Seed ac_cv_libgcrypt to really
+> > disable libgcrypt when it is not the selected crypto back-end.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/b4e/b4e39890e003e9e590a5bf17c9300c653020d88c/
+> > http://autobuild.buildroot.net/results/45a/45a9b3559ceea4e1399794f9612f717f7c57a4a3/
+> > http://autobuild.buildroot.net/results/ae4/ae4afec62ca297df1cd02350601f1d62fc3cd1b7/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/libssh2/libssh2.mk | 1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> The patches are now all Git formatted, so instead of having weird
-> sequence numbers, they have normal sequence numbers starting from 0001
-> and incrementing.
-> 
-> Since binutils 2.29 is now available as a .tar.xz tarball, we use this
-> format instead of .bz2 used for previous versions.
+> Applied to master, thanks. However, could you submit a bug report
+> upstream, because this is clearly a bug.
 
-I am testing some more qemu defconfigs with binutils 2.29.
-sh4/sparc worked fine. But xtensa fails to compile busybox:
+Upstream changed the crypto backend selection code significantly after the 
+last release. Hopefully we won't be needing this workaround after the next 
+release.
 
-/home/wbx/buildroot/output/host/lib/gcc/xtensa-buildroot-linux-uclibc/6.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld:
-BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
+baruch
 
-Adding Max to Cc.
-
-best regards
- Waldemar
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
