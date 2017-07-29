@@ -1,65 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jul 2017 22:44:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cc-tool: link with libatomic
- when needed
-In-Reply-To: <20170729203220.20024-1-bernd.kuhls@t-online.de>
-References: <20170729203220.20024-1-bernd.kuhls@t-online.de>
-Message-ID: <20170729224413.55980d76@windsurf.lan>
+Date: Sat, 29 Jul 2017 22:44:31 +0200
+Subject: [Buildroot] [git commit] librsvg: update homepage link
+Message-ID: <20170729204032.D9EAC81F7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a81979758dcf6c5e8e41bc4f910049abb38afbd4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Jul 2017 22:32:20 +0200, Bernd Kuhls wrote:
-> Detecting the boost program_options library is broken:
-> 
-> checking for the Boost program_options library... no
-> configure: error: cannot find the flags to link with Boost program_options
-> 
-> config.log shows the reason, libatomic is missing:
-> 
-> conftest.o: In function `boost::detail::sp_counted_base::release()':
-> conftest.cpp:(.text._ZN5boost6detail15sp_counted_base7releaseEv[_ZN5boost6detail15sp_counted_base7releaseEv]+0xc):
->  undefined reference to `__atomic_fetch_sub_4'
-> conftest.cpp:(.text._ZN5boost6detail15sp_counted_base7releaseEv[_ZN5boost6detail15sp_counted_base7releaseEv]+0x38):
->  undefined reference to `__atomic_fetch_sub_4'
-> /home/buildroot/br4/output/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libboost_program_options.so:
->  undefined reference to `__atomic_fetch_add_4'
-> 
-> Please note that using LIBS=-latomic is not enough, although it fixes
-> the configure check the bug reoccurs when linking cc-tool:
-> 
->   CXXLD    cc-tool
-> src/application/cc_flasher.o: In function `boost::detail::sp_counted_base::weak_release()':
-> cc_flasher.cpp:(.text._ZN5boost6detail15sp_counted_base12weak_releaseEv[_ZN5boost6detail15sp_counted_base12weak_releaseEv]+0xc):
->  undefined reference to `__atomic_fetch_sub_4'
-> 
-> We need to add -latomic to CXXFLAGS to both fix configure and linking.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/596/596f97364bb2c7598b0646da8160939356f0d2c6/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/cc-tool/cc-tool.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+The SF page redirects to gnome.org.
 
-To be honest, this is not the ideal solution. Indeed, it's not cc-tool
-itself that needs libatomic, but the libboost_program_options library.
-So the dynamic linking situation would better be solved by having
-libboost_program_options linked against libatomic. However, this
-wouldn't solve the static linking situation. And since cc-tool doesn't
-use pkg-config to detect boost, we're pretty much out of luck.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/librsvg/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So, I've applied your patch, even if not ideal.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+index 211c53a..ffb0287 100644
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	  The rsvg library is an efficient renderer for Scalable
+ 	  Vector Graphics (SVG) pictures.
+ 
+-	  http://librsvg.sourceforge.net/
++	  https://wiki.gnome.org/Projects/LibRsvg
+ 
+ comment "librsvg needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
