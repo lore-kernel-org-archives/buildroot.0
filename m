@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jul 2017 15:41:57 +0200
-Subject: [Buildroot] [git commit] support/config-fragments/autobuild: fix
-	ARM internal fragment
-Message-ID: <20170729133957.136B880236@busybox.osuosl.org>
+Date: Sat, 29 Jul 2017 15:44:30 +0200
+Subject: [Buildroot] [PATCH 1/2] utils/test-pkg: add option to use an
+ alternate toolchains CSV file
+In-Reply-To: <20170725213613.6714-1-arnout@mind.be>
+References: <20170725213613.6714-1-arnout@mind.be>
+Message-ID: <20170729154430.06ce2118@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8097eb284bb289e3c872f9cb07aa1227ae93e67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The toolchain configuration used by the autobuilders to test the
-internal toolchain backend on ARM contains an option that no longer
-exists: BR2_UCLIBC_VERSION_NG. This option has been removed since
-uClibc-ng has been made the one and only uClibc version supported.
+On Tue, 25 Jul 2017 23:36:12 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> When testing a package with test-pkg, it may be useful to override the
+> set of toolchains used. For example:
+> - to test with toolchains used in your company;
+> - to test agains a subset that is known to be problematic;
+> - to use only toolchains you already have available locally when you
+>   have no network access.
+> 
+> Add an option to use an alternate CSV file containing the config
+> fragments of toolchains to try.
+> 
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> v8: reformulate commit message
+> v7: CSV file instead of directory
+> v6: s/defconfig/config fragment/g
+> v5: First version
 
-Due to this option no longer existing, this toolchain configuration
-was in fact never used, because the randgenconfig script validates
-that a toolchain configuration is valid by checking that all lines are
-still present in the final .config.
+Both applied to master. Thanks!
 
-Therefore, this commit removes the bogus option, which will make sure
-this toolchain config gets used again by our autobuilders.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/config-fragments/autobuild/br-arm-internal-full.config | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/support/config-fragments/autobuild/br-arm-internal-full.config b/support/config-fragments/autobuild/br-arm-internal-full.config
-index 2e70534..b5f1006 100644
---- a/support/config-fragments/autobuild/br-arm-internal-full.config
-+++ b/support/config-fragments/autobuild/br-arm-internal-full.config
-@@ -1,6 +1,5 @@
- BR2_arm=y
- BR2_ARM_EABI=y
--BR2_UCLIBC_VERSION_NG=y
- BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
