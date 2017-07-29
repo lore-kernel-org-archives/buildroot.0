@@ -1,59 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Jul 2017 22:32:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cc-tool: link with libatomic when
-	needed
-Message-ID: <20170729203220.20024-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Jul 2017 22:32:42 +0200
+Subject: [Buildroot] [git commit] libpng: bump to version 1.6.31
+Message-ID: <20170729202922.8EF7481D80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Detecting the boost program_options library is broken:
+commit: https://git.buildroot.net/buildroot/commit/?id=fae49e20f4b23fe8f5c7a893457b8ca5334fdd21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-checking for the Boost program_options library... no
-configure: error: cannot find the flags to link with Boost program_options
-
-config.log shows the reason, libatomic is missing:
-
-conftest.o: In function `boost::detail::sp_counted_base::release()':
-conftest.cpp:(.text._ZN5boost6detail15sp_counted_base7releaseEv[_ZN5boost6detail15sp_counted_base7releaseEv]+0xc):
- undefined reference to `__atomic_fetch_sub_4'
-conftest.cpp:(.text._ZN5boost6detail15sp_counted_base7releaseEv[_ZN5boost6detail15sp_counted_base7releaseEv]+0x38):
- undefined reference to `__atomic_fetch_sub_4'
-/home/buildroot/br4/output/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libboost_program_options.so:
- undefined reference to `__atomic_fetch_add_4'
-
-Please note that using LIBS=-latomic is not enough, although it fixes
-the configure check the bug reoccurs when linking cc-tool:
-
-  CXXLD    cc-tool
-src/application/cc_flasher.o: In function `boost::detail::sp_counted_base::weak_release()':
-cc_flasher.cpp:(.text._ZN5boost6detail15sp_counted_base12weak_releaseEv[_ZN5boost6detail15sp_counted_base12weak_releaseEv]+0xc):
- undefined reference to `__atomic_fetch_sub_4'
-
-We need to add -latomic to CXXFLAGS to both fix configure and linking.
-
-Fixes
-http://autobuild.buildroot.net/results/596/596f97364bb2c7598b0646da8160939356f0d2c6/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+[Thomas: fix hash file comment, noticed by Baruch.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cc-tool/cc-tool.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libpng/libpng.hash | 6 +++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
-index b9209ced3..37ac57e49 100644
---- a/package/cc-tool/cc-tool.mk
-+++ b/package/cc-tool/cc-tool.mk
-@@ -23,4 +23,8 @@ ifeq ($(BR2_STATIC_LIBS),y)
- CC_TOOL_CONF_ENV += LIBS="-lpthread"
- endif
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 279420a..4bc7b87 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.29/
+-sha1 7dbe6a5088b938545fc0857c507d4e0cf5d9023e  libpng-1.6.29.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.31/
++sha1 de695064363df331734466981ef7f6546ef516bf  libpng-1.6.31.tar.xz
+ # Locally computed:
+-sha256 4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239  libpng-1.6.29.tar.xz
++sha256 232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41  libpng-1.6.31.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index c82c4ef..0c19b29 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+CC_TOOL_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -latomic"
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.11.0
+-LIBPNG_VERSION = 1.6.29
++LIBPNG_VERSION = 1.6.31
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
