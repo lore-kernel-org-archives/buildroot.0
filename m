@@ -1,52 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jul 2017 21:34:00 +0200
-Subject: [Buildroot] [PATCH 2/4] binutils: add support for binutils 2.29
-In-Reply-To: <20170729181554.GF28707@waldemar-brodkorb.de>
-References: <20170729130906.2140-1-thomas.petazzoni@free-electrons.com>
- <20170729130906.2140-3-thomas.petazzoni@free-electrons.com>
- <20170729181554.GF28707@waldemar-brodkorb.de>
-Message-ID: <20170729213400.566ef659@windsurf.lan>
+Date: Sat, 29 Jul 2017 22:06:26 +0200
+Subject: [Buildroot] [PATCH] gdb: force to use ncurses and not termcap for
+	host-gdb
+Message-ID: <20170729200626.2403-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Both our target and host gdb depend on ncurses (host-ncurses for
+host-gdb, of course). However, while for the target we passs
+--with-curses, we are not doing this for the host variant. Due to
+this, host-gdb default to using the termcap library: if such a library
+is available on the build system, it will be used instead of the
+host-ncurses we have built. This causes the host gdb binary to depend
+on a library that we do not provide in $(HOST_DIR), breaking the
+principle of a standalone SDK (which should only depend on the C
+library).
 
-On Sat, 29 Jul 2017 20:15:54 +0200, Waldemar Brodkorb wrote:
+To solve this, we simply pass --with-curses in HOST_GDB_CONF_OPTS,
+which forces host-gdb to use the host-ncurses library.
 
-> > All patches from binutils 2.28 are kept, except patch
-> > 0906-microblaze-pr21180.patch, because it has been merged upstream as
-> > of commit bd757ca7bf5886a4025ca02093fca1b8c5ce11a2. Other patches are
-> > slightly adapted to differences that appeared in binutils 2.29.
-> > 
-> > The patches are now all Git formatted, so instead of having weird
-> > sequence numbers, they have normal sequence numbers starting from 0001
-> > and incrementing.
-> > 
-> > Since binutils 2.29 is now available as a .tar.xz tarball, we use this
-> > format instead of .bz2 used for previous versions.  
-> 
-> I am testing some more qemu defconfigs with binutils 2.29.
-> sh4/sparc worked fine. But xtensa fails to compile busybox:
-> 
-> /home/wbx/buildroot/output/host/lib/gcc/xtensa-buildroot-linux-uclibc/6.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld:
-> BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
-> 
-> Adding Max to Cc.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks!
-
-Since we're not switching to 2.29 as the default, I think it's fine if
-some architectures have a few issues with 2.29. The whole point of
-adding new versions before making them the default is precisely to iron
-out such issues.
-
-Best regards,
-
-Thomas
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 73b0ea0..1fef0d4 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -203,6 +203,7 @@ HOST_GDB_CONF_OPTS = \
+ 	--enable-threads \
+ 	--disable-werror \
+ 	--without-included-gettext \
++	--with-curses \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
+ 
+ ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.4
