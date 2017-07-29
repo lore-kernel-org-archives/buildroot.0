@@ -1,51 +1,40 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 29 Jul 2017 23:34:02 +0300
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: bump to version 2.16.5
-In-Reply-To: <871spb63sv.fsf@dell.be.48ers.dk>
-References: <20170705143303.26282-1-aperez@igalia.com>
- <87o9sg8qu7.fsf@dell.be.48ers.dk> <871spb63sv.fsf@dell.be.48ers.dk>
-Message-ID: <20170729233402.GB25408@momiji>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Jul 2017 22:34:08 +0200
+Subject: [Buildroot] [git commit] core/legal-info: properly check hashes of
+	license files for host packages
+Message-ID: <20170729203153.86C8C81922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=c58208642483e1455112d3ba5fea7458388681c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Jul 2017 08:05:52 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> 
-> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
->  >> This simply updates to the latest stable release. WebKitGTK+ versions
->  >> in the 2.1x series avoid bumping the dependencies in order to allow
->  >> distributions to provide updates, therefore no new dependencies are
->  >> needed.
-> 
->  >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> 
->  > Committed to 2017.02.x and 2017.05.x, thanks.
-> 
-> While backporting I noticed that webkitgtk doesn't seem to build without
-> the BR2_PACKAGE_WEBKITGTK_MULTIMEDIA option. I reproduced it with master
-> as well.
-> 
-> The build error I get is this. Do you have any idea how to fix?
-> 
-> [...]
+When called for a host package, we currently miss the hash file, because
+it is named after the target package.
 
-This should be now fixed in Git ?master?. Let me know if you find any other
-WebKitGTK+ build issues, I'll be happy to look into them.
+Fix that by using the package raw-name.
 
-Cheers,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
---
- Adri?n ?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170729/625ed801/attachment.asc>
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 130fd67..f17f110 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -854,7 +854,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+ 	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_NAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
++	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
+ endif # license files
+ 
+ ifeq ($$($(2)_SITE_METHOD),local)
