@@ -1,136 +1,54 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 29 Jul 2017 08:46:00 -0400
-Subject: [Buildroot] [PATCH 1/1] systemd: bump version to 234
-In-Reply-To: <294dfd60-ae61-9003-def5-1a7ce08eadde@mind.be>
-References: <20170728113516.17944-1-aduskett@gmail.com>
- <294dfd60-ae61-9003-def5-1a7ce08eadde@mind.be>
-Message-ID: <CAFSsvmo25Bxr=jx6tL0BOq1ejTqWEGhvUYDoZPhOwTAaksFZ6g@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sat, 29 Jul 2017 15:52:27 +0300
+Subject: [Buildroot] [PATCH 2/4] webkitgtk: Add patches which allow
+ building for ARMv8-A
+In-Reply-To: <20170728011203.GD32202@momiji>
+References: <20170712235531.20444-1-aperez@igalia.com>
+ <20170712235531.20444-3-aperez@igalia.com>	<20170721090654.5eb8e26b@windsurf>
+ <20170728011203.GD32202@momiji>
+Message-ID: <20170729155227.GB12589@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 28, 2017 at 6:22 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Adam,
->
-> On 28-07-17 13:35, Adam Duskett wrote:
->> Other changes:
->> - Removed the following patches due to being merged upstream:
->>     - resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
->>     - resolved-simplify-alloc-size-calculation.patch
->>     - resolved-do-not-allocate-packets-with-minimum-size.patch
->> - Updated the following patches to work with 234:
->>     - fix-getty-unit.patch
->>     - build-check-for-ln-relative.patch
->>     - fix-am-path-libgcrypt-no-found.patch
->> - Updated ordering of remaining patches.
->> - Reformatted remaining patches as git style patches.
->> - Updated Upstream-Status comment in "build-check-for-ln-relative.patch" to
->>   "Denied [No desire to support building on old distributions]"
->
->  This is a pretty darn big patch to review. It would have been nice to split it
-> a little, e.g. split off the reformatting to git style.
-I reformatted them as git because they didn't apply.  Might as well do it now.
+On Fri, 28 Jul 2017 01:12:03 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> Hello,
+> 
+> On Fri, 21 Jul 2017 09:06:54 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> 
+> > On Thu, 13 Jul 2017 02:55:29 +0300, Adrian Perez de Castro wrote:
+> > > The two added patches allow building WebKitGTK+ when the compiler
+> > > scpecifically targets ARMv8-A, and reports as such be pre-defining
+> > > __ARCH_ARM_8A__ instead of just __ARCH_ARM_8__. Both patches were
+> > > pulled from the corresponding upstream bug reports and edited to
+> > > remove the conflicting parts which edit the ChangeLog files.
+> > > 
+> > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > > ---
+> > >  ...ailure-to-build-when-the-compiler-specifica.patch | 20 ++++++++++++++++++++
+> > >  ...re-to-build-when-the-compiler-specifically-.patch | 20 ++++++++++++++++++++
+> > >  2 files changed, 40 insertions(+)
+> > >  create mode 100644 package/webkitgtk/0001-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
+> > >  create mode 100644 package/webkitgtk/0002-WTF-Failure-to-build-when-the-compiler-specifically-.patch
+> 
+> This patch is not needed anymore. The changes are already included in the
+> WebKitGTK+ 2.16.6 release.
 
-> Also, before sending,
-> it's nice to check if git has detected the renames correctly, and if not give an
-> argument to -M so it tries harder.
-? They detect fine. I am not sure what you want me to do or how I could prove
-they detect fine.  Also this is not in the Buildroot manual.
+Actually, it is still needed. I was looking at the 2.17.5 development release
+when I wrote my previous e-mail. I'll re-submit it with the patches properly
+formatted using ?git format-patch -N?.
 
->
->
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> [snip]
->> diff --git a/package/systemd/0001-fix-getty-unit.patch b/package/systemd/0001-fix-getty-unit.patch
->> new file mode 100644
->> index 000000000..c8d53d04a
->> --- /dev/null
->> +++ b/package/systemd/0001-fix-getty-unit.patch
->> @@ -0,0 +1,43 @@
->> +From 82dc074213122ef32c7a9cbfc406a827e5afed64 Mon Sep 17 00:00:00 2001
->> +From: Maxime Ripard <maxime.ripard@free-electrons.com>
->> +Date: Fri, 28 Jul 2017 06:58:45 -0400
->> +Subject: [PATCH] Prefer getty to agetty in console setup systemd units
->
->  You apparently didn't *really* create it with git format-patch, otherwise the
-> file name would have been 0001-Prefer-getty-to-agetty-...
-I did.  I just copied the  newly created patch over to the original name.
-
->
->> +
->> +Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
->> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
->> +Refresh for 234
->
->  The usual way to do this is:
->
-> [Adam: Refresh for 234]
-> Signed-off-by: Adam
-That's not how I did it for the nginx patches and they where accepted,
-so I just copied the formatting.  Also again, there is nothing in the
-Buildroot manual explaining the proper way to format this.
+Sorry about the confusion :-\
 
 
->
->> +---
->> + units/getty at .service.m4        | 2 +-
->> + units/serial-getty at .service.m4 | 2 +-
->> + 2 files changed, 2 insertions(+), 2 deletions(-)
->> +
->> +diff --git a/units/getty at .service.m4 b/units/getty at .service.m4
->> +index 2a84061..e6e8685 100644
->> +--- a/units/getty at .service.m4
->> ++++ b/units/getty at .service.m4
->> +@@ -36,7 +36,7 @@ ConditionPathExists=/dev/tty0
->> + # The '-o' option value tells agetty to replace 'login' arguments with an
->> + # option to preserve environment (-p), followed by '--' for safety, and then
->> + # the entered username.
->
->  Please also remove the comment above, otherwise it looks really weird to anyone
-> looking into this file on the target.
->
-Ok, I can do this.
-
->> +-ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
->> ++ExecStart=-/sbin/getty -L %I 115200 vt100
->> + Type=idle
->> + Restart=always
->> + RestartSec=0
->
-> [snip]
->> @@ -8,17 +11,25 @@ development files are available. Though libgcrypt support is optional in
->>  systemd, this macro should be available whenever autoreconf is used, otherwise
->>  the re-configuration will fail with:
->>
->> -  configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
->> +configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
->
->  Why do you remove the indentation here?
->
-Just a mistake.
-
->  Regards,
->  Arnout
->
-
-Thanks!
-Adam
->>
->>  As asking the user to install the development package of libgcrypt on the host
->>  machine or adding libgcrypt as a build dependency to systemd is not
->>  acceptable, the required file is added to the m4 directory.
->>
->>  Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170729/51269661/attachment.asc>
