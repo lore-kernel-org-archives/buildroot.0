@@ -1,122 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jul 2017 15:44:46 +0200
-Subject: [Buildroot] [git commit] busybox: disable new TLS support
-Message-ID: <20170730134452.CF3D681673@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Jul 2017 16:47:31 +0200
+Subject: [Buildroot] [PATCH 2/2] package/snappy: bump version,
+	switch to cmake
+In-Reply-To: <20170730144731.8961-1-bernd.kuhls@t-online.de>
+References: <20170730144731.8961-1-bernd.kuhls@t-online.de>
+Message-ID: <20170730144731.8961-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5507262f37506d6b1b48eb409ed8bc3f08d3e47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Upstream switched to CMake, host-pkgconf is not needed anymore.
 
-Busybox 1.17.1 has added built-in TLS support. Unfortunately, it fails
-to build on i686 with gcc 4.8, with:
+Instead of using the latest release 1.1.6 we use current git HEAD
+because it contains important patches:
 
-networking/tls_pstm_mul_comba.c: In function 'pstm_mul_comba':
-networking/tls_pstm_mul_comba.c:82:1: error: 'asm' operand has impossible constraints
- asm(                                                      \
- ^
-networking/tls_pstm_mul_comba.c:279:4: note: in expansion of macro 'MULADD'
-    MULADD(*tmpx++, *tmpy--);
-    ^
-make[3]: *** [networking/tls_pstm_mul_comba.o] Error 1
-make[2]: *** [networking] Error 2
+"Support both static and shared library CMake builds."
+https://github.com/google/snappy/commit/c756f7f5d90ad7591d4f96bb0da8159634943359
 
-Since TLS support is a new feature in 1.27, and wasn't present until
-now, let's disable it to avoid the build failure.
+"Redo CMake configuration", this commit allows to disable building
+Snappy's own tests.
+https://github.com/google/snappy/commit/be6dc3db83c4701e3e79694dcbfd1c3da03b91dd
 
-The bug has been reported upstream at
-http://lists.busybox.net/pipermail/busybox/2017-July/085713.html.
-
-Fixes:
-
- http://autobuild.buildroot.net/results/d973f9a2fbf0f52104f4943b902183e9dbf163a7/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/busybox/busybox-minimal.config | 8 ++++----
- package/busybox/busybox.config         | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/snappy/snappy.hash |  2 +-
+ package/snappy/snappy.mk   | 11 +++--------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index 5aadb22..4130e6a 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
-@@ -1,7 +1,7 @@
+diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
+index bb7f104cc..71a2500f8 100644
+--- a/package/snappy/snappy.hash
++++ b/package/snappy/snappy.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 f50719c6dc7103d65df66882a3b4569d598eda251266463eca716928187dc12b  snappy-32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda.tar.gz
++sha256 e701cd80f1154d648c762c86140ad6873a5c9b09ed1d754e3157be8193d2c39e  snappy-be6dc3db83c4701e3e79694dcbfd1c3da03b91dd.tar.gz
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index 81055594c..f5df6bf1f 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -4,17 +4,12 @@
  #
- # Automatically generated make config: don't edit
- # Busybox version: 1.27.1
--# Fri Jul 28 12:11:02 2017
-+# Sun Jul 30 15:42:11 2017
- #
- CONFIG_HAVE_DOT_CONFIG=y
+ ################################################################################
  
-@@ -888,7 +888,7 @@ CONFIG_PING=y
- # CONFIG_PSCAN is not set
- CONFIG_ROUTE=y
- # CONFIG_SLATTACH is not set
--CONFIG_SSL_CLIENT=y
-+# CONFIG_SSL_CLIENT is not set
- # CONFIG_TCPSVD is not set
- # CONFIG_UDPSVD is not set
- CONFIG_TELNET=y
-@@ -905,7 +905,7 @@ CONFIG_FEATURE_TELNET_WIDTH=y
- # CONFIG_FEATURE_TFTP_BLOCKSIZE is not set
- # CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
- # CONFIG_TFTP_DEBUG is not set
--CONFIG_TLS=y
-+# CONFIG_TLS is not set
- # CONFIG_TRACEROUTE is not set
- # CONFIG_TRACEROUTE6 is not set
- # CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
-@@ -918,7 +918,7 @@ CONFIG_WGET=y
- # CONFIG_FEATURE_WGET_STATUSBAR is not set
- # CONFIG_FEATURE_WGET_AUTHENTICATION is not set
- # CONFIG_FEATURE_WGET_TIMEOUT is not set
--CONFIG_FEATURE_WGET_HTTPS=y
-+# CONFIG_FEATURE_WGET_HTTPS is not set
- # CONFIG_FEATURE_WGET_OPENSSL is not set
- # CONFIG_WHOIS is not set
- # CONFIG_ZCIP is not set
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 62b00e9..7753a86 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -1,7 +1,7 @@
- #
- # Automatically generated make config: don't edit
- # Busybox version: 1.27.1
--# Fri Jul 28 12:12:37 2017
-+# Sun Jul 30 15:27:03 2017
- #
- CONFIG_HAVE_DOT_CONFIG=y
+-SNAPPY_VERSION = 32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda
++SNAPPY_VERSION = be6dc3db83c4701e3e79694dcbfd1c3da03b91dd
+ SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
+ SNAPPY_LICENSE = BSD-3-Clause
+ SNAPPY_LICENSE_FILES = COPYING
+-# from git
+-SNAPPY_AUTORECONF = YES
+-SNAPPY_DEPENDENCIES = host-pkgconf
+ SNAPPY_INSTALL_STAGING = YES
+-
+-# Disable tests
+-SNAPPY_CONF_OPTS = --disable-gtest
++SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_TESTS=OFF
  
-@@ -896,7 +896,7 @@ CONFIG_FEATURE_FANCY_PING=y
- # CONFIG_PSCAN is not set
- CONFIG_ROUTE=y
- # CONFIG_SLATTACH is not set
--CONFIG_SSL_CLIENT=y
-+# CONFIG_SSL_CLIENT is not set
- # CONFIG_TCPSVD is not set
- # CONFIG_UDPSVD is not set
- CONFIG_TELNET=y
-@@ -917,7 +917,7 @@ CONFIG_FEATURE_TFTP_PUT=y
- CONFIG_FEATURE_TFTP_BLOCKSIZE=y
- # CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
- # CONFIG_TFTP_DEBUG is not set
--CONFIG_TLS=y
-+# CONFIG_TLS is not set
- CONFIG_TRACEROUTE=y
- # CONFIG_TRACEROUTE6 is not set
- # CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
-@@ -930,7 +930,7 @@ CONFIG_FEATURE_WGET_LONG_OPTIONS=y
- CONFIG_FEATURE_WGET_STATUSBAR=y
- CONFIG_FEATURE_WGET_AUTHENTICATION=y
- CONFIG_FEATURE_WGET_TIMEOUT=y
--CONFIG_FEATURE_WGET_HTTPS=y
-+# CONFIG_FEATURE_WGET_HTTPS is not set
- # CONFIG_FEATURE_WGET_OPENSSL is not set
- # CONFIG_WHOIS is not set
- # CONFIG_ZCIP is not set
+ # libsnappy links with libstdc++. Some libstdc++/arch variants use
+ # pthread symbols for internal locking if built with thread
+@@ -25,4 +20,4 @@ ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ SNAPPY_CONF_OPTS += LIBS=-pthread
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
+-- 
+2.11.0
