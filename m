@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jul 2017 18:09:10 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/leveldb: bump version to 1.20
-Message-ID: <20170730160910.29322-1-bernd.kuhls@t-online.de>
+Date: Sun, 30 Jul 2017 18:18:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/liquid-dsp: bump version to 1.3.0
+Message-ID: <20170730161845.4297-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: fixed typo in 0002-Add-install-recipe.patch (Baruch)
+ package/liquid-dsp/liquid-dsp.hash | 2 +-
+ package/liquid-dsp/liquid-dsp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/leveldb/0002-Add-install-recipe.patch | 6 ++++--
- package/leveldb/leveldb.hash                  | 2 +-
- package/leveldb/leveldb.mk                    | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/package/leveldb/0002-Add-install-recipe.patch b/package/leveldb/0002-Add-install-recipe.patch
-index f65916f1e..29bf4a483 100644
---- a/package/leveldb/0002-Add-install-recipe.patch
-+++ b/package/leveldb/0002-Add-install-recipe.patch
-@@ -9,6 +9,8 @@ Signed-off-by: Steve James <ste@junkomatic.net>
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [baruch: update for v1.19]
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+[Bernd: update for v1.20]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  Makefile | 14 ++++++++++++++
-  1 file changed, 14 insertions(+)
-@@ -19,8 +21,8 @@ index 07a5a1ead6fd..c87023db527a 100644
- +++ b/Makefile
- @@ -412,3 +412,17 @@ $(SHARED_OUTDIR)/%.o: %.cc
-  
-- $(SHARED_OUTDIR)/%.o: %.c
-- 	$(CC) $(CFLAGS) $(PLATFORM_SHARED_CFLAGS) -c $< -o $@
-+ $(SHARED_OUTDIR)/port/port_posix_sse.o: port/port_posix_sse.cc
-+ 	$(CXX) $(CXXFLAGS) $(PLATFORM_SHARED_CFLAGS) $(PLATFORM_SSEFLAGS) -c $< -o $@
- +
- +INSTALL_ROOT = /
- +INSTALL_PREFIX= usr/local
-diff --git a/package/leveldb/leveldb.hash b/package/leveldb/leveldb.hash
-index 4af30fbe6..a5300d7cd 100644
---- a/package/leveldb/leveldb.hash
-+++ b/package/leveldb/leveldb.hash
+diff --git a/package/liquid-dsp/liquid-dsp.hash b/package/liquid-dsp/liquid-dsp.hash
+index e32d8290c..ecee47447 100644
+--- a/package/liquid-dsp/liquid-dsp.hash
++++ b/package/liquid-dsp/liquid-dsp.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 7d7a14ae825e66aabeb156c1c3fae9f9a76d640ef6b40ede74cc73da937e5202  leveldb-v1.19.tar.gz
-+sha256 f5abe8b5b209c2f36560b75f32ce61412f39a2922f7045ae764a2c23335b6664  leveldb-v1.20.tar.gz
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-index 478f358e8..54942a0f2 100644
---- a/package/leveldb/leveldb.mk
-+++ b/package/leveldb/leveldb.mk
+-sha256 d0f050b9d5137c43ba45a35b6c82bc8222eba86f772f4e2e46c91427647bb847 liquid-dsp-1191179b786703b3af20abf7e1404d91099b335d.tar.gz
++sha256 b136343d644bc1441f7854f2d292bfa054e8d040c0b745879b205f6836dca0f0  liquid-dsp-v1.3.0.tar.gz
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index 35994137e..e3114a2d1 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEVELDB_VERSION = v1.19
-+LEVELDB_VERSION = v1.20
- LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
- LEVELDB_LICENSE = BSD-3-Clause
- LEVELDB_LICENSE_FILES = LICENSE
+-LIQUID_DSP_VERSION = 1191179b786703b3af20abf7e1404d91099b335d
++LIQUID_DSP_VERSION = v1.3.0
+ LIQUID_DSP_SITE = $(call github,jgaeddert,liquid-dsp,$(LIQUID_DSP_VERSION))
+ LIQUID_DSP_LICENSE = MIT
+ LIQUID_DSP_LICENSE_FILES = LICENSE
 -- 
 2.11.0
