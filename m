@@ -1,51 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 19:24:24 +0200
-Subject: [Buildroot] [PATCH 1/9] fix help text wrapping for configs e
-In-Reply-To: <20170731191403.64ed5fae@windsurf.home>
-References: <20170731135350.9018-1-aduskett@gmail.com>
- <20170731191403.64ed5fae@windsurf.home>
-Message-ID: <20170731192424.74fe19a7@windsurf.home>
+Date: Mon, 31 Jul 2017 19:28:52 +0200
+Subject: [Buildroot] [git commit] squashfs: fix build with gcc 7
+Message-ID: <20170731172603.2224F80404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f308e4420fde3d14d00f8d44f8ca376b232f57cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 31 Jul 2017 19:14:03 +0200, Thomas Petazzoni wrote:
+gcc 7 with -Os (optimize for size) takes the liberty to remove the code of
+inline function entirely. This leads to undefined function references at link
+time. Restore gcc original inline behaviour to fix this issue.
 
-> I've applied the series but:
-> 
->  * There was a leftover PATCH 4/4 in the middle of the series. Please
->    try to be careful when sending series.
-> 
->  * The subjects were not really formatted properly. They did not comply
->    with the principle of "<package>: <description>". I fixed this up.
-> 
->  * It's generally quite annoying to get such patches now, when we're
->    about to close for -rc1. Do you really want to spend the
->    reviewer/maintainer time on reviewing/applying such patches, or
->    focus on more important things ? I know we need at some point to fix
->    all those warnings, but it's always annoying to receive such massive
->    patches :-/
+Fixes:
+http://autobuild.buildroot.net/results/3c5/3c5b1d799dce3ba361d618330c242bf4eba76019/
+http://autobuild.buildroot.net/results/09f/09f350b62e2486404b78222dce211400bb233000/
+http://autobuild.buildroot.net/results/693/693960ed7c01622c756dcc929e83b3b713c16ccc/
 
-And in addition, you did not even test your patches by running "make
-menuconfig". They broke menuconfig:
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squashfs/squashfs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-package/libsysfs/Config.in:8: syntax error
-package/libsysfs/Config.in:7: unknown option "http"
-Makefile:876: recipe for target 'menuconfig' failed
-make[1]: *** [menuconfig] Error 1
-
-I already applied and pushed a follow-up fix for this.
-
-But that can only strengthen my dislike for such patches...
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index db3f276..9599d89 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -59,7 +59,7 @@ HOST_SQUASHFS_MAKE_ARGS = \
+ define SQUASHFS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) \
+ 		CC="$(TARGET_CC)" \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		EXTRA_CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline" \
+ 		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		$(SQUASHFS_MAKE_ARGS) \
+ 		-C $(@D)/squashfs-tools/
