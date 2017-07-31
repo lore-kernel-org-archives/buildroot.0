@@ -1,21 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 19:09:20 +0200
-Subject: [Buildroot] [git commit] package/g*: fix wrapping of Config.in help
+Date: Mon, 31 Jul 2017 19:08:47 +0200
+Subject: [Buildroot] [git commit] package/e*: fix wrapping of Config.in help
 	text
-Message-ID: <20170731170652.7FDCD7FCEC@busybox.osuosl.org>
+Message-ID: <20170731170652.618F481EF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be9d731edf6d5fbd138c4fb4cc09d0fa6ae2d147
+commit: https://git.buildroot.net/buildroot/commit/?id=474e049f9660b7e181dc5d25c626a3e9d20bf581
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The check-package script when ran gives warnings on text wrapping
 on all of these Config files.  This patch cleans up all warnings
 related to the text wrapping for the Config files starting with
-the letter g in the package directory.
+the letter e in the package directory.
 
 The appropriate indentation is: <tab><2 spaces><62 chars>
 See http://nightly.buildroot.org/#writing-rules-config-in for more
@@ -24,278 +24,163 @@ information.
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gawk/Config.in                         |  4 ++--
- package/gdbm/Config.in                         |  4 ++--
- package/genpart/Config.in                      |  6 +++---
- package/genpart/Config.in.host                 |  6 +++---
- package/ghostscript-fonts/Config.in            |  6 +++---
- package/git/Config.in                          |  5 +++--
- package/gnuchess/Config.in                     |  3 ++-
- package/gnutls/Config.in                       |  3 ++-
- package/google-material-design-icons/Config.in |  4 ++--
- package/gpm/Config.in                          | 10 +++++-----
- package/gpsd/Config.in                         |  9 +++++----
- package/gptfdisk/Config.in                     | 18 ++++++++++--------
- package/gssdp/Config.in                        |  3 ++-
- package/gtkperf/Config.in                      |  4 ++--
- package/gupnp-av/Config.in                     |  4 ++--
- 15 files changed, 48 insertions(+), 41 deletions(-)
+ package/ecryptfs-utils/Config.in | 14 +++++++-------
+ package/efibootmgr/Config.in     |  6 +++---
+ package/eigen/Config.in          |  4 ++--
+ package/empty/Config.in          |  3 ++-
+ package/enscript/Config.in       | 12 +++++++-----
+ package/eudev/Config.in          |  8 ++++----
+ package/expedite/Config.in       |  8 ++++----
+ package/ezxml/Config.in          |  3 ++-
+ 8 files changed, 31 insertions(+), 27 deletions(-)
 
-diff --git a/package/gawk/Config.in b/package/gawk/Config.in
-index 36e70eb..a065243 100644
---- a/package/gawk/Config.in
-+++ b/package/gawk/Config.in
-@@ -6,8 +6,8 @@ config BR2_PACKAGE_GAWK
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 078ca36..bb4cc64 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -17,19 +17,19 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
  	help
- 	  A special-purpose programming language which is data driven
--	  rather than procedural. Allows for simple data-reformatting jobs
--	  with just a few lines of code.
-+	  rather than procedural. Allows for simple data-reformatting
-+	  jobs with just a few lines of code.
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+-	  Linux filesystem, it stores cryptographic metadata in the header
+-	  of each file written.
++	  Linux filesystem, it stores cryptographic metadata in the
++	  header of each file written.
  
- 	  http://www.gnu.org/software/gawk/
+ 	  The eCryptfs kernel module is available in all Linux kernels
+-	  since version 2.6.19. This package provides userspace utilities
+-	  needed to mount eCryptfs.
++	  since version 2.6.19. This package provides userspace
++	  utilities needed to mount eCryptfs.
  
-diff --git a/package/gdbm/Config.in b/package/gdbm/Config.in
-index 8ad0fc6..3646bd0 100644
---- a/package/gdbm/Config.in
-+++ b/package/gdbm/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_GDBM
- 	bool "gdbm"
+-	  Files are encrypted using a passphrase. Consider building openssl
+-	  for another method.
++	  Files are encrypted using a passphrase. Consider building
++	  openssl for another method.
+ 
+ 	  http://ecryptfs.org
+ 
+-comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
++comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+ 	depends on !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index 1096b9d..0d36ffd 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -9,9 +9,9 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 	select BR2_PACKAGE_EFIVAR
  	help
--	  GNU dbm is a set of database routines that use extensible hashing.
--	  It works similar to the standard UNIX dbm routines.
-+	  GNU dbm is a set of database routines that use extensible
-+	  hashing. It works similar to the standard UNIX dbm routines.
+ 	  A Linux user-space application to modify the Intel Extensible
+-	  Firmware Interface (EFI) Boot Manager. This application can create
+-	  and destroy boot entries, change the boot order, change the next
+-	  running boot option, and more.
++	  Firmware Interface (EFI) Boot Manager. This application can
++	  create and destroy boot entries, change the boot order, change
++	  the next running boot option, and more.
  
- 	  http://www.gnu.org/software/gdbm/gdbm.html
-diff --git a/package/genpart/Config.in b/package/genpart/Config.in
-index 8d9ec79..6428845 100644
---- a/package/genpart/Config.in
-+++ b/package/genpart/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_GENPART
- 	bool "genpart"
+ 	  https://github.com/rhinstaller/efibootmgr
+ 
+diff --git a/package/eigen/Config.in b/package/eigen/Config.in
+index 03d65b1..48752e0 100644
+--- a/package/eigen/Config.in
++++ b/package/eigen/Config.in
+@@ -3,8 +3,8 @@ config BR2_PACKAGE_EIGEN
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
--	  Generate a 16 byte partition table entry defined by command line
--	  arguments and dump it to stdout. No CHS magic is done, only lba
--	  entries are filled out.
-+	  Generate a 16 byte partition table entry defined by command
-+	  line arguments and dump it to stdout. No CHS magic is done,
-+	  only lba entries are filled out.
+ 	  Eigen is a C++ template library for linear algebra: vectors,
+-	  matrices, and related algorithms. It is versatile, fast, elegant
+-	  and works on many platforms (OS/Compilers).
++	  matrices, and related algorithms. It is versatile, fast,
++	  elegant and works on many platforms (OS/Compilers).
  
- 	  http://www.pengutronix.de/software/genpart/index_en.html
-diff --git a/package/genpart/Config.in.host b/package/genpart/Config.in.host
-index 6cc2a59..d8b9eb6 100644
---- a/package/genpart/Config.in.host
-+++ b/package/genpart/Config.in.host
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_HOST_GENPART
- 	bool "host genpart"
+ 	  This package only installs header files to the include path.
+ 	  If you just want to use Eigen, you can use the header files
+diff --git a/package/empty/Config.in b/package/empty/Config.in
+index 7fd0877..f73bce8 100644
+--- a/package/empty/Config.in
++++ b/package/empty/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_EMPTY
+ 	bool "empty"
+ 	depends on BR2_USE_MMU # uses fork()
  	help
--	  Generate a 16 byte partition table entry defined by command line
--	  arguments and dump it to stdout. No CHS magic is done, only lba
--	  entries are filled out.
-+	  Generate a 16 byte partition table entry defined by command
-+	  line arguments and dump it to stdout. No CHS magic is done,
-+	  only lba entries are filled out.
+-	  Run processes and applications under pseudo-terminal (PTY) sessions.
++	  Run processes and applications under pseudo-terminal (PTY)
++	  sessions.
  
- 	  http://www.pengutronix.de/software/genpart/index_en.html
-diff --git a/package/ghostscript-fonts/Config.in b/package/ghostscript-fonts/Config.in
-index 80bfbd0..9b9b8d0 100644
---- a/package/ghostscript-fonts/Config.in
-+++ b/package/ghostscript-fonts/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_GHOSTSCRIPT_FONTS
- 	bool "ghostscript-fonts"
+ 	  http://empty.sourceforge.net/
+diff --git a/package/enscript/Config.in b/package/enscript/Config.in
+index 26c45e1..b95bd92 100644
+--- a/package/enscript/Config.in
++++ b/package/enscript/Config.in
+@@ -1,11 +1,13 @@
+ config BR2_PACKAGE_ENSCRIPT
+ 	bool "enscript"
  	help
--	  Fonts and font metrics customarily distributed with Ghostscript.
--	  Currently includes the 35 standard PostScript fonts and a
--	  grab-bag of others.
-+	  Fonts and font metrics customarily distributed with
-+	  Ghostscript. Currently includes the 35 standard PostScript
-+	  fonts and a grab-bag of others.
+-	  GNU Enscript is a free replacement for Adobe's enscript program.
++	  GNU Enscript is a free replacement for Adobe's enscript
++	  program.
  
- 	  http://sourceforge.net/projects/gs-fonts
-diff --git a/package/git/Config.in b/package/git/Config.in
-index 9babbec..d53921d 100644
---- a/package/git/Config.in
-+++ b/package/git/Config.in
-@@ -4,7 +4,8 @@ config BR2_PACKAGE_GIT
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	  GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+-	  stores generated output to a file or sends it directly to the
+-	  printer. It includes features for `pretty-printing' (language-
+-	  sensitive code highlighting) in several programming languages.
++	  GNU Enscript converts ASCII files to PostScript, HTML, or RTF
++	  and stores generated output to a file or sends it directly to
++	  the printer. It includes features for `pretty-printing'
++	  (language-sensitive code highlighting) in several programming
++	  languages.
+ 
+ 	  http://www.gnu.org/software/enscript
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 02fcc7e..2220265 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -9,10 +9,10 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
  	help
--	  Git is a free and open source distributed version control system
--	  designed to handle everything from small to very large projects.
-+	  Git is a free and open source distributed version control
-+	  system designed to handle everything from small to very large
-+	  projects.
+-	  eudev is a fork of systemd-udev with the goal of obtaining better
+-	  compatibility with existing software such as OpenRC and Upstart,
+-	  older kernels, various toolchains and anything else required by
+-	  users and various distributions.
++	  eudev is a fork of systemd-udev with the goal of obtaining
++	  better compatibility with existing software such as OpenRC and
++	  Upstart, older kernels, various toolchains and anything else
++	  required by users and various distributions.
  
- 	  http://git-scm.com
-diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
-index aa446f4..0ddd288 100644
---- a/package/gnuchess/Config.in
-+++ b/package/gnuchess/Config.in
-@@ -4,7 +4,8 @@ config BR2_PACKAGE_GNUCHESS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FLEX
+ 	  https://wiki.gentoo.org/wiki/Project:Eudev
+ 
+diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+index 0bcf343..fdfc671 100644
+--- a/package/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -3,10 +3,10 @@ config BR2_PACKAGE_EXPEDITE
+ 	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
--	  GNU Chess lets most modern computers play a full game of chess.
-+	  GNU Chess lets most modern computers play a full game of
-+	  chess.
+-	  Expedite is the official Evas benchmark tool. It can test different
+-	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+-	  DirectFB and so on. Its tests are quite extensive, trying to
+-	  reproduce real world usage cases.
++	  Expedite is the official Evas benchmark tool. It can test
++	  different engines, such as X11, XRender, OpenGL (also ES
++	  variant), SDL, DirectFB and so on. Its tests are quite
++	  extensive, trying to reproduce real world usage cases.
  
- 	  http://ftp.gnu.org/pub/gnu/chess
- 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index 1db069c..176951a 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -20,7 +20,8 @@ config BR2_PACKAGE_GNUTLS_TOOLS
- 	select BR2_PACKAGE_ARGP_STANDALONE \
- 		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ comment "expedite needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/ezxml/Config.in b/package/ezxml/Config.in
+index 285c7a5..8a1643b 100644
+--- a/package/ezxml/Config.in
++++ b/package/ezxml/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_EZXML
+ 	bool "ezxml"
  	help
--	  Install GnuTLS command line tools for various cryptographic tasks.
-+	  Install GnuTLS command line tools for various cryptographic
-+	  tasks.
+-	  ezXML is a XML parser C library that is simple and easy to use.
++	  ezXML is a XML parser C library that is simple and easy to
++	  use.
  
- endif
- 
-diff --git a/package/google-material-design-icons/Config.in b/package/google-material-design-icons/Config.in
-index a200429..775f258 100644
---- a/package/google-material-design-icons/Config.in
-+++ b/package/google-material-design-icons/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
- 	bool "google-material-design-icons"
- 	help
--	  Material design icons are the official icon set from Google that
--	  are designed under the material design guidelines.
-+	  Material design icons are the official icon set from Google
-+	  that are designed under the material design guidelines.
- 
- 	  https://github.com/google/material-design-icons
- 
-diff --git a/package/gpm/Config.in b/package/gpm/Config.in
-index 2d0d366..1158479 100644
---- a/package/gpm/Config.in
-+++ b/package/gpm/Config.in
-@@ -3,11 +3,11 @@ config BR2_PACKAGE_GPM
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
- 	help
--	  "gpm" means general purpose mouse (server) and provides mouse support
--	  for Linux virtual consoles.
--	  gpm-root (to draw menus in current virtual console; config file in
--	  /etc/gpm-root.conf) and disable-paste (to disable paste buffer for
--	  security reasons), will also be installed.
-+	  "gpm" means general purpose mouse (server) and provides mouse
-+	  support for Linux virtual consoles.
-+	  gpm-root (to draw menus in current virtual console; config
-+	  file in /etc/gpm-root.conf) and disable-paste (to disable
-+	  paste buffer for security reasons), will also be installed.
- 
- 	  http://www.nico.schottelius.org/software/gpm/
- 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 876ab9b..68d3e2e 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -10,10 +10,11 @@ menuconfig BR2_PACKAGE_GPSD
- 	# Always tries to build a shared library
- 	depends on !BR2_STATIC_LIBS
- 	help
--	  gpsd is a service daemon that monitors one or more GPSes or AIS
--	  receivers attached to a host computer through serial or USB ports,
--	  making all data on the location/course/velocity of the sensors
--	  available to be queried on TCP port 2947 of the host computer.
-+	  gpsd is a service daemon that monitors one or more GPSes or
-+	  AIS receivers attached to a host computer through serial or
-+	  USB ports, making all data on the location/course/velocity of
-+	  the sensors available to be queried on TCP port 2947 of the
-+	  host computer.
- 
- 	  The D-Bus interface is included if dbus-glib is enabled.
- 
-diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
-index d243b90..ede72f3 100644
---- a/package/gptfdisk/Config.in
-+++ b/package/gptfdisk/Config.in
-@@ -10,9 +10,10 @@ config BR2_PACKAGE_GPTFDISK
- 		!(BR2_PACKAGE_GPTFDISK_SGDISK || BR2_PACKAGE_GPTFDISK_CGDISK)
- 	help
- 	  GPT fdisk (consisting of the gdisk and sgdisk programs) is a
--	  text-mode partitioning tool that works on Globally Unique Identifier
--	  (GUID) Partition Table (GPT) disks, rather than on the more common
--	  (through 2010) Master Boot Record (MBR) partition tables.
-+	  text-mode partitioning tool that works on Globally Unique
-+	  Identifier (GUID) Partition Table (GPT) disks, rather than on
-+	  the more common (through 2010) Master Boot Record (MBR)
-+	  partition tables.
- 
- 	  http://www.rodsbooks.com/gdisk/
- 
-@@ -22,16 +23,17 @@ config BR2_PACKAGE_GPTFDISK_GDISK
- 	bool "interactive gdisk"
- 	help
- 	  Install the interactive GUID partition table (GPT) manipulator
--	  /usr/sbin/gdisk which is modelled after and quite similar in use
--	  to the traditional MBR based fdisk tool.
-+	  /usr/sbin/gdisk which is modelled after and quite similar in
-+	  use to the traditional MBR based fdisk tool.
- 
- config BR2_PACKAGE_GPTFDISK_SGDISK
- 	bool "command line sgdisk"
- 	select BR2_PACKAGE_POPT
- 	help
--	  Install the command-line GUID partition table (GPT) manipulator
--	  /usr/sbin/sgdisk which is named after the traditional MBR based
--	  sfdisk tool albeit with an entirely different option syntax.
-+	  Install the command-line GUID partition table (GPT)
-+	  manipulator /usr/sbin/sgdisk which is named after the
-+	  traditional MBR based sfdisk tool albeit with an entirely
-+	  different option syntax.
- 
- config BR2_PACKAGE_GPTFDISK_CGDISK
- 	bool "ncurses cgdisk"
-diff --git a/package/gssdp/Config.in b/package/gssdp/Config.in
-index 8314971..80c5edf 100644
---- a/package/gssdp/Config.in
-+++ b/package/gssdp/Config.in
-@@ -6,7 +6,8 @@ config BR2_PACKAGE_GSSDP
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBSOUP
- 	help
--	  GSSDP implements resource discovery and announcement over SSDP.
-+	  GSSDP implements resource discovery and announcement over
-+	  SSDP.
- 
- 	  http://www.gupnp.org
- 
-diff --git a/package/gtkperf/Config.in b/package/gtkperf/Config.in
-index 1089dbf..78c35e7 100644
---- a/package/gtkperf/Config.in
-+++ b/package/gtkperf/Config.in
-@@ -5,5 +5,5 @@ config BR2_PACKAGE_GTKPERF
- 	  GtkPerf is an application designed to test GTK+ performance.
- 	  The point is to create common testing platform to run
- 	  predefined GTK+ widgets
--	  e.g. (opening comboboxes, toggling buttons, scrolling text yms.)
--	  and this way define the speed of device/platform.
-+	  e.g. (opening comboboxes, toggling buttons, scrolling text
-+	  yms.) and this way define the speed of device/platform.
-diff --git a/package/gupnp-av/Config.in b/package/gupnp-av/Config.in
-index 5320b82..7b618f5 100644
---- a/package/gupnp-av/Config.in
-+++ b/package/gupnp-av/Config.in
-@@ -7,8 +7,8 @@ config BR2_PACKAGE_GUPNP_AV
- 	select BR2_PACKAGE_GUPNP
- 	select BR2_PACKAGE_LIBXML2
- 	help
--	  GUPnP-AV is a collection of helpers for building AV (audio/video)
--	  applications using GUPnP.
-+	  GUPnP-AV is a collection of helpers for building AV
-+	  (audio/video) applications using GUPnP.
- 
- 	  http://www.gupnp.org/
- 
+ 	  http://ezxml.sf.net
