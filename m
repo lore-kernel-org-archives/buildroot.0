@@ -1,74 +1,57 @@
-From: Petar Koretic <petar.koretic@qaap.io>
-Date: Mon, 31 Jul 2017 19:48:16 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5declarative: backport 'Fix alignment
- issue on ARMv7' patch to 5.9.1
-In-Reply-To: <CAKdiq5_+hC1qMckjeahyp6KC_Q+035A0-8W1C5m3LuuF5crEoA@mail.gmail.com>
-References: <20170731171359.32471-1-petar.koretic@qaap.io>
- <20170731193331.692187b7@windsurf.home>
- <CAKdiq5_+hC1qMckjeahyp6KC_Q+035A0-8W1C5m3LuuF5crEoA@mail.gmail.com>
-Message-ID: <CAKdiq5_AxzACKggy9yd0m5ZfdXxLXP1g3QEJrSzxH4FpxpVpmg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 31 Jul 2017 20:29:34 +0200
+Subject: [Buildroot] [PATCH] perl: bump version 5.24.2
+Message-ID: <20170731182934.7232-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doesn't affect or apply to 5.6, if that was actually the question.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-Best regards,
-Petar
-
-On Mon, Jul 31, 2017 at 7:44 PM, Petar Koretic <petar.koretic@qaap.io>
-wrote:
-
-> Hi Thomas.
->
-> Thanks for the information.
-> It does affect and applies to Qt 5.8 (and 5.9.0) as well, just tested this
-> to confirm it.
-> Commit message needs fixing then, sorry.
->
-> Best regards,
-> Petar
->
->
-> On Mon, Jul 31, 2017 at 7:33 PM, Thomas Petazzoni <thomas.petazzoni@free-
-> electrons.com> wrote:
->
->> Hello,
->>
->> On Mon, 31 Jul 2017 19:13:59 +0200, Petar Koretic wrote:
->> > This resolves a QML issues reported in
->> > https://bugreports.qt.io/browse/QTBUG-61522 that will be fixed in the
->> 5.9.2.
->> >
->> > Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
->> > ---
->> >  .../0003-Fix-alignment-issue-on-ARMv7.patch        | 34
->> ++++++++++++++++++++++
->> >  1 file changed, 34 insertions(+)
->> >  create mode 100644 package/qt5/qt5declarative/000
->> 3-Fix-alignment-issue-on-ARMv7.patch
->> >
->> > diff --git a/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch
->> b/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch
->>
->> Does this patch applies only to 5.9.1 ? If so, it should go in
->> package/qt5/qt5declarative/5.9.1/.
->>
->> I can fixup the patch, just tell me if this issue is only applicable to
->> 5.9.1 (I guess it is the case, but I prefer to ask).
->>
->> Thanks,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux and Kernel engineering
->> http://free-electrons.com
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170731/aef86dec/attachment.html>
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index eb88b9e54d..b46189a7ad 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.1.tar.xz.{md5,sha1,sha256}.txt
+-md5    af6a84c7c3e2b8b269c105a5db2f6d53                                 perl-5.24.1.tar.xz
+-sha1   5bec25d8821b81a5939ee220997f4c8ab1c13e31                         perl-5.24.1.tar.xz
+-sha256 03a77bac4505c270f1890ece75afc7d4b555090b41aa41ea478747e23b2afb3f perl-5.24.1.tar.xz
++# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.2.tar.xz.{md5,sha1,sha256}.txt
++md5    b7c027975a476dbb9aa7202f760d8eca                                 perl-5.24.2.tar.xz
++sha1   61761989df70b10470bc387050974be72e33217e                         perl-5.24.2.tar.xz
++sha256 b25dd465ef32edf853078eb540b26243db0a3b5e1b1cc84393703d9564be67c0 perl-5.24.2.tar.xz
+ 
+-# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.5/perl-cross-1.1.5.hash
+-sha256	0e719e75983b16c7726c2c9462f9498bb1fc4ad38c9f2513a65f3dd34e3decb3  perl-cross-1.1.5.tar.gz
++# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.6/perl-cross-1.1.6.hash
++sha256	2b3b88f54d85beb438bd2dddd948e2d89461db5ab6253f01b3c2c9ae3ddc30b4  perl-cross-1.1.6.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index fb0cec3d4a..d7fcd75cab 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,14 +6,14 @@
+ 
+ # When updating the version here, also update support/scripts/scancpan
+ PERL_VERSION_MAJOR = 24
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.1.5
++PERL_CROSS_VERSION = 1.1.6
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+-- 
+2.11.0
