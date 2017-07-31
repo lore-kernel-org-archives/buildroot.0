@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 21:24:07 +0200
-Subject: [Buildroot] [RFC PATCH 1/4] .gitlab-ci.yml: save rootfs as
- artifact for runtime tests
-In-Reply-To: <20170730044946.11999-1-ricardo.martincoski@gmail.com>
+Date: Mon, 31 Jul 2017 21:25:04 +0200
+Subject: [Buildroot] [RFC PATCH 2/4] support/testing: allow to use extra
+ large timeouts
+In-Reply-To: <20170730044946.11999-2-ricardo.martincoski@gmail.com>
 References: <20170730044946.11999-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170731212407.02a7b111@windsurf.home>
+ <20170730044946.11999-2-ricardo.martincoski@gmail.com>
+Message-ID: <20170731212504.7f4ebf3b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Jul 2017 01:49:43 -0300, Ricardo Martincoski wrote:
-> Sometimes when a test fails in a gitlab pipeline the reason of the
-> failure cannot be determined using only the logfile.
-> 
-> Add the modified rootfs as an artifact of the job to improve
-> troubleshooting. To accomplish this, always use -k option from the test
-> infra, unconditionally add the resulting images to the artifacts, and
-> let the runner do the cleanup for us.
-> 
-> These artifacts can also be useful when a test fails locally but pass at
-> gitlab runners.
-> 
-> When the test does not generate a image, this message is displayed in
-> the runner log:
-> WARNING: test-output/*/images/*: no matching files
-> 
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> See also
-> http://lists.busybox.net/pipermail/buildroot/2017-July/199332.html
-> ---
->  .gitlab-ci.yml    | 5 ++++-
->  .gitlab-ci.yml.in | 5 ++++-
->  2 files changed, 8 insertions(+), 2 deletions(-)
+On Sun, 30 Jul 2017 01:49:44 -0300, Ricardo Martincoski wrote:
 
-Applied to master, thanks.
+> diff --git a/support/testing/run-tests b/support/testing/run-tests
+> index 0cb673c61f..33ac60d6b2 100755
+> --- a/support/testing/run-tests
+> +++ b/support/testing/run-tests
+> @@ -28,6 +28,8 @@ def main():
+>                          help='number of testcases to run simultaneously')
+>      parser.add_argument('-j', '--jlevel', type=int,
+>                          help='BR2_JLEVEL to use for each testcase')
+> +    parser.add_argument('-e', '--elastic-timeout', type=int, default=1,
+> +                        help='increase timeouts (useful for slow machines)')
+
+I find the choice of the "elastic timeout" a bit weird. To me, it feels
+like a timeout that will reduce and extend like an elastic, not a
+timeout multiplier.
+
+Perhaps we should call this --timeout-multiplier or something like
+that ?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
