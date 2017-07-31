@@ -1,92 +1,69 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 31 Jul 2017 23:18:00 +0200
-Subject: [Buildroot] [PATCH 2/2] swupdate: support for Lua 5.1 is broken
-In-Reply-To: <20170731211800.5888-1-joerg.krause@embedded.rocks>
-References: <20170731211800.5888-1-joerg.krause@embedded.rocks>
-Message-ID: <20170731211800.5888-2-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 31 Jul 2017 23:56:57 +0200
+Subject: [Buildroot] [git commit] package/skeleton: drop dependency on
+	host-mkpasswd
+Message-ID: <20170731215752.9859882156@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before commit 87b6ac1478821351c92f7ca1c3154550e4713b28 support for Lua
-was always disabled by the default config file:
+commit: https://git.buildroot.net/buildroot/commit/?id=7c1692df6f72ae4c3581a6a43cd2479b11c5ed84
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-```
-CONFIG_LUA is not set
-```
+Setting the root pasword is done in a target-finalize hook, so we do not
+need to enforce a dependency from the skeleton onto host-mkpasswd.
 
-The commit removed this setting and Lua support is now enabled if a Lua
-interpreter is enabled. As the swupdate build system uses pkg-config to check
-for the lua library by default (LUAPKG="lua") this throws a lot of
-undefined referenced in case LuaJIT is uses as Lua interpreter, e.g.:
+Dropping that dependency will simplify making skeleton a virtual
+package (in up-coming changes).
 
-```
-corelib/lib.a(lua_interface.o): In function `l_info':
-lua_interface.c:(.text.l_info+0x14): undefined reference to `luaL_checklstring'
-```
+Instead, it is now selected as any other package. As such, it is
+guaranteed to be built before target-finalize.
 
-However, since version 2017.07 support for Lua 5.1 is broken in swupdate. Therefore,
-remove support for Lua 5.1 and LuaJIT in the swupdate package for now
-until upstream might fix this issue.
+This however introduces a slight change in behaviour: previously,
+host-mkpasswd would only be built if we needed to hash the root password
+from its plain-text value. Now, host-mkpasswd is always built as soon as
+the root password is non-empty, even if already pre-hashed.
 
-Reported upstream:
-https://groups.google.com/forum/#!topic/swupdate/WAm8npAOd6o
+Since host-mkpasswd is a really tiny weeny package bundled in Buildroot,
+with only two C files, built as a single unit with a single gcc call,
+the overhead is really minimal. Compared to the simplifications this
+will allow in the skeleton packages (plural: common, sysv, systemd,
+custom) to come, this overhead is acceptable.
 
-Fixes:
-http://autobuild.buildroot.net/results/df2/df2a71efe5af52d7b8721a355c49934b1be197a3/
-http://autobuild.buildroot.net/results/400/4006225c8a47eb0b56399c83bd6d00406a0f62c2/
-http://autobuild.buildroot.net/results/098/098f9d6cd905359adac4fb15e1d54c5022757325/
-http://autobuild.buildroot.net/results/e5f/e5f6f99d96d9c661454335e7f931a03c3ae6a9e2/
-http://autobuild.buildroot.net/results/f3a/f3a0abe8d5e35c85da40d20dab260c28506a0d4c/
+Yet another simplification, even if small, to ease providing multiple
+skeletons.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/swupdate/Config.in   | 7 ++-----
- package/swupdate/swupdate.mk | 4 ++--
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/skeleton/skeleton.mk | 1 -
+ system/Config.in             | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index dbc69f1fe8..7a0f9d12e5 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_SWUPDATE
- 	depends on BR2_USE_MMU # fork()
- 	# swupdate requires a parser and uses libconfig as default
- 	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && \
--		!BR2_PACKAGE_HAS_LUAINTERPRETER
-+		!BR2_PACKAGE_LUA_5_2 && !BR2_PACKAGE_LUA_5_3
- 	help
- 	  swupdate provides a reliable way to update the software on an
- 	  embedded system.
-@@ -19,11 +19,8 @@ config BR2_PACKAGE_SWUPDATE
- 	  use your own modified configuration, you have to select the
- 	  necessary packages manually:
- 
--	  * Select BR2_PACKAGE_LUA or BR2_PACKAGE_LUAJIT if you want
-+	  * Select BR2_PACKAGE_LUA_5_2 or BR2_PACKAGE_LUA_5_3 if you want
- 	    to have Lua support.
--	    CONFIG_HANDLER_IN_LUA is not supported in LuaJIT or Lua 5.1.
--	    Note that for LuaJIT support, you need to set
--	    CONFIG_LUAVERSION="jit-5.1".
- 	  * Select BR2_LIBCURL if you want to use the download feature.
- 	  * Select BR2_PACKAGE_OPENSSL is you want to add encryption support.
- 	  * Select BR2_PACKAGE_MTD if you want to use swupdate with UBI
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index ee92adddf0..fbb092da05 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -39,8 +39,8 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
- endif
- 
--ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
--SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
-+ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
-+SWUPDATE_DEPENDENCIES += lua host-pkgconf
- SWUPDATE_MAKE_ENV += HAVE_LUA=y
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index f5106f7..41da177 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -120,7 +120,6 @@ SKELETON_ROOT_PASSWORD =
+ else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
+ SKELETON_ROOT_PASSWORD = '$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)'
  else
- SWUPDATE_MAKE_ENV += HAVE_LUA=n
--- 
-2.13.3
+-SKELETON_DEPENDENCIES += host-mkpasswd
+ # This variable will only be evaluated in the finalize stage, so we can
+ # be sure that host-mkpasswd will have already been built by that time.
+ SKELETON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)"`"
+diff --git a/system/Config.in b/system/Config.in
+index 828df42..1ee76e8 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -218,6 +218,7 @@ config BR2_ROOTFS_MERGED_USR
+ config BR2_TARGET_ENABLE_ROOT_LOGIN
+ 	bool "Enable root login with password"
+ 	default y
++	select BR2_PACKAGE_HOST_MKPASSWD if BR2_TARGET_GENERIC_ROOT_PASSWD != ""
+ 	help
+ 	  Allow root to log in with a password.
+ 
