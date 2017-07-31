@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 31 Jul 2017 09:53:47 -0400
-Subject: [Buildroot] [PATCH 6/9] fix help text wrapping for configs j
+Date: Mon, 31 Jul 2017 09:53:48 -0400
+Subject: [Buildroot] [PATCH 7/9] fix help text wrapping for configs k
 In-Reply-To: <20170731135350.9018-1-aduskett@gmail.com>
 References: <20170731135350.9018-1-aduskett@gmail.com>
-Message-ID: <20170731135350.9018-7-aduskett@gmail.com>
+Message-ID: <20170731135350.9018-8-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 The check-package script when ran gives warnings on text wrapping
 on all of these Config files.  This patch cleans up all warnings
 related to the text wrapping for the Config files starting with
-the letter j in the package directory.
+the letter k in the package directory.
 
 The appropriate indentation is: <tab><2 spaces><62 chars>
 See http://nightly.buildroot.org/#writing-rules-config-in for more
@@ -21,123 +21,118 @@ information.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/jansson/Config.in   |  4 ++--
- package/jemalloc/Config.in  |  5 +++--
- package/joe/Config.in       | 14 +++++++-------
- package/jq/Config.in        |  6 +++---
- package/jq/Config.in.host   | 10 +++++-----
- package/jquery-ui/Config.in |  4 ++--
- 6 files changed, 22 insertions(+), 21 deletions(-)
+ package/kexec-lite/Config.in    |  3 ++-
+ package/kexec/Config.in         |  3 ++-
+ package/kodi-pvr-vbox/Config.in |  3 ++-
+ package/kodi/Config.in          |  3 ++-
+ package/ktap/Config.in          | 17 +++++++++--------
+ package/kvmtool/Config.in       |  4 ++--
+ 6 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/package/jansson/Config.in b/package/jansson/Config.in
-index 960a7c4c3..18c8ce5df 100644
---- a/package/jansson/Config.in
-+++ b/package/jansson/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_JANSSON
- 	bool "jansson"
+diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
+index 97748dcce..cd0e30f2d 100644
+--- a/package/kexec-lite/Config.in
++++ b/package/kexec-lite/Config.in
+@@ -9,7 +9,8 @@ config BR2_PACKAGE_KEXEC_LITE
+ 	select BR2_PACKAGE_DTC_PROGRAMS
  	help
--	  Jansson is a C library for encoding, decoding and manipulating JSON
--	  data.
-+	  Jansson is a C library for encoding, decoding and manipulating
-+	  JSON data.
+ 	  Kexec is a user space utiltity for loading another kernel
+-	  and asking the currently running kernel to do something with it.
++	  and asking the currently running kernel to do something with
++	  it.
  
- 	  http://www.digip.org/jansson/
-diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
-index 85861407d..c3fd8e34b 100644
---- a/package/jemalloc/Config.in
-+++ b/package/jemalloc/Config.in
-@@ -14,8 +14,9 @@ config BR2_PACKAGE_JEMALLOC
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	  This package is a tiny implementation of the kexec userspace
+ 	  components, for devicetree-based platforms.
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index d92e6b957..c24dff38e 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_KEXEC
+ 		BR2_powerpc || BR2_sh4 || BR2_sh4a
  	help
--	  This library providing a malloc(3) implementation that emphasizes
--	  fragmentation avoidance and scalable concurrency support.
-+	  This library providing a malloc(3) implementation that
-+	  emphasizes fragmentation avoidance and scalable concurrency
-+	  support.
+ 	  Kexec is a user space utility for loading another kernel
+-	  and asking the currently running kernel to do something with it.
++	  and asking the currently running kernel to do something with
++	  it.
  
- 	  http://jemalloc.net/
+ 	  https://www.kernel.org/pub/linux/utils/kernel/kexec/
  
-diff --git a/package/joe/Config.in b/package/joe/Config.in
-index f335e057e..c9dd967b2 100644
---- a/package/joe/Config.in
-+++ b/package/joe/Config.in
-@@ -4,10 +4,10 @@ config BR2_PACKAGE_JOE
+diff --git a/package/kodi-pvr-vbox/Config.in b/package/kodi-pvr-vbox/Config.in
+index 3a5f8c464..c1c22c10d 100644
+--- a/package/kodi-pvr-vbox/Config.in
++++ b/package/kodi-pvr-vbox/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_PVR_VBOX
+ 	bool "kodi-pvr-vbox"
+ 	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Joe's Own Editor
+-	  Kodi PVR addon for interfacing with VBox Communications XTi TV Gateway
++	  Kodi PVR addon for interfacing with VBox Communications XTi TV
++	  Gateway
  
--	  JOE is an easy-to-use, full featured terminal-based screen editor.
--	  Its behavior is a blending of WordStar and GNU-EMACS (but it does
--	  not use code from either program). It is a great editor for new
--	  users or as an alternative to vi.
-+	  JOE is an easy-to-use, full featured terminal-based screen
-+	  editor. Its behavior is a blending of WordStar and GNU-EMACS
-+	  (but it does not use code from either program).
-+	  It is a great editor for new users or as an alternative to vi.
- 
- 	  http://joe-editor.sf.net
- 
-@@ -16,6 +16,6 @@ config BR2_PACKAGE_JOE_FULL
- 	default y
- 	depends on BR2_PACKAGE_JOE
+ 	  https://github.com/kodi-pvr/pvr.vbox
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 68c72e66c..76be9d925 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -207,7 +207,8 @@ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
  	help
--	  Install all rc and syntax highlighting files. Without this option
--	  only the joe binary is installed, which contains a default
--	  configuration.
-+	  Install all rc and syntax highlighting files. Without this
-+	  option only the joe binary is installed, which contains a
-+	  default configuration.
-diff --git a/package/jq/Config.in b/package/jq/Config.in
-index 9329b2fb3..321cbe8b5 100644
---- a/package/jq/Config.in
-+++ b/package/jq/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_JQ
- 	bool "jq"
+ 	  Enable Shairport support.
+-	  Select this if you want to stream content from an Apple device.
++	  Select this if you want to stream content from an Apple
++	  device.
+ 
+ config BR2_PACKAGE_KODI_LIBSMBCLIENT
+ 	bool "samba"
+diff --git a/package/ktap/Config.in b/package/ktap/Config.in
+index c85522846..38293f6dd 100644
+--- a/package/ktap/Config.in
++++ b/package/ktap/Config.in
+@@ -5,21 +5,22 @@ config BR2_PACKAGE_KTAP
  	help
--	  jq is like sed for JSON data - you can use it to slice and filter
--	  and map and transform structured data with the same ease that sed,
--	  awk, grep and friends let you play with text.
-+	  jq is like sed for JSON data - you can use it to slice and
-+	  filter and map and transform structured data with the same
-+	  ease that sed, awk, grep and friends let you play with text.
+ 	  ktap is a script-based dynamic tracing tool for Linux
  
- 	  http://stedolan.github.io/jq/
-diff --git a/package/jq/Config.in.host b/package/jq/Config.in.host
-index a0aabc0b3..9fc0e9905 100644
---- a/package/jq/Config.in.host
-+++ b/package/jq/Config.in.host
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_HOST_JQ
- 	bool "host jq"
+-	  It uses a scripting language and lets users trace the Linux kernel
+-	  dynamically. ktap is designed to give operational insights with
+-	  interoperability that allows users to tune, troubleshoot and extend
+-	  kernel and application. It's similar to Linux Systemtap and
+-	  Solaris Dtrace.
++	  It uses a scripting language and lets users trace the Linux
++	  kernel dynamically. ktap is designed to give operational
++	  insights with interoperability that allows users to tune,
++	  troubleshoot and extend kernel and application.
++	  It's similar to Linux Systemtap and Solaris Dtrace.
+ 
+ 	  ktap doesn't support kernels older than 3.1.
+ 
+-	  To be able to resolve symbols in DSO and for sdt, you need to enable
+-	  elfutils.
++	  To be able to resolve symbols in DSO and for sdt, you need to
++	  enable elfutils.
+ 
+ 	  Your kernel must have CONFIG_EVENT_TRACING,
+ 	  CONFIG_PERF_EVENTS, and CONFIG_DEBUG_FS enabled to compile.
+ 
+-	  Buildroot automatically enables these in the kernel configuration.
++	  Buildroot automatically enables these in the kernel
++	  configuration.
+ 
+ 	  http://www.ktap.org
+ 
+diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
+index d2290c5d8..bf19a2537 100644
+--- a/package/kvmtool/Config.in
++++ b/package/kvmtool/Config.in
+@@ -14,8 +14,8 @@ config BR2_PACKAGE_KVMTOOL
  	help
--	  jq is like sed for JSON data - you can use it to slice and filter
--	  and map and transform structured data with the same ease that sed,
--	  awk, grep and friends let you play with text.
-+	  jq is like sed for JSON data - you can use it to slice and
-+	  filter and map and transform structured data with the same
-+	  ease that sed, awk, grep and friends let you play with text.
+ 	  kvmtool is a lightweight tool for hosting KVM guests.
+ 	  As a pure virtualization tool it only supports guests using
+-	  the same architecture, though it supports running 32-bit guests
+-	  on those 64-bit architectures that allow this.
++	  the same architecture, though it supports running 32-bit
++	  guests on those 64-bit architectures that allow this.
  
--	  As a host tool, jq can be useful to create/edit/merge/check JSON
--	  files from a post-build script.
-+	  As a host tool, jq can be useful to create/edit/merge/check
-+	  JSON files from a post-build script.
+ 	  https://git.kernel.org/cgit/linux/kernel/git/will/kvmtool.git/tree/README
  
- 	  http://stedolan.github.io/jq/
-diff --git a/package/jquery-ui/Config.in b/package/jquery-ui/Config.in
-index a7c0a6df5..fd38997ef 100644
---- a/package/jquery-ui/Config.in
-+++ b/package/jquery-ui/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_JQUERY_UI
- 	help
- 	  jQuery UI provides abstractions for low-level interaction and
- 	  animation, advanced effects and high-level, themeable widgets,
--	  built on top of the jQuery JavaScript Library, that you can use
--	  to build highly interactive web applications.
-+	  built on top of the jQuery JavaScript Library, that you can
-+	  use to build highly interactive web applications.
- 
- 	  http://jqueryui.com/
 -- 
 2.13.3
