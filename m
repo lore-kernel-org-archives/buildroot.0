@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 31 Jul 2017 08:08:14 -0400
-Subject: [Buildroot] [PATCH v2 14/14] sngrep: support libressl
+Date: Mon, 31 Jul 2017 08:08:09 -0400
+Subject: [Buildroot] [PATCH v2 09/14] syslog-ng: support libressl
 In-Reply-To: <20170731120815.5315-1-aduskett@gmail.com>
 References: <20170731120815.5315-1-aduskett@gmail.com>
-Message-ID: <20170731120815.5315-14-aduskett@gmail.com>
+Message-ID: <20170731120815.5315-9-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +15,46 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Changes v1 -> v2:
   - None.
 
- package/sngrep/sngrep.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/syslog-ng/Config.in    | 2 +-
+ package/syslog-ng/syslog-ng.mk | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 67ef882e2..2d2d1e904 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -20,6 +20,9 @@ SNGREP_CONF_OPTS += --disable-unicode
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SNGREP_DEPENDENCIES += openssl
- SNGREP_CONF_OPTS += --with-openssl --without-gnutls
+diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
+index fbc236221..a6c1efc79 100644
+--- a/package/syslog-ng/Config.in
++++ b/package/syslog-ng/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_SYSLOG_NG
+ 	select BR2_PACKAGE_EVENTLOG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PCRE
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+ 	help
+ 	  syslog-ng is an enhanced log daemon, supporting a wide range
+ 	  of input and output methods: syslog, unstructured text,
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 325fac584..4b182c9e3 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -9,12 +9,18 @@ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-n
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING
+ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-	eventlog libglib2 openssl pcre
++	eventlog libglib2 pcre
+ # rabbit-mq needs -lrt
+ SYSLOG_NG_CONF_ENV = LIBS=-lrt
+ SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+ 	--disable-java --disable-java-modules --disable-mongodb
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++SYSLOG_NG_DEPENDENCIES += openssl
 +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+SNGREP_DEPENDENCIES += libressl
-+SNGREP_CONF_OPTS += --with-openssl --without-gnutls
- # gnutls support also requires libgcrypt
- else ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
- SNGREP_DEPENDENCIES += gnutls
++SYSLOG_NG_DEPENDENCIES += libressl
++endif
++
+ # We override busybox's S01logging init script
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ SYSLOG_NG_DEPENDENCIES += busybox
 -- 
 2.13.3
