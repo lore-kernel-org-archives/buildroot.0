@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 31 Jul 2017 08:08:09 -0400
-Subject: [Buildroot] [PATCH v2 09/14] syslog-ng: support libressl
+Date: Mon, 31 Jul 2017 08:08:10 -0400
+Subject: [Buildroot] [PATCH v2 10/14] netsnmp: support libressl
 In-Reply-To: <20170731120815.5315-1-aduskett@gmail.com>
 References: <20170731120815.5315-1-aduskett@gmail.com>
-Message-ID: <20170731120815.5315-9-aduskett@gmail.com>
+Message-ID: <20170731120815.5315-10-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +15,26 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Changes v1 -> v2:
   - None.
 
- package/syslog-ng/Config.in    | 2 +-
- package/syslog-ng/syslog-ng.mk | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/netsnmp/netsnmp.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
-index fbc236221..a6c1efc79 100644
---- a/package/syslog-ng/Config.in
-+++ b/package/syslog-ng/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_SYSLOG_NG
- 	select BR2_PACKAGE_EVENTLOG
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PCRE
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
- 	help
- 	  syslog-ng is an enhanced log daemon, supporting a wide range
- 	  of input and output methods: syslog, unstructured text,
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 325fac584..4b182c9e3 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -9,12 +9,18 @@ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-n
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
--	eventlog libglib2 openssl pcre
-+	eventlog libglib2 pcre
- # rabbit-mq needs -lrt
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
- 	--disable-java --disable-java-modules --disable-mongodb
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+SYSLOG_NG_DEPENDENCIES += openssl
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index abcf63d56..2c94f6c24 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -60,6 +60,13 @@ NETSNMP_CONF_OPTS += \
+ 	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
+ 	--with-security-modules="tsm,usm" \
+ 	--with-transports="DTLSUDP,TLSTCP"
++# LibreSSL
 +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+SYSLOG_NG_DEPENDENCIES += libressl
-+endif
-+
- # We override busybox's S01logging init script
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSLOG_NG_DEPENDENCIES += busybox
++NETSNMP_DEPENDENCIES += libressl
++NETSNMP_CONF_OPTS += \
++	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
++	--with-security-modules="tsm,usm" \
++	--with-transports="DTLSUDP,TLSTCP"
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # openssl uses zlib, so we need to explicitly link with it when static
+ NETSNMP_CONF_ENV += LIBS=-lz
 -- 
 2.13.3
