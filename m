@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 19:33:31 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5declarative: backport 'Fix alignment
- issue on ARMv7' patch to 5.9.1
-In-Reply-To: <20170731171359.32471-1-petar.koretic@qaap.io>
-References: <20170731171359.32471-1-petar.koretic@qaap.io>
-Message-ID: <20170731193331.692187b7@windsurf.home>
+Date: Mon, 31 Jul 2017 19:34:33 +0200
+Subject: [Buildroot] [PATCH] squashfs: fix build with gcc 7
+In-Reply-To: <51890a64ced8a223b72a52bdb0e98fc31f539a30.1501007295.git.baruch@tkos.co.il>
+References: <51890a64ced8a223b72a52bdb0e98fc31f539a30.1501007295.git.baruch@tkos.co.il>
+Message-ID: <20170731193433.7eb92d7d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 31 Jul 2017 19:13:59 +0200, Petar Koretic wrote:
-> This resolves a QML issues reported in
-> https://bugreports.qt.io/browse/QTBUG-61522 that will be fixed in the 5.9.2.
+On Tue, 25 Jul 2017 21:28:15 +0300, Baruch Siach wrote:
+> gcc 7 with -Os (optimize for size) takes the liberty to remove the code of
+> inline function entirely. This leads to undefined function references at link
+> time. Restore gcc original inline behaviour to fix this issue.
 > 
-> Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
+> Fixes:
+> http://autobuild.buildroot.net/results/3c5/3c5b1d799dce3ba361d618330c242bf4eba76019/
+> http://autobuild.buildroot.net/results/09f/09f350b62e2486404b78222dce211400bb233000/
+> http://autobuild.buildroot.net/results/693/693960ed7c01622c756dcc929e83b3b713c16ccc/
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  .../0003-Fix-alignment-issue-on-ARMv7.patch        | 34 ++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch
-> 
-> diff --git a/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch b/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch
+> The gcc doc[1] doesn't mention that feature of C99. A gcc bug, maybe?
 
-Does this patch applies only to 5.9.1 ? If so, it should go in
-package/qt5/qt5declarative/5.9.1/.
+Applied to master, thanks. To be honest, I hesitated between your
+proposal and patching the mksquashfs.c code, but OK, I went with your
+solution.
 
-I can fixup the patch, just tell me if this issue is only applicable to
-5.9.1 (I guess it is the case, but I prefer to ask).
+Can you send a patch upstream that removes the "inline" or switches
+them to "static inline" ?
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
