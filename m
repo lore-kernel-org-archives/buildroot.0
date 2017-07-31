@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 31 Jul 2017 09:53:44 -0400
-Subject: [Buildroot] [PATCH 4/9] fix help text wrapping for configs h
+Date: Mon, 31 Jul 2017 09:53:45 -0400
+Subject: [Buildroot] [PATCH 4/4] fix help text wrapping for configs i
 In-Reply-To: <20170731135350.9018-1-aduskett@gmail.com>
 References: <20170731135350.9018-1-aduskett@gmail.com>
-Message-ID: <20170731135350.9018-4-aduskett@gmail.com>
+Message-ID: <20170731135350.9018-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 The check-package script when ran gives warnings on text wrapping
 on all of these Config files.  This patch cleans up all warnings
 related to the text wrapping for the Config files starting with
-the letter h in the package directory.
+the letter i in the package directory.
 
 The appropriate indentation is: <tab><2 spaces><62 chars>
 See http://nightly.buildroot.org/#writing-rules-config-in for more
