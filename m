@@ -1,37 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 09:04:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lldpd: bump version to 0.9.7
-In-Reply-To: <20170730163258.28200-1-bernd.kuhls@t-online.de>
-References: <20170730163258.28200-1-bernd.kuhls@t-online.de>
-Message-ID: <20170731090434.268838b6@windsurf.lan>
+From: Petar Koretic <petar.koretic@qaap.io>
+Date: Mon, 31 Jul 2017 10:28:58 +0200
+Subject: [Buildroot] Qt 5.9.1 QML arm crash | QTBUG-61522
+Message-ID: <CAKdiq5_FDrJNp8OXw3pQ5cByeBZXzg4WQ_qH3nk+HhrcpZEZfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all.
 
-On Sun, 30 Jul 2017 18:32:58 +0200, Bernd Kuhls wrote:
-> Switched _SITE to https.
-> 
-> Removed 0001-build-make-generation-of-atom-glue-compatible-with-o.patch,
-> applied upstream:
-> https://github.com/vincentbernat/lldpd/commit/106aa50d4e5b336f7dd2d5cf4d882e692d205e91
-> 
-> Removed 0002-configure-do-not-check-for-libbsd.patch, included in
-> https://github.com/vincentbernat/lldpd/commit/cbe8bbd6b60fdc0fa83ddb10d2f771ed26810304
+So I've tested Qt 5.9.1 from the master branch with Raspberry Pi 3 stock
+build using glibc.
+Unfortunately it is hit by a big QML bug that results in a crash when doing
+a simple thing as
 
-This is not the same patch at all. Yann's patch was removing libbsd
-support entirely, while this patch adjusts how libbsd is detected.
+var x = {}
 
-Have you tested building lldpd in a configuration with libbsd enabled,
-and made sure that libbsd was built before lldpd ?
+This is reported and will be fixed in 5.9.2
+https://bugreports.qt.io/browse/QTBUG-61522.
+
+I have tested the patch with buildroot and it does work correctly after that.
+Would you be interested now in adding the patch until 5.9.2 is
+released or will you be waiting for 5.9.2?
+
+I don't see this over at https://bugs.busybox.net. Should I open it
+there instead?
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Petar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170731/86a437fc/attachment.html>
