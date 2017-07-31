@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 31 Jul 2017 09:53:45 -0400
-Subject: [Buildroot] [PATCH 4/4] fix help text wrapping for configs i
+Date: Mon, 31 Jul 2017 09:53:46 -0400
+Subject: [Buildroot] [PATCH 5/9] fix help text wrapping for configs i
 In-Reply-To: <20170731135350.9018-1-aduskett@gmail.com>
 References: <20170731135350.9018-1-aduskett@gmail.com>
-Message-ID: <20170731135350.9018-5-aduskett@gmail.com>
+Message-ID: <20170731135350.9018-6-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,96 +21,184 @@ information.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/hans/Config.in               |  7 ++++---
- package/hicolor-icon-theme/Config.in |  3 ++-
- package/hplip/Config.in              | 11 ++++++-----
- package/httping/Config.in            |  9 +++++----
- package/hwdata/Config.in             |  5 +++--
- 5 files changed, 20 insertions(+), 15 deletions(-)
+ package/i2c-tools/Config.in        |  6 +++---
+ package/iftop/Config.in            |  7 ++++---
+ package/ifupdown-scripts/Config.in |  4 ++--
+ package/imagemagick/Config.in      | 13 +++++++------
+ package/inotify-tools/Config.in    |  4 ++--
+ package/iozone/Config.in           |  3 ++-
+ package/iperf3/Config.in           |  8 ++++----
+ package/ipmitool/Config.in         | 13 +++++++------
+ package/iptraf-ng/Config.in        |  9 +++++----
+ 9 files changed, 36 insertions(+), 31 deletions(-)
 
-diff --git a/package/hans/Config.in b/package/hans/Config.in
-index 7b60090f6..54bdfd96d 100644
---- a/package/hans/Config.in
-+++ b/package/hans/Config.in
-@@ -5,9 +5,10 @@ config BR2_PACKAGE_HANS
- 	bool "hans"
- 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
+index 82ee33423..d9b8dd9a3 100644
+--- a/package/i2c-tools/Config.in
++++ b/package/i2c-tools/Config.in
+@@ -4,8 +4,8 @@ config BR2_PACKAGE_I2C_TOOLS
  	help
--	  Hans makes it possible to tunnel IPv4 through ICMP echo packets,
--	  so you could call it a ping tunnel.
-+	  Hans makes it possible to tunnel IPv4 through ICMP echo
-+	  packets, so you could call it a ping tunnel.
- 	  This can be useful when you find yourself in the situation
--	  that your Internet access is firewalled, but pings are allowed.
-+	  that your Internet access is firewalled, but pings are
-+	  allowed.
+ 	  Heterogeneous set of I2C tools for Linux
  
- 	  http://code.gerade.org/hans/
-diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
-index 6cda097c1..10edbf886 100644
---- a/package/hicolor-icon-theme/Config.in
-+++ b/package/hicolor-icon-theme/Config.in
-@@ -5,4 +5,5 @@ config BR2_PACKAGE_HICOLOR_ICON_THEME
+-	  This package contains a heterogeneous set of I2C tools for Linux:
+-	  a bus probing tool, a chip dumper, register-level access helpers,
+-	  EEPROM decoding scripts, and more.
++	  This package contains a heterogeneous set of I2C tools for
++	  Linux: a bus probing tool, a chip dumper, register-level
++	  access helpers, EEPROM decoding scripts, and more.
  
- 	  This is the fallback icon theme, which only creates the
- 	  standard directory structure for storing icons of third-party
--	  applications (i.e. the ones not available in usual icon themes).
-+	  applications (i.e. the ones not available in usual icon
-+	  themes).
-diff --git a/package/hplip/Config.in b/package/hplip/Config.in
-index 176dc6a6a..f4e0fe753 100644
---- a/package/hplip/Config.in
-+++ b/package/hplip/Config.in
-@@ -8,11 +8,12 @@ config BR2_PACKAGE_HPLIP
- 	select BR2_PACKAGE_JPEG
+ 	  https://i2c.wiki.kernel.org/index.php/I2C_Tools
+diff --git a/package/iftop/Config.in b/package/iftop/Config.in
+index f80a83137..514101ca9 100644
+--- a/package/iftop/Config.in
++++ b/package/iftop/Config.in
+@@ -5,9 +5,10 @@ config BR2_PACKAGE_IFTOP
+ 	select BR2_PACKAGE_LIBPCAP
  	help
- 	  HP Linux Imaging and Printing (HPLIP)
--	  HPLIP is an HP-developed solution for printing, scanning, and faxing
--	  with HP inkjet and laser based printers in Linux. The HPLIP project
--	  provides printing support for 2,211 printer models, including
--	  Deskjet, Officejet, Photosmart, PSC (Print Scan Copy), Business
--	  Inkjet, LaserJet, Edgeline MFP, and LaserJet MFP.
-+	  HPLIP is an HP-developed solution for printing, scanning, and
-+	  faxing with HP inkjet and laser based printers in Linux. The
-+	  HPLIP project provides printing support for 2,211 printer
-+	  models, including Deskjet, Officejet, Photosmart, PSC
-+	  (Print Scan Copy), Business Inkjet, LaserJet, Edgeline MFP,
-+	  and LaserJet MFP.
+ 	  iftop does for network usage what top(1) does for CPU usage.
+-	  It listens to network traffic on a named interface and displays
+-	  a table of current bandwidth usage by pairs of hosts. Handy for
+-	  answering the question "why is our ADSL link so slow?".
++	  It listens to network traffic on a named interface and
++	  displays a table of current bandwidth usage by pairs of hosts.
++	  Handy for answering the question "why is our ADSL link so
++	  slow?".
  
- 	  http://hplipopensource.com/
+ 	  http://www.ex-parrot.com/pdw/iftop/
  
-diff --git a/package/httping/Config.in b/package/httping/Config.in
-index 07ff10208..c0e5071ce 100644
---- a/package/httping/Config.in
-+++ b/package/httping/Config.in
-@@ -6,10 +6,11 @@ config BR2_PACKAGE_HTTPING
- 	depends on BR2_USE_WCHAR
+diff --git a/package/ifupdown-scripts/Config.in b/package/ifupdown-scripts/Config.in
+index 7064d58fe..9cd03950f 100644
+--- a/package/ifupdown-scripts/Config.in
++++ b/package/ifupdown-scripts/Config.in
+@@ -3,5 +3,5 @@ config BR2_PACKAGE_IFUPDOWN_SCRIPTS
+ 	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	default y if BR2_ROOTFS_SKELETON_DEFAULT
  	help
- 	  Httping is like 'ping' but for http-requests.
--	  Give it an url, and it'll show you how long it takes to connect,
--	  send a request and retrieve the reply (only the headers).
--	  Be aware that the transmission across the network also takes time!
--	  So it measures the latency of the webserver + network.
-+	  Give it an url, and it'll show you how long it takes to
-+	  connect, send a request and retrieve the reply (only the
-+	  headers).
-+	  Be aware that the transmission across the network also takes
-+	  time! So it measures the latency of the webserver + network.
- 
- 	  http://www.vanheusden.com/httping/
- 
-diff --git a/package/hwdata/Config.in b/package/hwdata/Config.in
-index 33e0738af..8424238e1 100644
---- a/package/hwdata/Config.in
-+++ b/package/hwdata/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HWDATA
- 	bool "hwdata"
+-	  Set of scripts used by ifupdown (either the standalone one, or the
+-	  busybox one) to bring network up, or tear it down.
++	  Set of scripts used by ifupdown (either the standalone one,
++	  or the busybox one) to bring network up, or tear it down.
+diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
+index 0bd4df2ab..4bd81dbd7 100644
+--- a/package/imagemagick/Config.in
++++ b/package/imagemagick/Config.in
+@@ -3,12 +3,13 @@ config BR2_PACKAGE_IMAGEMAGICK
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
--	  Various hardware identification and configuration data, such as
--	  the pci.ids database, or the XFree86/xorg Cards database.
-+	  Various hardware identification and configuration data,
-+	  such as the pci.ids database, or the XFree86/xorg Cards
-+	  database.
+-	  ImageMagick(R) is a software suite to create, edit, and compose
+-	  bitmap images. It can read, convert and write images in a variety of
+-	  formats (about 100) including DPX, EXR, GIF, JPEG, JPEG-2000, PDF,
+-	  PhotoCD, PNG, Postscript, SVG, and TIFF. Use ImageMagick to
+-	  translate, flip, mirror, rotate, scale, shear and transform images,
+-	  adjust image colors, apply various special effects, or draw text,
++	  ImageMagick(R) is a software suite to create, edit, and
++	  compose bitmap images. It can read, convert and write images
++	  in a variety of formats (about 100) including DPX, EXR, GIF,
++	  JPEG, JPEG-2000, PDF, PhotoCD, PNG, Postscript, SVG, and TIFF.
++	  Use ImageMagick to translate, flip, mirror, rotate, scale,
++	  shear and transform images, adjust image colors, apply various
++	  special effects, or draw text,
+ 	  lines, polygons, ellipses and B?zier curves.
+ 
+ 	  http://www.imagemagick.org/
+diff --git a/package/inotify-tools/Config.in b/package/inotify-tools/Config.in
+index df440d592..1ca01b6e1 100644
+--- a/package/inotify-tools/Config.in
++++ b/package/inotify-tools/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_INOTIFY_TOOLS
+ 	  inotify-tools is a C library and a set of command-line
+ 	  programs for Linux providing a simple interface to inotify.
+ 	  These programs can be used to monitor and act upon
+-	  filesystem events. Provides the 'inotifywait' and 'inotifywatch'
+-	  binaries.
++	  filesystem events. Provides the 'inotifywait' and
++	  'inotifywatch' binaries.
+ 
+ 	  https://github.com/rvoicilas/inotify-tools
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+index 33c938ee7..c66def264 100644
+--- a/package/iozone/Config.in
++++ b/package/iozone/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_IOZONE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  IOzone is a filesystem benchmark tool.
+-	  The benchmark generates and measures a variety of file operations
++	  The benchmark generates and measures a variety of file
++	  operations
+ 
+ 	  http://www.iozone.org/
+ 
+diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
+index 074c1d36c..5b2204c5e 100644
+--- a/package/iperf3/Config.in
++++ b/package/iperf3/Config.in
+@@ -5,10 +5,10 @@ config BR2_PACKAGE_IPERF3
+ 	  iperf is a tool for active measurements of the maximum
+ 	  achievable bandwidth on IP networks.
+ 	  It supports tuning of various parameters related to timing,
+-	  protocols, and buffers. For each test it reports the bandwidth,
+-	  loss, and other parameters.
+-	  It's a redesign of the NLANR/DAST iperf(2) and is not
+-	  backward compatible.
++	  protocols, and buffers. For each test it reports the
++	  bandwidth, loss, and other parameters.
++	  It's a redesign of the NLANR/DAST iperf(2) and is not backward
++	  compatible.
+ 
+ 	  http://software.es.net/iperf/index.html
+ 
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+index 554a12cbd..826bc094b 100644
+--- a/package/ipmitool/Config.in
++++ b/package/ipmitool/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_IPMITOOL
+ 	bool "ipmitool"
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  IPMItool provides a simple command-line interface to IPMI-enabled devices.
++	  IPMItool provides a simple command-line interface to
++	  IPMI-enabled devices.
+ 
+ 	  http://sourceforge.net/projects/ipmitool/
+ 
+@@ -12,11 +13,11 @@ config BR2_PACKAGE_IPMITOOL_LANPLUS
+ 	bool "enable lanplus interface"
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+-	  Enables the IPMI v2.0 RMCP+ LAN interface typically used to send IPMI
+-	  commands to the BMC of a remote server.
+-	  Not needed if you only want to communicate with the local BMC of your
+-	  device using the OpenIPMI ipmi_si kernel module, or if using the
+-	  legacy IPMI v1.5 RMCP LAN interface.
++	  Enables the IPMI v2.0 RMCP+ LAN interface typically used to
++	  send IPMI commands to the BMC of a remote server.
++	  Not needed if you only want to communicate with the local BMC
++	  of your device using the OpenIPMI ipmi_si kernel module, or if
++	  using the legacy IPMI v1.5 RMCP LAN interface.
+ 
+ config BR2_PACKAGE_IPMITOOL_USB
+ 	bool "enable usb interface"
+diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
+index 5afb81dac..5c3b4848b 100644
+--- a/package/iptraf-ng/Config.in
++++ b/package/iptraf-ng/Config.in
+@@ -3,10 +3,11 @@ config BR2_PACKAGE_IPTRAF_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  IPTraf-ng is a ncurses-based network monitoring utility. It gathers
+-	  data like TCP connection packet and byte counts, interface statistics
+-	  and activity indicators.
++	  IPTraf-ng is a ncurses-based network monitoring utility. It
++	  gathers data like TCP connection packet and byte counts,
++	  interface statistics and activity indicators.
+ 
+ 	  https://fedorahosted.org/iptraf-ng/
+ 
+-	  IPTraf-ng is a fork of original IPTraf v3.0.0 (http://iptraf.seul.org).
++	  IPTraf-ng is a fork of original IPTraf v3.0.0
++	  (http://iptraf.seul.org).
 -- 
 2.13.3
