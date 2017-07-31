@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 23:03:39 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5declarative: backport 'Fix
- alignment issue on ARMv7' patch to 5.9.1
-In-Reply-To: <20170731203206.17875-1-petar.koretic@qaap.io>
-References: <20170731203206.17875-1-petar.koretic@qaap.io>
-Message-ID: <20170731230339.2d5d3db0@windsurf.home>
+Date: Mon, 31 Jul 2017 23:05:05 +0200
+Subject: [Buildroot] [PATCH] board: icorem6: Add Qt5 configs for 800x480
+ LVDS display
+In-Reply-To: <1498580320-12765-1-git-send-email-jteki@openedev.com>
+References: <1498580320-12765-1-git-send-email-jteki@openedev.com>
+Message-ID: <20170731230505.0100b3bd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 31 Jul 2017 22:32:06 +0200, Petar Koretic wrote:
-> This resolves a QML issues reported in
-> https://bugreports.qt.io/browse/QTBUG-61522 that will be fixed in the
-> 5.9.2.
+On Tue, 27 Jun 2017 21:48:40 +0530, Jagan Teki wrote:
+> From: Jagan Teki <jagan@amarulasolutions.com>
 > 
-> Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
-> ---
-> v2:
->  - add patch to 5.9.1 subfolder
->  - add missing bug report link and Signed-off-by to upstream patch
+> i.CoreM6 Starter Kit has 800x480 LVDS display, this patch adds
+> relevant qt5 configs with supports opensource Etnaviv graphical stack.
+> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-Applied to master, thanks a lot!
+Following the review from Arnout on June 27, which got no feedback from
+you, and no new version, I've marked this patch as "Changes Requested"
+in patchwork.
+
+Best regards,
 
 Thomas
 -- 
