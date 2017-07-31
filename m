@@ -1,70 +1,66 @@
-From: Petar Koretic <petar.koretic@qaap.io>
-Date: Mon, 31 Jul 2017 22:32:06 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5declarative: backport 'Fix alignment
-	issue on ARMv7' patch to 5.9.1
-Message-ID: <20170731203206.17875-1-petar.koretic@qaap.io>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 31 Jul 2017 22:56:24 +0200
+Subject: [Buildroot] [git commit] package/python-web2py: remove admin panel
+Message-ID: <20170731205239.78C6481F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This resolves a QML issues reported in
-https://bugreports.qt.io/browse/QTBUG-61522 that will be fixed in the
-5.9.2.
+commit: https://git.buildroot.net/buildroot/commit/?id=9fda08fd818c3f38a9ee3c561af0026e26017237
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
+This commmit adds an option to remove admin panel to save
+speace if not needed.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+[Thomas: fix indentation.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2:
- - add patch to 5.9.1 subfolder
- - add missing bug report link and Signed-off-by to upstream patch
+ package/python-web2py/Config.in        | 11 +++++++++++
+ package/python-web2py/python-web2py.mk |  4 ++++
+ 2 files changed, 15 insertions(+)
 
- .../5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch  | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
-
-diff --git a/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch b/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
-new file mode 100644
-index 0000000000..1d36b805f2
---- /dev/null
-+++ b/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
-@@ -0,0 +1,37 @@
-+From 03c2661b1243cc529fc3d8cfa65073f1da420307 Mon Sep 17 00:00:00 2001
-+From: Simon Hausmann <simon.hausmann@qt.io>
-+Date: Thu, 22 Jun 2017 13:34:09 +0200
-+Subject: [PATCH 1/1] Fix alignment issue on ARMv7
+diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
+index b10d3a4..3b55153 100644
+--- a/package/python-web2py/Config.in
++++ b/package/python-web2py/Config.in
+@@ -14,6 +14,15 @@ config BR2_PACKAGE_PYTHON_WEB2PY
+ 
+ if BR2_PACKAGE_PYTHON_WEB2PY
+ 
++config BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
++	bool "install admin panel application"
++	default y
++	help
++	  This option install web2py admin panel application.
++	  It can be removed to save space on embedded systems.
 +
-+As analyzed in the bug report, it appears that we may get
-+QV4::CompiledData::Function pointers for writing that are not aligned
-+for the 64-bit fields at the beginning.
++if BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
 +
-+[ChangeLog][QtQml] Fix crash due to misaligned data structures on ARMv7
+ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
+ 	string "admin panel password"
+ 	default web2py
+@@ -21,3 +30,5 @@ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
+ 	  Set the admin panel password.
+ 
+ endif
 +
-+Task-number: QTBUG-61552
-+Change-Id: I6b2c166b725496150c8850475577628ccd811d65
-+Reviewed-by: Erik Verbruggen <erik.verbruggen@qt.io>
-+commit: https://codereview.qt-project.org/#/c/198278/
-+
-+Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
-+---
-+ src/qml/compiler/qv4compiler.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/qml/compiler/qv4compiler.cpp b/src/qml/compiler/qv4compiler.cpp
-+index e32749bbf7..c32e1685a0 100644
-+--- a/src/qml/compiler/qv4compiler.cpp
-++++ b/src/qml/compiler/qv4compiler.cpp
-+@@ -406,6 +406,8 @@ QV4::CompiledData::Unit QV4::Compiler::JSUnitGenerator::generateHeader(QV4::Comp
-+     *jsClassDataOffset = nextOffset;
-+     nextOffset += jsClassData.size();
-+ 
-++    nextOffset = (nextOffset + 7) & ~quint32(0x7);
-++
-+     for (int i = 0; i < irModule->functions.size(); ++i) {
-+         QV4::IR::Function *f = irModule->functions.at(i);
-+         functionOffsets[i] = nextOffset;
-+-- 
-+2.13.3
-+
--- 
-2.13.3
++endif
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 3f9d089..887925b 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -36,7 +36,11 @@ define PYTHON_WEB2PY_GENERATE_PASSWORD
+ 		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
+ endef
+ 
++ifeq ($(BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN),y)
+ PYTHON_WEB2PY_POST_BUILD_HOOKS += PYTHON_WEB2PY_GENERATE_PASSWORD
++else
++PYTHON_WEB2PY_EXCLUSIONS += applications/admin
++endif
+ 
+ define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/var/www/web2py
