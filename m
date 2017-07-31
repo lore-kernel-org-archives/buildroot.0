@@ -1,38 +1,32 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 31 Jul 2017 08:06:18 -0300 (BRT)
-Subject: [Buildroot] [PATCH 1/1] util-linux: bump to v2.30.1
-In-Reply-To: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
-References: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
-Message-ID: <444949365.2448670.1501499178309.JavaMail.zimbra@datacom.ind.br>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 31 Jul 2017 08:08:01 -0400
+Subject: [Buildroot] [PATCH v2 01/14] libressl: add host variant
+Message-ID: <20170731120815.5315-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Marcus Hoffmann" <m.hoffmann@cartelsol.com>
-> To: buildroot at buildroot.org
-> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "Marcus Hoffmann" <m.hoffmann@cartelsol.com>
-> Sent: Saturday, July 29, 2017 12:36:02 PM
-> Subject: [PATCH 1/1] util-linux: bump to v2.30.1
+If a package can be compiled against libressl, the package can build against
+a host variant as well.
 
-> - Drop patch 0002-column-fix-compilation-when-libc-lacks-wide-characte.patch
-> as it has been applied upstream
-> - Patch 0001-Revert-build-sys-ncurses-headers-cleanup.patch is still
-> required to fix ncursesw support.
-> 
-> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-> Cc: "Carlos Santos" <casantos@datacom.ind.br>
-> ---
-> @Carlos: As far as I could find no upstream discussion has taken place
-> regarding the 0001 patch right? Do you want to send an email to the list
-> describing the problem?
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Added this patch to the beginning of this series.
 
-Hum, I got distracted with other things here. I will take care of this
-today. Thanks for the reminder!
+ package/libressl/libressl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index ccd236d29..a4d4098f4 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -18,3 +18,4 @@ LIBRESSL_POST_INSTALL_TARGET_HOOKS += LIBRESSL_REMOVE_BIN
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.13.3
