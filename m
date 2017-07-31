@@ -1,59 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 21:21:25 +0200
-Subject: [Buildroot] [git commit] perl: bump version 5.24.2
-Message-ID: <20170731191718.533BA7FAA4@busybox.osuosl.org>
+Date: Mon, 31 Jul 2017 21:22:46 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5declarative: backport 'Fix alignment
+ issue on ARMv7' patch to 5.9.1
+In-Reply-To: <20170731171359.32471-1-petar.koretic@qaap.io>
+References: <20170731171359.32471-1-petar.koretic@qaap.io>
+Message-ID: <20170731212246.79362bcb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02ca51f63ec72d4f6c4eb627b0919e6b9ea1b428
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+On Mon, 31 Jul 2017 19:13:59 +0200, Petar Koretic wrote:
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index eb88b9e..b46189a 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.1.tar.xz.{md5,sha1,sha256}.txt
--md5    af6a84c7c3e2b8b269c105a5db2f6d53                                 perl-5.24.1.tar.xz
--sha1   5bec25d8821b81a5939ee220997f4c8ab1c13e31                         perl-5.24.1.tar.xz
--sha256 03a77bac4505c270f1890ece75afc7d4b555090b41aa41ea478747e23b2afb3f perl-5.24.1.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.2.tar.xz.{md5,sha1,sha256}.txt
-+md5    b7c027975a476dbb9aa7202f760d8eca                                 perl-5.24.2.tar.xz
-+sha1   61761989df70b10470bc387050974be72e33217e                         perl-5.24.2.tar.xz
-+sha256 b25dd465ef32edf853078eb540b26243db0a3b5e1b1cc84393703d9564be67c0 perl-5.24.2.tar.xz
- 
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.5/perl-cross-1.1.5.hash
--sha256	0e719e75983b16c7726c2c9462f9498bb1fc4ad38c9f2513a65f3dd34e3decb3  perl-cross-1.1.5.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.6/perl-cross-1.1.6.hash
-+sha256	2b3b88f54d85beb438bd2dddd948e2d89461db5ab6253f01b3c2c9ae3ddc30b4  perl-cross-1.1.6.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index fb0cec3..d7fcd75 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,14 +6,14 @@
- 
- # When updating the version here, also update support/scripts/scancpan
- PERL_VERSION_MAJOR = 24
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.1.5
-+PERL_CROSS_VERSION = 1.1.6
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+> diff --git a/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch b/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch
+> new file mode 100644
+> index 0000000000..da68826ccb
+> --- /dev/null
+> +++ b/package/qt5/qt5declarative/0003-Fix-alignment-issue-on-ARMv7.patch
+> @@ -0,0 +1,34 @@
+> +From 03c2661b1243cc529fc3d8cfa65073f1da420307 Mon Sep 17 00:00:00 2001
+> +From: Simon Hausmann <simon.hausmann@qt.io>
+> +Date: Thu, 22 Jun 2017 13:34:09 +0200
+> +Subject: [PATCH] Fix alignment issue on ARMv7
+> +
+> +As analyzed in the bug report, it appears that we may get
+> +QV4::CompiledData::Function pointers for writing that are not aligned
+> +for the 64-bit fields at the beginning.
+> +
+> +[ChangeLog][QtQml] Fix crash due to misaligned data structures on ARMv7
+> +
+> +Task-number: QTBUG-61552
+> +Change-Id: I6b2c166b725496150c8850475577628ccd811d65
+> +Reviewed-by: Erik Verbruggen <erik.verbruggen@qt.io>
+
+You should add your Signed-off-by here, and a link to the upstream bug
+report or commit (I see you wrote the task number and change-id, but a
+direct link is preferable).
+
+Since anyway the patch was not entirely correct because it should be in
+the 5.9.1/ subfolder, can you resend an updated version that takes into
+account those small comments?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
