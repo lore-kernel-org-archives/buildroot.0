@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 31 Jul 2017 09:53:42 -0400
-Subject: [Buildroot] [PATCH 2/9] fix help text wrapping for configs f
+Date: Mon, 31 Jul 2017 09:53:43 -0400
+Subject: [Buildroot] [PATCH 3/9] fix help text wrapping for configs g
 In-Reply-To: <20170731135350.9018-1-aduskett@gmail.com>
 References: <20170731135350.9018-1-aduskett@gmail.com>
-Message-ID: <20170731135350.9018-2-aduskett@gmail.com>
+Message-ID: <20170731135350.9018-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 The check-package script when ran gives warnings on text wrapping
 on all of these Config files.  This patch cleans up all warnings
 related to the text wrapping for the Config files starting with
-the letter f in the package directory.
+the letter g in the package directory.
 
 The appropriate indentation is: <tab><2 spaces><62 chars>
 See http://nightly.buildroot.org/#writing-rules-config-in for more
@@ -21,318 +21,280 @@ information.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/fbdump/Config.in        | 8 ++++----
- package/fbgrab/Config.in        | 4 ++--
- package/fbset/Config.in         | 7 ++++---
- package/fbv/Config.in           | 6 +++---
- package/fdk-aac/Config.in       | 6 +++---
- package/fetchmail/Config.in     | 3 ++-
- package/ffmpeg/Config.in        | 4 ++--
- package/fftw/Config.in          | 8 ++++----
- package/ficl/Config.in          | 6 +++---
- package/flot/Config.in          | 6 ++++--
- package/fmc/Config.in           | 8 ++++----
- package/fmlib/Config.in         | 9 +++++----
- package/fmt/Config.in           | 6 +++---
- package/fontconfig/Config.in    | 3 ++-
- package/freescale-imx/Config.in | 5 +++--
- package/ftop/Config.in          | 3 ++-
- package/fxload/Config.in        | 9 +++++----
- 17 files changed, 55 insertions(+), 46 deletions(-)
+ package/gawk/Config.in                         |  4 ++--
+ package/gdbm/Config.in                         |  4 ++--
+ package/genpart/Config.in                      |  6 +++---
+ package/genpart/Config.in.host                 |  6 +++---
+ package/ghostscript-fonts/Config.in            |  6 +++---
+ package/git/Config.in                          |  5 +++--
+ package/gnuchess/Config.in                     |  3 ++-
+ package/gnutls/Config.in                       |  3 ++-
+ package/google-material-design-icons/Config.in |  4 ++--
+ package/gpm/Config.in                          | 10 +++++-----
+ package/gpsd/Config.in                         |  9 +++++----
+ package/gptfdisk/Config.in                     | 18 ++++++++++--------
+ package/gssdp/Config.in                        |  3 ++-
+ package/gtkperf/Config.in                      |  4 ++--
+ package/gupnp-av/Config.in                     |  4 ++--
+ 15 files changed, 48 insertions(+), 41 deletions(-)
 
-diff --git a/package/fbdump/Config.in b/package/fbdump/Config.in
-index 982448dd5..c102fe27e 100644
---- a/package/fbdump/Config.in
-+++ b/package/fbdump/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_FBDUMP
- 	bool "fbdump (Framebuffer Capture Tool)"
- 	help
--	  fbdump is a simple tool to capture snapshots from the Linux kernel
--	  framebuffer  device and write them out as a PPM file. Currently,
--	  most packed-pixel framebuffer formats and the vga16 framebuffer
--	  are supported.
-+	  fbdump is a simple tool to capture snapshots from the Linux
-+	  kernel framebuffer  device and write them out as a PPM file.
-+	  Currently, most packed-pixel framebuffer formats and the vga16
-+	  framebuffer are supported.
- 
- 	  http://www.rcdrummond.net/fbdump
-diff --git a/package/fbgrab/Config.in b/package/fbgrab/Config.in
-index f3b29d9f9..d1e9e69b3 100644
---- a/package/fbgrab/Config.in
-+++ b/package/fbgrab/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_FBGRAB
- 	bool "fbgrab"
- 	select BR2_PACKAGE_LIBPNG
- 	help
--	  FBGrab is a framebuffer screenshot program, capturing the linux
--	  frambuffer and converting it to a png-picture.
-+	  FBGrab is a framebuffer screenshot program, capturing the
-+	  linux frambuffer and converting it to a png-picture.
- 
- 	  http://fbgrab.monells.se/
-diff --git a/package/fbset/Config.in b/package/fbset/Config.in
-index c3f8d0ba7..b4ef41f0a 100644
---- a/package/fbset/Config.in
-+++ b/package/fbset/Config.in
-@@ -2,8 +2,9 @@ config BR2_PACKAGE_FBSET
- 	bool "fbset"
+diff --git a/package/gawk/Config.in b/package/gawk/Config.in
+index 36e70eb7a..a065243b7 100644
+--- a/package/gawk/Config.in
++++ b/package/gawk/Config.in
+@@ -6,8 +6,8 @@ config BR2_PACKAGE_GAWK
  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  	help
--	  Fbset is a system utility to show or change the settings of the frame
--	  buffer device. The frame buffer device provides a simple and unique
--	  interface to access different kinds of graphic displays.
-+	  Fbset is a system utility to show or change the settings of
-+	  the frame buffer device. The frame buffer device provides a
-+	  simple and unique interface to access different kinds of
-+	  graphic displays.
+ 	  A special-purpose programming language which is data driven
+-	  rather than procedural. Allows for simple data-reformatting jobs
+-	  with just a few lines of code.
++	  rather than procedural. Allows for simple data-reformatting
++	  jobs with just a few lines of code.
  
- 	  http://users.telenet.be/geertu/Linux/fbdev/
-diff --git a/package/fbv/Config.in b/package/fbv/Config.in
-index 3160a8555..220627633 100644
---- a/package/fbv/Config.in
-+++ b/package/fbv/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_FBV
- 	bool "fbv"
+ 	  http://www.gnu.org/software/gawk/
+ 
+diff --git a/package/gdbm/Config.in b/package/gdbm/Config.in
+index 8ad0fc6ce..3646bd058 100644
+--- a/package/gdbm/Config.in
++++ b/package/gdbm/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_GDBM
+ 	bool "gdbm"
  	help
--	  fbv is a very simple graphic file viewer for the framebuffer console,
--	  capable of displaying GIF, JPEG, PNG and BMP files using libungif,
--	  libjpeg and libpng.
-+	  fbv is a very simple graphic file viewer for the framebuffer
-+	  console, capable of displaying GIF, JPEG, PNG and BMP files
-+	  using libungif, libjpeg and libpng.
+-	  GNU dbm is a set of database routines that use extensible hashing.
+-	  It works similar to the standard UNIX dbm routines.
++	  GNU dbm is a set of database routines that use extensible
++	  hashing. It works similar to the standard UNIX dbm routines.
  
- 	  http://freshmeat.net/projects/fbv/
- 
-diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
-index f51c5ab19..111de41ca 100644
---- a/package/fdk-aac/Config.in
-+++ b/package/fdk-aac/Config.in
-@@ -10,9 +10,9 @@ config BR2_PACKAGE_FDK_AAC
- 	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
+ 	  http://www.gnu.org/software/gdbm/gdbm.html
+diff --git a/package/genpart/Config.in b/package/genpart/Config.in
+index 8d9ec795c..64288452e 100644
+--- a/package/genpart/Config.in
++++ b/package/genpart/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_GENPART
+ 	bool "genpart"
  	help
--	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
--	  is software that implements the MPEG Advanced Audio Coding ("AAC")
--	  encoding and decoding scheme for digital audio
-+	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC
-+	  Codec") is software that implements the MPEG Advanced Audio
-+	  Coding ("AAC") encoding and decoding scheme for digital audio
+-	  Generate a 16 byte partition table entry defined by command line
+-	  arguments and dump it to stdout. No CHS magic is done, only lba
+-	  entries are filled out.
++	  Generate a 16 byte partition table entry defined by command
++	  line arguments and dump it to stdout. No CHS magic is done,
++	  only lba entries are filled out.
  
- 	  http://sourceforge.net/projects/opencore-amr/files/fdk-aac/
- 
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-index 62f4f84d5..a4bf5a7c2 100644
---- a/package/fetchmail/Config.in
-+++ b/package/fetchmail/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FETCHMAIL
- 	select BR2_PACKAGE_OPENSSL
+ 	  http://www.pengutronix.de/software/genpart/index_en.html
+diff --git a/package/genpart/Config.in.host b/package/genpart/Config.in.host
+index 6cc2a59a7..d8b9eb61b 100644
+--- a/package/genpart/Config.in.host
++++ b/package/genpart/Config.in.host
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_HOST_GENPART
+ 	bool "host genpart"
  	help
- 	  Fetchmail - the mail-retrieval daemon
--	  Client daemon to move mail from POP and IMAP to your local computer
-+	  Client daemon to move mail from POP and IMAP to your local
-+	  computer
+-	  Generate a 16 byte partition table entry defined by command line
+-	  arguments and dump it to stdout. No CHS magic is done, only lba
+-	  entries are filled out.
++	  Generate a 16 byte partition table entry defined by command
++	  line arguments and dump it to stdout. No CHS magic is done,
++	  only lba entries are filled out.
  
- 	  http://www.fetchmail.info/
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 279f94f0d..ed87ddd49 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -15,8 +15,8 @@ menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	  http://www.pengutronix.de/software/genpart/index_en.html
+diff --git a/package/ghostscript-fonts/Config.in b/package/ghostscript-fonts/Config.in
+index 80bfbd03e..9b9b8d0cd 100644
+--- a/package/ghostscript-fonts/Config.in
++++ b/package/ghostscript-fonts/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_GHOSTSCRIPT_FONTS
+ 	bool "ghostscript-fonts"
  	help
--	  FFmpeg is a complete, cross-platform solution to record, convert
--	  and stream audio and video.
-+	  FFmpeg is a complete, cross-platform solution to record,
-+	  convert and stream audio and video.
+-	  Fonts and font metrics customarily distributed with Ghostscript.
+-	  Currently includes the 35 standard PostScript fonts and a
+-	  grab-bag of others.
++	  Fonts and font metrics customarily distributed with
++	  Ghostscript. Currently includes the 35 standard PostScript
++	  fonts and a grab-bag of others.
  
- 	  http://www.ffmpeg.org
- 
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index ef1138493..d51f8f3c5 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -33,15 +33,15 @@ config BR2_PACKAGE_FFTW_PRECISION_SINGLE
- 	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
- 	select BR2_PACKAGE_FFTW_USE_NEON if BR2_ARM_CPU_HAS_NEON && !BR2_ARM_SOFT_FLOAT
+ 	  http://sourceforge.net/projects/gs-fonts
+diff --git a/package/git/Config.in b/package/git/Config.in
+index 9babbecf0..d53921d7d 100644
+--- a/package/git/Config.in
++++ b/package/git/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_GIT
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
--	  Compile fftw in single precision, i.e. use 'float' for floating
--	  point type.
-+	  Compile fftw in single precision, i.e. use 'float' for
-+	  floating point type.
+-	  Git is a free and open source distributed version control system
+-	  designed to handle everything from small to very large projects.
++	  Git is a free and open source distributed version control
++	  system designed to handle everything from small to very large
++	  projects.
  
- config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
- 	bool "double"
- 	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+ 	  http://git-scm.com
+diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
+index aa446f4b2..0ddd2882d 100644
+--- a/package/gnuchess/Config.in
++++ b/package/gnuchess/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_GNUCHESS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FLEX
  	help
--	  Compile fftw in double precision (the default), i.e. use 'double'
--	  for floating point type.
-+	  Compile fftw in double precision (the default), i.e. use
-+	  'double' for floating point type.
+-	  GNU Chess lets most modern computers play a full game of chess.
++	  GNU Chess lets most modern computers play a full game of
++	  chess.
  
- config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
- 	bool "long double"
-diff --git a/package/ficl/Config.in b/package/ficl/Config.in
-index 3445a6428..4d9ab4a5b 100644
---- a/package/ficl/Config.in
-+++ b/package/ficl/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_FICL
- 	bool "ficl"
+ 	  http://ftp.gnu.org/pub/gnu/chess
+ 
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 1db069c65..176951a38 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -20,7 +20,8 @@ config BR2_PACKAGE_GNUTLS_TOOLS
+ 	select BR2_PACKAGE_ARGP_STANDALONE \
+ 		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
  	help
--	  Ficl is a programming language interpreter designed to be embedded
--	  into other systems as a command, macro, and development
--	  prototyping language.
-+	  Ficl is a programming language interpreter designed to be
-+	  embedded into other systems as a command, macro, and
-+	  development prototyping language.
- 	  Ficl is an acronym for "Forth Inspired Command Language".
+-	  Install GnuTLS command line tools for various cryptographic tasks.
++	  Install GnuTLS command line tools for various cryptographic
++	  tasks.
  
- 	  http://ficl.sourceforge.net
-diff --git a/package/flot/Config.in b/package/flot/Config.in
-index 4c0d3ec33..404487202 100644
---- a/package/flot/Config.in
-+++ b/package/flot/Config.in
-@@ -44,7 +44,8 @@ config BR2_PACKAGE_FLOT_ERRORBARS
- config BR2_PACKAGE_FLOT_FILLBETWEEN
- 	bool "fillbetween"
+ endif
+ 
+diff --git a/package/google-material-design-icons/Config.in b/package/google-material-design-icons/Config.in
+index a20042988..775f258f2 100644
+--- a/package/google-material-design-icons/Config.in
++++ b/package/google-material-design-icons/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
+ 	bool "google-material-design-icons"
  	help
--	  Flot plugin for computing bottoms for filled line and bar charts
-+	  Flot plugin for computing bottoms for filled line and bar
-+	  charts
+-	  Material design icons are the official icon set from Google that
+-	  are designed under the material design guidelines.
++	  Material design icons are the official icon set from Google
++	  that are designed under the material design guidelines.
  
- config BR2_PACKAGE_FLOT_IMAGE
- 	bool "image"
-@@ -54,7 +55,8 @@ config BR2_PACKAGE_FLOT_IMAGE
- config BR2_PACKAGE_FLOT_NAVIGATE
- 	bool "navigate"
+ 	  https://github.com/google/material-design-icons
+ 
+diff --git a/package/gpm/Config.in b/package/gpm/Config.in
+index 2d0d366d7..115847992 100644
+--- a/package/gpm/Config.in
++++ b/package/gpm/Config.in
+@@ -3,11 +3,11 @@ config BR2_PACKAGE_GPM
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
  	help
--	  Flot plugin for adding panning and zooming capabilities to a plot
-+	  Flot plugin for adding panning and zooming capabilities to a
-+	  plot
+-	  "gpm" means general purpose mouse (server) and provides mouse support
+-	  for Linux virtual consoles.
+-	  gpm-root (to draw menus in current virtual console; config file in
+-	  /etc/gpm-root.conf) and disable-paste (to disable paste buffer for
+-	  security reasons), will also be installed.
++	  "gpm" means general purpose mouse (server) and provides mouse
++	  support for Linux virtual consoles.
++	  gpm-root (to draw menus in current virtual console; config
++	  file in /etc/gpm-root.conf) and disable-paste (to disable
++	  paste buffer for security reasons), will also be installed.
  
- config BR2_PACKAGE_FLOT_PIE
- 	bool "pie"
-diff --git a/package/fmc/Config.in b/package/fmc/Config.in
-index b7398e2bf..4399aa2ca 100644
---- a/package/fmc/Config.in
-+++ b/package/fmc/Config.in
-@@ -15,11 +15,11 @@ config BR2_PACKAGE_FMC
+ 	  http://www.nico.schottelius.org/software/gpm/
+ 
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 876ab9b03..68d3e2e7e 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -10,10 +10,11 @@ menuconfig BR2_PACKAGE_GPSD
+ 	# Always tries to build a shared library
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+-	  gpsd is a service daemon that monitors one or more GPSes or AIS
+-	  receivers attached to a host computer through serial or USB ports,
+-	  making all data on the location/course/velocity of the sensors
+-	  available to be queried on TCP port 2947 of the host computer.
++	  gpsd is a service daemon that monitors one or more GPSes or
++	  AIS receivers attached to a host computer through serial or
++	  USB ports, making all data on the location/course/velocity of
++	  the sensors available to be queried on TCP port 2947 of the
++	  host computer.
+ 
+ 	  The D-Bus interface is included if dbus-glib is enabled.
+ 
+diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
+index d243b9083..ede72f3b1 100644
+--- a/package/gptfdisk/Config.in
++++ b/package/gptfdisk/Config.in
+@@ -10,9 +10,10 @@ config BR2_PACKAGE_GPTFDISK
+ 		!(BR2_PACKAGE_GPTFDISK_SGDISK || BR2_PACKAGE_GPTFDISK_CGDISK)
+ 	help
+ 	  GPT fdisk (consisting of the gdisk and sgdisk programs) is a
+-	  text-mode partitioning tool that works on Globally Unique Identifier
+-	  (GUID) Partition Table (GPT) disks, rather than on the more common
+-	  (through 2010) Master Boot Record (MBR) partition tables.
++	  text-mode partitioning tool that works on Globally Unique
++	  Identifier (GUID) Partition Table (GPT) disks, rather than on
++	  the more common (through 2010) Master Boot Record (MBR)
++	  partition tables.
+ 
+ 	  http://www.rodsbooks.com/gdisk/
+ 
+@@ -22,16 +23,17 @@ config BR2_PACKAGE_GPTFDISK_GDISK
+ 	bool "interactive gdisk"
+ 	help
+ 	  Install the interactive GUID partition table (GPT) manipulator
+-	  /usr/sbin/gdisk which is modelled after and quite similar in use
+-	  to the traditional MBR based fdisk tool.
++	  /usr/sbin/gdisk which is modelled after and quite similar in
++	  use to the traditional MBR based fdisk tool.
+ 
+ config BR2_PACKAGE_GPTFDISK_SGDISK
+ 	bool "command line sgdisk"
+ 	select BR2_PACKAGE_POPT
+ 	help
+-	  Install the command-line GUID partition table (GPT) manipulator
+-	  /usr/sbin/sgdisk which is named after the traditional MBR based
+-	  sfdisk tool albeit with an entirely different option syntax.
++	  Install the command-line GUID partition table (GPT)
++	  manipulator /usr/sbin/sgdisk which is named after the
++	  traditional MBR based sfdisk tool albeit with an entirely
++	  different option syntax.
+ 
+ config BR2_PACKAGE_GPTFDISK_CGDISK
+ 	bool "ncurses cgdisk"
+diff --git a/package/gssdp/Config.in b/package/gssdp/Config.in
+index 83149718d..80c5edfff 100644
+--- a/package/gssdp/Config.in
++++ b/package/gssdp/Config.in
+@@ -6,7 +6,8 @@ config BR2_PACKAGE_GSSDP
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBSOUP
+ 	help
+-	  GSSDP implements resource discovery and announcement over SSDP.
++	  GSSDP implements resource discovery and announcement over
++	  SSDP.
+ 
+ 	  http://www.gupnp.org
+ 
+diff --git a/package/gtkperf/Config.in b/package/gtkperf/Config.in
+index 1089dbf47..78c35e72e 100644
+--- a/package/gtkperf/Config.in
++++ b/package/gtkperf/Config.in
+@@ -5,5 +5,5 @@ config BR2_PACKAGE_GTKPERF
+ 	  GtkPerf is an application designed to test GTK+ performance.
+ 	  The point is to create common testing platform to run
+ 	  predefined GTK+ widgets
+-	  e.g. (opening comboboxes, toggling buttons, scrolling text yms.)
+-	  and this way define the speed of device/platform.
++	  e.g. (opening comboboxes, toggling buttons, scrolling text
++	  yms.) and this way define the speed of device/platform.
+diff --git a/package/gupnp-av/Config.in b/package/gupnp-av/Config.in
+index 5320b82b5..7b618f5ba 100644
+--- a/package/gupnp-av/Config.in
++++ b/package/gupnp-av/Config.in
+@@ -7,8 +7,8 @@ config BR2_PACKAGE_GUPNP_AV
+ 	select BR2_PACKAGE_GUPNP
  	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_FMLIB
  	help
--	  The Frame Manager Configuration tool is Freescale PowerPC platform
--	  software package whose primary purpose is converting
-+	  The Frame Manager Configuration tool is Freescale PowerPC
-+	  platform software package whose primary purpose is converting
- 	  Parse-Classify-Police-Distribute (PCD) descriptions of network
- 	  packets flow into hardware configuration. The tool provides an
--	  abstraction layer between the end customer's vision of the PCD task
--	  definition and real hardware implementation.
-+	  abstraction layer between the end customer's vision of the PCD
-+	  task definition and real hardware implementation.
+-	  GUPnP-AV is a collection of helpers for building AV (audio/video)
+-	  applications using GUPnP.
++	  GUPnP-AV is a collection of helpers for building AV
++	  (audio/video) applications using GUPnP.
  
- 	  http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
-diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
-index d399cabe2..df4ae440e 100644
---- a/package/fmlib/Config.in
-+++ b/package/fmlib/Config.in
-@@ -7,10 +7,11 @@ config BR2_PACKAGE_FMLIB
- 	depends on BR2_powerpc_e500mc || BR2_powerpc_e6500
- 	depends on BR2_LINUX_KERNEL
- 	help
--	  The Frame Manager library provides Freescale PowerPC platforms an
--	  API on top of the Frame Manager driver ioctl calls, that provides
--	  a user space application with a simple way to configure driver
--	  parameters and PCD (parse - classify - distribute) rules.
-+	  The Frame Manager library provides Freescale PowerPC platforms
-+	  an API on top of the Frame Manager driver ioctl calls, that
-+	  provides a user space application with a simple way to
-+	  configure driver parameters and PCD (parse - classify -
-+	  distribute) rules.
+ 	  http://www.gupnp.org/
  
- 	  http://git.freescale.com/git/cgit.cgi/ppc/sdk/fmlib.git/tree/README
- 
-diff --git a/package/fmt/Config.in b/package/fmt/Config.in
-index 979d94093..69a6fb80a 100644
---- a/package/fmt/Config.in
-+++ b/package/fmt/Config.in
-@@ -3,9 +3,9 @@ config BR2_PACKAGE_FMT
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	help
--	  fmt is an open-source formatting library for C++. It can be used
--	  as a safe alternative to printf or as a fast alternative to
--	  IOStreams.
-+	  fmt is an open-source formatting library for C++. It can be
-+	  used as a safe alternative to printf or as a fast alternative
-+	  to IOStreams.
- 
- comment "fmt needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/fontconfig/Config.in b/package/fontconfig/Config.in
-index 1c54a4336..218fdb2e7 100644
---- a/package/fontconfig/Config.in
-+++ b/package/fontconfig/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_EXPAT
- 	help
--	  Fontconfig is a library for configuring and customizing font access.
-+	  Fontconfig is a library for configuring and customizing font
-+	  access.
- 
- 	  http://www.fontconfig.org/
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 056728ff0..656b44bed 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -2,8 +2,9 @@ menuconfig BR2_PACKAGE_FREESCALE_IMX
- 	bool "Freescale i.MX libraries"
- 	depends on BR2_arm
- 	help
--	  Those packages provide hardware acceleration for GPU or VPU, hardware
--	  optimization or some hardware tools for Freescale i.MX platforms.
-+	  Those packages provide hardware acceleration for GPU or VPU,
-+	  hardware optimization or some hardware tools for Freescale
-+	  i.MX platforms.
- 
- if BR2_PACKAGE_FREESCALE_IMX
- choice
-diff --git a/package/ftop/Config.in b/package/ftop/Config.in
-index aefe4f515..bee70bfd0 100644
---- a/package/ftop/Config.in
-+++ b/package/ftop/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_FTOP
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Ftop is to files what top is to processes.
--	  The progress of all open files and file systems can be monitored.
-+	  The progress of all open files and file systems can be
-+	  monitored.
- 
- 	  https://sourceforge.net/projects/ftop/
-diff --git a/package/fxload/Config.in b/package/fxload/Config.in
-index d178e2c90..88cc6d1e5 100644
---- a/package/fxload/Config.in
-+++ b/package/fxload/Config.in
-@@ -5,9 +5,10 @@ config BR2_PACKAGE_FXLOAD
- 	# Microblaze, just disable it on this architecture.
- 	depends on !BR2_microblaze
- 	help
--	  This program is conveniently able to download firmware into FX, FX2,
--	  and FX2LP EZ-USB devices, as well as the original AnchorChips EZ-USB.
--	  It is intended to be invoked by hotplug scripts when the unprogrammed
--	  device appears on the bus.
-+	  This program is conveniently able to download firmware into
-+	  FX, FX2, and FX2LP EZ-USB devices, as well as the original
-+	  AnchorChips EZ-USB.
-+	  It is intended to be invoked by hotplug scripts when the
-+	  unprogrammed device appears on the bus.
- 
- 	  http://sourceforge.net/projects/linux-hotplug/
 -- 
 2.13.3
