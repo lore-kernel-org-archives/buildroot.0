@@ -1,66 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 22:56:24 +0200
-Subject: [Buildroot] [git commit] package/python-web2py: remove admin panel
-Message-ID: <20170731205239.78C6481F57@busybox.osuosl.org>
+Date: Mon, 31 Jul 2017 22:45:12 +0200
+Subject: [Buildroot] [git commit] package/python-web2py: reduce installation
+	size
+Message-ID: <20170731205239.4FAC581F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fda08fd818c3f38a9ee3c561af0026e26017237
+commit: https://git.buildroot.net/buildroot/commit/?id=5316495c8e2a791ec090897dd415d44f5082af0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commmit adds an option to remove admin panel to save
-speace if not needed.
+This commit exclude some useless files from standard installation to
+save space on embedded systems.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Thomas: fix indentation.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-web2py/Config.in        | 11 +++++++++++
- package/python-web2py/python-web2py.mk |  4 ++++
- 2 files changed, 15 insertions(+)
+ package/python-web2py/python-web2py.mk | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
-index b10d3a4..3b55153 100644
---- a/package/python-web2py/Config.in
-+++ b/package/python-web2py/Config.in
-@@ -14,6 +14,15 @@ config BR2_PACKAGE_PYTHON_WEB2PY
- 
- if BR2_PACKAGE_PYTHON_WEB2PY
- 
-+config BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
-+	bool "install admin panel application"
-+	default y
-+	help
-+	  This option install web2py admin panel application.
-+	  It can be removed to save space on embedded systems.
-+
-+if BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
-+
- config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
- 	string "admin panel password"
- 	default web2py
-@@ -21,3 +30,5 @@ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
- 	  Set the admin panel password.
- 
- endif
-+
-+endif
 diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 3f9d089..887925b 100644
+index 878a588..250453d 100644
 --- a/package/python-web2py/python-web2py.mk
 +++ b/package/python-web2py/python-web2py.mk
-@@ -36,7 +36,11 @@ define PYTHON_WEB2PY_GENERATE_PASSWORD
+@@ -10,13 +10,33 @@ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+ PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
+ 
++PYTHON_WEB2PY_EXCLUSIONS = \
++	welcome.w2p \
++	applications/examples \
++	applications/welcome \
++	deposit \
++	docs \
++	examples \
++	extras \
++	handlers \
++	scripts \
++	ABOUT \
++	anyserver.py \
++	CHANGELOG \
++	Makefile \
++	MANIFEST.in \
++	README.markdown \
++	setup.py \
++	tox.ini
++
+ define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
+ 	$(HOST_DIR)/bin/python2 -c 'import os; \
+ 		os.chdir("$(@D)"); \
+ 		from gluon.main import save_password; \
  		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
+ 	mkdir -p $(TARGET_DIR)/var/www/web2py
+-	cp -dpfr $(@D)/* $(TARGET_DIR)/var/www/web2py
++	rsync -a $(@D)/ $(TARGET_DIR)/var/www/web2py/ \
++		$(addprefix --exclude=,$(PYTHON_WEB2PY_EXCLUSIONS))
  endef
  
-+ifeq ($(BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN),y)
- PYTHON_WEB2PY_POST_BUILD_HOOKS += PYTHON_WEB2PY_GENERATE_PASSWORD
-+else
-+PYTHON_WEB2PY_EXCLUSIONS += applications/admin
-+endif
- 
- define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/var/www/web2py
+ define PYTHON_WEB2PY_INSTALL_INIT_SYSV
