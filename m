@@ -1,164 +1,101 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Mon, 31 Jul 2017 14:06:48 -0700
-Subject: [Buildroot] [PATCH v3] qt5wayland: new package
-Message-ID: <1501535208-8161-1-git-send-email-joshua.henderson@microchip.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 31 Jul 2017 23:17:59 +0200
+Subject: [Buildroot] [PATCH 1/2] lua: fix pkg-config file
+Message-ID: <20170731211800.5888-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-QtWayland is a Qt 5 module that wraps the functionality of Wayland.
+When Lua is linked with additional libraries, these libraries should go
+into the pkg-config file as well.
 
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: Brent Sink <brents_3@hotmail.com>
-Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+Otherwise, linking swupdate with the lua library fails:
 
+```
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlopen'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlclose'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlerror'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
+```
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
+ package/lua/5.2.4/0004-lua-pc.patch | 4 +++-
+ package/lua/5.3.4/0004-lua-pc.patch | 4 +++-
+ package/lua/lua.mk                  | 8 ++++----
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-Changes for v3:
-- Seperate patch out from series bumping qt to 5.9.1.
-- Fix alpha ordering of qt5wayland config.
-- Fix install differences between versions of qt5wayland.
-- Add build dependency on libxkbcommon if it is enabled.
-- Fix build dependency on wayland.
-
-Changes for v2:
-- Fix config dependency logic.
-- Add license file hashes.
-- Fix opengl dependency.
-- Make enabling the compositor a config option.
-- This is now part of the QT bump to 5.9.1 series because it depends on it.
----
- package/qt5/Config.in                  |  1 +
- package/qt5/qt5wayland/Config.in       | 24 +++++++++++++
- package/qt5/qt5wayland/qt5wayland.hash |  5 +++
- package/qt5/qt5wayland/qt5wayland.mk   | 61 ++++++++++++++++++++++++++++++++++
- 4 files changed, 91 insertions(+)
- create mode 100644 package/qt5/qt5wayland/Config.in
- create mode 100644 package/qt5/qt5wayland/qt5wayland.hash
- create mode 100644 package/qt5/qt5wayland/qt5wayland.mk
-
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index abaa584..1802c86 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -77,6 +77,7 @@ source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5tools/Config.in"
- source "package/qt5/qt5virtualkeyboard/Config.in"
-+source "package/qt5/qt5wayland/Config.in"
- source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5webkit/Config.in"
- source "package/qt5/qt5websockets/Config.in"
-diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-new file mode 100644
-index 0000000..c83319f
---- /dev/null
-+++ b/package/qt5/qt5wayland/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_QT5WAYLAND
-+	bool "qt5wayland"
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	depends on BR2_PACKAGE_WAYLAND
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5wayland module.
-+
-+	  http://qt.io
-+
-+comment "qt5wayland needs QT OpenGL/Wayland support"
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_WAYLAND
-+
-+if BR2_PACKAGE_QT5WAYLAND
-+
-+config BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
-+	bool "Enable compositor (experimental)"
-+	help
-+	  The compositor API is still experimental, and not built by default.
-+
-+endif
-diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
-new file mode 100644
-index 0000000..95b8824
---- /dev/null
-+++ b/package/qt5/qt5wayland/qt5wayland.hash
-@@ -0,0 +1,5 @@
-+# hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwayland-opensource-src-5.6.2.tar.xz.mirrorlist
-+sha256 035c3199f4719627b64b7020f0f4574da2b4cb78c6981aba75f27b872d8e6c86	qtwayland-opensource-src-5.6.2.tar.xz
-+
-+# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwayland-opensource-src-5.9.1.tar.xz.mirrorlist
-+sha256 cf0cb1982a7b748bfec8c7834691f13072f104884c61809d0bbd1a01ebda3ffa	qtwayland-opensource-src-5.9.1.tar.xz
-diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-new file mode 100644
-index 0000000..0a7bdb8
---- /dev/null
-+++ b/package/qt5/qt5wayland/qt5wayland.mk
-@@ -0,0 +1,61 @@
-+################################################################################
-+#
-+# qt5wayland
-+#
-+################################################################################
-+
-+QT5WAYLAND_VERSION = $(QT5_VERSION)
-+QT5WAYLAND_SITE = $(QT5_SITE)
-+QT5WAYLAND_SOURCE = qtwayland-opensource-src-$(QT5WAYLAND_VERSION).tar.xz
-+QT5WAYLAND_DEPENDENCIES = qt5base qt5declarative wayland
-+QT5WAYLAND_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
-+QT5WAYLAND_DEPENDENCIES += libxkbcommon
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WAYLAND_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-+QT5WAYLAND_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-+else
-+QT5WAYLAND_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
-+QT5WAYLAND_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
-+QT5WAYLAND_QMAKEFLAGS += CONFIG+=wayland-compositor
-+endif
-+
-+define QT5WAYLAND_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake $(QT5WAYLAND_QMAKEFLAGS))
-+endef
-+
-+define QT5WAYLAND_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5WAYLAND_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+define QT5WAYLAND_INSTALL_COMPOSITOR
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandCompositor.so* $(TARGET_DIR)/usr/lib
-+endef
-+else
-+define QT5WAYLAND_INSTALL_COMPOSITOR
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor.so* $(TARGET_DIR)/usr/lib
-+endef
-+endif
-+endif
-+
-+define QT5WAYLAND_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandClient.so* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/wayland* $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforms/libqwayland* $(TARGET_DIR)/usr/lib/qt/plugins/platforms
-+	$(QT5WAYLAND_INSTALL_COMPOSITOR)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/lua/5.2.4/0004-lua-pc.patch b/package/lua/5.2.4/0004-lua-pc.patch
+index 62acb201f2..31ff61157a 100644
+--- a/package/lua/5.2.4/0004-lua-pc.patch
++++ b/package/lua/5.2.4/0004-lua-pc.patch
+@@ -1,6 +1,8 @@
+ add lua.pc
+ 
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++[J?rg Krause: add @MYLIBS@]
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ 
+ Index: b/etc/lua.pc
+ ===================================================================
+@@ -34,7 +36,7 @@ Index: b/etc/lua.pc
+ +Description: An Extensible Extension Language
+ +Version: ${R}
+ +Requires: 
+-+Libs: -L${libdir} -llua -lm
+++Libs: -L${libdir} -llua -lm @MYLIBS@
+ +Cflags: -I${includedir}
+ +
+ +# (end of lua.pc)
+diff --git a/package/lua/5.3.4/0004-lua-pc.patch b/package/lua/5.3.4/0004-lua-pc.patch
+index 615a7db8fc..11258329d1 100644
+--- a/package/lua/5.3.4/0004-lua-pc.patch
++++ b/package/lua/5.3.4/0004-lua-pc.patch
+@@ -1,6 +1,8 @@
+ add lua.pc
+ 
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++[J?rg Krause: add @MYLIBS@]
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ 
+ Index: b/etc/lua.pc
+ ===================================================================
+@@ -34,7 +36,7 @@ Index: b/etc/lua.pc
+ +Description: An Extensible Extension Language
+ +Version: ${R}
+ +Requires:
+-+Libs: -L${libdir} -llua -lm
+++Libs: -L${libdir} -llua -lm @MYLIBS@
+ +Cflags: -I${includedir}
+ +
+ +# (end of lua.pc)
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 93339ad9ce..0692c53764 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -86,8 +86,8 @@ endef
+ 
+ define LUA_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) INSTALL_TOP="$(STAGING_DIR)/usr" -C $(@D) install
+-	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
++	sed -e "s/@MYLIBS@/$(LUA_MYLIBS)/g" $(@D)/etc/lua.pc \
++		> $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
+ endef
+ 
+ define LUA_INSTALL_TARGET_CMDS
+@@ -96,8 +96,8 @@ endef
+ 
+ define HOST_LUA_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) INSTALL_TOP="$(HOST_DIR)" -C $(@D) install
+-	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+-		$(HOST_DIR)/lib/pkgconfig/lua.pc
++	sed -e "s/@MYLIBS@/$(HOST_LUA_MYLIBS)/g" $(@D)/etc/lua.pc \
++		> $(HOST_DIR)/lib/pkgconfig/lua.pc
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.7.4
+2.13.3
