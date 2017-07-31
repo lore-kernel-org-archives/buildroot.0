@@ -1,31 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 19:35:40 +0200
-Subject: [Buildroot] [PATCH 1/1] apf27: bump to kernel 4.12.4
-In-Reply-To: <1501369047-8256-1-git-send-email-tremyfr@gmail.com>
-References: <1501369047-8256-1-git-send-email-tremyfr@gmail.com>
-Message-ID: <20170731193540.7ee98c40@windsurf.home>
+Date: Mon, 31 Jul 2017 19:35:53 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: bump to version 3.3.3
+Message-ID: <20170731173146.4DAC1818C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7d876923124f20dd91f505b00b6fe76e4becb62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Jul 2017 00:57:27 +0200, Philippe Reynes wrote:
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/23508534
-> 
-> Signed-off-by: Philippe Reynes <tremyfr@gmail.com>
-> ---
->  .../apf27/{linux-3.18.config => linux-4.12.config} |   12 ++----------
->  configs/armadeus_apf27_defconfig                   |    8 ++++----
->  2 files changed, 6 insertions(+), 14 deletions(-)
->  rename board/armadeus/apf27/{linux-3.18.config => linux-4.12.config} (95%)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index b0556fe..2397f72 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 1998de1ab32616cbf2ff86efc3f1f26e76805ec5dc51e24c041c79edd8262785  ffmpeg-3.3.2.tar.xz
++sha256 d2a9002cdc6b533b59728827186c044ad02ba64841f1b7cd6c21779875453a1e  ffmpeg-3.3.3.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 6dfc62e..f50b410 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.3.2
++FFMPEG_VERSION = 3.3.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
