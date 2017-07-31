@@ -1,75 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 21:30:25 +0200
-Subject: [Buildroot] [git commit] python-hpack: new package
-Message-ID: <20170731192637.AA608817BA@busybox.osuosl.org>
+Date: Mon, 31 Jul 2017 21:31:01 +0200
+Subject: [Buildroot] [git commit] python-h2: new package
+Message-ID: <20170731192747.B904880165@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8514a745cd9a5035ead8bc8630327276e13628d
+commit: https://git.buildroot.net/buildroot/commit/?id=bff2f76cd62b6cbe4a9d40bade2eb759b615ebfd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |  1 +
- package/python-hpack/Config.in         |  6 ++++++
- package/python-hpack/python-hpack.hash |  3 +++
- package/python-hpack/python-hpack.mk   | 14 ++++++++++++++
- 4 files changed, 24 insertions(+)
+ package/Config.in                |  1 +
+ package/python-h2/Config.in      |  8 ++++++++
+ package/python-h2/python-h2.hash |  3 +++
+ package/python-h2/python-h2.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index d92cdad..87b61a8 100644
+index 87b61a8..d595e88 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -741,6 +741,7 @@ menu "External python modules"
  	source "package/python-futures/Config.in"
  	source "package/python-gobject/Config.in"
  	source "package/python-gunicorn/Config.in"
-+	source "package/python-hpack/Config.in"
++	source "package/python-h2/Config.in"
+ 	source "package/python-hpack/Config.in"
  	source "package/python-html5lib/Config.in"
  	source "package/python-httplib2/Config.in"
- 	source "package/python-humanize/Config.in"
-diff --git a/package/python-hpack/Config.in b/package/python-hpack/Config.in
+diff --git a/package/python-h2/Config.in b/package/python-h2/Config.in
 new file mode 100644
-index 0000000..b0ea03b
+index 0000000..dccee9b
 --- /dev/null
-+++ b/package/python-hpack/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_HPACK
-+	bool "python-hpack"
++++ b/package/python-h2/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_H2
++	bool "python-h2"
++	select BR2_PACKAGE_PYTHON_HYPERFRAME # runtime
++	select BR2_PACKAGE_PYTHON_HPACK # runtime
 +	help
-+	  Pure-Python HPACK header compression.
++	  HTTP/2 State-Machine based protocol implementation.
 +
 +	  http://hyper.rtfd.org
-diff --git a/package/python-hpack/python-hpack.hash b/package/python-hpack/python-hpack.hash
+diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
 new file mode 100644
-index 0000000..445d4d5
+index 0000000..e34f7be
 --- /dev/null
-+++ b/package/python-hpack/python-hpack.hash
++++ b/package/python-h2/python-h2.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/hpack/json, sha256 locally computed
-+md5	556b0ae66180f54c2ce8029a0952088b  hpack-3.0.0.tar.gz
-+sha256	8eec9c1f4bfae3408a3f30500261f7e6a65912dc138526ea054f9ad98892e9d2  hpack-3.0.0.tar.gz
-diff --git a/package/python-hpack/python-hpack.mk b/package/python-hpack/python-hpack.mk
++# md5 from https://pypi.python.org/pypi/h2/json, sha256 locally computed
++md5	586686662928c2851eb0f1fe99bf279d  h2-3.0.1.tar.gz
++sha256	b2962f883fa392a23cbfcc4ad03c335bcc661be0cf9627657b589f0df2206e64  h2-3.0.1.tar.gz
+diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
 new file mode 100644
-index 0000000..d6b9664
+index 0000000..37f0156
 --- /dev/null
-+++ b/package/python-hpack/python-hpack.mk
++++ b/package/python-h2/python-h2.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-hpack
++# python-h2
 +#
 +################################################################################
 +
-+PYTHON_HPACK_VERSION = 3.0.0
-+PYTHON_HPACK_SOURCE = hpack-$(PYTHON_HPACK_VERSION).tar.gz
-+PYTHON_HPACK_SITE = https://pypi.python.org/packages/44/f1/b4440e46e265a29c0cb7b09b6daec6edf93c79eae713cfed93fbbf8716c5
-+PYTHON_HPACK_SETUP_TYPE = setuptools
-+PYTHON_HPACK_LICENSE = MIT
-+PYTHON_HPACK_LICENSE_FILES = LICENSE
++PYTHON_H2_VERSION = 3.0.1
++PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
++PYTHON_H2_SITE = https://pypi.python.org/packages/3c/86/aebb88df3c87255cfd0ffd338608fbfb34d1c850750a486e7f05b013e5a3
++PYTHON_H2_SETUP_TYPE = setuptools
++PYTHON_H2_LICENSE = MIT
++PYTHON_H2_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
