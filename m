@@ -1,104 +1,76 @@
 From: Dave Bender <codehero@gmail.com>
-Date: Sun, 30 Jul 2017 18:50:44 -0400
-Subject: [Buildroot] host-icu: ERROR: package host-icu installs
- executables without proper RPATH:
-In-Reply-To: <0a256bf7-ce46-4349-1bb5-12f5cbbd7c4d@mind.be>
-References: <CAETHaKrDURWTeFqnFYeXU0X+rxqV0Vb_uB1nVJ+_gX4xGZUJ_g@mail.gmail.com>
- <0a256bf7-ce46-4349-1bb5-12f5cbbd7c4d@mind.be>
-Message-ID: <CAETHaKppmcyCGbDcS7RmvkzmKwvSCuiZfxJXTP2xmceytrSn6g@mail.gmail.com>
+Date: Sun, 30 Jul 2017 22:59:24 -0400
+Subject: [Buildroot] squashfs-fuse: new package
+Message-ID: <CAETHaKp82wP9fk=hFVp2--GBauJBoefW5VD=zVpp-7nJojJZGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
-  I guess there was some cruft in there from a prior build. The make clean
-step and rebuild resulted in success.
+Added FUSE squashfs utilities
 
-Thank you!
+Signed-off-by: David Bender <codehero@gmail.com>
+---
+ package/Config.in                      |  1 +
+ package/squashfs-fuse/Config.in        | 14 ++++++++++++++
+ package/squashfs-fuse/squashfs-fuse.mk | 14 ++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/squashfs-fuse/Config.in
+ create mode 100644 package/squashfs-fuse/squashfs-fuse.mk
 
--Dave
+diff --git a/package/Config.in b/package/Config.in
+index 9e90d98..2691a47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -191,6 +191,7 @@ menu "Filesystem and flash utilities"
+  source "package/sunxi-tools/Config.in"
+  source "package/unionfs/Config.in"
+  source "package/xfsprogs/Config.in"
++ source "package/squashfs-fuse/Config.in"
+ endmenu
 
-On Sun, Jul 30, 2017 at 5:42 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
-
->
->
-> On 30-07-17 22:18, Dave Bender wrote:
-> > (Note full build output for host-icu attached).
-> >
-> > host-icu build is breaking on detecting executables without proper RPATH.
-> > What corrective action should I take?
-> >
-> > cd /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/lib/icu/58.2/..; \
-> >     rm -f current && ln -s 58.2 current; \
-> >     rm -f Makefile.inc && ln -s current/Makefile.inc Makefile.inc; \
-> >     rm -f pkgdata.inc && ln -s current/pkgdata.inc pkgdata.inc
-> > make[2]: Leaving directory
-> > '/stuff/gsrc/AppImage/buildroot-qt/output/build/host-icu-58.2/source'
-> > make[1]: Leaving directory
-> > '/stuff/gsrc/AppImage/buildroot-qt/output/build/host-icu-58.2/source'
-> > ***
-> > *** ERROR: package host-icu installs executables without proper RPATH:
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/openssl
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/xzdec
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/tabs
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/getfattr
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/python2.7
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/setfattr
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/tput
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/lzmainfo
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/infocmp
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/xmlwf
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/lzmadec
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/mksquashfs
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/genimage
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/clear
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/tset
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/toe
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/xz
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/unsquashfs
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/tic
-> > ***   /stuff/gsrc/AppImage/buildroot-qt/output/host/usr/bin/attr
->
->  Something is really messed up here, since all these files are not
-> installed by
-> host-icu but by other packages.
->
->  Also, which Buildroot version are you using? Current master doesn't have
-> the
-> /usr part in the path anymore.
->
->  In either case, please try to run 'make clean world', that might fix it.
->
->  Regards,
->  Arnout
->
-> > make: *** [package/pkg-generic.mk:231 <http://pkg-generic.mk:231>:
-> > /stuff/gsrc/AppImage/buildroot-qt/output/build/
-> host-icu-58.2/.stamp_host_installed]
-> > Error 1
-> >
-> >
-> > Thanks,
-> > Dave
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170730/841ec310/attachment.html>
+ menu "Fonts, cursors, icons, sounds and themes"
+diff --git a/package/squashfs-fuse/Config.in b/package/squashfs-fuse/Config.in
+new file mode 100644
+index 0000000..b5f3537
+--- /dev/null
++++ b/package/squashfs-fuse/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_SQUASHFS_FUSE
++ bool "squashfs (FUSE)"
++ select BR2_PACKAGE_LIBFUSE
++ depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
++ depends on BR2_USE_MMU # libfuse
++ depends on !BR2_STATIC_LIBS # libfuse
++ help
++  A userspace squashfs implementation.
++
++ https://github.com/vasi/squashfuse
++
++comment "squashfs needs a toolchain w/ threads, dynamic library"
++ depends on BR2_USE_MMU
++ depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/squashfs-fuse/squashfs-fuse.mk
+b/package/squashfs-fuse/squashfs-fuse.mk
+new file mode 100644
+index 0000000..812a197
+--- /dev/null
++++ b/package/squashfs-fuse/squashfs-fuse.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# Squashfs-fuse
++#
++################################################################################
++
++SQUASHFS_FUSE_VERSION = 1f980303b89c779eabfd0a0fdd36d6a7a311bf92
++SQUASHFS_FUSE_SITE = $(call github,vasi,squashfuse,$(SQUASHFS_FUSE_VERSION))
++SQUASHFS_FUSE_DEPENDENCIES = libfuse host-pkgconf
++SQUASHFS_FUSE_LICENSE = BSD-2c
++SQUASHFS_FUSE_LICENSE_FILES = LICENSE
++SQUASHFS_FUSE_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.10.2
