@@ -1,62 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 22:45:12 +0200
-Subject: [Buildroot] [git commit] package/python-web2py: reduce installation
-	size
-Message-ID: <20170731205239.4FAC581F57@busybox.osuosl.org>
+Date: Mon, 31 Jul 2017 22:46:19 +0200
+Subject: [Buildroot] [git commit] package/python-web2py: move password
+	generation
+Message-ID: <20170731205239.5FDA181EC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5316495c8e2a791ec090897dd415d44f5082af0d
+commit: https://git.buildroot.net/buildroot/commit/?id=91f20433053cc4558256344ed4cebb8d147a3ee2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit exclude some useless files from standard installation to
-save space on embedded systems.
+This commit moves the password generation as a post build step.
+This prepares the option to remove the admin panel from
+installation.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-web2py/python-web2py.mk | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ package/python-web2py/python-web2py.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 878a588..250453d 100644
+index 250453d..3f9d089 100644
 --- a/package/python-web2py/python-web2py.mk
 +++ b/package/python-web2py/python-web2py.mk
-@@ -10,13 +10,33 @@ PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
- PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
+@@ -29,11 +29,16 @@ PYTHON_WEB2PY_EXCLUSIONS = \
+ 	setup.py \
+ 	tox.ini
  
-+PYTHON_WEB2PY_EXCLUSIONS = \
-+	welcome.w2p \
-+	applications/examples \
-+	applications/welcome \
-+	deposit \
-+	docs \
-+	examples \
-+	extras \
-+	handlers \
-+	scripts \
-+	ABOUT \
-+	anyserver.py \
-+	CHANGELOG \
-+	Makefile \
-+	MANIFEST.in \
-+	README.markdown \
-+	setup.py \
-+	tox.ini
-+
- define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
+-define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
++define PYTHON_WEB2PY_GENERATE_PASSWORD
  	$(HOST_DIR)/bin/python2 -c 'import os; \
  		os.chdir("$(@D)"); \
  		from gluon.main import save_password; \
  		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
++endef
++
++PYTHON_WEB2PY_POST_BUILD_HOOKS += PYTHON_WEB2PY_GENERATE_PASSWORD
++
++define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
  	mkdir -p $(TARGET_DIR)/var/www/web2py
--	cp -dpfr $(@D)/* $(TARGET_DIR)/var/www/web2py
-+	rsync -a $(@D)/ $(TARGET_DIR)/var/www/web2py/ \
-+		$(addprefix --exclude=,$(PYTHON_WEB2PY_EXCLUSIONS))
- endef
- 
- define PYTHON_WEB2PY_INSTALL_INIT_SYSV
+ 	rsync -a $(@D)/ $(TARGET_DIR)/var/www/web2py/ \
+ 		$(addprefix --exclude=,$(PYTHON_WEB2PY_EXCLUSIONS))
