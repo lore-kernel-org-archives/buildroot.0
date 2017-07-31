@@ -1,42 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 11:30:47 +0200
-Subject: [Buildroot] Qt 5.9.1 QML arm crash | QTBUG-61522
-In-Reply-To: <CAKdiq5_FDrJNp8OXw3pQ5cByeBZXzg4WQ_qH3nk+HhrcpZEZfw@mail.gmail.com>
-References: <CAKdiq5_FDrJNp8OXw3pQ5cByeBZXzg4WQ_qH3nk+HhrcpZEZfw@mail.gmail.com>
-Message-ID: <20170731113047.3e8c710c@windsurf.lan>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 31 Jul 2017 08:06:18 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/1] util-linux: bump to v2.30.1
+In-Reply-To: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
+References: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
+Message-ID: <444949365.2448670.1501499178309.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Marcus Hoffmann" <m.hoffmann@cartelsol.com>
+> To: buildroot at buildroot.org
+> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "Marcus Hoffmann" <m.hoffmann@cartelsol.com>
+> Sent: Saturday, July 29, 2017 12:36:02 PM
+> Subject: [PATCH 1/1] util-linux: bump to v2.30.1
 
-On Mon, 31 Jul 2017 10:28:58 +0200, Petar Koretic wrote:
-
-> So I've tested Qt 5.9.1 from the master branch with Raspberry Pi 3 stock
-> build using glibc.
-> Unfortunately it is hit by a big QML bug that results in a crash when doing
-> a simple thing as
+> - Drop patch 0002-column-fix-compilation-when-libc-lacks-wide-characte.patch
+> as it has been applied upstream
+> - Patch 0001-Revert-build-sys-ncurses-headers-cleanup.patch is still
+> required to fix ncursesw support.
 > 
-> var x = {}
-> 
-> This is reported and will be fixed in 5.9.2
-> https://bugreports.qt.io/browse/QTBUG-61522.
-> 
-> I have tested the patch with buildroot and it does work correctly after that.
-> Would you be interested now in adding the patch until 5.9.2 is
-> released or will you be waiting for 5.9.2?
+> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+> Cc: "Carlos Santos" <casantos@datacom.ind.br>
+> ---
+> @Carlos: As far as I could find no upstream discussion has taken place
+> regarding the 0001 patch right? Do you want to send an email to the list
+> describing the problem?
 
-We are interested in adding the patch. Especially since we are about to
-tag Buildroot 2017.08-rc1, and we will no longer be accepting version
-bumps. So we definitely want Qt 5.9.1 to work.
+Hum, I got distracted with other things here. I will take care of this
+today. Thanks for the reminder!
 
-So if you can send a Buildroot patch that adds the Qt5 fix, that would
-be nice. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
