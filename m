@@ -1,68 +1,70 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Mon, 31 Jul 2017 22:38:13 +0200
-Subject: [Buildroot] [PATCH 1/1] libcodec2: Update to version 0.6.
- Change to cmake-package
-In-Reply-To: <20170731223719.40a55064@windsurf.home>
-References: <20170705114236.14906-1-olivier.schonken@gmail.com>
- <20170731223719.40a55064@windsurf.home>
-Message-ID: <CALdGsk+QcwJM1EbTXETNwuj5-dLKMK9df5H3vyzZkvLvn3JS=g@mail.gmail.com>
+From: Petar Koretic <petar.koretic@qaap.io>
+Date: Mon, 31 Jul 2017 22:32:06 +0200
+Subject: [Buildroot] [PATCH v2 1/1] qt5declarative: backport 'Fix alignment
+	issue on ARMv7' patch to 5.9.1
+Message-ID: <20170731203206.17875-1-petar.koretic@qaap.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will do, thanks!
+This resolves a QML issues reported in
+https://bugreports.qt.io/browse/QTBUG-61522 that will be fixed in the
+5.9.2.
 
-On 31 Jul 2017 22:37, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
+---
+v2:
+ - add patch to 5.9.1 subfolder
+ - add missing bug report link and Signed-off-by to upstream patch
 
-> Hello,
->
-> On Wed,  5 Jul 2017 13:42:36 +0200, Olivier Schonken wrote:
-> > The 0.6 version of libcodec2 switched buildsystem from autotools to
-> cmake.
-> > The patches in the libcodec2 directory were removed because they were
-> > only relevant to the autotools build.  For the cmake package unittests
-> > are disabled by default.
-> > The download site was changed to http://files.freedv.org/codec2.
-> > An option was added to be able to install examples to target.
-> >
-> > Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> > ---
-> >  ...ative-compiler-to-build-generate_cookbook.patch | 153
-> ---------------------
-> >  .../0002-Add-option-to-disable-unit-tests.patch    |  50 -------
-> >  package/libcodec2/Config.in                        |  11 +-
-> >  package/libcodec2/libcodec2.hash                   |   2 +-
-> >  package/libcodec2/libcodec2.mk                     |  15 +-
-> >  5 files changed, 20 insertions(+), 211 deletions(-)
-> >  delete mode 100644 package/libcodec2/0001-Use-
-> the-native-compiler-to-build-generate_cookbook.patch
-> >  delete mode 100644 package/libcodec2/0002-Add-
-> option-to-disable-unit-tests.patch
->
-> I've applied to master, after:
->
->  - Bumping to 0.7, which solves the libdir issue in the .pc file
->
->  - Adding a patch that fixes (again) the .pc file, because now they got
->    includedir wrong.
->
-> Olivier, could you submit the patch fixing includedir to the upstream
-> project ?
->
-> I've verified that freeswitch module codec2 builds fine with this
-> version bump.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170731/028d97ad/attachment.html>
+ .../5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch  | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
+
+diff --git a/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch b/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
+new file mode 100644
+index 0000000000..1d36b805f2
+--- /dev/null
++++ b/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
+@@ -0,0 +1,37 @@
++From 03c2661b1243cc529fc3d8cfa65073f1da420307 Mon Sep 17 00:00:00 2001
++From: Simon Hausmann <simon.hausmann@qt.io>
++Date: Thu, 22 Jun 2017 13:34:09 +0200
++Subject: [PATCH 1/1] Fix alignment issue on ARMv7
++
++As analyzed in the bug report, it appears that we may get
++QV4::CompiledData::Function pointers for writing that are not aligned
++for the 64-bit fields at the beginning.
++
++[ChangeLog][QtQml] Fix crash due to misaligned data structures on ARMv7
++
++Task-number: QTBUG-61552
++Change-Id: I6b2c166b725496150c8850475577628ccd811d65
++Reviewed-by: Erik Verbruggen <erik.verbruggen@qt.io>
++commit: https://codereview.qt-project.org/#/c/198278/
++
++Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
++---
++ src/qml/compiler/qv4compiler.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/qml/compiler/qv4compiler.cpp b/src/qml/compiler/qv4compiler.cpp
++index e32749bbf7..c32e1685a0 100644
++--- a/src/qml/compiler/qv4compiler.cpp
+++++ b/src/qml/compiler/qv4compiler.cpp
++@@ -406,6 +406,8 @@ QV4::CompiledData::Unit QV4::Compiler::JSUnitGenerator::generateHeader(QV4::Comp
++     *jsClassDataOffset = nextOffset;
++     nextOffset += jsClassData.size();
++ 
+++    nextOffset = (nextOffset + 7) & ~quint32(0x7);
+++
++     for (int i = 0; i < irModule->functions.size(); ++i) {
++         QV4::IR::Function *f = irModule->functions.at(i);
++         functionOffsets[i] = nextOffset;
++-- 
++2.13.3
++
+-- 
+2.13.3
