@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Jul 2017 21:25:04 +0200
-Subject: [Buildroot] [RFC PATCH 2/4] support/testing: allow to use extra
- large timeouts
-In-Reply-To: <20170730044946.11999-2-ricardo.martincoski@gmail.com>
-References: <20170730044946.11999-1-ricardo.martincoski@gmail.com>
- <20170730044946.11999-2-ricardo.martincoski@gmail.com>
-Message-ID: <20170731212504.7f4ebf3b@windsurf.home>
+Date: Mon, 31 Jul 2017 21:26:06 +0200
+Subject: [Buildroot] [git commit] testing/infra/emulator: remove qemu
+	warnings about audio
+Message-ID: <20170731192205.8DBAF8013B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d8ab6b2b54574a5e5d5818ca3e816d2afd159ad0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Jul 2017 01:49:44 -0300, Ricardo Martincoski wrote:
+The default audio backend for qemu is configured at compile time. It
+generates annoying warning messages to qemu's stderr when running our
+tests, like these:
+pulseaudio: set_sink_input_volume() failed
+pulseaudio: Reason: Invalid argument
+pulseaudio: set_sink_input_mute() failed
+pulseaudio: Reason: Invalid argument
 
-> diff --git a/support/testing/run-tests b/support/testing/run-tests
-> index 0cb673c61f..33ac60d6b2 100755
-> --- a/support/testing/run-tests
-> +++ b/support/testing/run-tests
-> @@ -28,6 +28,8 @@ def main():
->                          help='number of testcases to run simultaneously')
->      parser.add_argument('-j', '--jlevel', type=int,
->                          help='BR2_JLEVEL to use for each testcase')
-> +    parser.add_argument('-e', '--elastic-timeout', type=int, default=1,
-> +                        help='increase timeouts (useful for slow machines)')
+Explicitly set the audio backend to "none" at runtime to remove those
+messages from our logs. There is no command line argument for this, so
+use an environment variable when starting qemu.
 
-I find the choice of the "elastic timeout" a bit weird. To me, it feels
-like a timeout that will reduce and extend like an elastic, not a
-timeout multiplier.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/emulator.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Perhaps we should call this --timeout-multiplier or something like
-that ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 9b079cb..588a92f 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -65,7 +65,8 @@ class Emulator(object):
+             qemu_cmd += ["-append", " ".join(kernel_cmdline)]
+ 
+         self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
+-        self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:], timeout=5)
++        self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:], timeout=5,
++                                  env={"QEMU_AUDIO_DRV": "none"})
+         # We want only stdout into the log to avoid double echo
+         self.qemu.logfile_read = self.logfile
+ 
