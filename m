@@ -1,77 +1,183 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 31 Jul 2017 16:21:42 +0300
-Subject: [Buildroot] [PATCH 4/4] webkitgtk: Ensure that Mesa headers do
- not include X11 headers on Wayland builds
-In-Reply-To: <20170727194513.GB5762@momiji.helsinki.igalia.com>
-References: <20170712235531.20444-1-aperez@igalia.com>
- <20170712235531.20444-5-aperez@igalia.com>	<20170721090947.2670fb7c@windsurf>
- <20170727194513.GB5762@momiji.helsinki.igalia.com>
-Message-ID: <20170731162142.GB19378@momiji.helsinki.igalia.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 31 Jul 2017 09:53:41 -0400
+Subject: [Buildroot] [PATCH 1/9] fix help text wrapping for configs e
+Message-ID: <20170731135350.9018-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+The check-package script when ran gives warnings on text wrapping
+on all of these Config files.  This patch cleans up all warnings
+related to the text wrapping for the Config files starting with
+the letter e in the package directory.
 
-On Thu, 27 Jul 2017 19:45:13 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
+The appropriate indentation is: <tab><2 spaces><62 chars>
+See http://nightly.buildroot.org/#writing-rules-config-in for more
+information.
 
-> On Fri, 21 Jul 2017 09:09:47 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> >
-> > On Thu, 13 Jul 2017 02:55:31 +0300, Adrian Perez de Castro wrote:
-> > 
-> > > diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> > > index ef20839f92..09781c2318 100644
-> > > --- a/package/webkitgtk/webkitgtk.mk
-> > > +++ b/package/webkitgtk/webkitgtk.mk
-> > > @@ -84,6 +84,9 @@ endif
-> > >  ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
-> > >  WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
-> > >  endif
-> > > +WEBKITGTK_CONF_OPTS += \
-> > > +	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -DMESA_EGL_NO_X11_HEADERS' \
-> > > +	-DCMAKE_CXX_FLAGS='$(TARGET_CXXFLAGS) -DMESA_EGL_NO_X11_HEADERS'
-> > 
-> > I am not happy with this: such CFLAGS should be provided by the OpenGL
-> > provider, through its pkg-config file, and consumers of the OpenGL
-> > implementation should get those flags using pkg-config.
-> > 
-> > If we don't do this, then we need to add -DMESA_EGL_NO_X11_HEADERS
-> > everywhere in all OpenGL consumers, which isn't nice.
-> > 
-> > We already have a few OpenGL providers that define these flags in
-> > their .pc file:
-> > 
-> > package/mali-t76x/egl.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-> > package/mali-t76x/glesv2.pc:Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-> > package/nvidia-driver/gl.pc:Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-> > package/odroid-mali/odroid-mali.mk:     $(SED) "s/Cflags: /Cflags: -DMESA_EGL_NO_X11_HEADERS /" \
-> 
-> Good point. I will make instead a patch for having Mesa's ?egl.pc? include
-> the ?-DMESA_EGL_NO_X11_HEADERS? when X11 support is disabled.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/ecryptfs-utils/Config.in | 14 +++++++-------
+ package/efibootmgr/Config.in     |  6 +++---
+ package/eigen/Config.in          |  4 ++--
+ package/empty/Config.in          |  3 ++-
+ package/enscript/Config.in       | 12 +++++++-----
+ package/eudev/Config.in          |  8 ++++----
+ package/expedite/Config.in       |  8 ++++----
+ package/ezxml/Config.in          |  3 ++-
+ 8 files changed, 31 insertions(+), 27 deletions(-)
 
-Well, it turns out that the Mesa build system is smart enough to figure out by
-itself that the X11 support has been disabled:
-
-   buildroot % grep Cflags output/staging/lib/pkgconfig/egl.pc
-   Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-   buildroot %
-
-It seems that the WebKitGTK+ CMake files are not picking the ?Cflags? value
-from the ?.pc? file. I'll try to fix this in WebKit, and that way it will not
-be needed to pass this from ?webkitgtk.mk? in Buildroot.
-
-Cheers,
-
-
---
- Adri?n ?
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170731/53e40d30/attachment.asc>
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 078ca3628..bb4cc6448 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -17,19 +17,19 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+-	  Linux filesystem, it stores cryptographic metadata in the header
+-	  of each file written.
++	  Linux filesystem, it stores cryptographic metadata in the
++	  header of each file written.
+ 
+ 	  The eCryptfs kernel module is available in all Linux kernels
+-	  since version 2.6.19. This package provides userspace utilities
+-	  needed to mount eCryptfs.
++	  since version 2.6.19. This package provides userspace
++	  utilities needed to mount eCryptfs.
+ 
+-	  Files are encrypted using a passphrase. Consider building openssl
+-	  for another method.
++	  Files are encrypted using a passphrase. Consider building
++	  openssl for another method.
+ 
+ 	  http://ecryptfs.org
+ 
+-comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
++comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+ 	depends on !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index 1096b9d72..0d36ffd6e 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -9,9 +9,9 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 	select BR2_PACKAGE_EFIVAR
+ 	help
+ 	  A Linux user-space application to modify the Intel Extensible
+-	  Firmware Interface (EFI) Boot Manager. This application can create
+-	  and destroy boot entries, change the boot order, change the next
+-	  running boot option, and more.
++	  Firmware Interface (EFI) Boot Manager. This application can
++	  create and destroy boot entries, change the boot order, change
++	  the next running boot option, and more.
+ 
+ 	  https://github.com/rhinstaller/efibootmgr
+ 
+diff --git a/package/eigen/Config.in b/package/eigen/Config.in
+index 03d65b19d..48752e0c8 100644
+--- a/package/eigen/Config.in
++++ b/package/eigen/Config.in
+@@ -3,8 +3,8 @@ config BR2_PACKAGE_EIGEN
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Eigen is a C++ template library for linear algebra: vectors,
+-	  matrices, and related algorithms. It is versatile, fast, elegant
+-	  and works on many platforms (OS/Compilers).
++	  matrices, and related algorithms. It is versatile, fast,
++	  elegant and works on many platforms (OS/Compilers).
+ 
+ 	  This package only installs header files to the include path.
+ 	  If you just want to use Eigen, you can use the header files
+diff --git a/package/empty/Config.in b/package/empty/Config.in
+index 7fd0877cb..f73bce898 100644
+--- a/package/empty/Config.in
++++ b/package/empty/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_EMPTY
+ 	bool "empty"
+ 	depends on BR2_USE_MMU # uses fork()
+ 	help
+-	  Run processes and applications under pseudo-terminal (PTY) sessions.
++	  Run processes and applications under pseudo-terminal (PTY)
++	  sessions.
+ 
+ 	  http://empty.sourceforge.net/
+diff --git a/package/enscript/Config.in b/package/enscript/Config.in
+index 26c45e1e2..b95bd92af 100644
+--- a/package/enscript/Config.in
++++ b/package/enscript/Config.in
+@@ -1,11 +1,13 @@
+ config BR2_PACKAGE_ENSCRIPT
+ 	bool "enscript"
+ 	help
+-	  GNU Enscript is a free replacement for Adobe's enscript program.
++	  GNU Enscript is a free replacement for Adobe's enscript
++	  program.
+ 
+-	  GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+-	  stores generated output to a file or sends it directly to the
+-	  printer. It includes features for `pretty-printing' (language-
+-	  sensitive code highlighting) in several programming languages.
++	  GNU Enscript converts ASCII files to PostScript, HTML, or RTF
++	  and stores generated output to a file or sends it directly to
++	  the printer. It includes features for `pretty-printing'
++	  (language-sensitive code highlighting) in several programming
++	  languages.
+ 
+ 	  http://www.gnu.org/software/enscript
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 02fcc7e14..2220265a5 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -9,10 +9,10 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
+ 	help
+-	  eudev is a fork of systemd-udev with the goal of obtaining better
+-	  compatibility with existing software such as OpenRC and Upstart,
+-	  older kernels, various toolchains and anything else required by
+-	  users and various distributions.
++	  eudev is a fork of systemd-udev with the goal of obtaining
++	  better compatibility with existing software such as OpenRC and
++	  Upstart, older kernels, various toolchains and anything else
++	  required by users and various distributions.
+ 
+ 	  https://wiki.gentoo.org/wiki/Project:Eudev
+ 
+diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+index 0bcf34349..fdfc67190 100644
+--- a/package/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -3,10 +3,10 @@ config BR2_PACKAGE_EXPEDITE
+ 	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Expedite is the official Evas benchmark tool. It can test different
+-	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+-	  DirectFB and so on. Its tests are quite extensive, trying to
+-	  reproduce real world usage cases.
++	  Expedite is the official Evas benchmark tool. It can test
++	  different engines, such as X11, XRender, OpenGL (also ES
++	  variant), SDL, DirectFB and so on. Its tests are quite
++	  extensive, trying to reproduce real world usage cases.
+ 
+ comment "expedite needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/ezxml/Config.in b/package/ezxml/Config.in
+index 285c7a5d4..8a1643b11 100644
+--- a/package/ezxml/Config.in
++++ b/package/ezxml/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_EZXML
+ 	bool "ezxml"
+ 	help
+-	  ezXML is a XML parser C library that is simple and easy to use.
++	  ezXML is a XML parser C library that is simple and easy to
++	  use.
+ 
+ 	  http://ezxml.sf.net
+-- 
+2.13.3
