@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Aug 2017 23:37:24 +0200
-Subject: [Buildroot] [PATCH] gdb: force to use ncurses and not termcap
- for host-gdb
-In-Reply-To: <20170729200626.2403-1-thomas.petazzoni@free-electrons.com>
-References: <20170729200626.2403-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170801233724.6026d204@windsurf.home>
+Date: Tue, 1 Aug 2017 23:37:51 +0200
+Subject: [Buildroot] [git commit] binutils: switch to use 2.28.x as the
+	default version
+Message-ID: <20170801213358.256198215C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ab2e1786c2c5b8ef377563ca9bc3f7dbabe2cb61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Jul 2017 22:06:26 +0200, Thomas Petazzoni wrote:
-> Both our target and host gdb depend on ncurses (host-ncurses for
-> host-gdb, of course). However, while for the target we passs
-> --with-curses, we are not doing this for the host variant. Due to
-> this, host-gdb default to using the termcap library: if such a library
-> is available on the build system, it will be used instead of the
-> host-ncurses we have built. This causes the host gdb binary to depend
-> on a library that we do not provide in $(HOST_DIR), breaking the
-> principle of a standalone SDK (which should only depend on the C
-> library).
-> 
-> To solve this, we simply pass --with-curses in HOST_GDB_CONF_OPTS,
-> which forces host-gdb to use the host-ncurses library.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gdb/gdb.mk | 1 +
->  1 file changed, 1 insertion(+)
+Now that binutils 2.29 has been released, it is time to move to
+binutils 2.28.x as the default binutils version, instead of 2.27.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/Config.in.host | 3 +--
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 0840e8a..ef6aadb 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -2,8 +2,7 @@ comment "Binutils Options"
+ 
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_27_X
+-	default BR2_BINUTILS_VERSION_2_28_X if (BR2_arm && !BR2_USE_MMU)
++	default BR2_BINUTILS_VERSION_2_28_X
+ 	depends on !BR2_arc
+ 	help
+ 	  Select the version of binutils you wish to use.
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 2e09ba7..768f084 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2017.03
+ else
+-BINUTILS_VERSION = 2.27
++BINUTILS_VERSION = 2.28.1
+ endif
+ endif # BINUTILS_VERSION
+ 
