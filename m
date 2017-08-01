@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 2 Aug 2017 00:52:12 +0200
-Subject: [Buildroot] [PATCH v5 02/14] package/skeleton: split out into
-	skeleton-custom
+Date: Wed, 2 Aug 2017 00:52:11 +0200
+Subject: [Buildroot] [PATCH v5 01/14] support/testing: add runtime testing
+	for init systems
 In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
 References: <20170801225224.16899-1-arnout@mind.be>
-Message-ID: <20170801225224.16899-3-arnout@mind.be>
+Message-ID: <20170801225224.16899-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,244 +13,326 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-For the custom skeleton, we practicaly do nothing, except ensure it
-contains the basic, required directories, and that those are properly
-setup wrt. merged /usr.
+The "builtin" kernel does not boot a systemd-based system, so
+we resort to building the same one as currently used by our
+qemu_arm_vexpress_defconfig.
 
-Furthermore, our current skeleton is not fit for systemd, and we'll
-have to split things out into various skeletons.
+We test the 8 following combinations:
 
-So, off-load the custom skeleton into its own package.
+  - busybox, read-only, without network
+  - busybox, read-only, with network
+  - busybox, read-write, without network
+  - busybox, read-write, with network
 
-Thus, the existing skeleton package is now limited to:
+  - basic systemd, read-write, network w/ ifupdown
+  - basic systemd, read-write, network w/ networkd
+  - full systemd, read-write, network w/ networkd
 
-  - when using our default skeleton, install and tweak it properly;
+  - no init system, read-only, without network
 
-  - when using a custom skeleton, do nothing except for depending on
-    the skeleton-custom package.
+The tests just verify what the /sbin/init binary is, and that we were
+able to grab an IP address. More tests can be added later, for example
+to check each systemd features (journal, tmpfiles...)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Arnout: split off in a separate patch doing only this]
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+[Arnout: update .gitlab-ci.yml]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Note: this calls for making skeleton a virtual package. This will come
-in follwup patches, after skeleton has lost all its code to the various
-skeleton packages.
-
----
 Changes v4 -> v5: (Arnout)
- - separate patch for the split into skeleton-customer; the rest of
-   the modifications comes in follow-up patches
- - fixed a use of SKELETON_PATH instead of SKELETON_CUSTOM_PATH
- - don't remove the "The skeleton can't depend on the toolchain" comment
+ - re-ordered
+ - update .gitlab-ci.yml
 
 Changes v3 -> v4:
-  - lib{32.64} are also tweaked in the skeleton  (Arnout)
+  - drop the systemd read-only tests for now, we do not support it yet.
 ---
- package/Config.in                          |  1 +
- package/skeleton-custom/Config.in          |  3 ++
- package/skeleton-custom/skeleton-custom.mk | 81 ++++++++++++++++++++++++++++++
- package/skeleton/skeleton.mk               | 51 +------------------
- system/Config.in                           |  2 +-
- 5 files changed, 88 insertions(+), 50 deletions(-)
- create mode 100644 package/skeleton-custom/Config.in
- create mode 100644 package/skeleton-custom/skeleton-custom.mk
+ .gitlab-ci.yml                             |  8 +++
+ support/testing/tests/init/__init__.py     |  0
+ support/testing/tests/init/base.py         | 47 +++++++++++++++++
+ support/testing/tests/init/test_busybox.py | 67 ++++++++++++++++++++++++
+ support/testing/tests/init/test_none.py    | 32 ++++++++++++
+ support/testing/tests/init/test_systemd.py | 82 ++++++++++++++++++++++++++++++
+ 6 files changed, 236 insertions(+)
+ create mode 100644 support/testing/tests/init/__init__.py
+ create mode 100644 support/testing/tests/init/base.py
+ create mode 100644 support/testing/tests/init/test_busybox.py
+ create mode 100644 support/testing/tests/init/test_none.py
+ create mode 100644 support/testing/tests/init/test_systemd.py
 
-diff --git a/package/Config.in b/package/Config.in
-index 86d714dae4..f409f5a363 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2,6 +2,7 @@ menu "Target packages"
- 
- 	source "package/busybox/Config.in"
- 	source "package/skeleton/Config.in"
-+	source "package/skeleton-custom/Config.in"
- 
- menu "Audio and video applications"
- 	source "package/alsa-utils/Config.in"
-diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index f9e5b1fa6b..cdae953bf9 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -229,6 +229,14 @@ tests.fs.test_jffs2.TestJffs2: *runtime_test
+ tests.fs.test_squashfs.TestSquashfs: *runtime_test
+ tests.fs.test_ubi.TestUbi: *runtime_test
+ tests.fs.test_yaffs2.TestYaffs2: *runtime_test
++tests.init.test_busybox.TestInitSystemBusyboxRo: *runtime_test
++tests.init.test_busybox.TestInitSystemBusyboxRoNet: *runtime_test
++tests.init.test_busybox.TestInitSystemBusyboxRw: *runtime_test
++tests.init.test_busybox.TestInitSystemBusyboxRwNet: *runtime_test
++tests.init.test_none.TestInitSystemNone: *runtime_test
++tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
++tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
++tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
+ tests.package.test_dropbear.TestDropbear: *runtime_test
+ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+diff --git a/support/testing/tests/init/__init__.py b/support/testing/tests/init/__init__.py
 new file mode 100644
-index 0000000000..b12bd8f73c
---- /dev/null
-+++ b/package/skeleton-custom/Config.in
-@@ -0,0 +1,3 @@
-+config BR2_PACKAGE_SKELETON_CUSTOM
-+	bool
-+	select BR2_PACKAGE_SKELETON
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
+index 0000000000..e69de29bb2
+diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
 new file mode 100644
-index 0000000000..4aebe3f3b1
+index 0000000000..a261d7dd46
 --- /dev/null
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -0,0 +1,81 @@
-+################################################################################
-+#
-+# skeleton-custom
-+#
-+################################################################################
++++ b/support/testing/tests/init/base.py
+@@ -0,0 +1,47 @@
++import os
++import subprocess
++import infra.basetest
 +
-+# The skeleton can't depend on the toolchain, since all packages depends on the
-+# skeleton and the toolchain is a target package, as is skeleton.
-+# Hence, skeleton would depends on the toolchain and the toolchain would depend
-+# on skeleton.
-+SKELETON_CUSTOM_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_CUSTOM_ADD_SKELETON_DEPENDENCY = NO
++class InitSystemBase(infra.basetest.BRTest):
 +
-+# The skeleton also handles the merged /usr case in the sysroot
-+SKELETON_CUSTOM_INSTALL_STAGING = YES
++    def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
++        img = os.path.join(self.builddir, "images", "rootfs.{}".format(fs_type))
++        subprocess.call(["truncate", "-s", "%1M", img])
 +
-+SKELETON_CUSTOM_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
++        options = ["-drive",
++                   "file={},if=sd,format=raw".format(img),
++                   "-M", "vexpress-a9"]
 +
-+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
-+ifeq ($(SKELETON_CUSTOM_PATH),)
-+$(error No path specified for the custom skeleton)
-+endif
++        if kernel is None:
++            kernel = "builtin"
++        else:
++            kernel = os.path.join(self.builddir, "images", kernel)
++            options.extend(["-dtb", os.path.join(self.builddir, "images",
++                                             "{}.dtb".format(dtb))])
 +
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++        kernel_cmdline = ["root=/dev/mmcblk0",
++                          "rootfstype={}".format(fs_type),
++                          "rootwait",
++                          "ro",
++                          "console=ttyAMA0"]
 +
-+# Ensure the user has prepared a merged /usr.
-+#
-+# Extract the inode numbers for all of those directories. In case any is
-+# a symlink, we want to get the inode of the pointed-to directory, so we
-+# append '/.' to be sure we get the target directory. Since the symlinks
-+# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
-+# all of them.
-+#
-+SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/.)
-+SKELETON_CUSTOM_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/bin/.)
-+SKELETON_CUSTOM_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/sbin/.)
-+SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/lib/.)
-+SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/.)
-+SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/.)
++        if not init is None:
++            kernel_cmdline.extend(["init={}".format(init)])
 +
-+ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
-+SKELETON_CUSTOM_NOT_MERGED_USR += /lib
-+endif
-+ifneq ($(SKELETON_CUSTOM_BIN_INODE),$(SKELETON_CUSTOM_USR_BIN_INODE))
-+SKELETON_CUSTOM_NOT_MERGED_USR += /bin
-+endif
-+ifneq ($(SKELETON_CUSTOM_SBIN_INODE),$(SKELETON_CUSTOM_USR_SBIN_INODE))
-+SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
-+endif
++        self.emulator.boot(arch="armv7",
++                           kernel=kernel,
++                           kernel_cmdline=kernel_cmdline,
++                           options=options)
 +
-+ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
-+$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is not \
-+	using a merged /usr for the following directories: \
-+	$(SKELETON_CUSTOM_NOT_MERGED_USR))
-+endif
++        if init is None:
++            self.emulator.login()
 +
-+endif # merged /usr
-+endif # ! building
++    def checkInit(self, path):
++        cmd = "cmp /proc/1/exe {}".format(path)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 +
-+define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
-+	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
-+	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
-+		$(TARGET_DIR_WARNING_FILE)
-+endef
++    def checkNetwork(self, interface, exitCode=0):
++        cmd = "ip addr show {} |grep inet".format(interface)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, exitCode)
+diff --git a/support/testing/tests/init/test_busybox.py b/support/testing/tests/init/test_busybox.py
+new file mode 100644
+index 0000000000..c3e425bf5d
+--- /dev/null
++++ b/support/testing/tests/init/test_busybox.py
+@@ -0,0 +1,67 @@
++import infra.basetest
++from tests.init.base import InitSystemBase as InitSystemBase
 +
-+# For the staging dir, we don't really care about /bin and /sbin.
-+# But for consistency with the target dir, and to simplify the code,
-+# we still handle them for the merged or non-merged /usr cases.
-+# Since the toolchain is not yet available, the staging is not yet
-+# populated, so we need to create the directories in /usr
-+define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
-+	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
-+endef
++class InitSystemBusyboxBase(InitSystemBase):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+$(eval $(generic-package))
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 41da1778a6..f44ecf48f6 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -14,57 +14,14 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- # The skeleton also handles the merged /usr case in the sysroot
- SKELETON_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
-+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
- 
--SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
--
--ifeq ($(BR_BUILDING),y)
--ifeq ($(SKELETON_PATH),)
--$(error No path specified for the custom skeleton)
--endif
--endif
--
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--
--# Ensure the user has prepared a merged /usr.
--#
--# Extract the inode numbers for all of those directories. In case any is
--# a symlink, we want to get the inode of the pointed-to directory, so we
--# append '/.' to be sure we get the target directory. Since the symlinks
--# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
--# all of them.
--#
--SKELETON_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/lib/.)
--SKELETON_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/bin/.)
--SKELETON_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/sbin/.)
--SKELETON_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/lib/.)
--SKELETON_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/bin/.)
--SKELETON_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/sbin/.)
--
--ifneq ($(SKELETON_LIB_INODE),$(SKELETON_USR_LIB_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR += /lib
--endif
--ifneq ($(SKELETON_BIN_INODE),$(SKELETON_USR_BIN_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR += /bin
--endif
--ifneq ($(SKELETON_SBIN_INODE),$(SKELETON_USR_SBIN_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
--endif
--
--ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
--$(error The custom skeleton in $(SKELETON_PATH) is not \
--	using a merged /usr for the following directories: \
--	$(SKELETON_CUSTOM_NOT_MERGED_USR))
--endif
--
--endif # merged /usr
-+SKELETON_DEPENDENCIES = skeleton-custom
- 
- else # ! custom skeleton
- 
- SKELETON_PATH = system/skeleton
- 
--endif # ! custom skeleton
--
- define SKELETON_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
- 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
-@@ -86,10 +43,6 @@ define SKELETON_INSTALL_STAGING_CMDS
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- endef
- 
--# The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
--# default skeleton.
--ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
--
- SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
- SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-diff --git a/system/Config.in b/system/Config.in
-index b2f5be376e..014aedfb42 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -11,7 +11,7 @@ config BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_ROOTFS_SKELETON_CUSTOM
- 	bool "custom target skeleton"
--	select BR2_PACKAGE_SKELETON
-+	select BR2_PACKAGE_SKELETON_CUSTOM
- 	help
- 	  Use custom target skeleton.
- 
++    def checkInit(self):
++        super(InitSystemBusyboxBase, self).checkInit("/bin/busybox")
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemBusyboxRo(InitSystemBusyboxBase):
++    config = InitSystemBusyboxBase.config + \
++        """
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        """
++
++    def test_run(self):
++        self.startEmulator("squashfs")
++        self.checkInit()
++        self.checkNetwork("eth0", 1)
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemBusyboxRw(InitSystemBusyboxBase):
++    config = InitSystemBusyboxBase.config + \
++        """
++        BR2_TARGET_ROOTFS_EXT2=y
++        """
++
++    def test_run(self):
++        self.startEmulator("ext2")
++        self.checkInit()
++        self.checkNetwork("eth0", 1)
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemBusyboxRoNet(InitSystemBusyboxBase):
++    config = InitSystemBusyboxBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        """
++
++    def test_run(self):
++        self.startEmulator("squashfs")
++        self.checkInit()
++        self.checkNetwork("eth0")
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemBusyboxRwNet(InitSystemBusyboxBase):
++    config = InitSystemBusyboxBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_TARGET_ROOTFS_EXT2=y
++        """
++
++    def test_run(self):
++        self.startEmulator("ext2")
++        self.checkInit()
++        self.checkNetwork("eth0")
+diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
+new file mode 100644
+index 0000000000..f55db5d3e0
+--- /dev/null
++++ b/support/testing/tests/init/test_none.py
+@@ -0,0 +1,32 @@
++import pexpect
++
++import infra.basetest
++from tests.init.base import InitSystemBase as InitSystemBase
++
++class TestInitSystemNone(InitSystemBase):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_INIT_NONE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        """
++
++    def test_run(self):
++        self.startEmulator(fs_type="squashfs", init="/bin/sh")
++        index = self.emulator.qemu.expect(["/bin/sh: can't access tty; job control turned off", pexpect.TIMEOUT], timeout=60)
++        if index != 0:
++            self.emulator.logfile.write("==> System does not boot")
++            raise SystemError("System does not boot")
++        index = self.emulator.qemu.expect(["#", pexpect.TIMEOUT], timeout=60)
++        if index != 0:
++            self.emulator.logfile.write("==> System does not boot")
++            raise SystemError("System does not boot")
++
++        out, exit_code = self.emulator.run("sh -c 'echo $PPID'")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "1")
++
++        _, exit_code = self.emulator.run("mount -t proc none /proc")
++        self.assertEqual(exit_code, 0)
++
++        self.checkInit("/bin/sh")
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+new file mode 100644
+index 0000000000..7a80aa1145
+--- /dev/null
++++ b/support/testing/tests/init/test_systemd.py
+@@ -0,0 +1,82 @@
++import infra.basetest
++from tests.init.base import InitSystemBase as InitSystemBase
++
++class InitSystemSystemdBase(InitSystemBase):
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_INIT_SYSTEMD=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def checkInit(self):
++        super(InitSystemSystemdBase, self).checkInit("/lib/systemd/systemd")
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
++    config = InitSystemSystemdBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_TARGET_ROOTFS_EXT2=y
++        """
++
++    def test_run(self):
++        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.checkInit()
++        self.checkNetwork("eth0")
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
++    config = InitSystemSystemdBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_TARGET_ROOTFS_EXT2=y
++        """
++
++    def test_run(self):
++        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.checkInit()
++        self.checkNetwork("eth0")
++
++
++#-------------------------------------------------------------------------------
++class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
++    config = InitSystemSystemdBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
++        BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
++        BR2_PACKAGE_SYSTEMD_BINFMT=y
++        BR2_PACKAGE_SYSTEMD_COREDUMP=y
++        BR2_PACKAGE_SYSTEMD_FIRSTBOOT=y
++        BR2_PACKAGE_SYSTEMD_HIBERNATE=y
++        BR2_PACKAGE_SYSTEMD_IMPORTD=y
++        BR2_PACKAGE_SYSTEMD_LOCALED=y
++        BR2_PACKAGE_SYSTEMD_LOGIND=y
++        BR2_PACKAGE_SYSTEMD_MACHINED=y
++        BR2_PACKAGE_SYSTEMD_POLKIT=y
++        BR2_PACKAGE_SYSTEMD_QUOTACHECK=y
++        BR2_PACKAGE_SYSTEMD_RANDOMSEED=y
++        BR2_PACKAGE_SYSTEMD_RFKILL=y
++        BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT=y
++        BR2_PACKAGE_SYSTEMD_SYSUSERS=y
++        BR2_PACKAGE_SYSTEMD_VCONSOLE=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        """
++
++    def test_run(self):
++        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.checkInit()
++        self.checkNetwork("eth0")
 -- 
 2.13.3
