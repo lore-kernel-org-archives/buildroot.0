@@ -1,237 +1,179 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Aug 2017 22:44:17 +0200
-Subject: [Buildroot] [PATCH 1/1] New board - EVB SoCrates based on
- Altera Cyclone 5
-In-Reply-To: <20170801201013.27685-1-michal.lyszczek@gmail.com>
-References: <20170801201013.27685-1-michal.lyszczek@gmail.com>
-Message-ID: <20170801224417.5f45e92c@windsurf.home>
+Date: Tue, 1 Aug 2017 23:24:26 +0200
+Subject: [Buildroot] [git commit] CHANGES: update for 2017.08-rc1
+Message-ID: <20170801212140.BF0EA80466@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6ce80b6a6e609a29a9930626d625f545968d9bb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks a lot for this new version. See a few comments below.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ CHANGES | 137 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 127 insertions(+), 10 deletions(-)
 
-On Tue,  1 Aug 2017 22:10:13 +0200, Micha? ?yszczek wrote:
-> From: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-> 
-> Configuration contains:
->   - binary uboot SPL
-
-Is it really "binary" now ?
-
-> diff --git a/board/altera/socrates_cyclone5/boot-env.txt b/board/altera/socrates_cyclone5/boot-env.txt
-> new file mode 100644
-> index 0000000..30c55a1
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/boot-env.txt
-> @@ -0,0 +1,3 @@
-> +source_env=fatload mmc 0:1 0x2000000 boot.scr; source 0x2000000
-> +bootcmd=run source_env; run start
-> +bootdelay=1
-> diff --git a/board/altera/socrates_cyclone5/boot.txt b/board/altera/socrates_cyclone5/boot.txt
-> new file mode 100644
-> index 0000000..0a70ff3
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/boot.txt
-> @@ -0,0 +1,7 @@
-> +setenv linux_load_address 0x100000
-> +setenv linux_dtb_load_address 0x100
-> +setenv linux_load 'mmc rescan; fatload mmc 0:1 ${linux_load_address} zImage; fatload mmc 0:1 ${linux_dtb_load_address} linux.dtb'
-> +
-> +setenv bootargs 'console=ttyS0,115200 root=/dev/mmcblk0p3 rw rootwait'
-> +
-> +setenv start 'run linux_load; bootz ${linux_load_address} - ${linux_dtb_load_address}'
-
-It's a bit weird to have both an environment and a boot script here,
-no? Why is the start command being defined in the boot script, but
-called from the bootcmd defined in the environment ? While the
-source_env command is defined *and* used in the environment ?
-
-This looks like it could be improved a bit.
-
-> diff --git a/board/altera/socrates_cyclone5/create_sdcard.sh b/board/altera/socrates_cyclone5/create_sdcard.sh
-> new file mode 100755
-> index 0000000..70ca865
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/create_sdcard.sh
-> @@ -0,0 +1,43 @@
-> +#!/bin/bash
-> +#
-> +# Script generates sdcard image for altera cyclone5 (socrates board)
-> +
-> +# $1 - image directory (output/images)
-> +
-> +BOARD_DIR="$(dirname $0)"
-> +IMAGES_DIR="$1"
-> +GENIMAGE_CFG="$BOARD_DIR/genimage.cfg"
-> +GENIMAGE_TMP="$BUILD_DIR/genimage.tmp"
-> +
-> +###
-> +# create preloader image that consists of 4 64k images
-> +#
-> +
-> +truncate -s64k "$IMAGES_DIR/u-boot-spl.bin.crc"
-> +dd if="$IMAGES_DIR/u-boot-spl.bin.crc" of="$IMAGES_DIR/preloader.bin" bs=64k count=1 seek=0
-> +dd if="$IMAGES_DIR/u-boot-spl.bin.crc" of="$IMAGES_DIR/preloader.bin" bs=64k count=1 seek=1
-> +dd if="$IMAGES_DIR/u-boot-spl.bin.crc" of="$IMAGES_DIR/preloader.bin" bs=64k count=1 seek=2
-> +dd if="$IMAGES_DIR/u-boot-spl.bin.crc" of="$IMAGES_DIR/preloader.bin" bs=64k count=1 seek=3
-> +
-> +###
-> +# append real uboot at the end of preloader to create complete uboot
-> +# image
-> +#
-> +
-> +cat "$IMAGES_DIR/preloader.bin" "$IMAGES_DIR/u-boot.img" > \
-> +    "$IMAGES_DIR/boot_partition.img"
-
-What about doing all of this using genimage ?
-
-You put u-boot-spl.bin.crc at offset 0, 64K, 128K and 196 KB, and you
-put u-boot.img at offset 256 KB.
-
-This way you can drop your post-image script and use
-support/scripts/genimage.sh.
-
-> diff --git a/board/altera/socrates_cyclone5/genimage.cfg b/board/altera/socrates_cyclone5/genimage.cfg
-> new file mode 100644
-> index 0000000..6c77017
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/genimage.cfg
-> @@ -0,0 +1,39 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"linux.dtb",
-> +			"boot.scr"
-> +		}
-> +	}
-> +	size = 10321920
-
-Why this size exactly ?
-
-
-> diff --git a/board/altera/socrates_cyclone5/linux-4.1.config b/board/altera/socrates_cyclone5/linux-4.1.config
-> new file mode 100644
-> index 0000000..295bdb8
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/linux-4.1.config
-
-There is no usable/useful defconfig for the platform in Altera's Github
-Linux repository ?
-
-> diff --git a/board/altera/socrates_cyclone5/linux.dts b/board/altera/socrates_cyclone5/linux.dts
-> new file mode 100644
-> index 0000000..f915f44
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/linux.dts
-
-Is this going to be upstream, or at least in Altera Github repository
-at some point ? We really don't want to be carrying .dts files forever,
-so we want to see that there is a path towards getting the platform
-supported without forcing Buildroot to carry the .dts.
-
-
-> diff --git a/board/altera/socrates_cyclone5/readme.txt b/board/altera/socrates_cyclone5/readme.txt
-> new file mode 100644
-> index 0000000..8630be1
-> --- /dev/null
-> +++ b/board/altera/socrates_cyclone5/readme.txt
-> @@ -0,0 +1,52 @@
-> +EBV SoCrates Evaluation Board
-> +
-> +Intro
-> +=====
-> +
-> +More information about board can be found here:
-
-about *this* board
-
-> +https://rocketboards.org/foswiki/Documentation/EBVSoCratesEvaluationBoard
-
-> +Pins 6:8 on P18 selector is used to determine boot device. To boot socrates from
-> +sdcard set these pins to value 0x5 (101b). Rest pins are used to determine how
-> +to configure FPGA and are not associate with booting into Linux kernel.
-
-Rest pins -> Remaining pins
-
-associate -> associated
-
-> diff --git a/configs/socrates_cyclone5_defconfig b/configs/socrates_cyclone5_defconfig
-> new file mode 100644
-> index 0000000..1225b27
-> --- /dev/null
-> +++ b/configs/socrates_cyclone5_defconfig
-> @@ -0,0 +1,37 @@
-> +BR2_arm=y
-> +BR2_cortex_a9=y
-> +BR2_ARM_ENABLE_NEON=y
-> +BR2_ARM_ENABLE_VFP=y
-> +BR2_ARM_FPU_NEON=y
-> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-
-Please drop, keep the default.
-
-> +BR2_KERNEL_HEADERS_4_1=y
-
-Please:
-
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-
-instead.
-
-> +BR2_GCC_VERSION_5_X=y
-> +BR2_GCC_ENABLE_LTO=y
-
-Please drop those two options, keep the default.
-
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/socrates_cyclone5/create_sdcard.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-4.1.33-ltsi_17.07.02_pr"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/altera/socrates_cyclone5/linux-4.1.config"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
-> +BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/altera/socrates_cyclone5/linux.dts"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="10M"
-
-This seems like a really small size. Why not keep the default of 60M ?
-
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2017.07"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="socfpga_socrates"
-> +BR2_TARGET_UBOOT_FORMAT_IMG=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC=y
-> +BR2_TARGET_UBOOT_ENVIMAGE=y
-> +BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/altera/socrates_cyclone5/boot-env.txt"
-> +BR2_TARGET_UBOOT_ENVIMAGE_SIZE="8192"
-> +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-> +BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/altera/socrates_cyclone5/boot.txt"
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-
-You also need:
-
-BR2_PACKAGE_HOST_MTOOLS=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-
-because your genimage.cfg describes a VFAT filesystem.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/CHANGES b/CHANGES
+index ce3ea23..f647953 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,7 +1,9 @@
+ 2017.08-rc1, To be released
+ 
+-	Major revamp of the gettext handling, with user-visible
+-	effect:
++	Infrastructure:
++
++	- Major revamp of the gettext handling, with user-visible
++	  effect:
+ 
+ 	  - prior to this revamp, when BR2_ENABLE_LOCALE=y, each
+ 	    package could decide to enable or not NLS support. When
+@@ -9,21 +11,136 @@
+ 	    by passing --disable-nls to packages.
+ 
+ 	  - after this revamp, a new BR2_SYSTEM_ENABLE_NLS option
+-            controls whether NLS support should be enabled or not in
+-            packages. This option defaults to disabled, which means
+-            that now, NLS support is by default disabled in all
+-            packages.
+-
+-	Therefore, if you need NLS support in packages, you must now
+-	explicitly enable the BR2_SYSTEM_ENABLE_NLS option.
++	    controls whether NLS support should be enabled or not in
++	    packages. This option defaults to disabled, which means
++	    that now, NLS support is by default disabled in all
++	    packages.
+ 
+-	Infrastructure:
++	  Therefore, if you need NLS support in packages, you must now
++	  explicitly enable the BR2_SYSTEM_ENABLE_NLS option.
+ 
+ 	- The host directory no longer has a usr/ component. This
+ 	  makes it much more natural to use that directory as an
+ 	  externally used toolchain. For compatibility with existing
+ 	  scripts, a link usr -> . is still added.
+ 
++	- Hashes are now checked on tarballs by Buildroot when a
++	  package is sourced from a Git repository.
++
++	- Patches are no longer being downloaded from Github, since
++	  auto-generated patches could change over time, and break
++	  hashes. All patches that were downloaded from Github are now
++	  stored in their respective package directories.
++
++	- Hash files in packages can now contain hashes for the
++	  license files contained in the package source code. This
++	  allows to detect changes in such license files.
++
++	- Binaries in $(TARGET_DIR) are now cleaned up from invalid
++	  RPATHs at the end of the build.
++
++	- A new "make sdk" target prepares $(HOST_DIR) to be
++	  relocatable: turns RPATHs in host binaries into relocatable
++	  ones, removes bogus RPATHs from staging binaries/libraries,
++	  and provides a relocate-sdk script that can be executed to
++	  relocate the SDK after installation.
++
++	- Addition of utils/genrandconfig which generates a random
++	  configuration based on a set of pre-defined toolchain
++	  configurations (support/config-fragments/autobuild/) and a
++	  random selection of packages. It is now used by the
++	  autobuilders to generate the random configurations.
++
++	Filesystems:
++
++	- ext2/3/4 filesystems are now generated using mkfs.ext from
++	  e2fsprogs instead of using genext2fs.
++
++	Architecture:
++
++	- Addition of support for ARM big.LITTLE variants
++	- Improved MIPS support, with options to select NaN encoding
++	  and FP32 mode.
++
++	Toolchain:
++
++	- Switch to gcc 6.x as the default gcc version, add support
++	  for gcc 7.x, remove support for gcc 4.8
++	- Support added for gdb 8.0
++	- uClibc-ng bumped to 1.0.26
++	- CodeSourcery toolchains for x86 and SuperH have been
++	  removed, they were using a too old glibc version
++	  (2.17). External toolchains with glibc 2.17 or earlier are
++	  no longer supported.
++	- The version selection in the glibc package has been
++	  removed. Like musl and uClibc-ng, we now use the latest
++	  glibc version.
++	- Improved support for Xtensa toolchain overlays, which can
++	  now be downloaded.
++
++	Tools:
++
++	- Numerous improvements to the runtime test infrastructure
++	- Tests are now executed by Gitlab CI on a regular basis
++	- Tools that are directly useful to the user have been moved
++	  from support/scripts/ to utils/: brmake, check-package,
++	  get-developers, scancpan, scanpipy, size-stats-compare,
++	  test-pkg.
++
++	New defconfigs: A13 Olinuxino, Engicam platforms (i.CoreM6
++	Solo/Dual/DualLite/Quad, RQS SOM, GEAM6UL SOM, Is.IoT MX6UL
++	SOM), Nano Pi M1 (Plus), OrangePi Zero and Plus.
++
++	New packages: azure-iot-sdk-c, cracklib, dt-utils, easy-rsa,
++	erlang-jiffy, erlang-p1-oauth2, erlang-p1-xmpp,
++	ifupdown-scripts, irrlicht, kodi-inputstream-adaptive,
++	kodi-inputstream-rtmp, kvazaar, let-me-create, libloki,
++	libpwquality, libressl, libspatialindex, libva-utils,
++	linuxconsoletools, linuxptp, luaossl, lua-sdl2, lua-stdlib,
++	lsscsi, paxtest, pcre2, pixz, python-asn1crypto,
++	python-backports-shutil-get-terminal-size, python-bcrypt,
++	python-cheroot, python-h2, python-hpack, python-hyperframe,
++	python-hyperlink, python-ipython-genutils, python-pathlib2,
++	python-pickleshare, python-priority, python-portend,
++	python-scandir, python-systemd, python-tempora,
++	python-traitlets, python-typepy, qt5virtualkeyboard,
++	ratpoison, rauc, refpolicy, rhash, sdl2_mixer, sdl2_net,
++	xr819-xradio, zstd
++
++	Removed packages: input-tools, mke2img
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9341: avahi-utils does not compile with uClibc +  libglib2
++	#9441: Link BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY to
++	       BR2_ENABLE_DEBUG
++	#9746: ext4 image generated by Buildroot is not working
++	       properly with U-Boot
++	#9886: Build fails with "unexpected EOF while looking for
++	       matching `"'" if PATH contains a newline
++	#9891: parted 3.1 => 3.2?
++	#9911: qt5 does not build on sparc
++	#9916: qt5 does not build on
++	       arm-buildroot-linux-uclibcgnueabihf for ARMv8 cores
++	#9936: Host QEMU does not build with SDL support because of
++	       pkg-config
++	#9941: nodejs option disappears for arm
++	#9951: SCANCPAN failure
++	#9966: util-linux-2.30/.stamp_built' failed
++	#9976: License file for package 'rtl8821au' incorrect
++	#9991: SGX Error implicit declaration of function
++	       ???dmac_map_area???
++	#10011: wget does not work from Buildroot
++	#10036: Buildroot builds Raspbian Jessie headless image
++		presenting incorrect prompt
++	#10051: make: *** No rule to make target
++		'raspberrpi3_defconfig'. Stop reported with Buildroot
++		v2017.05.1
++	#10056: No .config file was produced in /buildroot folder
++	#10061: gcc5.4 buildroot toolchain for powerpc libsanitizer
++		failure
++	#10076: Makefile:4113: recipe for target 'all-gcc'  failed
++
+ 2017.05.2, Released July 27th, 2017
+ 
+ 	Important / security related fixes.
