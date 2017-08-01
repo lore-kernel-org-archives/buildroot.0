@@ -1,12 +1,9 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Tue, 1 Aug 2017 22:31:41 +0530
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-07-30
-In-Reply-To: <20170801184924.4a82a5fa@windsurf.home>
-References: <20170731063108.12B5521DFC@mail.free-electrons.com>
- <CA+NV+VnF02-_eYGDycSH-EMJVZyNkjwj74dSAmxpSjLG2fobdQ@mail.gmail.com>
- <20170801184924.4a82a5fa@windsurf.home>
-Message-ID: <CA+NV+Vn8vZv8vzyGVx6VToYdGZKEVRiL57WjQdSoc2Cdaa_sXQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Aug 2017 19:08:40 +0200
+Subject: [Buildroot] [PATCH 1/2] lua: fix pkg-config file
+In-Reply-To: <20170731211800.5888-1-joerg.krause@embedded.rocks>
+References: <20170731211800.5888-1-joerg.krause@embedded.rocks>
+Message-ID: <20170801190840.457a6f6d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, Aug 1, 2017 at 10:19 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> You have not re-used the defconfig used by the autobuilders. What
-> Buildroot is saying here is that:
->
->  - The toolchain tarball contains a toolchain that uses the kernel
->    headers 4.12
->
->  - You told Buildroot, through the option
->    BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD, that you have a toolchain
->    that uses 2.6.x kernel headers
->
-> And therefore, Buildroot complains.
+On Mon, 31 Jul 2017 23:17:59 +0200, J?rg Krause wrote:
+> When Lua is linked with additional libraries, these libraries should go
+> into the pkg-config file as well.
+> 
+> Otherwise, linking swupdate with the lua library fails:
+> 
+> ```
+> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlopen'
+> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlclose'
+> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlerror'
+> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
+> ```
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-I usually copy defconfig from autobuilder link location and work with
-it to reproduce issue.
+Is this fixing an autobuilder issue ? I guess it should fix the ones
+you mention in PATCH 2/2, but obviously only for the supported Lua
+versions.
 
->
-> Remember that you can use the script at
-> https://git.buildroot.net/buildroot-test/plain/utils/br-reproduce-build
-> to reproduce a build failure. I.e:
->
->         ./br-reproduce-build af946fa6fe05ee265e4ac97742b15afeb0cea1ab
-
-I will try this now.
-
-Thanks,
-Rahul
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
