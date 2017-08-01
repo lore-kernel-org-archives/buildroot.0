@@ -1,31 +1,38 @@
-From: nimaim at gmail.com <nimaim@gmail.com>
-Date: Tue, 1 Aug 2017 15:19:36 -0700 (PDT)
-Subject: [Buildroot] 2017.08-rc1 approaching
-In-Reply-To: <20170801233055.2488a4fc@windsurf.home>
-References: <20170801233055.2488a4fc@windsurf.home>
-Message-ID: <1501625976917-172676.post@n4.nabble.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 1 Aug 2017 19:18:51 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/1] util-linux: bump to v2.30.1
+In-Reply-To: <444949365.2448670.1501499178309.JavaMail.zimbra@datacom.ind.br>
+References: <20170729153602.22599-1-m.hoffmann@cartelsol.com>
+ <444949365.2448670.1501499178309.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <357934249.2888641.1501625931554.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: "Marcus Hoffmann" <m.hoffmann@cartelsol.com>
+> Cc: buildroot at buildroot.org
+> Sent: Monday, July 31, 2017 8:06:18 AM
+> Subject: Re: [Buildroot] [PATCH 1/1] util-linux: bump to v2.30.1
 
-Just a request but I think it's important to finally get Qt 5.9.1 into this
-release, as it is probably the most popular cross-platform GUI framework
-today. It is the new LTS version and fixes a lot of the issues from older
-versions, even adding more embedded controls (Quick Controls 2). I am hoping
-someone can fix  this
-<http://buildroot-busybox.2317881.n4.nabble.com/Qt-5-9-1-QML-arm-crash-QTBUG-61522-td172524.html>  
-problem and push it up, and that you guys can commit it before releasing
-this RC. Unfortunately, I lack the knowledge and time to fix all the bugs
-currently present building this version but would be grateful if someone can
-look into it so we don't have to wait another 3 months to get a stable
-release with it in there. Thanks!
+>> From: "Marcus Hoffmann" <m.hoffmann@cartelsol.com>
+[...]
+>> @Carlos: As far as I could find no upstream discussion has taken place
+>> regarding the 0001 patch right? Do you want to send an email to the list
+>> describing the problem?
+> 
+> Hum, I got distracted with other things here. I will take care of this
+> today. Thanks for the reminder!
 
-
+After exchanging some messages with Karel Zak we found simple a solution
+for the the problem of building util-linux without a separate ncursesw.
+include dir. It is on the master branch of util-linux and hopefully will
+be included in some 2.30.x release.
 
 --
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/2017-08-rc1-approaching-tp172665p172676.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
