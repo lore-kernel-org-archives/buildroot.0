@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 2 Aug 2017 00:52:21 +0200
-Subject: [Buildroot] [PATCH v5 11/14] system: separate sysv and systemd
-	parts of the skeleton
+Date: Wed, 2 Aug 2017 00:52:22 +0200
+Subject: [Buildroot] [PATCH v5 12/14] fs: add pre- and post-command hooks
 In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
 References: <20170801225224.16899-1-arnout@mind.be>
-Message-ID: <20170801225224.16899-12-arnout@mind.be>
+Message-ID: <20170801225224.16899-13-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,138 +12,97 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-For systemd, we create a simple /etc/fstab with only an entry for /, as
-systemd otherwise automatically mounts what it needs where it needs it.
+In some cases, the directory structure we want in the filesystem is not
+exactly what we have in target/
 
-systemd does not like that the content of /var be symlinks to /tmp,
-especially journald that starts before /tmp is mounted, and thus the
-journal files are hidden from view, which causes quite a bit of fuss...
+For example, when systemd is used on a read-only rootfs, /var must be a
+tmpfs. However, we may have packages that install stuff in there, and
+set important rights (via the permission-table). So, at build time, we
+need /var to be a symlink to the remanent location (/usr/share/factory)
+while at runtime we need /var to be a directory.
 
-Instead, move the current /var to a sysv-only skeleton.
+One option would have seen to have /var as a real directory even during
+build time, and in a target-finalize hook, move everything out of there
+and into the "factory" location. However, that's not possible because
+it's too early: some packages may want to set ownership and/or acces
+rights on directories or files in /var, and this is only done in the
+fakeroot script, which is called only later during the assembling of the
+filesystem images.
 
-systemd at install time will create the /var content it needs, so we
-just create an empty /var for systemd.
+Also, there would have been no way to undo the tweak (i.e. we need to
+restore the /var symlink so that subsequent builds continue to work) if
+it were done as a target-finalize hook.
 
-systemd would create /home and /srv at runtime if they are missing, but
-it is better to create them right now, to simplify supporting systemd on
-a RO filesystem in the (near) future.
+The only solution is to allow packages to register pre- and post-hooks
+that are called right before and right after the rootfs commands are
+executed, and inside in the fakeroot script.
+
+We can however not re-use the BR2_ROOTFS_POST_FAKEROOT_SCRIPT feature
+either because it is done before the filesystem command, but there is
+nothing that is done after. Also, we don't want to add to, and modify a
+user-supplied variable.
+
+So, we introduce two new variables that packages can set to add the
+commands they need to run to tweak the filesystem right at the last
+moment.
+
+Those hooks are not documented on-purpose; they are probably going to
+only ever be used by systemd.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes v4 -> v5: (Arnout)
  - No changes
 
-Changes v3 -> v4:
-  - add blurb about /etc/fstab  (Arnout)
-  - blurb about /home and /srv moved from here to the commit log itself
+Changes v2 -> v3:
+  - add space between >> and $$   (Romain)
 ---
- package/skeleton-systemd/skeleton-systemd.mk              | 7 +++++++
- package/skeleton-sysv/skeleton-sysv.mk                    | 4 ++++
- {system => package/skeleton-sysv}/skeleton/dev/log        | 0
- {system => package/skeleton-sysv}/skeleton/dev/pts/.empty | 0
- {system => package/skeleton-sysv}/skeleton/dev/shm/.empty | 0
- {system => package/skeleton-sysv}/skeleton/etc/fstab      | 0
- {system => package/skeleton-sysv}/skeleton/var/cache      | 0
- {system => package/skeleton-sysv}/skeleton/var/lib/misc   | 0
- {system => package/skeleton-sysv}/skeleton/var/lock       | 0
- {system => package/skeleton-sysv}/skeleton/var/log        | 0
- {system => package/skeleton-sysv}/skeleton/var/run        | 0
- {system => package/skeleton-sysv}/skeleton/var/spool      | 0
- {system => package/skeleton-sysv}/skeleton/var/tmp        | 0
- system/skeleton/dev/{pts => }/.empty                      | 0
- 14 files changed, 11 insertions(+)
- rename {system => package/skeleton-sysv}/skeleton/dev/log (100%)
- copy {system => package/skeleton-sysv}/skeleton/dev/pts/.empty (100%)
- rename {system => package/skeleton-sysv}/skeleton/dev/shm/.empty (100%)
- rename {system => package/skeleton-sysv}/skeleton/etc/fstab (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/cache (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/lib/misc (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/lock (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/log (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/run (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/spool (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/tmp (100%)
- rename system/skeleton/dev/{pts => }/.empty (100%)
+ fs/common.mk           | 4 ++++
+ package/pkg-generic.mk | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-index cec6359007..384715e1c9 100644
---- a/package/skeleton-systemd/skeleton-systemd.mk
-+++ b/package/skeleton-systemd/skeleton-systemd.mk
-@@ -15,4 +15,11 @@ SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
+diff --git a/fs/common.mk b/fs/common.mk
+index 14e0a6b868..9a7758ff49 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -95,10 +95,14 @@ endif
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
++	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
+ ifeq ($$(BR2_REPRODUCIBLE),y)
+ 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
+ endif
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
++	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f17f110115..ae03051987 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -612,6 +612,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+ $(2)_POST_LEGAL_INFO_HOOKS      ?=
+ $(2)_TARGET_FINALIZE_HOOKS      ?=
++$(2)_ROOTFS_PRE_CMD_HOOKS       ?=
++$(2)_ROOTFS_POST_CMD_HOOKS      ?=
  
- SKELETON_SYSTEMD_PROVIDES = skeleton
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -931,6 +933,8 @@ ifneq ($$($(2)_USERS),)
+ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
++ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
++ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
  
-+define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/home
-+	mkdir -p $(TARGET_DIR)/srv
-+	mkdir -p $(TARGET_DIR)/var
-+	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
-index b0c2b6bac1..b5fa396ac2 100644
---- a/package/skeleton-sysv/skeleton-sysv.mk
-+++ b/package/skeleton-sysv/skeleton-sysv.mk
-@@ -15,4 +15,8 @@ SKELETON_SYSV_DEPENDENCIES = skeleton-common
- 
- SKELETON_SYSV_PROVIDES = skeleton
- 
-+define SKELETON_SYSV_INSTALL_TARGET_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_SYSV_PKGDIR)/skeleton,$(TARGET_DIR))
-+endef
-+
- $(eval $(generic-package))
-diff --git a/system/skeleton/dev/log b/package/skeleton-sysv/skeleton/dev/log
-similarity index 100%
-rename from system/skeleton/dev/log
-rename to package/skeleton-sysv/skeleton/dev/log
-diff --git a/system/skeleton/dev/pts/.empty b/package/skeleton-sysv/skeleton/dev/pts/.empty
-similarity index 100%
-copy from system/skeleton/dev/pts/.empty
-copy to package/skeleton-sysv/skeleton/dev/pts/.empty
-diff --git a/system/skeleton/dev/shm/.empty b/package/skeleton-sysv/skeleton/dev/shm/.empty
-similarity index 100%
-rename from system/skeleton/dev/shm/.empty
-rename to package/skeleton-sysv/skeleton/dev/shm/.empty
-diff --git a/system/skeleton/etc/fstab b/package/skeleton-sysv/skeleton/etc/fstab
-similarity index 100%
-rename from system/skeleton/etc/fstab
-rename to package/skeleton-sysv/skeleton/etc/fstab
-diff --git a/system/skeleton/var/cache b/package/skeleton-sysv/skeleton/var/cache
-similarity index 100%
-rename from system/skeleton/var/cache
-rename to package/skeleton-sysv/skeleton/var/cache
-diff --git a/system/skeleton/var/lib/misc b/package/skeleton-sysv/skeleton/var/lib/misc
-similarity index 100%
-rename from system/skeleton/var/lib/misc
-rename to package/skeleton-sysv/skeleton/var/lib/misc
-diff --git a/system/skeleton/var/lock b/package/skeleton-sysv/skeleton/var/lock
-similarity index 100%
-rename from system/skeleton/var/lock
-rename to package/skeleton-sysv/skeleton/var/lock
-diff --git a/system/skeleton/var/log b/package/skeleton-sysv/skeleton/var/log
-similarity index 100%
-rename from system/skeleton/var/log
-rename to package/skeleton-sysv/skeleton/var/log
-diff --git a/system/skeleton/var/run b/package/skeleton-sysv/skeleton/var/run
-similarity index 100%
-rename from system/skeleton/var/run
-rename to package/skeleton-sysv/skeleton/var/run
-diff --git a/system/skeleton/var/spool b/package/skeleton-sysv/skeleton/var/spool
-similarity index 100%
-rename from system/skeleton/var/spool
-rename to package/skeleton-sysv/skeleton/var/spool
-diff --git a/system/skeleton/var/tmp b/package/skeleton-sysv/skeleton/var/tmp
-similarity index 100%
-rename from system/skeleton/var/tmp
-rename to package/skeleton-sysv/skeleton/var/tmp
-diff --git a/system/skeleton/dev/pts/.empty b/system/skeleton/dev/.empty
-similarity index 100%
-rename from system/skeleton/dev/pts/.empty
-rename to system/skeleton/dev/.empty
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
 2.13.3
