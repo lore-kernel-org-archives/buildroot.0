@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 2 Aug 2017 00:52:22 +0200
-Subject: [Buildroot] [PATCH v5 12/14] fs: add pre- and post-command hooks
+Date: Wed, 2 Aug 2017 00:52:24 +0200
+Subject: [Buildroot] [PATCH v5 14/14] support/testing: add runtime testing
+	for read-only systemd
 In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
 References: <20170801225224.16899-1-arnout@mind.be>
-Message-ID: <20170801225224.16899-13-arnout@mind.be>
+Message-ID: <20170801225224.16899-15-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,97 +13,145 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-In some cases, the directory structure we want in the filesystem is not
-exactly what we have in target/
+We add the 3 following combinations:
 
-For example, when systemd is used on a read-only rootfs, /var must be a
-tmpfs. However, we may have packages that install stuff in there, and
-set important rights (via the permission-table). So, at build time, we
-need /var to be a symlink to the remanent location (/usr/share/factory)
-while at runtime we need /var to be a directory.
+  - basic systemd, read-only, network w/ ifupdown
+  - basic systemd, read-only, network w/ networkd
+  - full systemd, read-only, network w/ networkd
 
-One option would have seen to have /var as a real directory even during
-build time, and in a target-finalize hook, move everything out of there
-and into the "factory" location. However, that's not possible because
-it's too early: some packages may want to set ownership and/or acces
-rights on directories or files in /var, and this is only done in the
-fakeroot script, which is called only later during the assembling of the
-filesystem images.
-
-Also, there would have been no way to undo the tweak (i.e. we need to
-restore the /var symlink so that subsequent builds continue to work) if
-it were done as a target-finalize hook.
-
-The only solution is to allow packages to register pre- and post-hooks
-that are called right before and right after the rootfs commands are
-executed, and inside in the fakeroot script.
-
-We can however not re-use the BR2_ROOTFS_POST_FAKEROOT_SCRIPT feature
-either because it is done before the filesystem command, but there is
-nothing that is done after. Also, we don't want to add to, and modify a
-user-supplied variable.
-
-So, we introduce two new variables that packages can set to add the
-commands they need to run to tweak the filesystem right at the last
-moment.
-
-Those hooks are not documented on-purpose; they are probably going to
-only ever be used by systemd.
+The tests just verify what the /sbin/init binary is, and that we were
+able to grab an IP address. More tests can be added later, for example
+to check each systemd features (journal, tmpfiles...)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Arnout: regenerate .gitlab-ci.yml]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes v4 -> v5: (Arnout)
- - No changes
-
-Changes v2 -> v3:
-  - add space between >> and $$   (Romain)
+ - regenerate .gitlab-ci.yml
 ---
- fs/common.mk           | 4 ++++
- package/pkg-generic.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ .gitlab-ci.yml                                     |  3 +
+ .../testing/tests/init/systemd-factory/var/foo/bar |  1 +
+ support/testing/tests/init/test_systemd.py         | 70 ++++++++++++++++++++++
+ 3 files changed, 74 insertions(+)
+ create mode 100644 support/testing/tests/init/systemd-factory/var/foo/bar
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 14e0a6b868..9a7758ff49 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -95,10 +95,14 @@ endif
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
-+	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
- ifeq ($$(BR2_REPRODUCIBLE),y)
- 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
- endif
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f17f110115..ae03051987 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -612,6 +612,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- $(2)_TARGET_FINALIZE_HOOKS      ?=
-+$(2)_ROOTFS_PRE_CMD_HOOKS       ?=
-+$(2)_ROOTFS_POST_CMD_HOOKS      ?=
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index cdae953bf9..9cd52c6798 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -234,6 +234,9 @@ tests.init.test_busybox.TestInitSystemBusyboxRoNet: *runtime_test
+ tests.init.test_busybox.TestInitSystemBusyboxRw: *runtime_test
+ tests.init.test_busybox.TestInitSystemBusyboxRwNet: *runtime_test
+ tests.init.test_none.TestInitSystemNone: *runtime_test
++tests.init.test_systemd.TestInitSystemSystemdRoFull: *runtime_test
++tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: *runtime_test
++tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
+diff --git a/support/testing/tests/init/systemd-factory/var/foo/bar b/support/testing/tests/init/systemd-factory/var/foo/bar
+new file mode 100644
+index 0000000000..323fae03f4
+--- /dev/null
++++ b/support/testing/tests/init/systemd-factory/var/foo/bar
+@@ -0,0 +1 @@
++foobar
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 7a80aa1145..b1b6517373 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -22,6 +22,28 @@ class InitSystemSystemdBase(InitSystemBase):
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -931,6 +933,8 @@ ifneq ($$($(2)_USERS),)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
-+ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
-+ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
+ #-------------------------------------------------------------------------------
++class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
++    config = InitSystemSystemdBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_ROOTFS_OVERLAY="{}"
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        """.format(infra.filepath("tests/init/systemd-factory"))
++
++    def test_run(self):
++        self.startEmulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.checkInit()
++        self.checkNetwork("eth0")
++
++        # This one must be executed on the target, to check that
++        # the factory feature works as expected
++        out, exit_code = self.emulator.run("cat /var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "foobar")
++
++
++#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -36,6 +58,22 @@ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
+ 
+ 
+ #-------------------------------------------------------------------------------
++class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
++    config = InitSystemSystemdBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        """
++
++    def test_run(self):
++        self.startEmulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.checkInit()
++        self.checkNetwork("eth0")
++
++
++#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -52,6 +90,38 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+ 
+ 
+ #-------------------------------------------------------------------------------
++class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
++    config = InitSystemSystemdBase.config + \
++        """
++        BR2_SYSTEM_DHCP="eth0"
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
++        BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
++        BR2_PACKAGE_SYSTEMD_BINFMT=y
++        BR2_PACKAGE_SYSTEMD_COREDUMP=y
++        BR2_PACKAGE_SYSTEMD_FIRSTBOOT=y
++        BR2_PACKAGE_SYSTEMD_HIBERNATE=y
++        BR2_PACKAGE_SYSTEMD_IMPORTD=y
++        BR2_PACKAGE_SYSTEMD_LOCALED=y
++        BR2_PACKAGE_SYSTEMD_LOGIND=y
++        BR2_PACKAGE_SYSTEMD_MACHINED=y
++        BR2_PACKAGE_SYSTEMD_POLKIT=y
++        BR2_PACKAGE_SYSTEMD_QUOTACHECK=y
++        BR2_PACKAGE_SYSTEMD_RANDOMSEED=y
++        BR2_PACKAGE_SYSTEMD_RFKILL=y
++        BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT=y
++        BR2_PACKAGE_SYSTEMD_SYSUSERS=y
++        BR2_PACKAGE_SYSTEMD_VCONSOLE=y
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        """
++
++    def test_run(self):
++        self.startEmulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.checkInit()
++        self.checkNetwork("eth0")
++
++
++#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
 -- 
 2.13.3
