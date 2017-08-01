@@ -1,198 +1,256 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 2 Aug 2017 00:52:10 +0200
-Subject: [Buildroot] [PATCH v5 00/14] system: properly handle systemd as
-	init system
-Message-ID: <20170801225224.16899-1-arnout@mind.be>
+Date: Wed, 2 Aug 2017 00:52:12 +0200
+Subject: [Buildroot] [PATCH v5 02/14] package/skeleton: split out into
+	skeleton-custom
+In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
+References: <20170801225224.16899-1-arnout@mind.be>
+Message-ID: <20170801225224.16899-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series is a proposal to fix our handling of systemd as an init
-system.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Our default skeleton is not well suited for systemd:
+For the custom skeleton, we practicaly do nothing, except ensure it
+contains the basic, required directories, and that those are properly
+setup wrt. merged /usr.
 
-  - we have /var/log a symlink to /tmp/log, but the way systemd starts
-    hides the journals:
-    - start systemd-journald, stores journals in /tmp/log/ (because of
-      the redirection above)
-    - mounts a tmpfs over /tmp, thus hidding the journals.
+Furthermore, our current skeleton is not fit for systemd, and we'll
+have to split things out into various skeletons.
 
-  - on a read-only rootfs, systemd expects /var to be read-write, which
-    we do not provide. Read-only rootfs will be handled in a separate
-    series.
+So, off-load the custom skeleton into its own package.
 
-All of this sounds trivial, but fixing it is definitely not.
+Thus, the existing skeleton package is now limited to:
 
-The overall idea is that we need different skeletons, one for each type
-of init systems: sysv, systemd, others (aka custom).
+  - when using our default skeleton, install and tweak it properly;
 
-The skeleton package becomes a virtual package, that is provided by one
-of four implementations:
+  - when using a custom skeleton, do nothing except for depending on
+    the skeleton-custom package.
 
-  - skeleton-sysv or skeleton-systemd, as their names imply, for either
-    SysV- or systemd-based systems, and which depend on skeleton-common;
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Arnout: split off in a separate patch doing only this]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Note: this calls for making skeleton a virtual package. This will come
+in follwup patches, after skeleton has lost all its code to the various
+skeleton packages.
 
-  - skeleton-common, that provides base files and directories comon to
-    all skeletons (except custom, below); skeleton-common is also a
-    provider for the skeleton virtual package, for use with no-init (aka
-    custom init) systems;
-
-  - skeleton-custom, for user-provided custom skeleton, and of which we
-    expect it is fully prepared; skeleton-custom does not depend on
-    skeleton-common.
-
-Eventually, we add support for runing systemd on a read-only rootfs.
-This requires that we play tricks with /var and the systemd-tmpfiles
-factory feautre.
-
-A series of runtime tests have also been added, running on the QEMU
-vexpress:
-
-    init system         rootfs      DHCP?
-    -------------------------------------
-    busybox             ext4        no
-    busybox             ext4        eth0
-    busybox             squashfs    no
-    busybox             squashfs    eth0
-
-  * systemd-ifupdown    ext4        eth0
-  * systemd-ifupdown    squashfs    eth0
- ** systemd-networkd    ext4        eth0
- ** systemd-networkd    squashfs    eth0
-*** systemd-full        ext4        eth0
-*** systemd-full        squashfs    eth0
-
-  + no-init             squashfs    no
-
-  * systemd-networkd: only what gets selected automatically when
-    systemd is used as init system, with all other options unset;
-
- ** systemd-ifupdown: like systemd-networkd, but with networkd
-    disabled, thus using ifupdown instead;
-
-*** systemd-full: all systemd options enabled, implies networkd;
-
-  + a shell is launched as init
-
-Those new tests are not exhaustive, especially the systemd one; instead,
-they just test basic features: what init is being used, and did we get
-an IP adress for eth0? More tests can be added later on.
-
-You can also find this series on https://gitlab.com/arnout/buildroot
-branch systemd-skeleton-5-by-arnout
-
-Changes v4 -> v5:
-  - moved the test infra patch all the way to the beginning of the series
-  - dropped the patch that removed support for BR2_INIT_NONE with the default
-    skeleton
-  - to make that possible, merged the patch that re-introduced BR2_INIT_NONE
-    support with the patch that breaks it, i.e. the introduction of
-    skeleton-sysv and skeleton-systemd
-  - split the patch that splits off skeleton-custom into 4 patches; the first
-    one does only the split, the other ones do 3 clean-ups. Except for
-    comments, the end result is the same as the original skeleton-custom
-  - add a further cleanup to skeleton-common that renames
-    SKELETON_ROOT_PASSWORD to SKELETON_CUSTOM_ROOT_PASSWORD
-  - re-generate .gitlab-ci.yml in the two patches that create new tests.
+---
+Changes v4 -> v5: (Arnout)
+ - separate patch for the split into skeleton-customer; the rest of
+   the modifications comes in follow-up patches
+ - fixed a use of SKELETON_PATH instead of SKELETON_CUSTOM_PATH
+ - don't remove the "The skeleton can't depend on the toolchain" comment
 
 Changes v3 -> v4:
-  - fix the read-only support  (Arnout)
-  - add reviewed-by tags from Arnout. Thanks a lot!
-  - enhance some commit logs after those reviews
-  - simplify no-init skeleton-common  (Arnout)
-
-Changes v2 -> v3:
-  - too much to note, mostly rewriten from scratch
-
-Changes v1 -> v2:
-  - enhance the commit logs
-
-Regards,
-Arnout
-
-----------------------------------------------------------------
-Arnout Vandecappelle (1):
-  skeleton-common: rename SKELETON_ROOT_PASSWORD to
-    SKELETON_CUSTOM_ROOT_PASSWORD
-
-Yann E. MORIN (13):
-  support/testing: add runtime testing for init systems
-  package/skeleton: split out into skeleton-custom
-  package/skeleton-custom: rework the merged_usr and building conditions
-  package/skeleton-custom: also check for missing directories
-  package/skeleton-custom: simplify target/staging install
-  package/skeleton: split out into skeleton-common
-  package/skeleton: make it a virtual package
-  package/skeleton-common: simplify staging install
-  package/skeleton: introduce sysv- and systemd-specific skeletons
-  system: separate sysv and systemd parts of the skeleton
-  fs: add pre- and post-command hooks
-  system: make systemd work on a read-only rootfs
-  support/testing: add runtime testing for read-only systemd
-
- .gitlab-ci.yml                                     |   8 ++
- fs/common.mk                                       |   4 +
- package/Config.in                                  |   4 +
- package/pkg-generic.mk                             |   4 +
- package/skeleton-common/Config.in                  |  17 +++
- package/skeleton-common/skeleton-common.mk         |  90 ++++++++++++
- package/skeleton-custom/Config.in                  |   6 +
- package/skeleton-custom/skeleton-custom.mk         | 107 +++++++++++++++
- package/skeleton-systemd/Config.in                 |   7 +
- package/skeleton-systemd/skeleton-systemd.mk       |  71 ++++++++++
- package/skeleton-sysv/Config.in                    |   7 +
- package/skeleton-sysv/skeleton-sysv.mk             |  22 +++
- {system => package/skeleton-sysv}/skeleton/dev/log |   0
- .../skeleton-sysv}/skeleton/dev/pts/.empty         |   0
- .../skeleton-sysv}/skeleton/dev/shm/.empty         |   0
- .../skeleton-sysv}/skeleton/etc/fstab              |   0
- .../skeleton-sysv}/skeleton/var/cache              |   0
- .../skeleton-sysv}/skeleton/var/lib/misc           |   0
- .../skeleton-sysv}/skeleton/var/lock               |   0
- {system => package/skeleton-sysv}/skeleton/var/log |   0
- {system => package/skeleton-sysv}/skeleton/var/run |   0
- .../skeleton-sysv}/skeleton/var/spool              |   0
- {system => package/skeleton-sysv}/skeleton/var/tmp |   0
- package/skeleton/Config.in                         |   9 +-
- package/skeleton/skeleton.mk                       | 139 +------------------
- .../testing/tests/init/__init__.py                 |   0
- support/testing/tests/init/base.py                 |  47 +++++++
- .../testing/tests/init/systemd-factory/var/foo/bar |   1 +
- support/testing/tests/init/test_busybox.py         |  67 +++++++++
- support/testing/tests/init/test_none.py            |  32 +++++
- support/testing/tests/init/test_systemd.py         | 152 +++++++++++++++++++++
- system/Config.in                                   |  12 +-
- system/skeleton/dev/{pts => }/.empty               |   0
- 33 files changed, 663 insertions(+), 143 deletions(-)
- create mode 100644 package/skeleton-common/Config.in
- create mode 100644 package/skeleton-common/skeleton-common.mk
+  - lib{32.64} are also tweaked in the skeleton  (Arnout)
+---
+ package/Config.in                          |  1 +
+ package/skeleton-custom/Config.in          |  3 ++
+ package/skeleton-custom/skeleton-custom.mk | 81 ++++++++++++++++++++++++++++++
+ package/skeleton/skeleton.mk               | 51 +------------------
+ system/Config.in                           |  2 +-
+ 5 files changed, 88 insertions(+), 50 deletions(-)
  create mode 100644 package/skeleton-custom/Config.in
  create mode 100644 package/skeleton-custom/skeleton-custom.mk
- create mode 100644 package/skeleton-systemd/Config.in
- create mode 100644 package/skeleton-systemd/skeleton-systemd.mk
- create mode 100644 package/skeleton-sysv/Config.in
- create mode 100644 package/skeleton-sysv/skeleton-sysv.mk
- rename {system => package/skeleton-sysv}/skeleton/dev/log (100%)
- copy {system => package/skeleton-sysv}/skeleton/dev/pts/.empty (100%)
- rename {system => package/skeleton-sysv}/skeleton/dev/shm/.empty (100%)
- rename {system => package/skeleton-sysv}/skeleton/etc/fstab (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/cache (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/lib/misc (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/lock (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/log (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/run (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/spool (100%)
- rename {system => package/skeleton-sysv}/skeleton/var/tmp (100%)
- copy system/skeleton/dev/pts/.empty => support/testing/tests/init/__init__.py (100%)
- create mode 100644 support/testing/tests/init/base.py
- create mode 100644 support/testing/tests/init/systemd-factory/var/foo/bar
- create mode 100644 support/testing/tests/init/test_busybox.py
- create mode 100644 support/testing/tests/init/test_none.py
- create mode 100644 support/testing/tests/init/test_systemd.py
- rename system/skeleton/dev/{pts => }/.empty (100%)
 
+diff --git a/package/Config.in b/package/Config.in
+index 86d714dae4..f409f5a363 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2,6 +2,7 @@ menu "Target packages"
+ 
+ 	source "package/busybox/Config.in"
+ 	source "package/skeleton/Config.in"
++	source "package/skeleton-custom/Config.in"
+ 
+ menu "Audio and video applications"
+ 	source "package/alsa-utils/Config.in"
+diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
+new file mode 100644
+index 0000000000..b12bd8f73c
+--- /dev/null
++++ b/package/skeleton-custom/Config.in
+@@ -0,0 +1,3 @@
++config BR2_PACKAGE_SKELETON_CUSTOM
++	bool
++	select BR2_PACKAGE_SKELETON
+diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
+new file mode 100644
+index 0000000000..4aebe3f3b1
+--- /dev/null
++++ b/package/skeleton-custom/skeleton-custom.mk
+@@ -0,0 +1,81 @@
++################################################################################
++#
++# skeleton-custom
++#
++################################################################################
++
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_CUSTOM_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_CUSTOM_ADD_SKELETON_DEPENDENCY = NO
++
++# The skeleton also handles the merged /usr case in the sysroot
++SKELETON_CUSTOM_INSTALL_STAGING = YES
++
++SKELETON_CUSTOM_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
++
++ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
++ifeq ($(SKELETON_CUSTOM_PATH),)
++$(error No path specified for the custom skeleton)
++endif
++
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++
++# Ensure the user has prepared a merged /usr.
++#
++# Extract the inode numbers for all of those directories. In case any is
++# a symlink, we want to get the inode of the pointed-to directory, so we
++# append '/.' to be sure we get the target directory. Since the symlinks
++# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
++# all of them.
++#
++SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/.)
++SKELETON_CUSTOM_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/bin/.)
++SKELETON_CUSTOM_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/sbin/.)
++SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/lib/.)
++SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/.)
++SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/.)
++
++ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
++SKELETON_CUSTOM_NOT_MERGED_USR += /lib
++endif
++ifneq ($(SKELETON_CUSTOM_BIN_INODE),$(SKELETON_CUSTOM_USR_BIN_INODE))
++SKELETON_CUSTOM_NOT_MERGED_USR += /bin
++endif
++ifneq ($(SKELETON_CUSTOM_SBIN_INODE),$(SKELETON_CUSTOM_USR_SBIN_INODE))
++SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
++endif
++
++ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
++$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is not \
++	using a merged /usr for the following directories: \
++	$(SKELETON_CUSTOM_NOT_MERGED_USR))
++endif
++
++endif # merged /usr
++endif # ! building
++
++define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
++	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
++	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
++	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
++	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
++		$(TARGET_DIR_WARNING_FILE)
++endef
++
++# For the staging dir, we don't really care about /bin and /sbin.
++# But for consistency with the target dir, and to simplify the code,
++# we still handle them for the merged or non-merged /usr cases.
++# Since the toolchain is not yet available, the staging is not yet
++# populated, so we need to create the directories in /usr
++define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
++	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
++	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
++endef
++
++$(eval $(generic-package))
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 41da1778a6..f44ecf48f6 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -14,57 +14,14 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
+ # The skeleton also handles the merged /usr case in the sysroot
+ SKELETON_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
++ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
+ 
+-SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
+-
+-ifeq ($(BR_BUILDING),y)
+-ifeq ($(SKELETON_PATH),)
+-$(error No path specified for the custom skeleton)
+-endif
+-endif
+-
+-ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+-
+-# Ensure the user has prepared a merged /usr.
+-#
+-# Extract the inode numbers for all of those directories. In case any is
+-# a symlink, we want to get the inode of the pointed-to directory, so we
+-# append '/.' to be sure we get the target directory. Since the symlinks
+-# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
+-# all of them.
+-#
+-SKELETON_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/lib/.)
+-SKELETON_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/bin/.)
+-SKELETON_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/sbin/.)
+-SKELETON_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/lib/.)
+-SKELETON_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/bin/.)
+-SKELETON_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/sbin/.)
+-
+-ifneq ($(SKELETON_LIB_INODE),$(SKELETON_USR_LIB_INODE))
+-SKELETON_CUSTOM_NOT_MERGED_USR += /lib
+-endif
+-ifneq ($(SKELETON_BIN_INODE),$(SKELETON_USR_BIN_INODE))
+-SKELETON_CUSTOM_NOT_MERGED_USR += /bin
+-endif
+-ifneq ($(SKELETON_SBIN_INODE),$(SKELETON_USR_SBIN_INODE))
+-SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
+-endif
+-
+-ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
+-$(error The custom skeleton in $(SKELETON_PATH) is not \
+-	using a merged /usr for the following directories: \
+-	$(SKELETON_CUSTOM_NOT_MERGED_USR))
+-endif
+-
+-endif # merged /usr
++SKELETON_DEPENDENCIES = skeleton-custom
+ 
+ else # ! custom skeleton
+ 
+ SKELETON_PATH = system/skeleton
+ 
+-endif # ! custom skeleton
+-
+ define SKELETON_INSTALL_TARGET_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
+ 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+@@ -86,10 +43,6 @@ define SKELETON_INSTALL_STAGING_CMDS
+ 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
+ endef
+ 
+-# The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
+-# default skeleton.
+-ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+-
+ SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+ SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+diff --git a/system/Config.in b/system/Config.in
+index b2f5be376e..014aedfb42 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -11,7 +11,7 @@ config BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ config BR2_ROOTFS_SKELETON_CUSTOM
+ 	bool "custom target skeleton"
+-	select BR2_PACKAGE_SKELETON
++	select BR2_PACKAGE_SKELETON_CUSTOM
+ 	help
+ 	  Use custom target skeleton.
+ 
 -- 
 2.13.3
