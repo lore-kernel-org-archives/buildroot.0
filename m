@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 2 Aug 2017 00:52:13 +0200
-Subject: [Buildroot] [PATCH v5 03/14] package/skeleton-custom: rework the
-	merged_usr and building conditions
+Date: Wed, 2 Aug 2017 00:52:14 +0200
+Subject: [Buildroot] [PATCH v5 04/14] package/skeleton-custom: also check
+	for missing directories
 In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
 References: <20170801225224.16899-1-arnout@mind.be>
-Message-ID: <20170801225224.16899-4-arnout@mind.be>
+Message-ID: <20170801225224.16899-5-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,18 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-skeleton-custom.mk contains a huge condition for BR_BUILDING and for
-BR2_ROOTFS_MERGED_USR. This makes the code difficult to follow, so
-rework the condition a bit so that only the parts that really need to
-be conditional are indeed conditional.
+In addition to checking the symlinks in the merged usr case, also check
+whether /bin, /lib, /sbin and their /usr/... counterparts exist in the
+non-merged case.
 
-Note that there is no overhead in needlessly evaluation the "stat"
-commands. Indeed, the assignments use late evaluation so the "stat"
-is only executed when evaluating the condition - when skeleton-custom
-is not selected, stat is never called.
+Missing directories are collected in the variable
+SKELETON_CUSTOM_MISSING_DIRS. For symmetry and because it's more
+logical, rename SKELETON_CUSTOM_NOT_MERGED_USR to
+SKELETON_CUSTOM_NOT_MERGED_USR_DIRS.
+
+When a directory is indeed missing, "stat" will print an error.
+Buildroot *also* prints an error, which is clearer. So remove the error
+from stat by redirecting it to /dev/null.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 [Arnout: split off in a separate patch + wrote commit message]
@@ -30,55 +33,84 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Changes v4 -> v5: (Arnout)
  - New patch (split off from the previous one)
 ---
- package/skeleton-custom/skeleton-custom.mk | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ package/skeleton-custom/skeleton-custom.mk | 48 +++++++++++++++++++++++-------
+ 1 file changed, 37 insertions(+), 11 deletions(-)
 
 diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index 4aebe3f3b1..b514f8017b 100644
+index b514f8017b..df46b72c4c 100644
 --- a/package/skeleton-custom/skeleton-custom.mk
 +++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -20,11 +20,8 @@ ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
- ifeq ($(SKELETON_CUSTOM_PATH),)
- $(error No path specified for the custom skeleton)
- endif
+@@ -28,34 +28,60 @@ endif
+ # can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
+ # all of them.
+ #
+-SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/.)
+-SKELETON_CUSTOM_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/bin/.)
+-SKELETON_CUSTOM_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/sbin/.)
+-SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/lib/.)
+-SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/.)
+-SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/.)
++SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/. 2>/dev/null)
++SKELETON_CUSTOM_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/bin/. 2>/dev/null)
++SKELETON_CUSTOM_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/sbin/. 2>/dev/null)
++SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/lib/. 2>/dev/null)
++SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/. 2>/dev/null)
++SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/. 2>/dev/null)
++
++# Ensure that the custom skeleton has /lib, /bin and /sbin, and their
++# /usr counterparts
++ifeq ($(SKELETON_CUSTOM_LIB_INODE),)
++SKELETON_CUSTOM_MISSING_DIRS += /lib
++endif
++ifeq ($(SKELETON_CUSTOM_USR_LIB_INODE),)
++SKELETON_CUSTOM_MISSING_DIRS += /usr/lib
++endif
++ifeq ($(SKELETON_CUSTOM_BIN_INODE),)
++SKELETON_CUSTOM_MISSING_DIRS += /bin
++endif
++ifeq ($(SKELETON_CUSTOM_USR_BIN_INODE),)
++SKELETON_CUSTOM_MISSING_DIRS += /usr/bin
++endif
++ifeq ($(SKELETON_CUSTOM_SBIN_INODE),)
++SKELETON_CUSTOM_MISSING_DIRS += /sbin
++endif
++ifeq ($(SKELETON_CUSTOM_USR_SBIN_INODE),)
++SKELETON_CUSTOM_MISSING_DIRS += /usr/sbin
 +endif
  
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--
--# Ensure the user has prepared a merged /usr.
--#
- # Extract the inode numbers for all of those directories. In case any is
- # a symlink, we want to get the inode of the pointed-to directory, so we
- # append '/.' to be sure we get the target directory. Since the symlinks
-@@ -38,6 +35,10 @@ SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr
- SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/.)
- SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/.)
+ # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+ # counterparts are appropriately setup as symlinks ones to the others.
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
  
-+# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
-+# counterparts are appropriately setup as symlinks ones to the others.
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+
  ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
- SKELETON_CUSTOM_NOT_MERGED_USR += /lib
+-SKELETON_CUSTOM_NOT_MERGED_USR += /lib
++SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /lib
  endif
-@@ -48,14 +49,15 @@ ifneq ($(SKELETON_CUSTOM_SBIN_INODE),$(SKELETON_CUSTOM_USR_SBIN_INODE))
- SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
+ ifneq ($(SKELETON_CUSTOM_BIN_INODE),$(SKELETON_CUSTOM_USR_BIN_INODE))
+-SKELETON_CUSTOM_NOT_MERGED_USR += /bin
++SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /bin
+ endif
+ ifneq ($(SKELETON_CUSTOM_SBIN_INODE),$(SKELETON_CUSTOM_USR_SBIN_INODE))
+-SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
++SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /sbin
  endif
  
-+endif # merged /usr
-+
-+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
- ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
+ endif # merged /usr
+ 
+ ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
+-ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
++ifneq ($(SKELETON_CUSTOM_MISSING_DIRS),)
++$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is \
++	missing those directories or symlinks: \
++	$(SKELETON_CUSTOM_MISSING_DIRS))
++endif
++ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS),)
  $(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is not \
  	using a merged /usr for the following directories: \
- 	$(SKELETON_CUSTOM_NOT_MERGED_USR))
+-	$(SKELETON_CUSTOM_NOT_MERGED_USR))
++	$(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS))
  endif
--
--endif # merged /usr
--endif # ! building
-+endif
+ endif
  
- define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
 -- 
 2.13.3
