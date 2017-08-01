@@ -1,28 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 01 Aug 2017 23:34:19 +0000
-Subject: [Buildroot] [Bug 10121] webkit without the multimedia option causes
-	build error
-In-Reply-To: <bug-10121-163@https.bugs.busybox.net/>
-References: <bug-10121-163@https.bugs.busybox.net/>
-Message-ID: <bug-10121-163-YRhZj29eFs@https.bugs.busybox.net/>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Tue,  1 Aug 2017 16:42:59 -0700
+Subject: [Buildroot] [PATCH 0/2] update GCC graphite support
+Message-ID: <20170801234301.23840-1-yurovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10121
+The current ISL prevents building GCC 7.X with graphite. Update ISL to
+version 0.18 which works with GCC 5.X through 7.X and mark graphite as
+unsupported for GCC 4.X. Addesses bug 10091.
 
---- Comment #3 from Adri?n P?rez de Castro <aperez@igalia.com> ---
-The patches needed for this have landed in ?master? a while ago:
+Andrey Yurovsky (2):
+  gcc: support grahite for GCC 5 or above
+  isl: bump to version 0.18
 
- -
-https://git.busybox.net/buildroot/commit/?id=f2b9399c769001d790e4a6ea199e1f36f181db8a
- -
-https://git.busybox.net/buildroot/commit/?id=9aceb8bfa8c39167b1c449301b7f00f16e4f816c
-
-So I suppose this bug can be closed now.
+ package/gcc/Config.in.host | 4 ++++
+ package/gcc/gcc.mk         | 9 +++------
+ package/isl/isl.hash       | 2 +-
+ package/isl/isl.mk         | 5 +----
+ 4 files changed, 9 insertions(+), 11 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.13.3
