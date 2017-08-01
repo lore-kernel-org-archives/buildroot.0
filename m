@@ -1,89 +1,70 @@
-From: Dave Bender <codehero@gmail.com>
-Date: Tue, 1 Aug 2017 06:27:50 -0400
-Subject: [Buildroot] cpprestsdk: new package
-Message-ID: <CAETHaKqd_JNhE++wYngS9O0VvWO_eQNyvHDX8Wu2G95JR-MevQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Aug 2017 13:21:12 +0200
+Subject: [Buildroot] Patch: new board Socrates Cyclone 5
+In-Reply-To: <20170801130711.16efdcf0.viktorin@rehivetech.com>
+References: <aafbf1fc-74ab-1be4-5c58-76a2db9b97e3@gmail.com>
+ <20170730151502.6e99d720@windsurf.lan>
+ <20170801075456.ir2ubcdo2h3n5r5l@ed>
+ <20170801105303.48d9fcb3@windsurf.home>
+ <20170801100248.smfxvyhxk624nnwq@ed>
+ <20170801130711.16efdcf0.viktorin@rehivetech.com>
+Message-ID: <20170801132112.16d0f42f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added cpprestsdk library
+Hello,
 
-Signed-off-by: David Bender <codehero@gmail.com>
----
- package/Config.in                  |  1 +
- package/cpprestsdk/Config.in       | 15 +++++++++++++++
- package/cpprestsdk/cpprestsdk.hash |  2 ++
- package/cpprestsdk/cpprestsdk.mk   | 15 +++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/cpprestsdk/Config.in
- create mode 100644 package/cpprestsdk/cpprestsdk.hash
- create mode 100644 package/cpprestsdk/cpprestsdk.mk
+On Tue, 1 Aug 2017 13:07:11 +0200, Jan Viktorin wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 34cb75238..a61fa741e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1582,6 +1582,7 @@ menu "Networking applications"
-  source "package/connman/Config.in"
-  source "package/connman-gtk/Config.in"
-  source "package/conntrack-tools/Config.in"
-+ source "package/cpprestsdk/Config.in"
-  source "package/crda/Config.in"
-  source "package/ctorrent/Config.in"
-  source "package/cups/Config.in"
-diff --git a/package/cpprestsdk/Config.in b/package/cpprestsdk/Config.in
-new file mode 100644
-index 000000000..beb37ad17
---- /dev/null
-+++ b/package/cpprestsdk/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_CPPRESTSDK
-+ bool "cpprestsdk"
-+ select BR2_PACKAGE_BOOST
-+ select BR2_PACKAGE_BOOST_CHRONO
-+ select BR2_PACKAGE_BOOST_FILESYSTEM
-+ select BR2_PACKAGE_BOOST_RANDOM
-+ select BR2_PACKAGE_BOOST_REGEX
-+ select BR2_PACKAGE_BOOST_SYSTEM
-+ select BR2_PACKAGE_BOOST_THREAD
-+ select BR2_PACKAGE_OPENSSL
-+ help
-+  The C++ REST SDK is a Microsoft project for cloud-based client-server
-+  communication in native code using a modern asynchronous C++ API design.
-+
-+  https://github.com/Microsoft/cpprestsdk
-diff --git a/package/cpprestsdk/cpprestsdk.hash
-b/package/cpprestsdk/cpprestsdk.hash
-new file mode 100644
-index 000000000..edd974496
---- /dev/null
-+++ b/package/cpprestsdk/cpprestsdk.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha512 d3e1ee4312d4fd77993637ca0f9108f67d3bedaf124b7edd25c7e1a42d703c2297145bb3f88408d4f72167016ed90e178ee96ecf1d343496fe1a362884c14ac0
-cpprestsdk-2.9.1.tar.gz
-diff --git a/package/cpprestsdk/cpprestsdk.mk b/package/cpprestsdk/cpprestsdk.mk
-new file mode 100644
-index 000000000..261cbafeb
---- /dev/null
-+++ b/package/cpprestsdk/cpprestsdk.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# cpprestsdk
-+#
-+################################################################################
-+
-+CPPRESTSDK_VERSION = 2.9.1
-+CPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(CPPRESTSDK_VERSION))
-+CPPRESTSDK_DEPENDENCIES += openssl boost
-+CPPRESTSDK_LICENSE = MIT
-+CPPRESTSDK_LICENSE_FILES = license.txt
-+
-+CPPRESTSDK_SUBDIR = Release
-+
-+$(eval $(cmake-package))
+> > On Tue, Aug 01, 2017 at 10:53:03AM +0200, Thomas Petazzoni wrote:  
+> > > Hello,
+> > > 
+> > > On Tue, 1 Aug 2017 09:54:56 +0200, Lionel Flandrin wrote:
+> > >     
+> > > > Can I access this preloader.bin somewhere? I could check if there's
+> > > > anything obviously special about it.    
+> > > 
+> > > The preloader.bin is part of the patch that Micha? sent:
+> > > 
+> > >   https://patchwork.ozlabs.org/patch/795350/    
+> > 
+> > Ah, I missed that, thank you for pointing it out.
+> > 
+> > It's definitely a mkpimage file. A simple way to validate that is to
+> > check offset 0x40:
+> > 
+> > @0x40: [41 53 30 31]     Magic ("AS01")
+> > @0x44: [00]              Version (v0 for Cyclone V)
+> > @0x45: [00]              Flags
+> > @0x46: [48 25]           Program length in words, so 38176B
+> > @0x48: [00 00]           Not used ("spare")
+> > @0x4a: [62 01]           Header checksum
+> > 
+> > Then at the end of the file you have a 4 byte CRC which I haven't
+> > bothered to validate.
+> > 
+> > So nothing out of the ordinary as far as I can tell. In particular I
+> > can't see anything ressembling a cryptographic signature at the
+> > beginning or end of the file. Looks like a regular u-boot SPL to me.
+> > 
+> > I can't really say more about it, I don't have a Cyclone V board at
+> > the moment. My advice would be to validate that the SPL generated by  
+> 
+> Hi, I've got a Socrates Cyclone V available and so I am able to test.
+> If there are any patches to test, I can probably help.
+
+Micha? original patch is at
+https://patchwork.ozlabs.org/patch/795350/, but I dislike having the
+prebuilt preloader.bin in the Buildroot tree. So if you can get that to
+work without having a pre-built binary in U-Boot, that'd be great.
+
+Thanks!
+
+Thomas
 -- 
-2.13.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
