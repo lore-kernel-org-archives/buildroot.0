@@ -1,62 +1,136 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Jun 2017 23:55:39 +0200
-Subject: [Buildroot] [git commit] boot/syslinux: drop patch 0008,
-	not needed after gnu-efi update
-Message-ID: <20170630215940.B49737F9B7@busybox.osuosl.org>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 31 Jul 2017 22:49:14 -0500
+Subject: [Buildroot] [PATCH] RFC: security hardening [RELO & FORTIFY]
+Message-ID: <1501559354-56821-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=967ef5af9e570419145849a50915ac4c2573b31b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+An adaptation of the OpenWRT Hardening options for RELO and Fortify
+(https://patchwork.ozlabs.org/patch/427454/)
 
-Thanks to the bump of gnu-efi from 3.0.5 to 3.0.6, patch 0008 in the
-syslinux package is no longer needed. More specifically, it's commit
-bf07e8141777e5a2d67ec8447084215224bdad4b in upstream gnu-efi that
-fixed the underlying issue.
+The enabling of these options can be verified by a post build
+analysis of the elf file output using a tool like checksec.sh
+(https://github.com/slimm609/checksec.sh).
 
-Signed-off-by: Beno??t Allard <benoit.allard@greenbone.net>
-[Thomas: add better commit log]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ..._BASE_CODE-struct-has-been-renamed-to-EFI.patch | 30 ----------------------
- 1 file changed, 30 deletions(-)
+Initial testing of these options were performed using a build of
+the qemu_aarch64_virt_defconfig target.
 
-diff --git a/boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch b/boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
-deleted file mode 100644
-index c5ed38a..0000000
---- a/boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 6e25d11a062ef49c8add24476cf1bb74aa67e906 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
--Date: Fri, 9 Jun 2017 11:56:27 +0200
--Subject: [PATCH] The EFI_PXE_BASE_CODE struct has been renamed to
-- EFI_PXE_BASE_CODE_PROTOCOL
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Signed-off-by: Beno??t Allard <benoit.allard@greenbone.net>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ----
-- efi/pxe.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/efi/pxe.c b/efi/pxe.c
--index 6e59109..8060dff 100644
----- a/efi/pxe.c
--+++ b/efi/pxe.c
--@@ -90,7 +90,7 @@ struct embedded_dhcp_options embedded_dhcp_options =
-- void net_parse_dhcp(void)
-- {
--     EFI_PXE_BASE_CODE_MODE *mode;
---    EFI_PXE_BASE_CODE *bc;
--+    EFI_PXE_BASE_CODE_PROTOCOL *bc;
--     unsigned int pkt_len = sizeof(EFI_PXE_BASE_CODE_PACKET);
--     EFI_STATUS status;
--     uint8_t hardlen;
---- 
--2.1.4
--
+
+While testing this patch, I've noticed there are some hardening
+items which could be improved in the Buildroot toolchain build
+of (at least through my testing) the glibc variant.  I've started
+looking at enabling libssp and working the dependency/overlap between
+the standard library and GCC's approach.  The end goal I'm aiming
+for is a comparable toolchain to linaro when it comes to default
+hardening configuration.
+---
+ Config.in           | 57 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ package/Makefile.in | 20 +++++++++++++++++++
+ 2 files changed, 77 insertions(+)
+
+diff --git a/Config.in b/Config.in
+index e395995..323220c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -726,6 +726,63 @@ config BR2_REPRODUCIBLE
+ 	  This is labeled as an experimental feature, as not all
+ 	  packages behave properly to ensure reproducibility.
+ 
++comment "Security Hardening Options"
++
++choice
++	bool "RELRO protection"
++	help
++	  Enable a link-time protection know as RELRO (Relocation Read Only)
++	  which helps to protect from certain type of exploitation techniques
++	  altering the content of some ELF sections.
++
++config BR2_RELRO_NONE
++	bool "None"
++	help
++	  Disables Relocation link-time protections.
++
++config BR2_RELRO_PARTIAL
++	bool "Partial"
++	help
++	  This option makes the dynamic section not writeable after
++	  initialization (with almost no performance penalty).
++
++config BR2_RELRO_FULL
++	bool "Full"
++	help
++	  This option includes the partial configurtation, but also
++	  marks the GOT as read-only at the cost of initializing time
++	  during startup.
++
++endchoice
++
++choice
++	bool "Buffer-overflows detection (FORTIFY_SOURCE)"
++	help
++	  Enable the _FORTIFY_SOURCE macro which introduces additional
++	  checks to detect buffer-overflows in the following standard library
++	  functions: memcpy, mempcpy, memmove, memset, strcpy, stpcpy,
++	  strncpy, strcat, strncat, sprintf, vsprintf, snprintf, vsnprintf,
++	  gets.
++
++config BR2_FORTIFY_SOURCE_NONE
++	bool "None"
++	help
++	  Disables additional checks to detect buffer-overflows.
++
++config BR2_FORTIFY_SOURCE_1
++	bool "Conservative"
++	help
++	  This option sets _FORTIFY_SOURCE set to 1 and only introduces
++	  checks that sholdn't change the behavior of conforming programs,
++
++config BR2_FORTIFY_SOURCE_2
++	bool "Aggressive"
++	help
++	  This option sets _FORTIFY_SOURCES set to 2 and some more checking
++	  is added, but some conforming programs might fail.
++
++endchoice
++
+ endmenu
+ 
+ endmenu
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a1a5316..68ba50c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -181,6 +181,26 @@ TARGET_CXXFLAGS += -fstack-protector-all
+ TARGET_FCFLAGS += -fstack-protector-all
+ endif
+ 
++ifeq ($(BR2_RELRO_PARTIAL),y)
++TARGET_CFLAGS += -Wl,-z,relro
++TARGET_CXXFLAGS += -Wl,-z,relro
++TARGET_FCFLAGS += -Wl,-z,relro
++else ifeq ($(BR2_RELRO_FULL),y)
++TARGET_CFLAGS += -Wl,-z,now -Wl,-z,relro
++TARGET_CXXFLAGS += -Wl,-z,now -Wl,-z,relro
++TARGET_FCFLAGS += -Wl,-z,now -Wl,-z,relro
++endif
++
++ifeq ($(BR2_FORTIFY_SOURCE_1),y)
++TARGET_CFLAGS += -D_FORTIFY_SOURCE=1
++TARGET_CXXFLAGS += -D_FORTIFY_SOURCE=1
++TARGET_FCFLAGS += -D_FORTIFY_SOURCE=1
++else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
++TARGET_CFLAGS += -D_FORTIFY_SOURCE=2
++TARGET_CXXFLAGS += -D_FORTIFY_SOURCE=2
++TARGET_FCFLAGS += -D_FORTIFY_SOURCE=2
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TARGET_CROSS = $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-
+ else
+-- 
+1.9.1
