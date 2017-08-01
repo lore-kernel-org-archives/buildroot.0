@@ -1,64 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Aug 2017 08:30:48 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-07-31
-Message-ID: <20170801063048.E1A5E20C14@mail.free-electrons.com>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Tue, 1 Aug 2017 09:54:56 +0200
+Subject: [Buildroot] Patch: new board Socrates Cyclone 5
+In-Reply-To: <20170730151502.6e99d720@windsurf.lan>
+References: <aafbf1fc-74ab-1be4-5c58-76a2db9b97e3@gmail.com>
+ <20170730151502.6e99d720@windsurf.lan>
+Message-ID: <20170801075456.ir2ubcdo2h3n5r5l@ed>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, Jul 30, 2017 at 03:15:02PM +0200, Thomas Petazzoni wrote:
+> Hello,
 
-Build statistics for 2017-07-31
-================================
+Hi!
 
-      successes : 165
-       failures : 18 
-       timeouts : 0  
-          TOTAL : 183
+> (Lionel, Jan: see below, there is a question for you.)
+>
+> On Sun, 30 Jul 2017 14:51:25 +0200, Micha? ?yszczek wrote:
+>
+> > This is my first contribution so please correct me if I did something wrong.
+>
+> Could you please resend your patch with "git send-email" so that it is
+> sent as the e-mail body and not as attachment? This will make reviewing
+> the patch a lot easier.
+>
+> > I attach patch with new board support - EVB SoCrates based on Altera's
+> > Cyclone 5. I had to add a single binary file - preloader.bin. This is
+> > uboot based SPL from Altera. Problem with altera is that boot images
+> > must be signed with mkpimage tool, that is bundled with Quartus and it
+> > is not possible to sign SPL from buildroot. Yes, supposedly there is
+> > option in config to create signed SPL, but it doesn't work for none of
+> > my Altera's board, hence this binary SPL. Good side is that this SPL
+> > loads uboot that is made during compilation, so there is still place for
+> > customization and patching if someone needs it.
 
-Classification of failures by reason
-====================================
+What do you mean by "signed" with mkpimage? As far as I know mkpimage
+can't sign anything, it just puts a simple header before the BIN file
+and then adds a CRC at the end. Simply looking at the help message of
+Altera's own mkpimage:
 
-                     gpsd-3.16 | 2 
-             lttng-tools-2.9.5 | 2 
-              swupdate-2017.07 | 2 
-                  dnsmasq-2.76 | 1 
-                    ficl-4.1.0 | 1 
-                libressl-2.5.5 | 1 
-                librsync-0.9.7 | 1 
-         libspatialindex-1.8.5 | 1 
-          mediastreamer-2.14.0 | 1 
-                    mpv-0.25.0 | 1 
-                     nvme-v1.3 | 1 
-                openocd-0.10.0 | 1 
-     python-cryptography-1.7.2 | 1 
-                      qt-4.8.7 | 1 
-snappy-be6dc3db83c4701e3e79... | 1 
+> mkpimage version 16.0 (build 211)
+>
+> Description: This tool creates an Altera BootROM-compatible image of Second
+> Stage Boot Loader (SSBL). The input and output files are in binary format.
+> It can also decode and check the validity of previously generated image.
+>
+> Usage:
+>  Create quad image:
+>      mkpimage [options] -hv <num> -o <outfile> <infile> <infile> <infile> <infile>
+>  Create single image:
+>      mkpimage [options] -hv <num> -o <outfile> <infile>
+>  Decode single/quad image:
+>      mkpimage -d [-a <num>] <infile>
+>
+> Options:
+>  -a (--alignment) <num>       : Address alignment in kilobytes for output image
+>                                 (64, 128, 256, etc.), default to 64 for header
+>                                 version 0 and 256 for header version 1,
+>                                 override if the NAND flash has a different
+>                                 block size. If outputting a single image, value
+>                                 of '0' is permitted to specify no flash block
+>                                 padding (needed for SSBL image encryption).
+>  -d (--decode)                : Flag to decode the header information from
+>                                 input file and display it
+>  -f (--force)                 : Flag to force decoding even if the input file
+>                                 is an unpadded image
+>  -h (--help)                  : Display this help message and exit
+>  -hv (--header-version) <num> : Header version to be created (Arria/Cyclone V =
+>                                 0, Arria 10 = 1)
+>  -o (--output) <outfile>      : Output file, relative and absolute path
+>                                 supported
+>  -off (--offset) <num>        : Program entry offset relative to start of
+>                                 header (0x40), default to 0x14. Used for header
+>                                 version 1 only
 
+Buildroot uses barebox's reimplementation in package/mkpimage to have
+the same functionality. They should generate a valid image for Altera
+bootloaders (both Arria/Cyclone V and 10).
 
-Detail of failures
-===================
+Now on top of that I know that the Arria 10 supports booting signed
+and even encrypted images, however I'm not sure if the Cyclone V has
+this functionality. If it does and your board is configured only to
+accept signed code maybe that's your problem?
 
-        m68k |                   dnsmasq-2.76 | NOK | http://autobuild.buildroot.net/results/c3146d758cca085f5553fcd3f843f738c890f0b1 | ORPH
-         arm |                     ficl-4.1.0 | NOK | http://autobuild.buildroot.net/results/4302794efefcd8c62cc95c7e015e66ff8f005050 |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/64a0bec7efe5b63a2b315bd204fb50884d62f0a8 |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/4c240106fb29805382d5ae347e65b6f83d5033d4 |     
-        m68k |                 libressl-2.5.5 | NOK | http://autobuild.buildroot.net/results/f3242dffec031fe32ccc3133d5d6138c49c47055 |     
-         arm |                 librsync-0.9.7 | NOK | http://autobuild.buildroot.net/results/91e0333a52b1e8c8a34d43fb1d6de1fb63389a84 | ORPH
-microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/3cd4bb438158e6f848072af1acae876a8a44ef88 |     
-      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/27c19943a9a2ae7c53ba0ef6fc924d0dd61fe473 |     
-     powerpc |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/3505d9a8df7d3a323782f9b144153ab67329ad0a |     
-         arm |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/5839e7a553e7dbe9920cdef7069c18846bafb918 | ORPH
-     aarch64 |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/f03a4ba557a5bf421ff57f999053a2cd1b4283af |     
-microblazeel |                      nvme-v1.3 | NOK | http://autobuild.buildroot.net/results/53b2d1e0c3cdeafb980389bcfd8a10b6ca48fbc2 |     
-        m68k |                 openocd-0.10.0 | NOK | http://autobuild.buildroot.net/results/6517e8364a6ac8c5c959f5bb26067d1e65fabe47 | ORPH
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/073f82ce9a0366297da6464db552eb8049efd55b |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/d1c0e5e7d23614e2f90b2da94d667421c59aaab3 | ORPH
-         arm | snappy-be6dc3db83c4701e3e79... | NOK | http://autobuild.buildroot.net/results/fc643983a5ec0a49fa626ef033fb82bb7627a8ec |     
-         arm |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/c689783cc869162e6967e3dbe67e757e047f6011 |     
-   powerpc64 |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/1c349cc5904868e4def292b9fbfa164828e46156 |     
+Can I access this preloader.bin somewhere? I could check if there's
+anything obviously special about it.
+
+> I've added in Cc: Jan and Lionel who added and improved the
+> BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC. Hopefully they will have
+> some ideas.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
 -- 
-http://autobuild.buildroot.net
+Lionel Flandrin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170801/68f68ca7/attachment.asc>
