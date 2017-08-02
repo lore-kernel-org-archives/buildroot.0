@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 21:41:15 +0200
-Subject: [Buildroot] [PATCH 1/2] gcc: support grahite for GCC 5 or above
-In-Reply-To: <20170801234301.23840-2-yurovsky@gmail.com>
+Date: Wed, 2 Aug 2017 21:41:41 +0200
+Subject: [Buildroot] [PATCH 2/2] isl: bump to version 0.18
+In-Reply-To: <20170801234301.23840-3-yurovsky@gmail.com>
 References: <20170801234301.23840-1-yurovsky@gmail.com>
- <20170801234301.23840-2-yurovsky@gmail.com>
-Message-ID: <20170802214115.2b5c994d@windsurf.home>
+ <20170801234301.23840-3-yurovsky@gmail.com>
+Message-ID: <20170802214141.7f8de2a1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 Aug 2017 16:43:00 -0700, Andrey Yurovsky wrote:
-> Dropping graphite support for 4.X (of which only 4.9 remains) enables us
-> to build graphite support the modern way (which involves only ISL
-> rather than ISL and cloog). Newer versions of GCC require a newer ISL
-> which does not work with cloog.
+On Tue,  1 Aug 2017 16:43:01 -0700, Andrey Yurovsky wrote:
+> This is needed by GCC 7.X for graphite support. There's no longer any
+> tie to cloog, so remove the comment related to that.
 > 
 > Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 > ---
->  package/gcc/Config.in.host | 4 ++++
->  package/gcc/gcc.mk         | 9 +++------
->  2 files changed, 7 insertions(+), 6 deletions(-)
+>  package/isl/isl.hash | 2 +-
+>  package/isl/isl.mk   | 5 +----
+>  2 files changed, 2 insertions(+), 5 deletions(-)
 
-Applied after tweaking the commit log. Thanks!
+Applied after tweaking the commit log, and removing ISL_LIBTOOL_PATCH =
+NO, which was no longer needed.
+
+Also, I've removed the cloog package, which was no longer used anywhere.
+
+Thanks!
 
 Thomas
 -- 
