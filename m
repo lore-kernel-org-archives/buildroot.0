@@ -1,129 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Aug 2017 00:29:36 +0200
-Subject: [Buildroot] [PATCH v2] azmq: Add new package
-In-Reply-To: <20170728180459.32667-1-rj.ascani@gmail.com>
-References: <20170721191140.29980-1-rj.ascani@gmail.com>
- <20170728180459.32667-1-rj.ascani@gmail.com>
-Message-ID: <9c1bfb84-9025-9941-dd0f-8a6c0a250940@mind.be>
+Date: Thu, 3 Aug 2017 00:29:44 +0200
+Subject: [Buildroot] Kernel with *AND* without initrd
+In-Reply-To: <CAGt4E5scWEvH+k3OOA5QG9koLLc=9T9nfDkEYoC-gwK5s_y86w@mail.gmail.com>
+References: <CAGt4E5scWEvH+k3OOA5QG9koLLc=9T9nfDkEYoC-gwK5s_y86w@mail.gmail.com>
+Message-ID: <33ec2a92-1f1f-ba47-1602-f6ecf0d9a511@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi RJ,
 
- I'm not sure if we can still get this in 2017.08 since I have a few comments
-that I can't fix up myself...
 
-On 28-07-17 20:04, RJ Ascani wrote:
-> The azmq library provides Boost Asio style bindings for ZeroMQ. This
-> library is built on top of ZeroMQ's standard C interface and is intended
-> to work well with C++ applications which use the Boost libraries in
-> general, and Asio in particular.
+On 01-08-17 17:29, Markus Mayer wrote:
+> Hi all,
 > 
-> Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+> Our home-grown rootfs build system (which we are looking to replace
+> with buildroot) has a feature that is quite helpful to developers: it
+> generates a kernel with embedded initrd and one without during the
+> same build process. (The rootfs is also generated in multiple
+> formats.)
 
- We require the Signed-off-by to be a full, real name because it's a legal
-statement. It is a short way for you to assert that you are entitled to
-contribute the patch under buildroot's GPL license.  See
-http://elinux.org/Developer_Certificate_Of_Origin for more details.
+ I think this would indeed be a nice feature to have in Buildroot, and not too
+difficult at that. LINUX_BUILD_CMDS (or LINUX_PRE_BUILD_HOOKS) would need to
+remove and create an empty rootfs.cpio. LINUX_INSTALL_IMAGES_CMDS (or
+LINUX_POST_INSTALL_IMAGES_HOOKS) would need to make copy of the kernel image
+without rootfs to e.g. $(LINUX_IMAGE_NAME).norootfs. And the
+linux-rebuild-with-initramfs would work as normal.
 
- The Author should be the same name, of course.
+ It would be nicer if linux-rebuild-with-initramfs would instead install to
+$(LINUX_IMAGE_NAME).rootfs, but for backward-compatibility reasons we can't
+change that any more.
 
+> 
+> It does the initrd/non-initrd build by building the initrd kernel,
+> then setting CONFIG_INITRAMFS_SOURCE="" and re-building the kernel.
 
-[snip]
-> +From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
-> +From: RJ Ascani <rj.ascani@gmail.com>
-> +Date: Thu, 20 Jul 2017 15:53:40 -0700
-> +Subject: [PATCH] Conditionally disable test and doc builds
+ Oh yeah, that's even better! Then it can all be contained in the
+linux-rebuild-with-initramfs target.
 
- What is the upstream status of this patch? Please send it upstream if you
-didn't already do so.
-
-> +
-> +Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
-> +---
-> + CMakeLists.txt | 12 +++++++++---
-> + 1 file changed, 9 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 5b5b9cc..97006a4 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
-> +                     ${ZeroMQ_INCLUDE_DIRS}
-> +                     ${PROJECT_SOURCE_DIR})
-> +
-> +-enable_testing()
-> ++if (BUILD_TESTING)
-
- I would expect that upstream would require BUILD_TESTING to be set to ON by
-default. Also, I think BUILD_TESTS is more common, but I have no data to back
-that up.
-
-> ++    enable_testing()
-> ++endif()
-> +
-> + macro(add_catch_test name)
-> +     if (TEST_REPORT_FORMAT)
-> +@@ -59,8 +61,12 @@ macro(add_catch_test name)
-> +     endif()
-> + endmacro()
-> +
-> +-add_subdirectory(test)
-> +-add_subdirectory(doc)
-> ++if (BUILD_TESTING)
-> ++    add_subdirectory(test)
-> ++endif()
-> ++if (BUILD_DOC)
-
- Same here, of course.
-
-> ++    add_subdirectory(doc)
-> ++endif()
-> +
-> + install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
-> +         DESTINATION include)
-[snip]
-> index 000000000..d3993f498
-> --- /dev/null
-> +++ b/package/azmq/azmq.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
-> +sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
-> diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-> new file mode 100644
-> index 000000000..427ad0f5b
-> --- /dev/null
-> +++ b/package/azmq/azmq.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# azmq
-> +#
-> +################################################################################
-> +
-> +AZMQ_VERSION = v1.0
-> +AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
-> +AZMQ_DEPENDENCIES = boost zeromq
-> +AZMQ_LICENSE = BSL-1.0
-> +AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
-> +
-> +# AZMQ is a header only library, so it does not need to be installed on the
-> +# target.
-> +AZMQ_INSTALL_STAGING = YES
-> +AZMQ_INSTALL_TARGET = NO
-
- So I would expect that we would need to pass an explicit -DBUILD_TESTING=OFF
-and -DBUILD_DOCS=OFF
+ Patches are welcome!
 
  Regards,
  Arnout
 
-> +
-> +$(eval $(cmake-package))
+> This is very quick, since almost nothing has to actually be rebuilt.
+> 
+> There was a patch accepted into the Linux kernel a couple of months
+> ago to fix this build method after an unrelated commit broke it. The
+> commit message also explains a bit more about our build system.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57ddfdaa9a72fe726a44d26d99db31bc137dbeff
+> 
+> Is there a way to do something similar with buildroot? As far as I can
+> tell, it's very easy to generate the rootfs in multiple different
+> formats, but the kernel is built only once. If "initrd" is enabled, it
+> will have the RAM disk embedded. Otherwise it won't. And you can't get
+> the respective other one.
+> 
+> Did I miss anything? If not, is there a recommended way of adding this
+> functionality? I am sure other developers would find this interesting,
+> as well.
+> 
+> Thanks,
+> -Markus
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
