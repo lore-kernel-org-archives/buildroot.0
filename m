@@ -1,282 +1,129 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Aug 2017 00:28:59 +0200
-Subject: [Buildroot] [v5 2/3] qt5webengine: new package
-In-Reply-To: <20170724134429.22816-3-gael.portay@savoirfairelinux.com>
-References: <20170724134429.22816-1-gael.portay@savoirfairelinux.com>
- <20170724134429.22816-3-gael.portay@savoirfairelinux.com>
-Message-ID: <4562c730-c973-f66c-e24a-2d8ffecd3ee1@mind.be>
+Date: Thu, 3 Aug 2017 00:29:36 +0200
+Subject: [Buildroot] [PATCH v2] azmq: Add new package
+In-Reply-To: <20170728180459.32667-1-rj.ascani@gmail.com>
+References: <20170721191140.29980-1-rj.ascani@gmail.com>
+ <20170728180459.32667-1-rj.ascani@gmail.com>
+Message-ID: <9c1bfb84-9025-9941-dd0f-8a6c0a250940@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gael,
+ Hi RJ,
 
- Hopefully these comments reach you before you send v6...
+ I'm not sure if we can still get this in 2017.08 since I have a few comments
+that I can't fix up myself...
 
-
-On 24-07-17 15:44, Ga?l PORTAY wrote:
-> This patch is based on works [1] and [2].
+On 28-07-17 20:04, RJ Ascani wrote:
+> The azmq library provides Boost Asio style bindings for ZeroMQ. This
+> library is built on top of ZeroMQ's standard C interface and is intended
+> to work well with C++ applications which use the Boost libraries in
+> general, and Asio in particular.
 > 
-> [1]: http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
-> [2]: https://patchwork.ozlabs.org/patch/640633/
-> 
-> Cc: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/Config.in                      |   1 +
->  package/qt5/qt5webengine/Config.in         |  64 ++++++++
->  package/qt5/qt5webengine/chromium.inc      | 239 +++++++++++++++++++++++++++++
->  package/qt5/qt5webengine/qt5webengine.hash |   5 +
->  package/qt5/qt5webengine/qt5webengine.mk   |  82 ++++++++++
+> Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
 
- Please add yourself to the DEVELOPERS file. Julien, Akihiko, would you also
-like to be added?
+ We require the Signed-off-by to be a full, real name because it's a legal
+statement. It is a short way for you to assert that you are entitled to
+contribute the patch under buildroot's GPL license.  See
+http://elinux.org/Developer_Certificate_Of_Origin for more details.
 
-> +comment "qt5webengine needs an Open(E)GL-capable backend"
-> +	depends on BR2_PACKAGE_QT5
+ The Author should be the same name, of course.
 
- Put the arch dependency first, then the package dependency. Like you did for
-the main symbol. However, this entire file is already included under 'if
-BR2_PACKAGE_QT5' in package/qt5/Config.in.
-
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mips64
-
- Please remove duplicate aarch64.
-
- Please keep alphabetical - then you'd have noticed the duplicate. Keeping i386
-and x86_64 together is OK though.
-
- Please wrap the long line.
-
- Perhaps it's also better to introduce an ARCH_SUPPORTS:
-
-config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
-	depends on BR2_aarch64 || BR2_arm || \
-		BR2_i386 || BR2_x86_64 || \
-		BR2_mips || BR2_mips64
-
-
-> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_HAS_LIBEGL
-> +
-> +comment "qt5webengine is not yet buildable with Qt 5.6"
-> +	depends on BR2_PACKAGE_QT5
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mips64
-> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_QT5_VERSION_5_6
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                   should be removed
-
-> +
-> +config BR2_PACKAGE_QT5WEBENGINE
-> +	bool "qt5webengine"
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mips64
-> +	depends on BR2_PACKAGE_QT5
-> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_QT5_VERSION_5_6
-
- Don't use && but use separate lines.
-
-> +	select BR2_PACKAGE_LIBGLIB2
-
- libglib2 depends no !MMU, qt5 doesn't.
-
-> +	select BR2_PACKAGE_QT5BASE
-> +	select BR2_PACKAGE_QT5BASE_DBUS
-> +	select BR2_PACKAGE_QT5BASE_FONTCONFIG
-> +	select BR2_PACKAGE_QT5BASE_ICU
-
- This one also has extra dependencies. Please check the dependencies for all
-packages you select.
-
-> +	select BR2_PACKAGE_QT5BASE_GUI
-> +	select BR2_PACKAGE_QT5BASE_EGLFS
-> +	select BR2_PACKAGE_QT5BASE_WIDGETS
-> +	select BR2_PACKAGE_QT5DECLARATIVE
-> +	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> +	select BR2_PACKAGE_QT5WEBCHANNEL
-> +	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_QT5BASE_XCB
-> +	select BR2_PACKAGE_XLIB_LIBXCURSOR if BR2_PACKAGE_QT5BASE_XCB
-> +	select BR2_PACKAGE_XLIB_LIBXI if BR2_PACKAGE_QT5BASE_XCB
-> +	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_QT5BASE_XCB
-> +	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_QT5BASE_XCB
-> +	select BR2_PACKAGE_XLIB_LIBXTST if BR2_PACKAGE_QT5BASE_XCB
-> +	help
-> +	  The Qt WebEngine module provides a web browser engine that makes it
-> +	  easy to embed content from the World Wide Web into your Qt application
-> +	  on platforms that do not have a native web engine.
-
- Lines are too long. Please use check-package.
-
- I'm not sure if the "on platforms that do not have a native web engine" makes
-sense for Buildroot. This is to say "you don't need this on Android or iOS", but
-that's really not relevant for Buildroot.
-
-> +
-> +	  Qt WebEngine provides C++ classes and QML types for rendering HTML,
-> +	  XHTML, and SVG documents, styled using Cascading Style Sheets (CSS)
-> +	  and scripted with JavaScript. HTML documents can be made fully
-> +	  editable by the user through the use of the contenteditable attribute
-> +	  on HTML elements.
-
- Please add an upstream URL - the main documentation page for qt5webengine.
-
-> +
-> +if BR2_PACKAGE_QT5WEBENGINE
-> +
-> +config BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS
-> +	bool "proprietary codecs"
-> +	help
-> +	  Qt WebEngine supports the MPEG-4 Part 14 (MP4) file format; which
-> +	  includes required proprietary audio and video codecs, such as H.264
-> +	  and MPEG layer-3 (MP3).
-> +
-> +config BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG
-> +	bool "use system ffmpeg"
-> +	select BR2_PACKAGE_FFMPEG
-> +	select BR2_PACKAGE_OPUS
-> +	select BR2_PACKAGE_LIBVPX
-> +	select BR2_PACKAGE_WEBP
-> +	select BR2_PACKAGE_WEBP_DEMUX
-> +	default y
-> +	help
-> +	  If this option is enabled, it uses buildroot's copy.
-
- Why would we ever want to use the bundled ffmpeg?
-
- We may want to disable multimedia entirely maybe, but we never want to use
-bundled cruft. Or if it is necessary because it's patched or an old version,
-then we don't want to use Buildroot's version.
-
-> +
-> +endif
-> diff --git a/package/qt5/qt5webengine/chromium.inc b/package/qt5/qt5webengine/chromium.inc
-> new file mode 100644
-> index 000000000..5e1756817
-> --- /dev/null
-> +++ b/package/qt5/qt5webengine/chromium.inc
-
- IIRC this is a separate file because then it can be generated. Either the
-commit message or a comment in the .mk file should specify:
-- why this is a separate file;
-- how it is generated (i.e. the shell scriptlet that does it).
 
 [snip]
-> diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
-> new file mode 100644
-> index 000000000..a7f10b1ce
-> --- /dev/null
-> +++ b/package/qt5/qt5webengine/qt5webengine.hash
-> @@ -0,0 +1,5 @@
-> +# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwebengine-opensource-src-5.6.2.tar.xz.mirrorlist
-> +sha256 2f0a1648e1a8b22bad0134f2b37d69d185074393c398c1a3c6a83b910ff39740  qtwebengine-opensource-src-5.6.2.tar.xz
+> +From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
+> +From: RJ Ascani <rj.ascani@gmail.com>
+> +Date: Thu, 20 Jul 2017 15:53:40 -0700
+> +Subject: [PATCH] Conditionally disable test and doc builds
 
- If 5.6.2 is not supported, why is this here?
+ What is the upstream status of this patch? Please send it upstream if you
+didn't already do so.
 
 > +
-> +# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebengine-opensource-src-5.9.1.tar.xz.mirrorlist
-> +sha256 f6a37eeb9188474a16d29ede498fce959396ab80329a0a83eaeb925251686401  qtwebengine-opensource-src-5.9.1.tar.xz
-> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-> new file mode 100644
-> index 000000000..49abc11b3
+> +Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+> +---
+> + CMakeLists.txt | 12 +++++++++---
+> + 1 file changed, 9 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 5b5b9cc..97006a4 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
+> +                     ${ZeroMQ_INCLUDE_DIRS}
+> +                     ${PROJECT_SOURCE_DIR})
+> +
+> +-enable_testing()
+> ++if (BUILD_TESTING)
+
+ I would expect that upstream would require BUILD_TESTING to be set to ON by
+default. Also, I think BUILD_TESTS is more common, but I have no data to back
+that up.
+
+> ++    enable_testing()
+> ++endif()
+> +
+> + macro(add_catch_test name)
+> +     if (TEST_REPORT_FORMAT)
+> +@@ -59,8 +61,12 @@ macro(add_catch_test name)
+> +     endif()
+> + endmacro()
+> +
+> +-add_subdirectory(test)
+> +-add_subdirectory(doc)
+> ++if (BUILD_TESTING)
+> ++    add_subdirectory(test)
+> ++endif()
+> ++if (BUILD_DOC)
+
+ Same here, of course.
+
+> ++    add_subdirectory(doc)
+> ++endif()
+> +
+> + install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
+> +         DESTINATION include)
+[snip]
+> index 000000000..d3993f498
 > --- /dev/null
-> +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> @@ -0,0 +1,82 @@
+> +++ b/package/azmq/azmq.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
+> +sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
+> diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
+> new file mode 100644
+> index 000000000..427ad0f5b
+> --- /dev/null
+> +++ b/package/azmq/azmq.mk
+> @@ -0,0 +1,18 @@
 > +################################################################################
 > +#
-> +# qt5webengine
+> +# azmq
 > +#
 > +################################################################################
 > +
-> +QT5WEBENGINE_VERSION = $(QT5_VERSION)
-> +QT5WEBENGINE_SITE = $(QT5_SITE)
-> +QT5WEBENGINE_SOURCE = qtwebengine-opensource-src-$(QT5WEBENGINE_VERSION).tar.xz
-> +QT5WEBENGINE_DEPENDENCIES = qt5base qt5declarative qt5webchannel host-gperf \
-> +	host-python
-> +QT5WEBENGINE_INSTALL_STAGING = YES
+> +AZMQ_VERSION = v1.0
+> +AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
+> +AZMQ_DEPENDENCIES = boost zeromq
+> +AZMQ_LICENSE = BSL-1.0
+> +AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
 > +
-> +include package/qt5/qt5webengine/chromium.inc
-> +QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
-> +QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
-> +	LICENSE.GPLv3 LICENSE.LGPL3 $(CHROMIUM_LICENSE_FILES)
-> +
-> +ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
-> +QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
-> +	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-> +QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
+> +# AZMQ is a header only library, so it does not need to be installed on the
+> +# target.
+> +AZMQ_INSTALL_STAGING = YES
+> +AZMQ_INSTALL_TARGET = NO
 
- Can we have a QT5WEBENGINE_CONFIG that we append to, and then a global
-
-QMAKEFLAGS += WEBENGINE_CONFIG+="$(QT5WEBENGINE_CONFIG)"
-
-? Or doesn't that work? Or does it look ugly?
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG),y)
-> +QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-> +QT5WEBENGINE_DEPENDENCIES += ffmpeg
-> +endif
-> +
-> +# QtWebengine's build system uses python, but only supports python2. We work
-> +# around this by forcing python2 early in the PATH, via a python->python2
-> +# symlink.
-> +QT5WEBENGINE_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-> +define QT5WEBENGINE_PYTHON2_SYMLINK
-> +	mkdir -p $(@D)/host-bin
-> +	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/host-bin/python
-> +endef
-> +QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
-> +
-> +define QT5WEBENGINE_CONFIGURE_CMDS
-> +	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(HOST_DIR)/usr/bin/qmake $(QMAKEFLAGS))
-> +endef
-> +
-> +define QT5WEBENGINE_BUILD_CMDS
-> +	$(QT5WEBENGINE_ENV) $(MAKE) -C $(@D)
-
- TARGET_MAKE_ENV should be here as well.
+ So I would expect that we would need to pass an explicit -DBUILD_TESTING=OFF
+and -DBUILD_DOCS=OFF
 
  Regards,
  Arnout
 
-> +endef
 > +
-> +define QT5WEBENGINE_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(MAKE) -C $(@D) install
-> +	$(QT5_LA_PRL_FILES_FIXUP)
-> +endef
-> +
-> +define QT5WEBENGINE_INSTALL_TARGET_QMLS
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebEngine $(TARGET_DIR)/usr/qml/
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-> +define QT5WEBENGINE_INSTALL_TARGET_EXAMPLES
-> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webengine* $(TARGET_DIR)/usr/lib/qt/examples/
-> +endef
-> +endif
-> +
-> +ifneq ($(BR2_STATIC_LIBS),y)
-> +define QT5WEBENGINE_INSTALL_TARGET_LIBS
-> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebEngine*.so.* $(TARGET_DIR)/usr/lib
-> +	cp -dpf $(STAGING_DIR)/usr/libexec/QtWebEngineProcess $(TARGET_DIR)/usr/libexec/
-> +	cp -dpfr $(STAGING_DIR)/usr/resources/ $(TARGET_DIR)/usr/
-> +	mkdir -p $(TARGET_DIR)/usr/translations/qtwebengine_locales/
-> +	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/qtwebengine_locales/
-> +endef
-> +endif
-> +
-> +define QT5WEBENGINE_INSTALL_TARGET_CMDS
-> +	$(QT5WEBENGINE_INSTALL_TARGET_LIBS)
-> +	$(QT5WEBENGINE_INSTALL_TARGET_QMLS)
-> +	$(QT5WEBENGINE_INSTALL_TARGET_EXAMPLES)
-> +endef
-> +
-> +$(eval $(generic-package))
+> +$(eval $(cmake-package))
 > 
 
 -- 
