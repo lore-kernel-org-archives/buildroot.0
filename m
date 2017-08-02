@@ -1,30 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 19:29:17 +0200
-Subject: [Buildroot] [PATCH v5 07/14] skeleton-common: rename
- SKELETON_ROOT_PASSWORD to SKELETON_CUSTOM_ROOT_PASSWORD
-In-Reply-To: <20170801225224.16899-8-arnout@mind.be>
-References: <20170801225224.16899-1-arnout@mind.be>
- <20170801225224.16899-8-arnout@mind.be>
-Message-ID: <20170802192917.19f2e623@windsurf.home>
+Date: Wed, 2 Aug 2017 19:31:09 +0200
+Subject: [Buildroot] [git commit] package/skeleton: make it a virtual package
+Message-ID: <20170802172734.BD4FD7F963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cb09e1c81f8da8926b3acb167595360ed15e30dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 2 Aug 2017 00:52:17 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Package variables should always be prefixed with the package name. For
-> SKELETON_CUSTOM_ROOT_PASSWORD, this means we set the variable a second
+We now have two packages that can act as a skeleton, skeleton-common,
+also known as our default skeleton, and skeleton-custom.
 
-The variable is now named SKELETON_COMMON_ROOT_PASSWORD, not
-SKELETON_CUSTOM_ROOT_PASSWORD. I've fixed that in both the commit title
-and in the above sentence.
+This means that the skeleton package can be a standard virtual package
+now.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/skeleton-common/Config.in          | 5 ++++-
+ package/skeleton-common/skeleton-common.mk | 2 ++
+ package/skeleton-custom/Config.in          | 5 ++++-
+ package/skeleton-custom/skeleton-custom.mk | 3 ++-
+ package/skeleton/Config.in                 | 9 +++++++--
+ package/skeleton/skeleton.mk               | 8 +-------
+ system/Config.in                           | 4 ++++
+ 7 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
+index 6c094f6..5675e87 100644
+--- a/package/skeleton-common/Config.in
++++ b/package/skeleton-common/Config.in
+@@ -1,3 +1,6 @@
+ config BR2_PACKAGE_SKELETON_COMMON
+ 	bool
+-	select BR2_PACKAGE_SKELETON
++	select BR2_PACKAGE_HAS_SKELETON
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	default "skeleton-common" if BR2_PACKAGE_SKELETON_COMMON
+diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
+index 06e59c0..e3a52dc 100644
+--- a/package/skeleton-common/skeleton-common.mk
++++ b/package/skeleton-common/skeleton-common.mk
+@@ -11,6 +11,8 @@
+ SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
+ SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
+ 
++SKELETON_COMMON_PROVIDES = skeleton
++
+ # The skeleton also handles the merged /usr case in the sysroot
+ SKELETON_COMMON_INSTALL_STAGING = YES
+ 
+diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
+index b12bd8f..601c3b2 100644
+--- a/package/skeleton-custom/Config.in
++++ b/package/skeleton-custom/Config.in
+@@ -1,3 +1,6 @@
+ config BR2_PACKAGE_SKELETON_CUSTOM
+ 	bool
+-	select BR2_PACKAGE_SKELETON
++	select BR2_PACKAGE_HAS_SKELETON
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	default "skeleton-custom" if BR2_PACKAGE_SKELETON_CUSTOM
+diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
+index 6e9d526..d3c6b48 100644
+--- a/package/skeleton-custom/skeleton-custom.mk
++++ b/package/skeleton-custom/skeleton-custom.mk
+@@ -11,7 +11,8 @@
+ SKELETON_CUSTOM_ADD_TOOLCHAIN_DEPENDENCY = NO
+ SKELETON_CUSTOM_ADD_SKELETON_DEPENDENCY = NO
+ 
+-# The skeleton also handles the merged /usr case in the sysroot
++SKELETON_CUSTOM_PROVIDES = skeleton
++
+ SKELETON_CUSTOM_INSTALL_STAGING = YES
+ 
+ SKELETON_CUSTOM_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
+diff --git a/package/skeleton/Config.in b/package/skeleton/Config.in
+index b22ac66..efaa1e1 100644
+--- a/package/skeleton/Config.in
++++ b/package/skeleton/Config.in
+@@ -1,4 +1,9 @@
+ config BR2_PACKAGE_SKELETON
+ 	bool
+-	help
+-	  The basic skeleton for your rootfs.
++	default y
++
++config BR2_PACKAGE_HAS_SKELETON
++	bool
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	string
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 1d3e4fb..d380f41 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -11,10 +11,4 @@
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+ SKELETON_ADD_SKELETON_DEPENDENCY = NO
+ 
+-ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
+-SKELETON_DEPENDENCIES = skeleton-custom
+-else
+-SKELETON_DEPENDENCIES = skeleton-common
+-endif
+-
+-$(eval $(generic-package))
++$(eval $(virtual-package))
+diff --git a/system/Config.in b/system/Config.in
+index 448984e..8c3f903 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -1,5 +1,9 @@
+ menu "System configuration"
+ 
++# Note: usually, it is not possible to select a provider of a virtual
++# package. But here we have an exception: there are only two providers
++# and they only get selected each by separate entries in this choice.
++# So this is a safe situation.
+ choice
+ 	prompt "Root FS skeleton"
+ 
