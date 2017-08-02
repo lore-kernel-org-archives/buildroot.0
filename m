@@ -1,12 +1,10 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 02 Aug 2017 09:46:18 +0200
-Subject: [Buildroot] [PATCH 2/2] swupdate: support for Lua 5.1 is broken
-In-Reply-To: <1501656165.1978.3.camel@embedded.rocks>
+Date: Wed, 02 Aug 2017 10:04:28 +0200
+Subject: [Buildroot] [PATCH 1/2] lua: fix pkg-config file
+In-Reply-To: <20170801190840.457a6f6d@windsurf.home>
 References: <20170731211800.5888-1-joerg.krause@embedded.rocks>
- <20170731211800.5888-2-joerg.krause@embedded.rocks>
- <20170801191032.6c2ca207@windsurf.home>
- <1501656165.1978.3.camel@embedded.rocks>
-Message-ID: <1501659978.1978.9.camel@embedded.rocks>
+ <20170801190840.457a6f6d@windsurf.home>
+Message-ID: <1501661068.1978.11.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,70 +12,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
-Hi Jordan,
 
-On Wed, 2017-08-02 at 08:42 +0200, J?rg Krause wrote:
-> Hi Thomas,
+On Tue, 2017-08-01 at 19:08 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Tue, 2017-08-01 at 19:10 +0200, Thomas Petazzoni wrote:
-> > Hello,
+> On Mon, 31 Jul 2017 23:17:59 +0200, J?rg Krause wrote:
+> > When Lua is linked with additional libraries, these libraries
+> > should go
+> > into the pkg-config file as well.
 > > 
-> > On Mon, 31 Jul 2017 23:18:00 +0200, J?rg Krause wrote:
-> > > Before commit 87b6ac1478821351c92f7ca1c3154550e4713b28 support
-> > > for
-> > > Lua
-> > > was always disabled by the default config file:
-> > > 
-> > > ```
-> > > CONFIG_LUA is not set
-> > > ```
-> > > 
-> > > The commit removed this setting and Lua support is now enabled if
-> > > a
-> > > Lua
-> > > interpreter is enabled. As the swupdate build system uses pkg-
-> > > config to check
-> > > for the lua library by default (LUAPKG="lua") this throws a lot
-> > > of
-> > > undefined referenced in case LuaJIT is uses as Lua interpreter,
-> > > e.g.:
-> > > 
-> > > ```
-> > > corelib/lib.a(lua_interface.o): In function `l_info':
-> > > lua_interface.c:(.text.l_info+0x14): undefined reference to
-> > > `luaL_checklstring'
-> > > ```
-> > > 
-> > > However, since version 2017.07 support for Lua 5.1 is broken in
-> > > swupdate. Therefore,
-> > > remove support for Lua 5.1 and LuaJIT in the swupdate package for
-> > > now
-> > > until upstream might fix this issue.
+> > Otherwise, linking swupdate with the lua library fails:
 > > 
-> > Isn't it better to revert the bump to 2017.07 instead of removing
-> > functionality that people could be relying on ?
+> > ```
+> > /home/buildroot/output/host/arm-buildroot-linux-
+> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to
+> > `dlopen'
+> > /home/buildroot/output/host/arm-buildroot-linux-
+> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to
+> > `dlclose'
+> > /home/buildroot/output/host/arm-buildroot-linux-
+> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to
+> > `dlerror'
+> > /home/buildroot/output/host/arm-buildroot-linux-
+> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
+> > ```
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > 
-> Lua 5.1 and LuaJIT were never supported if CONFIG_HANDLER_IN_LUA was
-> selected. Upstream changed the functionality that the Lua code used
-> when enabling CONFIG_HANDLER_IN_LUA is now used in more common places
-> and therefore enabled if CONFIG_LUA is enabled.
-> 
-> That's why, I should have reword the commit message to: "Lua 5.1 is
-> not
-> supported" instead of "broken".
-> 
-> I am asking the Stefano Babic, the swupdate maintainer, if he is
-> interested in enabling Lua 5.1 support. For now, swupdate is
-> explicitly
-> tested using Lua 5.3.
+> Is this fixing an autobuilder issue ? I guess it should fix the ones
+> you mention in PATCH 2/2, but obviously only for the supported Lua
+> versions.
 
-Stefano confirmed that he has no plans in adding support for Lua
-5.1/LuaJIT himself, but patches are welcome [1].
+It is an autobuilder issue indeed, but it was not detected the date I
+wrote the patch. The autobuilder issues concerning swupdate until that
+date where Lua 5.1/LuaJIT related. I noticed the issue using the Linaro
+ Toolchain for armhf.
 
-@Jordan: You've added a patch to allow configuring swupdate with LuaJIT
-last year. If you're still interested in support for LuaJIT, please
-contact the swupdate maintainer on the swupdate mailing list.
+There is now a report of an autobuilder from yesterday:
+http://autobuild.buildroot.net/results/1c3/1c349cc5904868e4def292b9fbfa
+164828e46156/
 
-[1] https://groups.google.com/d/msg/swupdate/WAm8npAOd6o/hPWMMkV_AAAJ
+Not all toolchains are producing the issue (only glibc ones?):
+
+                armv5-ctng-linux-gnueabi [ 1/47]: FAILED
+              armv7-ctng-linux-gnueabihf [ 2/47]: FAILED
+                        br-aarch64-glibc [ 3/47]: FAILED
+                           br-arcle-hs38 [ 4/47]: OK
+                            br-arm-basic [ 5/47]: OK
+                  br-arm-cortex-a9-glibc [ 6/47]: FAILED
+                   br-arm-cortex-a9-musl [ 7/47]: OK
+                             br-arm-full [ 9/47]: OK
+                      br-arm-full-static [11/47]: OK
+                   br-i386-pentium4-full [13/47]: OK
+                br-i386-pentium-mmx-musl [14/47]: OK
+                      br-m68k-68040-full [16/47]: OK
+                    br-microblazeel-full [17/47]: OK
+                 br-mips32r6-el-hf-glibc [18/47]: FAILED
+                      br-mips64-n64-full [19/47]: OK
+                 br-mips64r6-el-hf-glibc [20/47]: FAILED
 
 J?rg
