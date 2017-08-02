@@ -1,221 +1,129 @@
-From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@gmail.com>
-Date: Wed,  2 Aug 2017 20:03:02 +0200
-Subject: [Buildroot] [PATCH v2] New board - EVB SoCrates based on Altera
-	Cyclone 5
-Message-ID: <20170802180302.30300-1-michal.lyszczek@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Aug 2017 20:04:29 +0200
+Subject: [Buildroot] [git commit] system: separate sysv and systemd parts of
+	the skeleton
+Message-ID: <20170802180056.00F1B81EBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+commit: https://git.buildroot.net/buildroot/commit/?id=76fc9275f14ec295b0125910464969bfa7441b85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Configuration contains:
-  - building uboot (and spl) from altera's github
-  - booting from SD card
-  - working ethernet, serial, i2c, fpga_manager
-  - minimal rootfs with busybox
-  - ready to flash SD card image
+For systemd, we create a simple /etc/fstab with only an entry for /, as
+systemd otherwise automatically mounts what it needs where it needs it.
 
-Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+systemd does not like that the content of /var be symlinks to /tmp,
+especially journald that starts before /tmp is mounted, and thus the
+journal files are hidden from view, which causes quite a bit of fuss...
 
+Instead, move the current /var to a sysv-only skeleton.
+
+systemd at install time will create the /var content it needs, so we
+just create an empty /var for systemd.
+
+systemd would create /home and /srv at runtime if they are missing, but
+it is better to create them right now, to simplify supporting systemd on
+a RO filesystem in the (near) future.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  (all changes suggested by Thomas Petazzoni)
-  - merged boot.scr and boot-env into single boot-env
-  - removed create_sdcard.sh in favor of more complete genimage.cfg
-  - changed size of vfat boot partition to more sane value
-  - removed custom kernel defconfig and used one from kernel source tree
-  - removed custom dts and used one from kernel source tree
-  - corrected spelling in readme.txt
-  - droped some custom config of buildroot (now using default ones)
-  - added missing tools to create sdcard.img
-  - removed binary SPL (all compiled from source now)
+ package/skeleton-systemd/skeleton-systemd.mk              | 7 +++++++
+ package/skeleton-sysv/skeleton-sysv.mk                    | 4 ++++
+ {system => package/skeleton-sysv}/skeleton/dev/log        | 0
+ {system => package/skeleton-sysv}/skeleton/dev/pts/.empty | 0
+ {system => package/skeleton-sysv}/skeleton/dev/shm/.empty | 0
+ {system => package/skeleton-sysv}/skeleton/etc/fstab      | 0
+ {system => package/skeleton-sysv}/skeleton/var/cache      | 0
+ {system => package/skeleton-sysv}/skeleton/var/lib/misc   | 0
+ {system => package/skeleton-sysv}/skeleton/var/lock       | 0
+ {system => package/skeleton-sysv}/skeleton/var/log        | 0
+ {system => package/skeleton-sysv}/skeleton/var/run        | 0
+ {system => package/skeleton-sysv}/skeleton/var/spool      | 0
+ {system => package/skeleton-sysv}/skeleton/var/tmp        | 0
+ system/skeleton/dev/{pts => }/.empty                      | 0
+ 14 files changed, 11 insertions(+)
 
- board/altera/socrates_cyclone5/boot-env.txt |  8 ++++
- board/altera/socrates_cyclone5/genimage.cfg | 58 +++++++++++++++++++++++++++++
- board/altera/socrates_cyclone5/readme.txt   | 52 ++++++++++++++++++++++++++
- configs/socrates_cyclone5_defconfig         | 32 ++++++++++++++++
- 4 files changed, 150 insertions(+)
- create mode 100644 board/altera/socrates_cyclone5/boot-env.txt
- create mode 100644 board/altera/socrates_cyclone5/genimage.cfg
- create mode 100644 board/altera/socrates_cyclone5/readme.txt
- create mode 100644 configs/socrates_cyclone5_defconfig
-
-diff --git a/board/altera/socrates_cyclone5/boot-env.txt b/board/altera/socrates_cyclone5/boot-env.txt
-new file mode 100644
-index 0000000..ed5b613
---- /dev/null
-+++ b/board/altera/socrates_cyclone5/boot-env.txt
-@@ -0,0 +1,8 @@
-+linux_load_address=0x100000
-+linux_dtb_load_address=0x100
-+linux_dtb=socfpga_cyclone5_socrates.dtb
-+linux_load=mmc rescan; fatload mmc 0:1 ${linux_load_address} zImage; fatload mmc 0:1 ${linux_dtb_load_address} ${linux_dtb}
-+bootargs=console=ttyS0,115200 root=/dev/mmcblk0p3 ro rootwait
-+source_env=fatload mmc 0:1 0x2000000 boot.scr; source 0x2000000
-+bootcmd=run linux_load; bootz ${linux_load_address} - ${linux_dtb_load_address}
-+bootdelay=1
-diff --git a/board/altera/socrates_cyclone5/genimage.cfg b/board/altera/socrates_cyclone5/genimage.cfg
-new file mode 100644
-index 0000000..63fef8b
---- /dev/null
-+++ b/board/altera/socrates_cyclone5/genimage.cfg
-@@ -0,0 +1,58 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"socfpga_cyclone5_socrates.dtb"
-+		}
-+	}
-+	size = 8M
-+}
+diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+index cec6359..384715e 100644
+--- a/package/skeleton-systemd/skeleton-systemd.mk
++++ b/package/skeleton-systemd/skeleton-systemd.mk
+@@ -15,4 +15,11 @@ SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
+ 
+ SKELETON_SYSTEMD_PROVIDES = skeleton
+ 
++define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/home
++	mkdir -p $(TARGET_DIR)/srv
++	mkdir -p $(TARGET_DIR)/var
++	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
++endef
 +
-+image uboot.img {
-+	hdimage {
-+		partition-table = "no"
-+	}
+ $(eval $(generic-package))
+diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
+index b0c2b6b..b5fa396 100644
+--- a/package/skeleton-sysv/skeleton-sysv.mk
++++ b/package/skeleton-sysv/skeleton-sysv.mk
+@@ -15,4 +15,8 @@ SKELETON_SYSV_DEPENDENCIES = skeleton-common
+ 
+ SKELETON_SYSV_PROVIDES = skeleton
+ 
++define SKELETON_SYSV_INSTALL_TARGET_CMDS
++	$(call SYSTEM_RSYNC,$(SKELETON_SYSV_PKGDIR)/skeleton,$(TARGET_DIR))
++endef
 +
-+	partition spl {
-+		in-partition-table = "no"
-+		image = "u-boot-spl.bin.crc"
-+		offset = 0
-+		size = 64k
-+	}
-+
-+	partition uboot-full {
-+		in-partition-table = "no"
-+		image = "u-boot.img"
-+		offset = 256k
-+	}
-+
-+	size = 1M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition uboot-env {
-+		in-partition-table = "no"
-+		image = "uboot-env.bin"
-+		offset = 17408 # 512 * 34 -> just after gpt
-+	}
-+
-+	partition boot {
-+		partition-type = 0xc
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition uboot {
-+		partition-type = 0xa2
-+		image = "uboot.img"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext2"
-+		size = 500M
-+	}
-+}
-diff --git a/board/altera/socrates_cyclone5/readme.txt b/board/altera/socrates_cyclone5/readme.txt
-new file mode 100644
-index 0000000..4e78fee
---- /dev/null
-+++ b/board/altera/socrates_cyclone5/readme.txt
-@@ -0,0 +1,52 @@
-+EBV SoCrates Evaluation Board
-+
-+Intro
-+=====
-+
-+More information about this board can be found here:
-+https://rocketboards.org/foswiki/Documentation/EBVSoCratesEvaluationBoard
-+
-+Build
-+=====
-+
-+First, load socrates config for buildroot
-+
-+    make socrates_cyclone5_defconfig
-+
-+Build everything
-+
-+    make
-+
-+Following files will be generated in output/images
-+
-+.
-+??? boot.vfat
-+??? rootfs.ext2
-+??? rootfs.ext4 -> rootfs.ext2
-+??? rootfs.tar
-+??? sdcard.img
-+??? socfpga_cyclone5_socrates.dtb
-+??? u-boot-spl.bin
-+??? u-boot-spl.bin.crc
-+??? u-boot.bin
-+??? u-boot.img
-+??? uboot-env.bin
-+??? uboot.img
-+??? zImage
-+
-+
-+Creating bootable SD card
-+=========================
-+
-+Simply invoke
-+
-+dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Where X is your SD card device (not partition)
-+
-+Booting
-+=======
-+
-+Pins 6:8 on P18 selector is used to determine boot device. To boot socrates from
-+sdcard set these pins to value 0x5 (101b). Remaining pins are used to determine
-+how to configure FPGA and are not associated with booting into Linux kernel.
-diff --git a/configs/socrates_cyclone5_defconfig b/configs/socrates_cyclone5_defconfig
-new file mode 100644
-index 0000000..5793458
---- /dev/null
-+++ b/configs/socrates_cyclone5_defconfig
-@@ -0,0 +1,32 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_NEON=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/altera/socrates_cyclone5/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-4.1.33-ltsi_17.07.02_pr"
-+BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_socrates"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2017.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="socfpga_socrates"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC=y
-+BR2_TARGET_UBOOT_ENVIMAGE=y
-+BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/altera/socrates_cyclone5/boot-env.txt"
-+BR2_TARGET_UBOOT_ENVIMAGE_SIZE="8192"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
---
-2.10.2
+ $(eval $(generic-package))
+diff --git a/system/skeleton/dev/log b/package/skeleton-sysv/skeleton/dev/log
+similarity index 100%
+rename from system/skeleton/dev/log
+rename to package/skeleton-sysv/skeleton/dev/log
+diff --git a/system/skeleton/dev/pts/.empty b/package/skeleton-sysv/skeleton/dev/pts/.empty
+similarity index 100%
+copy from system/skeleton/dev/pts/.empty
+copy to package/skeleton-sysv/skeleton/dev/pts/.empty
+diff --git a/system/skeleton/dev/shm/.empty b/package/skeleton-sysv/skeleton/dev/shm/.empty
+similarity index 100%
+rename from system/skeleton/dev/shm/.empty
+rename to package/skeleton-sysv/skeleton/dev/shm/.empty
+diff --git a/system/skeleton/etc/fstab b/package/skeleton-sysv/skeleton/etc/fstab
+similarity index 100%
+rename from system/skeleton/etc/fstab
+rename to package/skeleton-sysv/skeleton/etc/fstab
+diff --git a/system/skeleton/var/cache b/package/skeleton-sysv/skeleton/var/cache
+similarity index 100%
+rename from system/skeleton/var/cache
+rename to package/skeleton-sysv/skeleton/var/cache
+diff --git a/system/skeleton/var/lib/misc b/package/skeleton-sysv/skeleton/var/lib/misc
+similarity index 100%
+rename from system/skeleton/var/lib/misc
+rename to package/skeleton-sysv/skeleton/var/lib/misc
+diff --git a/system/skeleton/var/lock b/package/skeleton-sysv/skeleton/var/lock
+similarity index 100%
+rename from system/skeleton/var/lock
+rename to package/skeleton-sysv/skeleton/var/lock
+diff --git a/system/skeleton/var/log b/package/skeleton-sysv/skeleton/var/log
+similarity index 100%
+rename from system/skeleton/var/log
+rename to package/skeleton-sysv/skeleton/var/log
+diff --git a/system/skeleton/var/run b/package/skeleton-sysv/skeleton/var/run
+similarity index 100%
+rename from system/skeleton/var/run
+rename to package/skeleton-sysv/skeleton/var/run
+diff --git a/system/skeleton/var/spool b/package/skeleton-sysv/skeleton/var/spool
+similarity index 100%
+rename from system/skeleton/var/spool
+rename to package/skeleton-sysv/skeleton/var/spool
+diff --git a/system/skeleton/var/tmp b/package/skeleton-sysv/skeleton/var/tmp
+similarity index 100%
+rename from system/skeleton/var/tmp
+rename to package/skeleton-sysv/skeleton/var/tmp
+diff --git a/system/skeleton/dev/pts/.empty b/system/skeleton/dev/.empty
+similarity index 100%
+rename from system/skeleton/dev/pts/.empty
+rename to system/skeleton/dev/.empty
