@@ -1,129 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 20:04:29 +0200
-Subject: [Buildroot] [git commit] system: separate sysv and systemd parts of
-	the skeleton
-Message-ID: <20170802180056.00F1B81EBF@busybox.osuosl.org>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Wed,  2 Aug 2017 23:35:39 +0530
+Subject: [Buildroot] [PATCH] let-me-create: fix build with musl
+Message-ID: <1501697139-9059-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76fc9275f14ec295b0125910464969bfa7441b85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add a patch to fix build with musl C library.
 
-For systemd, we create a simple /etc/fstab with only an entry for /, as
-systemd otherwise automatically mounts what it needs where it needs it.
+Fixes:
+  http://autobuild.buildroot.net/results/af946fa6fe05ee265e4ac97742b15afeb0cea1ab
 
-systemd does not like that the content of /var be symlinks to /tmp,
-especially journald that starts before /tmp is mounted, and thus the
-journal files are hidden from view, which causes quite a bit of fuss...
-
-Instead, move the current /var to a sysv-only skeleton.
-
-systemd at install time will create the /var content it needs, so we
-just create an empty /var for systemd.
-
-systemd would create /home and /srv at runtime if they are missing, but
-it is better to create them right now, to simplify supporting systemd on
-a RO filesystem in the (near) future.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/skeleton-systemd/skeleton-systemd.mk              | 7 +++++++
- package/skeleton-sysv/skeleton-sysv.mk                    | 4 ++++
- {system => package/skeleton-sysv}/skeleton/dev/log        | 0
- {system => package/skeleton-sysv}/skeleton/dev/pts/.empty | 0
- {system => package/skeleton-sysv}/skeleton/dev/shm/.empty | 0
- {system => package/skeleton-sysv}/skeleton/etc/fstab      | 0
- {system => package/skeleton-sysv}/skeleton/var/cache      | 0
- {system => package/skeleton-sysv}/skeleton/var/lib/misc   | 0
- {system => package/skeleton-sysv}/skeleton/var/lock       | 0
- {system => package/skeleton-sysv}/skeleton/var/log        | 0
- {system => package/skeleton-sysv}/skeleton/var/run        | 0
- {system => package/skeleton-sysv}/skeleton/var/spool      | 0
- {system => package/skeleton-sysv}/skeleton/var/tmp        | 0
- system/skeleton/dev/{pts => }/.empty                      | 0
- 14 files changed, 11 insertions(+)
+ .../0001-fix-build-with-musl-C-library.patch       | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/let-me-create/0001-fix-build-with-musl-C-library.patch
 
-diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-index cec6359..384715e 100644
---- a/package/skeleton-systemd/skeleton-systemd.mk
-+++ b/package/skeleton-systemd/skeleton-systemd.mk
-@@ -15,4 +15,11 @@ SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
- 
- SKELETON_SYSTEMD_PROVIDES = skeleton
- 
-+define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/home
-+	mkdir -p $(TARGET_DIR)/srv
-+	mkdir -p $(TARGET_DIR)/var
-+	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
-+endef
+diff --git a/package/let-me-create/0001-fix-build-with-musl-C-library.patch b/package/let-me-create/0001-fix-build-with-musl-C-library.patch
+new file mode 100644
+index 0000000..90a7246
+--- /dev/null
++++ b/package/let-me-create/0001-fix-build-with-musl-C-library.patch
+@@ -0,0 +1,38 @@
++From 93fbc53a727a49dd5061e44e3156ff2044e6e0b5 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
++Date: Tue, 1 Aug 2017 22:44:22 +0530
++Subject: [PATCH] fix build with musl C library
 +
- $(eval $(generic-package))
-diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
-index b0c2b6b..b5fa396 100644
---- a/package/skeleton-sysv/skeleton-sysv.mk
-+++ b/package/skeleton-sysv/skeleton-sysv.mk
-@@ -15,4 +15,8 @@ SKELETON_SYSV_DEPENDENCIES = skeleton-common
- 
- SKELETON_SYSV_PROVIDES = skeleton
- 
-+define SKELETON_SYSV_INSTALL_TARGET_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_SYSV_PKGDIR)/skeleton,$(TARGET_DIR))
-+endef
++With musl C library, we get following build error:
 +
- $(eval $(generic-package))
-diff --git a/system/skeleton/dev/log b/package/skeleton-sysv/skeleton/dev/log
-similarity index 100%
-rename from system/skeleton/dev/log
-rename to package/skeleton-sysv/skeleton/dev/log
-diff --git a/system/skeleton/dev/pts/.empty b/package/skeleton-sysv/skeleton/dev/pts/.empty
-similarity index 100%
-copy from system/skeleton/dev/pts/.empty
-copy to package/skeleton-sysv/skeleton/dev/pts/.empty
-diff --git a/system/skeleton/dev/shm/.empty b/package/skeleton-sysv/skeleton/dev/shm/.empty
-similarity index 100%
-rename from system/skeleton/dev/shm/.empty
-rename to package/skeleton-sysv/skeleton/dev/shm/.empty
-diff --git a/system/skeleton/etc/fstab b/package/skeleton-sysv/skeleton/etc/fstab
-similarity index 100%
-rename from system/skeleton/etc/fstab
-rename to package/skeleton-sysv/skeleton/etc/fstab
-diff --git a/system/skeleton/var/cache b/package/skeleton-sysv/skeleton/var/cache
-similarity index 100%
-rename from system/skeleton/var/cache
-rename to package/skeleton-sysv/skeleton/var/cache
-diff --git a/system/skeleton/var/lib/misc b/package/skeleton-sysv/skeleton/var/lib/misc
-similarity index 100%
-rename from system/skeleton/var/lib/misc
-rename to package/skeleton-sysv/skeleton/var/lib/misc
-diff --git a/system/skeleton/var/lock b/package/skeleton-sysv/skeleton/var/lock
-similarity index 100%
-rename from system/skeleton/var/lock
-rename to package/skeleton-sysv/skeleton/var/lock
-diff --git a/system/skeleton/var/log b/package/skeleton-sysv/skeleton/var/log
-similarity index 100%
-rename from system/skeleton/var/log
-rename to package/skeleton-sysv/skeleton/var/log
-diff --git a/system/skeleton/var/run b/package/skeleton-sysv/skeleton/var/run
-similarity index 100%
-rename from system/skeleton/var/run
-rename to package/skeleton-sysv/skeleton/var/run
-diff --git a/system/skeleton/var/spool b/package/skeleton-sysv/skeleton/var/spool
-similarity index 100%
-rename from system/skeleton/var/spool
-rename to package/skeleton-sysv/skeleton/var/spool
-diff --git a/system/skeleton/var/tmp b/package/skeleton-sysv/skeleton/var/tmp
-similarity index 100%
-rename from system/skeleton/var/tmp
-rename to package/skeleton-sysv/skeleton/var/tmp
-diff --git a/system/skeleton/dev/pts/.empty b/system/skeleton/dev/.empty
-similarity index 100%
-rename from system/skeleton/dev/pts/.empty
-rename to system/skeleton/dev/.empty
++/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c: In function 'spi_transfer':
++/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c:170:19: error: '_IOC_SIZEBITS' undeclared (first use in this function)
++if (ioctl(fd, SPI_IOC_MESSAGE(1), &tr) < 0) {
++^
++/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c:170:19: note: each undeclared identifier is reported only once for each function it appears in
++
++Include <linux/ioctl.h> for musl C library compatibility.
++
++This build issue is detected by Buildroot autobuilder:
++http://autobuild.buildroot.net/results/af9/af946fa6fe05ee265e4ac97742b15afeb0cea1ab/
++
++Signed-off-by: Rahul Bedarkar rahulbedarkar89 at gmail.com
++---
++Upstream status: https://github.com/CreatorDev/LetMeCreate/pull/29
++
++ src/core/spi.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/core/spi.c b/src/core/spi.c
++index 4d55cee..9ec7ea9 100644
++--- a/src/core/spi.c
+++++ b/src/core/spi.c
++@@ -1,4 +1,5 @@
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ #include <linux/spi/spidev.h>
++ #include <fcntl.h>
++ #include <errno.h>
++-- 
++2.7.4
++
+-- 
+2.7.4
