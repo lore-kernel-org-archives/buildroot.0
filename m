@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 21:42:36 +0200
-Subject: [Buildroot] [PATCH] package/binutils: fix assertion in 2.29
- xtensa ld
-In-Reply-To: <1501699199-3006-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1501699199-3006-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20170802214236.4449b66d@windsurf.home>
+Date: Wed, 2 Aug 2017 21:42:39 +0200
+Subject: [Buildroot] [PATCH] package/binutils: fix crash caused by buggy
+ xtensa overlay
+In-Reply-To: <1501699220-3055-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1501699220-3055-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20170802214239.7ed1d94d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  2 Aug 2017 11:39:59 -0700, Max Filippov wrote:
-> Section sorting code in xtensa ld was incorrectly cleaned up in release
-> 2.29, resulting in the following assertion when --sort-section,alignment
-> option is used:
-> 
->   BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
-> 
-> Backport the fix that restores original section sorting.
+On Wed,  2 Aug 2017 11:40:20 -0700, Max Filippov wrote:
+> In some xtensa configurations there may be system/user registers in
+> xtensa-modules with negative index. ISA initialization for such config
+> may clobber heap and result in program termination.
+> Don't update lookup table entries for register with negative indices.
 > 
 > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 > ---
->  ...a-ld-restore-old-section-sorting-behavior.patch | 48 ++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
+>  ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+>  ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+>  ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+>  3 files changed, 126 insertions(+)
+>  create mode 100644 package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+>  create mode 100644 package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+>  create mode 100644 package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
 
 Applied to master, thanks.
 
