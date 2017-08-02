@@ -1,36 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 22:54:26 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/kodi: Add support for more
- archs
-In-Reply-To: <20170802162942.6989-1-bernd.kuhls@t-online.de>
-References: <20170802162942.6989-1-bernd.kuhls@t-online.de>
-Message-ID: <20170802225426.6058cc5f@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 02 Aug 2017 20:56:00 +0000
+Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
+In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
+References: <bug-10141-163@https.bugs.busybox.net/>
+Message-ID: <bug-10141-163-FpHpGjPxV2@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10141
 
-On Wed,  2 Aug 2017 18:29:42 +0200, Bernd Kuhls wrote:
-> For the autoconf-based build system it was necessary to allow each
-> supported architecture separatly:
-> https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
-> 
-> For the CMake build system this is not necessary anymore so we only
-> blacklist archs in Config.in known to be broken.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v4: removed sunxi mali patches from patch series
-> v3: fixed "KODI_CXX_FLAGS +=" (Samuel)
-> v2: rebased
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
 
-Thomas
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Clayton,
+
+Are you able to reproduce if you add "-processors 1" to the mksquashfs command?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
