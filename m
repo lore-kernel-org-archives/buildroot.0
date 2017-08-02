@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  2 Aug 2017 07:57:25 +0200
-Subject: [Buildroot] [PATCH v2 3/4] python-automat: new package
+Date: Wed,  2 Aug 2017 07:57:26 +0200
+Subject: [Buildroot] [PATCH v2 4/4] python-twisted: bump to version 17.5.0
 In-Reply-To: <20170802055726.18461-1-yegorslists@googlemail.com>
 References: <20170802055726.18461-1-yegorslists@googlemail.com>
-Message-ID: <20170802055726.18461-4-yegorslists@googlemail.com>
+Message-ID: <20170802055726.18461-5-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,54 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Also fix/add runtime dependencies: Automat and hyperlink modules.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                          |  1 +
- package/python-automat/Config.in           |  8 ++++++++
- package/python-automat/python-automat.hash |  3 +++
- package/python-automat/python-automat.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-automat/Config.in
- create mode 100644 package/python-automat/python-automat.hash
- create mode 100644 package/python-automat/python-automat.mk
+ package/python-twisted/Config.in           | 2 ++
+ package/python-twisted/python-twisted.hash | 4 ++--
+ package/python-twisted/python-twisted.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8366ad580..72b52c5d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -689,6 +689,7 @@ menu "External python modules"
- 	source "package/python-asn1crypto/Config.in"
- 	source "package/python-attrs/Config.in"
- 	source "package/python-autobahn/Config.in"
-+	source "package/python-automat/Config.in"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-backports-shutil-get-terminal-size/Config.in"
-diff --git a/package/python-automat/Config.in b/package/python-automat/Config.in
-new file mode 100644
-index 000000000..910b3d6ae
---- /dev/null
-+++ b/package/python-automat/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_AUTOMAT
-+	bool "python-automat"
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Self-service finite-state machines for the programmer on the go.
-+
-+	  https://github.com/glyph/Automat
-diff --git a/package/python-automat/python-automat.hash b/package/python-automat/python-automat.hash
-new file mode 100644
-index 000000000..c0e350523
---- /dev/null
-+++ b/package/python-automat/python-automat.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/automat/json, sha256 locally computed
-+md5	ad7bba58d262d8956d732330cb5ef53d  Automat-0.6.0.tar.gz
-+sha256	3c1fd04ecf08ac87b4dd3feae409542e9bf7827257097b2b6ed5692f69d6f6a8  Automat-0.6.0.tar.gz
-diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
-new file mode 100644
-index 000000000..96a4f5150
---- /dev/null
-+++ b/package/python-automat/python-automat.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-automat
-+#
-+################################################################################
-+
-+PYTHON_AUTOMAT_VERSION = 0.6.0
-+PYTHON_AUTOMAT_SOURCE = Automat-$(PYTHON_AUTOMAT_VERSION).tar.gz
-+PYTHON_AUTOMAT_SITE = https://pypi.python.org/packages/de/05/b8e453085cf8a7f27bb1226596f4ccf5cc9e758377d60284f990bbdc592c
-+PYTHON_AUTOMAT_SETUP_TYPE = setuptools
-+PYTHON_AUTOMAT_LICENSE = MIT
-+PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
-+PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm
-+
-+$(eval $(python-package))
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index 7fe4289d4..6b1a4fc2c 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -1,7 +1,9 @@
+ config BR2_PACKAGE_PYTHON_TWISTED
+ 	bool "python-twisted"
+ 	select BR2_PACKAGE_PYTHON_INCREMENTAL
++	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
+ 	select BR2_PACKAGE_PYTHON_CONSTANTLY # runtime
++	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
+ 	help
+ 	  Twisted is an event-driven networking engine written in Python.
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 360e16d54..c22f33643 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/twisted/json, sha256 locally computed
+-md5 5b4b9ea5a480bec9c1449ffb57b2052a Twisted-17.1.0.tar.bz2
+-sha256 dbf211d70afe5b4442e3933ff01859533eba9f13d8b3e2e1b97dc2125e2d44dc Twisted-17.1.0.tar.bz2
++md5 cd5c287802dcbaf7be15cf937c922b71 Twisted-17.5.0.tar.bz2
++sha256 f198a494f0df2482f7c5f99d7f3eef33d22763ffc76641b36fec476b878002ea Twisted-17.5.0.tar.bz2
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 9b3ced57b..fe276d641 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TWISTED_VERSION = 17.1.0
++PYTHON_TWISTED_VERSION = 17.5.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+-PYTHON_TWISTED_SITE = https://pypi.python.org/packages/d2/5d/ed5071740be94da625535f4333793d6fd238f9012f0fee189d0c5d00bd74
++PYTHON_TWISTED_SITE = https://pypi.python.org/packages/31/bf/7f86a8f8b9778e90d8b2921e9f442a8c8aa33fd2489fc10f236bc8af1749
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
 -- 
 2.11.0
