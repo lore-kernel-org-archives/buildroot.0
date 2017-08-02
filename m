@@ -1,28 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 02 Aug 2017 18:35:05 +0200
-Subject: [Buildroot] 2017.08-rc1 approaching
-References: <20170801233055.2488a4fc@windsurf.home>
- <1m485exrb.ln2@ID-313208.user.individual.net>
-Message-ID: <pib95exi5g.ln2@ID-313208.user.individual.net>
+Date: Wed,  2 Aug 2017 18:52:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcodec2: disable unittest
+Message-ID: <20170802165217.24046-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Quoting
+https://svn.code.sf.net/p/freetel/code/codec2-dev/CMakeLists.txt
+"# Unittest should be on for dev builds and off for releases."
 
-Am Wed, 02 Aug 2017 07:31:13 +0200 schrieb Bernd Kuhls:
+If unittest is enabled libcodec2 depends on speex and libsamplerate.
+To avoid these dependencies we simply disable unittest.
 
-> This patch is currently tested by test-pkg with all 47 toolchains.
-> I expect to have the result this evening and would sent v4 of the
-> patch in the hope it will get into 2017.08 ;)
+Fixes
+http://autobuild.buildroot.net/results/da2/da2b6402c8fabd85a9ee728e8dbf7b78c5aa801e/
 
-done: http://patchwork.ozlabs.org/patch/796693/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libcodec2/libcodec2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-And while you are at it please take a look at this patch as well which 
-was tested by Yann: http://patchwork.ozlabs.org/patch/756785/
-
-I just checked that it still applies to git HEAD.
-
-Regards, Bernd
+diff --git a/package/libcodec2/libcodec2.mk b/package/libcodec2/libcodec2.mk
+index 38ecac164..7d1c6c383 100644
+--- a/package/libcodec2/libcodec2.mk
++++ b/package/libcodec2/libcodec2.mk
+@@ -11,6 +11,7 @@ LIBCODEC2_LICENSE = LGPL-2.1
+ LIBCODEC2_LICENSE_FILES = COPYING
+ LIBCODEC2_INSTALL_STAGING = YES
+ LIBCODEC2_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBCODEC2_CONF_OPTS = -DUNITTEST=OFF
+ 
+ ifeq ($(BR2_PACKAGE_LIBCODEC2_EXAMPLES),y)
+ LIBCODEC2_CONF_OPTS += -DINSTALL_EXAMPLES=ON
+-- 
+2.11.0
