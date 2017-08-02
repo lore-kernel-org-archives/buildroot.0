@@ -1,48 +1,129 @@
-From: =?UTF-8?B?TWljaGHFgiDFgXlzemN6ZWs=?= <michal.lyszczek@gmail.com>
-Date: Wed, 2 Aug 2017 15:55:10 +0200
-Subject: [Buildroot] genimage raw partition from multiple files
-Message-ID: <cadb0fad-d46f-554c-05ee-ba70d0db7af1@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed,  2 Aug 2017 10:50:09 -0400
+Subject: [Buildroot] [PATCH 1/1] nginx: support libressl
+Message-ID: <20170802145009.9037-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/nginx/Config.in | 10 +++++-----
+ package/nginx/nginx.mk  | 20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 5 deletions(-)
 
-I've been trying to figure out, how to create raw partition, without
-filesystem, from 2 or more files. Here is a general idea
-
-
-partition uboot {
-    partition-type = 0xa2
-    size = 1M
-
-    image spl {
-        image = "u-boot-spl.bin.crc"
-	size = 64k
-        offset = 0
-    }
-
-    image uboot-real {
-        image = "u-boot.bin"
-        offset = 256k
-    }
-}
-
-
-Note that spl is 64k big, and uboot-real must be at offset 256k. Also
-this *MUST* be a partition of type 0xa2. Can such thing be done fully in
-genimage without post-install script?
-
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 36fa69cd2..beb9345bb 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -34,13 +34,13 @@ if BR2_PACKAGE_NGINX_HTTP
+ 
+ config BR2_PACKAGE_NGINX_HTTP_CACHE
+ 	bool "http cache support"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+ 
+ comment "http modules"
+ 
+ config BR2_PACKAGE_NGINX_HTTP_SSL_MODULE
+ 	bool "ngx_http_ssl_module"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+ 	help
+ 	  Enable ngx_http_ssl_module
+ 
+@@ -119,7 +119,7 @@ config BR2_PACKAGE_NGINX_HTTP_RANDOM_INDEX_MODULE
+ 
+ config BR2_PACKAGE_NGINX_HTTP_SECURE_LINK_MODULE
+ 	bool "ngx_http_secure_link_module"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+ 	help
+ 	  Enable ngx_http_secure_link_module
+ 
+@@ -288,7 +288,7 @@ if BR2_PACKAGE_NGINX_MAIL
+ 
+ config BR2_PACKAGE_NGINX_MAIL_SSL_MODULE
+ 	bool "ngx_mail_ssl_module"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+ 	help
+ 	  Enable ngx_mail_ssl_module
+ 
+@@ -319,7 +319,7 @@ if BR2_PACKAGE_NGINX_STREAM
+ 
+ config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
+ 	bool "ngx_stream_ssl_module"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+ 	help
+ 	  Enable ngx_stream_ssl_module
+ 
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index ceb80229d..e5c71c295 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -110,7 +110,11 @@ endif
+ # http server modules
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP),y)
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP_CACHE),y)
++ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++NGINX_DEPENDENCIES += libressl
++else
+ NGINX_DEPENDENCIES += openssl
++endif
+ else
+ NGINX_CONF_OPTS += --without-http-cache
+ endif
+@@ -121,7 +125,11 @@ NGINX_CONF_OPTS += --with-http_v2_module
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP_SSL_MODULE),y)
++ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++NGINX_DEPENDENCIES += libressl
++else
+ NGINX_DEPENDENCIES += openssl
++endif
+ NGINX_CONF_OPTS += --with-http_ssl_module
+ endif
+ 
+@@ -146,7 +154,11 @@ NGINX_CONF_OPTS += --with-http_gzip_static_module
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP_SECURE_LINK_MODULE),y)
++ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++NGINX_DEPENDENCIES += libressl
++else
+ NGINX_DEPENDENCIES += openssl
++endif
+ NGINX_CONF_OPTS += --with-http_secure_link_module
+ endif
+ 
+@@ -205,7 +217,11 @@ ifeq ($(BR2_PACKAGE_NGINX_MAIL),y)
+ NGINX_CONF_OPTS += --with-mail
+ 
+ ifeq ($(BR2_PACKAGE_NGINX_MAIL_SSL_MODULE),y)
++ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++NGINX_DEPENDENCIES += libressl
++else
+ NGINX_DEPENDENCIES += openssl
++endif
+ NGINX_CONF_OPTS += --with-mail_ssl_module
+ endif
+ 
+@@ -221,7 +237,11 @@ ifeq ($(BR2_PACKAGE_NGINX_STREAM),y)
+ NGINX_CONF_OPTS += --with-stream
+ 
+ ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
++ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++NGINX_DEPENDENCIES += libressl
++else
+ NGINX_DEPENDENCIES += openssl
++endif
+ NGINX_CONF_OPTS += --with-stream_ssl_module
+ endif
+ 
 -- 
-Best Regards
-?yszczek Micha?
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170802/a449bafb/attachment.asc>
+2.13.3
