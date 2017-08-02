@@ -1,79 +1,170 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed,  2 Aug 2017 11:39:59 -0700
-Subject: [Buildroot] [PATCH] package/binutils: fix assertion in 2.29 xtensa
-	ld
-Message-ID: <1501699199-3006-1-git-send-email-jcmvbkbc@gmail.com>
+Date: Wed,  2 Aug 2017 11:40:20 -0700
+Subject: [Buildroot] [PATCH] package/binutils: fix crash caused by buggy
+	xtensa overlay
+Message-ID: <1501699220-3055-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Section sorting code in xtensa ld was incorrectly cleaned up in release
-2.29, resulting in the following assertion when --sort-section,alignment
-option is used:
-
-  BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
-
-Backport the fix that restores original section sorting.
+In some xtensa configurations there may be system/user registers in
+xtensa-modules with negative index. ISA initialization for such config
+may clobber heap and result in program termination.
+Don't update lookup table entries for register with negative indices.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- ...a-ld-restore-old-section-sorting-behavior.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
+ ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+ ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+ ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+ 3 files changed, 126 insertions(+)
+ create mode 100644 package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+ create mode 100644 package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+ create mode 100644 package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
 
-diff --git a/package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch b/package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
+diff --git a/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
 new file mode 100644
-index 000000000000..b4118378d25d
+index 000000000000..30103ee05eca
 --- /dev/null
-+++ b/package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
-@@ -0,0 +1,48 @@
-+From 3a399127ead1ba3c8b8d0b9e7206fce39311ee72 Mon Sep 17 00:00:00 2001
++++ b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+@@ -0,0 +1,42 @@
++From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
 +From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 2 Aug 2017 02:49:56 -0700
-+Subject: [PATCH] xtensa: ld: restore old section sorting behavior
++Date: Wed, 2 Aug 2017 00:36:05 -0700
++Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
 +
-+With the recent change 535b785fb0c9 ("Don't compare boolean values
-+against TRUE or FALSE") the following assertion is observed when
-+linking with --sort-section,alignment option:
++In some xtensa configurations there may be system/user registers in
++xtensa-modules with negative index. ISA initialization for such config
++may clobber heap and result in program termination.
++Don't update lookup table entries for register with negative indices.
++They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
++change should not affect processing of valid assembly/binary code.
 +
-+  BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
-+
-+It appears that xtensa linker only supported sorting sections by name,
-+and the code that checks for the section sorting type in
-+ld/emultempl/xtensaelf.em was not updated in the change bcaa7b3eb957
-+("ld/"), that replaced boolean wildcard_spec::sorted with enumeration.
-+
-+Restore the original behavior of the section sorting code.
-+
-+ld/
++bfd/
 +2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
 +
-+	* emultempl/xtensaelf.em
-+	(xtensa_wild_group_interleave_callback): Only check for by_name
-+	sorting.
++	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
++	entries for sysregs with negative indices.
 +
 +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+Backported from: 73d5923e480944e2d66bde8c59f4dff298ec57e3
++Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
 +
-+ ld/emultempl/xtensaelf.em | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ bfd/xtensa-isa.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/ld/emultempl/xtensaelf.em b/ld/emultempl/xtensaelf.em
-+index 1447d526a25b..3827d91b6291 100644
-+--- a/ld/emultempl/xtensaelf.em
-++++ b/ld/emultempl/xtensaelf.em
-+@@ -1432,7 +1432,7 @@ xtensa_wild_group_interleave_callback (lang_statement_union_type *statement)
-+ 	  struct wildcard_list *l;
-+ 	  for (l = w->section_list; l != NULL; l = l->next)
-+ 	    {
-+-	      if (l->spec.sorted != none)
-++	      if (l->spec.sorted == by_name)
-+ 		{
-+ 		  no_reorder = TRUE;
-+ 		  break;
++diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
++index 8da75bea8109..8c6ee88fdeae 100644
++--- a/bfd/xtensa-isa.c
+++++ b/bfd/xtensa-isa.c
++@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
++       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
++       is_user = sreg->is_user;
++ 
++-      isa->sysreg_table[is_user][sreg->number] = n;
+++      if (sreg->number >= 0)
+++	isa->sysreg_table[is_user][sreg->number] = n;
++     }
++ 
++   /* Set up the interface lookup table.  */
++-- 
++2.1.4
++
+diff --git a/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+new file mode 100644
+index 000000000000..30103ee05eca
+--- /dev/null
++++ b/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+@@ -0,0 +1,42 @@
++From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 2 Aug 2017 00:36:05 -0700
++Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
++
++In some xtensa configurations there may be system/user registers in
++xtensa-modules with negative index. ISA initialization for such config
++may clobber heap and result in program termination.
++Don't update lookup table entries for register with negative indices.
++They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
++change should not affect processing of valid assembly/binary code.
++
++bfd/
++2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
++	entries for sysregs with negative indices.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
++
++ bfd/xtensa-isa.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
++index 8da75bea8109..8c6ee88fdeae 100644
++--- a/bfd/xtensa-isa.c
+++++ b/bfd/xtensa-isa.c
++@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
++       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
++       is_user = sreg->is_user;
++ 
++-      isa->sysreg_table[is_user][sreg->number] = n;
+++      if (sreg->number >= 0)
+++	isa->sysreg_table[is_user][sreg->number] = n;
++     }
++ 
++   /* Set up the interface lookup table.  */
++-- 
++2.1.4
++
+diff --git a/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+new file mode 100644
+index 000000000000..30103ee05eca
+--- /dev/null
++++ b/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+@@ -0,0 +1,42 @@
++From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 2 Aug 2017 00:36:05 -0700
++Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
++
++In some xtensa configurations there may be system/user registers in
++xtensa-modules with negative index. ISA initialization for such config
++may clobber heap and result in program termination.
++Don't update lookup table entries for register with negative indices.
++They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
++change should not affect processing of valid assembly/binary code.
++
++bfd/
++2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
++	entries for sysregs with negative indices.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
++
++ bfd/xtensa-isa.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
++index 8da75bea8109..8c6ee88fdeae 100644
++--- a/bfd/xtensa-isa.c
+++++ b/bfd/xtensa-isa.c
++@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
++       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
++       is_user = sreg->is_user;
++ 
++-      isa->sysreg_table[is_user][sreg->number] = n;
+++      if (sreg->number >= 0)
+++	isa->sysreg_table[is_user][sreg->number] = n;
++     }
++ 
++   /* Set up the interface lookup table.  */
 +-- 
 +2.1.4
 +
