@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 21:12:43 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20170802190908.41A6681EEE@busybox.osuosl.org>
+Date: Wed, 2 Aug 2017 21:19:41 +0200
+Subject: [Buildroot] [PATCH v5 00/14] system: properly handle systemd as
+ init system
+In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
+References: <20170801225224.16899-1-arnout@mind.be>
+Message-ID: <20170802211941.15c8ed74@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d64d1216968e5a99c0baccef06e98f7c982cb60b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Update with the skeleton rework details, and a webkitgtk bug that is
-now fixed.
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- CHANGES | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+On Wed, 2 Aug 2017 00:52:10 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-diff --git a/CHANGES b/CHANGES
-index e31fd7a..61df8ef 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,6 +2,19 @@
- 
- 	Infrastructure:
- 
-+	- The skeleton package has been split into multiple packages:
-+	  skeleton-sysv (when Busybox or SysV init are used),
-+	  skeleton-systemd (when systemd is used), skeleton-none (when
-+	  no init system is used) and skeleton-custom (when a custom
-+	  skeleton is used). Those packages, except skeleton-custom,
-+	  share common logic and data in a new package called
-+	  skeleton-common. The skeleton package becomes a virtual
-+	  package. This change allows to generate a filesystem that is
-+	  compliant with systemd expectations.
-+
-+	- Support for using a read-only filesystem with systemd has
-+	  been fixed.
-+
- 	- Major revamp of the gettext handling, with user-visible
- 	  effect:
- 
-@@ -113,6 +126,7 @@
- 
- 	Issues resolved (http://bugs.buildroot.org):
- 
-+	#7892: systemd-journald is broken
- 	#9341: avahi-utils does not compile with uClibc +  libglib2
- 	#9441: Link BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY to
- 	       BR2_ENABLE_DEBUG
-@@ -142,6 +156,8 @@
- 	#10061: gcc5.4 buildroot toolchain for powerpc libsanitizer
- 		failure
- 	#10076: Makefile:4113: recipe for target 'all-gcc'  failed
-+	#10121: webkit without the multimedia option causes build
-+		error
- 
- 2017.05.2, Released July 27th, 2017
- 
+> Arnout Vandecappelle (1):
+>   skeleton-common: rename SKELETON_ROOT_PASSWORD to
+>     SKELETON_CUSTOM_ROOT_PASSWORD
+> 
+> Yann E. MORIN (13):
+>   support/testing: add runtime testing for init systems
+>   package/skeleton: split out into skeleton-custom
+>   package/skeleton-custom: rework the merged_usr and building conditions
+>   package/skeleton-custom: also check for missing directories
+>   package/skeleton-custom: simplify target/staging install
+>   package/skeleton: split out into skeleton-common
+>   package/skeleton: make it a virtual package
+>   package/skeleton-common: simplify staging install
+>   package/skeleton: introduce sysv- and systemd-specific skeletons
+>   system: separate sysv and systemd parts of the skeleton
+>   fs: add pre- and post-command hooks
+>   system: make systemd work on a read-only rootfs
+>   support/testing: add runtime testing for read-only systemd
+
+I've now applied the entire series. Thanks to Yann for all the work,
+and thanks Arnout for the final polishing.
+
+I made a few changes here and there, which I commented as replies to
+the respective patches.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
