@@ -1,58 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 19:31:41 +0200
-Subject: [Buildroot] [git commit] package/skeleton-common: simplify staging
-	install
-Message-ID: <20170802172734.E9B94800CC@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  2 Aug 2017 19:43:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version to
+	4.15.3
+Message-ID: <20170802174343.31443-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=175a96c4909104bde706fa0e1f9010af8b252caa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We don't really care what's going in staging, as long as it is properly
-setup for merged/non-merged /usr, especially for the lib/ directory.
-
-So we can just copy the skeleton as-is.
-
-This simplifies maintenance, should we ever need to tweak the layout:
-we'd just have to do it once in the skeleton directory to have it
-propagated to both target and staging.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/skeleton-common/skeleton-common.mk | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
-index e3a52dc..bf75077 100644
---- a/package/skeleton-common/skeleton-common.mk
-+++ b/package/skeleton-common/skeleton-common.mk
-@@ -26,17 +26,14 @@ define SKELETON_COMMON_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR_WARNING_FILE)
- endef
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 57725a0ed..82923a89a 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 30b6a20f846f0f0cc14c2347efbf3b72162c876daed53a3731d3f975d370765e  kodi-pvr-mythtv-4.15.0.tar.gz
++sha256 fd60aba0dac25ab5885371495a5dfca53308c1fa23215299b0f62997c7391e1e  kodi-pvr-mythtv-4.15.3.tar.gz
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index 515050b17..8099ffae3 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -6,7 +6,7 @@
  
--# For the staging dir, we don't really care about /bin and /sbin.
--# But for consistency with the target dir, and to simplify the code,
--# we still handle them for the merged or non-merged /usr cases.
--# Since the toolchain is not yet available, the staging is not yet
--# populated, so we need to create the directories in /usr
-+# We don't care much about what goes in staging, as long as it is
-+# correctly setup for merged/non-merged /usr. The simplest is to
-+# fill it in with the content of the skeleton.
- define SKELETON_COMMON_INSTALL_STAGING_CMDS
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
-+	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
- 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
- endef
- 
- SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_MYTHTV_VERSION = 4.15.0
++KODI_PVR_MYTHTV_VERSION = 4.15.3
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
+-- 
+2.11.0
