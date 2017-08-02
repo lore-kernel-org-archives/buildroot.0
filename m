@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 22:53:13 +0200
+Date: Wed, 2 Aug 2017 22:53:32 +0200
 Subject: [Buildroot] 2017.08-rc1 approaching
-In-Reply-To: <trinity-bf99dbd3-4c07-4421-bd8b-2ebe2b06d098-1501654134602@3capp-mailcom-bs15>
+In-Reply-To: <d088f387-2d1f-b940-5b7e-198c0e6fdc6c@cartelsol.com>
 References: <20170801233055.2488a4fc@windsurf.home>
- <trinity-bf99dbd3-4c07-4421-bd8b-2ebe2b06d098-1501654134602@3capp-mailcom-bs15>
-Message-ID: <20170802225313.5cb66435@windsurf.home>
+ <d088f387-2d1f-b940-5b7e-198c0e6fdc6c@cartelsol.com>
+Message-ID: <20170802225332.59b23f0d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 2 Aug 2017 08:08:54 +0200, daggs wrote:
+On Wed, 2 Aug 2017 12:09:49 +0200, Marcus Hoffmann wrote:
 
-> my I inquire what will be the status of the odroidc2 in this release?
+> > If there is anything that you believe is really important to have in
+> > 2017.08 and that is already pending in patchwork, let me know. After
+> > we cut 2017.08-rc1, new features will continue to be merged in the
+> > "next" branch and will be part of the 2017.11 release, and only bug
+> > fixes will be accepted for 2017.08.  
+> 
+> Can we get the systemd bump to 234 in?
 
-The defconfig is still there, in configs/odroidc2_defconfig. And it
-currently builds fine:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/25168668.
-
-> it still depends on gcc 4.9.x, I'm working on a latest uboot support which will remove this limitation but I wasn't able to get it to work yet.
-> in addition I lost the ability to test it as the board was dedicated to other urgent matter, I'm planning to order a new one now but it will take time arrive.
-
-For now, we're keeping gcc 4.9 support around, so no problem for the
-2017.08 release.
-
-Best regards,
+I've applied. Thanks!
 
 Thomas
 -- 
