@@ -1,32 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 22:23:00 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with gcc 7.x graphite
-	optimization bug fixed
-Message-ID: <20170802201905.DE770821EE@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 02 Aug 2017 20:25:01 +0000
+Subject: [Buildroot] [Bug 10021] libqeglfs-viv-integration.so file is
+ missing for qt5 on armv7
+In-Reply-To: <bug-10021-163@https.bugs.busybox.net/>
+References: <bug-10021-163@https.bugs.busybox.net/>
+Message-ID: <bug-10021-163-y2ts3Fetg3@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90a1b819312af78846b981ad8df2aa432e8df2b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=10021
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- CHANGES | 2 ++
- 1 file changed, 2 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-diff --git a/CHANGES b/CHANGES
-index 981a5a5..090b442 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -156,6 +156,8 @@
- 	#10061: gcc5.4 buildroot toolchain for powerpc libsanitizer
- 		failure
- 	#10076: Makefile:4113: recipe for target 'all-gcc'  failed
-+	#10091: gcc7.1 does not build with graphite support due to old
-+		isl
- 	#10121: webkit without the multimedia option causes build
- 		error
- 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |ps.report at gmx.net
+                   |.org                        |
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
