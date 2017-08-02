@@ -1,64 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 19:15:19 +0200
-Subject: [Buildroot] [git commit] package/skeleton-custom: simplify
-	target/staging install
-Message-ID: <20170802171116.5DC40821E6@busybox.osuosl.org>
+Date: Wed, 2 Aug 2017 19:24:43 +0200
+Subject: [Buildroot] [PATCH v5 06/14] package/skeleton: split out into
+ skeleton-common
+In-Reply-To: <20170801225224.16899-7-arnout@mind.be>
+References: <20170801225224.16899-1-arnout@mind.be>
+ <20170801225224.16899-7-arnout@mind.be>
+Message-ID: <20170802192443.5a47e27c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=049d56e949ef202633e2611e0e74e692ab2a9a67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-For target install, we don't need to check the merged-usr symlinks
-any more, it was already checked before.
+On Wed, 2 Aug 2017 00:52:16 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-For staging, instead of creating directories, just copy the same
-skeleton, which was already checked to be correct.
+> We don't name it skeleton-default, because it will be further split
+> later, into a skeleton for sysv and another for systemd, with some parts
+> still common between the two. So just name it skeleton-common right now;
+> this will save us a rename later.
+> 
+> We keep in the skeleton package all definitions of macros and variables
+> that can be used by other skeleton packages and/or init systems, and
+> just offload the actual feeding of the skeleton to the new package.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Arnout: split off in a separate patch + wrote commit message]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/skeleton-custom/skeleton-custom.mk | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+This paragraph was actually no longer true: after this patch,
+package/skeleton/skeleton.mk is basically empty, with just a dependency
+on skeleton-custom or skeleton-common:
 
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index df46b72..6e9d526 100644
---- a/package/skeleton-custom/skeleton-custom.mk
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -85,24 +85,21 @@ $(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is not \
- endif
- endif
- 
-+# The target-dir-warning file and the lib{32,64} symlinks are the only
-+# things we customise in the custom skeleton.
- define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
--	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
- endef
- 
--# For the staging dir, we don't really care about /bin and /sbin.
--# But for consistency with the target dir, and to simplify the code,
--# we still handle them for the merged or non-merged /usr cases.
--# Since the toolchain is not yet available, the staging is not yet
--# populated, so we need to create the directories in /usr
-+# For the staging dir, we don't really care what we install, but we
-+# need the /lib and /usr/lib appropriately setup. Since we ensure,
-+# above, that they are correct in the skeleton, we can simply copy the
-+# skeleton to staging.
- define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
--	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
-+	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(STAGING_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- endef
- 
+==
+SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+SKELETON_ADD_SKELETON_DEPENDENCY = NO
+
+ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM),y)
+SKELETON_DEPENDENCIES = skeleton-custom
+else
+SKELETON_DEPENDENCIES = skeleton-common
+endif
+
+$(eval $(generic-package))
+==
+
+So I've dropped this paragraph from the commit log.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
