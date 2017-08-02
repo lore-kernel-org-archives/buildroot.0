@@ -1,74 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 02 Aug 2017 10:04:28 +0200
-Subject: [Buildroot] [PATCH 1/2] lua: fix pkg-config file
-In-Reply-To: <20170801190840.457a6f6d@windsurf.home>
-References: <20170731211800.5888-1-joerg.krause@embedded.rocks>
- <20170801190840.457a6f6d@windsurf.home>
-Message-ID: <1501661068.1978.11.camel@embedded.rocks>
+From: Mason <slash.tmp@free.fr>
+Date: Wed, 2 Aug 2017 11:39:04 +0200
+Subject: [Buildroot] Policy for upgrading toolchains in LTS version
+In-Reply-To: <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
+References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
+ <20170622192701.GC3054@scaer> <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
+ <87a84zkw97.fsf@dell.be.48ers.dk>
+ <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
+Message-ID: <6589d153-b760-1284-6975-89fb29a14c99@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 23/06/2017 16:15, Mason wrote:
 
-On Tue, 2017-08-01 at 19:08 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 31 Jul 2017 23:17:59 +0200, J?rg Krause wrote:
-> > When Lua is linked with additional libraries, these libraries
-> > should go
-> > into the pkg-config file as well.
-> > 
-> > Otherwise, linking swupdate with the lua library fails:
-> > 
-> > ```
-> > /home/buildroot/output/host/arm-buildroot-linux-
-> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to
-> > `dlopen'
-> > /home/buildroot/output/host/arm-buildroot-linux-
-> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to
-> > `dlclose'
-> > /home/buildroot/output/host/arm-buildroot-linux-
-> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to
-> > `dlerror'
-> > /home/buildroot/output/host/arm-buildroot-linux-
-> > gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
-> > ```
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> Is this fixing an autobuilder issue ? I guess it should fix the ones
-> you mention in PATCH 2/2, but obviously only for the supported Lua
-> versions.
+> As previously mentioned, IIUC, Linaro is preparing an
+> OOB release addressing "stack clash". I plan to wait
+> for that release, and then send a patch, is that OK?
 
-It is an autobuilder issue indeed, but it was not detected the date I
-wrote the patch. The autobuilder issues concerning swupdate until that
-date where Lua 5.1/LuaJIT related. I noticed the issue using the Linaro
- Toolchain for armhf.
+Hello Peter,
 
-There is now a report of an autobuilder from yesterday:
-http://autobuild.buildroot.net/results/1c3/1c349cc5904868e4def292b9fbfa
-164828e46156/
+yroux has confirmed that the updated toolchain is not
+ready yet ("the stack clash mitigation patchset is still
+under discussion/review on GCC list").
 
-Not all toolchains are producing the issue (only glibc ones?):
+There will be an update to GCC 6.4 in 2-3 weeks which will
+include the mitigation patches *if* they are ready.
 
-                armv5-ctng-linux-gnueabi [ 1/47]: FAILED
-              armv7-ctng-linux-gnueabihf [ 2/47]: FAILED
-                        br-aarch64-glibc [ 3/47]: FAILED
-                           br-arcle-hs38 [ 4/47]: OK
-                            br-arm-basic [ 5/47]: OK
-                  br-arm-cortex-a9-glibc [ 6/47]: FAILED
-                   br-arm-cortex-a9-musl [ 7/47]: OK
-                             br-arm-full [ 9/47]: OK
-                      br-arm-full-static [11/47]: OK
-                   br-i386-pentium4-full [13/47]: OK
-                br-i386-pentium-mmx-musl [14/47]: OK
-                      br-m68k-68040-full [16/47]: OK
-                    br-microblazeel-full [17/47]: OK
-                 br-mips32r6-el-hf-glibc [18/47]: FAILED
-                      br-mips64-n64-full [19/47]: OK
-                 br-mips64r6-el-hf-glibc [20/47]: FAILED
+In the mean time, could you cherry-pick:
 
-J?rg
+641fe0e39240 toolchain-external: bump Linaro AArch64 toolchain to 2017.02
+52f059f38d46 toolchain-external: bump Linaro ARMeb toolchain to 2017.02
+075d26900b4f toolchain-external: bump Linaro ARM toolchain to 2017.02
+
+onto the 2017.02.x branch, so that it is in sync with master?
+
+Regards.
