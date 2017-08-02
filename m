@@ -1,66 +1,48 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 2 Aug 2017 09:49:11 -0400
-Subject: [Buildroot] [v5 2/3] qt5webengine: new package
-In-Reply-To: <5012f8e7-0164-27c7-813e-86f1f2dcb0df@gmail.com>
-References: <20170724134429.22816-1-gael.portay@savoirfairelinux.com>
- <20170724134429.22816-3-gael.portay@savoirfairelinux.com>
- <5012f8e7-0164-27c7-813e-86f1f2dcb0df@gmail.com>
-Message-ID: <20170802134911.7aghi4vv3h2oul3p@gportay>
+From: =?UTF-8?B?TWljaGHFgiDFgXlzemN6ZWs=?= <michal.lyszczek@gmail.com>
+Date: Wed, 2 Aug 2017 15:55:10 +0200
+Subject: [Buildroot] genimage raw partition from multiple files
+Message-ID: <cadb0fad-d46f-554c-05ee-ba70d0db7af1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Zoltan,
+Hi,
 
-On Sat, Jul 29, 2017 at 04:13:27PM +0200, Zoltan Gyarmati wrote:
-> Dear Ga?l & All,
-> 
-> 
-> with the shipped raspberrypi3_qt5_defconfig (where also the qt5 examples
-> are enabled), the building of the 'demobrowser' example is failing:
-> 
-> .obj/browsermainwindow.o: In function `BrowserMainWindow::printRequested(QWebEnginePage*)':
-> browsermainwindow.cpp:(.text+0x29d8): undefined reference to `QWebEnginePage::print(QPrinter*, QWebEngineCallback<bool> const&)'
-> 
-> probably due to the fact that in the qtwebengine config the PDF/print
-> support is not enabled:
-> 
-> Qt WebEngine:
-> 
->   Embedded build ......................... yes
-> 
->   Pepper Plugins ......................... no
-> 
->   Printing and PDF ....................... no
-> 
->   Proprietary Codecs ..................... no
-> 
->   Spellchecker ........................... yes
-> 
-> 
-> There is a webengine config option 'WEBENGINE_CONFIG += use_printing
-> use_pdf' ,
-> maybe it has to be set explicitly in  qt5webengine.mk when
-> BR2_PACKAGE_QT5BASE_PRINTSUPPORT is set?
-> 
+I've been trying to figure out, how to create raw partition, without
+filesystem, from 2 or more files. Here is a general idea
 
-My bad.
 
-I forgot to git add the following patch to package/qt5/qt5webengine/5.9.1.
+partition uboot {
+    partition-type = 0xa2
+    size = 1M
 
-	085c2c52 Always compile QWebEnginePage::print
+    image spl {
+        image = "u-boot-spl.bin.crc"
+	size = 64k
+        offset = 0
+    }
 
-I will resend a v6. In the meanwhile, you can download the patch[1] and test it.
+    image uboot-real {
+        image = "u-boot.bin"
+        offset = 256k
+    }
+}
 
-> Regards,
-> 
-> Zoltan Gyarmati
-> https://zgyarmati.de
-> 
 
-Regards,
-Gael
+Note that spl is 64k big, and uboot-real must be at offset 256k. Also
+this *MUST* be a partition of type 0xa2. Can such thing be done fully in
+genimage without post-install script?
 
-[1]: https://github.com/qt/qtwebengine/commit/085c2c529473bbe9dd7c8c5698a45053520cc423.patch
+-- 
+Best Regards
+?yszczek Micha?
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170802/a449bafb/attachment.asc>
