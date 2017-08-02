@@ -1,39 +1,65 @@
-From: Mason <slash.tmp@free.fr>
-Date: Wed, 2 Aug 2017 11:39:04 +0200
-Subject: [Buildroot] Policy for upgrading toolchains in LTS version
-In-Reply-To: <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
-References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
- <20170622192701.GC3054@scaer> <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
- <87a84zkw97.fsf@dell.be.48ers.dk>
- <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
-Message-ID: <6589d153-b760-1284-6975-89fb29a14c99@free.fr>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Wed, 2 Aug 2017 12:01:56 +0200
+Subject: [Buildroot] [PATCH v2 1/2] systemd: bump version to 234
+In-Reply-To: <20170731142210.24593-1-aduskett@gmail.com>
+References: <20170731142210.24593-1-aduskett@gmail.com>
+Message-ID: <1033b846-a3bb-e7e5-6e44-993d4ce7a0db@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/06/2017 16:15, Mason wrote:
+Hello,
 
-> As previously mentioned, IIUC, Linaro is preparing an
-> OOB release addressing "stack clash". I plan to wait
-> for that release, and then send a patch, is that OK?
+On 31.07.2017 16:22, Adam Duskett wrote:
+> Other changes:
+> - Removed the following patches due to being merged upstream:
+>     - resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
+>     - resolved-simplify-alloc-size-calculation.patch
+>     - resolved-do-not-allocate-packets-with-minimum-size.patch
+> - Updated the following patches to work with 234:
+>     - fix-getty-unit.patch
+>     - build-check-for-ln-relative.patch
+>     - fix-am-path-libgcrypt-no-found.patch
+> - Updated ordering of remaining patches.
+> - Reformatted remaining patches as git style patches.
+> - Updated Upstream-Status comment in "build-check-for-ln-relative.patch" to
+>   "Denied [No desire to support building on old distributions]"
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Changed "Prefer getty to agetty in console setup systemd units" to
+>     fix-getty-unit in 0001-fix-getty-unit.patch, and put
+>     "Prefer getty to agetty in console setup systemd units" as the
+>     body. (Arnout)
+>   - Removed comment explaining -o in units/getty at .service.m4 (Arnout)
+>   - Readded indent in Configure.in (Arnout)
+> 
+>  package/systemd/0001-fix-getty-unit.patch          | 48 ++++++++++++++++++++
+>  ...-of-null-pointer-p-question-dereferencing.patch | 28 ------------
+>  ...atch => 0002-build-check-for-ln-relative.patch} | 24 +++++-----
+>  ...-resolved-simplify-alloc-size-calculation.patch | 51 ----------------------
+>  ...h => 0003-fix-am-path-libgcrypt-no-found.patch} | 24 +++++++---
+>  ...do-not-allocate-packets-with-minimum-size.patch | 48 --------------------
+>  package/systemd/0004-fix-getty-unit.patch          | 30 -------------
+>  package/systemd/systemd.hash                       |  2 +-
+>  package/systemd/systemd.mk                         |  2 +-
+>  9 files changed, 82 insertions(+), 175 deletions(-)
+>  create mode 100644 package/systemd/0001-fix-getty-unit.patch
+>  delete mode 100644 package/systemd/0001-resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
+>  rename package/systemd/{0005-build-check-for-ln-relative.patch => 0002-build-check-for-ln-relative.patch} (83%)
+>  delete mode 100644 package/systemd/0002-resolved-simplify-alloc-size-calculation.patch
+>  rename package/systemd/{0006-fix-am-path-libgcrypt-no-found.patch => 0003-fix-am-path-libgcrypt-no-found.patch} (90%)
+>  delete mode 100644 package/systemd/0003-resolved-do-not-allocate-packets-with-minimum-size.patch
+>  delete mode 100644 package/systemd/0004-fix-getty-unit.patch
 
-Hello Peter,
+Tested-by: Marcus Hoffmann <m.hoffmann@caretelsol.com>
 
-yroux has confirmed that the updated toolchain is not
-ready yet ("the stack clash mitigation patchset is still
-under discussion/review on GCC list").
+Tested with Arnouts new init testing infrastructure. Basic networkd
+configuration (rw + ro) builds and boots fine without any failed units.
+Network is functional.
 
-There will be an update to GCC 6.4 in 2-3 weeks which will
-include the mitigation patches *if* they are ready.
-
-In the mean time, could you cherry-pick:
-
-641fe0e39240 toolchain-external: bump Linaro AArch64 toolchain to 2017.02
-52f059f38d46 toolchain-external: bump Linaro ARMeb toolchain to 2017.02
-075d26900b4f toolchain-external: bump Linaro ARM toolchain to 2017.02
-
-onto the 2017.02.x branch, so that it is in sync with master?
-
-Regards.
+Best wishes,
+Marcus
