@@ -1,67 +1,174 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Wed,  2 Aug 2017 23:35:39 +0530
-Subject: [Buildroot] [PATCH] let-me-create: fix build with musl
-Message-ID: <1501697139-9059-1-git-send-email-rahulbedarkar89@gmail.com>
+From: =?UTF-8?B?TWljaGHFgiDFgXlzemN6ZWs=?= <michal.lyszczek@gmail.com>
+Date: Wed, 2 Aug 2017 20:09:01 +0200
+Subject: [Buildroot] genimage raw partition from multiple files
+In-Reply-To: <20170802195518.2f279e2b@windsurf.home>
+References: <cadb0fad-d46f-554c-05ee-ba70d0db7af1@gmail.com>
+ <67c75046-efbc-0881-e7c1-656b11168102@gmail.com>
+ <20170802195518.2f279e2b@windsurf.home>
+Message-ID: <5eba6e0b-68e0-db07-f0d7-d5be0580e257@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix build with musl C library.
+W dniu 02.08.2017 o 19:55, Thomas Petazzoni pisze:
+> Hello,
+> 
+> On Wed, 2 Aug 2017 19:25:02 +0200, Micha? ?yszczek wrote:
+> 
+>>> Note that spl is 64k big, and uboot-real must be at offset 256k. Also
+>>> this *MUST* be a partition of type 0xa2. Can such thing be done fully in
+>>> genimage without post-install script?
+>>>   
+>>
+>> Ok, after messing with source code a little bit a found a way to do what
+>> I want. Let's say want to create partition of type 0xA2 for uboot. That
+>> partition should contain spl image and full uboot. First create image of
+>> that partition - this image will be built from "subpartitions"
+>>
+>>
+>> image uboot.img {
+>>         hdimage {
+>>                 partition-table = "no"
+>>         }
+>>
+>>         partition spl {
+>>                 in-partition-table = "no"
+>>                 image = "u-boot-spl.bin.crc"
+>>                 offset = 0
+>>                 size = 64k
+>>         }
+>>
+>>         partition uboot-full {
+>>                 in-partition-table = "no"
+>>                 image = "u-boot.img"
+>>                 offset = 256k
+>>         }
+>>
+>>         size = 1M
+>> }
+>>
+>> 2 things are very important here, first is "partition-table = "no"" in
+>> hdimage, this will tell hdimage not add ANYTHING from itself, so no
+>> partition table, no dos magic (55 aa), no mbr at all. All partitions
+>> should also have "in-partition-table = "no"" to prevent any additional
+>> bytes from genimage.
+>>
+>> When image is created like that it can be normally added into partition
+>> table
+>>
+>>
+>> image sdcard.img {
+>>         hdimage {
+>>         }
+>>
+>>         partition uboot-env {
+>>                 in-partition-table = "no"
+>>                 image = "uboot-env.bin"
+>>                 offset = 17408 # 512 * 34 -> just after gpt
+>>         }
+>>
+>>         partition uboot {
+>>                 partition-type = 0xa2
+>>                 image = "uboot.img"
+>>         }
+>>
+>>  	partition rootfs {
+>>                 partition-type = 0x83
+>>                 image = "rootfs.ext2"
+>>                 size = 500M
+>>         }
+>> }
+>>
+>>
+>> And that's all, image will generate as expected. This may look like
+>> hack, but it is quite clean solution I think. We can avoid any scripts
+>> to create such partition for bootloader, and everything is in one place.
+> 
+> And those two snippets of genimage configuration can be in a single
+> genimage.cfg, and both uboot.img and then sdcard.img will be produced
+> by a single genimage invocation ? Or do we need a first genimage
+> invocation to generate uboot.img, and then a second genimage invocation
+> to generate sdcard.img (which requires uboot.img) ?
+> 
+> Thanks!
+> 
+> Thomas
+> 
 
-Fixes:
-  http://autobuild.buildroot.net/results/af946fa6fe05ee265e4ac97742b15afeb0cea1ab
+Only one invocation of genimage.sh is needed to generate working
+sdcard.img. Yes! It's that simple! I attach full genimage.cfg I created
+for my port for cyclone5. This genimage.cfg creates fully working
+sdcard.img (including uboot.img), and only external script used is
+support/script/genimage.sh -c genimage.cfg.
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- .../0001-fix-build-with-musl-C-library.patch       | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/let-me-create/0001-fix-build-with-musl-C-library.patch
-
-diff --git a/package/let-me-create/0001-fix-build-with-musl-C-library.patch b/package/let-me-create/0001-fix-build-with-musl-C-library.patch
-new file mode 100644
-index 0000000..90a7246
---- /dev/null
-+++ b/package/let-me-create/0001-fix-build-with-musl-C-library.patch
-@@ -0,0 +1,38 @@
-+From 93fbc53a727a49dd5061e44e3156ff2044e6e0b5 Mon Sep 17 00:00:00 2001
-+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-+Date: Tue, 1 Aug 2017 22:44:22 +0530
-+Subject: [PATCH] fix build with musl C library
-+
-+With musl C library, we get following build error:
-+
-+/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c: In function 'spi_transfer':
-+/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c:170:19: error: '_IOC_SIZEBITS' undeclared (first use in this function)
-+if (ioctl(fd, SPI_IOC_MESSAGE(1), &tr) < 0) {
-+^
-+/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c:170:19: note: each undeclared identifier is reported only once for each function it appears in
-+
-+Include <linux/ioctl.h> for musl C library compatibility.
-+
-+This build issue is detected by Buildroot autobuilder:
-+http://autobuild.buildroot.net/results/af9/af946fa6fe05ee265e4ac97742b15afeb0cea1ab/
-+
-+Signed-off-by: Rahul Bedarkar rahulbedarkar89 at gmail.com
-+---
-+Upstream status: https://github.com/CreatorDev/LetMeCreate/pull/29
-+
-+ src/core/spi.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/core/spi.c b/src/core/spi.c
-+index 4d55cee..9ec7ea9 100644
-+--- a/src/core/spi.c
-++++ b/src/core/spi.c
-+@@ -1,4 +1,5 @@
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ #include <linux/spi/spidev.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-+-- 
-+2.7.4
-+
 -- 
-2.7.4
+Best Regards
+?yszczek Micha?
+-------------- next part --------------
+image boot.vfat {
+	vfat {
+		files = {
+			"zImage",
+			"socfpga_cyclone5_socrates.dtb"
+		}
+	}
+	size = 8M
+}
+
+image uboot.img {
+	hdimage {
+		partition-table = "no"
+	}
+
+	partition spl {
+		in-partition-table = "no"
+		image = "u-boot-spl.bin.crc"
+		offset = 0
+		size = 64k
+	}
+
+	partition uboot-full {
+		in-partition-table = "no"
+		image = "u-boot.img"
+		offset = 256k
+	}
+
+	size = 1M
+}
+
+image sdcard.img {
+	hdimage {
+	}
+
+	partition uboot-env {
+		in-partition-table = "no"
+		image = "uboot-env.bin"
+		offset = 17408 # 512 * 34 -> just after gpt
+	}
+
+	partition boot {
+		partition-type = 0xc
+		bootable = "true"
+		image = "boot.vfat"
+	}
+
+	partition uboot {
+		partition-type = 0xa2
+		image = "uboot.img"
+	}
+
+	partition rootfs {
+		partition-type = 0x83
+		image = "rootfs.ext2"
+		size = 500M
+	}
+}
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170802/616f0fc6/attachment.asc>
