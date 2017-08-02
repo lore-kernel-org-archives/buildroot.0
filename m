@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 22:51:13 +0200
+Date: Wed, 2 Aug 2017 22:53:13 +0200
 Subject: [Buildroot] 2017.08-rc1 approaching
-In-Reply-To: <pib95exi5g.ln2@ID-313208.user.individual.net>
+In-Reply-To: <trinity-bf99dbd3-4c07-4421-bd8b-2ebe2b06d098-1501654134602@3capp-mailcom-bs15>
 References: <20170801233055.2488a4fc@windsurf.home>
- <1m485exrb.ln2@ID-313208.user.individual.net>
- <pib95exi5g.ln2@ID-313208.user.individual.net>
-Message-ID: <20170802225113.454b6284@windsurf.home>
+ <trinity-bf99dbd3-4c07-4421-bd8b-2ebe2b06d098-1501654134602@3capp-mailcom-bs15>
+Message-ID: <20170802225313.5cb66435@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 02 Aug 2017 18:35:05 +0200, Bernd Kuhls wrote:
+On Wed, 2 Aug 2017 08:08:54 +0200, daggs wrote:
 
-> Am Wed, 02 Aug 2017 07:31:13 +0200 schrieb Bernd Kuhls:
-> 
-> > This patch is currently tested by test-pkg with all 47 toolchains.
-> > I expect to have the result this evening and would sent v4 of the
-> > patch in the hope it will get into 2017.08 ;)  
-> 
-> done: http://patchwork.ozlabs.org/patch/796693/
+> my I inquire what will be the status of the odroidc2 in this release?
 
-I've applied this one.
+The defconfig is still there, in configs/odroidc2_defconfig. And it
+currently builds fine:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/25168668.
 
-> And while you are at it please take a look at this patch as well which 
-> was tested by Yann: http://patchwork.ozlabs.org/patch/756785/
+> it still depends on gcc 4.9.x, I'm working on a latest uboot support which will remove this limitation but I wasn't able to get it to work yet.
+> in addition I lost the ability to test it as the board was dedicated to other urgent matter, I'm planning to order a new one now but it will take time arrive.
 
-This one looks less important, and it's time to cut -rc1, so this one
-will be for the next release;
+For now, we're keeping gcc 4.9 support around, so no problem for the
+2017.08 release.
 
 Best regards,
 
