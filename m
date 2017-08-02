@@ -1,36 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 02 Aug 2017 07:31:13 +0200
-Subject: [Buildroot] 2017.08-rc1 approaching
-References: <20170801233055.2488a4fc@windsurf.home>
-Message-ID: <1m485exrb.ln2@ID-313208.user.individual.net>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed,  2 Aug 2017 07:57:22 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Bump python-twisted and fix dependencies
+Message-ID: <20170802055726.18461-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 01 Aug 2017 23:30:55 +0200 schrieb Thomas Petazzoni:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> If there is anything that you believe is really important to have in
-> 2017.08 and that is already pending in patchwork, let me know.
+Current version needed Automat, that will be added in this series.
 
-Hi Thomas,
+And the bumped version also needs hyperlink, that is meanwhile available.
 
-I would like to have the "kodi: Add support for more archs"[1] patch in 
-2017.08, it allows to use kodi, among others, on aarch64.
-In May we already had a user asking for this on our mailinglist:
-http://lists.busybox.net/pipermail/buildroot/2017-May/191352.html
+Yegor Yefremov (4):
+  python-mistune: add host variant
+  python-m2r: new package
+  python-automat: new package
+  python-twisted: bump to version 17.5.0
 
-This patch is part of a 3-patch series which includes a fix for the 
-broken sunxi mali support. I agree with your proposal to change the egl 
-checks to a positive list "depends on PLATFORM_A || PLATFORM_B || 
-PLATFORM_C" but this takes more time to test than I currently have.
+ package/Config.in                          |  2 ++
+ package/python-automat/Config.in           |  8 ++++++++
+ package/python-automat/python-automat.hash |  3 +++
+ package/python-automat/python-automat.mk   | 15 +++++++++++++++
+ package/python-m2r/Config.in               |  8 ++++++++
+ package/python-m2r/python-m2r.hash         |  3 +++
+ package/python-m2r/python-m2r.mk           | 16 ++++++++++++++++
+ package/python-mistune/python-mistune.mk   |  1 +
+ package/python-twisted/Config.in           |  2 ++
+ package/python-twisted/python-twisted.hash |  4 ++--
+ package/python-twisted/python-twisted.mk   |  4 ++--
+ 11 files changed, 62 insertions(+), 4 deletions(-)
+ create mode 100644 package/python-automat/Config.in
+ create mode 100644 package/python-automat/python-automat.hash
+ create mode 100644 package/python-automat/python-automat.mk
+ create mode 100644 package/python-m2r/Config.in
+ create mode 100644 package/python-m2r/python-m2r.hash
+ create mode 100644 package/python-m2r/python-m2r.mk
 
-Therefore I removed the sunxi stuff from the patch series to keep only 
-the fix for the supported archs. This patch is currently tested by test-
-pkg with all 47 toolchains. I expect to have the result this evening and 
-would sent v4 of the patch in the hope it will get into 2017.08 ;)
-
-Regards, Bernd
-
-[1] http://patchwork.ozlabs.org/patch/788923/
+-- 
+2.11.0
