@@ -1,40 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Aug 2017 19:43:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version to
-	4.15.3
-Message-ID: <20170802174343.31443-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 Aug 2017 19:51:53 +0200
+Subject: [Buildroot] [PATCH v5 00/14] system: properly handle systemd as
+	init system
+In-Reply-To: <20170801225224.16899-1-arnout@mind.be>
+References: <20170801225224.16899-1-arnout@mind.be>
+Message-ID: <20170802175153.GA2885@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Arnout, All,
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 57725a0ed..82923a89a 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 30b6a20f846f0f0cc14c2347efbf3b72162c876daed53a3731d3f975d370765e  kodi-pvr-mythtv-4.15.0.tar.gz
-+sha256 fd60aba0dac25ab5885371495a5dfca53308c1fa23215299b0f62997c7391e1e  kodi-pvr-mythtv-4.15.3.tar.gz
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 515050b17..8099ffae3 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -6,7 +6,7 @@
- 
- # This cset is on the branch 'Krypton'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_MYTHTV_VERSION = 4.15.0
-+KODI_PVR_MYTHTV_VERSION = 4.15.3
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
+On 2017-08-02 00:52 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> This series is a proposal to fix our handling of systemd as an init
+> system.
+[--SNIP--]
+> Changes v4 -> v5:
+>   - moved the test infra patch all the way to the beginning of the series
+>   - dropped the patch that removed support for BR2_INIT_NONE with the default
+>     skeleton
+>   - to make that possible, merged the patch that re-introduced BR2_INIT_NONE
+>     support with the patch that breaks it, i.e. the introduction of
+>     skeleton-sysv and skeleton-systemd
+>   - split the patch that splits off skeleton-custom into 4 patches; the first
+>     one does only the split, the other ones do 3 clean-ups. Except for
+>     comments, the end result is the same as the original skeleton-custom
+>   - add a further cleanup to skeleton-common that renames
+>     SKELETON_ROOT_PASSWORD to SKELETON_CUSTOM_ROOT_PASSWORD
+>   - re-generate .gitlab-ci.yml in the two patches that create new tests.
+
+Thanks for cleaning it up faster than I could! ;-)
+
+I'll try to dedicate a bit of time tonight to look at the patches that
+are not yet applied.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
