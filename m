@@ -1,113 +1,195 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Aug 2017 17:48:09 +0200
-Subject: [Buildroot] [PATCH v5 01/14] support/testing: add runtime
- testing for init systems
-In-Reply-To: <20170801225224.16899-2-arnout@mind.be>
-References: <20170801225224.16899-1-arnout@mind.be>
- <20170801225224.16899-2-arnout@mind.be>
-Message-ID: <20170802174809.1a7bba4f@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  2 Aug 2017 18:29:42 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/kodi: Add support for more archs
+Message-ID: <20170802162942.6989-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For the autoconf-based build system it was necessary to allow each
+supported architecture separatly:
+https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
 
-On Wed, 2 Aug 2017 00:52:11 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> The "builtin" kernel does not boot a systemd-based system, so
-> we resort to building the same one as currently used by our
-> qemu_arm_vexpress_defconfig.
+For the CMake build system this is not necessary anymore so we only
+blacklist archs in Config.in known to be broken.
 
-[...]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v4: removed sunxi mali patches from patch series
+v3: fixed "KODI_CXX_FLAGS +=" (Samuel)
+v2: rebased
 
-Thanks, I've applied. I like the test case definitions themselves, they
-are small and very readable. However, there are a few other things that
-I think could be better, see below.
+Tested with test-pkg using this defconfig
+
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_EVENTCLIENTS=y
+BR2_PACKAGE_KODI_LIBBLURAY=y
+BR2_PACKAGE_KODI_LIBCEC=y
+BR2_PACKAGE_KODI_PVR_HTS=y
+BR2_PACKAGE_KODI_SCREENSAVER_RSXS=y
+BR2_PACKAGE_KODI_VISUALISATION_GOOM=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
+
+with this result:
+
+                armv5-ctng-linux-gnueabi [ 1/47]: OK
+              armv7-ctng-linux-gnueabihf [ 2/47]: OK
+                        br-aarch64-glibc [ 3/47]: OK
+                           br-arcle-hs38 [ 4/47]: OK
+                            br-arm-basic [ 5/47]: SKIPPED
+                  br-arm-cortex-a9-glibc [ 6/47]: OK
+                   br-arm-cortex-a9-musl [ 7/47]: SKIPPED
+                   br-arm-cortex-m4-full [ 8/47]: SKIPPED
+                             br-arm-full [ 9/47]: OK
+                    br-arm-full-nothread [10/47]: SKIPPED
+                      br-arm-full-static [11/47]: SKIPPED
+                            br-bfin-full [12/47]: SKIPPED
+                   br-i386-pentium4-full [13/47]: OK
+                br-i386-pentium-mmx-musl [14/47]: SKIPPED
+                       br-m68k-5208-full [15/47]: SKIPPED
+                      br-m68k-68040-full [16/47]: SKIPPED
+                    br-microblazeel-full [17/47]: SKIPPED
+                 br-mips32r6-el-hf-glibc [18/47]: OK
+                      br-mips64-n64-full [19/47]: OK
+                 br-mips64r6-el-hf-glibc [20/47]: OK
+                      br-mipsel-o32-full [21/47]: OK
+                          br-nios2-glibc [22/47]: SKIPPED
+                      br-openrisc-uclibc [23/47]: SKIPPED
+               br-powerpc-603e-basic-cpp [24/47]: SKIPPED
+             br-powerpc64le-power8-glibc [25/47]: OK
+               br-powerpc64-power7-glibc [26/47]: OK
+                  br-powerpc-e500mc-full [27/47]: OK
+                             br-sh4-full [28/47]: OK
+                        br-sparc64-glibc [29/47]: OK
+                         br-sparc-uclibc [30/47]: SKIPPED
+                    br-x86-64-core2-full [31/47]: OK
+                          br-x86-64-musl [32/47]: SKIPPED
+                          br-xtensa-full [33/47]: OK
+                     i686-ctng-linux-gnu [34/47]: SKIPPED
+                          linaro-aarch64 [35/47]: OK
+                              linaro-arm [36/47]: OK
+             mips64el-ctng_n32-linux-gnu [37/47]: OK
+             mips64el-ctng_n64-linux-gnu [38/47]: OK
+        powerpc-ctng_e500v2-linux-gnuspe [39/47]: SKIPPED
+                     sourcery-arm-armv4t [40/47]: OK
+                            sourcery-arm [41/47]: OK
+                     sourcery-arm-thumb2 [42/47]: OK
+                         sourcery-mips64 [43/47]: OK
+                           sourcery-mips [44/47]: OK
+                          sourcery-nios2 [45/47]: SKIPPED
+                         sourcery-x86-64 [46/47]: OK
+           x86_64-ctng_locales-linux-gnu [47/47]: OK
+47 builds, 18 skipped, 0 build failed, 0 legal-info failed
 
 
-> +class InitSystemBase(infra.basetest.BRTest):
-> +
-> +    def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
-> +        img = os.path.join(self.builddir, "images", "rootfs.{}".format(fs_type))
-> +        subprocess.call(["truncate", "-s", "%1M", img])
-> +
-> +        options = ["-drive",
-> +                   "file={},if=sd,format=raw".format(img),
-> +                   "-M", "vexpress-a9"]
-> +
-> +        if kernel is None:
-> +            kernel = "builtin"
-> +        else:
-> +            kernel = os.path.join(self.builddir, "images", kernel)
-> +            options.extend(["-dtb", os.path.join(self.builddir, "images",
-> +                                             "{}.dtb".format(dtb))])
-> +
-> +        kernel_cmdline = ["root=/dev/mmcblk0",
-> +                          "rootfstype={}".format(fs_type),
-> +                          "rootwait",
-> +                          "ro",
-> +                          "console=ttyAMA0"]
+ package/kodi/Config.in |  6 +++---
+ package/kodi/kodi.mk   | 45 ++++++++++++++++++++++++++++++++++++---------
+ 2 files changed, 39 insertions(+), 12 deletions(-)
 
-The beginning of this function partly duplicates some of the logic in
-the Emulator() class, like passing -M vexpress-a9, etc. The fact that
-you needed this additional helper function on top indicates IMO that
-the self.emulator.boot() method should be improved.
-
-> +        if not init is None:
-
-if init is not None ?
-
-> +            kernel_cmdline.extend(["init={}".format(init)])
-> +
-> +        self.emulator.boot(arch="armv7",
-> +                           kernel=kernel,
-> +                           kernel_cmdline=kernel_cmdline,
-> +                           options=options)
-> +
-> +        if init is None:
-> +            self.emulator.login()
-
-Reading this condition is really weird. Indeed when you have an init
-such as systemd or busybox, the init variable is None, and that's why
-you login. And when you have *no* init, then the init variable has a
-value, and you can't login.
-
-But the naming of the variable can cause confusion here: "if init is
-None" can be understood as "if there's no init program". But it's
-actually exactly the opposite.
-
-It would be nice to find a way to clarify that.
-
-> +class TestInitSystemNone(InitSystemBase):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        """
-> +        BR2_INIT_NONE=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        BR2_TARGET_ROOTFS_SQUASHFS=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.startEmulator(fs_type="squashfs", init="/bin/sh")
-> +        index = self.emulator.qemu.expect(["/bin/sh: can't access tty; job control turned off", pexpect.TIMEOUT], timeout=60)
-> +        if index != 0:
-> +            self.emulator.logfile.write("==> System does not boot")
-> +            raise SystemError("System does not boot")
-> +        index = self.emulator.qemu.expect(["#", pexpect.TIMEOUT], timeout=60)
-> +        if index != 0:
-> +            self.emulator.logfile.write("==> System does not boot")
-> +            raise SystemError("System does not boot")
-
-The self.emulator class should provide a method to wait for a string so
-that you don't have to use the internals of self.emulator.qemu.
-
-Thanks!
-
-Thomas
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 76be9d925..a321e03d9 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+-		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+-		&& BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on BR2_USE_MMU # libcdio, and others
++# i386: needs sse (see upstream PR 10351)
++	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
++		&& !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
+ 
+ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 309d0d3af..0bf7331dd 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -57,6 +57,8 @@ KODI_EXTRA_DOWNLOADS = \
+ 	https://github.com/xbmc/libdvdread/archive/$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
+ KODI_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(KODI_C_FLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(KODI_CXX_FLAGS)" \
+ 	-DENABLE_CCACHE=OFF \
+ 	-DENABLE_DVDCSS=ON \
+ 	-DENABLE_INTERNAL_CROSSGUID=OFF \
+@@ -70,14 +72,34 @@ KODI_CONF_OPTS += \
+ 	-DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
+ 	-DLIBDVDREAD_URL=$(DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
+-ifeq ($(BR2_arm),y)
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
++KODI_DEPENDENCIES += rpi-userland
++# These CPU-specific options are only used on rbpi:
++# https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L13
++ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
++endif
++else
++ifeq ($(BR2_arceb)$(BR2_arcle),y)
++KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
++else ifeq ($(BR2_armeb),y)
+ KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+-else ifeq ($(BR2_mips),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
+-else ifeq ($(BR2_i386),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
+-else ifeq ($(BR2_x86_64),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
++else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
++KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
++else
++# Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
++# see project/cmake/scripts/linux/ArchSetup.cmake
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
++endif
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+@@ -128,6 +150,11 @@ else
+ KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
+ endif
+ 
++# mips: uses __atomic_load_8
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++KODI_CXX_FLAGS += -latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+ KODI_DEPENDENCIES += mysql
+@@ -230,9 +257,9 @@ endif
+ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+ KODI_CONF_OPTS += \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+ 	-DENABLE_OPENGLES=ON
++KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
++KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
+ else
+ KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
