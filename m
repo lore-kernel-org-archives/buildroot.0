@@ -1,33 +1,124 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Aug 2017 20:48:12 +0000
-Subject: [Buildroot] [Bug 10071] [PATCH] fakeroot: replace hard-coded paths
- in post install
-In-Reply-To: <bug-10071-163@https.bugs.busybox.net/>
-References: <bug-10071-163@https.bugs.busybox.net/>
-Message-ID: <bug-10071-163-kWhh8ZjvgD@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Aug 2017 22:48:35 +0200
+Subject: [Buildroot] [git commit] package/kodi: add support for more
+	architectures
+Message-ID: <20170802204443.BAFC681DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10071
+commit: https://git.buildroot.net/buildroot/commit/?id=27db56397bc01d28ef265f28d9bab9af15b587d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+For the autoconf-based build system it was necessary to allow each
+supported architecture separatly:
+https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+For the CMake build system this is not necessary anymore so we only
+blacklist archs in Config.in known to be broken.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-This issue has been fixed by the relocatable SDK work. The idea is that after a
-build, you run "make sdk", which prepares the SDK to be relocable. Then you can
-move the contents of output/host/ around, you can tarball it and share it with
-other developers. output/host contains a relocate-sdk.sh script, which one must
-run before using the SDK. This script will adjust the hardcoded paths as
-needed.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: slightly tweak the BR2_PACKAGE_KODI_ARCH_SUPPORTS definition.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi/Config.in |  6 +++---
+ package/kodi/kodi.mk   | 45 ++++++++++++++++++++++++++++++++++++---------
+ 2 files changed, 39 insertions(+), 12 deletions(-)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 76be9d9..1115a1e 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+-		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+-		&& BR2_TOOLCHAIN_HAS_SYNC_8
++	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	# i386: needs sse (see upstream PR 10351)
++	depends on !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
+ 	depends on BR2_USE_MMU # libcdio, and others
+ 
+ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 309d0d3..0bf7331 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -57,6 +57,8 @@ KODI_EXTRA_DOWNLOADS = \
+ 	https://github.com/xbmc/libdvdread/archive/$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
+ KODI_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(KODI_C_FLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(KODI_CXX_FLAGS)" \
+ 	-DENABLE_CCACHE=OFF \
+ 	-DENABLE_DVDCSS=ON \
+ 	-DENABLE_INTERNAL_CROSSGUID=OFF \
+@@ -70,14 +72,34 @@ KODI_CONF_OPTS += \
+ 	-DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
+ 	-DLIBDVDREAD_URL=$(DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
+-ifeq ($(BR2_arm),y)
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
++KODI_DEPENDENCIES += rpi-userland
++# These CPU-specific options are only used on rbpi:
++# https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L13
++ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
++endif
++else
++ifeq ($(BR2_arceb)$(BR2_arcle),y)
++KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
++else ifeq ($(BR2_armeb),y)
+ KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+-else ifeq ($(BR2_mips),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
+-else ifeq ($(BR2_i386),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
+-else ifeq ($(BR2_x86_64),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
++else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
++KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
++else
++# Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
++# see project/cmake/scripts/linux/ArchSetup.cmake
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
++endif
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+@@ -128,6 +150,11 @@ else
+ KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
+ endif
+ 
++# mips: uses __atomic_load_8
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++KODI_CXX_FLAGS += -latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+ KODI_DEPENDENCIES += mysql
+@@ -230,9 +257,9 @@ endif
+ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+ KODI_CONF_OPTS += \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`" \
+ 	-DENABLE_OPENGLES=ON
++KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
++KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
+ else
+ KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
+ endif
