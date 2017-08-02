@@ -1,25 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Aug 2017 15:06:52 +0000
-Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
-In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
-References: <bug-10141-163@https.bugs.busybox.net/>
-Message-ID: <bug-10141-163-2LTMOcWsCn@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Aug 2017 08:40:03 +0200
+Subject: [Buildroot] [git commit] package/samba4: add optional dependency to
+	dbus
+Message-ID: <20170802152747.DED408020F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10141
+commit: https://git.buildroot.net/buildroot/commit/?id=17f6c26590d22365968e7fd0d246b315b255d204
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #1 from clayton.shotwell at rockwellcollins.com ---
-Forgot to mention what is printed when the error occurs. I see the following
-printed from mksquashfs. The error code changes often and so does the file it
-failed on. It only happens about 10% of the time on the servers I am running
-on.
+samba4 picks up dbus as dependency if it was built before:
 
-llistxattr for [file] failed in read_attrs, because Unknown error 810343192
+Checking for dbus                : yes
+Checking for header dbus/dbus.h  : yes
+Checking for library dbus-1      : yes
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+There is no configure option to control dbus support so we just make
+sure dbus is built before samba4 to have reproducible builds.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/samba4/samba4.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ffa101b..3dbb261 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -44,6 +44,10 @@ else
+ SAMBA4_CONF_OPTS += --disable-cups
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DBUS),y)
++SAMBA4_DEPENDENCIES += dbus
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
+ SAMBA4_CONF_OPTS += --enable-avahi
+ SAMBA4_DEPENDENCIES += avahi
