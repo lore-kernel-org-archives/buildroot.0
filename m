@@ -1,172 +1,28 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed,  2 Aug 2017 11:40:20 -0700
-Subject: [Buildroot] [PATCH] package/binutils: fix crash caused by buggy
-	xtensa overlay
-Message-ID: <1501699220-3055-1-git-send-email-jcmvbkbc@gmail.com>
+Date: Wed, 2 Aug 2017 11:43:39 -0700
+Subject: [Buildroot] [PATCH 2/4] binutils: add support for binutils 2.29
+In-Reply-To: <20170729181554.GF28707@waldemar-brodkorb.de>
+References: <20170729130906.2140-1-thomas.petazzoni@free-electrons.com>
+ <20170729130906.2140-3-thomas.petazzoni@free-electrons.com>
+ <20170729181554.GF28707@waldemar-brodkorb.de>
+Message-ID: <CAMo8BfLC7UC03ehNo7rZvL7yA6YDnPzr8V8Oa_un7uKwY2eE_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some xtensa configurations there may be system/user registers in
-xtensa-modules with negative index. ISA initialization for such config
-may clobber heap and result in program termination.
-Don't update lookup table entries for register with negative indices.
+Hi Waldemar,
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
- ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
- ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
- 3 files changed, 126 insertions(+)
- create mode 100644 package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
- create mode 100644 package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
- create mode 100644 package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+On Sat, Jul 29, 2017 at 11:15 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> I am testing some more qemu defconfigs with binutils 2.29.
+> sh4/sparc worked fine. But xtensa fails to compile busybox:
+>
+> /home/wbx/buildroot/output/host/lib/gcc/xtensa-buildroot-linux-uclibc/6.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld:
+> BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
 
-diff --git a/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-new file mode 100644
-index 000000000000..30103ee05eca
---- /dev/null
-+++ b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-@@ -0,0 +1,42 @@
-+From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 2 Aug 2017 00:36:05 -0700
-+Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
-+
-+In some xtensa configurations there may be system/user registers in
-+xtensa-modules with negative index. ISA initialization for such config
-+may clobber heap and result in program termination.
-+Don't update lookup table entries for register with negative indices.
-+They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
-+change should not affect processing of valid assembly/binary code.
-+
-+bfd/
-+2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
-+	entries for sysregs with negative indices.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
-+
-+ bfd/xtensa-isa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
-+index 8da75bea8109..8c6ee88fdeae 100644
-+--- a/bfd/xtensa-isa.c
-++++ b/bfd/xtensa-isa.c
-+@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
-+       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
-+       is_user = sreg->is_user;
-+ 
-+-      isa->sysreg_table[is_user][sreg->number] = n;
-++      if (sreg->number >= 0)
-++	isa->sysreg_table[is_user][sreg->number] = n;
-+     }
-+ 
-+   /* Set up the interface lookup table.  */
-+-- 
-+2.1.4
-+
-diff --git a/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-new file mode 100644
-index 000000000000..30103ee05eca
---- /dev/null
-+++ b/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-@@ -0,0 +1,42 @@
-+From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 2 Aug 2017 00:36:05 -0700
-+Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
-+
-+In some xtensa configurations there may be system/user registers in
-+xtensa-modules with negative index. ISA initialization for such config
-+may clobber heap and result in program termination.
-+Don't update lookup table entries for register with negative indices.
-+They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
-+change should not affect processing of valid assembly/binary code.
-+
-+bfd/
-+2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
-+	entries for sysregs with negative indices.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
-+
-+ bfd/xtensa-isa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
-+index 8da75bea8109..8c6ee88fdeae 100644
-+--- a/bfd/xtensa-isa.c
-++++ b/bfd/xtensa-isa.c
-+@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
-+       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
-+       is_user = sreg->is_user;
-+ 
-+-      isa->sysreg_table[is_user][sreg->number] = n;
-++      if (sreg->number >= 0)
-++	isa->sysreg_table[is_user][sreg->number] = n;
-+     }
-+ 
-+   /* Set up the interface lookup table.  */
-+-- 
-+2.1.4
-+
-diff --git a/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-new file mode 100644
-index 000000000000..30103ee05eca
---- /dev/null
-+++ b/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-@@ -0,0 +1,42 @@
-+From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 2 Aug 2017 00:36:05 -0700
-+Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
-+
-+In some xtensa configurations there may be system/user registers in
-+xtensa-modules with negative index. ISA initialization for such config
-+may clobber heap and result in program termination.
-+Don't update lookup table entries for register with negative indices.
-+They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
-+change should not affect processing of valid assembly/binary code.
-+
-+bfd/
-+2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
-+	entries for sysregs with negative indices.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
-+
-+ bfd/xtensa-isa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
-+index 8da75bea8109..8c6ee88fdeae 100644
-+--- a/bfd/xtensa-isa.c
-++++ b/bfd/xtensa-isa.c
-+@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
-+       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
-+       is_user = sreg->is_user;
-+ 
-+-      isa->sysreg_table[is_user][sreg->number] = n;
-++      if (sreg->number >= 0)
-++	isa->sysreg_table[is_user][sreg->number] = n;
-+     }
-+ 
-+   /* Set up the interface lookup table.  */
-+-- 
-+2.1.4
-+
+Thanks for the heads up. I've posted a fix.
+
 -- 
-2.1.4
+Thanks.
+-- Max
