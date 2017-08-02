@@ -1,41 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  2 Aug 2017 23:22:39 +0200
-Subject: [Buildroot] [PATCH] fs/squashfs: honour the number of parallel jobs
-Message-ID: <20170802212239.27167-1-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 02 Aug 2017 21:26:23 +0000
+Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
+In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
+References: <bug-10141-163@https.bugs.busybox.net/>
+Message-ID: <bug-10141-163-EV6w6UR3qO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
----
- fs/squashfs/squashfs.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=10141
 
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 342c7a8a37..7de7f51af1 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -6,6 +6,8 @@
- 
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
-+ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
-+
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
- else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
-@@ -19,8 +21,7 @@ ROOTFS_SQUASHFS_ARGS += -comp gzip
- endif
- 
- define ROOTFS_SQUASHFS_CMD
--	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
--		$(ROOTFS_SQUASHFS_ARGS)
-+	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
- endef
- 
- $(eval $(call ROOTFS_TARGET,squashfs))
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Clayton,
+
+As a stop-gap measure, I've sent a patch that makes mksquashfs honour
+the configured number of parallel jobs:
+    https://patchwork.ozlabs.org/patch/796879/
+
+Of course, if you use auto-caclulation, that won't help. But if you
+already used a lower limit on yout build jobs, that may help.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
