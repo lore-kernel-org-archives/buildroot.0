@@ -1,55 +1,35 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Aug 2017 09:25:50 +0000
-Subject: [Buildroot] [Bug 10151] New: toolchain eclipse register : fails
- with a custom BR2_HOST_DIR
-Message-ID: <bug-10151-163@https.bugs.busybox.net/>
+Date: Thu, 03 Aug 2017 09:35:12 +0000
+Subject: [Buildroot] [Bug 10146] [PATCH] package/skeleton-common fix
+	recursive variable
+In-Reply-To: <bug-10146-163@https.bugs.busybox.net/>
+References: <bug-10146-163@https.bugs.busybox.net/>
+Message-ID: <bug-10146-163-eUTXadMzHw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10151
+https://bugs.busybox.net/show_bug.cgi?id=10146
 
-            Bug ID: 10151
-           Summary: toolchain eclipse register : fails with a custom
-                    BR2_HOST_DIR
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: frederic.mathieu at dualis.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-The toolchain registering fails when a custom HOST directory is defined. 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+             Status|NEW                         |ASSIGNED
 
-the script './support/scripts/eclipse-register-toolchain' returns message :
-"Your project directory does not look like a Buildroot output"
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Stefan,
 
-tested with versions 2017.02.(n), 2017.05.2
+Can you please add your Signed-off-by line and send it to the list, please?
 
+Thanks!
 
-in my case, 
-BR2_HOST_DIR="$(BASE_DIR)/../../../toolchain/2107.02.3_X86_32/host"
-also tested with absolute path :
-/home/dev01/data/toolchain/2107.02.3_X86_32/host"
-
-
-...
-./support/scripts/eclipse-register-toolchain `readlink -f
-/home/dev01/data/projects/buildroot-2017.02.3_X86_32/output`
-i686-buildroot-linux-gnu- "i686"
-Your project directory does not look like a Buildroot output
-Makefile:655: recipe for target 'target-finalize' failed
-make[1]: *** [target-finalize] Error 1
-Makefile:79: recipe for target '_all' failed
-make: *** [_all] Error 2
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
