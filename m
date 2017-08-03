@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Aug 2017 09:25:56 +0200
-Subject: [Buildroot] [PATCH] fs/squashfs: honour the number of parallel
- jobs
-In-Reply-To: <20170802212239.27167-1-yann.morin.1998@free.fr>
-References: <20170802212239.27167-1-yann.morin.1998@free.fr>
-Message-ID: <20170803092556.752dfa19@windsurf.home>
+Date: Thu, 3 Aug 2017 09:28:12 +0200
+Subject: [Buildroot] [git commit] Update for 2017.08-rc1
+In-Reply-To: <20170802211523.BFC8881E4E@busybox.osuosl.org>
+References: <20170802211523.BFC8881E4E@busybox.osuosl.org>
+Message-ID: <20170803092812.35d282ae@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  2 Aug 2017 23:22:39 +0200, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+On Wed, 2 Aug 2017 23:00:13 +0200, Thomas Petazzoni wrote:
 
-This would benefit from an extended commit log. Why do we do this? Is
-this fixing something? Is this reducing the duration of mksquashfs
-because it leverages multiple cores when doing the compression? In the
-latter case, a few numbers would be nice to have.
+>  # Set and export the version string
+> -export BR2_VERSION := 2017.08-git
+> +export BR2_VERSION := 2017.08-rc1
+>  # Actual time the release is cut (for reproducible builds)
+> -BR2_VERSION_EPOCH = 1496267000
+> +BR2_VERSION_EPOCH = 150170700
 
-Thanks,
+As noticed by Florent Jacquet, I messed up here. I wanted to round a
+bit the epoch date (like was done for previous releases), but while
+doing this, I forgot to re-add a zero.
+
+Therefore, your 2017.08-rc1 is dated from October 5th, 1974, instead of
+the expected August 2nd, 2017.
+
+I'll fix that up for the -rc2.
+
+Best regards,
 
 Thomas
 -- 
