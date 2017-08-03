@@ -1,25 +1,98 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Aug 2017 21:29:03 +0000
-Subject: [Buildroot] [Bug 10151] toolchain eclipse register : fails with a
- custom BR2_HOST_DIR
-In-Reply-To: <bug-10151-163@https.bugs.busybox.net/>
-References: <bug-10151-163@https.bugs.busybox.net/>
-Message-ID: <bug-10151-163-qI70hdMSUg@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  3 Aug 2017 23:30:27 +0200
+Subject: [Buildroot] [PATCH] glibc: add patch fixing the build with binutils
+	2.29
+Message-ID: <20170803213027.27565-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10151
+Fixes the following build failure, which occurs on all architectures:
 
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-Indeed, the eclipse-register-toolchain script doesn't seem to support a
-non-default BR2_HOST_DIR.
+/tmp/cc6APNmN.s: Assembler messages:
+/tmp/cc6APNmN.s: Error: `loc1 at GLIBC_2.17' can't be versioned to common symbol 'loc1'
+/tmp/cc6APNmN.s: Error: `loc2 at GLIBC_2.17' can't be versioned to common symbol 'loc2'
+/tmp/cc6APNmN.s: Error: `locs at GLIBC_2.17' can't be versioned to common symbol 'locs'
+../o-iterator.mk:9: recipe for target '/tmp/output/build/glibc-2.25/build/misc/regexp.os' failed
 
-A simple solution would be to symlink host to BR2_HOST_DIR if it's not the
-default. Any objections to that?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glibc/0005-fix-binutils-2-29-build.patch | 65 ++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/glibc/0005-fix-binutils-2-29-build.patch
 
+diff --git a/package/glibc/0005-fix-binutils-2-29-build.patch b/package/glibc/0005-fix-binutils-2-29-build.patch
+new file mode 100644
+index 0000000..47fcd2f
+--- /dev/null
++++ b/package/glibc/0005-fix-binutils-2-29-build.patch
+@@ -0,0 +1,65 @@
++From: H.J. Lu <hjl.tools@gmail.com>
++Date: Fri, 23 Jun 2017 21:38:46 +0000 (-0700)
++Subject: Avoid .symver on common symbols [BZ #21666]
++X-Git-Tag: glibc-2.26~241
++X-Git-Url: https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff_plain;h=388b4f1a02f3a801965028bbfcd48d905638b797
++
++Avoid .symver on common symbols [BZ #21666]
++
++The .symver directive on common symbol just creates a new common symbol,
++not an alias and the newer assembler with the bug fix for
++
++https://sourceware.org/bugzilla/show_bug.cgi?id=21661
++
++will issue an error.  Before the fix, we got
++
++$ readelf -sW libc.so | grep "loc[12s]"
++  5109: 00000000003a0608     8 OBJECT  LOCAL  DEFAULT   36 loc1
++  5188: 00000000003a0610     8 OBJECT  LOCAL  DEFAULT   36 loc2
++  5455: 00000000003a0618     8 OBJECT  LOCAL  DEFAULT   36 locs
++  6575: 00000000003a05f0     8 OBJECT  GLOBAL DEFAULT   36 locs at GLIBC_2.2.5
++  7156: 00000000003a05f8     8 OBJECT  GLOBAL DEFAULT   36 loc1 at GLIBC_2.2.5
++  7312: 00000000003a0600     8 OBJECT  GLOBAL DEFAULT   36 loc2 at GLIBC_2.2.5
++
++in libc.so.  The versioned loc1, loc2 and locs have the wrong addresses.
++After the fix, we got
++
++$ readelf -sW libc.so | grep "loc[12s]"
++  6570: 000000000039e3b8     8 OBJECT  GLOBAL DEFAULT   34 locs at GLIBC_2.2.5
++  7151: 000000000039e3c8     8 OBJECT  GLOBAL DEFAULT   34 loc1 at GLIBC_2.2.5
++  7307: 000000000039e3c0     8 OBJECT  GLOBAL DEFAULT   34 loc2 at GLIBC_2.2.5
++
++	[BZ #21666]
++	* misc/regexp.c (loc1): Add __attribute__ ((nocommon));
++	(loc2): Likewise.
++	(locs): Likewise.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Backported from upstream commit
++388b4f1a02f3a801965028bbfcd48d905638b797, to fix the build with
++binutils 2.29.]
++---
++diff --git a/misc/regexp.c b/misc/regexp.c
++index 19d76c0..eaea7c3 100644
++--- a/misc/regexp.c
+++++ b/misc/regexp.c
++@@ -29,14 +29,15 @@
++ 
++ #if SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_23)
++ 
++-/* Define the variables used for the interface.  */
++-char *loc1;
++-char *loc2;
+++/* Define the variables used for the interface.  Avoid .symver on common
+++   symbol, which just creates a new common symbol, not an alias.  */
+++char *loc1 __attribute__ ((nocommon));
+++char *loc2 __attribute__ ((nocommon));
++ compat_symbol (libc, loc1, loc1, GLIBC_2_0);
++ compat_symbol (libc, loc2, loc2, GLIBC_2_0);
++ 
++ /* Although we do not support the use we define this variable as well.  */
++-char *locs;
+++char *locs __attribute__ ((nocommon));
++ compat_symbol (libc, locs, locs, GLIBC_2_0);
++ 
++ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.9.4
