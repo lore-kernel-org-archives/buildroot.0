@@ -1,49 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Aug 2017 17:58:10 +0200
-Subject: [Buildroot] [PATCH v2 1/1] webkitgtk: Add patch for properly
- picking GL flags when building
-In-Reply-To: <20170803181034.GB17397@momiji>
-References: <20170803113109.20158-1-aperez@igalia.com>
- <20170803154156.58737072@windsurf.home>
- <20170803181034.GB17397@momiji>
-Message-ID: <20170803175810.71d1fcca@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 03 Aug 2017 17:29:55 +0000
+Subject: [Buildroot] [Bug 10161] New: unable to build u-boot.imx reliably
+Message-ID: <bug-10161-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10161
 
-On Thu, 3 Aug 2017 18:10:34 +0300, Adrian Perez de Castro wrote:
+            Bug ID: 10161
+           Summary: unable to build u-boot.imx reliably
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: yurovsky at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> On Thu, 3 Aug 2017 15:41:56 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> > On Thu,  3 Aug 2017 14:31:09 +0300, Adrian Perez de Castro wrote:  
-> > > This solves build failures caused by WebKit trying to include X11 headers
-> > > when support for X11 is disabled in Mesa3D. A common situation is when
-> > > configuring both GTK+ and WebKitGTK+ only with Wayland support.  
-> > 
-> > Have such errors occurred in the autobuilders? If so, we want to have a
-> > reference to such autobuilder failures in the commit log.  
-> 
-> Unfortunately, I have not seen this kind of build failure in the autobuilder
-> logs, sorry. But the issue certainly exists, and I can experience it myself,
-> and I am aware of a couple of work mates who have hit this ? one of them
-> Carlos Lopez, who made the patch for the WebKit CMake files.
+Created attachment 7156
+  --> https://bugs.busybox.net/attachment.cgi?id=7156&action=edit
+hacky workaround
 
-In this case, ideally having a defconfig that exhibits the issue is
-always nice. Don't bother adding it now, but next time, when you fix a
-build failure, adding some kind of minimal defconfig is very good. For
-trivial build issues, it's not needed. But for build issues that
-involve multiple packages in specific configurations (such as a
-condition of a given OpenGL provider and WebkitGtk), having a defconfig
-is good.
+I'm unable to build the u-boot.imx image (for Freescale i.MX SoCs) reliably
+(that is, it generally works but if I "slow down" my system by making the CPUs
+busy, or use a slower machine, I can break the build very often).
 
-Thanks!
+The issue seems to be in u-boot's build system but I'm not certain so I wanted
+to check if there's anything that we might be doing in buildroot that should be
+done differently before taking this up with them.
 
-Thomas
+To build the i.MX image the config should have:
+
+BR2_TARGET_UBOOT_FORMAT_IMX=y
+
+(and be one of the i.MX targets anyway since we need a board target in u-boot).
+What happens is u-boot will process a template config file and eventually
+mkimage is run to generate the .imx image using the .cfg files in the board
+directory. The build will fail because the processed .cfg isn't found and it
+seems that the .cfg was in fact built, it just raced with the image step.
+
+I have a workaround that, while hacky, shows that we can prevent the problem by
+making those steps less parallel (attached).
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
