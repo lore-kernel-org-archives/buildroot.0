@@ -1,171 +1,129 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 3 Aug 2017 09:12:13 +0200
-Subject: [Buildroot] [git commit branch/next] azmq: Add new package
-Message-ID: <20170803070941.0C8DB7F8A2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  3 Aug 2017 09:15:48 +0200
+Subject: [Buildroot] [PATCH] gdb: add fix for gdb 7.12 and gdb 8.0 build on
+	noMMU platforms
+Message-ID: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fdc07c335481a05de31beacb73fb82818f6f117
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
+noMMU platforms. It is not needed for older versions of gdb, since
+it's related to the switch of gdb to C++ in the 7.12 release.
 
-The azmq library provides Boost Asio style bindings for ZeroMQ. This
-library is built on top of ZeroMQ's standard C interface and is intended
-to work well with C++ applications which use the Boost libraries in
-general, and Asio in particular.
+Fixes:
 
-Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+       child_stack = xmalloc (STACK_SIZE * 4);
+
+The patch has already been merged upstream, as of commit
+ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
+of future gdb releases.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...Conditionally-disable-test-and-doc-builds.patch | 43 ++++++++++++++++++++++
- package/azmq/Config.in                             | 28 ++++++++++++++
- package/azmq/azmq.hash                             |  3 ++
- package/azmq/azmq.mk                               | 18 +++++++++
- 6 files changed, 96 insertions(+)
+ ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+ ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+ create mode 100644 package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ee2c9a0..474999b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1426,6 +1426,9 @@ N:	Rico Bachmann <bachmann@tofwerk.com>
- F:	package/apr-util/
- F:	package/subversion/
- 
-+N:	RJ Ascani <rj.ascani@gmail.com>
-+F:	package/azmq/
-+
- N:	Rodrigo Rebello <rprebello@gmail.com>
- F:	package/chocolate-doom/
- F:	package/irssi/
-diff --git a/package/Config.in b/package/Config.in
-index b5170b0..85416af 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1284,6 +1284,7 @@ menu "Networking"
- 	source "package/alljoyn-base/Config.in"
- 	source "package/alljoyn-tcl/Config.in"
- 	source "package/alljoyn-tcl-base/Config.in"
-+	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
-diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
+diff --git a/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
 new file mode 100644
-index 0000000..98975d2
+index 0000000..4eb72e4
 --- /dev/null
-+++ b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-@@ -0,0 +1,43 @@
-+From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
-+From: RJ Ascani <rj.ascani@gmail.com>
-+Date: Thu, 20 Jul 2017 15:53:40 -0700
-+Subject: [PATCH] Conditionally disable test and doc builds
++++ b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+@@ -0,0 +1,41 @@
++From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 18 Jun 2017 23:09:43 +0200
++Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
 +
-+Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
++On noMMU platforms, the following code gets compiled:
++
++  child_stack = xmalloc (STACK_SIZE * 4);
++
++Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
++the lack of cast is valid in C, it is not in C++, causing the
++following build failure:
++
++../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
++../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
++       child_stack = xmalloc (STACK_SIZE * 4);
++
++Therefore, this commit adds the appropriate cast.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
 +---
-+ CMakeLists.txt | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
++ gdb/nat/linux-ptrace.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 5b5b9cc..97006a4 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
-+                     ${ZeroMQ_INCLUDE_DIRS}
-+                     ${PROJECT_SOURCE_DIR})
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 3447e07..33833e2 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
++ #define STACK_SIZE 4096
++ 
++     if (child_stack == NULL)
++-      child_stack = xmalloc (STACK_SIZE * 4);
+++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
++ 
++     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
++ #ifdef __ia64__
++-- 
++2.9.4
 +
-+-enable_testing()
-++if (BUILD_TESTING)
-++    enable_testing()
-++endif()
-+
-+ macro(add_catch_test name)
-+     if (TEST_REPORT_FORMAT)
-+@@ -59,8 +61,12 @@ macro(add_catch_test name)
-+     endif()
-+ endmacro()
-+
-+-add_subdirectory(test)
-+-add_subdirectory(doc)
-++if (BUILD_TESTING)
-++    add_subdirectory(test)
-++endif()
-++if (BUILD_DOC)
-++    add_subdirectory(doc)
-++endif()
-+
-+ install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
-+         DESTINATION include)
-+--
-+2.13.3
-+
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+diff --git a/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
 new file mode 100644
-index 0000000..422a058
+index 0000000..4eb72e4
 --- /dev/null
-+++ b/package/azmq/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_AZMQ
-+	bool "azmq"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_USE_WCHAR # boost
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	select BR2_PACKAGE_ZEROMQ
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_LOG
-+	select BR2_PACKAGE_BOOST_RANDOM
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	help
-+	  This library provides Boost Asio style bindings for ZeroMQ.
++++ b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+@@ -0,0 +1,41 @@
++From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 18 Jun 2017 23:09:43 +0200
++Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
 +
-+	  https://github.com/zeromq/azmq
++On noMMU platforms, the following code gets compiled:
 +
-+comment "azmq needs a toolchain w/ C++11, wchar and threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
++  child_stack = xmalloc (STACK_SIZE * 4);
 +
-+comment "azmq needs exception_ptr"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
-new file mode 100644
-index 0000000..d3993f4
---- /dev/null
-+++ b/package/azmq/azmq.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
-+sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
-diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-new file mode 100644
-index 0000000..427ad0f
---- /dev/null
-+++ b/package/azmq/azmq.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# azmq
-+#
-+################################################################################
++Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
++the lack of cast is valid in C, it is not in C++, causing the
++following build failure:
 +
-+AZMQ_VERSION = v1.0
-+AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
-+AZMQ_DEPENDENCIES = boost zeromq
-+AZMQ_LICENSE = BSL-1.0
-+AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
++../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
++../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
++       child_stack = xmalloc (STACK_SIZE * 4);
 +
-+# AZMQ is a header only library, so it does not need to be installed on the
-+# target.
-+AZMQ_INSTALL_STAGING = YES
-+AZMQ_INSTALL_TARGET = NO
++Therefore, this commit adds the appropriate cast.
 +
-+$(eval $(cmake-package))
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
++---
++ gdb/nat/linux-ptrace.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 3447e07..33833e2 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
++ #define STACK_SIZE 4096
++ 
++     if (child_stack == NULL)
++-      child_stack = xmalloc (STACK_SIZE * 4);
+++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
++ 
++     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
++ #ifdef __ia64__
++-- 
++2.9.4
++
+-- 
+2.9.4
