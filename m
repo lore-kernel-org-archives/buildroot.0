@@ -1,98 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  3 Aug 2017 23:30:27 +0200
-Subject: [Buildroot] [PATCH] glibc: add patch fixing the build with binutils
-	2.29
-Message-ID: <20170803213027.27565-1-thomas.petazzoni@free-electrons.com>
+Date: Thu,  3 Aug 2017 23:58:12 +0200
+Subject: [Buildroot] [PATCH] gdb: drop support for Microblaze
+Message-ID: <20170803215812.28951-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following build failure, which occurs on all architectures:
+Microblaze support was never upstreamed in gdb. We currently use a gdb
+from the Xilinx Github repository, but this gdb is based on 7.6, and
+has never been updated in the last 4 years. There are no other active
+branches at https://github.com/Xilinx/gdb/branches.
 
-/tmp/cc6APNmN.s: Assembler messages:
-/tmp/cc6APNmN.s: Error: `loc1 at GLIBC_2.17' can't be versioned to common symbol 'loc1'
-/tmp/cc6APNmN.s: Error: `loc2 at GLIBC_2.17' can't be versioned to common symbol 'loc2'
-/tmp/cc6APNmN.s: Error: `locs at GLIBC_2.17' can't be versioned to common symbol 'locs'
-../o-iterator.mk:9: recipe for target '/tmp/output/build/glibc-2.25/build/misc/regexp.os' failed
+Xilinx has a slightly newer gdb, based on 7.7, available at
+https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb. However,
+it's apparently only available in the form of stack of big patches
+(https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb/files).
+
+Currently, gdb on Microblaze fails to build in various conditions:
+
+ * Against glibc, with "error: conflicting types for 'ps_lgetfpregs'"
+
+ * Against musl, with "error: unknown type name 'elf_gregset_t'"
+
+While those issues can probably be fixed, the fact that there is no
+active upstream significantly reduces the incentive to fix those
+problems.
+
+Therefore, let's drop support for gdb on Microblaze entirely.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glibc/0005-fix-binutils-2-29-build.patch | 65 ++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/glibc/0005-fix-binutils-2-29-build.patch
+ package/gdb/Config.in      | 5 +++--
+ package/gdb/Config.in.host | 5 ++---
+ package/gdb/gdb.hash       | 1 -
+ package/gdb/gdb.mk         | 6 ------
+ 4 files changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/package/glibc/0005-fix-binutils-2-29-build.patch b/package/glibc/0005-fix-binutils-2-29-build.patch
-new file mode 100644
-index 0000000..47fcd2f
---- /dev/null
-+++ b/package/glibc/0005-fix-binutils-2-29-build.patch
-@@ -0,0 +1,65 @@
-+From: H.J. Lu <hjl.tools@gmail.com>
-+Date: Fri, 23 Jun 2017 21:38:46 +0000 (-0700)
-+Subject: Avoid .symver on common symbols [BZ #21666]
-+X-Git-Tag: glibc-2.26~241
-+X-Git-Url: https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff_plain;h=388b4f1a02f3a801965028bbfcd48d905638b797
-+
-+Avoid .symver on common symbols [BZ #21666]
-+
-+The .symver directive on common symbol just creates a new common symbol,
-+not an alias and the newer assembler with the bug fix for
-+
-+https://sourceware.org/bugzilla/show_bug.cgi?id=21661
-+
-+will issue an error.  Before the fix, we got
-+
-+$ readelf -sW libc.so | grep "loc[12s]"
-+  5109: 00000000003a0608     8 OBJECT  LOCAL  DEFAULT   36 loc1
-+  5188: 00000000003a0610     8 OBJECT  LOCAL  DEFAULT   36 loc2
-+  5455: 00000000003a0618     8 OBJECT  LOCAL  DEFAULT   36 locs
-+  6575: 00000000003a05f0     8 OBJECT  GLOBAL DEFAULT   36 locs at GLIBC_2.2.5
-+  7156: 00000000003a05f8     8 OBJECT  GLOBAL DEFAULT   36 loc1 at GLIBC_2.2.5
-+  7312: 00000000003a0600     8 OBJECT  GLOBAL DEFAULT   36 loc2 at GLIBC_2.2.5
-+
-+in libc.so.  The versioned loc1, loc2 and locs have the wrong addresses.
-+After the fix, we got
-+
-+$ readelf -sW libc.so | grep "loc[12s]"
-+  6570: 000000000039e3b8     8 OBJECT  GLOBAL DEFAULT   34 locs at GLIBC_2.2.5
-+  7151: 000000000039e3c8     8 OBJECT  GLOBAL DEFAULT   34 loc1 at GLIBC_2.2.5
-+  7307: 000000000039e3c0     8 OBJECT  GLOBAL DEFAULT   34 loc2 at GLIBC_2.2.5
-+
-+	[BZ #21666]
-+	* misc/regexp.c (loc1): Add __attribute__ ((nocommon));
-+	(loc2): Likewise.
-+	(locs): Likewise.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Backported from upstream commit
-+388b4f1a02f3a801965028bbfcd48d905638b797, to fix the build with
-+binutils 2.29.]
-+---
-+diff --git a/misc/regexp.c b/misc/regexp.c
-+index 19d76c0..eaea7c3 100644
-+--- a/misc/regexp.c
-++++ b/misc/regexp.c
-+@@ -29,14 +29,15 @@
-+ 
-+ #if SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_23)
-+ 
-+-/* Define the variables used for the interface.  */
-+-char *loc1;
-+-char *loc2;
-++/* Define the variables used for the interface.  Avoid .symver on common
-++   symbol, which just creates a new common symbol, not an alias.  */
-++char *loc1 __attribute__ ((nocommon));
-++char *loc2 __attribute__ ((nocommon));
-+ compat_symbol (libc, loc1, loc1, GLIBC_2_0);
-+ compat_symbol (libc, loc2, loc2, GLIBC_2_0);
-+ 
-+ /* Although we do not support the use we define this variable as well.  */
-+-char *locs;
-++char *locs __attribute__ ((nocommon));
-+ compat_symbol (libc, locs, locs, GLIBC_2_0);
-+ 
-+ 
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 67ef010..af020f4 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_bfin
++	depends on !BR2_microblaze
+ 	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 
+@@ -47,11 +48,11 @@ config BR2_PACKAGE_GDB_SERVER
+ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_sh && !BR2_microblaze
++	depends on !BR2_sh
+ 	select BR2_PACKAGE_NCURSES
+ 
+ comment "full gdb on target needs a toolchain w/ wchar"
+-	depends on !BR2_sh && !BR2_microblaze
++	depends on !BR2_sh
+ 	depends on !BR2_USE_WCHAR
+ 
+ if BR2_PACKAGE_GDB_DEBUGGER
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 6a3037d..93dfa67 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_HOST_GDB
+ 	# toolchain should be used.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
++	depends on !BR2_microblaze
+ 	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 	help
+@@ -29,7 +30,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
+ 
+ config BR2_PACKAGE_HOST_GDB_SIM
+ 	bool "Simulator support"
+-	depends on !BR2_arc && !BR2_microblaze
++	depends on !BR2_arc
+ 	help
+ 	  This option enables the simulator support in the cross gdb.
+ 
+@@ -37,7 +38,6 @@ choice
+ 	prompt "GDB debugger Version"
+ 	default BR2_GDB_VERSION_7_11
+ 	depends on !BR2_arc
+-	depends on !BR2_microblaze
+ 	help
+ 	  Select the version of gdb you wish to use.
+ 
+@@ -65,7 +65,6 @@ endif
+ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2017.03-gdb" if BR2_arc
+-	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.10.1"   if BR2_GDB_VERSION_7_10
+ 	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.12.1"   if BR2_GDB_VERSION_7_12
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 098d20a..a4fd8bc 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -5,5 +5,4 @@ sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7
+ sha512  e4044bdd162cbf95044ec1eaa44d2fa62a33e051bdbbacbc97afd4dfb07bae1bea514381fc1966aede89d6796ef2377a15748a93d95e2ad494c8497db489e886	gdb-8.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+-sha512  0a467091d4b01fbecabb4b8da1cb743025c70e7f4874a0b5c8fa2ec623569a39bde6762b91806de0be6e63711aeb6909715cfbe43860de73d8aec6159a9f10a7	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
+ sha512  8ec849a5ea1c16f104c51c4813c35ab229e460eef0025967673b87316f62b5171f05448cda018464914d43d2da50b2902eb7f9f060d0af1368a9db111f959668	gdb-arc-2017.03-gdb.tar.gz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 1fef0d4..7e86ba0 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -14,12 +14,6 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ GDB_FROM_GIT = y
+ endif
+ 
+-ifeq ($(BR2_microblaze),y)
+-GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
+-GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+-GDB_FROM_GIT = y
+-endif
+-
+ GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ 
 -- 
 2.9.4
