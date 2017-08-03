@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Aug 2017 09:06:56 +0200
-Subject: [Buildroot] [PATCH v3] qt5wayland: new package
-In-Reply-To: <1501535208-8161-1-git-send-email-joshua.henderson@microchip.com>
-References: <1501535208-8161-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <e5d8c8ca-0aae-0d3d-2c19-3e520318345a@mind.be>
+Date: Thu, 3 Aug 2017 09:07:13 +0200
+Subject: [Buildroot] [PATCHv2 2/2] instrumentation: extend
+ packages-file-list.txt with symlinks and directories
+In-Reply-To: <20170205134507.15328-3-patrickdepinguin@gmail.com>
+References: <20170205134507.15328-1-patrickdepinguin@gmail.com>
+ <20170205134507.15328-3-patrickdepinguin@gmail.com>
+Message-ID: <6fcaded9-04c2-9b95-ccac-bcce2603cde3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +14,41 @@ To: buildroot@busybox.net
 
 
 
-On 31-07-17 23:06, Joshua Henderson wrote:
-> QtWayland is a Qt 5 module that wraps the functionality of Wayland.
+On 05-02-17 14:45, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Brent Sink <brents_3@hotmail.com>
-> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> Using the package instrumentation hooks, a file packages-file-list.txt is
+> created containing the list of files installed by a package with their size.
+> 
+> Due to the use of 'find -type f', symbolic links to files are not included
+> in this file list. Since the original purpose of this file was to calculate
+> the total size of a package and symbolic links have file size 0, this was
+> not a problem.
+> 
+> However, if packages-file-list.txt is reused for other purposes, for example
+> to get a complete list of files installed by a package regardless of size,
+> symbolic links to files are important too.
+> 
+> Likewise, to get a complete view of what a package installs, directories
+> should be included too.
+> 
+> Update the instrumentation hook accordingly.
+> Although for files an md5sum is taken, we cannot do this for directories.
+> Instead, mimic the output of md5sum with a fake hash string.
+> 
+> Note: for directories that are used by several packages, e.g. /etc/init.d/,
+> the package that created the directory will be treated as the 'owner' of
+> that directory.  This gives a somewhat distorted view of ownership.
+> Similarly, the package size reported by 'make graph-size' (based on
+> packages-file-list.txt) will include the 'size' of a directory for that
+> owner, which is reported as e.g. 4096 bytes.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
- Hi Joshua,
-
- I've applied to the next branch, with a few fixes:
-
-     - select wayland instead of depending on it;
-     - propagate jscore dependency from qt5declarative
-     - re-order select/depends statements
-     - rewrite comment to only refer to GL backend (jscore is an arch
-       dependency)
-     - rewrap help text of BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
-
- Could you also add yourself to the DEVELOPERS file for this package and others
-you are interested in? Then you will get a mail whenever these packages fail in
-the autobuilders.
-
+ In the end, I've applied both to next as-is, thanks!
 
  Regards,
  Arnout
-
-[snip]
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
