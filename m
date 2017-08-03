@@ -1,45 +1,51 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Thu, 3 Aug 2017 10:30:59 -0700
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Aug 2017 20:07:41 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2017-08-02
-In-Reply-To: <20170803063049.45E0621EC8@mail.free-electrons.com>
+In-Reply-To: <a8c9e92b-38f9-88c2-c423-99f946fa5571@microchip.com>
 References: <20170803063049.45E0621EC8@mail.free-electrons.com>
-Message-ID: <a8c9e92b-38f9-88c2-c423-99f946fa5571@microchip.com>
+ <a8c9e92b-38f9-88c2-c423-99f946fa5571@microchip.com>
+Message-ID: <20170803200741.245f3b6f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Howdy,
+Hello,
 
-On 08/02/2017 11:30 PM, Thomas Petazzoni wrote:
-> Hello,
+On Thu, 3 Aug 2017 10:30:59 -0700, Joshua Henderson wrote:
+
+> For reference, I opened an upstream Qt bug [1] about this.  This build log is
+> not strictly identical, but looks to be the same problem.  I believe the
+> issue is gtk3 is properly auto detected by Qt build in order to build an
+> optional Qt gtk3 plugin, but what it really needs is gtk3 compiled with X11.
+> So, when gtk3 is built without X11 in buildroot, the Qt build fails.
 > 
-> Build statistics for 2017-08-02
-> ================================
-> 
+> Any direction on whether this should be solved:
+> 1) in buildroot as config/build dependency (seems odd to make a dependency on
+>    X11 for qt5base if gtk3 is enabled),
+> 2) patch Qt,
+> 3) by explicitly disabling building gtk3 theme support in qt5base (instead of
+>    being automatic),
+> 4) with some combination of the above.
 
-...
-   
->     mips64el |                  qt5base-5.9.1 | NOK | http://autobuild.buildroot.net/results/6f3c2fcb0a44cd13ef4c73822d4d08f923291099 |     
+I would say a combination of (1) and (3).
 
-For reference, I opened an upstream Qt bug [1] about this.  This build log is
-not strictly identical, but looks to be the same problem.  I believe the
-issue is gtk3 is properly auto detected by Qt build in order to build an
-optional Qt gtk3 plugin, but what it really needs is gtk3 compiled with X11.
-So, when gtk3 is built without X11 in buildroot, the Qt build fails.
+We want to:
 
-Any direction on whether this should be solved:
-1) in buildroot as config/build dependency (seems odd to make a dependency on
-   X11 for qt5base if gtk3 is enabled),
-2) patch Qt,
-3) by explicitly disabling building gtk3 theme support in qt5base (instead of
-   being automatic),
-4) with some combination of the above.
+ * Enable the gtk3 theme support only when the necessary dependencies
+   are met. In this case, it would be BR2_PACKAGE_LIBGTK3_X11, which
+   indicates that gtk3 is enabled with its X11 backend.
 
-[1] https://bugreports.qt.io/browse/QTBUG-62101
+ * Be explicit about enabling and disabling the gtk3 theme. I.e
+   explicitly enable it when BR2_PACKAGE_LIBGTK3_X11=y, explicitly
+   disable it otherwise.
 
-...
+Thanks!
 
-Josh
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
