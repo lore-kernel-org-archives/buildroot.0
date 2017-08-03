@@ -1,51 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Aug 2017 20:07:41 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-08-02
-In-Reply-To: <a8c9e92b-38f9-88c2-c423-99f946fa5571@microchip.com>
-References: <20170803063049.45E0621EC8@mail.free-electrons.com>
- <a8c9e92b-38f9-88c2-c423-99f946fa5571@microchip.com>
-Message-ID: <20170803200741.245f3b6f@windsurf.lan>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 3 Aug 2017 16:49:19 -0300
+Subject: [Buildroot] [PATCH v3] imx6q-sabresd: Add a qt5 defconfig
+	variant
+In-Reply-To: <47e21512-545b-5183-7397-844035c9818f@mind.be>
+References: <1498078187-32377-1-git-send-email-festevam@gmail.com>
+ <47e21512-545b-5183-7397-844035c9818f@mind.be>
+Message-ID: <CAOMZO5ACVkLqxWmwFY3kBPjhPVOVs0J_Tq__jZJ29_YFXBFjHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Arnout,
 
-On Thu, 3 Aug 2017 10:30:59 -0700, Joshua Henderson wrote:
+On Thu, Aug 3, 2017 at 4:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> For reference, I opened an upstream Qt bug [1] about this.  This build log is
-> not strictly identical, but looks to be the same problem.  I believe the
-> issue is gtk3 is properly auto detected by Qt build in order to build an
-> optional Qt gtk3 plugin, but what it really needs is gtk3 compiled with X11.
-> So, when gtk3 is built without X11 in buildroot, the Qt build fails.
-> 
-> Any direction on whether this should be solved:
-> 1) in buildroot as config/build dependency (seems odd to make a dependency on
->    X11 for qt5base if gtk3 is enabled),
-> 2) patch Qt,
-> 3) by explicitly disabling building gtk3 theme support in qt5base (instead of
->    being automatic),
-> 4) with some combination of the above.
+>  Hi Fabio, I applied to next, with a lot of changes:
+>
+>      - Add Fabio to DEVELOPERS
+>      - Rename linux config fragment to linux_qt5.fragment
+>      - Add comment to linux_qt5.fragment why it is needed
+>      - Add explicit CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y to it
+>      - Reorder defconfig entries to they match imx6q-sabresd_defconfig
+>      - Remove strace and host-uboot-tools, neither seems to be needed
+>      - Drop BR2_PACKAGE_QT5BASE_LICENSE_APPROVED, it no longer exists
+>      - Replace BR2_TARGET_ROOTFS_EXT2_BLOCKS with BR2_TARGET_ROOTFS_EXT2_SIZE
+>      - Regenerate .gitlab-ci.yml
+>
+>  Could you re-test based on the next branch?
 
-I would say a combination of (1) and (3).
+Thanks for reworking the patch and applying it.
 
-We want to:
+I am currently out of the office without hardware access to test it.
 
- * Enable the gtk3 theme support only when the necessary dependencies
-   are met. In this case, it would be BR2_PACKAGE_LIBGTK3_X11, which
-   indicates that gtk3 is enabled with its X11 backend.
+Will test it as soon as I am back to the office (week of August 21)
 
- * Be explicit about enabling and disabling the gtk3 theme. I.e
-   explicitly enable it when BR2_PACKAGE_LIBGTK3_X11=y, explicitly
-   disable it otherwise.
+>
+>  Also, you set BR2_TOOLCHAIN_BUILDROOT_GLIBC=y but none of the packages selected
+> seem to need it. Is there a reason why it is needed? Could you either remove it
+> (after testing with uClibc-ng) or add a comment why it is needed and remove
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y?
 
-Thanks!
+Sure, will do it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thanks
