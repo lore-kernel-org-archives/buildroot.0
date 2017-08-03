@@ -1,30 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Aug 2017 10:16:26 +0000
-Subject: [Buildroot] [Bug 10146] [PATCH] package/skeleton-common fix
-	recursive variable
-In-Reply-To: <bug-10146-163@https.bugs.busybox.net/>
-References: <bug-10146-163@https.bugs.busybox.net/>
-Message-ID: <bug-10146-163-Dk5sObjuke@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Aug 2017 12:31:55 +0200
+Subject: [Buildroot] [git commit] package/skeleton-common: fix recursive
+	variable
+Message-ID: <20170803102856.C43B9821FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10146
+commit: https://git.buildroot.net/buildroot/commit/?id=9682fcaf465cfeb56cbdf06c85b32d378032799e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Stefan Becker <chemobejk@gmail.com> changed:
+This fixes a recursive variable definition introduced by the refactoring
+in commit 120307520f69f801bf05df1d2fd3433c6d498551. Simply rename the
+hook to remove the recursion.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #7141|0                           |1
-        is obsolete|                            |
+Fixes https://bugs.busybox.net/show_bug.cgi?id=10146
 
---- Comment #3 from Stefan Becker <chemobejk@gmail.com> ---
-Created attachment 7151
-  --> https://bugs.busybox.net/attachment.cgi?id=7151&action=edit
-patch for skeleton-common.mk (with Signed-off-by: line)
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+---
+ package/skeleton-common/skeleton-common.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
+index e9b87c3..e94dd6e 100644
+--- a/package/skeleton-common/skeleton-common.mk
++++ b/package/skeleton-common/skeleton-common.mk
+@@ -75,16 +75,16 @@ endef
+ SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ROOT_PASSWD
+ 
+ ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+-define SKELETON_COMMON_BIN_SH
++define SKELETON_COMMON_SET_BIN_SH
+ 	rm -f $(TARGET_DIR)/bin/sh
+ endef
+ else
+ ifneq ($(SKELETON_COMMON_BIN_SH),)
+-define SKELETON_COMMON_BIN_SH
++define SKELETON_COMMON_SET_BIN_SH
+ 	ln -sf $(SKELETON_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
+ endef
+ endif
+ endif
+-SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_BIN_SH
++SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_BIN_SH
+ 
+ $(eval $(generic-package))
