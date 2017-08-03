@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Aug 2017 09:06:30 +0200
-Subject: [Buildroot] [PATCH v3] imx6q-sabresd: Add a qt5 defconfig
-	variant
-In-Reply-To: <1498078187-32377-1-git-send-email-festevam@gmail.com>
-References: <1498078187-32377-1-git-send-email-festevam@gmail.com>
-Message-ID: <47e21512-545b-5183-7397-844035c9818f@mind.be>
+Date: Thu, 3 Aug 2017 09:06:56 +0200
+Subject: [Buildroot] [PATCH v3] qt5wayland: new package
+In-Reply-To: <1501535208-8161-1-git-send-email-joshua.henderson@microchip.com>
+References: <1501535208-8161-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <e5d8c8ca-0aae-0d3d-2c19-3e520318345a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +12,35 @@ To: buildroot@busybox.net
 
 
 
-On 21-06-17 22:49, Fabio Estevam wrote:
-> Introduce imx6q-sabresd_qt5_defconfig that supports the opensource
-> Etnaviv graphical stack.
+On 31-07-17 23:06, Joshua Henderson wrote:
+> QtWayland is a Qt 5 module that wraps the functionality of Wayland.
 > 
-> This defconfig provides a way to quickly test some graphical applications,
-> such as kmscube, qt5, glmark2.
-> 
-> Currently kernel mainline exhibits issues when running cpufreq as ondemand
-> governor on mx6, so add a linux fragment that disables such option for the
-> time being.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Brent Sink <brents_3@hotmail.com>
+> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
- Hi Fabio, I applied to next, with a lot of changes:
+ Hi Joshua,
 
-     - Add Fabio to DEVELOPERS
-     - Rename linux config fragment to linux_qt5.fragment
-     - Add comment to linux_qt5.fragment why it is needed
-     - Add explicit CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y to it
-     - Reorder defconfig entries to they match imx6q-sabresd_defconfig
-     - Remove strace and host-uboot-tools, neither seems to be needed
-     - Drop BR2_PACKAGE_QT5BASE_LICENSE_APPROVED, it no longer exists
-     - Replace BR2_TARGET_ROOTFS_EXT2_BLOCKS with BR2_TARGET_ROOTFS_EXT2_SIZE
-     - Regenerate .gitlab-ci.yml
+ I've applied to the next branch, with a few fixes:
 
- Could you re-test based on the next branch?
+     - select wayland instead of depending on it;
+     - propagate jscore dependency from qt5declarative
+     - re-order select/depends statements
+     - rewrite comment to only refer to GL backend (jscore is an arch
+       dependency)
+     - rewrap help text of BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
 
- Also, you set BR2_TOOLCHAIN_BUILDROOT_GLIBC=y but none of the packages selected
-seem to need it. Is there a reason why it is needed? Could you either remove it
-(after testing with uClibc-ng) or add a comment why it is needed and remove
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y?
+ Could you also add yourself to the DEVELOPERS file for this package and others
+you are interested in? Then you will get a mail whenever these packages fail in
+the autobuilders.
+
 
  Regards,
  Arnout
+
+[snip]
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
