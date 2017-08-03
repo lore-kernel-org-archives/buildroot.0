@@ -1,55 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Aug 2017 17:29:55 +0000
-Subject: [Buildroot] [Bug 10161] New: unable to build u-boot.imx reliably
-Message-ID: <bug-10161-163@https.bugs.busybox.net/>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Thu, 3 Aug 2017 10:30:59 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-08-02
+In-Reply-To: <20170803063049.45E0621EC8@mail.free-electrons.com>
+References: <20170803063049.45E0621EC8@mail.free-electrons.com>
+Message-ID: <a8c9e92b-38f9-88c2-c423-99f946fa5571@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10161
+Howdy,
 
-            Bug ID: 10161
-           Summary: unable to build u-boot.imx reliably
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: yurovsky at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On 08/02/2017 11:30 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Build statistics for 2017-08-02
+> ================================
+> 
 
-Created attachment 7156
-  --> https://bugs.busybox.net/attachment.cgi?id=7156&action=edit
-hacky workaround
+...
+   
+>     mips64el |                  qt5base-5.9.1 | NOK | http://autobuild.buildroot.net/results/6f3c2fcb0a44cd13ef4c73822d4d08f923291099 |     
 
-I'm unable to build the u-boot.imx image (for Freescale i.MX SoCs) reliably
-(that is, it generally works but if I "slow down" my system by making the CPUs
-busy, or use a slower machine, I can break the build very often).
+For reference, I opened an upstream Qt bug [1] about this.  This build log is
+not strictly identical, but looks to be the same problem.  I believe the
+issue is gtk3 is properly auto detected by Qt build in order to build an
+optional Qt gtk3 plugin, but what it really needs is gtk3 compiled with X11.
+So, when gtk3 is built without X11 in buildroot, the Qt build fails.
 
-The issue seems to be in u-boot's build system but I'm not certain so I wanted
-to check if there's anything that we might be doing in buildroot that should be
-done differently before taking this up with them.
+Any direction on whether this should be solved:
+1) in buildroot as config/build dependency (seems odd to make a dependency on
+   X11 for qt5base if gtk3 is enabled),
+2) patch Qt,
+3) by explicitly disabling building gtk3 theme support in qt5base (instead of
+   being automatic),
+4) with some combination of the above.
 
-To build the i.MX image the config should have:
+[1] https://bugreports.qt.io/browse/QTBUG-62101
 
-BR2_TARGET_UBOOT_FORMAT_IMX=y
+...
 
-(and be one of the i.MX targets anyway since we need a board target in u-boot).
-What happens is u-boot will process a template config file and eventually
-mkimage is run to generate the .imx image using the .cfg files in the board
-directory. The build will fail because the processed .cfg isn't found and it
-seems that the .cfg was in fact built, it just raced with the image step.
-
-I have a workaround that, while hacky, shows that we can prevent the problem by
-making those steps less parallel (attached).
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Josh
