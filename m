@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Aug 2017 09:07:13 +0200
-Subject: [Buildroot] [PATCHv2 2/2] instrumentation: extend
- packages-file-list.txt with symlinks and directories
-In-Reply-To: <20170205134507.15328-3-patrickdepinguin@gmail.com>
-References: <20170205134507.15328-1-patrickdepinguin@gmail.com>
- <20170205134507.15328-3-patrickdepinguin@gmail.com>
-Message-ID: <6fcaded9-04c2-9b95-ccac-bcce2603cde3@mind.be>
+Date: Thu, 3 Aug 2017 09:12:04 +0200
+Subject: [Buildroot] [PATCH v2] azmq: Add new package
+In-Reply-To: <CAD58DeaGcy5S0e4RLG770EahiS4nZgV3d1kBw5SV52YM2iTQyA@mail.gmail.com>
+References: <20170721191140.29980-1-rj.ascani@gmail.com>
+ <20170728180459.32667-1-rj.ascani@gmail.com>
+ <9c1bfb84-9025-9941-dd0f-8a6c0a250940@mind.be>
+ <CAD58DeaGcy5S0e4RLG770EahiS4nZgV3d1kBw5SV52YM2iTQyA@mail.gmail.com>
+Message-ID: <00bebb9e-c0b5-09e3-5fa7-2f986ea1c984@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +15,112 @@ To: buildroot@busybox.net
 
 
 
-On 05-02-17 14:45, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On 03-08-17 01:45, RJ Ascani wrote:
+> Hi Arnout,
 > 
-> Using the package instrumentation hooks, a file packages-file-list.txt is
-> created containing the list of files installed by a package with their size.
+> Thank you so much for the review. I'm not in any rush, so making it
+> into 2017.08 is not a necessity.
 > 
-> Due to the use of 'find -type f', symbolic links to files are not included
-> in this file list. Since the original purpose of this file was to calculate
-> the total size of a package and symbolic links have file size 0, this was
-> not a problem.
+> On Wed, Aug 2, 2017 at 3:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi RJ,
+>>
+>>  I'm not sure if we can still get this in 2017.08 since I have a few comments
+>> that I can't fix up myself...
+>>
+>> On 28-07-17 20:04, RJ Ascani wrote:
+>>> The azmq library provides Boost Asio style bindings for ZeroMQ. This
+>>> library is built on top of ZeroMQ's standard C interface and is intended
+>>> to work well with C++ applications which use the Boost libraries in
+>>> general, and Asio in particular.
+>>>
+>>> Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+>>
+>>  We require the Signed-off-by to be a full, real name because it's a legal
+>> statement. It is a short way for you to assert that you are entitled to
+>> contribute the patch under buildroot's GPL license.  See
+>> http://elinux.org/Developer_Certificate_Of_Origin for more details.
+>>
+>>  The Author should be the same name, of course.
+>>
 > 
-> However, if packages-file-list.txt is reused for other purposes, for example
-> to get a complete list of files installed by a package regardless of size,
-> symbolic links to files are important too.
-> 
-> Likewise, to get a complete view of what a package installs, directories
-> should be included too.
-> 
-> Update the instrumentation hook accordingly.
-> Although for files an md5sum is taken, we cannot do this for directories.
-> Instead, mimic the output of md5sum with a fake hash string.
-> 
-> Note: for directories that are used by several packages, e.g. /etc/init.d/,
-> the package that created the directory will be treated as the 'owner' of
-> that directory.  This gives a somewhat distorted view of ownership.
-> Similarly, the package size reported by 'make graph-size' (based on
-> packages-file-list.txt) will include the 'size' of a directory for that
-> owner, which is reported as e.g. 4096 bytes.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Just to be clear, it's my initials that are the issue? I've gone by RJ
+> my entire life so I didn't realize that would be an issue.
 
- In the end, I've applied both to next as-is, thanks!
+ In that case it's OK - it looked like an alias/nick, that's all.
+
+
+>> [snip]
+>>> +From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
+>>> +From: RJ Ascani <rj.ascani@gmail.com>
+>>> +Date: Thu, 20 Jul 2017 15:53:40 -0700
+>>> +Subject: [PATCH] Conditionally disable test and doc builds
+>>
+>>  What is the upstream status of this patch? Please send it upstream if you
+>> didn't already do so.
+>>
+> 
+> Actually, I probably should have elaborated a bit more in the
+> explanation here. The reason I added this patch was actually because
+> there is a bug in building the tests under buildroot. Upstream is
+> missing a library that needs to be linked in their test
+> CMakeLists.txt. Since buildroot already forcibly tries to disable docs
+> and tests for cmake packages, I assumed it would be better to just
+> have the tests not even be built for buildroot. I'm not certain I
+> could get those conditionals into upstream, but I'm fairly certain I
+> could get the test bug patched upstream. Would it be preferable to: 1)
+> patch the actual test bug and let the tests build or 2) disable the
+> building of the tests entirely?
+
+ Disabling building of tests is preferable, yes. I don't see why upstream
+wouldn't agree with a patch that makes that optional - especially if the name is
+standard, like you mention below. So please send it upstream (after checking
+that the defaults for both these symbols is ON).
+
+>>> +
+>>> +Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+>>> +---
+>>> + CMakeLists.txt | 12 +++++++++---
+>>> + 1 file changed, 9 insertions(+), 3 deletions(-)
+>>> +
+>>> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+>>> +index 5b5b9cc..97006a4 100644
+>>> +--- a/CMakeLists.txt
+>>> ++++ b/CMakeLists.txt
+>>> +@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
+>>> +                     ${ZeroMQ_INCLUDE_DIRS}
+>>> +                     ${PROJECT_SOURCE_DIR})
+>>> +
+>>> +-enable_testing()
+>>> ++if (BUILD_TESTING)
+>>
+>>  I would expect that upstream would require BUILD_TESTING to be set to ON by
+>> default. Also, I think BUILD_TESTS is more common, but I have no data to back
+>> that up.
+> 
+> BUILD_TESTING is an actually a built-in for CTest (CMake's testing module).
+
+ OK, I didn't know that, thanks!
+
+[snip]
+>>
+>>  So I would expect that we would need to pass an explicit -DBUILD_TESTING=OFF
+>> and -DBUILD_DOCS=OFF
+>>
+> 
+> Those are already added to the cmake configure command from
+> package/pkg-cmake.mk. Are you saying we should also add them as an
+> explicit option in AZMQ_CONF_OPTS?
+
+ D'oh, I actually knew that, silly me!
+
+ So the patch is OK then, I've applied to the next branch unchanged.
+
+ Could you still send a patch that adds you to the DEVELOPERS file? That way,
+you'll get a personal mail when this package breaks in the autobuilders.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
