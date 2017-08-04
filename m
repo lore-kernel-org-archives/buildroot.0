@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 22:10:09 +0200
-Subject: [Buildroot] [PATCH] gdb: drop support for Microblaze
-In-Reply-To: <20170803215812.28951-1-thomas.petazzoni@free-electrons.com>
-References: <20170803215812.28951-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <1a0f3d27-091a-b2ac-915d-c1db1ab6d7f9@mind.be>
+Date: Fri, 4 Aug 2017 22:11:04 +0200
+Subject: [Buildroot] [PATCH] glibc: add patch fixing the build with
+ binutils 2.29
+In-Reply-To: <20170803213027.27565-1-thomas.petazzoni@free-electrons.com>
+References: <20170803213027.27565-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <80269a11-68f6-6d43-f20f-d8d50576c7b4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +13,14 @@ To: buildroot@busybox.net
 
 
 
-On 03-08-17 23:58, Thomas Petazzoni wrote:
-> Microblaze support was never upstreamed in gdb. We currently use a gdb
-> from the Xilinx Github repository, but this gdb is based on 7.6, and
-> has never been updated in the last 4 years. There are no other active
-> branches at https://github.com/Xilinx/gdb/branches.
+On 03-08-17 23:30, Thomas Petazzoni wrote:
+> Fixes the following build failure, which occurs on all architectures:
 > 
-> Xilinx has a slightly newer gdb, based on 7.7, available at
-> https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb. However,
-> it's apparently only available in the form of stack of big patches
-> (https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb/files).
-> 
-> Currently, gdb on Microblaze fails to build in various conditions:
-> 
->  * Against glibc, with "error: conflicting types for 'ps_lgetfpregs'"
-> 
->  * Against musl, with "error: unknown type name 'elf_gregset_t'"
-> 
-> While those issues can probably be fixed, the fact that there is no
-> active upstream significantly reduces the incentive to fix those
-> problems.
-> 
-> Therefore, let's drop support for gdb on Microblaze entirely.
+> /tmp/cc6APNmN.s: Assembler messages:
+> /tmp/cc6APNmN.s: Error: `loc1 at GLIBC_2.17' can't be versioned to common symbol 'loc1'
+> /tmp/cc6APNmN.s: Error: `loc2 at GLIBC_2.17' can't be versioned to common symbol 'loc2'
+> /tmp/cc6APNmN.s: Error: `locs at GLIBC_2.17' can't be versioned to common symbol 'locs'
+> ../o-iterator.mk:9: recipe for target '/tmp/output/build/glibc-2.25/build/misc/regexp.os' failed
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
