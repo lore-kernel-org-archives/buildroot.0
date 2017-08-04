@@ -1,44 +1,46 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu,  3 Aug 2017 21:29:07 -0400
-Subject: [Buildroot] [PATCH 1/1] python-cryptography: bump to version 2.0.2
-Message-ID: <20170804012907.8668-1-Adamduskett@outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  4 Aug 2017 06:02:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/snappy: remove pthread handling for
+	static builds
+Message-ID: <20170804040248.8773-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+As pointed out by Thomas[1] the special handling of libpthread for
+static builds is not needed anymore.
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index a1162cf88..51ca6cb8c 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
--md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
--sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
-+md5 170fd846e78a4603febf40d55b605301 cryptography-2.0.2.tar.gz
-+sha256 3780b2663ee7ebb37cb83263326e3cd7f8b2ea439c448539d4b87de12c8d06ab cryptography-2.0.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 5373da820..69b568cd5 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Tested with the following musl & uclibc defconfigs which also fix build
+errors:
+http://autobuild.buildroot.net/results/39f/39f9fc4300ddca19e8a533765b46838003752000/
+http://autobuild.buildroot.net/results/886/8860b9259f7a3aecb2ddbfa787be048072bd347b/
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-July/199549.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/snappy/snappy.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index f5df6bf1f..a537ade57 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -11,13 +11,4 @@ SNAPPY_LICENSE_FILES = COPYING
+ SNAPPY_INSTALL_STAGING = YES
+ SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_TESTS=OFF
  
--PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
-+PYTHON_CRYPTOGRAPHY_VERSION = 2.0.2
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/0a/23/ffee389a45f752dc745706cdb2d354b91ddb71594506fac45236cf67af49
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-# libsnappy links with libstdc++. Some libstdc++/arch variants use
+-# pthread symbols for internal locking if built with thread
+-# support. libstdc++ does not have a .pc file, and its .la file does
+-# not mention -pthread.  So, static linkig to libstdc++ will fail if
+-# -pthread is not explicity linked to. Only do that for static builds.
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+-SNAPPY_CONF_OPTS += LIBS=-pthread
+-endif
+-
+ $(eval $(cmake-package))
 -- 
-2.13.3
+2.11.0
