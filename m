@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 22:13:32 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-07-31
-In-Reply-To: <5fddab52-cf68-20a3-2c57-efea72323008@gmail.com>
-References: <20170801063048.E1A5E20C14@mail.free-electrons.com>
- <5fddab52-cf68-20a3-2c57-efea72323008@gmail.com>
-Message-ID: <e5452c53-ec9b-8c77-85c0-628425dd1040@mind.be>
+Date: Fri, 4 Aug 2017 22:16:05 +0200
+Subject: [Buildroot] [RFC] python-cryptography: bump to version 2.0.3
+In-Reply-To: <CAGm1_ksXJ6Bi5gj5C=wm2vUYXMDF9hU+ym18RLc25ZhmgAWz8g@mail.gmail.com>
+References: <20170804052400.10360-1-yegorslists@googlemail.com>
+ <CAGm1_ktaTUcbX6GSo59jqXTjV7sSON4jSjpyBNtGr--CsWRBbw@mail.gmail.com>
+ <e767c93d-4bde-bbaa-16ef-c92a97764853@mind.be>
+ <CAGm1_ksXJ6Bi5gj5C=wm2vUYXMDF9hU+ym18RLc25ZhmgAWz8g@mail.gmail.com>
+Message-ID: <e6fd9630-c719-8697-ee5d-89bbe3361564@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +15,29 @@ To: buildroot@busybox.net
 
 
 
-On 04-08-17 22:01, Romain Naour wrote:
-> Hi Thomas,
+On 04-08-17 21:53, Yegor Yefremov wrote:
+> On Fri, Aug 4, 2017 at 5:47 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>> On 04-08-17 07:25, Yegor Yefremov wrote:
+>>> During [1] execution following error will be thrown:
+>>
+>>  I would propose then not to apply the bump until this issue is resolved, OK?
+>>
+>>  BTW, for this particular package, it would definitely be useful to have a
+>> runtime test (since it has many runtime dependencies, and apparently they may
+>> change over time).
 > 
-> Le 01/08/2017 ? 08:30, Thomas Petazzoni a ?crit :
->> Hello,
->>
->> Build statistics for 2017-07-31
->> ================================
->>
->>       successes : 165
->>        failures : 18 
->>        timeouts : 0  
->>           TOTAL : 183
->>
->> Classification of failures by reason
->> ====================================
->>
->>                      gpsd-3.16 | 2 
->>          libspatialindex-1.8.5 | 1 
->>
->> Detail of failures
->> ===================
->>
->> microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/64a0bec7efe5b63a2b315bd204fb50884d62f0a8 |     
->> microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/4c240106fb29805382d5ae347e65b6f83d5033d4 |     
->> microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/3cd4bb438158e6f848072af1acae876a8a44ef88 |     
-> 
-> Following the removal of gdb on microblaze, what do we do for this toolchain
-> issue? You reported the bug last year without any feedback [1].
-> 
-> I would suggest adding an autobuilder exception on these two packages.
+> It's on my todo list, but where do I find documentation concerning
+> such testing or is there any in-tree package that uses this
+> infrastructure?
 
- These kind of things can often be "solved" by tweaking the compiler options
-(though what is needed may be version dependent...). Cfr. quite a few PowerPC
-things that replace -Os with -O2.
+ The source is the documentation! I do assume you know Python? :-P Look at
+support/testing. The IPython tests are probably a good place to start.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
