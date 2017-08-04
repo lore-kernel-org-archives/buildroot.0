@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 17:13:14 +0200
-Subject: [Buildroot] [PATCH] gdb: drop support for Microblaze
-In-Reply-To: <20170803215812.28951-1-thomas.petazzoni@free-electrons.com>
-References: <20170803215812.28951-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <bc187437-bbb7-ae6b-dce7-5ffa3e19a75d@mind.be>
+Date: Fri, 4 Aug 2017 17:36:00 +0200
+Subject: [Buildroot] [PATCH 1/1] xmlstarlet: fix host package build
+ errors.
+In-Reply-To: <20170804010531.31789-1-Adamduskett@outlook.com>
+References: <20170804010531.31789-1-Adamduskett@outlook.com>
+Message-ID: <40426826-4155-413f-069c-d288102081d3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +13,68 @@ To: buildroot@busybox.net
 
 
 
-On 03-08-17 23:58, Thomas Petazzoni wrote:
-> Microblaze support was never upstreamed in gdb. We currently use a gdb
-> from the Xilinx Github repository, but this gdb is based on 7.6, and
-> has never been updated in the last 4 years. There are no other active
-> branches at https://github.com/Xilinx/gdb/branches.
-> 
-> Xilinx has a slightly newer gdb, based on 7.7, available at
-> https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb. However,
-> it's apparently only available in the form of stack of big patches
-> (https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb/files).
-> 
-> Currently, gdb on Microblaze fails to build in various conditions:
-> 
->  * Against glibc, with "error: conflicting types for 'ps_lgetfpregs'"
-> 
->  * Against musl, with "error: unknown type name 'elf_gregset_t'"
-> 
-> While those issues can probably be fixed, the fact that there is no
-> active upstream significantly reduces the incentive to fix those
-> problems.
-> 
-> Therefore, let's drop support for gdb on Microblaze entirely.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 04-08-17 03:05, Adam Duskett wrote:
+> The host version of xmlstarlet doesn't have any conf opts.
+> As such, if the host PC doesn't have libxml header files installed,
+> a build error will occure because host-xmlstarlet won't be able to find
+> libxml/xmlstring.h: No such file or directory.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Weird that the autobuilders didn't catch this. Ah, of course, it's only a
+dependency of kodi and kodi never gets built because of the dependency on .py
+files...
 
- Since ARC is now the only "special" case remaining, the gdb.mk file could be
-simplified a little. But perhaps ARC is on its way upstream and we can
-completely remove the special case soonish? Anyway, that's for a separate patch.
 
- I'm not sure if this is for next or for master (it "fixes" build failures), so
-I didn't apply directly.
+> Add HOST_XMLSTARLET_CONF_OPTS to fix this issue.
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> ---
+>  package/xmlstarlet/xmlstarlet.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+> index 9920dcfc7..54ed36bc8 100644
+> --- a/package/xmlstarlet/xmlstarlet.mk
+> +++ b/package/xmlstarlet/xmlstarlet.mk
+> @@ -17,6 +17,11 @@ XMLSTARLET_CONF_OPTS += \
+>  	--with-libxslt-prefix=$(STAGING_DIR)/usr \
+>  	--with-libiconv-prefix=$(STAGING_DIR)/usr
+>  
+> +HOST_XMLSTARLET_CONF_OPTS += \
+> +	--with-libxml-prefix=$(HOST_DIR)/usr \
+> +	--with-libxslt-prefix=$(HOST_DIR)/usr \
+> +	--with-libiconv-prefix=$(HOST_DIR)/usr
+
+ Since $(HOST_DIR)/usr was recently removed, this can't be right...
+
+ However, I can't reproduce this issue. Without this patch, config.log says
+
+configure:4407: checking for xml2-config
+configure:4425: found .../output/host/bin/xml2-config
+configure:4437: result: .../output/host/bin/xml2-config
+configure:4466: using libxml-2.9.4
+configure:4548: checking for xslt-config
+configure:4566: found .../output/host/bin/xslt-config
+configure:4578: result: .../output/host/bin/xslt-config
+
+and further on I can see that it's using the correct paths. Indeed, during the
+build I get a warning:
+
+.../output/host/include/libxml2/libxml/xmlstring.h:35:18: warning: pointer
+targets in passing argument 3 of ?xmlStrPrintf? differ in signedness
+[-Wpointer-sign]
+
+so it is *definitely* using the correct libxml2.
+
+ Could you investigate a little further what's going on on your end?
 
  Regards,
  Arnout
+
+> +
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  XMLSTARLET_CONF_OPTS += --enable-static-libs
+>  XMLSTARLET_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libxml-2.0 libexslt`"
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
