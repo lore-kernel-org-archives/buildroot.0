@@ -1,46 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 4 Aug 2017 23:28:50 +0200
-Subject: [Buildroot] [git commit branch/next] netatalk: bump to version 3.1.9
-Message-ID: <20170804213747.463A480AE2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 4 Aug 2017 23:44:25 +0200
+Subject: [Buildroot] [PATCH 05/10] netatalk: bump to version 3.1.9
+In-Reply-To: <20170804185521.12320-6-Adamduskett@outlook.com>
+References: <20170804185521.12320-1-Adamduskett@outlook.com>
+ <20170804185521.12320-6-Adamduskett@outlook.com>
+Message-ID: <8fbaeeed-d6b2-b2c9-a485-305f34983923@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb7a53e5afa24077f3a8210d07a12f9ee9de9473
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version is compatible with LibreSSL.
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/netatalk/netatalk.hash | 6 +++---
- package/netatalk/netatalk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 04-08-17 20:55, Adam Duskett wrote:
+> This version is compatible with LibreSSL.
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
-index 955ffd4..1b974f5 100644
---- a/package/netatalk/netatalk.hash
-+++ b/package/netatalk/netatalk.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.8/
--md5	9cab934ca32b8979f389da52d44c69c2	netatalk-3.1.8.tar.bz2
--sha1	00518461a311e6c17c95738ac214c8f06f863b4b	netatalk-3.1.8.tar.bz2
-+# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.9/
-+md5	d1d385ae6c3dc45eef4c923472f8fa5f	netatalk-3.1.9.tar.bz2
-+sha1	ac746efc00e8cfbe5042a7835b27480bb83505cd	netatalk-3.1.9.tar.bz2
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 8e661a0..e0085db 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NETATALK_VERSION = 3.1.8
-+NETATALK_VERSION = 3.1.9
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
+ Applied to next, thanks.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
