@@ -1,32 +1,64 @@
-From: Atilla Filiz <atilla.filiz@gmail.com>
-Date: Fri, 4 Aug 2017 14:21:26 +0200
-Subject: [Buildroot] Howto handle fork of an existing package
-Message-ID: <6947b9e4-bf6e-ace7-c8c9-e440a494e225@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri,  4 Aug 2017 09:15:56 -0400
+Subject: [Buildroot] [PATCH v2 1/1] python-cryptography: bump to version
+	2.0.2
+Message-ID: <20170804131556.699-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+In addition, the new version depends on python-asn1crypto as well.
 
-I have made a package of Wiring Pi for Lemaker boards Banana Pi and 
-Banana Pro. Since this is a fork from an older version, the site, teh 
-versioning, the patches etc are all different. I would like to ask, 
-whoat would be the best way to merge this package properly. Either
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes v1 -> v2:
+  - Added BR2_PACKAGE_PYTHON_ASN1CRYPTO to the selection as it is now a
+    runtime dependency.
 
-1. Make it a completely new package, like wiringpi-lemaker and make it 
-depend on !BR2_PACKAGE_WIRINGPI and vice versa. Easiest way.
+ package/python-cryptography/Config.in                | 1 +
+ package/python-cryptography/python-cryptography.hash | 4 ++--
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-2. Turn wiringpi into a subtree, with a radio button for board 
-selection: Raspberry Pi, Banana Pi, Banana Pro and enable teh proper 
-package. Raspberry Pi being the default option. Slightly intrusive way.
-
-3. Have one wiringpi to rule them all. Make the board selection as a 
-mere set of parameters. Make a bit more complicated wirinpi.mk that 
-selects correct site, version, patch directory etc depending on a bunch 
-of defined flags. Possibly unnecessarily complicated.
-
-Currently I made and tested it as a separate package.
-
-Atilla
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+index 9827cf82b..9e8bc94ef 100644
+--- a/package/python-cryptography/Config.in
++++ b/package/python-cryptography/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_ASN1CRYPTO if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  cryptography is a package designed to expose cryptographic
+ 	  primitives and recipes to Python developers.
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index a1162cf88..51ca6cb8c 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
+-md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
+-sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
++md5 170fd846e78a4603febf40d55b605301 cryptography-2.0.2.tar.gz
++sha256 3780b2663ee7ebb37cb83263326e3cd7f8b2ea439c448539d4b87de12c8d06ab cryptography-2.0.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 5373da820..69b568cd5 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
++PYTHON_CRYPTOGRAPHY_VERSION = 2.0.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/0a/23/ffee389a45f752dc745706cdb2d354b91ddb71594506fac45236cf67af49
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-- 
+2.13.3
