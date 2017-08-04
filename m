@@ -1,115 +1,46 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 4 Aug 2017 07:25:40 +0200
-Subject: [Buildroot] [RFC] python-cryptography: bump to version 2.0.3
-In-Reply-To: <20170804052400.10360-1-yegorslists@googlemail.com>
-References: <20170804052400.10360-1-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ktaTUcbX6GSo59jqXTjV7sSON4jSjpyBNtGr--CsWRBbw@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri,  4 Aug 2017 07:27:18 +0200
+Subject: [Buildroot] [PATCH] python-netifaces: bump to version 0.10.6
+Message-ID: <20170804052718.11102-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 4, 2017 at 7:24 AM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Replace pyasn with asn1crypto and reorder runtime dependencies
-> alphabetically.
->
-> Enable Python hashlib module.
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-cryptography/Config.in                | 10 ++++++----
->  package/python-cryptography/python-cryptography.hash |  4 ++--
->  package/python-cryptography/python-cryptography.mk   |  4 ++--
->  3 files changed, 10 insertions(+), 8 deletions(-)
->
-> diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-> index 9827cf82b..fc37f970b 100644
-> --- a/package/python-cryptography/Config.in
-> +++ b/package/python-cryptography/Config.in
-> @@ -2,17 +2,19 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
->         bool "python-cryptography"
->         depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
->         select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_PYTHON_ASN1CRYPTO # runtime
->         select BR2_PACKAGE_PYTHON_CFFI # runtime
-> -       select BR2_PACKAGE_PYTHON_IDNA # runtime
-> -       select BR2_PACKAGE_PYTHON_PYASN # runtime
-> -       select BR2_PACKAGE_PYTHON_SIX # runtime
->         select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON_IDNA # runtime
-> +       select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
->         select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON3_HASHLIB if BR2_PACKAGE_PYTHON3 # runtime
->         select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
->         select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
->         select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
->         select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-> -       select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
->         help
->           cryptography is a package designed to expose cryptographic
->           primitives and recipes to Python developers.
-> diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-> index a1162cf88..431a9e1bf 100644
-> --- a/package/python-cryptography/python-cryptography.hash
-> +++ b/package/python-cryptography/python-cryptography.hash
-> @@ -1,3 +1,3 @@
->  # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
-> -md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
-> -sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
-> +md5    24cbdab3fda22be31dd3aef2808f5d2f  cryptography-2.0.3.tar.gz
-> +sha256 d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a  cryptography-2.0.3.tar.gz
-> diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-> index 5373da820..0901f845b 100644
-> --- a/package/python-cryptography/python-cryptography.mk
-> +++ b/package/python-cryptography/python-cryptography.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->
-> -PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
-> +PYTHON_CRYPTOGRAPHY_VERSION = 2.0.3
->  PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-> -PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
-> +PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/9c/1a/0fc8cffb04582f9ffca61b15b0681cf2e8588438e55f61403eb9880bd8e0
->  PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
->  PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
->  PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-> --
-> 2.11.0
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-During [1] execution following error will be thrown:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-netifaces/python-netifaces.hash | 4 ++--
+ package/python-netifaces/python-netifaces.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-# python
-Python 3.6.1 (default, Aug  1 2017, 08:53:45)
-[GCC 6.3.1 20170109] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> from cryptography.fernet import Fernet
->>> key = Fernet.generate_key()
->>> f = Fernet(key)
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "usr/lib/python3.6/site-packages/cryptography/fernet.py", line
-32, in __init__
-  File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/__init__.py",
-line 15, in default_backend
-  File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/openssl/__init__.py",
-line 7, in <module>
-  File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/openssl/backend.py",
-line 53, in <module>
-  File "usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/openssl/binding.py",
-line 13, in <module>
-ImportError: /usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/_openssl.abi3.so:
-undefined symbol: pthread_atfork
->>>
-
-So far I have no idea why it happens. Python is compiled with
-pthread_atfork and I'm using Linaro ARM 2017.02 toolchain.
-
-[1] https://github.com/pyca/cryptography/blob/master/README.rst
-
-Yegor
+diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
+index 6f3e358b0..335f907d5 100644
+--- a/package/python-netifaces/python-netifaces.hash
++++ b/package/python-netifaces/python-netifaces.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/netifaces/json, sha256 locally computed
+-md5     5b4d1f1310ed279e6df27ef3a9b71519                                  netifaces-0.10.5.tar.gz
+-sha256  59d8ad52dd3116fcb6635e175751b250dc783fb011adba539558bd764e5d628b  netifaces-0.10.5.tar.gz
++md5	1d424cb5ef52907c5ab913011122a98b  netifaces-0.10.6.tar.gz
++sha256	0c4da523f36d36f1ef92ee183f2512f3ceb9a9d2a45f7d19cda5a42c6689ebe0  netifaces-0.10.6.tar.gz
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+index 3e01c2480..3258be7a9 100644
+--- a/package/python-netifaces/python-netifaces.mk
++++ b/package/python-netifaces/python-netifaces.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NETIFACES_VERSION = 0.10.5
++PYTHON_NETIFACES_VERSION = 0.10.6
+ PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
+-PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/a7/4c/8e0771a59fd6e55aac993a7cc1b6a0db993f299514c464ae6a1ecf83b31d
++PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/72/01/ba076082628901bca750bf53b322a8ff10c1d757dc29196a8e6082711c9d
+ PYTHON_NETIFACES_LICENSE = MIT
+ PYTHON_NETIFACES_LICENSE_FILES = README.rst
+ PYTHON_NETIFACES_SETUP_TYPE = setuptools
+-- 
+2.11.0
