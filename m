@@ -1,67 +1,141 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 4 Aug 2017 22:23:06 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-07-31
-In-Reply-To: <e5452c53-ec9b-8c77-85c0-628425dd1040@mind.be>
-References: <20170801063048.E1A5E20C14@mail.free-electrons.com>
- <5fddab52-cf68-20a3-2c57-efea72323008@gmail.com>
- <e5452c53-ec9b-8c77-85c0-628425dd1040@mind.be>
-Message-ID: <045d4e91-53fd-ee56-376b-d7bf6a0cd9e5@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 4 Aug 2017 22:43:26 +0200
+Subject: [Buildroot] [PATCH] gdb: add fix for gdb 7.12 and gdb 8.0 build
+ on noMMU platforms
+In-Reply-To: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
+References: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <4a2a10bc-9516-ddb6-b9b6-9c67038a8339@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Thomas,
 
-Le 04/08/2017 ? 22:13, Arnout Vandecappelle a ?crit :
+Le 03/08/2017 ? 09:15, Thomas Petazzoni a ?crit :
+> This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
+> noMMU platforms. It is not needed for older versions of gdb, since
+> it's related to the switch of gdb to C++ in the 7.12 release.
 > 
+> Fixes:
 > 
-> On 04-08-17 22:01, Romain Naour wrote:
->> Hi Thomas,
->>
->> Le 01/08/2017 ? 08:30, Thomas Petazzoni a ?crit :
->>> Hello,
->>>
->>> Build statistics for 2017-07-31
->>> ================================
->>>
->>>       successes : 165
->>>        failures : 18 
->>>        timeouts : 0  
->>>           TOTAL : 183
->>>
->>> Classification of failures by reason
->>> ====================================
->>>
->>>                      gpsd-3.16 | 2 
->>>          libspatialindex-1.8.5 | 1 
->>>
->>> Detail of failures
->>> ===================
->>>
->>> microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/64a0bec7efe5b63a2b315bd204fb50884d62f0a8 |     
->>> microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/4c240106fb29805382d5ae347e65b6f83d5033d4 |     
->>> microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/3cd4bb438158e6f848072af1acae876a8a44ef88 |     
->>
->> Following the removal of gdb on microblaze, what do we do for this toolchain
->> issue? You reported the bug last year without any feedback [1].
->>
->> I would suggest adding an autobuilder exception on these two packages.
+> ../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+> ../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+>        child_stack = xmalloc (STACK_SIZE * 4);
 > 
->  These kind of things can often be "solved" by tweaking the compiler options
-> (though what is needed may be version dependent...). Cfr. quite a few PowerPC
-> things that replace -Os with -O2.
+> The patch has already been merged upstream, as of commit
+> ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
+> of future gdb releases.
 
-Not only.
-Thomas also noticed that mixing Os and -fPIC trigged the issue.
-Do we really want to remove -fPIC ?
+What's the arch/config are you using?
+It's seems no toolchain able to build gdb on noMMU case are present in the
+autobuilder.
 
 Best regards,
 Romain
 
 > 
->  Regards,
->  Arnout
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+>  ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+>  2 files changed, 82 insertions(+)
+>  create mode 100644 package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+>  create mode 100644 package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+> 
+> diff --git a/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+> new file mode 100644
+> index 0000000..4eb72e4
+> --- /dev/null
+> +++ b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+> @@ -0,0 +1,41 @@
+> +From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Date: Sun, 18 Jun 2017 23:09:43 +0200
+> +Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
+> +
+> +On noMMU platforms, the following code gets compiled:
+> +
+> +  child_stack = xmalloc (STACK_SIZE * 4);
+> +
+> +Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
+> +the lack of cast is valid in C, it is not in C++, causing the
+> +following build failure:
+> +
+> +../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+> +../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+> +       child_stack = xmalloc (STACK_SIZE * 4);
+> +
+> +Therefore, this commit adds the appropriate cast.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
+> +---
+> + gdb/nat/linux-ptrace.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
+> +index 3447e07..33833e2 100644
+> +--- a/gdb/nat/linux-ptrace.c
+> ++++ b/gdb/nat/linux-ptrace.c
+> +@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
+> + #define STACK_SIZE 4096
+> + 
+> +     if (child_stack == NULL)
+> +-      child_stack = xmalloc (STACK_SIZE * 4);
+> ++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
+> + 
+> +     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
+> + #ifdef __ia64__
+> +-- 
+> +2.9.4
+> +
+> diff --git a/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+> new file mode 100644
+> index 0000000..4eb72e4
+> --- /dev/null
+> +++ b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+> @@ -0,0 +1,41 @@
+> +From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Date: Sun, 18 Jun 2017 23:09:43 +0200
+> +Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
+> +
+> +On noMMU platforms, the following code gets compiled:
+> +
+> +  child_stack = xmalloc (STACK_SIZE * 4);
+> +
+> +Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
+> +the lack of cast is valid in C, it is not in C++, causing the
+> +following build failure:
+> +
+> +../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+> +../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+> +       child_stack = xmalloc (STACK_SIZE * 4);
+> +
+> +Therefore, this commit adds the appropriate cast.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
+> +---
+> + gdb/nat/linux-ptrace.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
+> +index 3447e07..33833e2 100644
+> +--- a/gdb/nat/linux-ptrace.c
+> ++++ b/gdb/nat/linux-ptrace.c
+> +@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
+> + #define STACK_SIZE 4096
+> + 
+> +     if (child_stack == NULL)
+> +-      child_stack = xmalloc (STACK_SIZE * 4);
+> ++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
+> + 
+> +     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
+> + #ifdef __ia64__
+> +-- 
+> +2.9.4
+> +
 > 
