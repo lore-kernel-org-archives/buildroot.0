@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu,  3 Aug 2017 21:22:10 -0400
-Subject: [Buildroot] [PATCH 1/1] perl-net-ssleay: bump to version 1.81
-Message-ID: <20170804012212.9815-1-Adamduskett@outlook.com>
+Date: Thu,  3 Aug 2017 21:25:34 -0400
+Subject: [Buildroot] [PATCH 1/1] netatalk: bump to version 3.1.9
+Message-ID: <20170804012534.28582-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/perl-net-ssleay/perl-net-ssleay.hash | 4 ++--
- package/perl-net-ssleay/perl-net-ssleay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/netatalk/0002-no-acl.patch | 15 ---------------
+ package/netatalk/netatalk.hash     |  6 +++---
+ package/netatalk/netatalk.mk       |  2 +-
+ 3 files changed, 4 insertions(+), 19 deletions(-)
+ delete mode 100644 package/netatalk/0002-no-acl.patch
 
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
-index 556aea7d5..08b2aee2e 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.hash
-+++ b/package/perl-net-ssleay/perl-net-ssleay.hash
+diff --git a/package/netatalk/0002-no-acl.patch b/package/netatalk/0002-no-acl.patch
+deleted file mode 100644
+index 165141b47..000000000
+--- a/package/netatalk/0002-no-acl.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Fix builds without acl, from http://sourceforge.net/p/netatalk/bugs/574/
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura netatalk-3.1.7.orig/include/atalk/acl.h netatalk-3.1.7/include/atalk/acl.h
+---- netatalk-3.1.7.orig/include/atalk/acl.h	2014-12-03 17:34:49.895524464 -0300
+-+++ netatalk-3.1.7/include/atalk/acl.h	2014-12-03 17:34:58.735243283 -0300
+-@@ -61,6 +61,7 @@
+- #else /* HAVE_ACLS=no */
+- 
+- #define O_NETATALK_ACL 0
+-+#define O_IGNORE 0
+- #define chmod_acl chmod
+- 
+- #endif /* HAVE_ACLS */
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index 955ffd401..1b974f5b6 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
 @@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    a740d7792dbac8ca8c4eb38d3b8fbd01 Net-SSLeay-1.72.tar.gz
--sha256 1baac39f0f12cee515d8bec633175bb5916ca542e5356e26420437bd6195d2f4 Net-SSLeay-1.72.tar.gz
-+md5    71932ce34d4db44de8d00399c3405792 Net-SSLeay-1.81.tar.gz
-+sha256 00cbb6174e628b42178e1445c9fd5a3c5ae2cfd6a5a43e03610ba14786f21b7d Net-SSLeay-1.81.tar.gz
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 03a039e06..e91b34406 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+-# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.8/
+-md5	9cab934ca32b8979f389da52d44c69c2	netatalk-3.1.8.tar.bz2
+-sha1	00518461a311e6c17c95738ac214c8f06f863b4b	netatalk-3.1.8.tar.bz2
++# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.9/
++md5	d1d385ae6c3dc45eef4c923472f8fa5f	netatalk-3.1.9.tar.bz2
++sha1	ac746efc00e8cfbe5042a7835b27480bb83505cd	netatalk-3.1.9.tar.bz2
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 8e661a04a..e0085db74 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_SSLEAY_VERSION = 1.72
-+PERL_NET_SSLEAY_VERSION = 1.81
- PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
- PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
- PERL_NET_SSLEAY_DEPENDENCIES = openssl
+-NETATALK_VERSION = 3.1.8
++NETATALK_VERSION = 3.1.9
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+ # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
 -- 
 2.13.3
