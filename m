@@ -1,26 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 04 Aug 2017 19:27:38 +0200
-Subject: [Buildroot] [PATCH 1/1] xmlstarlet: fix host package build
-	errors.
-References: <20170804010531.31789-1-Adamduskett@outlook.com>
- <40426826-4155-413f-069c-d288102081d3@mind.be>
-Message-ID: <adne5ex2tj.ln2@ID-313208.user.individual.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 04 Aug 2017 17:37:30 +0000
+Subject: [Buildroot] [Bug 10161] unable to build u-boot.imx reliably
+In-Reply-To: <bug-10161-163@https.bugs.busybox.net/>
+References: <bug-10161-163@https.bugs.busybox.net/>
+Message-ID: <bug-10161-163-5zXktFLs8H@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+https://bugs.busybox.net/show_bug.cgi?id=10161
 
-Am Fri, 04 Aug 2017 17:36:00 +0200 schrieb Arnout Vandecappelle:
+--- Comment #2 from Andrey Yurovsky <yurovsky@gmail.com> ---
+Sorry, I meant to say I tried 2017.05 and 2017.07. I'll reproduce this and post
+output, however the output is a bit unclear (even at V=1) because this is a
+parallel make problem so we're dealing with some kind of race condition.
 
-> Weird that the autobuilders didn't catch this. Ah, of course, it's only 
-> a dependency of kodi and kodi never gets built because of the dependency
-> on .py files...
+I believe that I can only reproduce it by building the way buildroot does (one
+make invocation with multiple targets), the attached workaround patch shows
+that we avoid the problem by invoking make twice.
 
-this should not be the case anymore after https://git.buildroot.net/
-buildroot-test/commit/?id=c0de21d9530af53eae5588d99d90c7e0cb87c543 unless 
-the patch is not enough...
+I'll try to reproduce this with u-boot on its own. The Makefile portions
+dealing with building a .imx image have changed significantly between 2017.05
+and 2017.07.
 
-Regards, Bernd
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
