@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Aug 2017 16:40:14 +0200
-Subject: [Buildroot] Tslib patch problem
-In-Reply-To: <598438FF.7020702@wil.waw.pl>
-References: <5984335C.1030403@wil.waw.pl>
-	<598438FF.7020702@wil.waw.pl>
-Message-ID: <20170804164014.0bb15e3b@windsurf.lan>
+Date: Fri, 4 Aug 2017 16:41:45 +0200
+Subject: [Buildroot] Howto handle fork of an existing package
+In-Reply-To: <6947b9e4-bf6e-ace7-c8c9-e440a494e225@gmail.com>
+References: <6947b9e4-bf6e-ace7-c8c9-e440a494e225@gmail.com>
+Message-ID: <20170804164145.21595c6d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 4 Aug 2017 11:06:07 +0200, Marcin Bara?ski wrote:
+On Fri, 4 Aug 2017 14:21:26 +0200, Atilla Filiz wrote:
 
-> buildroot for myd-sama5d3x board on ubuntu i get an error. Can you help
-> me to get this work fine?
+> I have made a package of Wiring Pi for Lemaker boards Banana Pi and 
+> Banana Pro. Since this is a fork from an older version, the site, teh 
+> versioning, the patches etc are all different. I would like to ask, 
+> whoat would be the best way to merge this package properly. Either
 > 
-> root at ubuntu:/opt/linux/Buildroot-at91/buildroot-at91# make
-
-Where is your U-Boot coming from ? Atmel no longer has its own
-Buildroot fork, they recommend to use the mainline Buildroot:
-
-  http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#How_to_build_Buildroot_for_AT91
-
-In addition, running Buildroot as root is not recommended.
-
-> >>> tslib 412d99d Patching package//tslib  
+> 1. Make it a completely new package, like wiringpi-lemaker and make it 
+> depend on !BR2_PACKAGE_WIRINGPI and vice versa. Easiest way.
 > 
-> Applying tslib_add_finddef_and_inputattach_utils.patch using patch:
-> patching file tests/Makefile.am
-> Hunk #1 FAILED at 12.
-> Hunk #2 FAILED at 27.
-> 2 out of 2 hunks FAILED -- saving rejects to file tests/Makefile.am.rej
+> 2. Turn wiringpi into a subtree, with a radio button for board 
+> selection: Raspberry Pi, Banana Pi, Banana Pro and enable teh proper 
+> package. Raspberry Pi being the default option. Slightly intrusive way.
+> 
+> 3. Have one wiringpi to rule them all. Make the board selection as a 
+> mere set of parameters. Make a bit more complicated wirinpi.mk that 
+> selects correct site, version, patch directory etc depending on a bunch 
+> of defined flags. Possibly unnecessarily complicated.
 
-The patch tslib_add_finddef_and_inputattach_utils.patch in
-package/tslib doesn't apply. This patch doesn't exist in the official
-Buildroot, so it's a problem on your side: you have added a patch that
-doesn't apply.
+4. Contribute to the official wiringpi project instead of doing a fork,
+so that a single project supports multiple platforms.
+
+I think I have a preference for option (4). If not possible, option (3)
+will be acceptable, but not as nice :-)
 
 Best regards,
 
