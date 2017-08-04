@@ -1,64 +1,49 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  4 Aug 2017 09:15:56 -0400
-Subject: [Buildroot] [PATCH v2 1/1] python-cryptography: bump to version
-	2.0.2
-Message-ID: <20170804131556.699-1-Adamduskett@outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Aug 2017 16:40:14 +0200
+Subject: [Buildroot] Tslib patch problem
+In-Reply-To: <598438FF.7020702@wil.waw.pl>
+References: <5984335C.1030403@wil.waw.pl>
+	<598438FF.7020702@wil.waw.pl>
+Message-ID: <20170804164014.0bb15e3b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition, the new version depends on python-asn1crypto as well.
+Hello,
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
-Changes v1 -> v2:
-  - Added BR2_PACKAGE_PYTHON_ASN1CRYPTO to the selection as it is now a
-    runtime dependency.
+On Fri, 4 Aug 2017 11:06:07 +0200, Marcin Bara?ski wrote:
 
- package/python-cryptography/Config.in                | 1 +
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+> buildroot for myd-sama5d3x board on ubuntu i get an error. Can you help
+> me to get this work fine?
+> 
+> root at ubuntu:/opt/linux/Buildroot-at91/buildroot-at91# make
 
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-index 9827cf82b..9e8bc94ef 100644
---- a/package/python-cryptography/Config.in
-+++ b/package/python-cryptography/Config.in
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
- 	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_ASN1CRYPTO if BR2_PACKAGE_PYTHON # runtime
- 	help
- 	  cryptography is a package designed to expose cryptographic
- 	  primitives and recipes to Python developers.
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index a1162cf88..51ca6cb8c 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
--md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
--sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
-+md5 170fd846e78a4603febf40d55b605301 cryptography-2.0.2.tar.gz
-+sha256 3780b2663ee7ebb37cb83263326e3cd7f8b2ea439c448539d4b87de12c8d06ab cryptography-2.0.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 5373da820..69b568cd5 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
-+PYTHON_CRYPTOGRAPHY_VERSION = 2.0.2
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/0a/23/ffee389a45f752dc745706cdb2d354b91ddb71594506fac45236cf67af49
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+Where is your U-Boot coming from ? Atmel no longer has its own
+Buildroot fork, they recommend to use the mainline Buildroot:
+
+  http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#How_to_build_Buildroot_for_AT91
+
+In addition, running Buildroot as root is not recommended.
+
+> >>> tslib 412d99d Patching package//tslib  
+> 
+> Applying tslib_add_finddef_and_inputattach_utils.patch using patch:
+> patching file tests/Makefile.am
+> Hunk #1 FAILED at 12.
+> Hunk #2 FAILED at 27.
+> 2 out of 2 hunks FAILED -- saving rejects to file tests/Makefile.am.rej
+
+The patch tslib_add_finddef_and_inputattach_utils.patch in
+package/tslib doesn't apply. This patch doesn't exist in the official
+Buildroot, so it's a problem on your side: you have added a patch that
+doesn't apply.
+
+Best regards,
+
+Thomas
 -- 
-2.13.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
