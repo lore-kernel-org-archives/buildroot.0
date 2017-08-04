@@ -1,52 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 23:58:15 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Joshua Henderson for
- qt5wayland
-In-Reply-To: <1501879584-17902-1-git-send-email-joshua.henderson@microchip.com>
-References: <1501879584-17902-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <78ed7c22-880c-65f4-3053-0d010d87612d@mind.be>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sat, 5 Aug 2017 00:30:31 +0200
+Subject: [Buildroot] [PATCH 02/10] add openssl as a dependency to
+ certain packages
+In-Reply-To: <20170804185521.12320-3-Adamduskett@outlook.com>
+References: <20170804185521.12320-1-Adamduskett@outlook.com>
+ <20170804185521.12320-3-Adamduskett@outlook.com>
+Message-ID: <d3e411b7-3f6d-d938-0f4d-51c33493bce1@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Adam,
 
-
-On 04-08-17 22:46, Joshua Henderson wrote:
-> Add myself and include the qt5/qt5wayland package.
+On 04.08.2017 20:55, Adam Duskett wrote:
+> The following packages only work with OpenSSL.  In anticipation for the next
+> patch, these packages must explicitly rely on OpenSSL in thier Config.in
+> files.
 > 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-
- Applied to next, thanks.
-
- Regards,
- Arnout
-
-> ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
+> The reason for each package is as follows:
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ece87e2..97d221f 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -947,6 +947,9 @@ F:	package/libuio/
->  F:	package/netsniff-ng/
->  F:	package/rabbitmq-c/
->  
-> +N:	Joshua Henderson <joshua.henderson@microchip.com>
-> +F:	package/qt5/qt5wayland/
-> +
->  N:	Juha Rantanen <juha@codercoded.com>
->  F:	package/acsccid/
->  
+> luvi:
+>   Uses TS_RESP_CTX_set_time_cb which is removed from LibreSSL.
+>   This is the only package that currently uses this API in
+>   BuildRoot.
 > 
+> nodejs:
+>   Bundles it's own OpenSSL variant, which is tightly intigrated
+>   with node.  There is a ongoing effort to make the SSL library
+>   agnostic.  Gentoo has provided a patch to make NodeJS work with
+>   LibreSSL, but I haven't been able to test it.
+> 
+> python-cryptography:
+>   Newer versions compile against LibreSSL, however there
+>   are some issues running the latest version when
+>   cross compiling.
+> 
+> rauc:
+>    Rauc uses smc exclusively, which LibreSSL does not support.
+> 
+> stunnel:
+>   The author of stunnel has on two occasions said he will now
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+'not' instead of 'now' I think.
+
+[snip]
+
+Best wishes,
+Marcus
