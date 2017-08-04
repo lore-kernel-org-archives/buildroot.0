@@ -1,136 +1,137 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 4 Aug 2017 22:01:38 +0200
-Subject: [Buildroot] [git commit] gdb: drop support for Microblaze
-Message-ID: <20170804195830.2C7047FA8A@busybox.osuosl.org>
+Date: Fri, 4 Aug 2017 21:50:24 +0200
+Subject: [Buildroot] [git commit] dbus: add upstream patch to fix startup
+	hang with with expat >= 2.2.1
+Message-ID: <20170804195830.0A94E802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcfdf82e536cab7cd94ad057b25bc392e985de9f
+commit: https://git.buildroot.net/buildroot/commit/?id=5a5e76381f8b000baa09c902ca89d45725c47f04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Microblaze support was never upstreamed in gdb. We currently use a gdb
-from the Xilinx Github repository, but this gdb is based on 7.6, and
-has never been updated in the last 4 years. There are no other active
-branches at https://github.com/Xilinx/gdb/branches.
+After c0ad6ded018ffbc33f7f5 expat: security bump to version 2.2.1
+the system can hang on startup under certain circumstances.
 
-Xilinx has a slightly newer gdb, based on 7.7, available at
-https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb. However,
-it's apparently only available in the form of stack of big patches
-(https://github.com/Xilinx/meta-xilinx/tree/master/recipes-microblaze/gdb/files).
+This happens when:
+  * we use systemd as init system
+  * the random nonblocking pool takes a while to initialize
+    * this apparently doesn't happen on qemu, so this would not have
+      been caught by the runtime testing infrastructure
+    * it also doesn't seem to happen when network booting
 
-Currently, gdb on Microblaze fails to build in various conditions:
+For a more detailed description of the bug see here:
+https://bugs.freedesktop.org/show_bug.cgi?id=101858
 
- * Against glibc, with "error: conflicting types for 'ps_lgetfpregs'"
+The patch should be in next dbus version 1.10.24
 
- * Against musl, with "error: unknown type name 'elf_gregset_t'"
+Set DBUS_AUTORECONF = YES because configure.ac is changed.
 
-While those issues can probably be fixed, the fact that there is no
-active upstream significantly reduces the incentive to fix those
-problems.
-
-Therefore, let's drop support for gdb on Microblaze entirely.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+[Arnout: add upstream commit sha + Marcus's Sob to the patch]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gdb/Config.in      | 5 +++--
- package/gdb/Config.in.host | 5 ++---
- package/gdb/gdb.hash       | 1 -
- package/gdb/gdb.mk         | 6 ------
- 4 files changed, 5 insertions(+), 12 deletions(-)
+ ...er-expat-Tell-Expat-not-to-defend-against.patch | 78 ++++++++++++++++++++++
+ package/dbus/dbus.mk                               |  3 +
+ 2 files changed, 81 insertions(+)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 67ef010..af020f4 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
- 	default y
- 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
- 	depends on !BR2_bfin
-+	depends on !BR2_microblaze
- 	depends on !BR2_nios2
- 	depends on !BR2_or1k
+diff --git a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+new file mode 100644
+index 0000000..fd9e01d
+--- /dev/null
++++ b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+@@ -0,0 +1,78 @@
++From 1252dc1d1f465b8ab6b36ff7252e395e66a040cf Mon Sep 17 00:00:00 2001
++From: Simon McVittie <smcv@debian.org>
++Date: Fri, 21 Jul 2017 10:46:39 +0100
++Subject: [PATCH 1/2] config-loader-expat: Tell Expat not to defend against
++ hash collisions
++
++By default, Expat uses cryptographic-quality random numbers as a salt for
++its hash algorithm, and since 2.2.1 it gets them from the getrandom
++syscall on Linux. That syscall refuses to return any entropy until the
++kernel's CSPRNG (random pool) has been initialized. Unfortunately, this
++can take as long as 40 seconds on embedded devices with few entropy
++sources, which is too long: if the system dbus-daemon blocks for that
++length of time, important D-Bus clients like systemd and systemd-logind
++time out and fail to connect to it.
++
++We're parsing small configuration files here, and we trust them
++completely, so we don't need to defend against hash collisions: nobody
++is going to be crafting them to cause pathological performance.
++
++Bug: https://bugs.freedesktop.org/show_bug.cgi?id=101858
++Signed-off-by: Simon McVittie <smcv@debian.org>
++Tested-by: Christopher Hewitt <hewitt@ieee.org>
++Reviewed-by: Philip Withnall <withnall@endlessm.com>
++
++Upstream commit 1252dc1d1f465b8ab6b36ff7252e395e66a040cf
++Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
++---
++ bus/config-loader-expat.c | 14 ++++++++++++++
++ configure.ac              |  8 ++++++++
++ 2 files changed, 22 insertions(+)
++
++diff --git a/bus/config-loader-expat.c b/bus/config-loader-expat.c
++index b571fda3..27cbe2d0 100644
++--- a/bus/config-loader-expat.c
+++++ b/bus/config-loader-expat.c
++@@ -203,6 +203,20 @@ bus_config_load (const DBusString      *file,
++       goto failed;
++     }
++ 
+++  /* We do not need protection against hash collisions (CVE-2012-0876)
+++   * because we are only parsing trusted XML; and if we let Expat block
+++   * waiting for the CSPRNG to be initialized, as it does by default to
+++   * defeat CVE-2012-0876, it can cause timeouts during early boot on
+++   * entropy-starved embedded devices.
+++   *
+++   * TODO: When Expat gets a more explicit API for this than
+++   * XML_SetHashSalt, check for that too, and use it preferentially.
+++   * https://github.com/libexpat/libexpat/issues/91 */
+++#if defined(HAVE_XML_SETHASHSALT)
+++  /* Any nonzero number will do. https://xkcd.com/221/ */
+++  XML_SetHashSalt (expat, 4);
+++#endif
+++
++   if (!_dbus_string_get_dirname (file, &dirname))
++     {
++       dbus_set_error (error, DBUS_ERROR_NO_MEMORY, NULL);
++diff --git a/configure.ac b/configure.ac
++index 52da11fb..c4022ed7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -938,6 +938,14 @@ XML_CFLAGS=
++ AC_SUBST([XML_CFLAGS])
++ AC_SUBST([XML_LIBS])
++ 
+++save_cflags="$CFLAGS"
+++save_libs="$LIBS"
+++CFLAGS="$CFLAGS $XML_CFLAGS"
+++LIBS="$LIBS $XML_LIBS"
+++AC_CHECK_FUNCS([XML_SetHashSalt])
+++CFLAGS="$save_cflags"
+++LIBS="$save_libs"
+++
++ # Thread lib detection
++ AC_ARG_VAR([THREAD_LIBS])
++ save_libs="$LIBS"
++-- 
++2.11.0
++
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 1e3b462..a2f81cd 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,6 +6,9 @@
  
-@@ -47,11 +48,11 @@ config BR2_PACKAGE_GDB_SERVER
- config BR2_PACKAGE_GDB_DEBUGGER
- 	bool "full debugger"
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_sh && !BR2_microblaze
-+	depends on !BR2_sh
- 	select BR2_PACKAGE_NCURSES
- 
- comment "full gdb on target needs a toolchain w/ wchar"
--	depends on !BR2_sh && !BR2_microblaze
-+	depends on !BR2_sh
- 	depends on !BR2_USE_WCHAR
- 
- if BR2_PACKAGE_GDB_DEBUGGER
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 6a3037d..93dfa67 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_HOST_GDB
- 	# toolchain should be used.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
- 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
-+	depends on !BR2_microblaze
- 	depends on !BR2_nios2
- 	depends on !BR2_or1k
- 	help
-@@ -29,7 +30,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
- 
- config BR2_PACKAGE_HOST_GDB_SIM
- 	bool "Simulator support"
--	depends on !BR2_arc && !BR2_microblaze
-+	depends on !BR2_arc
- 	help
- 	  This option enables the simulator support in the cross gdb.
- 
-@@ -37,7 +38,6 @@ choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_7_11
- 	depends on !BR2_arc
--	depends on !BR2_microblaze
- 	help
- 	  Select the version of gdb you wish to use.
- 
-@@ -65,7 +65,6 @@ endif
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2017.03-gdb" if BR2_arc
--	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.10.1"   if BR2_GDB_VERSION_7_10
- 	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 098d20a..a4fd8bc 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -5,5 +5,4 @@ sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7
- sha512  e4044bdd162cbf95044ec1eaa44d2fa62a33e051bdbbacbc97afd4dfb07bae1bea514381fc1966aede89d6796ef2377a15748a93d95e2ad494c8497db489e886	gdb-8.0.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  0a467091d4b01fbecabb4b8da1cb743025c70e7f4874a0b5c8fa2ec623569a39bde6762b91806de0be6e63711aeb6909715cfbe43860de73d8aec6159a9f10a7	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
- sha512  8ec849a5ea1c16f104c51c4813c35ab229e460eef0025967673b87316f62b5171f05448cda018464914d43d2da50b2902eb7f9f060d0af1368a9db111f959668	gdb-arc-2017.03-gdb.tar.gz
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 1fef0d4..7e86ba0 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -14,12 +14,6 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
- endif
- 
--ifeq ($(BR2_microblaze),y)
--GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
--GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
--GDB_FROM_GIT = y
--endif
--
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
+ DBUS_VERSION = 1.10.22
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
++
++# 0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
++DBUS_AUTORECONF = YES
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+ DBUS_INSTALL_STAGING = YES
