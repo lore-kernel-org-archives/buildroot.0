@@ -1,46 +1,57 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  4 Aug 2017 07:27:18 +0200
-Subject: [Buildroot] [PATCH] python-netifaces: bump to version 0.10.6
-Message-ID: <20170804052718.11102-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  4 Aug 2017 08:30:52 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-03
+Message-ID: <20170804063052.F248121EF4@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-netifaces/python-netifaces.hash | 4 ++--
- package/python-netifaces/python-netifaces.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Build statistics for 2017-08-03
+================================
 
-diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
-index 6f3e358b0..335f907d5 100644
---- a/package/python-netifaces/python-netifaces.hash
-+++ b/package/python-netifaces/python-netifaces.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/netifaces/json, sha256 locally computed
--md5     5b4d1f1310ed279e6df27ef3a9b71519                                  netifaces-0.10.5.tar.gz
--sha256  59d8ad52dd3116fcb6635e175751b250dc783fb011adba539558bd764e5d628b  netifaces-0.10.5.tar.gz
-+md5	1d424cb5ef52907c5ab913011122a98b  netifaces-0.10.6.tar.gz
-+sha256	0c4da523f36d36f1ef92ee183f2512f3ceb9a9d2a45f7d19cda5a42c6689ebe0  netifaces-0.10.6.tar.gz
-diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
-index 3e01c2480..3258be7a9 100644
---- a/package/python-netifaces/python-netifaces.mk
-+++ b/package/python-netifaces/python-netifaces.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_NETIFACES_VERSION = 0.10.5
-+PYTHON_NETIFACES_VERSION = 0.10.6
- PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
--PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/a7/4c/8e0771a59fd6e55aac993a7cc1b6a0db993f299514c464ae6a1ecf83b31d
-+PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/72/01/ba076082628901bca750bf53b322a8ff10c1d757dc29196a8e6082711c9d
- PYTHON_NETIFACES_LICENSE = MIT
- PYTHON_NETIFACES_LICENSE_FILES = README.rst
- PYTHON_NETIFACES_SETUP_TYPE = setuptools
+      successes : 144
+       failures : 16 
+       timeouts : 0  
+          TOTAL : 160
+
+Classification of failures by reason
+====================================
+
+                     gpsd-3.16 | 4 
+              swupdate-2017.07 | 3 
+snappy-be6dc3db83c4701e3e79... | 2 
+                  cc-tool-0.26 | 1 
+                  dnsmasq-2.76 | 1 
+kvmtool-bed2bd9e1fbef581909... | 1 
+                librsync-0.9.7 | 1 
+          mediastreamer-2.14.0 | 1 
+     python-cryptography-1.7.2 | 1 
+                 qt5base-5.9.1 | 1 
+
+
+Detail of failures
+===================
+
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/3c7d7bd3ff43ec4719b61861dfcc03e047cf916d |     
+        m68k |                   dnsmasq-2.76 | NOK | http://autobuild.buildroot.net/results/ed64ce27846e72f3c5b5c217f54eb68bdeacc0c7 | ORPH
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/f0484296ff5beb78dcdb3bbd9b3c0bafac45487d |     
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/88a03a3e918072b810a3e214aab64927868f3355 |     
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/437705e886c4a2a436f0963aba0bca60b24b196e |     
+microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/6936b7a3fe1b286bb281bf74571772dfcb4957c7 |     
+      x86_64 | kvmtool-bed2bd9e1fbef581909... | NOK | http://autobuild.buildroot.net/results/7d8e6d469269b5f147ab6d7bf73466807f4a3488 |     
+         arm |                 librsync-0.9.7 | NOK | http://autobuild.buildroot.net/results/05c4d6d7af60dcdd3ebee01ea486a208c203ea12 | ORPH
+         arm |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/42d2ff90086d8a78db2daf3274ca06286c17eff7 | ORPH
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/6bbd10ddb2e07ccabfb9733f2c6c97739e8579b1 |     
+       sparc |                  qt5base-5.9.1 | NOK | http://autobuild.buildroot.net/results/841c7ecd59dff6c320262118436711acaeb2d156 |     
+        m68k | snappy-be6dc3db83c4701e3e79... | NOK | http://autobuild.buildroot.net/results/8860b9259f7a3aecb2ddbfa787be048072bd347b |     
+        i586 | snappy-be6dc3db83c4701e3e79... | NOK | http://autobuild.buildroot.net/results/39f9fc4300ddca19e8a533765b46838003752000 |     
+         arm |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/a4f64d21867c6bd909e6d03e6eeaee96ec6aa539 |     
+     sparc64 |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/cc5beda3d7e0027291668aa739078cb613c2db9e |     
+      mipsel |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/9befed13c509eeeab70a7db5769dfc727af52e6f |     
+
 -- 
-2.11.0
+http://autobuild.buildroot.net
