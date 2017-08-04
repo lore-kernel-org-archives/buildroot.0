@@ -1,76 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 4 Aug 2017 18:31:30 +0200
-Subject: [Buildroot] [PATCH 2/2] Makefile: create symlink to non-default
-	HOST_DIR
-In-Reply-To: <20170804163130.15772-1-arnout@mind.be>
-References: <20170804163130.15772-1-arnout@mind.be>
-Message-ID: <20170804163130.15772-2-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 4 Aug 2017 18:41:38 +0200
+Subject: [Buildroot] Howto handle fork of an existing package
+In-Reply-To: <20170804164145.21595c6d@windsurf.lan>
+References: <6947b9e4-bf6e-ace7-c8c9-e440a494e225@gmail.com>
+ <20170804164145.21595c6d@windsurf.lan>
+Message-ID: <3712be4a-076a-25b1-2f46-e25acb31d856@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If BR2_HOST_DIR is not the default, it can be difficult to find the
-host directory (i.e., HOST_DIR always has to be passed explicitly in
-addition to the output directory). For example, the Eclipse plugin
-assumes that HOST_DIR=BASE_DIR/host.
 
-Create a symlink from $(BASE_DIR)/host to $(HOST_DIR) if it is not the
-default. Also remove it in the clean target.
 
-When BR2_HOST_DIR is the default, HOST_DIR_SYMLINK will be empty so
-there will be no additional dependency to dirs and nothing to remove
-in clean.
+On 04-08-17 16:41, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 4 Aug 2017 14:21:26 +0200, Atilla Filiz wrote:
+> 
+>> I have made a package of Wiring Pi for Lemaker boards Banana Pi and 
+>> Banana Pro. Since this is a fork from an older version, the site, teh 
+>> versioning, the patches etc are all different. I would like to ask, 
+>> whoat would be the best way to merge this package properly. Either
+>>
+>> 1. Make it a completely new package, like wiringpi-lemaker and make it 
+>> depend on !BR2_PACKAGE_WIRINGPI and vice versa. Easiest way.
+>>
+>> 2. Turn wiringpi into a subtree, with a radio button for board 
+>> selection: Raspberry Pi, Banana Pi, Banana Pro and enable teh proper 
+>> package. Raspberry Pi being the default option. Slightly intrusive way.
+>>
+>> 3. Have one wiringpi to rule them all. Make the board selection as a 
+>> mere set of parameters. Make a bit more complicated wirinpi.mk that 
+>> selects correct site, version, patch directory etc depending on a bunch 
+>> of defined flags. Possibly unnecessarily complicated.
+> 
+> 4. Contribute to the official wiringpi project instead of doing a fork,
+> so that a single project supports multiple platforms.
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=10151
+ Tell that to the LeMaker people, not to Atilla. And while you're at it, tell
+the RaspberryPi people to not fork the kernel interfaces so that there is no
+need to create a library that has to be forked for RaspberryPi-derivatives...
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-This depends on the previous patch, otherwise there are two rules for
-the $(BASE_DIR)/host target.
 
-Note that this implementation assumes that HOST_DIR is an absolute
-path, but that assumption is made in dozens of other places as well.
-Perhaps an abspath should be added to it.
----
- Makefile | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> I think I have a preference for option (4). If not possible, option (3)
+> will be acceptable, but not as nice :-)
 
-diff --git a/Makefile b/Makefile
-index 6ca5d835f4..77684b5b60 100644
---- a/Makefile
-+++ b/Makefile
-@@ -430,6 +430,12 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
- # packages compiled for the host go here
- HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
- 
-+ifneq ($(HOST_DIR),$(BASE_DIR)/host)
-+HOST_DIR_SYMLINK = $(BASE_DIR)/host
-+$(HOST_DIR_SYMLINK): $(BASE_DIR)
-+	ln -snf $(HOST_DIR) $(BASE_DIR)/host
-+endif
-+
- # Quotes are needed for spaces and all in the original PATH content.
- BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
- 
-@@ -533,7 +539,7 @@ endif
- 
- .PHONY: dirs
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
-+	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(HOST_DIR)/usr $(BINARIES_DIR)
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -955,7 +961,7 @@ printvars:
- 
- .PHONY: clean
- clean:
--	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-+	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
- 		$(BUILD_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
- 
+ Essentially there is no real relationship between the proprietary GPIO
+interface for RPi and the *different* proprietary GPIO interface for BPi, so I
+wouldn't mind solution (1). It's a different upstream with a potentially
+different API...
+
+ By the way, upstream says:
+"This is a modified WiringPi for Banana Pro/Pi. We call it WiringBP."
+So naturally, the package should be called wiringbp.
+
+
+ Regards,
+ Arnout
+
 -- 
-2.13.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
