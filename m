@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 23:10:52 +0200
-Subject: [Buildroot] [PATCH 01/10] libssl: new virtual package
-In-Reply-To: <20170804185521.12320-2-Adamduskett@outlook.com>
+Date: Fri, 4 Aug 2017 23:16:42 +0200
+Subject: [Buildroot] [PATCH 02/10] add openssl as a dependency to
+ certain packages
+In-Reply-To: <20170804185521.12320-3-Adamduskett@outlook.com>
 References: <20170804185521.12320-1-Adamduskett@outlook.com>
- <20170804185521.12320-2-Adamduskett@outlook.com>
-Message-ID: <2c8f9301-1fbf-a14c-fd6c-ab17ea0a0bd0@mind.be>
+ <20170804185521.12320-3-Adamduskett@outlook.com>
+Message-ID: <4e8839b0-a879-2094-3022-714ad348732c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +16,42 @@ To: buildroot@busybox.net
 
 On 04-08-17 20:55, Adam Duskett wrote:
 [snip]
-> +choice
-> +	prompt "ssl variant"
-> +	default BR2_PACKAGE_OPENSSL
-> +	help
-> +	  Select OpenSSL or LibreSSL.
-> +
-> +	source "package/openssl/Config.in"
+> diff --git a/package/luvi/Config.in b/package/luvi/Config.in
+> index c9fd41739..c8921c320 100644
+> --- a/package/luvi/Config.in
+> +++ b/package/luvi/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_LUVI
+>  	depends on !BR2_STATIC_LIBS # libuv
+>  	depends on BR2_PACKAGE_LUAJIT
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+> +	depends on BR2_PACKAGE_OPENSSL
 
- Don't ever source a Config.in file within a choice. It's too easy to add more
-options in the sourced Config.in file and that will fail dramatically. Instead,
-move the symbol definition into the choice (possibly deleting the original
-Config.in file).
+ This makes no sense to me. luvi can be built without openssl, so why should it
+depend on it? In fact, the only thing you should do is NOT modify the .mk file,
+then lua-openssl will not be used if libressl is selected.
+
 [snip]
-> +++ b/package/libssl/libssl.mk
-> @@ -0,0 +1,8 @@
-> +################################################################################
-> +#
-> +# libssl
-> +#
-> +################################################################################
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index 345fe1047..921f3c609 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -13,6 +13,9 @@ comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.8, wch
+>  	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+>  		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
+>  
+> +comment "nodejs needs OpenSSL"
+> +	depends on !BR2_PACKAGE_OPENSSL
 > +
-> +$(eval $(host-virtual-package))
-> +$(eval $(virtual-package))
+>  config BR2_PACKAGE_NODEJS
+>  	bool "nodejs"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+> @@ -21,6 +24,7 @@ config BR2_PACKAGE_NODEJS
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_8
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  	depends on BR2_USE_WCHAR
+> +	depends on BR2_PACKAGE_OPENSSL
 
- We usually do first target then host.
+ Similar situation here, I think.
 
 
  Regards,
