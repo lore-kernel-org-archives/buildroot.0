@@ -1,39 +1,99 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 8 Aug 2017 17:11:20 +0200
-Subject: [Buildroot] [git commit branch/next] mutt: fix build with
-	BR2_PACKAGE_SKELETON_NONE
-Message-ID: <20170809225749.3D3517FF5E@busybox.osuosl.org>
+Date: Fri, 4 Aug 2017 22:01:48 +0200
+Subject: [Buildroot] [git commit branch/next] glibc: add patch fixing the
+	build with binutils 2.29
+Message-ID: <20170809225748.C6151803A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6756d69154bb8a68232ff11d4b15a2a8f0788b0
+commit: https://git.buildroot.net/buildroot/commit/?id=cf821efbd0b24690b52f379d4a9934a16073762e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which
-breaks symlink creation in that directory. Make sure that /var exists
-before creating the symlink.
+Fixes the following build failure, which occurs on all architectures:
 
-Fixes:
-http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
+/tmp/cc6APNmN.s: Assembler messages:
+/tmp/cc6APNmN.s: Error: `loc1 at GLIBC_2.17' can't be versioned to common symbol 'loc1'
+/tmp/cc6APNmN.s: Error: `loc2 at GLIBC_2.17' can't be versioned to common symbol 'loc2'
+/tmp/cc6APNmN.s: Error: `locs at GLIBC_2.17' can't be versioned to common symbol 'locs'
+../o-iterator.mk:9: recipe for target '/tmp/output/build/glibc-2.25/build/misc/regexp.os' failed
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mutt/mutt.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/glibc/0005-fix-binutils-2-29-build.patch | 65 ++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index abd40e5..b0bf5a7 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -66,6 +66,7 @@ MUTT_CONF_ENV += \
- MUTT_CONF_OPTS += --with-mailpath=/var/mail
- 
- define MUTT_VAR_MAIL
-+	mkdir -p $(TARGET_DIR)/var
- 	ln -sf /tmp $(TARGET_DIR)/var/mail
- endef
- MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
+diff --git a/package/glibc/0005-fix-binutils-2-29-build.patch b/package/glibc/0005-fix-binutils-2-29-build.patch
+new file mode 100644
+index 0000000..47fcd2f
+--- /dev/null
++++ b/package/glibc/0005-fix-binutils-2-29-build.patch
+@@ -0,0 +1,65 @@
++From: H.J. Lu <hjl.tools@gmail.com>
++Date: Fri, 23 Jun 2017 21:38:46 +0000 (-0700)
++Subject: Avoid .symver on common symbols [BZ #21666]
++X-Git-Tag: glibc-2.26~241
++X-Git-Url: https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff_plain;h=388b4f1a02f3a801965028bbfcd48d905638b797
++
++Avoid .symver on common symbols [BZ #21666]
++
++The .symver directive on common symbol just creates a new common symbol,
++not an alias and the newer assembler with the bug fix for
++
++https://sourceware.org/bugzilla/show_bug.cgi?id=21661
++
++will issue an error.  Before the fix, we got
++
++$ readelf -sW libc.so | grep "loc[12s]"
++  5109: 00000000003a0608     8 OBJECT  LOCAL  DEFAULT   36 loc1
++  5188: 00000000003a0610     8 OBJECT  LOCAL  DEFAULT   36 loc2
++  5455: 00000000003a0618     8 OBJECT  LOCAL  DEFAULT   36 locs
++  6575: 00000000003a05f0     8 OBJECT  GLOBAL DEFAULT   36 locs at GLIBC_2.2.5
++  7156: 00000000003a05f8     8 OBJECT  GLOBAL DEFAULT   36 loc1 at GLIBC_2.2.5
++  7312: 00000000003a0600     8 OBJECT  GLOBAL DEFAULT   36 loc2 at GLIBC_2.2.5
++
++in libc.so.  The versioned loc1, loc2 and locs have the wrong addresses.
++After the fix, we got
++
++$ readelf -sW libc.so | grep "loc[12s]"
++  6570: 000000000039e3b8     8 OBJECT  GLOBAL DEFAULT   34 locs at GLIBC_2.2.5
++  7151: 000000000039e3c8     8 OBJECT  GLOBAL DEFAULT   34 loc1 at GLIBC_2.2.5
++  7307: 000000000039e3c0     8 OBJECT  GLOBAL DEFAULT   34 loc2 at GLIBC_2.2.5
++
++	[BZ #21666]
++	* misc/regexp.c (loc1): Add __attribute__ ((nocommon));
++	(loc2): Likewise.
++	(locs): Likewise.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Backported from upstream commit
++388b4f1a02f3a801965028bbfcd48d905638b797, to fix the build with
++binutils 2.29.]
++---
++diff --git a/misc/regexp.c b/misc/regexp.c
++index 19d76c0..eaea7c3 100644
++--- a/misc/regexp.c
+++++ b/misc/regexp.c
++@@ -29,14 +29,15 @@
++ 
++ #if SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_23)
++ 
++-/* Define the variables used for the interface.  */
++-char *loc1;
++-char *loc2;
+++/* Define the variables used for the interface.  Avoid .symver on common
+++   symbol, which just creates a new common symbol, not an alias.  */
+++char *loc1 __attribute__ ((nocommon));
+++char *loc2 __attribute__ ((nocommon));
++ compat_symbol (libc, loc1, loc1, GLIBC_2_0);
++ compat_symbol (libc, loc2, loc2, GLIBC_2_0);
++ 
++ /* Although we do not support the use we define this variable as well.  */
++-char *locs;
+++char *locs __attribute__ ((nocommon));
++ compat_symbol (libc, locs, locs, GLIBC_2_0);
++ 
++ 
