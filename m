@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 22:11:04 +0200
-Subject: [Buildroot] [PATCH] glibc: add patch fixing the build with
- binutils 2.29
-In-Reply-To: <20170803213027.27565-1-thomas.petazzoni@free-electrons.com>
-References: <20170803213027.27565-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <80269a11-68f6-6d43-f20f-d8d50576c7b4@mind.be>
+Date: Fri, 4 Aug 2017 22:13:32 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-07-31
+In-Reply-To: <5fddab52-cf68-20a3-2c57-efea72323008@gmail.com>
+References: <20170801063048.E1A5E20C14@mail.free-electrons.com>
+ <5fddab52-cf68-20a3-2c57-efea72323008@gmail.com>
+Message-ID: <e5452c53-ec9b-8c77-85c0-628425dd1040@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,41 @@ To: buildroot@busybox.net
 
 
 
-On 03-08-17 23:30, Thomas Petazzoni wrote:
-> Fixes the following build failure, which occurs on all architectures:
+On 04-08-17 22:01, Romain Naour wrote:
+> Hi Thomas,
 > 
-> /tmp/cc6APNmN.s: Assembler messages:
-> /tmp/cc6APNmN.s: Error: `loc1 at GLIBC_2.17' can't be versioned to common symbol 'loc1'
-> /tmp/cc6APNmN.s: Error: `loc2 at GLIBC_2.17' can't be versioned to common symbol 'loc2'
-> /tmp/cc6APNmN.s: Error: `locs at GLIBC_2.17' can't be versioned to common symbol 'locs'
-> ../o-iterator.mk:9: recipe for target '/tmp/output/build/glibc-2.25/build/misc/regexp.os' failed
+> Le 01/08/2017 ? 08:30, Thomas Petazzoni a ?crit :
+>> Hello,
+>>
+>> Build statistics for 2017-07-31
+>> ================================
+>>
+>>       successes : 165
+>>        failures : 18 
+>>        timeouts : 0  
+>>           TOTAL : 183
+>>
+>> Classification of failures by reason
+>> ====================================
+>>
+>>                      gpsd-3.16 | 2 
+>>          libspatialindex-1.8.5 | 1 
+>>
+>> Detail of failures
+>> ===================
+>>
+>> microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/64a0bec7efe5b63a2b315bd204fb50884d62f0a8 |     
+>> microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/4c240106fb29805382d5ae347e65b6f83d5033d4 |     
+>> microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/3cd4bb438158e6f848072af1acae876a8a44ef88 |     
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Following the removal of gdb on microblaze, what do we do for this toolchain
+> issue? You reported the bug last year without any feedback [1].
+> 
+> I would suggest adding an autobuilder exception on these two packages.
 
-
- Applied to master, thanks.
+ These kind of things can often be "solved" by tweaking the compiler options
+(though what is needed may be version dependent...). Cfr. quite a few PowerPC
+things that replace -Os with -O2.
 
  Regards,
  Arnout
