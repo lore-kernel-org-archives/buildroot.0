@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 04 Aug 2017 07:03:55 +0000
+Date: Fri, 04 Aug 2017 07:38:37 +0000
 Subject: [Buildroot] [Bug 10151] toolchain eclipse register : fails with a
  custom BR2_HOST_DIR
 In-Reply-To: <bug-10151-163@https.bugs.busybox.net/>
 References: <bug-10151-163@https.bugs.busybox.net/>
-Message-ID: <bug-10151-163-I9PqJtKWvm@https.bugs.busybox.net/>
+Message-ID: <bug-10151-163-U9hn8g632S@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,9 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=10151
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I'm not really happy to add this host symlink just for the sake of making the
-eclipse-register-toolchain script work. Instead, we should pass $(HOST_DIR) as
-argument to eclipse-register-toolchain.
+--- Comment #3 from Frederic MATHIEU <frederic.mathieu@dualis.com> ---
+I agree with Thomas, it is better to solve the problem at its source, ie the
+main makefile.
 
 -- 
 You are receiving this mail because:
