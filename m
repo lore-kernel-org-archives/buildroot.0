@@ -1,42 +1,34 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 4 Aug 2017 21:46:33 +0200
-Subject: [Buildroot] Arnout as an additional Buildroot committer
-In-Reply-To: <20170726103218.7e6da0af@windsurf.lan>
-References: <20170726103218.7e6da0af@windsurf.lan>
-Message-ID: <cacaf38e-48a0-6dca-e6bd-39f44dd560b5@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 4 Aug 2017 21:53:54 +0200
+Subject: [Buildroot] [RFC] python-cryptography: bump to version 2.0.3
+In-Reply-To: <e767c93d-4bde-bbaa-16ef-c92a97764853@mind.be>
+References: <20170804052400.10360-1-yegorslists@googlemail.com>
+ <CAGm1_ktaTUcbX6GSo59jqXTjV7sSON4jSjpyBNtGr--CsWRBbw@mail.gmail.com>
+ <e767c93d-4bde-bbaa-16ef-c92a97764853@mind.be>
+Message-ID: <CAGm1_ksXJ6Bi5gj5C=wm2vUYXMDF9hU+ym18RLc25ZhmgAWz8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+On Fri, Aug 4, 2017 at 5:47 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 04-08-17 07:25, Yegor Yefremov wrote:
+>> During [1] execution following error will be thrown:
+>
+>  I would propose then not to apply the bump until this issue is resolved, OK?
+>
+>  BTW, for this particular package, it would definitely be useful to have a
+> runtime test (since it has many runtime dependencies, and apparently they may
+> change over time).
 
-Le 26/07/2017 ? 10:32, Thomas Petazzoni a ?crit :
-> Hello all,
-> 
-> As you have probably noticed, Arnout Vandecappelle recently started
-> applying Buildroot patches, and pushing them to the official
-> repository.
-> 
-> We are seeing a continuous stream of contributions, which is obviously
-> very good for the project. However, Peter and myself have felt the
-> need to get some help in the patch review and merging work, and we
-> have decided to add Arnout to the team in charge of this effort.
-> 
-> Therefore, as of today, three persons have commit access to the
-> Buildroot repository: Peter Korsgaard, Arnout Vandecappelle and
-> myself.
+It's on my todo list, but where do I find documentation concerning
+such testing or is there any in-tree package that uses this
+infrastructure?
 
-Congratulation Arnout!
+So far I have only found the build test description: "17.20.2. How to
+test your package"
 
-I'm glad to see more manpower for merging patches :)
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas Petazzoni
-> 
+Yegor
