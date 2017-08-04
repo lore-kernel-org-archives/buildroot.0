@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Aug 2017 23:35:56 +0200
-Subject: [Buildroot] [PATCH 07/10] softether: bump to version
- 471de39ddf91be0a6a020a68fd6c4c20ef5ba702cb8b5da12ae8350493819ed8
-In-Reply-To: <20170804185521.12320-8-Adamduskett@outlook.com>
+Date: Fri, 4 Aug 2017 23:42:59 +0200
+Subject: [Buildroot] [PATCH 08/10] libssl: fix make files for libressl
+In-Reply-To: <20170804185521.12320-9-Adamduskett@outlook.com>
 References: <20170804185521.12320-1-Adamduskett@outlook.com>
- <20170804185521.12320-8-Adamduskett@outlook.com>
-Message-ID: <5ec0b1b1-c98b-5406-4601-ef3e364ecfa2@mind.be>
+ <20170804185521.12320-9-Adamduskett@outlook.com>
+Message-ID: <14c98b55-b9a4-fdd2-5fcd-edc2495e3a17@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +14,25 @@ To: buildroot@busybox.net
 
 
 On 04-08-17 20:55, Adam Duskett wrote:
-> While this version isn't 100% compatible with LibreSSL, it makes it much
-> easier to apply a small patch that makes it compatible.
+> Two packages need a slight change to get them to build with libressl.
 > 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  package/softether/softether.hash | 2 +-
->  package/softether/softether.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/softether/softether.hash b/package/softether/softether.hash
-> index 961990baf..2f77df1db 100644
-> --- a/package/softether/softether.hash
-> +++ b/package/softether/softether.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 4bdcc05fcd163eea735444283264e40b86626d24fddf110aa416f2c8cb82448b softether-1e17c9bcfd7e7b31756aa5389bcbff76c2c9c88a.tar.gz
-> +sha256 471de39ddf91be0a6a020a68fd6c4c20ef5ba702cb8b5da12ae8350493819ed8 softether-e9006faf0c8739147ab97e27fe11c5cdd20ed9e6.tar.gz
-> diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-> index 33d20c40b..31504cfb1 100644
-> --- a/package/softether/softether.mk
-> +++ b/package/softether/softether.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SOFTETHER_VERSION = 1e17c9bcfd7e7b31756aa5389bcbff76c2c9c88a
-> +SOFTETHER_VERSION = e9006faf0c8739147ab97e27fe11c5cdd20ed9e6
+> ca-certificates uses the c_rehash script from openssl to create
+> symlinks to the certificates by their hash value.
+> LibreSSL moved this functionality into the openssl binary itself.
 
- Perhaps use the v4.22-9634-beta tag instead? It feels more like something
-upstream considers releasable. Note that the previous version 1e17c9 was
-v4.21-9613-beta (but they didn't actually tag that).
+ I may be confused by the patches in flight (though apparently you've removed
+everything pending from patchwork), but as far as I understand, we always use
+host-openssl and never host-libressl, so this isn't relevant, right?
+
+> mosquitto has tls_psk enabled by default, which libressl does not support.
+> This is fixed with passing WITH_TLS_PSK=no to the make opts.
+
+ For consistency we should probably also have WITH_TLS_PSK=yes in the other case.
 
  Regards,
  Arnout
 
->  SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
->  SOFTETHER_LICENSE = GPL-2.0
->  SOFTETHER_LICENSE_FILES = LICENSE
-> 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
