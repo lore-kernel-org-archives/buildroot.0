@@ -1,249 +1,44 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu,  3 Aug 2017 21:27:49 -0400
-Subject: [Buildroot] [PATCH 1/1] freerdp: bump to
-	9a00b25adc6604f4fbe7c1d69aa4e5663d4d3863
-Message-ID: <20170804012749.2776-1-Adamduskett@outlook.com>
+Date: Thu,  3 Aug 2017 21:29:07 -0400
+Subject: [Buildroot] [PATCH 1/1] python-cryptography: bump to version 2.0.2
+Message-ID: <20170804012907.8668-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition, remove all patches, as none of them apply or are relevant
-anymore.
-
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- .../freerdp/0001-fix-building-shared-libs.patch    | 26 --------
- .../freerdp/0002-add-support-for-tz-package.patch  | 30 ---------
- package/freerdp/0003-add-missing-define.patch      | 44 -------------
- package/freerdp/0004-ffmpeg30.patch                | 74 ----------------------
- package/freerdp/freerdp.hash                       |  2 +-
- package/freerdp/freerdp.mk                         |  2 +-
- 6 files changed, 2 insertions(+), 176 deletions(-)
- delete mode 100644 package/freerdp/0001-fix-building-shared-libs.patch
- delete mode 100644 package/freerdp/0002-add-support-for-tz-package.patch
- delete mode 100644 package/freerdp/0003-add-missing-define.patch
- delete mode 100644 package/freerdp/0004-ffmpeg30.patch
+ package/python-cryptography/python-cryptography.hash | 4 ++--
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freerdp/0001-fix-building-shared-libs.patch b/package/freerdp/0001-fix-building-shared-libs.patch
-deleted file mode 100644
-index 8922cb15b..000000000
---- a/package/freerdp/0001-fix-building-shared-libs.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--winpr/tools: fix building shared libs
--
--libwinpr-makecert-tool.a is used to build libxfreerdp-server.so, so even
--if we are building a static libwinpr-makecert-tool.a library, we need to
--build it with -fPIC.
--
--Patch and commit log suggested by Samuel MARTIN.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Cc: Samuel Martin <s.martin49@gmail.com>
--
--diff -durN freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt
----- freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt	2014-08-25 06:52:43.000000000 -0700
--+++ freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt	2014-10-24 15:39:39.600319523 -0700
--@@ -37,4 +37,11 @@
-- add_subdirectory(cli)
-- 
-- set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "WinPR/Tools")
--+
--+if(BUILD_SHARED_LIBS)
--+	# build libwinpr-makecert-tool.a with PIC because it is used to build
--+	# the shared library libxfreerdp-server.so.
--+	set_property(TARGET ${MODULE_NAME} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
--+endif()
--+
-- export_complex_library(LIBNAME ${MODULE_NAME})
-diff --git a/package/freerdp/0002-add-support-for-tz-package.patch b/package/freerdp/0002-add-support-for-tz-package.patch
-deleted file mode 100644
-index 93e4afde1..000000000
---- a/package/freerdp/0002-add-support-for-tz-package.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 605d0a85183d2f9d5b0da5629cbadf01173bbb2f Mon Sep 17 00:00:00 2001
--From: Scott Fan <fancp2007@gmail.com>
--Date: Mon, 13 Jul 2015 15:01:17 +0800
--Subject: [PATCH] Add support for tz package
--
--Fixes error message while freerdp connected the remote desktop:
--Unable to detect time zone
--
--Signed-off-by: Scott Fan <fancp2007@gmail.com>
-----
-- libfreerdp/locale/timezone.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/libfreerdp/locale/timezone.c b/libfreerdp/locale/timezone.c
--index 3070f1f..4a06786 100644
----- a/libfreerdp/locale/timezone.c
--+++ b/libfreerdp/locale/timezone.c
--@@ -1539,7 +1539,8 @@ char* freerdp_get_unix_timezone_identifier()
-- 	 * America/Montreal for example.
-- 	 */
-- 	
---	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1)
--+	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1 ||
--+	    (len = readlink("/etc/TZ", buf, sizeof(buf) - 1)) != -1)
-- 	{
-- 		int num = 0;
-- 		int pos = len;
---- 
--2.4.5
--
-diff --git a/package/freerdp/0003-add-missing-define.patch b/package/freerdp/0003-add-missing-define.patch
-deleted file mode 100644
-index a8f669e10..000000000
---- a/package/freerdp/0003-add-missing-define.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--libwinpr/comm_seria: fix missing define
--
--FreeRDP uses CMSPAR, which is defined by glibc in bits/termios.h .
--
--glibc has two flavours of bits/termios.h: a genmeric one and an
--architecture-specific one. When installing, glibc will install the
--architecture-specific file if it exists, otherwise it installs the
--generic file. Only Alpha, MIPS, PPC and Sparc have their own
--bits/termios.h.
--
--The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
--do define CMSPAR. However, the MIPS flavour does not define it.
--
--Define CMSPAR to the value from the generic value, which is also the
--value known to the Linux kernel for MIPS.
--
--Fixes:
--    http://autobuild.buildroot.org/results/0b4/0b4793f0bf9f4c57933897f3480054a4e06528ad/
--    http://autobuild.buildroot.org/results/7a2/7a2284d0a2987158fa2e78f789b07c8c6fcdb974/
--    http://autobuild.buildroot.org/results/387/3874088c3ccd4bbf76ea0c911ca1ef64c7dc9d1c/
--    ...
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Cc: Peter Korsgaard <jacmet@uclibc.org>
--Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--diff -durN freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.orig/winpr/libwinpr/comm/comm_serial_sys.c freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16/winpr/libwinpr/comm/comm_serial_sys.c
----- freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.orig/winpr/libwinpr/comm/comm_serial_sys.c	2015-09-04 16:20:17.000000000 +0100
--+++ freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16/winpr/libwinpr/comm/comm_serial_sys.c	2015-10-04 11:07:41.868513726 +0100
--@@ -27,6 +27,14 @@
-- #include <fcntl.h>
-- #include <sys/ioctl.h>
-- #include <termios.h>
--+
--+/* glibc for MIPS has its own bits/termios.h which does not define
--+ * CMSPAR, so we vampirise the value from the generic bits/termios.h
--+ */
--+#ifndef CMSPAR
--+#define CMSPAR 010000000000
--+#endif
--+
-- #include <unistd.h>
-- 
-- #include "comm_serial_sys.h"
-diff --git a/package/freerdp/0004-ffmpeg30.patch b/package/freerdp/0004-ffmpeg30.patch
-deleted file mode 100644
-index a7998b789..000000000
---- a/package/freerdp/0004-ffmpeg30.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From b7b66968f93f6ce75dd06d12638e14029bf3717b Mon Sep 17 00:00:00 2001
--From: Alexis Ballier <aballier@gentoo.org>
--Date: Thu, 17 Sep 2015 10:36:44 +0200
--Subject: [PATCH] channels/tsmf/client/ffmpeg: Fix build with ffmpeg git
-- master.
--
--Replace old, deprecated and now removed, APIs with their new equivalent while retaining backward compatibility with old ffmpeg versions.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Downloaded from upstream commit:
-- https://github.com/FreeRDP/FreeRDP/commit/f8ceb3f6061583c650bd4f6cddc10bc0471f2076]
-----
-- channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c | 17 ++++++++++++++++-
-- 1 file changed, 16 insertions(+), 1 deletion(-)
--
--diff --git a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
--index d0880e7..e1b9f83 100644
----- a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
--+++ b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
--@@ -61,6 +61,9 @@
-- #define AV_CODEC_ID_AC3 CODEC_ID_AC3
-- #endif
-- 
--+#if LIBAVUTIL_VERSION_MAJOR < 52
--+#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
--+#endif
-- 
-- typedef struct _TSMFFFmpegDecoder
-- {
--@@ -102,7 +105,11 @@ static BOOL tsmf_ffmpeg_init_video_stream(ITSMFDecoder* decoder, const TS_AM_MED
-- 	mdecoder->codec_context->bit_rate = media_type->BitRate;
-- 	mdecoder->codec_context->time_base.den = media_type->SamplesPerSecond.Numerator;
-- 	mdecoder->codec_context->time_base.num = media_type->SamplesPerSecond.Denominator;
--+#if LIBAVCODEC_VERSION_MAJOR < 55
-- 	mdecoder->frame = avcodec_alloc_frame();
--+#else
--+	mdecoder->frame = av_frame_alloc();
--+#endif
-- 	return TRUE;
-- }
-- 
--@@ -328,7 +335,11 @@ static BOOL tsmf_ffmpeg_decode_video(ITSMFDecoder* decoder, const BYTE *data, UI
-- 		if (!mdecoder->decoded_data)
-- 			return FALSE;
-- 
--+#if LIBAVCODEC_VERSION_MAJOR < 55
-- 		frame = avcodec_alloc_frame();
--+#else
--+		frame = av_frame_alloc();
--+#endif
-- 		avpicture_fill((AVPicture*) frame, mdecoder->decoded_data,
-- 					   mdecoder->codec_context->pix_fmt,
-- 					   mdecoder->codec_context->width, mdecoder->codec_context->height);
--@@ -400,7 +411,11 @@ static BOOL tsmf_ffmpeg_decode_audio(ITSMFDecoder* decoder, const BYTE *data, UI
-- 									(int16_t *) dst, &frame_size, src, src_size);
-- #else
-- 		{
--+#if LIBAVCODEC_VERSION_MAJOR < 55
-- 			AVFrame *decoded_frame = avcodec_alloc_frame();
--+#else
--+			AVFrame *decoded_frame = av_frame_alloc();
--+#endif
-- 			int got_frame = 0;
-- 			AVPacket pkt;
-- 			av_init_packet(&pkt);
--@@ -480,7 +495,7 @@ static UINT32 tsmf_ffmpeg_get_decoded_format(ITSMFDecoder* decoder)
-- 
-- 	switch (mdecoder->codec_context->pix_fmt)
-- 	{
---		case PIX_FMT_YUV420P:
--+		case AV_PIX_FMT_YUV420P:
-- 			return RDP_PIXFMT_I420;
-- 		default:
-- 			WLog_ERR(TAG, "unsupported pixel format %u",
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 2ced373b3..793f56e1c 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 1db496cca391f76382ef284db2d0306d5c15bf515ee2c964319c22272d969a32  freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.tar.gz
-+sha256 60df5f7ee5b976534eb7530a6913c36665c8637c3094ddb9c53a180ac49208f6  freerdp-9a00b25adc6604f4fbe7c1d69aa4e5663d4d3863.tar.gz
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index c3a3e55d0..e8c4e0d17 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index a1162cf88..51ca6cb8c 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
+-md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
+-sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
++md5 170fd846e78a4603febf40d55b605301 cryptography-2.0.2.tar.gz
++sha256 3780b2663ee7ebb37cb83263326e3cd7f8b2ea439c448539d4b87de12c8d06ab cryptography-2.0.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 5373da820..69b568cd5 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # Changeset on the master branch
--FREERDP_VERSION = 17834af7bb378f85a3b3cc4dcadaa5125a337e16
-+FREERDP_VERSION = 9a00b25adc6604f4fbe7c1d69aa4e5663d4d3863
- FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
++PYTHON_CRYPTOGRAPHY_VERSION = 2.0.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/0a/23/ffee389a45f752dc745706cdb2d354b91ddb71594506fac45236cf67af49
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 -- 
 2.13.3
