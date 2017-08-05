@@ -1,123 +1,76 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 5 Aug 2017 22:05:01 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix issue with gdb 8.0
-In-Reply-To: <20170805104858.GA31479@waldemar-brodkorb.de>
-References: <20170805104858.GA31479@waldemar-brodkorb.de>
-Message-ID: <d8716f27-f8b8-b78b-71d3-59d6d5730153@gmail.com>
+Date: Sat, 5 Aug 2017 22:14:32 +0200
+Subject: [Buildroot] [PATCH] gdb: add fix for gdb 7.12 and gdb 8.0 build
+ on noMMU platforms
+In-Reply-To: <20170805142342.027e1232@windsurf>
+References: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
+ <4a2a10bc-9516-ddb6-b9b6-9c67038a8339@smile.fr>
+ <20170805142342.027e1232@windsurf>
+Message-ID: <e98b4eda-35ac-a83b-c49a-324b196eb9a9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Hi Thomas,
 
-Le 05/08/2017 ? 12:49, Waldemar Brodkorb a ?crit :
-> gdb 8.0 is now compiled and linked with C++, the thread_db
-> headers need to use extern "C", to be usable for C++ code.
+Le 05/08/2017 ? 14:23, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Fri, 4 Aug 2017 22:43:26 +0200, Romain Naour wrote:
+> 
+>>> ../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+>>> ../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+>>>        child_stack = xmalloc (STACK_SIZE * 4);
+>>>
+>>> The patch has already been merged upstream, as of commit
+>>> ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
+>>> of future gdb releases.  
+>>
+>> What's the arch/config are you using?
+> 
+> This was happening on m68k Coldfire, if i remember correctly.
+> 
+>> It's seems no toolchain able to build gdb on noMMU case are present in the
+>> autobuilder.
+> 
+> We have a m68k Coldfire configuration in the autobuilders. However, the
+> pre-built toolchain is built without BR2_PTHREAD_DEBUG, and therefore
+> the target gdb is never built because it depends on
+> BR2_TOOLCHAIN_HAS_THREADS_DEBUG.
 
-I got the same issue with gdb-7.12.1.
+I got an error with gdbserver 8.0 with a m68k toolchain build today on master.
 
-gdb build fine with this patch applied and the one from Thomas [1]
+In file included from build-gnulib-gdbserver/import/stdint.h:556:0,
+                 from ../common/common-defs.h:55,
+                 from ../common/buffer.c:20:
+/home/naourr/toolchains/nommu/host/m68k-buildroot-uclinux-uclibc/include/c++/6.4.0/cwchar:58:5:
+erreur : conflicting declaration ? typedef struct rpl_mbstate_t rpl_mbstate_t ?
+   } mbstate_t;
+     ^
+build-gnulib-gdbserver/import/wchar.h:486:13: note : previous declaration as
+? typedef int rpl_mbstate_t ?
+ typedef int rpl_mbstate_t;
+             ^~~~~~~~~~~~~
 
-[1] http://patchwork.ozlabs.org/patch/797022/
+The toolchain used the following defconfig:
+BR2_m68k=y
+BR2_m68k_cf5208=y
+BR2_PTHREAD_DEBUG=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
-Tested-by: Romain Naour <romain.naour@gmail.com>
+gdbserver now require wchar support ?
+
+Also I had to apply [1] to avoid the link issue when thread_db.h is included.
+
+[1] http://patchwork.ozlabs.org/patch/798191/
 
 Best regards,
 Romain
 
 > 
-> Fixes:
->  Issue when building gdbserver for m68k-coldfire:
+> Best regards,
 > 
-> thread-db.o: In function `thread_db_init()':
-> thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
-> thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
-> thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
-> ...>
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/uclibc/0001-fix-issues-with-gdb-8.0.patch | 72 +++++++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-> 
-> diff --git a/package/uclibc/0001-fix-issues-with-gdb-8.0.patch b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-> new file mode 100644
-> index 0000000..20567e6
-> --- /dev/null
-> +++ b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-> @@ -0,0 +1,72 @@
-> +From 111f01d432d542a153c1cad83def3a6ab57df7af Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> +Date: Sat, 5 Aug 2017 11:28:07 +0200
-> +Subject: [PATCH] fix issues with gdb 8.0
-> +
-> +GDB 8.0 is compiled and linked with g++, but the
-> +linking of static targets (f.e. coldfire) fails,
-> +without declaring the functions in thread_db.h
-> +extern C.
-> +
-> +The compilation of gdb errors out with:
-> +thread-db.o: In function `thread_db_init()':
-> +thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
-> +thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
-> +thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
-> +..
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> +---
-> + libpthread/linuxthreads_db/thread_db.h | 7 +++++++
-> + libpthread/nptl_db/thread_db.h         | 7 +++++++
-> + 2 files changed, 14 insertions(+)
-> +
-> +diff --git a/libpthread/linuxthreads_db/thread_db.h b/libpthread/linuxthreads_db/thread_db.h
-> +index 13c30af..ec79f60 100644
-> +--- a/libpthread/linuxthreads_db/thread_db.h
-> ++++ b/libpthread/linuxthreads_db/thread_db.h
-> +@@ -27,6 +27,9 @@
-> + #include <sys/types.h>
-> + #include <sys/procfs.h>
-> + 
-> ++#ifdef __cplusplus
-> ++extern "C" {
-> ++#endif
-> + 
-> + /* Error codes of the library.  */
-> + typedef enum
-> +@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-> + /* Resume execution of thread TH.  */
-> + extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-> + 
-> ++#ifdef __cplusplus
-> ++}
-> ++#endif
-> ++
-> + #endif	/* thread_db.h */
-> +diff --git a/libpthread/nptl_db/thread_db.h b/libpthread/nptl_db/thread_db.h
-> +index 27ea69a..993842f 100644
-> +--- a/libpthread/nptl_db/thread_db.h
-> ++++ b/libpthread/nptl_db/thread_db.h
-> +@@ -27,6 +27,9 @@
-> + #include <sys/types.h>
-> + #include <sys/procfs.h>
-> + 
-> ++#ifdef __cplusplus
-> ++extern "C" {
-> ++#endif
-> + 
-> + /* Error codes of the library.  */
-> + typedef enum
-> +@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-> + /* Resume execution of thread TH.  */
-> + extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-> + 
-> ++#ifdef __cplusplus
-> ++}
-> ++#endif
-> ++
-> + #endif	/* thread_db.h */
-> +-- 
-> +2.1.4
-> +
+> Thomas
 > 
