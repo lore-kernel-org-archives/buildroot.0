@@ -1,183 +1,131 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 4 Aug 2017 21:19:06 -0400
-Subject: [Buildroot] [PATCH 00/10] libssl: new package
-In-Reply-To: <d7c29c3c-8cbb-60fc-9374-c3e33417e964@mind.be>
-References: <20170804185521.12320-1-Adamduskett@outlook.com>
- <d7c29c3c-8cbb-60fc-9374-c3e33417e964@mind.be>
-Message-ID: <CAFSsvmoy15xjrs7d5-etO9-d6oWJdZGDcXgKdZjeQ7TWFngmXA@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri,  4 Aug 2017 23:05:19 -0300
+Subject: [Buildroot] [PATCH v2 1/2] support/testing: allow to use a
+	multiplier for timeouts
+In-Reply-To: <20170730044946.11999-2-ricardo.martincoski@gmail.com>
+References: <20170730044946.11999-2-ricardo.martincoski@gmail.com>
+Message-ID: <20170805020520.4925-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Add a parameter to run-tests to act as a multiplier for all timeouts of
+emulator.
+It can be used to avoid sporadic failures on slow host machines as well
+in elastic runners on the cloud.
 
-I appreciate the fast response.
-On Fri, Aug 4, 2017 at 5:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Adam,
->
->  Wow, that's fast work!
->
-20 hours of solid work really isn't fast.
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+Changes v1 -> v2:
+  - use clearer parameter name (elastic-timeout -> timeout-multiplier)
+    (Thomas);
+  - adapt commit message;
+---
+ support/testing/infra/basetest.py |  4 +++-
+ support/testing/infra/emulator.py | 13 ++++++++++---
+ support/testing/run-tests         |  9 +++++++++
+ 3 files changed, 22 insertions(+), 4 deletions(-)
 
-
-> On 04-08-17 20:55, Adam Duskett wrote:
->>  - Add libssl as a new virtual package, and add OpenSSL as the only option.
->>    This prevents any package from breaking.
->
->  I briefly mentioned before but clearly didn't explain enough: this will not
-> fly. The problem is that we want existing configurations to keep working without
-> a package silently disappearing. So the following procedure should work:
->
-> 1. Create a .config with BR2_PACKAGE_OPENSSL=y
->
-> 2. Apply your patches (i.e., bump Buildroot)
->
-> 3. make menuconfig
->
-> 4. Save
->
-> -> the openssl package must still be selected.
->
->  With your current approach, what happens is this: Kconfig reads in the old
-> configuration, doesn't see BR2_PACKAGE_LIBSSL=y, removes everything that depends
-> on BR2_PACKAGE_LIBSSL, and thereby removes BR2_PACKAGE_OPENSSL.
->
->  It is acceptable if the user gets a warning when this happens - that's what
-> legacy handling does. But that will not happen here.
->
->
->  One solution would be to make libssl a more traditional virtual package, i.e.
-> one that can't be selected by the user. A traditional virtual package doesn't
-> even define a Kconfig symbol (see for example package/opengl/*/Config.in).
-> However, here we could use the Kconfig symbol to allow packages to select
-> openssl-or-libressl:
->
-> config BR2_PACKAGE_LIBSSL
->         bool
->         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
->
-> config BR2_PACKAGE_HAS_LIBSSL
->         bool
->
-> config BR2_PACKAGE_PROVIDES_LIBSSL
->         string
->
->
-> The openssl and libressl packages don't need to be changed, except that they
-> need to define the value of BR2_PACKAGE_PROVIDES_LIBSSL. Note that typically
-> there is also nothing stopping both providers to be selected simultaneously at
-> the Kconfig level; instead this is checked when building. Adding mutual
-> conclusion at the Kconfig level invariably leads to dependency cycles.
->
->
->  So that solution is not so nice for two reasons:
-> - it's not so clear to the user that they can choose between openssl and libressl;
-> - if the user selects both, they are only warned when building.
->
->
->  Therefore, an alternative approach is to call the virtual package openssl, and
-> rename the openssl package to openssl-orig or something. That way, an existing
-> .config will still work because BR2_PACKAGE_OPENSSL is still a visible symbol
-> with no dependencies. It has the additional benefit of not requiring the huge
-> patch 3 (but see below).
->
->
->  I'm not sure which of the two options is best. Or maybe there is still a third
-> solution. Maybe something is possible by making BR2_PACKAGE_OPENSSL available
-> even if BR2_PACKAGE_LIBSSL is not selected, and in the choice having two
-> auxiliary symbols instead of directly using
-> BR2_PACKAGE_OPENSSL/BR2_PACKAGE_LIBRESSL. But it gets hairy.
->
->
->>  - Add OpenSSL as a dependency to the broken packages.
->
->  This is really not nice: it means the user simply can't select these packages
-> any more unless he manually selects libssl and then openssl. The obvious
-> solution would be to both 'select BR2_PACKAGE_LIBSSL' and 'depends on
-> BR2_PACKAGE_OPENSSL' but I think that's a circular dependency for Kconfig. With
-> my first alternative, the solution is simple: just let them select
-> BR2_PACKAGE_OPENSSL.
->
->  Also, this really should be one patch per package.
->
->
->>  - Convert all other packages that don't have OpenSSL as a dependency
->>    from openssl to libssl.
->
->  Ideally we'd only want to convert packages that someone has runtime tested with
-> libressl. However in this case I'm willing to make an exception - libressl is
-> supposed to be compatible, and we already have plenty of package combinations
-> that received no runtime testing.
->
->  Ideally this should also be one patch per package, but that's more than 100
-> patches and really boring. Personally I'm willing to accept this as a single
-> patch, though Thomas will probably disagree.
->
->  With my first alternative, there is also no need to convert all packages before
-> adding libressl as a provider.
->
->
->>  - Bump any packages that need to be updated to build against libreSSL to
->>    the current version.
->
->  These bumps can be applied independently, right?
->
->
->>  - Fix any make files that would cause LibreSSL from not working.
->
->  Again, should be one patch per package that you fix.
->
->
->>  - Add fix-libressl-support.patch to any packages that need a patch to
->>    compile against libressl.
->
->  Same here.
->
->
->>  - Add LibreSSL as an option to libssl.
->
->  There we go! :-)
->
->
->  I've said this before but I'll repeat it: this is complicated stuff, expect it
-> to take months and several iterations before it gets (fully) applied. Ideally it
-> should be split up into steps that can be applied incrementally, but I'm afraid
-> that the first patch in the series will always commit us in a certain direction,
-> so it will be difficult to progress gradually.
->
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-I want to first say this: I appreciate your response and your feedback.
-
-However;
-
-I don't have time nor the energy to rebase and made all the changes
-you have requested,
-then some more arbitrary changes that other people will request that
-aren't outlined in the
-buildroot manual.
-
-As it sits, feel free to reject the series if you so wish to.  For the
-next year, I am going to be solid
-booked and I don't have time to fix this.
-
-Again, I appreciate everything you guys are doing (And I certainly
-don't have the time nor the energy
-to make 100+ patches for a package that nobody actually cares about :] )
-
-Sorry for wasting your time!
-
-
-Adam
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 431605b23f..493dea5125 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -35,6 +35,7 @@ class BRTest(unittest.TestCase):
+     logtofile = True
+     keepbuilds = False
+     jlevel = 0
++    timeout_multiplier = 1
+ 
+     def __init__(self, names):
+         super(BRTest, self).__init__(names)
+@@ -60,7 +61,8 @@ class BRTest(unittest.TestCase):
+             self.b.build()
+             self.show_msg("Building done")
+ 
+-        self.emulator = Emulator(self.builddir, self.downloaddir, self.logtofile)
++        self.emulator = Emulator(self.builddir, self.downloaddir,
++                                 self.logtofile, self.timeout_multiplier)
+ 
+     def tearDown(self):
+         self.show_msg("Cleaning up")
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 588a92f6a2..214a1067e9 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -5,10 +5,14 @@ import infra
+ 
+ class Emulator(object):
+ 
+-    def __init__(self, builddir, downloaddir, logtofile):
++    def __init__(self, builddir, downloaddir, logtofile, multiplier):
+         self.qemu = None
+         self.downloaddir = downloaddir
+         self.logfile = infra.open_log_file(builddir, "run", logtofile)
++        # We use elastic runners on the cloud to runs our tests. Those runners
++        # can take a long time to run the emulator. Use a timeout multiplier
++        # when running the tests to avoid sporadic failures.
++        self.multiplier = multiplier
+ 
+     # Start Qemu to boot the system
+     #
+@@ -65,7 +69,8 @@ class Emulator(object):
+             qemu_cmd += ["-append", " ".join(kernel_cmdline)]
+ 
+         self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
+-        self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:], timeout=5,
++        self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
++                                  timeout=5 * self.multiplier,
+                                   env={"QEMU_AUDIO_DRV": "none"})
+         # We want only stdout into the log to avoid double echo
+         self.qemu.logfile_read = self.logfile
+@@ -76,7 +81,7 @@ class Emulator(object):
+         # The login prompt can take some time to appear when running multiple
+         # instances in parallel, so set the timeout to a large value
+         index = self.qemu.expect(["buildroot login:", pexpect.TIMEOUT],
+-                                 timeout=60)
++                                 timeout=60 * self.multiplier)
+         if index != 0:
+             self.logfile.write("==> System does not boot")
+             raise SystemError("System does not boot")
+@@ -94,6 +99,8 @@ class Emulator(object):
+     # return a tuple (output, exit_code)
+     def run(self, cmd, timeout=-1):
+         self.qemu.sendline(cmd)
++        if timeout != -1:
++            timeout *= self.multiplier
+         self.qemu.expect("# ", timeout=timeout)
+         # Remove double carriage return from qemu stdout so str.splitlines()
+         # works as expected.
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 0cb673c61f..95c1565f72 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -28,6 +28,8 @@ def main():
+                         help='number of testcases to run simultaneously')
+     parser.add_argument('-j', '--jlevel', type=int,
+                         help='BR2_JLEVEL to use for each testcase')
++    parser.add_argument('--timeout-multiplier', type=int, default=1,
++                        help='increase timeouts (useful for slow machines)')
+ 
+     args = parser.parse_args()
+ 
+@@ -97,6 +99,13 @@ def main():
+         # the user can override the auto calculated value
+         BRTest.jlevel = args.jlevel
+ 
++    if args.timeout_multiplier < 1:
++        print "Invalid multiplier for timeout values"
++        print ""
++        parser.print_help()
++        return 1
++    BRTest.timeout_multiplier = args.timeout_multiplier
++
+     nose2_args = ["-v",
+                   "-N", str(args.testcases),
+                   "-s", "support/testing",
+-- 
+2.13.0
