@@ -1,43 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Aug 2017 11:30:42 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/lzo: bump version to 2.10
-Message-ID: <20170805093042.481-1-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 5 Aug 2017 11:34:24 +0200
+Subject: [Buildroot] [PATCH] qemu-sparc: update kernel
+Message-ID: <20170805093424.GA11878@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added locally computed sha256 hash.
+Fixes gcc 7.1.0 compile issues.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/lzo/lzo.hash | 4 +++-
- package/lzo/lzo.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ configs/qemu_sparc_ss10_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
-index 415ed99da..cf2734fc7 100644
---- a/package/lzo/lzo.hash
-+++ b/package/lzo/lzo.hash
-@@ -1,2 +1,4 @@
- # From http://www.oberhumer.com/opensource/lzo/
--sha1 e2a60aca818836181e7e6f8c4f2c323aca6ac057 lzo-2.09.tar.gz
-+sha1 4924676a9bae5db58ef129dc1cebce3baa3c4b5d  lzo-2.10.tar.gz
-+# Locally computed
-+sha256 c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072  lzo-2.10.tar.gz
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index 17d8d0fca..5b8efdd54 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LZO_VERSION = 2.09
-+LZO_VERSION = 2.10
- LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
- LZO_LICENSE = GPL-2.0+
- LZO_LICENSE_FILES = COPYING
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index b492f88..8c6b563 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -15,6 +15,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-4.11.config"
 -- 
-2.11.0
+2.1.4
