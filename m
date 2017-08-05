@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Aug 2017 11:28:37 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libuv: bump version to 1.13.1
-Message-ID: <20170805092837.6061-1-bernd.kuhls@t-online.de>
+Date: Sat,  5 Aug 2017 11:29:17 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/luv: bump version to 1.9.1-1
+Message-ID: <20170805092918.11608-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
+ package/luv/luv.hash | 2 +-
+ package/luv/luv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index c8289cda5..f9fe4fe30 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+index 140fe9638..44f4048df 100644
+--- a/package/luv/luv.hash
++++ b/package/luv/luv.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  41ce914a88da21d3b07a76023beca57576ca5b376c6ac440c80bc581cbca1250  libuv-v1.12.0.tar.gz
-+sha256 6a4976887594ec9f4e8521c95598dbbc478c59733056a5cf46354e93a1bc8400  libuv-v1.13.1.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 891ac7450..06c552008 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+-sha256  2eab80360f8ab6793612bb59d067a56664ac9a5a14988e0a09a53d0bff20c131  luv-1.9.1-0.tar.gz
++sha256 1051cfbdc361d5ea6d978fd71273b94c8a5007d76af498b456b297b18de9622c  luv-1.9.1-1.tar.gz
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index 43cecf57f..633bfe689 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.12.0
-+LIBUV_VERSION = v1.13.1
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-LUV_VERSION = 1.9.1-0
++LUV_VERSION = 1.9.1-1
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+ LUV_LICENSE_FILES = LICENSE.txt
 -- 
 2.11.0
