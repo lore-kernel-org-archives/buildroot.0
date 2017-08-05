@@ -1,64 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Aug 2017 08:30:50 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-04
-Message-ID: <20170805063050.9E97C21ED2@mail.free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 5 Aug 2017 09:55:20 +0200
+Subject: [Buildroot] host cmake packages pick up wrong path for
+ library/include discovery
+In-Reply-To: <DB6PR07MB3141CF640804B6C49A5917D794B00@DB6PR07MB3141.eurprd07.prod.outlook.com>
+References: <DB6PR07MB3141CF640804B6C49A5917D794B00@DB6PR07MB3141.eurprd07.prod.outlook.com>
+Message-ID: <CAHXCMM+nCwt0s3eF2gaOn4aDNBgDPigKQLDvfbxExcNyw1QjXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Frank, all,
 
-Build statistics for 2017-08-04
-================================
+On Thu, Aug 3, 2017 at 3:08 AM, Sigalas, Antonios (Nokia - GR/Athens)
+<antonios.sigalas@nokia.com> wrote:
+> Hello,
+>
+>
+> When a host package is configured with cmake (e.g. mariadb), the libraries
+> and includes that are picked up by cmake are not the correct ones. The
+> reason for this is that in the pkg-cmake.mk file the CMAKE_FIND_ROOT_PATH
+> variables for host packages is set to HOST_DIR. While this is a reasonable
+> choice, it happens than in buildroot the toolchain's sysroot is under the
+> HOST_DIR path. This could cause cmake to discover the "wrong"
+> libraries/includes during configuration time.
+>
+>
+> In order to reproduce, just run a "make libxml2 host-mariadb-configure" (so
+> that libxml2 exists in the toolchain's sysroot when host-mariadb is
+> configured) and look for the output concerning the discovery of the libxml2
+> package during host-mariadb package configuration. Although this does not
+> cause a failure, I believe that this is an error and one that is generic to
+> host packages that are built with cmake.
+>
 
-      successes : 154
-       failures : 19 
-       timeouts : 0  
-          TOTAL : 173
+Confirmed (using the cmake binary from the host system).
 
-Classification of failures by reason
-====================================
+>
+> Unfortunately I have not yet been able to come up with a proposed fix as I
+> am not aware of a cmake parameter that would cause some paths to be excluded
+> when cmake searches for libraries/includes under the configured
+> CMAKE_FIND_ROOT_PATH.
 
-                     gpsd-3.16 | 3 
-         libspatialindex-1.8.5 | 2 
-     python-cryptography-1.7.2 | 2 
-snappy-be6dc3db83c4701e3e79... | 2 
-                  cc-tool-0.26 | 1 
-                  dnsmasq-2.76 | 1 
-        ltp-testsuite-20170516 | 1 
-             lttng-tools-2.9.5 | 1 
-            luasocket-3.0rc1-1 | 1 
-                 uclibc-1.0.26 | 1 
-                  whois-5.2.14 | 1 
-               wireshark-2.2.7 | 1 
-            xlib_libXpm-3.5.12 | 1 
-                   zmqpp-4.1.2 | 1 
+It comes from the libxml2-config.cmake file, which internally calls pkg-config.
+Since the PATH is set to find program from the BR host bindir, the BR
+pkg-config wrapper will be called with no specific env. vars set.
+However, by default, the BR pkg-config wrapper checks for the target stuff,
+So, because we forgot to tell the pkg-config wrapper to look for host
+stuff, it wrongly find the target stuff for libxml.
+
+This bug may also affects others packages and others host dependencies.
+Fix incoming.
 
 
-Detail of failures
-===================
+Note: I also wonder whether the host-libxml2 dependency should be
+added to host-mariadb. Is libxml2 a requirement for mariadb?
 
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/eb76c00f691be48ae69508627459bb30eec970ba |     
-        mips |                   dnsmasq-2.76 | NOK | http://autobuild.buildroot.net/results/4aa75ac4009ce9997d028c942a42f854d906e3f4 | ORPH
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/c14ba9784598bbe591091bf0939bb11da9ef234c |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/624efaa84055a5c787c937a3392fda01388a91ee |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/9fc77de5eca55f71d0a556c5d50ba0034f25538f |     
-microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/3df379e49e4c728fc38c953f572d4db8bd3f2917 |     
-microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/282e774f23ebbcd8997d49f6216a89456be0bff5 |     
-         arc |         ltp-testsuite-20170516 | NOK | http://autobuild.buildroot.net/results/4b4bb924e90cd892a47e1782f281e3af3a85e291 |     
-        i686 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/ac3a4a2f6aba920a46cb2377732f14f6a3be2951 |     
-      x86_64 |             luasocket-3.0rc1-1 | NOK | http://autobuild.buildroot.net/results/a43b04c0136cfa2e94dbde6c78804e4b97f9a734 |     
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/6c91f93b7bb9bbfb9c2eee2f2e9185aaaafb8756 |     
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/ab2228214777182820c1b0dbb16a472ae30edeef |     
-         arm | snappy-be6dc3db83c4701e3e79... | NOK | http://autobuild.buildroot.net/results/b1c18b9755d3a1746907259513b717548b546677 |     
-         arm | snappy-be6dc3db83c4701e3e79... | NOK | http://autobuild.buildroot.net/results/827f766f73c29169e08a0d64213a7ad9038c4f11 |     
-         arc |                  uclibc-1.0.26 | NOK | http://autobuild.buildroot.net/results/bdeb4bdb62e6aab92f9794708cc87570f89e230d |     
-         arm |                   whois-5.2.14 | NOK | http://autobuild.buildroot.net/results/b62ec9d6f350e409731d47ffb585344c516944e8 |     
-      mipsel |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/3f9d593aac70d9d9cf2b0c768c250c289fa919ba |     
-     aarch64 |             xlib_libXpm-3.5.12 | NOK | http://autobuild.buildroot.net/results/af070ac3b98b56e7f128b3862fc45c21cf7c9121 |     
-       sparc |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/8451a21ebe66997f93672ab2962341329254390c |     
+Regards,
 
 -- 
-http://autobuild.buildroot.net
+Samuel
