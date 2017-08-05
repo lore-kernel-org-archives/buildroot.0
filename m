@@ -1,22 +1,73 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 05 Aug 2017 13:47:22 +0000
-Subject: [Buildroot] [Bug 10156] glibc compilation fails for X86 32bits
-	(i386)
-In-Reply-To: <bug-10156-163@https.bugs.busybox.net/>
-References: <bug-10156-163@https.bugs.busybox.net/>
-Message-ID: <bug-10156-163-wac4sqcX3G@https.bugs.busybox.net/>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 5 Aug 2017 16:00:48 +0200
+Subject: [Buildroot] [PATCH] pkg-cmake.mk: set pkg-config env. vars. in
+ the host configure environment
+In-Reply-To: <20170805154233.3df3e56f@windsurf>
+References: <20170805130605.25877-1-s.martin49@gmail.com>
+ <20170805154233.3df3e56f@windsurf>
+Message-ID: <CAHXCMMLijz7Rz-zBW_GA1ET-0O3NSGdvzbjPV_w5RqDWarfc6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10156
+On Sat, Aug 5, 2017 at 3:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sat,  5 Aug 2017 15:06:05 +0200, Samuel Martin wrote:
+>> Cmake may run pkg-config to find the dependencies when configuring a
+>> package. Because of the value of PATH, and it will use the Buildroot's
+>> pkg-config wrapper, which, by default, is configured (via some
+>> environment variables) to find the target dependencies.
+>>
+>> So, this change makes sure the pkg-config environment variables are
+>> properly set for finding host dependencies when configuring a
+>> host-package.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> Is this fixing a particular autobuild failure ?
+>
+> Is this fixing a specific bug ?
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I've submitted a patch that fixes this issue, see
-https://patchwork.ozlabs.org/patch/798221/.
+No such a specific thing, just a mail reporting the issue [1].
+
+Do you want me to file a ticket to have a trace in the bug tracker and
+add its ref. to the commit log?
+
+>
+> I do remember someone reporting CMake related issues when building host
+> packages. Perhaps it was an e-mail. In such a case, there should be a
+> reference to this e-mail, or bug, or autobuild failure.
+
+Unfortunately the abo have not (yet) trigger this bug for host-mariadb
+(I have not checked for other potentially affected packages).
+
+>
+> Currently, it's not clear whether your patch is fixing an actual
+> problem (and should be applied to master) or is just nice to have
+> (should be applied to next).
+
+IMHO, it's for master.
+
+>
+> Of course, I do know that this patch is important and should be applied
+> to master, but it would be good to have a clearer commit log from that
+> respect.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-August/199776.html
+
+Regards,
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Samuel
