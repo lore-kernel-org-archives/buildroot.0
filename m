@@ -1,8 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Aug 2017 11:52:53 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/memcached: bump version to
-	1.5.0
-Message-ID: <20170805095253.27442-1-bernd.kuhls@t-online.de>
+Date: Sat,  5 Aug 2017 12:18:23 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/minizip: bump version to 1.1
+Message-ID: <20170805101823.9377-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/minizip/minizip.hash | 2 +-
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 1a88cc728..204590d27 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.37.tar.gz.sha1
--sha1 6a6c2ab70e9470fef939afff1cb58b7602077611  memcached-1.4.37.tar.gz
-+# From http://www.memcached.org/files/memcached-1.5.0.tar.gz.sha1
-+sha1 e12af93e63c05ab7e89398e4cfd0bfc7b7bff1c5  memcached-1.5.0.tar.gz
- # Calculated based on the hash above
--sha256 2f335ab9110ce39036c5271ef39a582a852e424bc9659e421844073cfdf8606b  memcached-1.4.37.tar.gz
-+sha256 c001f812024bb461b5e4d7d0506daab63dff9614eea26f46536c3b7e1e601c32  memcached-1.5.0.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 087be570a..d0e3bc01d 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index 994ed60a5..718026c1f 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ac361f40531d9fb7222d4befd10d160c647d5e85138f6bc9eda080ed8f937fb8 minizip-5f56dd81d94bd7028f7dc05d7d14112697c30241.tar.gz
++sha256 5666b5ee3e85dfd2dd119970613c12e6267d31813f07d3ffa5d359fe272cb6d1  minizip-1.1.tar.gz
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 835dfb912..bcd6cc928 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.4.37
-+MEMCACHED_VERSION = 1.5.0
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-MINIZIP_VERSION = 5f56dd81d94bd7028f7dc05d7d14112697c30241
++MINIZIP_VERSION = 1.1
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = zlib
+ MINIZIP_AUTORECONF = YES
 -- 
 2.11.0
