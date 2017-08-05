@@ -1,73 +1,40 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 5 Aug 2017 16:00:48 +0200
-Subject: [Buildroot] [PATCH] pkg-cmake.mk: set pkg-config env. vars. in
- the host configure environment
-In-Reply-To: <20170805154233.3df3e56f@windsurf>
-References: <20170805130605.25877-1-s.martin49@gmail.com>
- <20170805154233.3df3e56f@windsurf>
-Message-ID: <CAHXCMMLijz7Rz-zBW_GA1ET-0O3NSGdvzbjPV_w5RqDWarfc6w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  5 Aug 2017 17:54:31 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/erlang-jiffy: bump version to
+	0.14.11
+Message-ID: <20170805155431.9003-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Aug 5, 2017 at 3:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat,  5 Aug 2017 15:06:05 +0200, Samuel Martin wrote:
->> Cmake may run pkg-config to find the dependencies when configuring a
->> package. Because of the value of PATH, and it will use the Buildroot's
->> pkg-config wrapper, which, by default, is configured (via some
->> environment variables) to find the target dependencies.
->>
->> So, this change makes sure the pkg-config environment variables are
->> properly set for finding host dependencies when configuring a
->> host-package.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
-> Is this fixing a particular autobuild failure ?
->
-> Is this fixing a specific bug ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/erlang-jiffy/erlang-jiffy.hash | 2 +-
+ package/erlang-jiffy/erlang-jiffy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-No such a specific thing, just a mail reporting the issue [1].
-
-Do you want me to file a ticket to have a trace in the bug tracker and
-add its ref. to the commit log?
-
->
-> I do remember someone reporting CMake related issues when building host
-> packages. Perhaps it was an e-mail. In such a case, there should be a
-> reference to this e-mail, or bug, or autobuild failure.
-
-Unfortunately the abo have not (yet) trigger this bug for host-mariadb
-(I have not checked for other potentially affected packages).
-
->
-> Currently, it's not clear whether your patch is fixing an actual
-> problem (and should be applied to master) or is just nice to have
-> (should be applied to next).
-
-IMHO, it's for master.
-
->
-> Of course, I do know that this patch is important and should be applied
-> to master, but it would be good to have a clearer commit log from that
-> respect.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-August/199776.html
-
-Regards,
-
+diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
+index 1f83e2789..4a201fe5d 100644
+--- a/package/erlang-jiffy/erlang-jiffy.hash
++++ b/package/erlang-jiffy/erlang-jiffy.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 7d1054c475c82c626de3ad57201a7fc51da38667c8a7502149eb751edc6b601d erlang-jiffy-0.14.8.tar.gz
++sha256 c555726f592b79894c253ca1dc3c3aec6a5697271d29364d57f8175f387b86f3 erlang-jiffy-0.14.11.tar.gz
+diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
+index 313945454..342576845 100644
+--- a/package/erlang-jiffy/erlang-jiffy.mk
++++ b/package/erlang-jiffy/erlang-jiffy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_JIFFY_VERSION = 0.14.8
++ERLANG_JIFFY_VERSION = 0.14.11
+ ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
+ ERLANG_JIFFY_LICENSE = MIT (core), \
+ 	BSD-3-Clause (Google double conversion library), \
 -- 
-Samuel
+2.11.0
