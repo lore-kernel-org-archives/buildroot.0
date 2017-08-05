@@ -1,44 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Aug 2017 11:30:17 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/lzip: bump version to 1.19
-Message-ID: <20170805093017.29803-1-bernd.kuhls@t-online.de>
+Date: Sat,  5 Aug 2017 11:30:42 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/lzo: bump version to 2.10
+Message-ID: <20170805093042.481-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched to sha256 hash provided by upstream.
+Added locally computed sha256 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/lzip/lzip.hash | 6 ++----
- package/lzip/lzip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/lzo/lzo.hash | 4 +++-
+ package/lzo/lzo.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
-index 8855231fb..e074c7600 100644
---- a/package/lzip/lzip.hash
-+++ b/package/lzip/lzip.hash
-@@ -1,4 +1,2 @@
--# From http://lists.nongnu.org/archive/html/lzip-bug/2016-06/msg00002.html
--sha1	ef42f3209d02c3b3c217a61c8f127bcb8747b128	lzip-1.18.tar.gz
--# Locally calculated after checking pgp signature
--sha256	47f9882a104ab05532f467a7b8f4ddbb898fa2f1e8d9d468556d6c2d04db14dd	lzip-1.18.tar.gz
-+# From http://lists.nongnu.org/archive/html/lzip-bug/2017-05/msg00000.html
-+sha256 ffadc4f56be1bc0d3ae155ec4527bd003133bdc703a753b2cc683f610e646ba9 lzip-1.19.tar.gz
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index cb8803737..b7ba5dd21 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
+diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
+index 415ed99da..cf2734fc7 100644
+--- a/package/lzo/lzo.hash
++++ b/package/lzo/lzo.hash
+@@ -1,2 +1,4 @@
+ # From http://www.oberhumer.com/opensource/lzo/
+-sha1 e2a60aca818836181e7e6f8c4f2c323aca6ac057 lzo-2.09.tar.gz
++sha1 4924676a9bae5db58ef129dc1cebce3baa3c4b5d  lzo-2.10.tar.gz
++# Locally computed
++sha256 c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072  lzo-2.10.tar.gz
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 17d8d0fca..5b8efdd54 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LZIP_VERSION = 1.18
-+LZIP_VERSION = 1.19
- LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
- LZIP_LICENSE = GPL-2.0+
- LZIP_LICENSE_FILES = COPYING
+-LZO_VERSION = 2.09
++LZO_VERSION = 2.10
+ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPL-2.0+
+ LZO_LICENSE_FILES = COPYING
 -- 
 2.11.0
