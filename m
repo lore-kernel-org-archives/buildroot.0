@@ -1,45 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Aug 2017 14:23:42 +0200
-Subject: [Buildroot] [PATCH] gdb: add fix for gdb 7.12 and gdb 8.0 build
- on noMMU platforms
-In-Reply-To: <4a2a10bc-9516-ddb6-b9b6-9c67038a8339@smile.fr>
-References: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
- <4a2a10bc-9516-ddb6-b9b6-9c67038a8339@smile.fr>
-Message-ID: <20170805142342.027e1232@windsurf>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat,  5 Aug 2017 15:06:05 +0200
+Subject: [Buildroot] [PATCH] pkg-cmake.mk: set pkg-config env. vars. in the
+	host configure environment
+Message-ID: <20170805130605.25877-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Cmake may run pkg-config to find the dependencies when configuring a
+package. Because of the value of PATH, and it will use the Buildroot's
+pkg-config wrapper, which, by default, is configured (via some
+environment variables) to find the target dependencies.
 
-On Fri, 4 Aug 2017 22:43:26 +0200, Romain Naour wrote:
+So, this change makes sure the pkg-config environment variables are
+properly set for finding host dependencies when configuring a
+host-package.
 
-> > ../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-> > ../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-> >        child_stack = xmalloc (STACK_SIZE * 4);
-> > 
-> > The patch has already been merged upstream, as of commit
-> > ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
-> > of future gdb releases.  
-> 
-> What's the arch/config are you using?
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/pkg-cmake.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-This was happening on m68k Coldfire, if i remember correctly.
-
-> It's seems no toolchain able to build gdb on noMMU case are present in the
-> autobuilder.
-
-We have a m68k Coldfire configuration in the autobuilders. However, the
-pre-built toolchain is built without BR2_PTHREAD_DEBUG, and therefore
-the target gdb is never built because it depends on
-BR2_TOOLCHAIN_HAS_THREADS_DEBUG.
-
-Best regards,
-
-Thomas
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 914bda7482..a91b0c2f57 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -109,6 +109,11 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
++	PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_LIBDIR="$$(HOST_DIR)/lib/pkgconfig:$$(HOST_DIR)/share/pkgconfig"
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.4
