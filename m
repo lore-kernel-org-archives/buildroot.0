@@ -1,53 +1,113 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 6 Aug 2017 10:28:47 +0300
-Subject: [Buildroot] [PATCH] squashfs: fix build with gcc 7
-In-Reply-To: <20170731193433.7eb92d7d@windsurf.home>
-References: <51890a64ced8a223b72a52bdb0e98fc31f539a30.1501007295.git.baruch@tkos.co.il>
- <20170731193433.7eb92d7d@windsurf.home>
-Message-ID: <20170806072847.gpfjbsheok5o63xf@sapphire.tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Aug 2017 09:31:55 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/fontconfig: bump version to
+	2.12.4
+Message-ID: <20170806073155.18409-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Removed patch applied upstream:
+https://cgit.freedesktop.org/fontconfig/commit/?id=1ab5258f7c2abfafcd63a760ca08bf93591912da
 
-On Mon, Jul 31, 2017 at 07:34:33PM +0200, Thomas Petazzoni wrote:
-> On Tue, 25 Jul 2017 21:28:15 +0300, Baruch Siach wrote:
-> > gcc 7 with -Os (optimize for size) takes the liberty to remove the code of
-> > inline function entirely. This leads to undefined function references at link
-> > time. Restore gcc original inline behaviour to fix this issue.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/3c5/3c5b1d799dce3ba361d618330c242bf4eba76019/
-> > http://autobuild.buildroot.net/results/09f/09f350b62e2486404b78222dce211400bb233000/
-> > http://autobuild.buildroot.net/results/693/693960ed7c01622c756dcc929e83b3b713c16ccc/
-> > 
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> > The gcc doc[1] doesn't mention that feature of C99. A gcc bug, maybe?
-> 
-> Applied to master, thanks. To be honest, I hesitated between your
-> proposal and patching the mksquashfs.c code, but OK, I went with your
-> solution.
-> 
-> Can you send a patch upstream that removes the "inline" or switches
-> them to "static inline" ?
-> 
-> Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...ts-with-integer-width-macros-from-TS-1866.patch | 50 ----------------------
+ package/fontconfig/fontconfig.hash                 |  4 +-
+ package/fontconfig/fontconfig.mk                   | 10 ++---
+ 3 files changed, 5 insertions(+), 59 deletions(-)
+ delete mode 100644 package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
 
-Done.
-
-https://sourceforge.net/p/squashfs/mailman/message/35982546/
-
-I'm still not sure what is the root cause if this issue, and whether this is 
-GCC/C99 expected behaviour.
-
-baruch
-
+diff --git a/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch b/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
+deleted file mode 100644
+index 80bf7a7b3..000000000
+--- a/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 1ab5258f7c2abfafcd63a760ca08bf93591912da Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Wed, 14 Dec 2016 16:11:05 -0800
+-Subject: [PATCH] Avoid conflicts with integer width macros from TS
+- 18661-1:2014
+-
+-glibc 2.25+ has now defined these macros in <limits.h>
+-https://sourceware.org/git/?p=glibc.git;a=commit;h=5b17fd0da62bf923cb61d1bb7b08cf2e1f1f9c1a
+-
+-Create an alias for FC_CHAR_WIDTH for ABI compatibility
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Patch status: upstream
+-
+- fontconfig/fontconfig.h | 3 ++-
+- src/fcobjs.h            | 2 +-
+- 2 files changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
+-index 5c72b22..070a557 100644
+---- a/fontconfig/fontconfig.h
+-+++ b/fontconfig/fontconfig.h
+-@@ -128,7 +128,8 @@ typedef int		FcBool;
+- #define FC_USER_CACHE_FILE	    ".fonts.cache-" FC_CACHE_VERSION
+- 
+- /* Adjust outline rasterizer */
+--#define FC_CHAR_WIDTH	    "charwidth"	/* Int */
+-+#define FC_CHARWIDTH	    "charwidth"	/* Int */
+-+#define FC_CHAR_WIDTH	    FC_CHARWIDTH
+- #define FC_CHAR_HEIGHT	    "charheight"/* Int */
+- #define FC_MATRIX	    "matrix"    /* FcMatrix */
+- 
+-diff --git a/src/fcobjs.h b/src/fcobjs.h
+-index 1fc4f65..d27864b 100644
+---- a/src/fcobjs.h
+-+++ b/src/fcobjs.h
+-@@ -51,7 +51,7 @@ FC_OBJECT (DPI,			FcTypeDouble,	NULL)
+- FC_OBJECT (RGBA,		FcTypeInteger,	NULL)
+- FC_OBJECT (SCALE,		FcTypeDouble,	NULL)
+- FC_OBJECT (MINSPACE,		FcTypeBool,	NULL)
+--FC_OBJECT (CHAR_WIDTH,		FcTypeInteger,	NULL)
+-+FC_OBJECT (CHARWIDTH,		FcTypeInteger,	NULL)
+- FC_OBJECT (CHAR_HEIGHT,		FcTypeInteger,	NULL)
+- FC_OBJECT (MATRIX,		FcTypeMatrix,	NULL)
+- FC_OBJECT (CHARSET,		FcTypeCharSet,	FcCompareCharSet)
+--- 
+-2.10.2
+-
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index ad3582557..e9963f6f3 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/fontconfig/2016-August/005794.html
+-sha256	b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3	fontconfig-2.12.1.tar.bz2
++# From https://lists.freedesktop.org/archives/fontconfig/2017-July/005961.html
++sha256 668293fcc4b3c59765cdee5cee05941091c0879edcc24dfec5455ef83912e45c  fontconfig-2.12.4.tar.bz2
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 8d395bccd..d8a2f5491 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -4,16 +4,12 @@
+ #
+ ################################################################################
+ 
+-FONTCONFIG_VERSION = 2.12.1
++FONTCONFIG_VERSION = 2.12.4
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
+-
+-# When
+-# 0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch is
+-# removed, the host-gperf dependency should be removed.
+-FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf
+-HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf host-gperf
++FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.11.0
