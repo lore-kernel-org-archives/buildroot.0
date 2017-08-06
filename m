@@ -1,71 +1,81 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 6 Aug 2017 21:30:43 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix microblaze runtime error
-Message-ID: <20170806193043.GA17113@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Aug 2017 22:44:33 +0200
+Subject: [Buildroot] [PATCH] mutt: fix build with
+ BR2_PACKAGE_SKELETON_NONE
+In-Reply-To: <23d9ad1d2c270c942d286f0fdf779dabfb876ffd.1502042905.git.baruch@tkos.co.il>
+References: <23d9ad1d2c270c942d286f0fdf779dabfb876ffd.1502042905.git.baruch@tkos.co.il>
+Message-ID: <20170806204433.GC2921@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With binutils 2.29 a runtime error is seen:
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000100
+Baruch, All,
 
-Backport upstream patch to fix the issue.
+On 2017-08-06 21:08 +0300, Baruch Siach spake thusly:
+> BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
+> symlink creation in that directory. Ignore the symlink creation error. It is
+> up to the user to provide a functional skeleton.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- ...handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
+Note that this defconfig does not use a custom skeleton; it uses the
+default skeleton. In this situation, the user is not providing the
+skeleton, so he has no chance to "provide a functional skeleton."
 
-diff --git a/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
-new file mode 100644
-index 0000000..9886efd
---- /dev/null
-+++ b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
-@@ -0,0 +1,42 @@
-+From 9db18d93811153fc9a70c9844fadc6fdf7cbbb64 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sun, 6 Aug 2017 21:15:50 +0200
-+Subject: [PATCH] microblaze: handle R_MICROBLAZE_NONE for ld.so bootstrap
-+
-+Latest binutils 2.29 release emits a R_MICROBLAZE_NONE
-+relocation, which breaks shared library loader bootstrap
-+relocation.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ ldso/ldso/microblaze/dl-startup.h | 7 ++-----
-+ 1 file changed, 2 insertions(+), 5 deletions(-)
-+
-+diff --git a/ldso/ldso/microblaze/dl-startup.h b/ldso/ldso/microblaze/dl-startup.h
-+index 720c53a..16d5762 100644
-+--- a/ldso/ldso/microblaze/dl-startup.h
-++++ b/ldso/ldso/microblaze/dl-startup.h
-+@@ -82,18 +82,15 @@ static __always_inline
-+ void PERFORM_BOOTSTRAP_RELOC(ELF_RELOC *rpnt, unsigned long *reloc_addr,
-+ 	unsigned long symbol_addr, unsigned long load_addr, attribute_unused Elf32_Sym *symtab)
-+ {
-+-
-+ 	switch (ELF_R_TYPE(rpnt->r_info))
-+ 	{
-+ 		case R_MICROBLAZE_REL:
-+-
-+ 			*reloc_addr = load_addr + rpnt->r_addend;
-+ 			break;
-+-
-++		case R_MICROBLAZE_NONE:
-++			break;
-+ 		default:
-+ 			_dl_exit(1);
-+ 			break;
-+-
-+ 	}
-+-
-+ }
-+-- 
-+2.1.4
-+
+Instead, we must ensure that our default skeleton for the "none" init
+system is correct.
+
+So, we have two options:
+  - provide /var in the skeleton-none
+  - have mutt do the mkdir as it needs it
+
+My preference goes with the second solution, because it looks to me that
+it is the best solution: mutt needs /var? Then it has to ensure that
+/var exists before it uses it.
+
+I do agreee however that one may consider that /var is a "magic"
+directory, like /etc or /bin and /lib, and that it should always exist.
+Nonetheless, I believe the second solution is still technically better,
+because it does not make any assumption.
+
+Care to respin by doing an mkdir, please?
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+> http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/mutt/mutt.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+> index abd40e5dd612..447c336b4893 100644
+> --- a/package/mutt/mutt.mk
+> +++ b/package/mutt/mutt.mk
+> @@ -66,7 +66,7 @@ MUTT_CONF_ENV += \
+>  MUTT_CONF_OPTS += --with-mailpath=/var/mail
+>  
+>  define MUTT_VAR_MAIL
+> -	ln -sf /tmp $(TARGET_DIR)/var/mail
+> +	-ln -sf /tmp $(TARGET_DIR)/var/mail
+>  endef
+>  MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
+>  
+> -- 
+> 2.13.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
