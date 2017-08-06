@@ -1,37 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  6 Aug 2017 21:08:25 +0300
-Subject: [Buildroot] [PATCH] mutt: fix build with BR2_PACKAGE_SKELETON_NONE
-Message-ID: <23d9ad1d2c270c942d286f0fdf779dabfb876ffd.1502042905.git.baruch@tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 6 Aug 2017 21:30:07 +0200
+Subject: [Buildroot] [PATCH] qemu-sparc64: update kernel
+Message-ID: <20170806193007.GA11010@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
-symlink creation in that directory. Ignore the symlink creation error. It is
-up to the user to provide a functional skeleton.
+This fixes '__multi3' issue when building the kernel.
 
-Fixes:
-http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/mutt/mutt.mk | 2 +-
+ configs/qemu_sparc64_sun4u_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index abd40e5dd612..447c336b4893 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -66,7 +66,7 @@ MUTT_CONF_ENV += \
- MUTT_CONF_OPTS += --with-mailpath=/var/mail
- 
- define MUTT_VAR_MAIL
--	ln -sf /tmp $(TARGET_DIR)/var/mail
-+	-ln -sf /tmp $(TARGET_DIR)/var/mail
- endef
- MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
- 
+diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
+index 1f4df06..072fba7 100644
+--- a/configs/qemu_sparc64_sun4u_defconfig
++++ b/configs/qemu_sparc64_sun4u_defconfig
+@@ -15,6 +15,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux-4.11.config"
 -- 
-2.13.2
+2.1.4
