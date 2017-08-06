@@ -1,58 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Aug 2017 17:41:02 +0200
-Subject: [Buildroot] [PATCHv2] fs/squashfs: honour the number of parallel
-	jobs
-Message-ID: <20170806154102.24807-1-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 06 Aug 2017 16:25:19 +0000
+Subject: [Buildroot] [Bug 9926] systemd-resolved.service: Failed at step
+ NAMESPACE (systemd 233)
+In-Reply-To: <bug-9926-163@https.bugs.busybox.net/>
+References: <bug-9926-163@https.bugs.busybox.net/>
+Message-ID: <bug-9926-163-CGl7nF6IPr@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, mksquashfs uses all the CPUs available, like us with
-BR2_JLEVEL=0.
+https://bugs.busybox.net/show_bug.cgi?id=9926
 
-However, by setting BR21_JLEVEL to non-zero, a user volutarily limits
-the number of jobbs allowed to run concurrently (for various reasons,
-like this is not a priority task on the machine; or like the
-autobuilders, to spread the load accross multiple runs without
-overloading the machine).
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-So, propagate tthe parallelisn settings down to mksquashfs, to repect
-the user's will.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WORKSFORME
+             Status|ASSIGNED                    |RESOLVED
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+--- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Mihcael, All,
 
----
-Changes v1 -> v2:
-  - enhance commit log  (Thomas)
----
- fs/squashfs/squashfs.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I am not able to reproduce this issue with current master, with
+the fiollowing defconfig (which enables the same set of systemd
+options as those you listed):
 
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 342c7a8a37..7de7f51af1 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -6,6 +6,8 @@
- 
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
-+ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
-+
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
- else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
-@@ -19,8 +21,7 @@ ROOTFS_SQUASHFS_ARGS += -comp gzip
- endif
- 
- define ROOTFS_SQUASHFS_CMD
--	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
--		$(ROOTFS_SQUASHFS_ARGS)
-+	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
- endef
- 
- $(eval $(call ROOTFS_TARGET,squashfs))
+    BR2_arm=y
+    BR2_cortex_a9=y
+    BR2_ARM_ENABLE_NEON=y
+    BR2_ARM_ENABLE_VFP=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_INIT_SYSTEMD=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+    BR2_SYSTEM_DHCP="eth0"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+    BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
+    BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+    BR2_LINUX_KERNEL_DTS_SUPPORT=y
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+    BR2_PACKAGE_SYSTEMD_VCONSOLE=y
+    BR2_TARGET_ROOTFS_EXT2=y
+    # BR2_TARGET_ROOTFS_TAR is not set
+
+Note that master contains a full rework of the skeleton to
+cope with systemd.
+
+Could you please retry on your use-case to confirm that the
+bug still exists (or not!) for you with current master?
+
+In the meantime, I am closing it. Just re-open it if you can
+reproduce, in which case please attach the complete defconfig
+you are using:
+
+    $ make BR2_DEFCONFIG=$(pwd)/defconfig savedefconfig
+    $ cat defconfig
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
