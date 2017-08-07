@@ -1,51 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 07 Aug 2017 14:04:13 +0000
-Subject: [Buildroot] [Bug 10176] New: Rsyslog's S01logging is deleted by
- Busybox.mk from TARGET
-Message-ID: <bug-10176-163@https.bugs.busybox.net/>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Mon, 7 Aug 2017 09:33:31 -0500
+Subject: [Buildroot] [PATCHv2] fs/squashfs: honour the number of
+	parallel jobs
+In-Reply-To: <20170806154102.24807-1-yann.morin.1998@free.fr>
+References: <20170806154102.24807-1-yann.morin.1998@free.fr>
+Message-ID: <CANn-YGRT2J1GuHu0efq6OhGCoJ9v0PyzmrcSRTfXkRoKyQkD-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10176
+Yann,
 
-            Bug ID: 10176
-           Summary: Rsyslog's S01logging is deleted by Busybox.mk from
-                    TARGET
-           Product: buildroot
-           Version: 2017.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: mail at kkrach.de
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Sun, Aug 6, 2017 at 10:41 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> By default, mksquashfs uses all the CPUs available, like us with
+> BR2_JLEVEL=0.
 
-Created attachment 7166
-  --> https://bugs.busybox.net/attachment.cgi?id=7166&action=edit
-Do not remove S01logging
+This ends up using the number of CPUs available plus 1. I tested this on my
+machine and it worked. I do still see the extended attributes issue
+that I posted
+in https://bugs.busybox.net/show_bug.cgi?id=10141.
 
-It seems that when no SYSLOGD is configured in Busybox, the file
-$(TARGET_DIR)/etc/init.d/S01logging is removed during installation of Busybox.
-But in case that rsyslog also has installed a S01logging, changing the Busybox
-configuration will cause that the startscript of rsyslog is removed.
+> However, by setting BR21_JLEVEL to non-zero, a user volutarily limits
+> the number of jobbs allowed to run concurrently (for various reasons,
+> like this is not a priority task on the machine; or like the
+> autobuilders, to spread the load accross multiple runs without
+> overloading the machine).
+>
+> So, propagate tthe parallelisn settings down to mksquashfs, to repect
+> the user's will.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-I ve checked busybox.mk and S01logging of rsyslog - and both seem to have the
-problem also in the current Buildroot master. I'm working with 2017.02 and do
-reproduce it only there.
+Tested-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-Further more, I ve attached the patch with solves the problem for me. Normally,
-the packages do not remove their startscript - so I ve removed the
-startscript-removal as well.
-
-BR, Karl
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thanks,
+Clayton
