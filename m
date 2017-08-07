@@ -1,68 +1,78 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 7 Aug 2017 23:18:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: examples depend on
-	OpenGL
-In-Reply-To: <20170807184149.62292a88@gmx.net>
-References: <20170807070344.29750-1-bernd.kuhls@t-online.de>
- <20170807184149.62292a88@gmx.net>
-Message-ID: <20170807231859.22bab8e7@gmx.net>
+Date: Tue, 8 Aug 2017 00:19:26 +0200
+Subject: [Buildroot] Failing bind 9.11.1-P3 configure failure
+In-Reply-To: <15dba6532c8-c03-26aa@webjas-vab011.srv.aolmail.net>
+References: <15dba6532c8-c03-26aa@webjas-vab011.srv.aolmail.net>
+Message-ID: <20170808001926.554b1a0a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+Hello 'grunpferd'(*),
 
-On Mon, 7 Aug 2017 18:41:49 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+On Sun, 6 Aug 2017 21:53:01 -0400, grunpferd at netscape.net wrote:
 
-> Hello Bernd,
+> Currently unable to build bind 9.11.1-P3.
 > 
-> On Mon,  7 Aug 2017 09:03:44 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 > 
-> > Fixes
-> > http://autobuild.buildroot.net/results/001/001bc930014fca8c2a8b7a390350b4e1a15fa375/
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/qt5/qt5base/Config.in | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-> > index f5de27228..f0138a10f 100644
-> > --- a/package/qt5/qt5base/Config.in
-> > +++ b/package/qt5/qt5base/Config.in
-> > @@ -44,11 +44,15 @@ config BR2_PACKAGE_QT5BASE_CONFIG_FILE
-> >  
-> >  config BR2_PACKAGE_QT5BASE_EXAMPLES
-> >  	bool "Compile and install examples (with code)"
-> > +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
 > 
-> Did not (yet) look at the details, but disabling all examples (mind that all sub
-> modules use BR2_PACKAGE_QT5BASE_EXAMPLES) because of one failing one seems a bit
-> over-reacted....better solution would be to disable only the failing one, see
-> e.g. package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+> It looks like there is some confusion over the local existence of header files resulting in the following error message.
+> Previous version of bind compiles successfully.
 > 
 
-Alternative patch submitted, see [1]...
+Could be, mind to try with BR2_COMPILER_PARANOID_UNSAFE_PATH enabled?
+
+> 
+> ...
+> checking for using OpenSSL for hash functions... no
+> checking for PKCS11 support... no
+> checking for PKCS11 tools... disabled
+> checking for native PKCS11... disabled
+> checking for clock_gettime... yes
+> checking for lmdb library... yes
+> checking for library containing mdb_env_create... no
+> configure: error: found lmdb include but not library.
+> package/pkg-generic.mk:217: recipe for target '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/bind-9.11.1-P3/.stamp_configured' faile
+> d
+> make: *** [/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/bind-9.11.1-P3/.stamp_configured] Error 1
+> 
+> ...
+
+Local build of bind here (with a random configuration) succeeds, mind to try
+the following buildroot patch:
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 988f40e1c2..c65568e9e3 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -24,6 +24,7 @@ BIND_CONF_ENV = \
+        BUILD_CC="$(TARGET_CC)" \
+        BUILD_CFLAGS="$(TARGET_CFLAGS)"
+ BIND_CONF_OPTS = \
++       --without-lmdb \
+        --with-libjson=no \
+        --with-randomdev=/dev/urandom \
+        --enable-epoll \
+
 
 Regards,
 Peter
 
-[1] https://patchwork.ozlabs.org/patch/798899
+(*) Using a real name instead of any pseudonym or fake name is preferred
 
-> Regards,
-> Peter
 > 
-> >  	select BR2_PACKAGE_QT5BASE_NETWORK
-> >  	select BR2_PACKAGE_QT5BASE_XML
-> >  	help
-> >  	  If unsure, say N.
-> >  
-> > +comment "Examples need an OpenGL-capable backend"
-> > +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-> > +
-> >  config BR2_PACKAGE_QT5BASE_NETWORK
-> >  	def_bool y
-> >  
+> 
+> So buildroot can't configure bind-9.11.1-P3.
+> 
+> 
+> Ross
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 > 
