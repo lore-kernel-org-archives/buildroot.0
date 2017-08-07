@@ -1,56 +1,34 @@
-From: grunpferd at netscape.net <grunpferd@netscape.net>
-Date: Sun, 6 Aug 2017 21:53:01 -0400
-Subject: [Buildroot] Failing bind 9.11.1-P3 configure failure
-Message-ID: <15dba6532c8-c03-26aa@webjas-vab011.srv.aolmail.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  7 Aug 2017 08:19:02 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 12}.x series
+Message-ID: <20170807061903.22333-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently unable to build bind 9.11.1-P3.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-
-It looks like there is some confusion over the local existence of header files resulting in the following error message.
-Previous version of bind compiles successfully.
-
-
-...
-checking for using OpenSSL for hash functions... no
-checking for PKCS11 support... no
-checking for PKCS11 tools... disabled
-checking for native PKCS11... disabled
-checking for clock_gettime... yes
-checking for lmdb library... yes
-checking for library containing mdb_env_create... no
-configure: error: found lmdb include but not library.
-package/pkg-generic.mk:217: recipe for target '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/bind-9.11.1-P3/.stamp_configured' faile
-d
-make: *** [/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/bind-9.11.1-P3/.stamp_configured] Error 1
-
-...
-
-
-So buildroot can't configure bind-9.11.1-P3.
-
-
-Ross
-
-
-
-
-
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170806/da756c3d/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 135378 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170806/da756c3d/attachment.obj>
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cebeb8c59..7f07da05f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,9 +236,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.79"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.40"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.80"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.41"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+-	default "4.12.4"	if BR2_KERNEL_HEADERS_4_12
++	default "4.12.5"	if BR2_KERNEL_HEADERS_4_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.11.0
