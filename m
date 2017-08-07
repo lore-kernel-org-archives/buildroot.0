@@ -1,86 +1,68 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  7 Aug 2017 23:15:44 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: fix examples compile without opengl
-	support
-Message-ID: <20170807211544.5286-1-ps.report@gmx.net>
+Date: Mon, 7 Aug 2017 23:18:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: examples depend on
+	OpenGL
+In-Reply-To: <20170807184149.62292a88@gmx.net>
+References: <20170807070344.29750-1-bernd.kuhls@t-online.de>
+ <20170807184149.62292a88@gmx.net>
+Message-ID: <20170807231859.22bab8e7@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Hello Bernd,
 
-  make[1]: Entering directory '.../build/qt5base-5.9.1/examples/opengl'
-  cd hellowindow/ && ( test -e Makefile || .../build/qt5base-5.9.1/bin/qmake -o Makefile .../build/qt5base-5.9.1/examples/opengl/hellowindow/hellowindow.pro ) && make -f Makefile
-  make[2]: Entering directory '.../build/qt5base-5.9.1/examples/opengl/hellowindow'
-  .../host/bin/sparc-linux-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=.../host/sparc-buildroot-linux-uclibc/sysroot -O2 -O3 -fno-exceptions -Wall -W -D_REENTRANT -fPIC -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -I. -I../../../include/QtGui/5.9.1 -I../../../include/QtGui/5.9.1/QtGui -I../../../include -I../../../include/QtGui -I../../../include/QtCore/5.9.1 -I../../../include/QtCore/5.9.1/QtCore -I../../../include/QtCore -I.moc -I../../../mkspecs/devices/linux-buildroot-g++ -o .obj/hellowindow.o hellowindow.cpp
-  In file included from hellowindow.cpp:51:0:
-  hellowindow.h:96:5: error: ?QOpenGLShaderProgram? does not name a type
-       QOpenGLShaderProgram *m_program;
-       ^~~~~~~~~~~~~~~~~~~~
-  hellowindow.h:97:5: error: ?QOpenGLBuffer? does not name a type
-       QOpenGLBuffer m_vbo;
-       ^~~~~~~~~~~~~
-  hellowindow.cpp: In constructor ?Renderer::Renderer(const QSurfaceFormat&, Renderer*, QScreen*)?:
-  hellowindow.cpp:62:40: error: invalid use of incomplete type ?class QOpenGLContext?
-       m_context = new QOpenGLContext(this);
-                                          ^
-  In file included from ../../../include/QtGui/qsurfaceformat.h:1:0,
-                   from ../../../include/QtGui/../../src/gui/kernel/qsurface.h:45,
-                   from ../../../include/QtGui/qsurface.h:1,
-                   from ../../../include/QtGui/../../src/gui/kernel/qwindow.h:51,
-                   from ../../../include/QtGui/qwindow.h:1,
-                   from ../../../include/QtGui/QWindow:1,
-                   from hellowindow.h:51,
-                   from hellowindow.cpp:51:
+On Mon, 7 Aug 2017 18:41:49 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
-[1] http://autobuild.buildroot.net/results/001/001bc930014fca8c2a8b7a390350b4e1a15fa375/build-end.log
+> Hello Bernd,
+> 
+> On Mon,  7 Aug 2017 09:03:44 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> 
+> > Fixes
+> > http://autobuild.buildroot.net/results/001/001bc930014fca8c2a8b7a390350b4e1a15fa375/
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> >  package/qt5/qt5base/Config.in | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+> > index f5de27228..f0138a10f 100644
+> > --- a/package/qt5/qt5base/Config.in
+> > +++ b/package/qt5/qt5base/Config.in
+> > @@ -44,11 +44,15 @@ config BR2_PACKAGE_QT5BASE_CONFIG_FILE
+> >  
+> >  config BR2_PACKAGE_QT5BASE_EXAMPLES
+> >  	bool "Compile and install examples (with code)"
+> > +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+> 
+> Did not (yet) look at the details, but disabling all examples (mind that all sub
+> modules use BR2_PACKAGE_QT5BASE_EXAMPLES) because of one failing one seems a bit
+> over-reacted....better solution would be to disable only the failing one, see
+> e.g. package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+> 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...amples-fix-compile-without-opengl-support.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
+Alternative patch submitted, see [1]...
 
-diff --git a/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch b/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
-new file mode 100644
-index 0000000000..6735ab63e0
---- /dev/null
-+++ b/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
-@@ -0,0 +1,33 @@
-+From adacb2d6701b12511c5a0e58072236da91ebf810 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 7 Aug 2017 22:54:11 +0200
-+Subject: [PATCH] examples: fix compile without opengl support
-+
-+Compile examples/opengl only in case opengl support is available.
-+
-+Task-number: QTBUG-62372
-+Change-Id: I742a1eb7b7639a5a722c4d5e9b4ee070b629b02e
-+
-+Upstream: https://codereview.qt-project.org/201947
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/examples.pro | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/examples/examples.pro b/examples/examples.pro
-+index a3851c6d81..d87fa2da88 100644
-+--- a/examples/examples.pro
-++++ b/examples/examples.pro
-+@@ -14,7 +14,8 @@ qtHaveModule(concurrent): SUBDIRS += qtconcurrent
-+ qtHaveModule(sql): SUBDIRS += sql
-+ qtHaveModule(widgets): SUBDIRS += widgets
-+ qtHaveModule(xml): SUBDIRS += xml
-+-qtHaveModule(gui): SUBDIRS += gui opengl
-++qtHaveModule(gui): SUBDIRS += gui
-++qtHaveModule(gui):qtConfig(opengl): SUBDIRS += opengl
-+ 
-+ aggregate.files = aggregate/examples.pro
-+ aggregate.path = $$[QT_INSTALL_EXAMPLES]
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/patch/798899
+
+> Regards,
+> Peter
+> 
+> >  	select BR2_PACKAGE_QT5BASE_NETWORK
+> >  	select BR2_PACKAGE_QT5BASE_XML
+> >  	help
+> >  	  If unsure, say N.
+> >  
+> > +comment "Examples need an OpenGL-capable backend"
+> > +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+> > +
+> >  config BR2_PACKAGE_QT5BASE_NETWORK
+> >  	def_bool y
+> >  
+> 
