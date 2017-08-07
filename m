@@ -1,81 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Aug 2017 22:44:33 +0200
-Subject: [Buildroot] [PATCH] mutt: fix build with
- BR2_PACKAGE_SKELETON_NONE
-In-Reply-To: <23d9ad1d2c270c942d286f0fdf779dabfb876ffd.1502042905.git.baruch@tkos.co.il>
-References: <23d9ad1d2c270c942d286f0fdf779dabfb876ffd.1502042905.git.baruch@tkos.co.il>
-Message-ID: <20170806204433.GC2921@scaer>
+From: grunpferd at netscape.net <grunpferd@netscape.net>
+Date: Sun, 6 Aug 2017 21:53:01 -0400
+Subject: [Buildroot] Failing bind 9.11.1-P3 configure failure
+Message-ID: <15dba6532c8-c03-26aa@webjas-vab011.srv.aolmail.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Currently unable to build bind 9.11.1-P3.
 
-On 2017-08-06 21:08 +0300, Baruch Siach spake thusly:
-> BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
-> symlink creation in that directory. Ignore the symlink creation error. It is
-> up to the user to provide a functional skeleton.
 
-Note that this defconfig does not use a custom skeleton; it uses the
-default skeleton. In this situation, the user is not providing the
-skeleton, so he has no chance to "provide a functional skeleton."
 
-Instead, we must ensure that our default skeleton for the "none" init
-system is correct.
+It looks like there is some confusion over the local existence of header files resulting in the following error message.
+Previous version of bind compiles successfully.
 
-So, we have two options:
-  - provide /var in the skeleton-none
-  - have mutt do the mkdir as it needs it
 
-My preference goes with the second solution, because it looks to me that
-it is the best solution: mutt needs /var? Then it has to ensure that
-/var exists before it uses it.
+...
+checking for using OpenSSL for hash functions... no
+checking for PKCS11 support... no
+checking for PKCS11 tools... disabled
+checking for native PKCS11... disabled
+checking for clock_gettime... yes
+checking for lmdb library... yes
+checking for library containing mdb_env_create... no
+configure: error: found lmdb include but not library.
+package/pkg-generic.mk:217: recipe for target '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/bind-9.11.1-P3/.stamp_configured' faile
+d
+make: *** [/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/bind-9.11.1-P3/.stamp_configured] Error 1
 
-I do agreee however that one may consider that /var is a "magic"
-directory, like /etc or /bin and /lib, and that it should always exist.
-Nonetheless, I believe the second solution is still technically better,
-because it does not make any assumption.
+...
 
-Care to respin by doing an mkdir, please?
 
-Regards,
-Yann E. MORIN.
+So buildroot can't configure bind-9.11.1-P3.
 
-> Fixes:
-> http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/mutt/mutt.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-> index abd40e5dd612..447c336b4893 100644
-> --- a/package/mutt/mutt.mk
-> +++ b/package/mutt/mutt.mk
-> @@ -66,7 +66,7 @@ MUTT_CONF_ENV += \
->  MUTT_CONF_OPTS += --with-mailpath=/var/mail
->  
->  define MUTT_VAR_MAIL
-> -	ln -sf /tmp $(TARGET_DIR)/var/mail
-> +	-ln -sf /tmp $(TARGET_DIR)/var/mail
->  endef
->  MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
->  
-> -- 
-> 2.13.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ross
+
+
+
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170806/da756c3d/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 135378 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170806/da756c3d/attachment.obj>
