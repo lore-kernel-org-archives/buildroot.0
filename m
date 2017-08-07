@@ -1,77 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 7 Aug 2017 20:57:32 +0300
-Subject: [Buildroot] [PATCH] mutt: fix build with
- BR2_PACKAGE_SKELETON_NONE
-In-Reply-To: <20170806204433.GC2921@scaer>
-References: <23d9ad1d2c270c942d286f0fdf779dabfb876ffd.1502042905.git.baruch@tkos.co.il>
- <20170806204433.GC2921@scaer>
-Message-ID: <20170807175732.leo6oj2but7lpu5p@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  7 Aug 2017 22:49:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.1.6
+Message-ID: <20170807204959.22104-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-On Sun, Aug 06, 2017 at 10:44:33PM +0200, Yann E. MORIN wrote:
-> On 2017-08-06 21:08 +0300, Baruch Siach spake thusly:
-> > BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
-> > symlink creation in that directory. Ignore the symlink creation error. It is
-> > up to the user to provide a functional skeleton.
-> 
-> Note that this defconfig does not use a custom skeleton; it uses the
-> default skeleton. In this situation, the user is not providing the
-> skeleton, so he has no chance to "provide a functional skeleton."
-> 
-> Instead, we must ensure that our default skeleton for the "none" init
-> system is correct.
-> 
-> So, we have two options:
->   - provide /var in the skeleton-none
->   - have mutt do the mkdir as it needs it
-> 
-> My preference goes with the second solution, because it looks to me that
-> it is the best solution: mutt needs /var? Then it has to ensure that
-> /var exists before it uses it.
-> 
-> I do agreee however that one may consider that /var is a "magic"
-> directory, like /etc or /bin and /lib, and that it should always exist.
-
-So do you think it is a good idea to add /var to skeleton-common? Maybe 
-skeleton-none only?
-
-> Nonetheless, I believe the second solution is still technically better,
-> because it does not make any assumption.
-> 
-> Care to respin by doing an mkdir, please?
-
-Done.
-
-baruch
-
-> > Fixes:
-> > http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/mutt/mutt.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-> > index abd40e5dd612..447c336b4893 100644
-> > --- a/package/mutt/mutt.mk
-> > +++ b/package/mutt/mutt.mk
-> > @@ -66,7 +66,7 @@ MUTT_CONF_ENV += \
-> >  MUTT_CONF_OPTS += --with-mailpath=/var/mail
-> >  
-> >  define MUTT_VAR_MAIL
-> > -	ln -sf /tmp $(TARGET_DIR)/var/mail
-> > +	-ln -sf /tmp $(TARGET_DIR)/var/mail
-> >  endef
-> >  MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 1356c38ef..7b9e4b42c 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.1.5
++MESA3D_HEADERS_VERSION = 17.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index fb6427a55..f2dda2064 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-July/000342.html
+-md5 6cf936fbcaadd98924298a7009e8265d  mesa-17.1.5.tar.xz
+-sha1 709a38eb9ecf54390c303071a016c23c1d4bd64b  mesa-17.1.5.tar.xz
+-sha256 378516b171712687aace4c7ea8b37c85895231d7a6d61e1e27362cf6034fded9  mesa-17.1.5.tar.xz
+-sha512 a12671afd812b304e1db690b123a9de16332608541f71cc3ee9128a3630c81416d46255e5bdbf19e14e85716b218f447987b555e3bc0081b8b6f392556fa21e2  mesa-17.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-August/000346.html
++md5 54758bf842f9ea53c8b57cce4311b87e  mesa-17.1.6.tar.xz
++sha1 2acc201e24ea67c5231074d6746a42a747228ed6  mesa-17.1.6.tar.xz
++sha256 0686deadde1f126b20aa67e47e8c50502043eee4ecdf60d5009ffda3cebfee50  mesa-17.1.6.tar.xz
++sha512 cf57f29a21208f0a9bc84157f806bcaf6fd0583352449fcb986b05773eeefc99c4040dc41b242782dd5aa9ff7f9c5312b17a4db82d87f600acf165b6acdfc95a  mesa-17.1.6.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1654046f0..e62dfff14 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.1.5
++MESA3D_VERSION = 17.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
