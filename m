@@ -1,40 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  7 Aug 2017 19:24:49 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libatomic_ops: bump version to
-	7.4.6
-Message-ID: <20170807172449.8247-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  7 Aug 2017 20:54:14 +0300
+Subject: [Buildroot] [PATCH v2] mutt: fix build with
+	BR2_PACKAGE_SKELETON_NONE
+Message-ID: <6e30bce5e2d63e03119cfcd15c88447b6a90256a.1502128454.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libatomic_ops/libatomic_ops.hash | 2 +-
- package/libatomic_ops/libatomic_ops.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
+symlink creation in that directory. Make sure that /var exists before creating
+the symlink.
 
-diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
-index 47a281ddf..9e67624d9 100644
---- a/package/libatomic_ops/libatomic_ops.hash
-+++ b/package/libatomic_ops/libatomic_ops.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ef8335676f18a111f885d48810ab090fb6bfad94e5a5dd76cdccd2a536828662  libatomic_ops-libatomic_ops-7_4_4.tar.gz
-+sha256 cf7e61f7f929651b65d6186a03446819805c867f4f75c7148c8f26321eb66260  libatomic_ops-v7.4.6.tar.gz
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index 52d274521..483f11812 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Fixes:
+http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: Create /var (Yann)
+---
+ package/mutt/mutt.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index abd40e5dd612..b0bf5a7b413f 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -66,6 +66,7 @@ MUTT_CONF_ENV += \
+ MUTT_CONF_OPTS += --with-mailpath=/var/mail
  
--LIBATOMIC_OPS_VERSION = libatomic_ops-7_4_4
-+LIBATOMIC_OPS_VERSION = v7.4.6
- LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
- LIBATOMIC_OPS_AUTORECONF = YES
- 
+ define MUTT_VAR_MAIL
++	mkdir -p $(TARGET_DIR)/var
+ 	ln -sf /tmp $(TARGET_DIR)/var/mail
+ endef
+ MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
 -- 
-2.11.0
+2.13.2
