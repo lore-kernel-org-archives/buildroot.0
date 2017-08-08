@@ -1,66 +1,97 @@
-From: Eugene Yudin <e.yudin@ndmsystems.com>
-Date: Tue, 8 Aug 2017 22:07:26 +0300
-Subject: [Buildroot] buildroot uClibc-ng build failure
-In-Reply-To: <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
-References: <20170803054828.GB7682@waldemar-brodkorb.de>
- <20170803092346.02d02371@windsurf.home>
- <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
- <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
-Message-ID: <CAPmKWpEnqQEiUjjjYDkGiwtvGu-4XmCmrK04sbVQzJdCOff-gg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 08 Aug 2017 19:47:34 +0000
+Subject: [Buildroot] [Bug 10021] libqeglfs-viv-integration.so file is
+ missing for qt5 on armv7
+In-Reply-To: <bug-10021-163@https.bugs.busybox.net/>
+References: <bug-10021-163@https.bugs.busybox.net/>
+Message-ID: <bug-10021-163-swSNMIlN4G@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes. Please install the locale "en_US.UTF-8".
-It's used in buildroot by default:
-package/uclibc/uclibc.mk:46:UCLIBC_LOCALES = en_US
+https://bugs.busybox.net/show_bug.cgi?id=10021
 
-On Tue, Aug 8, 2017 at 7:52 PM, Andr? Hentschel <nerv@dawncrow.de> wrote:
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Refik Tuzakli from comment #0)
 
-> Am 03.08.2017 um 10:11 schrieb Eugene Yudin:
-> > Hi Thomas,
-> >
-> >> Is this check insufficient now ?
-> > I think it's sufficient.
-> >
-> > Please post output of the following commands:
-> > $ locale
-> > $ locale -a
-> > $ cat /etc/os-release
-> $ locale
-> LANG=de_DE.utf8
-> LANGUAGE=de_DE.utf8
-> LC_CTYPE="de_DE.utf8"
-> LC_NUMERIC="de_DE.utf8"
-> LC_TIME="de_DE.utf8"
-> LC_COLLATE="de_DE.utf8"
-> LC_MONETARY="de_DE.utf8"
-> LC_MESSAGES="de_DE.utf8"
-> LC_PAPER="de_DE.utf8"
-> LC_NAME="de_DE.utf8"
-> LC_ADDRESS="de_DE.utf8"
-> LC_TELEPHONE="de_DE.utf8"
-> LC_MEASUREMENT="de_DE.utf8"
-> LC_IDENTIFICATION="de_DE.utf8"
-> LC_ALL=de_DE.utf8
->
-> $ locale -a
-> C
-> C.UTF-8
-> de_DE.utf8
-> POSIX
->
-> OS is Ubuntu 14.04.5 LTS
-> Should I install the english locale?
->
+Hello Refik,
+
+did a buildroot compile with your defconfig file, your missing
+libqeglfs-viv-integration.so file is compiled and installed here:
+
+$ find target   -name "*-viv-*"
+target/usr/lib/qt/plugins/egldeviceintegrations/libqeglfs-viv-integration.so
+
+Mind to try a complete rebuild (after 'make clean')?
+
+In case of failure please post the qt5base configure summary output, e.g.:
+
+Configure summary:
+
+Building on: linux-g++ (x86_64, CPU features: mmx sse sse2)
+Building for: devices/linux-buildroot-g++ (arm, CPU features: <none>)
+Configuration: cross_compile compile_examples enable_new_dtags largefile shared
+release c++11 c++14 c++1z concurrent dbus mremap reduce_exports release_tools
+stl
+Build options:
+  Mode ................................... release; optimized tools
+  Optimize release build for size ........ no
+  Building shared libraries .............. yes
+  Using C++ standard ..................... C++1z
+  Using gold linker ...................... no
+  Using new DTAGS ........................ yes
+  Using precompiled headers .............. no
+  Using LTCG ............................. no
+  Target compiler supports:
+    NEON ................................. no
+  Build parts ............................ examples libs
+Qt modules and options:
+[...]
+  EGL .................................... yes
+  OpenVG ................................. yes
+  OpenGL:
+    Desktop OpenGL ....................... no
+    OpenGL ES 2.0 ........................ yes
+    OpenGL ES 3.0 ........................ yes
+    OpenGL ES 3.1 ........................ no
+  Session Management ..................... yes
+Features used by QPA backends:
+  evdev .................................. yes
+  libinput ............................... yes
+  INTEGRITY HID .......................... no
+  mtdev .................................. yes
+  tslib .................................. yes
+  xkbcommon-evdev ........................ no
+QPA backends:
+  DirectFB ............................... no
+  EGLFS .................................. yes
+  EGLFS details:
+    EGLFS i.Mx6 .......................... yes
+    EGLFS i.Mx6 Wayland .................. no
+    EGLFS EGLDevice ...................... no
+    EGLFS GBM ............................ no
+    EGLFS Mali ........................... no
+    EGLFS Raspberry Pi ................... no
+    EGL on X11 ........................... no
+  LinuxFB ................................ no
+[...]
 
 
+And additinonal the lines about the egl-viv test:
+
+> gmake[2]: Entering directory '.../build/qt5base-5.9.1/config.tests/qpa/eglfs-viv'
+[...]
+> gmake[2]: Leaving directory '.../build/qt5base-5.9.1/config.tests/qpa/eglfs-viv'
+test config.gui.tests.egl-viv succeeded
+
+Did only a compile test here, no runtime test, because of lack of i.mx6 board
+at hand...
+
+Regards,
+Peter
 
 -- 
-Best regards,
-Eugene
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170808/0197ea4b/attachment.html>
+You are receiving this mail because:
+You are on the CC list for the bug.
