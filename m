@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:07:39 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
-	12}.x series
-In-Reply-To: <20170807061903.22333-1-bernd.kuhls@t-online.de>
-References: <20170807061903.22333-1-bernd.kuhls@t-online.de>
-Message-ID: <b81d6ba5-60b3-1397-6362-18ce4a101b3a@mind.be>
+Date: Tue, 8 Aug 2017 18:08:09 +0200
+Subject: [Buildroot] [PATCH] linux: drop full stop from prompt text
+In-Reply-To: <f148d8d9e57d88b3d243d75ed431129822e3b36e.1502109694.git.baruch@tkos.co.il>
+References: <f148d8d9e57d88b3d243d75ed431129822e3b36e.1502109694.git.baruch@tkos.co.il>
+Message-ID: <339ee133-5c90-6f5b-dcbd-f3adfa5575c2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +12,12 @@ To: buildroot@busybox.net
 
 
 
-On 07-08-17 08:19, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 07-08-17 14:41, Baruch Siach wrote:
+> We don't add full stop at the end of the prompt text.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- Both applied to master, thanks.
+ Applied to master, thanks.
 
  Regards,
  Arnout
