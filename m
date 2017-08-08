@@ -1,99 +1,33 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 4 Aug 2017 22:01:48 +0200
-Subject: [Buildroot] [git commit branch/next] glibc: add patch fixing the
-	build with binutils 2.29
-Message-ID: <20170809225748.C6151803A0@busybox.osuosl.org>
+Date: Tue, 8 Aug 2017 17:47:55 +0200
+Subject: [Buildroot] [git commit branch/next] qemu-sparc64: update kernel
+Message-ID: <20170809225749.7BB5380124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf821efbd0b24690b52f379d4a9934a16073762e
+commit: https://git.buildroot.net/buildroot/commit/?id=5cbfab1c20851220345f692f3968163e824b1ceb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following build failure, which occurs on all architectures:
+This fixes '__multi3' issue when building the kernel.
 
-/tmp/cc6APNmN.s: Assembler messages:
-/tmp/cc6APNmN.s: Error: `loc1 at GLIBC_2.17' can't be versioned to common symbol 'loc1'
-/tmp/cc6APNmN.s: Error: `loc2 at GLIBC_2.17' can't be versioned to common symbol 'loc2'
-/tmp/cc6APNmN.s: Error: `locs at GLIBC_2.17' can't be versioned to common symbol 'locs'
-../o-iterator.mk:9: recipe for target '/tmp/output/build/glibc-2.25/build/misc/regexp.os' failed
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/glibc/0005-fix-binutils-2-29-build.patch | 65 ++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ configs/qemu_sparc64_sun4u_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glibc/0005-fix-binutils-2-29-build.patch b/package/glibc/0005-fix-binutils-2-29-build.patch
-new file mode 100644
-index 0000000..47fcd2f
---- /dev/null
-+++ b/package/glibc/0005-fix-binutils-2-29-build.patch
-@@ -0,0 +1,65 @@
-+From: H.J. Lu <hjl.tools@gmail.com>
-+Date: Fri, 23 Jun 2017 21:38:46 +0000 (-0700)
-+Subject: Avoid .symver on common symbols [BZ #21666]
-+X-Git-Tag: glibc-2.26~241
-+X-Git-Url: https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff_plain;h=388b4f1a02f3a801965028bbfcd48d905638b797
-+
-+Avoid .symver on common symbols [BZ #21666]
-+
-+The .symver directive on common symbol just creates a new common symbol,
-+not an alias and the newer assembler with the bug fix for
-+
-+https://sourceware.org/bugzilla/show_bug.cgi?id=21661
-+
-+will issue an error.  Before the fix, we got
-+
-+$ readelf -sW libc.so | grep "loc[12s]"
-+  5109: 00000000003a0608     8 OBJECT  LOCAL  DEFAULT   36 loc1
-+  5188: 00000000003a0610     8 OBJECT  LOCAL  DEFAULT   36 loc2
-+  5455: 00000000003a0618     8 OBJECT  LOCAL  DEFAULT   36 locs
-+  6575: 00000000003a05f0     8 OBJECT  GLOBAL DEFAULT   36 locs at GLIBC_2.2.5
-+  7156: 00000000003a05f8     8 OBJECT  GLOBAL DEFAULT   36 loc1 at GLIBC_2.2.5
-+  7312: 00000000003a0600     8 OBJECT  GLOBAL DEFAULT   36 loc2 at GLIBC_2.2.5
-+
-+in libc.so.  The versioned loc1, loc2 and locs have the wrong addresses.
-+After the fix, we got
-+
-+$ readelf -sW libc.so | grep "loc[12s]"
-+  6570: 000000000039e3b8     8 OBJECT  GLOBAL DEFAULT   34 locs at GLIBC_2.2.5
-+  7151: 000000000039e3c8     8 OBJECT  GLOBAL DEFAULT   34 loc1 at GLIBC_2.2.5
-+  7307: 000000000039e3c0     8 OBJECT  GLOBAL DEFAULT   34 loc2 at GLIBC_2.2.5
-+
-+	[BZ #21666]
-+	* misc/regexp.c (loc1): Add __attribute__ ((nocommon));
-+	(loc2): Likewise.
-+	(locs): Likewise.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Backported from upstream commit
-+388b4f1a02f3a801965028bbfcd48d905638b797, to fix the build with
-+binutils 2.29.]
-+---
-+diff --git a/misc/regexp.c b/misc/regexp.c
-+index 19d76c0..eaea7c3 100644
-+--- a/misc/regexp.c
-++++ b/misc/regexp.c
-+@@ -29,14 +29,15 @@
-+ 
-+ #if SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_23)
-+ 
-+-/* Define the variables used for the interface.  */
-+-char *loc1;
-+-char *loc2;
-++/* Define the variables used for the interface.  Avoid .symver on common
-++   symbol, which just creates a new common symbol, not an alias.  */
-++char *loc1 __attribute__ ((nocommon));
-++char *loc2 __attribute__ ((nocommon));
-+ compat_symbol (libc, loc1, loc1, GLIBC_2_0);
-+ compat_symbol (libc, loc2, loc2, GLIBC_2_0);
-+ 
-+ /* Although we do not support the use we define this variable as well.  */
-+-char *locs;
-++char *locs __attribute__ ((nocommon));
-+ compat_symbol (libc, locs, locs, GLIBC_2_0);
-+ 
-+ 
+diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
+index 1f4df06..072fba7 100644
+--- a/configs/qemu_sparc64_sun4u_defconfig
++++ b/configs/qemu_sparc64_sun4u_defconfig
+@@ -15,6 +15,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux-4.11.config"
