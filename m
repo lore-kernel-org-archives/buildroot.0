@@ -1,87 +1,72 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 8 Aug 2017 17:09:14 +0200
-Subject: [Buildroot] [git commit] qt5base: fix examples compile without
-	opengl support
-Message-ID: <20170808155050.052AD817A0@busybox.osuosl.org>
+Date: Tue, 8 Aug 2017 17:47:55 +0200
+Subject: [Buildroot] [git commit] uclibc: fix microblaze runtime error
+Message-ID: <20170808155050.54A46802DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d29f050d548d9c5b6ef6002104e9341219c4356
+commit: https://git.buildroot.net/buildroot/commit/?id=62782633558acf93658f9c0debd02e87f581d1fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes [1]:
+With binutils 2.29 a runtime error is seen:
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000100
 
-  make[1]: Entering directory '.../build/qt5base-5.9.1/examples/opengl'
-  cd hellowindow/ && ( test -e Makefile || .../build/qt5base-5.9.1/bin/qmake -o Makefile .../build/qt5base-5.9.1/examples/opengl/hellowindow/hellowindow.pro ) && make -f Makefile
-  make[2]: Entering directory '.../build/qt5base-5.9.1/examples/opengl/hellowindow'
-  .../host/bin/sparc-linux-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=.../host/sparc-buildroot-linux-uclibc/sysroot -O2 -O3 -fno-exceptions -Wall -W -D_REENTRANT -fPIC -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -I. -I../../../include/QtGui/5.9.1 -I../../../include/QtGui/5.9.1/QtGui -I../../../include -I../../../include/QtGui -I../../../include/QtCore/5.9.1 -I../../../include/QtCore/5.9.1/QtCore -I../../../include/QtCore -I.moc -I../../../mkspecs/devices/linux-buildroot-g++ -o .obj/hellowindow.o hellowindow.cpp
-  In file included from hellowindow.cpp:51:0:
-  hellowindow.h:96:5: error: ???QOpenGLShaderProgram??? does not name a type
-       QOpenGLShaderProgram *m_program;
-       ^~~~~~~~~~~~~~~~~~~~
-  hellowindow.h:97:5: error: ???QOpenGLBuffer??? does not name a type
-       QOpenGLBuffer m_vbo;
-       ^~~~~~~~~~~~~
-  hellowindow.cpp: In constructor ???Renderer::Renderer(const QSurfaceFormat&, Renderer*, QScreen*)???:
-  hellowindow.cpp:62:40: error: invalid use of incomplete type ???class QOpenGLContext???
-       m_context = new QOpenGLContext(this);
-                                          ^
-  In file included from ../../../include/QtGui/qsurfaceformat.h:1:0,
-                   from ../../../include/QtGui/../../src/gui/kernel/qsurface.h:45,
-                   from ../../../include/QtGui/qsurface.h:1,
-                   from ../../../include/QtGui/../../src/gui/kernel/qwindow.h:51,
-                   from ../../../include/QtGui/qwindow.h:1,
-                   from ../../../include/QtGui/QWindow:1,
-                   from hellowindow.h:51,
-                   from hellowindow.cpp:51:
+Backport upstream patch to fix the issue.
 
-[1] http://autobuild.buildroot.net/results/001/001bc930014fca8c2a8b7a390350b4e1a15fa375/build-end.log
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...amples-fix-compile-without-opengl-support.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ ...handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch b/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
+diff --git a/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
 new file mode 100644
-index 0000000..6735ab6
+index 0000000..9886efd
 --- /dev/null
-+++ b/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
-@@ -0,0 +1,33 @@
-+From adacb2d6701b12511c5a0e58072236da91ebf810 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 7 Aug 2017 22:54:11 +0200
-+Subject: [PATCH] examples: fix compile without opengl support
++++ b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
+@@ -0,0 +1,42 @@
++From 9db18d93811153fc9a70c9844fadc6fdf7cbbb64 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Sun, 6 Aug 2017 21:15:50 +0200
++Subject: [PATCH] microblaze: handle R_MICROBLAZE_NONE for ld.so bootstrap
 +
-+Compile examples/opengl only in case opengl support is available.
++Latest binutils 2.29 release emits a R_MICROBLAZE_NONE
++relocation, which breaks shared library loader bootstrap
++relocation.
 +
-+Task-number: QTBUG-62372
-+Change-Id: I742a1eb7b7639a5a722c4d5e9b4ee070b629b02e
-+
-+Upstream: https://codereview.qt-project.org/201947
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
 +---
-+ examples/examples.pro | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ ldso/ldso/microblaze/dl-startup.h | 7 ++-----
++ 1 file changed, 2 insertions(+), 5 deletions(-)
 +
-+diff --git a/examples/examples.pro b/examples/examples.pro
-+index a3851c6d81..d87fa2da88 100644
-+--- a/examples/examples.pro
-++++ b/examples/examples.pro
-+@@ -14,7 +14,8 @@ qtHaveModule(concurrent): SUBDIRS += qtconcurrent
-+ qtHaveModule(sql): SUBDIRS += sql
-+ qtHaveModule(widgets): SUBDIRS += widgets
-+ qtHaveModule(xml): SUBDIRS += xml
-+-qtHaveModule(gui): SUBDIRS += gui opengl
-++qtHaveModule(gui): SUBDIRS += gui
-++qtHaveModule(gui):qtConfig(opengl): SUBDIRS += opengl
-+ 
-+ aggregate.files = aggregate/examples.pro
-+ aggregate.path = $$[QT_INSTALL_EXAMPLES]
++diff --git a/ldso/ldso/microblaze/dl-startup.h b/ldso/ldso/microblaze/dl-startup.h
++index 720c53a..16d5762 100644
++--- a/ldso/ldso/microblaze/dl-startup.h
+++++ b/ldso/ldso/microblaze/dl-startup.h
++@@ -82,18 +82,15 @@ static __always_inline
++ void PERFORM_BOOTSTRAP_RELOC(ELF_RELOC *rpnt, unsigned long *reloc_addr,
++ 	unsigned long symbol_addr, unsigned long load_addr, attribute_unused Elf32_Sym *symtab)
++ {
++-
++ 	switch (ELF_R_TYPE(rpnt->r_info))
++ 	{
++ 		case R_MICROBLAZE_REL:
++-
++ 			*reloc_addr = load_addr + rpnt->r_addend;
++ 			break;
++-
+++		case R_MICROBLAZE_NONE:
+++			break;
++ 		default:
++ 			_dl_exit(1);
++ 			break;
++-
++ 	}
++-
++ }
 +-- 
-+2.11.0
++2.1.4
 +
