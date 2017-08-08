@@ -1,57 +1,45 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 8 Aug 2017 19:00:23 +0200
+Date: Tue, 8 Aug 2017 19:07:50 +0200
 Subject: [Buildroot] Failing bind 9.11.1-P3 configure failure
-In-Reply-To: <2de931b7-cef0-5eb4-07bf-55db96252451@mind.be>
-References: <15dba6532c8-c03-26aa@webjas-vab011.srv.aolmail.net>
- <20170808001926.554b1a0a@gmx.net>
- <2de931b7-cef0-5eb4-07bf-55db96252451@mind.be>
-Message-ID: <20170808190023.2a1c6a6b@gmx.net>
+In-Reply-To: <15dbf45f074-58b7-6223@webprd-a18.mail.aol.com>
+References: <15dbf45f074-58b7-6223@webprd-a18.mail.aol.com>
+Message-ID: <20170808190750.21fad1a3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hello 'grunpferd',
 
-On Tue, 8 Aug 2017 16:18:35 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Mon, 7 Aug 2017 20:36:58 -0400, grunpferd at netscape.net wrote:
 
->  Hi Peter,
 > 
-> On 08-08-17 00:19, Peter Seiderer wrote:
+> It looks like there is some confusion over the local existence of header files resulting in error during configure.
+> 
+> 
+> 
 > > Local build of bind here (with a random configuration) succeeds, mind to try
 > > the following buildroot patch:
-> > 
-> > diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> > index 988f40e1c2..c65568e9e3 100644
-> > --- a/package/bind/bind.mk
-> > +++ b/package/bind/bind.mk
-> > @@ -24,6 +24,7 @@ BIND_CONF_ENV = \
-> >         BUILD_CC="$(TARGET_CC)" \
-> >         BUILD_CFLAGS="$(TARGET_CFLAGS)"
-> >  BIND_CONF_OPTS = \
-> > +       --without-lmdb \
-> >         --with-libjson=no \
-> >         --with-randomdev=/dev/urandom \
-> >         --enable-epoll \
-> 
->  Could you send this as an official patch?
+> I used the +       --without-lmdb \ option and that does work.
 
-O.k, patch is on the way...
+Thanks for testing...
 
 > 
 > 
-> > (*) Using a real name instead of any pseudonym or fake name is preferred
-> 
->  Actually, only when submitting patches. For bug reporting, asking questions, on
-> IRC, etc. use pseudonyms all you like.
+> I guess the the real issue is why it is looking at local header files at all, rather than the buildroot headers.
+> Also I presume why bind wants to try and use -lmdb is to speed up some object store and retrieval,
+> so maybe the right solution is to build a local version of mdb and have host headers and library available for the target.
 
-And thanks for clarifying...
+Yes this would be a nice buildroot feature, but I think there is no lmdb (Lightning
+Memory-mapped Database) package yet in buildroot to use...
 
 Regards,
 Peter
 
+> I have not tested the BR2_COMPILER_PARANOID_UNSAFE_PATH facility, prefer to let the build complete so I can test the resulting rootfs first!
 > 
->  Regards,
->  Arnout
+> 
+> Ross
+> 
 > 
