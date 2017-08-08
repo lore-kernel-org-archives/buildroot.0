@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:05:08 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix issue with gdb 8.0
-In-Reply-To: <20170805222935.GA7270@waldemar-brodkorb.de>
-References: <20170805104858.GA31479@waldemar-brodkorb.de>
- <d8716f27-f8b8-b78b-71d3-59d6d5730153@gmail.com>
- <20170805222935.GA7270@waldemar-brodkorb.de>
-Message-ID: <2ef98544-8b83-4fed-279c-e32010782be5@mind.be>
+Date: Tue, 8 Aug 2017 18:05:49 +0200
+Subject: [Buildroot] [PATCH] qemu-sparc: update kernel
+In-Reply-To: <20170805093424.GA11878@waldemar-brodkorb.de>
+References: <20170805093424.GA11878@waldemar-brodkorb.de>
+Message-ID: <b25a21e4-a874-031b-968b-de308428aab3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +12,15 @@ To: buildroot@busybox.net
 
 
 
-On 06-08-17 00:29, Waldemar Brodkorb wrote:
-> Hi,
-> Romain Naour wrote,
+On 05-08-17 11:34, Waldemar Brodkorb wrote:
+> Fixes gcc 7.1.0 compile issues.
 > 
->> Hi Waldemar,
->>
->> Le 05/08/2017 ? 12:49, Waldemar Brodkorb a ?crit :
->>> gdb 8.0 is now compiled and linked with C++, the thread_db
->>> headers need to use extern "C", to be usable for C++ code.
->>
->> I got the same issue with gdb-7.12.1.
-> 
-> Yeah, when --disable-build-with-cxx is _not_ used the problem
-> happens even for earlier versions. May be the commit message should
-> be adjusted before pushing.
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
- I applied to master but forgot to update the commit message :-(
+ Applied to master, thanks.
 
  Regards,
  Arnout
-
->  
->> gdb build fine with this patch applied and the one from Thomas [1]
->>
->> [1] http://patchwork.ozlabs.org/patch/797022/
->>
->> Tested-by: Romain Naour <romain.naour@gmail.com>
 
 
 -- 
