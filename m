@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:08:09 +0200
-Subject: [Buildroot] [PATCH] linux: drop full stop from prompt text
-In-Reply-To: <f148d8d9e57d88b3d243d75ed431129822e3b36e.1502109694.git.baruch@tkos.co.il>
-References: <f148d8d9e57d88b3d243d75ed431129822e3b36e.1502109694.git.baruch@tkos.co.il>
-Message-ID: <339ee133-5c90-6f5b-dcbd-f3adfa5575c2@mind.be>
+Date: Tue, 8 Aug 2017 18:11:05 +0200
+Subject: [Buildroot] [PATCH v2] mutt: fix build with
+ BR2_PACKAGE_SKELETON_NONE
+In-Reply-To: <6e30bce5e2d63e03119cfcd15c88447b6a90256a.1502128454.git.baruch@tkos.co.il>
+References: <6e30bce5e2d63e03119cfcd15c88447b6a90256a.1502128454.git.baruch@tkos.co.il>
+Message-ID: <8c6986ab-d0d6-d8cc-ccba-a54a09f8331c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,20 @@ To: buildroot@busybox.net
 
 
 
-On 07-08-17 14:41, Baruch Siach wrote:
-> We don't add full stop at the end of the prompt text.
+On 07-08-17 19:54, Baruch Siach wrote:
+> BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
+> symlink creation in that directory. Make sure that /var exists before creating
+> the symlink.
+
+ Commit message should be wrapped at 72 columns.
+
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- Applied to master, thanks.
+ Applied to master with that fixed, thanks.
 
  Regards,
  Arnout
