@@ -1,43 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  8 Aug 2017 20:45:20 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/sqlite: bump version to
-	3200000 (3.20.0)
-Message-ID: <20170808184520.26087-1-bernd.kuhls@t-online.de>
+From: Eugene Yudin <e.yudin@ndmsystems.com>
+Date: Tue, 8 Aug 2017 22:07:26 +0300
+Subject: [Buildroot] buildroot uClibc-ng build failure
+In-Reply-To: <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
+References: <20170803054828.GB7682@waldemar-brodkorb.de>
+ <20170803092346.02d02371@windsurf.home>
+ <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
+ <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
+Message-ID: <CAPmKWpEnqQEiUjjjYDkGiwtvGu-4XmCmrK04sbVQzJdCOff-gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yes. Please install the locale "en_US.UTF-8".
+It's used in buildroot by default:
+package/uclibc/uclibc.mk:46:UCLIBC_LOCALES = en_US
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index d04abf36d..bed2aefb1 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 58f2cabffb3ff4761a3ac7f834d9db7b46307c1f  sqlite-autoconf-3190300.tar.gz
-+sha1 2a451bcf42dc0865840463f7efc3f51cebeb4ea8  sqlite-autoconf-3200000.tar.gz
- # Calculated based on the hash above
--sha256 06129c03dced9f87733a8cba408871bd60673b8f93b920ba8d815efab0a06301  sqlite-autoconf-3190300.tar.gz
-+sha256 3814c6f629ff93968b2b37a70497cfe98b366bf587a2261a56a5f750af6ae6a0  sqlite-autoconf-3200000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index f6b249d94..1bfa6ca4a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3190300
-+SQLITE_VERSION = 3200000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+On Tue, Aug 8, 2017 at 7:52 PM, Andr? Hentschel <nerv@dawncrow.de> wrote:
+
+> Am 03.08.2017 um 10:11 schrieb Eugene Yudin:
+> > Hi Thomas,
+> >
+> >> Is this check insufficient now ?
+> > I think it's sufficient.
+> >
+> > Please post output of the following commands:
+> > $ locale
+> > $ locale -a
+> > $ cat /etc/os-release
+> $ locale
+> LANG=de_DE.utf8
+> LANGUAGE=de_DE.utf8
+> LC_CTYPE="de_DE.utf8"
+> LC_NUMERIC="de_DE.utf8"
+> LC_TIME="de_DE.utf8"
+> LC_COLLATE="de_DE.utf8"
+> LC_MONETARY="de_DE.utf8"
+> LC_MESSAGES="de_DE.utf8"
+> LC_PAPER="de_DE.utf8"
+> LC_NAME="de_DE.utf8"
+> LC_ADDRESS="de_DE.utf8"
+> LC_TELEPHONE="de_DE.utf8"
+> LC_MEASUREMENT="de_DE.utf8"
+> LC_IDENTIFICATION="de_DE.utf8"
+> LC_ALL=de_DE.utf8
+>
+> $ locale -a
+> C
+> C.UTF-8
+> de_DE.utf8
+> POSIX
+>
+> OS is Ubuntu 14.04.5 LTS
+> Should I install the english locale?
+>
+
+
+
 -- 
-2.11.0
+Best regards,
+Eugene
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170808/0197ea4b/attachment.html>
