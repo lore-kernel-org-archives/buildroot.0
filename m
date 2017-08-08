@@ -1,49 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Aug 2017 12:31:55 +0200
-Subject: [Buildroot] [git commit branch/next] package/skeleton-common: fix
-	recursive variable
-Message-ID: <20170809225748.6134181D3F@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 8 Aug 2017 17:07:20 +0200
+Subject: [Buildroot] [git commit branch/next] linux: bump cip version to
+	v4.4.75-cip6
+Message-ID: <20170809225748.D824E8169F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9682fcaf465cfeb56cbdf06c85b32d378032799e
+commit: https://git.buildroot.net/buildroot/commit/?id=03d5dad05f3f075507b63913da067e691e69bc43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This fixes a recursive variable definition introduced by the refactoring
-in commit 120307520f69f801bf05df1d2fd3433c6d498551. Simply rename the
-hook to remove the recursion.
-
-Fixes https://bugs.busybox.net/show_bug.cgi?id=10146
-
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/skeleton-common/skeleton-common.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-common/skeleton-common.mk
-index e9b87c3..e94dd6e 100644
---- a/package/skeleton-common/skeleton-common.mk
-+++ b/package/skeleton-common/skeleton-common.mk
-@@ -75,16 +75,16 @@ endef
- SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ROOT_PASSWD
+diff --git a/linux/Config.in b/linux/Config.in
+index 1622f01..59cb3af 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (4.12.4)"
  
- ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
--define SKELETON_COMMON_BIN_SH
-+define SKELETON_COMMON_SET_BIN_SH
- 	rm -f $(TARGET_DIR)/bin/sh
- endef
- else
- ifneq ($(SKELETON_COMMON_BIN_SH),)
--define SKELETON_COMMON_BIN_SH
-+define SKELETON_COMMON_SET_BIN_SH
- 	ln -sf $(SKELETON_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
- endef
- endif
- endif
--SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_BIN_SH
-+SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_BIN_SH
- 
- $(eval $(generic-package))
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.55-cip3)"
++	bool "Latest CIP SLTS version (v4.4.75-cip6)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -117,7 +117,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.12.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.75-cip6" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
