@@ -1,19 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:02:25 +0200
-Subject: [Buildroot] [PATCH] linux: bump cip version to v4.4.75-cip6
-In-Reply-To: <1502198309-10016-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1502198309-10016-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <5caea802-03c6-1d6b-fdf1-0614f222b9a5@mind.be>
+Date: Tue, 8 Aug 2017 18:03:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jack2: backport two build fixes
+In-Reply-To: <20170806125840.5694-1-bernd.kuhls@t-online.de>
+References: <20170806125840.5694-1-bernd.kuhls@t-online.de>
+Message-ID: <2df71770-efec-7231-19a5-3b0b4c950e75@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I was just thinking: I should prod Angelo to update the CIP kernel :-)
 
-On 08-08-17 15:18, Angelo Compagnucci wrote:
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
+On 06-08-17 14:58, Bernd Kuhls wrote:
+> 0005-gcc7.patch fixes
+> http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
+> 
+> 0006-fix-ftbfs-with-clang.patch
+> fixes the subsequent build error:
+> common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
+> memops.c:(.text+0x4dc): undefined reference to `fast_rand'
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
  Applied to master, thanks.
 
