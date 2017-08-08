@@ -1,34 +1,39 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 8 Aug 2017 17:14:04 +0200
-Subject: [Buildroot] [git commit] linux: drop full stop from prompt text
-Message-ID: <20170808155050.419457FEC7@busybox.osuosl.org>
+Date: Tue, 8 Aug 2017 17:11:20 +0200
+Subject: [Buildroot] [git commit] mutt: fix build with
+	BR2_PACKAGE_SKELETON_NONE
+Message-ID: <20170808155050.2E530817A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cfe1332d816d791b86ff353fc0ea99d55d8f2c7
+commit: https://git.buildroot.net/buildroot/commit/?id=f6756d69154bb8a68232ff11d4b15a2a8f0788b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We don't add a full stop at the end of the prompt text.
+BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which
+breaks symlink creation in that directory. Make sure that /var exists
+before creating the symlink.
+
+Fixes:
+http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mutt/mutt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 59cb3af..b654b5d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -368,7 +368,7 @@ choice
- 	default BR2_LINUX_KERNEL_USE_INTREE_DTS
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index abd40e5..b0bf5a7 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -66,6 +66,7 @@ MUTT_CONF_ENV += \
+ MUTT_CONF_OPTS += --with-mailpath=/var/mail
  
- config BR2_LINUX_KERNEL_USE_INTREE_DTS
--	bool "Use a device tree present in the kernel."
-+	bool "Use a device tree present in the kernel"
- 	help
- 	  Use a device tree source distributed with
- 	  the kernel sources. The dts files are located
+ define MUTT_VAR_MAIL
++	mkdir -p $(TARGET_DIR)/var
+ 	ln -sf /tmp $(TARGET_DIR)/var/mail
+ endef
+ MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
