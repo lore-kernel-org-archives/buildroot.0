@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:05:49 +0200
-Subject: [Buildroot] [PATCH] qemu-sparc: update kernel
-In-Reply-To: <20170805093424.GA11878@waldemar-brodkorb.de>
-References: <20170805093424.GA11878@waldemar-brodkorb.de>
-Message-ID: <b25a21e4-a874-031b-968b-de308428aab3@mind.be>
+Date: Tue, 8 Aug 2017 18:06:05 +0200
+Subject: [Buildroot] [PATCH] qemu-sparc64: update kernel
+In-Reply-To: <20170806193007.GA11010@waldemar-brodkorb.de>
+References: <20170806193007.GA11010@waldemar-brodkorb.de>
+Message-ID: <87e7a396-3d77-bc7d-497c-34b9b2bd0b86@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,8 @@ To: buildroot@busybox.net
 
 
 
-On 05-08-17 11:34, Waldemar Brodkorb wrote:
-> Fixes gcc 7.1.0 compile issues.
+On 06-08-17 21:30, Waldemar Brodkorb wrote:
+> This fixes '__multi3' issue when building the kernel.
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
@@ -21,7 +21,6 @@ On 05-08-17 11:34, Waldemar Brodkorb wrote:
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
