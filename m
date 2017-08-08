@@ -1,73 +1,33 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 8 Aug 2017 17:47:55 +0200
-Subject: [Buildroot] [git commit branch/next] uclibc: fix microblaze runtime
-	error
-Message-ID: <20170809225749.5D2617FF5E@busybox.osuosl.org>
+Date: Tue, 8 Aug 2017 17:48:00 +0200
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump 4.1.x
+	series
+Message-ID: <20170809225749.8EFE680124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62782633558acf93658f9c0debd02e87f581d1fd
+commit: https://git.buildroot.net/buildroot/commit/?id=d38797edee9b3e09492616a33c79c23a46d5a7ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With binutils 2.29 a runtime error is seen:
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000100
-
-Backport upstream patch to fix the issue.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
-new file mode 100644
-index 0000000..9886efd
---- /dev/null
-+++ b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
-@@ -0,0 +1,42 @@
-+From 9db18d93811153fc9a70c9844fadc6fdf7cbbb64 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sun, 6 Aug 2017 21:15:50 +0200
-+Subject: [PATCH] microblaze: handle R_MICROBLAZE_NONE for ld.so bootstrap
-+
-+Latest binutils 2.29 release emits a R_MICROBLAZE_NONE
-+relocation, which breaks shared library loader bootstrap
-+relocation.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ ldso/ldso/microblaze/dl-startup.h | 7 ++-----
-+ 1 file changed, 2 insertions(+), 5 deletions(-)
-+
-+diff --git a/ldso/ldso/microblaze/dl-startup.h b/ldso/ldso/microblaze/dl-startup.h
-+index 720c53a..16d5762 100644
-+--- a/ldso/ldso/microblaze/dl-startup.h
-++++ b/ldso/ldso/microblaze/dl-startup.h
-+@@ -82,18 +82,15 @@ static __always_inline
-+ void PERFORM_BOOTSTRAP_RELOC(ELF_RELOC *rpnt, unsigned long *reloc_addr,
-+ 	unsigned long symbol_addr, unsigned long load_addr, attribute_unused Elf32_Sym *symtab)
-+ {
-+-
-+ 	switch (ELF_R_TYPE(rpnt->r_info))
-+ 	{
-+ 		case R_MICROBLAZE_REL:
-+-
-+ 			*reloc_addr = load_addr + rpnt->r_addend;
-+ 			break;
-+-
-++		case R_MICROBLAZE_NONE:
-++			break;
-+ 		default:
-+ 			_dl_exit(1);
-+ 			break;
-+-
-+ 	}
-+-
-+ }
-+-- 
-+2.1.4
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 90c93ba..6f11fcc 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -235,7 +235,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+-	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.79"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.40"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
