@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:03:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jack2: backport two build fixes
-In-Reply-To: <20170806125840.5694-1-bernd.kuhls@t-online.de>
-References: <20170806125840.5694-1-bernd.kuhls@t-online.de>
-Message-ID: <2df71770-efec-7231-19a5-3b0b4c950e75@mind.be>
+Date: Tue, 8 Aug 2017 18:03:34 +0200
+Subject: [Buildroot] [PATCH] glibc: add patch to fix build on x86
+In-Reply-To: <20170805134618.26880-1-thomas.petazzoni@free-electrons.com>
+References: <20170805134618.26880-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <7d43e6bc-7c45-b220-65b7-40a33d58a3ad@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,25 @@ To: buildroot@busybox.net
 
 
 
-On 06-08-17 14:58, Bernd Kuhls wrote:
-> 0005-gcc7.patch fixes
-> http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
+On 05-08-17 15:46, Thomas Petazzoni wrote:
+> This fixes the following build issues:
 > 
-> 0006-fix-ftbfs-with-clang.patch
-> fixes the subsequent build error:
-> common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
-> memops.c:(.text+0x4dc): undefined reference to `fast_rand'
+> In file included from ../sysdeps/x86_64/multiarch/varshift.c:19:0,
+>                  from ../sysdeps/i386/i686/multiarch/varshift.c:1:
+> ../sysdeps/x86_64/multiarch/varshift.h: In function '__m128i_shift_right':
+> ../sysdeps/x86_64/multiarch/varshift.h:26:1: error: SSE vector return without SSE enabled changes the ABI [-Werror=psabi]
+>  {
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> [...]
+> 
+> .../lib/gcc/i686-buildroot-linux-gnu/7.1.0/include/tmmintrin.h:136:1: error: inlining failed in call to always_inline '_mm_shuffle_epi8': target specific option mismatch
+> 
+> The patch has been taken from glibc's patchwork at
+> https://patchwork.sourceware.org/patch/21003/.
+> 
+> Fixes bug #10156.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  Applied to master, thanks.
 
