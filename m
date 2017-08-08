@@ -1,39 +1,35 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue,  8 Aug 2017 15:18:29 +0200
-Subject: [Buildroot] [PATCH] linux: bump cip version to v4.4.75-cip6
-Message-ID: <1502198309-10016-1-git-send-email-angelo.compagnucci@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 08 Aug 2017 14:04:20 +0000
+Subject: [Buildroot] [Bug 10176] Rsyslog's S01logging is deleted by
+ Busybox.mk from TARGET
+In-Reply-To: <bug-10176-163@https.bugs.busybox.net/>
+References: <bug-10176-163@https.bugs.busybox.net/>
+Message-ID: <bug-10176-163-XePqnipdGa@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=10176
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1622f01..59cb3af 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.12.4)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-+	bool "Latest CIP SLTS version (v4.4.75-cip6)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -117,7 +117,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.12.4" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.75-cip6" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+Your analysis seems correct. Could you send the patch to the mailing list, as
+per the contribution guidelines? See
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+You also need to do the following.
+
+- Add your Signed-off-by line. This is a short way for you to assert that you
+are entitled to contribute the patch under Buildroot's GPL license.  See 
+http://elinux.org/Developer_Certificate_Of_Origin for more details.
+
+- Make it a git-formatted patch.
+
+- Add a note "Fixes https://bugs.busybox.net/show_bug.cgi?id=10176"
+
+Thanks!
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
