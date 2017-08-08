@@ -1,103 +1,77 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 08 Aug 2017 20:33:49 +0000
-Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
-In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
-References: <bug-10141-163@https.bugs.busybox.net/>
-Message-ID: <bug-10141-163-E5PqiZMv5g@https.bugs.busybox.net/>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 8 Aug 2017 22:49:13 +0200
+Subject: [Buildroot] buildroot uClibc-ng build failure
+In-Reply-To: <CAPmKWpEnqQEiUjjjYDkGiwtvGu-4XmCmrK04sbVQzJdCOff-gg@mail.gmail.com>
+References: <20170803054828.GB7682@waldemar-brodkorb.de>
+ <20170803092346.02d02371@windsurf.home>
+ <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
+ <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
+ <CAPmKWpEnqQEiUjjjYDkGiwtvGu-4XmCmrK04sbVQzJdCOff-gg@mail.gmail.com>
+Message-ID: <a74cbe12-aab1-4396-4bc2-4ccb3c4758a4@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10141
+done:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
-
---- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Clayton, All,
-
-So I've made a little Makefile to help investigate the issue. Usign a
-Makefile is definitely not required, but it help with parallel stuff,
-just to create the files (note that it takes quite a lot of space on
-the disk, more than 4GiB):
-
-    MKSQUASHFS ?= mksquashfs
-    SQSH_JOBS ?= 512
-
-    FILES := $(patsubst %,toto/%,$(shell seq 1 1024))
-    DIRS := $(patsubst %,titi/%,$(shell seq 1 1024))
-
-    all: titi.sqsh
-    rules: $(FILES)
-
-    titi.sqsh: $(DIRS)
-        $(MKSQUASHFS) titi $(@) -noappend -processors $(SQSH_JOBS) >/dev/null
-
-    toto/%:
-        @mkdir -p toto
-        @dd if=/dev/urandom of=$(@) bs=4096 count=1 2>/dev/null
-
-    $(DIRS): $(FILES)
-
-    titi/%:
-        @mkdir -p titi
-        @cp -a toto $(@)
-        @chattr -R +A $(@)
+$ locale -a
+C
+C.UTF-8
+de_DE.utf8
+en_US
+en_US.iso88591
+en_US.utf8
+POSIX
 
 
-And I call it like that (where 'O' is my out-of-tree build directory):
-
-    ~/dev/O/host/bin/fakeroot make -j 1000
-MKSQUASHFS=~/dev/O/host/bin/mksquashfs
-
-It is using the fakeroot and the mksquashfs as built by Buildroot, and
-I'm able to reproduce the issue; the failing files change with each run,
-due to scheduling ordering, but the number of failures is roughly always
-the same, around 10 failures for each runs, sometimes one or two less,
-sometimes a few more, but rarely above 12 or under 9.
-
-    llistxattr for titi/214/419 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/321/41 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/381/586 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/461/579 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/491/992 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/558/989 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/608/1022 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/769/843 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/816/899 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-    llistxattr for titi/832/714 failed in read_attrs, because Unknown error
--193619184.  Ignoring
-
-
-                     |        fakeroot    |
-                     | Buildroot | Ubuntu | no fakeroot
----------------------+----------------------------------
-mksquashfs Buildroot |   KO      |   KO   |    OK
-mksquashfs Ubuntu    |   KO      |   KO   |    OK
-
-So it really is fakeroot that is causing the issues... :-/
-No idea how to investigate further for now...
-
-Note: I was never able to run with more than about -processors 1019, or
-mksquashfs would fail at startup. 512 is anyway way above the 8 CPUs I
-have... Yet, it's enough to cause the failures, so job done.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Am 08.08.2017 um 21:07 schrieb Eugene Yudin:
+> Yes. Please install the locale "en_US.UTF-8".
+> It's used in buildroot by default:
+> package/uclibc/uclibc.mk:46:UCLIBC_LOCALES = en_US
+> 
+> On Tue, Aug 8, 2017 at 7:52 PM, Andr? Hentschel <nerv at dawncrow.de <mailto:nerv@dawncrow.de>> wrote:
+> 
+>     Am 03.08.2017 um 10:11 schrieb Eugene Yudin:
+>     > Hi Thomas,
+>     >
+>     >> Is this check insufficient now ?
+>     > I think it's sufficient.
+>     >
+>     > Please post output of the following commands:
+>     > $ locale
+>     > $ locale -a
+>     > $ cat /etc/os-release
+>     $ locale
+>     LANG=de_DE.utf8
+>     LANGUAGE=de_DE.utf8
+>     LC_CTYPE="de_DE.utf8"
+>     LC_NUMERIC="de_DE.utf8"
+>     LC_TIME="de_DE.utf8"
+>     LC_COLLATE="de_DE.utf8"
+>     LC_MONETARY="de_DE.utf8"
+>     LC_MESSAGES="de_DE.utf8"
+>     LC_PAPER="de_DE.utf8"
+>     LC_NAME="de_DE.utf8"
+>     LC_ADDRESS="de_DE.utf8"
+>     LC_TELEPHONE="de_DE.utf8"
+>     LC_MEASUREMENT="de_DE.utf8"
+>     LC_IDENTIFICATION="de_DE.utf8"
+>     LC_ALL=de_DE.utf8
+> 
+>     $ locale -a
+>     C
+>     C.UTF-8
+>     de_DE.utf8
+>     POSIX
+> 
+>     OS is Ubuntu 14.04.5 LTS
+>     Should I install the english locale?
+> 
+> 
+> 
+> 
+> -- 
+> Best regards,
+> Eugene
