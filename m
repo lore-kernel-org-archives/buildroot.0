@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Aug 2017 18:11:05 +0200
-Subject: [Buildroot] [PATCH v2] mutt: fix build with
- BR2_PACKAGE_SKELETON_NONE
-In-Reply-To: <6e30bce5e2d63e03119cfcd15c88447b6a90256a.1502128454.git.baruch@tkos.co.il>
-References: <6e30bce5e2d63e03119cfcd15c88447b6a90256a.1502128454.git.baruch@tkos.co.il>
-Message-ID: <8c6986ab-d0d6-d8cc-ccba-a54a09f8331c@mind.be>
+Date: Tue, 8 Aug 2017 18:12:04 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-headers: aarch64: Prevent
+ selecting unsupported versions
+In-Reply-To: <20170806134011.30228-1-bernd.kuhls@t-online.de>
+References: <20170806134011.30228-1-bernd.kuhls@t-online.de>
+Message-ID: <c1220cdf-f5b4-d50b-b19e-2aa93ba90508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,26 @@ To: buildroot@busybox.net
 
 
 
-On 07-08-17 19:54, Baruch Siach wrote:
-> BR2_PACKAGE_SKELETON_NONE does not provide the /var subdirectory which break
-> symlink creation in that directory. Make sure that /var exists before creating
-> the symlink.
-
- Commit message should be wrapped at 72 columns.
-
+On 06-08-17 15:40, Bernd Kuhls wrote:
+> Versions older than Linux v3.7 do not support the aarch64 architecture
+> so disable them, for reference see https://kernelnewbies.org/Linux_3.7
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/32d/32dff0df759baf1120e4f11335e735eb0708b237/
+> Without this patch these defconfigs fail to build
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> BR2_aarch64=y
+> BR2_KERNEL_HEADERS_3_2=y
+> 
+> BR2_aarch64=y
+> BR2_KERNEL_HEADERS_3_4=y
+> 
+> with error messages like this:
+> 
+> make[1]: Entering directory '/home/buildroot/br5_next/output/build/linux-headers-3.2.89'
+> Makefile:567: /home/buildroot/br5_next/output/build/linux-headers-3.2.89/arch/arm64/Makefile: No such file or directory
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Applied to master with that fixed, thanks.
+ Applied to master, thanks.
 
  Regards,
  Arnout
