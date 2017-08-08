@@ -1,26 +1,62 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 8 Aug 2017 13:54:39 -0700
-Subject: [Buildroot] [uclibc-ng-devel] buildroot uClibc-ng build failure
-In-Reply-To: <CAPmKWpEnqQEiUjjjYDkGiwtvGu-4XmCmrK04sbVQzJdCOff-gg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Aug 2017 23:00:48 +0200
+Subject: [Buildroot] buildroot uClibc-ng build failure
+In-Reply-To: <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
 References: <20170803054828.GB7682@waldemar-brodkorb.de>
  <20170803092346.02d02371@windsurf.home>
  <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
  <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
- <CAPmKWpEnqQEiUjjjYDkGiwtvGu-4XmCmrK04sbVQzJdCOff-gg@mail.gmail.com>
-Message-ID: <CAMo8Bf+-0C7EVQmAyfDokQwyWWsy5ERaEaJ4oMVNc8=tQ1NTdg@mail.gmail.com>
+Message-ID: <20170808230048.75361077@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 8, 2017 at 12:07 PM, Eugene Yudin <e.yudin@ndmsystems.com> wrote:
-> Yes. Please install the locale "en_US.UTF-8".
-> It's used in buildroot by default:
-> package/uclibc/uclibc.mk:46:UCLIBC_LOCALES = en_US
+Hello,
 
-Just curious: why not defaulting to C (or C.UTF-8) locale?
+On Tue, 8 Aug 2017 18:52:14 +0200, Andr? Hentschel wrote:
 
+> > Please post output of the following commands:
+> > $ locale
+> > $ locale -a
+> > $ cat /etc/os-release  
+> $ locale
+> LANG=de_DE.utf8
+> LANGUAGE=de_DE.utf8
+> LC_CTYPE="de_DE.utf8"
+> LC_NUMERIC="de_DE.utf8"
+> LC_TIME="de_DE.utf8"
+> LC_COLLATE="de_DE.utf8"
+> LC_MONETARY="de_DE.utf8"
+> LC_MESSAGES="de_DE.utf8"
+> LC_PAPER="de_DE.utf8"
+> LC_NAME="de_DE.utf8"
+> LC_ADDRESS="de_DE.utf8"
+> LC_TELEPHONE="de_DE.utf8"
+> LC_MEASUREMENT="de_DE.utf8"
+> LC_IDENTIFICATION="de_DE.utf8"
+> LC_ALL=de_DE.utf8
+> 
+> $ locale -a
+> C
+> C.UTF-8
+> de_DE.utf8
+> POSIX
+> 
+> OS is Ubuntu 14.04.5 LTS
+> Should I install the english locale?
+
+As per the current Buildroot requirements, it shouldn't be needed. We
+require one UTF-8 locale to be installed for uClibc to build its locale
+data, but not specifically the en_US.UTF-8 locale or any other english
+locale. If that has changed in uClibc, then we should adjust the
+dependency in Buildroot accordingly, but it would be a bit annoying.
+
+Best regards,
+
+Thomas
 -- 
-Thanks.
--- Max
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
