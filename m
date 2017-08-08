@@ -1,75 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:12:14 +0200
-Subject: [Buildroot] [PATCH] faad2: security bump to version 2.8.1
-In-Reply-To: <20170809151646.li4kbyz6ru7vmtgk@tarshish>
-References: <108fe39722b22a67f7737d6e174dc8483c784b95.1502254922.git.baruch@tkos.co.il>
- <a11dd81d-70f5-47d8-d612-65e188498de5@mind.be>
- <20170809151646.li4kbyz6ru7vmtgk@tarshish>
-Message-ID: <61409300-e617-9b4a-e6bb-21d6f59ebecd@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 8 Aug 2017 20:45:07 +0200
+Subject: [Buildroot] [git commit] bind: fix configure in case lmdb devel
+	files are present on the host
+Message-ID: <20170809210702.5A99A816A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=bb95fef1e0bec4ebc0584001f337438b17c4744d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix configure failure in case lmdb devel files are present on the host
+by adding --without-lmdb option (reported [1] and fix tested [2],[3] by
+grunpferd at netscape.net).
 
-On 09-08-17 17:16, Baruch Siach wrote:
-> Hi Arnout,
-> 
-> On Wed, Aug 09, 2017 at 02:42:36PM +0200, Arnout Vandecappelle wrote:
->> On 09-08-17 07:02, Baruch Siach wrote:
->>> Fixes: CVE-2017-9218, CVE-2017-9219, CVE-2017-9220, CVE-2017-9221,
->>> CVE-2017-9222, CVE-2017-9223, CVE-2017-9253, CVE-2017-9254,
->>> CVE-2017-9255, CVE-2017-9256, CVE-2017-9257
->>>
->>> http://seclists.org/fulldisclosure/2017/Jun/32
->> [snip]
->>> -FAAD2_VERSION = 2.7
->>> -FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION)
->>> +FAAD2_VERSION_MAJOR = 2.8
->>> +FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
->>
->>  Hm, "security bumps" are typically only affecting the minor version number,
->> this smells like a major bump... Or does faad have a slightly unconventional
->> version numbering scheme?
-> 
-> It's only called _MAJOR here because I reuse that in the URL, in line with the 
-> DRY principle.
-> 
-> Although version 2.8.0 (followed by 2.8.1 a week later) is the first release 
-> since February 2009, it does not contain a lot of code changes. I guess that 
-> the disclosed security issue were the main motivation of the release at this 
-> point.
+Fixes:
 
- OK, applied to master, thanks.
+  checking for lmdb library... yes
+  checking for library containing mdb_env_create... no
+  configure: error: found lmdb include but not library.
 
- Regards,
- Arnout
+[1] http://lists.busybox.net/pipermail/buildroot/2017-August/199945.html
+[2] http://lists.busybox.net/pipermail/buildroot/2017-August/199963.html
+[3] http://lists.busybox.net/pipermail/buildroot/2017-August/199964.html
 
-> 
->>> +FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
->>> +FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
->>
->>  Gah, what kind of stupid download URL is that :-)
-> 
-> Well, that's upstream.
-> 
->>>  FAAD2_LICENSE = GPL-2.0
->>>  FAAD2_LICENSE_FILES = COPYING
->>> +# No configure script in upstream tarball
->>> +FAAD2_AUTORECONF = YES
->>>  # frontend/faad calls frexp()
->>>  FAAD2_CONF_ENV = LIBS=-lm
->>>  FAAD2_INSTALL_STAGING = YES
-> 
-> baruch
-> 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/bind/bind.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 988f40e..c65568e 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -24,6 +24,7 @@ BIND_CONF_ENV = \
+ 	BUILD_CC="$(TARGET_CC)" \
+ 	BUILD_CFLAGS="$(TARGET_CFLAGS)"
+ BIND_CONF_OPTS = \
++	--without-lmdb \
+ 	--with-libjson=no \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
