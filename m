@@ -1,96 +1,102 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 08 Aug 2017 19:47:34 +0000
-Subject: [Buildroot] [Bug 10021] libqeglfs-viv-integration.so file is
- missing for qt5 on armv7
-In-Reply-To: <bug-10021-163@https.bugs.busybox.net/>
-References: <bug-10021-163@https.bugs.busybox.net/>
-Message-ID: <bug-10021-163-swSNMIlN4G@https.bugs.busybox.net/>
+Date: Tue, 08 Aug 2017 20:33:49 +0000
+Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
+In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
+References: <bug-10141-163@https.bugs.busybox.net/>
+Message-ID: <bug-10141-163-E5PqiZMv5g@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10021
+https://bugs.busybox.net/show_bug.cgi?id=10141
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Refik Tuzakli from comment #0)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Hello Refik,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+             Status|NEW                         |ASSIGNED
 
-did a buildroot compile with your defconfig file, your missing
-libqeglfs-viv-integration.so file is compiled and installed here:
+--- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Clayton, All,
 
-$ find target   -name "*-viv-*"
-target/usr/lib/qt/plugins/egldeviceintegrations/libqeglfs-viv-integration.so
+So I've made a little Makefile to help investigate the issue. Usign a
+Makefile is definitely not required, but it help with parallel stuff,
+just to create the files (note that it takes quite a lot of space on
+the disk, more than 4GiB):
 
-Mind to try a complete rebuild (after 'make clean')?
+    MKSQUASHFS ?= mksquashfs
+    SQSH_JOBS ?= 512
 
-In case of failure please post the qt5base configure summary output, e.g.:
+    FILES := $(patsubst %,toto/%,$(shell seq 1 1024))
+    DIRS := $(patsubst %,titi/%,$(shell seq 1 1024))
 
-Configure summary:
+    all: titi.sqsh
+    rules: $(FILES)
 
-Building on: linux-g++ (x86_64, CPU features: mmx sse sse2)
-Building for: devices/linux-buildroot-g++ (arm, CPU features: <none>)
-Configuration: cross_compile compile_examples enable_new_dtags largefile shared
-release c++11 c++14 c++1z concurrent dbus mremap reduce_exports release_tools
-stl
-Build options:
-  Mode ................................... release; optimized tools
-  Optimize release build for size ........ no
-  Building shared libraries .............. yes
-  Using C++ standard ..................... C++1z
-  Using gold linker ...................... no
-  Using new DTAGS ........................ yes
-  Using precompiled headers .............. no
-  Using LTCG ............................. no
-  Target compiler supports:
-    NEON ................................. no
-  Build parts ............................ examples libs
-Qt modules and options:
-[...]
-  EGL .................................... yes
-  OpenVG ................................. yes
-  OpenGL:
-    Desktop OpenGL ....................... no
-    OpenGL ES 2.0 ........................ yes
-    OpenGL ES 3.0 ........................ yes
-    OpenGL ES 3.1 ........................ no
-  Session Management ..................... yes
-Features used by QPA backends:
-  evdev .................................. yes
-  libinput ............................... yes
-  INTEGRITY HID .......................... no
-  mtdev .................................. yes
-  tslib .................................. yes
-  xkbcommon-evdev ........................ no
-QPA backends:
-  DirectFB ............................... no
-  EGLFS .................................. yes
-  EGLFS details:
-    EGLFS i.Mx6 .......................... yes
-    EGLFS i.Mx6 Wayland .................. no
-    EGLFS EGLDevice ...................... no
-    EGLFS GBM ............................ no
-    EGLFS Mali ........................... no
-    EGLFS Raspberry Pi ................... no
-    EGL on X11 ........................... no
-  LinuxFB ................................ no
-[...]
+    titi.sqsh: $(DIRS)
+        $(MKSQUASHFS) titi $(@) -noappend -processors $(SQSH_JOBS) >/dev/null
+
+    toto/%:
+        @mkdir -p toto
+        @dd if=/dev/urandom of=$(@) bs=4096 count=1 2>/dev/null
+
+    $(DIRS): $(FILES)
+
+    titi/%:
+        @mkdir -p titi
+        @cp -a toto $(@)
+        @chattr -R +A $(@)
 
 
-And additinonal the lines about the egl-viv test:
+And I call it like that (where 'O' is my out-of-tree build directory):
 
-> gmake[2]: Entering directory '.../build/qt5base-5.9.1/config.tests/qpa/eglfs-viv'
-[...]
-> gmake[2]: Leaving directory '.../build/qt5base-5.9.1/config.tests/qpa/eglfs-viv'
-test config.gui.tests.egl-viv succeeded
+    ~/dev/O/host/bin/fakeroot make -j 1000
+MKSQUASHFS=~/dev/O/host/bin/mksquashfs
 
-Did only a compile test here, no runtime test, because of lack of i.mx6 board
-at hand...
+It is using the fakeroot and the mksquashfs as built by Buildroot, and
+I'm able to reproduce the issue; the failing files change with each run,
+due to scheduling ordering, but the number of failures is roughly always
+the same, around 10 failures for each runs, sometimes one or two less,
+sometimes a few more, but rarely above 12 or under 9.
 
-Regards,
-Peter
+    llistxattr for titi/214/419 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/321/41 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/381/586 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/461/579 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/491/992 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/558/989 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/608/1022 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/769/843 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/816/899 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+    llistxattr for titi/832/714 failed in read_attrs, because Unknown error
+-193619184.  Ignoring
+
+
+                     |        fakeroot    |
+                     | Buildroot | Ubuntu | no fakeroot
+---------------------+----------------------------------
+mksquashfs Buildroot |   KO      |   KO   |    OK
+mksquashfs Ubuntu    |   KO      |   KO   |    OK
+
+So it really is fakeroot that is causing the issues... :-/
+No idea how to investigate further for now...
+
+Note: I was never able to run with more than about -processors 1019, or
+mksquashfs would fail at startup. 512 is anyway way above the 8 CPUs I
+have... Yet, it's enough to cause the failures, so job done.
 
 -- 
 You are receiving this mail because:
