@@ -1,137 +1,100 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 4 Aug 2017 21:50:24 +0200
-Subject: [Buildroot] [git commit branch/next] dbus: add upstream patch to
-	fix startup hang with with expat >= 2.2.1
-Message-ID: <20170809225748.7F5437FF5E@busybox.osuosl.org>
+Date: Tue, 8 Aug 2017 17:52:07 +0200
+Subject: [Buildroot] [git commit branch/next] package/jack2: backport two
+	build fixes
+Message-ID: <20170809225750.2EAF780124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a5e76381f8b000baa09c902ca89d45725c47f04
+commit: https://git.buildroot.net/buildroot/commit/?id=50ace0bcc31e375adde289215e2b0c728211f886
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-After c0ad6ded018ffbc33f7f5 expat: security bump to version 2.2.1
-the system can hang on startup under certain circumstances.
+0005-gcc7.patch fixes
+http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
 
-This happens when:
-  * we use systemd as init system
-  * the random nonblocking pool takes a while to initialize
-    * this apparently doesn't happen on qemu, so this would not have
-      been caught by the runtime testing infrastructure
-    * it also doesn't seem to happen when network booting
+0006-fix-ftbfs-with-clang.patch
+fixes the subsequent build error:
+common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
+memops.c:(.text+0x4dc): undefined reference to `fast_rand'
 
-For a more detailed description of the bug see here:
-https://bugs.freedesktop.org/show_bug.cgi?id=101858
-
-The patch should be in next dbus version 1.10.24
-
-Set DBUS_AUTORECONF = YES because configure.ac is changed.
-
-Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-[Arnout: add upstream commit sha + Marcus's Sob to the patch]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...er-expat-Tell-Expat-not-to-defend-against.patch | 78 ++++++++++++++++++++++
- package/dbus/dbus.mk                               |  3 +
- 2 files changed, 81 insertions(+)
+ package/jack2/0005-gcc7.patch                 | 31 +++++++++++++++++++++++++++
+ package/jack2/0006-fix-ftbfs-with-clang.patch | 28 ++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-diff --git a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+diff --git a/package/jack2/0005-gcc7.patch b/package/jack2/0005-gcc7.patch
 new file mode 100644
-index 0000000..fd9e01d
+index 0000000..dadaf44
 --- /dev/null
-+++ b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
-@@ -0,0 +1,78 @@
-+From 1252dc1d1f465b8ab6b36ff7252e395e66a040cf Mon Sep 17 00:00:00 2001
-+From: Simon McVittie <smcv@debian.org>
-+Date: Fri, 21 Jul 2017 10:46:39 +0100
-+Subject: [PATCH 1/2] config-loader-expat: Tell Expat not to defend against
-+ hash collisions
++++ b/package/jack2/0005-gcc7.patch
+@@ -0,0 +1,31 @@
++From f7bccdca651592cc4082b28fd4a01ed6ef8ab655 Mon Sep 17 00:00:00 2001
++From: Kjetil Matheussen <k.s.matheussen@notam02.no>
++Date: Sat, 15 Jul 2017 13:21:59 +0200
++Subject: [PATCH] Tests: Fix compilation with gcc7
 +
-+By default, Expat uses cryptographic-quality random numbers as a salt for
-+its hash algorithm, and since 2.2.1 it gets them from the getrandom
-+syscall on Linux. That syscall refuses to return any entropy until the
-+kernel's CSPRNG (random pool) has been initialized. Unfortunately, this
-+can take as long as 40 seconds on embedded devices with few entropy
-+sources, which is too long: if the system dbus-daemon blocks for that
-+length of time, important D-Bus clients like systemd and systemd-logind
-+time out and fail to connect to it.
++Fixes
++../tests/test.cpp: In function ???int process4(jack_nframes_t, void*)???:
++../tests/test.cpp:483:73: error: call of overloaded ???abs(jack_nframes_t)??? is ambiguous
++  if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
 +
-+We're parsing small configuration files here, and we trust them
-+completely, so we don't need to defend against hash collisions: nobody
-+is going to be crafting them to cause pathological performance.
++Downloaded from upstream commit
++https://github.com/jackaudio/jack2/commit/f7bccdca651592cc4082b28fd4a01ed6ef8ab655
 +
-+Bug: https://bugs.freedesktop.org/show_bug.cgi?id=101858
-+Signed-off-by: Simon McVittie <smcv@debian.org>
-+Tested-by: Christopher Hewitt <hewitt@ieee.org>
-+Reviewed-by: Philip Withnall <withnall@endlessm.com>
-+
-+Upstream commit 1252dc1d1f465b8ab6b36ff7252e395e66a040cf
-+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ bus/config-loader-expat.c | 14 ++++++++++++++
-+ configure.ac              |  8 ++++++++
-+ 2 files changed, 22 insertions(+)
++ tests/test.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/bus/config-loader-expat.c b/bus/config-loader-expat.c
-+index b571fda3..27cbe2d0 100644
-+--- a/bus/config-loader-expat.c
-++++ b/bus/config-loader-expat.c
-+@@ -203,6 +203,20 @@ bus_config_load (const DBusString      *file,
-+       goto failed;
-+     }
++diff --git a/tests/test.cpp b/tests/test.cpp
++index 8a8a8117..d2ef9a05 100644
++--- a/tests/test.cpp
+++++ b/tests/test.cpp
++@@ -479,7 +479,7 @@ int process4(jack_nframes_t nframes, void *arg)
++ 	jack_nframes_t delta_time = cur_time - last_time;
 + 
-++  /* We do not need protection against hash collisions (CVE-2012-0876)
-++   * because we are only parsing trusted XML; and if we let Expat block
-++   * waiting for the CSPRNG to be initialized, as it does by default to
-++   * defeat CVE-2012-0876, it can cause timeouts during early boot on
-++   * entropy-starved embedded devices.
-++   *
-++   * TODO: When Expat gets a more explicit API for this than
-++   * XML_SetHashSalt, check for that too, and use it preferentially.
-++   * https://github.com/libexpat/libexpat/issues/91 */
-++#if defined(HAVE_XML_SETHASHSALT)
-++  /* Any nonzero number will do. https://xkcd.com/221/ */
-++  XML_SetHashSalt (expat, 4);
-++#endif
-++
-+   if (!_dbus_string_get_dirname (file, &dirname))
-+     {
-+       dbus_set_error (error, DBUS_ERROR_NO_MEMORY, NULL);
-+diff --git a/configure.ac b/configure.ac
-+index 52da11fb..c4022ed7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -938,6 +938,14 @@ XML_CFLAGS=
-+ AC_SUBST([XML_CFLAGS])
-+ AC_SUBST([XML_LIBS])
++ 	Log("calling process4 callback : jack_frame_time = %ld delta_time = %ld\n", cur_time, delta_time);
++-	if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
+++	if (delta_time > 0  && abs((int64_t)delta_time - (int64_t)cur_buffer_size) > (int64_t)tolerance) {
++ 		printf("!!! ERROR !!! jack_frame_time seems to return incorrect values cur_buffer_size = %d, delta_time = %d tolerance %d\n", cur_buffer_size, delta_time, tolerance);
++ 	}
 + 
-++save_cflags="$CFLAGS"
-++save_libs="$LIBS"
-++CFLAGS="$CFLAGS $XML_CFLAGS"
-++LIBS="$LIBS $XML_LIBS"
-++AC_CHECK_FUNCS([XML_SetHashSalt])
-++CFLAGS="$save_cflags"
-++LIBS="$save_libs"
-++
-+ # Thread lib detection
-+ AC_ARG_VAR([THREAD_LIBS])
-+ save_libs="$LIBS"
-+-- 
-+2.11.0
+diff --git a/package/jack2/0006-fix-ftbfs-with-clang.patch b/package/jack2/0006-fix-ftbfs-with-clang.patch
+new file mode 100644
+index 0000000..a73fe69
+--- /dev/null
++++ b/package/jack2/0006-fix-ftbfs-with-clang.patch
+@@ -0,0 +1,28 @@
++From d3c8e2d8d78899fba40a3e677ed4dbe388d82269 Mon Sep 17 00:00:00 2001
++From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
++Date: Thu, 18 Sep 2014 18:29:23 +0200
++Subject: [PATCH] Fix FTBFS with clang++
 +
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 1e3b462..a2f81cd 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -6,6 +6,9 @@
- 
- DBUS_VERSION = 1.10.22
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
++Forwarded from http://bugs.debian.org/757820
 +
-+# 0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
-+DBUS_AUTORECONF = YES
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
- DBUS_INSTALL_STAGING = YES
++Downloaded from upstream commit
++https://github.com/jackaudio/jack2/commit/d3c8e2d8d78899fba40a3e677ed4dbe388d82269
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ common/memops.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/common/memops.c b/common/memops.c
++index 27f6194a..2d416b64 100644
++--- a/common/memops.c
+++++ b/common/memops.c
++@@ -198,7 +198,7 @@ static inline __m128i float_24_sse(__m128 s)
++  */
++ static unsigned int seed = 22222;
++ 
++-inline unsigned int fast_rand() {
+++static inline unsigned int fast_rand() {
++ 	seed = (seed * 96314165) + 907633515;
++ 	return seed;
++ }
