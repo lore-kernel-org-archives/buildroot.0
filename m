@@ -1,70 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Aug 2017 18:04:57 +0200
-Subject: [Buildroot] [PATCHv2] fs/squashfs: honour the number of
- parallel jobs
-In-Reply-To: <7f6220fd-6c9d-72a7-8364-d76b3065f18f@mind.be>
-References: <20170806154102.24807-1-yann.morin.1998@free.fr>
- <CANn-YGRT2J1GuHu0efq6OhGCoJ9v0PyzmrcSRTfXkRoKyQkD-g@mail.gmail.com>
- <7f6220fd-6c9d-72a7-8364-d76b3065f18f@mind.be>
-Message-ID: <20170808160457.GA3441@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Aug 2017 18:05:08 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix issue with gdb 8.0
+In-Reply-To: <20170805222935.GA7270@waldemar-brodkorb.de>
+References: <20170805104858.GA31479@waldemar-brodkorb.de>
+ <d8716f27-f8b8-b78b-71d3-59d6d5730153@gmail.com>
+ <20170805222935.GA7270@waldemar-brodkorb.de>
+Message-ID: <2ef98544-8b83-4fed-279c-e32010782be5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2017-08-08 16:09 +0200, Arnout Vandecappelle spake thusly:
-> On 07-08-17 16:33, Clayton Shotwell wrote:
-> > Yann,
-> > 
-> > On Sun, Aug 6, 2017 at 10:41 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >>
-> >> By default, mksquashfs uses all the CPUs available, like us with
-> >> BR2_JLEVEL=0.
-> > 
-> > This ends up using the number of CPUs available plus 1. I tested this on my
-> > machine and it worked. I do still see the extended attributes issue
-> > that I posted
-> > in https://bugs.busybox.net/show_bug.cgi?id=10141.
-> > 
-> >> However, by setting BR21_JLEVEL to non-zero, a user volutarily limits
-> >> the number of jobbs allowed to run concurrently (for various reasons,
-> >> like this is not a priority task on the machine; or like the
-> >> autobuilders, to spread the load accross multiple runs without
-> >> overloading the machine).
-> >>
-> >> So, propagate tthe parallelisn settings down to mksquashfs, to repect
-> >> the user's will.
-> >>
-> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> > 
-> > Tested-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-Thanks!
+On 06-08-17 00:29, Waldemar Brodkorb wrote:
+> Hi,
+> Romain Naour wrote,
+> 
+>> Hi Waldemar,
+>>
+>> Le 05/08/2017 ? 12:49, Waldemar Brodkorb a ?crit :
+>>> gdb 8.0 is now compiled and linked with C++, the thread_db
+>>> headers need to use extern "C", to be usable for C++ code.
+>>
+>> I got the same issue with gdb-7.12.1.
+> 
+> Yeah, when --disable-build-with-cxx is _not_ used the problem
+> happens even for earlier versions. May be the commit message should
+> be adjusted before pushing.
 
->  Thanks. I'm not sure if I should apply this to next or to master. It doesn't
-> really fix anything, so I'm inclined to put it in next...
+ I applied to master but forgot to update the commit message :-(
 
-Yes, next is good.
+ Regards,
+ Arnout
 
->  For the real mksquashfs issue, do we have a way to find out what goes wrong
-> exactly? From what I've read, it's not even clear if it's mksquashfs or fakeroot
-> that is at fault...
+>  
+>> gdb build fine with this patch applied and the one from Thomas [1]
+>>
+>> [1] http://patchwork.ozlabs.org/patch/797022/
+>>
+>> Tested-by: Romain Naour <romain.naour@gmail.com>
 
-So, the first analysis points toward highly-parallel situations.
-
-I'll do some experimentation...
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
