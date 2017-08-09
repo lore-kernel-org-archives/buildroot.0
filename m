@@ -1,52 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:53:52 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: libgtk3 support depends on
- X11 backend
-In-Reply-To: <trinity-db7b134a-e9a6-4a07-a674-162538e759b3-1502264291114@3capp-gmx-bs63>
-References: <1502237350-17331-1-git-send-email-joshua.henderson@microchip.com>
- <trinity-db7b134a-e9a6-4a07-a674-162538e759b3-1502264291114@3capp-gmx-bs63>
-Message-ID: <7eec17a3-366b-6303-c836-d3744b89333d@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 9 Aug 2017 23:59:55 +0200
+Subject: [Buildroot] [git commit branch/next] package/logrotate: bump
+	version to 3.12.3
+Message-ID: <20170809221936.336EA7FABD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=9614b21806f2c5f588aa74ced6ac4ec347d83b40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 09-08-17 09:38, Peter Seiderer wrote:
-> Hello Joshua,
-> 
->> Gesendet: Mittwoch, 09. August 2017 um 02:09 Uhr
->> Von: "Joshua Henderson" <joshua.henderson@microchip.com>
->> An: buildroot at buildroot.org
->> Cc: "Peter Seiderer" <ps.report@gmx.net>, "Julien Corjon" <corjon.j@ecagroup.com>, "Brent Sink" <brents_3@hotmail.com>, "Naoki Matsumoto" <n-matsumoto@melcoinc.co.jp>
->> Betreff: [PATCH] package/qt5base: libgtk3 support depends on X11 backend
->>
->> libgtk3 can conditionally be build with or without the X11 backend unlike
->> libgtk2. If libgtk3 is enabled and the X11 backend is not enabled for
->> BR2_PACKAGE_QT5_VERSION_LATEST, a build error [1] is introduced.  This change
->> disables gtk support in this case.
-> NAK - or only as a workaround, the real issue is a missing QT_EGL_NO_X11/MESA_EGL_NO_X11_HEADERS
-> define, see e.g. [2] for further discussion...
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Do you expect a proper resolution to arrive before 2017.08, or should I apply
-Joshua's patch (with modified commit message) to master after all?
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> Peter
-> 
-> [2] http://lists.busybox.net/pipermail/buildroot/2017-July/196075.html
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 4985a17..860263c 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 62aa0229cfd34c7b6ea6a6736d569983bf4a3dd1f3c9e9c2efe2ffe2a0a55cf2 logrotate-3.11.0.tar.gz
++sha256 683ccb7fff74082471aa6bd9e962ae7a3f4d55eea7df41fd97aa12ec6f55e657  logrotate-3.12.3.tar.gz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index b11fc88..274b2b6 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.11.0
++LOGROTATE_VERSION = 3.12.3
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
