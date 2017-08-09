@@ -1,48 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 00:00:21 +0200
-Subject: [Buildroot] [git commit branch/next] package/luvi: bump version to
-	2.7.6
-Message-ID: <20170809221936.7AC8A7FD28@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:00:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/lzip: bump version to
+	1.19
+Message-ID: <20170809221936.AFCF67FDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee895bdc1066ec0147880caf4f4bfa41e2da54ea
+commit: https://git.buildroot.net/buildroot/commit/?id=bbfe5846b57334ccf7d6653a70a60b12a94c56a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Switched to github helper because upstream does not provide the tarball
-anymore.
+Switched to sha256 hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/luvi/luvi.hash | 2 +-
- package/luvi/luvi.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/lzip/lzip.hash | 6 ++----
+ package/lzip/lzip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 99fd69e..7f7abdb 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b36a3b96ec5852398338bc38567c5bb589783487c65130e1d702ff98fac3a6b7  luvi-src-v2.7.5.tar.gz
-+sha256 65d3ded5007d5bb58fc3b76013913596fd42ed7326310d67c668ddf9a017a179  luvi-v2.7.6.tar.gz
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index 956c37f..7dd5e5a 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
+index 8855231..e074c76 100644
+--- a/package/lzip/lzip.hash
++++ b/package/lzip/lzip.hash
+@@ -1,4 +1,2 @@
+-# From http://lists.nongnu.org/archive/html/lzip-bug/2016-06/msg00002.html
+-sha1	ef42f3209d02c3b3c217a61c8f127bcb8747b128	lzip-1.18.tar.gz
+-# Locally calculated after checking pgp signature
+-sha256	47f9882a104ab05532f467a7b8f4ddbb898fa2f1e8d9d468556d6c2d04db14dd	lzip-1.18.tar.gz
++# From http://lists.nongnu.org/archive/html/lzip-bug/2017-05/msg00000.html
++sha256 ffadc4f56be1bc0d3ae155ec4527bd003133bdc703a753b2cc683f610e646ba9 lzip-1.19.tar.gz
+diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
+index cb88037..b7ba5dd 100644
+--- a/package/lzip/lzip.mk
++++ b/package/lzip/lzip.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUVI_VERSION = v2.7.5
--LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
--LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
-+LUVI_VERSION = v2.7.6
-+LUVI_SITE = $(call github,luvit,luvi,$(LUVI_VERSION))
- LUVI_LICENSE = Apache-2.0
- LUVI_LICENSE_FILES = LICENSE.txt
- LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+-LZIP_VERSION = 1.18
++LZIP_VERSION = 1.19
+ LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
+ LZIP_LICENSE = GPL-2.0+
+ LZIP_LICENSE_FILES = COPYING
