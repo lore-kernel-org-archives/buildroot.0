@@ -1,47 +1,60 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 00:00:43 +0200
-Subject: [Buildroot] [git commit branch/next] package/lzip: bump version to
-	1.19
-Message-ID: <20170809221936.AFCF67FDA8@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:12:13 +0200
+Subject: [Buildroot] [git commit branch/next] package/mdadm: bump version to
+	4.0
+Message-ID: <20170809221937.0223B7FDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbfe5846b57334ccf7d6653a70a60b12a94c56a1
+commit: https://git.buildroot.net/buildroot/commit/?id=47b693fb9bdb22599301c1003854ed6196c9e3ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Switched to sha256 hash provided by upstream.
+This version of mdadm can optionally use the corosync and libdlm
+packages. However, it checks for their presence by directly probing the
+host /usr/include, which fails for cross-compilation:
+
+http://git.neil.brown.name/?p=mdadm.git;a=commitdiff;h=7716570e6d906e7326f83d466f6ba73009649d03#patch2
+http://git.neil.brown.name/?p=mdadm.git;a=commitdiff;h=d15a1f72bd92bc4724ee94b2ae8132633ffeb72b#patch1
+
+Since Buildroot doesn't package either corosync nor libdlm, disable
+them explicitly with -DNO_COROSYNC -DNO_DLM.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lzip/lzip.hash | 6 ++----
- package/lzip/lzip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/mdadm/mdadm.hash | 2 +-
+ package/mdadm/mdadm.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
-index 8855231..e074c76 100644
---- a/package/lzip/lzip.hash
-+++ b/package/lzip/lzip.hash
-@@ -1,4 +1,2 @@
--# From http://lists.nongnu.org/archive/html/lzip-bug/2016-06/msg00002.html
--sha1	ef42f3209d02c3b3c217a61c8f127bcb8747b128	lzip-1.18.tar.gz
--# Locally calculated after checking pgp signature
--sha256	47f9882a104ab05532f467a7b8f4ddbb898fa2f1e8d9d468556d6c2d04db14dd	lzip-1.18.tar.gz
-+# From http://lists.nongnu.org/archive/html/lzip-bug/2017-05/msg00000.html
-+sha256 ffadc4f56be1bc0d3ae155ec4527bd003133bdc703a753b2cc683f610e646ba9 lzip-1.19.tar.gz
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index cb88037..b7ba5dd 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
+index 7f228d9..6132a6d 100644
+--- a/package/mdadm/mdadm.hash
++++ b/package/mdadm/mdadm.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
+-sha256	8ae5f45306b873190e91f410709b00e51997b633c072b33f8efd9f7df022ca68	mdadm-3.3.4.tar.xz
++sha256 1d6ae7f24ced3a0fa7b5613b32f4a589bb4881e3946a5a2c3724056254ada3a9  mdadm-4.0.tar.xz
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index c08e057..207b0be 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--LZIP_VERSION = 1.18
-+LZIP_VERSION = 1.19
- LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
- LZIP_LICENSE = GPL-2.0+
- LZIP_LICENSE_FILES = COPYING
+-MDADM_VERSION = 3.3.4
++MDADM_VERSION = 4.0
+ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
+ MDADM_LICENSE_FILES = COPYING
+ 
+ MDADM_MAKE_OPTS = \
+-	CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" CHECK_RUN_DIR=0 -C $(MDADM_DIR) mdadm
++	CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" CC="$(TARGET_CC)" CHECK_RUN_DIR=0 -C $(MDADM_DIR) mdadm
+ 
+ MDADM_INSTALL_TARGET_OPTS = \
+ 	DESTDIR=$(TARGET_DIR)/usr -C $(MDADM_DIR) install-mdadm
