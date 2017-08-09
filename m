@@ -1,90 +1,55 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:58:59 +0200
-Subject: [Buildroot] [git commit branch/next] package/log4cpp: bump version
-	to 1.1.3
-Message-ID: <20170809221936.23AA1800E3@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:22:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/erlang-jiffy: bump
+	version to 0.14.11
+Message-ID: <20170809221937.3C2CD7FB6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2146a779b8a198f908bf3387e893cfba318e109a
+commit: https://git.buildroot.net/buildroot/commit/?id=c11a8e3cac58585577a83e134549c0305168d5a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Added sha256 hash, removed patch applied upstream:
-https://sourceforge.net/p/log4cpp/codegit/ci/fe4ed0
+Removed ERLANG_JIFFY_SET_VERSION_HOOK, not needed anymore after
+https://github.com/davisp/jiffy/commit/d596d890bcc7d74d34d185854873ba678bbf237b
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/log4cpp/0001-Fix-musl-compile.patch | 34 -----------------------------
- package/log4cpp/log4cpp.hash                |  6 +++--
- package/log4cpp/log4cpp.mk                  |  2 +-
- 3 files changed, 5 insertions(+), 37 deletions(-)
+ package/erlang-jiffy/erlang-jiffy.hash | 2 +-
+ package/erlang-jiffy/erlang-jiffy.mk   | 8 +-------
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/package/log4cpp/0001-Fix-musl-compile.patch b/package/log4cpp/0001-Fix-musl-compile.patch
-deleted file mode 100644
-index f1a13a0..0000000
---- a/package/log4cpp/0001-Fix-musl-compile.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 17562259fb6684f351a70b98b4f3b438927ba1aa Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 11 Jul 2016 22:58:31 +0200
--Subject: [PATCH] Fix musl compile.
--
--Include proper config.h (via log4cpp/Portability.hh) to fix the
--evaluate of LOG4CPP_HAVE_STDINT_H in the file tests/Clock.hh
--
--Fixes:
--
--  Clock.hh:17:13: error: 'int64_t' does not name a type
--       typedef int64_t usec_t;
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- log4cpp/tests/Clock.hh | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/log4cpp/tests/Clock.hh b/log4cpp/tests/Clock.hh
--index 4bf0ca4..45c6467 100644
----- a/log4cpp/tests/Clock.hh
--+++ b/log4cpp/tests/Clock.hh
--@@ -6,6 +6,8 @@
-- #ifndef __CLOCK_H
-- #define __CLOCK_H
-- 
--+#include <log4cpp/Portability.hh>
--+
-- #ifdef LOG4CPP_HAVE_STDINT_H
-- #include <stdint.h>
-- #endif // LOG4CPP_HAVE_STDINT_H
---- 
--2.8.1
--
-diff --git a/package/log4cpp/log4cpp.hash b/package/log4cpp/log4cpp.hash
-index 6467aab..fd73988 100644
---- a/package/log4cpp/log4cpp.hash
-+++ b/package/log4cpp/log4cpp.hash
-@@ -1,3 +1,5 @@
- # From http://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/
--md5		1e173df8ee97205f412ff84aa93b8fbe	log4cpp-1.1.1.tar.gz
--sha1	23aa5bd7d6f79992c92bad3e1c6d64a34f8fcf68	log4cpp-1.1.1.tar.gz
-+md5 b9e2cee932da987212f2c74b767b4d8b  log4cpp-1.1.3.tar.gz
-+sha1 74f0fea7931dc1bc4e5cd34a6318cd2a51322041  log4cpp-1.1.3.tar.gz
-+# Locally computed
-+sha256 2cbbea55a5d6895c9f0116a9a9ce3afb86df383cd05c9d6c1a4238e5e5c8f51d  log4cpp-1.1.3.tar.gz
-diff --git a/package/log4cpp/log4cpp.mk b/package/log4cpp/log4cpp.mk
-index 1801cff..aab05f2 100644
---- a/package/log4cpp/log4cpp.mk
-+++ b/package/log4cpp/log4cpp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
+index 1f83e27..4a201fe 100644
+--- a/package/erlang-jiffy/erlang-jiffy.hash
++++ b/package/erlang-jiffy/erlang-jiffy.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 7d1054c475c82c626de3ad57201a7fc51da38667c8a7502149eb751edc6b601d erlang-jiffy-0.14.8.tar.gz
++sha256 c555726f592b79894c253ca1dc3c3aec6a5697271d29364d57f8175f387b86f3 erlang-jiffy-0.14.11.tar.gz
+diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
+index 3139454..9a688f7 100644
+--- a/package/erlang-jiffy/erlang-jiffy.mk
++++ b/package/erlang-jiffy/erlang-jiffy.mk
+@@ -4,17 +4,11 @@
+ #
  ################################################################################
  
- LOG4CPP_VERSION_MAJOR = 1.1
--LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).1
-+LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).3
- LOG4CPP_SITE = http://downloads.sourceforge.net/project/log4cpp/log4cpp-1.1.x%20%28new%29/log4cpp-$(LOG4CPP_VERSION_MAJOR)
- LOG4CPP_SUBDIR = log4cpp
- # The "or later" is indicated in the HTML documentation
+-ERLANG_JIFFY_VERSION = 0.14.8
++ERLANG_JIFFY_VERSION = 0.14.11
+ ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
+ ERLANG_JIFFY_LICENSE = MIT (core), \
+ 	BSD-3-Clause (Google double conversion library), \
+ 	BSD-3-Clause (tests)
+ ERLANG_JIFFY_LICENSE_FILES = LICENSE
+ 
+-# Set version manually in jiffy.app.src otherwise "git describe" is used.
+-define ERLANG_JIFFY_SET_VERSION_HOOK
+-	$(SED) 's/{vsn, git}/{vsn, "$(ERLANG_JIFFY_VERSION)"}/' $(@D)/src/jiffy.app.src
+-endef
+-ERLANG_JIFFY_POST_PATCH_HOOKS = ERLANG_JIFFY_SET_VERSION_HOOK
+-
+ $(eval $(rebar-package))
