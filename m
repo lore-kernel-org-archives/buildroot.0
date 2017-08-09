@@ -1,42 +1,63 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 00:00:38 +0200
-Subject: [Buildroot] [git commit branch/next] package/lvm2: bump version to
-	2.02.173
-Message-ID: <20170809221936.9E22D7FD28@busybox.osuosl.org>
+Date: Wed, 9 Aug 2017 23:56:04 +0200
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.1.6
+Message-ID: <20170809221935.D448A7FB2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dbf315f4eaece8fc64159cb750d4fd4f979dfaf
+commit: https://git.buildroot.net/buildroot/commit/?id=3b713c771cb6be041259f4ccd2e386ecef4906e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 81d0e97..9f7a6c6 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 801adcc2ae483f81edf6bfba73090b6b8f710370e48764f08a62da71d617157075bea01593c2535ad5ba71dcb5e0cfe83cec9a65180a6e8b9e0d214bdee79883  LVM2.2.02.171.tgz
-+sha512 c2ea8beafe006abf9282f51ec98600fd0ebff816d53c10ecbb19bbf336ada4825135cf9c92ccd364afb18f8b1d7e163eff5bdec8dfdd70dfb9ba45db2f6bdd5e  LVM2.2.02.173.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index f5cd0b5..63ac109 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 1356c38..7b9e4b4 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.1.5
++MESA3D_HEADERS_VERSION = 17.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index fb6427a..f2dda20 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-July/000342.html
+-md5 6cf936fbcaadd98924298a7009e8265d  mesa-17.1.5.tar.xz
+-sha1 709a38eb9ecf54390c303071a016c23c1d4bd64b  mesa-17.1.5.tar.xz
+-sha256 378516b171712687aace4c7ea8b37c85895231d7a6d61e1e27362cf6034fded9  mesa-17.1.5.tar.xz
+-sha512 a12671afd812b304e1db690b123a9de16332608541f71cc3ee9128a3630c81416d46255e5bdbf19e14e85716b218f447987b555e3bc0081b8b6f392556fa21e2  mesa-17.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-August/000346.html
++md5 54758bf842f9ea53c8b57cce4311b87e  mesa-17.1.6.tar.xz
++sha1 2acc201e24ea67c5231074d6746a42a747228ed6  mesa-17.1.6.tar.xz
++sha256 0686deadde1f126b20aa67e47e8c50502043eee4ecdf60d5009ffda3cebfee50  mesa-17.1.6.tar.xz
++sha512 cf57f29a21208f0a9bc84157f806bcaf6fd0583352449fcb986b05773eeefc99c4040dc41b242782dd5aa9ff7f9c5312b17a4db82d87f600acf165b6acdfc95a  mesa-17.1.6.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1654046..e62dfff 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LVM2_VERSION = 2.02.171
-+LVM2_VERSION = 2.02.173
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.1.5
++MESA3D_VERSION = 17.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
