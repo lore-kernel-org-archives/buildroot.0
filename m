@@ -1,47 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:41:51 +0200
-Subject: [Buildroot] [git commit] ficl: fix build with gcc 7
-Message-ID: <20170809214028.9C2707FA45@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 9 Aug 2017 23:47:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stella: fix gcc7 support
+In-Reply-To: <20170806095527.8051-1-bernd.kuhls@t-online.de>
+References: <20170806095527.8051-1-bernd.kuhls@t-online.de>
+Message-ID: <d075f4b5-3de4-90a6-6964-44572031b975@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=128a16aceeb43d7d22b10c6845f7c4d09439e031
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gcc 7 with -Os (optimize for size) takes the liberty to remove the code
-of inline functions entirely - which is indeed allowed according to the
-C99 standard, cfr. this [1] very complete StackOverflow answer. This
-leads to undefined function references at link time.
 
-The proper approach is to patch the code to use 'static inline'
-instead. However, for various reasons such a patch is not entirely
-trivial, and upstream has not moved since 7 years, so instead take the
-simpler approach of restoring the gcc original inline behaviour with
--fgnu89-inline to fix this issue.
+On 06-08-17 11:55, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/6ed/6edd7950c402dbf433f3904193c645ebc8531c7e/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Fixes http://autobuild.buildroot.org/results/d72/d72a7e9775a10bc884b9953dd2eba3ad32100cca
+ Applied to master, thanks.
 
-[1] https://stackoverflow.com/questions/6312597/is-inline-without-static-or-extern-ever-useful-in-c99
+ Regards,
+ Arnout
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/ficl/ficl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
-index 5d2d600..af900fa 100644
---- a/package/ficl/ficl.mk
-+++ b/package/ficl/ficl.mk
-@@ -39,7 +39,7 @@ endif
- 
- define FICL_BUILD_CMDS
- 	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
-+		CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
- endef
- 
- define FICL_INSTALL_STAGING_CMDS
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
