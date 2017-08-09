@@ -1,40 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 15:09:43 +0200
-Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
-In-Reply-To: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
-References: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
-Message-ID: <99c56dcf-2a6f-b025-7a70-70d33c64aa96@mind.be>
+Date: Wed, 9 Aug 2017 15:32:48 +0200
+Subject: [Buildroot] [PATCH v3] systemd: allow to build with uClibc
+ toolchains
+In-Reply-To: <20170808163702.GA29748@waldemar-brodkorb.de>
+References: <20170808163702.GA29748@waldemar-brodkorb.de>
+Message-ID: <a4dba163-8e8a-9168-ac8c-cab8ba1333ef@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Waldemar,
 
+ If you're willing to go through another round, I have a few remarks...
 
-On 09-08-17 14:30, Aseem Sharma wrote:
-> Hi,
-> 
-> I am naive to buildroot & processor world trying to compile
-> "buildroot-2017.02.5" for "Marvell ARM Armada 166E processor (compatible to
-> ARMv5TE instruction-set)" based old system. However, I do not understand the
-> options to be selected in "make menuconfig" for 
-> 1. Target options->Target Architecture {think should be ARM - little endian}
-> 2. Target options->Target Architecture variant
+On 08-08-17 18:37, Waldemar Brodkorb wrote:
+[snip]
+>  config BR2_PACKAGE_SYSTEMD_MACHINED
+>  	bool "enable machine daemon"
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
 
- It is indeed sometimes difficult to find out what the underlying CPU
-architecture is for a given SoC. Also, we only have 40-ish variants while gcc
-supports something like 100 variants. Anyway, for your CPU, it is certainly ARM
-little endian, and most likely xscale variant, though arm926t should work as well.
+ Could you add a comment why this doesn't work on uClibc?
 
- You probably need to keep VFP support turned off, but I can't find a reference
-that confirms that this CPU is lacking a floating point unit.
+ Normally for packages that have a library dependency we add a comment line. I'm
+not sure if we really want that here, though, it's making things a little heavy
+maybe. Although, in the menu it would look pretty OK I think. What do you think?
 
- You'll also need some figuring out to find a kernel configuration that works...
-Can't help you there, I'm afraid.
+ Both comments repeated for the rest of this file.
+
+[snip]
+> @@ -138,7 +138,7 @@ config BR2_INIT_SYSTEMD
+>  	select BR2_PACKAGE_SYSTEMD
+>  
+>  comment "systemd needs a glibc toolchain, headers >= 3.10"
+                            ^^^^^ or uClibc? :-)
+
+> -	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+> +	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
+
+ Maybe add parenthesis here for clarity - I'm not sure what the binding is of ||
+and && in kconfig...
 
  Regards,
  Arnout
+
+>  		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
+>  
+>  config BR2_INIT_NONE
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
