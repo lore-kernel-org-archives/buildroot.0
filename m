@@ -1,55 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 00:22:58 +0200
-Subject: [Buildroot] [git commit branch/next] package/erlang-jiffy: bump
-	version to 0.14.11
-Message-ID: <20170809221937.3C2CD7FB6F@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:01:25 +0200
+Subject: [Buildroot] [git commit branch/next] package/lzo: bump version to
+	2.10
+Message-ID: <20170809221936.BF9C47FDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c11a8e3cac58585577a83e134549c0305168d5a7
+commit: https://git.buildroot.net/buildroot/commit/?id=3ad2d40c65af7a346d79d38ec2999633795c051f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Removed ERLANG_JIFFY_SET_VERSION_HOOK, not needed anymore after
-https://github.com/davisp/jiffy/commit/d596d890bcc7d74d34d185854873ba678bbf237b
+Added locally computed sha256 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/erlang-jiffy/erlang-jiffy.hash | 2 +-
- package/erlang-jiffy/erlang-jiffy.mk   | 8 +-------
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ package/lzo/lzo.hash | 4 +++-
+ package/lzo/lzo.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
-index 1f83e27..4a201fe 100644
---- a/package/erlang-jiffy/erlang-jiffy.hash
-+++ b/package/erlang-jiffy/erlang-jiffy.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 7d1054c475c82c626de3ad57201a7fc51da38667c8a7502149eb751edc6b601d erlang-jiffy-0.14.8.tar.gz
-+sha256 c555726f592b79894c253ca1dc3c3aec6a5697271d29364d57f8175f387b86f3 erlang-jiffy-0.14.11.tar.gz
-diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
-index 3139454..9a688f7 100644
---- a/package/erlang-jiffy/erlang-jiffy.mk
-+++ b/package/erlang-jiffy/erlang-jiffy.mk
-@@ -4,17 +4,11 @@
+diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
+index 415ed99..cf2734f 100644
+--- a/package/lzo/lzo.hash
++++ b/package/lzo/lzo.hash
+@@ -1,2 +1,4 @@
+ # From http://www.oberhumer.com/opensource/lzo/
+-sha1 e2a60aca818836181e7e6f8c4f2c323aca6ac057 lzo-2.09.tar.gz
++sha1 4924676a9bae5db58ef129dc1cebce3baa3c4b5d  lzo-2.10.tar.gz
++# Locally computed
++sha256 c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072  lzo-2.10.tar.gz
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 17d8d0f..5b8efdd 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_JIFFY_VERSION = 0.14.8
-+ERLANG_JIFFY_VERSION = 0.14.11
- ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
- ERLANG_JIFFY_LICENSE = MIT (core), \
- 	BSD-3-Clause (Google double conversion library), \
- 	BSD-3-Clause (tests)
- ERLANG_JIFFY_LICENSE_FILES = LICENSE
- 
--# Set version manually in jiffy.app.src otherwise "git describe" is used.
--define ERLANG_JIFFY_SET_VERSION_HOOK
--	$(SED) 's/{vsn, git}/{vsn, "$(ERLANG_JIFFY_VERSION)"}/' $(@D)/src/jiffy.app.src
--endef
--ERLANG_JIFFY_POST_PATCH_HOOKS = ERLANG_JIFFY_SET_VERSION_HOOK
--
- $(eval $(rebar-package))
+-LZO_VERSION = 2.09
++LZO_VERSION = 2.10
+ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPL-2.0+
+ LZO_LICENSE_FILES = COPYING
