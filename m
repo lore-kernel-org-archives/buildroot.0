@@ -1,57 +1,30 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:57:35 +0200
-Subject: [Buildroot] [git commit branch/next] fs/squashfs: honour the number
-	of parallel jobs
-Message-ID: <20170809221936.11A787F945@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:00:01 +0200
+Subject: [Buildroot] [git commit branch/next] package/logsurfer: use hashes
+	provided by upstream
+Message-ID: <20170809221936.471B480ACC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62e626b2ab9f60b21b8c8c392b0dc4ccd509f69b
+commit: https://git.buildroot.net/buildroot/commit/?id=2fa8937c98eb4e9b6dbba8ac08d645a962f31c54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-By default, mksquashfs uses all the CPUs available, like us with
-BR2_JLEVEL=0.
-
-However, by setting BR21_JLEVEL to non-zero, a user volutarily limits
-the number of jobbs allowed to run concurrently (for various reasons,
-like this is not a priority task on the machine; or like the
-autobuilders, to spread the load accross multiple runs without
-overloading the machine).
-
-So, propagate tthe parallelisn settings down to mksquashfs, to repect
-the user's will.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Tested-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/squashfs/squashfs.mk | 5 +++--
+ package/logsurfer/logsurfer.hash | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 342c7a8..7de7f51 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -6,6 +6,8 @@
- 
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
-+ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
-+
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
- else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
-@@ -19,8 +21,7 @@ ROOTFS_SQUASHFS_ARGS += -comp gzip
- endif
- 
- define ROOTFS_SQUASHFS_CMD
--	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
--		$(ROOTFS_SQUASHFS_ARGS)
-+	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
- endef
- 
- $(eval $(call ROOTFS_TARGET,squashfs))
+diff --git a/package/logsurfer/logsurfer.hash b/package/logsurfer/logsurfer.hash
+index 2c14078..539a41a 100644
+--- a/package/logsurfer/logsurfer.hash
++++ b/package/logsurfer/logsurfer.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  74a36e8530a884031b4ae2344a46b9aaa07a1ee36d143802f6b64f817c5bd1af  logsurfer-1.8.tar.gz
++# From https://www.crypt.gen.nz/logsurfer/
++md5 4c26a74d813ccf766117c95c644aa601  logsurfer-1.8.tar.gz
++sha256 74a36e8530a884031b4ae2344a46b9aaa07a1ee36d143802f6b64f817c5bd1af  logsurfer-1.8.tar.gz
