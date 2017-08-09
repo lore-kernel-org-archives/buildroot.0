@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:11:37 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix issue with gdb 8.0
-In-Reply-To: <2ef98544-8b83-4fed-279c-e32010782be5@mind.be>
-References: <20170805104858.GA31479@waldemar-brodkorb.de>
- <d8716f27-f8b8-b78b-71d3-59d6d5730153@gmail.com>
- <20170805222935.GA7270@waldemar-brodkorb.de>
- <2ef98544-8b83-4fed-279c-e32010782be5@mind.be>
-Message-ID: <4826639f-7f12-d2af-d9be-da4cf57b09c1@mind.be>
+Date: Wed, 9 Aug 2017 23:12:14 +0200
+Subject: [Buildroot] [PATCH] faad2: security bump to version 2.8.1
+In-Reply-To: <20170809151646.li4kbyz6ru7vmtgk@tarshish>
+References: <108fe39722b22a67f7737d6e174dc8483c784b95.1502254922.git.baruch@tkos.co.il>
+ <a11dd81d-70f5-47d8-d612-65e188498de5@mind.be>
+ <20170809151646.li4kbyz6ru7vmtgk@tarshish>
+Message-ID: <61409300-e617-9b4a-e6bb-21d6f59ebecd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +14,57 @@ To: buildroot@busybox.net
 
 
 
-On 08-08-17 18:05, Arnout Vandecappelle wrote:
+On 09-08-17 17:16, Baruch Siach wrote:
+> Hi Arnout,
 > 
-> 
-> On 06-08-17 00:29, Waldemar Brodkorb wrote:
->> Hi,
->> Romain Naour wrote,
->>
->>> Hi Waldemar,
+> On Wed, Aug 09, 2017 at 02:42:36PM +0200, Arnout Vandecappelle wrote:
+>> On 09-08-17 07:02, Baruch Siach wrote:
+>>> Fixes: CVE-2017-9218, CVE-2017-9219, CVE-2017-9220, CVE-2017-9221,
+>>> CVE-2017-9222, CVE-2017-9223, CVE-2017-9253, CVE-2017-9254,
+>>> CVE-2017-9255, CVE-2017-9256, CVE-2017-9257
 >>>
->>> Le 05/08/2017 ? 12:49, Waldemar Brodkorb a ?crit :
->>>> gdb 8.0 is now compiled and linked with C++, the thread_db
->>>> headers need to use extern "C", to be usable for C++ code.
->>>
->>> I got the same issue with gdb-7.12.1.
+>>> http://seclists.org/fulldisclosure/2017/Jun/32
+>> [snip]
+>>> -FAAD2_VERSION = 2.7
+>>> -FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION)
+>>> +FAAD2_VERSION_MAJOR = 2.8
+>>> +FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
 >>
->> Yeah, when --disable-build-with-cxx is _not_ used the problem
->> happens even for earlier versions. May be the commit message should
->> be adjusted before pushing.
+>>  Hm, "security bumps" are typically only affecting the minor version number,
+>> this smells like a major bump... Or does faad have a slightly unconventional
+>> version numbering scheme?
 > 
->  I applied to master but forgot to update the commit message :-(
+> It's only called _MAJOR here because I reuse that in the URL, in line with the 
+> DRY principle.
+> 
+> Although version 2.8.0 (followed by 2.8.1 a week later) is the first release 
+> since February 2009, it does not contain a lot of code changes. I guess that 
+> the disclosed security issue were the main motivation of the release at this 
+> point.
 
- Apparently I hadn't pushed it yet so now I did update the commit message :-)
-
- But this probably means there's some other patch for which I forgot to send the
-'applied to master' mail.
+ OK, applied to master, thanks.
 
  Regards,
  Arnout
+
+> 
+>>> +FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
+>>> +FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
+>>
+>>  Gah, what kind of stupid download URL is that :-)
+> 
+> Well, that's upstream.
+> 
+>>>  FAAD2_LICENSE = GPL-2.0
+>>>  FAAD2_LICENSE_FILES = COPYING
+>>> +# No configure script in upstream tarball
+>>> +FAAD2_AUTORECONF = YES
+>>>  # frontend/faad calls frexp()
+>>>  FAAD2_CONF_ENV = LIBS=-lm
+>>>  FAAD2_INSTALL_STAGING = YES
+> 
+> baruch
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
