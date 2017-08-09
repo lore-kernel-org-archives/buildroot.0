@@ -1,51 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:37:47 +0200
-Subject: [Buildroot] [git commit] package/stella: fix gcc7 support
-Message-ID: <20170809214028.88418805F0@busybox.osuosl.org>
+Date: Wed, 9 Aug 2017 23:41:51 +0200
+Subject: [Buildroot] [git commit] ficl: fix build with gcc 7
+Message-ID: <20170809214028.9C2707FA45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2f0f5df468209e0bd97b54e713e80e92188ef4f
+commit: https://git.buildroot.net/buildroot/commit/?id=128a16aceeb43d7d22b10c6845f7c4d09439e031
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/6ed/6edd7950c402dbf433f3904193c645ebc8531c7e/
+gcc 7 with -Os (optimize for size) takes the liberty to remove the code
+of inline functions entirely - which is indeed allowed according to the
+C99 standard, cfr. this [1] very complete StackOverflow answer. This
+leads to undefined function references at link time.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The proper approach is to patch the code to use 'static inline'
+instead. However, for various reasons such a patch is not entirely
+trivial, and upstream has not moved since 7 years, so instead take the
+simpler approach of restoring the gcc original inline behaviour with
+-fgnu89-inline to fix this issue.
+
+Fixes http://autobuild.buildroot.org/results/d72/d72a7e9775a10bc884b9953dd2eba3ad32100cca
+
+[1] https://stackoverflow.com/questions/6312597/is-inline-without-static-or-extern-ever-useful-in-c99
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/stella/0004-gcc7.patch | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ package/ficl/ficl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/stella/0004-gcc7.patch b/package/stella/0004-gcc7.patch
-new file mode 100644
-index 0000000..979682d
---- /dev/null
-+++ b/package/stella/0004-gcc7.patch
-@@ -0,0 +1,23 @@
-+From fb6e573263b7fb80a12d0eb74d22e13899f745ee Mon Sep 17 00:00:00 2001
-+From: Stephen Anthony <sa666666@gmail.com>
-+Date: Mon, 17 Apr 2017 18:52:04 -0230
-+Subject: [PATCH] Update UNIX configure script for gcc7 and above.
-+
-+Backported from upstream commit:
-+https://github.com/stella-emu/stella/commit/fb6e573263b7fb80a12d0eb74d22e13899f745ee
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff --git a/configure b/configure
-+index 94b91ef9..b1218e9f 100755
-+--- a/configure
-++++ b/configure
-+@@ -417,7 +417,7 @@ elif test "$have_gcc" = yes; then
-+ 	fi
-+ 
-+ 	case $cxx_version in
-+-		4.[7-9]|4.[7-9].[0-9]|4.[7-9].[0-9][-.]*|[5-6].[0-9]|[5-6].[0-9].[0-9]|[5-6].[0-9].[0-9][-.]*)
-++		4.[7-9]|4.[7-9].[0-9]|4.[7-9].[0-9][-.]*|[5-9]|[5-9].[0-9]|[5-9].[0-9].[0-9]|[5-9].[0-9].[0-9][-.]*)
-+ 			_cxx_major=`echo $cxx_version | cut -d '.' -f 1`
-+ 			_cxx_minor=`echo $cxx_version | cut -d '.' -f 2`
-+ 			cxx_version="$cxx_version, ok"
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+index 5d2d600..af900fa 100644
+--- a/package/ficl/ficl.mk
++++ b/package/ficl/ficl.mk
+@@ -39,7 +39,7 @@ endif
+ 
+ define FICL_BUILD_CMDS
+ 	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
++		CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
+ endef
+ 
+ define FICL_INSTALL_STAGING_CMDS
