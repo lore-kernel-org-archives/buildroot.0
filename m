@@ -1,66 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  9 Aug 2017 09:59:09 +0300
-Subject: [Buildroot] [PATCH 1/2] nvme: fix libuuid test when cross compiling
-Message-ID: <f2563e1cd77f4d5ca181a015d57d36ea3f561bc7.1502261950.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 9 Aug 2017 09:38:11 +0200
+Subject: [Buildroot] [PATCH] package/qt5base: libgtk3 support depends on
+	X11 backend
+In-Reply-To: <1502237350-17331-1-git-send-email-joshua.henderson@microchip.com>
+References: <1502237350-17331-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <trinity-db7b134a-e9a6-4a07-a674-162538e759b3-1502264291114@3capp-gmx-bs63>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use $(LD) to test whether libuuid is installed, so that we check the target,
-not the host.
+Hello Joshua,
 
-Fixes:
-http://autobuild.buildroot.net/results/e26/e263ffbf8947374c2aac73ab42edcbf4d9a3600a/
-http://autobuild.buildroot.net/results/53b/53b2d1e0c3cdeafb980389bcfd8a10b6ca48fbc2/
+> Gesendet: Mittwoch, 09. August 2017 um 02:09 Uhr
+> Von: "Joshua Henderson" <joshua.henderson@microchip.com>
+> An: buildroot at buildroot.org
+> Cc: "Peter Seiderer" <ps.report@gmx.net>, "Julien Corjon" <corjon.j@ecagroup.com>, "Brent Sink" <brents_3@hotmail.com>, "Naoki Matsumoto" <n-matsumoto@melcoinc.co.jp>
+> Betreff: [PATCH] package/qt5base: libgtk3 support depends on X11 backend
+>
+> libgtk3 can conditionally be build with or without the X11 backend unlike
+> libgtk2. If libgtk3 is enabled and the X11 backend is not enabled for
+> BR2_PACKAGE_QT5_VERSION_LATEST, a build error [1] is introduced.  This change
+> disables gtk support in this case.
 
-Cc: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...allow-linker-override-for-cross-uuid-test.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch
+NAK - or only as a workaround, the real issue is a missing QT_EGL_NO_X11/MESA_EGL_NO_X11_HEADERS
+define, see e.g. [2] for further discussion...
 
-diff --git a/package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch b/package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch
-new file mode 100644
-index 000000000000..dc1c01a88824
---- /dev/null
-+++ b/package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch
-@@ -0,0 +1,34 @@
-+From f926559acd1beb74dc5dc9b0e414b087110a251f Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 9 Aug 2017 09:43:12 +0300
-+Subject: [PATCH] Makefile: allow linker override for cross uuid test
-+
-+The test to determine whether libuuid is installed uses the host 'ld' utility.
-+This breaks when cross compiling, since target libraries are often different
-+than host libraries.
-+
-+Use $(LD) instead. This allows to easily use the cross compiler linker.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/linux-nvme/nvme-cli/pull/216
-+
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 3f1d9aaa890d..cc74bdd6c3e6 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,7 +1,7 @@
-+ CFLAGS ?= -O2 -g -Wall -Werror
-+ CFLAGS += -std=gnu99
-+ CPPFLAGS += -D_GNU_SOURCE -D__CHECK_ENDIAN__
-+-LIBUUID = $(shell ld -o /dev/null -luuid >/dev/null 2>&1; echo $$?)
-++LIBUUID = $(shell $(LD) -o /dev/null -luuid >/dev/null 2>&1; echo $$?)
-+ NVME = nvme
-+ INSTALL ?= install
-+ DESTDIR =
-+-- 
-+2.13.2
-+
--- 
-2.13.2
+Regards,
+Peter
+
+[2] http://lists.busybox.net/pipermail/buildroot/2017-July/196075.html
+
+> 
+> [1] http://autobuild.buildroot.net/results/6f3c2fcb0a44cd13ef4c73822d4d08f923291099
+> 
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Brent Sink <brents_3@hotmail.com>
+> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index bbbdd41..1b4bd7b 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -190,6 +190,16 @@ else
+>  QT5BASE_CONFIGURE_OPTS += -no-libinput
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_LIBGTK3),yy)
+> +# only enable gtk support if libgtk3 X11 backend is enabled
+> +ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+> +QT5BASE_CONFIGURE_OPTS += -gtk
+> +QT5BASE_DEPENDENCIES += libgtk3
+> +else
+> +QT5BASE_CONFIGURE_OPTS += -no-gtk
+> +endif
+> +endif
+> +
+>  # Build the list of libraries to be installed on the target
+>  QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+>  QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
+> -- 
+> 2.7.4
+> 
+> 
