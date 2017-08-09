@@ -1,66 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:27:31 +0200
-Subject: [Buildroot] [PATCH] Revert "package/skeleton-custom: also check
- for missing directories"
-In-Reply-To: <20170809161005.3874-1-yann.morin.1998@free.fr>
-References: <20170809161005.3874-1-yann.morin.1998@free.fr>
-Message-ID: <18ca8a9d-9d07-8763-05eb-cbe9ef1dfcc6@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 9 Aug 2017 23:37:47 +0200
+Subject: [Buildroot] [git commit] package/stella: fix gcc7 support
+Message-ID: <20170809214028.88418805F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d2f0f5df468209e0bd97b54e713e80e92188ef4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes
+http://autobuild.buildroot.net/results/6ed/6edd7950c402dbf433f3904193c645ebc8531c7e/
 
-On 09-08-17 18:10, Yann E. MORIN wrote:
-> This partially reverts commit cf6d321e9d5c9dec63e42466fec4bf5de5853bd3.
-> 
-> The underlying reason for doing the checks is to ensure that a
-> merged-usr setting is properly enforced, even for custom skeletons.
-> 
-> Before that patch, a custom skeleton where both /bin and /usr/bin were
-> missing was accepted; but then the first package that intalled something
-> in /bin would create it as a directory, thus breaking the merged-usr
-> situation. Ditto sbin and lib, of course.
-> 
-> cf6d321 was created to detect that situation, and the fix was to require
-> that both directories do exist in the custom skeleton, so that we new
-> the check for consistency were OK, in all cases.
-> 
-> However, that broke existing skeletons which where missing both
-> directories, and some people are shinning about it...
-> 
-> The crux of the problem is that Buildroot should be responsible for
-> creating the directories or the symliks when they are missing, and only
-> fail if the existing ones are incorrect, but not impose the burden on
-> the user.
-> 
-> A situation where the problem arises is when a skeleton is shared
-> between various builds, some using a merged-usr while other do not.
-> 
-> We fix that by reverting the offending changes change, back to the
-> previous behaviour. We keep the stderr redirection in stat calls, and
-> the variable renaming.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/stella/0004-gcc7.patch | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
- So I didn't split the patch up sufficiently :-)
-
-
-> A proper fix to create the missing directories can be added later.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/stella/0004-gcc7.patch b/package/stella/0004-gcc7.patch
+new file mode 100644
+index 0000000..979682d
+--- /dev/null
++++ b/package/stella/0004-gcc7.patch
+@@ -0,0 +1,23 @@
++From fb6e573263b7fb80a12d0eb74d22e13899f745ee Mon Sep 17 00:00:00 2001
++From: Stephen Anthony <sa666666@gmail.com>
++Date: Mon, 17 Apr 2017 18:52:04 -0230
++Subject: [PATCH] Update UNIX configure script for gcc7 and above.
++
++Backported from upstream commit:
++https://github.com/stella-emu/stella/commit/fb6e573263b7fb80a12d0eb74d22e13899f745ee
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/configure b/configure
++index 94b91ef9..b1218e9f 100755
++--- a/configure
+++++ b/configure
++@@ -417,7 +417,7 @@ elif test "$have_gcc" = yes; then
++ 	fi
++ 
++ 	case $cxx_version in
++-		4.[7-9]|4.[7-9].[0-9]|4.[7-9].[0-9][-.]*|[5-6].[0-9]|[5-6].[0-9].[0-9]|[5-6].[0-9].[0-9][-.]*)
+++		4.[7-9]|4.[7-9].[0-9]|4.[7-9].[0-9][-.]*|[5-9]|[5-9].[0-9]|[5-9].[0-9].[0-9]|[5-9].[0-9].[0-9][-.]*)
++ 			_cxx_major=`echo $cxx_version | cut -d '.' -f 1`
++ 			_cxx_minor=`echo $cxx_version | cut -d '.' -f 2`
++ 			cxx_version="$cxx_version, ok"
