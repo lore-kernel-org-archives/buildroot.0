@@ -1,83 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 00:01:44 +0200
-Subject: [Buildroot] [git commit branch/next] package/mcelog: bump version
-	to 153
-Message-ID: <20170809221936.E5EB28179C@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:20:22 +0200
+Subject: [Buildroot] [git commit branch/next] package/mksh: bump version to
+	R55
+Message-ID: <20170809221937.2CAEF7FD65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84160165a18e2962df2c013f35cb1f7eee0069cf
+commit: https://git.buildroot.net/buildroot/commit/?id=9aca89e35f61318fb6e651b1b2187feb230ffb67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Removed patch applied upstream:
-https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=524ed1cd16de5adcb4a5015777d3dfc63afda1fe
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...memutil.h-add-missing-include-for-va_list.patch | 31 ----------------------
- package/mcelog/mcelog.hash                         |  2 +-
- package/mcelog/mcelog.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 33 deletions(-)
+ package/mksh/mksh.hash | 4 ++--
+ package/mksh/mksh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
-deleted file mode 100644
-index f9e08be..0000000
---- a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 36aad32283eae5b47a05e3adfa3f5f6a7b1b55c0 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 11 Jun 2017 10:02:39 +0200
--Subject: [PATCH] memutil.h: add missing include for va_list
--
--Fixes compile error with uclibc-ng:
--
--In file included from mcelog.c:51:0:
--memutil.h:4:48: error: unknown type name 'va_list'
-- int xvasprintf(char **ret, const char *format, va_list ap);
--
--Patch sent upstream: https://github.com/andikleen/mcelog/pull/54
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- memutil.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/memutil.h b/memutil.h
--index 81028e9..dbed7fa 100644
----- a/memutil.h
--+++ b/memutil.h
--@@ -1,4 +1,5 @@
-- #include <stdlib.h>
--+#include <stdarg.h>
-- 
-- int xasprintf(char **strp, const char *fmt, ...);
-- int xvasprintf(char **ret, const char *format, va_list ap);
---- 
--2.11.0
--
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index f1c0cd5..1a9dd60 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 825644a6cfd9b149e848d91d322724f2fb48f3a98441a25d9d38a5dbe02fe1ef  mcelog-v152.tar.gz
-+sha256 d8f3dde21b2e0d76740f374385817c11b3fd69b095a186a6dd12c7b0ba0cca8f  mcelog-v153.tar.gz
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index d12fc44..dca6a18 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index e92acd9..411baa8 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+-md5	be0a6fb93b4a5f927bcc1893bb6692f8	mksh-R54.tgz
++md5 718c44251b52c48e7312903273e263f4  mksh-R55.tgz
+ # Calculated based on the hash above
+-sha256	8bce3837c386684aa7780f085f1a4dbd5e3e26fb5c528ee0d41ae29af7f39013	mksh-R54.tgz
++sha256 ced42cb4a181d97d52d98009eed753bd553f7c34e6991d404f9a8dcb45c35a57  mksh-R55.tgz
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+index 4d91bfc..b5706db 100644
+--- a/package/mksh/mksh.mk
++++ b/package/mksh/mksh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MCELOG_VERSION = v152
-+MCELOG_VERSION = v153
- MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
- MCELOG_SITE_METHOD = git
- MCELOG_LICENSE = GPL-2.0
+-MKSH_VERSION = R54
++MKSH_VERSION = R55
+ MKSH_SOURCE = mksh-$(MKSH_VERSION).tgz
+ MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ # For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
