@@ -1,70 +1,70 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 9 Aug 2017 09:38:11 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: libgtk3 support depends on
-	X11 backend
-In-Reply-To: <1502237350-17331-1-git-send-email-joshua.henderson@microchip.com>
-References: <1502237350-17331-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <trinity-db7b134a-e9a6-4a07-a674-162538e759b3-1502264291114@3capp-gmx-bs63>
+Date: Wed, 9 Aug 2017 10:37:48 +0200
+Subject: [Buildroot] Failing gst1-validate-1.12.2 build,
+ documentation not necessary!
+In-Reply-To: <15dc45f8e06-3056-94cf@webprd-m104.mail.aol.com>
+References: <15dc45f8e06-3056-94cf@webprd-m104.mail.aol.com>
+Message-ID: <trinity-adc229dc-8010-433a-83e5-915ef6083410-1502267868449@3capp-gmx-bs26>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joshua,
+Hello 'grunpferd',
 
-> Gesendet: Mittwoch, 09. August 2017 um 02:09 Uhr
-> Von: "Joshua Henderson" <joshua.henderson@microchip.com>
-> An: buildroot at buildroot.org
-> Cc: "Peter Seiderer" <ps.report@gmx.net>, "Julien Corjon" <corjon.j@ecagroup.com>, "Brent Sink" <brents_3@hotmail.com>, "Naoki Matsumoto" <n-matsumoto@melcoinc.co.jp>
-> Betreff: [PATCH] package/qt5base: libgtk3 support depends on X11 backend
+> Gesendet:?Mittwoch, 09. August 2017 um 02:23 Uhr
+> Von:?grunpferd at netscape.net
+> An:?buildroot at busybox.net
+> Betreff:?[Buildroot] Failing gst1-validate-1.12.2 build, documentation not necessary!
 >
-> libgtk3 can conditionally be build with or without the X11 backend unlike
-> libgtk2. If libgtk3 is enabled and the X11 backend is not enabled for
-> BR2_PACKAGE_QT5_VERSION_LATEST, a build error [1] is introduced.  This change
-> disables gtk support in this case.
+> In building?gst1-validate-1.12.2.?
+> ?I think building "all" here is not necessary. Can't see the documentation is ever going to be installed on a target.
+> So why build it at all, especially when it fails!
+> ?
+> ?
+> ?
+> make[4]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/docs/validate'
+>
+> sphinx-build -b html -d ./doctrees ??. ./html
+> Error: Source directory doesn't contain a conf.py file.
 
-NAK - or only as a workaround, the real issue is a missing QT_EGL_NO_X11/MESA_EGL_NO_X11_HEADERS
-define, see e.g. [2] for further discussion...
+The problem seems you are one of the rare people who have a (non functional) sphinx documentation
+system installed on the build host....
+
+Mind to try the following (untested) patch:
+
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index be43df4f..5066c277 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -18,4 +18,6 @@ GST1_VALIDATE_DEPENDENCIES = \
+        python \
+        $(if $(BR2_PACKAGE_CAIRO),cairo)
+ 
++GST1_VALIDATE_CONF_ENV = ac_cv_prog_enable_sphinx_doc=no
++
+ $(eval $(autotools-package))
+
 
 Regards,
 Peter
 
-[2] http://lists.busybox.net/pipermail/buildroot/2017-July/196075.html
-
-> 
-> [1] http://autobuild.buildroot.net/results/6f3c2fcb0a44cd13ef4c73822d4d08f923291099
-> 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Brent Sink <brents_3@hotmail.com>
-> Cc: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-> ---
->  package/qt5/qt5base/qt5base.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index bbbdd41..1b4bd7b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -190,6 +190,16 @@ else
->  QT5BASE_CONFIGURE_OPTS += -no-libinput
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_LIBGTK3),yy)
-> +# only enable gtk support if libgtk3 X11 backend is enabled
-> +ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
-> +QT5BASE_CONFIGURE_OPTS += -gtk
-> +QT5BASE_DEPENDENCIES += libgtk3
-> +else
-> +QT5BASE_CONFIGURE_OPTS += -no-gtk
-> +endif
-> +endif
-> +
->  # Build the list of libraries to be installed on the target
->  QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
->  QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
-> -- 
-> 2.7.4
-> 
-> 
+> Makefile:687: recipe for target 'all' failed
+> make[4]: *** [all] Error 1
+> make[4]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/docs/launcher'
+> Makefile:806: recipe for target 'launcher' failed
+> make[3]: *** [launcher] Error 2
+> make[3]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/docs'
+> Makefile:713: recipe for target 'all-recursive' failed
+> make[2]: *** [all-recursive] Error 1
+> make[2]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2'
+> Makefile:623: recipe for target 'all' failed
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2'
+> package/pkg-generic.mk:227: recipe for target '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/.stamp_built' fail
+> ed
+> make: *** [/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/.stamp_built] Error 2
+> ?
+> ?
+> Ross
