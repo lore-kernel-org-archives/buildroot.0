@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 00:31:34 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/erlang-jiffy: bump
- version to 0.14.11
-In-Reply-To: <20170805173349.22514-1-bernd.kuhls@t-online.de>
-References: <20170805173349.22514-1-bernd.kuhls@t-online.de>
-Message-ID: <3673c828-9163-ed35-2bb5-3f83e1d0c549@mind.be>
+Date: Thu, 10 Aug 2017 00:32:11 +0200
+Subject: [Buildroot] [PATCHv2] fs/squashfs: honour the number of
+ parallel jobs
+In-Reply-To: <20170806154102.24807-1-yann.morin.1998@free.fr>
+References: <20170806154102.24807-1-yann.morin.1998@free.fr>
+Message-ID: <cdf52f07-6fbb-4b15-b846-99e243fa954b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,26 @@ To: buildroot@busybox.net
 
 
 
-On 05-08-17 19:33, Bernd Kuhls wrote:
-> Removed ERLANG_JIFFY_SET_VERSION_HOOK, not needed anymore after
-> https://github.com/davisp/jiffy/commit/d596d890bcc7d74d34d185854873ba678bbf237b
+On 06-08-17 17:41, Yann E. MORIN wrote:
+> By default, mksquashfs uses all the CPUs available, like us with
+> BR2_JLEVEL=0.
+> 
+> However, by setting BR21_JLEVEL to non-zero, a user volutarily limits
+> the number of jobbs allowed to run concurrently (for various reasons,
+> like this is not a priority task on the machine; or like the
+> autobuilders, to spread the load accross multiple runs without
+> overloading the machine).
+> 
+> So, propagate tthe parallelisn settings down to mksquashfs, to repect
+> the user's will.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
- Excellent catch! Applied to next, thanks.
+ Applied to next, thanks.
 
  Regards,
  Arnout
-
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
