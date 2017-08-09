@@ -1,65 +1,111 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:01:47 +0200
-Subject: [Buildroot] [git commit] faad2: security bump to version 2.8.1
-Message-ID: <20170809210704.AD0557FBEA@busybox.osuosl.org>
+Date: Wed, 9 Aug 2017 23:07:41 +0200
+Subject: [Buildroot] [git commit] uclibc: allow thread_db to be built with
+	C++
+Message-ID: <20170809210705.965A67FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e2c245bf4f21e9da41a60856cfa50eff5671e19
+commit: https://git.buildroot.net/buildroot/commit/?id=c21fca53db7885ba05c6aca73350477ff15dcfd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes: CVE-2017-9218, CVE-2017-9219, CVE-2017-9220, CVE-2017-9221,
-CVE-2017-9222, CVE-2017-9223, CVE-2017-9253, CVE-2017-9254,
-CVE-2017-9255, CVE-2017-9256, CVE-2017-9257
+gdb 7.12+ is compiled and linked with C++, therefore the thread_db
+headers need to use extern "C", to be usable for C++ code.
 
-http://seclists.org/fulldisclosure/2017/Jun/32
+Fixes:
+ Issue when building gdbserver for m68k-coldfire:
 
-Switch to .tar.bz2 to save some bandwidth.
+thread-db.o: In function `thread_db_init()':
+thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
+thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
+thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
+...
 
-Add autoreconf since unfortunately upstream tarball does not ship the
-configure script.
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/faad2/faad2.hash | 6 +++---
- package/faad2/faad2.mk   | 8 ++++++--
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ package/uclibc/0001-fix-issues-with-gdb-8.0.patch | 72 +++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index 691645b..d298e90 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.7/ (used by upstream):
--sha1	80eaaa5cc576c35dd28863767b795c50cbcc0511  faad2-2.7.tar.gz
-+# From http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.8.0/ (used by upstream):
-+sha1	a5caa71cd915acd502d96cba56f38296277f2350  faad2-2.8.1.tar.bz2
- # Locally computed
--sha256  ee26ed1e177c0cd8fa8458a481b14a0b24ca0b51468c8b4c8b676fd3ceccd330  faad2-2.7.tar.gz
-+sha256  f4042496f6b0a60f5ded6acd11093230044ef8a2fd965360c1bbd5b58780933d  faad2-2.8.1.tar.bz2
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index d7b55d3..fa965fe 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -4,10 +4,14 @@
- #
- ################################################################################
- 
--FAAD2_VERSION = 2.7
--FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION)
-+FAAD2_VERSION_MAJOR = 2.8
-+FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
-+FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
-+FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
-+# No configure script in upstream tarball
-+FAAD2_AUTORECONF = YES
- # frontend/faad calls frexp()
- FAAD2_CONF_ENV = LIBS=-lm
- FAAD2_INSTALL_STAGING = YES
+diff --git a/package/uclibc/0001-fix-issues-with-gdb-8.0.patch b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
+new file mode 100644
+index 0000000..20567e6
+--- /dev/null
++++ b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
+@@ -0,0 +1,72 @@
++From 111f01d432d542a153c1cad83def3a6ab57df7af Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Sat, 5 Aug 2017 11:28:07 +0200
++Subject: [PATCH] fix issues with gdb 8.0
++
++GDB 8.0 is compiled and linked with g++, but the
++linking of static targets (f.e. coldfire) fails,
++without declaring the functions in thread_db.h
++extern C.
++
++The compilation of gdb errors out with:
++thread-db.o: In function `thread_db_init()':
++thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
++thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
++thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
++..
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libpthread/linuxthreads_db/thread_db.h | 7 +++++++
++ libpthread/nptl_db/thread_db.h         | 7 +++++++
++ 2 files changed, 14 insertions(+)
++
++diff --git a/libpthread/linuxthreads_db/thread_db.h b/libpthread/linuxthreads_db/thread_db.h
++index 13c30af..ec79f60 100644
++--- a/libpthread/linuxthreads_db/thread_db.h
+++++ b/libpthread/linuxthreads_db/thread_db.h
++@@ -27,6 +27,9 @@
++ #include <sys/types.h>
++ #include <sys/procfs.h>
++ 
+++#ifdef __cplusplus
+++extern "C" {
+++#endif
++ 
++ /* Error codes of the library.  */
++ typedef enum
++@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
++ /* Resume execution of thread TH.  */
++ extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
++ 
+++#ifdef __cplusplus
+++}
+++#endif
+++
++ #endif	/* thread_db.h */
++diff --git a/libpthread/nptl_db/thread_db.h b/libpthread/nptl_db/thread_db.h
++index 27ea69a..993842f 100644
++--- a/libpthread/nptl_db/thread_db.h
+++++ b/libpthread/nptl_db/thread_db.h
++@@ -27,6 +27,9 @@
++ #include <sys/types.h>
++ #include <sys/procfs.h>
++ 
+++#ifdef __cplusplus
+++extern "C" {
+++#endif
++ 
++ /* Error codes of the library.  */
++ typedef enum
++@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
++ /* Resume execution of thread TH.  */
++ extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
++ 
+++#ifdef __cplusplus
+++}
+++#endif
+++
++ #endif	/* thread_db.h */
++-- 
++2.1.4
++
