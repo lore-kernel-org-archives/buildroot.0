@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:47:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stella: fix gcc7 support
-In-Reply-To: <20170806095527.8051-1-bernd.kuhls@t-online.de>
-References: <20170806095527.8051-1-bernd.kuhls@t-online.de>
-Message-ID: <d075f4b5-3de4-90a6-6964-44572031b975@mind.be>
+Date: Wed, 9 Aug 2017 23:48:24 +0200
+Subject: [Buildroot] [PATCH] ficl: fix build with gcc 7
+In-Reply-To: <20170806105608.24535-1-francois.perrad@gadz.org>
+References: <20170806105608.24535-1-francois.perrad@gadz.org>
+Message-ID: <91c2ae6b-2d71-7372-4d54-0d9c679ccd96@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,16 @@ To: buildroot@busybox.net
 
 
 
-On 06-08-17 11:55, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/6ed/6edd7950c402dbf433f3904193c645ebc8531c7e/
+On 06-08-17 12:56, Francois Perrad wrote:
+> same issue seen with squashfs, gcc7 with -Os remove the code of inline functions.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> see http://autobuild.buildroot.org/results/d72/d72a7e9775a10bc884b9953dd2eba3ad32100cca
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- Applied to master, thanks.
+ I extended the commit message a bit and applied to master, thanks. I was first
+going to suggest to fix it with a patch instead of with -fgnu89-inline, but then
+I saw that upstream has been dead for 7 years...
 
  Regards,
  Arnout
