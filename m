@@ -1,67 +1,62 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:00:51 +0200
-Subject: [Buildroot] [git commit] nvme: fix libuuid test when cross compiling
-Message-ID: <20170809210702.7E11A816A2@busybox.osuosl.org>
+Date: Wed, 9 Aug 2017 22:42:58 +0200
+Subject: [Buildroot] [git commit] package/snappy: remove pthread handling
+	for static builds
+Message-ID: <20170809210702.717137FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e13f7e11eecd7cb0c6f4f83ec4f1ff7a98b9fee
+commit: https://git.buildroot.net/buildroot/commit/?id=6e6208ea794262e4e629efb7c1bbb601d1fa2abc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use $(LD) to test whether libuuid is installed, so that we check the target,
-not the host.
+Commit 0e2ee0e6e8076 (package.snappy: fix static builds with threads)
+added LIBS=-pthread to configure options to fix static build with
+threads on some architectures. This works for autotools packages. Then,
+commit d26282b3aa14cb (package/snappy: bump version, switch to cmake)
+switched to cmake that does not understand the 'LIBS' parameter.
 
-Fixes:
-http://autobuild.buildroot.net/results/e26/e263ffbf8947374c2aac73ab42edcbf4d9a3600a/
-http://autobuild.buildroot.net/results/53b/53b2d1e0c3cdeafb980389bcfd8a10b6ca48fbc2/
+As pointed out by Thomas[1] the special handling of libpthread for
+static builds is not needed anymore: it was needed only to build the
+tests, and these are no longer built. Note that packages that link
+statically with snappy will still need to link with -pthread. Only
+two in-tree packages currently depend on snappy: lua-csnappy depends
+on !BR2_STATIC_LIBS and leveldb adds -pthread from its build system.
 
-Cc: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+Tested with the following musl & uclibc defconfigs which also fix build
+errors:
+http://autobuild.buildroot.net/results/39f/39f9fc4300ddca19e8a533765b46838003752000/
+http://autobuild.buildroot.net/results/886/8860b9259f7a3aecb2ddbfa787be048072bd347b/
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-July/199549.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Baruch: improved commit message]
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Arnout: improved commit message more, based on Yann's input]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...allow-linker-override-for-cross-uuid-test.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/snappy/snappy.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch b/package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch
-new file mode 100644
-index 0000000..dc1c01a
---- /dev/null
-+++ b/package/nvme/0001-Makefile-allow-linker-override-for-cross-uuid-test.patch
-@@ -0,0 +1,34 @@
-+From f926559acd1beb74dc5dc9b0e414b087110a251f Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 9 Aug 2017 09:43:12 +0300
-+Subject: [PATCH] Makefile: allow linker override for cross uuid test
-+
-+The test to determine whether libuuid is installed uses the host 'ld' utility.
-+This breaks when cross compiling, since target libraries are often different
-+than host libraries.
-+
-+Use $(LD) instead. This allows to easily use the cross compiler linker.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/linux-nvme/nvme-cli/pull/216
-+
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 3f1d9aaa890d..cc74bdd6c3e6 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,7 +1,7 @@
-+ CFLAGS ?= -O2 -g -Wall -Werror
-+ CFLAGS += -std=gnu99
-+ CPPFLAGS += -D_GNU_SOURCE -D__CHECK_ENDIAN__
-+-LIBUUID = $(shell ld -o /dev/null -luuid >/dev/null 2>&1; echo $$?)
-++LIBUUID = $(shell $(LD) -o /dev/null -luuid >/dev/null 2>&1; echo $$?)
-+ NVME = nvme
-+ INSTALL ?= install
-+ DESTDIR =
-+-- 
-+2.13.2
-+
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index f5df6bf..a537ade 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -11,13 +11,4 @@ SNAPPY_LICENSE_FILES = COPYING
+ SNAPPY_INSTALL_STAGING = YES
+ SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_TESTS=OFF
+ 
+-# libsnappy links with libstdc++. Some libstdc++/arch variants use
+-# pthread symbols for internal locking if built with thread
+-# support. libstdc++ does not have a .pc file, and its .la file does
+-# not mention -pthread.  So, static linkig to libstdc++ will fail if
+-# -pthread is not explicity linked to. Only do that for static builds.
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+-SNAPPY_CONF_OPTS += LIBS=-pthread
+-endif
+-
+ $(eval $(cmake-package))
