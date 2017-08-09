@@ -1,59 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 15:32:48 +0200
-Subject: [Buildroot] [PATCH v3] systemd: allow to build with uClibc
- toolchains
-In-Reply-To: <20170808163702.GA29748@waldemar-brodkorb.de>
-References: <20170808163702.GA29748@waldemar-brodkorb.de>
-Message-ID: <a4dba163-8e8a-9168-ac8c-cab8ba1333ef@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 9 Aug 2017 18:16:46 +0300
+Subject: [Buildroot] [PATCH] faad2: security bump to version 2.8.1
+In-Reply-To: <a11dd81d-70f5-47d8-d612-65e188498de5@mind.be>
+References: <108fe39722b22a67f7737d6e174dc8483c784b95.1502254922.git.baruch@tkos.co.il>
+ <a11dd81d-70f5-47d8-d612-65e188498de5@mind.be>
+Message-ID: <20170809151646.li4kbyz6ru7vmtgk@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Waldemar,
+Hi Arnout,
 
- If you're willing to go through another round, I have a few remarks...
-
-On 08-08-17 18:37, Waldemar Brodkorb wrote:
-[snip]
->  config BR2_PACKAGE_SYSTEMD_MACHINED
->  	bool "enable machine daemon"
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-
- Could you add a comment why this doesn't work on uClibc?
-
- Normally for packages that have a library dependency we add a comment line. I'm
-not sure if we really want that here, though, it's making things a little heavy
-maybe. Although, in the menu it would look pretty OK I think. What do you think?
-
- Both comments repeated for the rest of this file.
-
-[snip]
-> @@ -138,7 +138,7 @@ config BR2_INIT_SYSTEMD
->  	select BR2_PACKAGE_SYSTEMD
->  
->  comment "systemd needs a glibc toolchain, headers >= 3.10"
-                            ^^^^^ or uClibc? :-)
-
-> -	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-> +	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
-
- Maybe add parenthesis here for clarity - I'm not sure what the binding is of ||
-and && in kconfig...
-
- Regards,
- Arnout
-
->  		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
->  
->  config BR2_INIT_NONE
+On Wed, Aug 09, 2017 at 02:42:36PM +0200, Arnout Vandecappelle wrote:
+> On 09-08-17 07:02, Baruch Siach wrote:
+> > Fixes: CVE-2017-9218, CVE-2017-9219, CVE-2017-9220, CVE-2017-9221,
+> > CVE-2017-9222, CVE-2017-9223, CVE-2017-9253, CVE-2017-9254,
+> > CVE-2017-9255, CVE-2017-9256, CVE-2017-9257
+> > 
+> > http://seclists.org/fulldisclosure/2017/Jun/32
+> [snip]
+> > -FAAD2_VERSION = 2.7
+> > -FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION)
+> > +FAAD2_VERSION_MAJOR = 2.8
+> > +FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
 > 
+>  Hm, "security bumps" are typically only affecting the minor version number,
+> this smells like a major bump... Or does faad have a slightly unconventional
+> version numbering scheme?
+
+It's only called _MAJOR here because I reuse that in the URL, in line with the 
+DRY principle.
+
+Although version 2.8.0 (followed by 2.8.1 a week later) is the first release 
+since February 2009, it does not contain a lot of code changes. I guess that 
+the disclosed security issue were the main motivation of the release at this 
+point.
+
+> > +FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
+> > +FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
+> 
+>  Gah, what kind of stupid download URL is that :-)
+
+Well, that's upstream.
+
+> >  FAAD2_LICENSE = GPL-2.0
+> >  FAAD2_LICENSE_FILES = COPYING
+> > +# No configure script in upstream tarball
+> > +FAAD2_AUTORECONF = YES
+> >  # frontend/faad calls frexp()
+> >  FAAD2_CONF_ENV = LIBS=-lm
+> >  FAAD2_INSTALL_STAGING = YES
+
+baruch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
