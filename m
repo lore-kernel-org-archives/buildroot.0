@@ -1,52 +1,36 @@
-From: grunpferd at netscape.net <grunpferd@netscape.net>
-Date: Tue, 8 Aug 2017 20:23:02 -0400
-Subject: [Buildroot] Failing gst1-validate-1.12.2 build,
-	documentation not necessary!
-Message-ID: <15dc45f8e06-3056-94cf@webprd-m104.mail.aol.com>
+From: Jim Langston <jim.langston@gmail.com>
+Date: Tue, 8 Aug 2017 22:44:43 -0400
+Subject: [Buildroot] Buildroot and Xenomai 3.0.5 driver build issues...
+Message-ID: <CAF06wtgdv8TbUay_9FKX4uA8JA6w9+wVPEYemQYoEXTr1yTNCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+I've been trying to build a Xenomai driver with Xenomai 3.0.5 and the old
+'Alchemy/Native' skin under Buildroot 2017.02.02.  I realize that this is
+an older version, but I see nothing in the changelogs that seems to be
+relevant to the issues I'm facing.
 
-In building gst1-validate-1.12.2. 
+Basically it boils down to the fact that Xenomai's headers that override or
+extend system header files all use "#include_next<>", and the '-nostdinc'
+option along with the '-isysroot' option being being passed to GCC do not
+include the actual system header file, in this case pthread.h, so the
+compile fails.
 
+I remember stumbling across a discussion about "include_next<>" from a
+thread late last year, but cannot find it.  About all I remember is there
+was a comment to the effect, "packages that use #include_next<> will have
+issues".
 
-I think building "all" here is not necessary. Can't see the documentation is ever going to be installed on a target.
-So why build it at all, especially when it fails!
+Has anyone out there had any success building RTDM drivers with Xenomai 3
+under Buildroot 2017.02.02 (or newer)?
 
-
-
-
-
-
-make[4]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/docs/validate'
-
-sphinx-build -b html -d ./doctrees   . ./html
-Error: Source directory doesn't contain a conf.py file.
-Makefile:687: recipe for target 'all' failed
-make[4]: *** [all] Error 1
-make[4]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/docs/launcher'
-Makefile:806: recipe for target 'launcher' failed
-make[3]: *** [launcher] Error 2
-make[3]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/docs'
-Makefile:713: recipe for target 'all-recursive' failed
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2'
-Makefile:623: recipe for target 'all' failed
-make[1]: *** [all] Error 2
-make[1]: Leaving directory '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2'
-package/pkg-generic.mk:227: recipe for target '/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/.stamp_built' fail
-ed
-make: *** [/u/rfg/w/buildroot_tk1_gcc7_4.12/output/build/gst1-validate-1.12.2/.stamp_built] Error 2
-
-
-
-
-Ross
-
+Thanks,
+Jim
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170808/898e173c/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170808/478163d8/attachment.html>
