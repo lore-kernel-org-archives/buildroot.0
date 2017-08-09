@@ -1,67 +1,83 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Aug 2017 11:41:12 +0200
-Subject: [Buildroot] [PATCH 1/1] Update the ncurses library package names
-In-Reply-To: <1502208845-24891-1-git-send-email-arvindprasanna@gmail.com>
-References: <1502208845-24891-1-git-send-email-arvindprasanna@gmail.com>
-Message-ID: <bd8082a6-0454-4504-528d-8faa606e757a@mind.be>
+Date: Wed, 9 Aug 2017 12:07:10 +0200
+Subject: [Buildroot] Mysqld startup problems
+In-Reply-To: <CAJJ6jxutio48UzYa_bK-CRc7t834Ds16+05+bO5EKfnrQL1tgA@mail.gmail.com>
+References: <CAJJ6jxuKy46_6sk=J9XsRuo8JXnBgyFk1A076cie+C5p=uDwPw@mail.gmail.com>
+ <ba440c62-d192-435f-2b3f-099611dd88fd@mind.be>
+ <CAJJ6jxs0YL9hEumc5xwLYdTU0d6iM3CVtSyLiAMVM_9U0S1Erg@mail.gmail.com>
+ <669d2c84-8015-74fe-7c74-54f5101c6891@mind.be>
+ <CAJJ6jxutio48UzYa_bK-CRc7t834Ds16+05+bO5EKfnrQL1tgA@mail.gmail.com>
+Message-ID: <93435a55-386a-c2df-abb2-8ed7e496d7f1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Arvind,
 
- [I'm commenting on your v1, because as far as I can see, v2 only makes changes
-that are not good, like removing your Sob).
 
-On 08-08-17 18:14, Arvind Prasanna wrote:
-> -- Should be libncurses-dev for Debian based distros and ncurses-devel for Redhat based distros.
-> -- It saves time for the user to look up the actual package name.
-
- Don't start commit message lines with --, and wrap at 72 columns.
-
+On 08-08-17 22:52, Steve Calfee wrote:
+> Hi Arnout,
 > 
-> Signed-off-by: Arvind Prasanna <arvindprasanna@gmail.com>
-> ---
->  support/kconfig/lxdialog/check-lxdialog.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Thanks I really appreciate you trying to help. '
 > 
-> diff --git a/support/kconfig/lxdialog/check-lxdialog.sh b/support/kconfig/lxdialog/check-lxdialog.sh
-> index 3ce0a23..5400aed 100755
-> --- a/support/kconfig/lxdialog/check-lxdialog.sh
-> +++ b/support/kconfig/lxdialog/check-lxdialog.sh
-> @@ -54,7 +54,9 @@ EOF
->  	    echo " *** required header files."                            1>&2
->  	    echo " *** 'make menuconfig' requires the ncurses libraries." 1>&2
->  	    echo " *** "                                                  1>&2
-> -	    echo " *** Install ncurses (ncurses-devel) and try again."    1>&2
-> +	    echo " *** Install ncurses (libncurses-dev for Debian based"  1>&2
-> +	    echo " distros and ncurses-devel for Redhat based distros)"   1>&2
-> +	    echo " and try again."    					  1>&2
+> Here is the version of mysql I am using (the buildroot default)
+> mysql-5.1.73.tar.gz: OK (md5: 887f869bcc757957067b9198f707f32f)
+> mysql-5.1.73.tar.gz: OK (sha256:
+> 05ebe21305408b24407d14b77607a3e5ffa3c300e03f1359d3066f301989dcb5)
+> 
+> 
+> I cut my output to match what yours did and no mysql_safe was installed. :
+> Making install in sql-common
+> make[4]: Nothing to be done for 'install-exec-am'.
+> make[4]: Nothing to be done for 'install-data-am'.
+> Making install in scripts
+> /usr/bin/make  install-am
+>  /bin/mkdir -p '/home/calfee/nobu/br/dockstar/ds_9_2914/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin'
+>  /bin/mkdir -p '/home/calfee/nobu/br/dockstar/ds_9_2914/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/share/mysql'
+>  /usr/bin/install -c -m 644 fill_help_tables.sql
+> mysql_fix_privilege_tables.sql mysql_system_tables.sql
+> mysql_system_tables_data.sql mysql_test_data_timezone.sql
+> '/home/calfee/nobu/br/dockstar/ds_9_2914/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/share/mysql'
+>  /usr/bin/install -c msql2mysql mysql_config
+> mysql_fix_privilege_tables mysql_fix_extensions mysql_setpermission
+> mysql_secure_installation mysql_zap mysqlaccess mysqlbug
+> mysql_convert_table_format mysql_find_rows mysqlhotcopy mysqldumpslow
+> mysqld_multi '/home/calfee/nobu/br/dockstar/ds_9_2914/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin'
 
- This is unfortunately a bit problematic. kconfig doesn't come from Buildroot,
-it's copied from the Linux kernel. To be able to track the changes w.r.t. the
-kernel itself, we keep the differences in a set of patches, which you can find
-in support/kconfig/patches. So if you modify kconfig, you should also add a
-patch to that directory.
+ Right, so looking at Makefile.am leads me to this fragment in configure.in:
 
- However, I wonder if it is really worth it. In fact, I'd much prefer that you
-would push this patch to Linux itself, and then (if accepted) resync with the
-kernel. Send a mail to linux-kbuild [1] to get it upstream. And anyway, I think
-for us this is more relevant to put in docs/manual/prerequisite.txt rather than
-in this script.
+if test "$with_server" != "no"
+then
+  server_scripts="mysqld_safe mysql_install_db"
+  sql_server_dirs="strings mysys dbug extra regex storage plugin"
 
+  sql_server="vio sql"
+fi
+
+ So apparently, with_server is not set to yes in your case. We pass
+--with-embedded-server and a bit higher up configure.in we find
+
+if test "$with_embedded_server" = "yes"
+then
+  libmysqld_dirs=libmysqld
+
+  # We can't build embedded library without building the server, because
+  # we depend on libmysys, libmystrings, libmyisam, etc.
+  with_server=yes
+fi
+
+ So really, with_server should be yes...
+
+ Could you add some debug echos in configure.in and do a
+'make oracle-mysql-reconfigure' to try to find out what is going on? Or first,
+check config.log to see if you can find anything there.
 
  Regards,
  Arnout
 
-[1] http://vger.kernel.org/vger-lists.html#linux-kbuild
 
->  	    echo " *** "                                                  1>&2
->  	    exit 1
->  	fi
-> 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
