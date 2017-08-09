@@ -1,111 +1,62 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:07:41 +0200
-Subject: [Buildroot] [git commit branch/next] uclibc: allow thread_db to be
-	built with C++
-Message-ID: <20170809225752.746917FE41@busybox.osuosl.org>
+Date: Wed, 9 Aug 2017 22:42:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/snappy: remove pthread
+	handling for static builds
+Message-ID: <20170809225751.B57C77FA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c21fca53db7885ba05c6aca73350477ff15dcfd2
+commit: https://git.buildroot.net/buildroot/commit/?id=6e6208ea794262e4e629efb7c1bbb601d1fa2abc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gdb 7.12+ is compiled and linked with C++, therefore the thread_db
-headers need to use extern "C", to be usable for C++ code.
+Commit 0e2ee0e6e8076 (package.snappy: fix static builds with threads)
+added LIBS=-pthread to configure options to fix static build with
+threads on some architectures. This works for autotools packages. Then,
+commit d26282b3aa14cb (package/snappy: bump version, switch to cmake)
+switched to cmake that does not understand the 'LIBS' parameter.
 
-Fixes:
- Issue when building gdbserver for m68k-coldfire:
+As pointed out by Thomas[1] the special handling of libpthread for
+static builds is not needed anymore: it was needed only to build the
+tests, and these are no longer built. Note that packages that link
+statically with snappy will still need to link with -pthread. Only
+two in-tree packages currently depend on snappy: lua-csnappy depends
+on !BR2_STATIC_LIBS and leveldb adds -pthread from its build system.
 
-thread-db.o: In function `thread_db_init()':
-thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
-thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
-thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
-...
+Tested with the following musl & uclibc defconfigs which also fix build
+errors:
+http://autobuild.buildroot.net/results/39f/39f9fc4300ddca19e8a533765b46838003752000/
+http://autobuild.buildroot.net/results/886/8860b9259f7a3aecb2ddbfa787be048072bd347b/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Tested-by: Romain Naour <romain.naour@gmail.com>
+[1] http://lists.busybox.net/pipermail/buildroot/2017-July/199549.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Baruch: improved commit message]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Arnout: improved commit message more, based on Yann's input]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/uclibc/0001-fix-issues-with-gdb-8.0.patch | 72 +++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ package/snappy/snappy.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/uclibc/0001-fix-issues-with-gdb-8.0.patch b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-new file mode 100644
-index 0000000..20567e6
---- /dev/null
-+++ b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-@@ -0,0 +1,72 @@
-+From 111f01d432d542a153c1cad83def3a6ab57df7af Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sat, 5 Aug 2017 11:28:07 +0200
-+Subject: [PATCH] fix issues with gdb 8.0
-+
-+GDB 8.0 is compiled and linked with g++, but the
-+linking of static targets (f.e. coldfire) fails,
-+without declaring the functions in thread_db.h
-+extern C.
-+
-+The compilation of gdb errors out with:
-+thread-db.o: In function `thread_db_init()':
-+thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
-+thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
-+thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
-+..
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libpthread/linuxthreads_db/thread_db.h | 7 +++++++
-+ libpthread/nptl_db/thread_db.h         | 7 +++++++
-+ 2 files changed, 14 insertions(+)
-+
-+diff --git a/libpthread/linuxthreads_db/thread_db.h b/libpthread/linuxthreads_db/thread_db.h
-+index 13c30af..ec79f60 100644
-+--- a/libpthread/linuxthreads_db/thread_db.h
-++++ b/libpthread/linuxthreads_db/thread_db.h
-+@@ -27,6 +27,9 @@
-+ #include <sys/types.h>
-+ #include <sys/procfs.h>
-+ 
-++#ifdef __cplusplus
-++extern "C" {
-++#endif
-+ 
-+ /* Error codes of the library.  */
-+ typedef enum
-+@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-+ /* Resume execution of thread TH.  */
-+ extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-+ 
-++#ifdef __cplusplus
-++}
-++#endif
-++
-+ #endif	/* thread_db.h */
-+diff --git a/libpthread/nptl_db/thread_db.h b/libpthread/nptl_db/thread_db.h
-+index 27ea69a..993842f 100644
-+--- a/libpthread/nptl_db/thread_db.h
-++++ b/libpthread/nptl_db/thread_db.h
-+@@ -27,6 +27,9 @@
-+ #include <sys/types.h>
-+ #include <sys/procfs.h>
-+ 
-++#ifdef __cplusplus
-++extern "C" {
-++#endif
-+ 
-+ /* Error codes of the library.  */
-+ typedef enum
-+@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-+ /* Resume execution of thread TH.  */
-+ extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-+ 
-++#ifdef __cplusplus
-++}
-++#endif
-++
-+ #endif	/* thread_db.h */
-+-- 
-+2.1.4
-+
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index f5df6bf..a537ade 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -11,13 +11,4 @@ SNAPPY_LICENSE_FILES = COPYING
+ SNAPPY_INSTALL_STAGING = YES
+ SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_TESTS=OFF
+ 
+-# libsnappy links with libstdc++. Some libstdc++/arch variants use
+-# pthread symbols for internal locking if built with thread
+-# support. libstdc++ does not have a .pc file, and its .la file does
+-# not mention -pthread.  So, static linkig to libstdc++ will fail if
+-# -pthread is not explicity linked to. Only do that for static builds.
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+-SNAPPY_CONF_OPTS += LIBS=-pthread
+-endif
+-
+ $(eval $(cmake-package))
