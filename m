@@ -1,111 +1,105 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:07:41 +0200
-Subject: [Buildroot] [git commit] uclibc: allow thread_db to be built with
-	C++
-Message-ID: <20170809210705.965A67FBEA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 9 Aug 2017 23:19:39 +0200
+Subject: [Buildroot] [PATCH v2] pkg-cmake.mk: set pkg-config env. vars.
+ in the host configure environment
+In-Reply-To: <20170805181853.10785-1-s.martin49@gmail.com>
+References: <20170805181853.10785-1-s.martin49@gmail.com>
+Message-ID: <a23d5696-9e3b-c772-6519-3c5d15b0cf34@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c21fca53db7885ba05c6aca73350477ff15dcfd2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gdb 7.12+ is compiled and linked with C++, therefore the thread_db
-headers need to use extern "C", to be usable for C++ code.
 
-Fixes:
- Issue when building gdbserver for m68k-coldfire:
+On 05-08-17 20:18, Samuel Martin wrote:
+> This change is fixing the bug reported in [1].
+> 
+> Cmake may run pkg-config to find the dependencies when configuring a
+> package. Because of the value of PATH, and it will use the Buildroot's
+> pkg-config wrapper, which, by default, is configured (via some
+> environment variables) to find the target dependencies.
+> 
+> When configuring a host package using cmake, to prevent cmake from
+> wrongly solving dependencies from the target tree (when the
+> *-config.cmake files are using pkg-config) instead of looking for them
+> in the Buildroot's host tree or in the host system itself, we need to
+> set the environment variables altering the pkg-config behavior in the
+> cmake configure environment.
+> 
+> So, this change is fixing the cmake host-packages configuration step,
+> by properly setting the pkg-config environment variables to their values
+> for finding host dependencies.
+[snip]
+> Reported-by: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
+> Cc: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-thread-db.o: In function `thread_db_init()':
-thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
-thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
-thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
-...
+ Thank you for this extensive commit message!
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/uclibc/0001-fix-issues-with-gdb-8.0.patch | 72 +++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ Applied to master, thanks.
 
-diff --git a/package/uclibc/0001-fix-issues-with-gdb-8.0.patch b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-new file mode 100644
-index 0000000..20567e6
---- /dev/null
-+++ b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
-@@ -0,0 +1,72 @@
-+From 111f01d432d542a153c1cad83def3a6ab57df7af Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sat, 5 Aug 2017 11:28:07 +0200
-+Subject: [PATCH] fix issues with gdb 8.0
-+
-+GDB 8.0 is compiled and linked with g++, but the
-+linking of static targets (f.e. coldfire) fails,
-+without declaring the functions in thread_db.h
-+extern C.
-+
-+The compilation of gdb errors out with:
-+thread-db.o: In function `thread_db_init()':
-+thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
-+thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
-+thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
-+..
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libpthread/linuxthreads_db/thread_db.h | 7 +++++++
-+ libpthread/nptl_db/thread_db.h         | 7 +++++++
-+ 2 files changed, 14 insertions(+)
-+
-+diff --git a/libpthread/linuxthreads_db/thread_db.h b/libpthread/linuxthreads_db/thread_db.h
-+index 13c30af..ec79f60 100644
-+--- a/libpthread/linuxthreads_db/thread_db.h
-++++ b/libpthread/linuxthreads_db/thread_db.h
-+@@ -27,6 +27,9 @@
-+ #include <sys/types.h>
-+ #include <sys/procfs.h>
-+ 
-++#ifdef __cplusplus
-++extern "C" {
-++#endif
-+ 
-+ /* Error codes of the library.  */
-+ typedef enum
-+@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-+ /* Resume execution of thread TH.  */
-+ extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-+ 
-++#ifdef __cplusplus
-++}
-++#endif
-++
-+ #endif	/* thread_db.h */
-+diff --git a/libpthread/nptl_db/thread_db.h b/libpthread/nptl_db/thread_db.h
-+index 27ea69a..993842f 100644
-+--- a/libpthread/nptl_db/thread_db.h
-++++ b/libpthread/nptl_db/thread_db.h
-+@@ -27,6 +27,9 @@
-+ #include <sys/types.h>
-+ #include <sys/procfs.h>
-+ 
-++#ifdef __cplusplus
-++extern "C" {
-++#endif
-+ 
-+ /* Error codes of the library.  */
-+ typedef enum
-+@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-+ /* Resume execution of thread TH.  */
-+ extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-+ 
-++#ifdef __cplusplus
-++}
-++#endif
-++
-+ #endif	/* thread_db.h */
-+-- 
-+2.1.4
-+
+ However...
+
+> 
+> ---
+> 
+> Note:
+>   I think this fix is required on the master and cannot wait for the
+>   next release cycle.
+> 
+> changes v1->v2
+> - elaborate even more the commit log
+> - add bug ref to the commit log (ThomasP)
+> ---
+>  package/pkg-cmake.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 914bda7482..db78d897d8 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -109,6 +109,11 @@ define $(2)_CONFIGURE_CMDS
+>  	cd $$($$(PKG)_BUILDDIR) && \
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+> +	PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
+> +	PKG_CONFIG_SYSROOT_DIR="/" \
+> +	PKG_CONFIG_LIBDIR="$$(HOST_DIR)/lib/pkgconfig:$$(HOST_DIR)/share/pkgconfig" \
+> +	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+> +	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+
+ This is exactly the same as HOST_MAKE_ENV so could be refactored - but then it
+has to go to a new variable, perhaps. Or perhaps the variable should be renamed
+(because it really applies to any configure and build system, not just make) -
+but it's used in quite a few places so not so convenient.
+
+ Also, other build systems may suffer from the same problem, e.g. python, though
+probably those usually don't use pkg-config.
+
+
+ Finally, I think that what we're doing here is just plain silly. We create a
+wrapper script that sets some environment variables, but then we override those
+environment variables again half the time... A fundamentally better approach IMO
+is to create a HOST_DIR/cross-bin directory that contains the "cross" tools,
+like the pkg-config wrapper but also the foo-config scripts from STAGING_DIR and
+possibly some other stuff. And then for target builds we put that in front of
+PATH. But that, obviously, is a much bigger change.
+
+ Regards,
+ Arnout
+
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+>  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+>  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
