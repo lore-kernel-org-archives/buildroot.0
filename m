@@ -1,96 +1,89 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:26:01 +0200
-Subject: [Buildroot] [git commit branch/next] Revert
-	"package/skeleton-custom: also check for missing directories"
-Message-ID: <20170809225752.8EF3C7FA6F@busybox.osuosl.org>
+Date: Wed, 9 Aug 2017 23:02:16 +0200
+Subject: [Buildroot] [git commit branch/next] pkg-cmake.mk: set pkg-config
+	env. vars. in the host configure environment
+Message-ID: <20170809225752.606E17FE41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aff2f7395843b338f3492b915e8e5cd8b25a43b3
+commit: https://git.buildroot.net/buildroot/commit/?id=c9f9b16a2f37caeeced47cb562b642ec0c166652
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This partially reverts commit cf6d321e9d5c9dec63e42466fec4bf5de5853bd3.
+This change is fixing the bug reported in [1].
 
-The underlying reason for doing the checks is to ensure that a
-merged-usr setting is properly enforced, even for custom skeletons.
+Cmake may run pkg-config to find the dependencies when configuring a
+package. Because of the value of PATH, and it will use the Buildroot's
+pkg-config wrapper, which, by default, is configured (via some
+environment variables) to find the target dependencies.
 
-Before that patch, a custom skeleton where both /bin and /usr/bin were
-missing was accepted; but then the first package that intalled something
-in /bin would create it as a directory, thus breaking the merged-usr
-situation. Ditto sbin and lib, of course.
+When configuring a host package using cmake, to prevent cmake from
+wrongly solving dependencies from the target tree (when the
+*-config.cmake files are using pkg-config) instead of looking for them
+in the Buildroot's host tree or in the host system itself, we need to
+set the environment variables altering the pkg-config behavior in the
+cmake configure environment.
 
-cf6d321 was created to detect that situation, and the fix was to require
-that both directories do exist in the custom skeleton, so that we new
-the check for consistency were OK, in all cases.
+So, this change is fixing the cmake host-packages configuration step,
+by properly setting the pkg-config environment variables to their values
+for finding host dependencies.
 
-However, that broke existing skeletons which where missing both
-directories, and some people are shinning about it...
+Before this patch:
 
-The crux of the problem is that Buildroot should be responsible for
-creating the directories or the symliks when they are missing, and only
-fail if the existing ones are incorrect, but not impose the burden on
-the user.
+  make O=/opt/br/abo/cmake-host-find-root-path libxml2 host-mariadb{-dirclean,-configure} && echo $?
+  [...]
+  >>> host-mariadb 10.1.25 Configuring
+  (mkdir -p /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && cd /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && rm -f CMakeCache.txt && PATH="/opt/br/abo/cmake-host-find-root-path/host/bin:/opt/br/abo/cmake-host-find-root-path/host/sbin:/home/sam/.local/bin:/sbin:/usr/sbin:/bin:/usr/bin"  /usr/bin/cmake /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_C_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_CXX_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_EXE_LINKER_FLAGS="-L/opt/br/abo/cmake-host-find-root-path/host/lib -Wl,-rpath,/opt/br/abo/cmake-host-find-root-path/host/lib"
+  -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_CXX_COMPILER="/usr/bin/g++"  -DCMAKE_C_COMPILER_ARG1="" -DCMAKE_CXX_COMPILER_ARG1=""  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF  -DWITH_SSL=bundled )
+  -- Running cmake version 3.8.2
+  [...]
+  -- Found PkgConfig: /opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config (found version "0.28")
+  [...]
+  -- Found LibXml2: /opt/br/abo/cmake-host-find-root-path/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libxml2.so (found version "2.9.4")
+  [...]
+  0
 
-A situation where the problem arises is when a skeleton is shared
-between various builds, some using a merged-usr while other do not.
+After this patch is applied:
 
-We fix that by reverting the offending changes change, back to the
-previous behaviour. We keep the stderr redirection in stat calls, and
-the variable renaming.
+  make O=/opt/br/abo/cmake-host-find-root-path libxml2 host-mariadb{-dirclean,-configure} && echo $?
+  [...]
+  >>> host-mariadb 10.1.25 Configuring
+  (mkdir -p /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && cd /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && rm -f CMakeCache.txt && PATH="/opt/br/abo/cmake-host-find-root-path/host/bin:/opt/br/abo/cmake-host-find-root-path/host/sbin:/home/sam/.local/bin:/sbin:/usr/sbin:/bin:/usr/bin" PKG_CONFIG="/opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_LIBDIR="/opt/br/abo/cmake-host-find-root-path/host/lib/pkgconfig:/opt/br/abo/cmake-host-find-root-path/host/share/pkgconfig" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1  /usr/bin/cmake /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="/opt/br/abo/cmake-host-find-roo
+ t-path/host" -DCMAKE_C_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_CXX_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_EXE_LINKER_FLAGS="-L/opt/br/abo/cmake-host-find-root-path/host/lib -Wl,-rpath,/opt/br/abo/cmake-host-find-root-path/host/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_CXX_COMPILER="/usr/bin/g++"  -DCMAKE_C_COMPILER_ARG1="" -DCMAKE_CXX_COMPILER_ARG1=""  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF  -DWITH_SSL=bundled )
+  -- Running cmake version 3.8.2
+  [...]
+  -- Found PkgConfig: /opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config (found version "0.28")
+  [...]
+  -- Found LibXml2: /usr/lib/libxml2.so (found version "2.9.4")
+  [...]
+  0
 
-A proper fix to create the missing directories can be added later.
+[1] http://lists.busybox.net/pipermail/buildroot/2017-August/199776.html
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Reported-by: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
+Cc: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/skeleton-custom/skeleton-custom.mk | 26 --------------------------
- 1 file changed, 26 deletions(-)
+ package/pkg-cmake.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index d3c6b48..8c57531 100644
---- a/package/skeleton-custom/skeleton-custom.mk
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -36,27 +36,6 @@ SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr
- SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/. 2>/dev/null)
- SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/. 2>/dev/null)
- 
--# Ensure that the custom skeleton has /lib, /bin and /sbin, and their
--# /usr counterparts
--ifeq ($(SKELETON_CUSTOM_LIB_INODE),)
--SKELETON_CUSTOM_MISSING_DIRS += /lib
--endif
--ifeq ($(SKELETON_CUSTOM_USR_LIB_INODE),)
--SKELETON_CUSTOM_MISSING_DIRS += /usr/lib
--endif
--ifeq ($(SKELETON_CUSTOM_BIN_INODE),)
--SKELETON_CUSTOM_MISSING_DIRS += /bin
--endif
--ifeq ($(SKELETON_CUSTOM_USR_BIN_INODE),)
--SKELETON_CUSTOM_MISSING_DIRS += /usr/bin
--endif
--ifeq ($(SKELETON_CUSTOM_SBIN_INODE),)
--SKELETON_CUSTOM_MISSING_DIRS += /sbin
--endif
--ifeq ($(SKELETON_CUSTOM_USR_SBIN_INODE),)
--SKELETON_CUSTOM_MISSING_DIRS += /usr/sbin
--endif
--
- # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
- # counterparts are appropriately setup as symlinks ones to the others.
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-@@ -74,11 +53,6 @@ endif
- endif # merged /usr
- 
- ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
--ifneq ($(SKELETON_CUSTOM_MISSING_DIRS),)
--$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is \
--	missing those directories or symlinks: \
--	$(SKELETON_CUSTOM_MISSING_DIRS))
--endif
- ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS),)
- $(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is not \
- 	using a merged /usr for the following directories: \
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 914bda7..db78d89 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -109,6 +109,11 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
++	PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_LIBDIR="$$(HOST_DIR)/lib/pkgconfig:$$(HOST_DIR)/share/pkgconfig" \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
