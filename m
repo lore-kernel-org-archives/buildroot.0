@@ -1,42 +1,83 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Aug 2017 23:56:25 +0200
-Subject: [Buildroot] [git commit branch/next] package/libatomic_ops: bump
-	version to 7.4.6
-Message-ID: <20170809221935.EC0227F945@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 00:01:44 +0200
+Subject: [Buildroot] [git commit branch/next] package/mcelog: bump version
+	to 153
+Message-ID: <20170809221936.E5EB28179C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e661afd27c8edebe42246e14614cb0299ec835c
+commit: https://git.buildroot.net/buildroot/commit/?id=84160165a18e2962df2c013f35cb1f7eee0069cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Removed patch applied upstream:
+https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=524ed1cd16de5adcb4a5015777d3dfc63afda1fe
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libatomic_ops/libatomic_ops.hash | 2 +-
- package/libatomic_ops/libatomic_ops.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...memutil.h-add-missing-include-for-va_list.patch | 31 ----------------------
+ package/mcelog/mcelog.hash                         |  2 +-
+ package/mcelog/mcelog.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
-index 47a281d..9e67624 100644
---- a/package/libatomic_ops/libatomic_ops.hash
-+++ b/package/libatomic_ops/libatomic_ops.hash
+diff --git a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
+deleted file mode 100644
+index f9e08be..0000000
+--- a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 36aad32283eae5b47a05e3adfa3f5f6a7b1b55c0 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 11 Jun 2017 10:02:39 +0200
+-Subject: [PATCH] memutil.h: add missing include for va_list
+-
+-Fixes compile error with uclibc-ng:
+-
+-In file included from mcelog.c:51:0:
+-memutil.h:4:48: error: unknown type name 'va_list'
+- int xvasprintf(char **ret, const char *format, va_list ap);
+-
+-Patch sent upstream: https://github.com/andikleen/mcelog/pull/54
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- memutil.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/memutil.h b/memutil.h
+-index 81028e9..dbed7fa 100644
+---- a/memutil.h
+-+++ b/memutil.h
+-@@ -1,4 +1,5 @@
+- #include <stdlib.h>
+-+#include <stdarg.h>
+- 
+- int xasprintf(char **strp, const char *fmt, ...);
+- int xvasprintf(char **ret, const char *format, va_list ap);
+--- 
+-2.11.0
+-
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+index f1c0cd5..1a9dd60 100644
+--- a/package/mcelog/mcelog.hash
++++ b/package/mcelog/mcelog.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ef8335676f18a111f885d48810ab090fb6bfad94e5a5dd76cdccd2a536828662  libatomic_ops-libatomic_ops-7_4_4.tar.gz
-+sha256 cf7e61f7f929651b65d6186a03446819805c867f4f75c7148c8f26321eb66260  libatomic_ops-v7.4.6.tar.gz
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index 52d2745..483f118 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
+ # Locally computed
+-sha256 825644a6cfd9b149e848d91d322724f2fb48f3a98441a25d9d38a5dbe02fe1ef  mcelog-v152.tar.gz
++sha256 d8f3dde21b2e0d76740f374385817c11b3fd69b095a186a6dd12c7b0ba0cca8f  mcelog-v153.tar.gz
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index d12fc44..dca6a18 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBATOMIC_OPS_VERSION = libatomic_ops-7_4_4
-+LIBATOMIC_OPS_VERSION = v7.4.6
- LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
- LIBATOMIC_OPS_AUTORECONF = YES
- 
+-MCELOG_VERSION = v152
++MCELOG_VERSION = v153
+ MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+ MCELOG_SITE_METHOD = git
+ MCELOG_LICENSE = GPL-2.0
