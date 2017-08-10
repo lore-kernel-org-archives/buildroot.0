@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 11:25:27 +0200
-Subject: [Buildroot] [PATCH] gdb: add fix for gdb 7.12 and gdb 8.0 build
- on noMMU platforms
-In-Reply-To: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
-References: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <ff2def1e-0ac7-4d73-2083-f67ca110b280@mind.be>
+Date: Thu, 10 Aug 2017 11:26:31 +0200
+Subject: [Buildroot] [PATCH] glibc: fix sh4 compile error
+In-Reply-To: <20170804170742.GA10573@waldemar-brodkorb.de>
+References: <20170804170742.GA10573@waldemar-brodkorb.de>
+Message-ID: <ca02a9da-c4bd-aa8b-adc9-34fa677d1bbc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,24 @@ To: buildroot@busybox.net
 
 
 
-On 03-08-17 09:15, Thomas Petazzoni wrote:
-> This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
-> noMMU platforms. It is not needed for older versions of gdb, since
-> it's related to the switch of gdb to C++ in the 7.12 release.
-> 
+On 04-08-17 19:07, Waldemar Brodkorb wrote:
 > Fixes:
 > 
-> ../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-> ../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
->        child_stack = xmalloc (STACK_SIZE * 4);
+> /tmp/output/build/glibc-2.25/build/libc_pic.a(dl-error.os): In function `__GI__dl_signal_error':
+> dl-error.c:(.text+0x0): multiple definition of `_dl_signal_error'
+> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x134d8): first defined here
+> /tmp/output/build/glibc-2.25/build/libc_pic.a(dl-error.os): In function `__GI__dl_catch_error':
+> dl-error.c:(.text+0x190): multiple definition of `_dl_catch_error'
+> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x136fc): first defined here
+> /tmp/output/build/glibc-2.25/build/libc_pic.a(init-first.os):(.data+0x0): multiple definition of `__libc_multiple_libcs'
+> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.bss+0x6c): first defined here
+> /tmp/output/build/glibc-2.25/build/libc_pic.a(_itoa.os): In function `_itoa':
+> _itoa.c:(.text+0xd4): multiple definition of `_itoa'
+> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x133c8): first defined here
 > 
-> The patch has already been merged upstream, as of commit
-> ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
-> of future gdb releases.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
- Since this is an upstream patch, and the additional issue reported by Romain is
-something different, I applied to master, thanks.
-
- BTW, in another thread Thomas P. requested that a build fix which doesn't have
-an accompanying autobuild failure should have a defconfig to reproduce :-).
+ Applied to master, thanks.
 
  Regards,
  Arnout
