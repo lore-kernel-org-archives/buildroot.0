@@ -1,261 +1,52 @@
-From: Aseem Sharma <aseem.sharma19@gmail.com>
-Date: Thu, 10 Aug 2017 13:44:10 +0530
-Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
-In-Reply-To: <CANK3ZEca7+iUwmK2Hxt60T1jAQ5eYWC9z2_XVZ+cKCLWQq=Ebg@mail.gmail.com>
-References: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
- <20170809154918.tthy3t2p6d3hsqon@tarshish>
- <CANK3ZEe9uvSZx-=iG-gLkUPV98vTUxtsF8fC+wTAt+HovNDoVw@mail.gmail.com>
- <20170809171757.itid3fvz6462r2no@tarshish>
- <CANK3ZEctYdAA8B=w2=DqKqsQ=Sf_1B=Uj-SRsN+HdY35mvQSDw@mail.gmail.com>
- <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
- <20170810063631.e3jc22lsdjuchpbk@tarshish>
- <CANK3ZEeLMHhNYvt6dN45zf6QV5sTcw12FEyGf7h=CmQFqtX_4A@mail.gmail.com>
- <20170810071320.xvrhusojcw4dqxtu@tarshish>
- <CANK3ZEeJYeji_4Ds-kW6EXXRU3FcpXSgRaWeav96qQU6O5Jfkg@mail.gmail.com>
- <20170810072841.bs5ly52awzczejgz@tarshish>
- <CANK3ZEca7+iUwmK2Hxt60T1jAQ5eYWC9z2_XVZ+cKCLWQq=Ebg@mail.gmail.com>
-Message-ID: <CANK3ZEcwW1+xBazZB209PFnzpi1mmyfmEEac0CFPMYUBBmTRug@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Aug 2017 10:20:37 +0200
+Subject: [Buildroot] [PATCH v3] libcgi: bump to version 1.1
+In-Reply-To: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
+References: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
+Message-ID: <c3b8eed9-889c-5893-c9e1-7d8d063cc597@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Another information that I may have missed is that I am currently using
-Ubuntu 16.4 system, i686 arch to build source for "iwmmxt"
+ Hi Joe,
 
--Aseem
+On 10-08-17 09:45, Joe Lin wrote:
+> Cleanup the libcgi package,
+> by using https://github.com/rafaelsteil/libcgi as an upstream.
+> Remove old patch and use cmake to build new version.
+> 
+> Signed-off-by: Joe Lin <xlcwu.taiwan@gmail.com>
+[snip]
+> -LIBCGI_VERSION = 1.0
+> -LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
+> +LIBCGI_VERSION = 1.1
+> +LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
+> +
+>  LIBCGI_INSTALL_STAGING = YES
+> -# use cross CC/AR rather than host
+> -LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
+> -	$(if $(BR2_STATIC_LIBS),STATIC=1)
+>  LIBCGI_LICENSE = LGPL-2.1+
+>  
+> -$(eval $(autotools-package))
+> +LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO
 
-On Thu, Aug 10, 2017 at 1:39 PM, Aseem Sharma <aseem.sharma19@gmail.com>
-wrote:
+ Mario (added in Cc) submitted a similar patch and it didn't have this
+_IN_SOURCE_BUILD line. Is it really needed?
 
-> Where will i find minimal defconfig?
-> Please note that the issue was orignally observed on latest long term
-> support release v2017.02.5.
-> However I would try the steps provided in your last email over Latest
-> stable release v2017.05.2.
-> Sorry about too many naive questions.
->
-> -Aseem
->
-> On Thu, Aug 10, 2017 at 12:58 PM, Baruch Siach <baruch@tkos.co.il> wrote:
->
->> Hi Aseem,
->>
->> On Thu, Aug 10, 2017 at 12:51:53PM +0530, Aseem Sharma wrote:
->> > Sure. Can you please give me the exact steps to be carried out.
->> > Also, I tried selecting other gcc versions from menuconfig but the
->> > compilation seems to fail all the time with one issue or the other.
->>
->> Remove your current .config, copy the minimal defconfig below into
->> .config,
->> and then do
->>
->>   make olddefconfig
->>   make clean
->>   make
->>
->> This will automatically select the gcc version which as of current master
->> is
->> 6.4.0.
->>
->> baruch
->>
->> > On 10-Aug-2017 12:43 PM, "Baruch Siach" <baruch@tkos.co.il> wrote:
->> >
->> > On Thu, Aug 10, 2017 at 12:19:33PM +0530, Aseem Sharma wrote:
->> > > Yes Baruch. I tried a couple of times with "make clean" & even "make
->> > > distclean". However, the error is consistent.
->> > > Found a similar issue here: https://gcc.gnu.org/bugzilla/
->> > > show_bug.cgi?id=40836
->> >
->> > This issue seems to be fixed since gcc 4.8.
->> >
->> > I could not reproduce this ICE on current master with the following
->> minimal
->> > defconfig:
->> >
->> > BR2_arm=y
->> > BR2_iwmmxt=y
->> >
->> > Can you give it a try?
->> >
->> > baruch
->> >
->> > > On Thu, Aug 10, 2017 at 12:06 PM, Baruch Siach <baruch@tkos.co.il>
->> wrote:
->> > > > On Thu, Aug 10, 2017 at 11:56:56AM +0530, Aseem Sharma wrote:
->> > > > > *A follow-up question:*
->> > > > > I selected 'iwmmxt' as per Baruch's suggestion and tried to run
->> > "make".
->> > > > > The build seems to be failing with following error message in
->> > > > > "busybox-1.26.2" compilation:
->> > > > >
->> > > > > util-linux/mkfs_ext2.c: In function ?mkfs_ext2_main?:
->> > > > > util-linux/mkfs_ext2.c:715:1: error: insn does not satisfy its
->> > > > constraints:
->> > > > >  }
->> > > > >  ^
->> > > > > (insn 1169 286 287 31 (set (reg:SI 0 r0)
->> > > > >         (reg:SI 80 wr0)) util-linux/mkfs_ext2.c:344 426
->> > > > {*iwmmxt_movsi_insn}
->> > > > >      (nil))
->> > > > > util-linux/mkfs_ext2.c:715:1: internal compiler error: in
->> > > > > reload_cse_simplify_operands, at postreload.c:411
->> > > > > Please submit a full bug report,
->> > > > > with preprocessed source if appropriate.
->> > > > > See <http://bugs.buildroot.net/> for instructions.
->> > > > > scripts/Makefile.build:197: recipe for target
->> 'util-linux/mkfs_ext2.o'
->> > > > > failed
->> > > > > make[2]: *** [util-linux/mkfs_ext2.o] Error 1
->> > > > > Makefile:742: recipe for target 'util-linux' failed
->> > > > > make[1]: *** [util-linux] Error 2
->> > > > > make[1]: Leaving directory '/home/administrator/
->> > > > Downloads/buildroot_2017/
->> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2'
->> > > > > package/pkg-generic.mk:216: recipe for target
->> '/home/administrator/
->> > > > > Downloads/buildroot_2017/buildroot-2017.02.5/output/
->> > > > > build/busybox-1.26.2/.stamp_built' failed
->> > > > > make: *** [/home/administrator/Downloads/buildroot_2017/
->> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2/.stamp_built]
->> Error 2
->> > > > >
->> > > > > It would be really helpful is you can provide some insight and
->> > possibly a
->> > > > > fix/workaround.
->> > > >
->> > > > Have you done a clean rebuild, i.e., 'make clean; make'? See
->> > > > http://nightly.buildroot.org/manual.html#full-rebuild .
->> > > >
->> > > > baruch
->> > > >
->> > > > > On Thu, Aug 10, 2017 at 8:55 AM, Aseem Sharma <
->> > aseem.sharma19 at gmail.com>
->> > > > > wrote:
->> > > > >
->> > > > > > Thanks Baruch & Arnout. Will give a try.
->> > > > > >
->> > > > > > Best Regards,
->> > > > > > Aseem
->> > > > > >
->> > > > > > On Wed, Aug 9, 2017 at 10:47 PM, Baruch Siach <
->> baruch at tkos.co.il>
->> > > > wrote:
->> > > > > >
->> > > > > >> Hi Aseem,
->> > > > > >>
->> > > > > >> On Wed, Aug 09, 2017 at 10:03:24PM +0530, Aseem Sharma wrote:
->> > > > > >> > Hello Baruch & Arnout,
->> > > > > >> >
->> > > > > >> > Thanks for your responses.
->> > > > > >> > The board that I have is quite old with limited RAM and
->> Flash.
->> > > > > >> >
->> > > > > >> > Baruch,
->> > > > > >> > Could you please provide more details as to how do I select
->> > "iwmmxt"
->> > > > > >> using
->> > > > > >> > menuconfig. As far as I remember, I do not seem to have that
->> > option
->> > > > in
->> > > > > >> my
->> > > > > >> > current buildroot release.
->> > > > > >>
->> > > > > >> Go to 'Target options' -> 'Target Architecture Variant', and
->> select
->> > > > > >> 'iwmmxt'
->> > > > > >> (last option).
->> > > > > >>
->> > > > > >> > Also, as per Arnout's response to my query, I should be
->> using ARM
->> > > > little
->> > > > > >> > endian with arm926tARM.
->> > > > > >>
->> > > > > >> As far as I know arm926t code is compatible with iwmmxt, but
->> not
->> > the
->> > > > > >> other way
->> > > > > >> around. Look for Sheeva PJ1 at [1]. See also [2].
->> > > > > >>
->> > > > > >> [1] https://en.wikipedia.org/wiki/
->> List_of_ARM_microarchitectures
->> > > > > >>
->> > > > > >> [2] https://en.wikipedia.org/wiki/
->> MMX_(instruction_set)#MMX_in_e
->> > > > > >> mbedded_applications
->> > > > > >>
->> > > > > >> > Are these two options one and the same?
->> > > > > >>
->> > > > > >> I don't think so.
->> > > > > >>
->> > > > > >> baruch
->> > > > > >>
->> > > > > >> > Thanks in advance.
->> > > > > >> >
->> > > > > >> > Best Regards,
->> > > > > >> > Aseem
->> > > > > >> >
->> > > > > >> > Sent via really tiny keyboard. Expect random auto corrects,
->> fat
->> > > > finger
->> > > > > >> > typos and weirdness!!
->> > > > > >> >
->> > > > > >> >
->> > > > > >> > On 09-Aug-2017 21:19, "Baruch Siach" <baruch@tkos.co.il>
->> wrote:
->> > > > > >> >
->> > > > > >> > Hi Aweem,
->> > > > > >> >
->> > > > > >> > On Wed, Aug 09, 2017 at 06:00:55PM +0530, Aseem Sharma wrote:
->> > > > > >> > > I am naive to buildroot & processor world trying to compile
->> > > > > >> > > "buildroot-2017.02.5" for "Marvell ARM Armada 166E
->> processor
->> > > > > >> (compatible
->> > > > > >> > to
->> > > > > >> > > ARMv5TE instruction-set)" based old system. However, I do
->> not
->> > > > > >> understand
->> > > > > >> > > the options to be selected in "make menuconfig" for
->> > > > > >> > > 1. Target options->Target Architecture {think should be
->> ARM -
->> > > > little
->> > > > > >> > endian}
->> > > > > >> > > 2. Target options->Target Architecture variant
->> > > > > >> > >
->> > > > > >> > > Thanks in advance for your help.
->> > > > > >> >
->> > > > > >> > Based on the Armada 16x Datasheet[1], the mainline kernel
->> > > > > >> > arch/arm/mach-mmp/Kconfig (CONFIG_CPU_PXA168) and
->> > arch/arm/Kconfig
->> > > > > >> > (CONFIG_IWMMXT), it seems like you need the iwmmxt ARM
->> variant
->> > for
->> > > > your
->> > > > > >> > Armada
->> > > > > >> > 166E processor.
->> > > > > >> >
->> > > > > >> > [1] http://www.marvell.com.cn/appl
->> ication-processors/armada-100/
->> > > > > >> > assets/armada_16x_datasheet.pdf
->> >
->> > --
->> >      http://baruch.siach.name/blog/                  ~. .~   Tk Open
->> Systems
->> > =}------------------------------------------------ooO--U--Oo
->> o------------{=
->> >    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->>
->> --
->>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
->> Systems
->> =}------------------------------------------------ooO--U--Oo
->> o------------{=
->>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/2c538f8d/attachment.html>
+ Regards,
+ Arnout
+
+> +
+> +$(eval $(cmake-package))
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
