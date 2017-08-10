@@ -1,61 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 14:51:33 +0200
-Subject: [Buildroot] [PATCH 2/2] swupdate: support for Lua 5.1 is broken
-In-Reply-To: <20170731211800.5888-2-joerg.krause@embedded.rocks>
-References: <20170731211800.5888-1-joerg.krause@embedded.rocks>
- <20170731211800.5888-2-joerg.krause@embedded.rocks>
-Message-ID: <68d65b93-6f08-07d8-564d-7a6d7af56a75@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Aug 2017 15:53:16 +0300
+Subject: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
+In-Reply-To: <20170810124536.26344-1-daggs@gmx.com>
+References: <20170810124536.26344-1-daggs@gmx.com>
+Message-ID: <20170810125316.6qeroacb3dcvicj4@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Dagg,
 
+On Thu, Aug 10, 2017 at 03:45:36PM +0300, Dagg Stompler wrote:
+> when compiling host e2fsprogs on my system (gentoo amd64, glibc 2.25) the build fails with this error:
+> ../lib/libext2fs.a(ismounted.o): In function `check_mntent_file':
+> ismounted.c:(.text+0x224): undefined reference to `major'
 
-On 31-07-17 23:18, J?rg Krause wrote:
-> Before commit 87b6ac1478821351c92f7ca1c3154550e4713b28 support for Lua
-> was always disabled by the default config file:
-> 
-> ```
-> CONFIG_LUA is not set
-> ```
-> 
-> The commit removed this setting and Lua support is now enabled if a Lua
-> interpreter is enabled. As the swupdate build system uses pkg-config to check
-> for the lua library by default (LUAPKG="lua") this throws a lot of
-> undefined referenced in case LuaJIT is uses as Lua interpreter, e.g.:
-> 
-> ```
-> corelib/lib.a(lua_interface.o): In function `l_info':
-> lua_interface.c:(.text.l_info+0x14): undefined reference to `luaL_checklstring'
-> ```
-> 
-> However, since version 2017.07 support for Lua 5.1 is broken in swupdate. Therefore,
-> remove support for Lua 5.1 and LuaJIT in the swupdate package for now
-> until upstream might fix this issue.
-> 
-> Reported upstream:
-> https://groups.google.com/forum/#!topic/swupdate/WAm8npAOd6o
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/df2/df2a71efe5af52d7b8721a355c49934b1be197a3/
-> http://autobuild.buildroot.net/results/400/4006225c8a47eb0b56399c83bd6d00406a0f62c2/
-> http://autobuild.buildroot.net/results/098/098f9d6cd905359adac4fb15e1d54c5022757325/
-> http://autobuild.buildroot.net/results/e5f/e5f6f99d96d9c661454335e7f931a03c3ae6a9e2/
-> http://autobuild.buildroot.net/results/f3a/f3a0abe8d5e35c85da40d20dab260c28506a0d4c/
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Please provide the defconfig that causes this issue.
 
- Applied to master after updating the commit message as you suggested, thanks.
+Was that the host version of e2fsprogs?
 
- Regards,
- Arnout
+> bumping versions fixes the issue.
+
+This is upstream commit 3fb715b554268759 (include sys/sysmacros.h as needed), 
+right? If so, please add a reference in the commit log.
+
+baruch
+
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  package/e2fsprogs/e2fsprogs.hash | 4 ++--
+>  package/e2fsprogs/e2fsprogs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+> index cf41e3a3d5..ac420dd825 100644
+> --- a/package/e2fsprogs/e2fsprogs.hash
+> +++ b/package/e2fsprogs/e2fsprogs.hash
+> @@ -1,2 +1,2 @@
+> -# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.4/sha256sums.asc
+> -sha256 54b3f21123a531a6a536b9cdcc21344b0122a72790dbe4dacc98e64db25e4a24  e2fsprogs-1.43.4.tar.xz
+> +# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.5/sha256sums.asc
+> +sha256 261f3d9ade383fbf032a19140c9c25e998cc0f71a1ae686614fb3ae0eb955a17  e2fsprogs-1.43.5.tar.xz
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index 75e9213351..7627a1f589 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -E2FSPROGS_VERSION = 1.43.4
+> +E2FSPROGS_VERSION = 1.43.5
+>  E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+>  E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+>  E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
