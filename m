@@ -1,105 +1,64 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 12:54:57 +0200
-Subject: [Buildroot] [git commit] lua: fix pkg-config file
-Message-ID: <20170810124404.AFC8D7FA81@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 12:51:11 +0200
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: bump linux and
+	U-Boot versions
+Message-ID: <20170810124404.66A488082C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d845683e37640d33c186c0091ccce6ae3ef0777
+commit: https://git.buildroot.net/buildroot/commit/?id=7d6cd3677a1f1caab6b67fc369bd7073f687b38f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When Lua is linked with additional libraries, these libraries should go
-into the pkg-config file as well.
+This fixes build errors with GCC 6.
 
-Otherwise, linking swupdate with the lua library fails:
-
-```
-/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlopen'
-/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlclose'
-/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlerror'
-/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
-```
-
-Fixes http://autobuild.buildroot.net/results/1c3/1c349cc5904868e4def292b9fbfa164828e46156
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lua/5.2.4/0004-lua-pc.patch | 4 +++-
- package/lua/5.3.4/0004-lua-pc.patch | 4 +++-
- package/lua/lua.mk                  | 8 ++++----
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ configs/olimex_a20_olinuxino_lime_defconfig      | 5 +++--
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua/5.2.4/0004-lua-pc.patch b/package/lua/5.2.4/0004-lua-pc.patch
-index 62acb20..31ff611 100644
---- a/package/lua/5.2.4/0004-lua-pc.patch
-+++ b/package/lua/5.2.4/0004-lua-pc.patch
-@@ -1,6 +1,8 @@
- add lua.pc
- 
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+[J??rg Krause: add @MYLIBS@]
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
- 
- Index: b/etc/lua.pc
- ===================================================================
-@@ -34,7 +36,7 @@ Index: b/etc/lua.pc
- +Description: An Extensible Extension Language
- +Version: ${R}
- +Requires: 
--+Libs: -L${libdir} -llua -lm
-++Libs: -L${libdir} -llua -lm @MYLIBS@
- +Cflags: -I${includedir}
- +
- +# (end of lua.pc)
-diff --git a/package/lua/5.3.4/0004-lua-pc.patch b/package/lua/5.3.4/0004-lua-pc.patch
-index 615a7db..1125832 100644
---- a/package/lua/5.3.4/0004-lua-pc.patch
-+++ b/package/lua/5.3.4/0004-lua-pc.patch
-@@ -1,6 +1,8 @@
- add lua.pc
- 
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+[J??rg Krause: add @MYLIBS@]
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
- 
- Index: b/etc/lua.pc
- ===================================================================
-@@ -34,7 +36,7 @@ Index: b/etc/lua.pc
- +Description: An Extensible Extension Language
- +Version: ${R}
- +Requires:
--+Libs: -L${libdir} -llua -lm
-++Libs: -L${libdir} -llua -lm @MYLIBS@
- +Cflags: -I${includedir}
- +
- +# (end of lua.pc)
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 93339ad..0692c53 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -86,8 +86,8 @@ endef
- 
- define LUA_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) INSTALL_TOP="$(STAGING_DIR)/usr" -C $(@D) install
--	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
--		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
-+	sed -e "s/@MYLIBS@/$(LUA_MYLIBS)/g" $(@D)/etc/lua.pc \
-+		> $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
- endef
- 
- define LUA_INSTALL_TARGET_CMDS
-@@ -96,8 +96,8 @@ endef
- 
- define HOST_LUA_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) INSTALL_TOP="$(HOST_DIR)" -C $(@D) install
--	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
--		$(HOST_DIR)/lib/pkgconfig/lua.pc
-+	sed -e "s/@MYLIBS@/$(HOST_LUA_MYLIBS)/g" $(@D)/etc/lua.pc \
-+		> $(HOST_DIR)/lib/pkgconfig/lua.pc
- endef
- 
- $(eval $(generic-package))
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 1c9f261..526ed37 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.36"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,9 +34,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index 8042dfe..dde1791 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -41,9 +41,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
