@@ -1,129 +1,357 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 10:26:51 +0200
-Subject: [Buildroot] [git commit] gdb: add fix for gdb 7.12 and gdb 8.0
-	build on noMMU platforms
-Message-ID: <20170810090958.CF7B57FFC6@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 10:25:03 +0200
+Subject: [Buildroot] [git commit] glibc: fix sh4 compile error
+Message-ID: <20170810090958.980CC8029F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c12506f4da21fcc7a4f1514670c4bfd4f23b466
+commit: https://git.buildroot.net/buildroot/commit/?id=6db1651e343e03888977c09287299d111fdd7e6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
-noMMU platforms. It is not needed for older versions of gdb, since
-it's related to the switch of gdb to C++ in the 7.12 release.
 
 Fixes:
 
-../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-       child_stack = xmalloc (STACK_SIZE * 4);
+/tmp/output/build/glibc-2.25/build/libc_pic.a(dl-error.os): In function `__GI__dl_signal_error':
+dl-error.c:(.text+0x0): multiple definition of `_dl_signal_error'
+/tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x134d8): first defined here
+/tmp/output/build/glibc-2.25/build/libc_pic.a(dl-error.os): In function `__GI__dl_catch_error':
+dl-error.c:(.text+0x190): multiple definition of `_dl_catch_error'
+/tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x136fc): first defined here
+/tmp/output/build/glibc-2.25/build/libc_pic.a(init-first.os):(.data+0x0): multiple definition of `__libc_multiple_libcs'
+/tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.bss+0x6c): first defined here
+/tmp/output/build/glibc-2.25/build/libc_pic.a(_itoa.os): In function `_itoa':
+_itoa.c:(.text+0xd4): multiple definition of `_itoa'
+/tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x133c8): first defined here
 
-The patch has already been merged upstream, as of commit
-ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
-of future gdb releases.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
- ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
- 2 files changed, 82 insertions(+)
+ package/glibc/0006-sh4-trap.patch | 318 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 318 insertions(+)
 
-diff --git a/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+diff --git a/package/glibc/0006-sh4-trap.patch b/package/glibc/0006-sh4-trap.patch
 new file mode 100644
-index 0000000..4eb72e4
+index 0000000..c986ac3
 --- /dev/null
-+++ b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
-@@ -0,0 +1,41 @@
-+From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 18 Jun 2017 23:09:43 +0200
-+Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
++++ b/package/glibc/0006-sh4-trap.patch
+@@ -0,0 +1,318 @@
++commit db3d848e154b00071f4a5e729d5884efad410109
++Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
++Date:   Wed Mar 15 15:44:59 2017 -0300
 +
-+On noMMU platforms, the following code gets compiled:
++    Build divdi3 only for architecture that required it
++    
++    As noted in [1], divdi3 object is only exported in a handful ABIs
++    (i386, m68k, powerpc32, s390-32, and ia64), however it is built
++    for all current architectures regardless.
++    
++    This patch refact the make rules for this object to so only the
++    aforementioned architectures that actually require it builds it.
++    
++    Also, to avoid internal PLT calls to the exported symbol from the
++    module, glibc uses an internal header (symbol-hacks.h) which is
++    unrequired (and in fact breaks the build for architectures that
++    intend to get symbol definitions from libgcc.a).  The patch also
++    changes it to create its own header (divdi3-symbol-hacks.h) and
++    adjust the architectures that require it accordingly.
++    
++    I checked the build/check (with run-built-tests=no) on the
++    following architectures (which I think must cover all supported
++    ABI/builds) using GCC 6.3:
++    
++    aarch64-linux-gnu
++    alpha-linux-gnu
++    arm-linux-gnueabihf
++    hppa-linux-gnu
++    ia64-linux-gnu
++    m68k-linux-gnu
++    microblaze-linux-gnu
++    mips64-n32-linux-gnu
++    mips-linux-gnu
++    mips64-linux-gnu
++    nios2-linux-gnu
++    powerpc-linux-gnu
++    powerpc-linux-gnu-power4
++    powerpc64-linux-gnu
++    powerpc64le-linux-gnu
++    s390x-linux-gnu
++    s390-linux-gnu
++    sh4-linux-gnu
++    sh4-linux-gnu-soft
++    sparc64-linux-gnu
++    sparcv9-linux-gnu
++    tilegx-linux-gnu
++    tilegx-linux-gnu-32
++    tilepro-linux-gnu
++    x86_64-linux-gnu
++    x86_64-linux-gnu-x32
++    i686-linux-gnu
++    
++    I only saw one regression on sparcv9-linux-gnu (extra PLT call to
++    .udiv) which I address in next patch in the set.  It also correctly
++    build SH with GCC 7.0.1 (without any regression from c89721e25d).
++    
++    [1] https://sourceware.org/ml/libc-alpha/2017-03/msg00243.html
++    
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+  child_stack = xmalloc (STACK_SIZE * 4);
-+
-+Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
-+the lack of cast is valid in C, it is not in C++, causing the
-+following build failure:
-+
-+../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-+../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-+       child_stack = xmalloc (STACK_SIZE * 4);
-+
-+Therefore, this commit adds the appropriate cast.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
-+---
-+ gdb/nat/linux-ptrace.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
-+index 3447e07..33833e2 100644
-+--- a/gdb/nat/linux-ptrace.c
-++++ b/gdb/nat/linux-ptrace.c
-+@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
-+ #define STACK_SIZE 4096
++diff --git a/sysdeps/i386/symbol-hacks.h b/sysdeps/i386/symbol-hacks.h
++new file mode 100644
++index 0000000000..36a13c83f7
++--- /dev/null
+++++ b/sysdeps/i386/symbol-hacks.h
++@@ -0,0 +1,21 @@
+++/* Hacks needed for symbol manipulation.  i386 version.
+++   Copyright (C) 2017 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <sysdeps/wordsize-32/divdi3-symbol-hacks.h>
+++
+++#include_next "symbol-hacks.h"
++diff --git a/sysdeps/m68k/symbol-hacks.h b/sysdeps/m68k/symbol-hacks.h
++new file mode 100644
++index 0000000000..e449d29810
++--- /dev/null
+++++ b/sysdeps/m68k/symbol-hacks.h
++@@ -0,0 +1,21 @@
+++/* Hacks needed for symbol manipulation.  m68k version.
+++   Copyright (C) 2017 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <sysdeps/wordsize-32/divdi3-symbol-hacks.h>
+++
+++#include_next "symbol-hacks.h"
++diff --git a/sysdeps/powerpc/powerpc32/symbol-hacks.h b/sysdeps/powerpc/powerpc32/symbol-hacks.h
++new file mode 100644
++index 0000000000..dbb3141621
++--- /dev/null
+++++ b/sysdeps/powerpc/powerpc32/symbol-hacks.h
++@@ -0,0 +1,21 @@
+++/* Hacks needed for symbol manipulation.  powerpc version.
+++   Copyright (C) 2017 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <sysdeps/wordsize-32/divdi3-symbol-hacks.h>
+++
+++#include_next "symbol-hacks.h"
++diff --git a/sysdeps/s390/s390-32/symbol-hacks.h b/sysdeps/s390/s390-32/symbol-hacks.h
++new file mode 100644
++index 0000000000..585c42365a
++--- /dev/null
+++++ b/sysdeps/s390/s390-32/symbol-hacks.h
++@@ -0,0 +1,21 @@
+++/* Hacks needed for symbol manipulation.  s390 version.
+++   Copyright (C) 2017 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <sysdeps/wordsize-32/divdi3-symbol-hacks.h>
+++
+++#include_next "symbol-hacks.h"
++diff --git a/sysdeps/unix/sysv/linux/i386/Makefile b/sysdeps/unix/sysv/linux/i386/Makefile
++index 6aac0dfe15..4080b8c966 100644
++--- a/sysdeps/unix/sysv/linux/i386/Makefile
+++++ b/sysdeps/unix/sysv/linux/i386/Makefile
++@@ -26,6 +26,11 @@ endif
 + 
-+     if (child_stack == NULL)
-+-      child_stack = xmalloc (STACK_SIZE * 4);
-++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
++ ifeq ($(subdir),csu)
++ sysdep-dl-routines += sysdep
+++ifeq (yes,$(build-shared))
+++sysdep_routines += divdi3
+++shared-only-routines += divdi3
+++CPPFLAGS-divdi3.c = -Din_divdi3_c
+++endif
++ endif
 + 
-+     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
-+ #ifdef __ia64__
-+-- 
-+2.9.4
-+
-diff --git a/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
-new file mode 100644
-index 0000000..4eb72e4
---- /dev/null
-+++ b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
-@@ -0,0 +1,41 @@
-+From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 18 Jun 2017 23:09:43 +0200
-+Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
-+
-+On noMMU platforms, the following code gets compiled:
-+
-+  child_stack = xmalloc (STACK_SIZE * 4);
-+
-+Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
-+the lack of cast is valid in C, it is not in C++, causing the
-+following build failure:
-+
-+../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-+../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-+       child_stack = xmalloc (STACK_SIZE * 4);
-+
-+Therefore, this commit adds the appropriate cast.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
-+---
-+ gdb/nat/linux-ptrace.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
-+index 3447e07..33833e2 100644
-+--- a/gdb/nat/linux-ptrace.c
-++++ b/gdb/nat/linux-ptrace.c
-+@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
-+ #define STACK_SIZE 4096
++ ifeq ($(subdir),nptl)
++diff --git a/sysdeps/unix/sysv/linux/m68k/Makefile b/sysdeps/unix/sysv/linux/m68k/Makefile
++index 5c50ce6927..ce1f696a6f 100644
++--- a/sysdeps/unix/sysv/linux/m68k/Makefile
+++++ b/sysdeps/unix/sysv/linux/m68k/Makefile
++@@ -4,6 +4,11 @@ m68k-syntax-flag = -DMOTOROLA_SYNTAX
 + 
-+     if (child_stack == NULL)
-+-      child_stack = xmalloc (STACK_SIZE * 4);
-++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
++ ifeq ($(subdir),csu)
++ sysdep_routines += m68k-helpers
+++ifeq (yes,$(build-shared))
+++sysdep_routines += divdi3
+++shared-only-routines += divdi3
+++CPPFLAGS-divdi3.c = -Din_divdi3_c
+++endif
++ endif
 + 
-+     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
-+ #ifdef __ia64__
-+-- 
-+2.9.4
-+
++ ifeq ($(subdir),misc)
++diff --git a/sysdeps/unix/sysv/linux/powerpc/powerpc32/Makefile b/sysdeps/unix/sysv/linux/powerpc/powerpc32/Makefile
++index 3d6c150582..1f45659ed1 100644
++--- a/sysdeps/unix/sysv/linux/powerpc/powerpc32/Makefile
+++++ b/sysdeps/unix/sysv/linux/powerpc/powerpc32/Makefile
++@@ -1,2 +1,10 @@
++ # See Makeconfig regarding the use of default-abi.
++ default-abi := 32
+++
+++ifeq ($(subdir),csu)
+++ifeq (yes,$(build-shared))
+++sysdep_routines += divdi3
+++shared-only-routines += divdi3
+++CPPFLAGS-divdi3.c = -Din_divdi3_c
+++endif
+++endif
++diff --git a/sysdeps/unix/sysv/linux/s390/s390-32/Makefile b/sysdeps/unix/sysv/linux/s390/s390-32/Makefile
++index da3b3c76b4..fd8cf92633 100644
++--- a/sysdeps/unix/sysv/linux/s390/s390-32/Makefile
+++++ b/sysdeps/unix/sysv/linux/s390/s390-32/Makefile
++@@ -21,3 +21,11 @@ endif
++ ifeq ($(subdir),stdlib)
++ sysdep_routines += __makecontext_ret
++ endif
+++
+++ifeq ($(subdir),csu)
+++ifeq (yes,$(build-shared))
+++sysdep_routines += divdi3
+++shared-only-routines += divdi3
+++CPPFLAGS-divdi3.c = -Din_divdi3_c
+++endif
+++endif
++diff --git a/sysdeps/wordsize-32/Makefile b/sysdeps/wordsize-32/Makefile
++deleted file mode 100644
++index 82beac44ed..0000000000
++--- a/sysdeps/wordsize-32/Makefile
+++++ /dev/null
++@@ -1,7 +0,0 @@
++-ifeq ($(subdir),csu)
++-ifeq (yes,$(build-shared))
++-sysdep_routines += divdi3
++-shared-only-routines += divdi3
++-CPPFLAGS-divdi3.c = -Din_divdi3_c
++-endif
++-endif
++diff --git a/sysdeps/wordsize-32/divdi3-symbol-hacks.h b/sysdeps/wordsize-32/divdi3-symbol-hacks.h
++new file mode 100644
++index 0000000000..6c90cb796d
++--- /dev/null
+++++ b/sysdeps/wordsize-32/divdi3-symbol-hacks.h
++@@ -0,0 +1,31 @@
+++/* Hacks needed for divdi3 symbol manipulation.
+++   Copyright (C) 2004-2017 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++/* A very dirty trick: gcc emits references to __divdi3, __udivdi3,
+++   __moddi3, and __umoddi3.  These functions are exported and
+++   therefore we get PLTs.  Unnecessarily so.  Changing gcc is a big
+++   task which might not be worth it so we play tricks with the
+++   assembler.
+++   Note: in_divdi3_c is only used to avoid symbol alias on divdi3
+++   build itself.  */
+++#if !defined __ASSEMBLER__ && !defined in_divdi3_c && IS_IN (libc) && defined SHARED
+++asm ("__divdi3 = __divdi3_internal");
+++asm ("__udivdi3 = __udivdi3_internal");
+++asm ("__moddi3 = __moddi3_internal");
+++asm ("__umoddi3 = __umoddi3_internal");
+++#endif
++diff --git a/sysdeps/wordsize-32/symbol-hacks.h b/sysdeps/wordsize-32/symbol-hacks.h
++deleted file mode 100644
++index 0aec1e0b97..0000000000
++--- a/sysdeps/wordsize-32/symbol-hacks.h
+++++ /dev/null
++@@ -1,31 +0,0 @@
++-/* Hacks needed for symbol manipulation.
++-   Copyright (C) 2004-2017 Free Software Foundation, Inc.
++-   This file is part of the GNU C Library.
++-
++-   The GNU C Library is free software; you can redistribute it and/or
++-   modify it under the terms of the GNU Lesser General Public
++-   License as published by the Free Software Foundation; either
++-   version 2.1 of the License, or (at your option) any later version.
++-
++-   The GNU C Library is distributed in the hope that it will be useful,
++-   but WITHOUT ANY WARRANTY; without even the implied warranty of
++-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++-   Lesser General Public License for more details.
++-
++-   You should have received a copy of the GNU Lesser General Public
++-   License along with the GNU C Library; if not, see
++-   <http://www.gnu.org/licenses/>.  */
++-
++-#include_next "symbol-hacks.h"
++-
++-/* A very dirty trick: gcc emits references to __divdi3, __udivdi3,
++-   __moddi3, and __umoddi3.  These functions are exported and
++-   therefore we get PLTs.  Unnecessarily so.  Changing gcc is a big
++-   task which might not be worth it so we play tricks with the
++-   assembler.  */
++-#if !defined __ASSEMBLER__ && !defined in_divdi3_c && IS_IN (libc) && defined SHARED
++-asm ("__divdi3 = __divdi3_internal");
++-asm ("__udivdi3 = __udivdi3_internal");
++-asm ("__moddi3 = __moddi3_internal");
++-asm ("__umoddi3 = __umoddi3_internal");
++-#endif
