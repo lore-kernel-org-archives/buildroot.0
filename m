@@ -1,46 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 21:53:00 +0200
-Subject: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
-In-Reply-To: <20170810125316.6qeroacb3dcvicj4@tarshish>
-References: <20170810124536.26344-1-daggs@gmx.com>
- <20170810125316.6qeroacb3dcvicj4@tarshish>
-Message-ID: <77a8ebc6-5825-77a4-bbe3-4f23b2bea658@mind.be>
+Date: Thu, 10 Aug 2017 22:06:55 +0200
+Subject: [Buildroot] ci20_defconfig fails because of missing TLS support
+Message-ID: <d32e5a1d-aa99-f189-bdfc-5d10b10c1eda@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Vicente, Waldemar,
+
+ Since some time (probably since some uClibc bump), the ci20_defconfig has been
+failing with an error I don't really understand [1]:
+
+> /usr/bin/make -j3 -C /builds/buildroot.org/buildroot/output/build/uclibc-1.0.25 ARCH="mips" CROSS_COMPILE="/builds/buildroot.org/buildroot/output/host/bin/mipsel-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc"
+> make[1]: Entering directory '/builds/buildroot.org/buildroot/output/build/uclibc-1.0.25'
+> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
+> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
+> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
+> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
+> ####
+> #### Your compiler does not support TLS and you are trying to build uClibc-ng
+> #### with NPTL support. Upgrade your binutils and gcc to versions which
+> #### support TLS for your architecture. Do not contact uClibc-ng maintainers
+> #### about this problem.
+> ####
+> #### Exiting...
+> ####
+> Rules.mak:689: recipe for target 'gcc_tls_test_fail' failed
+> make[1]: *** [gcc_tls_test_fail] Error 1
+> make[1]: Leaving directory '/builds/buildroot.org/buildroot/output/build/uclibc-1.0.25'
 
 
-On 10-08-17 14:53, Baruch Siach wrote:
-> Hi Dagg,
-> 
-> On Thu, Aug 10, 2017 at 03:45:36PM +0300, Dagg Stompler wrote:
->> when compiling host e2fsprogs on my system (gentoo amd64, glibc 2.25) the build fails with this error:
->> ../lib/libext2fs.a(ismounted.o): In function `check_mntent_file':
->> ismounted.c:(.text+0x224): undefined reference to `major'
-> 
-> Please provide the defconfig that causes this issue.
-> 
-> Was that the host version of e2fsprogs?
-> 
->> bumping versions fixes the issue.
-> 
-> This is upstream commit 3fb715b554268759 (include sys/sysmacros.h as needed), 
-> right? If so, please add a reference in the commit log.
-
- I'm wondering if we should apply this version bump to master or to next (and
-backport 3fb715b55 to master)...
-
- It looks like this release does a *lot* more than just a few fixes, so it's not
-really the type of bump we would take into master now.
+ Could you guys have a look, so we can hopefully get a fix in 2017.08?
 
  Regards,
  Arnout
 
 
-[snip]
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/27873603
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
