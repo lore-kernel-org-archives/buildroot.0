@@ -1,122 +1,127 @@
-From: Eugene Yudin <e.yudin@ndmsystems.com>
-Date: Thu, 10 Aug 2017 12:09:56 +0300
-Subject: [Buildroot] buildroot uClibc-ng build failure
-In-Reply-To: <20170808230048.75361077@windsurf>
-References: <20170803054828.GB7682@waldemar-brodkorb.de>
- <20170803092346.02d02371@windsurf.home>
- <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
- <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
- <20170808230048.75361077@windsurf>
-Message-ID: <CAPmKWpGqm6xL=ng=TegOw7DqQtU5=Lmq_0Fxv4Vabxr512iPFQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Aug 2017 10:08:06 +0200
+Subject: [Buildroot] [git commit] support/testing: allow to use a multiplier
+	for timeouts
+Message-ID: <20170810090958.037AA804E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I describe the current situation:
-1) user enables locale support (BR2_TOOLCHAIN_BUILDROOT_LOCALE);
-2) user optionally can set custom list of locales (BR2_GENERATE_LOCALE).
+commit: https://git.buildroot.net/buildroot/commit/?id=6e45e33f27d5ae6fa0ab5aad3f032d886a886037
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The option "BR2_GENERATE_LOCALE" is handled in "package/uclibc/uclibc.mk":
- UCLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
+Add a parameter to run-tests to act as a multiplier for all timeouts of
+emulator.
+It can be used to avoid sporadic failures on slow host machines as well
+in elastic runners on the cloud.
 
- ifeq ($(UCLIBC_GENERATE_LOCALES),)
- # We need at least one locale
- UCLIBC_LOCALES = en_US
- else
- # Strip out the encoding part of locale names, if any
- UCLIBC_LOCALES = \
-         $(foreach locale,$(UCLIBC_GENERATE_LOCALES),\
-         $(firstword $(subst .,$(space),$(locale))))
- endif
- ...
- define UCLIBC_LOCALE_CONFIG
-         ...
-         $(call
-KCONFIG_ENABLE_OPT,UCLIBC_BUILD_MINIMAL_LOCALE,$(@D)/.config)
-         $(call
-KCONFIG_SET_OPT,UCLIBC_BUILD_MINIMAL_LOCALES,"$(UCLIBC_LOCALES)",$(@D)/.config)
-         ...
- endef
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[Arnout: rename multiplier to timeout_multiplier everywhere]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/testing/infra/basetest.py |  4 +++-
+ support/testing/infra/emulator.py | 13 ++++++++++---
+ support/testing/run-tests         |  9 +++++++++
+ 3 files changed, 22 insertions(+), 4 deletions(-)
 
-We can see that with empty list buildroot passes "en_US" to uClibc-ng.
-
-The system library makefile handles option the following way
-(extra/locale/Makefile.in):
- $(locale_OUT)/wctables.h: $(locale_OUT)/gen_wctype
-         @$(disp_gen)
-         $(Q)for locale in $(call qstrip,$(UCLIBC_BUILD_MINIMAL_LOCALES))
-en_US en_GB; do \
-                  $< $(FLAG-locale-verbose) $$locale > $@ || \
-                 $< $(FLAG-locale-verbose) $$locale.UTF-8 > $@ || \
-                 $< $(FLAG-locale-verbose) $$locale.iso8859-1 > $@ &&
-break; \
-         done
-
-The program "gen_wctype" receives locale name as command line parameter.
-That application call the function setlocale() inside it.
-Some time ago that call was disabled to workaround bug with locales.
-That's the reason for the absence of problems in the past.
-Changes in the last release return this call.
-
-On Wed, Aug 9, 2017 at 12:00 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> On Tue, 8 Aug 2017 18:52:14 +0200, Andr? Hentschel wrote:
->
-> > > Please post output of the following commands:
-> > > $ locale
-> > > $ locale -a
-> > > $ cat /etc/os-release
-> > $ locale
-> > LANG=de_DE.utf8
-> > LANGUAGE=de_DE.utf8
-> > LC_CTYPE="de_DE.utf8"
-> > LC_NUMERIC="de_DE.utf8"
-> > LC_TIME="de_DE.utf8"
-> > LC_COLLATE="de_DE.utf8"
-> > LC_MONETARY="de_DE.utf8"
-> > LC_MESSAGES="de_DE.utf8"
-> > LC_PAPER="de_DE.utf8"
-> > LC_NAME="de_DE.utf8"
-> > LC_ADDRESS="de_DE.utf8"
-> > LC_TELEPHONE="de_DE.utf8"
-> > LC_MEASUREMENT="de_DE.utf8"
-> > LC_IDENTIFICATION="de_DE.utf8"
-> > LC_ALL=de_DE.utf8
-> >
-> > $ locale -a
-> > C
-> > C.UTF-8
-> > de_DE.utf8
-> > POSIX
-> >
-> > OS is Ubuntu 14.04.5 LTS
-> > Should I install the english locale?
->
-> As per the current Buildroot requirements, it shouldn't be needed. We
-> require one UTF-8 locale to be installed for uClibc to build its locale
-> data, but not specifically the en_US.UTF-8 locale or any other english
-> locale. If that has changed in uClibc, then we should adjust the
-> dependency in Buildroot accordingly, but it would be a bit annoying.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
-
-
-
--- 
-Best regards,
-Eugene
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/ec243a68/attachment.html>
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 431605b..493dea5 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -35,6 +35,7 @@ class BRTest(unittest.TestCase):
+     logtofile = True
+     keepbuilds = False
+     jlevel = 0
++    timeout_multiplier = 1
+ 
+     def __init__(self, names):
+         super(BRTest, self).__init__(names)
+@@ -60,7 +61,8 @@ class BRTest(unittest.TestCase):
+             self.b.build()
+             self.show_msg("Building done")
+ 
+-        self.emulator = Emulator(self.builddir, self.downloaddir, self.logtofile)
++        self.emulator = Emulator(self.builddir, self.downloaddir,
++                                 self.logtofile, self.timeout_multiplier)
+ 
+     def tearDown(self):
+         self.show_msg("Cleaning up")
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 588a92f..802e89d 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -5,10 +5,14 @@ import infra
+ 
+ class Emulator(object):
+ 
+-    def __init__(self, builddir, downloaddir, logtofile):
++    def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier):
+         self.qemu = None
+         self.downloaddir = downloaddir
+         self.logfile = infra.open_log_file(builddir, "run", logtofile)
++        # We use elastic runners on the cloud to runs our tests. Those runners
++        # can take a long time to run the emulator. Use a timeout multiplier
++        # when running the tests to avoid sporadic failures.
++        self.timeout_multiplier = timeout_multiplier
+ 
+     # Start Qemu to boot the system
+     #
+@@ -65,7 +69,8 @@ class Emulator(object):
+             qemu_cmd += ["-append", " ".join(kernel_cmdline)]
+ 
+         self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
+-        self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:], timeout=5,
++        self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
++                                  timeout=5 * self.timeout_multiplier,
+                                   env={"QEMU_AUDIO_DRV": "none"})
+         # We want only stdout into the log to avoid double echo
+         self.qemu.logfile_read = self.logfile
+@@ -76,7 +81,7 @@ class Emulator(object):
+         # The login prompt can take some time to appear when running multiple
+         # instances in parallel, so set the timeout to a large value
+         index = self.qemu.expect(["buildroot login:", pexpect.TIMEOUT],
+-                                 timeout=60)
++                                 timeout=60 * self.timeout_multiplier)
+         if index != 0:
+             self.logfile.write("==> System does not boot")
+             raise SystemError("System does not boot")
+@@ -94,6 +99,8 @@ class Emulator(object):
+     # return a tuple (output, exit_code)
+     def run(self, cmd, timeout=-1):
+         self.qemu.sendline(cmd)
++        if timeout != -1:
++            timeout *= self.timeout_multiplier
+         self.qemu.expect("# ", timeout=timeout)
+         # Remove double carriage return from qemu stdout so str.splitlines()
+         # works as expected.
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 0cb673c..95c1565 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -28,6 +28,8 @@ def main():
+                         help='number of testcases to run simultaneously')
+     parser.add_argument('-j', '--jlevel', type=int,
+                         help='BR2_JLEVEL to use for each testcase')
++    parser.add_argument('--timeout-multiplier', type=int, default=1,
++                        help='increase timeouts (useful for slow machines)')
+ 
+     args = parser.parse_args()
+ 
+@@ -97,6 +99,13 @@ def main():
+         # the user can override the auto calculated value
+         BRTest.jlevel = args.jlevel
+ 
++    if args.timeout_multiplier < 1:
++        print "Invalid multiplier for timeout values"
++        print ""
++        parser.print_help()
++        return 1
++    BRTest.timeout_multiplier = args.timeout_multiplier
++
+     nose2_args = ["-v",
+                   "-N", str(args.testcases),
+                   "-s", "support/testing",
