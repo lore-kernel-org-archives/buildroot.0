@@ -1,7 +1,7 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Aug 2017 10:13:20 +0300
+From: Aseem Sharma <aseem.sharma19@gmail.com>
+Date: Thu, 10 Aug 2017 12:51:53 +0530
 Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
-In-Reply-To: <CANK3ZEeLMHhNYvt6dN45zf6QV5sTcw12FEyGf7h=CmQFqtX_4A@mail.gmail.com>
+In-Reply-To: <20170810071320.xvrhusojcw4dqxtu@tarshish>
 References: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
  <20170809154918.tthy3t2p6d3hsqon@tarshish>
  <CANK3ZEe9uvSZx-=iG-gLkUPV98vTUxtsF8fC+wTAt+HovNDoVw@mail.gmail.com>
@@ -10,12 +10,25 @@ References: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
  <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
  <20170810063631.e3jc22lsdjuchpbk@tarshish>
  <CANK3ZEeLMHhNYvt6dN45zf6QV5sTcw12FEyGf7h=CmQFqtX_4A@mail.gmail.com>
-Message-ID: <20170810071320.xvrhusojcw4dqxtu@tarshish>
+ <20170810071320.xvrhusojcw4dqxtu@tarshish>
+Message-ID: <CANK3ZEeJYeji_4Ds-kW6EXXRU3FcpXSgRaWeav96qQU6O5Jfkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Sure. Can you please give me the exact steps to be carried out.
+Also, I tried selecting other gcc versions from menuconfig but the
+compilation seems to fail all the time with one issue or the other.
+
+Best Regards,
+Aseem
+
+Sent via really tiny keyboard. Expect random auto corrects, fat finger
+typos and weirdness!!
+
+On 10-Aug-2017 12:43 PM, "Baruch Siach" <baruch@tkos.co.il> wrote:
 
 Hi Aseem,
 
@@ -27,7 +40,7 @@ On Thu, Aug 10, 2017 at 12:19:33PM +0530, Aseem Sharma wrote:
 
 This issue seems to be fixed since gcc 4.8.
 
-I could not reproduce this ICE on current master with the following minimal 
+I could not reproduce this ICE on current master with the following minimal
 defconfig:
 
 BR2_arm=y
@@ -40,7 +53,8 @@ baruch
 > On Thu, Aug 10, 2017 at 12:06 PM, Baruch Siach <baruch@tkos.co.il> wrote:
 > > On Thu, Aug 10, 2017 at 11:56:56AM +0530, Aseem Sharma wrote:
 > > > *A follow-up question:*
-> > > I selected 'iwmmxt' as per Baruch's suggestion and tried to run "make".
+> > > I selected 'iwmmxt' as per Baruch's suggestion and tried to run
+"make".
 > > > The build seems to be failing with following error message in
 > > > "busybox-1.26.2" compilation:
 > > >
@@ -72,7 +86,8 @@ baruch
 > > > make: *** [/home/administrator/Downloads/buildroot_2017/
 > > > buildroot-2017.02.5/output/build/busybox-1.26.2/.stamp_built] Error 2
 > > >
-> > > It would be really helpful is you can provide some insight and possibly a
+> > > It would be really helpful is you can provide some insight and
+possibly a
 > > > fix/workaround.
 > >
 > > Have you done a clean rebuild, i.e., 'make clean; make'? See
@@ -80,7 +95,8 @@ baruch
 > >
 > > baruch
 > >
-> > > On Thu, Aug 10, 2017 at 8:55 AM, Aseem Sharma <aseem.sharma19@gmail.com>
+> > > On Thu, Aug 10, 2017 at 8:55 AM, Aseem Sharma <
+aseem.sharma19@gmail.com>
 > > > wrote:
 > > >
 > > > > Thanks Baruch & Arnout. Will give a try.
@@ -100,9 +116,11 @@ baruch
 > > > >> > The board that I have is quite old with limited RAM and Flash.
 > > > >> >
 > > > >> > Baruch,
-> > > >> > Could you please provide more details as to how do I select "iwmmxt"
+> > > >> > Could you please provide more details as to how do I select
+"iwmmxt"
 > > > >> using
-> > > >> > menuconfig. As far as I remember, I do not seem to have that option
+> > > >> > menuconfig. As far as I remember, I do not seem to have that
+option
 > > in
 > > > >> my
 > > > >> > current buildroot release.
@@ -115,7 +133,8 @@ baruch
 > > little
 > > > >> > endian with arm926tARM.
 > > > >>
-> > > >> As far as I know arm926t code is compatible with iwmmxt, but not the
+> > > >> As far as I know arm926t code is compatible with iwmmxt, but not
+the
 > > > >> other way
 > > > >> around. Look for Sheeva PJ1 at [1]. See also [2].
 > > > >>
@@ -160,8 +179,10 @@ baruch
 > > > >> > > Thanks in advance for your help.
 > > > >> >
 > > > >> > Based on the Armada 16x Datasheet[1], the mainline kernel
-> > > >> > arch/arm/mach-mmp/Kconfig (CONFIG_CPU_PXA168) and arch/arm/Kconfig
-> > > >> > (CONFIG_IWMMXT), it seems like you need the iwmmxt ARM variant for
+> > > >> > arch/arm/mach-mmp/Kconfig (CONFIG_CPU_PXA168) and
+arch/arm/Kconfig
+> > > >> > (CONFIG_IWMMXT), it seems like you need the iwmmxt ARM variant
+for
 > > your
 > > > >> > Armada
 > > > >> > 166E processor.
@@ -169,7 +190,10 @@ baruch
 > > > >> > [1] http://www.marvell.com.cn/application-processors/armada-100/
 > > > >> > assets/armada_16x_datasheet.pdf
 
--- 
+--
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
 =}------------------------------------------------ooO--U--Ooo------------{=
    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/5a5d9528/attachment.html>
