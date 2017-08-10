@@ -1,52 +1,134 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 10:20:37 +0200
-Subject: [Buildroot] [PATCH v3] libcgi: bump to version 1.1
-In-Reply-To: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
-References: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
-Message-ID: <c3b8eed9-889c-5893-c9e1-7d8d063cc597@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Aug 2017 11:37:06 +0300
+Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
+In-Reply-To: <CANK3ZEcwW1+xBazZB209PFnzpi1mmyfmEEac0CFPMYUBBmTRug@mail.gmail.com>
+References: <20170809171757.itid3fvz6462r2no@tarshish>
+ <CANK3ZEctYdAA8B=w2=DqKqsQ=Sf_1B=Uj-SRsN+HdY35mvQSDw@mail.gmail.com>
+ <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
+ <20170810063631.e3jc22lsdjuchpbk@tarshish>
+ <CANK3ZEeLMHhNYvt6dN45zf6QV5sTcw12FEyGf7h=CmQFqtX_4A@mail.gmail.com>
+ <20170810071320.xvrhusojcw4dqxtu@tarshish>
+ <CANK3ZEeJYeji_4Ds-kW6EXXRU3FcpXSgRaWeav96qQU6O5Jfkg@mail.gmail.com>
+ <20170810072841.bs5ly52awzczejgz@tarshish>
+ <CANK3ZEca7+iUwmK2Hxt60T1jAQ5eYWC9z2_XVZ+cKCLWQq=Ebg@mail.gmail.com>
+ <CANK3ZEcwW1+xBazZB209PFnzpi1mmyfmEEac0CFPMYUBBmTRug@mail.gmail.com>
+Message-ID: <20170810083706.mjy35akja23lhmiq@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Joe,
+Hi Aseem,
 
-On 10-08-17 09:45, Joe Lin wrote:
-> Cleanup the libcgi package,
-> by using https://github.com/rafaelsteil/libcgi as an upstream.
-> Remove old patch and use cmake to build new version.
-> 
-> Signed-off-by: Joe Lin <xlcwu.taiwan@gmail.com>
-[snip]
-> -LIBCGI_VERSION = 1.0
-> -LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
-> +LIBCGI_VERSION = 1.1
-> +LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
-> +
->  LIBCGI_INSTALL_STAGING = YES
-> -# use cross CC/AR rather than host
-> -LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
-> -	$(if $(BR2_STATIC_LIBS),STATIC=1)
->  LIBCGI_LICENSE = LGPL-2.1+
->  
-> -$(eval $(autotools-package))
-> +LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO
+On Thu, Aug 10, 2017 at 01:44:10PM +0530, Aseem Sharma wrote:
+> Another information that I may have missed is that I am currently using
+> Ubuntu 16.4 system, i686 arch to build source for "iwmmxt"
 
- Mario (added in Cc) submitted a similar patch and it didn't have this
-_IN_SOURCE_BUILD line. Is it really needed?
+Buildroot is all about cross compiling. Your target architecture is usually 
+not the same as your host one.
 
- Regards,
- Arnout
+baruch
 
-> +
-> +$(eval $(cmake-package))
-> 
+> On Thu, Aug 10, 2017 at 1:39 PM, Aseem Sharma <aseem.sharma19@gmail.com>
+> wrote:
+> > Where will i find minimal defconfig?
+> > Please note that the issue was orignally observed on latest long term
+> > support release v2017.02.5.
+> > However I would try the steps provided in your last email over Latest
+> > stable release v2017.05.2.
+> > Sorry about too many naive questions.
+> >
+> > -Aseem
+> >
+> > On Thu, Aug 10, 2017 at 12:58 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> >> Hi Aseem,
+> >>
+> >> On Thu, Aug 10, 2017 at 12:51:53PM +0530, Aseem Sharma wrote:
+> >> > Sure. Can you please give me the exact steps to be carried out.
+> >> > Also, I tried selecting other gcc versions from menuconfig but the
+> >> > compilation seems to fail all the time with one issue or the other.
+> >>
+> >> Remove your current .config, copy the minimal defconfig below into
+> >> .config,
+> >> and then do
+> >>
+> >>   make olddefconfig
+> >>   make clean
+> >>   make
+> >>
+> >> This will automatically select the gcc version which as of current master
+> >> is 6.4.0.
+> >>
+> >> baruch
+> >>
+> >> > On 10-Aug-2017 12:43 PM, "Baruch Siach" <baruch@tkos.co.il> wrote:
+> >> >
+> >> > On Thu, Aug 10, 2017 at 12:19:33PM +0530, Aseem Sharma wrote:
+> >> > > Yes Baruch. I tried a couple of times with "make clean" & even "make
+> >> > > distclean". However, the error is consistent.
+> >> > > Found a similar issue here: https://gcc.gnu.org/bugzilla/
+> >> > > show_bug.cgi?id=40836
+> >> >
+> >> > This issue seems to be fixed since gcc 4.8.
+> >> >
+> >> > I could not reproduce this ICE on current master with the following
+> >> minimal
+> >> > defconfig:
+> >> >
+> >> > BR2_arm=y
+> >> > BR2_iwmmxt=y
+> >> >
+> >> > Can you give it a try?
+> >> >
+> >> > baruch
+> >> >
+> >> > > On Thu, Aug 10, 2017 at 12:06 PM, Baruch Siach <baruch@tkos.co.il>
+> >> wrote:
+> >> > > > On Thu, Aug 10, 2017 at 11:56:56AM +0530, Aseem Sharma wrote:
+> >> > > > > *A follow-up question:*
+> >> > > > > I selected 'iwmmxt' as per Baruch's suggestion and tried to run
+> >> > "make".
+> >> > > > > The build seems to be failing with following error message in
+> >> > > > > "busybox-1.26.2" compilation:
+> >> > > > >
+> >> > > > > util-linux/mkfs_ext2.c: In function ?mkfs_ext2_main?:
+> >> > > > > util-linux/mkfs_ext2.c:715:1: error: insn does not satisfy its
+> >> > > > constraints:
+> >> > > > >  }
+> >> > > > >  ^
+> >> > > > > (insn 1169 286 287 31 (set (reg:SI 0 r0)
+> >> > > > >         (reg:SI 80 wr0)) util-linux/mkfs_ext2.c:344 426
+> >> > > > {*iwmmxt_movsi_insn}
+> >> > > > >      (nil))
+> >> > > > > util-linux/mkfs_ext2.c:715:1: internal compiler error: in
+> >> > > > > reload_cse_simplify_operands, at postreload.c:411
+> >> > > > > Please submit a full bug report,
+> >> > > > > with preprocessed source if appropriate.
+> >> > > > > See <http://bugs.buildroot.net/> for instructions.
+> >> > > > > scripts/Makefile.build:197: recipe for target
+> >> 'util-linux/mkfs_ext2.o'
+> >> > > > > failed
+> >> > > > > make[2]: *** [util-linux/mkfs_ext2.o] Error 1
+> >> > > > > Makefile:742: recipe for target 'util-linux' failed
+> >> > > > > make[1]: *** [util-linux] Error 2
+> >> > > > > make[1]: Leaving directory '/home/administrator/
+> >> > > > Downloads/buildroot_2017/
+> >> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2'
+> >> > > > > package/pkg-generic.mk:216: recipe for target
+> >> '/home/administrator/
+> >> > > > > Downloads/buildroot_2017/buildroot-2017.02.5/output/
+> >> > > > > build/busybox-1.26.2/.stamp_built' failed
+> >> > > > > make: *** [/home/administrator/Downloads/buildroot_2017/
+> >> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2/.stamp_built]
+> >> Error 2
+> >> > > > >
+> >> > > > > It would be really helpful is you can provide some insight and
+> >> > possibly a
+> >> > > > > fix/workaround.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
