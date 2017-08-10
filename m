@@ -1,191 +1,115 @@
-From: Joe Lin <xlcwu.taiwan@gmail.com>
-Date: Thu, 10 Aug 2017 07:45:27 +0000
-Subject: [Buildroot] [PATCH v3] libcgi: bump to version 1.1
-Message-ID: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Aug 2017 09:57:42 +0200
+Subject: [Buildroot] [PATCH 00/10] libssl: new package
+In-Reply-To: <CAFSsvmoy15xjrs7d5-etO9-d6oWJdZGDcXgKdZjeQ7TWFngmXA@mail.gmail.com>
+References: <20170804185521.12320-1-Adamduskett@outlook.com>
+ <d7c29c3c-8cbb-60fc-9374-c3e33417e964@mind.be>
+ <CAFSsvmoy15xjrs7d5-etO9-d6oWJdZGDcXgKdZjeQ7TWFngmXA@mail.gmail.com>
+Message-ID: <32e05249-20bd-73ee-3b62-ea5d8e1c2c76@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cleanup the libcgi package,
-by using https://github.com/rafaelsteil/libcgi as an upstream.
-Remove old patch and use cmake to build new version.
+ Hi Adam,
 
-Signed-off-by: Joe Lin <xlcwu.taiwan@gmail.com>
----
-Changes v2 -> v3:
-    - Resubmit patch using real name
+On 05-08-17 03:19, Adam Duskett wrote:
+> Hi
+> 
+> I appreciate the fast response.
+> On Fri, Aug 4, 2017 at 5:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi Adam,
+>>
+>>  Wow, that's fast work!
+>>
+> 20 hours of solid work really isn't fast.
 
-Changes v1 -> v2:
-    - Remove old patch
-    - Cleanup libcgi.mk
-    - Rewrite commit log and reformat it
----
- package/libcgi/0001-misc-fixes.patch | 122 -----------------------------------
- package/libcgi/libcgi.hash           |   2 +-
- package/libcgi/libcgi.mk             |  12 ++--
- 3 files changed, 7 insertions(+), 129 deletions(-)
- delete mode 100644 package/libcgi/0001-misc-fixes.patch
+ If you do those 20 hours of work within two days, I consider it really fast!
 
-diff --git a/package/libcgi/0001-misc-fixes.patch b/package/libcgi/0001-misc-fixes.patch
-deleted file mode 100644
-index b576178..0000000
---- a/package/libcgi/0001-misc-fixes.patch
-+++ /dev/null
-@@ -1,122 +0,0 @@
--Index: b/src/cgi.c
--===================================================================
----- a/src/cgi.c
--+++ b/src/cgi.c
--@@ -336,7 +336,7 @@
-- 	hextable['b'] = 11;
-- 	hextable['c'] = 12;
-- 	hextable['d'] = 13;
---	hextable['e'] = 13;
--+	hextable['e'] = 14;
-- 	hextable['f'] = 15;
-- 	hextable['A'] = 10;
-- 	hextable['B'] = 11;
--Index: b/src/string.c
--===================================================================
----- a/src/string.c
--+++ b/src/string.c
--@@ -584,7 +584,7 @@
-- 
-- 	va_start(ptr, s);
-- 
---	va_copy(bkp, str);
--+	va_copy(bkp, ptr);
-- 	len = strlen(s);
-- 
-- 	while (*str) {
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -5,22 +5,32 @@
-- prefix = @prefix@
-- exec_prefix = @exec_prefix@
-- 
---SHAREDOPT = -shared
--+SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
-- LIBDIR = $(prefix)/lib
---INCDIR = $(prefix)/include
--+INCDIR = $(prefix)/include/libcgi/
-- MANDIR	= $(prefix)/man/man3
-- SHELL = /bin/sh
-- EXTRA_LIBS = 
-- 
-- INCS =  -Isrc
---FLAGS = -Wall -fpic
--+FLAGS = -Wall -D_REENTRANT
-- 
-- OBJS = src/error.o src/cgi.o src/session.o src/base64.o src/md5.o \
-- 	src/string.o src/general.o src/list.o src/cookie.o
--+SHOBJS=$(OBJS:.o=.sh.o)
-- 
---.c.o: $(CC) $(FLAGS) -c $<
--+ALL_TARGETS = src/libcgi.a
--+ifeq ($(STATIC),)
--+ALL_TARGETS += src/libcgi.so
--+endif
-- 
---all: $(OBJS) src/libcgi.so
--+%.o: %.c
--+	$(CC) $(FLAGS) -c $*.c -o $@
--+
--+%.sh.o: %.c
--+	$(CC) $(FLAGS) -fPIC -c $*.c -o $@
--+
--+all: $(ALL_TARGETS)
-- 
-- 	@echo ""
-- 	@echo ""
--@@ -48,14 +58,17 @@
-- src/libcgi.a: $(OBJS)
-- 	$(AR) rc src/libcgi.a $(OBJS)
-- 
---src/libcgi.so: src/libcgi.a
---	$(CC) $(SHAREDOPT) -o src/libcgi.so $(OBJS) $(EXTRA_LIBS)
--+src/libcgi.so: $(SHOBJS)
--+	$(CC) $(SHAREDOPT) -o src/libcgi.so $(SHOBJS) $(EXTRA_LIBS)
-- 
-- install:
---	cp src/libcgi.a $(LIBDIR)
---	cp src/libcgi.so $(LIBDIR)
---	cp src/cgi.h $(INCDIR)
---	cp src/session.h $(INCDIR)
--+	cp src/libcgi.a $(DESTDIR)/$(LIBDIR)
--+ifeq ($(STATIC),)
--+	cp src/libcgi.so $(DESTDIR)/$(LIBDIR)
--+endif
--+	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir -p $(DESTDIR)/$(INCDIR)
--+	cp src/cgi.h $(DESTDIR)/$(INCDIR)
--+	cp src/session.h $(DESTDIR)/$(INCDIR)
-- 
-- 
-- src/error.o: src/error.c src/error.h
--@@ -69,8 +82,9 @@
-- src/list.o: src/list.c
-- 
-- clean:
---	find src/ -name *.*o -exec rm -f {} \;
--+	find src/ -name *.o -exec rm -f {} \;
-- 	find src/ -name *.a -exec rm -f {} \;
--+	find src/ -name *.so -exec rm -f {} \;
-- 
-- uninstall: clean
-- 	rm -f $(LIBDIR)/libcgi.*
--@@ -78,11 +92,11 @@
-- 	rm -f $(INCDIR)/session.h
-- 	rm -f $(MANDIR)/libcgi*
-- 
---install_man:
---	cp doc/man/man3/libcgi_base64.3 $(MANDIR)
---	cp doc/man/man3/libcgi_cgi.3 $(MANDIR)
---	cp doc/man/man3/libcgi_general.3 $(MANDIR)
---	cp doc/man/man3/libcgi_string.3 $(MANDIR)
---	cp doc/man/man3/libcgi_session.3 $(MANDIR)
---	cp doc/man/man3/libcgi_cookie.3 $(MANDIR)
--+#install_man:
--+#	cp doc/man/man3/libcgi_base64.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_cgi.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_general.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_string.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_session.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_cookie.3 $(MANDIR)
-- 
-diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
-index 6bd7c0c..1ac1440 100644
---- a/package/libcgi/libcgi.hash
-+++ b/package/libcgi/libcgi.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  861df39cc0195d43419c4c3de8dff4f42478db66c9ba0b0c1e994c99400e130c  libcgi-1.0.tar.gz
-+sha256  128445f2f828e84905d51bd53d11e2e08c489df3a07225ff9f198c1318092fe6  libcgi-1.1.tar.gz
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index de2a1e4..66bb165 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--LIBCGI_VERSION = 1.0
--LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
-+LIBCGI_VERSION = 1.1
-+LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
-+
- LIBCGI_INSTALL_STAGING = YES
--# use cross CC/AR rather than host
--LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
--	$(if $(BR2_STATIC_LIBS),STATIC=1)
- LIBCGI_LICENSE = LGPL-2.1+
- 
--$(eval $(autotools-package))
-+LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+$(eval $(cmake-package))
+ And sorry for my slow response this time over, I'm suffering a little from bad
+internet connection on my holidays and when it got better, there was more recent
+stuff that bypassed this in the LIFO queue...
+
+>> On 04-08-17 20:55, Adam Duskett wrote:
+>>>  - Add libssl as a new virtual package, and add OpenSSL as the only option.
+>>>    This prevents any package from breaking.
+>>
+>>  I briefly mentioned before but clearly didn't explain enough: this will not
+>> fly. The problem is that we want existing configurations to keep working without
+>> a package silently disappearing. So the following procedure should work:
+[snip]
+> I want to first say this: I appreciate your response and your feedback.
+> 
+> However;
+> 
+> I don't have time nor the energy to rebase and made all the changes
+> you have requested,
+> then some more arbitrary changes that other people will request that
+> aren't outlined in the
+> buildroot manual.
+
+ What can we change in the manual to make this better? Adding a paragraph to
+explain that existing .config's should never break, would that help? Something like:
+
+==== Stable interface
+
+Buildroot doesn't have much of an interface, except for the `.config`
+configuration file. To make it easy to continuously upgrade Buildroot, we make
+sure that a `.config` file that worked in a previous release, still yields the
+same combination of packages after an update. In some cases, this is not
+possible, e.g. because a configuration option has been renamed or removed. For
+this, the legacy handling approach [ref:...] must be implemented. In some more
+complicated cases, even legacy handling does not help and other solutions to
+maintain backward compatibility must be found.
+
+ Does that more or less sum up the issue here? Anything that can be improved
+about the text?
+
+
+ About the "arbitrary changes" you mention, I guess you refer to the fact that
+we first asked you NOT to make libssl a virtual package, and now we're changing
+our mind again? Well, indeed, it's a case of "advancing insight" as we say in
+Dutch. In addition, the very reason I didn't accept your first implementation of
+a virtual package was because it would break existing .configs, and this would
+block the adoption of libressl entirely. Now, at least, we have the libressl
+package in Buildroot (though admittedly it is of limited use if almost no
+package makes use of it).
+
+
+> As it sits, feel free to reject the series if you so wish to.  For the
+> next year, I am going to be solid
+> booked and I don't have time to fix this.
+
+ That's a pity, we really valued your contributions, especially since you are
+able to deal with complicated stuff.
+
+ Could you at least take a look at the alternatives I proposed and give an
+opinion on which one you think is most appropriate? Or perhaps you can even
+think of a third alternative? That will make life easier for anyone who is
+willing to take over this series.
+
+
+> Again, I appreciate everything you guys are doing (And I certainly
+> don't have the time nor the energy
+> to make 100+ patches for a package that nobody actually cares about :] )
+
+ I don't think nobody cares about this - as proven by the discussion on IRC, I'd
+say.
+
+
+> Sorry for wasting your time!
+
+ Absolutely not. Free software projects with 100+ contributors only work because
+people throw out ideas that are improved on by others.
+
+ Regards,
+ Arnout
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
