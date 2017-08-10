@@ -1,49 +1,34 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 10 Aug 2017 08:41:49 -0300
-Subject: [Buildroot] [PATCH v2] package/stella: bump version to 5.0.1
-In-Reply-To: <fab7680a-be1e-3adb-de08-d2ee957ea6da@mind.be>
-References: <1502031148-14106-1-git-send-email-sergio.prado@e-labworks.com>
- <fab7680a-be1e-3adb-de08-d2ee957ea6da@mind.be>
-Message-ID: <CANu7NGsrKfqrRB_0aRJFkO-An1dyXr6BKH0_SgMrS5VFrvGRfw@mail.gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Thu, 10 Aug 2017 14:12:51 +0200
+Subject: [Buildroot] [PATCH 1/1] erlang-p1-xml: Fix host dependencies
+	variable name
+Message-ID: <20170810121251.17203-1-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+This should fix the error reported by autobuild:
+http://autobuild.buildroot.net/results/63c/63c63b2578e9f6ad71cbea82b987c128305cdab4/
 
-2017-08-09 20:07 GMT-03:00 Arnout Vandecappelle <arnout@mind.be>:
->
->  Hi Sergio,
->
-> On 06-08-17 16:52, Sergio Prado wrote:
-> > Removed 0003-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch, since
-> > stella now uses -std=c++14 that builds fine when using PPC altivec
-> > vectorization.
-> >
-> > Update toolchain dependencies to gcc 4.9 since codebase now uses C++14
-features.
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/0e787fd27537e1ff84a76bf7112104
-8596d808a1/
-> >
-> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
->
->  I instead applied Bernd's patch to master that just fixes the gcc7 build
-issue.
->
->  I've applied your patch to the next branch, but updated it to remove
-Bernd's
-> gcc7 fix patch again.
->
->  Can you re-test the next branch to verify that this was done correctly?
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ package/erlang-p1-xml/erlang-p1-xml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sure. I'll test it.
-
-Regards,
-Sergio Prado.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/61b5b751/attachment.html>
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index 0b0b1caaee..58ba3cbdeb 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -9,7 +9,7 @@ ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
+ ERLANG_P1_XML_LICENSE = Apache-2.0
+ ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_XML_DEPENDENCIES = expat erlang-p1-utils
+-ERLANG_P1_XML_HOST_DEPENDENCIES = host-expat host-erlang-p1-utils
++HOST_ERLANG_P1_XML_DEPENDENCIES = host-expat host-erlang-p1-utils
+ ERLANG_P1_XML_INSTALL_STAGING = YES
+ 
+ ERLANG_P1_XML_USE_AUTOCONF = YES
+-- 
+2.11.0
