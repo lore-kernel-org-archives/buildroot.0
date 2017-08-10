@@ -1,52 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Aug 2017 20:35:45 +0300
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.55.0
-Message-ID: <4f33b3435349660c4e3f2b444104442e6a9498b1.1502386545.git.baruch@tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 10 Aug 2017 19:44:18 +0200
+Subject: [Buildroot] buildroot uClibc-ng build failure
+In-Reply-To: <CAPmKWpG7bSbtrmbFOPDV4Z+EHxzTS_=-9PCBNCWiH3gier3mQA@mail.gmail.com>
+References: <20170803054828.GB7682@waldemar-brodkorb.de>
+ <20170803092346.02d02371@windsurf.home>
+ <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
+ <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
+ <20170808230048.75361077@windsurf>
+ <CAPmKWpGqm6xL=ng=TegOw7DqQtU5=Lmq_0Fxv4Vabxr512iPFQ@mail.gmail.com>
+ <04d33720-216b-4500-803c-7c55c97693ab@mind.be>
+ <CAPmKWpG7bSbtrmbFOPDV4Z+EHxzTS_=-9PCBNCWiH3gier3mQA@mail.gmail.com>
+Message-ID: <20170810174418.GJ28021@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hi Eugene,
+Eugene Yudin wrote,
 
- glob: do not parse after a strtoul() overflow range (CVE-2017-1000101)
- tftp: reject file name lengths that don't fit (CVE-2017-1000100)
- file: output the correct buffer to the user (CVE-2017-1000099)
+> Yes. In that particular case loop iterates through en_US (from buildroot),
+> en_US and en_GB.
+> Of cause, that list can be patched but I don't know if that's correct.
+> It's look a bit strange if user passes locale which actually absent.
+> 
+> Waldemar, what you think about it?
+> 
+> I made several tests with different locales (en_US, en_GB, ru_RU, C.UTF-8 and
+> C).
+> The generated header is the same for all the above locale except pure C.
+> 
+> Comment in the same makefile tells about problem with some locales.
+> I think it would be better to use C locale for fallback.
+> 
+> I attached the tested patch to modify fallback behavior based on Arnout draft.
+> I also changed the order of calls to raise priority of C.UTF-8 locale.
 
-Switch to .tar.xz to save bandwidth.
+Looks good to me. First trying the user configured locale (.UTF-8)
+and if it does not exist fallback to C.UTF-8.
 
-Add reference to tarball signature.
+Not sure if we should do configured locale (en_US.UTF-8) then
+C.UTF_8 and then even C, when C doesn't build workable output?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libcurl/libcurl.hash | 3 ++-
- package/libcurl/libcurl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 1b8d80fc9662..6d49b6742830 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
-+# https://curl.haxx.se/download/curl-7.55.0.tar.xz.asc
-+sha256 cdd58522f8607fd4e871df79d73acb3155075e2134641e5adab12a0962df059d  curl-7.55.0.tar.xz
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 684844919e3a..dd0ccbfa4621 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.54.1
--LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
-+LIBCURL_VERSION = 7.55.0
-+LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
--- 
-2.13.2
+best regards
+ Waldemar
