@@ -1,175 +1,122 @@
-From: Aseem Sharma <aseem.sharma19@gmail.com>
-Date: Thu, 10 Aug 2017 14:39:06 +0530
-Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
-In-Reply-To: <20170810085044.3pqhvt25wlhvssna@tarshish>
-References: <CANK3ZEctYdAA8B=w2=DqKqsQ=Sf_1B=Uj-SRsN+HdY35mvQSDw@mail.gmail.com>
- <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
- <20170810063631.e3jc22lsdjuchpbk@tarshish>
- <CANK3ZEeLMHhNYvt6dN45zf6QV5sTcw12FEyGf7h=CmQFqtX_4A@mail.gmail.com>
- <20170810071320.xvrhusojcw4dqxtu@tarshish>
- <CANK3ZEeJYeji_4Ds-kW6EXXRU3FcpXSgRaWeav96qQU6O5Jfkg@mail.gmail.com>
- <20170810072841.bs5ly52awzczejgz@tarshish>
- <CANK3ZEca7+iUwmK2Hxt60T1jAQ5eYWC9z2_XVZ+cKCLWQq=Ebg@mail.gmail.com>
- <CANK3ZEcwW1+xBazZB209PFnzpi1mmyfmEEac0CFPMYUBBmTRug@mail.gmail.com>
- <CANK3ZEeh3fd=TAKh4PB7huAh9FaBFVF9HgF_u=fAG90_saNzKg@mail.gmail.com>
- <20170810085044.3pqhvt25wlhvssna@tarshish>
-Message-ID: <CANK3ZEc54MP4MMy57cYoLJHnC0UWt7Q7NYNLEQ9yqWX6wva50w@mail.gmail.com>
+From: Eugene Yudin <e.yudin@ndmsystems.com>
+Date: Thu, 10 Aug 2017 12:09:56 +0300
+Subject: [Buildroot] buildroot uClibc-ng build failure
+In-Reply-To: <20170808230048.75361077@windsurf>
+References: <20170803054828.GB7682@waldemar-brodkorb.de>
+ <20170803092346.02d02371@windsurf.home>
+ <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
+ <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
+ <20170808230048.75361077@windsurf>
+Message-ID: <CAPmKWpGqm6xL=ng=TegOw7DqQtU5=Lmq_0Fxv4Vabxr512iPFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+I describe the current situation:
+1) user enables locale support (BR2_TOOLCHAIN_BUILDROOT_LOCALE);
+2) user optionally can set custom list of locales (BR2_GENERATE_LOCALE).
 
-My config uses gcc v4.7. Will try and build with gcc v6.X and see if it
-still fails.
-Do you think generating a minimal config in defconfig file help in my
-situation?
+The option "BR2_GENERATE_LOCALE" is handled in "package/uclibc/uclibc.mk":
+ UCLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
 
--Aseem
+ ifeq ($(UCLIBC_GENERATE_LOCALES),)
+ # We need at least one locale
+ UCLIBC_LOCALES = en_US
+ else
+ # Strip out the encoding part of locale names, if any
+ UCLIBC_LOCALES = \
+         $(foreach locale,$(UCLIBC_GENERATE_LOCALES),\
+         $(firstword $(subst .,$(space),$(locale))))
+ endif
+ ...
+ define UCLIBC_LOCALE_CONFIG
+         ...
+         $(call
+KCONFIG_ENABLE_OPT,UCLIBC_BUILD_MINIMAL_LOCALE,$(@D)/.config)
+         $(call
+KCONFIG_SET_OPT,UCLIBC_BUILD_MINIMAL_LOCALES,"$(UCLIBC_LOCALES)",$(@D)/.config)
+         ...
+ endef
 
+We can see that with empty list buildroot passes "en_US" to uClibc-ng.
 
-On Thu, Aug 10, 2017 at 2:20 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+The system library makefile handles option the following way
+(extra/locale/Makefile.in):
+ $(locale_OUT)/wctables.h: $(locale_OUT)/gen_wctype
+         @$(disp_gen)
+         $(Q)for locale in $(call qstrip,$(UCLIBC_BUILD_MINIMAL_LOCALES))
+en_US en_GB; do \
+                  $< $(FLAG-locale-verbose) $$locale > $@ || \
+                 $< $(FLAG-locale-verbose) $$locale.UTF-8 > $@ || \
+                 $< $(FLAG-locale-verbose) $$locale.iso8859-1 > $@ &&
+break; \
+         done
 
-> Hi Aseem,
+The program "gen_wctype" receives locale name as command line parameter.
+That application call the function setlocale() inside it.
+Some time ago that call was disabled to workaround bug with locales.
+That's the reason for the absence of problems in the past.
+Changes in the last release return this call.
+
+On Wed, Aug 9, 2017 at 12:00 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
 >
-> On Thu, Aug 10, 2017 at 02:16:59PM +0530, Aseem Sharma wrote:
-> > The build passes with minimal defconfig on Latest stable release
-> v2017.05.2
-> > and also on latest long term support release v2017.02.5.
-> > So the issue seems to be with my config settings. Is there any
-> workarounds
-> > to fix/avoid the issue?
+> On Tue, 8 Aug 2017 18:52:14 +0200, Andr? Hentschel wrote:
 >
-> What is your config? Generate a minimal config in the file 'defconfig' with
+> > > Please post output of the following commands:
+> > > $ locale
+> > > $ locale -a
+> > > $ cat /etc/os-release
+> > $ locale
+> > LANG=de_DE.utf8
+> > LANGUAGE=de_DE.utf8
+> > LC_CTYPE="de_DE.utf8"
+> > LC_NUMERIC="de_DE.utf8"
+> > LC_TIME="de_DE.utf8"
+> > LC_COLLATE="de_DE.utf8"
+> > LC_MONETARY="de_DE.utf8"
+> > LC_MESSAGES="de_DE.utf8"
+> > LC_PAPER="de_DE.utf8"
+> > LC_NAME="de_DE.utf8"
+> > LC_ADDRESS="de_DE.utf8"
+> > LC_TELEPHONE="de_DE.utf8"
+> > LC_MEASUREMENT="de_DE.utf8"
+> > LC_IDENTIFICATION="de_DE.utf8"
+> > LC_ALL=de_DE.utf8
+> >
+> > $ locale -a
+> > C
+> > C.UTF-8
+> > de_DE.utf8
+> > POSIX
+> >
+> > OS is Ubuntu 14.04.5 LTS
+> > Should I install the english locale?
 >
->   make savedefconfig
+> As per the current Buildroot requirements, it shouldn't be needed. We
+> require one UTF-8 locale to be installed for uClibc to build its locale
+> data, but not specifically the en_US.UTF-8 locale or any other english
+> locale. If that has changed in uClibc, then we should adjust the
+> dependency in Buildroot accordingly, but it would be a bit annoying.
 >
-> baruch
+> Best regards,
 >
-> > On Thu, Aug 10, 2017 at 1:44 PM, Aseem Sharma <aseem.sharma19@gmail.com>
-> > wrote:
-> > > Another information that I may have missed is that I am currently using
-> > > Ubuntu 16.4 system, i686 arch to build source for "iwmmxt"
-> > >
-> > > -Aseem
-> > >
-> > > On Thu, Aug 10, 2017 at 1:39 PM, Aseem Sharma <
-> aseem.sharma19 at gmail.com>
-> > > wrote:
-> > >
-> > >> Where will i find minimal defconfig?
-> > >> Please note that the issue was orignally observed on latest long term
-> > >> support release v2017.02.5.
-> > >> However I would try the steps provided in your last email over Latest
-> > >> stable release v2017.05.2.
-> > >> Sorry about too many naive questions.
-> > >>
-> > >> -Aseem
-> > >>
-> > >> On Thu, Aug 10, 2017 at 12:58 PM, Baruch Siach <baruch@tkos.co.il>
-> wrote:
-> > >>
-> > >>> Hi Aseem,
-> > >>>
-> > >>> On Thu, Aug 10, 2017 at 12:51:53PM +0530, Aseem Sharma wrote:
-> > >>> > Sure. Can you please give me the exact steps to be carried out.
-> > >>> > Also, I tried selecting other gcc versions from menuconfig but the
-> > >>> > compilation seems to fail all the time with one issue or the other.
-> > >>>
-> > >>> Remove your current .config, copy the minimal defconfig below into
-> > >>> .config,
-> > >>> and then do
-> > >>>
-> > >>>   make olddefconfig
-> > >>>   make clean
-> > >>>   make
-> > >>>
-> > >>> This will automatically select the gcc version which as of current
-> > >>> master is
-> > >>> 6.4.0.
-> > >>>
-> > >>> baruch
-> > >>>
-> > >>> > On 10-Aug-2017 12:43 PM, "Baruch Siach" <baruch@tkos.co.il> wrote:
-> > >>> >
-> > >>> > On Thu, Aug 10, 2017 at 12:19:33PM +0530, Aseem Sharma wrote:
-> > >>> > > Yes Baruch. I tried a couple of times with "make clean" & even
-> "make
-> > >>> > > distclean". However, the error is consistent.
-> > >>> > > Found a similar issue here: https://gcc.gnu.org/bugzilla/
-> > >>> > > show_bug.cgi?id=40836
-> > >>> >
-> > >>> > This issue seems to be fixed since gcc 4.8.
-> > >>> >
-> > >>> > I could not reproduce this ICE on current master with the following
-> > >>> minimal
-> > >>> > defconfig:
-> > >>> >
-> > >>> > BR2_arm=y
-> > >>> > BR2_iwmmxt=y
-> > >>> >
-> > >>> > Can you give it a try?
-> > >>> >
-> > >>> > baruch
-> > >>> >
-> > >>> > > On Thu, Aug 10, 2017 at 12:06 PM, Baruch Siach <
-> baruch at tkos.co.il>
-> > >>> wrote:
-> > >>> > > > On Thu, Aug 10, 2017 at 11:56:56AM +0530, Aseem Sharma wrote:
-> > >>> > > > > *A follow-up question:*
-> > >>> > > > > I selected 'iwmmxt' as per Baruch's suggestion and tried to
-> run
-> > >>> > "make".
-> > >>> > > > > The build seems to be failing with following error message in
-> > >>> > > > > "busybox-1.26.2" compilation:
-> > >>> > > > >
-> > >>> > > > > util-linux/mkfs_ext2.c: In function ?mkfs_ext2_main?:
-> > >>> > > > > util-linux/mkfs_ext2.c:715:1: error: insn does not satisfy
-> its
-> > >>> > > > constraints:
-> > >>> > > > >  }
-> > >>> > > > >  ^
-> > >>> > > > > (insn 1169 286 287 31 (set (reg:SI 0 r0)
-> > >>> > > > >         (reg:SI 80 wr0)) util-linux/mkfs_ext2.c:344 426
-> > >>> > > > {*iwmmxt_movsi_insn}
-> > >>> > > > >      (nil))
-> > >>> > > > > util-linux/mkfs_ext2.c:715:1: internal compiler error: in
-> > >>> > > > > reload_cse_simplify_operands, at postreload.c:411
-> > >>> > > > > Please submit a full bug report,
-> > >>> > > > > with preprocessed source if appropriate.
-> > >>> > > > > See <http://bugs.buildroot.net/> for instructions.
-> > >>> > > > > scripts/Makefile.build:197: recipe for target
-> > >>> 'util-linux/mkfs_ext2.o'
-> > >>> > > > > failed
-> > >>> > > > > make[2]: *** [util-linux/mkfs_ext2.o] Error 1
-> > >>> > > > > Makefile:742: recipe for target 'util-linux' failed
-> > >>> > > > > make[1]: *** [util-linux] Error 2
-> > >>> > > > > make[1]: Leaving directory '/home/administrator/
-> > >>> > > > Downloads/buildroot_2017/
-> > >>> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2'
-> > >>> > > > > package/pkg-generic.mk:216: recipe for target
-> > >>> '/home/administrator/
-> > >>> > > > > Downloads/buildroot_2017/buildroot-2017.02.5/output/
-> > >>> > > > > build/busybox-1.26.2/.stamp_built' failed
-> > >>> > > > > make: *** [/home/administrator/Downloads/buildroot_2017/
-> > >>> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2/.stamp_
-> built]
-> > >>> Error 2
-> > >>> > > > >
-> > >>> > > > > It would be really helpful is you can provide some insight
-> and
-> > >>> > possibly a
-> > >>> > > > > fix/workaround.
->
+> Thomas
 > --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--
-> Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 >
+
+
+
+-- 
+Best regards,
+Eugene
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/dad904f5/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/ec243a68/attachment.html>
