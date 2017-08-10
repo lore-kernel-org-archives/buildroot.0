@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 11:26:31 +0200
-Subject: [Buildroot] [PATCH] glibc: fix sh4 compile error
-In-Reply-To: <20170804170742.GA10573@waldemar-brodkorb.de>
-References: <20170804170742.GA10573@waldemar-brodkorb.de>
-Message-ID: <ca02a9da-c4bd-aa8b-adc9-34fa677d1bbc@mind.be>
+Date: Thu, 10 Aug 2017 11:26:19 +0200
+Subject: [Buildroot] [PATCH] gcc: fix sparcv8 compile issue
+In-Reply-To: <20170804214454.GA5085@waldemar-brodkorb.de>
+References: <20170804214454.GA5085@waldemar-brodkorb.de>
+Message-ID: <ca184258-04dd-3ecd-bc21-c00e9d74aecb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,22 @@ To: buildroot@busybox.net
 
 
 
-On 04-08-17 19:07, Waldemar Brodkorb wrote:
-> Fixes:
-> 
-> /tmp/output/build/glibc-2.25/build/libc_pic.a(dl-error.os): In function `__GI__dl_signal_error':
-> dl-error.c:(.text+0x0): multiple definition of `_dl_signal_error'
-> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x134d8): first defined here
-> /tmp/output/build/glibc-2.25/build/libc_pic.a(dl-error.os): In function `__GI__dl_catch_error':
-> dl-error.c:(.text+0x190): multiple definition of `_dl_catch_error'
-> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x136fc): first defined here
-> /tmp/output/build/glibc-2.25/build/libc_pic.a(init-first.os):(.data+0x0): multiple definition of `__libc_multiple_libcs'
-> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.bss+0x6c): first defined here
-> /tmp/output/build/glibc-2.25/build/libc_pic.a(_itoa.os): In function `_itoa':
-> _itoa.c:(.text+0xd4): multiple definition of `_itoa'
-> /tmp/output/build/glibc-2.25/build/elf/dl-allobjs.os:(.text+0x133c8): first defined here
+On 04-08-17 23:44, Waldemar Brodkorb wrote:
+> Fix compile issue with gcc 7.1.0:
+> /tmp/ccxalnSf.s: Assembler messages:
+> /tmp/ccxalnSf.s:12: Error: Architecture mismatch on "rd %tick,%o1".
+> /tmp/ccxalnSf.s:12: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
+> /tmp/ccxalnSf.s:13: Error: Architecture mismatch on "srlx %o1,32,%o0".
+> /tmp/ccxalnSf.s:13: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
+> /tmp/ccxalnSf.s:30: Error: Architecture mismatch on "rd %ccr,%g0".
+> /tmp/ccxalnSf.s:30: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
+> /tmp/ccxalnSf.s:33: Error: Architecture mismatch on "rd %ccr,%g0".
+> /tmp/ccxalnSf.s:33: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
+> /tmp/ccxalnSf.s:36: Error: Architecture mismatch on "rd %ccr,%g0".
+> /tmp/ccxalnSf.s:36: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
+> /tmp/ccxalnSf.s:39: Error: Architecture mismatch on "rd %ccr,%g0".
+> /tmp/ccxalnSf.s:39: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
+> Makefile:684: recipe for target 'os-unix-sysdep.lo' failed
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
