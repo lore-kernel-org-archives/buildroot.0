@@ -1,43 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Aug 2017 23:27:02 +0200
-Subject: [Buildroot] [PATCH v1] gst1-validate: disable buliding
-	documentation using sphinx
-Message-ID: <20170810212702.12221-1-ps.report@gmx.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Aug 2017 23:28:05 +0200
+Subject: [Buildroot] [PATCH] minnowboard_max_defconfig: grub2 needs WCHAR
+Message-ID: <20170810212805.27808-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure in case (a non functional) sphinx documentation
-system is installed on the host (reported [1] and fix tested [2]
-by grunpferd at netscape.net).
+Since commit 5ffafd2353f5d67 (grub2: bump up version), grub2 needs a
+toolchain with WCHAR support. However, the defconfigs that use grub2
+were not updated at the time.
 
-Fixes:
+Add BR2_TOOLCHAIN_BUILDROOT_WCHAR=y to minnowboard_max_defconfig.
 
-  sphinx-build -b html -d ./doctrees   . ./html
-  Error: Source directory doesn't contain a conf.py file.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-August/200021.html
-[2] http://lists.busybox.net/pipermail/buildroot/2017-August/200033.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc: Vincent Stehl? <vincent.stehle@intel.com>
 ---
- package/gstreamer1/gst1-validate/gst1-validate.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+The following other defconfigs also use grub2.
 
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index c5e3ec6fc9..c6e2ac9e15 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -18,4 +18,8 @@ GST1_VALIDATE_DEPENDENCIES = \
- 	python \
- 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+galileo_defconfig: Needs to be updated, but is anyway failing to build
+ the kernel and I expect it will be removed.
+
+minnowboard_max-graphical_defconfig: Already selects LOCALE which
+ implies WCHAR.
+
+pc_x86_64_bios_defconfig, pc_x86_64_efi_defconfig: already select
+ WCHAR because it is needed for eudev.
+---
+ configs/minnowboard_max_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index 674b144de8..db6e595779 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -9,6 +9,9 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
  
-+# disabling building documentation in case sphinx
-+# framework installed on host
-+GST1_VALIDATE_CONF_ENV = ac_cv_prog_enable_sphinx_doc=no
+ # Linux headers same as kernel, a 4.12 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++# Needed for grub2
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
 +
- $(eval $(autotools-package))
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-2.11.0
+2.13.3
