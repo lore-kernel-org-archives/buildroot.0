@@ -1,70 +1,49 @@
-From: xlcwu <xlcwu.taiwan@gmail.com>
-Date: Thu, 10 Aug 2017 11:48:27 +0000
-Subject: [Buildroot] [PATCH v3] libcgi: bump to version 1.1
-In-Reply-To: <c3b8eed9-889c-5893-c9e1-7d8d063cc597@mind.be>
-References: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
- <c3b8eed9-889c-5893-c9e1-7d8d063cc597@mind.be>
-Message-ID: <CAGtPAdUAUdettj-O0gMUt4m_X8dCj_3y8gnDb3K1NFsBtVcLzg@mail.gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Thu, 10 Aug 2017 08:41:49 -0300
+Subject: [Buildroot] [PATCH v2] package/stella: bump version to 5.0.1
+In-Reply-To: <fab7680a-be1e-3adb-de08-d2ee957ea6da@mind.be>
+References: <1502031148-14106-1-git-send-email-sergio.prado@e-labworks.com>
+ <fab7680a-be1e-3adb-de08-d2ee957ea6da@mind.be>
+Message-ID: <CANu7NGsrKfqrRB_0aRJFkO-An1dyXr6BKH0_SgMrS5VFrvGRfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout
+Hi Arnout,
 
-I build the libcgi by follow steps in
-https://github.com/rafaelsteil/libcgi/blob/master/README.md
-
-
-On Thu, Aug 10, 2017 at 4:20 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-
->  Hi Joe,
+2017-08-09 20:07 GMT-03:00 Arnout Vandecappelle <arnout@mind.be>:
 >
-> On 10-08-17 09:45, Joe Lin wrote:
-> > Cleanup the libcgi package,
-> > by using https://github.com/rafaelsteil/libcgi as an upstream.
-> > Remove old patch and use cmake to build new version.
+>  Hi Sergio,
+>
+> On 06-08-17 16:52, Sergio Prado wrote:
+> > Removed 0003-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch, since
+> > stella now uses -std=c++14 that builds fine when using PPC altivec
+> > vectorization.
 > >
-> > Signed-off-by: Joe Lin <xlcwu.taiwan@gmail.com>
-> [snip]
-> > -LIBCGI_VERSION = 1.0
-> > -LIBCGI_SITE =
-> http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
-> > +LIBCGI_VERSION = 1.1
-> > +LIBCGI_SITE =
-> https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
-> > +
-> >  LIBCGI_INSTALL_STAGING = YES
-> > -# use cross CC/AR rather than host
-> > -LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
-> > -     $(if $(BR2_STATIC_LIBS),STATIC=1)
-> >  LIBCGI_LICENSE = LGPL-2.1+
+> > Update toolchain dependencies to gcc 4.9 since codebase now uses C++14
+features.
 > >
-> > -$(eval $(autotools-package))
-> > +LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO
+> > Fixes:
+> > http://autobuild.buildroot.net/results/0e787fd27537e1ff84a76bf7112104
+8596d808a1/
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 >
->  Mario (added in Cc) submitted a similar patch and it didn't have this
-> _IN_SOURCE_BUILD line. Is it really needed?
+>  I instead applied Bernd's patch to master that just fixes the gcc7 build
+issue.
 >
-I am not sure and I will trigger a build to check it.
+>  I've applied your patch to the next branch, but updated it to remove
+Bernd's
+> gcc7 fix patch again.
+>
+>  Can you re-test the next branch to verify that this was done correctly?
 
->
->  Regards,
->  Arnout
->
-> > +
-> > +$(eval $(cmake-package))
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
+Sure. I'll test it.
+
+Regards,
+Sergio Prado.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/2153b631/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/61b5b751/attachment.html>
