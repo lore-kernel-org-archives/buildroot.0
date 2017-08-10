@@ -1,115 +1,245 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 09:57:42 +0200
-Subject: [Buildroot] [PATCH 00/10] libssl: new package
-In-Reply-To: <CAFSsvmoy15xjrs7d5-etO9-d6oWJdZGDcXgKdZjeQ7TWFngmXA@mail.gmail.com>
-References: <20170804185521.12320-1-Adamduskett@outlook.com>
- <d7c29c3c-8cbb-60fc-9374-c3e33417e964@mind.be>
- <CAFSsvmoy15xjrs7d5-etO9-d6oWJdZGDcXgKdZjeQ7TWFngmXA@mail.gmail.com>
-Message-ID: <32e05249-20bd-73ee-3b62-ea5d8e1c2c76@mind.be>
+From: Aseem Sharma <aseem.sharma19@gmail.com>
+Date: Thu, 10 Aug 2017 13:39:18 +0530
+Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
+In-Reply-To: <20170810072841.bs5ly52awzczejgz@tarshish>
+References: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
+ <20170809154918.tthy3t2p6d3hsqon@tarshish>
+ <CANK3ZEe9uvSZx-=iG-gLkUPV98vTUxtsF8fC+wTAt+HovNDoVw@mail.gmail.com>
+ <20170809171757.itid3fvz6462r2no@tarshish>
+ <CANK3ZEctYdAA8B=w2=DqKqsQ=Sf_1B=Uj-SRsN+HdY35mvQSDw@mail.gmail.com>
+ <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
+ <20170810063631.e3jc22lsdjuchpbk@tarshish>
+ <CANK3ZEeLMHhNYvt6dN45zf6QV5sTcw12FEyGf7h=CmQFqtX_4A@mail.gmail.com>
+ <20170810071320.xvrhusojcw4dqxtu@tarshish>
+ <CANK3ZEeJYeji_4Ds-kW6EXXRU3FcpXSgRaWeav96qQU6O5Jfkg@mail.gmail.com>
+ <20170810072841.bs5ly52awzczejgz@tarshish>
+Message-ID: <CANK3ZEca7+iUwmK2Hxt60T1jAQ5eYWC9z2_XVZ+cKCLWQq=Ebg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adam,
+Where will i find minimal defconfig?
+Please note that the issue was orignally observed on latest long term
+support release v2017.02.5.
+However I would try the steps provided in your last email over Latest
+stable release v2017.05.2.
+Sorry about too many naive questions.
 
-On 05-08-17 03:19, Adam Duskett wrote:
-> Hi
-> 
-> I appreciate the fast response.
-> On Fri, Aug 4, 2017 at 5:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Hi Adam,
->>
->>  Wow, that's fast work!
->>
-> 20 hours of solid work really isn't fast.
+-Aseem
 
- If you do those 20 hours of work within two days, I consider it really fast!
+On Thu, Aug 10, 2017 at 12:58 PM, Baruch Siach <baruch@tkos.co.il> wrote:
 
- And sorry for my slow response this time over, I'm suffering a little from bad
-internet connection on my holidays and when it got better, there was more recent
-stuff that bypassed this in the LIFO queue...
-
->> On 04-08-17 20:55, Adam Duskett wrote:
->>>  - Add libssl as a new virtual package, and add OpenSSL as the only option.
->>>    This prevents any package from breaking.
->>
->>  I briefly mentioned before but clearly didn't explain enough: this will not
->> fly. The problem is that we want existing configurations to keep working without
->> a package silently disappearing. So the following procedure should work:
-[snip]
-> I want to first say this: I appreciate your response and your feedback.
-> 
-> However;
-> 
-> I don't have time nor the energy to rebase and made all the changes
-> you have requested,
-> then some more arbitrary changes that other people will request that
-> aren't outlined in the
-> buildroot manual.
-
- What can we change in the manual to make this better? Adding a paragraph to
-explain that existing .config's should never break, would that help? Something like:
-
-==== Stable interface
-
-Buildroot doesn't have much of an interface, except for the `.config`
-configuration file. To make it easy to continuously upgrade Buildroot, we make
-sure that a `.config` file that worked in a previous release, still yields the
-same combination of packages after an update. In some cases, this is not
-possible, e.g. because a configuration option has been renamed or removed. For
-this, the legacy handling approach [ref:...] must be implemented. In some more
-complicated cases, even legacy handling does not help and other solutions to
-maintain backward compatibility must be found.
-
- Does that more or less sum up the issue here? Anything that can be improved
-about the text?
-
-
- About the "arbitrary changes" you mention, I guess you refer to the fact that
-we first asked you NOT to make libssl a virtual package, and now we're changing
-our mind again? Well, indeed, it's a case of "advancing insight" as we say in
-Dutch. In addition, the very reason I didn't accept your first implementation of
-a virtual package was because it would break existing .configs, and this would
-block the adoption of libressl entirely. Now, at least, we have the libressl
-package in Buildroot (though admittedly it is of limited use if almost no
-package makes use of it).
-
-
-> As it sits, feel free to reject the series if you so wish to.  For the
-> next year, I am going to be solid
-> booked and I don't have time to fix this.
-
- That's a pity, we really valued your contributions, especially since you are
-able to deal with complicated stuff.
-
- Could you at least take a look at the alternatives I proposed and give an
-opinion on which one you think is most appropriate? Or perhaps you can even
-think of a third alternative? That will make life easier for anyone who is
-willing to take over this series.
-
-
-> Again, I appreciate everything you guys are doing (And I certainly
-> don't have the time nor the energy
-> to make 100+ patches for a package that nobody actually cares about :] )
-
- I don't think nobody cares about this - as proven by the discussion on IRC, I'd
-say.
-
-
-> Sorry for wasting your time!
-
- Absolutely not. Free software projects with 100+ contributors only work because
-people throw out ideas that are improved on by others.
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Hi Aseem,
+>
+> On Thu, Aug 10, 2017 at 12:51:53PM +0530, Aseem Sharma wrote:
+> > Sure. Can you please give me the exact steps to be carried out.
+> > Also, I tried selecting other gcc versions from menuconfig but the
+> > compilation seems to fail all the time with one issue or the other.
+>
+> Remove your current .config, copy the minimal defconfig below into .config,
+> and then do
+>
+>   make olddefconfig
+>   make clean
+>   make
+>
+> This will automatically select the gcc version which as of current master
+> is
+> 6.4.0.
+>
+> baruch
+>
+> > On 10-Aug-2017 12:43 PM, "Baruch Siach" <baruch@tkos.co.il> wrote:
+> >
+> > On Thu, Aug 10, 2017 at 12:19:33PM +0530, Aseem Sharma wrote:
+> > > Yes Baruch. I tried a couple of times with "make clean" & even "make
+> > > distclean". However, the error is consistent.
+> > > Found a similar issue here: https://gcc.gnu.org/bugzilla/
+> > > show_bug.cgi?id=40836
+> >
+> > This issue seems to be fixed since gcc 4.8.
+> >
+> > I could not reproduce this ICE on current master with the following
+> minimal
+> > defconfig:
+> >
+> > BR2_arm=y
+> > BR2_iwmmxt=y
+> >
+> > Can you give it a try?
+> >
+> > baruch
+> >
+> > > On Thu, Aug 10, 2017 at 12:06 PM, Baruch Siach <baruch@tkos.co.il>
+> wrote:
+> > > > On Thu, Aug 10, 2017 at 11:56:56AM +0530, Aseem Sharma wrote:
+> > > > > *A follow-up question:*
+> > > > > I selected 'iwmmxt' as per Baruch's suggestion and tried to run
+> > "make".
+> > > > > The build seems to be failing with following error message in
+> > > > > "busybox-1.26.2" compilation:
+> > > > >
+> > > > > util-linux/mkfs_ext2.c: In function ?mkfs_ext2_main?:
+> > > > > util-linux/mkfs_ext2.c:715:1: error: insn does not satisfy its
+> > > > constraints:
+> > > > >  }
+> > > > >  ^
+> > > > > (insn 1169 286 287 31 (set (reg:SI 0 r0)
+> > > > >         (reg:SI 80 wr0)) util-linux/mkfs_ext2.c:344 426
+> > > > {*iwmmxt_movsi_insn}
+> > > > >      (nil))
+> > > > > util-linux/mkfs_ext2.c:715:1: internal compiler error: in
+> > > > > reload_cse_simplify_operands, at postreload.c:411
+> > > > > Please submit a full bug report,
+> > > > > with preprocessed source if appropriate.
+> > > > > See <http://bugs.buildroot.net/> for instructions.
+> > > > > scripts/Makefile.build:197: recipe for target
+> 'util-linux/mkfs_ext2.o'
+> > > > > failed
+> > > > > make[2]: *** [util-linux/mkfs_ext2.o] Error 1
+> > > > > Makefile:742: recipe for target 'util-linux' failed
+> > > > > make[1]: *** [util-linux] Error 2
+> > > > > make[1]: Leaving directory '/home/administrator/
+> > > > Downloads/buildroot_2017/
+> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2'
+> > > > > package/pkg-generic.mk:216: recipe for target
+> '/home/administrator/
+> > > > > Downloads/buildroot_2017/buildroot-2017.02.5/output/
+> > > > > build/busybox-1.26.2/.stamp_built' failed
+> > > > > make: *** [/home/administrator/Downloads/buildroot_2017/
+> > > > > buildroot-2017.02.5/output/build/busybox-1.26.2/.stamp_built]
+> Error 2
+> > > > >
+> > > > > It would be really helpful is you can provide some insight and
+> > possibly a
+> > > > > fix/workaround.
+> > > >
+> > > > Have you done a clean rebuild, i.e., 'make clean; make'? See
+> > > > http://nightly.buildroot.org/manual.html#full-rebuild .
+> > > >
+> > > > baruch
+> > > >
+> > > > > On Thu, Aug 10, 2017 at 8:55 AM, Aseem Sharma <
+> > aseem.sharma19 at gmail.com>
+> > > > > wrote:
+> > > > >
+> > > > > > Thanks Baruch & Arnout. Will give a try.
+> > > > > >
+> > > > > > Best Regards,
+> > > > > > Aseem
+> > > > > >
+> > > > > > On Wed, Aug 9, 2017 at 10:47 PM, Baruch Siach <baruch@tkos.co.il
+> >
+> > > > wrote:
+> > > > > >
+> > > > > >> Hi Aseem,
+> > > > > >>
+> > > > > >> On Wed, Aug 09, 2017 at 10:03:24PM +0530, Aseem Sharma wrote:
+> > > > > >> > Hello Baruch & Arnout,
+> > > > > >> >
+> > > > > >> > Thanks for your responses.
+> > > > > >> > The board that I have is quite old with limited RAM and Flash.
+> > > > > >> >
+> > > > > >> > Baruch,
+> > > > > >> > Could you please provide more details as to how do I select
+> > "iwmmxt"
+> > > > > >> using
+> > > > > >> > menuconfig. As far as I remember, I do not seem to have that
+> > option
+> > > > in
+> > > > > >> my
+> > > > > >> > current buildroot release.
+> > > > > >>
+> > > > > >> Go to 'Target options' -> 'Target Architecture Variant', and
+> select
+> > > > > >> 'iwmmxt'
+> > > > > >> (last option).
+> > > > > >>
+> > > > > >> > Also, as per Arnout's response to my query, I should be using
+> ARM
+> > > > little
+> > > > > >> > endian with arm926tARM.
+> > > > > >>
+> > > > > >> As far as I know arm926t code is compatible with iwmmxt, but not
+> > the
+> > > > > >> other way
+> > > > > >> around. Look for Sheeva PJ1 at [1]. See also [2].
+> > > > > >>
+> > > > > >> [1] https://en.wikipedia.org/wiki/
+> List_of_ARM_microarchitectures
+> > > > > >>
+> > > > > >> [2] https://en.wikipedia.org/wiki/
+> MMX_(instruction_set)#MMX_in_e
+> > > > > >> mbedded_applications
+> > > > > >>
+> > > > > >> > Are these two options one and the same?
+> > > > > >>
+> > > > > >> I don't think so.
+> > > > > >>
+> > > > > >> baruch
+> > > > > >>
+> > > > > >> > Thanks in advance.
+> > > > > >> >
+> > > > > >> > Best Regards,
+> > > > > >> > Aseem
+> > > > > >> >
+> > > > > >> > Sent via really tiny keyboard. Expect random auto corrects,
+> fat
+> > > > finger
+> > > > > >> > typos and weirdness!!
+> > > > > >> >
+> > > > > >> >
+> > > > > >> > On 09-Aug-2017 21:19, "Baruch Siach" <baruch@tkos.co.il>
+> wrote:
+> > > > > >> >
+> > > > > >> > Hi Aweem,
+> > > > > >> >
+> > > > > >> > On Wed, Aug 09, 2017 at 06:00:55PM +0530, Aseem Sharma wrote:
+> > > > > >> > > I am naive to buildroot & processor world trying to compile
+> > > > > >> > > "buildroot-2017.02.5" for "Marvell ARM Armada 166E processor
+> > > > > >> (compatible
+> > > > > >> > to
+> > > > > >> > > ARMv5TE instruction-set)" based old system. However, I do
+> not
+> > > > > >> understand
+> > > > > >> > > the options to be selected in "make menuconfig" for
+> > > > > >> > > 1. Target options->Target Architecture {think should be ARM
+> -
+> > > > little
+> > > > > >> > endian}
+> > > > > >> > > 2. Target options->Target Architecture variant
+> > > > > >> > >
+> > > > > >> > > Thanks in advance for your help.
+> > > > > >> >
+> > > > > >> > Based on the Armada 16x Datasheet[1], the mainline kernel
+> > > > > >> > arch/arm/mach-mmp/Kconfig (CONFIG_CPU_PXA168) and
+> > arch/arm/Kconfig
+> > > > > >> > (CONFIG_IWMMXT), it seems like you need the iwmmxt ARM variant
+> > for
+> > > > your
+> > > > > >> > Armada
+> > > > > >> > 166E processor.
+> > > > > >> >
+> > > > > >> > [1] http://www.marvell.com.cn/application-processors/armada-
+> 100/
+> > > > > >> > assets/armada_16x_datasheet.pdf
+> >
+> > --
+> >      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> > =}------------------------------------------------ooO--U--
+> Ooo------------{=
+> >    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--
+> Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/f94180fd/attachment.html>
