@@ -1,52 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 23:01:16 +0200
-Subject: [Buildroot] Failing defconfigs due to GCC 6
-Message-ID: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Aug 2017 23:11:16 +0200
+Subject: [Buildroot] [PATCH/next] get-developers: add option to get
+	developers for files
+Message-ID: <20170810211116.7996-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+The DEVELOPERS file lists file patterns, but the get-developers script
+only supports getting packages and CPU architectures. Some files are
+neither of those, e.g. defconfigs, support files, package infras, ...
 
- A number of defconfigs fail to build (usually the kernel, in one case U-Boot)
-because of GCC 6. Some of these could be fixed by simply bumping the upstream
-kernel; however, we really want defconfigs to be tested on an actual board,
-otherwise there's not much point.
+Add a '-f' option that allows to give a list of files for which to get
+the developer(s).
 
- I've put the people who have been involved in these defconfigs in To. Could you
-look at these defconfigs and try to fix the build with GCC 6? Anything that
-remains unfixed by the end of the month will probably be removed.
+Note that the DEVELOPERS file contains directories as well as files,
+and the directories are not expanded into individual files. Therefore,
+we have to use f.startswith(devfile) to match a directory. This assumes
+that the directory name ends with /, otherwise 'package/python' would
+also match 'package/python-foo'. Since we make sure that directories do
+end with / in the DEVELOPERS file, and since false positives are not
+much of an issue in this case, this isn't a problem.
 
-beaglebone_qt5_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873600
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ utils/get-developers | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-firefly_rk3288_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873613
-
-firefly_rk3288_demo_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873615
-
-ci40_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873604
-
-armadeus_apf9328_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
-
-galileo_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873632
-
-freescale_p1010rdb_pa_defconfig:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873630
-
-
- Regards,
- Arnout
+diff --git a/utils/get-developers b/utils/get-developers
+index fa6fc2fc68..6a028b4526 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -3,6 +3,7 @@
+ import argparse
+ import getdeveloperlib
+ import sys
++import os
+ 
+ def parse_args():
+     parser = argparse.ArgumentParser()
+@@ -12,6 +13,8 @@ def parse_args():
+                         help='find developers in charge of this architecture')
+     parser.add_argument('-p', dest='package', action='store',
+                         help='find developers in charge of this package')
++    parser.add_argument('-f', dest='files', nargs='*',
++                        help='find developers in charge of these files')
+     parser.add_argument('-c', dest='check', action='store_const',
+                         const=True, help='list files not handled by any developer')
+     return parser.parse_args()
+@@ -28,6 +31,8 @@ def __main__():
+         action += 1
+     if args.package is not None:
+         action += 1
++    if args.files:
++        action += 1
+     if args.check:
+         action += 1
+     if len(args.patches) != 0:
+@@ -59,6 +64,16 @@ def __main__():
+                 print(dev.name)
+         return
+ 
++    # Handle the files action
++    if args.files is not None:
++        args.files = [os.path.abspath(f) for f in args.files]
++        for dev in devs:
++            for devfile in dev.files:
++                commonfiles = [f for f in args.files if f.startswith(devfile)]
++                if commonfiles:
++                    print(dev.name)
++                    break
++
+     # Handle the patches action
+     if len(args.patches) != 0:
+         (files, infras) = getdeveloperlib.analyze_patches(args.patches)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.3
