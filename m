@@ -1,97 +1,129 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 10:27:58 +0200
-Subject: [Buildroot] [git commit] webkitgtk: Add patch for properly picking
-	GL flags when building
-Message-ID: <20170810090959.0E00C7FF69@busybox.osuosl.org>
+Date: Thu, 10 Aug 2017 10:26:51 +0200
+Subject: [Buildroot] [git commit] gdb: add fix for gdb 7.12 and gdb 8.0
+	build on noMMU platforms
+Message-ID: <20170810090958.CF7B57FFC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2da653d085df1015f869bb3c89d43e6973239d8
+commit: https://git.buildroot.net/buildroot/commit/?id=5c12506f4da21fcc7a4f1514670c4bfd4f23b466
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This solves build failures caused by WebKit trying to include X11 headers
-when support for X11 is disabled in Mesa3D. A common situation is when
-configuring both GTK+ and WebKitGTK+ only with Wayland support.
+This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
+noMMU platforms. It is not needed for older versions of gdb, since
+it's related to the switch of gdb to C++ in the 7.12 release.
 
-Once the fix for https://bugs.webkit.org/show_bug.cgi?id=175125 makes it
-into a release, the patch can be dropped.
+Fixes:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+       child_stack = xmalloc (STACK_SIZE * 4);
+
+The patch has already been merged upstream, as of commit
+ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
+of future gdb releases.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...AGS-from-pkg-config-for-E-GL-are-not-pass.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+ ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
 
-diff --git a/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch b/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch
+diff --git a/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
 new file mode 100644
-index 0000000..91c5116
+index 0000000..4eb72e4
 --- /dev/null
-+++ b/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch
-@@ -0,0 +1,64 @@
-+From 6579c307d85a9b447d3b7f13b25fb0a52177ed09 Mon Sep 17 00:00:00 2001
-+From: Carlos Alberto Lopez Perez <clopez@igalia.com>
-+Date: Thu, 3 Aug 2017 13:57:14 +0300
-+Subject: [PATCH] [GTK][WPE] CFLAGS from pkg-config for (E)GL are not passed to
-+ WebKit https://bugs.webkit.org/show_bug.cgi?id=175125
++++ b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+@@ -0,0 +1,41 @@
++From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 18 Jun 2017 23:09:43 +0200
++Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
 +
-+Patch by Carlos Alberto Lopez Perez <clopez@igalia.com> on 2017-08-03
-+Reviewed by NOBODY (OOPS!).
++On noMMU platforms, the following code gets compiled:
 +
-+* CMakeLists.txt: Pass GL-related flags to the WebKit component when
-+  appropriate.
++  child_stack = xmalloc (STACK_SIZE * 4);
 +
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
++the lack of cast is valid in C, it is not in C++, causing the
++following build failure:
 +
++../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
++../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
++       child_stack = xmalloc (STACK_SIZE * 4);
++
++Therefore, this commit adds the appropriate cast.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
 +---
-+ Source/WebKit2/CMakeLists.txt | 31 +++++++++++++++++++++++++++++++
-+ Source/WebKit2/ChangeLog      | 10 ++++++++++
-+ 2 files changed, 41 insertions(+)
++ gdb/nat/linux-ptrace.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Source/WebKit2/CMakeLists.txt b/Source/WebKit2/CMakeLists.txt
-+index 2d8215f6a35..b25e9872de2 100644
-+--- a/Source/WebKit2/CMakeLists.txt
-++++ b/Source/WebKit2/CMakeLists.txt
-+@@ -88,6 +88,37 @@ set(WebKit2_SYSTEM_INCLUDE_DIRECTORIES
-+ )
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 3447e07..33833e2 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
++ #define STACK_SIZE 4096
 + 
-+ if (ENABLE_GRAPHICS_CONTEXT_3D)
-++    # For platforms that want to use system-provided OpenGL (ES) / EGL headers,
-++    # these include directories, libraries or definitions need to be
-++    # added before the ANGLE directories.
-++    if (USE_OPENGL)
-++        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
-++            ${OPENGL_INCLUDE_DIRS}
-++        )
-++        list(APPEND WebKit2_LIBRARIES
-++            ${OPENGL_LIBRARIES}
-++        )
-++        add_definitions(${OPENGL_DEFINITIONS})
-++    elseif (USE_OPENGL_ES_2)
-++        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
-++            ${OPENGLES2_INCLUDE_DIRS}
-++        )
-++        list(APPEND WebKit2_LIBRARIES
-++            ${OPENGLES2_LIBRARIES}
-++        )
-++        add_definitions(${OPENGLES2_DEFINITIONS})
-++    endif ()
-++
-++    if (USE_EGL)
-++        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
-++            ${EGL_INCLUDE_DIRS}
-++        )
-++        list(APPEND WebKit2_LIBRARIES
-++            ${EGL_LIBRARIES}
-++        )
-++        add_definitions(${EGL_DEFINITIONS})
-++    endif ()
-++
-+     list(APPEND WebKit2_INCLUDE_DIRECTORIES
-+         "${THIRDPARTY_DIR}/ANGLE"
-+         "${THIRDPARTY_DIR}/ANGLE/include/KHR"
-+--
-+2.13.4
++     if (child_stack == NULL)
++-      child_stack = xmalloc (STACK_SIZE * 4);
+++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
++ 
++     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
++ #ifdef __ia64__
++-- 
++2.9.4
++
+diff --git a/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+new file mode 100644
+index 0000000..4eb72e4
+--- /dev/null
++++ b/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+@@ -0,0 +1,41 @@
++From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 18 Jun 2017 23:09:43 +0200
++Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
++
++On noMMU platforms, the following code gets compiled:
++
++  child_stack = xmalloc (STACK_SIZE * 4);
++
++Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
++the lack of cast is valid in C, it is not in C++, causing the
++following build failure:
++
++../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
++../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
++       child_stack = xmalloc (STACK_SIZE * 4);
++
++Therefore, this commit adds the appropriate cast.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
++---
++ gdb/nat/linux-ptrace.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 3447e07..33833e2 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
++ #define STACK_SIZE 4096
++ 
++     if (child_stack == NULL)
++-      child_stack = xmalloc (STACK_SIZE * 4);
+++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
++ 
++     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
++ #ifdef __ia64__
++-- 
++2.9.4
 +
