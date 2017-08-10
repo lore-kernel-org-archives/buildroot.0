@@ -1,46 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Aug 2017 14:23:23 +0200
-Subject: [Buildroot] [PATCH] gdb: add fix for gdb 7.12 and gdb 8.0 build
- on noMMU platforms
-In-Reply-To: <ff2def1e-0ac7-4d73-2083-f67ca110b280@mind.be>
-References: <20170803071548.2876-1-thomas.petazzoni@free-electrons.com>
- <ff2def1e-0ac7-4d73-2083-f67ca110b280@mind.be>
-Message-ID: <20170810142323.2ea80af0@windsurf>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Thu, 10 Aug 2017 15:45:36 +0300
+Subject: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
+Message-ID: <20170810124536.26344-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+when compiling host e2fsprogs on my system (gentoo amd64, glibc 2.25) the build fails with this error:
+../lib/libext2fs.a(ismounted.o): In function `check_mntent_file':
+ismounted.c:(.text+0x224): undefined reference to `major'
 
-On Thu, 10 Aug 2017 11:25:27 +0200, Arnout Vandecappelle wrote:
+bumping versions fixes the issue.
 
-> > Fixes:
-> > 
-> > ../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-> > ../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-> >        child_stack = xmalloc (STACK_SIZE * 4);
-> > 
-> > The patch has already been merged upstream, as of commit
-> > ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
-> > of future gdb releases.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> 
->  Since this is an upstream patch, and the additional issue reported by Romain is
-> something different, I applied to master, thanks.
-> 
->  BTW, in another thread Thomas P. requested that a build fix which doesn't have
-> an accompanying autobuild failure should have a defconfig to reproduce :-).
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Right, will do next time. You should have dropped my patch, I could
-have done a respin with a defconfig included in the commit log.
-
-Thanks!
-
-Thomas
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index cf41e3a3d5..ac420dd825 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.4/sha256sums.asc
+-sha256 54b3f21123a531a6a536b9cdcc21344b0122a72790dbe4dacc98e64db25e4a24  e2fsprogs-1.43.4.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.5/sha256sums.asc
++sha256 261f3d9ade383fbf032a19140c9c25e998cc0f71a1ae686614fb3ae0eb955a17  e2fsprogs-1.43.5.tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 75e9213351..7627a1f589 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.43.4
++E2FSPROGS_VERSION = 1.43.5
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.0
