@@ -1,9 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 11:26:19 +0200
-Subject: [Buildroot] [PATCH] gcc: fix sparcv8 compile issue
-In-Reply-To: <20170804214454.GA5085@waldemar-brodkorb.de>
-References: <20170804214454.GA5085@waldemar-brodkorb.de>
-Message-ID: <ca184258-04dd-3ecd-bc21-c00e9d74aecb@mind.be>
+Date: Thu, 10 Aug 2017 11:36:49 +0200
+Subject: [Buildroot] buildroot uClibc-ng build failure
+In-Reply-To: <CAPmKWpGqm6xL=ng=TegOw7DqQtU5=Lmq_0Fxv4Vabxr512iPFQ@mail.gmail.com>
+References: <20170803054828.GB7682@waldemar-brodkorb.de>
+ <20170803092346.02d02371@windsurf.home>
+ <CAPmKWpEX5YNKAgi-SbFh_4k3yvYBDMhhPB4Rm8W7m9ZQa0LELA@mail.gmail.com>
+ <298e3d5a-5994-3704-fba6-d292d32bfd4c@dawncrow.de>
+ <20170808230048.75361077@windsurf>
+ <CAPmKWpGqm6xL=ng=TegOw7DqQtU5=Lmq_0Fxv4Vabxr512iPFQ@mail.gmail.com>
+Message-ID: <04d33720-216b-4500-803c-7c55c97693ab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +17,34 @@ To: buildroot@busybox.net
 
 
 
-On 04-08-17 23:44, Waldemar Brodkorb wrote:
-> Fix compile issue with gcc 7.1.0:
-> /tmp/ccxalnSf.s: Assembler messages:
-> /tmp/ccxalnSf.s:12: Error: Architecture mismatch on "rd %tick,%o1".
-> /tmp/ccxalnSf.s:12: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
-> /tmp/ccxalnSf.s:13: Error: Architecture mismatch on "srlx %o1,32,%o0".
-> /tmp/ccxalnSf.s:13: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
-> /tmp/ccxalnSf.s:30: Error: Architecture mismatch on "rd %ccr,%g0".
-> /tmp/ccxalnSf.s:30: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
-> /tmp/ccxalnSf.s:33: Error: Architecture mismatch on "rd %ccr,%g0".
-> /tmp/ccxalnSf.s:33: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
-> /tmp/ccxalnSf.s:36: Error: Architecture mismatch on "rd %ccr,%g0".
-> /tmp/ccxalnSf.s:36: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
-> /tmp/ccxalnSf.s:39: Error: Architecture mismatch on "rd %ccr,%g0".
-> /tmp/ccxalnSf.s:39: (Requires v9|v9a|v9b|v9c|v9d|v9e|v9v|v9m|m8; requested architecture is v8.)
-> Makefile:684: recipe for target 'os-unix-sysdep.lo' failed
+On 10-08-17 11:09, Eugene Yudin wrote:
+> The system library makefile handles option the following way
+> (extra/locale/Makefile.in):
+>  $(locale_OUT)/wctables.h: $(locale_OUT)/gen_wctype
+>          @$(disp_gen)
+>          $(Q)for locale in $(call qstrip,$(UCLIBC_BUILD_MINIMAL_LOCALES)) en_US
+> en_GB; do \
+>                   $< $(FLAG-locale-verbose) $$locale > $@ || \
+>                  $< $(FLAG-locale-verbose) $$locale.UTF-8 > $@ || \
+>                  $< $(FLAG-locale-verbose) $$locale.iso8859-1 > $@ && break; \
+>          done
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> The program "gen_wctype" receives locale name as command line parameter.
+> That application call the function setlocale() inside it.
+> Some time ago that call was disabled to workaround bug with locales.
+> That's the reason for the absence of problems in the past.
+> Changes in the last release return this call.
 
- Applied to master, thanks.
+ So the problem really is that this command tries a number of locales, but not
+any of the locales actually present on the system?
+
+ I would propose to:
+- replace the "en_US en_GB" with "C C.UTF-8" since the latter is much more
+likely to be present on the host;
+- use '$(sort $(patsubst %.utf8,%,$(shell locale -a)))' as an ultimate fallback.
+
+ Does that sound reasonable? I didn't look at the history if this particular
+piece of code, I guess it must have gone through several detours already...
 
  Regards,
  Arnout
