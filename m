@@ -1,40 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 10 Aug 2017 22:29:13 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libhttpparser: bump version to
-	2.7.1
-Message-ID: <20170810202913.31252-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Aug 2017 23:01:16 +0200
+Subject: [Buildroot] Failing defconfigs due to GCC 6
+Message-ID: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libhttpparser/libhttpparser.hash | 2 +-
- package/libhttpparser/libhttpparser.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Hi all,
 
-diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
-index e11006e8a..a1b772e54 100644
---- a/package/libhttpparser/libhttpparser.hash
-+++ b/package/libhttpparser/libhttpparser.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 a11c5ccb9808496f3de66d54ea1f89271919923307e31c75de2a3a77a6754c97 libhttpparser-v2.6.0.tar.gz
-+sha256 70409ad324e5de2da6a0f39e859e566d497c1ff0a249c0c38a5012df91b386b3  libhttpparser-v2.7.1.tar.gz
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 015efc0a1..8ff041332 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHTTPPARSER_VERSION = v2.6.0
-+LIBHTTPPARSER_VERSION = v2.7.1
- LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
+ A number of defconfigs fail to build (usually the kernel, in one case U-Boot)
+because of GCC 6. Some of these could be fixed by simply bumping the upstream
+kernel; however, we really want defconfigs to be tested on an actual board,
+otherwise there's not much point.
+
+ I've put the people who have been involved in these defconfigs in To. Could you
+look at these defconfigs and try to fix the build with GCC 6? Anything that
+remains unfixed by the end of the month will probably be removed.
+
+beaglebone_qt5_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873600
+
+firefly_rk3288_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873613
+
+firefly_rk3288_demo_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873615
+
+ci40_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873604
+
+armadeus_apf9328_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
+
+galileo_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873632
+
+freescale_p1010rdb_pa_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873630
+
+
+ Regards,
+ Arnout
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
