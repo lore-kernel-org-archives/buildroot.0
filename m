@@ -1,71 +1,52 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Aug 2017 19:58:05 +0300
-Subject: [Buildroot] [PATCH 1/1] configs: add defconfig for TS-7680
-In-Reply-To: <1184350253.134774.1502379121796.JavaMail.zimbra@savoirfairelinux.com>
-References: <20170810144951.20841-1-julien.grossholtz@savoirfairelinux.com>
- <20170810145752.2i45xfkeuu3spryw@tarshish>
- <1184350253.134774.1502379121796.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <20170810165805.32jddb7jpulp4tdw@tarshish>
+Date: Thu, 10 Aug 2017 20:35:45 +0300
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.55.0
+Message-ID: <4f33b3435349660c4e3f2b444104442e6a9498b1.1502386545.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Fixes:
 
-On Thu, Aug 10, 2017 at 11:32:01AM -0400, Julien Grossholtz wrote:
-> ----- Mail original -----
-> > De: "Baruch Siach" <baruch@tkos.co.il>
-> > ?: "Julien Grossholtz" <julien.grossholtz@gmail.com>
-> > Cc: buildroot at buildroot.org, "Julien Grossholtz" <julien.grossholtz@savoirfairelinux.com>
-> > Envoy?: Jeudi 10 Ao?t 2017 10:57:52
-> > Objet: Re: [Buildroot] [PATCH 1/1] configs: add defconfig for TS-7680
-> > 
-> > On Thu, Aug 10, 2017 at 10:49:51AM -0400, Julien Grossholtz wrote:
-> >> The TS-7680 is an i.MX286 ARM ARM926EJ-S board with 10/100 Ethernet,
-> >> USB port, eMMC and CAN ports.
-> >> 
-> >> The TS-7680 uses a 3.14.28 Linux kernel provided by Technologic Systems:
-> >> https://github.com/embeddedarm/linux-3.14.28-imx28
-> >> 
-> >> U-Boot is not provided as the manufacturer recommends not to update the
-> >> built-in bootloader.
-> >> 
-> >> For more informations please see:
-> >> https://wiki.embeddedarm.com/wiki/TS-7680
-> >> 
-> >> Signed-off-by: Julien Grossholtz <julien.grossholtz@savoirfairelinux.com>
-> > 
-> > [snip]
-> > 
-> >> diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
-> >> new file mode 100644
-> >> index 0000000..0153685
-> >> --- /dev/null
-> >> +++ b/configs/ts7680_defconfig
-> >> @@ -0,0 +1,20 @@
-> >> +BR2_arm=y
-> >> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> >> +BR2_KERNEL_HEADERS_VERSION=y
-> >> +BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-> >> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-> >> +BR2_GCC_VERSION_4_9_X=y
-> > 
-> > gcc version 4.9 will be removed in the near future. You would better make sure
-> > that your kernel/bootloader build with more recent gcc versions.
-> 
-> Good to know. I was not able to compile the kernel with newer gcc releases. 
-> I will try to find a workaround.
-> Any other gcc release would be OK ? 
+ glob: do not parse after a strtoul() overflow range (CVE-2017-1000101)
+ tftp: reject file name lengths that don't fit (CVE-2017-1000100)
+ file: output the correct buffer to the user (CVE-2017-1000099)
 
-The defconfig should preferably work with all current gcc version. For the 
-kernel you might want to check commit 3711edaf01a from the linux-3.14.y stable 
-branch.
+Switch to .tar.xz to save bandwidth.
 
-baruch
+Add reference to tarball signature.
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libcurl/libcurl.hash | 3 ++-
+ package/libcurl/libcurl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 1b8d80fc9662..6d49b6742830 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
++# https://curl.haxx.se/download/curl-7.55.0.tar.xz.asc
++sha256 cdd58522f8607fd4e871df79d73acb3155075e2134641e5adab12a0962df059d  curl-7.55.0.tar.xz
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 684844919e3a..dd0ccbfa4621 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.54.1
+-LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
++LIBCURL_VERSION = 7.55.0
++LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.13.2
