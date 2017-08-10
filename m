@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 01:09:06 +0200
-Subject: [Buildroot] [Patch v7 03/10] rustc: expose host variant in
- menuconfig
-In-Reply-To: <20170723081206.7774-4-eric.le.bihan.dev@free.fr>
+Date: Fri, 11 Aug 2017 01:13:38 +0200
+Subject: [Buildroot] [Patch v7 04/10] rust-bootstrap: new package
+In-Reply-To: <20170723081206.7774-5-eric.le.bihan.dev@free.fr>
 References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
- <20170723081206.7774-4-eric.le.bihan.dev@free.fr>
-Message-ID: <e8960546-f98a-39cb-1d78-082b64d31471@mind.be>
+ <20170723081206.7774-5-eric.le.bihan.dev@free.fr>
+Message-ID: <170ae612-1cc1-434c-bafb-6cfab9e65d8b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,25 @@ To: buildroot@busybox.net
 
 
 
-On 23-07-17 10:11, Eric Le Bihan wrote:
-> Now that one provider is available for rustc, expose the host variant in
-> menuconfig.
+On 23-07-17 10:12, Eric Le Bihan wrote:
+> This new package fetches a binary snapshot of the Rust compiler,
+> suitable to bootstrap the host variant of the Rust compiler.
+> 
+> To bootstrap rustc version N, rustc N-1 is used.
 
- This doesn't need to be split up from the first patch that introduces the
-virtual package: that patch doesn't introduce any visible Kconfig symbol so
-including is already doesn't hurt. And *not* including it is completely pointless.
+ Is it really needed/useful to use N-1 to bootstrap with? From the user's
+perspective, that's just another useless download, right?
+
+ In fact, this way rust-bootstrap can be eliminated entirely: host-rust-bin can
+be used instead. It does complicate things a little bit, because in that case we
+should NOT depend on (target) rust-std-bin. So that means that host-rust-bin
+shouldn't depend on rust-std-bin, so that dependency should be added in some
+different way...
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/Config.in.host | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index c5a852b..ab24081 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -39,6 +39,7 @@ menu "Host utilities"
->  	source "package/qemu/Config.in.host"
->  	source "package/raspberrypi-usbboot/Config.in.host"
->  	source "package/rauc/Config.in.host"
-> +	source "package/rustc/Config.in.host"
->  	source "package/s6-rc/Config.in.host"
->  	source "package/sam-ba/Config.in.host"
->  	source "package/squashfs/Config.in.host"
-> 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
