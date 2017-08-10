@@ -1,55 +1,145 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Aug 2017 08:30:58 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-09
-Message-ID: <20170810063058.53F362096A@mail.free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Aug 2017 09:36:31 +0300
+Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
+In-Reply-To: <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
+References: <CANK3ZEdaEdw6YuyN-offP1M4F88zdgy_Eg7qikQ5uzUDC2-XKQ@mail.gmail.com>
+ <20170809154918.tthy3t2p6d3hsqon@tarshish>
+ <CANK3ZEe9uvSZx-=iG-gLkUPV98vTUxtsF8fC+wTAt+HovNDoVw@mail.gmail.com>
+ <20170809171757.itid3fvz6462r2no@tarshish>
+ <CANK3ZEctYdAA8B=w2=DqKqsQ=Sf_1B=Uj-SRsN+HdY35mvQSDw@mail.gmail.com>
+ <CANK3ZEfZZ1y=JNkXQfbtrRMSSPB5HxbjGu-fef=DacR9pNsRAw@mail.gmail.com>
+Message-ID: <20170810063631.e3jc22lsdjuchpbk@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Aseem,
 
-Build statistics for 2017-08-09
-================================
+On Thu, Aug 10, 2017 at 11:56:56AM +0530, Aseem Sharma wrote:
+> *A follow-up question:*
+> I selected 'iwmmxt' as per Baruch's suggestion and tried to run "make".
+> The build seems to be failing with following error message in
+> "busybox-1.26.2" compilation:
+> 
+> util-linux/mkfs_ext2.c: In function ?mkfs_ext2_main?:
+> util-linux/mkfs_ext2.c:715:1: error: insn does not satisfy its constraints:
+>  }
+>  ^
+> (insn 1169 286 287 31 (set (reg:SI 0 r0)
+>         (reg:SI 80 wr0)) util-linux/mkfs_ext2.c:344 426 {*iwmmxt_movsi_insn}
+>      (nil))
+> util-linux/mkfs_ext2.c:715:1: internal compiler error: in
+> reload_cse_simplify_operands, at postreload.c:411
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> See <http://bugs.buildroot.net/> for instructions.
+> scripts/Makefile.build:197: recipe for target 'util-linux/mkfs_ext2.o'
+> failed
+> make[2]: *** [util-linux/mkfs_ext2.o] Error 1
+> Makefile:742: recipe for target 'util-linux' failed
+> make[1]: *** [util-linux] Error 2
+> make[1]: Leaving directory '/home/administrator/Downloads/buildroot_2017/
+> buildroot-2017.02.5/output/build/busybox-1.26.2'
+> package/pkg-generic.mk:216: recipe for target '/home/administrator/
+> Downloads/buildroot_2017/buildroot-2017.02.5/output/
+> build/busybox-1.26.2/.stamp_built' failed
+> make: *** [/home/administrator/Downloads/buildroot_2017/
+> buildroot-2017.02.5/output/build/busybox-1.26.2/.stamp_built] Error 2
+> 
+> It would be really helpful is you can provide some insight and possibly a
+> fix/workaround.
 
-      successes : 113
-       failures : 16 
-       timeouts : 0  
-          TOTAL : 129
+Have you done a clean rebuild, i.e., 'make clean; make'? See 
+http://nightly.buildroot.org/manual.html#full-rebuild .
 
-Classification of failures by reason
-====================================
+baruch
 
-              swupdate-2017.07 | 5 
-                       unknown | 4 
-                      qt-4.8.7 | 2 
-                dbus-cpp-0.9.0 | 1 
-gmrender-resurrect-33600ab6... | 1 
-                     nvme-v1.3 | 1 
-             transmission-2.92 | 1 
-            xlib_libXpm-3.5.12 | 1 
-
-
-Detail of failures
-===================
-
-         arm |                 dbus-cpp-0.9.0 | NOK | http://autobuild.buildroot.net/results/35811796e176d5a4bd20fb6e22000b716fcb856f |     
-         arm | gmrender-resurrect-33600ab6... | NOK | http://autobuild.buildroot.net/results/ac477d5b5658be7d32dc97ac393e3a9017f80f54 |     
-         arm |                      nvme-v1.3 | NOK | http://autobuild.buildroot.net/results/52e06d8e3c0ed560fc6cb1f06f46818197efe104 |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/c9f05ab74e7b62207280e7930e4c736e514903df | ORPH
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/bee58bc178fa9ce02a7e659206872252df0ac1f4 | ORPH
-        i686 |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/d21aac5018419c75af81fc140916abfd8bc2fc56 |     
-    mips64el |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/0a8d016d4a5950d5cfd88220c6a95163be240de9 |     
-         arm |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/f401f3c1f846692a2acb0ba851ab99715c36aacf |     
-         arm |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/59caabe92ce480f56348683fa48f04c37507a744 |     
-      mipsel |               swupdate-2017.07 | NOK | http://autobuild.buildroot.net/results/39b4e5e70851f23135b6a883f50971e6e60d1d2c |     
-     powerpc |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/d210711ae09d3fb4c6b597c77a457458451a819a |     
-      mipsel |                        unknown | NOK | http://autobuild.buildroot.net/results/87a52aeaeb9752eefc341f2716cef5afaa7d2abf |     
-        m68k |                        unknown | NOK | http://autobuild.buildroot.net/results/41c53ec2ebbbf117566fcedce74797622bde436d |     
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/504f16e82ae549f88a18fdedf6a9c559af112cac |     
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/d5122f83d600eab6e0f13bfa44000397cefb65bc |     
-      xtensa |             xlib_libXpm-3.5.12 | NOK | http://autobuild.buildroot.net/results/9321a656a8440d66b14cf1f632ad4bee653ad717 |     
+> On Thu, Aug 10, 2017 at 8:55 AM, Aseem Sharma <aseem.sharma19@gmail.com>
+> wrote:
+> 
+> > Thanks Baruch & Arnout. Will give a try.
+> >
+> > Best Regards,
+> > Aseem
+> >
+> > On Wed, Aug 9, 2017 at 10:47 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> >> Hi Aseem,
+> >>
+> >> On Wed, Aug 09, 2017 at 10:03:24PM +0530, Aseem Sharma wrote:
+> >> > Hello Baruch & Arnout,
+> >> >
+> >> > Thanks for your responses.
+> >> > The board that I have is quite old with limited RAM and Flash.
+> >> >
+> >> > Baruch,
+> >> > Could you please provide more details as to how do I select "iwmmxt"
+> >> using
+> >> > menuconfig. As far as I remember, I do not seem to have that option in
+> >> my
+> >> > current buildroot release.
+> >>
+> >> Go to 'Target options' -> 'Target Architecture Variant', and select
+> >> 'iwmmxt'
+> >> (last option).
+> >>
+> >> > Also, as per Arnout's response to my query, I should be using ARM little
+> >> > endian with arm926tARM.
+> >>
+> >> As far as I know arm926t code is compatible with iwmmxt, but not the
+> >> other way
+> >> around. Look for Sheeva PJ1 at [1]. See also [2].
+> >>
+> >> [1] https://en.wikipedia.org/wiki/List_of_ARM_microarchitectures
+> >>
+> >> [2] https://en.wikipedia.org/wiki/MMX_(instruction_set)#MMX_in_e
+> >> mbedded_applications
+> >>
+> >> > Are these two options one and the same?
+> >>
+> >> I don't think so.
+> >>
+> >> baruch
+> >>
+> >> > Thanks in advance.
+> >> >
+> >> > Best Regards,
+> >> > Aseem
+> >> >
+> >> > Sent via really tiny keyboard. Expect random auto corrects, fat finger
+> >> > typos and weirdness!!
+> >> >
+> >> >
+> >> > On 09-Aug-2017 21:19, "Baruch Siach" <baruch@tkos.co.il> wrote:
+> >> >
+> >> > Hi Aweem,
+> >> >
+> >> > On Wed, Aug 09, 2017 at 06:00:55PM +0530, Aseem Sharma wrote:
+> >> > > I am naive to buildroot & processor world trying to compile
+> >> > > "buildroot-2017.02.5" for "Marvell ARM Armada 166E processor
+> >> (compatible
+> >> > to
+> >> > > ARMv5TE instruction-set)" based old system. However, I do not
+> >> understand
+> >> > > the options to be selected in "make menuconfig" for
+> >> > > 1. Target options->Target Architecture {think should be ARM - little
+> >> > endian}
+> >> > > 2. Target options->Target Architecture variant
+> >> > >
+> >> > > Thanks in advance for your help.
+> >> >
+> >> > Based on the Armada 16x Datasheet[1], the mainline kernel
+> >> > arch/arm/mach-mmp/Kconfig (CONFIG_CPU_PXA168) and arch/arm/Kconfig
+> >> > (CONFIG_IWMMXT), it seems like you need the iwmmxt ARM variant for your
+> >> > Armada
+> >> > 166E processor.
+> >> >
+> >> > [1] http://www.marvell.com.cn/application-processors/armada-100/
+> >> > assets/armada_16x_datasheet.pdf
 
 -- 
-http://autobuild.buildroot.net
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
