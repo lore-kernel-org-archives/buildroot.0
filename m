@@ -1,46 +1,105 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Thu, 10 Aug 2017 15:45:36 +0300
-Subject: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
-Message-ID: <20170810124536.26344-1-daggs@gmx.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Aug 2017 12:54:57 +0200
+Subject: [Buildroot] [git commit] lua: fix pkg-config file
+Message-ID: <20170810124404.AFC8D7FA81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-when compiling host e2fsprogs on my system (gentoo amd64, glibc 2.25) the build fails with this error:
-../lib/libext2fs.a(ismounted.o): In function `check_mntent_file':
-ismounted.c:(.text+0x224): undefined reference to `major'
+commit: https://git.buildroot.net/buildroot/commit/?id=8d845683e37640d33c186c0091ccce6ae3ef0777
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bumping versions fixes the issue.
+When Lua is linked with additional libraries, these libraries should go
+into the pkg-config file as well.
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Otherwise, linking swupdate with the lua library fails:
+
+```
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlopen'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlclose'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlerror'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
+```
+
+Fixes http://autobuild.buildroot.net/results/1c3/1c349cc5904868e4def292b9fbfa164828e46156
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua/5.2.4/0004-lua-pc.patch | 4 +++-
+ package/lua/5.3.4/0004-lua-pc.patch | 4 +++-
+ package/lua/lua.mk                  | 8 ++++----
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index cf41e3a3d5..ac420dd825 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.4/sha256sums.asc
--sha256 54b3f21123a531a6a536b9cdcc21344b0122a72790dbe4dacc98e64db25e4a24  e2fsprogs-1.43.4.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.5/sha256sums.asc
-+sha256 261f3d9ade383fbf032a19140c9c25e998cc0f71a1ae686614fb3ae0eb955a17  e2fsprogs-1.43.5.tar.xz
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 75e9213351..7627a1f589 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lua/5.2.4/0004-lua-pc.patch b/package/lua/5.2.4/0004-lua-pc.patch
+index 62acb20..31ff611 100644
+--- a/package/lua/5.2.4/0004-lua-pc.patch
++++ b/package/lua/5.2.4/0004-lua-pc.patch
+@@ -1,6 +1,8 @@
+ add lua.pc
  
--E2FSPROGS_VERSION = 1.43.4
-+E2FSPROGS_VERSION = 1.43.5
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
--- 
-2.14.0
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++[J??rg Krause: add @MYLIBS@]
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+ 
+ Index: b/etc/lua.pc
+ ===================================================================
+@@ -34,7 +36,7 @@ Index: b/etc/lua.pc
+ +Description: An Extensible Extension Language
+ +Version: ${R}
+ +Requires: 
+-+Libs: -L${libdir} -llua -lm
+++Libs: -L${libdir} -llua -lm @MYLIBS@
+ +Cflags: -I${includedir}
+ +
+ +# (end of lua.pc)
+diff --git a/package/lua/5.3.4/0004-lua-pc.patch b/package/lua/5.3.4/0004-lua-pc.patch
+index 615a7db..1125832 100644
+--- a/package/lua/5.3.4/0004-lua-pc.patch
++++ b/package/lua/5.3.4/0004-lua-pc.patch
+@@ -1,6 +1,8 @@
+ add lua.pc
+ 
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++[J??rg Krause: add @MYLIBS@]
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+ 
+ Index: b/etc/lua.pc
+ ===================================================================
+@@ -34,7 +36,7 @@ Index: b/etc/lua.pc
+ +Description: An Extensible Extension Language
+ +Version: ${R}
+ +Requires:
+-+Libs: -L${libdir} -llua -lm
+++Libs: -L${libdir} -llua -lm @MYLIBS@
+ +Cflags: -I${includedir}
+ +
+ +# (end of lua.pc)
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 93339ad..0692c53 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -86,8 +86,8 @@ endef
+ 
+ define LUA_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) INSTALL_TOP="$(STAGING_DIR)/usr" -C $(@D) install
+-	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
++	sed -e "s/@MYLIBS@/$(LUA_MYLIBS)/g" $(@D)/etc/lua.pc \
++		> $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
+ endef
+ 
+ define LUA_INSTALL_TARGET_CMDS
+@@ -96,8 +96,8 @@ endef
+ 
+ define HOST_LUA_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) INSTALL_TOP="$(HOST_DIR)" -C $(@D) install
+-	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+-		$(HOST_DIR)/lib/pkgconfig/lua.pc
++	sed -e "s/@MYLIBS@/$(HOST_LUA_MYLIBS)/g" $(@D)/etc/lua.pc \
++		> $(HOST_DIR)/lib/pkgconfig/lua.pc
+ endef
+ 
+ $(eval $(generic-package))
