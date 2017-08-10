@@ -1,52 +1,63 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Aug 2017 23:28:05 +0200
-Subject: [Buildroot] [PATCH] minnowboard_max_defconfig: grub2 needs WCHAR
-Message-ID: <20170810212805.27808-1-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 10 Aug 2017 23:51:11 +0200
+Subject: [Buildroot] [PATCH] package/valgrind: hide comment when arch is not
+	supported
+Message-ID: <20170810215111.32360-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 5ffafd2353f5d67 (grub2: bump up version), grub2 needs a
-toolchain with WCHAR support. However, the defconfigs that use grub2
-were not updated at the time.
+Currently, the comment that "valgrind needs shared libs" is not hidden
+when the architecture dependencies are not met, which can confuse some
+users (as recently seen on IRC).
 
-Add BR2_TOOLCHAIN_BUILDROOT_WCHAR=y to minnowboard_max_defconfig.
+Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
+the comment and the symbol depend on that.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Erico Nunes <nunes.erico@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc: Vincent Stehl? <vincent.stehle@intel.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
+Cc: J?r?me Pouiller <jezz@sysmic.org>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
 ---
-The following other defconfigs also use grub2.
-
-galileo_defconfig: Needs to be updated, but is anyway failing to build
- the kernel and I expect it will be removed.
-
-minnowboard_max-graphical_defconfig: Already selects LOCALE which
- implies WCHAR.
-
-pc_x86_64_bios_defconfig, pc_x86_64_efi_defconfig: already select
- WCHAR because it is needed for eudev.
+Note: Cc-ing the people that have touched valgrind in the past 12
+months-or-so...
 ---
- configs/minnowboard_max_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ package/valgrind/Config.in | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
-index 674b144de8..db6e595779 100644
---- a/configs/minnowboard_max_defconfig
-+++ b/configs/minnowboard_max_defconfig
-@@ -9,6 +9,9 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 40e219d95a..919bd1afb5 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -1,14 +1,19 @@
+ comment "valgrind needs a toolchain w/ dynamic library"
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS
  
- # Linux headers same as kernel, a 4.12 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
-+# Needed for grub2
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
++	bool
++	default y if BR2_ARM_CPU_ARMV7A
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	depends on !BR2_MIPS_SOFT_FLOAT
 +
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+ config BR2_PACKAGE_VALGRIND
+ 	bool "valgrind"
+-	depends on BR2_ARM_CPU_ARMV7A || BR2_i386 || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		   BR2_x86_64
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_MIPS_SOFT_FLOAT
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
+ 
 -- 
-2.13.3
+2.11.0
