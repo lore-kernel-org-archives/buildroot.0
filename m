@@ -1,50 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Aug 2017 22:06:55 +0200
-Subject: [Buildroot] ci20_defconfig fails because of missing TLS support
-Message-ID: <d32e5a1d-aa99-f189-bdfc-5d10b10c1eda@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 10 Aug 2017 22:29:13 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libhttpparser: bump version to
+	2.7.1
+Message-ID: <20170810202913.31252-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Vicente, Waldemar,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libhttpparser/libhttpparser.hash | 2 +-
+ package/libhttpparser/libhttpparser.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Since some time (probably since some uClibc bump), the ci20_defconfig has been
-failing with an error I don't really understand [1]:
-
-> /usr/bin/make -j3 -C /builds/buildroot.org/buildroot/output/build/uclibc-1.0.25 ARCH="mips" CROSS_COMPILE="/builds/buildroot.org/buildroot/output/host/bin/mipsel-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc"
-> make[1]: Entering directory '/builds/buildroot.org/buildroot/output/build/uclibc-1.0.25'
-> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
-> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
-> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
-> mipsel-buildroot-linux-uclibc-gcc.br_real: warning: '-mfused-madd' is deprecated; use '-ffp-contract=' instead
-> ####
-> #### Your compiler does not support TLS and you are trying to build uClibc-ng
-> #### with NPTL support. Upgrade your binutils and gcc to versions which
-> #### support TLS for your architecture. Do not contact uClibc-ng maintainers
-> #### about this problem.
-> ####
-> #### Exiting...
-> ####
-> Rules.mak:689: recipe for target 'gcc_tls_test_fail' failed
-> make[1]: *** [gcc_tls_test_fail] Error 1
-> make[1]: Leaving directory '/builds/buildroot.org/buildroot/output/build/uclibc-1.0.25'
-
-
- Could you guys have a look, so we can hopefully get a fix in 2017.08?
-
- Regards,
- Arnout
-
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/27873603
-
-
+diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
+index e11006e8a..a1b772e54 100644
+--- a/package/libhttpparser/libhttpparser.hash
++++ b/package/libhttpparser/libhttpparser.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 a11c5ccb9808496f3de66d54ea1f89271919923307e31c75de2a3a77a6754c97 libhttpparser-v2.6.0.tar.gz
++sha256 70409ad324e5de2da6a0f39e859e566d497c1ff0a249c0c38a5012df91b386b3  libhttpparser-v2.7.1.tar.gz
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 015efc0a1..8ff041332 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTTPPARSER_VERSION = v2.6.0
++LIBHTTPPARSER_VERSION = v2.7.1
+ LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
