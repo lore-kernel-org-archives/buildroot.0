@@ -1,50 +1,51 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 10 Aug 2017 16:10:10 -0300
-Subject: [Buildroot] [PATCH v2] package/stella: bump version to 5.0.1
-In-Reply-To: <fab7680a-be1e-3adb-de08-d2ee957ea6da@mind.be>
-References: <1502031148-14106-1-git-send-email-sergio.prado@e-labworks.com>
- <fab7680a-be1e-3adb-de08-d2ee957ea6da@mind.be>
-Message-ID: <CANu7NGtcVrJ4rwADvBqchOyNhWJ+7m1hXthu8Ls4LCh3sPTcxg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Aug 2017 21:53:00 +0200
+Subject: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
+In-Reply-To: <20170810125316.6qeroacb3dcvicj4@tarshish>
+References: <20170810124536.26344-1-daggs@gmx.com>
+ <20170810125316.6qeroacb3dcvicj4@tarshish>
+Message-ID: <77a8ebc6-5825-77a4-bbe3-4f23b2bea658@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-2017-08-09 20:07 GMT-03:00 Arnout Vandecappelle <arnout@mind.be>:
->
->  Hi Sergio,
->
-> On 06-08-17 16:52, Sergio Prado wrote:
-> > Removed 0003-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch, since
-> > stella now uses -std=c++14 that builds fine when using PPC altivec
-> > vectorization.
-> >
-> > Update toolchain dependencies to gcc 4.9 since codebase now uses C++14
-features.
-> >
-> > Fixes:
-> >
-http://autobuild.buildroot.net/results/0e787fd27537e1ff84a76bf71121048596d808a1/
-> >
-> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
->
->  I instead applied Bernd's patch to master that just fixes the gcc7 build
-issue.
->
->  I've applied your patch to the next branch, but updated it to remove
-Bernd's
-> gcc7 fix patch again.
->
->  Can you re-test the next branch to verify that this was done correctly?
 
-Tested on ARM (Raspberry Pi 3) and also build-tested on x86 and PPC.
+On 10-08-17 14:53, Baruch Siach wrote:
+> Hi Dagg,
+> 
+> On Thu, Aug 10, 2017 at 03:45:36PM +0300, Dagg Stompler wrote:
+>> when compiling host e2fsprogs on my system (gentoo amd64, glibc 2.25) the build fails with this error:
+>> ../lib/libext2fs.a(ismounted.o): In function `check_mntent_file':
+>> ismounted.c:(.text+0x224): undefined reference to `major'
+> 
+> Please provide the defconfig that causes this issue.
+> 
+> Was that the host version of e2fsprogs?
+> 
+>> bumping versions fixes the issue.
+> 
+> This is upstream commit 3fb715b554268759 (include sys/sysmacros.h as needed), 
+> right? If so, please add a reference in the commit log.
 
-Thanks,
+ I'm wondering if we should apply this version bump to master or to next (and
+backport 3fb715b55 to master)...
 
-Sergio Prado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170810/cb1061ec/attachment.html>
+ It looks like this release does a *lot* more than just a few fixes, so it's not
+really the type of bump we would take into master now.
+
+ Regards,
+ Arnout
+
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
