@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 01:41:53 +0200
-Subject: [Buildroot] [Patch v7 08/10] libhttpparser: add host variant
-In-Reply-To: <20170723081206.7774-9-eric.le.bihan.dev@free.fr>
+Date: Fri, 11 Aug 2017 01:45:37 +0200
+Subject: [Buildroot] [Patch v7 09/10] libcurl: add host variant
+In-Reply-To: <20170723081206.7774-10-eric.le.bihan.dev@free.fr>
 References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
- <20170723081206.7774-9-eric.le.bihan.dev@free.fr>
-Message-ID: <1c151425-25f5-4d3d-0143-044f51f4cc2f@mind.be>
+ <20170723081206.7774-10-eric.le.bihan.dev@free.fr>
+Message-ID: <8558ce88-9c19-a1d8-3566-ae9d2b354236@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,32 @@ To: buildroot@busybox.net
 
 
 On 23-07-17 10:12, Eric Le Bihan wrote:
-> Allow build of host variant of libhttpparser.
-> 
 > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > ---
->  package/libhttpparser/libhttpparser.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  package/libcurl/libcurl.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-> index 015efc0..475dfde 100644
-> --- a/package/libhttpparser/libhttpparser.mk
-> +++ b/package/libhttpparser/libhttpparser.mk
-> @@ -23,4 +23,13 @@ define LIBHTTPPARSER_INSTALL_TARGET_CMDS
->  	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
->  endef
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 6848449..0e216ca 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -82,4 +82,7 @@ endef
+>  LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+>  endif
 >  
-> +define HOST_LIBHTTPPARSER_BUILD_CMDS
-> +	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) library package
-> +endef
-> +
-> +define HOST_LIBHTTPPARSER_INSTALL_CMDS
-> +	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) PREFIX=$(HOST_DIR)/usr install
+> +HOST_LIBCURL_DEPENDENCIES = host-openssl
 
- /usr is gone.
+ You also want HOST_LIBCURL_CONF_OPTS which disables as much as possible.
+
+ You probably also want LIBCURL_FIX_DOT_PC.
+
 
  Regards,
  Arnout
 
-> +endef
 > +
->  $(eval $(generic-package))
-> +$(eval $(host-generic-package))
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 > 
 
 -- 
