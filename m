@@ -1,78 +1,79 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 11 Aug 2017 12:57:12 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 5.0.1.1
-In-Reply-To: <7dc157e1-bde7-5143-be61-aaee3c309bcb@mind.be>
-References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
- <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
- <7dc157e1-bde7-5143-be61-aaee3c309bcb@mind.be>
-Message-ID: <CA+TH9VmC_qbAKYfWZmDm_=TZjVsSFg0vgNBY7w9OeKogfuXfiA@mail.gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Fri, 11 Aug 2017 13:00:01 +0200
+Subject: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
+In-Reply-To: <20170810125316.6qeroacb3dcvicj4@tarshish>
+References: <20170810124536.26344-1-daggs@gmx.com>
+ <20170810125316.6qeroacb3dcvicj4@tarshish>
+Message-ID: <trinity-6468c773-b508-4d97-9354-7103ed0074f7-1502449201695@3c-app-mailcom-bs08>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Greetings Baruch,
 
-2017-08-11 12:00 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+> Sent: Thursday, August 10, 2017 at 3:53 PM
+> From: "Baruch Siach" <baruch@tkos.co.il>
+> To: "Dagg Stompler" <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] package/e2fsprogs: version bump for bug fix.
 >
->
-> On 11-08-17 10:14, Angelo Compagnucci wrote:
->> This patch bumps to mono 5.0.1.1 and updates the unit tests patch
->> accordingly.
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->>  .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
->
->  What is the upstream status of all the patches? Most of the other patches look
-> like they could be applicable for upstream, can you send them?
+> Hi Dagg,
+> 
+> On Thu, Aug 10, 2017 at 03:45:36PM +0300, Dagg Stompler wrote:
+> > when compiling host e2fsprogs on my system (gentoo amd64, glibc 2.25) the build fails with this error:
+> > ../lib/libext2fs.a(ismounted.o): In function `check_mntent_file':
+> > ismounted.c:(.text+0x224): undefined reference to `major'
+> 
+> Please provide the defconfig that causes this issue.
+please use odroidc2_defconfig
 
-All upstremeable patches are already be sent. Mono has a really long
-release cycle and the patches, also if applied, are not released in
-stable branches immediately.
+> 
+> Was that the host version of e2fsprogs?
+my local e2fsprogs is 1.43.5
 
->  Also, patch 4 says:
->
-> Patch is upstream:
->
->    https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
->
-> so why is this one not removed? Could you mention that explicitly in the commit log?
+> 
+> > bumping versions fixes the issue.
+> 
+> This is upstream commit 3fb715b554268759 (include sys/sysmacros.h as needed), 
+> right? If so, please add a reference in the commit log.
+will resend.
 
-Cause the patch is present from the tag mono-5.4.0.135 (future
-release) the stable release is now at 5.0.1.1 .
-I usually do care to remove patches upstreamed.
-
->  It would also be nice to rewrite patch 6 and 8 so they are upstreamable, but I
-> can imagine that that's more complicated.
-
-Patch 8 is not upstremeable cause the way buildroot handles paths.
-Buildroot sets $(mono_libdir) to the full host path, instead mono here
-expects something related to the / of the target.
-
-For patch 6 I've not tried cause it's a bit of a corner case: running
-mono unit-tests during compilation is not advisable cause it takes
-time but also cause they expects a certain environment that buildroot
-screws up. To make the unit-tests running in buildroot mono should be
-patched, but I originally though it was not necessary.
-
->
->  Regards,
->  Arnout
->
->
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+> 
+> baruch
+> 
+> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> > ---
+> >  package/e2fsprogs/e2fsprogs.hash | 4 ++--
+> >  package/e2fsprogs/e2fsprogs.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+> > index cf41e3a3d5..ac420dd825 100644
+> > --- a/package/e2fsprogs/e2fsprogs.hash
+> > +++ b/package/e2fsprogs/e2fsprogs.hash
+> > @@ -1,2 +1,2 @@
+> > -# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.4/sha256sums.asc
+> > -sha256 54b3f21123a531a6a536b9cdcc21344b0122a72790dbe4dacc98e64db25e4a24  e2fsprogs-1.43.4.tar.xz
+> > +# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.5/sha256sums.asc
+> > +sha256 261f3d9ade383fbf032a19140c9c25e998cc0f71a1ae686614fb3ae0eb955a17  e2fsprogs-1.43.5.tar.xz
+> > diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> > index 75e9213351..7627a1f589 100644
+> > --- a/package/e2fsprogs/e2fsprogs.mk
+> > +++ b/package/e2fsprogs/e2fsprogs.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -E2FSPROGS_VERSION = 1.43.4
+> > +E2FSPROGS_VERSION = 1.43.5
+> >  E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+> >  E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+> >  E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> 
