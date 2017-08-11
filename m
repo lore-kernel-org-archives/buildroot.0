@@ -1,64 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 11 Aug 2017 12:47:35 +0200
-Subject: [Buildroot] [git commit] package/valgrind: hide comment when arch
-	is not supported
-Message-ID: <20170811120045.14042800BC@busybox.osuosl.org>
+Date: Fri, 11 Aug 2017 12:42:34 +0200
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.55.0
+Message-ID: <20170811120044.8F98A7FA8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afb6bc67a6e3a9fa08a61d81e17e0c152ed09f2a
+commit: https://git.buildroot.net/buildroot/commit/?id=d88c79090add53947dc3290fb61d51f2b630301c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the comment that "valgrind needs shared libs" is not hidden
-when the architecture dependencies are not met, which can confuse some
-users (as recently seen on IRC).
+Fixes:
 
-Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
-the comment and the symbol depend on that.
+ glob: do not parse after a strtoul() overflow range (CVE-2017-1000101)
+ tftp: reject file name lengths that don't fit (CVE-2017-1000100)
+ file: output the correct buffer to the user (CVE-2017-1000099)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed--by: Pedro Ribeiro <pedrib@gmail.com>
-Tested-by: Pedro Ribeiro <pedrib@gmail.com>
-[Arnout: put _ARCH_SUPPORTS at the top of the file]
+Switch to .tar.xz to save bandwidth.
+
+Add reference to tarball signature.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/valgrind/Config.in | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ package/libcurl/libcurl.hash | 3 ++-
+ package/libcurl/libcurl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 40e219d..75b779d 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -1,14 +1,19 @@
-+config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_ARM_CPU_ARMV7A
-+	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	depends on !BR2_MIPS_SOFT_FLOAT
-+
- comment "valgrind needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 1b8d80f..6d49b67 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
++# https://curl.haxx.se/download/curl-7.55.0.tar.xz.asc
++sha256 cdd58522f8607fd4e871df79d73acb3155075e2134641e5adab12a0962df059d  curl-7.55.0.tar.xz
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 6848449..dd0ccbf 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_VALGRIND
- 	bool "valgrind"
--	depends on BR2_ARM_CPU_ARMV7A || BR2_i386 || \
--		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
--		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
--		   BR2_x86_64
-+	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_MIPS_SOFT_FLOAT
- 	help
- 	  Tool for debugging and profiling Linux programs.
- 
+-LIBCURL_VERSION = 7.54.1
+-LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
++LIBCURL_VERSION = 7.55.0
++LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
