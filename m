@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Aug 2017 15:30:06 +0200
-Subject: [Buildroot] [PATCH] nanopi_m1{,
- _plus}_defconfig: U-Boot needs pylibfdt
-In-Reply-To: <20170810215929.13430-1-arnout@mind.be>
-References: <20170810215929.13430-1-arnout@mind.be>
-Message-ID: <20170811153006.053e3329@windsurf>
+Date: Fri, 11 Aug 2017 15:31:57 +0200
+Subject: [Buildroot] [git commit] beaglebone_qt5_defconfig: use gcc 5.x
+Message-ID: <20170811132542.1B2F881E7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e845e012e7bfebe9c2ccf314eae059c892851e36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 Aug 2017 23:59:29 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> nanopi_m1 and nanopi_m1_plus are sunxi boards that need pylibfdt in
-> U-Boot.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/27873655
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/27873656
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Chakra Divi <2chakrass@gmail.com>
-> ---
-> Apparently this was only tested on a host that had pylibfdt installed?
+The linux 4.1 kernel does not compile with gcc 6.x.
+The compiler version is now fixed to 5.x until a new kernel is used.
 
-Applied to master, thanks.
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/beaglebone_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 4135f71..fb61bf5 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -3,6 +3,7 @@ BR2_cortex_a8=y
+ BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_GCC_VERSION_5_X=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
