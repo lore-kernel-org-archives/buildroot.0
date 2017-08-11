@@ -1,40 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 11 Aug 2017 14:15:45 +0000
-Subject: [Buildroot] [Bug 10201]
- buildroot-2017.08-rc1/toolchain/toolchain-wrapper.c:192]: (error) Memory
- leak:
-In-Reply-To: <bug-10201-163@https.bugs.busybox.net/>
-References: <bug-10201-163@https.bugs.busybox.net/>
-Message-ID: <bug-10201-163-Dz1Sjif4hl@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 11 Aug 2017 16:41:24 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-08-10
+References: <20170811063103.6730E20A51@mail.free-electrons.com>
+Message-ID: <k9s06ex8uo.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10201
+Hi Yann,
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+Am Fri, 11 Aug 2017 08:31:03 +0200 schrieb Thomas Petazzoni:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+>          | ORPH arm |            oracle-mysql-5.1.73 | NOK |
+>          http://autobuild.buildroot.net/
+results/49377c636edf72bc68cbcecd1a787d578dba1d4e
 
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-Your static analyser is weird, because there are a few other things which
-aren't freed either: relbasedir, absbasedir in different code paths.
+FYI: this build error, although still valid, was found by your 
+autobuilder http://autobuild.buildroot.net/?submitter=Yann+E.+MORIN
+which is not testing current git master, but git master as of Jul, 29th
 
-However, we do this by choice. Freeing things before exiting is useless, since
-the OS will implicitly free everything when the program exits. That's why e.g.
-valgrind doesn't report these as real memory leaks (because they are still
-reachable).
+https://git.buildroot.net/buildroot/commit/?
+id=908960d98ff0c88b93a916b857daf84e39182581
 
-So no, this is not a memory leak.
-
-For consistency, the free(args) at the end should be removed, but that's a
-different issue.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards, Bernd
