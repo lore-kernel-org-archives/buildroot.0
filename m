@@ -1,54 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 15:20:31 +0200
-Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
-References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
-Message-ID: <dbe1c07b-acac-59b8-70c8-dc10b7375a12@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Aug 2017 15:27:05 +0200
+Subject: [Buildroot] [git commit] minnowboard_max_defconfig: grub2 needs
+	WCHAR
+Message-ID: <20170811132052.C4FAD804FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=033e2b94318503d7ada2efcd53b2a606bd41148a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since commit 5ffafd2353f5d67 (grub2: bump up version), grub2 needs a
+toolchain with WCHAR support. However, the defconfigs that use grub2
+were not updated at the time.
 
-On 10-08-17 23:01, Arnout Vandecappelle wrote:
->  Hi all,
-> 
->  A number of defconfigs fail to build (usually the kernel, in one case U-Boot)
-> because of GCC 6. Some of these could be fixed by simply bumping the upstream
-> kernel; however, we really want defconfigs to be tested on an actual board,
-> otherwise there's not much point.
-> 
->  I've put the people who have been involved in these defconfigs in To. Could you
-> look at these defconfigs and try to fix the build with GCC 6? Anything that
-> remains unfixed by the end of the month will probably be removed.
+Add BR2_TOOLCHAIN_BUILDROOT_WCHAR=y to minnowboard_max_defconfig.
 
- Looks like yesterday I missed a few:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc: Vincent Stehl?? <vincent.stehle@intel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/minnowboard_max_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-riotboard_defconfig:
-https://gitlab.com/arnout/buildroot/-/jobs/28979360
-
-telit_evk_pro3_defconfig:
-https://gitlab.com/arnout/buildroot/-/jobs/28979373
-
-toradex_apalis_imx6_defconfig:
-https://gitlab.com/arnout/buildroot/-/jobs/28979374
-
-ts4900_defconfig:
-https://gitlab.com/arnout/buildroot/-/jobs/28979376
-
-
- All of these seem to have a DTS in 4.11, so perhaps we can switch to upstream?
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index 674b144..db6e595 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -9,6 +9,9 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+ 
+ # Linux headers same as kernel, a 4.12 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++# Needed for grub2
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
