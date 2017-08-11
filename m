@@ -1,121 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 11 Aug 2017 15:45:36 +0200
-Subject: [Buildroot] [git commit branch/next] package/mono: bump to version
-	5.0.1.1 and monolite to version 1050001000
-Message-ID: <20170811135808.BBD568189B@busybox.osuosl.org>
+Date: Fri, 11 Aug 2017 15:49:35 +0200
+Subject: [Buildroot] [git commit branch/next] package/libhttpparser: bump
+	version to 2.7.1
+Message-ID: <20170811135811.719987FD0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=309b466a1d80c5cbf254478348c06996ea914700
+commit: https://git.buildroot.net/buildroot/commit/?id=b719de9d3c1c2a32f8dc2486695c6d71293a0d4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps to mono 5.0.1.1 and updates the unit tests patch
-accordingly.
-
-The latest version of mono carries a bit of changes in the monolite
-package: the version string changes and from now on, monolite should
-be installed in a subdirectory with the exact version string as a name.
-Therefore, mono and monolite are bumped in a single commit.
-
-Patch 0004, although applied in upstream master, is not yet in this
-(stable) release.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Arnout: squashed the patches, removed /usr part from HOST_DIR]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
- package/mono/mono.hash                                     |  2 +-
- package/mono/mono.mk                                       |  2 +-
- package/monolite/monolite.hash                             |  2 +-
- package/monolite/monolite.mk                               |  6 +++---
- 5 files changed, 13 insertions(+), 13 deletions(-)
+ package/libhttpparser/libhttpparser.hash | 2 +-
+ package/libhttpparser/libhttpparser.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch b/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
-index 6adbd81..a3e88e7 100644
---- a/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
-+++ b/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
-@@ -1,6 +1,6 @@
--From 357bea890354acda52aa6dfaec7fa232fa0b8208 Mon Sep 17 00:00:00 2001
-+From 26e31fc54af591bdd88d6a4a79b7fa91c57f4b0c Mon Sep 17 00:00:00 2001
- From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
--Date: Tue, 23 May 2017 11:19:58 +0200
-+Date: Thu, 10 Aug 2017 23:30:05 +0200
- Subject: [PATCH] Remove unit-tests from mono compilation
- 
- This patch fixes compiling errors with unit-tests under linux.
-@@ -15,15 +15,15 @@ index 8c9c2cb..7af36ec 100644
- --- a/mono/Makefile.am
- +++ b/mono/Makefile.am
- @@ -34,7 +34,7 @@ monotouch-do-clean:
--          (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target); \
-+ 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target); \
-      done;
-  else
---SUBDIRS = $(btls_dirs) arch utils io-layer cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
--+SUBDIRS = $(btls_dirs) arch utils io-layer cil metadata $(sgen_dirs) mini dis tests benchmark profiler
-+-SUBDIRS = $(btls_dirs) arch utils cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
-++SUBDIRS = $(btls_dirs) arch utils cil metadata $(sgen_dirs) mini dis tests benchmark profiler
-  endif
-  endif
---DIST_SUBDIRS = btls arch utils io-layer cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
--+DIST_SUBDIRS = btls arch utils io-layer cil metadata $(sgen_dirs) mini dis tests benchmark profiler
-+-DIST_SUBDIRS = btls arch utils cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
-++DIST_SUBDIRS = btls arch utils cil metadata $(sgen_dirs) mini dis tests benchmark profiler
- -- 
- 2.7.4
- 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 89b8ed0..5d14a52 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
+diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
+index e11006e..a1b772e 100644
+--- a/package/libhttpparser/libhttpparser.hash
++++ b/package/libhttpparser/libhttpparser.hash
 @@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 18cb38a670e51609c36c687ed90ad42cfedabeffd0a2dc5f7f0c46249eb8dbef  mono-4.8.1.0.tar.bz2
-+sha256 48d6ae71d593cd01bf0f499de569359d45856cda325575e1bacb5fabaa7e9718  mono-5.0.1.1.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index ec7e14e..ec2f38f 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
+ # Locally computed:
+-sha256 a11c5ccb9808496f3de66d54ea1f89271919923307e31c75de2a3a77a6754c97 libhttpparser-v2.6.0.tar.gz
++sha256 70409ad324e5de2da6a0f39e859e566d497c1ff0a249c0c38a5012df91b386b3  libhttpparser-v2.7.1.tar.gz
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 015efc0..8ff0413 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONO_VERSION = 4.8.1.0
-+MONO_VERSION = 5.0.1.1
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 09f9554..7638ce2 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 2cdf6cff1d82d76412461a4c8a3616bb2aa1e835fb55479941662dec3799c924  monolite-156-latest.tar.gz
-+sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 5317898..a2815ef 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--MONOLITE_VERSION = 156
-+MONOLITE_VERSION = 1050001000
- MONOLITE_SITE = http://download.mono-project.com/monolite/
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
- 
- define HOST_MONOLITE_INSTALL_CMDS
--	mkdir -p $(HOST_DIR)/lib/monolite
--	cp $(@D)/* $(HOST_DIR)/lib/monolite
-+	mkdir -p $(HOST_DIR)/lib/monolite/$(MONOLITE_VERSION)
-+	cp -r $(@D)/* $(HOST_DIR)/lib/monolite/$(MONOLITE_VERSION)
- endef
- 
- $(eval $(host-generic-package))
+-LIBHTTPPARSER_VERSION = v2.6.0
++LIBHTTPPARSER_VERSION = v2.7.1
+ LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
