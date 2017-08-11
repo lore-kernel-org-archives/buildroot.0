@@ -1,40 +1,59 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 11 Aug 2017 20:11:00 +0200
-Subject: [Buildroot] [PATCH] toolchain-wrapper: do not use deprecated
- -mfused-madd
-In-Reply-To: <7a3aef53-510d-a620-5980-d3c780eb5ddd@mind.be>
-References: <20170811052847.GA32348@waldemar-brodkorb.de>
- <20170811080858.336ba4d3@windsurf>
- <7a3aef53-510d-a620-5980-d3c780eb5ddd@mind.be>
-Message-ID: <20170811181100.GM28021@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Aug 2017 20:31:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
+ 1050001000
+In-Reply-To: <CA+TH9V=Bzj42mksn4cyGzupuDhGRoBG1HGFgKrsGX4pSL5J15Q@mail.gmail.com>
+References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
+ <44cbe2b5-2d53-9c66-15a3-5e3fbfa3b219@mind.be>
+ <CA+TH9VkzS19L_bWGBaRaaVSRqkuuHRPXHoq-uCfm8ePaS9oN+g@mail.gmail.com>
+ <ccd40fe9-af68-42db-3b5c-8ac2d8ecdce2@mind.be>
+ <CA+TH9V=Bzj42mksn4cyGzupuDhGRoBG1HGFgKrsGX4pSL5J15Q@mail.gmail.com>
+Message-ID: <20170811203134.4bcad015@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-Arnout Vandecappelle wrote,
+Hello,
 
-> 
-> 
-> On 11-08-17 08:08, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > On Fri, 11 Aug 2017 07:28:48 +0200, Waldemar Brodkorb wrote:
-> >> GCC deprecated -mfused-madd, -ffp-contract=off should
-> >> be used for Xburst workaround.
-> >> uClibc compilations will fail, because a gcc warning
-> >> is emitted while checking for TLS support in the compiler.
-> > 
-> > In which gcc version was -ffp-contract=off added ? Can we use that
-> > unconditionally, or is it only available in recent gcc versions ?
-> 
->  And remember that we support GCC down to 4.3 in external toolchains...
+On Fri, 11 Aug 2017 17:07:18 +0200, Angelo Compagnucci wrote:
 
-The usage for -ffp-contract=off is limited for MIPS32 xburst and
-I see only two external toolchains from 2016 for MIPS in
-make menuconfig...
+> >> Sorry for the noise, but this is not how the things worked in the
+> >> past. I was suggested several times in the past to send a patch for
+> >> each modification/package.  
+> >
+> >  Yes, but only if they indeed work separately. Don't worry, I'll squash while
+> > applying.  
+> 
+> I searched the history for the mono package just to be sure and such a
+> way of squashing commits for separate packages was never been done.
+> I'm a bit puzzled ...
 
-best regards
- Waldemar
+Yes, I used to apply them separately. Theoretically, if the bumps are
+really both needed for the whole thing to work, Arnout is right that
+both bumps should be done in the same patch.
+
+I simply don't apply an absolutely strict rule of "everything should be
+bisectable" in Buildroot, so I'm a bit more relaxed than Arnout on
+this. I'm not saying Arnout isn't right, just that it wasn't something
+that I thought was important enough.
+
+> Right now I'm working updating sysdig and it requires som bumps to
+> other packages, should I send a squashed patch?!
+
+No, because the patch series is bisectable: if we apply only PATCH 1/3,
+it works. If we apply patches 1/3 and 2/3, it works. And if we apply
+1/3, 2/3 and 3/3, it works.
+
+The question is not whether patches are independent, but whether the
+patch series is bisectable. I.e what happens if you apply only M
+patches on the total of N patches in the series.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
