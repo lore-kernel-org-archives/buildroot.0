@@ -1,35 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 16:07:59 +0200
-Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
- 1050001000
-In-Reply-To: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <969afbed-28c6-739c-637a-27c35042a711@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Aug 2017 14:15:45 +0000
+Subject: [Buildroot] [Bug 10201]
+ buildroot-2017.08-rc1/toolchain/toolchain-wrapper.c:192]: (error) Memory
+ leak:
+In-Reply-To: <bug-10201-163@https.bugs.busybox.net/>
+References: <bug-10201-163@https.bugs.busybox.net/>
+Message-ID: <bug-10201-163-Dz1Sjif4hl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=10201
 
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-On 11-08-17 10:14, Angelo Compagnucci wrote:
-> The latest version of mono carries a bit of changes in the monolite
-> package: the version string changes and from now on, monolite should
-> be installed in a subdirectory with the exact version string as a name.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WONTFIX
 
- I've squashed both, modified the commit message a little, and applied to next,
-thanks!
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+Your static analyser is weird, because there are a few other things which
+aren't freed either: relbasedir, absbasedir in different code paths.
 
- Regards,
- Arnout
+However, we do this by choice. Freeing things before exiting is useless, since
+the OS will implicitly free everything when the program exits. That's why e.g.
+valgrind doesn't report these as real memory leaks (because they are still
+reachable).
+
+So no, this is not a memory leak.
+
+For consistency, the free(args) at the end should be removed, but that's a
+different issue.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
