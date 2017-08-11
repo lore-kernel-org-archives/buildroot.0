@@ -1,74 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 23:00:13 +0200
-Subject: [Buildroot] [PATCH] toolchain-wrapper: do not use deprecated
- -mfused-madd
-In-Reply-To: <20170811173246.GL28021@waldemar-brodkorb.de>
-References: <20170811052847.GA32348@waldemar-brodkorb.de>
- <20170811080858.336ba4d3@windsurf>
- <20170811173246.GL28021@waldemar-brodkorb.de>
-Message-ID: <77f2751e-5b1d-d961-3f71-82e6696d9ccb@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Aug 2017 23:21:02 +0200
+Subject: [Buildroot] [PATCH 1/2] alsa-lib: add patch to fix incorrect code
+	dependency
+Message-ID: <20170811212103.24433-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This commit adds a patch to alsa-lib that fixes an incorrect code
+dependency: some code built when MIDI support is enabled is
+unconditionally referencing code that is built when SEQ support is
+enabled, both options being independent.
 
+This causes build failures such as:
 
-On 11-08-17 19:32, Waldemar Brodkorb wrote:
-> Hi,
-> Thomas Petazzoni wrote,
-> 
->> Hello,
->>
->> On Fri, 11 Aug 2017 07:28:48 +0200, Waldemar Brodkorb wrote:
->>> GCC deprecated -mfused-madd, -ffp-contract=off should
->>> be used for Xburst workaround.
->>> uClibc compilations will fail, because a gcc warning
->>> is emitted while checking for TLS support in the compiler.
->>
->> In which gcc version was -ffp-contract=off added ? Can we use that
->> unconditionally, or is it only available in recent gcc versions ?
-> 
-> It was added in commit b9be572eda05cd23bbabd6409387d2c7ac782715.
-> 
-> Not sure how to find when it was added in a release.
+/home/buildroot/buildroot-test/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(pcm_dmix.o): In function `snd_pcm_dmix_sync_ptr':
+pcm_dmix.c:(.text+0x83c): warning:
+/home/buildroot/buildroot-test/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(rawmidi_symbols.o):(.data+0x4): undefined reference to `_snd_module_rawmidi_virt'
 
-$ git describe --contains b9be572eda05cd23bbabd6409387d2c7ac782715
-gcc-4_6_0-release~2941
+Fixes:
 
- So we should use something like:
+  http://autobuild.buildroot.net/results/5964e7028c31a8f75b38a27270410f0b3c5c8422/
 
-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_6),y)
-TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
-else
-TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
-endif
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-rawmidi_symbols.c-use-rawmidi_virt-only-.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
 
- But actually, I'd much prefer this stuff to just be coded in
-TOOLCHAIN_WRAPPER_OPTS. But that's a much bigger patch (series) so not for master.
-
- Regards,
- Arnout
-
-
-> 4.6.4 seems to have it:
-> https://gcc.gnu.org/onlinedocs/gcc-4.6.4/gcc/Optimize-Options.html#index-ffp_002dcontract-691
-> 
-> I don't find it in earlier release docs.
-> 
-> best regards
->  Waldemar
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch b/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
+new file mode 100644
+index 0000000..df04cea
+--- /dev/null
++++ b/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
+@@ -0,0 +1,50 @@
++From da16e18f03fc63e1206b93d6a719b177d4f4bb99 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 11 Aug 2017 22:33:01 +0200
++Subject: [PATCH] src/rawmidi/rawmidi_symbols.c: use rawmidi_virt only when
++ available
++
++src/rawmidi/Makefile.am only brings rawmidi_virt.c into the build when
++BUILD_SEQ is defined (i.e when --enable-seq is passed). However,
++rawmidi_symbols.c unconditionally refers to _snd_module_rawmidi_virt,
++defined in rawmidi_virt.c.
++
++This causes a link failure when BUILD_SEQ is disabled. For example
++when linking ffmpeg against alsa-lib:
++
++/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(pcm_dmix.o): In function `snd_pcm_dmix_sync_ptr':
++pcm_dmix.c:(.text+0x83c): warning:
++/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(rawmidi_symbols.o):(.data+0x4): undefined reference to `_snd_module_rawmidi_virt'
++collect2: error: ld returned 1 exit status
++
++To fix this, we make sure that rawmidi_symbols.c only uses
++_snd_module_rawmidi_virt when available.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/rawmidi/rawmidi_symbols.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/rawmidi/rawmidi_symbols.c b/src/rawmidi/rawmidi_symbols.c
++index cdc06d7..6473433 100644
++--- a/src/rawmidi/rawmidi_symbols.c
+++++ b/src/rawmidi/rawmidi_symbols.c
++@@ -21,11 +21,15 @@
++ #ifndef PIC
++ 
++ extern const char *_snd_module_rawmidi_hw;
+++#ifdef BUILD_SEQ
++ extern const char *_snd_module_rawmidi_virt;
+++#endif
++ 
++ static const char **snd_rawmidi_open_objects[] = {
++ 	&_snd_module_rawmidi_hw,
+++#ifdef BUILD_SEQ
++ 	&_snd_module_rawmidi_virt
+++#endif
++ };
++ 	
++ void *snd_rawmidi_open_symbols(void)
++-- 
++2.9.4
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.4
