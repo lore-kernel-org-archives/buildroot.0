@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 16:07:19 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libhttpparser: bump
- version to 2.7.1
-In-Reply-To: <20170810202913.31252-1-bernd.kuhls@t-online.de>
-References: <20170810202913.31252-1-bernd.kuhls@t-online.de>
-Message-ID: <0dfe5b65-4589-9395-59d2-6b2bbddff25f@mind.be>
+Date: Fri, 11 Aug 2017 16:07:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
+ 1050001000
+In-Reply-To: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <969afbed-28c6-739c-637a-27c35042a711@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,19 @@ To: buildroot@busybox.net
 
 
 
-On 10-08-17 22:29, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 11-08-17 10:14, Angelo Compagnucci wrote:
+> The latest version of mono carries a bit of changes in the monolite
+> package: the version string changes and from now on, monolite should
+> be installed in a subdirectory with the exact version string as a name.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
- Applied to next, thanks.
+ I've squashed both, modified the commit message a little, and applied to next,
+thanks!
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
