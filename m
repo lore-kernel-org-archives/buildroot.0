@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 12:00:13 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 5.0.1.1
-In-Reply-To: <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
-References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
- <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <7dc157e1-bde7-5143-be61-aaee3c309bcb@mind.be>
+Date: Fri, 11 Aug 2017 12:20:42 +0200
+Subject: [Buildroot] ci20_defconfig fails because of missing TLS support
+In-Reply-To: <20170811052707.GK28021@waldemar-brodkorb.de>
+References: <d32e5a1d-aa99-f189-bdfc-5d10b10c1eda@mind.be>
+ <20170811052707.GK28021@waldemar-brodkorb.de>
+Message-ID: <8aea1d2b-c470-b1d4-aad9-0fe8c30e55af@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,31 @@ To: buildroot@busybox.net
 
 
 
-On 11-08-17 10:14, Angelo Compagnucci wrote:
-> This patch bumps to mono 5.0.1.1 and updates the unit tests patch
-> accordingly.
+On 11-08-17 07:27, Waldemar Brodkorb wrote:
+> Hi Arnout,
+> Arnout Vandecappelle wrote,
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
+>>  Vicente, Waldemar,
+>>
+>>  Since some time (probably since some uClibc bump), the ci20_defconfig has been
+>> failing with an error I don't really understand [1]:
+[snip]
+>>  Could you guys have a look, so we can hopefully get a fix in 2017.08?
+> 
+> It has nothing to do with uClibc-ng updates, it has something to do
+> with gcc updates and the toolchain-wrapper. I propose a patch, which
+> allows to build the toolchain, 
 
- What is the upstream status of all the patches? Most of the other patches look
-like they could be applicable for upstream, can you send them?
+ Great, that looks good.
 
- Also, patch 4 says:
+> but later u-boot fails to compile
+> with gcc-6, so I can't do runtime check on my ci20 device.
 
-Patch is upstream:
-
-   https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
-
-so why is this one not removed? Could you mention that explicitly in the commit log?
-
-
- It would also be nice to rewrite patch 6 and 8 so they are upstreamable, but I
-can imagine that that's more complicated.
+ That's like the ci40 failure and can be fixed by bumping the kernel and U-Boot
+to latest git.
 
  Regards,
  Arnout
-
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
