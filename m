@@ -1,46 +1,40 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 11 Aug 2017 10:36:28 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 4.2.1
-Message-ID: <1502440588-23379-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Aug 2017 11:53:30 +0200
+Subject: [Buildroot] [PATCH] toolchain-wrapper: do not use deprecated
+ -mfused-madd
+In-Reply-To: <20170811080858.336ba4d3@windsurf>
+References: <20170811052847.GA32348@waldemar-brodkorb.de>
+ <20170811080858.336ba4d3@windsurf>
+Message-ID: <7a3aef53-510d-a620-5980-d3c780eb5ddd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps python-pillow to versione 4.2.1
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 55b0709..d8c083b 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
--md5 f2565954955c8d10f3b4f1f72f852bf7  Pillow-4.1.1.tar.gz
--sha256 00b6a5f28d00f720235a937ebc2f50f4292a5c7e2d6ab9a8b26153b625c4f431  Pillow-4.1.1.tar.gz
-+md5 11e5e2046cf41586716a6042d89abeeb  Pillow-4.2.1.tar.gz
-+sha256 c724f65870e545316f9e82e4c6d608ab5aa9dd82d5185e5b2e72119378740073  Pillow-4.2.1.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index f2d020e..8407c99 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 4.1.1
-+PYTHON_PILLOW_VERSION = 4.2.1
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://pypi.python.org/packages/93/73/66854f63b1941aad9af18a1de59f9cf95ad1a87c801540222e332f6688d7
-+PYTHON_PILLOW_SITE = https://pypi.python.org/packages/55/aa/f7f983fb72710a9daa4b3374b7c160091d3f94f5c09221f9336ade9027f3
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+On 11-08-17 08:08, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 11 Aug 2017 07:28:48 +0200, Waldemar Brodkorb wrote:
+>> GCC deprecated -mfused-madd, -ffp-contract=off should
+>> be used for Xburst workaround.
+>> uClibc compilations will fail, because a gcc warning
+>> is emitted while checking for TLS support in the compiler.
+> 
+> In which gcc version was -ffp-contract=off added ? Can we use that
+> unconditionally, or is it only available in recent gcc versions ?
+
+ And remember that we support GCC down to 4.3 in external toolchains...
+
+ Regards,
+ Arnout
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
