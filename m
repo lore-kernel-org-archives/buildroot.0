@@ -1,49 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 15:33:10 +0200
-Subject: [Buildroot] [PATCH 1/1] board/beaglebone: skip bonegreen.dtb if
- not built
-In-Reply-To: <1502450173-3058-1-git-send-email-lothar.felten@gmail.com>
-References: <1502450173-3058-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <fa5edd86-21a9-3ac9-0b34-df27ea644115@mind.be>
+Date: Fri, 11 Aug 2017 15:38:00 +0200
+Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
+ 1050001000
+In-Reply-To: <CA+TH9VkzS19L_bWGBaRaaVSRqkuuHRPXHoq-uCfm8ePaS9oN+g@mail.gmail.com>
+References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
+ <44cbe2b5-2d53-9c66-15a3-5e3fbfa3b219@mind.be>
+ <CA+TH9VkzS19L_bWGBaRaaVSRqkuuHRPXHoq-uCfm8ePaS9oN+g@mail.gmail.com>
+Message-ID: <ccd40fe9-af68-42db-3b5c-8ac2d8ecdce2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Lothar,
-
-On 11-08-17 13:16, Lothar Felten wrote:
-> The beaglebone_qt5_defconfig does not provide a dtb for the beaglebone green.
-> This patch removes the am335x-bonegreen.dtb from the genimage config if it was
-> not built.
-
- Weird that Thomas didn't notice this when he created 028eb673c8f (which removes
-the build of bonegreen from beaglebone_qt5_defconfig).
 
 
-> +#the 4.1 kernel does not provide a dtb for beaglebone green
-> +#remove it from the genimage config if am335x-bonegreen.dtb is not built:
-> +if [[ ! -e ${BINARIES_DIR}/am335x-bonegreen.dtb ]]
-> +then
-> +	sed -i '/am335x-bonegreen.dtb/d' ${BOARD_DIR}/genimage.cfg
+On 11-08-17 12:40, Angelo Compagnucci wrote:
+> Dear Arnout Vandecappelle,
+> 
+> 2017-08-11 11:56 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>
+>> On 11-08-17 10:14, Angelo Compagnucci wrote:
+>>> The latest version of mono carries a bit of changes in the monolite
+>>> package: the version string changes and from now on, monolite should
+>>> be installed in a subdirectory with the exact version string as a name.
+>>
+>>  And does this work independently of the version bump of mono itself? I.e., if
+>> we apply just this patch, will mono still build?
+> 
+> Nope. The patches are sent in a series for the purpose to be both applied.
+> 
+>>  If not, then the two patches should be squashed. If you don't have time we can
+>> do that while applying.
+> 
+> Sorry for the noise, but this is not how the things worked in the
+> past. I was suggested several times in the past to send a patch for
+> each modification/package.
 
- This is not OK, you can't modify files in the Buildroot directory while
-building. The only proper way to do this is to make it a template file and
-generate the real genimage.cfg as part of the post-build script. But perhaps an
-easier solution is to use a different genimage.cfg for beaglebone_qt5. When the
-kernel finally gets bumped, that can be removed again.
+ Yes, but only if they indeed work separately. Don't worry, I'll squash while
+applying.
 
  Regards,
  Arnout
 
-> +	echo "removed am335x-bonegreen.dtb from genimage.cfg"
-> +fi
-> +
->  GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
->  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->  
-> 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
