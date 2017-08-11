@@ -1,78 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Aug 2017 15:39:34 +0200
-Subject: [Buildroot] [PATCH v2 1/1] configs: add defconfig for TS-7680
-In-Reply-To: <20170810221411.4324-1-julien.grossholtz@savoirfairelinux.com>
-References: <20170810221411.4324-1-julien.grossholtz@savoirfairelinux.com>
-Message-ID: <20170811153934.5efac50e@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Aug 2017 15:41:38 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 5.0.1.1
+In-Reply-To: <CA+TH9VmC_qbAKYfWZmDm_=TZjVsSFg0vgNBY7w9OeKogfuXfiA@mail.gmail.com>
+References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
+ <7dc157e1-bde7-5143-be61-aaee3c309bcb@mind.be>
+ <CA+TH9VmC_qbAKYfWZmDm_=TZjVsSFg0vgNBY7w9OeKogfuXfiA@mail.gmail.com>
+Message-ID: <b53124a6-cd66-a848-7fce-4b25e4fde82f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu, 10 Aug 2017 18:14:11 -0400, Julien Grossholtz wrote:
-
->  board/technologic/ts7680/genimage.cfg              |  14 +
->  ...LLVMLinux-use-static-inline-in-ARM-ftrace.patch |  52 +++
->  ...ux-Change-extern-inline-to-static-inline-.patch |  59 ++++
->  ...c-integrate-the-various-compiler-gcc-345-.patch | 367 +++++++++++++++++++++
-
-What are the chances of getting these patches merged "upstream" by the
-board vendor ? It's not really nice if we have to keep these patches
-forever.
-
-> diff --git a/board/technologic/ts7680/post-image.sh b/board/technologic/ts7680/post-image.sh
-> new file mode 100755
-> index 0000000..c3f5a4a
-> --- /dev/null
-> +++ b/board/technologic/ts7680/post-image.sh
-> @@ -0,0 +1,17 @@
-> +#!/bin/bash
-> +#
-> +# Copyright (C) 2017 Savoir-faire Linux, Inc.
-> +# Post image generation script.
-> +
-> +BOARD_DIR="$(dirname $0)"
-> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> +GENIMAGE_TMP=${BUILD_DIR}/.genimage_tmp
-> +
-> +rm -rf ${GENIMAGE_TMP}
-> +
-> +${HOST_DIR}/usr/bin/genimage \
-> +        --config ${GENIMAGE_CFG} \
-> +        --rootpath ${TARGET_DIR} \
-> +        --tmppath ${GENIMAGE_TMP} \
-> +        --inputpath $BINARIES_DIR \
-> +        --outputpath $BINARIES_DIR
-
-This script is not needed, you can use support/scripts/genimage.sh
-instead.
 
 
-> diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
-> new file mode 100644
-> index 0000000..df4e8f3
-> --- /dev/null
-> +++ b/configs/ts7680_defconfig
-> @@ -0,0 +1,20 @@
-> +BR2_arm=y
-> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+On 11-08-17 12:57, Angelo Compagnucci wrote:
+> Dear Arnout Vandecappelle,
+> 
+> 2017-08-11 12:00 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>
+>> On 11-08-17 10:14, Angelo Compagnucci wrote:
+>>> This patch bumps to mono 5.0.1.1 and updates the unit tests patch
+>>> accordingly.
+>>>
+>>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>>> ---
+>>>  .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
+>>
+>>  What is the upstream status of all the patches? Most of the other patches look
+>> like they could be applicable for upstream, can you send them?
+> 
+> All upstremeable patches are already be sent. Mono has a really long
+> release cycle and the patches, also if applied, are not released in
+> stable branches immediately.
 
-Why do you select glibc, and leave Buildroot default ?
+ OK, thanks for the info.
 
-> +BR2_KERNEL_HEADERS_VERSION=y
-> +BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts7680/post-image.sh"
+> 
+>>  Also, patch 4 says:
+>>
+>> Patch is upstream:
+>>
+>>    https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
+>>
+>> so why is this one not removed? Could you mention that explicitly in the commit log?
+> 
+> Cause the patch is present from the tag mono-5.4.0.135 (future
+> release) the stable release is now at 5.0.1.1 .
 
-As said above, you can use support/scripts/genimage.sh instead.
+ Wow, they look far into the future apparently...
 
-Thanks!
+> I usually do care to remove patches upstreamed.
+> 
+>>  It would also be nice to rewrite patch 6 and 8 so they are upstreamable, but I
+>> can imagine that that's more complicated.
+> 
+> Patch 8 is not upstremeable cause the way buildroot handles paths.
+> Buildroot sets $(mono_libdir) to the full host path, instead mono here
+> expects something related to the / of the target.
+> 
+> For patch 6 I've not tried cause it's a bit of a corner case: running
+> mono unit-tests during compilation is not advisable cause it takes
+> time but also cause they expects a certain environment that buildroot
+> screws up. To make the unit-tests running in buildroot mono should be
+> patched, but I originally though it was not necessary.
 
-Thomas
+ Understood!
+
+ By the way, I took a look now in more detail at how we build mono, and you
+really solved that complicated build system very elegantly.
+
+ Thanks for keeping mono up to date!
+
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
