@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 14:08:33 +0200
-Subject: [Buildroot] [PATCH] package/valgrind: hide comment when arch is
- not supported
-In-Reply-To: <20170810215111.32360-1-yann.morin.1998@free.fr>
-References: <20170810215111.32360-1-yann.morin.1998@free.fr>
-Message-ID: <4fce7fb0-4c63-311c-7eb8-e0af0bd2277c@mind.be>
+Date: Fri, 11 Aug 2017 14:09:47 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.55.0
+In-Reply-To: <4f33b3435349660c4e3f2b444104442e6a9498b1.1502386545.git.baruch@tkos.co.il>
+References: <4f33b3435349660c4e3f2b444104442e6a9498b1.1502386545.git.baruch@tkos.co.il>
+Message-ID: <697a4e21-8454-4c3d-99c3-ed66bafbb004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,22 @@ To: buildroot@busybox.net
 
 
 
-On 10-08-17 23:51, Yann E. MORIN wrote:
-> Currently, the comment that "valgrind needs shared libs" is not hidden
-> when the architecture dependencies are not met, which can confuse some
-> users (as recently seen on IRC).
+On 10-08-17 19:35, Baruch Siach wrote:
+> Fixes:
 > 
-> Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
-> the comment and the symbol depend on that.
+>  glob: do not parse after a strtoul() overflow range (CVE-2017-1000101)
+>  tftp: reject file name lengths that don't fit (CVE-2017-1000100)
+>  file: output the correct buffer to the user (CVE-2017-1000099)
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
-> Cc: J?r?me Pouiller <jezz@sysmic.org>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Switch to .tar.xz to save bandwidth.
+> 
+> Add reference to tarball signature.
 
- Applied to master after moving the _ARCH_SUPPORTS to the top of the file and
-adding Pedro's Rev-by and Tested-by, thanks.
+ Nice!
+
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+ Applied to master, thanks.
 
  Regards,
  Arnout
