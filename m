@@ -1,74 +1,45 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 11 Aug 2017 17:07:18 +0200
-Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
-	1050001000
-In-Reply-To: <ccd40fe9-af68-42db-3b5c-8ac2d8ecdce2@mind.be>
-References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
- <44cbe2b5-2d53-9c66-15a3-5e3fbfa3b219@mind.be>
- <CA+TH9VkzS19L_bWGBaRaaVSRqkuuHRPXHoq-uCfm8ePaS9oN+g@mail.gmail.com>
- <ccd40fe9-af68-42db-3b5c-8ac2d8ecdce2@mind.be>
-Message-ID: <CA+TH9V=Bzj42mksn4cyGzupuDhGRoBG1HGFgKrsGX4pSL5J15Q@mail.gmail.com>
+From: grunpferd at netscape.net <grunpferd@netscape.net>
+Date: Fri, 11 Aug 2017 11:19:07 -0400
+Subject: [Buildroot] [PATCH v1] gst1-validate: disable buliding
+ documentation using sphinx
+In-Reply-To: <a2d4c688-435e-64da-4491-47e0aa4a4b5e@mind.be>
+Message-ID: <15dd1e0a717-430c-11b69@webprd-a86.mail.aol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle ,
-
-2017-08-11 15:38 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 11-08-17 12:40, Angelo Compagnucci wrote:
->> Dear Arnout Vandecappelle,
->>
->> 2017-08-11 11:56 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->>>
->>>
->>> On 11-08-17 10:14, Angelo Compagnucci wrote:
->>>> The latest version of mono carries a bit of changes in the monolite
->>>> package: the version string changes and from now on, monolite should
->>>> be installed in a subdirectory with the exact version string as a name.
->>>
->>>  And does this work independently of the version bump of mono itself? I.e., if
->>> we apply just this patch, will mono still build?
->>
->> Nope. The patches are sent in a series for the purpose to be both applied.
->>
->>>  If not, then the two patches should be squashed. If you don't have time we can
->>> do that while applying.
->>
->> Sorry for the noise, but this is not how the things worked in the
->> past. I was suggested several times in the past to send a patch for
->> each modification/package.
->
->  Yes, but only if they indeed work separately. Don't worry, I'll squash while
-> applying.
-
-I searched the history for the mono package just to be sure and such a
-way of squashing commits for separate packages was never been done.
-I'm a bit puzzled ...
-
-Right now I'm working updating sysdig and it requires som bumps to
-other packages, should I send a squashed patch?!
-
-Thanks!
-
->
->  Regards,
->  Arnout
->
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+G'day Arnout,
 
 
+Just gave a test of:
 
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+
+> GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
+> should work as well, no?
+> 
+> Ross, could you test that?
+
+And I can confirm this works also.
+It looks a little more elegant!
+The main thing is that none of that documentation is produced only to be thrown away,
+wasting space and compute cycles.
+
+
+It gets harder these days to work out what tools are prerequisites to build so many things!
+I am not sure if meson will make this harder or easier, but it seems there are a number of packages that are starting to move towards meson instead of make with autoconf tooling.
+
+
+So I am happy with either solution here, although the later seems just a little nicer!
+
+
+Regards,
+
+
+Ross
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170811/57adda91/attachment.html>
