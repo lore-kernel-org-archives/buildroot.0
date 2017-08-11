@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 14:09:04 +0200
-Subject: [Buildroot] [PATCH 1/1] erlang-p1-xml: Fix host dependencies
- variable name
-In-Reply-To: <20170810121251.17203-1-johan.oudinet@gmail.com>
-References: <20170810121251.17203-1-johan.oudinet@gmail.com>
-Message-ID: <8ac25ab4-5c76-71d3-4378-c265cf7aa689@mind.be>
+Date: Fri, 11 Aug 2017 14:08:33 +0200
+Subject: [Buildroot] [PATCH] package/valgrind: hide comment when arch is
+ not supported
+In-Reply-To: <20170810215111.32360-1-yann.morin.1998@free.fr>
+References: <20170810215111.32360-1-yann.morin.1998@free.fr>
+Message-ID: <4fce7fb0-4c63-311c-7eb8-e0af0bd2277c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,26 @@ To: buildroot@busybox.net
 
 
 
-On 10-08-17 14:12, Johan Oudinet wrote:
-> This should fix the error reported by autobuild:
-> http://autobuild.buildroot.net/results/63c/63c63b2578e9f6ad71cbea82b987c128305cdab4/
+On 10-08-17 23:51, Yann E. MORIN wrote:
+> Currently, the comment that "valgrind needs shared libs" is not hidden
+> when the architecture dependencies are not met, which can confuse some
+> users (as recently seen on IRC).
 > 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
+> the comment and the symbol depend on that.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
+> Cc: J?r?me Pouiller <jezz@sysmic.org>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
- Good catch!
- Applied to master, thanks.
+ Applied to master after moving the _ARCH_SUPPORTS to the top of the file and
+adding Pedro's Rev-by and Tested-by, thanks.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
