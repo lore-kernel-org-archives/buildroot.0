@@ -1,54 +1,75 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 11 Aug 2017 07:28:48 +0200
-Subject: [Buildroot] [PATCH] toolchain-wrapper: do not use deprecated
-	-mfused-madd
-Message-ID: <20170811052847.GA32348@waldemar-brodkorb.de>
+From: xlcwu <xlcwu.taiwan@gmail.com>
+Date: Fri, 11 Aug 2017 13:47:39 +0800
+Subject: [Buildroot] [PATCH v3] libcgi: bump to version 1.1
+In-Reply-To: <CAGtPAdUAUdettj-O0gMUt4m_X8dCj_3y8gnDb3K1NFsBtVcLzg@mail.gmail.com>
+References: <1502351127-21326-1-git-send-email-xlcwu.taiwan@gmail.com>
+ <c3b8eed9-889c-5893-c9e1-7d8d063cc597@mind.be>
+ <CAGtPAdUAUdettj-O0gMUt4m_X8dCj_3y8gnDb3K1NFsBtVcLzg@mail.gmail.com>
+Message-ID: <CAGtPAdWAG+yzRnNiKutsL7O8DoaCTCPELGpekaQBhJcP223bJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC deprecated -mfused-madd, -ffp-contract=off should
-be used for Xburst workaround.
-uClibc compilations will fail, because a gcc warning
-is emitted while checking for TLS support in the compiler.
+Hi Arnout,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- toolchain/toolchain-wrapper.c  | 4 ++--
- toolchain/toolchain-wrapper.mk | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+On Thu, Aug 10, 2017 at 7:48 PM, xlcwu <xlcwu.taiwan@gmail.com> wrote:
+> Hi Arnout
+>
+> I build the libcgi by follow steps in
+> https://github.com/rafaelsteil/libcgi/blob/master/README.md
+>
+>
+> On Thu, Aug 10, 2017 at 4:20 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>  Hi Joe,
+>>
+>> On 10-08-17 09:45, Joe Lin wrote:
+>> > Cleanup the libcgi package,
+>> > by using https://github.com/rafaelsteil/libcgi as an upstream.
+>> > Remove old patch and use cmake to build new version.
+>> >
+>> > Signed-off-by: Joe Lin <xlcwu.taiwan@gmail.com>
+>> [snip]
+>> > -LIBCGI_VERSION = 1.0
+>> > -LIBCGI_SITE =
+>> > http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
+>> > +LIBCGI_VERSION = 1.1
+>> > +LIBCGI_SITE =
+>> > https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
+>> > +
+>> >  LIBCGI_INSTALL_STAGING = YES
+>> > -# use cross CC/AR rather than host
+>> > -LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)"
+>> > \
+>> > -     $(if $(BR2_STATIC_LIBS),STATIC=1)
+>> >  LIBCGI_LICENSE = LGPL-2.1+
+>> >
+>> > -$(eval $(autotools-package))
+>> > +LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO
+>>
+>>  Mario (added in Cc) submitted a similar patch and it didn't have this
+>> _IN_SOURCE_BUILD line. Is it really needed?
+>
+> I am not sure and I will trigger a build to check it.
+I build libcgi with/without _IN_SOURCE_BUILD = NO then use "diff -y"
+"cmp -l" to compare two binary and make no difference. We can remove
+it.
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index dd77c11..44cdcf3 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -69,8 +69,8 @@ static char *predef_args[] = {
- #ifdef BR_OMIT_LOCK_PREFIX
- 	"-Wa,-momit-lock-prefix=yes",
- #endif
--#ifdef BR_NO_FUSED_MADD
--	"-mno-fused-madd",
-+#ifdef BR_FP_CONTRACT_OFF
-+	"-ffp-contract=off",
- #endif
- #ifdef BR_BINFMT_FLAT
- 	"-Wl,-elf2flt",
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 7f72a0c..ecf67a4 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -27,8 +27,9 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
- endif
- 
- # Avoid FPU bug on XBurst CPUs
-+# -mfused-madd is deprecated, use -ffp-contract instead
- ifeq ($(BR2_mips_xburst),y)
--TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
- endif
- 
- ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
--- 
-2.1.4
+>>
+>>
+>>  Regards,
+>>  Arnout
+>>
+>> > +
+>> > +$(eval $(cmake-package))
+>> >
+>>
+>> --
+>> Arnout Vandecappelle                          arnout at mind be
+>> Senior Embedded Software Architect            +32-16-286500
+>> Essensium/Mind                                http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
