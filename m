@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 11:56:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
- 1050001000
-In-Reply-To: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Fri, 11 Aug 2017 12:00:13 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 5.0.1.1
+In-Reply-To: <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
 References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <44cbe2b5-2d53-9c66-15a3-5e3fbfa3b219@mind.be>
+ <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <7dc157e1-bde7-5143-be61-aaee3c309bcb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,57 +14,33 @@ To: buildroot@busybox.net
 
 
 On 11-08-17 10:14, Angelo Compagnucci wrote:
-> The latest version of mono carries a bit of changes in the monolite
-> package: the version string changes and from now on, monolite should
-> be installed in a subdirectory with the exact version string as a name.
+> This patch bumps to mono 5.0.1.1 and updates the unit tests patch
+> accordingly.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
 
- And does this work independently of the version bump of mono itself? I.e., if
-we apply just this patch, will mono still build?
+ What is the upstream status of all the patches? Most of the other patches look
+like they could be applicable for upstream, can you send them?
 
- If not, then the two patches should be squashed. If you don't have time we can
-do that while applying.
+ Also, patch 4 says:
+
+Patch is upstream:
+
+   https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
+
+so why is this one not removed? Could you mention that explicitly in the commit log?
+
+
+ It would also be nice to rewrite patch 6 and 8 so they are upstreamable, but I
+can imagine that that's more complicated.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/monolite/monolite.hash | 2 +-
->  package/monolite/monolite.mk   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-> index 09f9554..7638ce2 100644
-> --- a/package/monolite/monolite.hash
-> +++ b/package/monolite/monolite.hash
-> @@ -1,2 +1,2 @@
->  # sha256 locally computed
-> -sha256 2cdf6cff1d82d76412461a4c8a3616bb2aa1e835fb55479941662dec3799c924  monolite-156-latest.tar.gz
-> +sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
-> diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-> index 73f2352..2cc08df 100644
-> --- a/package/monolite/monolite.mk
-> +++ b/package/monolite/monolite.mk
-> @@ -4,14 +4,14 @@
->  #
->  ################################################################################
->  
-> -MONOLITE_VERSION = 156
-> +MONOLITE_VERSION = 1050001000
->  MONOLITE_SITE = http://download.mono-project.com/monolite/
->  MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
->  MONOLITE_LICENSE = LGPL-2.0 or commercial
->  
->  define HOST_MONOLITE_INSTALL_CMDS
-> -	mkdir -p $(HOST_DIR)/usr/lib/monolite
-> -	cp $(@D)/* $(HOST_DIR)/usr/lib/monolite
-> +	mkdir -p $(HOST_DIR)/usr/lib/monolite/$(MONOLITE_VERSION)
-> +	cp -r $(@D)/* $(HOST_DIR)/usr/lib/monolite/$(MONOLITE_VERSION)
->  endef
->  
->  $(eval $(host-generic-package))
-> 
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
