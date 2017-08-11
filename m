@@ -1,87 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 15:41:38 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 5.0.1.1
-In-Reply-To: <CA+TH9VmC_qbAKYfWZmDm_=TZjVsSFg0vgNBY7w9OeKogfuXfiA@mail.gmail.com>
-References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
- <1502439245-18039-2-git-send-email-angelo.compagnucci@gmail.com>
- <7dc157e1-bde7-5143-be61-aaee3c309bcb@mind.be>
- <CA+TH9VmC_qbAKYfWZmDm_=TZjVsSFg0vgNBY7w9OeKogfuXfiA@mail.gmail.com>
-Message-ID: <b53124a6-cd66-a848-7fce-4b25e4fde82f@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Aug 2017 13:58:00 +0000
+Subject: [Buildroot] [Bug 10021] libqeglfs-viv-integration.so file is
+ missing for qt5 on armv7
+In-Reply-To: <bug-10021-163@https.bugs.busybox.net/>
+References: <bug-10021-163@https.bugs.busybox.net/>
+Message-ID: <bug-10021-163-OefE3gdj2O@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=10021
 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-On 11-08-17 12:57, Angelo Compagnucci wrote:
-> Dear Arnout Vandecappelle,
-> 
-> 2017-08-11 12:00 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->>
->>
->> On 11-08-17 10:14, Angelo Compagnucci wrote:
->>> This patch bumps to mono 5.0.1.1 and updates the unit tests patch
->>> accordingly.
->>>
->>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->>> ---
->>>  .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
->>
->>  What is the upstream status of all the patches? Most of the other patches look
->> like they could be applicable for upstream, can you send them?
-> 
-> All upstremeable patches are already be sent. Mono has a really long
-> release cycle and the patches, also if applied, are not released in
-> stable branches immediately.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WORKSFORME
+             Status|NEW                         |RESOLVED
 
- OK, thanks for the info.
-
-> 
->>  Also, patch 4 says:
->>
->> Patch is upstream:
->>
->>    https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
->>
->> so why is this one not removed? Could you mention that explicitly in the commit log?
-> 
-> Cause the patch is present from the tag mono-5.4.0.135 (future
-> release) the stable release is now at 5.0.1.1 .
-
- Wow, they look far into the future apparently...
-
-> I usually do care to remove patches upstreamed.
-> 
->>  It would also be nice to rewrite patch 6 and 8 so they are upstreamable, but I
->> can imagine that that's more complicated.
-> 
-> Patch 8 is not upstremeable cause the way buildroot handles paths.
-> Buildroot sets $(mono_libdir) to the full host path, instead mono here
-> expects something related to the / of the target.
-> 
-> For patch 6 I've not tried cause it's a bit of a corner case: running
-> mono unit-tests during compilation is not advisable cause it takes
-> time but also cause they expects a certain environment that buildroot
-> screws up. To make the unit-tests running in buildroot mono should be
-> patched, but I originally though it was not necessary.
-
- Understood!
-
- By the way, I took a look now in more detail at how we build mono, and you
-really solved that complicated build system very elegantly.
-
- Thanks for keeping mono up to date!
-
-
- Regards,
- Arnout
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Closing bug as "Works for me", since Peter Seiderer couldn't reproduce the
+problem, which was probably caused by a partial build.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
