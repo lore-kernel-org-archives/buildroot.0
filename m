@@ -1,44 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Aug 2017 08:31:03 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-10
-Message-ID: <20170811063103.6730E20A51@mail.free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 11 Aug 2017 10:14:04 +0200
+Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version 1050001000
+Message-ID: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The latest version of mono carries a bit of changes in the monolite
+package: the version string changes and from now on, monolite should
+be installed in a subdirectory with the exact version string as a name.
 
-Build statistics for 2017-08-10
-================================
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/monolite/monolite.hash | 2 +-
+ package/monolite/monolite.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-      successes : 112
-       failures : 7  
-       timeouts : 0  
-          TOTAL : 119
-
-Classification of failures by reason
-====================================
-
-                       unknown | 2 
-                  ffmpeg-3.3.3 | 1 
-                     gpsd-3.16 | 1 
-          mediastreamer-2.14.0 | 1 
-           oracle-mysql-5.1.73 | 1 
-     python-cryptography-1.7.2 | 1 
-
-
-Detail of failures
-===================
-
-         arm |                   ffmpeg-3.3.3 | NOK | http://autobuild.buildroot.net/results/5964e7028c31a8f75b38a27270410f0b3c5c8422 |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/b0502c3709e650166a8a7e9a99fc5493efad0315 |     
-         arm |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/cba9c8cdc4cab39150a9a550b98653281f5bad54 | ORPH
-         arm |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/49377c636edf72bc68cbcecd1a787d578dba1d4e | ORPH
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/15464f62c59889291cccd1a30acb357f2d278b95 |     
-      mipsel |                        unknown | NOK | http://autobuild.buildroot.net/results/7bccafd0b54a90e3a1bcea600daf5e9c04685760 |     
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/662d21891f4ede3c9a3352513299d2f5c84d459c |     
-
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 09f9554..7638ce2 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 2cdf6cff1d82d76412461a4c8a3616bb2aa1e835fb55479941662dec3799c924  monolite-156-latest.tar.gz
++sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index 73f2352..2cc08df 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = 156
++MONOLITE_VERSION = 1050001000
+ MONOLITE_SITE = http://download.mono-project.com/monolite/
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPL-2.0 or commercial
+ 
+ define HOST_MONOLITE_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/usr/lib/monolite
+-	cp $(@D)/* $(HOST_DIR)/usr/lib/monolite
++	mkdir -p $(HOST_DIR)/usr/lib/monolite/$(MONOLITE_VERSION)
++	cp -r $(@D)/* $(HOST_DIR)/usr/lib/monolite/$(MONOLITE_VERSION)
+ endef
+ 
+ $(eval $(host-generic-package))
 -- 
-http://autobuild.buildroot.net
+2.7.4
