@@ -1,55 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Aug 2017 15:38:00 +0200
-Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version
- 1050001000
-In-Reply-To: <CA+TH9VkzS19L_bWGBaRaaVSRqkuuHRPXHoq-uCfm8ePaS9oN+g@mail.gmail.com>
-References: <1502439245-18039-1-git-send-email-angelo.compagnucci@gmail.com>
- <44cbe2b5-2d53-9c66-15a3-5e3fbfa3b219@mind.be>
- <CA+TH9VkzS19L_bWGBaRaaVSRqkuuHRPXHoq-uCfm8ePaS9oN+g@mail.gmail.com>
-Message-ID: <ccd40fe9-af68-42db-3b5c-8ac2d8ecdce2@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Aug 2017 15:39:34 +0200
+Subject: [Buildroot] [PATCH v2 1/1] configs: add defconfig for TS-7680
+In-Reply-To: <20170810221411.4324-1-julien.grossholtz@savoirfairelinux.com>
+References: <20170810221411.4324-1-julien.grossholtz@savoirfairelinux.com>
+Message-ID: <20170811153934.5efac50e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
+
+On Thu, 10 Aug 2017 18:14:11 -0400, Julien Grossholtz wrote:
+
+>  board/technologic/ts7680/genimage.cfg              |  14 +
+>  ...LLVMLinux-use-static-inline-in-ARM-ftrace.patch |  52 +++
+>  ...ux-Change-extern-inline-to-static-inline-.patch |  59 ++++
+>  ...c-integrate-the-various-compiler-gcc-345-.patch | 367 +++++++++++++++++++++
+
+What are the chances of getting these patches merged "upstream" by the
+board vendor ? It's not really nice if we have to keep these patches
+forever.
+
+> diff --git a/board/technologic/ts7680/post-image.sh b/board/technologic/ts7680/post-image.sh
+> new file mode 100755
+> index 0000000..c3f5a4a
+> --- /dev/null
+> +++ b/board/technologic/ts7680/post-image.sh
+> @@ -0,0 +1,17 @@
+> +#!/bin/bash
+> +#
+> +# Copyright (C) 2017 Savoir-faire Linux, Inc.
+> +# Post image generation script.
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+> +GENIMAGE_TMP=${BUILD_DIR}/.genimage_tmp
+> +
+> +rm -rf ${GENIMAGE_TMP}
+> +
+> +${HOST_DIR}/usr/bin/genimage \
+> +        --config ${GENIMAGE_CFG} \
+> +        --rootpath ${TARGET_DIR} \
+> +        --tmppath ${GENIMAGE_TMP} \
+> +        --inputpath $BINARIES_DIR \
+> +        --outputpath $BINARIES_DIR
+
+This script is not needed, you can use support/scripts/genimage.sh
+instead.
 
 
-On 11-08-17 12:40, Angelo Compagnucci wrote:
-> Dear Arnout Vandecappelle,
-> 
-> 2017-08-11 11:56 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->>
->>
->> On 11-08-17 10:14, Angelo Compagnucci wrote:
->>> The latest version of mono carries a bit of changes in the monolite
->>> package: the version string changes and from now on, monolite should
->>> be installed in a subdirectory with the exact version string as a name.
->>
->>  And does this work independently of the version bump of mono itself? I.e., if
->> we apply just this patch, will mono still build?
-> 
-> Nope. The patches are sent in a series for the purpose to be both applied.
-> 
->>  If not, then the two patches should be squashed. If you don't have time we can
->> do that while applying.
-> 
-> Sorry for the noise, but this is not how the things worked in the
-> past. I was suggested several times in the past to send a patch for
-> each modification/package.
+> diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
+> new file mode 100644
+> index 0000000..df4e8f3
+> --- /dev/null
+> +++ b/configs/ts7680_defconfig
+> @@ -0,0 +1,20 @@
+> +BR2_arm=y
+> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
 
- Yes, but only if they indeed work separately. Don't worry, I'll squash while
-applying.
+Why do you select glibc, and leave Buildroot default ?
 
- Regards,
- Arnout
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="3.14.28"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts7680/post-image.sh"
 
-[snip]
+As said above, you can use support/scripts/genimage.sh instead.
 
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
