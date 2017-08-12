@@ -1,43 +1,83 @@
 From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sat, 12 Aug 2017 11:46:51 -0400
-Subject: [Buildroot] [PATCH v6 0/3] Qt WebEngine support
-In-Reply-To: <8c8fd01f-12eb-f91f-2316-294286a2f5aa@mind.be>
+Date: Sat, 12 Aug 2017 11:54:36 -0400
+Subject: [Buildroot] [PATCH v6 1/3] rpi-userland: fix opengl library
+	symlinks
+In-Reply-To: <e68a0fc8-7ad3-26c3-02a3-79a794600271@mind.be>
 References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
- <20170811212937.62d819fc@tux.kirchner>
- <20170811223048.0c445573@windsurf>
- <20170812094839.70a0c4b1@tux.kirchner>
- <20170812095737.58da25f5@windsurf>
- <20170812150813.ondf3yfcsjcg5443@gportay>
- <8c8fd01f-12eb-f91f-2316-294286a2f5aa@mind.be>
-Message-ID: <20170812154651.riivua2uz4gfsybf@gportay>
+ <20170811013358.26864-2-gael.portay@savoirfairelinux.com>
+ <e68a0fc8-7ad3-26c3-02a3-79a794600271@mind.be>
+Message-ID: <20170812155436.eh73caa3ejsvedkn@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Aug 12, 2017 at 05:12:37PM +0200, Arnout Vandecappelle wrote:
+Hello Arnout,
+
+On Sat, Aug 12, 2017 at 05:31:16PM +0200, Arnout Vandecappelle wrote:
+>  Since you're probably going to send a v7 with the IA32 workaround, some
+> comments on this patch which I'd otherwise fix up while applying.
 > 
-> On 12-08-17 17:08, Ga?l PORTAY wrote:
-> [snip]
-> > BTW, it seems this bug is quite new in Qt; it appeared since QtWebengine 5.9 [2]
-> > and [3].
+> On 11-08-17 03:33, Ga?l PORTAY wrote:
+> > The Qt WebEngine module loads libEGL.so.1 and libGLESv2.so.2 libraries.
+> > Path are hard-coded [1].
+>   Paths
+> 
 > > 
-> > I will check if it requirement to build Qt WebEngine.
+> > This patch sets up cmake to create those library links.
+> > 
+> > 	# ls -l /usr/lib/lib*GL*
+> > 	lrwxrwxrwx    1 root     root            11 Mar 21 17:24 /usr/lib/libEGL.so -> libEGL.so.1
+> > 	lrwxrwxrwx    1 root     root            15 Mar 21 17:24 /usr/lib/libEGL.so.1 -> libEGL.so.1.0.0
+> > 	-rwxr-xr-x    1 root     root        163152 Mar 22 14:56 /usr/lib/libEGL.so.1.0.0
+> > 	lrwxrwxrwx    1 root     root            14 Mar 21 17:24 /usr/lib/libGLESv2.so -> libGLESv2.so.2
+> > 	lrwxrwxrwx    1 root     root            18 Mar 21 17:24 /usr/lib/libGLESv2.so.2 -> libGLESv2.so.2.0.0
+> > 	-rwxr-xr-x    1 root     root         78788 Mar 22 14:56 /usr/lib/libGLESv2.so.2.0.0
 > 
->  Since adding Qt WebEngine to Buildroot is long overdue, I propose to apply it
-> with the BR2_HOSTARCH_NEEDS_IA32_COMPILER work-around and resolve this issue later.
+>  If I read the code correctly (I didn't try to execute it), it will actually
+> create a link libEGL.so.1 -> libEGL.so, so where do you get the above?
+
+You are right, this output is outdated.
+
+	$ ls -l /usr/lib/lib*GL*
+	-rwxr-xr-x 1 gportay gportay 130032 Aug 10 21:16 libbrcmEGL.so
+	-rwxr-xr-x 1 gportay gportay  71088 Aug 10 21:17 libbrcmGLESv2.so
+	-rwxr-xr-x 1 gportay gportay 130032 Aug 10 21:17 libEGL.so
+	lrwxrwxrwx 1 gportay gportay      9 Aug  9 12:30 libEGL.so.1 -> libEGL.so
+	-rwxr-xr-x 1 gportay gportay  71088 Aug 10 21:16 libGLESv2.so
+	lrwxrwxrwx 1 gportay gportay     12 Aug  9 12:30 libGLESv2.so.2 -> libGLESv2.so
+
+> 
+> > 
+> > A pull request is pending [2].
+> > 
+> > [1] https://github.com/qt/qtwebengine/blob/5.8.0/src/core/surface_factory_qt.cpp#L76-L86
+> 
+>  Perhaps use the 5.9.1 link now:
+> https://github.com/qt/qtwebengine/blob/v5.9.1/src/core/surface_factory_qt.cpp#L76-L86
+> 
+> 
+> > [2] https://github.com/raspberrypi/userland/pull/379
+> 
+>  This pull request URL should also be in the patch itself.
+> 
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+I will reword the commit.
+
+> 
+>  Another question: do the other 10 providers of libGLES and libEGL do create the
+> correct symlinks? If some of them don't, then perhaps we should find a more
+> fundamental solution... That said, for now this is sufficient I think.
 > 
 
-After a quick look to QtWE requirements, there is no mention about this.
+I will have a look to this.
 
-It seems that host-bison, host-flex and host-pkgconf are missing dependencies.
-I will add them in v7.
-
-Concerning dbus and fontconfig packages. They are selected through qt5base
-configs (BR2_PACKAGE_QT5BASE_FONTCONFIG and BR2_PACKAGE_QT5BASE_DBUS).
-
-Do they also be a part of QT5WEBENGINE_DEPENDENCIES? or adding qt5base is safe.
+>  Regards,
+>  Arnout
+> 
 
 Regards,
 Gael
