@@ -1,33 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 Aug 2017 22:57:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/git: security bump to version
- 2.13.5
-In-Reply-To: <20170811171728.30489-1-bernd.kuhls@t-online.de>
-References: <20170811171728.30489-1-bernd.kuhls@t-online.de>
-Message-ID: <28d94f42-7619-22d7-0516-3b62b1744ebb@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 12 Aug 2017 23:06:10 +0200
+Subject: [Buildroot] [PATCH v2] gst1-validate: disable building
+	documentation using sphinx
+Message-ID: <20170812210610.536-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Peter Seiderer <ps.report@gmx.net>
 
+Fix a build failure in case (a non functional) sphinx documentation
+system is installed on the host (reported [1] and fix tested [2]
+by grunpferd at netscape.net).
 
-On 11-08-17 19:17, Bernd Kuhls wrote:
-> Fixes CVE-2017-1000117:
-> http://www.mail-archive.com/linux-kernel at vger.kernel.org/msg1466490.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
 
- Applied to master, thanks.
+  sphinx-build -b html -d ./doctrees   . ./html
+  Error: Source directory doesn't contain a conf.py file.
 
- Regards,
- Arnout
+[1] http://lists.busybox.net/pipermail/buildroot/2017-August/200021.html
+[2] http://lists.busybox.net/pipermail/buildroot/2017-August/200267.html
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Cc: grunpferd at netscape.net
+[Arnout:
+ - use --disable-sphinx-doc instead of a cv variable
+ - remove the comment, it speaks for itself]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gstreamer1/gst1-validate/gst1-validate.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index c5e3ec6fc9..31b01ef5fa 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -18,4 +18,6 @@ GST1_VALIDATE_DEPENDENCIES = \
+ 	python \
+ 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+ 
++GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
++
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.3
