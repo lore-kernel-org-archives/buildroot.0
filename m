@@ -1,54 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Aug 2017 09:57:37 +0200
-Subject: [Buildroot] [PATCH v6 0/3] Qt WebEngine support
-In-Reply-To: <20170812094839.70a0c4b1@tux.kirchner>
-References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
- <20170811212937.62d819fc@tux.kirchner>
- <20170811223048.0c445573@windsurf>
- <20170812094839.70a0c4b1@tux.kirchner>
-Message-ID: <20170812095737.58da25f5@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Aug 2017 11:49:43 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: fix retrieving the gitid
+Message-ID: <20170812094943.16460-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Before 66f91eb (autobuild-run: add --repo option), we used to 'git pull'
+to update the local Buildroot clone. This had the side-effect of
+updating the local refs because we were pulling from 'origin'.
 
-On Sat, 12 Aug 2017 09:48:39 +0200, Bj?rn Kirchner wrote:
+So 'origin/master' and 'master' were correctly updated.
 
-> > There is -m32, so it's trying to build a 32 bit binary on your x86_64
-> > machine...
-> >   
-> > > -Wno-unused-local-typedefs -Wno-maybe-uninitialized
-> > > -Wno-missing-field-initializers -Wno-unused-parameter -O3 -fno-ident
-> > > -fdata-sections -ffunction-sections -fno-threadsafe-statics
-> > > -fvisibility-inlines-hidden -std=gnu++11 -fno-rtti -fno-exceptions
-> > > -Wno-deprecated -Wno-narrowing
-> > > -c ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.cc
-> > > -o v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o In file
-> > > included from /usr/include/c++/4.9/ios:38:0,
-> > > from /usr/include/c++/4.9/ostream:38,
-> > > from ../../3rdparty/chromium/v8/src/globals.h:11,
-> > > from ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.h:8,
-> > > from ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.cc:5: /usr/include/c++/4.9/iosfwd:38:28:
-> > > fatal error: bits/c++config.h: No such file or directory #include
-> > > <bits/c++config.h> ^ compilation terminated.  
-> > 
-> > ... but you don't have the 32 bit development headers installed.  
-> 
-> You were absolutely right. After installing the missing headers,
-> compilation finished without errors. Thanks.
+But since the offending commit, we no longer pull, and we instead fetch
+from an explicit repository, which never updates 'origin/master' nor
+'master'. Instead, they both are stuck at the time the repository was
+cloned, or at the time the autobuild script was updated.
 
-But still, we need to resolve this:
+We fix that by just dropping the 'master' ref from the git log so that
+the log applies to the commit for current working copy.
 
- * Why qtwebengine builds this application for 32 bit ?
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ scripts/autobuild-run | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- * If it really needs to do so (which would be weird), then qtwebengine
-   should select BR2_HOSTARCH_NEEDS_IA32_COMPILER
-
-Thomas
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index ef4f40e..406b8e5 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -409,7 +409,7 @@ def send_results(result, **kwargs):
+         shutil.copyfile(os.path.join(outputdir, "legal-info", "manifest.csv"),
+                         os.path.join(resultdir, "licenses-manifest.csv"))
+ 
+-    subprocess.call(["git log master -n 1 --pretty=format:%%H > %s" % \
++    subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
+                      os.path.join(resultdir, "gitid")],
+                     shell=True, cwd=srcdir)
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
