@@ -1,45 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 12 Aug 2017 15:04:42 +0200
-Subject: [Buildroot] WIP: glibc 2.16 bump
-In-Reply-To: <20170812134641.7895db19@windsurf>
-References: <a24db610-bef2-c2fc-c9af-ba23cf29cc25@gmail.com>
- <20170812134641.7895db19@windsurf>
-Message-ID: <6125d920-9dd6-71b5-bb88-c4daa9d7c51b@gmail.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 12 Aug 2017 11:08:13 -0400
+Subject: [Buildroot] [PATCH v6 0/3] Qt WebEngine support
+In-Reply-To: <20170812095737.58da25f5@windsurf>
+References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
+ <20170811212937.62d819fc@tux.kirchner>
+ <20170811223048.0c445573@windsurf>
+ <20170812094839.70a0c4b1@tux.kirchner>
+ <20170812095737.58da25f5@windsurf>
+Message-ID: <20170812150813.ondf3yfcsjcg5443@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Le 12/08/2017 ? 13:46, Thomas Petazzoni a ?crit :
-> Hello,
+On Sat, Aug 12, 2017 at 09:57:37AM +0200, Thomas Petazzoni wrote:
+> ...
 > 
-> On Sat, 12 Aug 2017 12:24:50 +0200, Romain Naour wrote:
+> But still, we need to resolve this:
 > 
->> I started to look at glibc 2.26 bump.
-> 
-> Good!
-> 
->> All patches are uptream but the bump trigger some build issue with gcc 7 (older
->> gcc version are not tested yet).
->> For now I'm building only the toolchain on several arch, so no runtime test yet.
->> How the freeelectron farm can help to test new gcc/libc version ?
-> 
-> If you submit the patch and/or push it to some branch somewhere, I can
-> apply it on a branch (not to the official Buildroot tree), and run a
-> test build of all the toolchains configurations, and give you the link
-> to the Gitlab CI build results.
 
-Can you try with this branch ?
-https://github.com/RomainNaour/buildroot/tree/glibc-2.26
+Right.
 
-Best regards,
-Romain
+>  * Why qtwebengine builds this application for 32 bit ?
+> 
 
+I think it is because the target is 32 bits. I will have a deeper look to v8 to
+understand why they are doing this.
+
+I just had a quick look, and I found this [1].
+
+>  * If it really needs to do so (which would be weird), then qtwebengine
+>    should select BR2_HOSTARCH_NEEDS_IA32_COMPILER
 > 
-> Best regards,
-> 
-> Thomas
-> 
+
+BTW, it seems this bug is quite new in Qt; it appeared since QtWebengine 5.9 [2]
+and [3].
+
+I will check if it requirement to build Qt WebEngine.
+
+[1] https://github.com/v8/v8/blob/master/gypfiles/toolchain.gypi#L1000-L1043
+[2] https://bugreports.qt.io/browse/QTBUG-59504
+[3] https://bugreports.qt.io/browse/QTBUG-61873
+
+Regards,
+Gael
