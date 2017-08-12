@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Aug 2017 13:46:41 +0200
-Subject: [Buildroot] WIP: glibc 2.16 bump
-In-Reply-To: <a24db610-bef2-c2fc-c9af-ba23cf29cc25@gmail.com>
-References: <a24db610-bef2-c2fc-c9af-ba23cf29cc25@gmail.com>
-Message-ID: <20170812134641.7895db19@windsurf>
+Date: Sat, 12 Aug 2017 13:50:13 +0200
+Subject: [Buildroot] [PATCH 1/2] alsa-lib: add patch to fix incorrect
+ code dependency
+In-Reply-To: <20170812100046.GB3021@scaer>
+References: <20170811212103.24433-1-thomas.petazzoni@free-electrons.com>
+ <20170812100046.GB3021@scaer>
+Message-ID: <20170812135013.14446155@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 12 Aug 2017 12:24:50 +0200, Romain Naour wrote:
+On Sat, 12 Aug 2017 12:00:46 +0200, Yann E. MORIN wrote:
 
-> I started to look at glibc 2.26 bump.
+> > +/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(pcm_dmix.o): In function `snd_pcm_dmix_sync_ptr':
+> > +pcm_dmix.c:(.text+0x83c): warning:
+> > +/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(rawmidi_symbols.o):(.data+0x4): undefined reference to `_snd_module_rawmidi_virt'
+> > +collect2: error: ld returned 1 exit status
+> > +
+> > +To fix this, we make sure that rawmidi_symbols.c only uses
+> > +_snd_module_rawmidi_virt when available.
+> > +
+> > +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
+> 
+> Upstream status?
 
-Good!
-
-> All patches are uptream but the bump trigger some build issue with gcc 7 (older
-> gcc version are not tested yet).
-> For now I'm building only the toolchain on several arch, so no runtime test yet.
-> How the freeelectron farm can help to test new gcc/libc version ?
-
-If you submit the patch and/or push it to some branch somewhere, I can
-apply it on a branch (not to the official Buildroot tree), and run a
-test build of all the toolchains configurations, and give you the link
-to the Gitlab CI build results.
+I submitted it upstream after sending the Buildroot patch, so I didn't
+had the link. But it's submitted upstream, see
+https://www.spinics.net/lists/alsa-devel/msg65902.html.
 
 Best regards,
 
