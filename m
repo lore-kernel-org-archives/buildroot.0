@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Aug 2017 12:16:23 +0200
+Date: Sat, 12 Aug 2017 12:18:06 +0200
 Subject: [Buildroot] [PATCH 1/1] package/git: security bump to version
  2.13.5
 In-Reply-To: <20170811171728.30489-1-bernd.kuhls@t-online.de>
 References: <20170811171728.30489-1-bernd.kuhls@t-online.de>
-Message-ID: <20170812101623.GD3021@scaer>
+Message-ID: <20170812101806.GE3021@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +16,14 @@ Bernd, All,
 On 2017-08-11 19:17 +0200, Bernd Kuhls spake thusly:
 > Fixes CVE-2017-1000117:
 > http://www.mail-archive.com/linux-kernel at vger.kernel.org/msg1466490.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Then we should also update subversion at the same time, to fix the same
-CVE:
-    https://www.mail-archive.com/announce at apache.org/msg04041.html
-
-Mercurial is also impacted, but we don;t have a package for it.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
 > Since bumping to 2.14.1 would be a feature patch we stick to 2.13.x in
 > the master branch and bump to 2.14.1 on the next branch.
