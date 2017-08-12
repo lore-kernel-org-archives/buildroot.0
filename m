@@ -1,72 +1,267 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Fri, 11 Aug 2017 18:24:08 -0400
-Subject: [Buildroot] [PATCH v6 0/3] Qt WebEngine support
-In-Reply-To: <20170811223048.0c445573@windsurf>
-References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
- <20170811212937.62d819fc@tux.kirchner>
- <20170811223048.0c445573@windsurf>
-Message-ID: <20170811222408.c6ywkmwk2a3tl6vn@gportay>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 11 Aug 2017 22:01:34 -0500
+Subject: [Buildroot] [PATCH] util-linux: Revert genrandom(2) logic
+Message-ID: <1502506894-64344-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+New logic was added at configure time and new conditional code
+in lib/randutils.c between versions 2.29.2 and >= 2.30.  The logic
+determines if the glibc or syscall API should be used for
+rand calls.  This has been observed causing issues in a
+configuration of a 4.1 kernel and glibc2.25.  A tool like
+parted when used at boot hangs for ~40x the time and when
+debugged with gdb shows blocking on genrandom, even though
+a entropy check from a hardware rng used by rngd is adequate
+before the parted tool is used.
 
-On Fri, Aug 11, 2017 at 10:30:48PM +0200, Thomas Petazzoni wrote:
-> ...
-> > 
-> > [8/9559] CXX v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o
-> > FAILED: v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o 
-> > /usr/bin/g++ -MMD -MF
-> > v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o.d
-> > -DV8_DEPRECATION_WARNINGS -DUSE_UDEV -DUSE_AURA=1 -DUSE_OPENSSL_CERTS=1
-> > -DUSE_OZONE=1 -DNO_TCMALLOC -DDISABLE_NACL -DENABLE_TASK_MANAGER=1
-> > -DENABLE_THEMES=1 -DFULL_SAFE_BROWSING -DSAFE_BROWSING_CSD
-> > -DSAFE_BROWSING_DB_LOCAL -DCHROMIUM_BUILD -DFIELDTRIAL_TESTING_ENABLED
-> > -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
-> > -D_LARGEFILE64_SOURCE -DNDEBUG -DNVALGRIND
-> > -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DV8_I18N_SUPPORT -DV8_TARGET_ARCH_ARM
-> > -DCAN_USE_ARMV7_INSTRUCTIONS -DCAN_USE_VFP3_INSTRUCTIONS
-> > -DUSE_EABI_HARDFLOAT=1 -Iv8_snapshot/gen -I../../3rdparty/chromium
-> > -I../../3rdparty/chromium/v8/include -Iv8_snapshot/gen/v8/include
-> > -I../../3rdparty/chromium/v8 -fno-strict-aliasing
-> > --param=ssp-buffer-size=4 -fstack-protector -funwind-tables -fPIC -pipe
-> > -pthread -m32 -msse2 -mfpmath=sse -mmmx -g0 -fvisibility=hidden
-> 
-> There is -m32, so it's trying to build a 32 bit binary on your x86_64
-> machine...
-> 
-> > -Wno-unused-local-typedefs -Wno-maybe-uninitialized
-> > -Wno-missing-field-initializers -Wno-unused-parameter -O3 -fno-ident
-> > -fdata-sections -ffunction-sections -fno-threadsafe-statics
-> > -fvisibility-inlines-hidden -std=gnu++11 -fno-rtti -fno-exceptions
-> > -Wno-deprecated -Wno-narrowing
-> > -c ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.cc -o
-> > v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o In file included
-> > from /usr/include/c++/4.9/ios:38:0,
-> > from /usr/include/c++/4.9/ostream:38,
-> > from ../../3rdparty/chromium/v8/src/globals.h:11,
-> > from ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.h:8,
-> > from ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.cc:5: /usr/include/c++/4.9/iosfwd:38:28:
-> > fatal error: bits/c++config.h: No such file or directory #include
-> > <bits/c++config.h> ^ compilation terminated.
-> 
-> ... but you don't have the 32 bit development headers installed.
-> 
-> Questions are:
-> 
->  * Is it normal that qtwebengine builds this for the host machine. It
->    could be normal, if it's a program later used to generate data/code ?
-> 
->  * If it's normal that it's built for the host, why do they force
->    building for 32 bits by passing -m32 ?
-> 
+Bug tracker:
+https://github.com/karelzak/util-linux/issues/496
 
-According to the Changelog of v8, it seems that it uses -m32 for host tools
-(see output/build/qt5webengine-5.9.1/src/3rdparty/chromium/v8/ChangeLog)
+Upstream reverted commits
+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.30&id=b192dd6943e5bb5d2a3773b2c9b06cbd4eb28258
+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.30&id=cc01c2dca4f62e36505570d5cb15f868aa44bf54
 
->        Set '-m32' option for host and target platforms
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+--
 
-But I do not know the reason.
+I haven't completely root caused this issue but figured I'd
+get it out there while we investigate further.  It was
+disected down to these changes but further investigation
+is limited on my project and we're going to carry this workaround.
+
+Debug notes:
+We did notice that if we straced the parted tool and let all that
+output hit console it didn't block and take the complete 40sec to
+return.  So our theory was that entropy was created via the uart
+output.  We also noticed similar if we enabled networking that
+the tool would return much faster.  So we wondered if these commits
+are actually using a API that doesn't leverage a hardware rng
+output as ours was setup with a value of ~3000 when we checked
+the entropy quality.  Any thoughts on comparable packages which
+would use a similar approach to using this new API?
+
+---
+ ...randutils-glibc-2.25-has-getrandom-2-decl.patch |  31 ++++
+ ...randutils-use-getrandom-2-when-it-is-avai.patch | 169 +++++++++++++++++++++
+ 2 files changed, 200 insertions(+)
+ create mode 100644 package/util-linux/0002-Revert-lib-randutils-glibc-2.25-has-getrandom-2-decl.patch
+ create mode 100644 package/util-linux/0003-Revert-lib-randutils-use-getrandom-2-when-it-is-avai.patch
+
+diff --git a/package/util-linux/0002-Revert-lib-randutils-glibc-2.25-has-getrandom-2-decl.patch b/package/util-linux/0002-Revert-lib-randutils-glibc-2.25-has-getrandom-2-decl.patch
+new file mode 100644
+index 0000000..eb96d60
+--- /dev/null
++++ b/package/util-linux/0002-Revert-lib-randutils-glibc-2.25-has-getrandom-2-decl.patch
+@@ -0,0 +1,31 @@
++From 8278bc37aa497ec60af05cf2baf2e0050125a0aa Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 11 Aug 2017 19:43:46 -0500
++Subject: [PATCH] Revert "lib/randutils: glibc 2.25 has getrandom(2)
++ declaration"
++
++This reverts commit b192dd6943e5bb5d2a3773b2c9b06cbd4eb28258.
++
++Upstream:
++https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.30&id=b192dd6943e5bb5d2a3773b2c9b06cbd4eb28258
++
++---
++ lib/randutils.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/randutils.c b/lib/randutils.c
++index 09dd261..fdce868 100644
++--- a/lib/randutils.c
+++++ b/lib/randutils.c
++@@ -26,7 +26,7 @@
++ #endif
++ 
++ #ifdef HAVE_GETRANDOM
++-# include <sys/random.h>
+++# include <linux/random.h>
++ #elif defined (__linux__)
++ # if !defined(SYS_getrandom) && defined(__NR_getrandom)
++    /* usable kernel-headers, but old glibc-headers */
++-- 
++1.9.1
++
+diff --git a/package/util-linux/0003-Revert-lib-randutils-use-getrandom-2-when-it-is-avai.patch b/package/util-linux/0003-Revert-lib-randutils-use-getrandom-2-when-it-is-avai.patch
+new file mode 100644
+index 0000000..764b0eb
+--- /dev/null
++++ b/package/util-linux/0003-Revert-lib-randutils-use-getrandom-2-when-it-is-avai.patch
+@@ -0,0 +1,169 @@
++From 6018bf2aadfa6e9222b8164f73f561a3952d2130 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 11 Aug 2017 20:05:10 -0500
++Subject: [PATCH] Revert "lib/randutils: use getrandom(2) when it is
++ available"
++
++This reverts commit cc01c2dca4f62e36505570d5cb15f868aa44bf54.
++
++Conflicts:
++	lib/randutils.c
++
++Upstream:
++https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.30&id=cc01c2dca4f62e36505570d5cb15f868aa44bf54
++
++---
++ configure.ac    |  1 -
++ lib/randutils.c | 70 ++++++++++++++-------------------------------------------
++ 2 files changed, 17 insertions(+), 54 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 35b0a30..e440b6a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -396,7 +396,6 @@ AC_CHECK_FUNCS([ \
++ 	getdtablesize \
++ 	getexecname \
++ 	getmntinfo \
++-	getrandom \
++ 	getrlimit \
++ 	getsgnam \
++ 	inotify_init \
++diff --git a/lib/randutils.c b/lib/randutils.c
++index fdce868..e8f67be 100644
++--- a/lib/randutils.c
+++++ b/lib/randutils.c
++@@ -25,24 +25,6 @@
++ #define THREAD_LOCAL static
++ #endif
++ 
++-#ifdef HAVE_GETRANDOM
++-# include <linux/random.h>
++-#elif defined (__linux__)
++-# if !defined(SYS_getrandom) && defined(__NR_getrandom)
++-   /* usable kernel-headers, but old glibc-headers */
++-#  define SYS_getrandom __NR_getrandom
++-# endif
++-#endif
++-
++-#if !defined(HAVE_GETRANDOM) && defined(SYS_getrandom)
++-/* libc without function, but we have syscal */
++-static int getrandom(void *buf, size_t buflen, unsigned int flags)
++-{
++-	return (syscall(SYS_getrandom, buf, buflen, flags));
++-}
++-# define HAVE_GETRANDOM
++-#endif
++-
++ #if defined(__linux__) && defined(__NR_gettid) && defined(HAVE_JRAND48)
++ #define DO_JRAND_MIX
++ THREAD_LOCAL unsigned short ul_jrand_seed[3];
++@@ -53,12 +35,21 @@ int rand_get_number(int low_n, int high_n)
++ 	return rand() % (high_n - low_n + 1) + low_n;
++ }
++ 
++-static void crank_random(void)
+++int random_get_fd(void)
++ {
++-	int i;
+++	int i, fd;
++ 	struct timeval tv;
++ 
++-	gettimeofday(&tv, NULL);
+++	fd = open("/dev/urandom", O_RDONLY | O_CLOEXEC);
+++	if (fd == -1)
+++		fd = open("/dev/random", O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+++	if (fd >= 0) {
+++		i = fcntl(fd, F_GETFD);
+++		if (i >= 0)
+++			fcntl(fd, F_SETFD, i | FD_CLOEXEC);
+++	}
+++
+++	gettimeofday(&tv, 0);
++ 	srand((getpid() << 16) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
++ 
++ #ifdef DO_JRAND_MIX
++@@ -70,24 +61,10 @@ static void crank_random(void)
++ 	gettimeofday(&tv, NULL);
++ 	for (i = (tv.tv_sec ^ tv.tv_usec) & 0x1F; i > 0; i--)
++ 		rand();
++-}
++-
++-int random_get_fd(void)
++-{
++-	int i, fd;
++-
++-	fd = open("/dev/urandom", O_RDONLY | O_CLOEXEC);
++-	if (fd == -1)
++-		fd = open("/dev/random", O_RDONLY | O_NONBLOCK | O_CLOEXEC);
++-	if (fd >= 0) {
++-		i = fcntl(fd, F_GETFD);
++-		if (i >= 0)
++-			fcntl(fd, F_SETFD, i | FD_CLOEXEC);
++-	}
++-	crank_random();
++ 	return fd;
++ }
++ 
+++
++ /*
++  * Generate a stream of random nbytes into buf.
++  * Use /dev/urandom if possible, and if not,
++@@ -95,19 +72,10 @@ int random_get_fd(void)
++  */
++ void random_get_bytes(void *buf, size_t nbytes)
++ {
++-	size_t i;
++-	unsigned char *cp = (unsigned char *)buf;
++-
++-#ifdef HAVE_GETRANDOM
++-	while (getrandom(buf, nbytes, 0) < 0) {
++-		if (errno == EINTR)
++-			continue;
++-		break;
++-	}
++-#else
++-	size_t n = nbytes;
+++	size_t i, n = nbytes;
++ 	int fd = random_get_fd();
++ 	int lose_counter = 0;
+++	unsigned char *cp = (unsigned char *) buf;
++ 
++ 	if (fd >= 0) {
++ 		while (n > 0) {
++@@ -124,12 +92,11 @@ void random_get_bytes(void *buf, size_t nbytes)
++ 
++ 		close(fd);
++ 	}
++-#endif
+++
++ 	/*
++ 	 * We do this all the time, but this is the only source of
++ 	 * randomness if /dev/random/urandom is out to lunch.
++ 	 */
++-	crank_random();
++ 	for (cp = buf, i = 0; i < nbytes; i++)
++ 		*cp++ ^= (rand() >> 7) & 0xFF;
++ 
++@@ -155,9 +122,6 @@ void random_get_bytes(void *buf, size_t nbytes)
++  */
++ const char *random_tell_source(void)
++ {
++-#ifdef HAVE_GETRANDOM
++-	return _("getrandom() function");
++-#else
++ 	size_t i;
++ 	static const char *random_sources[] = {
++ 		"/dev/urandom",
++@@ -168,7 +132,7 @@ const char *random_tell_source(void)
++ 		if (!access(random_sources[i], R_OK))
++ 			return random_sources[i];
++ 	}
++-#endif
+++
++ 	return _("libc pseudo-random functions");
++ }
++ 
++-- 
++1.9.1
++
+-- 
+1.9.1
