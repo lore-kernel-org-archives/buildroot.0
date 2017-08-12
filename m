@@ -1,72 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 Aug 2017 17:43:30 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: fix retrieving the gitid
-In-Reply-To: <20170812094943.16460-1-yann.morin.1998@free.fr>
-References: <20170812094943.16460-1-yann.morin.1998@free.fr>
-Message-ID: <1c2b2347-3b34-ce6a-7e4b-30055fae81d3@mind.be>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 12 Aug 2017 11:46:51 -0400
+Subject: [Buildroot] [PATCH v6 0/3] Qt WebEngine support
+In-Reply-To: <8c8fd01f-12eb-f91f-2316-294286a2f5aa@mind.be>
+References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
+ <20170811212937.62d819fc@tux.kirchner>
+ <20170811223048.0c445573@windsurf>
+ <20170812094839.70a0c4b1@tux.kirchner>
+ <20170812095737.58da25f5@windsurf>
+ <20170812150813.ondf3yfcsjcg5443@gportay>
+ <8c8fd01f-12eb-f91f-2316-294286a2f5aa@mind.be>
+Message-ID: <20170812154651.riivua2uz4gfsybf@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 12-08-17 11:49, Yann E. MORIN wrote:
-> Before 66f91eb (autobuild-run: add --repo option), we used to 'git pull'
-> to update the local Buildroot clone. This had the side-effect of
-> updating the local refs because we were pulling from 'origin'.
+On Sat, Aug 12, 2017 at 05:12:37PM +0200, Arnout Vandecappelle wrote:
 > 
-> So 'origin/master' and 'master' were correctly updated.
+> On 12-08-17 17:08, Ga?l PORTAY wrote:
+> [snip]
+> > BTW, it seems this bug is quite new in Qt; it appeared since QtWebengine 5.9 [2]
+> > and [3].
+> > 
+> > I will check if it requirement to build Qt WebEngine.
 > 
-> But since the offending commit, we no longer pull, and we instead fetch
-> from an explicit repository, which never updates 'origin/master' nor
-> 'master'. Instead, they both are stuck at the time the repository was
-> cloned, or at the time the autobuild script was updated.
-> 
-> We fix that by just dropping the 'master' ref from the git log so that
-> the log applies to the commit for current working copy.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Also checked that there are no other similar oopses.
-
- For me it would make sense to produce this gitid file immediately after the
-fetch, but that's a different story of course.
-
- Regards,
- Arnout
-
-> ---
->  scripts/autobuild-run | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index ef4f40e..406b8e5 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -409,7 +409,7 @@ def send_results(result, **kwargs):
->          shutil.copyfile(os.path.join(outputdir, "legal-info", "manifest.csv"),
->                          os.path.join(resultdir, "licenses-manifest.csv"))
->  
-> -    subprocess.call(["git log master -n 1 --pretty=format:%%H > %s" % \
-> +    subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
->                       os.path.join(resultdir, "gitid")],
->                      shell=True, cwd=srcdir)
->  
+>  Since adding Qt WebEngine to Buildroot is long overdue, I propose to apply it
+> with the BR2_HOSTARCH_NEEDS_IA32_COMPILER work-around and resolve this issue later.
 > 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+After a quick look to QtWE requirements, there is no mention about this.
+
+It seems that host-bison, host-flex and host-pkgconf are missing dependencies.
+I will add them in v7.
+
+Concerning dbus and fontconfig packages. They are selected through qt5base
+configs (BR2_PACKAGE_QT5BASE_FONTCONFIG and BR2_PACKAGE_QT5BASE_DBUS).
+
+Do they also be a part of QT5WEBENGINE_DEPENDENCIES? or adding qt5base is safe.
+
+Regards,
+Gael
