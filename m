@@ -1,122 +1,45 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sat, 12 Aug 2017 22:54:17 +1000
-Subject: [Buildroot] [PATCH 1/4] skeleton: Rename skeleton-none to
-	skeleton-init-none
-In-Reply-To: <20170812123505.14714-2-camh@xdna.net>
-References: <20170812123505.14714-1-camh@xdna.net>
- <20170812123505.14714-2-camh@xdna.net>
-Message-ID: <CABa6e=qM2+ULvdMvqiGE8cx76QN-vmEkfAjnKHFLsiu-goctKQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 12 Aug 2017 15:04:42 +0200
+Subject: [Buildroot] WIP: glibc 2.16 bump
+In-Reply-To: <20170812134641.7895db19@windsurf>
+References: <a24db610-bef2-c2fc-c9af-ba23cf29cc25@gmail.com>
+ <20170812134641.7895db19@windsurf>
+Message-ID: <6125d920-9dd6-71b5-bb88-c4daa9d7c51b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch does not have the rename of skeleton-none.mk to
-skeleton-init-none.mk. I fixed that, so I'm not sure why/how this version
-is here. I'll fix it again and re-run my tests. I'll follow-up shortly.
+Hi Thomas,
 
-On 12 August 2017 at 22:35, Cam Hutchison <camh@xdna.net> wrote:
+Le 12/08/2017 ? 13:46, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Sat, 12 Aug 2017 12:24:50 +0200, Romain Naour wrote:
+> 
+>> I started to look at glibc 2.26 bump.
+> 
+> Good!
+> 
+>> All patches are uptream but the bump trigger some build issue with gcc 7 (older
+>> gcc version are not tested yet).
+>> For now I'm building only the toolchain on several arch, so no runtime test yet.
+>> How the freeelectron farm can help to test new gcc/libc version ?
+> 
+> If you submit the patch and/or push it to some branch somewhere, I can
+> apply it on a branch (not to the official Buildroot tree), and run a
+> test build of all the toolchains configurations, and give you the link
+> to the Gitlab CI build results.
 
-> The skeletons are based on the selection of BR2_INIT_*, so add init- to
-> the package name to make this clearer. The name skeleton-none implies no
-> skeleton at all, not a base skeleton with no init-specific files.
->
-> Signed-off-by: Cam Hutchison <camh@xdna.net>
-> ---
->  package/Config.in                                              |  2 +-
->  package/{skeleton-none => skeleton-init-none}/Config.in        |  4 ++--
->  package/{skeleton-none => skeleton-init-none}/skeleton-none.mk | 10
-> +++++-----
->  system/Config.in                                               |  2 +-
->  4 files changed, 9 insertions(+), 9 deletions(-)
->  rename package/{skeleton-none => skeleton-init-none}/Config.in (52%)
->  rename package/{skeleton-none => skeleton-init-none}/skeleton-none.mk
-> (67%)
->
-> diff --git a/package/Config.in b/package/Config.in
-> index b5170b044c..b48eac65ca 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -4,7 +4,7 @@ menu "Target packages"
->         source "package/skeleton/Config.in"
->         source "package/skeleton-common/Config.in"
->         source "package/skeleton-custom/Config.in"
-> -       source "package/skeleton-none/Config.in"
-> +       source "package/skeleton-init-none/Config.in"
->         source "package/skeleton-systemd/Config.in"
->         source "package/skeleton-sysv/Config.in"
->
-> diff --git a/package/skeleton-none/Config.in b/package/skeleton-init-none/
-> Config.in
-> similarity index 52%
-> rename from package/skeleton-none/Config.in
-> rename to package/skeleton-init-none/Config.in
-> index 43fb3f277c..426954ca4c 100644
-> --- a/package/skeleton-none/Config.in
-> +++ b/package/skeleton-init-none/Config.in
-> @@ -1,7 +1,7 @@
-> -config BR2_PACKAGE_SKELETON_NONE
-> +config BR2_PACKAGE_SKELETON_INIT_NONE
->         bool
->         select BR2_PACKAGE_HAS_SKELETON
->         select BR2_PACKAGE_SKELETON_COMMON
->
->  config BR2_PACKAGE_PROVIDES_SKELETON
-> -       default "skeleton-none" if BR2_PACKAGE_SKELETON_NONE
-> +       default "skeleton-init-none" if BR2_PACKAGE_SKELETON_INIT_NONE
-> diff --git a/package/skeleton-none/skeleton-none.mk
-> b/package/skeleton-init-none/skeleton-none.mk
-> similarity index 67%
-> rename from package/skeleton-none/skeleton-none.mk
-> rename to package/skeleton-init-none/skeleton-none.mk
-> index 9e9579866a..04e38c98d9 100644
-> --- a/package/skeleton-none/skeleton-none.mk
-> +++ b/package/skeleton-init-none/skeleton-none.mk
-> @@ -1,6 +1,6 @@
->  ############################################################
-> ####################
->  #
-> -# skeleton-none
-> +# skeleton-init-none
->  #
->  ############################################################
-> ####################
->
-> @@ -8,11 +8,11 @@
->  # skeleton and the toolchain is a target package, as is skeleton.
->  # Hence, skeleton would depends on the toolchain and the toolchain would
-> depend
->  # on skeleton.
-> -SKELETON_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
-> -SKELETON_NONE_ADD_SKELETON_DEPENDENCY = NO
-> +SKELETON_INIT_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
-> +SKELETON_INIT_NONE_ADD_SKELETON_DEPENDENCY = NO
->
-> -SKELETON_NONE_DEPENDENCIES = skeleton-common
-> +SKELETON_INIT_NONE_DEPENDENCIES = skeleton-common
->
-> -SKELETON_NONE_PROVIDES = skeleton
-> +SKELETON_INIT_NONE_PROVIDES = skeleton
->
->  $(eval $(generic-package))
-> diff --git a/system/Config.in b/system/Config.in
-> index 59d8eab271..45326f0985 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -12,7 +12,7 @@ config BR2_ROOTFS_SKELETON_DEFAULT
->         select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
->         select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
->         select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
-> -       select BR2_PACKAGE_SKELETON_NONE if BR2_INIT_NONE
-> +       select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
->         help
->           Use default target skeleton
->
-> --
-> 2.11.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170812/cb63d841/attachment.html>
+Can you try with this branch ?
+https://github.com/RomainNaour/buildroot/tree/glibc-2.26
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
