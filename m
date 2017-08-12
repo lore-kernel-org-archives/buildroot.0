@@ -1,173 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 12 Aug 2017 18:22:55 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: add patch for recent glibc
-In-Reply-To: <20170811110549.6278-1-daggs@gmx.com>
-References: <20170811110549.6278-1-daggs@gmx.com>
-Message-ID: <20170812162255.23034-1-arnout@mind.be>
+Date: Sat, 12 Aug 2017 18:27:38 +0200
+Subject: [Buildroot] [git commit] Revert "alsa-utils: amidi option needs seq
+	support in alsa-lib"
+Message-ID: <20170812162306.109EF81941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent glibc have deprecated the implicit include of sys/sysmacros.h
-from sys/types.h. That means that the macros major and minor are no
-longer defined unless this header is included.
+commit: https://git.buildroot.net/buildroot/commit/?id=684e0371bc6584b8921c133bff64b42d196c118d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This problem was observed for host-e2fsprogs when building on a host
-with recent glibc.
+This reverts commit c69088b8c35177cecdd0f1f385c13f5b2c509f1d, which is
+no longer needed now that alsa-lib has been fixed properly.
 
-Add an upstream patch that includes sys/sysmacros.h when needed.
+Indeed, this commit was made because alsa-utils failed to build with:
 
+/home/buildroot/build/instance-0/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libasound.a(pcm_dmix.o): In function `snd_pcm_dmix_htimestamp':
+pcm_dmix.c:(.text+0x5c0): warning:
+/home/buildroot/build/instance-0/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libasound.a(rawmidi_symbols.o):(.data.rel+0x4): undefined reference to `_snd_module_rawmidi_virt'
+collect2: error: ld returned 1 exit status
+
+Which is exactly the problem that we fixed in alsa-lib by making sure
+that rawmidi_symbols.c doesn't reference symbols from rawmidi_virt.c
+when SEQ support is not enabled.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Dagg Stompler <daggs@gmx.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
 ---
-Dagg, I prefer to cherry-pick this single commit on master instead of
-bumping the package, since the bump does quite a lot more than just
-this single change. Can you undo the bump, apply this patch, and see
-if that fixes the issue for you? If yes, please add your Tested-by.
+ package/alsa-utils/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-I'll then apply the version bump to next.
----
- .../0002-include-sys-sysmacros.h-as-needed.patch   | 129 +++++++++++++++++++++
- 1 file changed, 129 insertions(+)
- create mode 100644 package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
-
-diff --git a/package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch b/package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
-new file mode 100644
-index 0000000000..c58fcb3217
---- /dev/null
-+++ b/package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
-@@ -0,0 +1,129 @@
-+From 3fb715b55426875902dfef3056b2cf7335953178 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Fri, 19 May 2017 13:25:59 -0400
-+Subject: [PATCH] include sys/sysmacros.h as needed
-+
-+The minor/major/makedev macros are not entirely standard.  glibc has had
-+the definitions in sys/sysmacros.h since the start, and wants to move away
-+from always defining them implicitly via sys/types.h (as this pollutes the
-+namespace in violation of POSIX).  Other C libraries have already dropped
-+them.  Since the configure script already checks for this header, use that
-+to pull in the header in files that use these macros.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-+
-+Upstream commit 3fb715b55426875902dfef3056b2cf7335953178
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ debugfs/debugfs.c      | 3 +++
-+ lib/blkid/devname.c    | 3 +++
-+ lib/blkid/devno.c      | 3 +++
-+ lib/ext2fs/finddev.c   | 3 +++
-+ lib/ext2fs/ismounted.c | 3 +++
-+ misc/create_inode.c    | 4 ++++
-+ misc/mk_hugefiles.c    | 3 +++
-+ 7 files changed, 22 insertions(+)
-+
-+diff --git a/debugfs/debugfs.c b/debugfs/debugfs.c
-+index 059ddc39..453f5b52 100644
-+--- a/debugfs/debugfs.c
-++++ b/debugfs/debugfs.c
-+@@ -26,6 +26,9 @@ extern char *optarg;
-+ #include <errno.h>
-+ #endif
-+ #include <fcntl.h>
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-+ 
-+ #include "debugfs.h"
-+ #include "uuid/uuid.h"
-+diff --git a/lib/blkid/devname.c b/lib/blkid/devname.c
-+index 3e2efa9d..671e781f 100644
-+--- a/lib/blkid/devname.c
-++++ b/lib/blkid/devname.c
-+@@ -36,6 +36,9 @@
-+ #if HAVE_SYS_MKDEV_H
-+ #include <sys/mkdev.h>
-+ #endif
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-+ #include <time.h>
-+ 
-+ #include "blkidP.h"
-+diff --git a/lib/blkid/devno.c b/lib/blkid/devno.c
-+index aa6eb907..480030f2 100644
-+--- a/lib/blkid/devno.c
-++++ b/lib/blkid/devno.c
-+@@ -31,6 +31,9 @@
-+ #if HAVE_SYS_MKDEV_H
-+ #include <sys/mkdev.h>
-+ #endif
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-+ 
-+ #include "blkidP.h"
-+ 
-+diff --git a/lib/ext2fs/finddev.c b/lib/ext2fs/finddev.c
-+index 311608de..62fa0dbe 100644
-+--- a/lib/ext2fs/finddev.c
-++++ b/lib/ext2fs/finddev.c
-+@@ -31,6 +31,9 @@
-+ #if HAVE_SYS_MKDEV_H
-+ #include <sys/mkdev.h>
-+ #endif
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-+ 
-+ #include "ext2_fs.h"
-+ #include "ext2fs.h"
-+diff --git a/lib/ext2fs/ismounted.c b/lib/ext2fs/ismounted.c
-+index bcac0f15..7d524715 100644
-+--- a/lib/ext2fs/ismounted.c
-++++ b/lib/ext2fs/ismounted.c
-+@@ -49,6 +49,9 @@
-+ #if HAVE_SYS_TYPES_H
-+ #include <sys/types.h>
-+ #endif
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-+ 
-+ #include "ext2_fs.h"
-+ #include "ext2fs.h"
-+diff --git a/misc/create_inode.c b/misc/create_inode.c
-+index ae22ff6f..8ce3fafa 100644
-+--- a/misc/create_inode.c
-++++ b/misc/create_inode.c
-+@@ -22,6 +22,10 @@
-+ #include <attr/xattr.h>
-+ #endif
-+ #include <sys/ioctl.h>
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-++
-+ #include <ext2fs/ext2fs.h>
-+ #include <ext2fs/ext2_types.h>
-+ #include <ext2fs/fiemap.h>
-+diff --git a/misc/mk_hugefiles.c b/misc/mk_hugefiles.c
-+index 049c6f41..5882394d 100644
-+--- a/misc/mk_hugefiles.c
-++++ b/misc/mk_hugefiles.c
-+@@ -35,6 +35,9 @@ extern int optind;
-+ #include <sys/ioctl.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>
-++#endif
-+ #include <libgen.h>
-+ #include <limits.h>
-+ #include <blkid/blkid.h>
-+-- 
-+2.13.3
-+
--- 
-2.13.3
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index d3fd18d..1a48fc0 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -49,7 +49,6 @@ config BR2_PACKAGE_ALSA_UTILS_ALSATPLG
+ config BR2_PACKAGE_ALSA_UTILS_AMIDI
+ 	bool "amidi"
+ 	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
+-	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 
+ config BR2_PACKAGE_ALSA_UTILS_AMIXER
+ 	bool "amixer"
