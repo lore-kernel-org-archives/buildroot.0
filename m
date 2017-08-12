@@ -1,7 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Aug 2017 08:30:51 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-11
-Message-ID: <20170812063051.03847208C9@mail.free-electrons.com>
+From: =?ISO-8859-15?B?Qmr2cm4=?= Kirchner <bjoern@am-soft.de>
+Date: Sat, 12 Aug 2017 09:48:39 +0200
+Subject: [Buildroot] [PATCH v6 0/3] Qt WebEngine support
+In-Reply-To: <20170811223048.0c445573@windsurf>
+References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
+ <20170811212937.62d819fc@tux.kirchner>
+ <20170811223048.0c445573@windsurf>
+Message-ID: <20170812094839.70a0c4b1@tux.kirchner>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +14,99 @@ To: buildroot@busybox.net
 
 Hello,
 
-Build statistics for 2017-08-11
-================================
+Am Fri, 11 Aug 2017 22:30:48 +0200
+schrieb Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 
-      successes : 130
-       failures : 15 
-       timeouts : 0  
-          TOTAL : 145
+> Hello,
+> 
+> On Fri, 11 Aug 2017 21:29:37 +0200, Bj?rn Kirchner wrote:
+> > Hello Ga?l,
+> > 
+> > Am Thu, 10 Aug 2017 21:33:55 -0400
+> > schrieb Ga?l PORTAY <gael.portay@savoirfairelinux.com>:
+> > 
+> > > Hi all,
+> > > 
+> > > The purpose of this patch series is to continue the integration of
+> > > Qt5 WebEngine in buildroot; started long time ago by Akihiko Odaki
+> > > [1] and Julien Corjon [2].
+> > >   
+> > ...
+> > > 
+> > > I have tested it with a rpi 3; and I will be glad if someone else
+> > > has another EGL platform to test it.
+> > >   
+> > 
+> > Thanks for your efforts. I have tried to compile the qt5webengine
+> > package for Qt 5.9.1. Unfortunatly there is a build error.
+> > 
+> > I applied your patches to buildroot git master. My build machine is
+> > Debian 8 64bit, my target is ARM Cortex-A8 (Olimex A10 Lime board
+> > with Allwinner A10 CPU).
+> > 
+> > It looks like the build is calling the system compiler of the host,
+> > which eventually seems to lead to a missing include file
+> > (bits/c++config.h). Please see snipped from build output:
+> > 
+> > --- snip from build output ---
+> > 
+> > [8/9559] CXX v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o
+> > FAILED: v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o 
+> > /usr/bin/g++ -MMD -MF
+> > v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o.d
+> > -DV8_DEPRECATION_WARNINGS -DUSE_UDEV -DUSE_AURA=1
+> > -DUSE_OPENSSL_CERTS=1 -DUSE_OZONE=1 -DNO_TCMALLOC -DDISABLE_NACL
+> > -DENABLE_TASK_MANAGER=1 -DENABLE_THEMES=1 -DFULL_SAFE_BROWSING
+> > -DSAFE_BROWSING_CSD -DSAFE_BROWSING_DB_LOCAL -DCHROMIUM_BUILD
+> > -DFIELDTRIAL_TESTING_ENABLED -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64
+> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNDEBUG -DNVALGRIND
+> > -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DV8_I18N_SUPPORT
+> > -DV8_TARGET_ARCH_ARM -DCAN_USE_ARMV7_INSTRUCTIONS
+> > -DCAN_USE_VFP3_INSTRUCTIONS -DUSE_EABI_HARDFLOAT=1
+> > -Iv8_snapshot/gen -I../../3rdparty/chromium
+> > -I../../3rdparty/chromium/v8/include -Iv8_snapshot/gen/v8/include
+> > -I../../3rdparty/chromium/v8 -fno-strict-aliasing
+> > --param=ssp-buffer-size=4 -fstack-protector -funwind-tables -fPIC
+> > -pipe -pthread -m32 -msse2 -mfpmath=sse -mmmx -g0
+> > -fvisibility=hidden
+> 
+> There is -m32, so it's trying to build a 32 bit binary on your x86_64
+> machine...
+> 
+> > -Wno-unused-local-typedefs -Wno-maybe-uninitialized
+> > -Wno-missing-field-initializers -Wno-unused-parameter -O3 -fno-ident
+> > -fdata-sections -ffunction-sections -fno-threadsafe-statics
+> > -fvisibility-inlines-hidden -std=gnu++11 -fno-rtti -fno-exceptions
+> > -Wno-deprecated -Wno-narrowing
+> > -c ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.cc
+> > -o v8_snapshot/obj/v8/mkpeephole/bytecode-operands.o In file
+> > included from /usr/include/c++/4.9/ios:38:0,
+> > from /usr/include/c++/4.9/ostream:38,
+> > from ../../3rdparty/chromium/v8/src/globals.h:11,
+> > from ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.h:8,
+> > from ../../3rdparty/chromium/v8/src/interpreter/bytecode-operands.cc:5: /usr/include/c++/4.9/iosfwd:38:28:
+> > fatal error: bits/c++config.h: No such file or directory #include
+> > <bits/c++config.h> ^ compilation terminated.
+> 
+> ... but you don't have the 32 bit development headers installed.
 
-Classification of failures by reason
-====================================
+You were absolutely right. After installing the missing headers,
+compilation finished without errors. Thanks.
 
-                libcurl-7.55.0 | 10
-                  cc-tool-0.26 | 2 
-                       unknown | 2 
-                     gpsd-3.16 | 1 
+Best regards,
 
+Bj?rn
 
-Detail of failures
-===================
-
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/debc56d01aa2617e0ec8942251ff8d1d2c689222 |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/d9167071b4d7fe29abfe8ad37a4f8e807145853c |     
-microblazeel |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/3686cd3f3e7b6aee84f4377bd2dded1115321fb3 |     
-         arc |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/ffd0889cd7ebae53467489fc06a7da9c3b245616 | ORPH
-       nios2 |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/dfa3618d1ff18964f273c801c4afd420096da956 | ORPH
-        m68k |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/51dfbb97a96e9fd041ee24b17fefc03948abfd68 | ORPH
-microblazeel |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/100268b405a2f16db35e8ac2c2771bf7ccdcf9a5 | ORPH
-        m68k |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/3f1bafa2d6de2d769643bce37e2c31766a357cc7 | ORPH
-        or1k |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/bf26c08cf3267214278674472f931603f69951ae | ORPH
-         arc |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/4ba76b92b208ab247527fb4500e01697838b4f7e | ORPH
-        or1k |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/46a186a11228d3a41cdefc0d4e554f9b3989cdcf | ORPH
-         arc |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/38d95a9f6b799fd0097d233f2e964764f5451203 | ORPH
-       nios2 |                 libcurl-7.55.0 | NOK | http://autobuild.buildroot.net/results/d1f73c7f808bf8fd6bafc495bdceb6ca44078a2b | ORPH
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/ce0822022f053397b019365b6719e340a1acf635 |     
-        mips |                        unknown | NOK | http://autobuild.buildroot.net/results/7b752db0b615da4ef5b7154df9de0ba051af950c |     
-
--- 
-http://autobuild.buildroot.net
+> 
+> Questions are:
+> 
+>  * Is it normal that qtwebengine builds this for the host machine. It
+>    could be normal, if it's a program later used to generate
+> data/code ?
+> 
+>  * If it's normal that it's built for the host, why do they force
+>    building for 32 bits by passing -m32 ?
+> 
+> Best regards,
+> 
+> Thomas
