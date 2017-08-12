@@ -1,63 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 Aug 2017 17:31:16 +0200
-Subject: [Buildroot] [PATCH v6 1/3] rpi-userland: fix opengl library
-	symlinks
-In-Reply-To: <20170811013358.26864-2-gael.portay@savoirfairelinux.com>
-References: <20170811013358.26864-1-gael.portay@savoirfairelinux.com>
- <20170811013358.26864-2-gael.portay@savoirfairelinux.com>
-Message-ID: <e68a0fc8-7ad3-26c3-02a3-79a794600271@mind.be>
+Date: Sat, 12 Aug 2017 17:43:30 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: fix retrieving the gitid
+In-Reply-To: <20170812094943.16460-1-yann.morin.1998@free.fr>
+References: <20170812094943.16460-1-yann.morin.1998@free.fr>
+Message-ID: <1c2b2347-3b34-ce6a-7e4b-30055fae81d3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Since you're probably going to send a v7 with the IA32 workaround, some
-comments on this patch which I'd otherwise fix up while applying.
 
-On 11-08-17 03:33, Ga?l PORTAY wrote:
-> The Qt WebEngine module loads libEGL.so.1 and libGLESv2.so.2 libraries.
-> Path are hard-coded [1].
-  Paths
 
+On 12-08-17 11:49, Yann E. MORIN wrote:
+> Before 66f91eb (autobuild-run: add --repo option), we used to 'git pull'
+> to update the local Buildroot clone. This had the side-effect of
+> updating the local refs because we were pulling from 'origin'.
 > 
-> This patch sets up cmake to create those library links.
+> So 'origin/master' and 'master' were correctly updated.
 > 
-> 	# ls -l /usr/lib/lib*GL*
-> 	lrwxrwxrwx    1 root     root            11 Mar 21 17:24 /usr/lib/libEGL.so -> libEGL.so.1
-> 	lrwxrwxrwx    1 root     root            15 Mar 21 17:24 /usr/lib/libEGL.so.1 -> libEGL.so.1.0.0
-> 	-rwxr-xr-x    1 root     root        163152 Mar 22 14:56 /usr/lib/libEGL.so.1.0.0
-> 	lrwxrwxrwx    1 root     root            14 Mar 21 17:24 /usr/lib/libGLESv2.so -> libGLESv2.so.2
-> 	lrwxrwxrwx    1 root     root            18 Mar 21 17:24 /usr/lib/libGLESv2.so.2 -> libGLESv2.so.2.0.0
-> 	-rwxr-xr-x    1 root     root         78788 Mar 22 14:56 /usr/lib/libGLESv2.so.2.0.0
-
- If I read the code correctly (I didn't try to execute it), it will actually
-create a link libEGL.so.1 -> libEGL.so, so where do you get the above?
-
+> But since the offending commit, we no longer pull, and we instead fetch
+> from an explicit repository, which never updates 'origin/master' nor
+> 'master'. Instead, they both are stuck at the time the repository was
+> cloned, or at the time the autobuild script was updated.
 > 
-> A pull request is pending [2].
+> We fix that by just dropping the 'master' ref from the git log so that
+> the log applies to the commit for current working copy.
 > 
-> [1] https://github.com/qt/qtwebengine/blob/5.8.0/src/core/surface_factory_qt.cpp#L76-L86
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
- Perhaps use the 5.9.1 link now:
-https://github.com/qt/qtwebengine/blob/v5.9.1/src/core/surface_factory_qt.cpp#L76-L86
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ Also checked that there are no other similar oopses.
 
-> [2] https://github.com/raspberrypi/userland/pull/379
-
- This pull request URL should also be in the patch itself.
-
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-
- Another question: do the other 10 providers of libGLES and libEGL do create the
-correct symlinks? If some of them don't, then perhaps we should find a more
-fundamental solution... That said, for now this is sufficient I think.
+ For me it would make sense to produce this gitid file immediately after the
+fetch, but that's a different story of course.
 
  Regards,
  Arnout
 
-[snip]
+> ---
+>  scripts/autobuild-run | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index ef4f40e..406b8e5 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -409,7 +409,7 @@ def send_results(result, **kwargs):
+>          shutil.copyfile(os.path.join(outputdir, "legal-info", "manifest.csv"),
+>                          os.path.join(resultdir, "licenses-manifest.csv"))
+>  
+> -    subprocess.call(["git log master -n 1 --pretty=format:%%H > %s" % \
+> +    subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
+>                       os.path.join(resultdir, "gitid")],
+>                      shell=True, cwd=srcdir)
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
