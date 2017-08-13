@@ -1,23 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 00:02:14 +0200
-Subject: [Buildroot] Please update your autobuild-run script
-Message-ID: <20170814000214.40bf529b@windsurf>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 14 Aug 2017 01:25:24 +0200
+Subject: [Buildroot] [PATCH] socrates_cyclone5_defconfig: U-Boot needs DTC
+Message-ID: <20170813232524.17775-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Probably not noticed before because dtc was already built or it was
+installed on the host.
 
-A new important commit has been made on the autobuild-run script, so
-could you please update your autobuilder instances with the latest
-version (commit da65988ec200767bab0c891ee2916ccc10071a7e).
+Fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979369
 
-Thanks a lot!
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+---
+ configs/socrates_cyclone5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/configs/socrates_cyclone5_defconfig b/configs/socrates_cyclone5_defconfig
+index 5793458b74..45355c1b85 100644
+--- a/configs/socrates_cyclone5_defconfig
++++ b/configs/socrates_cyclone5_defconfig
+@@ -21,6 +21,7 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="socfpga_socrates"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.3
