@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Aug 2017 17:56:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump verstion to 0.3.0.10
-In-Reply-To: <20170802170850.22311-1-bernd.kuhls@t-online.de>
-References: <20170802170850.22311-1-bernd.kuhls@t-online.de>
-Message-ID: <8dbeb620-731a-6273-74ef-53f15fd9dfff@mind.be>
+Date: Sun, 13 Aug 2017 17:57:09 +0200
+Subject: [Buildroot] [PATCH] python-netifaces: bump to version 0.10.6
+In-Reply-To: <20170804052718.11102-1-yegorslists@googlemail.com>
+References: <20170804052718.11102-1-yegorslists@googlemail.com>
+Message-ID: <738eb49c-b594-c72e-fdb8-69b8e7613383@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,10 @@ To: buildroot@busybox.net
 
 
 
-On 02-08-17 19:08, Bernd Kuhls wrote:
-> Release notes: https://blog.torproject.org/blog/tor-03010-released
+On 04-08-17 07:27, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
  Applied to next, thanks.
 
