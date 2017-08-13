@@ -1,41 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Aug 2017 01:28:58 +0200
-Subject: [Buildroot] [PATCH] syslinux: Drop patch 0003,
- not needed after gnu-efi update
-In-Reply-To: <1499073063-15005-1-git-send-email-benoit.allard@greenbone.net>
-References: <1499073063-15005-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <314d6f8b-551b-172d-63f0-a65490baa00c@mind.be>
+Date: Mon, 14 Aug 2017 01:44:27 +0200
+Subject: [Buildroot] defconfigs with upstream kernels
+Message-ID: <a1c822f4-061c-527b-5ae2-2a82764159f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Benoit,
+ Hi all,
 
-On 03-07-17 11:11, Beno?t Allard wrote:
-> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+ Currently, we want the defconfigs to have fixed versions of kernel and
+bootloader that have been tested on the target platform. However, we *don't*
+have fixed versions of GCC, uClibc, and even some bootloaders (grub and syslinux
+don't have a version selection).
 
- Is this patch really not needed anymore after the gnu-efi update? Isn't it
-still needed for BIOS (and perhaps others as well, e.g. isolinux)? I'm looking
-at the build failure of ts5x00_defconfig and it seems to point at this issue.
-And indeed, reinstating this patch fixes the build failure.
+ Therefore, I wonder if it doesn't make a lot more sense to use
+BR2_LINUX_KERNEL_LATEST_VERSION and BR2_TARGET_UBOOT_LATEST_VERSION for boards
+that are fully upstream (i.e. without patches).
 
-[snip]
-> -Fix for https://bugs.debian.org/846679: syslinux: FTBFS: ld:
-> -ldlinux.elf: Not enough room for program headers, try linking with -N
+ It's a divergence from our current philosophy, because the defconfigs are no
+longer fixed, but really currently they aren't either. In fact, we see constant
+build failures from the GCC bumps (*1) which would be avoided by just using the
+latest version (*2). We can assume that upstream does their homework and makes
+sure that supported boards remain supported (*3). And we anyway already see
+occasional failures due to grub or syslinux bumps.
 
- This is exactly the error we see.
+ Any objections to switching all upstream boards to LATEST?
 
- I sent a patch to revert this, could you check it?
+(*1) Actually, this will be the last time this happens to such a degree, because
+both linux and u-boot removed their dependence on the GCC version number.
+
+(*2) Actually, only 5 of the 13 defconfigs that currently fail because of this
+use an upstream kernel.
+
+(*3) For the qemu builds, it turns out that we sometimes have to stick to an
+older kernel. But qemu is of course special.
+
 
  Regards,
  Arnout
-
-[1] https://gitlab.com/arnout/buildroot/-/jobs/28979377
-
-[snip]
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
