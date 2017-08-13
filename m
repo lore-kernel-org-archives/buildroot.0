@@ -1,35 +1,70 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 14 Aug 2017 01:25:24 +0200
-Subject: [Buildroot] [PATCH] socrates_cyclone5_defconfig: U-Boot needs DTC
-Message-ID: <20170813232524.17775-1-arnout@mind.be>
+Date: Mon, 14 Aug 2017 01:28:35 +0200
+Subject: [Buildroot] [PATCH] Revert "syslinux: drop patch 0003,
+	not needed after gnu-efi update"
+Message-ID: <20170813232835.18414-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Probably not noticed before because dtc was already built or it was
-installed on the host.
+It turns out that this patch is still needed, since with some versions
+of binutils the error still occurs.
 
-Fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979369
+Partially fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979377
+
+This reverts commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+Cc: Beno?t Allard <benoit.allard@greenbone.net>
 ---
- configs/socrates_cyclone5_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+The failing ts5x00_defconfig also requires a kernel bump
+---
+ ....elf-Not-enough-room-for-program-headers-.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
 
-diff --git a/configs/socrates_cyclone5_defconfig b/configs/socrates_cyclone5_defconfig
-index 5793458b74..45355c1b85 100644
---- a/configs/socrates_cyclone5_defconfig
-+++ b/configs/socrates_cyclone5_defconfig
-@@ -21,6 +21,7 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2017.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="socfpga_socrates"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC=y
+diff --git a/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch b/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
+new file mode 100644
+index 0000000000..83a87ee071
+--- /dev/null
++++ b/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
+@@ -0,0 +1,35 @@
++From 61de7762389d460da7ffdd644f50c60175cce23b Mon Sep 17 00:00:00 2001
++From: Steve McIntyre <93sam@debian.org>
++Date: Wed, 5 Apr 2017 22:09:37 +0200
++Subject: [PATCH] Fix 'ldlinux.elf: Not enough room for program headers, try
++ linking with -N'
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fix for https://bugs.debian.org/846679: syslinux: FTBFS: ld:
++ldlinux.elf: Not enough room for program headers, try linking with -N
++
++https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=846679;filename=syslinux_6.03%2Bdfsg-14.1.debdiff;msg=10
++
++Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
++---
++ core/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/core/Makefile b/core/Makefile
++index ad0acb5..58a3545 100644
++--- a/core/Makefile
+++++ b/core/Makefile
++@@ -165,7 +165,7 @@ LDSCRIPT = $(SRC)/$(ARCH)/syslinux.ld
++ 
++ %.elf: %.o $(LIBDEP) $(LDSCRIPT) $(AUXLIBS)
++ 	$(LD) $(LDFLAGS) -Bsymbolic $(LD_PIE) -E --hash-style=gnu -T $(LDSCRIPT) -M -o $@ $< \
++-		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group \
+++		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group --no-dynamic-linker \
++ 		> $(@:.elf=.map)
++ 	$(OBJDUMP) -h $@ > $(@:.elf=.sec)
++ 	$(PERL) $(SRC)/lstadjust.pl $(@:.elf=.lsr) $(@:.elf=.sec) $(@:.elf=.lst)
++-- 
++2.7.4
++
 -- 
 2.13.3
