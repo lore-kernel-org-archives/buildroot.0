@@ -1,94 +1,80 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 13 Aug 2017 16:28:08 +0200
-Subject: [Buildroot] [git commit branch/next] package/sysdig: bump to
-	version 0.17.0
-Message-ID: <20170813154723.596C881F7B@busybox.osuosl.org>
+Date: Sun, 13 Aug 2017 17:32:11 +0200
+Subject: [Buildroot] [git commit branch/next] python-automat: new package
+Message-ID: <20170813154723.A85FC818A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a04b0b519e89a2fa9f82ff81376509b8d4e6a32
+commit: https://git.buildroot.net/buildroot/commit/?id=9d6b907a4b463d73af3b43ae19e0d508c1d1b3c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps sysdig to version 0.17.0 and updates the
-dependencies accordingly.
-
-According to [1], the minimum GCC version is 4.8 so encode that as
-well.
-
-[1] https://www.sysdig.org/wiki/how-to-install-sysdig-from-the-source-code/
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Arnout: also bump gcc dependency to 4.8]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Arnout: properly wrapped Config.in help text]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/sysdig/Config.in   | 11 ++++++++---
- package/sysdig/sysdig.hash |  2 +-
- package/sysdig/sysdig.mk   |  8 +++++---
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ package/Config.in                          |  1 +
+ package/python-automat/Config.in           |  9 +++++++++
+ package/python-automat/python-automat.hash |  3 +++
+ package/python-automat/python-automat.mk   | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index dfb9db5..d3f73e6 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -3,11 +3,16 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on !BR2_STATIC_LIBS # luajit
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_JSONCPP
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_JQ
-+	select BR2_PACKAGE_LIBB64
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux instance,
-@@ -17,7 +22,7 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  http://sysdig.org
- 
--comment "sysdig needs a toolchain w/ C++, gcc >= 4.7, dynamic library and a Linux kernel to be built"
-+comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index f64ef9e..8305413 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256  e72490eaf413745aef87965a5abb1024908053064f86593b257f12bf5b0d6b97  sysdig-0.1.100.tar.gz
-+sha256  f009acc32f2b15fcb0d2267bde6f6de9b3445179003c979ba61a8836abdb78f9  sysdig-0.17.0.tar.gz
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index f967727..2d5ad23 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
- 
--SYSDIG_VERSION = 0.1.100
-+SYSDIG_VERSION = 0.17.0
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
- SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
--	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
--SYSDIG_DEPENDENCIES = zlib luajit jsoncpp
-+	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
-+	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
-+	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
-+SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- # sysdig creates the module Makefile from a template, which contains a
+diff --git a/package/Config.in b/package/Config.in
+index 9bc3209..5f83a4d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -694,6 +694,7 @@ menu "External python modules"
+ 	source "package/python-asn1crypto/Config.in"
+ 	source "package/python-attrs/Config.in"
+ 	source "package/python-autobahn/Config.in"
++	source "package/python-automat/Config.in"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-backports-shutil-get-terminal-size/Config.in"
+diff --git a/package/python-automat/Config.in b/package/python-automat/Config.in
+new file mode 100644
+index 0000000..ee02d22
+--- /dev/null
++++ b/package/python-automat/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_AUTOMAT
++	bool "python-automat"
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  Self-service finite-state machines for the programmer on the
++	  go.
++
++	  https://github.com/glyph/Automat
+diff --git a/package/python-automat/python-automat.hash b/package/python-automat/python-automat.hash
+new file mode 100644
+index 0000000..c0e3505
+--- /dev/null
++++ b/package/python-automat/python-automat.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/automat/json, sha256 locally computed
++md5	ad7bba58d262d8956d732330cb5ef53d  Automat-0.6.0.tar.gz
++sha256	3c1fd04ecf08ac87b4dd3feae409542e9bf7827257097b2b6ed5692f69d6f6a8  Automat-0.6.0.tar.gz
+diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
+new file mode 100644
+index 0000000..96a4f51
+--- /dev/null
++++ b/package/python-automat/python-automat.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-automat
++#
++################################################################################
++
++PYTHON_AUTOMAT_VERSION = 0.6.0
++PYTHON_AUTOMAT_SOURCE = Automat-$(PYTHON_AUTOMAT_VERSION).tar.gz
++PYTHON_AUTOMAT_SITE = https://pypi.python.org/packages/de/05/b8e453085cf8a7f27bb1226596f4ccf5cc9e758377d60284f990bbdc592c
++PYTHON_AUTOMAT_SETUP_TYPE = setuptools
++PYTHON_AUTOMAT_LICENSE = MIT
++PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
++PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm
++
++$(eval $(python-package))
