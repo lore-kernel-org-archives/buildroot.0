@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Aug 2017 17:58:25 +0200
-Subject: [Buildroot] [PATCH v2 3/4] python-automat: new package
-In-Reply-To: <20170802055726.18461-4-yegorslists@googlemail.com>
-References: <20170802055726.18461-1-yegorslists@googlemail.com>
- <20170802055726.18461-4-yegorslists@googlemail.com>
-Message-ID: <418b145a-e1b1-2145-223b-1391e4f89b33@mind.be>
+Date: Sun, 13 Aug 2017 18:00:40 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libb64: new package
+In-Reply-To: <1502467249-2861-2-git-send-email-angelo.compagnucci@gmail.com>
+References: <1502467249-2861-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1502467249-2861-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <16847176-5001-1660-7b1a-96cbed5e67f0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,27 @@ To: buildroot@busybox.net
 
 
 
-On 02-08-17 07:57, yegorslists at googlemail.com wrote:
-> +config BR2_PACKAGE_PYTHON_AUTOMAT
-> +	bool "python-automat"
-> +	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-> +	select BR2_PACKAGE_PYTHON_SIX # runtime
-> +	help
-> +	  Self-service finite-state machines for the programmer on the go.
+On 11-08-17 18:00, Angelo Compagnucci wrote:
+> This patch adds libb64, a library of ANSI C routines for fast
+> encoding/decoding data into and from a base64-encoded format.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
- I had to rewrap this before applying to next. Please use the check-package
-script before submitting your patches.
+ Applied to next with significant changes:
+    - properly wrap Config.in
+    - move from Crypto to Other menu
+    - don't install to target
+    - don't make headers executable
+    - don't add -D to install with multiple source files
+    - extend commit log
+
+ Could you re-test the final version on the next branch?
+
+ One of the issues was the wrapping of Config.in. For future patches, please use
+the check-package script before submitting.
 
  Regards,
  Arnout
-
-> +
-> +	  https://github.com/glyph/Automat
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
