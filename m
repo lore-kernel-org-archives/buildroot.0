@@ -1,39 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Aug 2017 18:02:51 +0200
-Subject: [Buildroot] [PATCH 3/3] package/sysdig: bump to version 0.17.0
-In-Reply-To: <1502467249-2861-4-git-send-email-angelo.compagnucci@gmail.com>
-References: <1502467249-2861-1-git-send-email-angelo.compagnucci@gmail.com>
- <1502467249-2861-4-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <834e0ac9-0ba8-3035-3ecb-dfe5dbafced3@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 13 Aug 2017 19:10:39 +0200
+Subject: [Buildroot] [PATCH] ci20: update kernel and u-boot
+Message-ID: <20170813171039.GA7676@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Unbreak failing defconfig.
+Resulting kernel and rootfs booted on ci20 device.
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ configs/ci20_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On 11-08-17 18:00, Angelo Compagnucci wrote:
-> This patch bumps sysdig to version 0.17.0 and updates the
-> dependencies accordingly.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-
- Applied to next, thanks.
-
- I also changed it to depend on GCC 4.8 because that's what upstream claims they
-support - I haven't actually tested with GCC 4.7.
-
- Note that this package doesn't get tested in the autobuilders since it depends
-on the kernel. We really should find a solution for that...
-
- Regards,
- Arnout
-
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index ecf3007..75687ae 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fbf929bc733b82b15f6996d4262a45870f19d214"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7dff33297116643485ca37141d804eddd793e834"
+ BR2_LINUX_KERNEL_DEFCONFIG="ci20"
+ 
+ # u-boot
+@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
+ BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
+-BR2_TARGET_UBOOT_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
++BR2_TARGET_UBOOT_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
