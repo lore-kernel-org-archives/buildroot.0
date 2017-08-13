@@ -1,70 +1,45 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 14 Aug 2017 01:28:35 +0200
-Subject: [Buildroot] [PATCH] Revert "syslinux: drop patch 0003,
-	not needed after gnu-efi update"
-Message-ID: <20170813232835.18414-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 14 Aug 2017 01:28:58 +0200
+Subject: [Buildroot] [PATCH] syslinux: Drop patch 0003,
+ not needed after gnu-efi update
+In-Reply-To: <1499073063-15005-1-git-send-email-benoit.allard@greenbone.net>
+References: <1499073063-15005-1-git-send-email-benoit.allard@greenbone.net>
+Message-ID: <314d6f8b-551b-172d-63f0-a65490baa00c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It turns out that this patch is still needed, since with some versions
-of binutils the error still occurs.
+ Hi Benoit,
 
-Partially fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979377
+On 03-07-17 11:11, Beno?t Allard wrote:
+> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
 
-This reverts commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9.
+ Is this patch really not needed anymore after the gnu-efi update? Isn't it
+still needed for BIOS (and perhaps others as well, e.g. isolinux)? I'm looking
+at the build failure of ts5x00_defconfig and it seems to point at this issue.
+And indeed, reinstating this patch fixes the build failure.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Beno?t Allard <benoit.allard@greenbone.net>
----
-The failing ts5x00_defconfig also requires a kernel bump
----
- ....elf-Not-enough-room-for-program-headers-.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
+[snip]
+> -Fix for https://bugs.debian.org/846679: syslinux: FTBFS: ld:
+> -ldlinux.elf: Not enough room for program headers, try linking with -N
 
-diff --git a/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch b/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
-new file mode 100644
-index 0000000000..83a87ee071
---- /dev/null
-+++ b/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
-@@ -0,0 +1,35 @@
-+From 61de7762389d460da7ffdd644f50c60175cce23b Mon Sep 17 00:00:00 2001
-+From: Steve McIntyre <93sam@debian.org>
-+Date: Wed, 5 Apr 2017 22:09:37 +0200
-+Subject: [PATCH] Fix 'ldlinux.elf: Not enough room for program headers, try
-+ linking with -N'
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fix for https://bugs.debian.org/846679: syslinux: FTBFS: ld:
-+ldlinux.elf: Not enough room for program headers, try linking with -N
-+
-+https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=846679;filename=syslinux_6.03%2Bdfsg-14.1.debdiff;msg=10
-+
-+Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
-+---
-+ core/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/core/Makefile b/core/Makefile
-+index ad0acb5..58a3545 100644
-+--- a/core/Makefile
-++++ b/core/Makefile
-+@@ -165,7 +165,7 @@ LDSCRIPT = $(SRC)/$(ARCH)/syslinux.ld
-+ 
-+ %.elf: %.o $(LIBDEP) $(LDSCRIPT) $(AUXLIBS)
-+ 	$(LD) $(LDFLAGS) -Bsymbolic $(LD_PIE) -E --hash-style=gnu -T $(LDSCRIPT) -M -o $@ $< \
-+-		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group \
-++		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group --no-dynamic-linker \
-+ 		> $(@:.elf=.map)
-+ 	$(OBJDUMP) -h $@ > $(@:.elf=.sec)
-+ 	$(PERL) $(SRC)/lstadjust.pl $(@:.elf=.lsr) $(@:.elf=.sec) $(@:.elf=.lst)
-+-- 
-+2.7.4
-+
+ This is exactly the error we see.
+
+ I sent a patch to revert this, could you check it?
+
+ Regards,
+ Arnout
+
+[1] https://gitlab.com/arnout/buildroot/-/jobs/28979377
+
+[snip]
+
 -- 
-2.13.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
