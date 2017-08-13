@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Aug 2017 17:56:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
- to 4.15.3
-In-Reply-To: <20170802174343.31443-1-bernd.kuhls@t-online.de>
-References: <20170802174343.31443-1-bernd.kuhls@t-online.de>
-Message-ID: <33d189dc-043c-9485-60a7-a741bb822b6d@mind.be>
+Date: Sun, 13 Aug 2017 17:56:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tor: bump verstion to 0.3.0.10
+In-Reply-To: <20170802170850.22311-1-bernd.kuhls@t-online.de>
+References: <20170802170850.22311-1-bernd.kuhls@t-online.de>
+Message-ID: <8dbeb620-731a-6273-74ef-53f15fd9dfff@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +12,9 @@ To: buildroot@busybox.net
 
 
 
-On 02-08-17 19:43, Bernd Kuhls wrote:
+On 02-08-17 19:08, Bernd Kuhls wrote:
+> Release notes: https://blog.torproject.org/blog/tor-03010-released
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
  Applied to next, thanks.
