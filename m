@@ -1,44 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 13 Aug 2017 17:26:57 +0200
-Subject: [Buildroot] [git commit branch/next] package/tor: bump version to
-	0.3.0.10
-Message-ID: <20170813154723.77108817B0@busybox.osuosl.org>
+Date: Sun, 13 Aug 2017 17:27:26 +0200
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-mythtv: bump
+	version to 4.15.3
+Message-ID: <20170813154723.8527A817B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e40f8cf77cacdfd5027199ebe8584c33c16b9d3f
+commit: https://git.buildroot.net/buildroot/commit/?id=b085302642ffb24d5896744b7102f8bc25c30ae6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Release notes: https://blog.torproject.org/blog/tor-03010-released
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 618acdc..3252306 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 57725a0..82923a8 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 48d4880bf6ccb19ce9af2abde6946d7cf0635cc807548badbf4a221a79581e42  tor-0.3.0.9.tar.gz
-+sha256 9a8e6e49a1688dae64dca10f84a414ec9a4f393fb2256ae28e0c2e3239185ab1  tor-0.3.0.10.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 0fa17e6..3a4c52e 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256 30b6a20f846f0f0cc14c2347efbf3b72162c876daed53a3731d3f975d370765e  kodi-pvr-mythtv-4.15.0.tar.gz
++sha256 fd60aba0dac25ab5885371495a5dfca53308c1fa23215299b0f62997c7391e1e  kodi-pvr-mythtv-4.15.3.tar.gz
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index 515050b..8099ffa 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -6,7 +6,7 @@
  
--TOR_VERSION = 0.3.0.9
-+TOR_VERSION = 0.3.0.10
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_MYTHTV_VERSION = 4.15.0
++KODI_PVR_MYTHTV_VERSION = 4.15.3
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
