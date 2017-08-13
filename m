@@ -1,72 +1,79 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 13 Aug 2017 22:22:47 +0200
-Subject: [Buildroot] [PATCH] libconfuse: bugfix bump to 3.2
-Message-ID: <20170813202247.17711-1-arnout@mind.be>
+From: Cam Hutchison <camh@xdna.net>
+Date: Mon, 14 Aug 2017 07:21:08 +1000
+Subject: [Buildroot] [PATCH v2 0/4] Rename skeleton packages to include init-
+Message-ID: <20170813212112.7873-1-camh@xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release contains only two real changes to fix two bugs. One is
-only relevant for Windows; the other one fixes handling of empty
-comment lines.
+This series renames the skeletons selected by init systems to add "init-"
+into the name of the package. For the short time that this new skeleton
+structure has been in buildroot, the naming has caused a little
+confusion with at least two people.
 
-libconfuse is used by genimage, and we have one defconfig,
-linksprite_pcduino, that has empty comment lines in its genimage.cfg.
-Thus, it fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/27873642
+Arnout has suggested this rename (on irc). We normally wouldn't bother
+but there's a chance to get it in before the 2017.08 release enshrines
+the names.
 
-While we're at it, also change the upstream URL in Config.in to github.
-The old URL on nongnu was just a download directory and didn't have
-anything newer than 2010, while github has a nice README.md.
+I split it into four patches for easier review - names are similar so
+it's easy to miss a mistake when looking at multiple renames in one
+patch.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Frank Hunleth <fhunleth@troodon-software.com>
----
-Just to be clear, this is for master.
+Changes v1 -> v2:
+  - Fixed skeleton-none.mk missed rename
 
-It is NOT for 2017.05 because the bug is a regression of v3.1 and
-2017.05.x has v3.0.
----
- package/libconfuse/Config.in       | 2 +-
- package/libconfuse/libconfuse.hash | 7 ++++---
- package/libconfuse/libconfuse.mk   | 2 +-
- 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libconfuse/Config.in b/package/libconfuse/Config.in
-index be18cbb073..b96b8f2811 100644
---- a/package/libconfuse/Config.in
-+++ b/package/libconfuse/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBCONFUSE
- 	  environment variable expansion, functions and nested include
- 	  statements.
- 
--	  http://savannah.nongnu.org/download/confuse/
-+	  https://github.com/martinh/libconfuse/
-diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
-index e57e59c56d..826a9263f5 100644
---- a/package/libconfuse/libconfuse.hash
-+++ b/package/libconfuse/libconfuse.hash
-@@ -1,3 +1,4 @@
--# From https://github.com/martinh/libconfuse/releases/download/v3.1/confuse-3.1.tar.xz.md5, sha256 locally computed.
--md5  08f1ace0055f92d80a8ad11671346a37  confuse-3.1.tar.xz
--sha256  8171f31e0071d5e4460269fdcc8b4e748cf23b4bf6bbe672f718a136dd63ca66  confuse-3.1.tar.xz
-+# From https://github.com/martinh/libconfuse/releases/download/v3.2/confuse-3.2.tar.xz.md5
-+md5  84259ac3bd495645ab2fe61654917232  confuse-3.2.tar.xz
-+# Locally computed
-+sha256  a46abb8696026d314197b6a70ae1a1c296342a9a68aa69b1935709c1477a4e48  confuse-3.1.tar.xz
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 07a73c8937..431fefd4c7 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCONFUSE_VERSION = 3.1
-+LIBCONFUSE_VERSION = 3.2
- LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
- LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
- LIBCONFUSE_INSTALL_STAGING = YES
+Cam Hutchison (4):
+  skeleton: Rename skeleton-none to skeleton-init-none
+  skeleton: Rename skeleton-systemd to skeleton-init-systemd
+  skeleton: Rename skeleton-sysv to skeleton-init-sysv
+  skeleton: Rename skeleton-common to skeleton-init-common
+
+ package/Config.in                                  |  8 +--
+ package/skeleton-common/Config.in                  |  2 -
+ package/skeleton-init-common/Config.in             |  2 +
+ .../skeleton-init-common.mk}                       | 72 +++++++++++-----------
+ .../Config.in                                      |  6 +-
+ .../skeleton-init-none.mk}                         | 10 +--
+ .../Config.in                                      |  6 +-
+ .../skeleton-init-systemd.mk}                      | 26 ++++----
+ .../Config.in                                      |  6 +-
+ .../skeleton-init-sysv.mk}                         | 14 ++---
+ .../skeleton/dev/log                               |  0
+ .../skeleton/dev/pts/.empty                        |  0
+ .../skeleton/dev/shm/.empty                        |  0
+ .../skeleton/etc/fstab                             |  0
+ .../skeleton/var/cache                             |  0
+ .../skeleton/var/lib/misc                          |  0
+ .../skeleton/var/lock                              |  0
+ .../skeleton/var/log                               |  0
+ .../skeleton/var/run                               |  0
+ .../skeleton/var/spool                             |  0
+ .../skeleton/var/tmp                               |  0
+ system/Config.in                                   |  8 +--
+ 22 files changed, 80 insertions(+), 80 deletions(-)
+ delete mode 100644 package/skeleton-common/Config.in
+ create mode 100644 package/skeleton-init-common/Config.in
+ rename package/{skeleton-common/skeleton-common.mk => skeleton-init-common/skeleton-init-common.mk} (40%)
+ rename package/{skeleton-sysv => skeleton-init-none}/Config.in (35%)
+ rename package/{skeleton-none/skeleton-none.mk => skeleton-init-none/skeleton-init-none.mk} (67%)
+ rename package/{skeleton-none => skeleton-init-systemd}/Config.in (33%)
+ rename package/{skeleton-systemd/skeleton-systemd.mk => skeleton-init-systemd/skeleton-init-systemd.mk} (72%)
+ rename package/{skeleton-systemd => skeleton-init-sysv}/Config.in (35%)
+ rename package/{skeleton-sysv/skeleton-sysv.mk => skeleton-init-sysv/skeleton-init-sysv.mk} (57%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/log (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/pts/.empty (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/shm/.empty (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/etc/fstab (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/cache (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/lib/misc (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/lock (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/log (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/run (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/spool (100%)
+ rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/tmp (100%)
+
 -- 
-2.13.3
+2.11.0
