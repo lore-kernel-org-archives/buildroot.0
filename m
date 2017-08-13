@@ -1,278 +1,127 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Mon, 14 Aug 2017 07:21:12 +1000
-Subject: [Buildroot] [PATCH v2 4/4] skeleton: Rename skeleton-common to
-	skeleton-init-common
-In-Reply-To: <20170813212112.7873-1-camh@xdna.net>
-References: <20170813212112.7873-1-camh@xdna.net>
-Message-ID: <20170813212112.7873-5-camh@xdna.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Aug 2017 23:32:38 +0200
+Subject: [Buildroot] [PATCH] elf2flt: add patch to fix ld.real search logic
+Message-ID: <20170813213238.27144-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The skeletons are based on the selection of BR2_INIT_*, so add init- to
-the package name to make this clearer. The name skeleton-common implies
-that it is common to all skeletons, yet it does not apply to
-skeleton-custom. It is only common to the skeleton-init-* packages, so
-name it the same way.
+elf2flt contains a program called ld-elf2flt, which gets installed as
+a replacement for ld, with ld renamed to ld.real. This program
+therefore calls ld.real internally.
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
+The logic to find ld.real worked fine for:
+
+ - bin/TARGET_ALIAS-ld
+ - TARGET_ALIAS/bin/ld
+
+However, it failed badly if bin/SIMPLER_TARGET_ALIAS-ld is used, as
+symlink to bin/TARGET_ALIAS-ld. For example:
+
+$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
+/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
+
+$ ./output/host/bin/arm-linux-ld
+arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
+
+$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
+/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
+
+This commit fixes that by adding a patch that adjusts the ld-elf2flt
+logic to properly cope with this situation.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |  2 +-
- package/skeleton-common/Config.in                  |  2 -
- package/skeleton-init-common/Config.in             |  2 +
- .../skeleton-init-common.mk}                       | 72 +++++++++++-----------
- package/skeleton-init-none/Config.in               |  2 +-
- package/skeleton-init-none/skeleton-init-none.mk   |  2 +-
- package/skeleton-init-systemd/Config.in            |  2 +-
- .../skeleton-init-systemd/skeleton-init-systemd.mk |  2 +-
- package/skeleton-init-sysv/Config.in               |  2 +-
- package/skeleton-init-sysv/skeleton-init-sysv.mk   |  2 +-
- 10 files changed, 45 insertions(+), 45 deletions(-)
- delete mode 100644 package/skeleton-common/Config.in
- create mode 100644 package/skeleton-init-common/Config.in
- rename package/{skeleton-common/skeleton-common.mk => skeleton-init-common/skeleton-init-common.mk} (40%)
+ ...behave-properly-when-called-with-a-name-d.patch | 79 ++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index ed2a472cef..a0868d92ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2,8 +2,8 @@ menu "Target packages"
- 
- 	source "package/busybox/Config.in"
- 	source "package/skeleton/Config.in"
--	source "package/skeleton-common/Config.in"
- 	source "package/skeleton-custom/Config.in"
-+	source "package/skeleton-init-common/Config.in"
- 	source "package/skeleton-init-none/Config.in"
- 	source "package/skeleton-init-systemd/Config.in"
- 	source "package/skeleton-init-sysv/Config.in"
-diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
-deleted file mode 100644
-index 9abed4292a..0000000000
---- a/package/skeleton-common/Config.in
-+++ /dev/null
-@@ -1,2 +0,0 @@
--config BR2_PACKAGE_SKELETON_COMMON
--	bool
-diff --git a/package/skeleton-init-common/Config.in b/package/skeleton-init-common/Config.in
+diff --git a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
 new file mode 100644
-index 0000000000..0fd95de822
+index 0000000..a27c491
 --- /dev/null
-+++ b/package/skeleton-init-common/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_SKELETON_INIT_COMMON
-+	bool
-diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-similarity index 40%
-rename from package/skeleton-common/skeleton-common.mk
-rename to package/skeleton-init-common/skeleton-init-common.mk
-index e94dd6e14d..8228a8103f 100644
---- a/package/skeleton-common/skeleton-common.mk
-+++ b/package/skeleton-init-common/skeleton-init-common.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# skeleton-common
-+# skeleton-init-common
- #
- ################################################################################
- 
-@@ -8,16 +8,16 @@
- # skeleton and the toolchain is a target package, as is skeleton.
- # Hence, skeleton would depends on the toolchain and the toolchain would depend
- # on skeleton.
--SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
--SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
-+SKELETON_INIT_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_INIT_COMMON_ADD_SKELETON_DEPENDENCY = NO
- 
- # The skeleton also handles the merged /usr case in the sysroot
--SKELETON_COMMON_INSTALL_STAGING = YES
-+SKELETON_INIT_COMMON_INSTALL_STAGING = YES
- 
--SKELETON_COMMON_PATH = system/skeleton
-+SKELETON_INIT_COMMON_PATH = system/skeleton
- 
--define SKELETON_COMMON_INSTALL_TARGET_CMDS
--	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(TARGET_DIR))
-+define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(TARGET_DIR))
- 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
-@@ -27,64 +27,64 @@ endef
- # We don't care much about what goes in staging, as long as it is
- # correctly setup for merged/non-merged /usr. The simplest is to
- # fill it in with the content of the skeleton.
--define SKELETON_COMMON_INSTALL_STAGING_CMDS
--	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
-+define SKELETON_INIT_COMMON_INSTALL_STAGING_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(STAGING_DIR))
- 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
- endef
- 
--SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
--SKELETON_COMMON_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
--SKELETON_COMMON_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
--SKELETON_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
--SKELETON_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
-+SKELETON_INIT_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
-+SKELETON_INIT_COMMON_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
-+SKELETON_INIT_COMMON_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-+SKELETON_INIT_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
-+SKELETON_INIT_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
- 
--ifneq ($(SKELETON_COMMON_HOSTNAME),)
--define SKELETON_COMMON_SET_HOSTNAME
-+ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),)
-+define SKELETON_INIT_COMMON_SET_HOSTNAME
- 	mkdir -p $(TARGET_DIR)/etc
--	echo "$(SKELETON_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
--	$(SED) '$$a \127.0.1.1\t$(SKELETON_COMMON_HOSTNAME)' \
-+	echo "$(SKELETON_INIT_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
-+	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTNAME)' \
- 		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
- endef
--SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_HOSTNAME
-+SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_HOSTNAME
- endif
- 
--ifneq ($(SKELETON_COMMON_ISSUE),)
--define SKELETON_COMMON_SET_ISSUE
-+ifneq ($(SKELETON_INIT_COMMON_ISSUE),)
-+define SKELETON_INIT_COMMON_SET_ISSUE
- 	mkdir -p $(TARGET_DIR)/etc
--	echo "$(SKELETON_COMMON_ISSUE)" > $(TARGET_DIR)/etc/issue
-+	echo "$(SKELETON_INIT_COMMON_ISSUE)" > $(TARGET_DIR)/etc/issue
- endef
--SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ISSUE
-+SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_ISSUE
- endif
- 
- ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
--ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_COMMON_ROOT_PASSWD)),)
--SKELETON_COMMON_ROOT_PASSWORD = '$(SKELETON_COMMON_ROOT_PASSWD)'
--else ifneq ($(SKELETON_COMMON_ROOT_PASSWD),)
-+ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_INIT_COMMON_ROOT_PASSWD)),)
-+SKELETON_INIT_COMMON_ROOT_PASSWORD = '$(SKELETON_INIT_COMMON_ROOT_PASSWD)'
-+else ifneq ($(SKELETON_INIT_COMMON_ROOT_PASSWD),)
- # This variable will only be evaluated in the finalize stage, so we can
- # be sure that host-mkpasswd will have already been built by that time.
--SKELETON_COMMON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_COMMON_PASSWD_METHOD)" "$(SKELETON_COMMON_ROOT_PASSWD)"`"
-+SKELETON_INIT_COMMON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_INIT_COMMON_PASSWD_METHOD)" "$(SKELETON_INIT_COMMON_ROOT_PASSWD)"`"
- endif
- else # !BR2_TARGET_ENABLE_ROOT_LOGIN
--SKELETON_COMMON_ROOT_PASSWORD = "*"
-+SKELETON_INIT_COMMON_ROOT_PASSWORD = "*"
- endif
--define SKELETON_COMMON_SET_ROOT_PASSWD
--	$(SED) s,^root:[^:]*:,root:$(SKELETON_COMMON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
-+define SKELETON_INIT_COMMON_SET_ROOT_PASSWD
-+	$(SED) s,^root:[^:]*:,root:$(SKELETON_INIT_COMMON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
- endef
--SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ROOT_PASSWD
-+SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_ROOT_PASSWD
- 
- ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
--define SKELETON_COMMON_SET_BIN_SH
-+define SKELETON_INIT_COMMON_SET_BIN_SH
- 	rm -f $(TARGET_DIR)/bin/sh
- endef
- else
--ifneq ($(SKELETON_COMMON_BIN_SH),)
--define SKELETON_COMMON_SET_BIN_SH
--	ln -sf $(SKELETON_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
-+ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
-+define SKELETON_INIT_COMMON_SET_BIN_SH
-+	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
- endef
- endif
- endif
--SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_BIN_SH
-+SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_BIN_SH
- 
- $(eval $(generic-package))
-diff --git a/package/skeleton-init-none/Config.in b/package/skeleton-init-none/Config.in
-index 426954ca4c..449bf66125 100644
---- a/package/skeleton-init-none/Config.in
-+++ b/package/skeleton-init-none/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SKELETON_INIT_NONE
- 	bool
- 	select BR2_PACKAGE_HAS_SKELETON
--	select BR2_PACKAGE_SKELETON_COMMON
-+	select BR2_PACKAGE_SKELETON_INIT_COMMON
- 
- config BR2_PACKAGE_PROVIDES_SKELETON
- 	default "skeleton-init-none" if BR2_PACKAGE_SKELETON_INIT_NONE
-diff --git a/package/skeleton-init-none/skeleton-init-none.mk b/package/skeleton-init-none/skeleton-init-none.mk
-index 04e38c98d9..8181aa0354 100644
---- a/package/skeleton-init-none/skeleton-init-none.mk
-+++ b/package/skeleton-init-none/skeleton-init-none.mk
-@@ -11,7 +11,7 @@
- SKELETON_INIT_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_INIT_NONE_ADD_SKELETON_DEPENDENCY = NO
- 
--SKELETON_INIT_NONE_DEPENDENCIES = skeleton-common
-+SKELETON_INIT_NONE_DEPENDENCIES = skeleton-init-common
- 
- SKELETON_INIT_NONE_PROVIDES = skeleton
- 
-diff --git a/package/skeleton-init-systemd/Config.in b/package/skeleton-init-systemd/Config.in
-index 2d8845c281..59b21d155e 100644
---- a/package/skeleton-init-systemd/Config.in
-+++ b/package/skeleton-init-systemd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SKELETON_INIT_SYSTEMD
- 	bool
- 	select BR2_PACKAGE_HAS_SKELETON
--	select BR2_PACKAGE_SKELETON_COMMON
-+	select BR2_PACKAGE_SKELETON_INIT_COMMON
- 
- config BR2_PACKAGE_PROVIDES_SKELETON
- 	default "skeleton-init-systemd" if BR2_PACKAGE_SKELETON_INIT_SYSTEMD
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index b2a6e266b4..a2d4e8c4b3 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -11,7 +11,7 @@
- SKELETON_INIT_SYSTEMD_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_INIT_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
- 
--SKELETON_INIT_SYSTEMD_DEPENDENCIES = skeleton-common
-+SKELETON_INIT_SYSTEMD_DEPENDENCIES = skeleton-init-common
- 
- SKELETON_INIT_SYSTEMD_PROVIDES = skeleton
- 
-diff --git a/package/skeleton-init-sysv/Config.in b/package/skeleton-init-sysv/Config.in
-index 60000e0e92..6f645f9e25 100644
---- a/package/skeleton-init-sysv/Config.in
-+++ b/package/skeleton-init-sysv/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SKELETON_INIT_SYSV
- 	bool
- 	select BR2_PACKAGE_HAS_SKELETON
--	select BR2_PACKAGE_SKELETON_COMMON
-+	select BR2_PACKAGE_SKELETON_INIT_COMMON
- 
- config BR2_PACKAGE_PROVIDES_SKELETON
- 	default "skeleton-init-sysv" if BR2_PACKAGE_SKELETON_INIT_SYSV
-diff --git a/package/skeleton-init-sysv/skeleton-init-sysv.mk b/package/skeleton-init-sysv/skeleton-init-sysv.mk
-index dcff2b8edf..c89c2dc1fd 100644
---- a/package/skeleton-init-sysv/skeleton-init-sysv.mk
-+++ b/package/skeleton-init-sysv/skeleton-init-sysv.mk
-@@ -11,7 +11,7 @@
- SKELETON_INIT_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_INIT_SYSV_ADD_SKELETON_DEPENDENCY = NO
- 
--SKELETON_INIT_SYSV_DEPENDENCIES = skeleton-common
-+SKELETON_INIT_SYSV_DEPENDENCIES = skeleton-init-common
- 
- SKELETON_INIT_SYSV_PROVIDES = skeleton
- 
++++ b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
+@@ -0,0 +1,79 @@
++From b31e9b1bff6832063816b972395179859d1d4619 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 13 Aug 2017 16:03:20 +0200
++Subject: [PATCH] ld-elf2flt: behave properly when called with a name different
++ from TARGET_ALIAS
++
++ld-elf2flt currently handles two cases:
++
++ 1 It is called as the wrapper for <TARGET_ALIAS>-ld, generally
++   installed in the bin/ directory of a toolchain.
++
++ 2 It is called as the wrapper for "ld", generally installed in the
++   TARGET_ALIAS/bin/ directory of a toolchain.
++
++Unfortunately, if for some reason it gets called using a FOOBAR-ld
++name that is different from <TARGET_ALIAS>-ld, it assumes it is in
++case (2), while it really is in case (1). Due to this, the path
++mangling logic doesn't work, and it doesn't find ld.real.
++
++This happens for example when the binary program in bin/ is named
++arm-buildroot-uclinux-uclibcgnueabi-ld, but also has a simpler symlink
++named arm-linux-ld. In this case,
++arm-buildroot-uclinux-uclibcgnueabi-ld is recognized by ld-elf2flt as
++containing TARGET_ALIAS, and therefore the proper logic to find
++ld.real is applied. However, when arm-linux-ld is used, ld-elf2flt
++doesn't find TARGET_ALIAS, and therefore assumes we're being called as
++TARGET_ALIAS/bin/ld.. and searches for a program called ld.real in
++bin/, which doesn't exist.
++
++See:
++
++$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
++/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
++
++$ ./output/host/bin/arm-linux-ld
++arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
++
++$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
++/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
++
++This commit fixes that by inverting the logic: if we're being called
++as just "ld", then we assume it's the program in
++TARGET_ALIAS/bin/. Otherwise, we're called through some variant of
++TARGET-ld.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Submitted-upstream: https://github.com/uclinux-dev/elf2flt/pull/8
++---
++ ld-elf2flt.c | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/ld-elf2flt.c b/ld-elf2flt.c
++index de39fe0..c187c2e 100644
++--- a/ld-elf2flt.c
+++++ b/ld-elf2flt.c
++@@ -506,15 +506,15 @@ int main(int argc, char *argv[])
++ 	   the host while those in <TARGET_ALIAS>/lib are for the target.
++ 	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
++ 	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
++-	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
++-		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
+++	if (streqn(elf2flt_progname, "ld")) {
+++		tmp = concat(argv0_dir, "../../bin", NULL);
++ 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
++-			tooldir = concat(tmp, "/", NULL);
+++			bindir = concat(tmp, "/", NULL);
++ 		}
++ 	} else {
++-		tmp = concat(argv0_dir, "../../bin", NULL);
+++		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
++ 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
++-			bindir = concat(tmp, "/", NULL);
+++			tooldir = concat(tmp, "/", NULL);
++ 		}
++ 	}
++ 
++-- 
++2.9.4
++
 -- 
-2.11.0
+2.9.4
