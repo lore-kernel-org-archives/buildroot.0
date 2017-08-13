@@ -1,79 +1,103 @@
 From: Cam Hutchison <camh@xdna.net>
-Date: Mon, 14 Aug 2017 07:21:08 +1000
-Subject: [Buildroot] [PATCH v2 0/4] Rename skeleton packages to include init-
-Message-ID: <20170813212112.7873-1-camh@xdna.net>
+Date: Mon, 14 Aug 2017 07:21:09 +1000
+Subject: [Buildroot] [PATCH v2 1/4] skeleton: Rename skeleton-none to
+	skeleton-init-none
+In-Reply-To: <20170813212112.7873-1-camh@xdna.net>
+References: <20170813212112.7873-1-camh@xdna.net>
+Message-ID: <20170813212112.7873-2-camh@xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series renames the skeletons selected by init systems to add "init-"
-into the name of the package. For the short time that this new skeleton
-structure has been in buildroot, the naming has caused a little
-confusion with at least two people.
+The skeletons are based on the selection of BR2_INIT_*, so add init- to
+the package name to make this clearer. The name skeleton-none implies no
+skeleton at all, not a base skeleton with no init-specific files.
 
-Arnout has suggested this rename (on irc). We normally wouldn't bother
-but there's a chance to get it in before the 2017.08 release enshrines
-the names.
-
-I split it into four patches for easier review - names are similar so
-it's easy to miss a mistake when looking at multiple renames in one
-patch.
-
-Changes v1 -> v2:
-  - Fixed skeleton-none.mk missed rename
-
-
-Cam Hutchison (4):
-  skeleton: Rename skeleton-none to skeleton-init-none
-  skeleton: Rename skeleton-systemd to skeleton-init-systemd
-  skeleton: Rename skeleton-sysv to skeleton-init-sysv
-  skeleton: Rename skeleton-common to skeleton-init-common
-
- package/Config.in                                  |  8 +--
- package/skeleton-common/Config.in                  |  2 -
- package/skeleton-init-common/Config.in             |  2 +
- .../skeleton-init-common.mk}                       | 72 +++++++++++-----------
- .../Config.in                                      |  6 +-
- .../skeleton-init-none.mk}                         | 10 +--
- .../Config.in                                      |  6 +-
- .../skeleton-init-systemd.mk}                      | 26 ++++----
- .../Config.in                                      |  6 +-
- .../skeleton-init-sysv.mk}                         | 14 ++---
- .../skeleton/dev/log                               |  0
- .../skeleton/dev/pts/.empty                        |  0
- .../skeleton/dev/shm/.empty                        |  0
- .../skeleton/etc/fstab                             |  0
- .../skeleton/var/cache                             |  0
- .../skeleton/var/lib/misc                          |  0
- .../skeleton/var/lock                              |  0
- .../skeleton/var/log                               |  0
- .../skeleton/var/run                               |  0
- .../skeleton/var/spool                             |  0
- .../skeleton/var/tmp                               |  0
- system/Config.in                                   |  8 +--
- 22 files changed, 80 insertions(+), 80 deletions(-)
- delete mode 100644 package/skeleton-common/Config.in
- create mode 100644 package/skeleton-init-common/Config.in
- rename package/{skeleton-common/skeleton-common.mk => skeleton-init-common/skeleton-init-common.mk} (40%)
- rename package/{skeleton-sysv => skeleton-init-none}/Config.in (35%)
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+---
+ package/Config.in                                              |  2 +-
+ package/{skeleton-none => skeleton-init-none}/Config.in        |  4 ++--
+ .../skeleton-init-none.mk}                                     | 10 +++++-----
+ system/Config.in                                               |  2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+ rename package/{skeleton-none => skeleton-init-none}/Config.in (52%)
  rename package/{skeleton-none/skeleton-none.mk => skeleton-init-none/skeleton-init-none.mk} (67%)
- rename package/{skeleton-none => skeleton-init-systemd}/Config.in (33%)
- rename package/{skeleton-systemd/skeleton-systemd.mk => skeleton-init-systemd/skeleton-init-systemd.mk} (72%)
- rename package/{skeleton-systemd => skeleton-init-sysv}/Config.in (35%)
- rename package/{skeleton-sysv/skeleton-sysv.mk => skeleton-init-sysv/skeleton-init-sysv.mk} (57%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/log (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/pts/.empty (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/shm/.empty (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/etc/fstab (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/cache (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/lib/misc (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/lock (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/log (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/run (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/spool (100%)
- rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/tmp (100%)
 
+diff --git a/package/Config.in b/package/Config.in
+index b5170b044c..b48eac65ca 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -4,7 +4,7 @@ menu "Target packages"
+ 	source "package/skeleton/Config.in"
+ 	source "package/skeleton-common/Config.in"
+ 	source "package/skeleton-custom/Config.in"
+-	source "package/skeleton-none/Config.in"
++	source "package/skeleton-init-none/Config.in"
+ 	source "package/skeleton-systemd/Config.in"
+ 	source "package/skeleton-sysv/Config.in"
+ 
+diff --git a/package/skeleton-none/Config.in b/package/skeleton-init-none/Config.in
+similarity index 52%
+rename from package/skeleton-none/Config.in
+rename to package/skeleton-init-none/Config.in
+index 43fb3f277c..426954ca4c 100644
+--- a/package/skeleton-none/Config.in
++++ b/package/skeleton-init-none/Config.in
+@@ -1,7 +1,7 @@
+-config BR2_PACKAGE_SKELETON_NONE
++config BR2_PACKAGE_SKELETON_INIT_NONE
+ 	bool
+ 	select BR2_PACKAGE_HAS_SKELETON
+ 	select BR2_PACKAGE_SKELETON_COMMON
+ 
+ config BR2_PACKAGE_PROVIDES_SKELETON
+-	default "skeleton-none" if BR2_PACKAGE_SKELETON_NONE
++	default "skeleton-init-none" if BR2_PACKAGE_SKELETON_INIT_NONE
+diff --git a/package/skeleton-none/skeleton-none.mk b/package/skeleton-init-none/skeleton-init-none.mk
+similarity index 67%
+rename from package/skeleton-none/skeleton-none.mk
+rename to package/skeleton-init-none/skeleton-init-none.mk
+index 9e9579866a..04e38c98d9 100644
+--- a/package/skeleton-none/skeleton-none.mk
++++ b/package/skeleton-init-none/skeleton-init-none.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# skeleton-none
++# skeleton-init-none
+ #
+ ################################################################################
+ 
+@@ -8,11 +8,11 @@
+ # skeleton and the toolchain is a target package, as is skeleton.
+ # Hence, skeleton would depends on the toolchain and the toolchain would depend
+ # on skeleton.
+-SKELETON_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
+-SKELETON_NONE_ADD_SKELETON_DEPENDENCY = NO
++SKELETON_INIT_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_INIT_NONE_ADD_SKELETON_DEPENDENCY = NO
+ 
+-SKELETON_NONE_DEPENDENCIES = skeleton-common
++SKELETON_INIT_NONE_DEPENDENCIES = skeleton-common
+ 
+-SKELETON_NONE_PROVIDES = skeleton
++SKELETON_INIT_NONE_PROVIDES = skeleton
+ 
+ $(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index 59d8eab271..45326f0985 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -12,7 +12,7 @@ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
+ 	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
+ 	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
+-	select BR2_PACKAGE_SKELETON_NONE if BR2_INIT_NONE
++	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
+ 	help
+ 	  Use default target skeleton
+ 
 -- 
 2.11.0
