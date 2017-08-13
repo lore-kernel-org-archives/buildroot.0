@@ -1,127 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Aug 2017 23:32:38 +0200
-Subject: [Buildroot] [PATCH] elf2flt: add patch to fix ld.real search logic
-Message-ID: <20170813213238.27144-1-thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Aug 2017 23:32:45 +0200
+Subject: [Buildroot] [PATCH] configs/qemu_sparc_ss10: add Linux kernel patch
+	to fix build with gcc 7.x
+Message-ID: <20170813213245.27199-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-elf2flt contains a program called ld-elf2flt, which gets installed as
-a replacement for ld, with ld renamed to ld.real. This program
-therefore calls ld.real internally.
+This commit adds a Linux kernel patch that fixes the build of the
+qemu_sparc_ss10 defconfig when used with gcc 7.x:
 
-The logic to find ld.real worked fine for:
+arch/sparc/kernel/pcic.c: In function ?pcibios_fixup_bus?:
+arch/sparc/kernel/pcic.c:647:8: error: ?cmd? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+    cmd |= PCI_COMMAND_IO;
+        ^~
 
- - bin/TARGET_ALIAS-ld
- - TARGET_ALIAS/bin/ld
-
-However, it failed badly if bin/SIMPLER_TARGET_ALIAS-ld is used, as
-symlink to bin/TARGET_ALIAS-ld. For example:
-
-$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
-/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-
-$ ./output/host/bin/arm-linux-ld
-arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
-
-$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
-/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-
-This commit fixes that by adding a patch that adjusts the ld-elf2flt
-logic to properly cope with this situation.
+The patch has been submitted upstream.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...behave-properly-when-called-with-a-name-d.patch | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
+I don't know if we want to merge this patch in Buildroot. Indeed:
 
-diff --git a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
+ - The defconfig doesn't use gcc 7.x currently, so the problem doesn't
+   exist with the defconfig as-is.
+
+ - This problem exists for essentially all SPARC configurations that
+   have PCI support enabled.
+
+The reason why I encountered this problem is because I'm testing
+bleeding edge toolchains (based on gcc 7.x) with our Qemu defconfigs.
+---
+ ...l-pcic-silence-gcc-7.x-warning-in-pcibios.patch | 55 ++++++++++++++++++++++
+ configs/qemu_sparc_ss10_defconfig                  |  3 ++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 board/qemu/sparc-ss10/patches/linux/0001-sparc-kernel-pcic-silence-gcc-7.x-warning-in-pcibios.patch
+
+diff --git a/board/qemu/sparc-ss10/patches/linux/0001-sparc-kernel-pcic-silence-gcc-7.x-warning-in-pcibios.patch b/board/qemu/sparc-ss10/patches/linux/0001-sparc-kernel-pcic-silence-gcc-7.x-warning-in-pcibios.patch
 new file mode 100644
-index 0000000..a27c491
+index 0000000..49424bb
 --- /dev/null
-+++ b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-@@ -0,0 +1,79 @@
-+From b31e9b1bff6832063816b972395179859d1d4619 Mon Sep 17 00:00:00 2001
++++ b/board/qemu/sparc-ss10/patches/linux/0001-sparc-kernel-pcic-silence-gcc-7.x-warning-in-pcibios.patch
+@@ -0,0 +1,55 @@
++From 4152ce511663d290bdcd689f983ca45d1cb12c0a Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 13 Aug 2017 16:03:20 +0200
-+Subject: [PATCH] ld-elf2flt: behave properly when called with a name different
-+ from TARGET_ALIAS
++Date: Sun, 13 Aug 2017 23:07:43 +0200
++Subject: [PATCH] sparc: kernel/pcic: silence gcc 7.x warning in
++ pcibios_fixup_bus()
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+ld-elf2flt currently handles two cases:
++When building the kernel for Sparc using gcc 7.x, the build fails
++with:
 +
-+ 1 It is called as the wrapper for <TARGET_ALIAS>-ld, generally
-+   installed in the bin/ directory of a toolchain.
++arch/sparc/kernel/pcic.c: In function ?pcibios_fixup_bus?:
++arch/sparc/kernel/pcic.c:647:8: error: ?cmd? may be used uninitialized in this function [-Werror=maybe-uninitialized]
++    cmd |= PCI_COMMAND_IO;
++        ^~
 +
-+ 2 It is called as the wrapper for "ld", generally installed in the
-+   TARGET_ALIAS/bin/ directory of a toolchain.
++The simplified code looks like this:
 +
-+Unfortunately, if for some reason it gets called using a FOOBAR-ld
-+name that is different from <TARGET_ALIAS>-ld, it assumes it is in
-+case (2), while it really is in case (1). Due to this, the path
-+mangling logic doesn't work, and it doesn't find ld.real.
++unsigned int cmd;
++[...]
++pcic_read_config(dev->bus, dev->devfn, PCI_COMMAND, 2, &cmd);
++[...]
++cmd |= PCI_COMMAND_IO;
 +
-+This happens for example when the binary program in bin/ is named
-+arm-buildroot-uclinux-uclibcgnueabi-ld, but also has a simpler symlink
-+named arm-linux-ld. In this case,
-+arm-buildroot-uclinux-uclibcgnueabi-ld is recognized by ld-elf2flt as
-+containing TARGET_ALIAS, and therefore the proper logic to find
-+ld.real is applied. However, when arm-linux-ld is used, ld-elf2flt
-+doesn't find TARGET_ALIAS, and therefore assumes we're being called as
-+TARGET_ALIAS/bin/ld.. and searches for a program called ld.real in
-+bin/, which doesn't exist.
++I.e, the code assumes that pcic_read_config() will always initialize
++cmd. But it's not the case. Looking at pcic_read_config(), if
++bus->number is != 0 or if the size is not one of 1, 2 or 4, *val will
++not be initialized.
 +
-+See:
-+
-+$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
-+/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-+
-+$ ./output/host/bin/arm-linux-ld
-+arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
-+
-+$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
-+/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-+
-+This commit fixes that by inverting the logic: if we're being called
-+as just "ld", then we assume it's the program in
-+TARGET_ALIAS/bin/. Otherwise, we're called through some variant of
-+TARGET-ld.
++As a simple fix, we initialize cmd to zero at the beginning of
++pcibios_fixup_bus.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Submitted-upstream: https://github.com/uclinux-dev/elf2flt/pull/8
++Submitted-upstream: https://patchwork.ozlabs.org/patch/801039/
 +---
-+ ld-elf2flt.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
++ arch/sparc/kernel/pcic.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/ld-elf2flt.c b/ld-elf2flt.c
-+index de39fe0..c187c2e 100644
-+--- a/ld-elf2flt.c
-++++ b/ld-elf2flt.c
-+@@ -506,15 +506,15 @@ int main(int argc, char *argv[])
-+ 	   the host while those in <TARGET_ALIAS>/lib are for the target.
-+ 	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
-+ 	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
-+-	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
-+-		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-++	if (streqn(elf2flt_progname, "ld")) {
-++		tmp = concat(argv0_dir, "../../bin", NULL);
-+ 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-+-			tooldir = concat(tmp, "/", NULL);
-++			bindir = concat(tmp, "/", NULL);
-+ 		}
-+ 	} else {
-+-		tmp = concat(argv0_dir, "../../bin", NULL);
-++		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-+ 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-+-			bindir = concat(tmp, "/", NULL);
-++			tooldir = concat(tmp, "/", NULL);
-+ 		}
-+ 	}
-+ 
++diff --git a/arch/sparc/kernel/pcic.c b/arch/sparc/kernel/pcic.c
++index a38787b..732af9a 100644
++--- a/arch/sparc/kernel/pcic.c
+++++ b/arch/sparc/kernel/pcic.c
++@@ -602,7 +602,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
++ {
++ 	struct pci_dev *dev;
++ 	int i, has_io, has_mem;
++-	unsigned int cmd;
+++	unsigned int cmd = 0;
++ 	struct linux_pcic *pcic;
++ 	/* struct linux_pbm_info* pbm = &pcic->pbm; */
++ 	int node;
 +-- 
 +2.9.4
 +
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 8c6b563..55152ae 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -5,6 +5,9 @@ BR2_sparc_v8=y
+ # System
+ BR2_SYSTEM_DHCP="eth0"
+ 
++# Patches
++BR2_GLOBAL_PATCH_DIR="board/qemu/sparc-ss10/patches"
++
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.9.4
