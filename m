@@ -1,44 +1,62 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 13 Aug 2017 19:10:39 +0200
-Subject: [Buildroot] [PATCH] ci20: update kernel and u-boot
-Message-ID: <20170813171039.GA7676@waldemar-brodkorb.de>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sun, 13 Aug 2017 20:35:59 +0300
+Subject: [Buildroot] [PATCH] sysvinit: fix compilation error against musl
+Message-ID: <20170813173559.8413-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unbreak failing defconfig.
-Resulting kernel and rootfs booted on ci20 device.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- configs/ci20_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../0002-musl_fix_compilation_errors.patch         | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/sysvinit/0002-musl_fix_compilation_errors.patch
 
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index ecf3007..75687ae 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fbf929bc733b82b15f6996d4262a45870f19d214"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7dff33297116643485ca37141d804eddd793e834"
- BR2_LINUX_KERNEL_DEFCONFIG="ci20"
- 
- # u-boot
-@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
- BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
--BR2_TARGET_UBOOT_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
-+BR2_TARGET_UBOOT_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
+diff --git a/package/sysvinit/0002-musl_fix_compilation_errors.patch b/package/sysvinit/0002-musl_fix_compilation_errors.patch
+new file mode 100644
+index 0000000000..76b6ced894
+--- /dev/null
++++ b/package/sysvinit/0002-musl_fix_compilation_errors.patch
+@@ -0,0 +1,38 @@
++fix compilation errors when compiling against must libc.
++
++Signed-off-by: Dagg Stompler <daggs@gmx.com>
++
++diff -Nupr a/src/init.c b/src/init.c
++--- a/src/init.c	2017-08-13 18:44:27.000000000 +0300
+++++ b/src/init.c	2017-08-13 18:34:45.000000000 +0300
++@@ -37,6 +37,7 @@
++ #include <sys/kd.h>
++ #endif
++ #include <sys/resource.h>
+++#include <sys/ttydefaults.h>
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <errno.h>
++diff -Nupr a/src/init.h b/src/init.h
++--- a/src/init.h	2017-08-13 19:35:46.000000000 +0300
+++++ b/src/init.h	2017-08-13 19:36:01.000000000 +0300
++@@ -22,6 +22,8 @@
++  *
++  */
++ 
+++#include <time.h>
+++
++ /* Standard configuration */
++ #define CHANGE_WAIT 0			/* Change runlevel while
++ 					   waiting for a process to exit? */
++diff -Nupr a/src/mountpoint.c b/src/mountpoint.c
++--- a/src/mountpoint.c	2017-08-13 20:28:26.000000000 +0300
+++++ b/src/mountpoint.c	2017-08-13 20:28:40.000000000 +0300
++@@ -24,6 +24,7 @@
++  */
++ 
++ #include <sys/stat.h>
+++#include <sys/types.h>
++ #include <unistd.h>
++ #include <stdlib.h>
++ #include <string.h>
 -- 
-2.1.4
+2.14.1
