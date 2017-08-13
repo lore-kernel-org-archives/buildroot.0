@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Aug 2017 17:55:57 +0200
-Subject: [Buildroot] [PATCH v2 0/4] Bump python-twisted and fix
- dependencies
-In-Reply-To: <20170802055726.18461-1-yegorslists@googlemail.com>
-References: <20170802055726.18461-1-yegorslists@googlemail.com>
-Message-ID: <5f1fad5c-c793-3306-712f-cc754bcc2752@mind.be>
+Date: Sun, 13 Aug 2017 17:56:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
+ to 4.15.3
+In-Reply-To: <20170802174343.31443-1-bernd.kuhls@t-online.de>
+References: <20170802174343.31443-1-bernd.kuhls@t-online.de>
+Message-ID: <33d189dc-043c-9485-60a7-a741bb822b6d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,14 @@ To: buildroot@busybox.net
 
 
 
-On 02-08-17 07:57, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Current version needed Automat, that will be added in this series.
-> 
-> And the bumped version also needs hyperlink, that is meanwhile available.
+On 02-08-17 19:43, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Series applied to next, thanks.
+ Applied to next, thanks.
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
