@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Aug 2017 17:57:32 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 4.2.1
-In-Reply-To: <1502440588-23379-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1502440588-23379-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <c2b03dce-b018-0594-c64e-53240c89b5f4@mind.be>
+Date: Sun, 13 Aug 2017 17:58:25 +0200
+Subject: [Buildroot] [PATCH v2 3/4] python-automat: new package
+In-Reply-To: <20170802055726.18461-4-yegorslists@googlemail.com>
+References: <20170802055726.18461-1-yegorslists@googlemail.com>
+ <20170802055726.18461-4-yegorslists@googlemail.com>
+Message-ID: <418b145a-e1b1-2145-223b-1391e4f89b33@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +13,22 @@ To: buildroot@busybox.net
 
 
 
-On 11-08-17 10:36, Angelo Compagnucci wrote:
-> This patch bumps python-pillow to versione 4.2.1
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+On 02-08-17 07:57, yegorslists at googlemail.com wrote:
+> +config BR2_PACKAGE_PYTHON_AUTOMAT
+> +	bool "python-automat"
+> +	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+> +	select BR2_PACKAGE_PYTHON_SIX # runtime
+> +	help
+> +	  Self-service finite-state machines for the programmer on the go.
 
- Applied to next, thanks.
+ I had to rewrap this before applying to next. Please use the check-package
+script before submitting your patches.
 
  Regards,
  Arnout
+
+> +
+> +	  https://github.com/glyph/Automat
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
