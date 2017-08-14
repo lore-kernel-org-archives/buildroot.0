@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Aug 2017 19:57:25 +0200
-Subject: [Buildroot] [PATCH v2 3/4] skeleton: Rename skeleton-sysv to
- skeleton-init-sysv
-In-Reply-To: <20170813212112.7873-4-camh@xdna.net>
+Date: Mon, 14 Aug 2017 19:57:47 +0200
+Subject: [Buildroot] [PATCH v2 4/4] skeleton: Rename skeleton-common to
+ skeleton-init-common
+In-Reply-To: <20170813212112.7873-5-camh@xdna.net>
 References: <20170813212112.7873-1-camh@xdna.net>
- <20170813212112.7873-4-camh@xdna.net>
-Message-ID: <20170814175725.GE2810@scaer>
+ <20170813212112.7873-5-camh@xdna.net>
+Message-ID: <20170814175747.GF2810@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,10 +16,10 @@ Cam, All,
 
 On 2017-08-14 07:21 +1000, Cam Hutchison spake thusly:
 > The skeletons are based on the selection of BR2_INIT_*, so add init- to
-> the package name to make this clearer. While skeleton-sysv is relatively
-> clear, skeleton-common and skeleton-none are less clear on their
-> relationship to BR2_INIT_*. So rename skeleton-sysv to conform to a
-> clearer pattern.
+> the package name to make this clearer. The name skeleton-common implies
+> that it is common to all skeletons, yet it does not apply to
+> skeleton-custom. It is only common to the skeleton-init-* packages, so
+> name it the same way.
 > 
 > Signed-off-by: Cam Hutchison <camh@xdna.net>
 
@@ -29,162 +29,261 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/Config.in                                          |  2 +-
->  package/{skeleton-sysv => skeleton-init-sysv}/Config.in    |  4 ++--
->  .../skeleton-init-sysv.mk}                                 | 14 +++++++-------
->  .../{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/log |  0
->  .../skeleton/dev/pts/.empty                                |  0
->  .../skeleton/dev/shm/.empty                                |  0
->  .../skeleton/etc/fstab                                     |  0
->  .../skeleton/var/cache                                     |  0
->  .../skeleton/var/lib/misc                                  |  0
->  .../skeleton/var/lock                                      |  0
->  .../{skeleton-sysv => skeleton-init-sysv}/skeleton/var/log |  0
->  .../{skeleton-sysv => skeleton-init-sysv}/skeleton/var/run |  0
->  .../skeleton/var/spool                                     |  0
->  .../{skeleton-sysv => skeleton-init-sysv}/skeleton/var/tmp |  0
->  system/Config.in                                           |  4 ++--
->  15 files changed, 12 insertions(+), 12 deletions(-)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/Config.in (52%)
->  rename package/{skeleton-sysv/skeleton-sysv.mk => skeleton-init-sysv/skeleton-init-sysv.mk} (57%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/log (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/pts/.empty (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/dev/shm/.empty (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/etc/fstab (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/cache (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/lib/misc (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/lock (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/log (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/run (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/spool (100%)
->  rename package/{skeleton-sysv => skeleton-init-sysv}/skeleton/var/tmp (100%)
+>  package/Config.in                                  |  2 +-
+>  package/skeleton-common/Config.in                  |  2 -
+>  package/skeleton-init-common/Config.in             |  2 +
+>  .../skeleton-init-common.mk}                       | 72 +++++++++++-----------
+>  package/skeleton-init-none/Config.in               |  2 +-
+>  package/skeleton-init-none/skeleton-init-none.mk   |  2 +-
+>  package/skeleton-init-systemd/Config.in            |  2 +-
+>  .../skeleton-init-systemd/skeleton-init-systemd.mk |  2 +-
+>  package/skeleton-init-sysv/Config.in               |  2 +-
+>  package/skeleton-init-sysv/skeleton-init-sysv.mk   |  2 +-
+>  10 files changed, 45 insertions(+), 45 deletions(-)
+>  delete mode 100644 package/skeleton-common/Config.in
+>  create mode 100644 package/skeleton-init-common/Config.in
+>  rename package/{skeleton-common/skeleton-common.mk => skeleton-init-common/skeleton-init-common.mk} (40%)
 > 
 > diff --git a/package/Config.in b/package/Config.in
-> index 4bdfeeaedd..ed2a472cef 100644
+> index ed2a472cef..a0868d92ee 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -6,7 +6,7 @@ menu "Target packages"
+> @@ -2,8 +2,8 @@ menu "Target packages"
+>  
+>  	source "package/busybox/Config.in"
+>  	source "package/skeleton/Config.in"
+> -	source "package/skeleton-common/Config.in"
 >  	source "package/skeleton-custom/Config.in"
+> +	source "package/skeleton-init-common/Config.in"
 >  	source "package/skeleton-init-none/Config.in"
 >  	source "package/skeleton-init-systemd/Config.in"
-> -	source "package/skeleton-sysv/Config.in"
-> +	source "package/skeleton-init-sysv/Config.in"
->  
->  menu "Audio and video applications"
->  	source "package/alsa-utils/Config.in"
-> diff --git a/package/skeleton-sysv/Config.in b/package/skeleton-init-sysv/Config.in
-> similarity index 52%
-> rename from package/skeleton-sysv/Config.in
-> rename to package/skeleton-init-sysv/Config.in
-> index 2f6dbd9673..60000e0e92 100644
-> --- a/package/skeleton-sysv/Config.in
-> +++ b/package/skeleton-init-sysv/Config.in
-> @@ -1,7 +1,7 @@
-> -config BR2_PACKAGE_SKELETON_SYSV
-> +config BR2_PACKAGE_SKELETON_INIT_SYSV
->  	bool
->  	select BR2_PACKAGE_HAS_SKELETON
->  	select BR2_PACKAGE_SKELETON_COMMON
->  
->  config BR2_PACKAGE_PROVIDES_SKELETON
-> -	default "skeleton-sysv" if BR2_PACKAGE_SKELETON_SYSV
-> +	default "skeleton-init-sysv" if BR2_PACKAGE_SKELETON_INIT_SYSV
-> diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-init-sysv/skeleton-init-sysv.mk
-> similarity index 57%
-> rename from package/skeleton-sysv/skeleton-sysv.mk
-> rename to package/skeleton-init-sysv/skeleton-init-sysv.mk
-> index b5fa396ac2..dcff2b8edf 100644
-> --- a/package/skeleton-sysv/skeleton-sysv.mk
-> +++ b/package/skeleton-init-sysv/skeleton-init-sysv.mk
+>  	source "package/skeleton-init-sysv/Config.in"
+> diff --git a/package/skeleton-common/Config.in b/package/skeleton-common/Config.in
+> deleted file mode 100644
+> index 9abed4292a..0000000000
+> --- a/package/skeleton-common/Config.in
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -config BR2_PACKAGE_SKELETON_COMMON
+> -	bool
+> diff --git a/package/skeleton-init-common/Config.in b/package/skeleton-init-common/Config.in
+> new file mode 100644
+> index 0000000000..0fd95de822
+> --- /dev/null
+> +++ b/package/skeleton-init-common/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_SKELETON_INIT_COMMON
+> +	bool
+> diff --git a/package/skeleton-common/skeleton-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> similarity index 40%
+> rename from package/skeleton-common/skeleton-common.mk
+> rename to package/skeleton-init-common/skeleton-init-common.mk
+> index e94dd6e14d..8228a8103f 100644
+> --- a/package/skeleton-common/skeleton-common.mk
+> +++ b/package/skeleton-init-common/skeleton-init-common.mk
 > @@ -1,6 +1,6 @@
 >  ################################################################################
 >  #
-> -# skeleton-sysv
-> +# skeleton-init-sysv
+> -# skeleton-common
+> +# skeleton-init-common
 >  #
 >  ################################################################################
 >  
-> @@ -8,15 +8,15 @@
+> @@ -8,16 +8,16 @@
 >  # skeleton and the toolchain is a target package, as is skeleton.
 >  # Hence, skeleton would depends on the toolchain and the toolchain would depend
 >  # on skeleton.
-> -SKELETON_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
-> -SKELETON_SYSV_ADD_SKELETON_DEPENDENCY = NO
-> +SKELETON_INIT_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
-> +SKELETON_INIT_SYSV_ADD_SKELETON_DEPENDENCY = NO
+> -SKELETON_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
+> -SKELETON_COMMON_ADD_SKELETON_DEPENDENCY = NO
+> +SKELETON_INIT_COMMON_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +SKELETON_INIT_COMMON_ADD_SKELETON_DEPENDENCY = NO
 >  
-> -SKELETON_SYSV_DEPENDENCIES = skeleton-common
-> +SKELETON_INIT_SYSV_DEPENDENCIES = skeleton-common
+>  # The skeleton also handles the merged /usr case in the sysroot
+> -SKELETON_COMMON_INSTALL_STAGING = YES
+> +SKELETON_INIT_COMMON_INSTALL_STAGING = YES
 >  
-> -SKELETON_SYSV_PROVIDES = skeleton
-> +SKELETON_INIT_SYSV_PROVIDES = skeleton
+> -SKELETON_COMMON_PATH = system/skeleton
+> +SKELETON_INIT_COMMON_PATH = system/skeleton
 >  
-> -define SKELETON_SYSV_INSTALL_TARGET_CMDS
-> -	$(call SYSTEM_RSYNC,$(SKELETON_SYSV_PKGDIR)/skeleton,$(TARGET_DIR))
-> +define SKELETON_INIT_SYSV_INSTALL_TARGET_CMDS
-> +	$(call SYSTEM_RSYNC,$(SKELETON_INIT_SYSV_PKGDIR)/skeleton,$(TARGET_DIR))
+> -define SKELETON_COMMON_INSTALL_TARGET_CMDS
+> -	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(TARGET_DIR))
+> +define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+> +	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(TARGET_DIR))
+>  	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+>  	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
+>  	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> @@ -27,64 +27,64 @@ endef
+>  # We don't care much about what goes in staging, as long as it is
+>  # correctly setup for merged/non-merged /usr. The simplest is to
+>  # fill it in with the content of the skeleton.
+> -define SKELETON_COMMON_INSTALL_STAGING_CMDS
+> -	$(call SYSTEM_RSYNC,$(SKELETON_COMMON_PATH),$(STAGING_DIR))
+> +define SKELETON_INIT_COMMON_INSTALL_STAGING_CMDS
+> +	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(STAGING_DIR))
+>  	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
+>  	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
+>  	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
 >  endef
 >  
->  $(eval $(generic-package))
-> diff --git a/package/skeleton-sysv/skeleton/dev/log b/package/skeleton-init-sysv/skeleton/dev/log
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/dev/log
-> rename to package/skeleton-init-sysv/skeleton/dev/log
-> diff --git a/package/skeleton-sysv/skeleton/dev/pts/.empty b/package/skeleton-init-sysv/skeleton/dev/pts/.empty
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/dev/pts/.empty
-> rename to package/skeleton-init-sysv/skeleton/dev/pts/.empty
-> diff --git a/package/skeleton-sysv/skeleton/dev/shm/.empty b/package/skeleton-init-sysv/skeleton/dev/shm/.empty
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/dev/shm/.empty
-> rename to package/skeleton-init-sysv/skeleton/dev/shm/.empty
-> diff --git a/package/skeleton-sysv/skeleton/etc/fstab b/package/skeleton-init-sysv/skeleton/etc/fstab
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/etc/fstab
-> rename to package/skeleton-init-sysv/skeleton/etc/fstab
-> diff --git a/package/skeleton-sysv/skeleton/var/cache b/package/skeleton-init-sysv/skeleton/var/cache
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/cache
-> rename to package/skeleton-init-sysv/skeleton/var/cache
-> diff --git a/package/skeleton-sysv/skeleton/var/lib/misc b/package/skeleton-init-sysv/skeleton/var/lib/misc
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/lib/misc
-> rename to package/skeleton-init-sysv/skeleton/var/lib/misc
-> diff --git a/package/skeleton-sysv/skeleton/var/lock b/package/skeleton-init-sysv/skeleton/var/lock
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/lock
-> rename to package/skeleton-init-sysv/skeleton/var/lock
-> diff --git a/package/skeleton-sysv/skeleton/var/log b/package/skeleton-init-sysv/skeleton/var/log
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/log
-> rename to package/skeleton-init-sysv/skeleton/var/log
-> diff --git a/package/skeleton-sysv/skeleton/var/run b/package/skeleton-init-sysv/skeleton/var/run
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/run
-> rename to package/skeleton-init-sysv/skeleton/var/run
-> diff --git a/package/skeleton-sysv/skeleton/var/spool b/package/skeleton-init-sysv/skeleton/var/spool
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/spool
-> rename to package/skeleton-init-sysv/skeleton/var/spool
-> diff --git a/package/skeleton-sysv/skeleton/var/tmp b/package/skeleton-init-sysv/skeleton/var/tmp
-> similarity index 100%
-> rename from package/skeleton-sysv/skeleton/var/tmp
-> rename to package/skeleton-init-sysv/skeleton/var/tmp
-> diff --git a/system/Config.in b/system/Config.in
-> index cbde411895..b9714923c4 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -9,8 +9,8 @@ choice
+> -SKELETON_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+> -SKELETON_COMMON_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+> -SKELETON_COMMON_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+> -SKELETON_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+> -SKELETON_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+> +SKELETON_INIT_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+> +SKELETON_INIT_COMMON_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+> +SKELETON_INIT_COMMON_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+> +SKELETON_INIT_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+> +SKELETON_INIT_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
 >  
->  config BR2_ROOTFS_SKELETON_DEFAULT
->  	bool "default target skeleton"
-> -	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
-> -	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
-> +	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_SYSV
-> +	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_BUSYBOX
->  	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_INIT_SYSTEMD
->  	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
->  	help
+> -ifneq ($(SKELETON_COMMON_HOSTNAME),)
+> -define SKELETON_COMMON_SET_HOSTNAME
+> +ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),)
+> +define SKELETON_INIT_COMMON_SET_HOSTNAME
+>  	mkdir -p $(TARGET_DIR)/etc
+> -	echo "$(SKELETON_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+> -	$(SED) '$$a \127.0.1.1\t$(SKELETON_COMMON_HOSTNAME)' \
+> +	echo "$(SKELETON_INIT_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+> +	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTNAME)' \
+>  		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
+>  endef
+> -SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_HOSTNAME
+> +SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_HOSTNAME
+>  endif
+>  
+> -ifneq ($(SKELETON_COMMON_ISSUE),)
+> -define SKELETON_COMMON_SET_ISSUE
+> +ifneq ($(SKELETON_INIT_COMMON_ISSUE),)
+> +define SKELETON_INIT_COMMON_SET_ISSUE
+>  	mkdir -p $(TARGET_DIR)/etc
+> -	echo "$(SKELETON_COMMON_ISSUE)" > $(TARGET_DIR)/etc/issue
+> +	echo "$(SKELETON_INIT_COMMON_ISSUE)" > $(TARGET_DIR)/etc/issue
+>  endef
+> -SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ISSUE
+> +SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_ISSUE
+>  endif
+>  
+>  ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
+> -ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_COMMON_ROOT_PASSWD)),)
+> -SKELETON_COMMON_ROOT_PASSWORD = '$(SKELETON_COMMON_ROOT_PASSWD)'
+> -else ifneq ($(SKELETON_COMMON_ROOT_PASSWD),)
+> +ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_INIT_COMMON_ROOT_PASSWD)),)
+> +SKELETON_INIT_COMMON_ROOT_PASSWORD = '$(SKELETON_INIT_COMMON_ROOT_PASSWD)'
+> +else ifneq ($(SKELETON_INIT_COMMON_ROOT_PASSWD),)
+>  # This variable will only be evaluated in the finalize stage, so we can
+>  # be sure that host-mkpasswd will have already been built by that time.
+> -SKELETON_COMMON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_COMMON_PASSWD_METHOD)" "$(SKELETON_COMMON_ROOT_PASSWD)"`"
+> +SKELETON_INIT_COMMON_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_INIT_COMMON_PASSWD_METHOD)" "$(SKELETON_INIT_COMMON_ROOT_PASSWD)"`"
+>  endif
+>  else # !BR2_TARGET_ENABLE_ROOT_LOGIN
+> -SKELETON_COMMON_ROOT_PASSWORD = "*"
+> +SKELETON_INIT_COMMON_ROOT_PASSWORD = "*"
+>  endif
+> -define SKELETON_COMMON_SET_ROOT_PASSWD
+> -	$(SED) s,^root:[^:]*:,root:$(SKELETON_COMMON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
+> +define SKELETON_INIT_COMMON_SET_ROOT_PASSWD
+> +	$(SED) s,^root:[^:]*:,root:$(SKELETON_INIT_COMMON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
+>  endef
+> -SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_ROOT_PASSWD
+> +SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_ROOT_PASSWD
+>  
+>  ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+> -define SKELETON_COMMON_SET_BIN_SH
+> +define SKELETON_INIT_COMMON_SET_BIN_SH
+>  	rm -f $(TARGET_DIR)/bin/sh
+>  endef
+>  else
+> -ifneq ($(SKELETON_COMMON_BIN_SH),)
+> -define SKELETON_COMMON_SET_BIN_SH
+> -	ln -sf $(SKELETON_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
+> +ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
+> +define SKELETON_INIT_COMMON_SET_BIN_SH
+> +	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
+>  endef
+>  endif
+>  endif
+> -SKELETON_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_COMMON_SET_BIN_SH
+> +SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_BIN_SH
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/skeleton-init-none/Config.in b/package/skeleton-init-none/Config.in
+> index 426954ca4c..449bf66125 100644
+> --- a/package/skeleton-init-none/Config.in
+> +++ b/package/skeleton-init-none/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_SKELETON_INIT_NONE
+>  	bool
+>  	select BR2_PACKAGE_HAS_SKELETON
+> -	select BR2_PACKAGE_SKELETON_COMMON
+> +	select BR2_PACKAGE_SKELETON_INIT_COMMON
+>  
+>  config BR2_PACKAGE_PROVIDES_SKELETON
+>  	default "skeleton-init-none" if BR2_PACKAGE_SKELETON_INIT_NONE
+> diff --git a/package/skeleton-init-none/skeleton-init-none.mk b/package/skeleton-init-none/skeleton-init-none.mk
+> index 04e38c98d9..8181aa0354 100644
+> --- a/package/skeleton-init-none/skeleton-init-none.mk
+> +++ b/package/skeleton-init-none/skeleton-init-none.mk
+> @@ -11,7 +11,7 @@
+>  SKELETON_INIT_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  SKELETON_INIT_NONE_ADD_SKELETON_DEPENDENCY = NO
+>  
+> -SKELETON_INIT_NONE_DEPENDENCIES = skeleton-common
+> +SKELETON_INIT_NONE_DEPENDENCIES = skeleton-init-common
+>  
+>  SKELETON_INIT_NONE_PROVIDES = skeleton
+>  
+> diff --git a/package/skeleton-init-systemd/Config.in b/package/skeleton-init-systemd/Config.in
+> index 2d8845c281..59b21d155e 100644
+> --- a/package/skeleton-init-systemd/Config.in
+> +++ b/package/skeleton-init-systemd/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_SKELETON_INIT_SYSTEMD
+>  	bool
+>  	select BR2_PACKAGE_HAS_SKELETON
+> -	select BR2_PACKAGE_SKELETON_COMMON
+> +	select BR2_PACKAGE_SKELETON_INIT_COMMON
+>  
+>  config BR2_PACKAGE_PROVIDES_SKELETON
+>  	default "skeleton-init-systemd" if BR2_PACKAGE_SKELETON_INIT_SYSTEMD
+> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> index b2a6e266b4..a2d4e8c4b3 100644
+> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> @@ -11,7 +11,7 @@
+>  SKELETON_INIT_SYSTEMD_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  SKELETON_INIT_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
+>  
+> -SKELETON_INIT_SYSTEMD_DEPENDENCIES = skeleton-common
+> +SKELETON_INIT_SYSTEMD_DEPENDENCIES = skeleton-init-common
+>  
+>  SKELETON_INIT_SYSTEMD_PROVIDES = skeleton
+>  
+> diff --git a/package/skeleton-init-sysv/Config.in b/package/skeleton-init-sysv/Config.in
+> index 60000e0e92..6f645f9e25 100644
+> --- a/package/skeleton-init-sysv/Config.in
+> +++ b/package/skeleton-init-sysv/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_SKELETON_INIT_SYSV
+>  	bool
+>  	select BR2_PACKAGE_HAS_SKELETON
+> -	select BR2_PACKAGE_SKELETON_COMMON
+> +	select BR2_PACKAGE_SKELETON_INIT_COMMON
+>  
+>  config BR2_PACKAGE_PROVIDES_SKELETON
+>  	default "skeleton-init-sysv" if BR2_PACKAGE_SKELETON_INIT_SYSV
+> diff --git a/package/skeleton-init-sysv/skeleton-init-sysv.mk b/package/skeleton-init-sysv/skeleton-init-sysv.mk
+> index dcff2b8edf..c89c2dc1fd 100644
+> --- a/package/skeleton-init-sysv/skeleton-init-sysv.mk
+> +++ b/package/skeleton-init-sysv/skeleton-init-sysv.mk
+> @@ -11,7 +11,7 @@
+>  SKELETON_INIT_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  SKELETON_INIT_SYSV_ADD_SKELETON_DEPENDENCY = NO
+>  
+> -SKELETON_INIT_SYSV_DEPENDENCIES = skeleton-common
+> +SKELETON_INIT_SYSV_DEPENDENCIES = skeleton-init-common
+>  
+>  SKELETON_INIT_SYSV_PROVIDES = skeleton
+>  
 > -- 
 > 2.11.0
 > 
