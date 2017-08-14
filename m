@@ -1,48 +1,48 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 14 Aug 2017 23:06:53 +0300
-Subject: [Buildroot] [PATCH 1/1] libepoxy: bump to version 1.4.3
-In-Reply-To: <20170814213113.6187b327@windsurf>
-References: <20170814172320.16984-1-aperez@igalia.com>
- <20170814213113.6187b327@windsurf>
-Message-ID: <20170814230653.GB14043@momiji>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Aug 2017 22:09:53 +0200
+Subject: [Buildroot] [PATCH] Revert "syslinux: drop patch 0003,
+ not needed after gnu-efi update"
+In-Reply-To: <20170813232835.18414-1-arnout@mind.be>
+References: <20170813232835.18414-1-arnout@mind.be>
+Message-ID: <20170814220953.45dcf706@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Mon, 14 Aug 2017 21:31:13 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-
-> On Mon, 14 Aug 2017 20:23:20 +0300, Adrian Perez de Castro wrote:
-> > Among other small fixes, the new version fixes crashes when running in
-> > X11 without GLX (i.e. using EGL). Additionally, the changes from patch
-> > "0002-Make-EGL-support-optional.patch" were committed upstream, and the
-> > file can be dropped.
-> > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+On Mon, 14 Aug 2017 01:28:35 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> It turns out that this patch is still needed, since with some versions
+> of binutils the error still occurs.
 > 
-> Since we're post -rc2 comes the question: do we want to apply this in
-> master (i.e to be part of the 2017.08 release) or in next.
->
-> If it fixes a crash, we probably want it in master. But version bumps
-> are a bit frowned upon. How much differences are there between 1.4.1
-> and 1.4.3 ? Are they significant ? If they are significant, is it
-> possible to backport just the one patch that fixes the crash ?
+> Partially fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979377
+> 
+> This reverts commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Beno?t Allard <benoit.allard@greenbone.net>
+> ---
+> The failing ts5x00_defconfig also requires a kernel bump
 
-Good point. I would apply the patch as-is onto ?next?, and for the 2017.08
-branch it looks doable to pick just the patch that fixes the segfaults [1].
-I'll try and submit a patch which does just the latter.
+The problem with this is that you are going to run into the problem I
+reported at:
+http://lists.busybox.net/pipermail/buildroot/2017-July/195927.html, i.e
+the --no-dynamic-linker option doesn't exist in old binutils versions,
+and will therefore cause a build failure.
 
-Cheers,
+BTW Arnout, you should not expect any feedback from Beno?t, he has left
+his previous employer, and explicitly removed himself from the syslinux
+developer:
+https://git.buildroot.org/buildroot/commit/DEVELOPERS?id=74a1e8f9f220c8fb95abe1de67ee5441b7c449e7.
+He will most likely not even receive your e-mail.
 
----
-[1] https://github.com/anholt/libepoxy/pull/118/commits/106eae7aad23dffcefe11ec3bf86e54e35137689
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170814/af68b389/attachment.asc>
+Therefore, we are on our own to figure out this one :)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
