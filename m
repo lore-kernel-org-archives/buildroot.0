@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 21:29:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/mtd: integck needs threads
-In-Reply-To: <20170814190123.6828-1-bernd.kuhls@t-online.de>
-References: <20170814190123.6828-1-bernd.kuhls@t-online.de>
-Message-ID: <20170814212952.69e2033c@windsurf>
+Date: Mon, 14 Aug 2017 21:31:13 +0200
+Subject: [Buildroot] [PATCH 1/1] libepoxy: bump to version 1.4.3
+In-Reply-To: <20170814172320.16984-1-aperez@igalia.com>
+References: <20170814172320.16984-1-aperez@igalia.com>
+Message-ID: <20170814213113.6187b327@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 14 Aug 2017 21:01:23 +0200, Bernd Kuhls wrote:
-> The test programs depend on pthreads:
-> http://git.infradead.org/mtd-utils.git/blob/1bfee8660131fca7a18f68e9548a18ca6b3378a0:/configure.ac#l43
+On Mon, 14 Aug 2017 20:23:20 +0300, Adrian Perez de Castro wrote:
+> Among other small fixes, the new version fixes crashes when running in
+> X11 without GLX (i.e. using EGL). Additionally, the changes from patch
+> "0002-Make-EGL-support-optional.patch" were committed upstream, and the
+> file can be dropped.
 > 
-> Our option BR2_PACKAGE_MTD_INTEGCK is the only option which enables
-> building the test programs so it needs to depend on threads because
-> BR2_PACKAGE_MTD_TESTS as a hidden option cannot be selected.
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-I don't understand this explanation, and actually, I believe it is
-wrong, and the thread dependency should be added to
-BR2_PACKAGE_MTD_TESTS. Indeed, it's the fact of enabling
-BR2_PACKAGE_MTD_TESTS that passes --enable-tests, which requires thread
-support.
+Since we're post -rc2 comes the question: do we want to apply this in
+master (i.e to be part of the 2017.08 release) or in next.
 
-The thread dependency should be added to BR2_PACKAGE_MTD_TESTS, so that
-is other people add more visible options to enable other tests in the
-future, they will notice this dependency.
+If it fixes a crash, we probably want it in master. But version bumps
+are a bit frowned upon. How much differences are there between 1.4.1
+and 1.4.3 ? Are they significant ? If they are significant, is it
+possible to backport just the one patch that fixes the crash ?
 
-Of course, this thread dependency should then be propagated to all
-existing reverse dependencies of BR2_PACKAGE_MTD_TESTS, which means
-doing exactly your patch.
-
-So basically, your patch + a "depends on BR2_TOOLCHAIN_HAS_THREADS" on
-BR2_PACKAGE_MTD_TESTS and a reworked commit log would be good.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
