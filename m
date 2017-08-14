@@ -1,20 +1,54 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 14 Aug 2017 20:09:27 +0200
-Subject: [Buildroot] autodetection upon usb insertion.
-Message-ID: <trinity-82be2f69-e0ba-492b-9616-3deb9c70a625-1502734167646@3c-app-mailcom-bs12>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 14 Aug 2017 21:16:45 +0300
+Subject: [Buildroot] [PATCH 1/1] package/mtd: needs threads
+In-Reply-To: <20170814170231.17724-1-bernd.kuhls@t-online.de>
+References: <20170814170231.17724-1-bernd.kuhls@t-online.de>
+Message-ID: <20170814181645.i365lrsyy5smixrc@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hi Bernd,
 
-I have a sysvinit based image with eudev which as a usb dongle connected to it.
-when I boot the system with the dongle connected, upon login, all them modules are loaded and the device is ready to use.
-but when I connected it when the system is already running, I get nothing. not detection even if I load all the drivers manually, it is still not detected.
-what am I missing?
+On Mon, Aug 14, 2017 at 07:02:31PM +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/879/879c79e505f65387a46c4be263dc8783c8ca61bf/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mtd/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+> index a1df4cfc0..8c9ba1428 100644
+> --- a/package/mtd/Config.in
+> +++ b/package/mtd/Config.in
+> @@ -1,10 +1,14 @@
+>  config BR2_PACKAGE_MTD
+>  	bool "mtd, jffs2 and ubi/ubifs tools"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-Thanks,
+configure.ac indicates that threads are needed only when building tests. That 
+means that adding threads dependency to BR2_PACKAGE_MTD_TESTS should be 
+enough.
 
-Dagg.
+baruch
+
+>  	help
+>  	  Build mtd, jffs2 and ubi/ubifs tools
+>  
+>  	  http://www.linux-mtd.infradead.org/
+>  
+> +comment "mtd needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+>  if BR2_PACKAGE_MTD
+>  
+>  # The three hidden options below match mtd configure script options
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
