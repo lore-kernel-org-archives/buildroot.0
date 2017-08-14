@@ -1,76 +1,52 @@
-From: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
-Date: Mon, 14 Aug 2017 11:29:10 -0400 (EDT)
-Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <dbe1c07b-acac-59b8-70c8-dc10b7375a12@mind.be>
-References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
- <dbe1c07b-acac-59b8-70c8-dc10b7375a12@mind.be>
-Message-ID: <1994262785.125612.1502724550397.JavaMail.zimbra@savoirfairelinux.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Aug 2017 17:43:14 +0200
+Subject: [Buildroot] [PATCH/2017.02.x 2/2] dbus: add upstream patch to
+ fix startup hang with with expat >= 2.2.1
+In-Reply-To: <C56A6F38-72BB-48CA-9E8C-ED32DB6D7E8F@armadeus.com>
+References: <1502372823-31706-1-git-send-email-sebastien.szymanski@armadeus.com>
+ <1502372823-31706-2-git-send-email-sebastien.szymanski@armadeus.com>
+ <20170813125606.GA3475@scaer>
+ <C56A6F38-72BB-48CA-9E8C-ED32DB6D7E8F@armadeus.com>
+Message-ID: <20170814154314.GB2810@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+S?bastien, All,
 
------ Original Message -----
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Buildroot Mailing List" <buildroot@buildroot.org>, "Mathieu Audat" <mathieu.audat@savoirfairelinux.com>, "Fabio
-> Estevam" <fabio.estevam@nxp.com>, "Nikolay Dimitrov" <picmaster@mail.bg>, "Fabio Porcedda" <fabio.porcedda@gmail.com>,
-> "Sergio Prado" <sergio.prado@e-labworks.com>
-> Sent: Friday, 11 August, 2017 09:20:31
-> Subject: Re: Failing defconfigs due to GCC 6
+On 2017-08-14 10:40 +0200, S?bastien Szymanski spake thusly:
+>   On 13 Aug 2017, at 14:56, Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
+>   On 2017-08-10 15:47 +0200, S?bastien Szymanski spake thusly:
+>     After c0ad6ded018ffbc33f7f5 expat: security bump to version 2.2.1
+>     the system can hang on startup under certain circumstances.
+[--SNIP--]
+>   In the meantime. expat 2.2.3 has been released, which contrains (amongst
+>   other interesting stuff) commit 55839b633 (xmlparse.c: Read /dev/urandom
+>   if non-blocking getrandom failed), which ought to fix the boot delay.
+[--SNIP--]
+> expat is still at version 2.2.2 on the master branch.
 
-> On 10-08-17 23:01, Arnout Vandecappelle wrote:
->>  Hi all,
->> 
->>  A number of defconfigs fail to build (usually the kernel, in one case U-Boot)
->> because of GCC 6. Some of these could be fixed by simply bumping the upstream
->> kernel; however, we really want defconfigs to be tested on an actual board,
->> otherwise there's not much point.
->> 
->>  I've put the people who have been involved in these defconfigs in To. Could you
->> look at these defconfigs and try to fix the build with GCC 6? Anything that
->> remains unfixed by the end of the month will probably be removed.
-> 
-> Looks like yesterday I missed a few:
-> 
-> riotboard_defconfig:
-> https://gitlab.com/arnout/buildroot/-/jobs/28979360
-> 
-> telit_evk_pro3_defconfig:
-> https://gitlab.com/arnout/buildroot/-/jobs/28979373
-> 
-> toradex_apalis_imx6_defconfig:
-> https://gitlab.com/arnout/buildroot/-/jobs/28979374
-> 
-> ts4900_defconfig:
-> https://gitlab.com/arnout/buildroot/-/jobs/28979376
-> 
+I was suggesting that expat be bumped on master, yes.
 
-We still have this board, as you suggested a simple fix would be to bump the kernel.
-I'll have a look this week and test it.
+> I guess a patch needs to be first on the master branch before it can be
+> backported on a LTS branch, isn?t it?
 
-> 
-> All of these seem to have a DTS in 4.11, so perhaps we can switch to upstream?
->
+Ah, this is for the stable branches. Then, it is OK to just add this
+patch for DBus, yes.
 
-Indeed, that would be nice :)
+>   Or did I miss something?
 
-> Regards,
-> Arnout
-> 
-> 
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Yup, I did... ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Mathieu Audat
-Consultant en logiciel libre | Montr?al, Qc
-Savoir-Faire Linux
-Bureau: (+1) 514-276-5468 # 356
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
