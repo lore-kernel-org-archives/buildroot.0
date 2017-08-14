@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 22:10:41 +0200
-Subject: [Buildroot] [PATCH] socrates_cyclone5_defconfig: U-Boot needs
- DTC
-In-Reply-To: <20170813232524.17775-1-arnout@mind.be>
-References: <20170813232524.17775-1-arnout@mind.be>
-Message-ID: <20170814221041.1e398f77@windsurf>
+Date: Mon, 14 Aug 2017 22:14:09 +0200
+Subject: [Buildroot] [git commit branch/next] package/sysdig: fix incorrect
+	module name
+Message-ID: <20170814200757.903908081A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=204ed2e0b08a43ac69cbacf85bb1acaf0633cba5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 14 Aug 2017 01:25:24 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Probably not noticed before because dtc was already built or it was
-> installed on the host.
-> 
-> Fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979369
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-> ---
->  configs/socrates_cyclone5_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+Latest version of sysdig introduced a variable for the kernel module
+name. This patch updates that variable into Makefile.in.
 
-Applied to master, thanks.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sysdig/sysdig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index 2d5ad23..ecafb9d 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -24,6 +24,7 @@ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+ define SYSDIG_MODULE_GEN_MAKEFILE
+ 	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
+ 	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
++	$(SED) 's/@PROBE_NAME@/sysdig-probe/;' $(@D)/driver/Makefile
+ endef
+ SYSDIG_POST_PATCH_HOOKS += SYSDIG_MODULE_GEN_MAKEFILE
+ 
