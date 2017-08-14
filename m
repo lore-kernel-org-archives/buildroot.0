@@ -1,43 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 23:31:38 +0200
-Subject: [Buildroot] [PATCH] gpsd: fix compile for microblaze arch
-In-Reply-To: <20170813085926.GA13312@waldemar-brodkorb.de>
-References: <20170813085926.GA13312@waldemar-brodkorb.de>
-Message-ID: <20170814233138.1fea9610@windsurf>
+Date: Mon, 14 Aug 2017 23:40:59 +0200
+Subject: [Buildroot] [PATCH] libspatialindex: fix build on Microblaze
+Message-ID: <20170814214059.18498-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit fixes the build of libspatialindex on the Microblaze
+architecture by working around a gcc bug, by passing -O0 as the
+optimization level.
 
-On Sun, 13 Aug 2017 10:59:26 +0200, Waldemar Brodkorb wrote:
-> Disable O2 and add O0. The suggested flags in the gcc report
-> are not enough for gcc >= 6.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/368/3686cd3f3e7b6aee84f4377bd2dded1115321fb3/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/gpsd/0002-do-not-append-O2.patch | 18 ++++++++++++++++++
->  package/gpsd/gpsd.mk                     |  2 +-
->  2 files changed, 19 insertions(+), 1 deletion(-)
->  create mode 100644 package/gpsd/0002-do-not-append-O2.patch
+A patch to configure.ac is needed to not have -O2 be forced by the
+libspatialindex build system, and therefore AUTORECONF=YES is now
+needed.
 
-I've applied to master. However, before doing this, I had to reformat
-the patch using Git, and improve the patch description, which was a bit
-too terse: it was only saying what the patch is doing (which is obvious
-by reading the patch), but not *why* you're doing it.
+Fixes:
 
-Also, please use Git to format patches when the upstream project is
-hosted in Git.
+  http://autobuild.buildroot.net/results/bbba2a2c97dbec21340c7fd07162a316a411cba4/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-configure.ac-do-not-force-O2.patch        | 30 ++++++++++++++++++++++
+ package/libspatialindex/libspatialindex.mk         | 10 ++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
 
-Thomas
+diff --git a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
+new file mode 100644
+index 0000000..c078e71
+--- /dev/null
++++ b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
+@@ -0,0 +1,30 @@
++From 7472764fe19cb3eea77f21cc2859859b8ac62085 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 14 Aug 2017 23:36:36 +0200
++Subject: [PATCH] configure.ac: do not force -O2
++
++The user may want to provide its own set of optimization flags, and
++therefore forcing -O2 should not be done.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Submitted-upstream: https://github.com/libspatialindex/libspatialindex/pull/101
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index dc5e49f..2e2aa68 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -53,7 +53,7 @@ if test "x$enable_debug" = "xyes"; then
++ 	CXXFLAGS="$CXXFLAGS -g -DDEBUG"
++ 	AC_MSG_RESULT(checking wether debug information is enabled... yes)
++ else
++-	CXXFLAGS="$CXXFLAGS -O2 -DNDEBUG"
+++	CXXFLAGS="$CXXFLAGS -DNDEBUG"
++ 	AC_MSG_RESULT(checking wether debug information is enabled... no)
++ fi
++ 
++-- 
++2.9.4
++
+diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
+index d815364..e6e773d 100644
+--- a/package/libspatialindex/libspatialindex.mk
++++ b/package/libspatialindex/libspatialindex.mk
+@@ -10,5 +10,15 @@ LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
+ LIBSPATIALINDEX_INSTALL_STAGING = YES
+ LIBSPATIALINDEX_LICENSE = MIT
+ LIBSPATIALINDEX_LICENSE_FILES = COPYING
++# We're patching configure.ac
++LIBSPATIALINDEX_AUTORECONF = YES
++LIBSPATIALINDEX_CXXFLAGS = $(TARGET_CXXFLAGS)
++LIBSPATIALINDEX_CONF_ENV = CXXFLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
++
++# Workaround gcc ICE
++# (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485)
++ifeq ($(BR2_microblaze),y)
++LIBSPATIALINDEX_CXXFLAGS += -O0
++endif
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.4
