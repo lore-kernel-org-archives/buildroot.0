@@ -1,38 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 22:39:37 +0200
-Subject: [Buildroot] [PATCH] ci20: update kernel and u-boot
-In-Reply-To: <20170813171039.GA7676@waldemar-brodkorb.de>
-References: <20170813171039.GA7676@waldemar-brodkorb.de>
-Message-ID: <20170814223937.3f2c7d26@windsurf>
+Date: Mon, 14 Aug 2017 22:39:57 +0200
+Subject: [Buildroot] [git commit branch/next] get-developers: add option to
+	get developers for files
+Message-ID: <20170814203559.10A3F8010D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=009ae96c6f6c4ab18b120d3923583efaea29cfba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 13 Aug 2017 19:10:39 +0200, Waldemar Brodkorb wrote:
-> Unbreak failing defconfig.
-> Resulting kernel and rootfs booted on ci20 device.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+The DEVELOPERS file lists file patterns, but the get-developers script
+only supports getting packages and CPU architectures. Some files are
+neither of those, e.g. defconfigs, support files, package infras, ...
 
-I've applied to master, after doing an additional tweak...
+Add a '-f' option that allows to give a list of files for which to get
+the developer(s).
 
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
-> -BR2_TARGET_UBOOT_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
-> +BR2_TARGET_UBOOT_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
+Note that the DEVELOPERS file contains directories as well as files,
+and the directories are not expanded into individual files. Therefore,
+we have to use f.startswith(devfile) to match a directory. This assumes
+that the directory name ends with /, otherwise 'package/python' would
+also match 'package/python-foo'. Since we make sure that directories do
+end with / in the DEVELOPERS file, and since false positives are not
+much of an issue in this case, this isn't a problem.
 
-I've dropped the BR2_TARGET_UBOOT_VERSION line, which was useless,
-because BR2_TARGET_UBOOT_VERSION is a hidden variable, and therefore
-has no business being present in a defconfig.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ utils/get-developers | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/utils/get-developers b/utils/get-developers
+index fa6fc2f..6a028b4 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -3,6 +3,7 @@
+ import argparse
+ import getdeveloperlib
+ import sys
++import os
+ 
+ def parse_args():
+     parser = argparse.ArgumentParser()
+@@ -12,6 +13,8 @@ def parse_args():
+                         help='find developers in charge of this architecture')
+     parser.add_argument('-p', dest='package', action='store',
+                         help='find developers in charge of this package')
++    parser.add_argument('-f', dest='files', nargs='*',
++                        help='find developers in charge of these files')
+     parser.add_argument('-c', dest='check', action='store_const',
+                         const=True, help='list files not handled by any developer')
+     return parser.parse_args()
+@@ -28,6 +31,8 @@ def __main__():
+         action += 1
+     if args.package is not None:
+         action += 1
++    if args.files:
++        action += 1
+     if args.check:
+         action += 1
+     if len(args.patches) != 0:
+@@ -59,6 +64,16 @@ def __main__():
+                 print(dev.name)
+         return
+ 
++    # Handle the files action
++    if args.files is not None:
++        args.files = [os.path.abspath(f) for f in args.files]
++        for dev in devs:
++            for devfile in dev.files:
++                commonfiles = [f for f in args.files if f.startswith(devfile)]
++                if commonfiles:
++                    print(dev.name)
++                    break
++
+     # Handle the patches action
+     if len(args.patches) != 0:
+         (files, infras) = getdeveloperlib.analyze_patches(args.patches)
