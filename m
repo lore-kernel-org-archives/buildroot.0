@@ -1,36 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 22:15:42 +0200
-Subject: [Buildroot] [PATCH 1/1] libepoxy: bump to version 1.4.3
-In-Reply-To: <20170814230653.GB14043@momiji>
-References: <20170814172320.16984-1-aperez@igalia.com>
- <20170814213113.6187b327@windsurf> <20170814230653.GB14043@momiji>
-Message-ID: <20170814221542.77518b99@windsurf>
+Date: Mon, 14 Aug 2017 22:19:46 +0200
+Subject: [Buildroot] [git commit] sysvinit: fix compilation error against
+	musl
+Message-ID: <20170814201341.7F88A81D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ec15db9db138c71133413fbc9f354de9b74e309
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Aug 2017 23:06:53 +0300, Adrian Perez de Castro wrote:
+This commit adds a patch to the sysvinit package that fixes various
+build issues against musl due to missing header includes.
 
-> > Since we're post -rc2 comes the question: do we want to apply this in
-> > master (i.e to be part of the 2017.08 release) or in next.
-> >
-> > If it fixes a crash, we probably want it in master. But version bumps
-> > are a bit frowned upon. How much differences are there between 1.4.1
-> > and 1.4.3 ? Are they significant ? If they are significant, is it
-> > possible to backport just the one patch that fixes the crash ?  
-> 
-> Good point. I would apply the patch as-is onto ?next?, and for the 2017.08
-> branch it looks doable to pick just the patch that fixes the segfaults [1].
-> I'll try and submit a patch which does just the latter.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-musl-fix-compilation-errors.patch         | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-Sounds good. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/sysvinit/0002-musl-fix-compilation-errors.patch b/package/sysvinit/0002-musl-fix-compilation-errors.patch
+new file mode 100644
+index 0000000..5dcdecf
+--- /dev/null
++++ b/package/sysvinit/0002-musl-fix-compilation-errors.patch
+@@ -0,0 +1,38 @@
++Fix various compilation errors when compiling against must libc
++
++Signed-off-by: Dagg Stompler <daggs@gmx.com>
++
++diff -Nupr a/src/init.c b/src/init.c
++--- a/src/init.c	2017-08-13 18:44:27.000000000 +0300
+++++ b/src/init.c	2017-08-13 18:34:45.000000000 +0300
++@@ -37,6 +37,7 @@
++ #include <sys/kd.h>
++ #endif
++ #include <sys/resource.h>
+++#include <sys/ttydefaults.h>
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <errno.h>
++diff -Nupr a/src/init.h b/src/init.h
++--- a/src/init.h	2017-08-13 19:35:46.000000000 +0300
+++++ b/src/init.h	2017-08-13 19:36:01.000000000 +0300
++@@ -22,6 +22,8 @@
++  *
++  */
++ 
+++#include <time.h>
+++
++ /* Standard configuration */
++ #define CHANGE_WAIT 0			/* Change runlevel while
++ 					   waiting for a process to exit? */
++diff -Nupr a/src/mountpoint.c b/src/mountpoint.c
++--- a/src/mountpoint.c	2017-08-13 20:28:26.000000000 +0300
+++++ b/src/mountpoint.c	2017-08-13 20:28:40.000000000 +0300
++@@ -24,6 +24,7 @@
++  */
++ 
++ #include <sys/stat.h>
+++#include <sys/types.h>
++ #include <unistd.h>
++ #include <stdlib.h>
++ #include <string.h>
