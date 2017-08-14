@@ -1,76 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 23:29:50 +0200
-Subject: [Buildroot] [git commit] gpsd: fix build for microblaze architecture
-Message-ID: <20170814212356.473C981D5D@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 15 Aug 2017 00:31:17 +0300
+Subject: [Buildroot] [PATCH 1/1] libepoxy: add patch to fix segfaults when
+	using in X11 without GLX
+Message-ID: <20170814213117.4735-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6d0177f5319457588080b7ed111da2c3b628cf8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This adds a patch cherry-picked from libepoxy 1.4.2, which adds missing
+NULL-pointer checks and avoids segmentation faults when using libepoxy
+under X11, when the server does not have the GLX extension, or it is
+disabled -- and applications can still use EGL.
 
-Disable O2 and add O0. The suggested flags in the gcc report
-are not enough for gcc >= 6.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/3686cd3f3e7b6aee84f4377bd2dded1115321fb3/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Thomas: use Git to format the patch, improve patch description.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- ...002-SConstruct-do-not-force-O2-by-default.patch | 29 ++++++++++++++++++++++
- package/gpsd/gpsd.mk                               |  2 +-
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ ...nal_has_gl_extension-epoxy_egl_version-ad.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/libepoxy/0003-epoxy_internal_has_gl_extension-epoxy_egl_version-ad.patch
 
-diff --git a/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch b/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
+diff --git a/package/libepoxy/0003-epoxy_internal_has_gl_extension-epoxy_egl_version-ad.patch b/package/libepoxy/0003-epoxy_internal_has_gl_extension-epoxy_egl_version-ad.patch
 new file mode 100644
-index 0000000..641afa3
+index 0000000000..770d210097
 --- /dev/null
-+++ b/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
-@@ -0,0 +1,29 @@
-+From eb7cce5dbb53a64cf55ac0d9a7fa4dcbebd4b173 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 14 Aug 2017 23:24:38 +0200
-+Subject: [PATCH] SConstruct: do not force -O2 by default
++++ b/package/libepoxy/0003-epoxy_internal_has_gl_extension-epoxy_egl_version-ad.patch
+@@ -0,0 +1,62 @@
++From 0e004b7344ea67fd682f33446d19e3b63a187513 Mon Sep 17 00:00:00 2001
++From: Gianfranco Costamagna <costamagnagianfranco@yahoo.it>
++Date: Mon, 24 Apr 2017 16:10:28 +0200
++Subject: [PATCH] epoxy_internal_has_gl_extension, epoxy_egl_version: add some
++ missing nullpointer checks from
++ https://bugzilla.redhat.com/show_bug.cgi?id=1395366 Related commit:
++ b3b8bd9af7bf1fcfe544fd131f4d4f0d117ae7bc  Fix "epoxy_glx_version" to handle
++ the case when GLX is not active on the display. Patch is tweak from the
++ original version posted by Tom Horsley
 +
-+-O2 can cause problems on some architectures, so do not force it by
-+ default.
++Backported from: https://github.com/anholt/libepoxy/pull/118
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 +---
-+ SConstruct | 2 --
-+ 1 file changed, 2 deletions(-)
++ src/dispatch_common.c | 9 ++++++++-
++ src/dispatch_egl.c    | 3 +++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
 +
-+diff --git a/SConstruct b/SConstruct
-+index fe444a2..93d91a4 100644
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -330,8 +330,6 @@ if not 'CCFLAGS' in os.environ:
-+     # Should we build with optimisation?
-+     if env['debug'] or env['coveraging']:
-+         env.Append(CCFLAGS=['-O0'])
-+-    else:
-+-        env.Append(CCFLAGS=['-O2'])
++diff --git a/src/dispatch_common.c b/src/dispatch_common.c
++index b521b1b..a38c0fc 100644
++--- a/src/dispatch_common.c
+++++ b/src/dispatch_common.c
++@@ -443,7 +443,12 @@ bool
++ epoxy_extension_in_string(const char *extension_list, const char *ext)
++ {
++     const char *ptr = extension_list;
++-    int len = strlen(ext);
+++    int len;
+++
+++    if (!ext)
+++        return false;
+++
+++    len = strlen(ext);
 + 
-+ # Get a slight speedup by not doing automatic RCS and SCCS fetches.
-+ env.SourceCode('.', None)
++     if (extension_list == NULL || *extension_list == '\0')
++         return false;
++@@ -478,6 +483,8 @@ epoxy_internal_has_gl_extension(const char *ext, bool invalid_op_mode)
++ 
++         for (i = 0; i < num_extensions; i++) {
++             const char *gl_ext = (const char *)glGetStringi(GL_EXTENSIONS, i);
+++            if (!gl_ext)
+++                return false;
++             if (strcmp(ext, gl_ext) == 0)
++                 return true;
++         }
++diff --git a/src/dispatch_egl.c b/src/dispatch_egl.c
++index 50e66dd..f555a58 100644
++--- a/src/dispatch_egl.c
+++++ b/src/dispatch_egl.c
++@@ -65,6 +65,9 @@ epoxy_egl_version(EGLDisplay dpy)
++     int ret;
++ 
++     version_string = eglQueryString(dpy, EGL_VERSION);
+++    if (!version_string)
+++        return 0;
+++
++     ret = sscanf(version_string, "%d.%d", &major, &minor);
++     assert(ret == 2);
++     return major * 10 + minor;
 +-- 
-+2.9.4
++2.14.1
 +
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 552d6d9..2b9c38a 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -44,7 +44,7 @@ endif
- # A bug was reported to the gcc bug tracker:
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
- ifeq ($(BR2_microblaze),y)
--GPSD_CFLAGS += -fno-expensive-optimizations -fno-schedule-insns
-+GPSD_CFLAGS += -O0
- endif
- 
- # Enable or disable Qt binding
+-- 
+2.14.1
