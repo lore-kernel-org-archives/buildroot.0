@@ -1,42 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 23:04:35 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: add patch for recent glibc
-In-Reply-To: <20170812162255.23034-1-arnout@mind.be>
-References: <20170811110549.6278-1-daggs@gmx.com>
- <20170812162255.23034-1-arnout@mind.be>
-Message-ID: <20170814230435.06af05f9@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Aug 2017 23:18:24 +0200
+Subject: [Buildroot] [PATCHv2] fs/iso9660: really create initrd temp dir
+Message-ID: <20170814211824.6112-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In case we're using an initrd, we create an empty "root" directory that
+will contain only the bootloader stuff, not the actual root filesystem,
+because it is in an initrd (standalone or initramfs).
 
-On Sat, 12 Aug 2017 18:22:55 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Recent glibc have deprecated the implicit include of sys/sysmacros.h
-> from sys/types.h. That means that the macros major and minor are no
-> longer defined unless this header is included.
-> 
-> This problem was observed for host-e2fsprogs when building on a host
-> with recent glibc.
-> 
-> Add an upstream patch that includes sys/sysmacros.h when needed.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Dagg Stompler <daggs@gmx.com>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> ---
-> Dagg, I prefer to cherry-pick this single commit on master instead of
-> bumping the package, since the bump does quite a lot more than just
-> this single change. Can you undo the bump, apply this patch, and see
-> if that fixes the issue for you? If yes, please add your Tested-by.
+We have to ensure that the directory is empty before assembling the
+filesystem (to avoid any file lingering from a previous run, like the
+sequence  "make; make"). So we first remove it before we create it, so
+that on each build (especially not-from-scratch builds) get the exact
+expected content without any leftover.
 
-Applied to master, thanks.
+However, the macro responsible for that, although defined since was
+never called.
 
-Thomas
+Fix that by registering it as a pre-gen hook.
+
+Note: the directory need not be created, as there are quite a few
+"install -D" commands that ensure it is created. Yet, we prefer to
+create it explicitly to avoid any confusion.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+---
+Changes v1 -> v2:
+  - expand commit log; explain why it was seemingly working  (Thomas)
+---
+ fs/iso9660/iso9660.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index fafe5b0e84..478cb0239b 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -40,6 +40,7 @@ define ROOTFS_ISO9660_CREATE_TEMPDIR
+ 	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
+ 	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
+ endef
++ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_CREATE_TEMPDIR
+ else
+ ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
