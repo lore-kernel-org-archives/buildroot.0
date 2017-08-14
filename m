@@ -1,40 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Aug 2017 21:51:54 +0200
-Subject: [Buildroot] [PATCH] libconfuse: bugfix bump to 3.2
-In-Reply-To: <20170813202247.17711-1-arnout@mind.be>
-References: <20170813202247.17711-1-arnout@mind.be>
-Message-ID: <20170814215154.4e58a37e@windsurf>
+Date: Mon, 14 Aug 2017 21:52:43 +0200
+Subject: [Buildroot] [git commit] skeleton: Rename skeleton-none to
+	skeleton-init-none
+Message-ID: <20170814194941.0E49881F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f4a8ba8c8be2a471a2bb9d42961f90438b1056b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Aug 2017 22:22:47 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> This release contains only two real changes to fix two bugs. One is
-> only relevant for Windows; the other one fixes handling of empty
-> comment lines.
-> 
-> libconfuse is used by genimage, and we have one defconfig,
-> linksprite_pcduino, that has empty comment lines in its genimage.cfg.
-> Thus, it fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/27873642
-> 
-> While we're at it, also change the upstream URL in Config.in to github.
-> The old URL on nongnu was just a download directory and didn't have
-> anything newer than 2010, while github has a nice README.md.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
-> Just to be clear, this is for master.
+The skeletons are based on the selection of BR2_INIT_*, so add init- to
+the package name to make this clearer. The name skeleton-none implies no
+skeleton at all, not a base skeleton with no init-specific files.
 
-Applied to master, thanks.
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                              |  2 +-
+ package/{skeleton-none => skeleton-init-none}/Config.in        |  4 ++--
+ .../skeleton-init-none.mk}                                     | 10 +++++-----
+ system/Config.in                                               |  2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index b5170b0..b48eac6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -4,7 +4,7 @@ menu "Target packages"
+ 	source "package/skeleton/Config.in"
+ 	source "package/skeleton-common/Config.in"
+ 	source "package/skeleton-custom/Config.in"
+-	source "package/skeleton-none/Config.in"
++	source "package/skeleton-init-none/Config.in"
+ 	source "package/skeleton-systemd/Config.in"
+ 	source "package/skeleton-sysv/Config.in"
+ 
+diff --git a/package/skeleton-none/Config.in b/package/skeleton-init-none/Config.in
+similarity index 52%
+rename from package/skeleton-none/Config.in
+rename to package/skeleton-init-none/Config.in
+index 43fb3f2..426954c 100644
+--- a/package/skeleton-none/Config.in
++++ b/package/skeleton-init-none/Config.in
+@@ -1,7 +1,7 @@
+-config BR2_PACKAGE_SKELETON_NONE
++config BR2_PACKAGE_SKELETON_INIT_NONE
+ 	bool
+ 	select BR2_PACKAGE_HAS_SKELETON
+ 	select BR2_PACKAGE_SKELETON_COMMON
+ 
+ config BR2_PACKAGE_PROVIDES_SKELETON
+-	default "skeleton-none" if BR2_PACKAGE_SKELETON_NONE
++	default "skeleton-init-none" if BR2_PACKAGE_SKELETON_INIT_NONE
+diff --git a/package/skeleton-none/skeleton-none.mk b/package/skeleton-init-none/skeleton-init-none.mk
+similarity index 67%
+rename from package/skeleton-none/skeleton-none.mk
+rename to package/skeleton-init-none/skeleton-init-none.mk
+index 9e95798..04e38c9 100644
+--- a/package/skeleton-none/skeleton-none.mk
++++ b/package/skeleton-init-none/skeleton-init-none.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# skeleton-none
++# skeleton-init-none
+ #
+ ################################################################################
+ 
+@@ -8,11 +8,11 @@
+ # skeleton and the toolchain is a target package, as is skeleton.
+ # Hence, skeleton would depends on the toolchain and the toolchain would depend
+ # on skeleton.
+-SKELETON_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
+-SKELETON_NONE_ADD_SKELETON_DEPENDENCY = NO
++SKELETON_INIT_NONE_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_INIT_NONE_ADD_SKELETON_DEPENDENCY = NO
+ 
+-SKELETON_NONE_DEPENDENCIES = skeleton-common
++SKELETON_INIT_NONE_DEPENDENCIES = skeleton-common
+ 
+-SKELETON_NONE_PROVIDES = skeleton
++SKELETON_INIT_NONE_PROVIDES = skeleton
+ 
+ $(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index 59d8eab..45326f0 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -12,7 +12,7 @@ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_SYSV
+ 	select BR2_PACKAGE_SKELETON_SYSV if BR2_INIT_BUSYBOX
+ 	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
+-	select BR2_PACKAGE_SKELETON_NONE if BR2_INIT_NONE
++	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
+ 	help
+ 	  Use default target skeleton
+ 
