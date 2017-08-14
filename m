@@ -1,21 +1,189 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Aug 2017 08:28:47 +0000
-Subject: [Buildroot] Please update your autobuild-run script
-In-Reply-To: <20170814000214.40bf529b@windsurf>
-References: <20170814000214.40bf529b@windsurf>
-Message-ID: <77BD4B42-4A64-45F5-AAF3-9A7F06615C53@free.fr>
+From: =?utf-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Mon, 14 Aug 2017 10:40:57 +0200
+Subject: [Buildroot] [PATCH/2017.02.x 2/2] dbus: add upstream patch to
+ fix startup hang with with expat >= 2.2.1
+In-Reply-To: <20170813125606.GA3475@scaer>
+References: <1502372823-31706-1-git-send-email-sebastien.szymanski@armadeus.com>
+ <1502372823-31706-2-git-send-email-sebastien.szymanski@armadeus.com>
+ <20170813125606.GA3475@scaer>
+Message-ID: <C56A6F38-72BB-48CA-9E8C-ED32DB6D7E8F@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On August 14, 2017 12:02:14 AM GMT+02:00, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> A new important commit has been made on the autobuild-run script, so
-> could you please update your autobuilder instances with the latest
-> version (commit da65988ec200767bab0c891ee2916ccc10071a7e).
+Yann, All,
 
-Done, thanks!
+> 
+> On 13 Aug 2017, at 14:56, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> 
+> S?bastien, All,
+> 
+> On 2017-08-10 15:47 +0200, S?bastien Szymanski spake thusly:
+>> From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+>> After c0ad6ded018ffbc33f7f5 expat: security bump to version 2.2.1
+>> the system can hang on startup under certain circumstances.
+>> 
+>> This happens when:
+>>  * we use systemd as init system
+>>  * the random nonblocking pool takes a while to initialize
+>>    * this apparently doesn't happen on qemu, so this would not have
+>>      been caught by the runtime testing infrastructure
+>>    * it also doesn't seem to happen when network booting
+>> 
+>> For a more detailed description of the bug see here:
+>> https://bugs.freedesktop.org/show_bug.cgi?id=101858
+>> 
+>> The patch should be in next dbus version 1.10.24
+> 
+> In the meantime. expat 2.2.3 has been released, which contrains (amongst
+> other interesting stuff) commit 55839b633 (xmlparse.c: Read /dev/urandom
+> if non-blocking getrandom failed), which ought to fix the boot delay.
+> 
+> So, maybe it is beter to bumnpt expat instead, no? Or at least, backport
+> that one commit.
 
--- 
-Sent from my phone. Please excuse my brevity.
+expat is still at version 2.2.2 on the master branch.
+I guess a patch needs to be first on the master branch before it can be backported on a LTS branch, isn?t it?
+
+Regards,
+S?bastien Szymanski
+
+> 
+> Or did I miss something?
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> Set DBUS_AUTORECONF = YES because configure.ac is changed.
+>> 
+>> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+>> [Arnout: add upstream commit sha + Marcus's Sob to the patch]
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> 
+>> (cherry picked from commit 5a5e76381f8b000baa09c902ca89d45725c47f04)
+>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>> ---
+>> ...er-expat-Tell-Expat-not-to-defend-against.patch | 78 ++++++++++++++++++++++
+>> package/dbus/dbus.mk                               |  3 +
+>> 2 files changed, 81 insertions(+)
+>> create mode 100644 package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+>> 
+>> diff --git a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+>> new file mode 100644
+>> index 0000000..fd9e01d
+>> --- /dev/null
+>> +++ b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+>> @@ -0,0 +1,78 @@
+>> +From 1252dc1d1f465b8ab6b36ff7252e395e66a040cf Mon Sep 17 00:00:00 2001
+>> +From: Simon McVittie <smcv@debian.org>
+>> +Date: Fri, 21 Jul 2017 10:46:39 +0100
+>> +Subject: [PATCH 1/2] config-loader-expat: Tell Expat not to defend against
+>> + hash collisions
+>> +
+>> +By default, Expat uses cryptographic-quality random numbers as a salt for
+>> +its hash algorithm, and since 2.2.1 it gets them from the getrandom
+>> +syscall on Linux. That syscall refuses to return any entropy until the
+>> +kernel's CSPRNG (random pool) has been initialized. Unfortunately, this
+>> +can take as long as 40 seconds on embedded devices with few entropy
+>> +sources, which is too long: if the system dbus-daemon blocks for that
+>> +length of time, important D-Bus clients like systemd and systemd-logind
+>> +time out and fail to connect to it.
+>> +
+>> +We're parsing small configuration files here, and we trust them
+>> +completely, so we don't need to defend against hash collisions: nobody
+>> +is going to be crafting them to cause pathological performance.
+>> +
+>> +Bug: https://bugs.freedesktop.org/show_bug.cgi?id=101858
+>> +Signed-off-by: Simon McVittie <smcv@debian.org>
+>> +Tested-by: Christopher Hewitt <hewitt@ieee.org>
+>> +Reviewed-by: Philip Withnall <withnall@endlessm.com>
+>> +
+>> +Upstream commit 1252dc1d1f465b8ab6b36ff7252e395e66a040cf
+>> +Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+>> +---
+>> + bus/config-loader-expat.c | 14 ++++++++++++++
+>> + configure.ac              |  8 ++++++++
+>> + 2 files changed, 22 insertions(+)
+>> +
+>> +diff --git a/bus/config-loader-expat.c b/bus/config-loader-expat.c
+>> +index b571fda3..27cbe2d0 100644
+>> +--- a/bus/config-loader-expat.c
+>> ++++ b/bus/config-loader-expat.c
+>> +@@ -203,6 +203,20 @@ bus_config_load (const DBusString      *file,
+>> +       goto failed;
+>> +     }
+>> + 
+>> ++  /* We do not need protection against hash collisions (CVE-2012-0876)
+>> ++   * because we are only parsing trusted XML; and if we let Expat block
+>> ++   * waiting for the CSPRNG to be initialized, as it does by default to
+>> ++   * defeat CVE-2012-0876, it can cause timeouts during early boot on
+>> ++   * entropy-starved embedded devices.
+>> ++   *
+>> ++   * TODO: When Expat gets a more explicit API for this than
+>> ++   * XML_SetHashSalt, check for that too, and use it preferentially.
+>> ++   * https://github.com/libexpat/libexpat/issues/91 */
+>> ++#if defined(HAVE_XML_SETHASHSALT)
+>> ++  /* Any nonzero number will do. https://xkcd.com/221/ */
+>> ++  XML_SetHashSalt (expat, 4);
+>> ++#endif
+>> ++
+>> +   if (!_dbus_string_get_dirname (file, &dirname))
+>> +     {
+>> +       dbus_set_error (error, DBUS_ERROR_NO_MEMORY, NULL);
+>> +diff --git a/configure.ac b/configure.ac
+>> +index 52da11fb..c4022ed7 100644
+>> +--- a/configure.ac
+>> ++++ b/configure.ac
+>> +@@ -938,6 +938,14 @@ XML_CFLAGS=
+>> + AC_SUBST([XML_CFLAGS])
+>> + AC_SUBST([XML_LIBS])
+>> + 
+>> ++save_cflags="$CFLAGS"
+>> ++save_libs="$LIBS"
+>> ++CFLAGS="$CFLAGS $XML_CFLAGS"
+>> ++LIBS="$LIBS $XML_LIBS"
+>> ++AC_CHECK_FUNCS([XML_SetHashSalt])
+>> ++CFLAGS="$save_cflags"
+>> ++LIBS="$save_libs"
+>> ++
+>> + # Thread lib detection
+>> + AC_ARG_VAR([THREAD_LIBS])
+>> + save_libs="$LIBS"
+>> +-- 
+>> +2.11.0
+>> +
+>> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+>> index e05fbff..f2974f2 100644
+>> --- a/package/dbus/dbus.mk
+>> +++ b/package/dbus/dbus.mk
+>> @@ -6,6 +6,9 @@
+>> 
+>> DBUS_VERSION = 1.10.22
+>> DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+>> +
+>> +# 0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+>> +DBUS_AUTORECONF = YES
+>> DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
+>> DBUS_LICENSE_FILES = COPYING
+>> DBUS_INSTALL_STAGING = YES
+>> -- 
+>> 2.7.3
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net <mailto:buildroot@busybox.net>
+>> http://lists.busybox.net/mailman/listinfo/buildroot <http://lists.busybox.net/mailman/listinfo/buildroot>
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ <http://ymorin.is-a-geek.org/> | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170814/030ad7e2/attachment.html>
