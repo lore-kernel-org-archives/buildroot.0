@@ -1,47 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 14 Aug 2017 21:01:23 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Aug 2017 21:29:52 +0200
 Subject: [Buildroot] [PATCH v2 1/1] package/mtd: integck needs threads
-Message-ID: <20170814190123.6828-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20170814190123.6828-1-bernd.kuhls@t-online.de>
+References: <20170814190123.6828-1-bernd.kuhls@t-online.de>
+Message-ID: <20170814212952.69e2033c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The test programs depend on pthreads:
-http://git.infradead.org/mtd-utils.git/blob/1bfee8660131fca7a18f68e9548a18ca6b3378a0:/configure.ac#l43
+Hello,
 
-Our option BR2_PACKAGE_MTD_INTEGCK is the only option which enables
-building the test programs so it needs to depend on threads because
-BR2_PACKAGE_MTD_TESTS as a hidden option cannot be selected.
+On Mon, 14 Aug 2017 21:01:23 +0200, Bernd Kuhls wrote:
+> The test programs depend on pthreads:
+> http://git.infradead.org/mtd-utils.git/blob/1bfee8660131fca7a18f68e9548a18ca6b3378a0:/configure.ac#l43
+> 
+> Our option BR2_PACKAGE_MTD_INTEGCK is the only option which enables
+> building the test programs so it needs to depend on threads because
+> BR2_PACKAGE_MTD_TESTS as a hidden option cannot be selected.
 
-Fixes
-http://autobuild.buildroot.net/results/879/879c79e505f65387a46c4be263dc8783c8ca61bf/
+I don't understand this explanation, and actually, I believe it is
+wrong, and the thread dependency should be added to
+BR2_PACKAGE_MTD_TESTS. Indeed, it's the fact of enabling
+BR2_PACKAGE_MTD_TESTS that passes --enable-tests, which requires thread
+support.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: threads are only needed for test programs (Baruch)
+The thread dependency should be added to BR2_PACKAGE_MTD_TESTS, so that
+is other people add more visible options to enable other tests in the
+future, they will notice this dependency.
 
- package/mtd/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Of course, this thread dependency should then be propagated to all
+existing reverse dependencies of BR2_PACKAGE_MTD_TESTS, which means
+doing exactly your patch.
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index a1df4cfc0..15057a00e 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -174,9 +174,13 @@ config BR2_PACKAGE_MTD_UBIBLOCK
- 
- config BR2_PACKAGE_MTD_INTEGCK
- 	bool "integck"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_MTD_TESTS
- 	help
- 	  Install the integck test program.
- 
-+comment "integck needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- endif
+So basically, your patch + a "depends on BR2_TOOLCHAIN_HAS_THREADS" on
+BR2_PACKAGE_MTD_TESTS and a reworked commit log would be good.
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
