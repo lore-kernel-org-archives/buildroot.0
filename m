@@ -1,16 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 17:23:00 +0200
-Subject: [Buildroot] [PATCH 2/3] whois: use github repo as home page
-In-Reply-To: <20170815140739.3370030e@windsurf>
-References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <fa924d0754ef385b1706721751e5f6f00e60c199.1502649259.git.baruch@tkos.co.il>
- <20170814220354.3665d3eb@windsurf>
- <20170815041434.tlygmw6w4skyih6k@sapphire.tkos.co.il>
- <b6dfe8f7-5fa2-1ade-2aa5-eaeab13b271c@mind.be>
- <20170815125621.4d78c480@windsurf>
- <20170815112018.rg7udjb7zlfps4ue@sapphire.tkos.co.il>
- <20170815140739.3370030e@windsurf>
-Message-ID: <913da711-54bf-e3b9-04ac-c54d0d650a8d@mind.be>
+Date: Tue, 15 Aug 2017 17:32:14 +0200
+Subject: [Buildroot] [PATCH] core/pkg-toolchain-external: quiesce
+	spurious stderr
+In-Reply-To: <20170815150340.16983-1-yann.morin.1998@free.fr>
+References: <20170815150340.16983-1-yann.morin.1998@free.fr>
+Message-ID: <a0db62ed-35c1-31d4-225b-27763d0d730c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,38 +13,37 @@ To: buildroot@busybox.net
 
 
 
-On 15-08-17 14:07, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 15 Aug 2017 14:20:18 +0300, Baruch Siach wrote:
-> 
->> On Tue, Aug 15, 2017 at 12:56:21PM +0200, Thomas Petazzoni wrote:
+On 15-08-17 17:03, Yann E. MORIN wrote:
 [snip]
->> The real whois upstream README file says this:
->>
->>   The canonical distribution point for releases of the program is
->>   http://ftp.debian.org/debian/pool/main/w/whois/ .
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Fair enough. But I still find it completely weird to have the Github
-> page as the "project home page" indicated in the Config.in file, and
-> not use that as the upstream.
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 23cdf30b9f..b139638100 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -74,7 +74,7 @@ endif
+>  ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+>  ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+>  # if no path set, figure it out from path
+> -TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+> +TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc) 2>/dev/null)
 
- It's weird, but it is what it is. Don't we have any other package where the
-github repo is the upstream URL, but the release tarball comes from somewhere else?
+ How about
 
+TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
 
-> And Arnout has put PATCH 1/3 back to the New state, while I still
-> disagree with the approach being taken.
+? Or is there some fundamental reason why $(dir ...) doesn't work here?
 
- Sorry, I hadn't seen your reply to 1/3, I had also seen your reply to 2/3 and
-considered that Baruch and I had given sufficient feedback to warrant going back
-to New. With your reply to 1/3, it indeed makes sense to set the entire series
-to Changes Requested.
+ For reference: this construct was introduced by Peter in 85dc57f6fd27 when he
+added the toolchain wrapper. Before that time, the external-toolchain-from-path
+was implicit because it would be used directly in TARGET_CC. The commit contains
+no explanation as to why it needs to be 'shell dirname' instead of the make
+function 'dir'.
 
- However, I'm just going to apply patch 3/3 now, since there is no objection to
-that one. So only 1/3 and 2/3 will be Changes Requested.
-
-
+ Regards,
+ Arnout
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
