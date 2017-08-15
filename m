@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 23:24:54 +0200
-Subject: [Buildroot] can't build qt5webkit for raspberry pi 3
-In-Reply-To: <20170815210235.3uvthq2bk5zoxluo@gportay>
-References: <20170815114148.42777e85@brock-desktop>
- <20170815210235.3uvthq2bk5zoxluo@gportay>
-Message-ID: <a6c22850-0224-c263-123d-197392f48615@mind.be>
+Date: Tue, 15 Aug 2017 23:25:39 +0200
+Subject: [Buildroot] [PATCH] Revert "syslinux: drop patch 0003,
+ not needed after gnu-efi update"
+In-Reply-To: <f662424e-3bc1-b799-9008-8fa84c79a40b@mind.be>
+References: <20170813232835.18414-1-arnout@mind.be>
+ <20170814220953.45dcf706@windsurf>
+ <f662424e-3bc1-b799-9008-8fa84c79a40b@mind.be>
+Message-ID: <a5999e2a-cc9e-52ca-0d82-2c1458e16ff5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +15,43 @@ To: buildroot@busybox.net
 
 
 
-On 15-08-17 23:02, Ga?l PORTAY wrote:
-> Hello Brock,
+On 15-08-17 16:53, Arnout Vandecappelle wrote:
 > 
-> On Tue, Aug 15, 2017 at 11:41:48AM -0600, Brock Williams wrote:
->> I'm not able to build qt5webkit for a pi 3 from master.  It works for pi
->> 2. Here is the error:
+> On 14-08-17 22:09, Thomas Petazzoni wrote:
+>> Hello,
 >>
->> In file included from ./config.h:30:0,
->>                  from wtf/CurrentTime.cpp:34:
->> ./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
->>  #    error "Not supported ARM architecture"
->>       ^~~~~
->>
->> I've attached the defconfig that we are using.  This is based on the
->> raspberrypi3_defconfig with what I think is just the minimum to build
->> qt5webkit added.  For now we have just configured
->> the build down to the pi 2 cpu settings.
->>
->> Brock
->>
-> The CPU of rpi3 has moved from cortex-a8 (armv7) to cortex-a53 (armv8) in the
-> raspberrypi3_defconfig. And Qt WebKit do not support for armv8.
+>> On Mon, 14 Aug 2017 01:28:35 +0200, Arnout Vandecappelle
+>> (Essensium/Mind) wrote:
+>>> It turns out that this patch is still needed, since with some versions
+>>> of binutils the error still occurs.
+>>>
+>>> Partially fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979377
+>>>
+>>> This reverts commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9.
+>>>
+>>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>> Cc: Beno?t Allard <benoit.allard@greenbone.net>
+>>> ---
+>>> The failing ts5x00_defconfig also requires a kernel bump
+>> The problem with this is that you are going to run into the problem I
+>> reported at:
+>> http://lists.busybox.net/pipermail/buildroot/2017-July/195927.html, i.e
+>> the --no-dynamic-linker option doesn't exist in old binutils versions,
+>> and will therefore cause a build failure.
+>  Indeed, TestIso9660Syslinux{Ex,Int}ternal fail on it.
+> 
+>  I'm now trying with --omagic --no-omagic instead. If I read the man page
+> correctly, this should have more or less the same effect. It feels like a huge
+> hack though...
 
- So we should add arch dependencies to qt5webkit, I guess. Are there more arches
-that are excluded (but still allowed by jscore, so only arm, x86, mipsel)?
+ That didn't work...
+
+ But I tried with latest master and that did work (after applying our
+cross-compilation patches). Bisecting now...
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
