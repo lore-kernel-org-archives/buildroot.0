@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 18:18:30 +0200
-Subject: [Buildroot] [PATCH] package/fakeroot: fix highly parallel uses
-In-Reply-To: <20170813214834.24093-1-yann.morin.1998@free.fr>
-References: <20170813214834.24093-1-yann.morin.1998@free.fr>
-Message-ID: <c3a46dd3-57f1-6b84-dc93-23a4da8de50c@mind.be>
+Date: Tue, 15 Aug 2017 18:19:31 +0200
+Subject: [Buildroot] [PATCH] elf2flt: add patch to fix ld.real search
+ logic
+In-Reply-To: <20170813213238.27144-1-thomas.petazzoni@free-electrons.com>
+References: <20170813213238.27144-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <52471861-e9d8-34c8-b49e-2a58b396a6f3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,41 @@ To: buildroot@busybox.net
 
 
 
-On 13-08-17 23:48, Yann E. MORIN wrote:
-> Although the issue can very well occur with low-paralle builds, or even
-> with non-parallel builds, the conditions are so strict that the ocasion
-> it breaks is extremely rare, to the point where a failure would go
-> unnoticed.
+On 13-08-17 23:32, Thomas Petazzoni wrote:
+> elf2flt contains a program called ld-elf2flt, which gets installed as
+> a replacement for ld, with ld renamed to ld.real. This program
+> therefore calls ld.real internally.
 > 
-> Fixes #10141.
+> The logic to find ld.real worked fine for:
 > 
-> Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>  - bin/TARGET_ALIAS-ld
+>  - TARGET_ALIAS/bin/ld
+> 
+> However, it failed badly if bin/SIMPLER_TARGET_ALIAS-ld is used, as
+> symlink to bin/TARGET_ALIAS-ld. For example:
+> 
+> $ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
+> /home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
+> 
+> $ ./output/host/bin/arm-linux-ld
+> arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
+> 
+> $ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
+> /home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
+> 
+> This commit fixes that by adding a patch that adjusts the ld-elf2flt
+> logic to properly cope with this situation.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- As you noticed on IRC, applied to master, thanks.
+ Nice catch! I hoped that upstream would have given some feedback already, but
+alas...
 
- Clayton, for testing you can just use master.
+ Applied to master, thanks.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
