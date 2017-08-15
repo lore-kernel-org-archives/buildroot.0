@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 18:16:10 +0200
-Subject: [Buildroot] [PATCHv2] fs/iso9660: really create initrd temp dir
-In-Reply-To: <20170814211824.6112-1-yann.morin.1998@free.fr>
-References: <20170814211824.6112-1-yann.morin.1998@free.fr>
-Message-ID: <c6de822b-f44a-d94a-392c-b2febf9bb925@mind.be>
+Date: Tue, 15 Aug 2017 18:18:30 +0200
+Subject: [Buildroot] [PATCH] package/fakeroot: fix highly parallel uses
+In-Reply-To: <20170813214834.24093-1-yann.morin.1998@free.fr>
+References: <20170813214834.24093-1-yann.morin.1998@free.fr>
+Message-ID: <c3a46dd3-57f1-6b84-dc93-23a4da8de50c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +12,25 @@ To: buildroot@busybox.net
 
 
 
-On 14-08-17 23:18, Yann E. MORIN wrote:
-> In case we're using an initrd, we create an empty "root" directory that
-> will contain only the bootloader stuff, not the actual root filesystem,
-> because it is in an initrd (standalone or initramfs).
+On 13-08-17 23:48, Yann E. MORIN wrote:
+> Although the issue can very well occur with low-paralle builds, or even
+> with non-parallel builds, the conditions are so strict that the ocasion
+> it breaks is extremely rare, to the point where a failure would go
+> unnoticed.
 > 
-> We have to ensure that the directory is empty before assembling the
-> filesystem (to avoid any file lingering from a previous run, like the
-> sequence  "make; make"). So we first remove it before we create it, so
-> that on each build (especially not-from-scratch builds) get the exact
-> expected content without any leftover.
+> Fixes #10141.
 > 
-> However, the macro responsible for that, although defined since was
-> never called.
-> 
-> Fix that by registering it as a pre-gen hook.
-> 
-> Note: the directory need not be created, as there are quite a few
-> "install -D" commands that ensure it is created. Yet, we prefer to
-> create it explicitly to avoid any confusion.
-> 
+> Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
- Applied to master, thanks.
+ As you noticed on IRC, applied to master, thanks.
+
+ Clayton, for testing you can just use master.
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
