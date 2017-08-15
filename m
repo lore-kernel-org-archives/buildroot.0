@@ -1,11 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 15 Aug 2017 07:14:34 +0300
-Subject: [Buildroot] [PATCH 2/3] whois: use github repo as home page
-In-Reply-To: <20170814220354.3665d3eb@windsurf>
+Date: Tue, 15 Aug 2017 07:18:32 +0300
+Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
+In-Reply-To: <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
 References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <fa924d0754ef385b1706721751e5f6f00e60c199.1502649259.git.baruch@tkos.co.il>
- <20170814220354.3665d3eb@windsurf>
-Message-ID: <20170815041434.tlygmw6w4skyih6k@sapphire.tkos.co.il>
+ <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
+Message-ID: <20170815041832.jyuew657zabwrplz@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +13,54 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Mon, Aug 14, 2017 at 10:03:54PM +0200, Thomas Petazzoni wrote:
-> On Sun, 13 Aug 2017 21:34:18 +0300, Baruch Siach wrote:
-> > The github repo is more informative than the list Marco's software on
-> > the previous link.
-> > 
-> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Sun, Aug 13, 2017 at 09:34:19PM +0300, Baruch Siach wrote:
+> Fixes serious usability issues (Debian changelog):
 > 
-> What about switching the upstream to be Github, instead of fetching
-> from Debian? The Github repo has all the releases available:
-> https://github.com/rfc1036/whois/releases.
+>   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
+>     broken by an ICANN-mandated output change:
+>     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
 > 
-> Just make sure that the 5.2.14 tarball we were getting from Debian is
-> similar in contents to what we get from the Github repository for the
-> same version.
+> Use snapshot.debian.org for the .dsc reference, since files tend to
+> disappear from the official Debian ftp site over time.
+> 
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-But we generally prefer upstream provided tarballs, aren't we? Moreover, in 
-this case the Debian repo provides a smaller .tar.xz, and an upstream computed 
-SHA256 in the .dsc file. You don't get that from github.
+Why has this patch been marked 'Changes Requested'? It is independent of other 
+patches in this series.
 
 baruch
+
+> This should go to master IMO.
+> ---
+>  package/whois/whois.hash | 4 ++--
+>  package/whois/whois.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+> index 6f65074c2c48..29623b529f20 100644
+> --- a/package/whois/whois.hash
+> +++ b/package/whois/whois.hash
+> @@ -1,2 +1,2 @@
+> -# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.14.dsc
+> -sha256	a41daf41abed0fbfa8c9c4b0e4a3f5f22d9876dd6feb9091aac12f8f4c38b0d2	whois_5.2.14.tar.xz
+> +# From http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois/whois_5.2.17.dsc
+> +sha256	257585678f571e18964667b41dc6543fe9da6123ac95743660c9c3ae1eba9664	whois_5.2.17.tar.xz
+> diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+> index 87cc65fac4c7..22117cf3aa88 100644
+> --- a/package/whois/whois.mk
+> +++ b/package/whois/whois.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -WHOIS_VERSION = 5.2.14
+> -WHOIS_SITE = http://snapshot.debian.org/archive/debian/20161230T032015Z/pool/main/w/whois
+> +WHOIS_VERSION = 5.2.17
+> +WHOIS_SITE = http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois
+>  WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+>  # take precedence over busybox implementation
+>  WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
