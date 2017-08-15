@@ -1,39 +1,33 @@
-From: Brock Williams <brock@cottonwoodcomputer.com>
-Date: Tue, 15 Aug 2017 11:41:48 -0600
-Subject: [Buildroot] can't build qt5webkit for raspberry pi 3
-Message-ID: <20170815114148.42777e85@brock-desktop>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 15 Aug 2017 22:14:41 +0300
+Subject: [Buildroot] [PATCH v2 2/2] whois: use github repo as home page
+In-Reply-To: <a73c8c9cceb698f9b2fa61339baa694087a00377.1502824481.git.baruch@tkos.co.il>
+References: <a73c8c9cceb698f9b2fa61339baa694087a00377.1502824481.git.baruch@tkos.co.il>
+Message-ID: <5238381800b4c59088db472757ec95155c96a7cc.1502824481.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The github repo is more informative than the list Marco's software on
+the previous link.
 
-I'm not able to build qt5webkit for a pi 3 from master.  It works for pi
-2. Here is the error:
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/whois/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In file included from ./config.h:30:0,
-                 from wtf/CurrentTime.cpp:34:
-./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
- #    error "Not supported ARM architecture"
-      ^~~~~
-
-I've attached the defconfig that we are using.  This is based on the
-raspberrypi3_defconfig with what I think is just the minimum to build
-qt5webkit added.  For now we have just configured
-the build down to the pi 2 cpu settings.
-
-Brock
-
-
+diff --git a/package/whois/Config.in b/package/whois/Config.in
+index 9505d5832056..d2a030282b76 100644
+--- a/package/whois/Config.in
++++ b/package/whois/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_WHOIS
+ 	help
+ 	  Improved whois client.
+ 
+-	  http://www.linux.it/~md/software/
++	  https://github.com/rfc1036/whois
 -- 
-Brock Williams  brock at cottonwoodcomputer.com
-Cottonwood Computer Solutions, Inc.
-www.cottonwoodcomputer.com      406-896-4910
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: defconfig
-Type: application/octet-stream
-Size: 1302 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170815/14926295/attachment.obj>
+2.14.1
