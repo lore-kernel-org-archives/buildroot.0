@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 18:22:02 +0200
-Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
-In-Reply-To: <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
-References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
-Message-ID: <c6c5ba20-6b55-bb90-e4c3-2a90814adc95@mind.be>
+Date: Tue, 15 Aug 2017 18:24:36 +0200
+Subject: [Buildroot] [PATCH] package/fakeroot: fix highly parallel uses
+In-Reply-To: <c3a46dd3-57f1-6b84-dc93-23a4da8de50c@mind.be>
+References: <20170813214834.24093-1-yann.morin.1998@free.fr>
+ <c3a46dd3-57f1-6b84-dc93-23a4da8de50c@mind.be>
+Message-ID: <9e6f4ee1-28a0-9a29-e5fd-26b398cc9406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,27 @@ To: buildroot@busybox.net
 
 
 
-On 13-08-17 20:34, Baruch Siach wrote:
-> Fixes serious usability issues (Debian changelog):
+On 15-08-17 18:18, Arnout Vandecappelle wrote:
 > 
->   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
->     broken by an ICANN-mandated output change:
->     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
-> 
-> Use snapshot.debian.org for the .dsc reference, since files tend to
-> disappear from the official Debian ftp site over time.
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> On 13-08-17 23:48, Yann E. MORIN wrote:
+>> Although the issue can very well occur with low-paralle builds, or even
+>> with non-parallel builds, the conditions are so strict that the ocasion
+>> it breaks is extremely rare, to the point where a failure would go
+>> unnoticed.
+>>
+>> Fixes #10141.
+>>
+>> Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
- As mentioned before, applied to master, thanks.
+>  As you noticed on IRC, applied to master, thanks.
 
- I first checked the differences between 5.2.14 and 5.2.17, and it really is
-only in the whois databases (and in documentation) that there are changes.
-Source code hasn't changed.
-
- Peter, this should probably go to the LTS branches as well.
+ By the way, did you send the patch upstream in the end? I looked in
+bugs.debian.org but couldn't find anything...
 
  Regards,
  Arnout
-
-> ---
-> 
-> This should go to master IMO.
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
