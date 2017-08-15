@@ -1,66 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 12:32:38 +0200
-Subject: [Buildroot] [PATCH] lua: fix install of lua.pc
-In-Reply-To: <CAB0FRsvzktuPOcsADkydwxjBVCQZJ-ZB090wTL_mfzTKo9TZjg@mail.gmail.com>
-References: <20170813133111.3959-1-francois.perrad@gadz.org>
- <20170814222528.1ca21238@windsurf>
- <CAB0FRsuYHMSgoMqpkyq2ieQL54hh6EVywUTv=jBAqdgNZcZdWw@mail.gmail.com>
- <20170815103948.5e910211@windsurf>
- <CAB0FRsvzktuPOcsADkydwxjBVCQZJ-ZB090wTL_mfzTKo9TZjg@mail.gmail.com>
-Message-ID: <93725030-7abe-4bed-30e8-19b7dbde5b3c@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 15 Aug 2017 03:47:21 -0700 (PDT)
+Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
+	package
+In-Reply-To: <20170227232240.GB2535@tungsten.ozlabs.ibm.com>
+References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
+ <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
+ <20170223101820.127d5700@free-electrons.com>
+ <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
+ <20170224092549.2c560db3@free-electrons.com>
+ <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
+ <20170227150637.ljo2c6dv3izstddn@tarshish>
+ <20170227232240.GB2535@tungsten.ozlabs.ibm.com>
+Message-ID: <1502794041870-173505.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi;
+
+I know this post is a bit old; however, I would really like to see
+gobject-introspection added
+to Buildroot.
+
+It's preventing a fair amount of packages from being updated.  Heck,
+python-gobject is stuck
+at 2.28.6 because of this, which is from 2011!  Adding this dependency is
+beyond my capabilities; however
+I do see the importance of it, which is why I would like to see this patch
+series brought back to life.
+
+Thanks!
+
+Adam
 
 
-On 15-08-17 11:12, Fran?ois Perrad wrote:
-> In order to keep a code base clean , I am against mixing the responsability of
-> different steps.
-> In my point of view, the install step must only:
->     - copying files
->     - modifying the mode of files
->     - rename files
->     - create symbolic links
 
- The current situation, at least, is also that fixing up files is done in
-(post-)install. Cfr. $(PKG)_CONFIG_SCRIPTS), fixup of libtool files. And several
-packages already do additional fixups in post-install.
-
- In this particular case, however, it does make more sense to make this
-modification in the configure step. Well, except that the .pc file is something
-we add ourselves with a patch... So in fact, in this particular case, it would
-make more sense to do it in post-install, but to get the .pc file from
-package/lua/lua.pc.in instead of patching lua to get it. Except of course in
-case the patch has been accepted upstream, then it would make more sense to do
-what you propose.
-
- So, in my opinion, there are two possibilities:
-
-1. 0004-lua-pc.patch has been accepted upstream. In that case, the proper thing
-to do would be to:
-  a. patch lua's Makefile to also substitute @MYLIBS@
-  b. send the resulting patch upstream
-
-2. lua.pc has not been accepted upstream. In that case, the proper thing to do
-would be to replace the patches with package/lua/lua.pc.in
-
-
- In either case, however, this is more a matter of making things nicer, it
-doesn't fix anything and it hardly makes things more maintainable. Only if
-lua.pc is upstream, then Joerg's fix should be improved and also sent upstream.
-
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/RFC-PATCH-0-2-add-gobject-introspection-tp157754p173505.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
