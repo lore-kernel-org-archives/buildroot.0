@@ -1,73 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Aug 2017 17:03:40 +0200
-Subject: [Buildroot] [PATCH] core/pkg-toolchain-external: quiesce spurious
-	stderr
-Message-ID: <20170815150340.16983-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Aug 2017 17:23:00 +0200
+Subject: [Buildroot] [PATCH 2/3] whois: use github repo as home page
+In-Reply-To: <20170815140739.3370030e@windsurf>
+References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
+ <fa924d0754ef385b1706721751e5f6f00e60c199.1502649259.git.baruch@tkos.co.il>
+ <20170814220354.3665d3eb@windsurf>
+ <20170815041434.tlygmw6w4skyih6k@sapphire.tkos.co.il>
+ <b6dfe8f7-5fa2-1ade-2aa5-eaeab13b271c@mind.be>
+ <20170815125621.4d78c480@windsurf>
+ <20170815112018.rg7udjb7zlfps4ue@sapphire.tkos.co.il>
+ <20170815140739.3370030e@windsurf>
+Message-ID: <913da711-54bf-e3b9-04ac-c54d0d650a8d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 392b0a26f5 (toolchain-external: default BR2_TOOLCHAIN_EXTERNAL_PATH
-to empty), calling 'make clean' or similar can yield a spurious stderr
-message:
-    dirname: missing operand
-    Try 'dirname --help' for more information.
 
-Which is definitely baffling and unsettling...
 
-It truns out that it is pretty trivial to reproduce, and this defconfig
-is just enough:
+On 15-08-17 14:07, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 15 Aug 2017 14:20:18 +0300, Baruch Siach wrote:
+> 
+>> On Tue, Aug 15, 2017 at 12:56:21PM +0200, Thomas Petazzoni wrote:
+[snip]
+>> The real whois upstream README file says this:
+>>
+>>   The canonical distribution point for releases of the program is
+>>   http://ftp.debian.org/debian/pool/main/w/whois/ .
+> 
+> Fair enough. But I still find it completely weird to have the Github
+> page as the "project home page" indicated in the Config.in file, and
+> not use that as the upstream.
 
-    $ cat my-defconfig
-    BR2_TOOLCHAIN_EXTERNAL=y
+ It's weird, but it is what it is. Don't we have any other package where the
+github repo is the upstream URL, but the release tarball comes from somewhere else?
 
-    $ make BR2_DEFCONFIG=$(pwd)/my-defconfig defconfig
 
-    $ make clean
-    dirname: missing operand
-    Try 'dirname --help' for more information.
-    [--snip--]
+> And Arnout has put PATCH 1/3 back to the New state, while I still
+> disagree with the approach being taken.
 
-This is because the cross-compiler is not found in the PATH (and for
-good reasons, I don't have it in the PATH, not even at all).
+ Sorry, I hadn't seen your reply to 1/3, I had also seen your reply to 2/3 and
+considered that Baruch and I had given sufficient feedback to warrant going back
+to New. With your reply to 1/3, it indeed makes sense to set the entire series
+to Changes Requested.
 
-So, when the cross-compiler is not found in the path, we simply
-continue as if all was good, and postpone the check to much later,
-when we try to copy the toolchain libs...
+ However, I'm just going to apply patch 3/3 now, since there is no objection to
+that one. So only 1/3 and 2/3 will be Changes Requested.
 
-We just quiesce the spurious message by consigning stderr to oblivion.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
----
-Note: it would be good to error out at this point, but as explained in
-the commit log, we already error out a bit later when copying the
-toolchain libs, and the check is easier done then than what we could
-do here, because we'd have to guard with BR_BUILDING, and for good
-measure, we'd also have to do the check when the tooolchain dir is
-actually specified. But then this would duplicate the existing (but
-later) checks, so we just don't bother...
----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 23cdf30b9f..b139638100 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -74,7 +74,7 @@ endif
- ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
- ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
- # if no path set, figure it out from path
--TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
-+TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc) 2>/dev/null)
- endif
- else
- TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
