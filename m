@@ -1,82 +1,53 @@
 From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Tue, 15 Aug 2017 17:59:00 -0400
-Subject: [Buildroot] can't build qt5webkit for raspberry pi 3
-In-Reply-To: <a6c22850-0224-c263-123d-197392f48615@mind.be>
-References: <20170815114148.42777e85@brock-desktop>
- <20170815210235.3uvthq2bk5zoxluo@gportay>
- <a6c22850-0224-c263-123d-197392f48615@mind.be>
-Message-ID: <20170815215900.bsskjbqwncdj2wyz@gportay>
+Date: Tue, 15 Aug 2017 18:04:58 -0400
+Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
+In-Reply-To: <20170815235749.30c17b60@windsurf>
+References: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
+ <20170815225006.0cb00732@windsurf>
+ <20170815205718.cn4a4ggjhonw3w7s@gportay>
+ <20170815235749.30c17b60@windsurf>
+Message-ID: <20170815220458.7uk7usnfyrri73pl@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hello,
 
-On Tue, Aug 15, 2017 at 11:24:54PM +0200, Arnout Vandecappelle wrote:
+On Tue, Aug 15, 2017 at 11:57:49PM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> 
-> On 15-08-17 23:02, Ga?l PORTAY wrote:
-> > Hello Brock,
+> On Tue, 15 Aug 2017 16:57:18 -0400, Ga?l PORTAY wrote:
+> > Hello Thomas,
 > > 
-> > On Tue, Aug 15, 2017 at 11:41:48AM -0600, Brock Williams wrote:
-> >> I'm not able to build qt5webkit for a pi 3 from master.  It works for pi
-> >> 2. Here is the error:
-> >>
-> >> In file included from ./config.h:30:0,
-> >>                  from wtf/CurrentTime.cpp:34:
-> >> ./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
-> >>  #    error "Not supported ARM architecture"
-> >>       ^~~~~
-> >>
-> >> I've attached the defconfig that we are using.  This is based on the
-> >> raspberrypi3_defconfig with what I think is just the minimum to build
-> >> qt5webkit added.  For now we have just configured
-> >> the build down to the pi 2 cpu settings.
-> >>
-> >> Brock
-> >>
-> > The CPU of rpi3 has moved from cortex-a8 (armv7) to cortex-a53 (armv8) in the
-> > raspberrypi3_defconfig. And Qt WebKit do not support for armv8.
+> > On Tue, Aug 15, 2017 at 10:50:06PM +0200, Thomas Petazzoni wrote:
+> > > Hello,
+> > > 
+> > > On Tue, 15 Aug 2017 16:38:52 -0400, Ga?l PORTAY wrote:
+> > >   
+> > > > Ga?l PORTAY (3):
+> > > >   qt5webengine: new package
+> > > >   configs: new raspberrypi3 qt5we config  
+> > > 
+> > > So there are really 2 patches now, not 3 ?
+> > >   
+> > 
+> > Yes, since Yann shows me that I can backport this patch [1], I can drop my patch
+> > about rpi-userland and library symlinks.
 > 
->  So we should add arch dependencies to qt5webkit, I guess. Are there more arches
-> that are excluded (but still allowed by jscore, so only arm, x86, mipsel)?
+> Yes I know that, I followed the discussions. But your cover letter
+> indicates [PATCH v8 0/3], and contains:
+> 
+>  Ga?l PORTAY (3):
+>    qt5webengine: new package
+>    configs: new raspberrypi3 qt5we config  
+> 
+> So you're announcing 3 patches, but you really have 2.
 > 
 
-I am compiling for rpi3. The fix seems to work. I will test it on the target
-when the image is ready.
+Damned...
 
-QtWebKit supposed to be supported on these architecture.
-
-	$ git grep '/\* CPU(.*).*\*/' Source/WTF/wtf/Platform.h
-	Source/WTF/wtf/Platform.h:/* CPU() - the target CPU architecture */
-	Source/WTF/wtf/Platform.h:/* CPU(ALPHA) - DEC Alpha */
-	Source/WTF/wtf/Platform.h:/* CPU(HPPA) - HP PA-RISC */
-	Source/WTF/wtf/Platform.h:/* CPU(IA64) - Itanium / IA-64 */
-	Source/WTF/wtf/Platform.h:/* CPU(MIPS64) - MIPS 64-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(MIPS) - MIPS 32-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(PPC) - PowerPC 32-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(PPC64) - PowerPC 64-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(SH4) - SuperH SH-4 */
-	Source/WTF/wtf/Platform.h:/* CPU(SPARC32) - SPARC 32-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(SPARC64) - SPARC 64-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(SPARC) - any SPARC, true for CPU(SPARC32) and CPU(SPARC64) */
-	Source/WTF/wtf/Platform.h:/* CPU(S390X) - S390 64-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(S390) - S390 32-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(X86) - i386 / x86 32-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(X86_64) - AMD64 / Intel64 / x86_64 64-bit */
-	Source/WTF/wtf/Platform.h:/* CPU(ARM) - ARM, any version*/
-	Source/WTF/wtf/Platform.h:/* CPU(ARM_FEATURE_UNALIGNED) - ARM instruction set supports unaligned access */
-	Source/WTF/wtf/Platform.h:/* CPU(ARM_TRADITIONAL) - Thumb2 is not available, only traditional ARM (v4 or greater) */
-	Source/WTF/wtf/Platform.h:/* CPU(ARM_THUMB2) - Thumb2 instruction set is available */
-	Source/WTF/wtf/Platform.h:/* CPU(AARCH64) - AArch64 */
-
-The issue comes from the fact we have __ARM_ARCH_8A__ defined but not
-__aarch64__ (because we have an armv8/32bits; and not an armv8/64bits).
-
-__ARM_ARCH_8A__ is never catched in an #ifdef/endif in Platform.h. __aarch64__
-and __ARM_ARCH_[4-7]x__ are caught.
-
-Regards,
-Gael
+I used a diff tool to get back things from the coverletter of the v7. And 
+obviously, I was not smart enough to copy only the right things... Sorry about
+that.
