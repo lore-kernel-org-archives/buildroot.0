@@ -1,89 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Aug 2017 18:03:55 +0200
-Subject: [Buildroot] [git commit] libspatialindex: fix build on Microblaze
-Message-ID: <20170815160109.8A5667FA7A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Aug 2017 18:14:09 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/mtd: test programs need
+ threads
+In-Reply-To: <20170815042004.12226-1-bernd.kuhls@t-online.de>
+References: <20170815042004.12226-1-bernd.kuhls@t-online.de>
+Message-ID: <7218ff76-ab9a-4d2e-8779-b77d91b87cd1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5299a7dd02a1ba74b6e089a428d0de720091e17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit fixes the build of libspatialindex on the Microblaze
-architecture by working around a gcc bug, by passing -O0 as the
-optimization level.
 
-A patch to configure.ac is needed to not have -O2 be forced by the
-libspatialindex build system, and therefore AUTORECONF=YES is now
-needed.
+On 15-08-17 06:20, Bernd Kuhls wrote:
+> The test programs depend on pthreads:
+> http://git.infradead.org/mtd-utils.git/blob/1bfee8660131fca7a18f68e9548a18ca6b3378a0:/configure.ac#l43
+> 
+> Also propagate the threads dependency to BR2_PACKAGE_MTD_INTEGCK.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/879/879c79e505f65387a46c4be263dc8783c8ca61bf/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
 
-Fixes:
+[snip]
+>  config BR2_PACKAGE_MTD_INTEGCK
+>  	bool "integck"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # mtd-tests
+>  	depends on BR2_USE_MMU # fork()
+>  	select BR2_PACKAGE_MTD_TESTS
+>  	help
+>  	  Install the integck test program.
+>  
+> +comment "integck needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-  http://autobuild.buildroot.net/results/bbba2a2c97dbec21340c7fd07162a316a411cba4/
+ You forgot the depends on MMU here. Applied to master with that fixed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-configure.ac-do-not-force-O2.patch        | 30 ++++++++++++++++++++++
- package/libspatialindex/libspatialindex.mk         | 12 +++++++++
- 2 files changed, 42 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-new file mode 100644
-index 0000000..c078e71
---- /dev/null
-+++ b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-@@ -0,0 +1,30 @@
-+From 7472764fe19cb3eea77f21cc2859859b8ac62085 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 14 Aug 2017 23:36:36 +0200
-+Subject: [PATCH] configure.ac: do not force -O2
-+
-+The user may want to provide its own set of optimization flags, and
-+therefore forcing -O2 should not be done.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Submitted-upstream: https://github.com/libspatialindex/libspatialindex/pull/101
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index dc5e49f..2e2aa68 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -53,7 +53,7 @@ if test "x$enable_debug" = "xyes"; then
-+ 	CXXFLAGS="$CXXFLAGS -g -DDEBUG"
-+ 	AC_MSG_RESULT(checking wether debug information is enabled... yes)
-+ else
-+-	CXXFLAGS="$CXXFLAGS -O2 -DNDEBUG"
-++	CXXFLAGS="$CXXFLAGS -DNDEBUG"
-+ 	AC_MSG_RESULT(checking wether debug information is enabled... no)
-+ fi
-+ 
-+-- 
-+2.9.4
-+
-diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
-index d815364..3a558df 100644
---- a/package/libspatialindex/libspatialindex.mk
-+++ b/package/libspatialindex/libspatialindex.mk
-@@ -11,4 +11,16 @@ LIBSPATIALINDEX_INSTALL_STAGING = YES
- LIBSPATIALINDEX_LICENSE = MIT
- LIBSPATIALINDEX_LICENSE_FILES = COPYING
- 
-+# 0001-configure.ac-do-not-force-O2.patch
-+LIBSPATIALINDEX_AUTORECONF = YES
-+
-+LIBSPATIALINDEX_CXXFLAGS = $(TARGET_CXXFLAGS)
-+LIBSPATIALINDEX_CONF_ENV = CXXFLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
-+
-+# Workaround gcc ICE
-+# (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485)
-+ifeq ($(BR2_microblaze),y)
-+LIBSPATIALINDEX_CXXFLAGS += -O0
-+endif
-+
- $(eval $(autotools-package))
+> +
+>  endif
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
