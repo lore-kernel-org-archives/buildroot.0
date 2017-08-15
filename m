@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 12:10:17 +0200
-Subject: [Buildroot] [PATCH 2/3] whois: use github repo as home page
-In-Reply-To: <20170815041434.tlygmw6w4skyih6k@sapphire.tkos.co.il>
+Date: Tue, 15 Aug 2017 12:12:01 +0200
+Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
+In-Reply-To: <20170815104048.28e8d41f@windsurf>
 References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <fa924d0754ef385b1706721751e5f6f00e60c199.1502649259.git.baruch@tkos.co.il>
- <20170814220354.3665d3eb@windsurf>
- <20170815041434.tlygmw6w4skyih6k@sapphire.tkos.co.il>
-Message-ID: <b6dfe8f7-5fa2-1ade-2aa5-eaeab13b271c@mind.be>
+ <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
+ <20170815041832.jyuew657zabwrplz@sapphire.tkos.co.il>
+ <20170815104048.28e8d41f@windsurf>
+Message-ID: <ea0e4f20-eb93-e6bb-a39a-b1eb25b72cd0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,39 @@ To: buildroot@busybox.net
 
 
 
-On 15-08-17 06:14, Baruch Siach wrote:
-> Hi Thomas,
+On 15-08-17 10:40, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Mon, Aug 14, 2017 at 10:03:54PM +0200, Thomas Petazzoni wrote:
->> On Sun, 13 Aug 2017 21:34:18 +0300, Baruch Siach wrote:
->>> The github repo is more informative than the list Marco's software on
->>> the previous link.
+> On Tue, 15 Aug 2017 07:18:32 +0300, Baruch Siach wrote:
+> 
+>> On Sun, Aug 13, 2017 at 09:34:19PM +0300, Baruch Siach wrote:
+>>> Fixes serious usability issues (Debian changelog):
+>>>
+>>>   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
+>>>     broken by an ICANN-mandated output change:
+>>>     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
+>>>
+>>> Use snapshot.debian.org for the .dsc reference, since files tend to
+>>> disappear from the official Debian ftp site over time.
 >>>
 >>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
->>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> What about switching the upstream to be Github, instead of fetching
->> from Debian? The Github repo has all the releases available:
->> https://github.com/rfc1036/whois/releases.
+>>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>  
 >>
->> Just make sure that the 5.2.14 tarball we were getting from Debian is
->> similar in contents to what we get from the Github repository for the
->> same version.
-> But we generally prefer upstream provided tarballs, aren't we? Moreover, in 
-> this case the Debian repo provides a smaller .tar.xz, and an upstream computed 
-> SHA256 in the .dsc file. You don't get that from github.
+>> Why has this patch been marked 'Changes Requested'? It is independent of other 
+>> patches in this series.
+> 
+> Because I always mark all patches in a series as Changes Requested if
+> at least one of them had comments. 
 
- On Sunday, I was going to ask the same question, and came to the same
-conclusion about the tar.xz and the sha256. Unfortunately, I don't remember why
-I didn't just apply it then and there...
+ Moreover, it was exactly this patch which had changes requested (switching
+upstream would change this patch completely).
+
+> Indeed, if it's a patch series, we
+> expect the submitter to resend a complete new iteration of the series,
+> even if some patches remain unchanged.
+
+ But in this case, there are in fact no changes requested in the series (or
+rather, the request has been refuted). So I've changed the status back to New.
 
  Regards,
  Arnout
