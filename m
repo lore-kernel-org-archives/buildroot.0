@@ -1,69 +1,42 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 15 Aug 2017 11:12:19 +0200
-Subject: [Buildroot] [PATCH] lua: fix install of lua.pc
-In-Reply-To: <20170815103948.5e910211@windsurf>
-References: <20170813133111.3959-1-francois.perrad@gadz.org>
- <20170814222528.1ca21238@windsurf>
- <CAB0FRsuYHMSgoMqpkyq2ieQL54hh6EVywUTv=jBAqdgNZcZdWw@mail.gmail.com>
- <20170815103948.5e910211@windsurf>
-Message-ID: <CAB0FRsvzktuPOcsADkydwxjBVCQZJ-ZB090wTL_mfzTKo9TZjg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Aug 2017 11:45:19 +0200
+Subject: [Buildroot] autodetection upon usb insertion.
+In-Reply-To: <trinity-82be2f69-e0ba-492b-9616-3deb9c70a625-1502734167646@3c-app-mailcom-bs12>
+References: <trinity-82be2f69-e0ba-492b-9616-3deb9c70a625-1502734167646@3c-app-mailcom-bs12>
+Message-ID: <a4b760a7-8813-c55c-40d5-fe7e8d62ea66@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-08-15 10:39 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Hello,
->
-> On Tue, 15 Aug 2017 08:14:19 +0200, Fran?ois Perrad wrote:
->
-> > The issue that we try to fix, was introduced 5 days ago, by the commit
-> > [lua: fix pkg-config file](
-> > https://git.busybox.net/buildroot/commit/package/lua?id=
-> 8d845683e37640d33c186c0091ccce6ae3ef0777
-> > )
-> >
-> > My patch restore the previous install commands.
-> > If the lua.pc must be modified with configuration data, the logical step
-> > for this is the configure step.
-> >
-> > Your patch is the little one which fixes the issue, but it doesn't see
-> the
-> > root cause.
->
-> Well, whether SED'ing those .pc files should be part of the configure
-> step or the install step can really be discussed. If those .pc files
-> were used for the build process, then indeed, generating them should be
-> part of the configure step. But as far as I know, they are not used
-> during the build step. Those .pc files are only used for other packages
-> who want to link against lua. Therefore, generating them/installing
-> them in the install step is quite OK I believe, but I agree it's a
-> matter of definition of what each step should do, so there might be
-> different views/opinions.
->
->
-In order to keep a code base clean , I am against mixing the responsability
-of different steps.
-In my point of view, the install step must only:
-    - copying files
-    - modifying the mode of files
-    - rename files
-    - create symbolic links
-
-Fran?ois
 
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170815/83b29822/attachment.html>
+On 14-08-17 20:09, daggs wrote:
+> Greetings,
+> 
+> I have a sysvinit based image with eudev which as a usb dongle connected to it.
+> when I boot the system with the dongle connected, upon login, all them modules are loaded and the device is ready to use.
+> but when I connected it when the system is already running, I get nothing. not detection even if I load all the drivers manually, it is still not detected.
+> what am I missing?
+
+ It's hard to say just like that, you'll probably have to do some kernel
+debugging to solve it.
+
+ I once had a similar issue with a buggy USB OTG driver that would go in
+powerdown and therefore never detect insertion of a device. Strangely enough, if
+you booted with something plugged in and then removed the device, it didn't go
+in powerdown.
+
+ Not saying your issue is similar, of course, but it's a possibility.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
