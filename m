@@ -1,12 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 12:12:01 +0200
-Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
-In-Reply-To: <20170815104048.28e8d41f@windsurf>
-References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
- <20170815041832.jyuew657zabwrplz@sapphire.tkos.co.il>
- <20170815104048.28e8d41f@windsurf>
-Message-ID: <ea0e4f20-eb93-e6bb-a39a-b1eb25b72cd0@mind.be>
+Date: Tue, 15 Aug 2017 12:32:38 +0200
+Subject: [Buildroot] [PATCH] lua: fix install of lua.pc
+In-Reply-To: <CAB0FRsvzktuPOcsADkydwxjBVCQZJ-ZB090wTL_mfzTKo9TZjg@mail.gmail.com>
+References: <20170813133111.3959-1-francois.perrad@gadz.org>
+ <20170814222528.1ca21238@windsurf>
+ <CAB0FRsuYHMSgoMqpkyq2ieQL54hh6EVywUTv=jBAqdgNZcZdWw@mail.gmail.com>
+ <20170815103948.5e910211@windsurf>
+ <CAB0FRsvzktuPOcsADkydwxjBVCQZJ-ZB090wTL_mfzTKo9TZjg@mail.gmail.com>
+Message-ID: <93725030-7abe-4bed-30e8-19b7dbde5b3c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,42 +16,46 @@ To: buildroot@busybox.net
 
 
 
-On 15-08-17 10:40, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 15 Aug 2017 07:18:32 +0300, Baruch Siach wrote:
-> 
->> On Sun, Aug 13, 2017 at 09:34:19PM +0300, Baruch Siach wrote:
->>> Fixes serious usability issues (Debian changelog):
->>>
->>>   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
->>>     broken by an ICANN-mandated output change:
->>>     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
->>>
->>> Use snapshot.debian.org for the .dsc reference, since files tend to
->>> disappear from the official Debian ftp site over time.
->>>
->>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
->>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>  
->>
->> Why has this patch been marked 'Changes Requested'? It is independent of other 
->> patches in this series.
-> 
-> Because I always mark all patches in a series as Changes Requested if
-> at least one of them had comments. 
+On 15-08-17 11:12, Fran?ois Perrad wrote:
+> In order to keep a code base clean , I am against mixing the responsability of
+> different steps.
+> In my point of view, the install step must only:
+>     - copying files
+>     - modifying the mode of files
+>     - rename files
+>     - create symbolic links
 
- Moreover, it was exactly this patch which had changes requested (switching
-upstream would change this patch completely).
+ The current situation, at least, is also that fixing up files is done in
+(post-)install. Cfr. $(PKG)_CONFIG_SCRIPTS), fixup of libtool files. And several
+packages already do additional fixups in post-install.
 
-> Indeed, if it's a patch series, we
-> expect the submitter to resend a complete new iteration of the series,
-> even if some patches remain unchanged.
+ In this particular case, however, it does make more sense to make this
+modification in the configure step. Well, except that the .pc file is something
+we add ourselves with a patch... So in fact, in this particular case, it would
+make more sense to do it in post-install, but to get the .pc file from
+package/lua/lua.pc.in instead of patching lua to get it. Except of course in
+case the patch has been accepted upstream, then it would make more sense to do
+what you propose.
 
- But in this case, there are in fact no changes requested in the series (or
-rather, the request has been refuted). So I've changed the status back to New.
+ So, in my opinion, there are two possibilities:
+
+1. 0004-lua-pc.patch has been accepted upstream. In that case, the proper thing
+to do would be to:
+  a. patch lua's Makefile to also substitute @MYLIBS@
+  b. send the resulting patch upstream
+
+2. lua.pc has not been accepted upstream. In that case, the proper thing to do
+would be to replace the patches with package/lua/lua.pc.in
+
+
+ In either case, however, this is more a matter of making things nicer, it
+doesn't fix anything and it hardly makes things more maintainable. Only if
+lua.pc is upstream, then Joerg's fix should be improved and also sent upstream.
+
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
