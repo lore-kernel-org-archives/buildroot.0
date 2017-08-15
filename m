@@ -1,46 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Aug 2017 10:40:48 +0200
-Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
-In-Reply-To: <20170815041832.jyuew657zabwrplz@sapphire.tkos.co.il>
-References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
- <20170815041832.jyuew657zabwrplz@sapphire.tkos.co.il>
-Message-ID: <20170815104048.28e8d41f@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 15 Aug 2017 11:12:19 +0200
+Subject: [Buildroot] [PATCH] lua: fix install of lua.pc
+In-Reply-To: <20170815103948.5e910211@windsurf>
+References: <20170813133111.3959-1-francois.perrad@gadz.org>
+ <20170814222528.1ca21238@windsurf>
+ <CAB0FRsuYHMSgoMqpkyq2ieQL54hh6EVywUTv=jBAqdgNZcZdWw@mail.gmail.com>
+ <20170815103948.5e910211@windsurf>
+Message-ID: <CAB0FRsvzktuPOcsADkydwxjBVCQZJ-ZB090wTL_mfzTKo9TZjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2017-08-15 10:39 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-On Tue, 15 Aug 2017 07:18:32 +0300, Baruch Siach wrote:
+> Hello,
+>
+> On Tue, 15 Aug 2017 08:14:19 +0200, Fran?ois Perrad wrote:
+>
+> > The issue that we try to fix, was introduced 5 days ago, by the commit
+> > [lua: fix pkg-config file](
+> > https://git.busybox.net/buildroot/commit/package/lua?id=
+> 8d845683e37640d33c186c0091ccce6ae3ef0777
+> > )
+> >
+> > My patch restore the previous install commands.
+> > If the lua.pc must be modified with configuration data, the logical step
+> > for this is the configure step.
+> >
+> > Your patch is the little one which fixes the issue, but it doesn't see
+> the
+> > root cause.
+>
+> Well, whether SED'ing those .pc files should be part of the configure
+> step or the install step can really be discussed. If those .pc files
+> were used for the build process, then indeed, generating them should be
+> part of the configure step. But as far as I know, they are not used
+> during the build step. Those .pc files are only used for other packages
+> who want to link against lua. Therefore, generating them/installing
+> them in the install step is quite OK I believe, but I agree it's a
+> matter of definition of what each step should do, so there might be
+> different views/opinions.
+>
+>
+In order to keep a code base clean , I am against mixing the responsability
+of different steps.
+In my point of view, the install step must only:
+    - copying files
+    - modifying the mode of files
+    - rename files
+    - create symbolic links
 
-> On Sun, Aug 13, 2017 at 09:34:19PM +0300, Baruch Siach wrote:
-> > Fixes serious usability issues (Debian changelog):
-> > 
-> >   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
-> >     broken by an ICANN-mandated output change:
-> >     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
-> > 
-> > Use snapshot.debian.org for the .dsc reference, since files tend to
-> > disappear from the official Debian ftp site over time.
-> > 
-> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>  
-> 
-> Why has this patch been marked 'Changes Requested'? It is independent of other 
-> patches in this series.
+Fran?ois
 
-Because I always mark all patches in a series as Changes Requested if
-at least one of them had comments. Indeed, if it's a patch series, we
-expect the submitter to resend a complete new iteration of the series,
-even if some patches remain unchanged.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170815/83b29822/attachment.html>
