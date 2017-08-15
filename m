@@ -1,51 +1,80 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Aug 2017 17:50:11 +0200
-Subject: [Buildroot] [git commit] fs/iso9660: really create initrd temp dir
-Message-ID: <20170815160109.763477FA7A@busybox.osuosl.org>
+Date: Tue, 15 Aug 2017 17:39:26 +0200
+Subject: [Buildroot] [git commit] package/fakeroot: fix highly parallel uses
+Message-ID: <20170815160109.553EA80359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a26adddde1e924236553584a5623485fdc90c7f
+commit: https://git.buildroot.net/buildroot/commit/?id=eff989bab851ab01d190f3771558eb6ac30af255
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In case we're using an initrd, we create an empty "root" directory that
-will contain only the bootloader stuff, not the actual root filesystem,
-because it is in an initrd (standalone or initramfs).
+Although the issue can very well occur with low-paralle builds, or even
+with non-parallel builds, the conditions are so strict that the ocasion
+it breaks is extremely rare, to the point where a failure would go
+unnoticed.
 
-We have to ensure that the directory is empty before assembling the
-filesystem (to avoid any file lingering from a previous run, like the
-sequence  "make; make"). So we first remove it before we create it, so
-that on each build (especially not-from-scratch builds) we get the exact
-expected content without any leftover.
+Fixes #10141.
 
-However, the macro responsible for that, although defined since 7080eef9,
-was never called.
-
-Fix that by registering it as a pre-gen hook.
-
-Note: the directory need not be created, as there are quite a few
-"install -D" commands that ensure it is created. Yet, we prefer to
-create it explicitly to avoid any confusion.
-
+Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/iso9660/iso9660.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...communicate-check-return-status-of-msgrcv.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index fafe5b0..478cb02 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -40,6 +40,7 @@ define ROOTFS_ISO9660_CREATE_TEMPDIR
- 	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
- 	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
- endef
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_CREATE_TEMPDIR
- else
- ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
- endif
+diff --git a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
+new file mode 100644
+index 0000000..3bb4f97
+--- /dev/null
++++ b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
+@@ -0,0 +1,46 @@
++From a853f21633693f9eefc4949660253a5328d2d2f3 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 13 Aug 2017 23:21:54 +0200
++Subject: [PATCH 1/1] communicate: check return status of msgrcv()
++
++msgrcv can return with -1 to indicate an error condition.
++One such error is to have been interrupted by a signal.
++
++Being interrupted by a signal is very rare in this code, except in a
++very special condition: a highly-parallel (1000 jobs!) mksquashfs on
++a filesystem with extended attributes, where we see errors like (those
++are mksquashfs errors):
++    llistxattr for titi/603/883 failed in read_attrs, because Unknown
++    error 1716527536
++
++See: https://bugs.busybox.net/show_bug.cgi?id=10141
++
++In this case, we just have to retry the call to msgrcv().
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ communicate.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/communicate.c b/communicate.c
++index 293f404..787bb63 100644
++--- a/communicate.c
+++++ b/communicate.c
++@@ -553,10 +553,13 @@ void send_get_fakem(struct fake_msg *buf)
++       l=msgrcv(msg_get,
++                (struct my_msgbuf*)buf,
++                sizeof(*buf)-sizeof(buf->mtype),0,0);
++-    while((buf->serial!=serial)||buf->pid!=pid);
+++    while(((l==-1)&&(errno==EINTR))||(buf->serial!=serial)||buf->pid!=pid);
++ 
++     semaphore_down();
++ 
+++    if(l==-1)
+++      buf->xattr.flags_rc=errno;
+++
++     /*
++     (nah, may be wrong, due to allignment)
++ 
++-- 
++2.11.0
++
