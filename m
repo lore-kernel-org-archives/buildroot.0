@@ -1,42 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Aug 2017 16:19:56 +0000
-Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
-In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
-References: <bug-10141-163@https.bugs.busybox.net/>
-Message-ID: <bug-10141-163-qYzF2jh5Mm@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Aug 2017 18:22:02 +0200
+Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
+In-Reply-To: <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
+References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
+ <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
+Message-ID: <c6c5ba20-6b55-bb90-e4c3-2a90814adc95@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10141
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |FIXED
+On 13-08-17 20:34, Baruch Siach wrote:
+> Fixes serious usability issues (Debian changelog):
+> 
+>   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
+>     broken by an ICANN-mandated output change:
+>     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
+> 
+> Use snapshot.debian.org for the .dsc reference, since files tend to
+> disappear from the official Debian ftp site over time.
+> 
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
---- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Clayton, All,
+ As mentioned before, applied to master, thanks.
 
-The patch has been applied:
-   
-https://git.buildroot.org/buildroot/commit/?id=eff989bab851ab01d190f3771558eb6ac30af255
+ I first checked the differences between 5.2.14 and 5.2.17, and it really is
+only in the whois databases (and in documentation) that there are changes.
+Source code hasn't changed.
 
-Obviously, we're still interested in feeback, so feel free to re-open
-if you're still affected by the issue.
+ Peter, this should probably go to the LTS branches as well.
 
-Most notably, can you check that the xattr you get in your generated
-filesystem are correct?
+ Regards,
+ Arnout
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
+> ---
+> 
+> This should go to master IMO.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
