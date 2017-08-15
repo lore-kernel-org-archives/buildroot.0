@@ -1,55 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Aug 2017 16:53:18 +0200
-Subject: [Buildroot] [PATCH] Revert "syslinux: drop patch 0003,
- not needed after gnu-efi update"
-In-Reply-To: <20170814220953.45dcf706@windsurf>
-References: <20170813232835.18414-1-arnout@mind.be>
- <20170814220953.45dcf706@windsurf>
-Message-ID: <f662424e-3bc1-b799-9008-8fa84c79a40b@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Aug 2017 17:03:40 +0200
+Subject: [Buildroot] [PATCH] core/pkg-toolchain-external: quiesce spurious
+	stderr
+Message-ID: <20170815150340.16983-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since 392b0a26f5 (toolchain-external: default BR2_TOOLCHAIN_EXTERNAL_PATH
+to empty), calling 'make clean' or similar can yield a spurious stderr
+message:
+    dirname: missing operand
+    Try 'dirname --help' for more information.
 
+Which is definitely baffling and unsettling...
 
-On 14-08-17 22:09, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 14 Aug 2017 01:28:35 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> It turns out that this patch is still needed, since with some versions
->> of binutils the error still occurs.
->>
->> Partially fixes: https://gitlab.com/arnout/buildroot/-/jobs/28979377
->>
->> This reverts commit 644c024edeb7e20bd96ce4426aeca2cbcd74d9b9.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> Cc: Beno?t Allard <benoit.allard@greenbone.net>
->> ---
->> The failing ts5x00_defconfig also requires a kernel bump
-> 
-> The problem with this is that you are going to run into the problem I
-> reported at:
-> http://lists.busybox.net/pipermail/buildroot/2017-July/195927.html, i.e
-> the --no-dynamic-linker option doesn't exist in old binutils versions,
-> and will therefore cause a build failure.
+It truns out that it is pretty trivial to reproduce, and this defconfig
+is just enough:
 
- Indeed, TestIso9660Syslinux{Ex,Int}ternal fail on it.
+    $ cat my-defconfig
+    BR2_TOOLCHAIN_EXTERNAL=y
 
- I'm now trying with --omagic --no-omagic instead. If I read the man page
-correctly, this should have more or less the same effect. It feels like a huge
-hack though...
+    $ make BR2_DEFCONFIG=$(pwd)/my-defconfig defconfig
 
- Regards,
- Arnout
+    $ make clean
+    dirname: missing operand
+    Try 'dirname --help' for more information.
+    [--snip--]
 
+This is because the cross-compiler is not found in the PATH (and for
+good reasons, I don't have it in the PATH, not even at all).
+
+So, when the cross-compiler is not found in the path, we simply
+continue as if all was good, and postpone the check to much later,
+when we try to copy the toolchain libs...
+
+We just quiesce the spurious message by consigning stderr to oblivion.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+
+---
+Note: it would be good to error out at this point, but as explained in
+the commit log, we already error out a bit later when copying the
+toolchain libs, and the check is easier done then than what we could
+do here, because we'd have to guard with BR_BUILDING, and for good
+measure, we'd also have to do the check when the tooolchain dir is
+actually specified. But then this would duplicate the existing (but
+later) checks, so we just don't bother...
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 23cdf30b9f..b139638100 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -74,7 +74,7 @@ endif
+ ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+ # if no path set, figure it out from path
+-TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
++TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc) 2>/dev/null)
+ endif
+ else
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
