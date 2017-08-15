@@ -1,129 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Aug 2017 17:34:36 +0200
-Subject: [Buildroot] [git commit] elf2flt: add patch to fix ld.real search
-	logic
-Message-ID: <20170815160109.21F1580080@busybox.osuosl.org>
+Date: Tue, 15 Aug 2017 17:32:28 +0200
+Subject: [Buildroot] [git commit] whois: bump to version 5.2.17
+Message-ID: <20170815160109.043D5819A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24cc8585aa51794be72ad1d9691aa3ab7b534b00
+commit: https://git.buildroot.net/buildroot/commit/?id=978724d8cf487f285c85473e75482ae6a618a2a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-elf2flt contains a program called ld-elf2flt, which gets installed as
-a replacement for ld, with ld renamed to ld.real. This program
-therefore calls ld.real internally.
+Fixes serious usability issues (Debian changelog):
 
-The logic to find ld.real worked fine for:
+  * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
+    broken by an ICANN-mandated output change:
+    https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
 
- - bin/TARGET_ALIAS-ld
- - TARGET_ALIAS/bin/ld
+Use snapshot.debian.org for the .dsc reference, since files tend to
+disappear from the official Debian ftp site over time.
 
-However, it failed badly if bin/SIMPLER_TARGET_ALIAS-ld is used, as
-symlink to bin/TARGET_ALIAS-ld. For example:
-
-$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
-/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-
-$ ./output/host/bin/arm-linux-ld
-arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
-
-$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
-/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-
-This commit fixes that by adding a patch that adjusts the ld-elf2flt
-logic to properly cope with this situation.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...behave-properly-when-called-with-a-name-d.patch | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-new file mode 100644
-index 0000000..a27c491
---- /dev/null
-+++ b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-@@ -0,0 +1,79 @@
-+From b31e9b1bff6832063816b972395179859d1d4619 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 13 Aug 2017 16:03:20 +0200
-+Subject: [PATCH] ld-elf2flt: behave properly when called with a name different
-+ from TARGET_ALIAS
-+
-+ld-elf2flt currently handles two cases:
-+
-+ 1 It is called as the wrapper for <TARGET_ALIAS>-ld, generally
-+   installed in the bin/ directory of a toolchain.
-+
-+ 2 It is called as the wrapper for "ld", generally installed in the
-+   TARGET_ALIAS/bin/ directory of a toolchain.
-+
-+Unfortunately, if for some reason it gets called using a FOOBAR-ld
-+name that is different from <TARGET_ALIAS>-ld, it assumes it is in
-+case (2), while it really is in case (1). Due to this, the path
-+mangling logic doesn't work, and it doesn't find ld.real.
-+
-+This happens for example when the binary program in bin/ is named
-+arm-buildroot-uclinux-uclibcgnueabi-ld, but also has a simpler symlink
-+named arm-linux-ld. In this case,
-+arm-buildroot-uclinux-uclibcgnueabi-ld is recognized by ld-elf2flt as
-+containing TARGET_ALIAS, and therefore the proper logic to find
-+ld.real is applied. However, when arm-linux-ld is used, ld-elf2flt
-+doesn't find TARGET_ALIAS, and therefore assumes we're being called as
-+TARGET_ALIAS/bin/ld.. and searches for a program called ld.real in
-+bin/, which doesn't exist.
-+
-+See:
-+
-+$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
-+/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-+
-+$ ./output/host/bin/arm-linux-ld
-+arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
-+
-+$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
-+/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-+
-+This commit fixes that by inverting the logic: if we're being called
-+as just "ld", then we assume it's the program in
-+TARGET_ALIAS/bin/. Otherwise, we're called through some variant of
-+TARGET-ld.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Submitted-upstream: https://github.com/uclinux-dev/elf2flt/pull/8
-+---
-+ ld-elf2flt.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/ld-elf2flt.c b/ld-elf2flt.c
-+index de39fe0..c187c2e 100644
-+--- a/ld-elf2flt.c
-++++ b/ld-elf2flt.c
-+@@ -506,15 +506,15 @@ int main(int argc, char *argv[])
-+ 	   the host while those in <TARGET_ALIAS>/lib are for the target.
-+ 	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
-+ 	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
-+-	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
-+-		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-++	if (streqn(elf2flt_progname, "ld")) {
-++		tmp = concat(argv0_dir, "../../bin", NULL);
-+ 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-+-			tooldir = concat(tmp, "/", NULL);
-++			bindir = concat(tmp, "/", NULL);
-+ 		}
-+ 	} else {
-+-		tmp = concat(argv0_dir, "../../bin", NULL);
-++		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-+ 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-+-			bindir = concat(tmp, "/", NULL);
-++			tooldir = concat(tmp, "/", NULL);
-+ 		}
-+ 	}
-+ 
-+-- 
-+2.9.4
-+
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 6f65074..29623b5 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.14.dsc
+-sha256	a41daf41abed0fbfa8c9c4b0e4a3f5f22d9876dd6feb9091aac12f8f4c38b0d2	whois_5.2.14.tar.xz
++# From http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois/whois_5.2.17.dsc
++sha256	257585678f571e18964667b41dc6543fe9da6123ac95743660c9c3ae1eba9664	whois_5.2.17.tar.xz
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index b773499..f22446b 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WHOIS_VERSION = 5.2.14
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20161230T032015Z/pool/main/w/whois
++WHOIS_VERSION = 5.2.17
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
