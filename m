@@ -1,53 +1,42 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 14 Aug 2017 18:37:10 -0400
-Subject: [Buildroot] [PATCH v7 1/3] rpi-userland: fix opengl library
- symlinks
-In-Reply-To: <20170814214724.GG2810@scaer>
-References: <20170813135650.14067-1-gael.portay@savoirfairelinux.com>
- <20170813135650.14067-2-gael.portay@savoirfairelinux.com>
- <20170814214724.GG2810@scaer>
-Message-ID: <20170814223710.wii6x3weja5nhen6@gportay>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 15 Aug 2017 07:14:34 +0300
+Subject: [Buildroot] [PATCH 2/3] whois: use github repo as home page
+In-Reply-To: <20170814220354.3665d3eb@windsurf>
+References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
+ <fa924d0754ef385b1706721751e5f6f00e60c199.1502649259.git.baruch@tkos.co.il>
+ <20170814220354.3665d3eb@windsurf>
+Message-ID: <20170815041434.tlygmw6w4skyih6k@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi Thomas,
 
-On Mon, Aug 14, 2017 at 11:47:24PM +0200, Yann E. MORIN wrote:
-> Ga?l, All,
-> 
-> On 2017-08-13 09:56 -0400, Ga?l PORTAY spake thusly:
-> > The Qt WebEngine module loads libEGL.so.1 and libGLESv2.so.2 libraries.
-> > Paths are hard-coded [1].
-> 
-> But now they no longer do that:
-> 
->     https://github.com/qt/qtwebengine/commit/d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
-> 
-
-Good catch!
-
-> > This patch sets up cmake to create those library links.
+On Mon, Aug 14, 2017 at 10:03:54PM +0200, Thomas Petazzoni wrote:
+> On Sun, 13 Aug 2017 21:34:18 +0300, Baruch Siach wrote:
+> > The github repo is more informative than the list Marco's software on
+> > the previous link.
 > > 
-> > 	$ ls -l output/target/usr/lib/libEGL* output/target/usr/lib/libGLESv2*
-> > 	-rwxr-xr-x 1 buildroot buildroot 130032 Aug 10 21:17 output/target/usr/lib/libEGL.so
-> > 	lrwxrwxrwx 1 buildroot buildroot      9 Aug  9 12:30 output/target/usr/lib/libEGL.so.1 -> libEGL.so
-> > 	-rwxr-xr-x 1 buildroot buildroot  71088 Aug 10 21:16 output/target/usr/lib/libGLESv2.so
-> > 	lrwxrwxrwx 1 buildroot buildroot     12 Aug  9 12:30 output/target/usr/lib/libGLESv2.so.2 -> libGLESv2.so
-> > 
-> > A pull request is pending [2].
-> > 
-> > [1] https://github.com/qt/qtwebengine/blob/5.9.1/src/core/surface_factory_qt.cpp#L76-L86
-> > [2] https://github.com/raspberrypi/userland/pull/379
+> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > 
-> Upstream was not too happy with your MR... :-(
+> What about switching the upstream to be Github, instead of fetching
+> from Debian? The Github repo has all the releases available:
+> https://github.com/rfc1036/whois/releases.
 > 
-> So, do you think you could look at backporting the Qt patch instead?
-> 
+> Just make sure that the 5.2.14 tarball we were getting from Debian is
+> similar in contents to what we get from the Github repository for the
+> same version.
 
-For sure, I will restart a build with this commit and without my patch.
+But we generally prefer upstream provided tarballs, aren't we? Moreover, in 
+this case the Debian repo provides a smaller .tar.xz, and an upstream computed 
+SHA256 in the .dsc file. You don't get that from github.
 
-Regards,
-Gael
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
