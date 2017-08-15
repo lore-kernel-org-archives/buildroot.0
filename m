@@ -1,68 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 15 Aug 2017 07:18:32 +0300
-Subject: [Buildroot] [PATCH 3/3] whois: bump to version 5.2.17
-In-Reply-To: <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
-References: <37040459db3e6ca01e2dc8236cf57a993f1831ed.1502649259.git.baruch@tkos.co.il>
- <b5c9e26c4b8e652827b9d04dad2f821a329c3249.1502649259.git.baruch@tkos.co.il>
-Message-ID: <20170815041832.jyuew657zabwrplz@sapphire.tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 15 Aug 2017 06:20:04 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/mtd: test programs need threads
+Message-ID: <20170815042004.12226-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The test programs depend on pthreads:
+http://git.infradead.org/mtd-utils.git/blob/1bfee8660131fca7a18f68e9548a18ca6b3378a0:/configure.ac#l43
 
-On Sun, Aug 13, 2017 at 09:34:19PM +0300, Baruch Siach wrote:
-> Fixes serious usability issues (Debian changelog):
-> 
->   * Fixed whois referrals for .com, .net, .jobs, .bz, .cc and .tv,
->     broken by an ICANN-mandated output change:
->     https://www.icann.org/resources/pages/rdds-labeling-policy-2017-02-01-en
-> 
-> Use snapshot.debian.org for the .dsc reference, since files tend to
-> disappear from the official Debian ftp site over time.
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Also propagate the threads dependency to BR2_PACKAGE_MTD_INTEGCK.
 
-Why has this patch been marked 'Changes Requested'? It is independent of other 
-patches in this series.
+Fixes
+http://autobuild.buildroot.net/results/879/879c79e505f65387a46c4be263dc8783c8ca61bf/
 
-baruch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: add threads dependency to BR2_PACKAGE_MTD_TESTS as well (Thomas)
+v2: threads are only needed for test programs (Baruch)
 
-> This should go to master IMO.
-> ---
->  package/whois/whois.hash | 4 ++--
->  package/whois/whois.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-> index 6f65074c2c48..29623b529f20 100644
-> --- a/package/whois/whois.hash
-> +++ b/package/whois/whois.hash
-> @@ -1,2 +1,2 @@
-> -# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.14.dsc
-> -sha256	a41daf41abed0fbfa8c9c4b0e4a3f5f22d9876dd6feb9091aac12f8f4c38b0d2	whois_5.2.14.tar.xz
-> +# From http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois/whois_5.2.17.dsc
-> +sha256	257585678f571e18964667b41dc6543fe9da6123ac95743660c9c3ae1eba9664	whois_5.2.17.tar.xz
-> diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-> index 87cc65fac4c7..22117cf3aa88 100644
-> --- a/package/whois/whois.mk
-> +++ b/package/whois/whois.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -WHOIS_VERSION = 5.2.14
-> -WHOIS_SITE = http://snapshot.debian.org/archive/debian/20161230T032015Z/pool/main/w/whois
-> +WHOIS_VERSION = 5.2.17
-> +WHOIS_SITE = http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois
->  WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
->  # take precedence over busybox implementation
->  WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
+ package/mtd/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index a1df4cfc0..a89925c63 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -24,6 +24,7 @@ config BR2_PACKAGE_MTD_UBIFS_UTILS
+ 
+ config BR2_PACKAGE_MTD_TESTS
+ 	bool
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "MTD tools selection"
+ 
+@@ -174,9 +175,13 @@ config BR2_PACKAGE_MTD_UBIBLOCK
+ 
+ config BR2_PACKAGE_MTD_INTEGCK
+ 	bool "integck"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # mtd-tests
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_MTD_TESTS
+ 	help
+ 	  Install the integck test program.
+ 
++comment "integck needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ endif
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.11.0
