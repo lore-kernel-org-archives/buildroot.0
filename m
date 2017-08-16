@@ -1,42 +1,74 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Wed, 16 Aug 2017 12:22:46 +0200
-Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
-References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
-Message-ID: <da69dee6-fcee-32c8-c01a-cae9f3788065@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 16 Aug 2017 13:53:05 +0300
+Subject: [Buildroot] [PATCH] faad2: fix build with musl libc
+Message-ID: <b727a178e0fa5a10b77e298e7b1dbf1b32ccb40d.1502880785.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The getopt.c code declares the strncmp() routine in a non confirming way
+under non GNU libc. Patch the code to make the declaration standard
+conforming.
 
-Arnout,
+Fixes:
+http://autobuild.buildroot.net/results/447/4471be349d7ad2e998a4d55afd33aa046a5d1fd2/
+http://autobuild.buildroot.net/results/2a9/2a90f4f518884fb50f7ad6ab505dee7565ed869e/
+http://autobuild.buildroot.net/results/6b1/6b159b766d791492bab4d897c33ce07845fb7119/
 
-On 10/08/2017 23:01, Arnout Vandecappelle wrote:
->  Hi all,
->
->  A number of defconfigs fail to build (usually the kernel, in one case U-Boot)
-> because of GCC 6. Some of these could be fixed by simply bumping the upstream
-> kernel; however, we really want defconfigs to be tested on an actual board,
-> otherwise there's not much point.
->
->  I've put the people who have been involved in these defconfigs in To. Could you
-> look at these defconfigs and try to fix the build with GCC 6? Anything that
-> remains unfixed by the end of the month will probably be removed.
->
-> ....
->
-> armadeus_apf9328_defconfig:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
->
-> ...
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0001-getopt-fix-strncmp-declaration.patch      | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/faad2/0001-getopt-fix-strncmp-declaration.patch
 
-As i.MX1 is no more (well) supported in Linux vanilla kernel and APF9328
-board is no more recommended for new projects, I think I will send a
-patch to remove this defconfig from BR.
-
-OK for you ?
-
-Regards,
+diff --git a/package/faad2/0001-getopt-fix-strncmp-declaration.patch b/package/faad2/0001-getopt-fix-strncmp-declaration.patch
+new file mode 100644
+index 000000000000..0e5f27e52af2
+--- /dev/null
++++ b/package/faad2/0001-getopt-fix-strncmp-declaration.patch
+@@ -0,0 +1,40 @@
++From 6787914efad562e4097a153988109c5c7158abf7 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 16 Aug 2017 13:35:57 +0300
++Subject: [PATCH] getopt: fix strncmp() declaration
++
++The strncmp() declaration does not conform with the standard as to the
++type of the 'n' parameter. Fix this to avoid the following build failure
++with musl libc:
++
++n file included from main.c:61:0:
++getopt.c:175:13: error: conflicting types for 'strncmp'
++ extern int  strncmp(const char *s1, const char *s2, unsigned int n);
++             ^~~~~~~
++In file included from main.c:49:0:
++.../host/x86_64-buildroot-linux-musl/sysroot/usr/include/string.h:38:5: note: previous declaration of 'strncmp' was here
++ int strncmp (const char *, const char *, size_t);
++     ^~~~~~~
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://sourceforge.net/p/faac/bugs/217/
++
++ frontend/getopt.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/frontend/getopt.c b/frontend/getopt.c
++index 185d49b804dd..40c7a2242551 100644
++--- a/frontend/getopt.c
+++++ b/frontend/getopt.c
++@@ -172,7 +172,7 @@ static enum
++ #if __STDC__ || defined(PROTO)
++ extern char *getenv(const char *name);
++ extern int  strcmp (const char *s1, const char *s2);
++-extern int  strncmp(const char *s1, const char *s2, unsigned int n);
+++extern int  strncmp(const char *s1, const char *s2, size_t n);
++ 
++ static int my_strlen(const char *s);
++ static char *my_index (const char *str, int chr);
++-- 
++2.14.1
++
+-- 
+2.14.1
