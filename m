@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Aug 2017 21:34:25 +0200
-Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <767EFADFF809234DB6CAABD6D2F93847C5D6E939@IRSMSX107.ger.corp.intel.com>
-References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
- <767EFADFF809234DB6CAABD6D2F93847C5D6E939@IRSMSX107.ger.corp.intel.com>
-Message-ID: <1d7655be-bd3f-6656-5cd9-18f8f96d9926@mind.be>
+Date: Wed, 16 Aug 2017 22:22:09 +0200
+Subject: [Buildroot] Analysis of build results for 2017-08-14
+In-Reply-To: <CANQCQpbHChJOk0=8Mo0U==BRdYRL9=W9kwxkJFZAK=bCXx944A@mail.gmail.com>
+References: <20170815063102.ED3612091A@mail.free-electrons.com>
+ <20170815142032.329e8103@windsurf>
+ <CANQCQpbHChJOk0=8Mo0U==BRdYRL9=W9kwxkJFZAK=bCXx944A@mail.gmail.com>
+Message-ID: <83b89591-a9f6-8df5-ab5b-5d244fb87708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,33 @@ To: buildroot@busybox.net
 
 
 
-On 14-08-17 22:38, Kinsella, Ray wrote:
-> Hi Arnout,
+On 15-08-17 14:58, Matthew Weber wrote:
+> You're going to see some more unknown builds today (end log snippets
+> below).  I've updated my autobuilder and trying to figure out the
+> following new error.  At this point I disabled my result submissions
+> and doing further testing offline.
 > 
-> The Galileo and Galileo Gen 2 are supported by the upstream kernel, so that would be simplest approach.
-> Some minor non-upstream fixes will however be lost along the way.
-> 
-> The biggest obstacle is that I wouldn't be able to do anything on this until at least mid-September (due to travel).
-> Would be a pity to see Galileo support depreciated in BR.
+> http://autobuild.buildroot.net/results/e19/e196ceb333f554748081e78858eafb2739e0e317//
+>  [7m>>>   Sanitizing RPATH in target tree [27m
+> /accts/mlweber1/instance-3/buildroot/support/scripts/fix-rpath target
+> make: Leaving directory `/accts/mlweber1/instance-3/buildroot'
+> make: Entering directory `/accts/mlweber1/instance-3/buildroot'
+> package/coxpcall/coxpcall.mk:11: *** COXPCALL_SITE cannot be empty
+> when COXPCALL_SOURCE is not.  Stop.
+> make: Leaving directory `/accts/mlweber1/instance-3/buildroot'
 
- If you're sure that you can update this defconfig later, I'll for now make a
-patch that just fixes GCC to version 5.
+ Yes, it's a bug!
+
+ if BR2_PRIMARY_SITE_ONLY=y, then BR2_LUAROCKS_MIRROR is not defined in
+Config.in so any lua package has its _SITE set to none so you get this error...
+There's a similar issue with the other mirrors, but those always have some path
+appended to them (e.g. $(BR2_GNU_MIRROR)/libc) so the _SITE is never empty.
+
+ I think it's best to put the empty _SITE check in an
+ifneq ($(BR2_PRIMARY_SITE_ONLY),y)
 
  Regards,
  Arnout
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
