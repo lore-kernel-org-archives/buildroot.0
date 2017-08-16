@@ -1,46 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Aug 2017 23:08:49 +0200
-Subject: [Buildroot] [PATCH 1/2] boot/syslinux: renumber patches
-In-Reply-To: <20170815224546.12593-1-arnout@mind.be>
-References: <20170815224546.12593-1-arnout@mind.be>
-Message-ID: <20170816230849.423f4a1e@windsurf>
+Date: Wed, 16 Aug 2017 23:09:24 +0200
+Subject: [Buildroot] [git commit] whois: fix build with NLS disabled
+Message-ID: <20170816210309.616518211F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=58ae0b35ed8fa0411757fa21fde66bf067e348f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Aug 2017 00:45:45 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Also the last two are regenerated, their context has changed due to
-> the patches that have been removed earlier.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ... => 0003-memdisk-Force-ld-output-format-to-32-bits.patch} |  0
->  ...atch => 0004-utils-Use-the-host-toolchain-to-build.patch} |  0
->  ...ch => 0005-lzo-Use-the-host-toolchain-for-prepcore.patch} |  0
->  ...e-VPrint-definition-is-now-part-of-the-exports-of-.patch} |  0
->  ...date-the-longjump-calls-to-fit-the-new-declaration.patch} | 12 ++++++------
->  ... 0008-efi-wrapper-build-it-with-the-host-toolchain.patch} |  8 ++++----
->  6 files changed, 10 insertions(+), 10 deletions(-)
->  rename boot/syslinux/{0004-memdisk-Force-ld-output-format-to-32-bits.patch => 0003-memdisk-Force-ld-output-format-to-32-bits.patch} (100%)
->  rename boot/syslinux/{0005-utils-Use-the-host-toolchain-to-build.patch => 0004-utils-Use-the-host-toolchain-to-build.patch} (100%)
->  rename boot/syslinux/{0006-lzo-Use-the-host-toolchain-for-prepcore.patch => 0005-lzo-Use-the-host-toolchain-for-prepcore.patch} (100%)
->  rename boot/syslinux/{0007-The-VPrint-definition-is-now-part-of-the-exports-of-.patch => 0006-The-VPrint-definition-is-now-part-of-the-exports-of-.patch} (100%)
->  rename boot/syslinux/{0009-Update-the-longjump-calls-to-fit-the-new-declaration.patch => 0007-Update-the-longjump-calls-to-fit-the-new-declaration.patch} (76%)
->  rename boot/syslinux/{0010-efi-wrapper-build-it-with-the-host-toolchain.patch => 0008-efi-wrapper-build-it-with-the-host-toolchain.patch} (81%)
+whois build uses the xgettext utility to build translation files.
+This utility may not be available when NLS is disabled. Omit the pos and
+install-pos Makefile targets from the default and the install targets
+when NLS is disabled, respectively.
 
-Both patches applied to master. I tested, and indeed before your
-patches, building syslinux fails with binutils 2.29, while it works
-after your patches.
+Fixes:
+http://autobuild.buildroot.net/results/862/862d8165a59711c970c65d90009a527315a1a6b4/
+http://autobuild.buildroot.net/results/b62/b62ec9d6f350e409731d47ffb585344c516944e8/
+http://autobuild.buildroot.net/results/be2/be28d06ae004a46c87133d6f07709c6f909288d8/
 
-Thanks!
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/whois/whois.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index f22446b..22117cf 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -27,13 +27,22 @@ WHOIS_DEPENDENCIES += libidn
+ WHOIS_MAKE_ENV += HAVE_LIBIDN=1
+ endif
+ 
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++WHOIS_BUILD_TARGETS =
++WHOIS_INSTALL_TARGETS = install
++else
++WHOIS_BUILD_TARGETS = Makefile.depend whois mkpasswd
++WHOIS_INSTALL_TARGETS = install-whois install-mkpasswd
++endif
++
+ define WHOIS_BUILD_CMDS
+-	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPTS) -C $(@D)
++	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPTS) \
++		$(WHOIS_BUILD_TARGETS) -C $(@D)
+ endef
+ 
+ define WHOIS_INSTALL_TARGET_CMDS
+ 	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPTS) \
+-		BASEDIR="$(TARGET_DIR)" install -C $(@D)
++		BASEDIR="$(TARGET_DIR)" $(WHOIS_INSTALL_TARGETS) -C $(@D)
+ endef
+ 
+ $(eval $(generic-package))
