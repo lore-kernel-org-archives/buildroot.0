@@ -1,83 +1,54 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 16 Aug 2017 14:21:41 +0930
-Subject: [Buildroot] [PATCH] linux-firmware: Add QLogic FC Adapters
-In-Reply-To: <20170816043023.6370-1-sam@mendozajonas.com>
-References: <20170816043023.6370-1-sam@mendozajonas.com>
-Message-ID: <CACPK8XeWkEZgdyrwAKVQuzD_Oqy9h=41HjYSZ0eYT2Ng9kBy-Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Aug 2017 08:31:26 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-15
+Message-ID: <20170816063126.1F0CA20829@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 16, 2017 at 2:00 PM, Samuel Mendoza-Jonas
-<sam@mendozajonas.com> wrote:
-> Add a config option to install the ql2xxx firmware binaries for QLogic
-> Fibre Channel adapters.
-> Since this doesn't quite fit under the existing categories in Config.in,
-> include it under a new category named "Fibre Channel Adapter Firmware".
->
-> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-> ---
-> Very open to suggestion about the category, just saw that it didn't
-> really fit under any of the existing headings.
+Hello,
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Build statistics for 2017-08-15
+================================
 
-No strong opinions on the name either, but the option looks good, and
-checked that the filenames line up.
+      successes : 202
+       failures : 14 
+       timeouts : 0  
+          TOTAL : 216
 
-Cheers,
+Classification of failures by reason
+====================================
 
-Joel
+                       unknown | 5 
+                   faad2-2.8.1 | 2 
+                libressl-2.5.5 | 1 
+         libspatialindex-1.8.5 | 1 
+          mediastreamer-2.14.0 | 1 
+                   mp4v2-2.0.0 | 1 
+                    norm-1.5r6 | 1 
+     python-cryptography-1.7.2 | 1 
+             transmission-2.92 | 1 
 
 
->
->  package/linux-firmware/Config.in         | 9 +++++++++
->  package/linux-firmware/linux-firmware.mk | 8 ++++++++
->  2 files changed, 17 insertions(+)
->
-> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-> index f0d64763d8..ad750e82ff 100644
-> --- a/package/linux-firmware/Config.in
-> +++ b/package/linux-firmware/Config.in
-> @@ -329,4 +329,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
->
->  endmenu
->
-> +menu "Fibre Channel Adapter Firmware"
-> +
-> +config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
-> +       bool "QLogic 2xxx Fibre Channel Adapters"
-> +       help
-> +         Firmware files for ql2xxx adapters
-> +
-> +endmenu
-> +
->  endif
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index e03788a3b5..b01585fbe4 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -414,6 +414,14 @@ LINUX_FIRMWARE_FILES += \
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
->  endif
->
-> +# ql2xxx
-> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX),y)
-> +LINUX_FIRMWARE_FILES += \
-> +       ql2100_fw.bin ql2200_fw.bin ql2300_fw.bin ql2322_fw.bin \
-> +       ql2400_fw.bin ql2500_fw.bin
-> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qla2xxx
-> +endif
-> +
->  ifneq ($(LINUX_FIRMWARE_FILES),)
->  define LINUX_FIRMWARE_INSTALL_FILES
->         cd $(@D) ; \
-> --
-> 2.14.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Detail of failures
+===================
+
+      x86_64 |                    faad2-2.8.1 | NOK | http://autobuild.buildroot.net/results/4471be349d7ad2e998a4d55afd33aa046a5d1fd2 |     
+      x86_64 |                    faad2-2.8.1 | NOK | http://autobuild.buildroot.net/results/2a90f4f518884fb50f7ad6ab505dee7565ed869e |     
+         arm |                 libressl-2.5.5 | NOK | http://autobuild.buildroot.net/results/a0a109dad1fc8886c52fd421c20347064df9e64e |     
+microblazeel |          libspatialindex-1.8.5 | NOK | http://autobuild.buildroot.net/results/c97fd5d2b65fa2a811c51e4549ce065b38f10bb1 |     
+    mips64el |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/945ede98f727eec6c99f90e6dd236a7b8c86b779 | ORPH
+         arm |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/e315c80a1ec652acd1b55dd0c3a6cd8b81933386 |     
+         arm |                     norm-1.5r6 | NOK | http://autobuild.buildroot.net/results/eecb5d9073e085ad5b7bf45c827764b156a35c46 |     
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/36a89f8341a7f8851b7d08125d400f2a02ef8567 |     
+    mips64el |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/f5a77a1ea448498ebd451e4ab308fa647f0a5506 |     
+        i686 |                        unknown | NOK | http://autobuild.buildroot.net/results/e196ceb333f554748081e78858eafb2739e0e317 |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/b180161214353e182e124b95660b31da6979fdf6 |     
+        mips |                        unknown | NOK | http://autobuild.buildroot.net/results/b661593831c817986c1928dbcdd376a900cf3701 |     
+      x86_64 |                        unknown | NOK | http://autobuild.buildroot.net/results/d3fa24b5589cc75f040a8f7aedb442ffda9b6814 |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/3dd4183b0d21497211f033a53772380f9ccf59b3 |     
+
+-- 
+http://autobuild.buildroot.net
