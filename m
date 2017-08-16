@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Aug 2017 23:15:32 +0200
-Subject: [Buildroot] [PATCH v2] gst1-validate: disable building
- documentation using sphinx
-In-Reply-To: <20170812210610.536-1-arnout@mind.be>
-References: <20170812210610.536-1-arnout@mind.be>
-Message-ID: <20170816231532.092f66f5@windsurf>
+Date: Wed, 16 Aug 2017 23:19:07 +0200
+Subject: [Buildroot] [PATCH] faad2: fix build with musl libc
+In-Reply-To: <b727a178e0fa5a10b77e298e7b1dbf1b32ccb40d.1502880785.git.baruch@tkos.co.il>
+References: <b727a178e0fa5a10b77e298e7b1dbf1b32ccb40d.1502880785.git.baruch@tkos.co.il>
+Message-ID: <20170816231907.16e5776a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 12 Aug 2017 23:06:10 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: Peter Seiderer <ps.report@gmx.net>
-> 
-> Fix a build failure in case (a non functional) sphinx documentation
-> system is installed on the host (reported [1] and fix tested [2]
-> by grunpferd at netscape.net).
+On Wed, 16 Aug 2017 13:53:05 +0300, Baruch Siach wrote:
+> The getopt.c code declares the strncmp() routine in a non confirming way
+> under non GNU libc. Patch the code to make the declaration standard
+> conforming.
 > 
 > Fixes:
+> http://autobuild.buildroot.net/results/447/4471be349d7ad2e998a4d55afd33aa046a5d1fd2/
+> http://autobuild.buildroot.net/results/2a9/2a90f4f518884fb50f7ad6ab505dee7565ed869e/
+> http://autobuild.buildroot.net/results/6b1/6b159b766d791492bab4d897c33ce07845fb7119/
 > 
->   sphinx-build -b html -d ./doctrees   . ./html
->   Error: Source directory doesn't contain a conf.py file.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2017-August/200021.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2017-August/200267.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> Cc: grunpferd at netscape.net
-> [Arnout:
->  - use --disable-sphinx-doc instead of a cv variable
->  - remove the comment, it speaks for itself]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/gstreamer1/gst1-validate/gst1-validate.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../0001-getopt-fix-strncmp-declaration.patch      | 40 ++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/faad2/0001-getopt-fix-strncmp-declaration.patch
 
 Applied to master, thanks.
 
