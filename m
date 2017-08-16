@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Aug 2017 00:48:10 +0200
-Subject: [Buildroot] Analysis of build results for 2017-08-14
-In-Reply-To: <20170816225324.331fec56@windsurf>
-References: <20170815063102.ED3612091A@mail.free-electrons.com>
- <20170815142032.329e8103@windsurf>
- <865c6d16-fd88-294e-2fea-62cf312fbacb@mind.be>
- <20170816225324.331fec56@windsurf>
-Message-ID: <9a1b8d71-d39b-dc8b-fa95-dbeb6f1213b4@mind.be>
+Date: Thu, 17 Aug 2017 00:51:23 +0200
+Subject: [Buildroot] [PATCH 1/1] Keep HOSTCFLAG and HOSTLDFLAGS
+ consistent when Making Linux Kernel
+In-Reply-To: <20170729150402.40d27236@windsurf.lan>
+References: <1501286200-4274-1-git-send-email-jqiaoulk@gmail.com>
+ <20170729150402.40d27236@windsurf.lan>
+Message-ID: <a2bbac58-b29b-cd95-ece4-1972bbafc971@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +14,22 @@ To: buildroot@busybox.net
 
 
 
-On 16-08-17 22:53, Thomas Petazzoni wrote:
->>>>       x86_64 |                     ruby-2.4.1 | NOK | http://autobuild.buildroot.net/results/8f0342b7b88df979a59fdab574b2489628d7ffa5 | ORPH  
->>> Not sure what's happening here:
->>>
->>> linking shared-library libruby.so.2.4.1
->>> libruby.so.2.4.1: final close failed: Invalid operation
->>> collect2: error: ld returned 1 exit status
->>>
->>> Anyone to look into this ?  
->>  Perhaps an instance of https://sourceware.org/bugzilla/show_bug.cgi?id=20006 ?
->> Not sure if that patch has been applied to the sourcery toolchain - it should
->> be, since the binutils 2.26 fix was committed in April 2016 and the toolchain is
->> from November, but it's hard to be sure.
-> If you look at http://autobuild.buildroot.net/?reason=ruby-2.4.1, this
-> issue only appeared two times: in July 2017 and August 2017. This
-> Sourcery toolchain has been around for much longer, and was last bumped
-> in December 2016.
+On 29-07-17 15:04, Thomas Petazzoni wrote:
+> Unrelated to your patch, but this $(HOSTCFLAGS) thing is messy. We
+> actually have:
+> 
+>  - HOSTCFLAGS, defined in the main Makefile to the value of
+>    $(CFLAGS_FOR_BUILD), which is empty. HOSTCFLAGS is then exported. It
+>    was done this way a long time ago in commit
+>    c0d7d4e0355b49b489d7235e945481cf5d32087f (from 2007) for kconfig.
+>    I'm not sure we still need this.
+> 
+>  - HOST_CFLAGS, defined in package/Makefile.in, which actually contains
+>    some useful flags. It is most likely the one we should pass as
+>    HOSTCFLAGS in LINUX_MAKE_FLAGS.
 
- As another point of reference: it didn't occur for ruby-2.4.0.
-
-> So if it was just the Sourcery toolchain being unable to build
-> ruby-2.4.1, I think we would have a lot more failures than that. So it
-> might be a toolchain issue, but that occurs under very specific
-> conditions.
-
- ruby has a bunch of optional dependencies, so yes indeed it only occurs for
-some exotic combination of these dependencies.
-
- So I checked the source of the Sourcery toolchain and it does NOT have the
-patch of bug 20006 applied, even though it was released in binutils 2.26.1, 4
-months before the Sourcery release...
-
- So, we could try to find out which exact combination of packages triggers this
-issue, but is that worth it for something that happens twice in five months...
+ In addition, I see no reason why we would *override* the kernel's HOSTCFLAGS.
+So I think the proper fix is to do HOST_EXTRACFLAGS=$(HOST_CFLAGS) instead.
 
  Regards,
  Arnout
