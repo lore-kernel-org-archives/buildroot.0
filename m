@@ -1,225 +1,62 @@
-From: Julien Grossholtz <julien.grossholtz@savoirfairelinux.com>
-Date: Wed, 16 Aug 2017 18:21:15 -0400 (EDT)
-Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
-In-Reply-To: <488835700.260243.1502835037832.JavaMail.zimbra@savoirfairelinux.com>
-References: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
- <488835700.260243.1502835037832.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <178556773.368025.1502922075670.JavaMail.zimbra@savoirfairelinux.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 Aug 2017 00:48:10 +0200
+Subject: [Buildroot] Analysis of build results for 2017-08-14
+In-Reply-To: <20170816225324.331fec56@windsurf>
+References: <20170815063102.ED3612091A@mail.free-electrons.com>
+ <20170815142032.329e8103@windsurf>
+ <865c6d16-fd88-294e-2fea-62cf312fbacb@mind.be>
+ <20170816225324.331fec56@windsurf>
+Message-ID: <9a1b8d71-d39b-dc8b-fa95-dbeb6f1213b4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I have been able to compile Qt WebEngine for the Beaglebone black. I ran the quicknanobrowser successfully even if performances are poor with this board and colors are not correct. I used the HDMI output and a mouse for this test.
-
-It was necessary to add some fonts to the system to run quicknanobrowser.
-
-It was also necessary to set QT_QPA_EGLFS_INTEGRATION to none, it fails without it:
-
-$ cd /usr/lib/qt/examples/webengine/quicknanobrowser/
-$ ./quicknanobrowser
-QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
-PVR: Hint: Setting WindowSystem to libpvrDRMWSEGL_FRONT.so
-
-mode for connector 20 is 1280x1024
-mode for CRTC of connector 20 is 1280x1024
-DRM SET CRTC: index: 0 fd: 5, crtc: 12, fb: 1e, conn: 14, mode: 1280x1024
-EGL library doesn't support Emulator extensions
-Aborted
-
-$ QT_QPA_EGLFS_INTEGRATION=none ./quicknanobrowser www.google.com
-QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
-PVR: Hint: Setting WindowSystem to libpvrDRMWSEGL_FRONT.so
-
-mode for connector 20 is 1280x1024
-mode for CRTC of connector 20 is 1280x1024
-fDRM SET CRTC: index: 0 fd: 6, crtc: 12, fb: 1e, conn: 14, mode: 1280x1024
-Unable to query physical screen size, defaulting to 100 dpi.
-To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and QT_QPA_EGLFS_PHYSICAL_HEIGHT (in millimeters).
-PVR: Hint: Setting DisableHWTQTextureUpload to 1
-
-[0101/001546.323753:WARNING:resource_bundle_qt.cpp(114)] locale_file_path.empty() for locale 
-[0101/001546.688823:WARNING:resource_bundle_qt.cpp(114)] locale_file_path.empty() for locale 
-PVR: Hint: Setting DisableHWTQTextureUpload to 1
-
-PVR: Hint: Setting DisableHWTQTextureUpload to 1
-
-PVR: Hint: Setting DisableHWTQTextureUpload to 1
-
-PVR: Hint: Setting DisableHWTQTextureUpload to 1
 
 
-So it is functional, but colors are somehow reversed.
+On 16-08-17 22:53, Thomas Petazzoni wrote:
+>>>>       x86_64 |                     ruby-2.4.1 | NOK | http://autobuild.buildroot.net/results/8f0342b7b88df979a59fdab574b2489628d7ffa5 | ORPH  
+>>> Not sure what's happening here:
+>>>
+>>> linking shared-library libruby.so.2.4.1
+>>> libruby.so.2.4.1: final close failed: Invalid operation
+>>> collect2: error: ld returned 1 exit status
+>>>
+>>> Anyone to look into this ?  
+>>  Perhaps an instance of https://sourceware.org/bugzilla/show_bug.cgi?id=20006 ?
+>> Not sure if that patch has been applied to the sourcery toolchain - it should
+>> be, since the binutils 2.26 fix was committed in April 2016 and the toolchain is
+>> from November, but it's hard to be sure.
+> If you look at http://autobuild.buildroot.net/?reason=ruby-2.4.1, this
+> issue only appeared two times: in July 2017 and August 2017. This
+> Sourcery toolchain has been around for much longer, and was last bumped
+> in December 2016.
 
+ As another point of reference: it didn't occur for ruby-2.4.0.
 
-Julien
+> So if it was just the Sourcery toolchain being unable to build
+> ruby-2.4.1, I think we would have a lot more failures than that. So it
+> might be a toolchain issue, but that occurs under very specific
+> conditions.
 
------ Original Message -----
-> From: "Julien Grossholtz" <julien.grossholtz@savoirfairelinux.com>
-> To: "Ga?l Portay" <gael.portay@savoirfairelinux.com>
-> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Joshua Henderson" <joshua.henderson@microchip.com>,
-> "Jean-Daniel Michaud" <jean.daniel.michaud@gmail.com>, "brents 3" <brents_3@hotmail.com>, "Peter Seiderer"
-> <ps.report@gmx.net>, "buildroot @ busybox . net" <buildroot@busybox.net>, "gomis" <tuzaklirefik@gmail.com>, "Akihiko
-> Odaki" <akihiko.odaki.4i@stu.hosei.ac.jp>
-> Sent: Tuesday, August 15, 2017 6:10:37 PM
-> Subject: Re: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
+ ruby has a bunch of optional dependencies, so yes indeed it only occurs for
+some exotic combination of these dependencies.
 
-> Hi,
-> 
-> I will test these patchs on a Beaglebone black.
-> 
-> Julien
-> 
-> 
-> ----- Original Message -----
->> From: "Ga?l Portay" <gael.portay@savoirfairelinux.com>
->> To: "buildroot @ busybox . net" <buildroot@busybox.net>, "Thomas Petazzoni"
->> <thomas.petazzoni@free-electrons.com>,
->> "Peter Seiderer" <ps.report@gmx.net>, "Arnout Vandecappelle" <arnout@mind.be>,
->> "Julien CORJON" <corjon.j@ecagroup.com>
->> Cc: "Joshua Henderson" <joshua.henderson@microchip.com>, "Jean-Daniel Michaud"
->> <jean.daniel.michaud@gmail.com>, "brents
->> 3" <brents_3@hotmail.com>, "Ga?l Portay" <gael.portay@savoirfairelinux.com>,
->> "gomis" <tuzaklirefik@gmail.com>, "Akihiko
->> Odaki" <akihiko.odaki.4i@stu.hosei.ac.jp>
->> Sent: Tuesday, August 15, 2017 4:38:52 PM
->> Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
-> 
->> Hi all,
->> 
->> The purpose of this patch series is to continue the integration of Qt5 WebEngine
->> in buildroot; started long time ago by Akihiko Odaki [1] and Julien Corjon [2].
->> 
->> The first patch provides the Qt WebEngine package.
->> 
->> The second patch is a special defconfig that provides a Qt WebEngine setup on
->> raspberrypi3 to provide a demo.
->> 
->> I have tested it with a rpi 3; and I will be glad if someone else has another
->> EGL platform to test it. You will find instructions to try qtwebengine on rpi3
->> in the commit message of the first patch.
->> 
->> Enjoy ;)
->> 
->> Note: Tested against:
->>        - GCC 6.x and binutils 2.27 on rpi 3.
->>        - GCC 7.x and binutils 2.28 on rpi 3.
->> 
->> [1] https://patchwork.ozlabs.org/patch/640633/
->> [2] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
->> 
->> Changes since RFC:
->> - rebase to master (use SPDX licenses, remove license approved, update
->>   qt5_defconfig...)
->> - remove the patch "prefer arm tune"
->> - disable build with Qt 5.6 LTS (not working, waiting for 5.6.3 in August)
->> - re-order patches
->> 
->> Changes since v1:
->> - manually create symlinks to preserve SONAME
->> - add my signed-off-by to the qt webengine patch
->> - make qtwe package depends on supported architectures
->> - fix Kconfig comment about Qt 5.6
->> - sort alphabetically chromium licenses
->> 
->> Changes since v2:
->> - fix build issue when I sorted alphabetically the chromium licenses
->> - replace legacy option BR2_TARGET_ROOTFS_EXT2_BLOCK to
->>   new option BR2_TARGET_ROOTFS_EXT2_SIZE
->> 
->> Changes since v3:
->> - add my signed-off-by and the PR link to the rpi-userland patch
->> - move rpi patch index from 0001 to 0007
->> 
->> Changes since v4:
->> - bump to Qt WebEngine to 5.9.1
->> - added the mainlined patch that fixes the build issue with samples when print
->>   is not supported
->> - udev is selected (required by chromium)
->> - add config entry to use system ffmpeg and set it to yes by default
->> - the patch concerning the path to CA certificates has been removed since it is
->>   no more relevant in 5.9.x
->> - increase BR2_TARGET_ROOTFS_EXT2_SIZE to 360MB to support
->>   $ du -sk target/
->>   312480	target/
->> 
->> Changes since v5:
->> - really add the mainlined patch that fixes the build issue with samples when
->>   print is not supported
->> - add BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS to list all supported
->>   architectures
->> - add BR2_PACKAGE_QT5WEBENGINE missing dependencies (tc, mmu, wchar...)
->> - stop using && for depends on relationships
->> - update chromium licence list in chromium.inc
->> - remove option BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG;
->>   and compile ffmpeg, opus, libvpx and webp packages
->> - reword help and add url to documentation of package qt5webengine
->> - remove hash of 5.6.2 version
->> - add QT5WEBENGINE_ namespace to QMAKEFLAGS
->> - add missing TARGET_MAKE_ENV to BUILD_CMD
->> - create python symlink form $(HOST_DIR)/bin (was $(HOST_DIR)/usr/bin)
->> - add myself to DEVELOPERS
->> 
->> Changes since v6:
->> - rpi-userland commit message:
->>   fix output of ls -l snippet
->>   update url to link to qtwe-5.9.1
->>   add upstream-status
->> - qtwe:
->>   add missing host-bison, host-flex and host-pkgconf dependencies
->>   select BR2_HOSTARCH_NEEDS_IA32_COMPILER to let v8 compiles its host-tools
->>   with the same word-size as the target.
->> 
->> Changes since v7:
->> - rpi-userland:
->>   remove rpi-userland patch and apply upstreamed commit suggested by Yann.
->> - qtwe:
->>   reword the commit message to include notes from the coverletter
->>   depends on has udev + comment (udev is needed at runtime)
->>   depends on uses glibc + comment (for now, it builds only with glibc)
->>   select qtquickcontrols2 (may be needed at runtime)
->>   reword BR2_HOSTARCH_NEEDS_IA32_COMPILER comment
->> - raspberrypi3_qt5we_defconfig:
->>   rename raspberrypi3_qt5_defconfig into raspberrypi3_qt5we_defconfig
->>   bump kernel (synced with all rpi defconfigs)
->>   add gif, jpeg and options to raspberrypi3_qt5we_defconfig
->>   use M suffix with BR2_TARGET_ROOTFS_EXT2_SIZE option
->> 
->> Ga?l PORTAY (3):
->>  qt5webengine: new package
->>  configs: new raspberrypi3 qt5we config
->> 
->> DEVELOPERS                                         |   1 +
->> configs/raspberrypi3_qt5we_defconfig               |  50 ++++
->> package/qt5/Config.in                              |   1 +
->> .../0001-Always-compile-QWebEnginePage-print.patch | 246 ++++++++++++++++
->> ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |  89 ++++++
->> package/qt5/qt5webengine/Config.in                 |  86 ++++++
->> package/qt5/qt5webengine/chromium.inc              | 310 +++++++++++++++++++++
->> package/qt5/qt5webengine/qt5webengine.hash         |   2 +
->> package/qt5/qt5webengine/qt5webengine.mk           |  80 ++++++
->> 9 files changed, 865 insertions(+)
->> create mode 100644 configs/raspberrypi3_qt5we_defconfig
->> create mode 100644
->> package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
->> create mode 100644
->> package/qt5/qt5webengine/5.9.1/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
->> create mode 100644 package/qt5/qt5webengine/Config.in
->> create mode 100644 package/qt5/qt5webengine/chromium.inc
->> create mode 100644 package/qt5/qt5webengine/qt5webengine.hash
->> create mode 100644 package/qt5/qt5webengine/qt5webengine.mk
->> 
->> --
->> 2.13.2
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ So I checked the source of the Sourcery toolchain and it does NOT have the
+patch of bug 20006 applied, even though it was released in binutils 2.26.1, 4
+months before the Sourcery release...
+
+ So, we could try to find out which exact combination of packages triggers this
+issue, but is that worth it for something that happens twice in five months...
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
