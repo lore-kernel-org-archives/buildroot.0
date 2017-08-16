@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Aug 2017 21:29:37 +0200
+Date: Wed, 16 Aug 2017 21:33:24 +0200
 Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <CAHkwnC9pJMX2AxcHsyMHiPMx_F8vDLNDp0sCFuSdcz0hNhdPSg@mail.gmail.com>
+In-Reply-To: <CAAEAJfA8ZefJaVg2TJ0=E90w=0N=WHK2F2uDJvS658UQJJZHFA@mail.gmail.com>
 References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
- <dbe1c07b-acac-59b8-70c8-dc10b7375a12@mind.be>
- <CAHkwnC9pJMX2AxcHsyMHiPMx_F8vDLNDp0sCFuSdcz0hNhdPSg@mail.gmail.com>
-Message-ID: <6434cf22-c37a-5633-d399-1705f7e1fb60@mind.be>
+ <CAAEAJfA8ZefJaVg2TJ0=E90w=0N=WHK2F2uDJvS658UQJJZHFA@mail.gmail.com>
+Message-ID: <a737ec3b-a3b3-598a-7313-48e62191673a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +13,14 @@ To: buildroot@busybox.net
 
 
 
-On 14-08-17 08:52, Fabio Porcedda wrote:
-> If possible i would like to backport the patch to support GCC 6 in the
-> mean time.
+On 11-08-17 17:19, Ezequiel Garcia wrote:
+> I think we should remove these if nobody can test.
 
- That's fine, or alternatively (if you're pretty sure you can find a fundamental
-fix eventually) you can just fix GCC to version 5 for now. Up to you.
+ Could you submit a patch that does that?
 
- Regards,
+ Thanks,
  Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
