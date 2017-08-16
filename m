@@ -1,43 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Aug 2017 00:51:23 +0200
-Subject: [Buildroot] [PATCH 1/1] Keep HOSTCFLAG and HOSTLDFLAGS
- consistent when Making Linux Kernel
-In-Reply-To: <20170729150402.40d27236@windsurf.lan>
-References: <1501286200-4274-1-git-send-email-jqiaoulk@gmail.com>
- <20170729150402.40d27236@windsurf.lan>
-Message-ID: <a2bbac58-b29b-cd95-ece4-1972bbafc971@mind.be>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 16 Aug 2017 20:31:54 -0300
+Subject: [Buildroot] [PATCH v2] configs/toradex_apalis_imx6: bump to U-Boot
+	2016.11 and kernel 4.1.41.
+Message-ID: <1502926314-11923-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since Toradex V2.7 SDK, U-Boot image has changed from u-boot.imx to
+SPL + u-boot.img.
 
+Also fix U-Boot build error with GCC6.
 
-On 29-07-17 15:04, Thomas Petazzoni wrote:
-> Unrelated to your patch, but this $(HOSTCFLAGS) thing is messy. We
-> actually have:
-> 
->  - HOSTCFLAGS, defined in the main Makefile to the value of
->    $(CFLAGS_FOR_BUILD), which is empty. HOSTCFLAGS is then exported. It
->    was done this way a long time ago in commit
->    c0d7d4e0355b49b489d7235e945481cf5d32087f (from 2007) for kconfig.
->    I'm not sure we still need this.
-> 
->  - HOST_CFLAGS, defined in package/Makefile.in, which actually contains
->    some useful flags. It is most likely the one we should pass as
->    HOSTCFLAGS in LINUX_MAKE_FLAGS.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
 
- In addition, I see no reason why we would *override* the kernel's HOSTCFLAGS.
-So I think the proper fix is to do HOST_EXTRACFLAGS=$(HOST_CFLAGS) instead.
+Changes v1 -> v2
+- add info about u-boot image change in the commit message
 
- Regards,
- Arnout
+---
+ configs/toradex_apalis_imx6_defconfig | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
+diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
+index 74d1fb3b9c46..607faaeb8ff6 100644
+--- a/configs/toradex_apalis_imx6_defconfig
++++ b/configs/toradex_apalis_imx6_defconfig
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8f237ebe42f2cb911245369276a6b3043c2815f2"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3f68dc7c600c0354f5df7f06b931661319addafb"
+ BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis_v1_0-eval imx6q-apalis_v1_0-ixora"
+@@ -17,8 +17,9 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1ef4a29e8cea0239411dde64f9617ad76248fd02"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f0e414972b5b225e33ebe75574562266116746f9"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apalis_imx6"
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.imx"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
