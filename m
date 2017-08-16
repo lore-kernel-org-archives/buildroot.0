@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Aug 2017 21:33:24 +0200
+Date: Wed, 16 Aug 2017 21:34:25 +0200
 Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <CAAEAJfA8ZefJaVg2TJ0=E90w=0N=WHK2F2uDJvS658UQJJZHFA@mail.gmail.com>
+In-Reply-To: <767EFADFF809234DB6CAABD6D2F93847C5D6E939@IRSMSX107.ger.corp.intel.com>
 References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
- <CAAEAJfA8ZefJaVg2TJ0=E90w=0N=WHK2F2uDJvS658UQJJZHFA@mail.gmail.com>
-Message-ID: <a737ec3b-a3b3-598a-7313-48e62191673a@mind.be>
+ <767EFADFF809234DB6CAABD6D2F93847C5D6E939@IRSMSX107.ger.corp.intel.com>
+Message-ID: <1d7655be-bd3f-6656-5cd9-18f8f96d9926@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,19 @@ To: buildroot@busybox.net
 
 
 
-On 11-08-17 17:19, Ezequiel Garcia wrote:
-> I think we should remove these if nobody can test.
+On 14-08-17 22:38, Kinsella, Ray wrote:
+> Hi Arnout,
+> 
+> The Galileo and Galileo Gen 2 are supported by the upstream kernel, so that would be simplest approach.
+> Some minor non-upstream fixes will however be lost along the way.
+> 
+> The biggest obstacle is that I wouldn't be able to do anything on this until at least mid-September (due to travel).
+> Would be a pity to see Galileo support depreciated in BR.
 
- Could you submit a patch that does that?
+ If you're sure that you can update this defconfig later, I'll for now make a
+patch that just fixes GCC to version 5.
 
- Thanks,
+ Regards,
  Arnout
 
 -- 
