@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Aug 2017 23:11:19 +0200
-Subject: [Buildroot] [PATCH 1/1] libepoxy: add patch to fix segfaults
- when using in X11 without GLX
-In-Reply-To: <20170814213117.4735-1-aperez@igalia.com>
-References: <20170814213117.4735-1-aperez@igalia.com>
-Message-ID: <20170816231119.7c6684ff@windsurf>
+Date: Wed, 16 Aug 2017 23:13:22 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: vc4 backend is an EGL
+	provider
+Message-ID: <20170816210712.70918821D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a8ee37245ca66131dbb6b4e3bf94cfb0cb370d0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Aug 2017 00:31:17 +0300, Adrian Perez de Castro wrote:
-> This adds a patch cherry-picked from libepoxy 1.4.2, which adds missing
-> NULL-pointer checks and avoids segmentation faults when using libepoxy
-> under X11, when the server does not have the GLX extension, or it is
-> disabled -- and applications can still use EGL.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  ...nal_has_gl_extension-epoxy_egl_version-ad.patch | 62 ++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 package/libepoxy/0003-epoxy_internal_has_gl_extension-epoxy_egl_version-ad.patch
+The VC4 GPU does not support full GL, it only provides EGL.
 
-Applied to master, thanks.
+Currently, it is possible to build the VC4 backend without EGL support,
+but that does not make sense in the slighest.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+So, forcibly enable EGL with VC4, like is done for etnaviv and virgl.
+
+Reported-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index ad41b1c..13c118e 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -102,6 +102,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_VC4
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+ 	  Driver for Broadcom VC4 (rpi2/3) GPUs.
+ 	  It requires a vanilla 4.5+ kernel with drm vc4 (open) support.
