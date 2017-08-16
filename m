@@ -1,57 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Aug 2017 13:22:19 +0200
-Subject: [Buildroot] Failing defconfigs due to GCC 6
-In-Reply-To: <da69dee6-fcee-32c8-c01a-cae9f3788065@free.fr>
-References: <15ef0875-b514-cb30-02df-d5d413bb0ea9@mind.be>
- <da69dee6-fcee-32c8-c01a-cae9f3788065@free.fr>
-Message-ID: <b061fd82-fa83-c7a6-a7ae-48814b615b1d@mind.be>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 16 Aug 2017 16:41:07 +0300
+Subject: [Buildroot] [PATCH 1/1] libepoxy: add patch to fix segfaults
+ when using in X11 without GLX
+In-Reply-To: <20170814213117.4735-1-aperez@igalia.com>
+References: <20170814213117.4735-1-aperez@igalia.com>
+Message-ID: <20170816164107.GB2311@momiji.helsinki.igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 16-08-17 12:22, Julien Boibessot wrote:
-> Hello,
+On Tue, 15 Aug 2017 00:31:17 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> This adds a patch cherry-picked from libepoxy 1.4.2, which adds missing
+> NULL-pointer checks and avoids segmentation faults when using libepoxy
+> under X11, when the server does not have the GLX extension, or it is
+> disabled -- and applications can still use EGL.
 > 
-> Arnout,
-> 
-> On 10/08/2017 23:01, Arnout Vandecappelle wrote:
->>  Hi all,
->>
->>  A number of defconfigs fail to build (usually the kernel, in one case U-Boot)
->> because of GCC 6. Some of these could be fixed by simply bumping the upstream
->> kernel; however, we really want defconfigs to be tested on an actual board,
->> otherwise there's not much point.
->>
->>  I've put the people who have been involved in these defconfigs in To. Could you
->> look at these defconfigs and try to fix the build with GCC 6? Anything that
->> remains unfixed by the end of the month will probably be removed.
->>
->> ....
->>
->> armadeus_apf9328_defconfig:
->> https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
->>
->> ...
-> 
-> As i.MX1 is no more (well) supported in Linux vanilla kernel and APF9328
-> board is no more recommended for new projects, I think I will send a
-> patch to remove this defconfig from BR.
-> 
-> OK for you ?
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
 
- Yes, thanks.
+Is there any chance of getting this merged before the 2017.08 release? If
+there is an area where there are ?interesting? GL setups which could hit the
+segfaults fixed by the patch, that's in the embedded world ;-)
 
- Regards,
- Arnout
+(I know people are busy and that the backlog of patches to be reviewed is not
+precisely small, but I think it would be a pity that this would go missing in
+the release.)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Cheers,
+
+
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170816/48a9b0cd/attachment.asc>
