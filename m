@@ -1,78 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Aug 2017 21:19:46 +0200
-Subject: [Buildroot] [PATCHv2] core/pkg-toolchain-external: quiesce spurious
-	stderr
-Message-ID: <20170817191946.9167-1-yann.morin.1998@free.fr>
+Date: Thu, 17 Aug 2017 22:26:47 +0200
+Subject: [Buildroot] [PATCH] toolchain/internal: not aailable for a few mips
+	cores
+Message-ID: <20170817202647.26738-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 392b0a26f5 (toolchain-external: default BR2_TOOLCHAIN_EXTERNAL_PATH
-to empty), calling 'make clean' or similar can yield a spurious stderr
-message:
-    dirname: missing operand
-    Try 'dirname --help' for more information.
+Commit 1b974425 (MIPS: add support for M6201 cores) xplained that the
+new core was not supported by upstream gcc, and as of gcc-8-trunk that's
+stil lthe case.
 
-Which is definitely baffling and unsettling...
+Ditto for 3cfbeb83 (MIPS: add support for P6600 cores).
 
-It turns out that it is pretty trivial to reproduce, and this defconfig
-is just enough:
+This means that we currently elect to build an internal tolchain for
+those cores, yet we have no suitable gcc version.
 
-    $ cat my-defconfig
-    BR2_TOOLCHAIN_EXTERNAL=y
-
-    $ make BR2_DEFCONFIG=$(pwd)/my-defconfig defconfig
-
-    $ make clean
-    dirname: missing operand
-    Try 'dirname --help' for more information.
-    [--snip--]
-
-This is because the cross-compiler is not found in the PATH (and for
-good reasons, I don't have it in the PATH, not even at all).
-
-So, when the cross-compiler is not found in the path, we simply
-continue as if all was good, and postpone the check to much later,
-when we try to copy the toolchain libs...
-
-So, use a make construct rather than calling to the shell: $(dir ...)
-does not whine if passed nothing.
+Disable the internal backend in this case.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
 ---
-Changes v1 -> v2:
-  - use $(dir ...) instead of $(shell dirname ...)  (Arnout)
+ package/gcc/Config.in.host | 7 +------
+ toolchain/Config.in        | 2 ++
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
----
-Note: it would be good to error out at this point, but as explained in
-the commit log, we already error out a bit later when copying the
-toolchain libs, and the check is easier done then than what we could
-do here, because we'd have to guard with BR_BUILDING, and for good
-measure, we'd also have to do the check when the tooolchain dir is
-actually specified. But then this would duplicate the existing (but
-later) checks, so we just don't bother...
----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 23cdf30b9f..dc0588c536 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -74,7 +74,7 @@ endif
- ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
- ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
- # if no path set, figure it out from path
--TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
-+TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
- endif
- else
- TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 485755a15d..77ea8ff374 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -50,8 +50,7 @@ config BR2_GCC_VERSION_5_X
+ 	# musl ppc64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 	# Unsupported MIPS cores
+-	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && \
+-		!BR2_mips_m6250 && !BR2_mips_i6400 && !BR2_mips_p6600
++	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && !BR2_mips_i6400
+ 	# musl mips64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -61,8 +60,6 @@ config BR2_GCC_VERSION_6_X
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
+ 	depends on !BR2_or1k
+-	# Unsupported MIPS cores
+-	depends on !BR2_mips_m6250 && !BR2_mips_p6600
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_GCC_VERSION_7_X
+@@ -70,8 +67,6 @@ config BR2_GCC_VERSION_7_X
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
+ 	depends on !BR2_or1k
+-	# Unsupported MIPS cores
+-	depends on !BR2_mips_m6250 && !BR2_mips_p6600
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ endchoice
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 15ee335481..584d053058 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -48,6 +48,8 @@ config BR2_TOOLCHAIN_BUILDROOT
+ 	depends on !BR2_bf608
+ 	depends on !BR2_bf609
+ 	depends on !BR2_csky
++	depends on !BR2_mips_m6250
++	depends on !BR2_mips_p6600
+ 
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool "External toolchain"
 -- 
 2.11.0
