@@ -1,33 +1,48 @@
-From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-Date: Wed, 16 Aug 2017 23:44:07 -0700 (PDT)
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
-	package
-In-Reply-To: <1502794041870-173505.post@n4.nabble.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
- <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
- <20170224092549.2c560db3@free-electrons.com>
- <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
- <20170227150637.ljo2c6dv3izstddn@tarshish>
- <20170227232240.GB2535@tungsten.ozlabs.ibm.com>
- <1502794041870-173505.post@n4.nabble.com>
-Message-ID: <1502952247260-173614.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Aug 2017 09:09:41 +0200
+Subject: [Buildroot] Analysis of build results for 2017-08-14
+In-Reply-To: <CANQCQpa+hXqae9hXk52+Ne0JBpTGUby5NSNnm2MyHma+cDHRew@mail.gmail.com>
+References: <20170815063102.ED3612091A@mail.free-electrons.com>
+ <20170815142032.329e8103@windsurf>
+ <CANQCQpbHChJOk0=8Mo0U==BRdYRL9=W9kwxkJFZAK=bCXx944A@mail.gmail.com>
+ <83b89591-a9f6-8df5-ab5b-5d244fb87708@mind.be>
+ <CANQCQpZ34VDsBhnZjTdaCrc=-pn0HgYvGs-S1oHXKhRA=uJPGA@mail.gmail.com>
+ <CANQCQpa+hXqae9hXk52+Ne0JBpTGUby5NSNnm2MyHma+cDHRew@mail.gmail.com>
+Message-ID: <20170817090941.1c8f98fe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Hello,
 
-I experience the same difficulties because of lack of object-introspection.
+On Wed, 16 Aug 2017 21:00:26 -0500, Matthew Weber wrote:
 
-Cheers,
-  Alex
+> >  I think it's best to put the empty _SITE check in an
+> > ifneq ($(BR2_PRIMARY_SITE_ONLY),y)
+> 
+> https://patchwork.ozlabs.org/patch/802290/
 
+I know this is what Arnout suggested, but I'm not sure it's my
+preferred fix. Indeed, what about instead dropping the:
 
+if !BR2_PRIMARY_SITE_ONLY
+...
+endif
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/RFC-PATCH-0-2-add-gobject-introspection-tp157754p173614.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+condition in Config.in that encloses the definition of BR2_GNU_MIRROR,
+BR2_LUAROCKS_MIRROR, etc. ?
+
+Even though I agree such variables are not used when
+BR2_PRIMARY_SITE_ONLY=y, I don't see why we hide them. Removing this
+condition in Config.in avoids the need for adding another condition in
+pkg-generic.mk, and it seems more logical to me.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
