@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Aug 2017 00:17:56 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 7.x series to 7.2.0
-In-Reply-To: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
-References: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <ad90209d-973e-b3e4-fb76-854f6bbb01e9@mind.be>
+Date: Fri, 18 Aug 2017 00:20:50 +0200
+Subject: [Buildroot] [PATCH] toolchain/internal: not aailable for a few
+ mips cores
+In-Reply-To: <20170817202647.26738-1-yann.morin.1998@free.fr>
+References: <20170817202647.26738-1-yann.morin.1998@free.fr>
+Message-ID: <ba40526d-508b-c2bb-64da-8f926429e8a0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +13,45 @@ To: buildroot@busybox.net
 
 
 
-On 16-08-17 22:30, Thomas Petazzoni wrote:
-> All patches continue to apply with no changes. 7.2.0 is a bugfix
-> release of the 7.x branch.
+On 17-08-17 22:26, Yann E. MORIN wrote:
+> Commit 1b974425 (MIPS: add support for M6201 cores) xplained that the
+> new core was not supported by upstream gcc, and as of gcc-8-trunk that's
+> stil lthe case.
 > 
-> The only change that is not a simple bump is that the 7.2.0 tarball is
-> now available xz-compressed instead of bz2-compressed.
+> Ditto for 3cfbeb83 (MIPS: add support for P6600 cores).
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+> This means that we currently elect to build an internal tolchain for
+> those cores, yet we have no suitable gcc version.
+> 
+> Disable the internal backend in this case.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-> I'm not sure whether we want this for master or next. 
+>  package/gcc/Config.in.host | 7 +------
+>  toolchain/Config.in        | 2 ++
+>  2 files changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index 485755a15d..77ea8ff374 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -50,8 +50,7 @@ config BR2_GCC_VERSION_5_X
+>  	# musl ppc64 unsupported
+>  	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+>  	# Unsupported MIPS cores
+> -	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && \
+> -		!BR2_mips_m6250 && !BR2_mips_i6400 && !BR2_mips_p6600
+> +	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && !BR2_mips_i6400
 
- master is fine for me.
-
-[snip]
-> @@ -18,9 +18,9 @@ GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
->  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->  else
->  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
-> -# From version 6.4.0 a bz2 release tarball is not provided anymore. Use the xz
-> -# tarball instead.
-> -ifeq ($(BR2_GCC_VERSION_6_X),y)
-> +# From version 6.4.0 and 7.2.0 a bz2 release tarball is not provided
-> +# anymore. Use the xz tarball instead.
-> +ifeq ($(BR2_GCC_VERSION_6_X)$(BR2_GCC_VERSION_7_X),y)
-
- This is not maintainable, at some point we'll have to change it into
-BR2_TOOLCHAIN_GCC_AT_LEAST_6.
+ I wouldn't remove the conditions here. If these cores are supported in GCC 8,
+then we would have to re-introduce them...
 
  Regards,
  Arnout
 
->  GCC_SOURCE = gcc-$(GCC_VERSION).tar.xz
->  else
->  GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
-> 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
