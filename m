@@ -1,50 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Aug 2017 19:44:25 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 7.x series to 7.2.0
-In-Reply-To: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
-References: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170817194425.62504831@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Aug 2017 21:19:46 +0200
+Subject: [Buildroot] [PATCHv2] core/pkg-toolchain-external: quiesce spurious
+	stderr
+Message-ID: <20170817191946.9167-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since 392b0a26f5 (toolchain-external: default BR2_TOOLCHAIN_EXTERNAL_PATH
+to empty), calling 'make clean' or similar can yield a spurious stderr
+message:
+    dirname: missing operand
+    Try 'dirname --help' for more information.
 
-On Wed, 16 Aug 2017 22:30:25 +0200, Thomas Petazzoni wrote:
+Which is definitely baffling and unsettling...
 
-> I'm not sure whether we want this for master or next. I've built 71
-> toolchains with GCC 7.2.0 for toolchains.free-electrons.com, the vast
-> majority of them being then used to build and boot a Linux kernel +
-> minimal userspace under Qemu.
-> 
-> Unfortunately, the tag gcc-7_2_0-release has still not appeared in
-> git://gcc.gnu.org/git/gcc.git, so it's hard to see the amount of
-> changes between gcc 7.1.0 and gcc 7.2.0.
-> 
-> According to the release e-mail at
-> https://gcc.gnu.org/ml/gcc/2017-08/msg00129.html:
-> 
-> """
-> GCC 7.2 is a bug-fix release from the GCC 7 branch
-> containing important fixes for regressions and serious bugs in
-> GCC 6.1 with more than 95 bugs fixed since the previous release.
-> """
-> 
-> Perhaps the safest is to take this in next.
+It turns out that it is pretty trivial to reproduce, and this defconfig
+is just enough:
 
-Rethinking this: gcc 7.x is not the default gcc version currently used
-in Buildroot, so I think bumping the 7.x series to 7.2.0 is quite safe
-for the 2017.08 release.
+    $ cat my-defconfig
+    BR2_TOOLCHAIN_EXTERNAL=y
 
-However, I don't really mind, so I'll let others give their opinion on
-this.
+    $ make BR2_DEFCONFIG=$(pwd)/my-defconfig defconfig
 
-Best regards,
+    $ make clean
+    dirname: missing operand
+    Try 'dirname --help' for more information.
+    [--snip--]
 
-Thomas
+This is because the cross-compiler is not found in the PATH (and for
+good reasons, I don't have it in the PATH, not even at all).
+
+So, when the cross-compiler is not found in the path, we simply
+continue as if all was good, and postpone the check to much later,
+when we try to copy the toolchain libs...
+
+So, use a make construct rather than calling to the shell: $(dir ...)
+does not whine if passed nothing.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+
+---
+Changes v1 -> v2:
+  - use $(dir ...) instead of $(shell dirname ...)  (Arnout)
+
+---
+Note: it would be good to error out at this point, but as explained in
+the commit log, we already error out a bit later when copying the
+toolchain libs, and the check is easier done then than what we could
+do here, because we'd have to guard with BR_BUILDING, and for good
+measure, we'd also have to do the check when the tooolchain dir is
+actually specified. But then this would duplicate the existing (but
+later) checks, so we just don't bother...
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 23cdf30b9f..dc0588c536 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -74,7 +74,7 @@ endif
+ ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+ # if no path set, figure it out from path
+-TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
++TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ endif
+ else
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
