@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Aug 2017 00:08:51 +0200
-Subject: [Buildroot] [PATCHv2] core/pkg-toolchain-external: quiesce
-	spurious stderr
-In-Reply-To: <20170817191946.9167-1-yann.morin.1998@free.fr>
-References: <20170817191946.9167-1-yann.morin.1998@free.fr>
-Message-ID: <60740d4a-674b-5d15-43cf-7d7983c15fce@mind.be>
+Date: Fri, 18 Aug 2017 00:17:56 +0200
+Subject: [Buildroot] [PATCH] gcc: bump 7.x series to 7.2.0
+In-Reply-To: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
+References: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <ad90209d-973e-b3e4-fb76-854f6bbb01e9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +12,44 @@ To: buildroot@busybox.net
 
 
 
-On 17-08-17 21:19, Yann E. MORIN wrote:
-> Since 392b0a26f5 (toolchain-external: default BR2_TOOLCHAIN_EXTERNAL_PATH
-> to empty), calling 'make clean' or similar can yield a spurious stderr
-> message:
->     dirname: missing operand
->     Try 'dirname --help' for more information.
+On 16-08-17 22:30, Thomas Petazzoni wrote:
+> All patches continue to apply with no changes. 7.2.0 is a bugfix
+> release of the 7.x branch.
 > 
-> Which is definitely baffling and unsettling...
+> The only change that is not a simple bump is that the 7.2.0 tarball is
+> now available xz-compressed instead of bz2-compressed.
 > 
-> It turns out that it is pretty trivial to reproduce, and this defconfig
-> is just enough:
-> 
->     $ cat my-defconfig
->     BR2_TOOLCHAIN_EXTERNAL=y
-> 
->     $ make BR2_DEFCONFIG=$(pwd)/my-defconfig defconfig
-> 
->     $ make clean
->     dirname: missing operand
->     Try 'dirname --help' for more information.
->     [--snip--]
-> 
-> This is because the cross-compiler is not found in the PATH (and for
-> good reasons, I don't have it in the PATH, not even at all).
-> 
-> So, when the cross-compiler is not found in the path, we simply
-> continue as if all was good, and postpone the check to much later,
-> when we try to copy the toolchain libs...
-> 
-> So, use a make construct rather than calling to the shell: $(dir ...)
-> does not whine if passed nothing.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+> ---
+> I'm not sure whether we want this for master or next. 
+
+ master is fine for me.
+
+[snip]
+> @@ -18,9 +18,9 @@ GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>  else
+>  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+> -# From version 6.4.0 a bz2 release tarball is not provided anymore. Use the xz
+> -# tarball instead.
+> -ifeq ($(BR2_GCC_VERSION_6_X),y)
+> +# From version 6.4.0 and 7.2.0 a bz2 release tarball is not provided
+> +# anymore. Use the xz tarball instead.
+> +ifeq ($(BR2_GCC_VERSION_6_X)$(BR2_GCC_VERSION_7_X),y)
+
+ This is not maintainable, at some point we'll have to change it into
+BR2_TOOLCHAIN_GCC_AT_LEAST_6.
+
  Regards,
  Arnout
+
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.xz
+>  else
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
