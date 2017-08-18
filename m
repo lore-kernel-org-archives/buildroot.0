@@ -1,11 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Aug 2017 14:18:58 +0200
-Subject: [Buildroot] mips: nan2008 require kernel headers 4.5.x
-In-Reply-To: <837cf48e-f422-30c8-8115-6988eb865906@gmail.com>
-References: <2f4c0a2a-ffeb-9a1c-ebe4-d5eaf50f3154@gmail.com>
- <38121FAB319C3344930C920E7B518313888D0F57@hhmail02.hh.imgtec.org>
- <837cf48e-f422-30c8-8115-6988eb865906@gmail.com>
-Message-ID: <20170818141858.75c78acb@windsurf>
+Date: Fri, 18 Aug 2017 16:05:37 +0200
+Subject: [Buildroot] Fixing cc-tool build issue: anyone understanding the
+ Boost build system?
+Message-ID: <20170818160537.07c954f7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,68 +11,63 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Aug 2017 12:54:19 +0200, Romain Naour wrote:
+I started investigating a cc-tool build issue on m68k coldfire, i.e:
+http://autobuild.buildroot.net/results/e30/e30a1cda39e996309a56e4ae23ad210356df4b03/build-end.log.
+It fails with:
 
-> Thomas replied on IRC:
-> (23:16:16) kos_tom: Kubu: I know about this dependency
-> (23:16:54) kos_tom: Kubu: we build our stable toolchains with 3.10
-> (23:17:08) kos_tom: Kubu: except the mips32r5 toolchain that we build with
-> kernel headers 4.9, see
-> https://github.com/free-electrons/toolchains-builder/blob/master/configs/optionals/mips32r5el-glibc-stable.config
-> 
-> There is the same issue for mips32r5el and mips64r6el.
-> 
-> Actually it's not only mips, if you search "arch_minimum_kernel" in the glibc
-> source code, you'll find few arch that require kernel header > 3.2
-> 
-> aarch64: kernel headers >= 3.7 (already handled in Buildroot)
-> sysdeps/unix/sysv/linux/aarch64/configure.ac:arch_minimum_kernel=3.7.0
+/home/peko/autobuild/instance-1/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libboost_program_options.a(options_description.o): In function `boost::program_options::options_description_easy_init::operator()(char const*, char const*)':
+options_description.cpp:(.text+0x3cbc): undefined reference to `__sync_fetch_and_add_4'
 
-Where do you see that this is already handled in Buildroot ?
+I.e, this means that the Boost program-options module is using
+__sync_fetch_and_add_4, which isn't provided on m68k Coldfire.
 
-> ia64: kernel headers >= 3.2.18 (not supported in Buildroot)
-> sysdeps/unix/sysv/linux/ia64/configure.ac:arch_minimum_kernel=3.2.18
-> 
-> mips with nan2008
-> sysdeps/unix/sysv/linux/mips/configure.ac:if test -z "$arch_minimum_kernel"; then
-> sysdeps/unix/sysv/linux/mips/configure.ac:    arch_minimum_kernel=4.5.0
-> 
-> nios2: kernel headers >= 3.19 (already handled in Buildroot)
-> sysdeps/unix/sysv/linux/nios2/configure.ac:arch_minimum_kernel=3.19.0
-> 
-> powerpc64el: kernel headers >= 3.10 since glibc 2.26
-> sysdeps/unix/sysv/linux/powerpc/powerpc64/configure.ac:  ],
-> arch_minimum_kernel=3.10.0, libc_cv_ppc64_le=no)])
-> 
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=c2ff5ec13fca1bdd1cd646a0260808386d7bd7ff
-> 
-> ia64: kernel headers >= 3.4.0 (not supported in Buildroot)
-> sysdeps/unix/sysv/linux/x86_64/x32/configure.ac:arch_minimum_kernel=3.4.0
-> 
-> How to handle mips and powerpc64el kernel header dependency for glibc toolchains
-> properly?
+Diving into the Boost source code, one can see in
+boost/smart_ptr/detail/sp_counted_base.hpp that there is some support
+for various ways of doing atomic operations. On m68k Coldfire, we fall
+into this case:
 
-Well, just add more dependencies to BR2_TOOLCHAIN_BUILDROOT_GLIBC. What
-is the problem with that ?
+#elif !defined( BOOST_NO_CXX11_HDR_ATOMIC )
+# include <boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp>
 
-For example:
+I.e we don't have BOOST_NO_CXX11_HDR_ATOMIC defined (beware of the
+inverted logic). So, Boost believes that C++11 atomics are available.
+Grepping for BOOST_NO_CXX11_HDR_ATOMIC in the tree, one can find
+libs/config/test/boost_no_cxx11_hdr_atomic.ipp which seems to be a test
+program to validate if C++11 atomics are available or not.
 
-	depends on BR2_arm || BR2_armeb || \
-		(BR2_aarch64 && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7) || \
-		...
+However adding random #error in this file never breaks the build, so it
+looks as if this file is not built ? Does anyone understand how the
+Boost build system works, and how it decides if
+BOOST_NO_CXX11_HDR_ATOMIC should be defined or not ? Are there some
+logs available where I can see if this file got built or not, and what
+was the result ?
 
-and then:
+For the record, a very simple program using C++11 atomics doesn't build
+on m68k Coldfire:
 
-comment "glibc on aarch64 needs a toolchain w/ headers >= 3.7"
-	depends on BR2_aarch64
-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+thomas at windsurf:~/projets/buildroot (master)$ cat toto.cpp 
+#include <atomic>
 
-> Maybe we can just don't allow building a mips toolchain with kernel headers <
-> 4.5.0 and do the same for powerpc64el toolchains with kernel headers < 3.10.0 ?
+int main()
+{
+	std::atomic<int> a;
 
-Yes, see above.
+	a.store(1);
+	a.fetch_add(2);
 
-Best regards,
+	return 0;
+}
+thomas at windsurf:~/projets/buildroot (master)$ ./output/host/usr/bin/m68k-linux-gcc -o toto toto.cpp 
+/tmp/ccLZZMR8.o: In function `main':
+toto.cpp:(.text+0x60): undefined reference to `__sync_fetch_and_add_4'
+collect2: error: ld returned 1 exit status
+
+Therefore, I would expect Boost configuration to define
+BOOST_NO_CXX11_HDR_ATOMIC. This way, it would fall back on a different
+atomic implementation (potentially based on pthread locks) and the
+build would work fine.
+
+Anybody has a clue ?
 
 Thomas
 -- 
