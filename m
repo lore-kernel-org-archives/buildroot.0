@@ -1,41 +1,27 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 18 Aug 2017 16:15:52 +0200
-Subject: [Buildroot] [PATCH] board/boundarydevices: add mac parameter for
-	BD-SDMAC in bootscript
-Message-ID: <20170818141552.1749-1-gary.bisson@boundarydevices.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 18 Aug 2017 16:50:40 +0200
+Subject: [Buildroot] mips: nan2008 require kernel headers 4.5.x
+References: <2f4c0a2a-ffeb-9a1c-ebe4-d5eaf50f3154@gmail.com>
+ <38121FAB319C3344930C920E7B518313888D0F57@hhmail02.hh.imgtec.org>
+ <837cf48e-f422-30c8-8115-6988eb865906@gmail.com>
+ <20170818141858.75c78acb@windsurf>
+Message-ID: <0fbj6ex70a.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Our new WiFi 802.11ac BT4.1 module (BD-SDMAC [1]) driver allows to
-override the wlan MAC address using a module parameter.
+Am Fri, 18 Aug 2017 14:18:58 +0200 schrieb Thomas Petazzoni:
 
-Since its driver is now included in our external repository [2], update
-the bootscript so it sets the parameter for that driver too.
+>> aarch64: kernel headers >= 3.7 (already handled in Buildroot)
+>> sysdeps/unix/sysv/linux/aarch64/configure.ac:arch_minimum_kernel=3.7.0
+> 
+> Where do you see that this is already handled in Buildroot ?
 
-As a FYI, $wlmac is based on Ethernet MAC address located in fuses.
+Hi Thomas,
 
-[1] https://boundarydevices.com/product/bd_sdmac_wifi/
-[2] https://github.com/boundarydevices/buildroot-external-boundary
+https://git.buildroot.net/buildroot/commit/package/linux-headers?
+id=1291528bde602120ab4b60d23d1a362d44cc5e04
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- board/boundarydevices/common/6x_bootscript.txt | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/board/boundarydevices/common/6x_bootscript.txt b/board/boundarydevices/common/6x_bootscript.txt
-index 2fc687aff4..af5822a88b 100644
---- a/board/boundarydevices/common/6x_bootscript.txt
-+++ b/board/boundarydevices/common/6x_bootscript.txt
-@@ -106,6 +106,7 @@ fi
- 
- if itest.s "x" != "x${wlmac}" ; then
- 	setenv bootargs ${bootargs} wlcore.mac=${wlmac}
-+	setenv bootargs ${bootargs} wlan.mac=${wlmac}
- fi
- 
- if itest.s "x" != "x${gpumem}" ; then
--- 
-2.14.1
+Regards, Bernd
