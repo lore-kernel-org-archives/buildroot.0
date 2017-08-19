@@ -1,57 +1,77 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sat, 19 Aug 2017 18:58:05 +0200
-Subject: [Buildroot] [PATCH] board/boundarydevices: add mac parameter
- for BD-SDMAC in bootscript
-In-Reply-To: <20170819151929.5c9fd2f7@windsurf>
-References: <20170818141552.1749-1-gary.bisson@boundarydevices.com>
- <20170819151929.5c9fd2f7@windsurf>
-Message-ID: <CAAMH-yuONc5YYdEk1KAT7zAvoaWyEBN3q2zRi87439_+DEhdDQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Aug 2017 22:55:26 +0200
+Subject: [Buildroot] [PATCH 1/3] kvmtool: add patch to fix build with musl
+Message-ID: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This commit backports an upstream patch that fixes the build of
+kvmtool with musl:
 
-On Sat, Aug 19, 2017 at 3:19 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 18 Aug 2017 16:15:52 +0200, Gary Bisson wrote:
->> Our new WiFi 802.11ac BT4.1 module (BD-SDMAC [1]) driver allows to
->> override the wlan MAC address using a module parameter.
->>
->> Since its driver is now included in our external repository [2], update
->> the bootscript so it sets the parameter for that driver too.
->>
->> As a FYI, $wlmac is based on Ethernet MAC address located in fuses.
->>
->> [1] https://boundarydevices.com/product/bd_sdmac_wifi/
->> [2] https://github.com/boundarydevices/buildroot-external-boundary
->>
->> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
->> ---
->>  board/boundarydevices/common/6x_bootscript.txt | 1 +
->>  1 file changed, 1 insertion(+)
->
-> Applied to master, thanks. However, I'm wondering why all this BD-SDMAC
-> WiFi support packages remain out of tree in your BR2_EXTERNAL. Would it
-> make sense to upstream them in Buildroot ?
+In file included from builtin-balloon.c:9:0:
+include/kvm/kvm.h:22:0: warning: "PAGE_SIZE" redefined
+ #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
 
-My main issue is that we've been asked, for dubious reasons, to hide
-the firmware files on a private git repo which requires to register to
-our website to get access to.
+Fixes one part of:
 
-Moreover this driver is based on qcacld-2.0 repository [1] whose build
-breaks easily depending on the kernel you build against.
+  http://autobuild.buildroot.net/results/4459a909e735343d1cf768d30466bc3c57eca19e/
 
-Finally it has only been tested on BD-SDMAC module so I'm not sure
-that many people are interested (except for our customers).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
 
-Let me know your thoughts.
-
-Regards,
-Gary
-
-[1] https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/wlan/qcacld-2.0/
+diff --git a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+new file mode 100644
+index 0000000..ed3370c
+--- /dev/null
++++ b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+@@ -0,0 +1,42 @@
++From bec1b0ced72dc0d49825d6b69d09296d13fd0af3 Mon Sep 17 00:00:00 2001
++From: Andre Przywara <andre.przywara@arm.com>
++Date: Tue, 21 Jul 2015 10:58:46 +0100
++Subject: [PATCH] avoid redefining PAGE_SIZE
++
++PAGE_SIZE may have been defined by the C libary (musl-libc does that).
++So avoid redefining it here unconditionally, instead only use our
++definition if none has been provided by the libc.
++
++Signed-off-by: Andre Przywara <andre.przywara@arm.com>
++Signed-off-by: Will Deacon <will.deacon@arm.com>
++[backport from upstream commit 4095fac878f618ae5e7384a1dc65ee34b6e05217.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ include/kvm/kvm.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/include/kvm/kvm.h b/include/kvm/kvm.h
++index 754e029..37155db 100644
++--- a/include/kvm/kvm.h
+++++ b/include/kvm/kvm.h
++@@ -11,6 +11,7 @@
++ #include <time.h>
++ #include <signal.h>
++ #include <sys/prctl.h>
+++#include <limits.h>
++ 
++ #define SIGKVMEXIT		(SIGRTMIN + 0)
++ #define SIGKVMPAUSE		(SIGRTMIN + 1)
++@@ -19,7 +20,9 @@
++ #define HOME_DIR		getenv("HOME")
++ #define KVM_BINARY_NAME		"lkvm"
++ 
+++#ifndef PAGE_SIZE
++ #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
+++#endif
++ 
++ #define DEFINE_KVM_EXT(ext)		\
++ 	.name = #ext,			\
++-- 
++2.9.4
++
+-- 
+2.9.4
