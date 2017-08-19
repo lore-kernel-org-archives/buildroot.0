@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Aug 2017 15:18:49 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/samba4: bump version to
- 4.6.7
-In-Reply-To: <20170818052642.32104-1-bernd.kuhls@t-online.de>
-References: <20170818052642.32104-1-bernd.kuhls@t-online.de>
-Message-ID: <20170819151849.5b80fde5@windsurf>
+Date: Sat, 19 Aug 2017 15:19:29 +0200
+Subject: [Buildroot] [PATCH] board/boundarydevices: add mac parameter
+ for BD-SDMAC in bootscript
+In-Reply-To: <20170818141552.1749-1-gary.bisson@boundarydevices.com>
+References: <20170818141552.1749-1-gary.bisson@boundarydevices.com>
+Message-ID: <20170819151929.5c9fd2f7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Aug 2017 07:26:42 +0200, Bernd Kuhls wrote:
-> Release notes: https://www.samba.org/samba/history/samba-4.6.7.html
+On Fri, 18 Aug 2017 16:15:52 +0200, Gary Bisson wrote:
+> Our new WiFi 802.11ac BT4.1 module (BD-SDMAC [1]) driver allows to
+> override the wlan MAC address using a module parameter.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Since its driver is now included in our external repository [2], update
+> the bootscript so it sets the parameter for that driver too.
+> 
+> As a FYI, $wlmac is based on Ethernet MAC address located in fuses.
+> 
+> [1] https://boundarydevices.com/product/bd_sdmac_wifi/
+> [2] https://github.com/boundarydevices/buildroot-external-boundary
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
->  package/samba4/samba4.hash | 2 +-
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  board/boundarydevices/common/6x_bootscript.txt | 1 +
+>  1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
+Applied to master, thanks. However, I'm wondering why all this BD-SDMAC
+WiFi support packages remain out of tree in your BR2_EXTERNAL. Would it
+make sense to upstream them in Buildroot ?
+
+Best regards,
 
 Thomas
 -- 
