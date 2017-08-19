@@ -1,46 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Aug 2017 08:30:25 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-18
-Message-ID: <20170819063025.C7AD721DAE@mail.free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 19 Aug 2017 08:46:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with gcc7
+Message-ID: <20170819064645.8807-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes
+http://autobuild.buildroot.net/results/f95/f9553c1669bd05acee3ccea76e36c2474e534d8c/
 
-Build statistics for 2017-08-18
-================================
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/xen/0003-gcc7.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/xen/0003-gcc7.patch
 
-      successes : 156
-       failures : 7  
-       timeouts : 1  
-          TOTAL : 164
-
-Classification of failures by reason
-====================================
-
-     python-cryptography-1.7.2 | 2 
-             lttng-tools-2.9.5 | 1 
-make: *** make[1]: *** wait... | 1 
-          mediastreamer-2.14.0 | 1 
-                 mplayer-1.3.0 | 1 
-                      qt-4.8.7 | 1 
-                    vde2-2.3.2 | 1 
-
-
-Detail of failures
-===================
-
-      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/0111d1f3c18b3f482207a1052831cd0bc45172b3 |     
-   powerpc64 | make: *** make[1]: *** wait... | TIM | http://autobuild.buildroot.net/results/69a8e848ee9ef142fb9565ee5f6d4b2b0e166b5e |     
-        m68k |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/92870b5a749af53e58687be77e50d91ba1583cfd | ORPH
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/9f8101a1a5be2fa79dfe606c1019dd5928069e73 |     
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/3219b94214a7c3ea11274be6a8a05a2fddeddca7 |     
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/35761bce2bc3bda0a82e4361dcafb2384d3f72b5 |     
-         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/4bcb939676052cc6a1f2bcce6f16c6ab0d65b538 | ORPH
-         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/7caed73f118932bc74149fd646eb2da56f15d52a |     
-
+diff --git a/package/xen/0003-gcc7.patch b/package/xen/0003-gcc7.patch
+new file mode 100644
+index 000000000..5919ef023
+--- /dev/null
++++ b/package/xen/0003-gcc7.patch
+@@ -0,0 +1,20 @@
++Fix arm build with gcc7
++
++Downloaded from upstream patchworks:
++https://patchwork.kernel.org/patch/9754799/
++https://www.mail-archive.com/xen-devel at lists.xen.org/msg109313.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/tools/libxc/xc_dom_arm.c b/tools/libxc/xc_dom_arm.c
++index e7d4bd0..e669fb0 100644
++--- a/tools/libxc/xc_dom_arm.c
+++++ b/tools/libxc/xc_dom_arm.c
++@@ -223,6 +223,8 @@ static int set_mode(xc_interface *xch, domid_tdomid, char *guest_type)
++ 
++     domctl.domain = domid;
++     domctl.cmd    = XEN_DOMCTL_set_address_size;
+++    domctl.u.address_size.size = 0;
+++
++     for ( i = 0; i < ARRAY_SIZE(types); i++ )
++         if ( !strcmp(types[i].guest, guest_type) )
 -- 
-http://autobuild.buildroot.net
+2.11.0
