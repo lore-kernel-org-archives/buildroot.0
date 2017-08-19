@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Aug 2017 15:13:10 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.12.8
-Message-ID: <20170819130702.96ADD81687@busybox.osuosl.org>
+Date: Sat, 19 Aug 2017 15:13:05 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 12}.x series
+Message-ID: <20170819130701.EF3C48187E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e24688bb47e990fc61087a5258976113f46a9a40
+commit: https://git.buildroot.net/buildroot/commit/?id=ab157dd4d188c42c5b8fa115ab7fab35de2fffcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 00613b2..38c8129 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.12.5)"
-+	bool "Latest version (4.12.8)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.75-cip6)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.12.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.12.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.75-cip6" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7f07da0..1807ce4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,9 +236,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.80"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.41"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.83"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.44"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+-	default "4.12.5"	if BR2_KERNEL_HEADERS_4_12
++	default "4.12.8"	if BR2_KERNEL_HEADERS_4_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
