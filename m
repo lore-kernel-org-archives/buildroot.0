@@ -1,75 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Aug 2017 22:55:26 +0200
-Subject: [Buildroot] [PATCH 1/3] kvmtool: add patch to fix build with musl
-Message-ID: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Aug 2017 22:55:27 +0200
+Subject: [Buildroot] [PATCH 2/3] kvmtool: fix build with kernel headers >=
+	4.12
+In-Reply-To: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
+References: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170819205528.31753-2-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit backports an upstream patch that fixes the build of
-kvmtool with musl:
+In Linux 4.12, the header <asm/msr-index.h> has been removed from the
+set of headers exported to userspace. Therefore, it cannot be used by
+kvmtool anymore. This commit takes the simple approach of duplicating
+inside kvmtool the MSR_* definitions that were used from this
+<asm/msr-index.h> header.
 
-In file included from builtin-balloon.c:9:0:
-include/kvm/kvm.h:22:0: warning: "PAGE_SIZE" redefined
- #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
+This fixes:
 
-Fixes one part of:
+x86/kvm-cpu.c:7:27: fatal error: asm/msr-index.h: No such file or directory
+ #include <asm/msr-index.h>
+
+Which is the second part of:
 
   http://autobuild.buildroot.net/results/4459a909e735343d1cf768d30466bc3c57eca19e/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+ ...6-kvm-cpu.c-don-t-include-asm-msr-index.h.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
 
-diff --git a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+diff --git a/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch b/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
 new file mode 100644
-index 0000000..ed3370c
+index 0000000..842c131
 --- /dev/null
-+++ b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
-@@ -0,0 +1,42 @@
-+From bec1b0ced72dc0d49825d6b69d09296d13fd0af3 Mon Sep 17 00:00:00 2001
-+From: Andre Przywara <andre.przywara@arm.com>
-+Date: Tue, 21 Jul 2015 10:58:46 +0100
-+Subject: [PATCH] avoid redefining PAGE_SIZE
++++ b/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
+@@ -0,0 +1,58 @@
++From ce9abb649165aca728e4645ce09e7bb77e684b06 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 19 Aug 2017 16:35:59 +0200
++Subject: [PATCH] x86/kvm-cpu.c: don't include <asm/msr-index.h>
 +
-+PAGE_SIZE may have been defined by the C libary (musl-libc does that).
-+So avoid redefining it here unconditionally, instead only use our
-+definition if none has been provided by the libc.
++Since kernel commit 25dc1d6cc3082aab293e5dad47623b550f7ddd2a ("x86:
++stop exporting msr-index.h to userland"), <asm/msr-index.h> is no
++longer exported to userspace. Therefore, any toolchain built with
++kernel headers >= 4.12 will no longer have this header file, causing a
++build failure in kvmtool.
 +
-+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-+Signed-off-by: Will Deacon <will.deacon@arm.com>
-+[backport from upstream commit 4095fac878f618ae5e7384a1dc65ee34b6e05217.]
++As a replacement, this patch includes inside x86/kvm-cpu.c the
++necessary MSR_* definitions.
++
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Submitted-upstream: https://patchwork.kernel.org/patch/9910687/
 +---
-+ include/kvm/kvm.h | 3 +++
-+ 1 file changed, 3 insertions(+)
++ x86/kvm-cpu.c | 17 ++++++++++++++++-
++ 1 file changed, 16 insertions(+), 1 deletion(-)
 +
-+diff --git a/include/kvm/kvm.h b/include/kvm/kvm.h
-+index 754e029..37155db 100644
-+--- a/include/kvm/kvm.h
-++++ b/include/kvm/kvm.h
-+@@ -11,6 +11,7 @@
-+ #include <time.h>
-+ #include <signal.h>
-+ #include <sys/prctl.h>
-++#include <limits.h>
++diff --git a/x86/kvm-cpu.c b/x86/kvm-cpu.c
++index 5cc4e1e..b02ff65 100644
++--- a/x86/kvm-cpu.c
+++++ b/x86/kvm-cpu.c
++@@ -4,7 +4,6 @@
++ #include "kvm/util.h"
++ #include "kvm/kvm.h"
 + 
-+ #define SIGKVMEXIT		(SIGRTMIN + 0)
-+ #define SIGKVMPAUSE		(SIGRTMIN + 1)
-+@@ -19,7 +20,9 @@
-+ #define HOME_DIR		getenv("HOME")
-+ #define KVM_BINARY_NAME		"lkvm"
++-#include <asm/msr-index.h>
++ #include <asm/apicdef.h>
++ #include <linux/err.h>
++ #include <sys/ioctl.h>
++@@ -136,6 +135,22 @@ static struct kvm_msrs *kvm_msrs__new(size_t nmsrs)
++ 	return vcpu;
++ }
 + 
-++#ifndef PAGE_SIZE
-+ #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
-++#endif
+++#define MSR_IA32_SYSENTER_CS            0x00000174
+++#define MSR_IA32_SYSENTER_ESP           0x00000175
+++#define MSR_IA32_SYSENTER_EIP           0x00000176
+++
+++#define MSR_STAR                0xc0000081 /* legacy mode SYSCALL target */
+++#define MSR_LSTAR               0xc0000082 /* long mode SYSCALL target */
+++#define MSR_CSTAR               0xc0000083 /* compat mode SYSCALL target */
+++#define MSR_SYSCALL_MASK        0xc0000084 /* EFLAGS mask for syscall */
+++#define MSR_KERNEL_GS_BASE      0xc0000102 /* SwapGS GS shadow */
+++
+++#define MSR_IA32_TSC                    0x00000010
+++#define MSR_IA32_MISC_ENABLE            0x000001a0
+++
+++#define MSR_IA32_MISC_ENABLE_FAST_STRING_BIT            0
+++#define MSR_IA32_MISC_ENABLE_FAST_STRING                (1ULL << MSR_IA32_MISC_ENABLE_FAST_STRING_BIT)
+++
++ #define KVM_MSR_ENTRY(_index, _data)	\
++ 	(struct kvm_msr_entry) { .index = _index, .data = _data }
 + 
-+ #define DEFINE_KVM_EXT(ext)		\
-+ 	.name = #ext,			\
 +-- 
 +2.9.4
 +
