@@ -1,45 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 18 Aug 2017 18:49:02 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 7.x series to 7.2.0
-References: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
- <20170817194425.62504831@windsurf>
-Message-ID: <ucij6ex70a.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Aug 2017 08:30:25 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-18
+Message-ID: <20170819063025.C7AD721DAE@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 17 Aug 2017 19:44:25 +0200 schrieb Thomas Petazzoni:
+Hello,
 
-> However, I don't really mind, so I'll let others give their opinion on
-> this.
+Build statistics for 2017-08-18
+================================
 
-Hi Thomas,
+      successes : 156
+       failures : 7  
+       timeouts : 1  
+          TOTAL : 164
 
-building this Kodi defconfig with your patch works:
+Classification of failures by reason
+====================================
 
-BR2_x86_64=y
-BR2_x86_core_avx2=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_GCC_VERSION_7_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_KODI_ALSA_LIB=y
-BR2_PACKAGE_KODI_BLUEZ=y
-BR2_PACKAGE_KODI_LIBBLURAY=y
-BR2_PACKAGE_KODI_LIBCEC=y
-BR2_PACKAGE_KODI_LIBVA=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_PY_ONLY=y
+     python-cryptography-1.7.2 | 2 
+             lttng-tools-2.9.5 | 1 
+make: *** make[1]: *** wait... | 1 
+          mediastreamer-2.14.0 | 1 
+                 mplayer-1.3.0 | 1 
+                      qt-4.8.7 | 1 
+                    vde2-2.3.2 | 1 
 
-Imho you can commit your patch to the master branch.
 
-Regards, Bernd
+Detail of failures
+===================
+
+      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/0111d1f3c18b3f482207a1052831cd0bc45172b3 |     
+   powerpc64 | make: *** make[1]: *** wait... | TIM | http://autobuild.buildroot.net/results/69a8e848ee9ef142fb9565ee5f6d4b2b0e166b5e |     
+        m68k |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/92870b5a749af53e58687be77e50d91ba1583cfd | ORPH
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/9f8101a1a5be2fa79dfe606c1019dd5928069e73 |     
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/3219b94214a7c3ea11274be6a8a05a2fddeddca7 |     
+      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/35761bce2bc3bda0a82e4361dcafb2384d3f72b5 |     
+         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/4bcb939676052cc6a1f2bcce6f16c6ab0d65b538 | ORPH
+         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/7caed73f118932bc74149fd646eb2da56f15d52a |     
+
+-- 
+http://autobuild.buildroot.net
