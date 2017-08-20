@@ -1,41 +1,29 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Aug 2017 10:07:44 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/lzo: switch to cmake
-Message-ID: <20170820080744.8947-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Aug 2017 10:06:04 +0200
+Subject: [Buildroot] [PATCH 1/3] kvmtool: add patch to fix build with
+	musl
+References: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <cgsn6ex8gp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-autoreconf for the host package is broken after bumping to 2.10:
-http://lists.busybox.net/pipermail/buildroot/2017-August/200634.html
+Am Sat, 19 Aug 2017 22:55:26 +0200 schrieb Thomas Petazzoni:
 
-To solve the problem we switch to cmake.
+> This commit backports an upstream patch that fixes the build of kvmtool
+> with musl:
+> 
+> In file included from builtin-balloon.c:9:0:
+> include/kvm/kvm.h:22:0: warning: "PAGE_SIZE" redefined
+>  #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
+> 
+> Fixes one part of:
+> 
+>   http://autobuild.buildroot.net/
+results/4459a909e735343d1cf768d30466bc3c57eca19e/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: patch is for next branch
-
- package/lzo/lzo.mk | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index 5b8efdd54..dba965fcd 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -9,9 +9,7 @@ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
- LZO_LICENSE = GPL-2.0+
- LZO_LICENSE_FILES = COPYING
- LZO_INSTALL_STAGING = YES
--# Ships a beta libtool version hence our patch doesn't apply.
--# Run autoreconf to regenerate ltmain.sh.
--LZO_AUTORECONF = YES
-+LZO_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
--- 
-2.11.0
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[ build-tested using http://autobuild.buildroot.net/results/ae4/
+ae434d85be12d07dddf4c955855120da83a19dd6/defconfig ]
