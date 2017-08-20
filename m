@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 20 Aug 2017 10:03:23 +0200
-Subject: [Buildroot] [PATCH 10/18] perl-net-http: bump to version 6.16
+Date: Sun, 20 Aug 2017 10:03:24 +0200
+Subject: [Buildroot] [PATCH 11/18] perl-net-ssleay: bump to version 1.81
 In-Reply-To: <20170820080331.12935-1-francois.perrad@gadz.org>
 References: <20170820080331.12935-1-francois.perrad@gadz.org>
-Message-ID: <20170820080331.12935-10-francois.perrad@gadz.org>
+Message-ID: <20170820080331.12935-11-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-http/perl-net-http.hash | 4 ++--
- package/perl-net-http/perl-net-http.mk   | 2 +-
+ package/perl-net-ssleay/perl-net-ssleay.hash | 4 ++--
+ package/perl-net-ssleay/perl-net-ssleay.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
-index 4dfad86e3..31cf85af9 100644
---- a/package/perl-net-http/perl-net-http.hash
-+++ b/package/perl-net-http/perl-net-http.hash
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
+index 556aea7d5..08b2aee2e 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.hash
++++ b/package/perl-net-ssleay/perl-net-ssleay.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    988c72ce2890df56e41df6695d108e5d Net-HTTP-6.12.tar.gz
--sha256 8565aff76b3d09084642f3a83c654fb4ced8220e8e19d35c78b661519b4c1be6 Net-HTTP-6.12.tar.gz
-+md5    7d4f31e5b346e1926c0b9b4b27b07500 Net-HTTP-6.16.tar.gz
-+sha256 70c45b6aaf3e9fb1ce30a1fc3cf828cfaee45c5c0bd147b2f617efade1765e78 Net-HTTP-6.16.tar.gz
-diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
-index 8dfe278f3..027853763 100644
---- a/package/perl-net-http/perl-net-http.mk
-+++ b/package/perl-net-http/perl-net-http.mk
+-md5    a740d7792dbac8ca8c4eb38d3b8fbd01 Net-SSLeay-1.72.tar.gz
+-sha256 1baac39f0f12cee515d8bec633175bb5916ca542e5356e26420437bd6195d2f4 Net-SSLeay-1.72.tar.gz
++md5    71932ce34d4db44de8d00399c3405792 Net-SSLeay-1.81.tar.gz
++sha256 00cbb6174e628b42178e1445c9fd5a3c5ae2cfd6a5a43e03610ba14786f21b7d Net-SSLeay-1.81.tar.gz
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index 03a039e06..e91b34406 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_HTTP_VERSION = 6.12
-+PERL_NET_HTTP_VERSION = 6.16
- PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
- PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_NET_HTTP_DEPENDENCIES = perl-uri
+-PERL_NET_SSLEAY_VERSION = 1.72
++PERL_NET_SSLEAY_VERSION = 1.81
+ PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+ PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
+ PERL_NET_SSLEAY_DEPENDENCIES = openssl
 -- 
 2.11.0
