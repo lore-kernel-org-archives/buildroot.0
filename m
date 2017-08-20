@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 20 Aug 2017 10:03:19 +0200
-Subject: [Buildroot] [PATCH 06/18] perl-mail-dkim: bump to version 0.42
+Date: Sun, 20 Aug 2017 10:03:20 +0200
+Subject: [Buildroot] [PATCH 07/18] perl-module-build: bump to version 0.4224
 In-Reply-To: <20170820080331.12935-1-francois.perrad@gadz.org>
 References: <20170820080331.12935-1-francois.perrad@gadz.org>
-Message-ID: <20170820080331.12935-6-francois.perrad@gadz.org>
+Message-ID: <20170820080331.12935-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/perl-module-build/perl-module-build.hash | 4 ++--
+ package/perl-module-build/perl-module-build.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index b6bb545ab..c40e66e99 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
+diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
+index 0363ac576..17e8b4e5d 100644
+--- a/package/perl-module-build/perl-module-build.hash
++++ b/package/perl-module-build/perl-module-build.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9ceb8a0397aff83928e7a9760b1b190f Mail-DKIM-0.40.tar.gz
--sha256 3c5ea0c3a2028a5a2c3b64bbcd6bd9de6a5fa5ee4e16046dd8875c4796aaa6f1 Mail-DKIM-0.40.tar.gz
-+md5    60ebe54760f6633f07b25228272b9473 Mail-DKIM-0.42.tar.gz
-+sha256 f4e3a6344517aeee9a7516c0f58197f41dce81461f74ce9ba8401a143aa2577c Mail-DKIM-0.42.tar.gz
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index 03a3b7442..e088ecf1a 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -4,10 +4,9 @@
+-md5    9df204e188462a4410d496f316c2c531 Module-Build-0.4220.tar.gz
+-sha256 fb1207c7e799366f7a8adda3f135bf8141c4d6068505650d4db2b2d3ce34b5a2 Module-Build-0.4220.tar.gz
++md5    b74c2f6e84b60aad3a3defd30b6f0f4d Module-Build-0.4224.tar.gz
++sha256 a6ca15d78244a7b50fdbf27f85c85f4035aa799ce7dd018a0d98b358ef7bc782 Module-Build-0.4224.tar.gz
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index 080e8179e..42c9c1114 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 0.40
-+PERL_MAIL_DKIM_VERSION = 0.42
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
--PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JA/JASLONG
-+PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_DEPENDENCIES = perl-crypt-openssl-rsa perl-mailtools perl-net-dns
--PERL_MAIL_DKIM_LICENSE_FILES = README
- 
- $(eval $(perl-package))
+-PERL_MODULE_BUILD_VERSION = 0.4220
++PERL_MODULE_BUILD_VERSION = 0.4224
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+ PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
 -- 
 2.11.0
