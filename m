@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 20 Aug 2017 10:03:18 +0200
-Subject: [Buildroot] [PATCH 05/18] perl-libwww-perl: bump to version 6.26
+Date: Sun, 20 Aug 2017 10:03:19 +0200
+Subject: [Buildroot] [PATCH 06/18] perl-mail-dkim: bump to version 0.42
 In-Reply-To: <20170820080331.12935-1-francois.perrad@gadz.org>
 References: <20170820080331.12935-1-francois.perrad@gadz.org>
-Message-ID: <20170820080331.12935-5-francois.perrad@gadz.org>
+Message-ID: <20170820080331.12935-6-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-libwww-perl/Config.in             | 3 ++-
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
+ package/perl-mail-dkim/perl-mail-dkim.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-libwww-perl/Config.in b/package/perl-libwww-perl/Config.in
-index fc46bf1df..09fc00543 100644
---- a/package/perl-libwww-perl/Config.in
-+++ b/package/perl-libwww-perl/Config.in
-@@ -11,12 +11,13 @@ config BR2_PACKAGE_PERL_LIBWWW_PERL
- 	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
- 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
- 	select BR2_PACKAGE_PERL_NET_HTTP
-+	select BR2_PACKAGE_PERL_TRY_TINY
- 	select BR2_PACKAGE_PERL_URI
- 	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
- 	help
- 	  The World-Wide Web library for Perl
- 
--	  https://metacpan.org/release/libwww-perl
-+	  https://github.com/libwww-perl/libwww-perl
- 
- comment "perl-libwww-perl needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index d3b332864..24e077d38 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
+index b6bb545ab..c40e66e99 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.hash
++++ b/package/perl-mail-dkim/perl-mail-dkim.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    0880fade10edcf5f60087e42f1db4481 libwww-perl-6.16.tar.gz
--sha256 daffd268000f92d241f8ae5508ae5616dbd02f15a587b4fbcd14998ccc15ce22 libwww-perl-6.16.tar.gz
-+md5    457bf4a4f40af3e2f43653329a9c6ab7 libwww-perl-6.26.tar.gz
-+sha256 d0c5435275f8638ff36fff8f655ad2ccad1156e66cc47bfacfb9e44fc585b24f libwww-perl-6.26.tar.gz
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index fe5bd984e..fd4857cf5 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
-@@ -4,7 +4,7 @@
+-md5    9ceb8a0397aff83928e7a9760b1b190f Mail-DKIM-0.40.tar.gz
+-sha256 3c5ea0c3a2028a5a2c3b64bbcd6bd9de6a5fa5ee4e16046dd8875c4796aaa6f1 Mail-DKIM-0.40.tar.gz
++md5    60ebe54760f6633f07b25228272b9473 Mail-DKIM-0.42.tar.gz
++sha256 f4e3a6344517aeee9a7516c0f58197f41dce81461f74ce9ba8401a143aa2577c Mail-DKIM-0.42.tar.gz
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
+index 03a3b7442..e088ecf1a 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.mk
++++ b/package/perl-mail-dkim/perl-mail-dkim.mk
+@@ -4,10 +4,9 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.16
-+PERL_LIBWWW_PERL_VERSION = 6.26
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_DEPENDENCIES = \
-@@ -18,6 +18,7 @@ PERL_LIBWWW_PERL_DEPENDENCIES = \
- 	perl-http-negotiate \
- 	perl-lwp-mediatypes \
- 	perl-net-http \
-+	perl-try-tiny \
- 	perl-uri \
- 	perl-www-robotrules
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+-PERL_MAIL_DKIM_VERSION = 0.40
++PERL_MAIL_DKIM_VERSION = 0.42
+ PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
+-PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JA/JASLONG
++PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
+ PERL_MAIL_DKIM_DEPENDENCIES = perl-crypt-openssl-rsa perl-mailtools perl-net-dns
+-PERL_MAIL_DKIM_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
 -- 
 2.11.0
