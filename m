@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 20 Aug 2017 10:03:29 +0200
-Subject: [Buildroot] [PATCH 16/18] perl-xml-namespacesupport: bump to
-	version 1.12
+Date: Sun, 20 Aug 2017 10:03:30 +0200
+Subject: [Buildroot] [PATCH 17/18] perl-xml-sax-base: bump to version 1.09
 In-Reply-To: <20170820080331.12935-1-francois.perrad@gadz.org>
 References: <20170820080331.12935-1-francois.perrad@gadz.org>
-Message-ID: <20170820080331.12935-16-francois.perrad@gadz.org>
+Message-ID: <20170820080331.12935-17-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-xml-namespacesupport/Config.in                      | 4 ++--
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash | 4 ++--
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-xml-sax-base/perl-xml-sax-base.hash | 4 ++--
+ package/perl-xml-sax-base/perl-xml-sax-base.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-xml-namespacesupport/Config.in b/package/perl-xml-namespacesupport/Config.in
-index bc67d4790..93a697c62 100644
---- a/package/perl-xml-namespacesupport/Config.in
-+++ b/package/perl-xml-namespacesupport/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT
- 	bool "perl-xml-namespacesupport"
- 	help
--	  a simple generic namespace support class
-+	  A simple generic namespace processor
- 
--	  https://metacpan.org/release/XML-NamespaceSupport
-+	  https://github.com/perigrin/xml-namespacesupport
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-index 9389601d0..d55551c11 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
+diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.hash b/package/perl-xml-sax-base/perl-xml-sax-base.hash
+index 6822e1844..a51e1d1b1 100644
+--- a/package/perl-xml-sax-base/perl-xml-sax-base.hash
++++ b/package/perl-xml-sax-base/perl-xml-sax-base.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    222cca76161cd956d724286d36b607da XML-NamespaceSupport-1.11.tar.gz
--sha256 6d8151f0a3f102313d76b64bfd1c2d9ed46bfe63a16f038e7d860fda287b74ea XML-NamespaceSupport-1.11.tar.gz
-+md5    a8916c6d095bcf073e1108af02e78c97 XML-NamespaceSupport-1.12.tar.gz
-+sha256 47e995859f8dd0413aa3f22d350c4a62da652e854267aa0586ae544ae2bae5ef XML-NamespaceSupport-1.12.tar.gz
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-index d7bcdd455..325440b33 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-@@ -4,10 +4,10 @@
+-md5    38c8c3247dfd080712596118d70dbe32 XML-SAX-Base-1.08.tar.gz
+-sha256 666270318b15f88b8427e585198abbc19bc2e6ccb36dc4c0a4f2d9807330219e XML-SAX-Base-1.08.tar.gz
++md5    ec347a14065dd7aec7d9fb181b2d7946 XML-SAX-Base-1.09.tar.gz
++sha256 66cb355ba4ef47c10ca738bd35999723644386ac853abbeb5132841f5e8a2ad0 XML-SAX-Base-1.09.tar.gz
+diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.mk b/package/perl-xml-sax-base/perl-xml-sax-base.mk
+index bb197ae25..ec6e052b7 100644
+--- a/package/perl-xml-sax-base/perl-xml-sax-base.mk
++++ b/package/perl-xml-sax-base/perl-xml-sax-base.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_XML_NAMESPACESUPPORT_VERSION = 1.11
-+PERL_XML_NAMESPACESUPPORT_VERSION = 1.12
- PERL_XML_NAMESPACESUPPORT_SOURCE = XML-NamespaceSupport-$(PERL_XML_NAMESPACESUPPORT_VERSION).tar.gz
- PERL_XML_NAMESPACESUPPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERIGRIN
- PERL_XML_NAMESPACESUPPORT_LICENSE = Artistic or GPL-1.0+
--PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = README
-+PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
+-PERL_XML_SAX_BASE_VERSION = 1.08
++PERL_XML_SAX_BASE_VERSION = 1.09
+ PERL_XML_SAX_BASE_SOURCE = XML-SAX-Base-$(PERL_XML_SAX_BASE_VERSION).tar.gz
+ PERL_XML_SAX_BASE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM
+ PERL_XML_SAX_BASE_LICENSE = Artistic or GPL-1.0+
 -- 
 2.11.0
