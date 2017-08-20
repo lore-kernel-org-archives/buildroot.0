@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Aug 2017 15:54:50 +0200
-Subject: [Buildroot] [PATCH 2/2] cc-tool: add patch fixing boost.m4
- logic for static linking
-In-Reply-To: <20170820133416.11231-2-thomas.petazzoni@free-electrons.com>
-References: <20170820133416.11231-1-thomas.petazzoni@free-electrons.com>
- <20170820133416.11231-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170820155450.7ec3cde0@windsurf>
+Date: Sun, 20 Aug 2017 15:55:39 +0200
+Subject: [Buildroot] [PATCH] norm: fix build with gcc 7.x
+In-Reply-To: <20170820135234.16037-1-thomas.petazzoni@free-electrons.com>
+References: <20170820135234.16037-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170820155539.55426bd9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 Aug 2017 15:34:16 +0200, Thomas Petazzoni wrote:
+On Sun, 20 Aug 2017 15:52:34 +0200, Thomas Petazzoni wrote:
 
->  ...-fix-rpath-option-check-for-static-linkin.patch | 44 ++++++++++++++++++++++
+>  package/norm/0003-fix-const-qualifier-gcc7.patch | 44 ++++++++++++++++++++++++
 
-This patch was submitted upstream, but not in cc-tool since in fact
-boost.m4 comes from a dedicated project, and gets duplicated in
-cc-tool. So I've submitted to the official boost.m4 project,
-https://github.com/tsuna/boost.m4/pull/103.
+This patch has been submitted upstream to
+https://publists.nrl.navy.mil/pipermail/norm-dev/, but the mailing list
+archives have not been updated yet.
+
+Best regards,
 
 Thomas
 -- 
