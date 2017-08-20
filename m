@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Aug 2017 14:14:56 +0200
-Subject: [Buildroot] [PATCH] lttng-tools: disable build-time test
- failing for musl/uclibc
-In-Reply-To: <20170820103008.GA28645@waldemar-brodkorb.de>
-References: <20170820103008.GA28645@waldemar-brodkorb.de>
-Message-ID: <20170820141456.7d79c879@windsurf>
+Date: Sun, 20 Aug 2017 14:15:53 +0200
+Subject: [Buildroot] [PATCH] lua: refactor with a common template
+ lua.pc.in
+In-Reply-To: <20170820083856.13579-1-francois.perrad@gadz.org>
+References: <20170820083856.13579-1-francois.perrad@gadz.org>
+Message-ID: <20170820141553.0d626cd1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 Aug 2017 12:30:08 +0200, Waldemar Brodkorb wrote:
-> Disable a failing build time test, which uses dlmopen
-> without the need for autoreconf.
+On Sun, 20 Aug 2017 10:38:56 +0200, Francois Perrad wrote:
 
-Why without doing an autoreconf ?
+> +define LUA_CONFIGURE_CMDS
+> +	sed -e "s/@VERSION@/$(LUA_VERSION)/;s/@ABI@/$(LUAINTERPRETER_ABIVER)/;s/@MYLIBS@/$(LUA_MYLIBS)/" \
+> +		package/lua/lua.pc.in > $(@D)/lua.pc
+> +endef
+> +
+> +define HOST_LUA_CONFIGURE_CMDS
+> +	sed -e "s/@VERSION@/$(LUA_VERSION)/;s/@ABI@/$(LUAINTERPRETER_ABIVER)/;s/@MYLIBS@/$(HOST_LUA_MYLIBS)/" \
+> +		package/lua/lua.pc.in > $(@D)/lua.pc
+> +endef
 
-Also perhaps it is in fact better to add a --disable-tests option,
-since we don't really need to build tests in the context of Buildroot.
+I still disagree, and still believe that it should be done as part of
+the <pkg>_BUILD_CMDS step.
+
+Also, could you clarify if you intend this patch to be merged in the
+master branch or in the next branch.
 
 Thanks!
 
