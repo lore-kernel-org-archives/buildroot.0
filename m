@@ -1,47 +1,41 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 20 Aug 2017 10:03:31 +0200
-Subject: [Buildroot] [PATCH 18/18] scancpan: catch exception when MANIFEST
-	is missing
-In-Reply-To: <20170820080331.12935-1-francois.perrad@gadz.org>
-References: <20170820080331.12935-1-francois.perrad@gadz.org>
-Message-ID: <20170820080331.12935-18-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Aug 2017 10:07:44 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/lzo: switch to cmake
+Message-ID: <20170820080744.8947-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- utils/scancpan | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+autoreconf for the host package is broken after bumping to 2.10:
+http://lists.busybox.net/pipermail/buildroot/2017-August/200634.html
 
-diff --git a/utils/scancpan b/utils/scancpan
-index 9ccbac5a4..20bd4c693 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -567,11 +567,17 @@ sub fetch {
-         say qq{fetch ${name}} unless $quiet;
-         my $result = $mcpan->release( distribution => $name );
-         $dist{$name} = $result;
--        my $manifest = $mcpan->source( author => $result->{author},
--                                       release => $name . q{-} . $result->{version},
--                                       path => 'MANIFEST' );
--        $need_dlopen{$name} = is_xs( $manifest );
--        $license_files{$name} = find_license_files( $manifest );
-+        eval {
-+            my $manifest = $mcpan->source( author => $result->{author},
-+                                           release => $name . q{-} . $result->{version},
-+                                           path => 'MANIFEST' );
-+            $need_dlopen{$name} = is_xs( $manifest );
-+            $license_files{$name} = find_license_files( $manifest );
-+        };
-+        if ($@) {
-+            warn $@;
-+            $license_files{$name} = [];
-+        }
-         my %build = ();
-         my %runtime = ();
-         my %optional = ();
+To solve the problem we switch to cmake.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: patch is for next branch
+
+ package/lzo/lzo.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 5b8efdd54..dba965fcd 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -9,9 +9,7 @@ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPL-2.0+
+ LZO_LICENSE_FILES = COPYING
+ LZO_INSTALL_STAGING = YES
+-# Ships a beta libtool version hence our patch doesn't apply.
+-# Run autoreconf to regenerate ltmain.sh.
+-LZO_AUTORECONF = YES
++LZO_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.11.0
