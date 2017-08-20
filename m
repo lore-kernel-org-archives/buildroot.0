@@ -1,69 +1,98 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 20 Aug 2017 16:41:54 +0200
-Subject: [Buildroot] [PATCH] glibc: needs kernel headers >= 4.5 on mips(64)
-Message-ID: <20170820144154.15347-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Aug 2017 22:26:02 +0200
+Subject: [Buildroot] [PATCH] glibc: needs kernel headers >= 4.5 on
+ mips(64)
+In-Reply-To: <20170820144154.15347-1-romain.naour@gmail.com>
+References: <20170820144154.15347-1-romain.naour@gmail.com>
+Message-ID: <20170820222602.1f51bd7c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since glibc 2.23 [1]:
-sysdeps/unix/sysv/linux/mips/configure.ac
-[...]
-if test -z "$arch_minimum_kernel"; then
-  if test x$libc_cv_mips_nan2008 = xyes; then
-    arch_minimum_kernel=4.5.0
-  fi
-fi
+Hello,
 
-This mean that if nan2008 support is requested (i.e BR2_MIPS_NAN_2008
-in Buildroot) the minimum kernel headers version is 4.5.0 (not 3.2.0).
++Vicente, since the discussion is MIPS related.
 
-To simplify the dependancy handling in Buildroot we add this dependency
-for all mips(64), even if BR2_MIPS_NAN_2008 is not selected.
+On Sun, 20 Aug 2017 16:41:54 +0200, Romain Naour wrote:
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=d5f2798a0ac9d5ad8ad7a506a2f840035135e2d2
+> I tried to use BR2_MIPS_NAN_2008 but it trigger a circular dependency in Kconfig.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-
-This is for master.
-
-I tried to use BR2_MIPS_NAN_2008 but it trigger a circular dependency in Kconfig.
-
- toolchain/toolchain-buildroot/Config.in | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+I indeed tried:
 
 diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index f47001f..967da1a 100644
+index f47001f..9b25809 100644
 --- a/toolchain/toolchain-buildroot/Config.in
 +++ b/toolchain/toolchain-buildroot/Config.in
-@@ -43,8 +43,9 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	bool "glibc"
- 	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
--		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
--		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
-+		   BR2_aarch64_be  || BR2_i386       || \
-+		   ((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && \
-+		   BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5) || \
- 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
- 		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
- 		   BR2_microblaze || BR2_nios2
-@@ -65,6 +66,11 @@ comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 3.2"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+@@ -50,7 +50,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+                   BR2_microblaze || BR2_nios2
+        depends on BR2_USE_MMU
+        depends on !BR2_STATIC_LIBS
+-       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++       depends on (BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 && !BR2_MIPS_NAN_2008) || \
++               (BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 && BR2_MIPS_NAN_2008)
+        depends on !BR2_powerpc_SPE
+        select BR2_TOOLCHAIN_USES_GLIBC
+        # our glibc.mk enables RPC support
+@@ -63,8 +64,14 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
  
-+# glibc require kernel headers >= 4.5 if nan2008 support is selected.
-+comment "glibc on mips(64) needs a toolchain w/ headers >= 4.5"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 3.2"
+        depends on BR2_USE_MMU
++       depends on !BR2_MIPS_NAN_2008
+        depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
++comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 4.5"
++       depends on BR2_USE_MMU
++       depends on BR2_MIPS_NAN_2008
++       depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
 +
  config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl"
- 	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
+        bool "musl"
+        depends on BR2_aarch64    || BR2_arm     || BR2_armeb     || BR2_i386 || \
+
+And Kconfig yells with:
+
+toolchain/toolchain-buildroot/Config.in:23:error: recursive dependency detected!
+toolchain/toolchain-buildroot/Config.in:23:	choice <choice> contains symbol BR2_TOOLCHAIN_BUILDROOT_GLIBC
+toolchain/toolchain-buildroot/Config.in:43:	symbol BR2_TOOLCHAIN_BUILDROOT_GLIBC depends on BR2_MIPS_NAN_2008
+arch/Config.in.mips:168:	symbol BR2_MIPS_NAN_2008 is selected by BR2_MIPS_ENABLE_NAN_2008
+arch/Config.in.mips:185:	symbol BR2_MIPS_ENABLE_NAN_2008 is part of choice <choice>
+arch/Config.in.mips:171:	choice <choice> contains symbol <choice>
+arch/Config.in.mips:171:	choice <choice> contains symbol BR2_TOOLCHAIN_HAS_MNAN_OPTION
+toolchain/toolchain-common.in:347:	symbol BR2_TOOLCHAIN_HAS_MNAN_OPTION depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+toolchain/toolchain-common.in:314:	symbol BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 is selected by BR2_TOOLCHAIN_GCC_AT_LEAST_5
+toolchain/toolchain-common.in:318:	symbol BR2_TOOLCHAIN_GCC_AT_LEAST_5 is selected by BR2_TOOLCHAIN_GCC_AT_LEAST_6
+toolchain/toolchain-common.in:322:	symbol BR2_TOOLCHAIN_GCC_AT_LEAST_6 is selected by BR2_TOOLCHAIN_GCC_AT_LEAST_7
+toolchain/toolchain-common.in:326:	symbol BR2_TOOLCHAIN_GCC_AT_LEAST_7 is selected by BR2_GCC_VERSION_7_X
+package/gcc/Config.in.host:68:	symbol BR2_GCC_VERSION_7_X is part of choice <choice>
+package/gcc/Config.in.host:3:	choice <choice> contains symbol BR2_GCC_VERSION_4_9_X
+package/gcc/Config.in.host:23:	symbol BR2_GCC_VERSION_4_9_X depends on BR2_TOOLCHAIN_USES_MUSL
+toolchain/Config.in:25:	symbol BR2_TOOLCHAIN_USES_MUSL is selected by BR2_TOOLCHAIN_BUILDROOT_MUSL
+toolchain/toolchain-buildroot/Config.in:75:	symbol BR2_TOOLCHAIN_BUILDROOT_MUSL is part of choice <choice>
+
+And I believe he is right to yell about this. I think the addition of
+the BR2_TOOLCHAIN_HAS_<xyz>_OPTION dependencies in arch/Config.in.mips
+is what causes the problem. Indeed, it's the first time we have a
+dependency on an architecture option to a toolchain option. This is not
+logical, because in Buildroot, you first select the architecture, and
+then you select the toolchain details. For example, we disallow
+selecting a given gcc version if it is not supported on a given
+architecture. But here, those BR2_TOOLCHAIN_HAS_MFPXX_OPTION /
+BR2_TOOLCHAIN_HAS_MNAN_OPTION are doing the opposite: they prevent you
+from selecting a given architecture variant if the gcc version is not
+sufficient.
+
+I believe we need to invert those dependencies, and instead have a
+mechanism where selecting a too old gcc version is not possible when
+-mnan/-mfp are used on MIPS.
+
+Yann is specifically working on a mechanism to allow architectures to
+describe what minimum gcc version they need. Perhaps we should use that
+to express this dependency as well. Adding Yann in Cc :)
+
+Thomas
 -- 
-2.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
