@@ -1,34 +1,24 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Aug 2017 10:06:22 +0200
-Subject: [Buildroot] [PATCH 2/3] kvmtool: fix build with kernel headers
-	>=	4.12
+Date: Sun, 20 Aug 2017 10:06:33 +0200
+Subject: [Buildroot] [PATCH 3/3] kvmtool: add patches fixing build
+	warnings	with musl
 References: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
- <20170819205528.31753-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <ugsn6ex8gp.ln2@ID-313208.user.individual.net>
+ <20170819205528.31753-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <9hsn6ex8gp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 19 Aug 2017 22:55:27 +0200 schrieb Thomas Petazzoni:
+Am Sat, 19 Aug 2017 22:55:28 +0200 schrieb Thomas Petazzoni:
 
-> In Linux 4.12, the header <asm/msr-index.h> has been removed from the
-> set of headers exported to userspace. Therefore, it cannot be used by
-> kvmtool anymore. This commit takes the simple approach of duplicating
-> inside kvmtool the MSR_* definitions that were used from this
-> <asm/msr-index.h> header.
+> This commit backports three patches that are already upstream in kvmtool
+> fixing build warnings with musl. Those are not strictly needed for the
+> build to succeed, they just reduce the amount of warning noise.
 > 
-> This fixes:
-> 
-> x86/kvm-cpu.c:7:27: fatal error: asm/msr-index.h: No such file or
-> directory
->  #include <asm/msr-index.h>
-> 
-> Which is the second part of:
-> 
->   http://autobuild.buildroot.net/
-results/4459a909e735343d1cf768d30466bc3c57eca19e/
+> Signed-off-by: Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>
 
 Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 [ build-tested using http://autobuild.buildroot.net/results/ae4/
