@@ -1,32 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Aug 2017 00:06:24 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: Add QLogic FC Adapters
-In-Reply-To: <20170816043023.6370-1-sam@mendozajonas.com>
-References: <20170816043023.6370-1-sam@mendozajonas.com>
-Message-ID: <20170822000624.081bc693@windsurf>
+From: Bruno Kremel <bruno.kremel@gmail.com>
+Date: Tue, 22 Aug 2017 01:01:10 +0200
+Subject: [Buildroot] Include kernel's dtsi from customised dts in
+	buiuldroot-external
+References: <87inhgle9f.fsf@gmail.com>
+Message-ID: <87h8x0le4p.fsf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All,
 
-On Wed, 16 Aug 2017 14:30:23 +1000, Samuel Mendoza-Jonas wrote:
-> Add a config option to install the ql2xxx firmware binaries for QLogic
-> Fibre Channel adapters.
-> Since this doesn't quite fit under the existing categories in Config.in,
-> include it under a new category named "Fibre Channel Adapter Firmware".
-> 
-> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-> ---
-> Very open to suggestion about the category, just saw that it didn't
-> really fit under any of the existing headings.
+I have set up buildroot external for Toradex Colibri iMX6 board. I would
+like to customise kernel default dts, so I have made a copy of this dts
+to my external board/toradex/colibiri-imx6 and then in the defconfig I
+set up the path to custom dts:
+BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(BR2_EXTERNAL)/board/toradex/colibri-imx6/imx6dl-colibri-mcp-25.dts"
 
-Applied to next, thanks.
+This successfully makes buildroot use my modified dts file. But this
+file inludes some kernel dtsi files.
+Namely:
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+#include "imx6dl.dtsi"
+#include "imx6qdl-colibri.dtsi"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+These are however not found by dts compiler during build and I end up
+with dtc failing on undefined symbols in devicetree.
+
+How can I specify dts include path such that it will use kernel dtsi
+files or what is the correct way to include these from external?
+
+Thanks
+Bruno
