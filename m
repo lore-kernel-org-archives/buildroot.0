@@ -1,61 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:30:14 +0200
-Subject: [Buildroot] [PATCH] libunwind: needs dynamic library support
-In-Reply-To: <20170820210151.2242-1-thomas.petazzoni@free-electrons.com>
-References: <20170820210151.2242-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170821233014.221cc34b@windsurf>
+Date: Mon, 21 Aug 2017 23:30:39 +0200
+Subject: [Buildroot] [git commit] gcc: bump 7.x series to 7.2.0
+Message-ID: <20170821212405.545CB7F88C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=80546e97fa63e7ce196be648f0fc1eb4e7d711b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Aug 2017 23:01:51 +0200, Thomas Petazzoni wrote:
-> libunwind configure script explicitly links libunwind against
-> libgcc_s. libgcc_s is only guaranteed to be available for toolchains
-> that supports dynamic linking: pure static linking toolchains only
-> have libgcc.a, not libgcc_s.so.
-> 
-> Therefore, let's make libunwind unavailable on toolchains that lack
-> dynamic linking support. We could potentially support linking with
-> libgcc, but switching to libgcc_s was done upstream because libgcc was
-> lacking some symbols on ARM
-> (https://lists.nongnu.org/archive/html/libunwind-devel/2014-06/msg00024.html). Even
-> though recent gcc versions seem to provide such symbols in libgcc.a,
-> having libunwind available on static linking configurations is not a
-> useful enough use-case to do the necessary research to find when this
-> issue was fixed in gcc.
-> 
-> Since libunwind is not used as a mandatory dependency in any package,
-> adding this !BR2_STATIC_LIBS dependency is trivial and nicely avoids
-> the problematic situation.
-> 
-> This fixes two different autobuilder failures:
-> 
->  - Gstreamer 1.x programs failing to link, because libunwind links
->    against libgcc_s that isn't available (static linking
->    configuration):
-> 
->    http://autobuild.buildroot.net/results/9d4fbf7167e9afce0eef5c9e0cfd42c966ecba36/
-> 
->  - Gmrender-resurrect, which fails to link, because GStreamer 1.x uses
->    some libunwind functionality, but does not take into account the
->    libunwind dependency in its .pc files (static linking
->    configuration):
-> 
->    http://autobuild.buildroot.net/results/0a3a2485c187a000482c178f1e9c64dd716a858f/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libunwind/Config.in | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+All patches continue to apply with no changes. 7.2.0 is a bugfix
+release of the 7.x branch.
 
-Applied to master, thanks.
+The only change that is not a simple bump is that the 7.2.0 tarball is
+now available xz-compressed instead of bz2-compressed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/{7.1.0 => 7.2.0}/0100-uclibc-conf.patch                 | 0
+ package/gcc/{7.1.0 => 7.2.0}/0810-arm-softfloat-libgcc.patch        | 0
+ .../gcc/{7.1.0 => 7.2.0}/0860-cilk-fix-build-without-wchar.patch    | 0
+ package/gcc/{7.1.0 => 7.2.0}/0891-fix-m68k-uclinux.patch            | 0
+ package/gcc/{7.1.0 => 7.2.0}/0892-microblaze-Revert.patch           | 0
+ package/gcc/{7.1.0 => 7.2.0}/0900-remove-selftests.patch            | 0
+ package/gcc/Config.in.host                                          | 2 +-
+ package/gcc/gcc.hash                                                | 4 ++--
+ package/gcc/gcc.mk                                                  | 6 +++---
+ 9 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/gcc/7.1.0/0100-uclibc-conf.patch b/package/gcc/7.2.0/0100-uclibc-conf.patch
+similarity index 100%
+rename from package/gcc/7.1.0/0100-uclibc-conf.patch
+rename to package/gcc/7.2.0/0100-uclibc-conf.patch
+diff --git a/package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch b/package/gcc/7.2.0/0810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch
+rename to package/gcc/7.2.0/0810-arm-softfloat-libgcc.patch
+diff --git a/package/gcc/7.1.0/0860-cilk-fix-build-without-wchar.patch b/package/gcc/7.2.0/0860-cilk-fix-build-without-wchar.patch
+similarity index 100%
+rename from package/gcc/7.1.0/0860-cilk-fix-build-without-wchar.patch
+rename to package/gcc/7.2.0/0860-cilk-fix-build-without-wchar.patch
+diff --git a/package/gcc/7.1.0/0891-fix-m68k-uclinux.patch b/package/gcc/7.2.0/0891-fix-m68k-uclinux.patch
+similarity index 100%
+rename from package/gcc/7.1.0/0891-fix-m68k-uclinux.patch
+rename to package/gcc/7.2.0/0891-fix-m68k-uclinux.patch
+diff --git a/package/gcc/7.1.0/0892-microblaze-Revert.patch b/package/gcc/7.2.0/0892-microblaze-Revert.patch
+similarity index 100%
+rename from package/gcc/7.1.0/0892-microblaze-Revert.patch
+rename to package/gcc/7.2.0/0892-microblaze-Revert.patch
+diff --git a/package/gcc/7.1.0/0900-remove-selftests.patch b/package/gcc/7.2.0/0900-remove-selftests.patch
+similarity index 100%
+rename from package/gcc/7.1.0/0900-remove-selftests.patch
+rename to package/gcc/7.2.0/0900-remove-selftests.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 485755a..6f82fe0 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -92,7 +92,7 @@ config BR2_GCC_VERSION
+ 	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
+ 	default "5.4.0"     if BR2_GCC_VERSION_5_X
+ 	default "6.4.0"     if BR2_GCC_VERSION_6_X
+-	default "7.1.0"     if BR2_GCC_VERSION_7_X
++	default "7.2.0"     if BR2_GCC_VERSION_7_X
+ 	default "arc-2017.03" if BR2_GCC_VERSION_ARC
+ 	default "musl-5.4.0" if BR2_GCC_VERSION_OR1K
+ 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index c3e5ffb..f35a2e2 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  93abb78e16277454f41a8e9810f41f66c0fdffdc539a762ff6b67d3037f78db971378683
+ sha512  2941cc950c8f2409a314df497631f9b0266211aa74746c1839c46e04f1c7c299afe2528d1ef16ea39def408a644ba48f97519ec7a7dd37d260c3e9423514265b  gcc-5.4.0.tar.bz2
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-6.4.0/sha512.sum
+ sha512  02c60e54527c7adf584798d5251f8a0b80c93d5deafce82501b2c28e6692e0bd783927bbfc4bc527a863c0cccc025150a34740a9e29badb02d4b48e56a8aba90  gcc-6.4.0.tar.xz
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.1.0/sha512.sum
+-sha512  b5d952be9a10f0e0926bb2868877d10544039d6d2f35ba0a08f51231dd622a007650764a03e173194701467547789ad7d2d9cbc10adcdf118d619cdedbd14aec  gcc-7.1.0.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.2.0/sha512.sum
++sha512  f853cd6530b4055d8d8289da74687cb4c6d5f363598d386332d31852b581bac76c3adb7d61889edec3b779f63d8646f0122840f12965ce4a4389ba535dbbb6e1  gcc-7.2.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  282f76b8b63372f5b4426092b80d36da96cd0bda2a8588405b9ec22806c69fafb696b0e0df65bc36c3c3aa8ce5befc24246fd5c6ddb21dcde01f45f7b11ff7c4  gcc-arc-2017.03.tar.gz
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 6ee840e..49ccccf 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -18,9 +18,9 @@ GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+ else
+ GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+-# From version 6.4.0 a bz2 release tarball is not provided anymore. Use the xz
+-# tarball instead.
+-ifeq ($(BR2_GCC_VERSION_6_X),y)
++# From version 6.4.0 and 7.2.0 a bz2 release tarball is not provided
++# anymore. Use the xz tarball instead.
++ifeq ($(BR2_GCC_VERSION_6_X)$(BR2_GCC_VERSION_7_X),y)
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.xz
+ else
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
