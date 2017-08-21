@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:59 +0200
-Subject: [Buildroot] [git commit] perl-path-tiny: bump to version 0.104
-Message-ID: <20170902130619.1DF1981D34@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:41:06 +0200
+Subject: [Buildroot] [git commit] perl-xml-sax-base: bump to version 1.09
+Message-ID: <20170902130619.60CC081D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2707614be4e0688c7013ed2df5e4206caedefa7
+commit: https://git.buildroot.net/buildroot/commit/?id=2ded88b9cdbb615117ff3a1d3b592c70367e8762
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-path-tiny/perl-path-tiny.hash | 4 ++--
- package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
+ package/perl-xml-sax-base/perl-xml-sax-base.hash | 4 ++--
+ package/perl-xml-sax-base/perl-xml-sax-base.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
-index 259469c..49b6661 100644
---- a/package/perl-path-tiny/perl-path-tiny.hash
-+++ b/package/perl-path-tiny/perl-path-tiny.hash
+diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.hash b/package/perl-xml-sax-base/perl-xml-sax-base.hash
+index 6822e18..a51e1d1 100644
+--- a/package/perl-xml-sax-base/perl-xml-sax-base.hash
++++ b/package/perl-xml-sax-base/perl-xml-sax-base.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    92ece7b2aa09f18035b0550b0118bdee Path-Tiny-0.100.tar.gz
--sha256 8b8c4c9db710470a26b356e7187eba47217fbba1fe8bd0ad72c5b2cc8f6ba10c Path-Tiny-0.100.tar.gz
-+md5    17354181d9794df01be555b25114dd24 Path-Tiny-0.104.tar.gz
-+sha256 c69f1dcfeb4aa004086deb9bc14c7d79f45798b947f1efbd634a3442e267aaef Path-Tiny-0.104.tar.gz
-diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
-index ed1304d..53e787d 100644
---- a/package/perl-path-tiny/perl-path-tiny.mk
-+++ b/package/perl-path-tiny/perl-path-tiny.mk
+-md5    38c8c3247dfd080712596118d70dbe32 XML-SAX-Base-1.08.tar.gz
+-sha256 666270318b15f88b8427e585198abbc19bc2e6ccb36dc4c0a4f2d9807330219e XML-SAX-Base-1.08.tar.gz
++md5    ec347a14065dd7aec7d9fb181b2d7946 XML-SAX-Base-1.09.tar.gz
++sha256 66cb355ba4ef47c10ca738bd35999723644386ac853abbeb5132841f5e8a2ad0 XML-SAX-Base-1.09.tar.gz
+diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.mk b/package/perl-xml-sax-base/perl-xml-sax-base.mk
+index bb197ae..ec6e052 100644
+--- a/package/perl-xml-sax-base/perl-xml-sax-base.mk
++++ b/package/perl-xml-sax-base/perl-xml-sax-base.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PATH_TINY_VERSION = 0.100
-+PERL_PATH_TINY_VERSION = 0.104
- PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
- PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
- PERL_PATH_TINY_LICENSE = Apache-2.0
+-PERL_XML_SAX_BASE_VERSION = 1.08
++PERL_XML_SAX_BASE_VERSION = 1.09
+ PERL_XML_SAX_BASE_SOURCE = XML-SAX-Base-$(PERL_XML_SAX_BASE_VERSION).tar.gz
+ PERL_XML_SAX_BASE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM
+ PERL_XML_SAX_BASE_LICENSE = Artistic or GPL-1.0+
