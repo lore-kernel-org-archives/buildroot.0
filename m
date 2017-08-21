@@ -1,60 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:41:01 +0200
-Subject: [Buildroot] [git commit] perl-time-hires: bump to version 1.9746
-Message-ID: <20170902130619.2B15181D34@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:40:48 +0200
+Subject: [Buildroot] [git commit] perl-http-message: bump to version 6.13
+Message-ID: <20170902130618.93CBD81DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6586d3b68e47356d4906db617fcca32ce437dbc
+commit: https://git.buildroot.net/buildroot/commit/?id=3dd4c190ea3b532ad9a6077d5137299006a80568
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-time-hires/Config.in            | 2 +-
- package/perl-time-hires/perl-time-hires.hash | 4 ++--
- package/perl-time-hires/perl-time-hires.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-http-message/Config.in              | 5 ++---
+ package/perl-http-message/perl-http-message.hash | 4 ++--
+ package/perl-http-message/perl-http-message.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl-time-hires/Config.in b/package/perl-time-hires/Config.in
-index 37bad71..fe933a4 100644
---- a/package/perl-time-hires/Config.in
-+++ b/package/perl-time-hires/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PERL_TIME_HIRES
+diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
+index 9dda1ee..682a4b0 100644
+--- a/package/perl-http-message/Config.in
++++ b/package/perl-http-message/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_PERL_HTTP_MESSAGE
+ 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
+ 	select BR2_PACKAGE_PERL_URI
  	help
- 	  High resolution alarm, sleep, gettimeofday, interval timers
+-	  The HTTP-Message distribution contains classes useful for representing
+-	  the messages passed in HTTP style communication.
++	  HTTP style message (base class)
  
--	  http://search.cpan.org/dist/Time-HiRes/HiRes.pm
-+	  https://metacpan.org/release/Time-HiRes
- 
- comment "perl-time-hires needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
-index 1852340..210f630 100644
---- a/package/perl-time-hires/perl-time-hires.hash
-+++ b/package/perl-time-hires/perl-time-hires.hash
+-	  https://github.com/libwww-perl/http-message
++	  https://github.com/libwww-perl/HTTP-Message
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index f57fec2..bb52dea 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    077e5d7eda1349f98c564026603f8a0a Time-HiRes-1.9726.tar.gz
--sha256 ff662ad9b1f6c75a149db7fa1bfc7a161ac8b271e5f3980345e08b734769109e Time-HiRes-1.9726.tar.gz
-+md5    728dc2c2715313a056792191d7d0726c Time-HiRes-1.9746.tar.gz
-+sha256 89408c81bb827bc908c98eec50071e6e1158f38fa462865ecc3dc03aebf5f596 Time-HiRes-1.9746.tar.gz
-diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
-index e1c32a2..7f52625 100644
---- a/package/perl-time-hires/perl-time-hires.mk
-+++ b/package/perl-time-hires/perl-time-hires.mk
+-md5    4ed7add10daea3ab30abfeab6d03872f HTTP-Message-6.11.tar.gz
+-sha256 e7b368077ae6a188d99920411d8f52a8e5acfb39574d4f5c24f46fd22533d81b HTTP-Message-6.11.tar.gz
++md5    4c1b7c6ee114c1cff69379ec9651d9ac HTTP-Message-6.13.tar.gz
++sha256 f25f38428de851e5661e72f124476494852eb30812358b07f1c3a289f6f5eded HTTP-Message-6.13.tar.gz
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index a66353a..4143432 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_TIME_HIRES_VERSION = 1.9726
-+PERL_TIME_HIRES_VERSION = 1.9746
- PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
--PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
-+PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JH/JHI
- PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
- PERL_TIME_HIRES_LICENSE_FILES = README
- 
+-PERL_HTTP_MESSAGE_VERSION = 6.11
++PERL_HTTP_MESSAGE_VERSION = 6.13
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+-PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_DEPENDENCIES = perl-encode-locale perl-http-date perl-io-html perl-lwp-mediatypes perl-uri
+ PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
