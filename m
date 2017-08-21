@@ -1,59 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 08:31:17 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-20
-Message-ID: <20170821063117.9438D208E5@mail.free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 21 Aug 2017 10:30:57 +0200
+Subject: [Buildroot] [PATCH] python3: remove target Python packages from
+	PYTHONPATH
+In-Reply-To: <20170819211150.32340-1-thomas.petazzoni@free-electrons.com>
+References: <20170819211150.32340-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_ks0sWa4jPWdPy-YJ-h==mvXQEu-q=OT_MT0y3pboVfaAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Build statistics for 2017-08-20
-================================
+On Sat, Aug 19, 2017 at 11:11 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This commit is similar to 350941e31de5b454cad75abe5fb0d3db027bc1a7
+> ("python: remove target Python packages from PYTHONPATH") but for
+> python3.
+>
+> We currently have
+> $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
+> inside the PYTHON3_PATH variable, which gets used to define
+> PYTHONPATH, passed to the host Python interpreter when
+> building/installing target packages.
+>
+> However, this is terribly wrong, as it causes the host interpreter to
+> potentially import target Python packages. This is wrong for several
+> reasons:
+>
+>  - Some Python packages might need some Python modules to be installed
+>    on the host (described in setup_requires in setup.py), but their
+>    installation currently works because by luck the corresponding
+>    Python module is installed for the target. Some of those cases were
+>    happening for real, and fixed by previous patches.
+>
+>  - Some Python packages include some native code, therefore built for
+>    a specific CPU architecture. When you point the host Python
+>    interpreter to native libraries built for the target, you get nice
+>    build failures, such as the one affecting the python-cffi related
+>    packages.
+>
+> This change fixes the following build failures:
+>
+>    http://autobuild.buildroot.net/results/9005b89407e46b537a54cac6cc0c69dcac4dc5ea/
+>    (python-cryptography)
+>
+>    http://autobuild.buildroot.net/results/395682d33d02fdcaa39d3c0326355bd9ea3d6feb/
+>    (python-pynacl)
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-      successes : 203
-       failures : 13 
-       timeouts : 1  
-          TOTAL : 217
+I've compiled some heavy packages like crossbar and pytablewrite (they
+select more than a half of Python packages) and everything is working
+as expected. Thanks for the fix.
 
-Classification of failures by reason
-====================================
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-                  cc-tool-0.26 | 1 
-                  dnsmasq-2.76 | 1 
-gmrender-resurrect-33600ab6... | 1 
-             gstreamer1-1.12.2 | 1 
-make: *** wait: No child pr... | 1 
-          mediastreamer-2.14.0 | 1 
-                    norm-1.5r6 | 1 
-           oracle-mysql-5.1.73 | 1 
-     python-cryptography-1.7.2 | 1 
-       python-smbus-cffi-0.5.1 | 1 
-          qt5declarative-5.9.1 | 1 
-             transmission-2.92 | 1 
-                       unknown | 1 
-            xlib_libXpm-3.5.12 | 1 
+Yegor
 
-
-Detail of failures
-===================
-
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/c2d5547016b8a9be4868ded81cb1ff0c97eb9b60 |     
-         arm |                   dnsmasq-2.76 | NOK | http://autobuild.buildroot.net/results/1d094f20017e04b867e1ba0f4ff9c1787c419358 | ORPH
-         arm | gmrender-resurrect-33600ab6... | NOK | http://autobuild.buildroot.net/results/bfdd7d06c9d92ec343ffe90d6aeb0a5087bebf9a |     
-         arm |              gstreamer1-1.12.2 | NOK | http://autobuild.buildroot.net/results/9d4fbf7167e9afce0eef5c9e0cfd42c966ecba36 |     
-         arm | make: *** wait: No child pr... | TIM | http://autobuild.buildroot.net/results/8c2bb335662bf05d0d21e74fe96bf16bfb590a58 |     
-        i586 |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/af091cfd0508df9395778cdc796f77e95c168410 | ORPH
-         arm |                     norm-1.5r6 | NOK | http://autobuild.buildroot.net/results/c79dc84cdc34d62199099eb4438b1aed3e7459bb |     
-         arm |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/2a55d767f6d6e8b54e5581545f531a422081d392 | ORPH
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/f11d73f625b4a712b72d2ca47a9b38eec641cea8 |     
-      x86_64 |        python-smbus-cffi-0.5.1 | NOK | http://autobuild.buildroot.net/results/6cb11908f6aa84a62434fc7c9c2266c04a89c64d |     
-         arm |           qt5declarative-5.9.1 | NOK | http://autobuild.buildroot.net/results/2dde17bf55db5d8c963f70f6c58a6e7086519368 |     
-    mips64el |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/71f6fd76de397fbcda6ce6310adacd6c42ab6a2e |     
-      x86_64 |                        unknown | NOK | http://autobuild.buildroot.net/results/d58d03c7f2605a558e3610b473f4807edc63ecce |     
-     powerpc |             xlib_libXpm-3.5.12 | NOK | http://autobuild.buildroot.net/results/e98f7eabc5271d5f1b38c4205f10a842fb6eafe7 |     
-
--- 
-http://autobuild.buildroot.net
+> ---
+>  package/python3/python3.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 80905dd..a18dc7f 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -232,7 +232,7 @@ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
+>  endif
+>
+>  # Provided to other packages
+> -PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
+> +PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
+>
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> --
+> 2.9.4
+>
