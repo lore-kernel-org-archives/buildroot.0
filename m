@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:36:58 +0200
-Subject: [Buildroot] [PATCH/2017.02.x 1/2] dbus: bump version to 1.10.22
-In-Reply-To: <20170815214537.52eb3814@windsurf>
-References: <1502372823-31706-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20170814224427.2adfb1c3@windsurf>
- <188886FC-9E87-4A0B-B1EE-D7704B4F979C@armadeus.com>
- <20170815214537.52eb3814@windsurf>
-Message-ID: <20170821233658.4541ee99@windsurf>
+Date: Mon, 21 Aug 2017 23:40:14 +0200
+Subject: [Buildroot] [V2] lua: refactor with a common template lua.pc.in
+In-Reply-To: <20170821163723.14585-1-francois.perrad@gadz.org>
+References: <20170821163723.14585-1-francois.perrad@gadz.org>
+Message-ID: <20170821234014.7492a75f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +12,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 15 Aug 2017 21:45:37 +0200, Thomas Petazzoni wrote:
-
-> On Tue, 15 Aug 2017 21:01:51 +0200, S?bastien Szymanski wrote:
+On Mon, 21 Aug 2017 18:37:23 +0200, Francois Perrad wrote:
+> lua.pc is generated from a common template in the build step.
+> install steps are restored like in BR 2017.05
 > 
-> > No particular reason, I just thought it would be easier to backport
-> > the dbus patch on the version 1.10.22 as it is applied on this
-> > version on the master branch, rather than backporting it on dbus
-> > version 1.10.16.  
-> 
-> To change things in a LTS branch such as 2017.02.x, we need a much more
-> solid reason than just "no particular reason".
-> 
-> So I think we need a backport of the dbus patch working around the
-> expat related issues on top of 1.10.16, instead of bumping dbus to
-> 1.10.22.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua/5.2.4/0004-lua-pc.patch | 42 -------------------------------------
+>  package/lua/5.3.4/0004-lua-pc.patch | 42 -------------------------------------
+>  package/lua/lua.mk                  | 14 +++++++------
+>  package/lua/lua.pc.in               | 26 +++++++++++++++++++++++
+>  4 files changed, 34 insertions(+), 90 deletions(-)
+>  delete mode 100644 package/lua/5.2.4/0004-lua-pc.patch
+>  delete mode 100644 package/lua/5.3.4/0004-lua-pc.patch
+>  create mode 100644 package/lua/lua.pc.in
 
-Following this discussion, I have marked your two patches as Changes
-Requested in patchwork. Please respin an updated version that takes
-into account the comment if you want such patches to be merged.
+Thanks. To avoid merge conflicts, I'll apply this once next is merged
+back into master.
 
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
