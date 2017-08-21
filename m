@@ -1,79 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:24:59 +0200
-Subject: [Buildroot] [git commit] kvmtool: add patch to fix build with musl
-Message-ID: <20170821211826.1E9977FF3E@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:25:03 +0200
+Subject: [Buildroot] [git commit] python3: remove target Python packages
+	from PYTHONPATH
+Message-ID: <20170821211826.6B6C67FA47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4688b3a7e20578a761b7e54a392814323c8e4200
+commit: https://git.buildroot.net/buildroot/commit/?id=d3c6db36227e315d13c0e8414f03d3f629572173
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit backports an upstream patch that fixes the build of
-kvmtool with musl:
+This commit is similar to 350941e31de5b454cad75abe5fb0d3db027bc1a7
+("python: remove target Python packages from PYTHONPATH") but for
+python3.
 
-In file included from builtin-balloon.c:9:0:
-include/kvm/kvm.h:22:0: warning: "PAGE_SIZE" redefined
- #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
+We currently have
+$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
+inside the PYTHON3_PATH variable, which gets used to define
+PYTHONPATH, passed to the host Python interpreter when
+building/installing target packages.
 
-Fixes one part of:
+However, this is terribly wrong, as it causes the host interpreter to
+potentially import target Python packages. This is wrong for several
+reasons:
 
-  http://autobuild.buildroot.net/results/4459a909e735343d1cf768d30466bc3c57eca19e/
+ - Some Python packages might need some Python modules to be installed
+   on the host (described in setup_requires in setup.py), but their
+   installation currently works because by luck the corresponding
+   Python module is installed for the target. Some of those cases were
+   happening for real, and fixed by previous patches.
+
+ - Some Python packages include some native code, therefore built for
+   a specific CPU architecture. When you point the host Python
+   interpreter to native libraries built for the target, you get nice
+   build failures, such as the one affecting the python-cffi related
+   packages.
+
+This change fixes the following build failures:
+
+   http://autobuild.buildroot.net/results/9005b89407e46b537a54cac6cc0c69dcac4dc5ea/
+   (python-cryptography)
+
+   http://autobuild.buildroot.net/results/395682d33d02fdcaa39d3c0326355bd9ea3d6feb/
+   (python-pynacl)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/python3/python3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
-new file mode 100644
-index 0000000..ed3370c
---- /dev/null
-+++ b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
-@@ -0,0 +1,42 @@
-+From bec1b0ced72dc0d49825d6b69d09296d13fd0af3 Mon Sep 17 00:00:00 2001
-+From: Andre Przywara <andre.przywara@arm.com>
-+Date: Tue, 21 Jul 2015 10:58:46 +0100
-+Subject: [PATCH] avoid redefining PAGE_SIZE
-+
-+PAGE_SIZE may have been defined by the C libary (musl-libc does that).
-+So avoid redefining it here unconditionally, instead only use our
-+definition if none has been provided by the libc.
-+
-+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-+Signed-off-by: Will Deacon <will.deacon@arm.com>
-+[backport from upstream commit 4095fac878f618ae5e7384a1dc65ee34b6e05217.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/kvm/kvm.h | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/include/kvm/kvm.h b/include/kvm/kvm.h
-+index 754e029..37155db 100644
-+--- a/include/kvm/kvm.h
-++++ b/include/kvm/kvm.h
-+@@ -11,6 +11,7 @@
-+ #include <time.h>
-+ #include <signal.h>
-+ #include <sys/prctl.h>
-++#include <limits.h>
-+ 
-+ #define SIGKVMEXIT		(SIGRTMIN + 0)
-+ #define SIGKVMPAUSE		(SIGRTMIN + 1)
-+@@ -19,7 +20,9 @@
-+ #define HOME_DIR		getenv("HOME")
-+ #define KVM_BINARY_NAME		"lkvm"
-+ 
-++#ifndef PAGE_SIZE
-+ #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
-++#endif
-+ 
-+ #define DEFINE_KVM_EXT(ext)		\
-+ 	.name = #ext,			\
-+-- 
-+2.9.4
-+
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 80905dd..a18dc7f 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -232,7 +232,7 @@ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
+ endif
+ 
+ # Provided to other packages
+-PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
++PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
