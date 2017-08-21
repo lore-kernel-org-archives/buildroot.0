@@ -1,51 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Aug 2017 16:07:16 +0200
-Subject: [Buildroot] [git commit] package/minidlna: bump version to 1.2.1
-Message-ID: <20170902130620.1095C8016A@busybox.osuosl.org>
+Date: Tue, 22 Aug 2017 00:05:29 +0200
+Subject: [Buildroot] [git commit] linux-firmware: Add QLogic FC Adapters
+Message-ID: <20170902130619.7D9E881DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f4eb8cc69a0b3b2ce255b9e523299411edc63eb
+commit: https://git.buildroot.net/buildroot/commit/?id=91983091455e2b82432509c11f958409e7bbefcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched _SITE to https.
+Add a config option to install the ql2xxx firmware binaries for QLogic
+Fibre Channel adapters.
+Since this doesn't quite fit under the existing categories in Config.in,
+include it under a new category named "Fibre Channel Adapter Firmware".
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/minidlna/minidlna.hash | 8 ++++----
- package/minidlna/minidlna.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/linux-firmware/Config.in         | 9 +++++++++
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/minidlna/minidlna.hash b/package/minidlna/minidlna.hash
-index 8f6b1cc..5398506 100644
---- a/package/minidlna/minidlna.hash
-+++ b/package/minidlna/minidlna.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/minidlna/files/minidlna/1.2.0/
--md5 5f59700431e9f66198238deeb4e0d0de  minidlna-1.2.0.tar.gz
--sha1 700e07440167ddef44b06aa59cabe5e3abe612f6  minidlna-1.2.0.tar.gz
-+# From https://sourceforge.net/projects/minidlna/files/minidlna/1.2.1/
-+md5 a968d3d84971322471cabda3669cc0f8  minidlna-1.2.1.tar.gz
-+sha1 79d0032c7055aefd4c8e5178bc86fbf258d449d2  minidlna-1.2.1.tar.gz
- # Locally computed
--sha256 8d34436580c4c44be25976d5e46bc5b71af69bf441c4492774eac001164c4433  minidlna-1.2.0.tar.gz
-+sha256 67388ba23ab0c7033557a32084804f796aa2a796db7bb2b770fb76ac2a742eec  minidlna-1.2.1.tar.gz
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index d0d9136..e6f9059 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index f0d6476..ad750e8 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -329,4 +329,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
  
--MINIDLNA_VERSION = 1.2.0
--MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
-+MINIDLNA_VERSION = 1.2.1
-+MINIDLNA_SITE = https://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
- MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
- MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+ endmenu
  
++menu "Fibre Channel Adapter Firmware"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
++	bool "QLogic 2xxx Fibre Channel Adapters"
++	help
++	  Firmware files for ql2xxx adapters
++
++endmenu
++
+ endif
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index e03788a..b01585f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -414,6 +414,14 @@ LINUX_FIRMWARE_FILES += \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
+ 
++# ql2xxx
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX),y)
++LINUX_FIRMWARE_FILES += \
++	ql2100_fw.bin ql2200_fw.bin ql2300_fw.bin ql2322_fw.bin \
++	ql2400_fw.bin ql2500_fw.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qla2xxx
++endif
++
+ ifneq ($(LINUX_FIRMWARE_FILES),)
+ define LINUX_FIRMWARE_INSTALL_FILES
+ 	cd $(@D) ; \
