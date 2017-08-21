@@ -1,82 +1,99 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 21 Aug 2017 10:30:57 +0200
-Subject: [Buildroot] [PATCH] python3: remove target Python packages from
-	PYTHONPATH
-In-Reply-To: <20170819211150.32340-1-thomas.petazzoni@free-electrons.com>
-References: <20170819211150.32340-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_ks0sWa4jPWdPy-YJ-h==mvXQEu-q=OT_MT0y3pboVfaAQ@mail.gmail.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon, 21 Aug 2017 15:18:15 +0200
+Subject: [Buildroot] [PATCH] board: remove Armadeus's APF9328 support
+Message-ID: <1503321495-5763-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-On Sat, Aug 19, 2017 at 11:11 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> This commit is similar to 350941e31de5b454cad75abe5fb0d3db027bc1a7
-> ("python: remove target Python packages from PYTHONPATH") but for
-> python3.
->
-> We currently have
-> $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
-> inside the PYTHON3_PATH variable, which gets used to define
-> PYTHONPATH, passed to the host Python interpreter when
-> building/installing target packages.
->
-> However, this is terribly wrong, as it causes the host interpreter to
-> potentially import target Python packages. This is wrong for several
-> reasons:
->
->  - Some Python packages might need some Python modules to be installed
->    on the host (described in setup_requires in setup.py), but their
->    installation currently works because by luck the corresponding
->    Python module is installed for the target. Some of those cases were
->    happening for real, and fixed by previous patches.
->
->  - Some Python packages include some native code, therefore built for
->    a specific CPU architecture. When you point the host Python
->    interpreter to native libraries built for the target, you get nice
->    build failures, such as the one affecting the python-cffi related
->    packages.
->
-> This change fixes the following build failures:
->
->    http://autobuild.buildroot.net/results/9005b89407e46b537a54cac6cc0c69dcac4dc5ea/
->    (python-cryptography)
->
->    http://autobuild.buildroot.net/results/395682d33d02fdcaa39d3c0326355bd9ea3d6feb/
->    (python-pynacl)
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+i.MX1/L boards require an old Linux kernel version to run, which is not
+compatible with latest Buildroot needs.
+Will fix:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
 
-I've compiled some heavy packages like crossbar and pytablewrite (they
-select more than a half of Python packages) and everything is working
-as expected. Thanks for the fix.
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ board/armadeus/readme.txt          |  9 ++-------
+ configs/armadeus_apf9328_defconfig | 29 -----------------------------
+ 2 files changed, 2 insertions(+), 36 deletions(-)
+ delete mode 100644 configs/armadeus_apf9328_defconfig
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Yegor
-
-> ---
->  package/python3/python3.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 80905dd..a18dc7f 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -232,7 +232,7 @@ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
->  endif
->
->  # Provided to other packages
-> -PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
-> +PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
->
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> --
-> 2.9.4
->
+diff --git a/board/armadeus/readme.txt b/board/armadeus/readme.txt
+index a1f1325..98c7b08 100644
+--- a/board/armadeus/readme.txt
++++ b/board/armadeus/readme.txt
+@@ -13,7 +13,6 @@ Supported platforms
+ Buildroot currently supports the following Armadeus platforms with the
+ associated defconfigs:
+ 
+- * APF9328 SOM + devt boards -> armadeus_apf9328_defconfig
+  * APF27 SOM + devt board    -> armadeus_apf27_defconfig
+  * APF51 SOM + devt board    -> armadeus_apf51_defconfig
+  * APF28 SOM + devt board    -> armadeus_apf28_defconfig
+@@ -46,15 +45,12 @@ When the build is finished, you will end up with:
+ 
+     output/images/
+     ??? imx**-apfxxdev.dtb	[1]
+-    ??? rootfs.jffs2		[2]
+     ??? rootfs.tar
+-    ??? rootfs.ubi		[2]
+-    ??? rootfs.ubifs		[2]
++    ??? rootfs.ubi
++    ??? rootfs.ubifs
+     ??? uImage
+ 
+ [1] Only if the kernel version used uses a Device Tree.
+-[2] .ubi/.ubifs images are not available on APF9328 and replaced by a
+-    .jffs2 one in this case.
+ 
+ Building U-Boot is currently not supported in these configurations.
+ 
+@@ -69,7 +65,6 @@ it:
+   $ cp output/images/uImage /tftpboot/apfxx-linux.bin
+   $ cp output/images/*.dtb /tftpboot/
+   $ cp output/images/rootfs.ubi /tftpboot/apfxx-rootfs.ubi
+-  $ cp output/images/rootfs.jffs2 /tftpboot/apfxx-rootfs.jffs2
+ 
+ where "apfxx" is the version of your SOM, as used with _defconfigs.
+ 
+diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
+deleted file mode 100644
+index 8abfcfd..0000000
+--- a/configs/armadeus_apf9328_defconfig
++++ /dev/null
+@@ -1,29 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm920t=y
+-
+-# Toolchain
+-BR2_PACKAGE_GDB=y
+-BR2_PACKAGE_HOST_GDB=y
+-BR2_ENABLE_LOCALE_PURGE=y
+-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+-
+-# System
+-BR2_TARGET_GENERIC_HOSTNAME="apf9328"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_JFFS2=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.29"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x08008000"
+-- 
+2.1.4
