@@ -1,62 +1,262 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:41:05 +0200
-Subject: [Buildroot] [git commit] perl-xml-namespacesupport: bump to version
-	1.12
-Message-ID: <20170902130619.54A9F81D34@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:32:12 +0200
+Subject: [Buildroot] [git commit] libepoxy: bump to version 1.4.3
+Message-ID: <20170902130618.68EE3818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=731a0316a6e4172d24c5eefc8897cdfefc89a5c5
+commit: https://git.buildroot.net/buildroot/commit/?id=97ff448fc9a30439f1a3883b2f7d1a5154c666a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Among other small fixes, the new version fixes crashes when running in
+X11 without GLX (i.e. using EGL). Additionally, the changes from patch
+"0002-Make-EGL-support-optional.patch" were committed upstream, and the
+file can be dropped.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-xml-namespacesupport/Config.in                      | 4 ++--
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash | 4 ++--
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ .../libepoxy/0002-Make-EGL-support-optional.patch  | 200 ---------------------
+ package/libepoxy/libepoxy.hash                     |   4 +-
+ package/libepoxy/libepoxy.mk                       |   4 +-
+ 3 files changed, 3 insertions(+), 205 deletions(-)
 
-diff --git a/package/perl-xml-namespacesupport/Config.in b/package/perl-xml-namespacesupport/Config.in
-index bc67d47..93a697c 100644
---- a/package/perl-xml-namespacesupport/Config.in
-+++ b/package/perl-xml-namespacesupport/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT
- 	bool "perl-xml-namespacesupport"
- 	help
--	  a simple generic namespace support class
-+	  A simple generic namespace processor
- 
--	  https://metacpan.org/release/XML-NamespaceSupport
-+	  https://github.com/perigrin/xml-namespacesupport
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-index 9389601..d55551c 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    222cca76161cd956d724286d36b607da XML-NamespaceSupport-1.11.tar.gz
--sha256 6d8151f0a3f102313d76b64bfd1c2d9ed46bfe63a16f038e7d860fda287b74ea XML-NamespaceSupport-1.11.tar.gz
-+md5    a8916c6d095bcf073e1108af02e78c97 XML-NamespaceSupport-1.12.tar.gz
-+sha256 47e995859f8dd0413aa3f22d350c4a62da652e854267aa0586ae544ae2bae5ef XML-NamespaceSupport-1.12.tar.gz
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-index d7bcdd4..325440b 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-@@ -4,10 +4,10 @@
- #
+diff --git a/package/libepoxy/0002-Make-EGL-support-optional.patch b/package/libepoxy/0002-Make-EGL-support-optional.patch
+deleted file mode 100644
+index b114bb2..0000000
+--- a/package/libepoxy/0002-Make-EGL-support-optional.patch
++++ /dev/null
+@@ -1,200 +0,0 @@
+-From 0511fc56e7017209ad18d16551ccaad05de9486c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 8 May 2017 23:12:49 +0200
+-Subject: [PATCH] Make EGL support optional
+-
+-It is perfectly possible to build Mesa3D with just OpenGL support, and
+-use with GLX in X.org, without having EGL/OpenGLES support.
+-
+-However, libepoxy currently unconditionally requires EGL support in its
+-configure.ac, which causes a build failure when Mesa3D only provides
+-full OpenGL support:
+-
+-checking for EGL... no
+-configure: error: Package requirements (egl) were not met:
+-
+-Package egl was not found in the pkg-config search path.
+-Perhaps you should add the directory containing `egl.pc'
+-to the PKG_CONFIG_PATH environment variable
+-Package 'egl', required by 'world', not found
+-
+-This commit fixes that by:
+-
+- - Adjusting the configure.ac to add a --{enable,disable}-egl option
+-   handled in the exact same way as --{enable,disable}-glx
+-
+- - Adjusting the meson build logic in the same way.
+-
+- - Adjusting src/dispatch_common.h to define PLATFORM_HAS_EGL correctly,
+-   which allows to not include any EGL related header file if EGL
+-   support is not enabled.
+-
+-Submitted-upstream: https://github.com/anholt/libepoxy/pull/123
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac          | 33 ++++++++++++++++++++++++++++-----
+- meson.build           | 21 ++++++++++++++++++---
+- meson_options.txt     |  5 +++++
+- src/dispatch_common.h |  8 ++++----
+- 4 files changed, 55 insertions(+), 12 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 31b0985..2dbecd9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -88,11 +88,35 @@ AS_CASE([$enable_glx],
+-   [AC_MSG_ERROR([Invalid value "$enable_glx" for option "--enable-glx"])]
+- ])
+- 
+--# The remaining platform specific API for GL/GLES are enabled
+--# depending on the platform we're building for
+-+AC_ARG_ENABLE([egl],
+-+              [AC_HELP_STRING([--enable-egl=@<:@auto,yes,no@:>@], [Enable EGL support @<:@default=auto@:>@])],
+-+              [enable_egl=$enableval],
+-+              [enable_egl=auto])
+-+
+-+AS_CASE([$enable_egl],
+-+  [auto], [
+-+    AS_CASE([$host_os],
+-+            [mingw*], [build_egl=no],
+-+            [darwin*], [build_egl=no],
+-+            [android*], [build_egl=no],
+-+            [build_egl=yes])
+-+  ],
+-+
+-+  [yes], [
+-+    build_egl=yes
+-+  ],
+-+
+-+  [no], [
+-+    build_egl=no
+-+  ],
+-+
+-+  [AC_MSG_ERROR([Invalid value "$enable_egl" for option "--enable-egl"])]
+-+])
+-+
+-+# The remaining platform specific API are enabled depending on the
+-+# platform we're building for
+- AS_CASE([$host_os],
+-   [mingw*], [
+--    build_egl=no
+-     build_wgl=yes
+-     has_znow=yes
+-     # On windows, the DLL has to have all of its functions
+-@@ -108,7 +132,6 @@ AS_CASE([$host_os],
+-   ],
+- 
+-   [darwin*], [
+--    build_egl=no
+-     build_wgl=no
+-     build_apple=yes
+-     has_znow=no
+-@@ -116,7 +139,6 @@ AS_CASE([$host_os],
+-   ],
+- 
+-   [
+--    build_egl=yes
+-     build_wgl=no
+-     has_znow=yes
+-     # On platforms with dlopen, we load everything dynamically and
+-@@ -131,6 +153,7 @@ AM_CONDITIONAL(BUILD_EGL, test x$build_egl = xyes)
+- if test x$build_egl = xyes; then
+-     PKG_CHECK_MODULES(EGL, [egl])
+-     AC_DEFINE([BUILD_EGL], [1], [build EGL tests])
+-+    AC_DEFINE(ENABLE_EGL, [1], [Whether EGL support is enabled])
+- fi
+- 
+- AM_CONDITIONAL(BUILD_GLX, test x$build_glx = xyes)
+-diff --git a/meson.build b/meson.build
+-index 5435f45..226152e 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -51,26 +51,41 @@ elif enable_glx == 'no'
+-   build_glx = false
+- endif
+- 
+-+enable_egl = get_option('enable-egl')
+-+if enable_egl == 'auto'
+-+  if host_system == 'windows'
+-+    build_egl = false
+-+  elif host_system == 'darwin'
+-+    build_egl = false
+-+  elif host_system == 'android'
+-+    build_egl = false
+-+  else
+-+    build_egl = true
+-+  endif
+-+elif enable_egl == 'yes'
+-+  build_egl = true
+-+elif enable_egl == 'no'
+-+  build_egl = false
+-+endif
+-+
+- # The remaining platform specific API for GL/GLES are enabled
+- # depending on the platform we're building for
+- if host_system == 'windows'
+--  build_egl = false
+-   build_apple = false
+-   build_wgl = true
+-   has_znow = true
+- elif host_system == 'darwin'
+--  build_egl = false
+-   build_apple = true
+-   build_wgl = false
+-   has_znow = false
+- else
+--  build_egl = true
+-   build_apple = false
+-   build_wgl = false
+-   has_znow = true
+- endif
+- 
+- conf.set10('ENABLE_GLX', build_glx)
+-+conf.set10('ENABLE_EGL', build_egl)
+- 
+- # Compiler flags, taken from the Xorg macros
+- if cc.get_id() == 'msvc'
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 18932f5..244476a 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -6,3 +6,8 @@ option('enable-glx',
+-        choices: [ 'auto', 'yes', 'no' ],
+-        value: 'auto',
+-        description: 'Enable GLX support')
+-+option('enable-egl',
+-+       type: 'combo',
+-+       choices: [ 'auto', 'yes', 'no' ],
+-+       value: 'auto',
+-+       description: 'Enable EGL support')
+-diff --git a/src/dispatch_common.h b/src/dispatch_common.h
+-index e3277f7..e16771f 100644
+---- a/src/dispatch_common.h
+-+++ b/src/dispatch_common.h
+-@@ -24,19 +24,19 @@
+- #include "config.h"
+- 
+- #ifdef _WIN32
+--#define PLATFORM_HAS_EGL 0
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX ENABLE_GLX
+- #define PLATFORM_HAS_WGL 1
+- #elif defined(__APPLE__)
+--#define PLATFORM_HAS_EGL 0
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX ENABLE_GLX
+- #define PLATFORM_HAS_WGL 0
+- #elif defined(ANDROID)
+--#define PLATFORM_HAS_EGL 1
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX 0
+- #define PLATFORM_HAS_WGL 0
+- #else
+--#define PLATFORM_HAS_EGL 1
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX ENABLE_GLX
+- #define PLATFORM_HAS_WGL 0
+- #endif
+--- 
+-2.7.4
+-
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 7d2ade8..d7ebec5 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,2 +1,2 @@
+-# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.4/libepoxy-1.4.1.sha256sum
+-sha256 88c6abf5522fc29bab7d6c555fd51a855cbd9253c4315f8ea44e832baef21aa6  libepoxy-1.4.1.tar.xz
++# From ftp://ftp.gnome.org/pub/GNOME/sources/libepoxy/1.4/libepoxy-1.4.3.sha256sum
++sha256 0b808a06c9685a62fca34b680abb8bc7fb2fda074478e329b063c1f872b826f6  libepoxy-1.4.3.tar.xz
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index e72743d..366cc11 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,15 +5,13 @@
  ################################################################################
  
--PERL_XML_NAMESPACESUPPORT_VERSION = 1.11
-+PERL_XML_NAMESPACESUPPORT_VERSION = 1.12
- PERL_XML_NAMESPACESUPPORT_SOURCE = XML-NamespaceSupport-$(PERL_XML_NAMESPACESUPPORT_VERSION).tar.gz
- PERL_XML_NAMESPACESUPPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERIGRIN
- PERL_XML_NAMESPACESUPPORT_LICENSE = Artistic or GPL-1.0+
--PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = README
-+PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = LICENSE
+ LIBEPOXY_VERSION_MAJOR = 1.4
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).1
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
+-# 0002-Make-EGL-support-optional.patch
+-LIBEPOXY_AUTORECONF = YES
  
- $(eval $(perl-package))
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+ LIBEPOXY_CONF_OPTS += --enable-egl
