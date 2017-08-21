@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:53 +0200
-Subject: [Buildroot] [git commit branch/next] perl-module-build: bump to
-	version 0.4224
-Message-ID: <20170821214003.3C7F17FDC1@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:40:59 +0200
+Subject: [Buildroot] [git commit branch/next] perl-path-tiny: bump to
+	version 0.104
+Message-ID: <20170821214003.32334821F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68fb9044be4f380504ff8fa40720f852060a336c
+commit: https://git.buildroot.net/buildroot/commit/?id=e2707614be4e0688c7013ed2df5e4206caedefa7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-module-build/perl-module-build.hash | 4 ++--
- package/perl-module-build/perl-module-build.mk   | 2 +-
+ package/perl-path-tiny/perl-path-tiny.hash | 4 ++--
+ package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
-index 0363ac5..17e8b4e 100644
---- a/package/perl-module-build/perl-module-build.hash
-+++ b/package/perl-module-build/perl-module-build.hash
+diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
+index 259469c..49b6661 100644
+--- a/package/perl-path-tiny/perl-path-tiny.hash
++++ b/package/perl-path-tiny/perl-path-tiny.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9df204e188462a4410d496f316c2c531 Module-Build-0.4220.tar.gz
--sha256 fb1207c7e799366f7a8adda3f135bf8141c4d6068505650d4db2b2d3ce34b5a2 Module-Build-0.4220.tar.gz
-+md5    b74c2f6e84b60aad3a3defd30b6f0f4d Module-Build-0.4224.tar.gz
-+sha256 a6ca15d78244a7b50fdbf27f85c85f4035aa799ce7dd018a0d98b358ef7bc782 Module-Build-0.4224.tar.gz
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 080e817..42c9c11 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
+-md5    92ece7b2aa09f18035b0550b0118bdee Path-Tiny-0.100.tar.gz
+-sha256 8b8c4c9db710470a26b356e7187eba47217fbba1fe8bd0ad72c5b2cc8f6ba10c Path-Tiny-0.100.tar.gz
++md5    17354181d9794df01be555b25114dd24 Path-Tiny-0.104.tar.gz
++sha256 c69f1dcfeb4aa004086deb9bc14c7d79f45798b947f1efbd634a3442e267aaef Path-Tiny-0.104.tar.gz
+diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
+index ed1304d..53e787d 100644
+--- a/package/perl-path-tiny/perl-path-tiny.mk
++++ b/package/perl-path-tiny/perl-path-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MODULE_BUILD_VERSION = 0.4220
-+PERL_MODULE_BUILD_VERSION = 0.4224
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
+-PERL_PATH_TINY_VERSION = 0.100
++PERL_PATH_TINY_VERSION = 0.104
+ PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
+ PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+ PERL_PATH_TINY_LICENSE = Apache-2.0
