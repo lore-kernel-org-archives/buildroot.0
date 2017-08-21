@@ -1,66 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Aug 2017 00:04:42 +0200
-Subject: [Buildroot] [PATCH] dbus-cpp: fix build with gcc 7.x
-Message-ID: <20170821220442.12240-1-thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Aug 2017 00:05:29 +0200
+Subject: [Buildroot] [git commit branch/next] linux-firmware: Add QLogic FC
+	Adapters
+Message-ID: <20170821215923.A3D1980765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to dbus-cpp to make it build with gcc 7.x.
+commit: https://git.buildroot.net/buildroot/commit/?id=91983091455e2b82432509c11f958409e7bbefcd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
+Add a config option to install the ql2xxx firmware binaries for QLogic
+Fibre Channel adapters.
+Since this doesn't quite fit under the existing categories in Config.in,
+include it under a new category named "Fibre Channel Adapter Firmware".
 
-  http://autobuild.buildroot.net/results/07a7559c0efeeda16c239e0fa06259d4cd48c71b/
-
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...3-src-pipe.c-fix-build-error-with-gcc-7.x.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/dbus-cpp/0003-src-pipe.c-fix-build-error-with-gcc-7.x.patch
+ package/linux-firmware/Config.in         | 9 +++++++++
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/dbus-cpp/0003-src-pipe.c-fix-build-error-with-gcc-7.x.patch b/package/dbus-cpp/0003-src-pipe.c-fix-build-error-with-gcc-7.x.patch
-new file mode 100644
-index 0000000..6f3e624
---- /dev/null
-+++ b/package/dbus-cpp/0003-src-pipe.c-fix-build-error-with-gcc-7.x.patch
-@@ -0,0 +1,36 @@
-+From 167042116f523f90911f3a28c4ec065918d56cc9 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 22 Aug 2017 00:02:52 +0200
-+Subject: [PATCH] src/pipe.c: fix build error with gcc 7.x
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index f0d6476..ad750e8 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -329,4 +329,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+ 
+ endmenu
+ 
++menu "Fibre Channel Adapter Firmware"
 +
-+The write function takes a char* as argument, not a char.
++config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
++	bool "QLogic 2xxx Fibre Channel Adapters"
++	help
++	  Firmware files for ql2xxx adapters
 +
-+Fixes:
++endmenu
 +
-+pipe.cpp: In member function ?void DBus::Pipe::signal()?:
-+pipe.cpp:86:29: error: invalid conversion from ?char? to ?const void*? [-fpermissive]
-+   ::write(_fd_write, '\0', 1);
-+                             ^
+ endif
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index e03788a..b01585f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -414,6 +414,14 @@ LINUX_FIRMWARE_FILES += \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
+ 
++# ql2xxx
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX),y)
++LINUX_FIRMWARE_FILES += \
++	ql2100_fw.bin ql2200_fw.bin ql2300_fw.bin ql2322_fw.bin \
++	ql2400_fw.bin ql2500_fw.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qla2xxx
++endif
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/pipe.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/pipe.cpp b/src/pipe.cpp
-+index 01211b3..d0572c7 100644
-+--- a/src/pipe.cpp
-++++ b/src/pipe.cpp
-+@@ -83,5 +83,5 @@ ssize_t Pipe::read(void *buffer, unsigned int &nbytes)
-+ void Pipe::signal()
-+ {
-+   // TODO: ignoring return of read/write generates warning; maybe relevant for eventloop work...
-+-  ::write(_fd_write, '\0', 1);
-++  ::write(_fd_write, "\0", 1);
-+ }
-+-- 
-+2.9.4
-+
--- 
-2.9.4
+ ifneq ($(LINUX_FIRMWARE_FILES),)
+ define LINUX_FIRMWARE_INSTALL_FILES
+ 	cd $(@D) ; \
