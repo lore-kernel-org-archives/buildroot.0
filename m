@@ -1,36 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:23:56 +0200
-Subject: [Buildroot] [PATCH] board: remove Armadeus's APF9328 support
-In-Reply-To: <1503321495-5763-1-git-send-email-julien.boibessot@free.fr>
-References: <1503321495-5763-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20170821232356.1b243cf4@windsurf>
+Date: Mon, 21 Aug 2017 23:24:59 +0200
+Subject: [Buildroot] [git commit] kvmtool: add patch to fix build with musl
+Message-ID: <20170821211826.1E9977FF3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4688b3a7e20578a761b7e54a392814323c8e4200
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 21 Aug 2017 15:18:15 +0200, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> i.MX1/L boards require an old Linux kernel version to run, which is not
-> compatible with latest Buildroot needs.
-> Will fix:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> ---
->  board/armadeus/readme.txt          |  9 ++-------
->  configs/armadeus_apf9328_defconfig | 29 -----------------------------
->  2 files changed, 2 insertions(+), 36 deletions(-)
->  delete mode 100644 configs/armadeus_apf9328_defconfig
+This commit backports an upstream patch that fixes the build of
+kvmtool with musl:
 
-Applied to master, thanks.
+In file included from builtin-balloon.c:9:0:
+include/kvm/kvm.h:22:0: warning: "PAGE_SIZE" redefined
+ #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes one part of:
+
+  http://autobuild.buildroot.net/results/4459a909e735343d1cf768d30466bc3c57eca19e/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+new file mode 100644
+index 0000000..ed3370c
+--- /dev/null
++++ b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+@@ -0,0 +1,42 @@
++From bec1b0ced72dc0d49825d6b69d09296d13fd0af3 Mon Sep 17 00:00:00 2001
++From: Andre Przywara <andre.przywara@arm.com>
++Date: Tue, 21 Jul 2015 10:58:46 +0100
++Subject: [PATCH] avoid redefining PAGE_SIZE
++
++PAGE_SIZE may have been defined by the C libary (musl-libc does that).
++So avoid redefining it here unconditionally, instead only use our
++definition if none has been provided by the libc.
++
++Signed-off-by: Andre Przywara <andre.przywara@arm.com>
++Signed-off-by: Will Deacon <will.deacon@arm.com>
++[backport from upstream commit 4095fac878f618ae5e7384a1dc65ee34b6e05217.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ include/kvm/kvm.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/include/kvm/kvm.h b/include/kvm/kvm.h
++index 754e029..37155db 100644
++--- a/include/kvm/kvm.h
+++++ b/include/kvm/kvm.h
++@@ -11,6 +11,7 @@
++ #include <time.h>
++ #include <signal.h>
++ #include <sys/prctl.h>
+++#include <limits.h>
++ 
++ #define SIGKVMEXIT		(SIGRTMIN + 0)
++ #define SIGKVMPAUSE		(SIGRTMIN + 1)
++@@ -19,7 +20,9 @@
++ #define HOME_DIR		getenv("HOME")
++ #define KVM_BINARY_NAME		"lkvm"
++ 
+++#ifndef PAGE_SIZE
++ #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
+++#endif
++ 
++ #define DEFINE_KVM_EXT(ext)		\
++ 	.name = #ext,			\
++-- 
++2.9.4
++
