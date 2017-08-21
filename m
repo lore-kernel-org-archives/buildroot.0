@@ -1,48 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:51 +0200
-Subject: [Buildroot] [git commit branch/next] perl-mail-dkim: bump to
-	version 0.42
-Message-ID: <20170821214002.7046E7FAE8@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:41:02 +0200
+Subject: [Buildroot] [git commit branch/next] perl-uri: bump to version 1.72
+Message-ID: <20170821214003.2EBE37FF0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5c319aa50af5b697b2330e49c690b4d698ac9c0
+commit: https://git.buildroot.net/buildroot/commit/?id=98e97d2f3e32a5d110bfabda9e0a338fe45b609a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/perl-uri/Config.in     | 6 ++----
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index b6bb545..c40e66e 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
+diff --git a/package/perl-uri/Config.in b/package/perl-uri/Config.in
+index 62a53f2..23e5c50 100644
+--- a/package/perl-uri/Config.in
++++ b/package/perl-uri/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_PERL_URI
+ 	bool "perl-uri"
+ 	help
+-	  The module implements the URI class. Objects of this class represent
+-	  Uniform Resource Identifier references as specified in RFC 2396 and
+-	  updated by RFC 2732.
++	  Uniform Resource Identifiers (absolute and relative)
+ 
+-	  https://github.com/libwww-perl/uri
++	  https://github.com/libwww-perl/URI
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index 8a265bf..a11924f 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9ceb8a0397aff83928e7a9760b1b190f Mail-DKIM-0.40.tar.gz
--sha256 3c5ea0c3a2028a5a2c3b64bbcd6bd9de6a5fa5ee4e16046dd8875c4796aaa6f1 Mail-DKIM-0.40.tar.gz
-+md5    60ebe54760f6633f07b25228272b9473 Mail-DKIM-0.42.tar.gz
-+sha256 f4e3a6344517aeee9a7516c0f58197f41dce81461f74ce9ba8401a143aa2577c Mail-DKIM-0.42.tar.gz
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index 03a3b74..e088ecf 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -4,10 +4,9 @@
+-md5    247c3da29a794f72730e01aa5a715daf URI-1.71.tar.gz
+-sha256 9c8eca0d7f39e74bbc14706293e653b699238eeb1a7690cc9c136fb8c2644115 URI-1.71.tar.gz
++md5    cd56d81ed429efaa97e7f3ff08851b48 URI-1.72.tar.gz
++sha256 35f14431d4b300de4be1163b0b5332de2d7fbda4f05ff1ed198a8e9330d40a32 URI-1.72.tar.gz
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index effeb16..75f374a 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 0.40
-+PERL_MAIL_DKIM_VERSION = 0.42
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
--PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JA/JASLONG
-+PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_DEPENDENCIES = perl-crypt-openssl-rsa perl-mailtools perl-net-dns
--PERL_MAIL_DKIM_LICENSE_FILES = README
- 
- $(eval $(perl-package))
+-PERL_URI_VERSION = 1.71
++PERL_URI_VERSION = 1.72
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
