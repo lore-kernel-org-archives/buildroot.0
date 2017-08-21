@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:54 +0200
-Subject: [Buildroot] [git commit branch/next] perl-mojolicious: bump to
-	version 7.43
-Message-ID: <20170821214003.408037FF0C@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:51:59 +0200
+Subject: [Buildroot] [PATCH 01/18] perl-file-util: bump to version
+ 4.161950
+In-Reply-To: <20170820080331.12935-1-francois.perrad@gadz.org>
+References: <20170820080331.12935-1-francois.perrad@gadz.org>
+Message-ID: <20170821235159.732df5b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e05ef12b8e985fd6db49041a5d3defba241f7f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sun, 20 Aug 2017 10:03:14 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-file-util/perl-file-util.hash | 4 ++--
+>  package/perl-file-util/perl-file-util.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 21b2768..45bfd5a 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    97a935d64fc2aaf5538e6ab704bbc420 Mojolicious-7.20.tar.gz
--sha256 ddd034bdd2b99f64498f30b9859c2f2607318f43983dfe36e14bfdf1526fd693 Mojolicious-7.20.tar.gz
-+md5    a07d9d3fc06a35cc7336b35e6e531e43 Mojolicious-7.43.tar.gz
-+sha256 ca177da7b0c1e2a31a1880c4a06afbbd1ada1da57146bfa030b7912a3d608b5e Mojolicious-7.43.tar.gz
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index b3e6615..b3bec15 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MOJOLICIOUS_VERSION = 7.20
-+PERL_MOJOLICIOUS_VERSION = 7.43
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+I've applied the entire series to next... and I'm only seeing Arnout's
+review now. If they need to be addressed, please send follow-up
+patches. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
