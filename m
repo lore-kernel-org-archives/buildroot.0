@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:25:52 +0200
-Subject: [Buildroot] [PATCH 1/3] kvmtool: add patch to fix build with
- musl
-In-Reply-To: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
-References: <20170819205528.31753-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170821232552.486d2004@windsurf>
+Date: Mon, 21 Aug 2017 23:26:15 +0200
+Subject: [Buildroot] [git commit branch/next] configs/imx6q-sabresd_qt5:
+	Remove BR2_TOOLCHAIN_BUILDROOT_GLIBC
+Message-ID: <20170821211929.B93077FE04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d04430e22dd6bdddb89e37d3d1aecc723841dfc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 19 Aug 2017 22:55:26 +0200, Thomas Petazzoni wrote:
-> This commit backports an upstream patch that fixes the build of
-> kvmtool with musl:
-> 
-> In file included from builtin-balloon.c:9:0:
-> include/kvm/kvm.h:22:0: warning: "PAGE_SIZE" redefined
->  #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
-> 
-> Fixes one part of:
-> 
->   http://autobuild.buildroot.net/results/4459a909e735343d1cf768d30466bc3c57eca19e/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+There is no need to select BR2_TOOLCHAIN_BUILDROOT_GLIBC, so just remove it.
 
-All applied. Thanks Bernd for having tested the patches!
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/imx6q-sabresd_qt5_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/imx6q-sabresd_qt5_defconfig b/configs/imx6q-sabresd_qt5_defconfig
+index 0b4e961..801b256 100644
+--- a/configs/imx6q-sabresd_qt5_defconfig
++++ b/configs/imx6q-sabresd_qt5_defconfig
+@@ -10,7 +10,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ # Additional features needed for packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
