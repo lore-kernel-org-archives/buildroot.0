@@ -1,44 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 23:26:14 +0200
-Subject: [Buildroot] [git commit] package/terminology: bump to 1.1.0
-Message-ID: <20170902130621.0A9A38016A@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:40:50 +0200
+Subject: [Buildroot] [git commit] perl-libwww-perl: bump to version 6.26
+Message-ID: <20170902130618.B440B80337@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7614e6336d6148afebaece968445c94795658a4
+commit: https://git.buildroot.net/buildroot/commit/?id=55acd64d896ea4ef3b6e26b16ff0af94dac71b2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See: https://sourceforge.net/p/enlightenment/mailman/message/36004555/
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/terminology/terminology.hash | 4 ++--
- package/terminology/terminology.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-libwww-perl/Config.in             | 3 ++-
+ package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 3 ++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index 86f6606..c203226 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,2 +1,2 @@
--# From https://sourceforge.net/p/enlightenment/mailman/message/35600707/
--sha256	bfed42b83bce854d35ba33a4d38373c6d42fb2c0ea0335d76420488c091692f4	terminology-1.0.0.tar.xz
-+# Locally calculated
-+sha256	eb9136e487ab9e6ff3c98173919b5ad105626434d096dafecd18392fc40c348f	terminology-1.1.0.tar.xz
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index dbfec2e..817521d 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
+diff --git a/package/perl-libwww-perl/Config.in b/package/perl-libwww-perl/Config.in
+index fc46bf1..09fc005 100644
+--- a/package/perl-libwww-perl/Config.in
++++ b/package/perl-libwww-perl/Config.in
+@@ -11,12 +11,13 @@ config BR2_PACKAGE_PERL_LIBWWW_PERL
+ 	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
+ 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
+ 	select BR2_PACKAGE_PERL_NET_HTTP
++	select BR2_PACKAGE_PERL_TRY_TINY
+ 	select BR2_PACKAGE_PERL_URI
+ 	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
+ 	help
+ 	  The World-Wide Web library for Perl
+ 
+-	  https://metacpan.org/release/libwww-perl
++	  https://github.com/libwww-perl/libwww-perl
+ 
+ comment "perl-libwww-perl needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index d3b3328..24e077d 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    0880fade10edcf5f60087e42f1db4481 libwww-perl-6.16.tar.gz
+-sha256 daffd268000f92d241f8ae5508ae5616dbd02f15a587b4fbcd14998ccc15ce22 libwww-perl-6.16.tar.gz
++md5    457bf4a4f40af3e2f43653329a9c6ab7 libwww-perl-6.26.tar.gz
++sha256 d0c5435275f8638ff36fff8f655ad2ccad1156e66cc47bfacfb9e44fc585b24f libwww-perl-6.26.tar.gz
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index fe5bd98..fd4857c 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TERMINOLOGY_VERSION = 1.0.0
-+TERMINOLOGY_VERSION = 1.1.0
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
+-PERL_LIBWWW_PERL_VERSION = 6.16
++PERL_LIBWWW_PERL_VERSION = 6.26
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+ PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_DEPENDENCIES = \
+@@ -18,6 +18,7 @@ PERL_LIBWWW_PERL_DEPENDENCIES = \
+ 	perl-http-negotiate \
+ 	perl-lwp-mediatypes \
+ 	perl-net-http \
++	perl-try-tiny \
+ 	perl-uri \
+ 	perl-www-robotrules
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
