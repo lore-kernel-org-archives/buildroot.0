@@ -1,42 +1,63 @@
-From: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
-Date: Thu, 31 Aug 2017 16:29:31 -0400
-Subject: [Buildroot] [PATCH] configs/ts4900: bump kernel version to 4.12
-Message-ID: <1504211371-457-1-git-send-email-mathieu.audat@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Aug 2017 23:26:52 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.1.7
+Message-ID: <20170902130618.443C1818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ts4900 defconfig is upstream in Linux since v4.9:
-       a2f1145 ARM: dts: TS-4900: add basic device tree
+commit: https://git.buildroot.net/buildroot/commit/?id=7d952d1b050420bf3f1ec39fcb6e8c13ad116e41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump kernel version to v4.12 and use the upstreamed defconfig
-imx_v6_v7.
-
-Signed-off-by: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/ts4900_defconfig | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/configs/ts4900_defconfig b/configs/ts4900_defconfig
-index 7d5d02b..082234f 100644
---- a/configs/ts4900_defconfig
-+++ b/configs/ts4900_defconfig
-@@ -1,12 +1,9 @@
- BR2_arm=y
- BR2_cortex_a9=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4900/post-image.sh"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/embeddedarm/linux-3.10.17-imx6.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="70d1e85a22879e27cc9e36384438d5a9793e44b0"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--- 
-2.7.4
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 7b9e4b4..0ef08b6 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.1.6
++MESA3D_HEADERS_VERSION = 17.1.7
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f2dda20..b04689b 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-August/000346.html
+-md5 54758bf842f9ea53c8b57cce4311b87e  mesa-17.1.6.tar.xz
+-sha1 2acc201e24ea67c5231074d6746a42a747228ed6  mesa-17.1.6.tar.xz
+-sha256 0686deadde1f126b20aa67e47e8c50502043eee4ecdf60d5009ffda3cebfee50  mesa-17.1.6.tar.xz
+-sha512 cf57f29a21208f0a9bc84157f806bcaf6fd0583352449fcb986b05773eeefc99c4040dc41b242782dd5aa9ff7f9c5312b17a4db82d87f600acf165b6acdfc95a  mesa-17.1.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-August/000349.html
++md5 e40bb428a263bd28cbf6478dae45b207  mesa-17.1.7.tar.xz
++sha1 dfc7decc37bbad96bb0af8fa6dedae59424a9370  mesa-17.1.7.tar.xz
++sha256 69f472a874b1122404fa0bd13e2d6bf87eb3b9ad9c21d2f39872a96d83d9e5f5  mesa-17.1.7.tar.xz
++sha512 a1cb22b78c74572bef720c132294a028413402520260afff3d46e79f8837dce35aafd8675a8d6834574a4a15ded3611f06dddd5a9fc5882a6dcedab63d0b3e35  mesa-17.1.7.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e62dfff..71978f8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.1.6
++MESA3D_VERSION = 17.1.7
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
