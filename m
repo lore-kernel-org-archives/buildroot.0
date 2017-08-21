@@ -1,64 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:46 +0200
-Subject: [Buildroot] [git commit branch/next] perl-http-cookies: bump to
-	version 6.04
-Message-ID: <20170821214001.F034C7FF0C@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:40:49 +0200
+Subject: [Buildroot] [git commit branch/next] perl-io-socket-ssl: bump to
+	version 2.050
+Message-ID: <20170821214002.1D8557FF0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf407c8b4de677ee610f34ec2b2457d1674148dc
+commit: https://git.buildroot.net/buildroot/commit/?id=79139a250adc0a08fc9a5ae64e3be827331b535b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-http-cookies/Config.in              | 4 ++--
- package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
- package/perl-http-cookies/perl-http-cookies.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
-index cb5a3c1..4095fee 100644
---- a/package/perl-http-cookies/Config.in
-+++ b/package/perl-http-cookies/Config.in
-@@ -3,6 +3,6 @@ config BR2_PACKAGE_PERL_HTTP_COOKIES
- 	select BR2_PACKAGE_PERL_HTTP_DATE
- 	select BR2_PACKAGE_PERL_HTTP_MESSAGE
- 	help
--	  Objects that represent a "cookie jar"
-+	  HTTP cookie jars
- 
--	  http://github.com/gisle/http-cookies
-+	  https://github.com/libwww-perl/http-cookies
-diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
-index 94e5f31..361d4db 100644
---- a/package/perl-http-cookies/perl-http-cookies.hash
-+++ b/package/perl-http-cookies/perl-http-cookies.hash
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 852eb8d..617a973 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    ecfd0eeb88512033352c2f13c9580f03 HTTP-Cookies-6.01.tar.gz
--sha256 f5d3ade383ce6389d80cb0d0356b643af80435bb036afd8edce335215ec5eb20 HTTP-Cookies-6.01.tar.gz
-+md5    7bf1e277bd5c886bc18d21eb8423b65f HTTP-Cookies-6.04.tar.gz
-+sha256 0cc7f079079dcad8293fea36875ef58dd1bfd75ce1a6c244cd73ed9523eb13d4 HTTP-Cookies-6.04.tar.gz
-diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
-index a4ef552..0777c08 100644
---- a/package/perl-http-cookies/perl-http-cookies.mk
-+++ b/package/perl-http-cookies/perl-http-cookies.mk
-@@ -4,11 +4,11 @@
+-md5    a5f284d543aec4a6fcd595eb5fc8898b IO-Socket-SSL-2.022.tar.gz
+-sha256 651c4e5e2762ca780f2743986639b64557295bb326fddaff32f3adc0eac4f806 IO-Socket-SSL-2.022.tar.gz
++md5    98184d4ce23b2c5faf2e89120a683a07 IO-Socket-SSL-2.050.tar.gz
++sha256 54e6716e40df8b1c168d8f54a0b8f215313739bd99dda17adb7c00fe94656692 IO-Socket-SSL-2.050.tar.gz
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index be7db72..a1ba993 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_COOKIES_VERSION = 6.01
-+PERL_HTTP_COOKIES_VERSION = 6.04
- PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
--PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_COOKIES_DEPENDENCIES = perl-http-date perl-http-message
- PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
--PERL_HTTP_COOKIES_LICENSE_FILES = README
-+PERL_HTTP_COOKIES_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
+-PERL_IO_SOCKET_SSL_VERSION = 2.022
++PERL_IO_SOCKET_SSL_VERSION = 2.050
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_DEPENDENCIES = perl-net-ssleay
