@@ -1,40 +1,262 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:31:50 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 7.x series to 7.2.0
-In-Reply-To: <ad90209d-973e-b3e4-fb76-854f6bbb01e9@mind.be>
-References: <20170816203025.22554-1-thomas.petazzoni@free-electrons.com>
- <ad90209d-973e-b3e4-fb76-854f6bbb01e9@mind.be>
-Message-ID: <20170821233150.28c91c2b@windsurf>
+Date: Mon, 21 Aug 2017 23:32:12 +0200
+Subject: [Buildroot] [git commit branch/next] libepoxy: bump to version 1.4.3
+Message-ID: <20170821212905.237D77FCFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=97ff448fc9a30439f1a3883b2f7d1a5154c666a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 18 Aug 2017 00:17:56 +0200, Arnout Vandecappelle wrote:
+Among other small fixes, the new version fixes crashes when running in
+X11 without GLX (i.e. using EGL). Additionally, the changes from patch
+"0002-Make-EGL-support-optional.patch" were committed upstream, and the
+file can be dropped.
 
-> > @@ -18,9 +18,9 @@ GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
-> >  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
-> >  else
-> >  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
-> > -# From version 6.4.0 a bz2 release tarball is not provided anymore. Use the xz
-> > -# tarball instead.
-> > -ifeq ($(BR2_GCC_VERSION_6_X),y)
-> > +# From version 6.4.0 and 7.2.0 a bz2 release tarball is not provided
-> > +# anymore. Use the xz tarball instead.
-> > +ifeq ($(BR2_GCC_VERSION_6_X)$(BR2_GCC_VERSION_7_X),y)  
-> 
->  This is not maintainable, at some point we'll have to change it into
-> BR2_TOOLCHAIN_GCC_AT_LEAST_6.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../libepoxy/0002-Make-EGL-support-optional.patch  | 200 ---------------------
+ package/libepoxy/libepoxy.hash                     |   4 +-
+ package/libepoxy/libepoxy.mk                       |   4 +-
+ 3 files changed, 3 insertions(+), 205 deletions(-)
 
-Agreed, but I've kept that for a future change. In the future, most gcc
-tarballs will be .tar.xz, so what we'll have to special case are the
-older versions, not the newer ones :)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libepoxy/0002-Make-EGL-support-optional.patch b/package/libepoxy/0002-Make-EGL-support-optional.patch
+deleted file mode 100644
+index b114bb2..0000000
+--- a/package/libepoxy/0002-Make-EGL-support-optional.patch
++++ /dev/null
+@@ -1,200 +0,0 @@
+-From 0511fc56e7017209ad18d16551ccaad05de9486c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 8 May 2017 23:12:49 +0200
+-Subject: [PATCH] Make EGL support optional
+-
+-It is perfectly possible to build Mesa3D with just OpenGL support, and
+-use with GLX in X.org, without having EGL/OpenGLES support.
+-
+-However, libepoxy currently unconditionally requires EGL support in its
+-configure.ac, which causes a build failure when Mesa3D only provides
+-full OpenGL support:
+-
+-checking for EGL... no
+-configure: error: Package requirements (egl) were not met:
+-
+-Package egl was not found in the pkg-config search path.
+-Perhaps you should add the directory containing `egl.pc'
+-to the PKG_CONFIG_PATH environment variable
+-Package 'egl', required by 'world', not found
+-
+-This commit fixes that by:
+-
+- - Adjusting the configure.ac to add a --{enable,disable}-egl option
+-   handled in the exact same way as --{enable,disable}-glx
+-
+- - Adjusting the meson build logic in the same way.
+-
+- - Adjusting src/dispatch_common.h to define PLATFORM_HAS_EGL correctly,
+-   which allows to not include any EGL related header file if EGL
+-   support is not enabled.
+-
+-Submitted-upstream: https://github.com/anholt/libepoxy/pull/123
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac          | 33 ++++++++++++++++++++++++++++-----
+- meson.build           | 21 ++++++++++++++++++---
+- meson_options.txt     |  5 +++++
+- src/dispatch_common.h |  8 ++++----
+- 4 files changed, 55 insertions(+), 12 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 31b0985..2dbecd9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -88,11 +88,35 @@ AS_CASE([$enable_glx],
+-   [AC_MSG_ERROR([Invalid value "$enable_glx" for option "--enable-glx"])]
+- ])
+- 
+--# The remaining platform specific API for GL/GLES are enabled
+--# depending on the platform we're building for
+-+AC_ARG_ENABLE([egl],
+-+              [AC_HELP_STRING([--enable-egl=@<:@auto,yes,no@:>@], [Enable EGL support @<:@default=auto@:>@])],
+-+              [enable_egl=$enableval],
+-+              [enable_egl=auto])
+-+
+-+AS_CASE([$enable_egl],
+-+  [auto], [
+-+    AS_CASE([$host_os],
+-+            [mingw*], [build_egl=no],
+-+            [darwin*], [build_egl=no],
+-+            [android*], [build_egl=no],
+-+            [build_egl=yes])
+-+  ],
+-+
+-+  [yes], [
+-+    build_egl=yes
+-+  ],
+-+
+-+  [no], [
+-+    build_egl=no
+-+  ],
+-+
+-+  [AC_MSG_ERROR([Invalid value "$enable_egl" for option "--enable-egl"])]
+-+])
+-+
+-+# The remaining platform specific API are enabled depending on the
+-+# platform we're building for
+- AS_CASE([$host_os],
+-   [mingw*], [
+--    build_egl=no
+-     build_wgl=yes
+-     has_znow=yes
+-     # On windows, the DLL has to have all of its functions
+-@@ -108,7 +132,6 @@ AS_CASE([$host_os],
+-   ],
+- 
+-   [darwin*], [
+--    build_egl=no
+-     build_wgl=no
+-     build_apple=yes
+-     has_znow=no
+-@@ -116,7 +139,6 @@ AS_CASE([$host_os],
+-   ],
+- 
+-   [
+--    build_egl=yes
+-     build_wgl=no
+-     has_znow=yes
+-     # On platforms with dlopen, we load everything dynamically and
+-@@ -131,6 +153,7 @@ AM_CONDITIONAL(BUILD_EGL, test x$build_egl = xyes)
+- if test x$build_egl = xyes; then
+-     PKG_CHECK_MODULES(EGL, [egl])
+-     AC_DEFINE([BUILD_EGL], [1], [build EGL tests])
+-+    AC_DEFINE(ENABLE_EGL, [1], [Whether EGL support is enabled])
+- fi
+- 
+- AM_CONDITIONAL(BUILD_GLX, test x$build_glx = xyes)
+-diff --git a/meson.build b/meson.build
+-index 5435f45..226152e 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -51,26 +51,41 @@ elif enable_glx == 'no'
+-   build_glx = false
+- endif
+- 
+-+enable_egl = get_option('enable-egl')
+-+if enable_egl == 'auto'
+-+  if host_system == 'windows'
+-+    build_egl = false
+-+  elif host_system == 'darwin'
+-+    build_egl = false
+-+  elif host_system == 'android'
+-+    build_egl = false
+-+  else
+-+    build_egl = true
+-+  endif
+-+elif enable_egl == 'yes'
+-+  build_egl = true
+-+elif enable_egl == 'no'
+-+  build_egl = false
+-+endif
+-+
+- # The remaining platform specific API for GL/GLES are enabled
+- # depending on the platform we're building for
+- if host_system == 'windows'
+--  build_egl = false
+-   build_apple = false
+-   build_wgl = true
+-   has_znow = true
+- elif host_system == 'darwin'
+--  build_egl = false
+-   build_apple = true
+-   build_wgl = false
+-   has_znow = false
+- else
+--  build_egl = true
+-   build_apple = false
+-   build_wgl = false
+-   has_znow = true
+- endif
+- 
+- conf.set10('ENABLE_GLX', build_glx)
+-+conf.set10('ENABLE_EGL', build_egl)
+- 
+- # Compiler flags, taken from the Xorg macros
+- if cc.get_id() == 'msvc'
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 18932f5..244476a 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -6,3 +6,8 @@ option('enable-glx',
+-        choices: [ 'auto', 'yes', 'no' ],
+-        value: 'auto',
+-        description: 'Enable GLX support')
+-+option('enable-egl',
+-+       type: 'combo',
+-+       choices: [ 'auto', 'yes', 'no' ],
+-+       value: 'auto',
+-+       description: 'Enable EGL support')
+-diff --git a/src/dispatch_common.h b/src/dispatch_common.h
+-index e3277f7..e16771f 100644
+---- a/src/dispatch_common.h
+-+++ b/src/dispatch_common.h
+-@@ -24,19 +24,19 @@
+- #include "config.h"
+- 
+- #ifdef _WIN32
+--#define PLATFORM_HAS_EGL 0
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX ENABLE_GLX
+- #define PLATFORM_HAS_WGL 1
+- #elif defined(__APPLE__)
+--#define PLATFORM_HAS_EGL 0
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX ENABLE_GLX
+- #define PLATFORM_HAS_WGL 0
+- #elif defined(ANDROID)
+--#define PLATFORM_HAS_EGL 1
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX 0
+- #define PLATFORM_HAS_WGL 0
+- #else
+--#define PLATFORM_HAS_EGL 1
+-+#define PLATFORM_HAS_EGL ENABLE_EGL
+- #define PLATFORM_HAS_GLX ENABLE_GLX
+- #define PLATFORM_HAS_WGL 0
+- #endif
+--- 
+-2.7.4
+-
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 7d2ade8..d7ebec5 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,2 +1,2 @@
+-# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.4/libepoxy-1.4.1.sha256sum
+-sha256 88c6abf5522fc29bab7d6c555fd51a855cbd9253c4315f8ea44e832baef21aa6  libepoxy-1.4.1.tar.xz
++# From ftp://ftp.gnome.org/pub/GNOME/sources/libepoxy/1.4/libepoxy-1.4.3.sha256sum
++sha256 0b808a06c9685a62fca34b680abb8bc7fb2fda074478e329b063c1f872b826f6  libepoxy-1.4.3.tar.xz
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index e72743d..366cc11 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,15 +5,13 @@
+ ################################################################################
+ 
+ LIBEPOXY_VERSION_MAJOR = 1.4
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).1
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
+-# 0002-Make-EGL-support-optional.patch
+-LIBEPOXY_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+ LIBEPOXY_CONF_OPTS += --enable-egl
