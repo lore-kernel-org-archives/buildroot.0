@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:26:15 +0200
-Subject: [Buildroot] [git commit branch/next] configs/imx6q-sabresd_qt5:
-	Remove BR2_TOOLCHAIN_BUILDROOT_GLIBC
-Message-ID: <20170821211929.B93077FE04@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:26:43 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/imx6q-sabresd_qt5: Remove
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC
+In-Reply-To: <1503339652-7641-1-git-send-email-fabio.estevam@nxp.com>
+References: <1503339652-7641-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <20170821232643.5f9c44f7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d04430e22dd6bdddb89e37d3d1aecc723841dfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-There is no need to select BR2_TOOLCHAIN_BUILDROOT_GLIBC, so just remove it.
+On Mon, 21 Aug 2017 15:20:51 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@gmail.com>
+> 
+> There is no need to select BR2_TOOLCHAIN_BUILDROOT_GLIBC, so just remove it.
+> 
+> Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/imx6q-sabresd_qt5_defconfig | 1 -
+>  1 file changed, 1 deletion(-)
 
-Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/imx6q-sabresd_qt5_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+Applied to next, thanks.
 
-diff --git a/configs/imx6q-sabresd_qt5_defconfig b/configs/imx6q-sabresd_qt5_defconfig
-index 0b4e961..801b256 100644
---- a/configs/imx6q-sabresd_qt5_defconfig
-+++ b/configs/imx6q-sabresd_qt5_defconfig
-@@ -10,7 +10,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
--BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
