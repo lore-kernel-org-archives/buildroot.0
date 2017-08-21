@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 21 Aug 2017 21:35:30 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/lzo: switch to cmake
-In-Reply-To: <20170820080744.8947-1-bernd.kuhls@t-online.de>
-References: <20170820080744.8947-1-bernd.kuhls@t-online.de>
-Message-ID: <8e8ea34e-3224-667a-5693-70a565dc49b7@mind.be>
+Date: Mon, 21 Aug 2017 21:38:02 +0200
+Subject: [Buildroot] [PATCH 09/18] perl-net-dns: bump to version 1.12
+In-Reply-To: <20170820080331.12935-9-francois.perrad@gadz.org>
+References: <20170820080331.12935-1-francois.perrad@gadz.org>
+ <20170820080331.12935-9-francois.perrad@gadz.org>
+Message-ID: <3015bde1-cfbd-8cc4-f6ba-28ce06957120@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,23 @@ To: buildroot@busybox.net
 
 
 
-On 20-08-17 10:07, Bernd Kuhls wrote:
-> +LZO_SUPPORTS_IN_SOURCE_BUILD = NO
+On 20-08-17 10:03, Francois Perrad wrote:
+> diff --git a/package/perl-net-dns/Config.in b/package/perl-net-dns/Config.in
+> index de720bf25..c156505c7 100644
+> --- a/package/perl-net-dns/Config.in
+> +++ b/package/perl-net-dns/Config.in
+> @@ -4,4 +4,4 @@ config BR2_PACKAGE_PERL_NET_DNS
+>  	help
+>  	  Perl Interface to the Domain Name System
+>  
+> -	  http://www.net-dns.org
+> +	  https://metacpan.org/release/Net-DNS
 
- Why doesn't it support in-source build? Best to explain that in the commit message.
+
+ Why change the upstream URL? net-dns.org still seems relevant...
 
  Regards,
  Arnout
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
