@@ -1,62 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:41:05 +0200
-Subject: [Buildroot] [git commit branch/next] perl-xml-namespacesupport:
-	bump to version 1.12
-Message-ID: <20170821214003.46B6C821FA@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:41:01 +0200
+Subject: [Buildroot] [git commit branch/next] perl-time-hires: bump to
+	version 1.9746
+Message-ID: <20170821214003.3E1B7821EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=731a0316a6e4172d24c5eefc8897cdfefc89a5c5
+commit: https://git.buildroot.net/buildroot/commit/?id=b6586d3b68e47356d4906db617fcca32ce437dbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-xml-namespacesupport/Config.in                      | 4 ++--
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash | 4 ++--
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-time-hires/Config.in            | 2 +-
+ package/perl-time-hires/perl-time-hires.hash | 4 ++--
+ package/perl-time-hires/perl-time-hires.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-xml-namespacesupport/Config.in b/package/perl-xml-namespacesupport/Config.in
-index bc67d47..93a697c 100644
---- a/package/perl-xml-namespacesupport/Config.in
-+++ b/package/perl-xml-namespacesupport/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT
- 	bool "perl-xml-namespacesupport"
+diff --git a/package/perl-time-hires/Config.in b/package/perl-time-hires/Config.in
+index 37bad71..fe933a4 100644
+--- a/package/perl-time-hires/Config.in
++++ b/package/perl-time-hires/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_PERL_TIME_HIRES
  	help
--	  a simple generic namespace support class
-+	  A simple generic namespace processor
+ 	  High resolution alarm, sleep, gettimeofday, interval timers
  
--	  https://metacpan.org/release/XML-NamespaceSupport
-+	  https://github.com/perigrin/xml-namespacesupport
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-index 9389601..d55551c 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
+-	  http://search.cpan.org/dist/Time-HiRes/HiRes.pm
++	  https://metacpan.org/release/Time-HiRes
+ 
+ comment "perl-time-hires needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
+index 1852340..210f630 100644
+--- a/package/perl-time-hires/perl-time-hires.hash
++++ b/package/perl-time-hires/perl-time-hires.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    222cca76161cd956d724286d36b607da XML-NamespaceSupport-1.11.tar.gz
--sha256 6d8151f0a3f102313d76b64bfd1c2d9ed46bfe63a16f038e7d860fda287b74ea XML-NamespaceSupport-1.11.tar.gz
-+md5    a8916c6d095bcf073e1108af02e78c97 XML-NamespaceSupport-1.12.tar.gz
-+sha256 47e995859f8dd0413aa3f22d350c4a62da652e854267aa0586ae544ae2bae5ef XML-NamespaceSupport-1.12.tar.gz
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-index d7bcdd4..325440b 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-@@ -4,10 +4,10 @@
+-md5    077e5d7eda1349f98c564026603f8a0a Time-HiRes-1.9726.tar.gz
+-sha256 ff662ad9b1f6c75a149db7fa1bfc7a161ac8b271e5f3980345e08b734769109e Time-HiRes-1.9726.tar.gz
++md5    728dc2c2715313a056792191d7d0726c Time-HiRes-1.9746.tar.gz
++sha256 89408c81bb827bc908c98eec50071e6e1158f38fa462865ecc3dc03aebf5f596 Time-HiRes-1.9746.tar.gz
+diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
+index e1c32a2..7f52625 100644
+--- a/package/perl-time-hires/perl-time-hires.mk
++++ b/package/perl-time-hires/perl-time-hires.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_XML_NAMESPACESUPPORT_VERSION = 1.11
-+PERL_XML_NAMESPACESUPPORT_VERSION = 1.12
- PERL_XML_NAMESPACESUPPORT_SOURCE = XML-NamespaceSupport-$(PERL_XML_NAMESPACESUPPORT_VERSION).tar.gz
- PERL_XML_NAMESPACESUPPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERIGRIN
- PERL_XML_NAMESPACESUPPORT_LICENSE = Artistic or GPL-1.0+
--PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = README
-+PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = LICENSE
+-PERL_TIME_HIRES_VERSION = 1.9726
++PERL_TIME_HIRES_VERSION = 1.9746
+ PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
+-PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
++PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JH/JHI
+ PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
+ PERL_TIME_HIRES_LICENSE_FILES = README
  
- $(eval $(perl-package))
