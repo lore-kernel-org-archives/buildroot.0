@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:26:15 +0200
-Subject: [Buildroot] [git commit] configs/imx6q-sabresd_qt5: Remove
-	BR2_TOOLCHAIN_BUILDROOT_GLIBC
-Message-ID: <20170902130618.37190818F3@busybox.osuosl.org>
+Date: Mon, 21 Aug 2017 23:28:17 +0200
+Subject: [Buildroot] [git commit] package/lzo: switch to cmake
+Message-ID: <20170902130618.5BF6A818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d04430e22dd6bdddb89e37d3d1aecc723841dfc
+commit: https://git.buildroot.net/buildroot/commit/?id=61c4c63c79e37f86adf8af0ef896624af7ed4b77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is no need to select BR2_TOOLCHAIN_BUILDROOT_GLIBC, so just remove it.
+autoreconf for the host package is broken after bumping to 2.10:
+http://lists.busybox.net/pipermail/buildroot/2017-August/200634.html
 
-Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+To solve the problem we switch to cmake.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/imx6q-sabresd_qt5_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ package/lzo/lzo.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/configs/imx6q-sabresd_qt5_defconfig b/configs/imx6q-sabresd_qt5_defconfig
-index 0b4e961..801b256 100644
---- a/configs/imx6q-sabresd_qt5_defconfig
-+++ b/configs/imx6q-sabresd_qt5_defconfig
-@@ -10,7 +10,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
--BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 5b8efdd..dba965f 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -9,9 +9,7 @@ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPL-2.0+
+ LZO_LICENSE_FILES = COPYING
+ LZO_INSTALL_STAGING = YES
+-# Ships a beta libtool version hence our patch doesn't apply.
+-# Run autoreconf to regenerate ltmain.sh.
+-LZO_AUTORECONF = YES
++LZO_SUPPORTS_IN_SOURCE_BUILD = NO
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
