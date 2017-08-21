@@ -1,99 +1,42 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Mon, 21 Aug 2017 15:18:15 +0200
-Subject: [Buildroot] [PATCH] board: remove Armadeus's APF9328 support
-Message-ID: <1503321495-5763-1-git-send-email-julien.boibessot@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 21 Aug 2017 16:48:01 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: bump to latest commit
+Message-ID: <20170821144801.2349-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+The current commit is from Sep 23, 2016. Update to latest commit from
+Jul 11, 2017 to add support for i.MX6ULL processors.
 
-i.MX1/L boards require an old Linux kernel version to run, which is not
-compatible with latest Buildroot needs.
-Will fix:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/27873568
-
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- board/armadeus/readme.txt          |  9 ++-------
- configs/armadeus_apf9328_defconfig | 29 -----------------------------
- 2 files changed, 2 insertions(+), 36 deletions(-)
- delete mode 100644 configs/armadeus_apf9328_defconfig
+ package/imx-usb-loader/imx-usb-loader.hash | 2 +-
+ package/imx-usb-loader/imx-usb-loader.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/armadeus/readme.txt b/board/armadeus/readme.txt
-index a1f1325..98c7b08 100644
---- a/board/armadeus/readme.txt
-+++ b/board/armadeus/readme.txt
-@@ -13,7 +13,6 @@ Supported platforms
- Buildroot currently supports the following Armadeus platforms with the
- associated defconfigs:
+diff --git a/package/imx-usb-loader/imx-usb-loader.hash b/package/imx-usb-loader/imx-usb-loader.hash
+index 3e02038997..6cb581147f 100644
+--- a/package/imx-usb-loader/imx-usb-loader.hash
++++ b/package/imx-usb-loader/imx-usb-loader.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256  40e1e36791e91366b13f57b16b32e75cf05e7177b2813f1bf2446419d0ed44eb  imx-usb-loader-9b0e81cf9511c3a27cf635407714caa2793b570c.tar.gz
++sha256  5232292cb1ad853905357de59ed251b57060562dc8d7f1cce0bb6c0c8d280dae  imx-usb-loader-f04f225ebc1c38e81eb24745333c8622deda6b49.tar.gz
+diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
+index 685fa9d24a..7593e3ce7a 100644
+--- a/package/imx-usb-loader/imx-usb-loader.mk
++++ b/package/imx-usb-loader/imx-usb-loader.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-- * APF9328 SOM + devt boards -> armadeus_apf9328_defconfig
-  * APF27 SOM + devt board    -> armadeus_apf27_defconfig
-  * APF51 SOM + devt board    -> armadeus_apf51_defconfig
-  * APF28 SOM + devt board    -> armadeus_apf28_defconfig
-@@ -46,15 +45,12 @@ When the build is finished, you will end up with:
- 
-     output/images/
-     ??? imx**-apfxxdev.dtb	[1]
--    ??? rootfs.jffs2		[2]
-     ??? rootfs.tar
--    ??? rootfs.ubi		[2]
--    ??? rootfs.ubifs		[2]
-+    ??? rootfs.ubi
-+    ??? rootfs.ubifs
-     ??? uImage
- 
- [1] Only if the kernel version used uses a Device Tree.
--[2] .ubi/.ubifs images are not available on APF9328 and replaced by a
--    .jffs2 one in this case.
- 
- Building U-Boot is currently not supported in these configurations.
- 
-@@ -69,7 +65,6 @@ it:
-   $ cp output/images/uImage /tftpboot/apfxx-linux.bin
-   $ cp output/images/*.dtb /tftpboot/
-   $ cp output/images/rootfs.ubi /tftpboot/apfxx-rootfs.ubi
--  $ cp output/images/rootfs.jffs2 /tftpboot/apfxx-rootfs.jffs2
- 
- where "apfxx" is the version of your SOM, as used with _defconfigs.
- 
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-deleted file mode 100644
-index 8abfcfd..0000000
---- a/configs/armadeus_apf9328_defconfig
-+++ /dev/null
-@@ -1,29 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm920t=y
--
--# Toolchain
--BR2_PACKAGE_GDB=y
--BR2_PACKAGE_HOST_GDB=y
--BR2_ENABLE_LOCALE_PURGE=y
--BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
--
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
--
--# System
--BR2_TARGET_GENERIC_HOSTNAME="apf9328"
--BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
--
--# Filesystem
--BR2_TARGET_ROOTFS_JFFS2=y
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.29"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x08008000"
+-IMX_USB_LOADER_VERSION = 9b0e81cf9511c3a27cf635407714caa2793b570c
++IMX_USB_LOADER_VERSION = f04f225ebc1c38e81eb24745333c8622deda6b49
+ IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
+ IMX_USB_LOADER_LICENSE = LGPL-2.1+
+ IMX_USB_LOADER_LICENSE_FILES = COPYING
 -- 
-2.1.4
+2.14.1
