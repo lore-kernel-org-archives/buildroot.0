@@ -1,74 +1,103 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue, 22 Aug 2017 07:07:26 -0700
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to 10.1.26
-Message-ID: <20170822140726.2232-1-bluemrp9@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Aug 2017 18:34:30 +0200
+Subject: [Buildroot] [PATCH] glibc: needs kernel headers >= 4.5 on
+ mips(64)
+In-Reply-To: <20170821231004.0deded59@windsurf>
+References: <20170820144154.15347-1-romain.naour@gmail.com>
+ <20170820222602.1f51bd7c@windsurf> <20170821162846.GA3412@scaer>
+ <20170821231004.0deded59@windsurf>
+Message-ID: <20170822163430.GA3722@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10126-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10126-changelog/
+Thomas, All,
 
-Fixes the following security vulnerabilities:
+On 2017-08-21 23:10 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 21 Aug 2017 18:28:46 +0200, Yann E. MORIN wrote:
+> 
+> > > Yann is specifically working on a mechanism to allow architectures to
+> > > describe what minimum gcc version they need. Perhaps we should use that
+> > > to express this dependency as well. Adding Yann in Cc :)  
+> > 
+> > And indeed, it was pretty trivial to do so with my changes:
+> >     https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/aarch64-cpus-2&id=96c77a38f423fd1745ea5601b71d3ac63c7ea11e
+> 
+> I am not sure this patch is correct. Indeed, in the choice you have two
+> options: NaN 2008 and NaN legacy. With your patch, it's only when NaN
+> 2008 is chosen that you indicate the architecture needs at least gcc
+> 4.9.
+> 
+> But in fact, even if NaN legacy is chosen, you need gcc 4.9, because
+> -mnan=legacy also only works with gcc 4.9: the -mnan option didn't
+> exist at all before gcc 4.9 (at least that's my understanding).
 
-CVE-2017-3636 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Client programs). Supported versions that are affected are
-5.5.56 and earlier and 5.6.36 and earlier. Easily exploitable vulnerability
-allows low privileged attacker with logon to the infrastructure where MySQL
-Server executes to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized update, insert or delete access to
-some of MySQL Server accessible data as well as unauthorized read access to
-a subset of MySQL Server accessible data and unauthorized ability to cause
-a partial denial of service (partial DOS) of MySQL Server.
+So, gcc before 4.9 do not have the -mnan option, so the symbol
+BR2_TOOLCHAIN_HAS_MNAN_OPTION is not set. And the code that adds -mnan
+is now conditioanl to that symbol.
 
-CVE-2017-3641 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are
-5.5.56 and earlier, 5.6.36 and earlier and 5.7.18 and earlier. Easily
-exploitable vulnerability allows high privileged attacker with network
-access via multiple protocols to compromise MySQL Server. Successful
-attacks of this vulnerability can result in unauthorized ability to cause
-a hang or frequently repeatable crash (complete DOS) of MySQL Server.
+So it does work:
 
-CVE-2017-3653 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are
-5.5.56 and earlier, 5.6.36 and earlier and 5.7.18 and earlier. Difficult
-to exploit vulnerability allows low privileged attacker with network access
-via multiple protocols to compromise MySQL Server. Successful attacks of
-this vulnerability can result in unauthorized update, insert or delete
-access to some of MySQL Server accessible data.
+ 1- if the user selects NaN legacy, he is not restricted in the gcc
+    version he may use;
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+    1a- if gcc is older than 4.9, no -mnan option is passed,
+    1b- if gcc if 4.9 or later, -mnan=legacy is passed (although that is
+        the default in gcc, we force it);
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 4ef3551a3..fd5625c8e 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.25/
--sha256 7205ecaa6f1bc16335ad88faa5c46be52b3ac628a5e795cb942a3f4335b2a0d6  mariadb-10.1.25.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.26/
-+sha256 ba88b1cb9967dea2909938a34ba89373b162b0d83e5c98a0f1c94540156bf73d  mariadb-10.1.26.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index db538fd0f..47c790658 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.25
-+MARIADB_VERSION = 10.1.26
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+ 2- the user select NaN-2008, he is restricted in using a gcc 4.9 or
+    later, and we always pass -mnan=2008.
+
+Isn't what we want?
+
+Of course, I may have left a bug somewhere... ;-)
+
+> However, I believe the current code is already bogus. Indeed,
+> BR2_MIPS_CPU_MIPS32 selects BR2_MIPS_NAN_LEGACY, which means
+> BR2_GCC_TARGET_NAN is set to legacy, so -mnan=legacy will be passed...
+> which will break the build for gcc < 4.9.
+
+Not really, because when gcc is older than 4.9, BR2_GCC_TARGET_NAN is
+not set, so this condition is not met (line ~210):
+
+    package/gcc/gcc.mk:ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
+    package/gcc/gcc.mk:HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
+    package/gcc/gcc.mk:endif
+
+So there is no -mnan option pased in this case.
+
+But with my patch, BR2_GCC_TARGET_NAN is always set now, so the
+condition above is now enclosed with:
+
+    package/gcc/gcc.mk:ifeq ($(BR2_TOOLCHAIN_MIPS_HAS_MNAN_OPTION),y)
+    [the code above]
+    package/gcc/gcc.mk:endif
+
+> There is definitely something to double check here.
+> 
+> > Also, I think we should rename BR2_TOOLCHAIN_HAS_MNAN_OPTION to include
+> > the fact that it is mips, like: BR2_TOOLCHAIN_HAS_MIPS_MNAN_OPTION.
+> 
+> Also what I thought when reviewing Vicente patches, but then I decided
+> to not do it, because the gcc option is really named -mnan and not
+> -mmips-nan or something like that.
+
+Hence I renamed it BR2_TOOLCHAIN_MIPS_HAS_MNAN_OPTION because we already
+have symbols named as such:
+
+    https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/aarch64-cpus-2&id=b8950fddae941f427ce7b4cc64d6388573a93101
+
+(We're not doing a review of a series I haven't yet posted, are we? ;-] )
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
