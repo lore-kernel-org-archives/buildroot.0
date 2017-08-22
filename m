@@ -1,9 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 22 Aug 2017 22:04:35 +0200
-Subject: [Buildroot] [PATCH/next 2/3] package/wayland: bump version to 1.14.0
-In-Reply-To: <20170822200436.24905-1-bernd.kuhls@t-online.de>
-References: <20170822200436.24905-1-bernd.kuhls@t-online.de>
-Message-ID: <20170822200436.24905-2-bernd.kuhls@t-online.de>
+Date: Tue, 22 Aug 2017 22:04:34 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/wayland-protocols: bump
+	version to 1.10
+Message-ID: <20170822200436.24905-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +11,38 @@ To: buildroot@busybox.net
 
 Added all hashes provided by upstream.
 
+Upcoming mesa3d 17.2.0 needs version >= 1.8:
+https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=17.2&id=02cc359372773800de817950aebdf9be2c7973d1
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/wayland/wayland.hash | 7 +++++--
- package/wayland/wayland.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 6 ++++--
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 9b2c01dc4..c46aca2bd 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,2 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/033193.html
--sha256  69b052c031a61e89af7cc8780893d0da1e301492352aa449dee9345043e6fe51	wayland-1.13.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-August/034748.html
-+md5  0235f6075c32c3be61cff94fa0b9f108  wayland-1.14.0.tar.xz
-+sha1 53a443be3bafe73209bbc49ef2cb134ed16e0141  wayland-1.14.0.tar.xz
-+sha256 ed80cabc0961a759a42092e2c39aabfc1ec9a13c86c98bbe2b812f008da27ab8  wayland-1.14.0.tar.xz
-+sha512 bd38b2b8963d4d98d42c270e5d7dbff6323789a173b19b67a18258424fd8adee5021b282c9d7f6dad0bd25aa0160e76aecd8ed803d4eb25d911ef0a81cd713a5  wayland-1.14.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index bd1030e95..10710a811 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index a31669801..bfda1d81a 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,2 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030606.html
+-sha256	635f2a937d318f1fecb97b54074ca211486e38af943868dd0fa82ea38d091c1f	wayland-protocols-1.7.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-July/034706.html
++md5 84a7846c2b6a6a3e265fc9be36453e60  wayland-protocols-1.10.tar.xz
++sha1 4f1322f03fa8b2e6467b8f71471f53eff82728a4  wayland-protocols-1.10.tar.xz
++sha256 5719c51d7354864983171c5083e93a72ac99229e2b460c4bb10513de08839c0a  wayland-protocols-1.10.tar.xz
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 54c2ec138..a4b3376fa 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.13.0
-+WAYLAND_VERSION = 1.14.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WAYLAND_PROTOCOLS_VERSION = 1.7
++WAYLAND_PROTOCOLS_VERSION = 1.10
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 -- 
 2.11.0
