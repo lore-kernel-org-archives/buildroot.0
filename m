@@ -1,48 +1,183 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 22 Aug 2017 22:04:34 +0200
-Subject: [Buildroot] [PATCH/next 1/3] package/wayland-protocols: bump
-	version to 1.10
-Message-ID: <20170822200436.24905-1-bernd.kuhls@t-online.de>
+Date: Tue, 22 Aug 2017 22:15:24 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/kodi: bump to version 17.4
+Message-ID: <20170822201526.3285-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream.
+Removed patch 0003, applied upstream:
+https://github.com/xbmc/xbmc/commit/5fa10ff6b1b60abee172296d9c1dec8dfc10615c
 
-Upcoming mesa3d 17.2.0 needs version >= 1.8:
-https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=17.2&id=02cc359372773800de817950aebdf9be2c7973d1
+-DWITH_FFMPEG is needed due to commit
+https://github.com/xbmc/xbmc/commit/5ba6eb7cadc41d5eb86ef94e3661b833b62953ff
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/wayland-protocols/wayland-protocols.hash | 6 ++++--
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ .../kodi-jsonschemabuilder.mk                      |  2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk   |  2 +-
+ .../kodi/0003-FTPParse.cpp-use-std-string.patch    | 91 ----------------------
+ package/kodi/kodi.hash                             |  2 +-
+ package/kodi/kodi.mk                               |  3 +-
+ 5 files changed, 5 insertions(+), 95 deletions(-)
+ delete mode 100644 package/kodi/0003-FTPParse.cpp-use-std-string.patch
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index a31669801..bfda1d81a 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,2 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030606.html
--sha256	635f2a937d318f1fecb97b54074ca211486e38af943868dd0fa82ea38d091c1f	wayland-protocols-1.7.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-July/034706.html
-+md5 84a7846c2b6a6a3e265fc9be36453e60  wayland-protocols-1.10.tar.xz
-+sha1 4f1322f03fa8b2e6467b8f71471f53eff82728a4  wayland-protocols-1.10.tar.xz
-+sha256 5719c51d7354864983171c5083e93a72ac99229e2b460c4bb10513de08839c0a  wayland-protocols-1.10.tar.xz
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 54c2ec138..a4b3376fa 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 320c77977..e3de102b7 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
--WAYLAND_PROTOCOLS_VERSION = 1.7
-+WAYLAND_PROTOCOLS_VERSION = 1.10
- WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 17.3-Krypton
++KODI_JSONSCHEMABUILDER_VERSION = 17.4-Krypton
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index d69585b09..26776acbe 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 17.3-Krypton
++KODI_TEXTUREPACKER_VERSION = 17.4-Krypton
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+diff --git a/package/kodi/0003-FTPParse.cpp-use-std-string.patch b/package/kodi/0003-FTPParse.cpp-use-std-string.patch
+deleted file mode 100644
+index 9fa7abb71..000000000
+--- a/package/kodi/0003-FTPParse.cpp-use-std-string.patch
++++ /dev/null
+@@ -1,91 +0,0 @@
+-From 5fa10ff6b1b60abee172296d9c1dec8dfc10615c Mon Sep 17 00:00:00 2001
+-From: Stefan Saraev <stefan@saraev.ca>
+-Date: Sun, 7 May 2017 17:30:47 +0300
+-Subject: [PATCH] FTPParse.cpp: use std::string
+-
+-Fixes build with newer gcc versions.
+-
+-Backported from upstream commit
+-https://github.com/xbmc/xbmc/commit/5fa10ff6b1b60abee172296d9c1dec8dfc10615c
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- xbmc/filesystem/FTPParse.cpp | 44 ++++++++++++++++++++++----------------------
+- 1 file changed, 22 insertions(+), 22 deletions(-)
+-
+-diff --git a/xbmc/filesystem/FTPParse.cpp b/xbmc/filesystem/FTPParse.cpp
+-index cfcc7c64ed..b0f676ae1a 100644
+---- a/xbmc/filesystem/FTPParse.cpp
+-+++ b/xbmc/filesystem/FTPParse.cpp
+-@@ -34,7 +34,7 @@ CFTPParse::CFTPParse()
+-   m_time = 0;
+- }
+- 
+--string CFTPParse::getName()
+-+std::string CFTPParse::getName()
+- {
+-   return m_name;
+- }
+-@@ -59,16 +59,16 @@ time_t CFTPParse::getTime()
+-   return m_time;
+- }
+- 
+--void CFTPParse::setTime(string str)
+-+void CFTPParse::setTime(std::string str)
+- {
+-   /* Variables used to capture patterns via the regexes */
+--  string month;
+--  string day;
+--  string year;
+--  string hour;
+--  string minute;
+--  string second;
+--  string am_or_pm;
+-+  std::string month;
+-+  std::string day;
+-+  std::string year;
+-+  std::string hour;
+-+  std::string minute;
+-+  std::string second;
+-+  std::string am_or_pm;
+- 
+-   /* time struct used to set the time_t variable */
+-   struct tm time_struct = {};
+-@@ -338,21 +338,21 @@ int CFTPParse::getDayOfWeek(int month, int date, int year)
+-   return day_of_week;
+- }
+- 
+--int CFTPParse::FTPParse(string str)
+-+int CFTPParse::FTPParse(std::string str)
+- {
+-   /* Various variable to capture patterns via the regexes */
+--  string permissions;
+--  string link_count;
+--  string owner;
+--  string group;
+--  string size;
+--  string date;
+--  string name;
+--  string type;
+--  string stuff;
+--  string facts;
+--  string version;
+--  string file_id;
+-+  std::string permissions;
+-+  std::string link_count;
+-+  std::string owner;
+-+  std::string group;
+-+  std::string size;
+-+  std::string date;
+-+  std::string name;
+-+  std::string type;
+-+  std::string stuff;
+-+  std::string facts;
+-+  std::string version;
+-+  std::string file_id;
+- 
+-   /* Regex for standard Unix listing formats */
+-   pcrecpp::RE unix_re("^([-bcdlps])" // type
+--- 
+-2.11.0
+-
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 167b17928..6c7cf8f61 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 1de8653a3729cefd1baaf09ecde5ace01a1e3a58fbf29d48c1363f2503d331a1  kodi-17.3-Krypton.tar.gz
++sha256 b05e11b2d108222bfc3ff0c9a466d798c0feedf1228166239948e6ed37c3cb4f  kodi-17.4-Krypton.tar.gz
+ # Locally computed - libdvdcss
+ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236.tar.gz
+ # Locally computed - libdvdnav
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 0bf7331dd..793289f9b 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 17.3-Krypton
++KODI_VERSION = 17.4-Krypton
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.GPL
+@@ -67,6 +67,7 @@ KODI_CONF_OPTS += \
+ 	-DENABLE_OPENSSL=ON \
+ 	-DNATIVEPREFIX=$(HOST_DIR) \
+ 	-DDEPENDS_PATH=$(@D) \
++	-DWITH_FFMPEG=$(STAGING_DIR)/usr \
+ 	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/TexturePacker \
+ 	-DLIBDVDCSS_URL=$(DL_DIR)/$(KODI_LIBDVDCSS_VERSION).tar.gz \
+ 	-DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
 -- 
 2.11.0
