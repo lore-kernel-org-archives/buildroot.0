@@ -1,125 +1,132 @@
-From: Mike Harmony <mike.harmony@snapav.com>
-Date: Wed, 23 Aug 2017 16:23:01 -0400
-Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPi M2 Plus
-	board.
-Message-ID: <1503519781-105607-1-git-send-email-mike.harmony@snapav.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Aug 2017 22:45:46 +0200
+Subject: [Buildroot] [RFC-next 1/2] fs/genimage: add logic to generate an
+	image using genimage
+In-Reply-To: <20170823204547.16672-1-thomas.petazzoni@free-electrons.com>
+References: <20170823204547.16672-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170823204547.16672-2-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
----
- DEVELOPERS                         |  4 ++++
- board/lemaker/m2-plus/boot.cmd     |  7 +++++++
- board/lemaker/m2-plus/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
- configs/bananapi_m2_plus_defconfig | 28 ++++++++++++++++++++++++++++
- 4 files changed, 72 insertions(+)
- create mode 100644 board/lemaker/m2-plus/boot.cmd
- create mode 100644 board/lemaker/m2-plus/genimage.cfg
- create mode 100644 configs/bananapi_m2_plus_defconfig
+We have more and more boards that need to repeat in their post-image
+script the logic to use genimage. Even though the logic has been
+factorized in support/scripts/genimage.sh, users still have to
+remember that they need to enable BR2_PACKAGE_HOST_MTOOLS and
+BR2_PACKAGE_HOST_DOSFSTOOLS when they have a VFAT partition in their
+genimage configuration.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f3944e2..465293e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1234,6 +1234,10 @@ N:	Micha? ?yszczek <michal.lyszczek@bofc.pl>
- F:	board/altera/socrates_cyclone5/
- F:	configs/socrates_cyclone5_defconfig
+Therefore, this commit adds some minimal logic in Buildroot to use
+genimage directly.
+
+This logic is added into fs/genimage/, even if stricly speaking
+genimage isn't a filesystem format. It does not use the filesystem
+infrastructure (fs/common.mk), and is referenced explicitly from the
+target-post-image target in the main Makefile.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile                |  1 +
+ fs/Config.in            |  1 +
+ fs/genimage/Config.in   | 26 ++++++++++++++++++++++++++
+ fs/genimage/genimage.mk | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 59 insertions(+)
+ create mode 100644 fs/genimage/Config.in
+ create mode 100644 fs/genimage/genimage.mk
+
+diff --git a/Makefile b/Makefile
+index 1b0e36f..3baad7b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -733,6 +733,7 @@ endif
  
-+N:	Mike Harmony <mike.harmony@snapav.com>
-+F:	board/lemaker/m2-plus/
-+F:	configs/bananapi_m2_plus_defconfig
-+
- N:	Mikhail Boiko <mikhailboiko85@gmail.com>
- F:	package/libfribidi/
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize
++	$(GENIMAGE_GENERATE_CMDS)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+diff --git a/fs/Config.in b/fs/Config.in
+index 51ccf28..04b4ebe 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -13,5 +13,6 @@ source "fs/squashfs/Config.in"
+ source "fs/tar/Config.in"
+ source "fs/ubifs/Config.in"
+ source "fs/yaffs2/Config.in"
++source "fs/genimage/Config.in"
  
-diff --git a/board/lemaker/m2-plus/boot.cmd b/board/lemaker/m2-plus/boot.cmd
+ endmenu
+diff --git a/fs/genimage/Config.in b/fs/genimage/Config.in
 new file mode 100644
-index 0000000..d22464a
+index 0000000..bd747bc
 --- /dev/null
-+++ b/board/lemaker/m2-plus/boot.cmd
-@@ -0,0 +1,7 @@
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++++ b/fs/genimage/Config.in
+@@ -0,0 +1,26 @@
++config BR2_TARGET_ROOTFS_GENIMAGE
++	bool "generate a final image with genimage"
++	select BR2_PACKAGE_HOST_GENIMAGE
++	help
++	  This option allows to generate a final image to flash on
++	  your device using a tool called genimage.
 +
-+mmc dev 0
-+fatload mmc 0 $kernel_addr_r zImage
-+fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
++if BR2_TARGET_ROOTFS_GENIMAGE
 +
-+bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/lemaker/m2-plus/genimage.cfg b/board/lemaker/m2-plus/genimage.cfg
++config BR2_TARGET_ROOTFS_GENIMAGE_CFG_FILE
++	string "genimage config file"
++	help
++	  This option allows to specify the path to the genimage
++	  configuration file. See
++	  https://git.pengutronix.de/cgit/genimage/plain/README for
++	  the specification of the genimage configuration file format.
++
++config BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT
++	bool "genimage config uses vfat"
++	select BR2_PACKAGE_HOST_DOSFSTOOLS
++	select BR2_PACKAGE_HOST_MTOOLS
++	help
++	  Enable this option if your genimage configuration file uses
++	  a "vfat" section to generate a VFAT filesystem.
++
++endif
+diff --git a/fs/genimage/genimage.mk b/fs/genimage/genimage.mk
 new file mode 100644
-index 0000000..cde0669
+index 0000000..b44b29b
 --- /dev/null
-+++ b/board/lemaker/m2-plus/genimage.cfg
-@@ -0,0 +1,33 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"sun8i-h3-bananapi-m2-plus.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 64M
-+}
++++ b/fs/genimage/genimage.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# genimage support
++#
++################################################################################
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++ifeq ($(BR2_TARGET_ROOTFS_GENIMAGE),y)
++PACKAGES += host-genimage
 +
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+		size = 1040384 # 1MB - 8192
-+	}
++ifeq ($(BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT),y)
++PACKAGES += host-dosfstools host-mtools
++endif
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
++GENIMAGE_CFG_FILE = $(call qstrip,$(BR2_TARGET_ROOTFS_GENIMAGE_CFG_FILE))
++GENIMAGE_TMP = $(BUILD_DIR)/genimage.tmp
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
-new file mode 100644
-index 0000000..53e1880
---- /dev/null
-+++ b/configs/bananapi_m2_plus_defconfig
-@@ -0,0 +1,28 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_KERNEL_HEADERS_4_12=y
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://git.kernel.org/torvalds/t/linux-4.13-rc5.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/lemaker/m2-plus/boot.cmd"
-+BR2_PACKAGE_HOST_GENEXT2FS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++define GENIMAGE_GENERATE_CMDS
++	if grep -q "vfat.*{" $(GENIMAGE_CFG_FILE) && \
++	   test "$(BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT)" != "y" ; then \
++		echo "ERROR: genimage configuration generates a VFAT filesystem" ; \
++		echo "       please enable BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT" ; \
++	fi
++	$(RM) -rf $(GENIMAGE_TMP)
++	$(HOST_DIR)/usr/bin/genimage --rootpath $(TARGET_DIR) \
++		--tmppath $(GENIMAGE_TMP) \
++		--inputpath $(BINARIES_DIR) \
++		--outputpath $(BINARIES_DIR) \
++		--config $(GENIMAGE_CFG_FILE)
++endef
++
++endif # BR2_TARGET_ROOTFS_GENIMAGE
 -- 
-2.7.4
+2.9.4
