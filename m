@@ -1,121 +1,56 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 23 Aug 2017 18:46:39 +0200
-Subject: [Buildroot] BR2_ENABLE_DEBUG is (incorrectly) using `Debug` for
- CMAKE_BUILD_TYPE instead of `RelWithDebInfo`
-In-Reply-To: <CANF-O=aDUs4yojV3sLBG6AiNFcA4C16u90-YJ9+emiTfojFsOA@mail.gmail.com>
-References: <CANF-O=aDUs4yojV3sLBG6AiNFcA4C16u90-YJ9+emiTfojFsOA@mail.gmail.com>
-Message-ID: <CAHXCMM+D6cpnDdh2bMo3eL_-ahOQVz64_0ZOiAiKvrg9WbryNw@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 23 Aug 2017 13:51:20 -0300 (BRT)
+Subject: [Buildroot] [PATCH] util-linux: add menu items for login
+ utilities
+In-Reply-To: <20170823154252.03f70fea@windsurf>
+References: <20170819235533.18373-1-casantos@datacom.ind.br>
+ <20170823154252.03f70fea@windsurf>
+Message-ID: <242724150.6353497.1503507080856.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mehdi,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org
+> Sent: Wednesday, August 23, 2017 10:42:52 AM
+> Subject: Re: [Buildroot] [PATCH] util-linux: add menu items for login utilities
 
-On Wed, Aug 23, 2017 at 11:45 AM, Mehdi AMINI <joker.eph@gmail.com> wrote:
-> Hi,
->
-> I've been bitten by what I think is a surprising behavior of  :
-> https://bugs.busybox.net/show_bug.cgi?id=10246
->
-> Here is the documentation for BR2_ENABLE_DEBUG:
->
-> config BR2_ENABLE_DEBUG
->         bool "build packages with debugging symbols"
->         help
->           Build packages with debugging symbols enabled. All libraries
->           and binaries in the 'staging' directory will have debugging
->           symbols, which allows remote debugging even if libraries and
->           binaries are stripped on the target. Whether libraries and
->           binaries are stripped on the target is controlled by the
->           BR2_STRIP_* options below.
->
->
-> The option is supposed to enable debug symbols emission by the compiler. The
-> description mentions that the purpose is to enable remote debugging using
-> `staging` even after stripping the binaries in `target`.
-> However, by using `Debug` as `CMAKE_BUILD_TYPE` the option is not orthogonal
-> to other settings and have side-effects. In CMake, the CMAKE_BUILD_TYPE is
-> not *only* controlling the debug info emission but also the optimization
-> level for instance. Also, and with even more concerns, packages may use this
-> to trigger other settings.
->
-> It seems it has swing'd multiple times last year, first going from `Debug`
-> to `RelWithDebInfo` here:
-> http://lists.busybox.net/pipermail/buildroot/2016-June/163639.html and here
-> http://lists.busybox.net/pipermail/buildroot/2016-July/165714.html ; and
-> then back to `Debug` here:
-> https://git.buildroot.org/buildroot/commit/package/pkg-cmake.mk?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
-> (haven't found the mailing list discussion)
-> The latter claims that switching from `Release` to `Debug` is "semantically
-> closer" to the intent of the option in buildroot. If that is the case, the
-> doc does not seem to reflect correctly this intent to me: I always want to
-> build a "release" package, only to have debug-info emitted in my staging
-> directory.
->
+> Hello,
+> 
+> On Sat, 19 Aug 2017 20:55:33 -0300, Carlos Santos wrote:
+> 
+>> +config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+>> +	bool "login utilities"
+>> +	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
+>> +	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+>> +	depends on !BR2_STATIC_LIBS
+>> +	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+>> +	select BR2_PACKAGE_UTIL_LINUX_LAST
+>> +	select BR2_PACKAGE_UTIL_LINUX_LOGIN
+>> +	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
+>> +	select BR2_PACKAGE_UTIL_LINUX_SU
+>> +	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
+> 
+> I don't really see the need to keep this option. We have
+> BR2_PACKAGE_UTIL_LINUX_BINARIES, because it matches the upstream
+> --enable-all-programs option. But here,
+> BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS doesn't match anything provided by
+> upstream, it's just a random category created by Buildroot.
+> 
+> So let's get rid of this option, with appropriate Config.in.legacy
+> handling selecting all the individual tools, and only have sub-options
+> per tools, matching the --enable-<foo> options provided by util-linux
+> configure script.
 
-You may not have the entire view that led to this, some valuable
-details are in this change:
-https://git.buildroot.org/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
-
-> All the other settings mentioned in this commit message (assertions
-> enabled/disabled, optimization level, etc.) can be (and actually are I
-> think) handled orthogonally using other CMake flags.
-
-We went to these conclusions mostly by experiments, because CMake does
-not document the default values for all build type declinaison of
-flags :-/
-https://cmake.org/cmake/help/v3.9/variable/CMAKE_BUILD_TYPE.html
-
->
-> Using the same CMAKE_BUILD_TYPE as a base and overriding individual setting
-> seems like a more sane and robust approach to me.
->
-> Two practical examples of packages that shows what can go wrong:
->
-> 1) ceres-solver ( https://github.com/ceres-solver/ceres-solver )
->
-> When configured with CMAKE_BUILD_TYPE=Release, it'll generate:
->
->     lib/libceres.a
->
-> However with CMAKE_BUILD_TYPE=Debug we end up with:
->
->     lib/libceres-debug.a
->
->
-> 2) the LLVM compiler is doing special casing based on the value of
-> CMAKE_BUILD_TYPE. For example:
->
->     if (NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" AND
->         NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO")
->       add_flag_if_supported("-gline-tables-only" GLINE_TABLES_ONLY)
->     endif()
->     # Use -O1 even in debug mode, otherwise sanitizers slowdown is too
-> large.
->     if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
->       add_flag_if_supported("-O1" O1)
->     endif()
->
-> Or also:
->
-> if( NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
->   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" OFF)
-> else()
->   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" ON)
-> endif()
->
->
-> In my experience it has been quite common for CMake projects to use
-> CMAKE_BUILD_TYPE to differentiate on more than just default optimization
-> level.
-
-At the time the denounced changes were done, we did not have such
-cases in mind, nor to support, though they are legit.
-Enhancement welcome.
-
-Regards,
+I'm not particularly fond of this option but maintained it because
+it is usefull reduce the size of the defconfig files. Anyway, I will
+send a new patch removing the login utils group.
 
 -- 
-Samuel
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
