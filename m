@@ -1,81 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 14:32:47 +0200
-Subject: [Buildroot] [PATCH 1/1] Add option to the gst1-plugins-bad
- package to enable/disable the qt plugin.
-In-Reply-To: <CADujc4owoQzFY-7exkd5EBe1m=YMhpfa=-KFsV_k0dffhBgUdA@mail.gmail.com>
-References: <CADujc4qKisW=6QyDZjDSUo50Yj+_H4-+7V=2KW32cAzRB_d2Qw@mail.gmail.com>
- <20170721112225.748ac7a5@windsurf>
- <CADujc4owoQzFY-7exkd5EBe1m=YMhpfa=-KFsV_k0dffhBgUdA@mail.gmail.com>
-Message-ID: <20170823143247.716c0162@windsurf>
+Date: Wed, 23 Aug 2017 15:23:13 +0200
+Subject: [Buildroot] [git commit] mariadb: security bump version to 10.1.26
+Message-ID: <20170823131625.BFF5E819A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ff0cf723b7cb0aa621aa81f171814be63b179a4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 24 Jul 2017 14:19:04 +0800, Glenn Coombs wrote:
-> I think the code needs Qt5 rather than Qt4 as it uses the scene graph
-> rendering model that only exists in Qt5.  The code in the
-> output/build/gst1-plugins-bad-1.12.1/ext/qt/ directory needs the following
-> Qt header files in order to compile:
+Release notes: https://mariadb.com/kb/en/mariadb-10126-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10126-changelog/
 
-Correct, it uses Qt5.
+Fixes the following security vulnerabilities:
 
-> I've changed the gst1-plugins-bad/Config.in file like this:
-> 
-> config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_QT
->     bool "qt"
->         depends on BR2_PACKAGE_QT5
+CVE-2017-3636 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Client programs). Supported versions that are affected are
+5.5.56 and earlier and 5.6.36 and earlier. Easily exploitable vulnerability
+allows low privileged attacker with logon to the infrastructure where MySQL
+Server executes to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized update, insert or delete access to
+some of MySQL Server accessible data as well as unauthorized read access to
+a subset of MySQL Server accessible data and unauthorized ability to cause
+a partial denial of service (partial DOS) of MySQL Server.
 
-It probably needs a bunch more options here:
+CVE-2017-3641 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DML). Supported versions that are affected are
+5.5.56 and earlier, 5.6.36 and earlier and 5.7.18 and earlier. Easily
+exploitable vulnerability allows high privileged attacker with network
+access via multiple protocols to compromise MySQL Server. Successful
+attacks of this vulnerability can result in unauthorized ability to cause
+a hang or frequently repeatable crash (complete DOS) of MySQL Server.
 
-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-	select BR2_PACKAGE_QT5BASE
-	select BR2_PACKAGE_QT5BASE_GUI
-	select BR2_PACKAGE_QT5BASE_XML
-	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+CVE-2017-3653 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are
+5.5.56 and earlier, 5.6.36 and earlier and 5.7.18 and earlier. Difficult
+to exploit vulnerability allows low privileged attacker with network access
+via multiple protocols to compromise MySQL Server. Successful attacks of
+this vulnerability can result in unauthorized update, insert or delete
+access to some of MySQL Server accessible data.
 
-> which only allows the gst-plugins-bad/qt option to be selected if the Qt5
-> package has already been selected.  I'm not sure how to handle the
-> dependencies in the gst1-plugins-bad.mk file.  I think you're right that if
-> I add a dependency on Qt5 then it will introduce a circular dependency as
-> the qt5base.mk file has this section:
-> 
-> ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->     # gstreamer 0.10 support is broken in qt5multimedia
->     ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
->         QT5BASE_CONFIGURE_OPTS += -gstreamer 1.0
->         QT5BASE_DEPENDENCIES   += gst1-plugins-base
->     else
->         QT5BASE_CONFIGURE_OPTS += -no-gstreamer
->     endif
-> endif
-> 
-> Any thoughts on how best to break that circular dependency ?
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-In fact there is no circular dependency I believe:
-
-qt5base (for Qt 5.6) or qt5multimedia (for Qt 5.9) depend on
-gst1-plugins-base. But the dependency you're adding is in
-gst1-plugins-bad.
-
-Therefore, the following build order is perfectly fine, and has no
-circular dependency:
-
-gstreamer1
-gst1-plugins-base
-qt5base / qt5multimedia / qt5declarative
-gst1-plugins-bad
-
-Could you cook a patch adding the appropriate logic in
-gst1-plugins-bad ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 4ef3551..fd5625c 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.25/
+-sha256 7205ecaa6f1bc16335ad88faa5c46be52b3ac628a5e795cb942a3f4335b2a0d6  mariadb-10.1.25.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.26/
++sha256 ba88b1cb9967dea2909938a34ba89373b162b0d83e5c98a0f1c94540156bf73d  mariadb-10.1.26.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index db538fd..47c7906 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.25
++MARIADB_VERSION = 10.1.26
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
