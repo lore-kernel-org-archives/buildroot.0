@@ -1,55 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Aug 2017 23:04:41 +0200
-Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker Banana Pi M2
- Plus board.
-In-Reply-To: <1503433993-131060-1-git-send-email-mike.harmony@snapav.com>
-References: <1503433993-131060-1-git-send-email-mike.harmony@snapav.com>
-Message-ID: <20170822230441.3a5ff8ea@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 23 Aug 2017 04:10:57 +0000
+Subject: [Buildroot] [Bug 10246] New: BR2_ENABLE_DEBUG does not have the
+ expected effect for cmake packages
+Message-ID: <bug-10246-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10246
 
-Thanks for your contribution!
+            Bug ID: 10246
+           Summary: BR2_ENABLE_DEBUG does not have the expected effect for
+                    cmake packages
+           Product: buildroot
+           Version: 2017.05.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: joker.eph at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Tue, 22 Aug 2017 16:33:13 -0400, mike.harmony at snapav.com wrote:
-> From: Mike Harmony <mike.harmony@houselogix.com>
-> 
-> Signed-off-by: Mike Harmony <mike.harmony@houselogix.com>
-> ---
->  board/lemaker/m2-plus/boot.cmd      |    7 +
->  board/lemaker/m2-plus/genimage.cfg  |   33 +
->  board/lemaker/m2-plus/post-build.sh |   12 +
->  configs/bananapi_m2_plus_defconfig  | 3280 +++++++++++++++++++++++++++++++++++
->  4 files changed, 3332 insertions(+)
->  create mode 100644 board/lemaker/m2-plus/boot.cmd
->  create mode 100644 board/lemaker/m2-plus/genimage.cfg
->  create mode 100755 board/lemaker/m2-plus/post-build.sh
->  create mode 100644 configs/bananapi_m2_plus_defconfig
+I've been bitten by the option BR2_ENABLE_DEBUG which does not exactly do what
+the doc describes:
 
-I haven't looked in details at your submission. However, we already had
-a contribution adding support for Banana Pi M2 Plus, see:
 
-Subject: [Buildroot] [PATCH v2 2/3] Board: Add Bananapi M2 Plus support
-Date: Sun, 18 Jun 2017 22:18:02 +0530
+config BR2_ENABLE_DEBUG
+        bool "build packages with debugging symbols"
+        help
+          Build packages with debugging symbols enabled. All libraries
+          and binaries in the 'staging' directory will have debugging
+          symbols, which allows remote debugging even if libraries and
+          binaries are stripped on the target. Whether libraries and
+          binaries are stripped on the target is controlled by the
+          BR2_STRIP_* options below.
 
-It was not merged because I had some comments, and the original
-submitter didn't send an updated version.
 
-Regarding your submission, at the very least:
+For a CMake package, this corresponds to `-DCMAKE_BUILD_TYPE=RelWithDebInfo`,
+however currently buildroot will pass  `-DCMAKE_BUILD_TYPE=Debug` which has the
+effect of generating a *non-optimized* build (i.e. -O0).
 
- - The defconfig should be generated with "make savedefconfig", to be a
-   minimal defconfig. Look at other defconfig files in configs/
+I suggest the following patch:
 
- - Add yourself to the DEVELOPERS file
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index db78d897d826..0a7bee685096 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -257,7 +257,7 @@ $(HOST_DIR)/share/buildroot/toolchainfile.cmake:
+                -e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call
+qstrip,$(TARGET_FC)))#' \
+                -e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call
+qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+                -e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if
+$(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+-               -e 's#@@CMAKE_BUILD_TYPE@@#$(if
+$(BR2_ENABLE_DEBUG),Debug,Release)#' \
++               -e 's#@@CMAKE_BUILD_TYPE@@#$(if
+$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release)#' \
+                $(TOPDIR)/support/misc/toolchainfile.cmake.in \
+                > $@
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
