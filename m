@@ -1,78 +1,81 @@
-From: Stephan Bauroth <stephanbauroth@web.de>
-Date: Wed, 23 Aug 2017 13:48:46 +0200
-Subject: [Buildroot] [PATCH] libv4l: avoid compilation error by adding
- upstream patch
-In-Reply-To: <20170822133210.4254-1-stephanbauroth@web.de>
-References: <20170822133210.4254-1-stephanbauroth@web.de>
-Message-ID: <6022e55d-653d-7d46-e6dc-90bb5feb9404@web.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Aug 2017 14:32:47 +0200
+Subject: [Buildroot] [PATCH 1/1] Add option to the gst1-plugins-bad
+ package to enable/disable the qt plugin.
+In-Reply-To: <CADujc4owoQzFY-7exkd5EBe1m=YMhpfa=-KFsV_k0dffhBgUdA@mail.gmail.com>
+References: <CADujc4qKisW=6QyDZjDSUo50Yj+_H4-+7V=2KW32cAzRB_d2Qw@mail.gmail.com>
+ <20170721112225.748ac7a5@windsurf>
+ <CADujc4owoQzFY-7exkd5EBe1m=YMhpfa=-KFsV_k0dffhBgUdA@mail.gmail.com>
+Message-ID: <20170823143247.716c0162@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch does not solve the mentioned compilation breakage, please 
-ignore.
+Hello,
 
-On 22.08.2017 15:32, Stephan Bauroth wrote:
-> Without this patch, libv4l fails to build if qt5 is enabled:
->
-> capture-win-gl.cpp: In member function 'virtual void
-> CaptureWinGLEngine::initializeGL()':
-> capture-win-gl.cpp:275:15: error: 'GL_FLAT' was not declared in this scope
->    glShadeModel(GL_FLAT);
->                 ^~~~~~~
->
-> and more missing GL_* constants. This patch is upstream but not yet included in
-> any release. So unitl a new version gets released, include it here.
->
-> Backported from: 4d65b0571ea0027b6de45a76cfcadca32ea4be4a
-> Signed-off-by: Stephan Bauroth <stephanbauroth@web.de>
-> ---
->   package/libv4l/0011-fix-compilation-with-qt.patch | 37 +++++++++++++++++++++++
->   1 file changed, 37 insertions(+)
->   create mode 100644 package/libv4l/0011-fix-compilation-with-qt.patch
->
-> diff --git a/package/libv4l/0011-fix-compilation-with-qt.patch b/package/libv4l/0011-fix-compilation-with-qt.patch
-> new file mode 100644
-> index 0000000000..dbd60ee498
-> --- /dev/null
-> +++ b/package/libv4l/0011-fix-compilation-with-qt.patch
-> @@ -0,0 +1,37 @@
-> +From 4d65b0571ea0027b6de45a76cfcadca32ea4be4a Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Sat, 4 Mar 2017 21:01:53 +0100
-> +Subject: qv4l2: fix qv4l2.pro qmake project file
-> +
-> +The header files v4l2-tpg.h and v4l2-tpg-colors.h moved
-> +from v4l2-ctl to common.
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-> +
-> +diff --git a/utils/qv4l2/qv4l2.pro b/utils/qv4l2/qv4l2.pro
-> +index 02b03de..6420fa2 100644
-> +--- a/utils/qv4l2/qv4l2.pro
-> ++++ b/utils/qv4l2/qv4l2.pro
-> +@@ -13,6 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-> + QT += opengl
-> +
-> + INCLUDEPATH += $$PWD/../..
-> ++INCLUDEPATH += $$PWD/../common
-> + INCLUDEPATH += $$PWD/../v4l2-ctl/
-> + INCLUDEPATH += $$PWD/../v4l2-compliance
-> +
-> +@@ -25,8 +26,8 @@ HEADERS += general-tab.h
-> + HEADERS += qv4l2.h
-> + HEADERS += raw2sliced.h
-> + HEADERS += vbi-tab.h
-> +-HEADERS += ../v4l2-ctl/v4l2-tpg.h
-> +-HEADERS += ../v4l2-ctl/v4l2-tpg-colors.h
-> ++HEADERS += ../common/v4l2-tpg.h
-> ++HEADERS += ../common/v4l2-tpg-colors.h
-> + HEADERS += ../../config.h
-> +
-> + SOURCES += capture-win.cpp
-> +--
-> +cgit v0.10.2
-> +
+On Mon, 24 Jul 2017 14:19:04 +0800, Glenn Coombs wrote:
+> I think the code needs Qt5 rather than Qt4 as it uses the scene graph
+> rendering model that only exists in Qt5.  The code in the
+> output/build/gst1-plugins-bad-1.12.1/ext/qt/ directory needs the following
+> Qt header files in order to compile:
+
+Correct, it uses Qt5.
+
+> I've changed the gst1-plugins-bad/Config.in file like this:
+> 
+> config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_QT
+>     bool "qt"
+>         depends on BR2_PACKAGE_QT5
+
+It probably needs a bunch more options here:
+
+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+	select BR2_PACKAGE_QT5BASE
+	select BR2_PACKAGE_QT5BASE_GUI
+	select BR2_PACKAGE_QT5BASE_XML
+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+
+> which only allows the gst-plugins-bad/qt option to be selected if the Qt5
+> package has already been selected.  I'm not sure how to handle the
+> dependencies in the gst1-plugins-bad.mk file.  I think you're right that if
+> I add a dependency on Qt5 then it will introduce a circular dependency as
+> the qt5base.mk file has this section:
+> 
+> ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+>     # gstreamer 0.10 support is broken in qt5multimedia
+>     ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+>         QT5BASE_CONFIGURE_OPTS += -gstreamer 1.0
+>         QT5BASE_DEPENDENCIES   += gst1-plugins-base
+>     else
+>         QT5BASE_CONFIGURE_OPTS += -no-gstreamer
+>     endif
+> endif
+> 
+> Any thoughts on how best to break that circular dependency ?
+
+In fact there is no circular dependency I believe:
+
+qt5base (for Qt 5.6) or qt5multimedia (for Qt 5.9) depend on
+gst1-plugins-base. But the dependency you're adding is in
+gst1-plugins-bad.
+
+Therefore, the following build order is perfectly fine, and has no
+circular dependency:
+
+gstreamer1
+gst1-plugins-base
+qt5base / qt5multimedia / qt5declarative
+gst1-plugins-bad
+
+Could you cook a patch adding the appropriate logic in
+gst1-plugins-bad ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
