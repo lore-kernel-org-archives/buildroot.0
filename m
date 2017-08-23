@@ -1,44 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 22:30:09 +0200
-Subject: [Buildroot] [git commit] libftdi1: bump to version 1.4
-Message-ID: <20170902130620.CB2038016A@busybox.osuosl.org>
+Date: Wed, 23 Aug 2017 15:44:55 +0200
+Subject: [Buildroot] [git commit] package/wayland-protocols: bump version to
+	1.10
+Message-ID: <20170902130619.99F358016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b191d64d381a08d4bff4e004b273b4b0e89bc06
+commit: https://git.buildroot.net/buildroot/commit/?id=9a5bf83802ed00d40d867c580e8f8c887b974588
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Daniel Sangue <daniel.sangue@sangue.ch>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Added all hashes provided by upstream.
+
+Upcoming mesa3d 17.2.0 needs version >= 1.8:
+https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=17.2&id=02cc359372773800de817950aebdf9be2c7973d1
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libftdi1/libftdi1.hash | 5 +++--
- package/libftdi1/libftdi1.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 6 ++++--
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index 0a89182..40512a7 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,2 +1,3 @@
--# Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
--sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
-+# Locally computed after checking the signature
-+# https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.4.tar.bz2.sig
-+sha256  ec36fb49080f834690c24008328a5ef42d3cf584ef4060f3a35aa4681cb31b74  libftdi1-1.4.tar.bz2
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index 6b84b95..c45c83a 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index a316698..bfda1d8 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,2 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030606.html
+-sha256	635f2a937d318f1fecb97b54074ca211486e38af943868dd0fa82ea38d091c1f	wayland-protocols-1.7.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-July/034706.html
++md5 84a7846c2b6a6a3e265fc9be36453e60  wayland-protocols-1.10.tar.xz
++sha1 4f1322f03fa8b2e6467b8f71471f53eff82728a4  wayland-protocols-1.10.tar.xz
++sha256 5719c51d7354864983171c5083e93a72ac99229e2b460c4bb10513de08839c0a  wayland-protocols-1.10.tar.xz
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 54c2ec1..a4b3376 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFTDI1_VERSION = 1.3
-+LIBFTDI1_VERSION = 1.4
- LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
- LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
- LIBFTDI1_INSTALL_STAGING = YES
+-WAYLAND_PROTOCOLS_VERSION = 1.7
++WAYLAND_PROTOCOLS_VERSION = 1.10
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
