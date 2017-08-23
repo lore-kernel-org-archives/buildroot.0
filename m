@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 15:46:51 +0200
-Subject: [Buildroot] [PATCH/next 1/3] package/wayland-protocols: bump
- version to 1.10
-In-Reply-To: <20170822200436.24905-1-bernd.kuhls@t-online.de>
+Date: Wed, 23 Aug 2017 15:47:30 +0200
+Subject: [Buildroot] [PATCH/next 3/3] package/weston: bump version to
+ 3.0.0
+In-Reply-To: <20170822200436.24905-3-bernd.kuhls@t-online.de>
 References: <20170822200436.24905-1-bernd.kuhls@t-online.de>
-Message-ID: <20170823154651.75b58481@windsurf>
+ <20170822200436.24905-3-bernd.kuhls@t-online.de>
+Message-ID: <20170823154730.4750143b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 Aug 2017 22:04:34 +0200, Bernd Kuhls wrote:
-> Added all hashes provided by upstream.
-> 
-> Upcoming mesa3d 17.2.0 needs version >= 1.8:
-> https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=17.2&id=02cc359372773800de817950aebdf9be2c7973d1
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/wayland-protocols/wayland-protocols.hash | 6 ++++--
->  package/wayland-protocols/wayland-protocols.mk   | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+On Tue, 22 Aug 2017 22:04:36 +0200, Bernd Kuhls wrote:
 
-Series applied to next, with some changes on PATCH 3/3, I'll reply to
-it specifically. Thanks!
+> diff --git a/package/weston/Config.in b/package/weston/Config.in
+> index 454a14d39..61f157ec7 100644
+> --- a/package/weston/Config.in
+> +++ b/package/weston/Config.in
+> @@ -17,8 +17,8 @@ config BR2_PACKAGE_WESTON
+>  	select BR2_PACKAGE_CAIRO_PNG
+>  	select BR2_PACKAGE_LIBPNG
+>  	select BR2_PACKAGE_JPEG
+> -	select BR2_PACKAGE_MTDEV
+>  	select BR2_PACKAGE_LIBINPUT
+> +	select BR2_PACKAGE_LIBDRM
+
+So, the select BR2_PACKAGE_LIBDRM that was in BR2_PACKAGE_WESTON_DRM
+should have been removed.
+
+I've fixed that before applying.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
