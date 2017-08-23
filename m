@@ -1,112 +1,169 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 21:23:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPi M2
- Plus board.
-In-Reply-To: <1503492342-3805-1-git-send-email-mike.harmony@snapav.com>
-References: <1503492342-3805-1-git-send-email-mike.harmony@snapav.com>
-Message-ID: <20170823212350.030828c6@windsurf>
+From: Mehdi AMINI <joker.eph@gmail.com>
+Date: Wed, 23 Aug 2017 13:13:52 -0700
+Subject: [Buildroot] BR2_ENABLE_DEBUG is (incorrectly) using `Debug` for
+ CMAKE_BUILD_TYPE instead of `RelWithDebInfo`
+In-Reply-To: <CAHXCMM+D6cpnDdh2bMo3eL_-ahOQVz64_0ZOiAiKvrg9WbryNw@mail.gmail.com>
+References: <CANF-O=aDUs4yojV3sLBG6AiNFcA4C16u90-YJ9+emiTfojFsOA@mail.gmail.com>
+ <CAHXCMM+D6cpnDdh2bMo3eL_-ahOQVz64_0ZOiAiKvrg9WbryNw@mail.gmail.com>
+Message-ID: <CANF-O=aeybMQ==FVLdOnj3c-qeOUeZdgFsOOykcVrOUQwnvoew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Samuel,
 
-On Wed, 23 Aug 2017 08:45:42 -0400, Mike Harmony wrote:
-> Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
+Thanks for you answer.
 
-Thanks for this new iteration! A few comments below, it's almost ready
-to go.
+2017-08-23 9:46 GMT-07:00 Samuel Martin <s.martin49@gmail.com>:
 
-> diff --git a/board/lemaker/m2-plus/post-build.sh b/board/lemaker/m2-plus/post-build.sh
-> new file mode 100755
-> index 0000000..fb4b6e9
-> --- /dev/null
-> +++ b/board/lemaker/m2-plus/post-build.sh
-> @@ -0,0 +1,12 @@
-> +#!/bin/sh
-> +
-> +# Remove all but the brcmfmac43362 firmware files
-> +find $TARGET_DIR/lib/firmware/brcm -type f -not -name "brcmfmac43362*" -delete
+> Hi Mehdi,
+>
+> On Wed, Aug 23, 2017 at 11:45 AM, Mehdi AMINI <joker.eph@gmail.com> wrote:
+> > Hi,
+> >
+> > I've been bitten by what I think is a surprising behavior of  :
+> > https://bugs.busybox.net/show_bug.cgi?id=10246
+> >
+> > Here is the documentation for BR2_ENABLE_DEBUG:
+> >
+> > config BR2_ENABLE_DEBUG
+> >         bool "build packages with debugging symbols"
+> >         help
+> >           Build packages with debugging symbols enabled. All libraries
+> >           and binaries in the 'staging' directory will have debugging
+> >           symbols, which allows remote debugging even if libraries and
+> >           binaries are stripped on the target. Whether libraries and
+> >           binaries are stripped on the target is controlled by the
+> >           BR2_STRIP_* options below.
+> >
+> >
+> > The option is supposed to enable debug symbols emission by the compiler.
+> The
+> > description mentions that the purpose is to enable remote debugging using
+> > `staging` even after stripping the binaries in `target`.
+> > However, by using `Debug` as `CMAKE_BUILD_TYPE` the option is not
+> orthogonal
+> > to other settings and have side-effects. In CMake, the CMAKE_BUILD_TYPE
+> is
+> > not *only* controlling the debug info emission but also the optimization
+> > level for instance. Also, and with even more concerns, packages may use
+> this
+> > to trigger other settings.
+> >
+> > It seems it has swing'd multiple times last year, first going from
+> `Debug`
+> > to `RelWithDebInfo` here:
+> > http://lists.busybox.net/pipermail/buildroot/2016-June/163639.html and
+> here
+> > http://lists.busybox.net/pipermail/buildroot/2016-July/165714.html ; and
+> > then back to `Debug` here:
+> > https://git.buildroot.org/buildroot/commit/package/pkg-cmake.mk?id=
+> 104bb29e0490bfb487e2e665448dd3ca07fcc2b5
+> > (haven't found the mailing list discussion)
+> > The latter claims that switching from `Release` to `Debug` is
+> "semantically
+> > closer" to the intent of the option in buildroot. If that is the case,
+> the
+> > doc does not seem to reflect correctly this intent to me: I always want
+> to
+> > build a "release" package, only to have debug-info emitted in my staging
+> > directory.
+> >
+>
+> You may not have the entire view that led to this, some valuable
+> details are in this change:
+> https://git.buildroot.org/buildroot/commit/?id=
+> 12494ef48f893684d0800e7f6fe39a2ceaed0451
 
-Your defconfig does not enable any firmware related package, so this
-seems useless.
 
-> +BOARD_DIR="$(dirname $0)"
-> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
-> +BOOT_CMD=$BOARD_DIR/boot.cmd
-> +BOOT_CMD_H=$BINARIES_DIR/boot.scr
-> +
-> +# U-Boot script
-> +$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+Yeah I didn't find this one before!
+If I read correctly what is described, this confirms that buildroot is able
+to override the default CMake value for the optimization level and debug,
+right?
+If so, then always using `-DCMAKE_BUILD_TYPE=Release` should be fine,
+correct? Why the switch to a different -DCMAKE_BUILD_TYPE?
 
-You can remove this, and use BR2_TARGET_UBOOT_BOOT_SCRIPT instead.
 
-> diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
-> new file mode 100644
-> index 0000000..c2bae51
-> --- /dev/null
-> +++ b/configs/bananapi_m2_plus_defconfig
-> @@ -0,0 +1,33 @@
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_KERNEL_HEADERS_4_12=y
-> +BR2_BINUTILS_VERSION_2_27_X=y
-> +BR2_GCC_VERSION_5_X=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
-Please remove those four lines, and keep the default toolchain
-configuration. However, make sure to use:
+>
+>
+> > All the other settings mentioned in this commit message (assertions
+> > enabled/disabled, optimization level, etc.) can be (and actually are I
+> > think) handled orthogonally using other CMake flags.
+>
+> We went to these conclusions mostly by experiments, because CMake does
+> not document the default values for all build type declinaison of
+> flags :-/
+> https://cmake.org/cmake/help/v3.9/variable/CMAKE_BUILD_TYPE.html
 
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
 
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
-> +BR2_SYSTEM_DHCP="eth0"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/lemaker/m2-plus/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://git.kernel.org/torvalds/t/linux-4.13-rc5.tar.gz"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
-> +BR2_PACKAGE_IPERF3=y
+Especially it is toolchain dependent (and not guarantee to stay constant
+across release I guess).
+I assume you care the most about the GNU toolchain:
+https://github.com/Kitware/CMake/blob/master/Modules/Compiler/GNU.cmake#L43
 
-Please remove this package, we want minimal configurations.
+But if some projects are building GPU code:
+https://github.com/Kitware/CMake/blob/master/Modules/Compiler/NVIDIA-CUDA.cmake
 
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
 
-Please drop this option, it is not needed.
 
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
+> >
+> > Using the same CMAKE_BUILD_TYPE as a base and overriding individual
+> setting
+> > seems like a more sane and robust approach to me.
+> >
+> > Two practical examples of packages that shows what can go wrong:
+> >
+> > 1) ceres-solver ( https://github.com/ceres-solver/ceres-solver )
+> >
+> > When configured with CMAKE_BUILD_TYPE=Release, it'll generate:
+> >
+> >     lib/libceres.a
+> >
+> > However with CMAKE_BUILD_TYPE=Debug we end up with:
+> >
+> >     lib/libceres-debug.a
+> >
+> >
+> > 2) the LLVM compiler is doing special casing based on the value of
+> > CMAKE_BUILD_TYPE. For example:
+> >
+> >     if (NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" AND
+> >         NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO")
+> >       add_flag_if_supported("-gline-tables-only" GLINE_TABLES_ONLY)
+> >     endif()
+> >     # Use -O1 even in debug mode, otherwise sanitizers slowdown is too
+> > large.
+> >     if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+> >       add_flag_if_supported("-O1" O1)
+> >     endif()
+> >
+> > Or also:
+> >
+> > if( NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
+> >   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" OFF)
+> > else()
+> >   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" ON)
+> > endif()
+> >
+> >
+> > In my experience it has been quite common for CMake projects to use
+> > CMAKE_BUILD_TYPE to differentiate on more than just default optimization
+> > level.
+>
+> At the time the denounced changes were done, we did not have such
+> cases in mind, nor to support, though they are legit.
+> Enhancement welcome
+>
 
-The final 2017.07 has been published in July, could you use that
-instead of this release candidate ?
+So what do you think about always using -DCMAKE_BUILD_TYPE=Release instead?
 
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +BR2_PACKAGE_HOST_GENEXT2FS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_TARGET_ROOTFS_EXT2_BLOCKS=61440
+Best,
 
-This last option no longer exists in Buildroot, so please drop it. The
-replacement is BR2_TARGET_ROOTFS_EXT2_SIZE, but the default value of
-60MB should be sufficient.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Mehdi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170823/ff5dbfef/attachment.html>
