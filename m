@@ -1,104 +1,78 @@
-From: Mehdi AMINI <joker.eph@gmail.com>
-Date: Wed, 23 Aug 2017 02:45:15 -0700
-Subject: [Buildroot] BR2_ENABLE_DEBUG is (incorrectly) using `Debug` for
- CMAKE_BUILD_TYPE instead of `RelWithDebInfo`
-Message-ID: <CANF-O=aDUs4yojV3sLBG6AiNFcA4C16u90-YJ9+emiTfojFsOA@mail.gmail.com>
+From: Stephan Bauroth <stephanbauroth@web.de>
+Date: Wed, 23 Aug 2017 13:48:46 +0200
+Subject: [Buildroot] [PATCH] libv4l: avoid compilation error by adding
+ upstream patch
+In-Reply-To: <20170822133210.4254-1-stephanbauroth@web.de>
+References: <20170822133210.4254-1-stephanbauroth@web.de>
+Message-ID: <6022e55d-653d-7d46-e6dc-90bb5feb9404@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch does not solve the mentioned compilation breakage, please 
+ignore.
 
-I've been bitten by what I think is a surprising behavior of  :
-https://bugs.busybox.net/show_bug.cgi?id=10246
-
-Here is the documentation for BR2_ENABLE_DEBUG:
-
-config BR2_ENABLE_DEBUG
-        bool "build packages with debugging symbols"
-        help
-          Build packages with debugging symbols enabled. All libraries
-          and binaries in the 'staging' directory will have debugging
-          symbols, which allows remote debugging even if libraries and
-          binaries are stripped on the target. Whether libraries and
-          binaries are stripped on the target is controlled by the
-          BR2_STRIP_* options below.
-
-
-The option is supposed to enable debug symbols emission by the compiler.
-The description mentions that the purpose is to enable remote debugging
-using `staging` even after stripping the binaries in `target`.
-However, by using `Debug` as `CMAKE_BUILD_TYPE` the option is not
-orthogonal to other settings and have side-effects. In CMake, the
-CMAKE_BUILD_TYPE is not *only* controlling the debug info emission but also
-the optimization level for instance. Also, and with even more concerns,
-packages may use this to trigger other settings.
-
-It seems it has swing'd multiple times last year, first going from `Debug`
-to `RelWithDebInfo` here:
-http://lists.busybox.net/pipermail/buildroot/2016-June/163639.html and here
-http://lists.busybox.net/pipermail/buildroot/2016-July/165714.html ; and
-then back to `Debug` here:
-https://git.buildroot.org/buildroot/commit/package/pkg-cmake.mk?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
- (haven't found the mailing list discussion)
-The latter claims that switching from `Release` to `Debug` is "semantically
-closer" to the intent of the option in buildroot. If that is the case, the
-doc does not seem to reflect correctly this intent to me: I always want to
-build a "release" package, only to have debug-info emitted in my staging
-directory.
-
-All the other settings mentioned in this commit message (assertions
-enabled/disabled, optimization level, etc.) can be (and actually are I
-think) handled orthogonally using other CMake flags.
-
-Using the same CMAKE_BUILD_TYPE as a base and overriding individual setting
-seems like a more sane and robust approach to me.
-
-Two practical examples of packages that shows what can go wrong:
-
-1) ceres-solver ( https://github.com/ceres-solver/ceres-solver )
-
-When configured with CMAKE_BUILD_TYPE=Release, it'll generate:
-
-    lib/libceres.a
-
-However with CMAKE_BUILD_TYPE=Debug we end up with:
-
-    lib/libceres-debug.a
-
-
-2) the LLVM compiler is doing special casing based on the value of
-CMAKE_BUILD_TYPE. For example:
-
-    if (NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" AND
-        NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO")
-      add_flag_if_supported("-gline-tables-only" GLINE_TABLES_ONLY)
-    endif()
-    # Use -O1 even in debug mode, otherwise sanitizers slowdown is too
-large.
-    if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
-      add_flag_if_supported("-O1" O1)
-    endif()
-
-Or also:
-
-if( NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
-  option(LLVM_ENABLE_ASSERTIONS "Enable assertions" OFF)
-else()
-  option(LLVM_ENABLE_ASSERTIONS "Enable assertions" ON)
-endif()
-
-
-In my experience it has been quite common for CMake projects to use
-CMAKE_BUILD_TYPE to differentiate on more than just default optimization
-level.
-
-Best,
-
--- 
-Mehdi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170823/097c2f08/attachment.html>
+On 22.08.2017 15:32, Stephan Bauroth wrote:
+> Without this patch, libv4l fails to build if qt5 is enabled:
+>
+> capture-win-gl.cpp: In member function 'virtual void
+> CaptureWinGLEngine::initializeGL()':
+> capture-win-gl.cpp:275:15: error: 'GL_FLAT' was not declared in this scope
+>    glShadeModel(GL_FLAT);
+>                 ^~~~~~~
+>
+> and more missing GL_* constants. This patch is upstream but not yet included in
+> any release. So unitl a new version gets released, include it here.
+>
+> Backported from: 4d65b0571ea0027b6de45a76cfcadca32ea4be4a
+> Signed-off-by: Stephan Bauroth <stephanbauroth@web.de>
+> ---
+>   package/libv4l/0011-fix-compilation-with-qt.patch | 37 +++++++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+>   create mode 100644 package/libv4l/0011-fix-compilation-with-qt.patch
+>
+> diff --git a/package/libv4l/0011-fix-compilation-with-qt.patch b/package/libv4l/0011-fix-compilation-with-qt.patch
+> new file mode 100644
+> index 0000000000..dbd60ee498
+> --- /dev/null
+> +++ b/package/libv4l/0011-fix-compilation-with-qt.patch
+> @@ -0,0 +1,37 @@
+> +From 4d65b0571ea0027b6de45a76cfcadca32ea4be4a Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sat, 4 Mar 2017 21:01:53 +0100
+> +Subject: qv4l2: fix qv4l2.pro qmake project file
+> +
+> +The header files v4l2-tpg.h and v4l2-tpg-colors.h moved
+> +from v4l2-ctl to common.
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+> +
+> +diff --git a/utils/qv4l2/qv4l2.pro b/utils/qv4l2/qv4l2.pro
+> +index 02b03de..6420fa2 100644
+> +--- a/utils/qv4l2/qv4l2.pro
+> ++++ b/utils/qv4l2/qv4l2.pro
+> +@@ -13,6 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+> + QT += opengl
+> +
+> + INCLUDEPATH += $$PWD/../..
+> ++INCLUDEPATH += $$PWD/../common
+> + INCLUDEPATH += $$PWD/../v4l2-ctl/
+> + INCLUDEPATH += $$PWD/../v4l2-compliance
+> +
+> +@@ -25,8 +26,8 @@ HEADERS += general-tab.h
+> + HEADERS += qv4l2.h
+> + HEADERS += raw2sliced.h
+> + HEADERS += vbi-tab.h
+> +-HEADERS += ../v4l2-ctl/v4l2-tpg.h
+> +-HEADERS += ../v4l2-ctl/v4l2-tpg-colors.h
+> ++HEADERS += ../common/v4l2-tpg.h
+> ++HEADERS += ../common/v4l2-tpg-colors.h
+> + HEADERS += ../../config.h
+> +
+> + SOURCES += capture-win.cpp
+> +--
+> +cgit v0.10.2
+> +
