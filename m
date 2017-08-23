@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 15:47:30 +0200
-Subject: [Buildroot] [PATCH/next 3/3] package/weston: bump version to
- 3.0.0
-In-Reply-To: <20170822200436.24905-3-bernd.kuhls@t-online.de>
-References: <20170822200436.24905-1-bernd.kuhls@t-online.de>
- <20170822200436.24905-3-bernd.kuhls@t-online.de>
-Message-ID: <20170823154730.4750143b@windsurf>
+Date: Wed, 23 Aug 2017 15:51:02 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/kodi: bump to version 17.4
+In-Reply-To: <20170822201526.3285-1-bernd.kuhls@t-online.de>
+References: <20170822201526.3285-1-bernd.kuhls@t-online.de>
+Message-ID: <20170823155102.1843b9f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 Aug 2017 22:04:36 +0200, Bernd Kuhls wrote:
+On Tue, 22 Aug 2017 22:15:24 +0200, Bernd Kuhls wrote:
+> Removed patch 0003, applied upstream:
+> https://github.com/xbmc/xbmc/commit/5fa10ff6b1b60abee172296d9c1dec8dfc10615c
+> 
+> -DWITH_FFMPEG is needed due to commit
+> https://github.com/xbmc/xbmc/commit/5ba6eb7cadc41d5eb86ef94e3661b833b62953ff
 
-> diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index 454a14d39..61f157ec7 100644
-> --- a/package/weston/Config.in
-> +++ b/package/weston/Config.in
-> @@ -17,8 +17,8 @@ config BR2_PACKAGE_WESTON
->  	select BR2_PACKAGE_CAIRO_PNG
->  	select BR2_PACKAGE_LIBPNG
->  	select BR2_PACKAGE_JPEG
-> -	select BR2_PACKAGE_MTDEV
->  	select BR2_PACKAGE_LIBINPUT
-> +	select BR2_PACKAGE_LIBDRM
+It is not clear to me what in this commit makes -DWITH_FFMPEG required.
+Could you explain?
 
-So, the select BR2_PACKAGE_LIBDRM that was in BR2_PACKAGE_WESTON_DRM
-should have been removed.
-
-I've fixed that before applying.
+I have nothing against adding -DWITH_FFMPEG, it looks alright, but I'd
+like to understand the relationship with this commit you're pointing at.
 
 Thanks!
 
