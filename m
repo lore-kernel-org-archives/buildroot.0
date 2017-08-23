@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 23:20:45 +0200
-Subject: [Buildroot] [PATCH] dbus-cpp: fix build with gcc 7.x
-In-Reply-To: <20170821220442.12240-1-thomas.petazzoni@free-electrons.com>
-References: <20170821220442.12240-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170823232045.6e2299bd@windsurf>
+Date: Wed, 23 Aug 2017 23:21:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zmqpp: link with libatomic when
+ needed
+In-Reply-To: <20170818055007.13273-1-bernd.kuhls@t-online.de>
+References: <20170818055007.13273-1-bernd.kuhls@t-online.de>
+Message-ID: <20170823232159.0b6c286c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 Aug 2017 00:04:42 +0200, Thomas Petazzoni wrote:
-> This commit adds a patch to dbus-cpp to make it build with gcc 7.x.
+On Fri, 18 Aug 2017 07:50:07 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/c32/c32b9b8dd00d6f6d3db27fae9d8de758a4f25138/
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/07a7559c0efeeda16c239e0fa06259d4cd48c71b/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...3-src-pipe.c-fix-build-error-with-gcc-7.x.patch | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/dbus-cpp/0003-src-pipe.c-fix-build-error-with-gcc-7.x.patch
+>  package/zmqpp/zmqpp.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
+I still hate this solution, but we don't have much choice, Boost build
+system is really unmanageable :/ So: applied to master. Thanks!
 
 Thomas
 -- 
