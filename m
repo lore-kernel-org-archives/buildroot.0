@@ -1,133 +1,150 @@
-From: Aseem Sharma <aseem.sharma19@gmail.com>
-Date: Wed, 23 Aug 2017 20:39:28 +0530
-Subject: [Buildroot] Compiling buildroot for Arm "Armada 166E" Target
-In-Reply-To: <CANK3ZEfR40W4AQnXJsed__mdimkqXdAKBCGKJriRPvK+EOxcKQ@mail.gmail.com>
-References: <20170810071320.xvrhusojcw4dqxtu@tarshish>
- <CANK3ZEeJYeji_4Ds-kW6EXXRU3FcpXSgRaWeav96qQU6O5Jfkg@mail.gmail.com>
- <20170810072841.bs5ly52awzczejgz@tarshish>
- <CANK3ZEca7+iUwmK2Hxt60T1jAQ5eYWC9z2_XVZ+cKCLWQq=Ebg@mail.gmail.com>
- <CANK3ZEcwW1+xBazZB209PFnzpi1mmyfmEEac0CFPMYUBBmTRug@mail.gmail.com>
- <CANK3ZEeh3fd=TAKh4PB7huAh9FaBFVF9HgF_u=fAG90_saNzKg@mail.gmail.com>
- <20170810085044.3pqhvt25wlhvssna@tarshish>
- <CANK3ZEc54MP4MMy57cYoLJHnC0UWt7Q7NYNLEQ9yqWX6wva50w@mail.gmail.com>
- <20170810092224.vxecvn22telonxns@tarshish>
- <CANK3ZEd0CtMCnFtSZQWesqGkguX4BVH=7myJOzw1ih0uvpc5DQ@mail.gmail.com>
- <20170810103329.ptwo7grhmqjoln63@tarshish>
- <2162846e-f16a-8f55-120c-da8145b9c482@mind.be>
- <CANK3ZEfR40W4AQnXJsed__mdimkqXdAKBCGKJriRPvK+EOxcKQ@mail.gmail.com>
-Message-ID: <CANK3ZEfhmH75c=G3Qe=87wkY4whx7hju3i12tuB1dNhq+He2Lw@mail.gmail.com>
+From: Mike Harmony <mike.harmony@snapav.com>
+Date: Wed, 23 Aug 2017 08:45:42 -0400
+Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPi M2 Plus
+	board.
+Message-ID: <1503492342-3805-1-git-send-email-mike.harmony@snapav.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout/Baruch,
+Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
+---
+ DEVELOPERS                          |  4 ++++
+ board/lemaker/m2-plus/boot.cmd      |  7 +++++++
+ board/lemaker/m2-plus/genimage.cfg  | 33 +++++++++++++++++++++++++++++++++
+ board/lemaker/m2-plus/post-build.sh | 12 ++++++++++++
+ configs/bananapi_m2_plus_defconfig  | 33 +++++++++++++++++++++++++++++++++
+ 5 files changed, 89 insertions(+)
+ create mode 100644 board/lemaker/m2-plus/boot.cmd
+ create mode 100644 board/lemaker/m2-plus/genimage.cfg
+ create mode 100755 board/lemaker/m2-plus/post-build.sh
+ create mode 100644 configs/bananapi_m2_plus_defconfig
 
-I have successfully created a rootfs and zImage for my device. Thanks to
-your suggestions/help in achieving this.
-However, I have another not so related question:
-
-How do I setup serial console on my device? I am not able to find the usual
-"CONFIG_CMDLINE" option in menuconfig to be able to set kernel command line
-parameter.
-It will be really helpful if you can help me with the procedure/workaround
-to be able to give command line parameter to the kernel. Or any other means
-to redirect the output to ttyS0.
-
-Thanks & Regards,
-Aseem
-
-On Thu, Aug 10, 2017 at 4:36 PM, Aseem Sharma <aseem.sharma19@gmail.com>
-wrote:
-
-> Thanks Arnout & Baruch for your inputs & time.
-> I will try "arm926t" and see if that works for me.
->
-> Best Regards,
-> Aseem
->
-> On Thu, Aug 10, 2017 at 4:31 PM, Arnout Vandecappelle <arnout@mind.be>
-> wrote:
->
->>
->>
->> On 10-08-17 12:33, Baruch Siach wrote:
->> > Hi Aseem,
->> >
->> > On Thu, Aug 10, 2017 at 03:27:26PM +0530, Aseem Sharma wrote:
->> >> It still seems to be an issue with Gcc=v6.X :-(
->> >> In fact I have tried using all the available Gcc version from
->> menuconfig
->> >> and its still fails. Following is the exact error message for your
->> >> reference:
->> >>
->> >> In file included from lib/xmlparse.c:36:0:
->> >> lib/siphash.h: In function ?sip24_final?:
->> >> lib/siphash.h:247:1: error: unrecognizable insn:
->> >>  } /* sip24_final() */
->> >>  ^
->> >> (insn 78 77 79 11 (set (reg:DI 188)
->> >>         (xor:DI (reg:DI 189)
->> >>             (const_int 255 [0xff]))) lib/siphash.h:243 -1
->> >>      (nil))
->> >> lib/siphash.h:247:1: internal compiler error: in extract_insn, at
->> >> recog.c:2287
->> >> Please submit a full bug report,
->> >> with preprocessed source if appropriate.
->> >> See <http://bugs.buildroot.net/> for instructions.
->> >> Makefile:213: recipe for target 'lib/xmlparse.lo' failed
->> >> make[1]: *** [lib/xmlparse.lo] Error 1
->> >> make[1]: *** Waiting for unfinished jobs....
->> >> make[1]: Leaving directory '/home/administrator/Downloads
->> /buildroot_2017/
->> >> buildroot-2017.02.5/output/build/expat-2.2.2'
->> >> package/pkg-generic.mk:216: recipe for target '/home/administrator/
->> >> Downloads/buildroot_2017/buildroot-2017.02.5/output/
->> >> build/expat-2.2.2/.stamp_built' failed
->> >> make: *** [/home/administrator/Downloads/buildroot_2017/
->> >> buildroot-2017.02.5/output/build/expat-2.2.2/.stamp_built] Error 2
->> > I reproduced the exact same issue here on current master as of
->> c2da653d085df1.
->> > I only run 'make expat' to shorten build time.
->> >
->> > I think you should to take this to the gcc bug tracker. I don't think
->> any of
->> > the Buildroot gcc patches have anything to do with that, but I'll let
->> the
->> > toolchain experts on the list share their opinion.
->>
->>  I didn't check but I indeed doubt that any of Buildroot's gcc patches
->> could
->> have anything to do with it.
->>
->>  To be able to report it to the gcc bug tracker, it would have to be
->> reproduced
->> with current gcc master and with a minimal piece of code that exposes the
->> bug.
->> Quite a bit of work...
->>
->>  Aseem, to unblock you, I think it's best if you just use the much better
->> tested
->> and compatible arm926t CPU choice. It will result in slightly less
->> efficient
->> code because it won't make use of the iwmmx2 instructions, but I doubt
->> that it
->> will have more than a few % performance impact on generic programs.
->>
->>  Regards,
->>  Arnout
->>
->> --
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170823/836548bd/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f3944e2..465293e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1234,6 +1234,10 @@ N:	Micha? ?yszczek <michal.lyszczek@bofc.pl>
+ F:	board/altera/socrates_cyclone5/
+ F:	configs/socrates_cyclone5_defconfig
+ 
++N:	Mike Harmony <mike.harmony@snapav.com>
++F:	board/lemaker/m2-plus/
++F:	configs/bananapi_m2_plus_defconfig
++
+ N:	Mikhail Boiko <mikhailboiko85@gmail.com>
+ F:	package/libfribidi/
+ 
+diff --git a/board/lemaker/m2-plus/boot.cmd b/board/lemaker/m2-plus/boot.cmd
+new file mode 100644
+index 0000000..d22464a
+--- /dev/null
++++ b/board/lemaker/m2-plus/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/lemaker/m2-plus/genimage.cfg b/board/lemaker/m2-plus/genimage.cfg
+new file mode 100644
+index 0000000..cde0669
+--- /dev/null
++++ b/board/lemaker/m2-plus/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h3-bananapi-m2-plus.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/lemaker/m2-plus/post-build.sh b/board/lemaker/m2-plus/post-build.sh
+new file mode 100755
+index 0000000..fb4b6e9
+--- /dev/null
++++ b/board/lemaker/m2-plus/post-build.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++# Remove all but the brcmfmac43362 firmware files
++find $TARGET_DIR/lib/firmware/brcm -type f -not -name "brcmfmac43362*" -delete
++
++BOARD_DIR="$(dirname $0)"
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
++BOOT_CMD=$BOARD_DIR/boot.cmd
++BOOT_CMD_H=$BINARIES_DIR/boot.scr
++
++# U-Boot script
++$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
+new file mode 100644
+index 0000000..c2bae51
+--- /dev/null
++++ b/configs/bananapi_m2_plus_defconfig
+@@ -0,0 +1,33 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_KERNEL_HEADERS_4_12=y
++BR2_BINUTILS_VERSION_2_27_X=y
++BR2_GCC_VERSION_5_X=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/lemaker/m2-plus/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://git.kernel.org/torvalds/t/linux-4.13-rc5.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
++BR2_PACKAGE_IPERF3=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_GENEXT2FS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=61440
+-- 
+2.7.4
