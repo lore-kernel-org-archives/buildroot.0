@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 22:13:55 +0200
-Subject: [Buildroot] [git commit] package/opusfile: bump version to 0.9
-Message-ID: <20170902130620.9E5348016A@busybox.osuosl.org>
+Date: Wed, 23 Aug 2017 15:44:56 +0200
+Subject: [Buildroot] [git commit] package/wayland: bump version to 1.14.0
+Message-ID: <20170902130619.A87758016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=828cdd7f507698ddc7c31e04b21b069de6408b25
+commit: https://git.buildroot.net/buildroot/commit/?id=d9f58bd4da216d2f9af40a0b053cb902dc73243a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch upstream URL to https.
+Added all hashes provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opusfile/opusfile.hash | 2 +-
- package/opusfile/opusfile.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wayland/wayland.hash | 7 +++++--
+ package/wayland/wayland.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
-index 541a21f..528ded2 100644
---- a/package/opusfile/opusfile.hash
-+++ b/package/opusfile/opusfile.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256	2c231ed3cfaa1b3173f52d740e5bbd77d51b9dfecb87014b404917fba4b855a4	opusfile-0.8.tar.gz
-+sha256 f75fb500e40b122775ac1a71ad80c4477698842a8fe9da4a1b4a1a9f16e4e979  opusfile-0.9.tar.gz
-diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
-index 846eedd..186288d 100644
---- a/package/opusfile/opusfile.mk
-+++ b/package/opusfile/opusfile.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 9b2c01d..c46aca2 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/033193.html
+-sha256  69b052c031a61e89af7cc8780893d0da1e301492352aa449dee9345043e6fe51	wayland-1.13.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-August/034748.html
++md5  0235f6075c32c3be61cff94fa0b9f108  wayland-1.14.0.tar.xz
++sha1 53a443be3bafe73209bbc49ef2cb134ed16e0141  wayland-1.14.0.tar.xz
++sha256 ed80cabc0961a759a42092e2c39aabfc1ec9a13c86c98bbe2b812f008da27ab8  wayland-1.14.0.tar.xz
++sha512 bd38b2b8963d4d98d42c270e5d7dbff6323789a173b19b67a18258424fd8adee5021b282c9d7f6dad0bd25aa0160e76aecd8ed803d4eb25d911ef0a81cd713a5  wayland-1.14.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index bd1030e..10710a8 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPUSFILE_VERSION = 0.8
--OPUSFILE_SITE = http://downloads.xiph.org/releases/opus
-+OPUSFILE_VERSION = 0.9
-+OPUSFILE_SITE = https://downloads.xiph.org/releases/opus
- OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
- OPUSFILE_LICENSE = BSD-3-Clause
- OPUSFILE_LICENSE_FILES = COPYING
+-WAYLAND_VERSION = 1.13.0
++WAYLAND_VERSION = 1.14.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
