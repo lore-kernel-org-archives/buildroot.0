@@ -1,48 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Aug 2017 23:11:52 +0200
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.83
-Message-ID: <20170902130619.D3A8B8016A@busybox.osuosl.org>
+Date: Wed, 23 Aug 2017 15:32:43 +0200
+Subject: [Buildroot] [git commit] uhubctl: new package
+Message-ID: <20170902130619.8CDD08016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=089ad9cefd88b6952df2d28de9b0a6ed6fee3388
+commit: https://git.buildroot.net/buildroot/commit/?id=7fb1bc2731944e99b1e0bad85cca635b1a281ebc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/uhubctl/Config.in    | 11 +++++++++++
+ package/uhubctl/uhubctl.hash |  2 ++
+ package/uhubctl/uhubctl.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 37 insertions(+)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index f864c55..704bf1b 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-July/147750.html
--md5 29867814123c3d23056b1d05aada1b9d  libdrm-2.4.82.tar.bz2
--sha1 c42ff308db6352eaf009a8209c7aaadbc951a89f  libdrm-2.4.82.tar.bz2
--sha256 43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c  libdrm-2.4.82.tar.bz2
--sha512 e69fd8c2b392daabbb3a548179e3a21a555d5174c11d76a288eb2a08850849aa867c7777b67798ec00e026e998a3b128c22698f05a7b44eb24cddc5c8a3a02d0  libdrm-2.4.82.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2017-August/151077.html
-+md5 23800953ed7564988872e1e8c61fde31  libdrm-2.4.83.tar.bz2
-+sha1 f78d392684d6e482e8c0a85d355619ac64c4ad6a  libdrm-2.4.83.tar.bz2
-+sha256 03a52669da60ead62548a35bc430aafb6c2d8dd21ec9dba3a90f96eff5fe36d6  libdrm-2.4.83.tar.bz2
-+sha512 8f894ff61939bca03ac857506a84bbbcbe2367e60c91a0f2388bfce5ae81e12ba2f96fe1c962416cf9e2d25ef04b98b5437c7015497789561311a72607b3bfcb  libdrm-2.4.83.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 0175dc9..e4d3e39 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9df2896..ad52fb7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -178,6 +178,7 @@ F:	package/daemon/
+ F:	package/ebtables/
+ F:	package/openipmi/
+ F:	package/ti-uim/
++F:	package/uhubctl/
  
--LIBDRM_VERSION = 2.4.82
-+LIBDRM_VERSION = 2.4.83
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ N:	Ben Boeckel <mathstuf@gmail.com>
+ F:	package/taskd/
+diff --git a/package/Config.in b/package/Config.in
+index 5f83a4d..d4db8c2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -505,6 +505,7 @@ endmenu
+ 	source "package/uccp420wlan/Config.in"
+ 	source "package/udev/Config.in"
+ 	source "package/udisks/Config.in"
++	source "package/uhubctl/Config.in"
+ 	source "package/upower/Config.in"
+ 	source "package/usb_modeswitch/Config.in"
+ 	source "package/usb_modeswitch_data/Config.in"
+diff --git a/package/uhubctl/Config.in b/package/uhubctl/Config.in
+new file mode 100644
+index 0000000..c000b5a
+--- /dev/null
++++ b/package/uhubctl/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_UHUBCTL
++	bool "uhubctl"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Control USB power per-port on smart USB hubs.
++
++	  https://github.com/mvp/uhubctl
++
++comment "uhubctl needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
+new file mode 100644
+index 0000000..6afee90
+--- /dev/null
++++ b/package/uhubctl/uhubctl.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 dfc85571ad86a071bf7a0db7cadf97a870e628777e47176520de6866b4f042b6 uhubctl-047bb1e392efd3e0ea5d5caf351e20761e12cd44.tar.gz
+diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
+new file mode 100644
+index 0000000..7484500
+--- /dev/null
++++ b/package/uhubctl/uhubctl.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# uhubctl
++#
++################################################################################
++
++UHUBCTL_VERSION = 047bb1e392efd3e0ea5d5caf351e20761e12cd44
++UHUBCTL_SITE = $(call github,mvp,uhubctl,$(UHUBCTL_VERSION))
++UHUBCTL_LICENSE = GPL-2.0
++UHUBCTL_LICENSE_FILES = LICENSE
++UHUBCTL_DEPENDENCIES = libusb
++
++define UHUBCTL_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define UHUBCTL_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
++		$(MAKE) -C $(@D) install
++endef
++
++$(eval $(generic-package))
