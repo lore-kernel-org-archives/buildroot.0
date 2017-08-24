@@ -1,51 +1,203 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Aug 2017 08:31:16 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-23
-Message-ID: <20170824063116.5EC75207FC@mail.free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 24 Aug 2017 09:07:03 +0200
+Subject: [Buildroot] BR2_ENABLE_DEBUG is (incorrectly) using `Debug` for
+ CMAKE_BUILD_TYPE instead of `RelWithDebInfo`
+In-Reply-To: <CANF-O=aeybMQ==FVLdOnj3c-qeOUeZdgFsOOykcVrOUQwnvoew@mail.gmail.com>
+References: <CANF-O=aDUs4yojV3sLBG6AiNFcA4C16u90-YJ9+emiTfojFsOA@mail.gmail.com>
+ <CAHXCMM+D6cpnDdh2bMo3eL_-ahOQVz64_0ZOiAiKvrg9WbryNw@mail.gmail.com>
+ <CANF-O=aeybMQ==FVLdOnj3c-qeOUeZdgFsOOykcVrOUQwnvoew@mail.gmail.com>
+Message-ID: <CAHXCMMJWX6HPR6GWX2XmHJNZBNUm_eHQLLixr69NekPgyP_iNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Mehdi,
 
-Build statistics for 2017-08-23
-================================
+On Wed, Aug 23, 2017 at 10:13 PM, Mehdi AMINI <joker.eph@gmail.com> wrote:
+> Hi Samuel,
+>
+> Thanks for you answer.
+>
+> 2017-08-23 9:46 GMT-07:00 Samuel Martin <s.martin49@gmail.com>:
+>>
+>> Hi Mehdi,
+>>
+>> On Wed, Aug 23, 2017 at 11:45 AM, Mehdi AMINI <joker.eph@gmail.com> wrote:
+>> > Hi,
+>> >
+>> > I've been bitten by what I think is a surprising behavior of  :
+>> > https://bugs.busybox.net/show_bug.cgi?id=10246
+>> >
+>> > Here is the documentation for BR2_ENABLE_DEBUG:
+>> >
+>> > config BR2_ENABLE_DEBUG
+>> >         bool "build packages with debugging symbols"
+>> >         help
+>> >           Build packages with debugging symbols enabled. All libraries
+>> >           and binaries in the 'staging' directory will have debugging
+>> >           symbols, which allows remote debugging even if libraries and
+>> >           binaries are stripped on the target. Whether libraries and
+>> >           binaries are stripped on the target is controlled by the
+>> >           BR2_STRIP_* options below.
+>> >
+>> >
+>> > The option is supposed to enable debug symbols emission by the compiler.
+>> > The
+>> > description mentions that the purpose is to enable remote debugging
+>> > using
+>> > `staging` even after stripping the binaries in `target`.
+>> > However, by using `Debug` as `CMAKE_BUILD_TYPE` the option is not
+>> > orthogonal
+>> > to other settings and have side-effects. In CMake, the CMAKE_BUILD_TYPE
+>> > is
+>> > not *only* controlling the debug info emission but also the optimization
+>> > level for instance. Also, and with even more concerns, packages may use
+>> > this
+>> > to trigger other settings.
+>> >
+>> > It seems it has swing'd multiple times last year, first going from
+>> > `Debug`
+>> > to `RelWithDebInfo` here:
+>> > http://lists.busybox.net/pipermail/buildroot/2016-June/163639.html and
+>> > here
+>> > http://lists.busybox.net/pipermail/buildroot/2016-July/165714.html ; and
+>> > then back to `Debug` here:
+>> >
+>> > https://git.buildroot.org/buildroot/commit/package/pkg-cmake.mk?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
+>> > (haven't found the mailing list discussion)
+>> > The latter claims that switching from `Release` to `Debug` is
+>> > "semantically
+>> > closer" to the intent of the option in buildroot. If that is the case,
+>> > the
+>> > doc does not seem to reflect correctly this intent to me: I always want
+>> > to
+>> > build a "release" package, only to have debug-info emitted in my staging
+>> > directory.
+>> >
+>>
+>> You may not have the entire view that led to this, some valuable
+>> details are in this change:
+>>
+>> https://git.buildroot.org/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
+>
+>
+> Yeah I didn't find this one before!
+> If I read correctly what is described, this confirms that buildroot is able
+> to override the default CMake value for the optimization level and debug,
+> right?
 
-      successes : 226
-       failures : 10 
-       timeouts : 0  
-          TOTAL : 236
+Exactly
 
-Classification of failures by reason
-====================================
+> If so, then always using `-DCMAKE_BUILD_TYPE=Release` should be fine,
+> correct?
 
-                  boost-1.64.0 | 1 
-               ljsyscall-v0.12 | 1 
-             lttng-tools-2.9.5 | 1 
-                    mpv-0.25.0 | 1 
-                     php-7.1.7 | 1 
-                      qt-4.8.7 | 1 
-qt-webkit-kiosk-7fe40a350ab... | 1 
-             transmission-2.92 | 1 
-               wireshark-2.2.7 | 1 
-            xlib_libXpm-3.5.12 | 1 
+Yes
 
+> Why the switch to a different -DCMAKE_BUILD_TYPE?
 
-Detail of failures
-===================
+Certainly to be less misleading when people looks at the configure command line.
+But the way we are doing this the CMAKE_BUILD_TYPE value does not
+reaily matter from our point of view.
+Though I agree, it may have some impact if the project cmake code is
+sensitive to it and uses it in a non-standard/expected fashion.
 
-         arm |                   boost-1.64.0 | NOK | http://autobuild.buildroot.net/results/8eb20f79d61bf646dcf86e3d4c58b2fc5fbce02f |     
-      x86_64 |                ljsyscall-v0.12 | NOK | http://autobuild.buildroot.net/results/0760649ad743a27f33ad5f5362180fbb4a105335 |     
-         arm |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/341312a66a9554b0959a1229618dc5515ef3efe4 |     
-     aarch64 |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/dd01fb35f175bfe67cadde707ba557e1076b4ed9 |     
-         arm |                      php-7.1.7 | NOK | http://autobuild.buildroot.net/results/f2322170ca3ed6d69e91d261d0ed27f8cafaede2 | ORPH
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a50f5ccf30c0bd8688da987e2dd732cd4d3d74c6 | ORPH
-         arm | qt-webkit-kiosk-7fe40a350ab... | NOK | http://autobuild.buildroot.net/results/9acb15f955b8af31a3beeb0bd84c4b0db495e354 |     
-         arm |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/d667ec461c52b5116d5c74b2a19bc4854a0507c6 |     
-     powerpc |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/42d759f6cd4b1e29530de7ddc1caa81f2428baaf |     
-     powerpc |             xlib_libXpm-3.5.12 | NOK | http://autobuild.buildroot.net/results/0eb53b98acda1fbdcd40d4bbd9ae4e55dd5c2e82 |     
+>
+>
+>>
+>>
+>>
+>> > All the other settings mentioned in this commit message (assertions
+>> > enabled/disabled, optimization level, etc.) can be (and actually are I
+>> > think) handled orthogonally using other CMake flags.
+>>
+>> We went to these conclusions mostly by experiments, because CMake does
+>> not document the default values for all build type declinaison of
+>> flags :-/
+>> https://cmake.org/cmake/help/v3.9/variable/CMAKE_BUILD_TYPE.html
+>
+>
+> Especially it is toolchain dependent (and not guarantee to stay constant
+> across release I guess).
+> I assume you care the most about the GNU toolchain:
+> https://github.com/Kitware/CMake/blob/master/Modules/Compiler/GNU.cmake#L43
+
+Yes mostly
+
+>
+> But if some projects are building GPU code:
+> https://github.com/Kitware/CMake/blob/master/Modules/Compiler/NVIDIA-CUDA.cmake
+
+I'm not sure what take precedence between the initial value of
+CMAKE_C_FLAGS and CMAKE_C_FLAGS_INIT
+
+>
+>
+>>
+>> >
+>> > Using the same CMAKE_BUILD_TYPE as a base and overriding individual
+>> > setting
+>> > seems like a more sane and robust approach to me.
+>> >
+>> > Two practical examples of packages that shows what can go wrong:
+>> >
+>> > 1) ceres-solver ( https://github.com/ceres-solver/ceres-solver )
+>> >
+>> > When configured with CMAKE_BUILD_TYPE=Release, it'll generate:
+>> >
+>> >     lib/libceres.a
+>> >
+>> > However with CMAKE_BUILD_TYPE=Debug we end up with:
+>> >
+>> >     lib/libceres-debug.a
+>> >
+>> >
+>> > 2) the LLVM compiler is doing special casing based on the value of
+>> > CMAKE_BUILD_TYPE. For example:
+>> >
+>> >     if (NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" AND
+>> >         NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO")
+>> >       add_flag_if_supported("-gline-tables-only" GLINE_TABLES_ONLY)
+>> >     endif()
+>> >     # Use -O1 even in debug mode, otherwise sanitizers slowdown is too
+>> > large.
+>> >     if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+>> >       add_flag_if_supported("-O1" O1)
+>> >     endif()
+>> >
+>> > Or also:
+>> >
+>> > if( NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
+>> >   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" OFF)
+>> > else()
+>> >   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" ON)
+>> > endif()
+>> >
+>> >
+>> > In my experience it has been quite common for CMake projects to use
+>> > CMAKE_BUILD_TYPE to differentiate on more than just default optimization
+>> > level.
+>>
+>> At the time the denounced changes were done, we did not have such
+>> cases in mind, nor to support, though they are legit.
+>> Enhancement welcome
+>
+>
+> So what do you think about always using -DCMAKE_BUILD_TYPE=Release instead?
+
+Since Buildroot set what it prefer, workarounding the CMake build type
+feature, I don't see anything preventing from always using the release
+build type.
+
+>
+> Best,
+>
+> --
+> Mehdi
+>
+
+Regards,
 
 -- 
-http://autobuild.buildroot.net
+Samuel
