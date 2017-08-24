@@ -1,167 +1,288 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 24 Aug 2017 00:58:37 -0300
-Subject: [Buildroot] [PATCH 1/2] util-linux: add menu items for login
-	utilities
-In-Reply-To: <20170823154252.03f70fea@windsurf>
+Date: Thu, 24 Aug 2017 00:58:38 -0300
+Subject: [Buildroot] [PATCH 2/2] util-linux: use a patch from upstream to
+	fix ncursesw support
+In-Reply-To: <20170824035838.14466-1-casantos@datacom.ind.br>
 References: <20170823154252.03f70fea@windsurf>
-Message-ID: <20170824035838.14466-1-casantos@datacom.ind.br>
+ <20170824035838.14466-1-casantos@datacom.ind.br>
+Message-ID: <20170824035838.14466-2-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change extends to the login utilities the current policy of having
-a selection item in the configuration menu for each utility that has an
---enable/--disable knob in the "configure" script:
-
-- add selection items for login, runuser, su and sulogin (there was
-  already an item for "last")
-- move "login utilities" to Config.in.legacy
-- make "login utilities" select last, login, runuser, su and sulogin
+This patch is much smaller the the previous one and will unlikely cause
+a conflict with some forthcoming 2.30.x release.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- Config.in.legacy                 | 16 +++++++++++++++
- package/util-linux/Config.in     | 44 ++++++++++++++++++++++++++--------------
- package/util-linux/util-linux.mk |  7 +++++--
- 3 files changed, 50 insertions(+), 17 deletions(-)
+ ...-Revert-build-sys-ncurses-headers-cleanup.patch | 191 ---------------------
+ ...upport-ncursesw-without-headers-in-ncurse.patch |  58 +++++++
+ 2 files changed, 58 insertions(+), 191 deletions(-)
+ delete mode 100644 package/util-linux/0001-Revert-build-sys-ncurses-headers-cleanup.patch
+ create mode 100644 package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 693dc95d74..13486a5b92 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
- 
-+config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
-+	bool "login utilities option removed"
-+	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
-+	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
-+	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_UTIL_LINUX_LAST
-+	select BR2_PACKAGE_UTIL_LINUX_LOGIN
-+	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
-+	select BR2_PACKAGE_UTIL_LINUX_SU
-+	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
-+	help
-+	  Login utilities (last, login, runuser, su, sulogin) now have
-+	  their own selecion items in the configuration menu.
-+
- config BR2_BINUTILS_VERSION_2_26_X
- 	bool "binutils version 2.26 support removed"
- 	select BR2_LEGACY
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index cba590c4f9..1b56fff022 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -164,26 +164,20 @@ config BR2_PACKAGE_UTIL_LINUX_LINE
- 	help
- 	  Read one line
- 
--config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
--	bool "login utilities"
--	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
--	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
--	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
--	depends on BR2_USE_MMU # linux-pam
--	select BR2_PACKAGE_LINUX_PAM
--	help
--	  Login utilities (last, login, runuser, su, sulogin)
+diff --git a/package/util-linux/0001-Revert-build-sys-ncurses-headers-cleanup.patch b/package/util-linux/0001-Revert-build-sys-ncurses-headers-cleanup.patch
+deleted file mode 100644
+index a344ee9035..0000000000
+--- a/package/util-linux/0001-Revert-build-sys-ncurses-headers-cleanup.patch
++++ /dev/null
+@@ -1,191 +0,0 @@
+-From 51157b7416cd9d09cb21ee8cebf5750b48f44201 Mon Sep 17 00:00:00 2001
+-From: Carlos Santos <casantos@datacom.ind.br>
+-Date: Thu, 22 Jun 2017 20:53:55 -0300
+-Subject: [PATCH] Revert "build-sys: ncurses headers cleanup"
 -
--comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
--	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+-This reverts commit 3947ca4ca9737d830f54658ef353f5626c0d0282.
+----
+- configure.ac         |  8 +++++---
+- lib/colors.c         | 15 ++++-----------
+- misc-utils/cal.c     |  8 ++++----
+- term-utils/setterm.c |  8 ++++----
+- text-utils/more.c    |  8 ++++----
+- text-utils/pg.c      | 16 +++++++++-------
+- text-utils/ul.c      |  8 ++++----
+- 7 files changed, 34 insertions(+), 37 deletions(-)
 -
- config BR2_PACKAGE_UTIL_LINUX_LOGGER
- 	bool "logger"
- 	help
- 	  Enter messages into the system log
- 
-+config BR2_PACKAGE_UTIL_LINUX_LOGIN
-+	bool "login"
-+	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # fork(), linux-pam
-+	select BR2_PACKAGE_LINUX_PAM
-+	help
-+	  Begin a session on the system
+-diff --git a/configure.ac b/configure.ac
+-index 53d25b8ab..3512162df 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -803,8 +803,9 @@ have_ncursesw_header=no
+- AS_IF([test "x$with_ncursesw" != xno], [
+-   UL_NCURSES_CHECK([ncursesw])
+-   AS_IF([test "x$have_ncursesw" = xyes], [
+--    AC_CHECK_HEADERS([ncursesw/ncurses.h], [have_ncursesw_header=yes])
+--    AC_CHECK_HEADERS([ncursesw/term.h])
+-+    AC_CHECK_HEADERS([ncursesw/ncurses.h ncurses.h],
+-+		     [have_ncursesw_header=yes])
+-+    AC_CHECK_HEADERS([ncursesw/term.h term.h])
+-     AS_IF([test "x$have_ncursesw_header" = xno], [have_ncursesw=no])
+-   ])
+-   AS_IF([test "x$have_ncursesw" = xyes], [
+-@@ -829,7 +830,8 @@ AS_CASE([$with_ncurses:$build_widechar],
+- AS_IF([test "x$have_ncursesw" = xno -a "x$with_ncurses" != xno ], [
+-   UL_NCURSES_CHECK([ncurses])
+-   AS_IF([test "x$have_ncurses" = xyes], [
+--    AC_CHECK_HEADERS([ncurses/ncurses.h ncurses.h], [have_ncurses_header=yes])
+-+    AC_CHECK_HEADERS([ncurses/ncurses.h ncurses.h],
+-+		     [have_ncurses_header=yes])
+-     AC_CHECK_HEADERS([ncurses/term.h term.h])
+-     AS_IF([test "x$have_ncurses_header" = xno], [have_ncurses=no])
+-   ])
+-diff --git a/lib/colors.c b/lib/colors.c
+-index f82496d7a..72c5158cb 100644
+---- a/lib/colors.c
+-+++ b/lib/colors.c
+-@@ -12,19 +12,12 @@
+- #include <ctype.h>
+- 
+- #if defined(HAVE_LIBNCURSES) || defined(HAVE_LIBNCURSESW)
+--# if defined(HAVE_NCURSESW_NCURSES_H)
+--#  include <ncursesw/ncurses.h>
+--# elif defined(HAVE_NCURSES_NCURSES_H)
+--#  include <ncurses/ncurses.h>
+--# elif defined(HAVE_NCURSES_H)
+--#  include <ncurses.h>
+--# endif
+--# if defined(HAVE_NCURSESW_TERM_H)
+--#  include <ncursesw/term.h>
+-+# ifdef HAVE_TERM_H
+-+#  include <term.h>
+- # elif defined(HAVE_NCURSES_TERM_H)
+- #  include <ncurses/term.h>
+--# elif defined(HAVE_TERM_H)
+--#  include <term.h>
+-+# elif defined(HAVE_NCURSESW_TERM_H)
+-+#  include <ncursesw/term.h>
+- # endif
+- #endif
+- 
+-diff --git a/misc-utils/cal.c b/misc-utils/cal.c
+-index 604eb26a7..2b16979db 100644
+---- a/misc-utils/cal.c
+-+++ b/misc-utils/cal.c
+-@@ -80,12 +80,12 @@ static int has_term = 0;
+- static const char *Senter = "", *Sexit = "";	/* enter and exit standout mode */
+- 
+- #if defined(HAVE_LIBNCURSES) || defined(HAVE_LIBNCURSESW)
+--# if defined(HAVE_NCURSESW_TERM_H)
+--#  include <ncursesw/term.h>
+-+# ifdef HAVE_TERM_H
+-+#  include <term.h>
+- # elif defined(HAVE_NCURSES_TERM_H)
+- #  include <ncurses/term.h>
+--# elif defined(HAVE_TERM_H)
+--#  include <term.h>
+-+# elif defined(HAVE_NCURSESW_TERM_H)
+-+#  include <ncursesw/term.h>
+- # endif
+- #endif
+- 
+-diff --git a/term-utils/setterm.c b/term-utils/setterm.c
+-index 9f60e5693..53826f954 100644
+---- a/term-utils/setterm.c
+-+++ b/term-utils/setterm.c
+-@@ -60,12 +60,12 @@
+- #include <termios.h>
+- #include <unistd.h>
+- 
+--#if defined(HAVE_NCURSESW_TERM_H)
+--# include <ncursesw/term.h>
+-+#ifdef HAVE_TERM_H
+-+# include <term.h>
+- #elif defined(HAVE_NCURSES_TERM_H)
+- # include <ncurses/term.h>
+--#elif defined(HAVE_TERM_H)
+--# include <term.h>
+-+#elif defined(HAVE_NCURSESW_TERM_H)
+-+# include <ncursesw/term.h>
+- #endif
+- 
+- #ifdef HAVE_LINUX_TIOCL_H
+-diff --git a/text-utils/more.c b/text-utils/more.c
+-index 72dd96bf4..cc53075f6 100644
+---- a/text-utils/more.c
+-+++ b/text-utils/more.c
+-@@ -190,12 +190,12 @@ static struct {
+- } context, screen_start;
+- extern char PC;			/* pad character */
+- 
+--#if defined(HAVE_NCURSESW_TERM_H)
+--# include <ncursesw/term.h>
+-+#ifdef HAVE_TERM_H
+-+# include <term.h>
+- #elif defined(HAVE_NCURSES_TERM_H)
+- # include <ncurses/term.h>
+--#elif defined(HAVE_TERM_H)
+--# include <term.h>
+-+#elif defined(HAVE_NCURSESW_TERM_H)
+-+#  include <ncursesw/term.h>
+- #endif
+- 
+- #define TERM_AUTO_RIGHT_MARGIN    "am"
+-diff --git a/text-utils/pg.c b/text-utils/pg.c
+-index 1b9b8d7dd..bc485e2fe 100644
+---- a/text-utils/pg.c
+-+++ b/text-utils/pg.c
+-@@ -59,20 +59,22 @@
+- #include <signal.h>
+- #include <setjmp.h>
+- 
+--#if defined(HAVE_NCURSESW_NCURSES_H)
+-+#ifdef HAVE_NCURSESW_H
+-+# include <ncursesw.h>
+-+#elif defined(HAVE_NCURSES_H)
+-+# include <ncurses.h>
+-+#elif defined(HAVE_NCURSESW_NCURSES_H)
+- # include <ncursesw/ncurses.h>
+- #elif defined(HAVE_NCURSES_NCURSES_H)
+- # include <ncurses/ncurses.h>
+--#elif defined(HAVE_NCURSES_H)
+--# include <ncurses.h>
+- #endif
+- 
+--#if defined(HAVE_NCURSESW_TERM_H)
+--# include <ncursesw/term.h>
+-+#ifdef HAVE_TERM_H
+-+# include <term.h>
+- #elif defined(HAVE_NCURSES_TERM_H)
+- # include <ncurses/term.h>
+--#elif defined(HAVE_TERM_H)
+--# include <term.h>
+-+#elif defined(HAVE_NCURSESW_TERM_H)
+-+# include <ncursesw/term.h>
+- #endif
+- 
+- #include "nls.h"
+-diff --git a/text-utils/ul.c b/text-utils/ul.c
+-index 3986b4206..3d1518cea 100644
+---- a/text-utils/ul.c
+-+++ b/text-utils/ul.c
+-@@ -49,12 +49,12 @@
+- #include <errno.h>
+- #include <getopt.h>
+- 
+--#if defined(HAVE_NCURSESW_TERM_H)
+--# include <ncursesw/term.h>
+-+#ifdef HAVE_TERM_H
+-+# include <term.h>
+- #elif defined(HAVE_NCURSES_TERM_H)
+- # include <ncurses/term.h>
+--#elif defined(HAVE_TERM_H)
+--# include <term.h>
+-+#elif defined(HAVE_NCURSESW_TERM_H)
+-+# include <ncursesw/term.h>
+- #endif
+- 
+- #include "nls.h"
+--- 
+-2.11.0
+-
+diff --git a/package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch b/package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch
+new file mode 100644
+index 0000000000..062ac6725b
+--- /dev/null
++++ b/package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch
+@@ -0,0 +1,58 @@
++From 87c26ce5b689abe1b52181f98ef3c9eb1b1a5165 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Tue, 1 Aug 2017 14:36:25 +0200
++Subject: [PATCH] build-sys: support ncursesw without headers in ncursesw/
++ directory
 +
- config BR2_PACKAGE_UTIL_LINUX_LOSETUP
- 	bool "losetup"
- 	depends on BR2_USE_MMU # libsmartcols
-@@ -296,6 +290,14 @@ config BR2_PACKAGE_UTIL_LINUX_RESET
- 	help
- 	  Reset the terminal
- 
-+config BR2_PACKAGE_UTIL_LINUX_RUNUSER
-+	bool "runuser"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Run a command with substitute user and group ID (does not need
-+	  to ask for a password, because it may be executed by the root
-+	  user only)
++Let's check always for alone ncurses.h and term.h if the preferred
++variant with ncursesw/ subdirectory is not available.
 +
- config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
- 	bool "scheduling utilities"
- 	help
-@@ -313,6 +315,18 @@ config BR2_PACKAGE_UTIL_LINUX_SETTERM
- 	help
- 	  Set terminal attributes
- 
-+config BR2_PACKAGE_UTIL_LINUX_SU
-+	bool "su"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Run a command with substitute user and group ID
++The patch also minimize number of HAVE_...NCURSES_H macros in
++config.h. We don't need to check for ncurses.h if ncurses/ncurses.h is
++available.
 +
-+config BR2_PACKAGE_UTIL_LINUX_SULOGIN
-+	bool "sulogin"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Single-user login
++Reported-by: Carlos Santos <casantos@datacom.ind.br>
++Signed-off-by: Karel Zak <kzak@redhat.com>
++---
++ configure.ac | 18 ++++++++++++++++--
++ 1 file changed, 16 insertions(+), 2 deletions(-)
 +
- config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- 	bool "switch_root"
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index fc32668869..179e55dddf 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -118,7 +118,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
-@@ -136,9 +136,12 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset,--disable-reset) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_RUNUSER),--enable-runuser,--disable-runuser) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETTERM),--enable-setterm,--disable-setterm) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_SU),--enable-su,--disable-su) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_SULOGIN),--enable-sulogin,--disable-sulogin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT),--enable-switch_root,--disable-switch_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_TUNELP),--enable-tunelp,--disable-tunelp) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UL),--enable-ul,--disable-ul) \
-@@ -200,7 +203,7 @@ UTIL_LINUX_CONF_OPTS += --without-audit
- endif
- 
- # Install PAM configuration files
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU),y)
- define UTIL_LINUX_INSTALL_PAMFILES
- 	$(INSTALL) -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su
++diff --git a/configure.ac b/configure.ac
++index b204ec11e..592bd587e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -810,6 +810,13 @@ AS_IF([test "x$with_ncursesw" != xno], [
++   AS_IF([test "x$have_ncursesw" = xyes], [
++     AC_CHECK_HEADERS([ncursesw/ncurses.h], [have_ncursesw_header=yes])
++     AC_CHECK_HEADERS([ncursesw/term.h])
+++
+++    # Define HAVE_NCURSES_H only if check for HAVE_NCURSESW_NCURSES_H is
+++    # unsuccessful to avoid too many *_H permitations in config.h
+++    AS_IF([test "x$have_ncursesw_header" = xno], [
+++	   AC_CHECK_HEADERS([ncurses.h], [have_ncursesw_header=yes])
+++	   AC_CHECK_HEADERS([term.h])
+++    ])
++     AS_IF([test "x$have_ncursesw_header" = xno], [have_ncursesw=no])
++   ])
++   AS_IF([test "x$have_ncursesw" = xyes], [
++@@ -834,8 +841,15 @@ AS_CASE([$with_ncurses:$build_widechar],
++ AS_IF([test "x$have_ncursesw" = xno -a "x$with_ncurses" != xno ], [
++   UL_NCURSES_CHECK([ncurses])
++   AS_IF([test "x$have_ncurses" = xyes], [
++-    AC_CHECK_HEADERS([ncurses/ncurses.h ncurses.h], [have_ncurses_header=yes])
++-    AC_CHECK_HEADERS([ncurses/term.h term.h])
+++    AC_CHECK_HEADERS([ncurses/ncurses.h], [have_ncurses_header=yes])
+++    AC_CHECK_HEADERS([ncurses/term.h])
+++
+++    # Define HAVE_NCURSES_H only if check for HAVE_NCURSES_NCURSES_H is
+++    # unsuccessful to avoid too many *_H permitations in config.h
+++    AS_IF([test "x$have_ncurses_header" = xno], [
+++	   AC_CHECK_HEADERS([ncurses.h], [have_ncurses_header=yes])
+++	   AC_CHECK_HEADERS([term.h])
+++    ])
++     AS_IF([test "x$have_ncurses_header" = xno], [have_ncurses=no])
++   ])
++   AS_IF([test "x$have_ncurses" = xyes], [
++-- 
++2.13.5
++
 -- 
 2.13.5
