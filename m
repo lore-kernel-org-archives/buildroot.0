@@ -1,64 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Aug 2017 23:11:35 +0200
-Subject: [Buildroot] [PATCH] bcusdk: enable tpuarts support in eibd
-In-Reply-To: <20170824073008.GB22055@airbook.vandijck-laurijssen.be>
-References: <20170824073008.GB22055@airbook.vandijck-laurijssen.be>
-Message-ID: <20170824231135.4a4a8e98@windsurf>
+Date: Thu, 24 Aug 2017 23:11:52 +0200
+Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
+	to 2.4.83
+Message-ID: <20170824210450.874D5818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=089ad9cefd88b6952df2d28de9b0a6ed6fee3388
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 24 Aug 2017 09:30:08 +0200, Kurt Van Dijck wrote:
-> Hey,
-> 
-> Please find my patch below.
-> It enables an extra interface type for eibd.
-> I don't understand why it wasn't there.
-> 
-> Kind regards,
-> Kurt
-> 
-> --
-> commit e62160001f09bff9be8e74b6d47da11c349bb2a6
-> Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> Date:   Thu Aug 24 09:16:36 2017
-> 
->     bcusdk: enable tpuarts support in eibd
->     
->     This commit will enable tpuarts in eibd as well.
->     tpuarts is equally important to FT1.2.
->     It makes no sense to enable only some interfaces.
->     
->     Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Thanks, I've applied your patch to the next branch. However, I have a
-few comments/questions:
-
- - Could you use "git send-email" next time to send your patch? Indeed
-   the formatting of your patch was not correct, so I had to fix it up
-   manually. I.e you shouldn't be adding a "personal" message at the
-   top of the patch, but just e-mail out the output of "git
-   format-patch", which is exactly what "git send-email" guarantees to
-   do correctly.
-
- - I've added to the commit log some information about the size
-   increase caused by this new option. Since it's just 8 KB, it doesn't
-   justify adding a new Buildroot Config.in option.
-
- - Our DEVELOPERS file doesn't list anyone looking after the bcusdk
-   package. Would you be willing to take care of this package, since
-   you're using it? Basically, it only means that you would be
-   receiving notifications when there are build failures on this
-   package, and potentially be CC'ed on patches touching this package.
-
-Thanks a lot for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index f864c55..704bf1b 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-July/147750.html
+-md5 29867814123c3d23056b1d05aada1b9d  libdrm-2.4.82.tar.bz2
+-sha1 c42ff308db6352eaf009a8209c7aaadbc951a89f  libdrm-2.4.82.tar.bz2
+-sha256 43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c  libdrm-2.4.82.tar.bz2
+-sha512 e69fd8c2b392daabbb3a548179e3a21a555d5174c11d76a288eb2a08850849aa867c7777b67798ec00e026e998a3b128c22698f05a7b44eb24cddc5c8a3a02d0  libdrm-2.4.82.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2017-August/151077.html
++md5 23800953ed7564988872e1e8c61fde31  libdrm-2.4.83.tar.bz2
++sha1 f78d392684d6e482e8c0a85d355619ac64c4ad6a  libdrm-2.4.83.tar.bz2
++sha256 03a52669da60ead62548a35bc430aafb6c2d8dd21ec9dba3a90f96eff5fe36d6  libdrm-2.4.83.tar.bz2
++sha512 8f894ff61939bca03ac857506a84bbbcbe2367e60c91a0f2388bfce5ae81e12ba2f96fe1c962416cf9e2d25ef04b98b5437c7015497789561311a72607b3bfcb  libdrm-2.4.83.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 0175dc9..e4d3e39 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.82
++LIBDRM_VERSION = 2.4.83
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
