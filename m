@@ -1,7 +1,7 @@
-From: Jonas <qiaohuang178@gmail.com>
-Date: Thu, 24 Aug 2017 03:42:05 -0700 (MST)
-Subject: [Buildroot] pulseaudio isn't work on buildroot-2017.02.5
-Message-ID: <1503571325385-173857.post@n4.nabble.com>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Thu, 24 Aug 2017 20:47:39 +0800
+Subject: [Buildroot] simicsfs 1.18 does not build with kernel 4.12.2
+Message-ID: <CAEUhbmWTZY-zU6c_yEFpp+HR2xuGj5FiZjGVDumSrAuAg+kG5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,123 +10,44 @@ To: buildroot@busybox.net
 
 Hi,
 
-I'm useing RPi and buildroot-2017.02.5.tar.gz.
-linux is work but pulseaudio is not work.
+I am using buildroot 2017.08-rc3 to build a rootfs for minnowboard
+max. What I did is:
 
-The following is my config:
+$ make minnowboard_max_defconfig
+$ make menuconfig
 
-System configuration  --->
-/dev management (Dynamic using devtmpfs + mdev)  --->
-Dynamic using devtmpfs + mdev
+Select "Target packages" -> "File system and flash utilities" -> simicsfs
 
-Toolchain  --->
-Enable WCHAR support 
+$ make
 
-Target packages  --->
-Audio and video applications  ---> 
-pulseaudio
+The error message is:
 
-Target packages  --->
-Audio and video applications  ---> 
-alsa-utils
+buildroot/output/build/simicsfs-1.18/./hostfs_file.c:67:43: error:
+?struct file? has no member named ?f_dentry?; did you mean ?f_owner??
+  DPRINT1("hostfs: hostfs_read %ld\n", file->f_dentry->d_inode->i_ino);
 
+buildroot/output/build/simicsfs-1.18/./hostfs_file.c:151:2: error:
+unknown field ?aio_read? specified in initializer
+  .aio_read = hostfs_aio_read,
 
-The following is error message:
+buildroot/output/build/simicsfs-1.18/./hostfs_file.c:152:2: error:
+unknown field ?aio_write? specified in initializer
+  .aio_write = hostfs_aio_write,
 
-#
-# modprobe snd_bcm2835
-#
-# ls /dev/snd/
-controlC0  pcmC0D0p   pcmC0D1p   timer
-#
-# aplay -l
-**** List of PLAYBACK Hardware Devices ****
-card 0: ALSA [bcm2835 ALSA], device 0: bcm2835 ALSA [bcm2835 ALSA]
-  Subdevices: 8/8
-  Subdevice #0: subdevice #0
-  Subdevice #1: subdevice #1
-  Subdevice #2: subdevice #2
-  Subdevice #3: subdevice #3
-  Subdevice #4: subdevice #4
-  Subdevice #5: subdevice #5
-  Subdevice #6: subdevice #6
-  Subdevice #7: subdevice #7
-card 0: ALSA [bcm2835 ALSA], device 1: bcm2835 ALSA [bcm2835 IEC958/HDMI]
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-#
-#
-# pulseaudio --verbose
-W: [pulseaudio] main.c: This program is not intended to be run as root
-(unless --system is specified).
-I: [pulseaudio] core-util.c: Successfully gained nice level -11.
-I: [pulseaudio] main.c: This is PulseAudio 9.0
-I: [pulseaudio] main.c: Page size is 4096 bytes
-I: [pulseaudio] main.c: Machine ID is buildroot.
-I: [pulseaudio] main.c: Using runtime directory
-/root/.config/pulse/buildroot-runtime.
-I: [pulseaudio] main.c: Using state directory /root/.config/pulse.
-I: [pulseaudio] main.c: Using modules directory /usr/lib/pulse-9.0/modules.
-I: [pulseaudio] main.c: Running in system mode: no
-I: [pulseaudio] main.c: System supports high resolution timers
-I: [pulseaudio] cpu-arm.c: CPU flags: V6 V7 VFP EDSP NEON VFPV3
-I: [pulseaudio] svolume_arm.c: Initialising ARM optimized volume functions.
-I: [pulseaudio] sconv_neon.c: Initialising ARM NEON optimized conversions.
-I: [pulseaudio] mix_neon.c: Initialising ARM NEON optimized mixing
-functions.
-I: [pulseaudio] remap_neon.c: Initialising ARM NEON optimized remappers.
-I: [pulseaudio] module-device-restore.c: Successfully opened database file
-'/root/.config/pulse/buildroot-device-volumes'.
-I: [pulseaudio] module.c: Loaded "module-device-restore" (index: #0;
-argument: "").
-I: [pulseaudio] module-stream-restore.c: Successfully opened database file
-'/root/.config/pulse/buildroot-stream-volumes'.
-I: [pulseaudio] module.c: Loaded "module-stream-restore" (index: #1;
-argument: "").
-I: [pulseaudio] module-card-restore.c: Successfully opened database file
-'/root/.config/pulse/buildroot-card-database'.
-I: [pulseaudio] module.c: Loaded "module-card-restore" (index: #2; argument:
-"").
-I: [pulseaudio] module.c: Loaded "module-augment-properties" (index: #3;
-argument: "").
-I: [pulseaudio] module.c: Loaded "module-switch-on-port-available" (index:
-#4; argument: "").
-W: [pulseaudio] module.c: module-detect is deprecated: Please use
-module-udev-detect instead of module-detect!
-I: [pulseaudio] (alsa-lib)conf.c: Unknown parameters 0
-I: [pulseaudio] (alsa-lib)pcm.c: Unknown PCM front:0
-I: [pulseaudio] alsa-util.c: Error opening PCM device front:0: Invalid
-argument
-I: [pulseaudio] alsa-util.c: Cannot disable ALSA period wakeups
-I: [pulseaudio] alsa-util.c: ALSA period wakeups were not disabled
-I: [pulseaudio] alsa-sink.c: Successfully opened device hw:0.
-I: [pulseaudio] alsa-sink.c: Selected mapping 'Analog Stereo'
-(analog-stereo).
-I: [pulseaudio] alsa-sink.c: Successfully enabled mmap() mode.
-I: [pulseaudio] alsa-sink.c: Successfully enabled timer-based scheduling
-mode.
-I: [pulseaudio] alsa-util.c: Successfully attached to mixer 'hw:0'
+buildroot/output/build/simicsfs-1.18/./hostfs_inode.c:174:10: error:
+implicit declaration of function ?inode_change_ok?
+[-Werror=implicit-function-declaration]
+  error = inode_change_ok(inode, iattr);
 
-# 
-# pulseaudio --verbose --system
-W: [pulseaudio] main.c: Running in system mode, but --disallow-exit not set.
-W: [pulseaudio] main.c: Running in system mode, but
---disallow-module-loading not set.
-N: [pulseaudio] main.c: Running in system mode, forcibly disabling SHM mode.
-N: [pulseaudio] main.c: Running in system mode, forcibly disabling exit idle
-time.
-I: [pulseaudio] core-util.c: Successfully gained nice level -11.
-E: [pulseaudio] main.c: Failed to find user 'pulse'.
-#
+buildroot/output/build/simicsfs-1.18/./hostfs_inode.c:248:25: error:
+?PAGE_CACHE_SHIFT? undeclared (first use in this function)
+  pgoff_t index = pos >> PAGE_CACHE_SHIFT;
 
-I don't know how to solve this issue
-how to let pulseaudio process work.
+<snip>
 
-Thanks,
-Jonas.
+Although the README in the simicsfs 1.18 package says: Linux kernel
+2.6.12 and later only. I believe this package does not build for
+latest kernel like v4.12.2.
 
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/pulseaudio-isn-t-work-on-buildroot-2017-02-5-tp173857.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Regards,
+Bin
