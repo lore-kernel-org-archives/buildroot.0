@@ -1,21 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Aug 2017 01:03:57 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
- package
-In-Reply-To: <CAFSsvmq8o3QVkogQ3=2=0BK20nZyUecy_hHLsc+XmuSJJYavTA@mail.gmail.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
- <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
- <20170224092549.2c560db3@free-electrons.com>
- <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
- <20170227150637.ljo2c6dv3izstddn@tarshish>
- <20170227232240.GB2535@tungsten.ozlabs.ibm.com>
- <1502794041870-173505.post@n4.nabble.com>
- <1502952247260-173614.post@n4.nabble.com>
- <346fcaef-6d03-4d57-c749-da966016d401@mind.be>
- <CAFSsvmq8o3QVkogQ3=2=0BK20nZyUecy_hHLsc+XmuSJJYavTA@mail.gmail.com>
-Message-ID: <2b5ed9ae-1477-0c8c-ff7d-440cc60d75a9@mind.be>
+Date: Fri, 25 Aug 2017 01:22:43 +0200
+Subject: [Buildroot] [RFC-next 0/2] Add genimage logic in fs/genimage
+In-Reply-To: <20170823204547.16672-1-thomas.petazzoni@free-electrons.com>
+References: <20170823204547.16672-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <44ccde2e-bbcb-9052-fbe3-6d5d34686841@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,31 +12,62 @@ To: buildroot@busybox.net
 
 
 
-On 22-08-17 12:57, Adam Duskett wrote:
-> On Thu, Aug 17, 2017 at 6:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
-> Well, in the Yocto project, there's a patch named:
-> Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
-> (I assume it should be Revert an incomplete upstream attempt at cross-compile
->  support).  So upstream is starting to try and get cross-compiling support built
-> into gobject-introspection it looks like!
+On 23-08-17 22:45, Thomas Petazzoni wrote:
+> This has been discussed in the past, so here is a first attempt at
+> adding some logic to generate genimage images from Buildroot. It's
+> sent as an RFC to really point out that it's an initial attempt, meant
+> to start the discussion.
 
- Hm, could be interesting to work with upstream to really get cross-compilation
-to work... But still, someone needs to do it :-)
+ I'm still not very convinced this is an improvement. The only thing it brings,
+really, is that the option to select the packages required for VFAT right next
+to the genimage option. But we can get a similar result by reorganizing the
+Config.in.host menu with some sections so all the filesystem generation bits are
+next to each other, and in the host-genimage help text explain that VFAT needs
+both mtools and dosfstools.
+
+ That said, I would agree if the longer-term vision is to:
+* do genimage under fakeroot, so it can generate the ext4fs directly instead of
+requiring support from Buildroot;
+* add support to generate simple genimage.cfg files from Buildroot config options;
+* make sure that genimage supports all the filesystem types that we do (just
+talking about actual filesystems here, so not cpio, tar, initramfs);
+* eventually deprecate our filesystem support and delegate all of it to genimage.
+
+ That's a five-year vision, of course, not something that needs to be fully
+implemented right away.
 
 
+> The aspects I'm not entirely sure:
+> 
+>  - fs/genimage/ is not ideal, because it's not a filesystem format
+>    per-se. But I'm not sure where to put it.
 
->> [3] describes how it is solved in an OpenEmbedded layer. The interesting bit
->> from this one is that they have 4 separate packages. I don't think we need 4,
->> but 2 could be useful.
->>
-> Is it possible to take most of the recipe from yocto and perhaps
-> translate it into
-> a make file that works for BuildRoot?
+ I think it is. As mentioned above, cpio, initramfs and tar are not filesystem
+formats either.
 
- Possibly, I haven't looked at the details. I also haven't looked at how they
-deal with the kernel ABI issue in qemu-user. Perhaps it works just with glibc
-and they assume that glibc is built with the very-old-kernel compatibility layer.
+
+>  - the "Filesystem images" menu in menuconfig is also not the ideal
+>    location, for the same reason, but I'm also not sure where this
+>    would fit.
+
+ It would make more sense close to the post-build options. However, that would
+put it in a not very logical place as well. Except if we move the filesystems
+menu as a submenu of system configuration. Oh well, not so important.
+
+
+>  - the direct call from target-post-image to GENIMAGE_GENERATE_CMDS is
+>    also probably not ideal.
+
+ We could introduce something like TARGET_FINALIZE_HOOKS, but with just one such
+thing I don't think it's worth it.
+
+ However, IMO, the genimage step should be done *after* the post-image scripts.
+If you look at our existing defconfigs, almost all of them do some preparatory
+work before calling genimage. There's only one script that does something
+afterwards: board/hardkernel/odroidc2/post-image.sh writes u-boot into the image
+using dd, because it needs a gap in the middle. But even that one could be done
+before genimage, splitting u-boot.bin into two files and using the genimage.cfg
+files to add them to the image.
 
  Regards,
  Arnout
