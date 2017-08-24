@@ -1,10 +1,10 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Thu, 24 Aug 2017 14:41:51 -0700
-Subject: [Buildroot] [PATCH 2/3] package/transmission: Do not mark .service
+Date: Thu, 24 Aug 2017 14:41:52 -0700
+Subject: [Buildroot] [PATCH 3/3] package/nss-pam-ldapd: Do not mark .service
 	file executable
 In-Reply-To: <20170824214152.5742-1-andrew.smirnov@gmail.com>
 References: <20170824214152.5742-1-andrew.smirnov@gmail.com>
-Message-ID: <20170824214152.5742-2-andrew.smirnov@gmail.com>
+Message-ID: <20170824214152.5742-3-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,21 @@ will give us a warning about it.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/transmission/transmission.mk | 2 +-
+ package/nss-pam-ldapd/nss-pam-ldapd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index f8abb2b8ba..0fce642a03 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -64,7 +64,7 @@ define TRANSMISSION_INSTALL_INIT_SYSV
- endef
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+index 1c4f73521a..3eddb5e2a1 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.mk
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+@@ -27,7 +27,7 @@ NSS_PAM_LDAPD_CONF_OPTS += --disable-pam
+ endif
  
- define TRANSMISSION_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
-+	$(INSTALL) -D -m 0644 $(@D)/daemon/transmission-daemon.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
+ define NSS_PAM_LDAPD_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 755 -D package/nss-pam-ldapd/nslcd.service \
++	$(INSTALL) -m 644 -D package/nss-pam-ldapd/nslcd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/nslcd.service
  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
+ 	ln -fs ../../../../usr/lib/systemd/system/nslcd.service \
 -- 
 2.13.5
