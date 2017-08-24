@@ -1,79 +1,52 @@
-From: Julien Grossholtz <julien.grossholtz@savoirfairelinux.com>
-Date: Thu, 24 Aug 2017 17:27:01 -0400 (EDT)
-Subject: [Buildroot] [PATCH v3] configs: add defconfig for TS-7680
-In-Reply-To: <20170824231804.0d1bc20a@windsurf>
-References: <20170824210700.26877-1-julien.grossholtz@savoirfairelinux.com>
- <20170824231804.0d1bc20a@windsurf>
-Message-ID: <200148308.340820.1503610021432.JavaMail.zimbra@savoirfairelinux.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 24 Aug 2017 16:27:06 -0500
+Subject: [Buildroot] simicsfs 1.18 does not build with kernel 4.12.2
+In-Reply-To: <20170824230211.4c0ea814@windsurf>
+References: <CAEUhbmWTZY-zU6c_yEFpp+HR2xuGj5FiZjGVDumSrAuAg+kG5A@mail.gmail.com>
+ <20170824193354.782bae38@windsurf>
+ <CANQCQpY+iyQ5XtTA5tCh9V9awNa4fhGzJ+bmBdY1YWODuxjppQ@mail.gmail.com>
+ <20170824230211.4c0ea814@windsurf>
+Message-ID: <CANQCQpY3p9GK58EE1weGjnJ1H-YwALk5nrSUQvG-UwF4RczWkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
------ Original Message -----
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Julien Grossholtz" <julien.grossholtz@gmail.com>
-> Cc: "Julien Grossholtz" <julien.grossholtz@savoirfairelinux.com>, "Mark Featherston" <mark@embeddedarm.com>,
-> buildroot at buildroot.org
-> Sent: Thursday, August 24, 2017 5:18:04 PM
-> Subject: Re: [Buildroot] [PATCH v3] configs: add defconfig for TS-7680
-
+On Thu, Aug 24, 2017 at 4:02 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Thu, 24 Aug 2017 17:07:00 -0400, Julien Grossholtz wrote:
->> The TS-7680 is an i.MX286 ARM ARM926EJ-S board with 10/100 Ethernet,
->> USB port, eMMC and CAN ports.
->> 
->> The TS-7680 uses a 3.14.28 Linux kernel provided by Technologic Systems:
->> https://github.com/embeddedarm/linux-3.14.28-imx28
->> 
->> U-Boot is not provided as the manufacturer recommends not to update the
->> built-in bootloader.
->> 
->> For more informations please see:
->> https://wiki.embeddedarm.com/wiki/TS-7680
->> 
->> Signed-off-by: Julien Grossholtz <julien.grossholtz@savoirfairelinux.com>
-> 
-> Thanks for this new version, much better! I've applied to the next
-> branch, with just one change (see below).
-> 
-> 
->> +++ b/configs/ts7680_defconfig
->> @@ -0,0 +1,19 @@
->> +BR2_arm=y
->> +BR2_KERNEL_HEADERS_VERSION=y
->> +BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-> 
-> Those two lines were not needed: indeed we prefer to use the option
-> "Same as kernel being built" (BR2_KERNEL_HEADERS_AS_KERNEL) when the
-> kernel is also built as part of the defconfig. Since
-> BR2_KERNEL_HEADERS_AS_KERNEL is the default, it doesn't need to be
-> specified in the defconfig.
-> 
-> One neat side effect is that it will avoid a double download of the
-> kernel: with your defconfig, Buildroot was downloading the vanilla
-> 3.14.28 for the kernel headers, and then Git cloning the
-> vendor-specific kernel tree. With the change I've made, it will use the
-> vendor-specific Git tree for the kernel headers as well, avoiding the
-> 3.14.28 vanilla kernel download.
+>
+> On Thu, 24 Aug 2017 12:50:20 -0500, Matthew Weber wrote:
+>
+>> > Unfortunately, simicsfs is no longer available at
+>> > http://download.simics.net/pub/simicsfs-1.18.tar.gz, where Buildroot
+>> > currently downloads it. The build only succeeds because we have a
+>> > backup of this tarball at http://sources.buildroot.net.
+>>
+>> The project I originally did the 1.18 integration on completed ~2yrs
+>> back and my access to WindRiver Simics material is now gone.  It's too
+>> bad they didn't keep this driver public, however you may check with
+>> your WindRiver Simics contacts to see if they just moved the site and
+>> you could propose an update to this Buildroot package fixing support.
+>
+> To be honest, since the source code is no longer available online, I'm
+> not sure it's really worth keeping this package in Buildroot. Let's see
+> if Bin gets some feedback from Windriver about putting the tarball back
+> online, publicly available. If there is no feedback, we'll drop the
+> package I believe.
+>
 
-This is great, thank you!
+Agree, that would make sense.
 
-> 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
 
-Julien
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
