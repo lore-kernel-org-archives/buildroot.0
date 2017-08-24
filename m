@@ -1,19 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Aug 2017 19:24:06 +0200
-Subject: [Buildroot] Need help with "CONFIG_CMDLINE" or setting up
- serial console.
-In-Reply-To: <CANK3ZEdib88=wt7YLnhBj2XwNJA8E3eZdecN3F_SgCO8Tbv=xw@mail.gmail.com>
-References: <CANK3ZEcnN1bK_LkiN-WGBcOqeRJhyPWwFjdDvAUQMefRp5QDew@mail.gmail.com>
- <CANK3ZEeshYV1gRVEdJwFv-qJ7FW3bBS3p0Uv64EGgtiqBu=+DQ@mail.gmail.com>
- <CANK3ZEcxuKgGCJeMxPQG6DytubWuojBieb+ApJiaW3rOrMbWzw@mail.gmail.com>
- <CANK3ZEfboeXLiyTZs0nR_CnmOp_VOsKdZxfo_0ocUbumEr_kkA@mail.gmail.com>
- <CANK3ZEdDRfwMSXKHHxKSHbzzxzfr1Z4dgL8eTKZSYHdKgGdjCA@mail.gmail.com>
- <CANK3ZEcNN4dS1mhsWCPQmc1RaUrVacErJ0eeVG_rEYcoMWER+g@mail.gmail.com>
- <CANK3ZEe8-g11nW4xsjnO8f1YX7sxOaEiVrvcTNdg3uCudgOQbw@mail.gmail.com>
- <CANK3ZEfgerodJDfKZr0QOfo1SuSeMFGR+fqthi=u4urN-T7sPQ@mail.gmail.com>
- <CANK3ZEeRTwNokPC8WS1VXiViQqmt6=Dpo3f_-_metsKQM3AjFg@mail.gmail.com>
- <CANK3ZEdib88=wt7YLnhBj2XwNJA8E3eZdecN3F_SgCO8Tbv=xw@mail.gmail.com>
-Message-ID: <20170824192406.785ce955@windsurf>
+Date: Thu, 24 Aug 2017 19:26:44 +0200
+Subject: [Buildroot] pulseaudio isn't work on buildroot-2017.02.5
+In-Reply-To: <1503571325385-173857.post@n4.nabble.com>
+References: <1503571325385-173857.post@n4.nabble.com>
+Message-ID: <20170824192644.56481029@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,32 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 24 Aug 2017 07:13:55 +0530, Aseem Sharma wrote:
+Thanks for your report!
 
-> I have created rootfs and zImage for "arm926t" using the long term support
-> release of buildroot. However I am having trouble knowing if it is working
-> as I do not see any messages on the screen.
-> 
-> How do I setup serial console on my device? I am not able to find the usual
-> "CONFIG_CMDLINE" option in menuconfig to be able to set kernel command line.
+On Thu, 24 Aug 2017 03:42:05 -0700 (MST), Jonas wrote:
+> E: [pulseaudio] main.c: Failed to find user 'pulse'.
 
-CONFIG_CMDLINE is a Linux kernel option, not a Buildroot option.
+So it complains that there is no user called "pulse". This is weird,
+because in package/pulseaudio/pulseaudio.mk, we have:
 
-In Buildroot, "make menuconfig" shows you the Buildroot options (which
-architecture to use, which packages to build, which filesystem image to
-generate, which kernel version and configuration to use, etc.)
+ifeq ($(BR2_PACKAGE_PULSEAUDIO_DAEMON),y)
+define PULSEAUDIO_USERS
+        pulse -1 pulse -1 * /var/run/pulse - audio,pulse-access
+endef
 
-If you want to access the Linux kernel configuration in the context of
-Buildroot, you need to do "make linux-menuconfig". This is all
-explained in the Buildroot manual, so please have a look at it.
+So, the pulse user should exist. Could you:
 
-However, using CONFIG_CMDLINE is by far not the easiest way of changing
-the kernel command line. Instead, if you're using a decent bootloader,
-it for sure provides a way to specify the kernel command line. Under
-U-Boot for example, the bootargs variable is used for the kernel
-command line value.
+ - Check output/target/etc/passwd and see if a "pulse" user exists.
 
-Best regards,
+ - Make sure that this issue can be reproduced after doing a complete
+   rebuild, i.e "make clean all".
+
+Thanks!
 
 Thomas
 -- 
