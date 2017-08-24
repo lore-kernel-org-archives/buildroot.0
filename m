@@ -1,63 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:46 +0200
-Subject: [Buildroot] [git commit] perl-http-cookies: bump to version 6.04
-Message-ID: <20170902130618.840B481DA2@busybox.osuosl.org>
+Date: Thu, 24 Aug 2017 23:11:52 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.83
+Message-ID: <20170902130619.D3A8B8016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf407c8b4de677ee610f34ec2b2457d1674148dc
+commit: https://git.buildroot.net/buildroot/commit/?id=089ad9cefd88b6952df2d28de9b0a6ed6fee3388
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-http-cookies/Config.in              | 4 ++--
- package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
- package/perl-http-cookies/perl-http-cookies.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
-index cb5a3c1..4095fee 100644
---- a/package/perl-http-cookies/Config.in
-+++ b/package/perl-http-cookies/Config.in
-@@ -3,6 +3,6 @@ config BR2_PACKAGE_PERL_HTTP_COOKIES
- 	select BR2_PACKAGE_PERL_HTTP_DATE
- 	select BR2_PACKAGE_PERL_HTTP_MESSAGE
- 	help
--	  Objects that represent a "cookie jar"
-+	  HTTP cookie jars
- 
--	  http://github.com/gisle/http-cookies
-+	  https://github.com/libwww-perl/http-cookies
-diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
-index 94e5f31..361d4db 100644
---- a/package/perl-http-cookies/perl-http-cookies.hash
-+++ b/package/perl-http-cookies/perl-http-cookies.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    ecfd0eeb88512033352c2f13c9580f03 HTTP-Cookies-6.01.tar.gz
--sha256 f5d3ade383ce6389d80cb0d0356b643af80435bb036afd8edce335215ec5eb20 HTTP-Cookies-6.01.tar.gz
-+md5    7bf1e277bd5c886bc18d21eb8423b65f HTTP-Cookies-6.04.tar.gz
-+sha256 0cc7f079079dcad8293fea36875ef58dd1bfd75ce1a6c244cd73ed9523eb13d4 HTTP-Cookies-6.04.tar.gz
-diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
-index a4ef552..0777c08 100644
---- a/package/perl-http-cookies/perl-http-cookies.mk
-+++ b/package/perl-http-cookies/perl-http-cookies.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index f864c55..704bf1b 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-July/147750.html
+-md5 29867814123c3d23056b1d05aada1b9d  libdrm-2.4.82.tar.bz2
+-sha1 c42ff308db6352eaf009a8209c7aaadbc951a89f  libdrm-2.4.82.tar.bz2
+-sha256 43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c  libdrm-2.4.82.tar.bz2
+-sha512 e69fd8c2b392daabbb3a548179e3a21a555d5174c11d76a288eb2a08850849aa867c7777b67798ec00e026e998a3b128c22698f05a7b44eb24cddc5c8a3a02d0  libdrm-2.4.82.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2017-August/151077.html
++md5 23800953ed7564988872e1e8c61fde31  libdrm-2.4.83.tar.bz2
++sha1 f78d392684d6e482e8c0a85d355619ac64c4ad6a  libdrm-2.4.83.tar.bz2
++sha256 03a52669da60ead62548a35bc430aafb6c2d8dd21ec9dba3a90f96eff5fe36d6  libdrm-2.4.83.tar.bz2
++sha512 8f894ff61939bca03ac857506a84bbbcbe2367e60c91a0f2388bfce5ae81e12ba2f96fe1c962416cf9e2d25ef04b98b5437c7015497789561311a72607b3bfcb  libdrm-2.4.83.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 0175dc9..e4d3e39 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_COOKIES_VERSION = 6.01
-+PERL_HTTP_COOKIES_VERSION = 6.04
- PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
--PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_COOKIES_DEPENDENCIES = perl-http-date perl-http-message
- PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
--PERL_HTTP_COOKIES_LICENSE_FILES = README
-+PERL_HTTP_COOKIES_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
+-LIBDRM_VERSION = 2.4.82
++LIBDRM_VERSION = 2.4.83
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
