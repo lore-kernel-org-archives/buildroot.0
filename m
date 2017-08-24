@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Aug 2017 23:00:55 +0200
-Subject: [Buildroot] [PATCH] qt-webkit-kiosk: bump to version
- 1.99.6-8-g26e3085
-In-Reply-To: <20170824205007.2329-1-jerome.oufella@savoirfairelinux.com>
-References: <20170824205007.2329-1-jerome.oufella@savoirfairelinux.com>
-Message-ID: <20170824230055.28dfcd75@windsurf>
+Date: Thu, 24 Aug 2017 23:02:11 +0200
+Subject: [Buildroot] simicsfs 1.18 does not build with kernel 4.12.2
+In-Reply-To: <CANQCQpY+iyQ5XtTA5tCh9V9awNa4fhGzJ+bmBdY1YWODuxjppQ@mail.gmail.com>
+References: <CAEUhbmWTZY-zU6c_yEFpp+HR2xuGj5FiZjGVDumSrAuAg+kG5A@mail.gmail.com>
+ <20170824193354.782bae38@windsurf>
+ <CANQCQpY+iyQ5XtTA5tCh9V9awNa4fhGzJ+bmBdY1YWODuxjppQ@mail.gmail.com>
+Message-ID: <20170824230211.4c0ea814@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 24 Aug 2017 16:50:07 -0400, J?r?me Oufella wrote:
-> This bumps the package from 1.99.3 to 1.99.6 (stability fixes), plus a
-> few documentation changes and a fix for the build issue logged at [1].
-> 
-> [1] http://autobuild.buildroot.net/results/9ac/9acb15f955b8af31a3beeb0bd84c4b0db495e354/
-> 
-> Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
-> ---
->  package/qt-webkit-kiosk/qt-webkit-kiosk.hash | 2 +-
->  package/qt-webkit-kiosk/qt-webkit-kiosk.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, 24 Aug 2017 12:50:20 -0500, Matthew Weber wrote:
 
-Since it fixes a build failure spotted by the autobuilders, I've
-applied to master. Thanks!
+> > Unfortunately, simicsfs is no longer available at
+> > http://download.simics.net/pub/simicsfs-1.18.tar.gz, where Buildroot
+> > currently downloads it. The build only succeeds because we have a
+> > backup of this tarball at http://sources.buildroot.net.
+> 
+> The project I originally did the 1.18 integration on completed ~2yrs
+> back and my access to WindRiver Simics material is now gone.  It's too
+> bad they didn't keep this driver public, however you may check with
+> your WindRiver Simics contacts to see if they just moved the site and
+> you could propose an update to this Buildroot package fixing support.
+
+To be honest, since the source code is no longer available online, I'm
+not sure it's really worth keeping this package in Buildroot. Let's see
+if Bin gets some feedback from Windriver about putting the tarball back
+online, publicly available. If there is no feedback, we'll drop the
+package I believe.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
