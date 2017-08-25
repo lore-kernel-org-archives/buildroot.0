@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:54 +0200
-Subject: [Buildroot] [git commit] perl-mojolicious: bump to version 7.43
-Message-ID: <20170902130618.DA25480337@busybox.osuosl.org>
+Date: Fri, 25 Aug 2017 16:07:36 +0200
+Subject: [Buildroot] [git commit] modem-manager: bump to version 1.6.8
+Message-ID: <20170902130620.1F3AF8016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e05ef12b8e985fd6db49041a5d3defba241f7f0
+commit: https://git.buildroot.net/buildroot/commit/?id=18d697960421715d18acfbf940b51353cad885fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 21b2768..45bfd5a 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    97a935d64fc2aaf5538e6ab704bbc420 Mojolicious-7.20.tar.gz
--sha256 ddd034bdd2b99f64498f30b9859c2f2607318f43983dfe36e14bfdf1526fd693 Mojolicious-7.20.tar.gz
-+md5    a07d9d3fc06a35cc7336b35e6e531e43 Mojolicious-7.43.tar.gz
-+sha256 ca177da7b0c1e2a31a1880c4a06afbbd1ada1da57146bfa030b7912a3d608b5e Mojolicious-7.43.tar.gz
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index b3e6615..b3bec15 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 2a2b96d..83d45da 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  cdd5b4cb1e4d7643643a28ccbfc4bb354bfa9cb89a77ea160ebdf7926171c668  ModemManager-1.6.4.tar.xz
++sha256  ffc035c4bfeb07780c4580bb4488ade0ab1d197c3cdf89cb8ab36386cfb34376  ModemManager-1.6.8.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 1eea355..6459f87 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 7.20
-+PERL_MOJOLICIOUS_VERSION = 7.43
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-MODEM_MANAGER_VERSION = 1.6.4
++MODEM_MANAGER_VERSION = 1.6.8
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
