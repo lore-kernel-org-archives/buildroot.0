@@ -1,73 +1,76 @@
-From: Aseem Sharma <aseem.sharma19@gmail.com>
-Date: Fri, 25 Aug 2017 12:20:06 +0530
-Subject: [Buildroot] Need help with "CONFIG_CMDLINE" or setting up
-	serial console.
-In-Reply-To: <20170824192406.785ce955@windsurf>
-References: <CANK3ZEcnN1bK_LkiN-WGBcOqeRJhyPWwFjdDvAUQMefRp5QDew@mail.gmail.com>
- <CANK3ZEeshYV1gRVEdJwFv-qJ7FW3bBS3p0Uv64EGgtiqBu=+DQ@mail.gmail.com>
- <CANK3ZEcxuKgGCJeMxPQG6DytubWuojBieb+ApJiaW3rOrMbWzw@mail.gmail.com>
- <CANK3ZEfboeXLiyTZs0nR_CnmOp_VOsKdZxfo_0ocUbumEr_kkA@mail.gmail.com>
- <CANK3ZEdDRfwMSXKHHxKSHbzzxzfr1Z4dgL8eTKZSYHdKgGdjCA@mail.gmail.com>
- <CANK3ZEcNN4dS1mhsWCPQmc1RaUrVacErJ0eeVG_rEYcoMWER+g@mail.gmail.com>
- <CANK3ZEe8-g11nW4xsjnO8f1YX7sxOaEiVrvcTNdg3uCudgOQbw@mail.gmail.com>
- <CANK3ZEfgerodJDfKZr0QOfo1SuSeMFGR+fqthi=u4urN-T7sPQ@mail.gmail.com>
- <CANK3ZEeRTwNokPC8WS1VXiViQqmt6=Dpo3f_-_metsKQM3AjFg@mail.gmail.com>
- <CANK3ZEdib88=wt7YLnhBj2XwNJA8E3eZdecN3F_SgCO8Tbv=xw@mail.gmail.com>
- <20170824192406.785ce955@windsurf>
-Message-ID: <CANK3ZEfu78kXsFBGJajJhiR2D1Fk3zT1CH+utDTgMsxweU9dog@mail.gmail.com>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Fri, 25 Aug 2017 09:15:11 +0200
+Subject: [Buildroot] [PATCH] bcusdk: enable tpuarts support in eibd
+In-Reply-To: <20170824231135.4a4a8e98@windsurf>
+References: <20170824073008.GB22055@airbook.vandijck-laurijssen.be>
+ <20170824231135.4a4a8e98@windsurf>
+Message-ID: <20170825071511.GA18332@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas for your inputs and time.
-
-Best Regards,
-Aseem
-
-On Thu, Aug 24, 2017 at 10:54 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
+> 
 > Hello,
->
-> On Thu, 24 Aug 2017 07:13:55 +0530, Aseem Sharma wrote:
->
-> > I have created rootfs and zImage for "arm926t" using the long term
-> support
-> > release of buildroot. However I am having trouble knowing if it is
-> working
-> > as I do not see any messages on the screen.
-> >
-> > How do I setup serial console on my device? I am not able to find the
-> usual
-> > "CONFIG_CMDLINE" option in menuconfig to be able to set kernel command
-> line.
->
-> CONFIG_CMDLINE is a Linux kernel option, not a Buildroot option.
->
-> In Buildroot, "make menuconfig" shows you the Buildroot options (which
-> architecture to use, which packages to build, which filesystem image to
-> generate, which kernel version and configuration to use, etc.)
->
-> If you want to access the Linux kernel configuration in the context of
-> Buildroot, you need to do "make linux-menuconfig". This is all
-> explained in the Buildroot manual, so please have a look at it.
->
-> However, using CONFIG_CMDLINE is by far not the easiest way of changing
-> the kernel command line. Instead, if you're using a decent bootloader,
-> it for sure provides a way to specify the kernel command line. Under
-> U-Boot for example, the bootargs variable is used for the kernel
-> command line value.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170825/b63cb6cb/attachment.html>
+> 
+> On Thu, 24 Aug 2017 09:30:08 +0200, Kurt Van Dijck wrote:
+> > Hey,
+> > 
+> > Please find my patch below.
+> > It enables an extra interface type for eibd.
+> > I don't understand why it wasn't there.
+> > 
+> > Kind regards,
+> > Kurt
+> > 
+> > --
+> > commit e62160001f09bff9be8e74b6d47da11c349bb2a6
+> > Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> > Date:   Thu Aug 24 09:16:36 2017
+> > 
+> >     bcusdk: enable tpuarts support in eibd
+> >     
+> >     This commit will enable tpuarts in eibd as well.
+> >     tpuarts is equally important to FT1.2.
+> >     It makes no sense to enable only some interfaces.
+> >     
+> >     Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> 
+> Thanks, I've applied your patch to the next branch. However, I have a
+> few comments/questions:
+> 
+>  - Could you use "git send-email" next time to send your patch? Indeed
+>    the formatting of your patch was not correct, so I had to fix it up
+>    manually. I.e you shouldn't be adding a "personal" message at the
+>    top of the patch, but just e-mail out the output of "git
+>    format-patch", which is exactly what "git send-email" guarantees to
+>    do correctly.
+
+Well, there has not been much reason to change, but since you're asking,
+I'll give it a try.
+
+> 
+>  - I've added to the commit log some information about the size
+>    increase caused by this new option. Since it's just 8 KB, it doesn't
+>    justify adding a new Buildroot Config.in option.
+
+I didn't understand why the different backends didn't have config options.
+Now I know.
+
+> 
+>  - Our DEVELOPERS file doesn't list anyone looking after the bcusdk
+>    package. Would you be willing to take care of this package, since
+>    you're using it? Basically, it only means that you would be
+>    receiving notifications when there are build failures on this
+>    package, and potentially be CC'ed on patches touching this package.
+
+This basically implies this has been unmaintained for a while, which
+explains a few things.
+Well, I think that it's good idea I start to take care for the package,
+as I'm indeed using it.
+Will you add my name in the DEVELOPERS file, or do I need to take action
+myself?
+
+Kind regards,
+Kurt
