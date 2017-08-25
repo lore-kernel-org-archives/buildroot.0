@@ -1,165 +1,188 @@
-From: David Mosberger <davidm@egauge.net>
-Date: Fri, 25 Aug 2017 08:53:13 -0600
-Subject: [Buildroot] [PATCH] package/openssl: bump version to 1.1.0f
-In-Reply-To: <0af65dc6-bc4a-bcc4-75ae-6cf2f9b2ac98@mind.be>
-References: <1503612091-799-1-git-send-email-davidm@egauge.net>
- <0af65dc6-bc4a-bcc4-75ae-6cf2f9b2ac98@mind.be>
-Message-ID: <CALnQHM3bmihUGtkWu4U9qKZLMSyhm8tpf27NYX3oFg8zxPNyRw@mail.gmail.com>
+From: Raul Munoz <munoz0raul@gmail.com>
+Date: Fri, 25 Aug 2017 12:56:59 -0300
+Subject: [Buildroot] [PATCH 1/1] configs/toradex_colibri_imx6_defconfig: new
+	board
+Message-ID: <20170825155659.8819-1-munoz0raul@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Add support to Colibri i.MX6 Toradex module.
 
-Thanks for the feedback.  I'll work on the things you pointed out.
+Based on commit e7127d25c56b9af237366dac79e3b4a67b306fa4,
+since the module works pretty much the same as Apalis iMX6.
 
-  --david
+Signed-off-by: Raul Munoz <munoz0raul@gmail.com>
+---
+ board/toradex/colibri-imx6/genimage.cfg  | 15 ++++++++
+ board/toradex/colibri-imx6/post-image.sh | 20 +++++++++++
+ board/toradex/colibri-imx6/readme.txt    | 59 ++++++++++++++++++++++++++++++++
+ board/toradex/colibri-imx6/uEnv.txt      |  7 ++++
+ configs/toradex_colibri_imx6_defconfig   | 25 ++++++++++++++
+ 5 files changed, 126 insertions(+)
+ create mode 100644 board/toradex/colibri-imx6/genimage.cfg
+ create mode 100755 board/toradex/colibri-imx6/post-image.sh
+ create mode 100644 board/toradex/colibri-imx6/readme.txt
+ create mode 100644 board/toradex/colibri-imx6/uEnv.txt
+ create mode 100644 configs/toradex_colibri_imx6_defconfig
 
-On Thu, Aug 24, 2017 at 4:59 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
-
->  Hi David,
->
-> On 25-08-17 00:01, David Mosberger-Tang wrote:
-> > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
->
->  When you make big changes like this, the commit log should me much more
-> extended to explain why all this has changed.
->
-> [snip]
-> > diff --git a/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-> b/package/openssl/0001-Dont-waste-time-building-manpages-
-> if-we-re-not-going.patch
-> > deleted file mode 100644
->
->  Why is this patch no longer needed? has it been applied upstream? Do we
-> now
-> have a different way of avoiding to build the manpages? Can the manpages be
-> built safely?
->
-> [snip]
-> > diff --git a/package/openssl/0002-cryptodev-Fix-issue-with-signature-generation.patch
-> b/package/openssl/0002-cryptodev-Fix-issue-with-signature-generation.patch
-> > deleted file mode 100644
->
->  Why is this patch no longer needed? Has it been applied upstream? If yes,
-> please refer to the upstream commit(s) in the commit message. Does
-> cryptodev
-> build successfully now?
->
-> [snip]
-> > diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-> > index 064eeca..3411d5f 100644
-> > --- a/package/openssl/openssl.hash
-> > +++ b/package/openssl/openssl.hash
-> > @@ -1,4 +1,5 @@
-> > -# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
-> > +# From https://www.openssl.org/source/openssl-1.1.0f.tar.gz.sha256
-> > +sha256       12f746f3f2493b2f39da7ecf63d7ee
-> 19c6ac9ec6a4fcd8c229da8a522cb12765        openssl-1.1.0f.tar.gz
-> >  sha256       6b3977c61f2aedf0f96367dcfb5c6e
-> 578cf37e7b8d913b4ecb6643c3cb88d8c0        openssl-1.0.2k.tar.gz
-> >  # Locally computed
-> >  sha256       eddd8a5123748052c598214487ac17
-> 8e4bfa4e31ba2ec520c70d59c8c5bfa2e9        openssl-1.0.2a-parallel-
-> install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
->
->  If you remove the patches downloaded from gentoo, then their hashes
-> should be
-> removed as well.
->
-> [snip]
-> > -OPENSSL_PATCH = \
-> > -     https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-
-> libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=
-> c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
-> > -     https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-
-> libs/openssl/files/openssl-1.0.2a-parallel-obj-headers.patch?id=
-> c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
-> > -     https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-
-> libs/openssl/files/openssl-1.0.2a-parallel-install-dirs.patch?id=
-> c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
-> > -     https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-
-> libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=
-> c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
->
->  Why can these patches be removed? Have they been applied upstream? If yes,
-> please refer to the commit IDs. Does parallel build work reliably now?
->
-> >
-> >  # relocation truncated to fit: R_68K_GOT16O
-> >  ifeq ($(BR2_m68k_cf),y)
-> > @@ -84,7 +79,6 @@ define OPENSSL_CONFIGURE_CMDS
-> >                       no-rc5 \
-> >                       enable-camellia \
-> >                       enable-mdc2 \
-> > -                     enable-tlsext \
->
->  Why is this removed?
->
-> >                       $(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
-> >                       $(if $(BR2_STATIC_LIBS),no-dso) \
-> >       )
-> > @@ -110,7 +104,8 @@ define OPENSSL_BUILD_CMDS
-> >  endef
-> >
-> >  define OPENSSL_INSTALL_STAGING_CMDS
-> > -     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR)
-> install
-> > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
-> > +             install_engines install_runtime install_ssldirs
->
->  Why doesn't the install target work any more?
->
-> >  endef
-> >
-> >  define HOST_OPENSSL_INSTALL_CMDS
-> > @@ -118,8 +113,8 @@ define HOST_OPENSSL_INSTALL_CMDS
-> >  endef
-> >
-> >  define OPENSSL_INSTALL_TARGET_CMDS
-> > -     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR)
-> install
-> > -     rm -rf $(TARGET_DIR)/usr/lib/ssl
->
->  Why is this no longer needed?
->
-> > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
-> > +             install_engines install_runtime install_ssldirs
-> >       rm -f $(TARGET_DIR)/usr/bin/c_rehash
-> >  endef
-> >
-> > @@ -136,7 +131,7 @@ endif
-> >  ifneq ($(BR2_STATIC_LIBS),y)
-> >  # libraries gets installed read only, so strip fails
->
->  Is this still needed? I.e. are libs still installed readonly?
->
-> >  define OPENSSL_INSTALL_FIXUPS_SHARED
-> > -     chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
-> > +     chmod +w $(TARGET_DIR)/usr/lib/engines-1.1/*.so
->
->  Hm, perhaps we should introduce OPENSSL_VERSION_MAJOR and use that here...
->
->  Regards,
->  Arnout
->
-> >       for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.*
-> libssl.so.*); \
-> >       do chmod +w $$i; done
-> >  endef
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170825/7de75ce1/attachment.html>
+diff --git a/board/toradex/colibri-imx6/genimage.cfg b/board/toradex/colibri-imx6/genimage.cfg
+new file mode 100644
+index 0000000..fe359bd
+--- /dev/null
++++ b/board/toradex/colibri-imx6/genimage.cfg
+@@ -0,0 +1,15 @@
++# Minimal SD card image for the Toradex Apalis i.MX6 COM
++#
++# It does not need a boot section for a bootloader since it is booted
++# from its internal flash memory (eMMC).
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++    size = 512M
++  }
++}
+diff --git a/board/toradex/colibri-imx6/post-image.sh b/board/toradex/colibri-imx6/post-image.sh
+new file mode 100755
+index 0000000..b95e175
+--- /dev/null
++++ b/board/toradex/colibri-imx6/post-image.sh
+@@ -0,0 +1,20 @@
++#!/usr/bin/env bash
++
++GENIMAGE_CFG="$(dirname $0)/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++# copy the uEnv.txt to the output/images directory
++cp board/toradex/colibri-imx6/uEnv.txt $BINARIES_DIR/uEnv.txt
++
++rm -rf "${GENIMAGE_TMP}"
++
++# generate rootfs.img
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++RET=${?}
++exit ${RET}
+diff --git a/board/toradex/colibri-imx6/readme.txt b/board/toradex/colibri-imx6/readme.txt
+new file mode 100644
+index 0000000..f73d9f8
+--- /dev/null
++++ b/board/toradex/colibri-imx6/readme.txt
+@@ -0,0 +1,59 @@
++Toradex Colibri i.MX6 Computer on Module
++
++Intro
++=====
++
++The Colibri iMX6 is a small form-factor Computer on Module that comes
++in both quad core and dual core versions based on Freescale i.MX6Q and
++Freescale i.MX6D SoCs respectively. The Cortex A9 quad core and dual
++core CPU peaks at 1 GHz for commercial temperature variant, while the
++industrial temperature variant has a peak frequency of 800 MHz.
++
++https://www.toradex.com/computer-on-modules/colibri-arm-family/nxp-freescale-imx6
++
++It supports two carrier boards:
++
++Colibri Evaluation Board
++https://www.toradex.com/products/carrier-board/colibri-evaluation-carrier-board
++
++Iris Carrier Board
++https://www.toradex.com/products/carrier-board/iris-carrier-board
++
++Aster Carrier Board
++https://www.toradex.com/products/carrier-boards/aster-carrier-board
++
++Viola Carrier Board
++https://www.toradex.com/products/carrier-board/viola-carrier-board
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make toradex_colibri_imx6_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++How to boot the image
++=====================
++
++The board only boots from its internal flash memory eMMC, so the
++bootloader image should be copied to it, following the procedures
++described in Toradex website.
++
++http://developer.toradex.com/knowledge-base/flashing-linux-on-imx6-modules
++
++Buildroot prepares a "sdcard.img" in output/images/ with the kernel
++image, device tree and a root filesystem, ready to be dumped on an SD
++card.
++
++    $ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
++
++To boot from the SD card, you should change the U-Boot
++environment. Since U-Boot is running from internal eMMC, you will need
++to access its command line prompt and manually set the necessary
++variables to boot from the external SD card. For convenience, you can
++use uEnv.txt provided in output/images/ as a reference to create the
++necessary U-Boot variables to boot from the SD card.
+diff --git a/board/toradex/colibri-imx6/uEnv.txt b/board/toradex/colibri-imx6/uEnv.txt
+new file mode 100644
+index 0000000..4c28507
+--- /dev/null
++++ b/board/toradex/colibri-imx6/uEnv.txt
+@@ -0,0 +1,7 @@
++boot_file 'zImage'
++fdt_file 'imx6dl-colibri-eval-v3.dtb'
++sdargs 'ip=off root=/dev/mmcblk1p1 rw,noatime rootfstype=ext4 rootwait'
++sddtbload 'ext4load mmc 1:1 ${fdt_addr_r} boot/${fdt_file}'
++sdkernelload 'ext4load mmc 1:1 ${kernel_addr_r} boot/${boot_file}'
++bootcmd 'run setup; bootargs ${defargs} ${sdargs} ${setupargs} ${vidargs}; echo Booting from SD card...; run sddtbload; run sdkernelload; bootz ${kernel_addr_r} - ${fdt_addr_r}'
++
+diff --git a/configs/toradex_colibri_imx6_defconfig b/configs/toradex_colibri_imx6_defconfig
+new file mode 100644
+index 0000000..b5d1965
+--- /dev/null
++++ b/configs/toradex_colibri_imx6_defconfig
+@@ -0,0 +1,25 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/colibri-imx6/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3f68dc7c600c0354f5df7f06b931661319addafb"
++BR2_LINUX_KERNEL_DEFCONFIG="colibri_imx6"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-colibri-aster imx6dl-colibri-cam-eval-v3 imx6dl-colibri-eval-v3"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f0e414972b5b225e33ebe75574562266116746f9"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="colibri_imx6"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
++BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.9.5
