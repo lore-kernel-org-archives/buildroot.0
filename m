@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Aug 2017 16:06:12 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: adopt bcusdk
-In-Reply-To: <1503665934-12710-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-References: <1503665934-12710-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20170825160612.0f158c34@windsurf>
+Date: Fri, 25 Aug 2017 16:05:27 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: adopt bcusdk
+Message-ID: <20170825135922.0966182140@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=eff4f4b29aa5f45ede8e9c8b868fc762417076b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 25 Aug 2017 14:58:54 +0200, Kurt Van Dijck wrote:
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> ---
->  DEVELOPERS | 4 ++++
->  1 file changed, 4 insertions(+)
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied to master, thanks. However, your patch didn't apply as-is: you
-didn't base it on the latest master. Please do so for future patches
-(except of course if they are meant for the next branch!).
-
-Thanks for adopting this package!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f3944e2..73686e2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1026,6 +1026,10 @@ F:	package/libgphoto2/
+ N:	Koen Martens <gmc@sonologic.nl>
+ F:	package/linuxconsoletools/
+ 
++N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
++F:	package/bcusdk/
++F:	package/libpthsem/
++
+ N:	Laurent Cans <laurent.cans@gmail.com>
+ F:	package/aircrack-ng/
+ 
