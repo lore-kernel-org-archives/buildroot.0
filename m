@@ -1,110 +1,175 @@
-From: Mehdi AMINI <joker.eph@gmail.com>
-Date: Thu, 24 Aug 2017 18:47:33 -0700
-Subject: [Buildroot] BR2_ENABLE_DEBUG is (incorrectly) using `Debug` for
- CMAKE_BUILD_TYPE instead of `RelWithDebInfo`
-In-Reply-To: <d3f95fb4-acd1-83fa-e1fd-f33ed850249b@mind.be>
-References: <CANF-O=aDUs4yojV3sLBG6AiNFcA4C16u90-YJ9+emiTfojFsOA@mail.gmail.com>
- <d3f95fb4-acd1-83fa-e1fd-f33ed850249b@mind.be>
-Message-ID: <CANF-O=Y3HWoBepd+AFZoe_Hm5o5+r1WC95Z8PeLrS6qpGvrdbQ@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 25 Aug 2017 00:19:31 -0300
+Subject: [Buildroot] [PATCH v3] util-linux: add menu items for login
+	utilities
+In-Reply-To: <20170824232403.1a196068@windsurf>
+References: <20170824232403.1a196068@windsurf>
+Message-ID: <20170825031931.6768-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-08-24 14:39 GMT-07:00 Arnout Vandecappelle <arnout@mind.be>:
+This change extends to the login utilities the current policy of having
+a selection item in the configuration menu for each utility that has an
+--enable/--disable knob in the "configure" script:
 
->
->
-> On 23-08-17 11:45, Mehdi AMINI wrote:
-> [snip]
-> > Two practical examples of packages that shows what can go wrong:
-> >
-> > 1) ceres-solver ( https://github.com/ceres-solver/ceres-solver )
-> >
-> > When configured with CMAKE_BUILD_TYPE=Release, it'll generate:
-> >
-> >     lib/libceres.a
-> >
-> > However with CMAKE_BUILD_TYPE=Debug we end up with:
-> >
-> >     lib/libceres-debug.a
-> >
-> >
-> > 2) the LLVM compiler is doing special casing based on the value of
-> > CMAKE_BUILD_TYPE. For example:
-> >
-> >     if (NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" AND
-> >         NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO")
-> >       add_flag_if_supported("-gline-tables-only" GLINE_TABLES_ONLY)
-> >     endif()
-> >     # Use -O1 even in debug mode, otherwise sanitizers slowdown is too
-> large.
-> >     if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
-> >       add_flag_if_supported("-O1" O1)
-> >     endif()
-> >
-> > Or also:
-> >
-> > if( NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
-> >   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" OFF)
-> > else()
-> >   option(LLVM_ENABLE_ASSERTIONS "Enable assertions" ON)
-> > endif()
-> >
-> >
-> > In my experience it has been quite common for CMake projects to use
-> > CMAKE_BUILD_TYPE to differentiate on more than just default optimization
-> level.
->
->  I think this is exactly why we should use Debug/Release instead of always
-> using
-> Release: the CmakeLists.txt may enable some other things conditional on
-> debug,
-> and when you choose BR2_ENABLE_DEBUG, you typically want those other
-> things.
-> Like the assertions in LLVM.
->
+- add selection items for login, runuser, su and sulogin (there was
+  already an item for "last")
+- move "login utilities" to Config.in.legacy
+- make "login utilities" select last, login, runuser, su and sulogin
 
-This is not what the documentation / description of the option says I
-believe. I wouldn't expect the generated code to be any different when
-enabling BR2_ENABLE_DEBUG personally (other than the added DWARF section).
-My reading of the description is that I should be able to turn it on and
-the binaries in the target directory should be bit-to-bit identical
-(assuming the rest of the build and the compiler is deterministic).
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
-If that's not the intent behind BR2_ENABLE_DEBUG, it seems to me that
-another option could be useful to provide exactly this mode: getting debug
-info in the staging directory without affecting anything in the target.
+---
+Changes v1->v2
+  - do not add section titles
+  - deprecate the "login utilities" group
+Changes v2->v3
+  - improve comments
+  - fix spelling errors
+  - add comment to show when "login" is unavailable
+---
+ Config.in.legacy                 | 12 +++++++++++
+ package/util-linux/Config.in     | 45 ++++++++++++++++++++++++++++------------
+ package/util-linux/util-linux.mk |  7 +++++--
+ 3 files changed, 49 insertions(+), 15 deletions(-)
 
-Hope this makes sense.
-
-Best,
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 693dc95d74..49cab8bda9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,18 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.08"
+ 
++config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
++	bool "util-linux login utilities option removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_UTIL_LINUX_LAST
++	select BR2_PACKAGE_UTIL_LINUX_LOGIN
++	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
++	select BR2_PACKAGE_UTIL_LINUX_SU
++	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
++	help
++	  Login utilities (last, login, runuser, su, sulogin) now have
++	  their own configuration options in the util-linux menu.
++
+ config BR2_BINUTILS_VERSION_2_26_X
+ 	bool "binutils version 2.26 support removed"
+ 	select BR2_LEGACY
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index cba590c4f9..b3494af101 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -164,26 +164,25 @@ config BR2_PACKAGE_UTIL_LINUX_LINE
+ 	help
+ 	  Read one line
+ 
+-config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+-	bool "login utilities"
+-	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
+-	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+-	depends on !BR2_STATIC_LIBS
++config BR2_PACKAGE_UTIL_LINUX_LOGGER
++	bool "logger"
++	help
++	  Enter messages into the system log
++
++config BR2_PACKAGE_UTIL_LINUX_LOGIN
++	bool "login"
++	depends on BR2_ENABLE_LOCALE # linux-pam
++	depends on BR2_USE_WCHAR # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+-	depends on BR2_USE_MMU # linux-pam
++	depends on BR2_USE_MMU # fork(), linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+-	  Login utilities (last, login, runuser, su, sulogin)
++	  Begin a session on the system
+ 
+-comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "login needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+ 		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+-config BR2_PACKAGE_UTIL_LINUX_LOGGER
+-	bool "logger"
+-	help
+-	  Enter messages into the system log
+-
+ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ 	bool "losetup"
+ 	depends on BR2_USE_MMU # libsmartcols
+@@ -296,6 +295,14 @@ config BR2_PACKAGE_UTIL_LINUX_RESET
+ 	help
+ 	  Reset the terminal
+ 
++config BR2_PACKAGE_UTIL_LINUX_RUNUSER
++	bool "runuser"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Run a command with substitute user and group ID (does not need
++	  to ask for a password, because it may be executed by the root
++	  user only)
++
+ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+ 	bool "scheduling utilities"
+ 	help
+@@ -313,6 +320,18 @@ config BR2_PACKAGE_UTIL_LINUX_SETTERM
+ 	help
+ 	  Set terminal attributes
+ 
++config BR2_PACKAGE_UTIL_LINUX_SU
++	bool "su"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Run a command with substitute user and group ID
++
++config BR2_PACKAGE_UTIL_LINUX_SULOGIN
++	bool "sulogin"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Single-user login
++
+ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ 	bool "switch_root"
+ 	depends on BR2_USE_MMU # fork()
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index fc32668869..179e55dddf 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -118,7 +118,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
+@@ -136,9 +136,12 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset,--disable-reset) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_RUNUSER),--enable-runuser,--disable-runuser) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETTERM),--enable-setterm,--disable-setterm) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_SU),--enable-su,--disable-su) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_SULOGIN),--enable-sulogin,--disable-sulogin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT),--enable-switch_root,--disable-switch_root) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_TUNELP),--enable-tunelp,--disable-tunelp) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UL),--enable-ul,--disable-ul) \
+@@ -200,7 +203,7 @@ UTIL_LINUX_CONF_OPTS += --without-audit
+ endif
+ 
+ # Install PAM configuration files
+-ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU),y)
+ define UTIL_LINUX_INSTALL_PAMFILES
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su
 -- 
-Mehdi
-
-
-
->
->  The ceres solver is something else. That package is just doing the wrong
-> thing.
-> It needs to be patched to remove that -debug suffix. We do something
-> similar for
-> synergy, for instance.
->
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170824/decb0c19/attachment.html>
+2.13.5
