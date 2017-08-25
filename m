@@ -1,38 +1,32 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Fri, 25 Aug 2017 14:30:15 +0200
-Subject: [Buildroot] [PATCH] modem-manager: update dependencies
-Message-ID: <20170825123015.10667-1-aleksander@aleksander.es>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Fri, 25 Aug 2017 14:58:54 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: adopt bcusdk
+Message-ID: <1503665934-12710-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dbus-glib package isn't a dependency since ModemManager 1.0, which
-is based on libglib2's GDBus implementation.
-
-Also, explicitly set libglib2 as dependency, which currently was being
-implicitly included by libgudev. The next major ModemManager release
-will have udev/libgudev as optional packages, while libglib2 is
-definitely not going to be ever optional.
-
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- package/modem-manager/modem-manager.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 1eea355f5..c2999dc2e 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -9,7 +9,7 @@ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
- MODEM_MANAGER_LICENSE_FILES = COPYING
--MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool libgudev
-+MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev host-intltool libglib2 libgudev
- MODEM_MANAGER_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d0ede7..f5969b3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -897,6 +897,10 @@ F:	package/cpuload/
+ F:	package/bwm-ng/
+ F:	package/ramsmp/
  
- ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
++N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
++F:	package/bcusdk/
++F:	package/libpthsem/
++
+ N:	Laurent Cans <laurent.cans@gmail.com>
+ F:	package/aircrack-ng/
+ 
 -- 
-2.14.1
+1.8.5.rc3
