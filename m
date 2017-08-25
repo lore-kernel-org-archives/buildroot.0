@@ -1,76 +1,48 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 25 Aug 2017 09:15:11 +0200
-Subject: [Buildroot] [PATCH] bcusdk: enable tpuarts support in eibd
-In-Reply-To: <20170824231135.4a4a8e98@windsurf>
-References: <20170824073008.GB22055@airbook.vandijck-laurijssen.be>
- <20170824231135.4a4a8e98@windsurf>
-Message-ID: <20170825071511.GA18332@airbook.vandijck-laurijssen.be>
+Date: Fri, 25 Aug 2017 09:26:39 +0200
+Subject: [Buildroot] [PATCH] bcusdk: fix endless recursion when opening USB
+	backends
+Message-ID: <1503645999-14791-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Hello,
-> 
-> On Thu, 24 Aug 2017 09:30:08 +0200, Kurt Van Dijck wrote:
-> > Hey,
-> > 
-> > Please find my patch below.
-> > It enables an extra interface type for eibd.
-> > I don't understand why it wasn't there.
-> > 
-> > Kind regards,
-> > Kurt
-> > 
-> > --
-> > commit e62160001f09bff9be8e74b6d47da11c349bb2a6
-> > Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > Date:   Thu Aug 24 09:16:36 2017
-> > 
-> >     bcusdk: enable tpuarts support in eibd
-> >     
-> >     This commit will enable tpuarts in eibd as well.
-> >     tpuarts is equally important to FT1.2.
-> >     It makes no sense to enable only some interfaces.
-> >     
-> >     Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> 
-> Thanks, I've applied your patch to the next branch. However, I have a
-> few comments/questions:
-> 
->  - Could you use "git send-email" next time to send your patch? Indeed
->    the formatting of your patch was not correct, so I had to fix it up
->    manually. I.e you shouldn't be adding a "personal" message at the
->    top of the patch, but just e-mail out the output of "git
->    format-patch", which is exactly what "git send-email" guarantees to
->    do correctly.
+The eibd usb backend implements clock_gettime, and calls pth_int_time from there.
+pth_int_time will result in a call to clock_gettime, resulting in an endless
+recursion.
+The problem is that the USB backend shouldn't overrule clock_gettime in the first place.
+Since the function does semantically and syntactically the same, the function is
+place in comment alltogether.
 
-Well, there has not been much reason to change, but since you're asking,
-I'll give it a try.
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+---
+ package/bcusdk/0002-linux-usbfs-clock-gettime.patch | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/bcusdk/0002-linux-usbfs-clock-gettime.patch
 
-> 
->  - I've added to the commit log some information about the size
->    increase caused by this new option. Since it's just 8 KB, it doesn't
->    justify adding a new Buildroot Config.in option.
-
-I didn't understand why the different backends didn't have config options.
-Now I know.
-
-> 
->  - Our DEVELOPERS file doesn't list anyone looking after the bcusdk
->    package. Would you be willing to take care of this package, since
->    you're using it? Basically, it only means that you would be
->    receiving notifications when there are build failures on this
->    package, and potentially be CC'ed on patches touching this package.
-
-This basically implies this has been unmaintained for a while, which
-explains a few things.
-Well, I think that it's good idea I start to take care for the package,
-as I'm indeed using it.
-Will you add my name in the DEVELOPERS file, or do I need to take action
-myself?
-
-Kind regards,
-Kurt
+diff --git a/package/bcusdk/0002-linux-usbfs-clock-gettime.patch b/package/bcusdk/0002-linux-usbfs-clock-gettime.patch
+new file mode 100644
+index 0000000..6d024c6
+--- /dev/null
++++ b/package/bcusdk/0002-linux-usbfs-clock-gettime.patch
+@@ -0,0 +1,16 @@
++--- a/eibd/usb/linux_usbfs.c	2017-07-29 22:24:15.890087674 +0200
+++++ b/eibd/usb/linux_usbfs.c	2017-07-29 22:20:11.830085100 +0200
++@@ -52,11 +52,13 @@
++ 	return 0;
++ }
++ 
+++/* don't redefine clock_gettime, use the system version
++ int clock_gettime(clockid_t clk_id, struct timespec *tp)
++ {
++ 	pth_int_time (tp);
++ 	return 0;
++ }
+++*/
++ 
++ /* sysfs vs usbfs:
++  * opening a usbfs node causes the device to be resumed, so we attempt to
+-- 
+1.8.5.rc3
