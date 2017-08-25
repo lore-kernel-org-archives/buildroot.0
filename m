@@ -1,48 +1,60 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 25 Aug 2017 09:26:39 +0200
-Subject: [Buildroot] [PATCH] bcusdk: fix endless recursion when opening USB
-	backends
-Message-ID: <1503645999-14791-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Aug 2017 14:31:16 +0200
+Subject: [Buildroot] [PATCH] bcusdk: enable tpuarts support in eibd
+In-Reply-To: <20170825071511.GA18332@airbook.vandijck-laurijssen.be>
+References: <20170824073008.GB22055@airbook.vandijck-laurijssen.be>
+ <20170824231135.4a4a8e98@windsurf>
+ <20170825071511.GA18332@airbook.vandijck-laurijssen.be>
+Message-ID: <20170825143116.52906566@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The eibd usb backend implements clock_gettime, and calls pth_int_time from there.
-pth_int_time will result in a call to clock_gettime, resulting in an endless
-recursion.
-The problem is that the USB backend shouldn't overrule clock_gettime in the first place.
-Since the function does semantically and syntactically the same, the function is
-place in comment alltogether.
+Hello,
 
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
----
- package/bcusdk/0002-linux-usbfs-clock-gettime.patch | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/bcusdk/0002-linux-usbfs-clock-gettime.patch
+On Fri, 25 Aug 2017 09:15:11 +0200, Kurt Van Dijck wrote:
+> >  - Could you use "git send-email" next time to send your patch? Indeed
+> >    the formatting of your patch was not correct, so I had to fix it up
+> >    manually. I.e you shouldn't be adding a "personal" message at the
+> >    top of the patch, but just e-mail out the output of "git
+> >    format-patch", which is exactly what "git send-email" guarantees to
+> >    do correctly.  
+> 
+> Well, there has not been much reason to change, but since you're asking,
+> I'll give it a try.
 
-diff --git a/package/bcusdk/0002-linux-usbfs-clock-gettime.patch b/package/bcusdk/0002-linux-usbfs-clock-gettime.patch
-new file mode 100644
-index 0000000..6d024c6
---- /dev/null
-+++ b/package/bcusdk/0002-linux-usbfs-clock-gettime.patch
-@@ -0,0 +1,16 @@
-+--- a/eibd/usb/linux_usbfs.c	2017-07-29 22:24:15.890087674 +0200
-++++ b/eibd/usb/linux_usbfs.c	2017-07-29 22:20:11.830085100 +0200
-+@@ -52,11 +52,13 @@
-+ 	return 0;
-+ }
-+ 
-++/* don't redefine clock_gettime, use the system version
-+ int clock_gettime(clockid_t clk_id, struct timespec *tp)
-+ {
-+ 	pth_int_time (tp);
-+ 	return 0;
-+ }
-++*/
-+ 
-+ /* sysfs vs usbfs:
-+  * opening a usbfs node causes the device to be resumed, so we attempt to
+Well, your e-mail contained the personal message at the top, which gets
+included in the commit log by git when doing "git am". If you want to
+include personal messages, put them below a "---" at the end of the
+commit log.
+
+> >  - I've added to the commit log some information about the size
+> >    increase caused by this new option. Since it's just 8 KB, it doesn't
+> >    justify adding a new Buildroot Config.in option.  
+> 
+> I didn't understand why the different backends didn't have config options.
+> Now I know.
+
+Well, it's all a matter of whether it makes sense to add gazillions of
+Buildroot options. For 8 KB of additional size, it doesn't make much
+sense.
+
+> This basically implies this has been unmaintained for a while, which
+> explains a few things.
+> Well, I think that it's good idea I start to take care for the package,
+> as I'm indeed using it.
+> Will you add my name in the DEVELOPERS file, or do I need to take action
+> myself?
+
+Please send a patch that adds yourself to the DEVELOPERS file for this
+package. Thanks a lot for adopting it!
+
+Best regards,
+
+Thomas
 -- 
-1.8.5.rc3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
