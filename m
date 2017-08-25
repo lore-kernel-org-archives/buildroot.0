@@ -1,35 +1,63 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 25 Aug 2017 23:33:06 +0200
-Subject: [Buildroot] [PATCH] bcusdk: fix endless recursion when opening
- USB backends
-In-Reply-To: <20170825225816.062a2818@windsurf>
-References: <1503645999-14791-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <20170825160004.5c2356df@windsurf>
- <20170825193652.GA6442@airbook.vandijck-laurijssen.be>
- <20170825221617.36a5d7c1@windsurf>
- <20170825204757.GB6442@airbook.vandijck-laurijssen.be>
- <20170825225816.062a2818@windsurf>
-Message-ID: <20170825213306.GC6442@airbook.vandijck-laurijssen.be>
+From: Brock Williams <brock@cottonwoodcomputer.com>
+Date: Fri, 25 Aug 2017 17:33:58 -0600
+Subject: [Buildroot] [PATCH 1/1] add package for pdmenu
+Message-ID: <20170825173358.7fd6f8bc@brock-desktop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hello,
-> 
-> On Fri, 25 Aug 2017 22:47:57 +0200, Kurt Van Dijck wrote:
-> 
-> > > https://sourceforge.net/p/bcusdk/code/ci/master/tree/ is a Git
-> > > repository.  
-> > 
-> > One day, I'll switch to https://github.com/knxd/knxd anyway.
-> 
-> Interesting. I see it's a fork of bcusdk. So perhaps we could drop the
-> bcusdk package at some point, and replace it with a knxd package.
-> Indeed, knxd seems to be actively maintained, which isn't the case of
-> bcusdk.
+Signed-off-by: Brock Williams <brock@cottonwoodcomputer.com>
+---
+ package/Config.in        | 1 +
+ package/pdmenu/Config.in | 9 +++++++++
+ package/pdmenu/pdmenu.mk | 9 +++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/pdmenu/Config.in
+ create mode 100644 package/pdmenu/pdmenu.mk
 
-Yes. but bcusdk does it's job at the moment at my place, and knxd does not.
-
-Kurt
+diff --git a/package/Config.in b/package/Config.in
+index a512827..8df01a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1847,6 +1847,7 @@ comment "Utilities"
+        source "package/which/Config.in"
+        source "package/xmlstarlet/Config.in"
+        source "package/xxhash/Config.in"
++       source "package/pdmenu/Config.in"
+ endmenu
+ 
+ menu "System tools"
+diff --git a/package/pdmenu/Config.in b/package/pdmenu/Config.in
+new file mode 100644
+index 0000000..df78c23
+--- /dev/null
++++ b/package/pdmenu/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PDMENU
++       bool "pdmenu"
++       depends on BR2_PACKAGE_SLANG
++       help
++               Pdmenu is a full screen menuing system for Unix. It is designed to be easy to use, and is suitable as a login shell for inexperienced users, or it can just be ran at the command line as a handy menu.
++
++               Pdmenu features color support and GPM mouse support at the Linux console. It was developed on Linux, and has now been compiled on many other unixes without problems.
++
++               https://joeyh.name/code/pdmenu/
+diff --git a/package/pdmenu/pdmenu.mk b/package/pdmenu/pdmenu.mk
+new file mode 100644
+index 0000000..29ab510
+--- /dev/null
++++ b/package/pdmenu/pdmenu.mk
+@@ -0,0 +1,9 @@
++PDMENU_VERSION = 1.3.4
++PDMENU_SOURCE = pdmenu_$(PDMENU_VERSION).tar.gz
++PDMENU_SITE = http://http.debian.net/debian/pool/main/p/pdmenu
++PDMENU_LICENSE = GPL-2.0+
++PDMENU_LICENSE_FILES = COPYING.GPLv2
++PDMENU_DEPENDENCIES = slang
++PDMENU_INSTALL_TARGET_OPTS = INSTALL_PREFIX=$(TARGET_DIR) install
++
++$(eval $(autotools-package))
+-- 
+2.7.4
