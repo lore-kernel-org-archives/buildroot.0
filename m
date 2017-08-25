@@ -1,36 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Aug 2017 22:58:16 +0200
-Subject: [Buildroot] [PATCH] bcusdk: fix endless recursion when opening
- USB backends
-In-Reply-To: <20170825204757.GB6442@airbook.vandijck-laurijssen.be>
-References: <1503645999-14791-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <20170825160004.5c2356df@windsurf>
- <20170825193652.GA6442@airbook.vandijck-laurijssen.be>
- <20170825221617.36a5d7c1@windsurf>
- <20170825204757.GB6442@airbook.vandijck-laurijssen.be>
-Message-ID: <20170825225816.062a2818@windsurf>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Fri, 25 Aug 2017 23:11:10 +0200
+Subject: [Buildroot] [PATCH V2] bcusdk: eibd: drop local clock_gettime in
+	USB backends
+Message-ID: <1503695470-27811-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+clock_gettime is defined locally, and calls pth_int_time, which
+in turn calls clock_gettime.
+The USB backend shouldn't overrule clock_gettime in the first place.
+This patch fixes this endless recursion by removing the local defition.
 
-On Fri, 25 Aug 2017 22:47:57 +0200, Kurt Van Dijck wrote:
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+---
+ ...endless-recursion-when-using-USB-backends.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch
 
-> > https://sourceforge.net/p/bcusdk/code/ci/master/tree/ is a Git
-> > repository.  
-> 
-> One day, I'll switch to https://github.com/knxd/knxd anyway.
-
-Interesting. I see it's a fork of bcusdk. So perhaps we could drop the
-bcusdk package at some point, and replace it with a knxd package.
-Indeed, knxd seems to be actively maintained, which isn't the case of
-bcusdk.
-
-Thomas
+diff --git a/package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch b/package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch
+new file mode 100644
+index 0000000..3b90289
+--- /dev/null
++++ b/package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch
+@@ -0,0 +1,35 @@
++From 6bd1b4958e949d83468e053c34bf6c89d14d687a Mon Sep 17 00:00:00 2001
++From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
++Date: Fri, 25 Aug 2017 23:01:14 +0200
++Subject: [PATCH] eibd: drop local clock_gettime in USB backends
++
++clock_gettime is defined locally, and calls pth_int_time, which
++in turn calls clock_gettime.
++The USB backend shouldn't overrule clock_gettime in the first place.
++This patch fixes this endless recursion by removing the local defition.
++
++Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
++---
++ eibd/usb/linux_usbfs.c | 6 ------
++ 1 file changed, 6 deletions(-)
++
++diff --git a/eibd/usb/linux_usbfs.c b/eibd/usb/linux_usbfs.c
++index c3ec410..957b908 100644
++--- a/eibd/usb/linux_usbfs.c
+++++ b/eibd/usb/linux_usbfs.c
++@@ -52,12 +52,6 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex)
++ 	return 0;
++ }
++ 
++-int clock_gettime(clockid_t clk_id, struct timespec *tp)
++-{
++-	pth_int_time (tp);
++-	return 0;
++-}
++-
++ /* sysfs vs usbfs:
++  * opening a usbfs node causes the device to be resumed, so we attempt to
++  * avoid this during enumeration.
++-- 
++1.8.5.rc3
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.8.5.rc3
