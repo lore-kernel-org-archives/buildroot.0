@@ -1,175 +1,34 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 25 Aug 2017 00:19:31 -0300
-Subject: [Buildroot] [PATCH v3] util-linux: add menu items for login
-	utilities
-In-Reply-To: <20170824232403.1a196068@windsurf>
-References: <20170824232403.1a196068@windsurf>
-Message-ID: <20170825031931.6768-1-casantos@datacom.ind.br>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 25 Aug 2017 06:57:56 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 12}.x series
+Message-ID: <20170825045757.13275-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change extends to the login utilities the current policy of having
-a selection item in the configuration menu for each utility that has an
---enable/--disable knob in the "configure" script:
-
-- add selection items for login, runuser, su and sulogin (there was
-  already an item for "last")
-- move "login utilities" to Config.in.legacy
-- make "login utilities" select last, login, runuser, su and sulogin
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1->v2
-  - do not add section titles
-  - deprecate the "login utilities" group
-Changes v2->v3
-  - improve comments
-  - fix spelling errors
-  - add comment to show when "login" is unavailable
----
- Config.in.legacy                 | 12 +++++++++++
- package/util-linux/Config.in     | 45 ++++++++++++++++++++++++++++------------
- package/util-linux/util-linux.mk |  7 +++++--
- 3 files changed, 49 insertions(+), 15 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 693dc95d74..49cab8bda9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,18 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
- 
-+config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
-+	bool "util-linux login utilities option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_UTIL_LINUX_LAST
-+	select BR2_PACKAGE_UTIL_LINUX_LOGIN
-+	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
-+	select BR2_PACKAGE_UTIL_LINUX_SU
-+	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
-+	help
-+	  Login utilities (last, login, runuser, su, sulogin) now have
-+	  their own configuration options in the util-linux menu.
-+
- config BR2_BINUTILS_VERSION_2_26_X
- 	bool "binutils version 2.26 support removed"
- 	select BR2_LEGACY
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index cba590c4f9..b3494af101 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -164,26 +164,25 @@ config BR2_PACKAGE_UTIL_LINUX_LINE
- 	help
- 	  Read one line
- 
--config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
--	bool "login utilities"
--	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
--	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
--	depends on !BR2_STATIC_LIBS
-+config BR2_PACKAGE_UTIL_LINUX_LOGGER
-+	bool "logger"
-+	help
-+	  Enter messages into the system log
-+
-+config BR2_PACKAGE_UTIL_LINUX_LOGIN
-+	bool "login"
-+	depends on BR2_ENABLE_LOCALE # linux-pam
-+	depends on BR2_USE_WCHAR # linux-pam
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
--	depends on BR2_USE_MMU # linux-pam
-+	depends on BR2_USE_MMU # fork(), linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
--	  Login utilities (last, login, runuser, su, sulogin)
-+	  Begin a session on the system
- 
--comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "login needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
- 		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
- 
--config BR2_PACKAGE_UTIL_LINUX_LOGGER
--	bool "logger"
--	help
--	  Enter messages into the system log
--
- config BR2_PACKAGE_UTIL_LINUX_LOSETUP
- 	bool "losetup"
- 	depends on BR2_USE_MMU # libsmartcols
-@@ -296,6 +295,14 @@ config BR2_PACKAGE_UTIL_LINUX_RESET
- 	help
- 	  Reset the terminal
- 
-+config BR2_PACKAGE_UTIL_LINUX_RUNUSER
-+	bool "runuser"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Run a command with substitute user and group ID (does not need
-+	  to ask for a password, because it may be executed by the root
-+	  user only)
-+
- config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
- 	bool "scheduling utilities"
- 	help
-@@ -313,6 +320,18 @@ config BR2_PACKAGE_UTIL_LINUX_SETTERM
- 	help
- 	  Set terminal attributes
- 
-+config BR2_PACKAGE_UTIL_LINUX_SU
-+	bool "su"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Run a command with substitute user and group ID
-+
-+config BR2_PACKAGE_UTIL_LINUX_SULOGIN
-+	bool "sulogin"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Single-user login
-+
- config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- 	bool "switch_root"
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index fc32668869..179e55dddf 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -118,7 +118,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
-@@ -136,9 +136,12 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset,--disable-reset) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_RUNUSER),--enable-runuser,--disable-runuser) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETTERM),--enable-setterm,--disable-setterm) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_SU),--enable-su,--disable-su) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_SULOGIN),--enable-sulogin,--disable-sulogin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT),--enable-switch_root,--disable-switch_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_TUNELP),--enable-tunelp,--disable-tunelp) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UL),--enable-ul,--disable-ul) \
-@@ -200,7 +203,7 @@ UTIL_LINUX_CONF_OPTS += --without-audit
- endif
- 
- # Install PAM configuration files
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU),y)
- define UTIL_LINUX_INSTALL_PAMFILES
- 	$(INSTALL) -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1807ce4227..a45172ed17 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,9 +236,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.83"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.44"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.84"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.45"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+-	default "4.12.8"	if BR2_KERNEL_HEADERS_4_12
++	default "4.12.9"	if BR2_KERNEL_HEADERS_4_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.13.5
+2.11.0
