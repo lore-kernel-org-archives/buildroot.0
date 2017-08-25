@@ -1,95 +1,38 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 25 Aug 2017 20:24:14 +0200
-Subject: [Buildroot] [PATCH] libv4l: avoid compilation error by adding
- upstream patch
-In-Reply-To: <6022e55d-653d-7d46-e6dc-90bb5feb9404@web.de>
-References: <20170822133210.4254-1-stephanbauroth@web.de>
- <6022e55d-653d-7d46-e6dc-90bb5feb9404@web.de>
-Message-ID: <20170825202414.2dd88a3b@gmx.net>
+Date: Fri, 25 Aug 2017 20:28:42 +0200
+Subject: [Buildroot] optimizing a rpi2 env
+In-Reply-To: <trinity-2b796612-07b4-4f47-9f17-b1e8706ec437-1503554259955@3c-app-mailcom-bs02>
+References: <trinity-2b796612-07b4-4f47-9f17-b1e8706ec437-1503554259955@3c-app-mailcom-bs02>
+Message-ID: <20170825202842.74f20361@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stephan,
+Hello Dagg,
 
-On Wed, 23 Aug 2017 13:48:46 +0200, Stephan Bauroth <stephanbauroth@web.de> wrote:
+On Thu, 24 Aug 2017 07:57:40 +0200, daggs <daggs@gmx.com> wrote:
 
-> This patch does not solve the mentioned compilation breakage, please 
-> ignore.
+> Greetings,
 > 
+> I have a rpi2 that I want to use as a headless local dtv server, e.g. no screen, inputs (beside a dongle).
+> only network, I've built a image with what I need and I wonder how can I optimize the env go no unneeded resorcses will be used? for example, gpu memory.
 
-Mind to share your config/defconfig file with which you get the compilation
-problems (or did your solve it already)?
+Not very buildroot specific questions, more one for the rpi community, but take a
+look at the config.txt file options [1],[2] maybe it helps...
 
 Regards,
 Peter
 
+[1] https://www.raspberrypi.org/documentation/configuration/config-txt/
+[2] https://www.raspberrypi.org/documentation/configuration/config-txt/memory.md
 
-> On 22.08.2017 15:32, Stephan Bauroth wrote:
-> > Without this patch, libv4l fails to build if qt5 is enabled:
-> >
-> > capture-win-gl.cpp: In member function 'virtual void
-> > CaptureWinGLEngine::initializeGL()':
-> > capture-win-gl.cpp:275:15: error: 'GL_FLAT' was not declared in this scope
-> >    glShadeModel(GL_FLAT);
-> >                 ^~~~~~~
-> >
-> > and more missing GL_* constants. This patch is upstream but not yet included in
-> > any release. So unitl a new version gets released, include it here.
-> >
-> > Backported from: 4d65b0571ea0027b6de45a76cfcadca32ea4be4a
-> > Signed-off-by: Stephan Bauroth <stephanbauroth@web.de>
-> > ---
-> >   package/libv4l/0011-fix-compilation-with-qt.patch | 37 +++++++++++++++++++++++
-> >   1 file changed, 37 insertions(+)
-> >   create mode 100644 package/libv4l/0011-fix-compilation-with-qt.patch
-> >
-> > diff --git a/package/libv4l/0011-fix-compilation-with-qt.patch b/package/libv4l/0011-fix-compilation-with-qt.patch
-> > new file mode 100644
-> > index 0000000000..dbd60ee498
-> > --- /dev/null
-> > +++ b/package/libv4l/0011-fix-compilation-with-qt.patch
-> > @@ -0,0 +1,37 @@
-> > +From 4d65b0571ea0027b6de45a76cfcadca32ea4be4a Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Sat, 4 Mar 2017 21:01:53 +0100
-> > +Subject: qv4l2: fix qv4l2.pro qmake project file
-> > +
-> > +The header files v4l2-tpg.h and v4l2-tpg-colors.h moved
-> > +from v4l2-ctl to common.
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-> > +
-> > +diff --git a/utils/qv4l2/qv4l2.pro b/utils/qv4l2/qv4l2.pro
-> > +index 02b03de..6420fa2 100644
-> > +--- a/utils/qv4l2/qv4l2.pro
-> > ++++ b/utils/qv4l2/qv4l2.pro
-> > +@@ -13,6 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-> > + QT += opengl
-> > +
-> > + INCLUDEPATH += $$PWD/../..
-> > ++INCLUDEPATH += $$PWD/../common
-> > + INCLUDEPATH += $$PWD/../v4l2-ctl/
-> > + INCLUDEPATH += $$PWD/../v4l2-compliance
-> > +
-> > +@@ -25,8 +26,8 @@ HEADERS += general-tab.h
-> > + HEADERS += qv4l2.h
-> > + HEADERS += raw2sliced.h
-> > + HEADERS += vbi-tab.h
-> > +-HEADERS += ../v4l2-ctl/v4l2-tpg.h
-> > +-HEADERS += ../v4l2-ctl/v4l2-tpg-colors.h
-> > ++HEADERS += ../common/v4l2-tpg.h
-> > ++HEADERS += ../common/v4l2-tpg-colors.h
-> > + HEADERS += ../../config.h
-> > +
-> > + SOURCES += capture-win.cpp
-> > +--
-> > +cgit v0.10.2
-> > +
+
 > 
+> Thanks,
+> 
+> Dagg.
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
