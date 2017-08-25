@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Aug 2017 16:09:58 +0200
-Subject: [Buildroot] [git commit] package/nss-pam-ldapd: Do not mark
-	.service file executable
-Message-ID: <20170825140416.43D8F805FD@busybox.osuosl.org>
+Date: Fri, 25 Aug 2017 16:09:57 +0200
+Subject: [Buildroot] [git commit] package/transmission: Do not mark .service
+	file executable
+Message-ID: <20170825140416.2EB55805FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06cf5c1812e13e9ffd5d4040f2dbaf0f41a8e181
+commit: https://git.buildroot.net/buildroot/commit/?id=a1c3ae753e7fb069cdb15ad2c194bcd47237123a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Do not mark .service file executable, otherwise systemd
@@ -18,19 +18,19 @@ will give us a warning about it.
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nss-pam-ldapd/nss-pam-ldapd.mk | 2 +-
+ package/transmission/transmission.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
-index 1c4f735..3eddb5e 100644
---- a/package/nss-pam-ldapd/nss-pam-ldapd.mk
-+++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
-@@ -27,7 +27,7 @@ NSS_PAM_LDAPD_CONF_OPTS += --disable-pam
- endif
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index f8abb2b..0fce642 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -64,7 +64,7 @@ define TRANSMISSION_INSTALL_INIT_SYSV
+ endef
  
- define NSS_PAM_LDAPD_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -m 755 -D package/nss-pam-ldapd/nslcd.service \
-+	$(INSTALL) -m 644 -D package/nss-pam-ldapd/nslcd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/nslcd.service
+ define TRANSMISSION_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
++	$(INSTALL) -D -m 0644 $(@D)/daemon/transmission-daemon.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/nslcd.service \
+ 	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
