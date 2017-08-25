@@ -1,50 +1,44 @@
-From: Jonas <qiaohuang178@gmail.com>
-Date: Thu, 24 Aug 2017 22:48:41 -0700 (MST)
-Subject: [Buildroot] pulseaudio isn't work on buildroot-2017.02.5
-In-Reply-To: <20170824192644.56481029@windsurf>
-References: <1503571325385-173857.post@n4.nabble.com>
- <20170824192644.56481029@windsurf>
-Message-ID: <1503640121686-173903.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Aug 2017 08:30:55 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-24
+Message-ID: <20170825063055.051A620998@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-thank you for your reply.
+Build statistics for 2017-08-24
+================================
 
-I try to set "BR2_PACKAGE_PULSEAUDIO_DAEMON".
+      successes : 212
+       failures : 7  
+       timeouts : 0  
+          TOTAL : 219
 
-# ps
-...
-  223 root     -sh
-  224 root     /sbin/getty -L tty1 0 vt100
-  256 pulse    pulseaudio --system --daemonize
-  260 root     ps
+Classification of failures by reason
+====================================
 
-it seen works in system mode, but I want to use "pactl" command.
-I need set source and sink.
-
-I get this error message:
-# pactl stat
-Connection failure: Access denied
-
-#pactl list sources short
-Connection failure: Access denied
-
-#pactl list sink short
-Connection failure: Access denied
-
-Could you help me again.
-Thank you very much.
-
-Thanks, 
-Jonas.
+                  cc-tool-0.26 | 2 
+                  dnsmasq-2.76 | 1 
+                  ffmpeg-3.3.3 | 1 
+             lttng-tools-2.9.5 | 1 
+               qt5webkit-5.9.1 | 1 
+               wireshark-2.2.7 | 1 
 
 
+Detail of failures
+===================
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/pulseaudio-isn-t-work-on-buildroot-2017-02-5-tp173857p173903.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/9bbd30abc0cb828a9f2fab188e1855b10120f61c |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/4599ff4b094b917feb010cb3a5916199cdb31138 |     
+        bfin |                   dnsmasq-2.76 | NOK | http://autobuild.buildroot.net/results/0b3886d57db51d574ab20070de803dbf686efa45 | ORPH
+         arm |                   ffmpeg-3.3.3 | NOK | http://autobuild.buildroot.net/results/5444b0c5556a42923e3fcdae782811a805e51b1f |     
+         arm |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/a6b18d0275fce3c0e84abf2bc1009615ba5247e4 |     
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/4956c608840ece86bddd94f91fc5ccf8a78070fa |     
+         arc |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/2ed41c0e9978ce7d4fe3af94c0155fc3aa292716 |     
+
+-- 
+http://autobuild.buildroot.net
