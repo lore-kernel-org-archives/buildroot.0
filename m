@@ -1,44 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 26 Aug 2017 21:58:05 +0200
-Subject: [Buildroot] [for-next 2/3] package/enlightenment: bump to 0.21.9
-In-Reply-To: <20170826195806.18802-1-romain.naour@gmail.com>
-References: <20170826195806.18802-1-romain.naour@gmail.com>
-Message-ID: <20170826195806.18802-2-romain.naour@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 26 Aug 2017 18:08:28 -0300
+Subject: [Buildroot] [RFC-next 1/2] fs/genimage: add logic to generate
+ an image using genimage
+References: <4bcea048-9283-4139-80c7-4c65b8675a31@mind.be>
+Message-ID: <59a1e34c4998a_9071138fac6086@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See: https://www.enlightenment.org/news/e0.21.9_release
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, Aug 24, 2017 at 08:33 PM, Arnout Vandecappelle wrote:
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index 0cb433f..91fb98a 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e0.21.8_release
--sha256	fac21c5fb9cab89fb717b3577f7980fd0644ff1e94b144a55ba841116e8c5232 	enlightenment-0.21.8.tar.xz
-+# From https://www.enlightenment.org/news/e0.21.9_release
-+sha256	eb560c0027378baf650d0690747ef0d08b5b329504e26e2210cc7978c019ae70 	enlightenment-0.21.9.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index e3c1dcf..441f049 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.21.8
-+ENLIGHTENMENT_VERSION = 0.21.9
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2-Clause
--- 
-2.9.5
+> On 23-08-17 22:45, Thomas Petazzoni wrote:
+[snip]
+>> +	   test "$(BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT)" != "y" ; then \
+>> +		echo "ERROR: genimage configuration generates a VFAT filesystem" ; \
+>> +		echo "       please enable BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT" ; \
+>> +	fi
+>> +	$(RM) -rf $(GENIMAGE_TMP)
+>> +	$(HOST_DIR)/usr/bin/genimage --rootpath $(TARGET_DIR) \
+
+I think you need to pass $(EXTRA_ENV) or a subset of it here, otherwise it will
+not use mkdosfs from the host/ directory and will fail if it not pre-installed,
+see:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/30257871
+sh: 1: mkdosfs: not found
+
+>> +		--tmppath $(GENIMAGE_TMP) \
+>> +		--inputpath $(BINARIES_DIR) \
+>> +		--outputpath $(BINARIES_DIR) \
+>> +		--config $(GENIMAGE_CFG_FILE)
+> 
+>  So the idea is to drop the genimage.sh script entirely? Hm, in the light of the
+> longer-term vision, I think things will become more and more complicated so
+> delegating it to a script sounds like the right thing to do...
+
+Even if the script is called I guess $(EXTRA_ENV) will be needed, just like
+target-post-image already does for custom scripts.
+
+Regards,
+Ricardo
