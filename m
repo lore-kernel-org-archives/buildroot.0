@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 26 Aug 2017 18:08:28 -0300
-Subject: [Buildroot] [RFC-next 1/2] fs/genimage: add logic to generate
- an image using genimage
-References: <4bcea048-9283-4139-80c7-4c65b8675a31@mind.be>
-Message-ID: <59a1e34c4998a_9071138fac6086@ultri3.mail>
+Date: Sat, 26 Aug 2017 18:12:16 -0300
+Subject: [Buildroot] [RFC-next 2/2] support/testing: add tests for the
+ genimage generation logic
+References: <20170823204547.16672-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <59a1e43030772_9073fef6c9318e0610b8@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,55 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, Aug 24, 2017 at 08:33 PM, Arnout Vandecappelle wrote:
+Looks good. Only nits below.
 
-> On 23-08-17 22:45, Thomas Petazzoni wrote:
-[snip]
->> +	   test "$(BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT)" != "y" ; then \
->> +		echo "ERROR: genimage configuration generates a VFAT filesystem" ; \
->> +		echo "       please enable BR2_TARGET_ROOTFS_GENIMAGE_USES_VFAT" ; \
->> +	fi
->> +	$(RM) -rf $(GENIMAGE_TMP)
->> +	$(HOST_DIR)/usr/bin/genimage --rootpath $(TARGET_DIR) \
+On Wed, Aug 23, 2017 at 05:45 PM, Thomas Petazzoni wrote:
 
-I think you need to pass $(EXTRA_ENV) or a subset of it here, otherwise it will
-not use mkdosfs from the host/ directory and will fail if it not pre-installed,
-see:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/30257871
-sh: 1: mkdosfs: not found
-
->> +		--tmppath $(GENIMAGE_TMP) \
->> +		--inputpath $(BINARIES_DIR) \
->> +		--outputpath $(BINARIES_DIR) \
->> +		--config $(GENIMAGE_CFG_FILE)
+> This commit adds two new test cases, to validate that the genimage
+> related functionality in Buildroot is working as expected:
 > 
->  So the idea is to drop the genimage.sh script entirely? Hm, in the light of the
-> longer-term vision, I think things will become more and more complicated so
-> delegating it to a script sounds like the right thing to do...
+>  - One test case with just one ext4 partition. We do the build, check
+>    in the image that one partition is available with the right type,
+>    and then boot the system under Qemu to validate that the root
+>    filesystem can be mounted from /dev/mmcblk0p1.
 
-Even if the script is called I guess $(EXTRA_ENV) will be needed, just like
-target-post-image already does for custom scripts.
+The root filesystem ends up mounted as read-only due to limitations in the
+builtin kernel image. From the -run.log:
+Filesystem with huge files cannot be mounted RDWR without CONFIG_LBDAF
+
+But I think it is OK since whether it is writable or not is not the subject of
+the test.
+
+[snip]
+> ---
+>  support/testing/tests/fs/genimage-simple.cfg |  9 ++++
+>  support/testing/tests/fs/genimage-vfat.cfg   | 25 ++++++++++
+>  support/testing/tests/fs/test_genimage.py    | 74 ++++++++++++++++++++++++++++
+>  3 files changed, 108 insertions(+)
+
+I don't know if it was intended (due to RFC status) or not, but the update to
+.gitlab-ci.yml is missing.
+
+[snip]
+> +++ b/support/testing/tests/fs/test_genimage.py
+
+Since it's a new file, could fix the 9 code style warnings from flake8?
+
+[snip]
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +             """
+> +             BR2_TARGET_ROOTFS_EXT2=y
+> +             BR2_TARGET_ROOTFS_EXT2_4=y
+> +             BR2_TARGET_ROOTFS_GENIMAGE=y
+> +             BR2_TARGET_ROOTFS_GENIMAGE_CFG_FILE="{}"
+> +             """.format(infra.filepath("tests/fs/genimage-simple.cfg"))
+
+This is a triple-quoted string and the test infra removes the white space at
+beginning of lines, so any indentation would be valid.
+But perhaps we could adopt a default and use everywhere for consistency. See
+support/testing/tests/init/test_none.py that indents one level in this case.
+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+        """
 
 Regards,
 Ricardo
