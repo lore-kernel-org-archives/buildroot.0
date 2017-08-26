@@ -1,66 +1,70 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 26 Aug 2017 18:12:16 -0300
-Subject: [Buildroot] [RFC-next 2/2] support/testing: add tests for the
- genimage generation logic
-References: <20170823204547.16672-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <59a1e43030772_9073fef6c9318e0610b8@ultri3.mail>
+Date: Sat, 26 Aug 2017 19:20:50 -0300
+Subject: [Buildroot] [next v2 1/7] testing/infra/builder: split configure()
+	from build()
+In-Reply-To: <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
+References: <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
+Message-ID: <20170826222056.6119-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 
-Looks good. Only nits below.
+Some test cases don't use a full build as setup, so split the build()
+method into configure() and build().
+It allows a test case to perform configuration at the setup stage and
+the build inside the test itself.
 
-On Wed, Aug 23, 2017 at 05:45 PM, Thomas Petazzoni wrote:
+Call this new method just before build in the BRTest base class, to keep
+the current behavior for existing test cases.
 
-> This commit adds two new test cases, to validate that the genimage
-> related functionality in Buildroot is working as expected:
-> 
->  - One test case with just one ext4 partition. We do the build, check
->    in the image that one partition is available with the right type,
->    and then boot the system under Qemu to validate that the root
->    filesystem can be mounted from /dev/mmcblk0p1.
+This change will be needed when adding a common class to test the git
+download infra.
 
-The root filesystem ends up mounted as read-only due to limitations in the
-builtin kernel image. From the -run.log:
-Filesystem with huge files cannot be mounted RDWR without CONFIG_LBDAF
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+---
+Changes v1 -> v2:
+  - new patch to adapt the test infra to test git download
+---
+ support/testing/infra/basetest.py | 1 +
+ support/testing/infra/builder.py  | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-But I think it is OK since whether it is writable or not is not the subject of
-the test.
-
-[snip]
-> ---
->  support/testing/tests/fs/genimage-simple.cfg |  9 ++++
->  support/testing/tests/fs/genimage-vfat.cfg   | 25 ++++++++++
->  support/testing/tests/fs/test_genimage.py    | 74 ++++++++++++++++++++++++++++
->  3 files changed, 108 insertions(+)
-
-I don't know if it was intended (due to RFC status) or not, but the update to
-.gitlab-ci.yml is missing.
-
-[snip]
-> +++ b/support/testing/tests/fs/test_genimage.py
-
-Since it's a new file, could fix the 9 code style warnings from flake8?
-
-[snip]
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +             """
-> +             BR2_TARGET_ROOTFS_EXT2=y
-> +             BR2_TARGET_ROOTFS_EXT2_4=y
-> +             BR2_TARGET_ROOTFS_GENIMAGE=y
-> +             BR2_TARGET_ROOTFS_GENIMAGE_CFG_FILE="{}"
-> +             """.format(infra.filepath("tests/fs/genimage-simple.cfg"))
-
-This is a triple-quoted string and the test infra removes the white space at
-beginning of lines, so any indentation would be valid.
-But perhaps we could adopt a default and use everywhere for consistency. See
-support/testing/tests/init/test_none.py that indents one level in this case.
-    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-        """
-
-Regards,
-Ricardo
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 431605b23f..d61f4d337b 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -57,6 +57,7 @@ class BRTest(unittest.TestCase):
+ 
+         if not self.b.is_finished():
+             self.show_msg("Building")
++            self.b.configure()
+             self.b.build()
+             self.show_msg("Building done")
+ 
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index 905b127c91..e7c8e0102c 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -10,7 +10,7 @@ class Builder(object):
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+ 
+-    def build(self):
++    def configure(self):
+         if not os.path.isdir(self.builddir):
+             os.makedirs(self.builddir)
+ 
+@@ -29,6 +29,7 @@ class Builder(object):
+         if ret != 0:
+             raise SystemError("Cannot olddefconfig")
+ 
++    def build(self):
+         cmd = ["make", "-C", self.builddir]
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile)
+         if ret != 0:
+-- 
+2.13.0
