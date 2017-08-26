@@ -1,23 +1,42 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Sat, 26 Aug 2017 10:12:26 +0800
-Subject: [Buildroot] Change "Target Architecture" does not rebuild
-	everything?
-Message-ID: <CAEUhbmVe=CaF3Rf6L2aNmgJbVd1d1rjeu26dfYZ4jB8HSVn6KQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Aug 2017 08:31:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-25
+Message-ID: <20170826063111.B9C64208D3@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I had a successful build of minnowboard_max_defconfig which generates
-a 64-bit kernel and rootfs. Now I want to change the target
-architecture to i386 (via 'make menuconfig') to generate a 32-bit
-build. But 'make' completed very quickly, and it looks the everything
-does not get rebuilt.
+Build statistics for 2017-08-25
+================================
 
-Is this supposed behavior? or a bug?
+      successes : 213
+       failures : 6  
+       timeouts : 0  
+          TOTAL : 219
 
-Regards,
-Bin
+Classification of failures by reason
+====================================
+
+                  cc-tool-0.26 | 2 
+libkcapi-79cb80714ebcbae2b9... | 1 
+                 mplayer-1.3.0 | 1 
+                      qt-4.8.7 | 1 
+           qt5multimedia-5.9.1 | 1 
+
+
+Detail of failures
+===================
+
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/3b4818f041901d8801656854886b1d3ec79b60af |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/a11bbc905f4da3fad3028c9aea1088817c9a1dba |     
+         arm | libkcapi-79cb80714ebcbae2b9... | NOK | http://autobuild.buildroot.net/results/01f207ccd1cf5fc030510cb7a4eb2649e124b49b |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/9747fc1e0080dae5f7cc55eb628bc9790a9450fe |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/fd6f5a77d760d7bdc077349fecd1773523a7927e | ORPH
+         arm |            qt5multimedia-5.9.1 | NOK | http://autobuild.buildroot.net/results/ce1e850bbc77cc34046e7463fd5c742d3fe2f971 |     
+
+-- 
+http://autobuild.buildroot.net
