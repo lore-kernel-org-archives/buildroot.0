@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 27 Aug 2017 19:36:02 +0200
-Subject: [Buildroot] [PATCH 3/7] package/mesa3d: fix build issue with glibc
-	>= 2.26
+Date: Sun, 27 Aug 2017 19:36:03 +0200
+Subject: [Buildroot] [PATCH 4/7] package/jsoncpp: fix build with glibc >=
+	2.26
 In-Reply-To: <20170827173606.13144-1-romain.naour@gmail.com>
 References: <20170827173606.13144-1-romain.naour@gmail.com>
-Message-ID: <20170827173606.13144-4-romain.naour@gmail.com>
+Message-ID: <20170827173606.13144-5-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +15,41 @@ Issue found while testing glibc 2.26 bump.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...-c99_math-fix-build-issue-with-glibc-2.26.patch | 82 ++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
+ ...001-json_writer-fix-build-with-glibc-2.26.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
 
-diff --git a/package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch b/package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
+diff --git a/package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch b/package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
 new file mode 100644
-index 0000000..55e4fcf
+index 0000000..90acb12
 --- /dev/null
-+++ b/package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
-@@ -0,0 +1,82 @@
-+From f8ef875d8b5313d8f15f8680dc0c512c10756ea8 Mon Sep 17 00:00:00 2001
++++ b/package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
+@@ -0,0 +1,28 @@
++From 8b7250335f1a1a4bb46f28846500e11148d78449 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 26 Aug 2017 19:20:56 +0200
-+Subject: [PATCH] c99_math: fix build issue with glibc >= 2.26
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The workaround is not required anymore since glibc 2.26 and
-+trigger a build issue:
-+
-+In file included from ../../src/gallium/auxiliary/util/u_math.h:44:0,
-+                 from ../../src/mesa/main/macros.h:35,
-+                 from glsl_types.cpp:25:
-+../../include/c99_math.h:196:12: error: ??std::fpclassify??  was not declared in this scope
-+ using std::fpclassify;
-+            ^~~~~~~~~~
-+../../include/c99_math.h:197:12: error: ??std::isfinite??  was not declared in this scope
-+ using std::isfinite;
-+            ^~~~~~~~
-+../../include/c99_math.h:198:12: error: ??std::isinf??  was not declared in this scope
-+ using std::isinf;
-+            ^~~~~
-+../../include/c99_math.h:199:12: error: ??std::isnan??  was not declared in this scope
-+ using std::isnan;
-+            ^~~~~
-+../../include/c99_math.h:200:12: error: ??std::isnormal??  was not declared in this scope
-+ using std::isnormal;
-+            ^~~~~~~~
-+../../include/c99_math.h:201:12: error: ??std::signbit??  was not declared in this scope
-+ using std::signbit;
-+            ^~~~~~~
-+../../include/c99_math.h:202:12: error: ??std::isgreater??  was not declared in this scope
-+ using std::isgreater;
-+            ^~~~~~~~~
-+../../include/c99_math.h:203:12: error: ??std::isgreaterequal??  was not declared in this scope
-+ using std::isgreaterequal;
-+            ^~~~~~~~~~~~~~
-+../../include/c99_math.h:204:12: error: ??std::isless??  was not declared in this scope
-+ using std::isless;
-+            ^~~~~~
-+../../include/c99_math.h:205:12: error: ??std::islessequal??  was not declared in this scope
-+ using std::islessequal;
-+            ^~~~~~~~~~~
-+../../include/c99_math.h:206:12: error: ??std::islessgreater??  was not declared in this scope
-+ using std::islessgreater;
-+            ^~~~~~~~~~~~~
-+../../include/c99_math.h:207:12: error: ??std::isunordered??  was not declared in this scope
-+ using std::isunordered;
-+            ^~~~~~~~~~~
++Date: Sat, 26 Aug 2017 19:39:03 +0200
++Subject: [PATCH] json_writer: fix build with glibc >= 2.26
 +
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ include/c99_math.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
++ src/lib_json/json_writer.cpp | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/include/c99_math.h b/include/c99_math.h
-+index e906c26..6fd257e 100644
-+--- a/include/c99_math.h
-++++ b/include/c99_math.h
-+@@ -193,6 +193,10 @@ fpclassify(double x)
-+ #if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23))
-+ #include <cmath>
-+ 
-++/* This workaround is not necessary since Glibc 2.26
-++ * https://sourceware.org/git/?p=glibc.git;a=commit;h=2072f5c34ede81dde9e0d953d57a0690a66b0f12
-++ */
-++#if (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 25)
-+ using std::fpclassify;
-+ using std::isfinite;
-+ using std::isinf;
-+@@ -206,6 +210,7 @@ using std::islessequal;
-+ using std::islessgreater;
-+ using std::isunordered;
++diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
++index 02f1cb1..db61988 100644
++--- a/src/lib_json/json_writer.cpp
+++++ b/src/lib_json/json_writer.cpp
++@@ -41,7 +41,9 @@
 + #endif
-++#endif
-+ 
-+ 
-+ #endif /* #define _C99_MATH_H_ */
++ #else
++ #include <cmath>
++-#if !(defined(__QNXNTO__)) // QNX already defines isfinite
+++// QNX already defines isfinite
+++#if !(defined(__QNXNTO__)) && \
+++    (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 25))
++ #define isfinite std::isfinite
++ #endif
++ #endif
 +-- 
 +2.9.5
 +
