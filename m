@@ -1,78 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 27 Aug 2017 07:00:49 +0300
-Subject: [Buildroot] [next v2 5/7] testing/tests/download: add git hash
- tests
-In-Reply-To: <59a1f867a6b59_320e3fc04c9c84c4650da@ultri3.mail>
-References: <20170826222056.6119-5-ricardo.martincoski@gmail.com>
- <59a1f867a6b59_320e3fc04c9c84c4650da@ultri3.mail>
-Message-ID: <20170827040049.yv6cotumoua6xv37@tarshish>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 27 Aug 2017 07:11:18 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
+	package
+In-Reply-To: <CAFSsvmr9ZWp8yh+ve88RDUsBQS9PxgZRWTjAkotaECQ13wNeJg@mail.gmail.com>
+References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
+ <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
+ <20170223101820.127d5700@free-electrons.com>
+ <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
+ <20170224092549.2c560db3@free-electrons.com>
+ <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
+ <20170227150637.ljo2c6dv3izstddn@tarshish>
+ <20170227232240.GB2535@tungsten.ozlabs.ibm.com>
+ <1502794041870-173505.post@n4.nabble.com>
+ <1502952247260-173614.post@n4.nabble.com>
+ <346fcaef-6d03-4d57-c749-da966016d401@mind.be>
+ <CAFSsvmq8o3QVkogQ3=2=0BK20nZyUecy_hHLsc+XmuSJJYavTA@mail.gmail.com>
+ <2b5ed9ae-1477-0c8c-ff7d-440cc60d75a9@mind.be>
+ <CAFSsvmr9ZWp8yh+ve88RDUsBQS9PxgZRWTjAkotaECQ13wNeJg@mail.gmail.com>
+Message-ID: <7F016C7D-1A3D-4B5E-9E0D-F575D0976265@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ricardo,
+Hi,
 
-On Sat, Aug 26, 2017 at 07:38:31PM -0300, Ricardo Martincoski wrote:
-> On Sat, Aug 26, 2017 at 07:20 PM, Ricardo Martincoski wrote:
-> > From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> > 
-> > Add three test cases for hash of a git package:
-> >  - correct hash;
-> >  - wrong hash;
-> >  - no hash file.
-> > 
-> > Besides the Python script, add some fixtures used during the tests:
-> >  - a br2-external (git-hash) with one package for each test case;
-> >  - a static git bare repo (repo.git) to be served using GitRemote class
-> >    for all these test cases.
-> > 
-> > Neither the br2-external nor the check hash functionalities are the
-> > subject of these tests per se, so for simplicity limit the check to the
-> > error codes and don't look for the messages in the log.
-> > 
-> > Thanks to Arnout for the hint about how to add a bare repo to test.
-> > 
-> > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> > Changes v1 -> v2:
-> >   - new patch
-> > ---
-> >  .gitlab-ci.yml                                     |   3 ++
-> >  .../tests/download/br2-external/git-hash/Config.in |   0
-> >  .../download/br2-external/git-hash/external.desc   |   1 +
-> >  .../download/br2-external/git-hash/external.mk     |   1 +
-> >  .../br2-external/git-hash/package/bad/bad.hash     |   1 +
-> >  .../br2-external/git-hash/package/bad/bad.mk       |  12 ++++++++
-> >  .../br2-external/git-hash/package/good/good.hash   |   1 +
-> >  .../br2-external/git-hash/package/good/good.mk     |  12 ++++++++
-> >  .../br2-external/git-hash/package/nohash/nohash.mk |  12 ++++++++
-> >  .../download/git-remote/repo.git/.gitattributes    |   1 +
-> >  .../tests/download/git-remote/repo.git/HEAD        |   1 +
-> >  .../tests/download/git-remote/repo.git/config      |   4 +++
-> >  .../12/33c8f882d130978246a30da75892321f13e5bb      | Bin 0 -> 49 bytes
-> >  .../74/46f8dab6cdb166aaf130aa88633dc627a4e8ad      | Bin 0 -> 153 bytes
-> >  .../8e/27be7d6154a1f68ea9160ef0e18691d20560dc      | Bin 0 -> 20 bytes
-> >  .../download/git-remote/repo.git/refs/heads/master |   1 +
-> >  support/testing/tests/download/test_git_hash.py    |  34 +++++++++++++++++++++
-> >  17 files changed, 84 insertions(+)
-> 
-> This patch didn't get to mailing list.
-> I guess it is because of binary files added.
-> 
-> Did I miss something to properly send this?
-> 
-> Anyway it can be seen here:
-> https://gitlab.com/RicardoMartincoski/buildroot/commit/32611754f77a17dbbfae26e10da55300ebea0b83
+> I highly doubt that considering OE/Yocto uses uclibc as well as glibc.
+> They even
+> have a bunch of patches to get SystemD working with uclibc.
 
-I got this patch from the list. It is also archived at 
-http://lists.busybox.net/pipermail/buildroot/2017-August/200933.html.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+OE no longer supports uclibc/uclibc-ng.
+Yocto just seems to carry an old recipe for uclibc.
+Latest release of uClibc-ng and systemd no longer requires any patches, so this shows how old the uclibc-ng support in OE might be, if there are still leftovers.
+best regards
+ Waldemar 
