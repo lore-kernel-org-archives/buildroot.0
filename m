@@ -1,37 +1,51 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 27 Aug 2017 07:11:18 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
-	package
-In-Reply-To: <CAFSsvmr9ZWp8yh+ve88RDUsBQS9PxgZRWTjAkotaECQ13wNeJg@mail.gmail.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
- <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
- <20170224092549.2c560db3@free-electrons.com>
- <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
- <20170227150637.ljo2c6dv3izstddn@tarshish>
- <20170227232240.GB2535@tungsten.ozlabs.ibm.com>
- <1502794041870-173505.post@n4.nabble.com>
- <1502952247260-173614.post@n4.nabble.com>
- <346fcaef-6d03-4d57-c749-da966016d401@mind.be>
- <CAFSsvmq8o3QVkogQ3=2=0BK20nZyUecy_hHLsc+XmuSJJYavTA@mail.gmail.com>
- <2b5ed9ae-1477-0c8c-ff7d-440cc60d75a9@mind.be>
- <CAFSsvmr9ZWp8yh+ve88RDUsBQS9PxgZRWTjAkotaECQ13wNeJg@mail.gmail.com>
-Message-ID: <7F016C7D-1A3D-4B5E-9E0D-F575D0976265@openadk.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Aug 2017 08:31:06 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-26
+Message-ID: <20170827063106.4309E20875@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-> I highly doubt that considering OE/Yocto uses uclibc as well as glibc.
-> They even
-> have a bunch of patches to get SystemD working with uclibc.
+Build statistics for 2017-08-26
+================================
 
-OE no longer supports uclibc/uclibc-ng.
-Yocto just seems to carry an old recipe for uclibc.
-Latest release of uClibc-ng and systemd no longer requires any patches, so this shows how old the uclibc-ng support in OE might be, if there are still leftovers.
-best regards
- Waldemar 
+      successes : 205
+       failures : 10 
+       timeouts : 0  
+          TOTAL : 215
+
+Classification of failures by reason
+====================================
+
+                  cc-tool-0.26 | 1 
+            lttng-libust-2.9.0 | 1 
+             lttng-tools-2.9.5 | 1 
+            mesa3d-demos-8.3.0 | 1 
+                   mp4v2-2.0.0 | 1 
+                 mplayer-1.3.0 | 1 
+                    mpv-0.25.0 | 1 
+                      qt-4.8.7 | 1 
+             transmission-2.92 | 1 
+               wireshark-2.2.7 | 1 
+
+
+Detail of failures
+===================
+
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/68f69f68cdfde63d935bf8868d65d1218bffb5c1 |     
+         arm |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/1bdd82fcaadc31a67b59d2180910079a29108615 |     
+      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/1bb49fa4e965732ed516f965e0dc17d0c8ac7641 |     
+         arm |             mesa3d-demos-8.3.0 | NOK | http://autobuild.buildroot.net/results/0179c90c4aeec45164d7388f0b6cb0f5a6ba94ca |     
+         arm |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/aaa22559d38be524b4a73d76fa37a35b122b720d |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/0ff7fb6d43b46fc9d1a80735f1ca8d760ee481c4 |     
+         arm |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/2bcf6a4b4736c9ddd560c47bda1995083998e3bb |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/16d2b18300eeb914832e05a0dc6d78fff4969a1e | ORPH
+      xtensa |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/98fd63832747d6115dedf54d92813b354c85f13d |     
+       sparc |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/70d7865c8c37956e7135a92847c53a37ff987ef6 |     
+
+-- 
+http://autobuild.buildroot.net
