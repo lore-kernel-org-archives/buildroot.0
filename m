@@ -1,38 +1,33 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Sun, 27 Aug 2017 19:57:48 +0800
-Subject: [Buildroot] minnowboard_max_defconfig, changes to build for 32-bit,
- fails in the end when installing grub
-Message-ID: <CAEUhbmW6BXHrudGz5LB4=xQYf3-3noyoUzDuryFv39_VUoP_cw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Aug 2017 15:43:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/squid: fix typo
+Message-ID: <20170827134336.6698-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixed typo added by
+https://git.buildroot.net/buildroot/commit/package/squid?id=d2f7d0d72cd7e00ffbe869011d200f0a4a53e7a5
 
-I wanted to build a 32-bit rootfs for minnowboard max, so I started by:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-$ make minnowboard_max_defconfig
-$ make menuconfig
-change "Target options" -> "Target Architecture" to i386, save and exit
-$ make
-
-It fails in the end.
-
-mkdir -p /buildroot/output/images/
-/buildroot/output/host/bin/grub-mkimage -d
-/buildroot/output/host/lib/grub/i386-pc -O i386-pc -o
-/buildroot/output/images/grub.img -p "(hd0,msdos1)/boot/grub"  boot
-linux ext2 fat squash4 part_msdos part_gpt normal efi_gop
-/buildroot/output/host/bin/grub-mkimage: error: cannot open
-`/buildroot/output/host/lib/grub/i386-pc/efi_gop.mod': No such file or
-directory.
-package/pkg-generic.mk:308: recipe for target
-'/buildroot/output/build/grub2-2.02/.stamp_target_installed' failed
-make: *** [/buildroot/output/build/grub2-2.02/.stamp_target_installed] Error 1
-
-Am I missing anything?
-
-Regards,
-Bin
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index bcb3744de..d334d14c8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -21,7 +21,7 @@ SQUID_CONF_ENV = \
+ 	ac_cv_func___va_copy=yes \
+ 	ac_cv_func_strnstr=no \
+ 	ac_cv_have_squid=yes \
+-	BUILXCXX="$(HOSTCXX)" \
++	BUILDCXX="$(HOSTCXX)" \
+ 	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
+ SQUID_CONF_OPTS = \
+ 	--enable-async-io=8 \
+-- 
+2.11.0
