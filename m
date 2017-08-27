@@ -1,38 +1,64 @@
 From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Sun, 27 Aug 2017 12:00:19 +0200
-Subject: [Buildroot] [PATCH v2] modem-manager: update dependencies
-In-Reply-To: <20170827092336.1f6ed439@windsurf>
-References: <20170825123015.10667-1-aleksander@aleksander.es>
- <20170825142120.26160-1-aleksander@aleksander.es>
- <20170825224135.6b053399@windsurf>
- <CAAP7uc+iakpbUqhHcrczfvEjdXDTwEvq3+yoOxcAzR4eYtR7ww@mail.gmail.com>
- <20170827092336.1f6ed439@windsurf>
-Message-ID: <CAAP7ucJDbVb4fVgi-3G751PSQu44tyieZM38izbZh-cN9FFYBw@mail.gmail.com>
+Date: Sun, 27 Aug 2017 12:42:40 +0200
+Subject: [Buildroot] [PATCH v3] modem-manager: update dependencies
+In-Reply-To: <20170825142120.26160-1-aleksander@aleksander.es>
+References: <20170825142120.26160-1-aleksander@aleksander.es>
+Message-ID: <20170827104240.10433-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Understood; yes DBus is only runtime dependency, so the Config.in
->> change would be enough.
->
-> Well, the package already has "select BR2_PACKAGE_DBUS", so that
-> shouldn't require any change.
->
+These are the changes implemented:
 
-Yeah, I meant the (already existing) Config.in entry would be enough,
-no change expected there, sorry for the confusion.
+  * Remove dbus-glib as a dependency, as it isn't required since
+    ModemManager 1.0, which is based on libglib2's GDBus
+    implementation.
 
->> I guess the same happens with udev then? MM
->> doesn't build-depend on udev, only on gudev (although it seems that
->> gudev itself depends on udev).
->
-> Then yes, having "udev" in MODEM_MANAGER_DEPENDENCIES is useless.
->
+  * Remove udev as a dependency, as the ModemManager build only needs
+    the libgudev package.
 
-Will update the patch and resend, thanks for the clarifications.
+  * Explicitly set libglib2 as dependency, which currently was being
+    implicitly included by libgudev. The next major ModemManager
+    release will have udev/libgudev as optional packages, while
+    libglib2 is definitely not going to be ever optional.
 
--- 
-Aleksander
-https://aleksander.es
+  * Add a comment explaining that dbus is only a runtime dependency.
+
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ package/modem-manager/Config.in        | 4 ++--
+ package/modem-manager/modem-manager.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+index aa7ed1e2f..8e995b417 100644
+--- a/package/modem-manager/Config.in
++++ b/package/modem-manager/Config.in
+@@ -4,8 +4,8 @@ config BR2_PACKAGE_MODEM_MANAGER
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
+-	select BR2_PACKAGE_DBUS
+-	select BR2_PACKAGE_DBUS_GLIB
++	select BR2_PACKAGE_DBUS # runtime dependency
++	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBGUDEV
+ 	help
+ 	  ModemManager is a DBus-activated daemon which controls mobile
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 6459f8785..fe08033c7 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -9,7 +9,7 @@ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ MODEM_MANAGER_LICENSE_FILES = COPYING
+-MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool libgudev
++MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2 libgudev
+ MODEM_MANAGER_INSTALL_STAGING = YES
+
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+--
+2.14.1
