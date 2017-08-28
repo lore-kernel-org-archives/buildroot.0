@@ -1,44 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 28 Aug 2017 08:34:16 +0300
-Subject: [Buildroot] [PATCH next 2/2] libftdi1: bump to version 1.4
-In-Reply-To: <c21debe1fe36162b182803d45b5e6b0ab4ff575d.1503898456.git.baruch@tkos.co.il>
-References: <c21debe1fe36162b182803d45b5e6b0ab4ff575d.1503898456.git.baruch@tkos.co.il>
-Message-ID: <1899b78d8e175b669b6feadcad538baf7f119c68.1503898456.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Aug 2017 08:30:51 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-27
+Message-ID: <20170828063051.2115621F23@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Daniel Sangue <daniel.sangue@sangue.ch>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libftdi1/libftdi1.hash | 5 +++--
- package/libftdi1/libftdi1.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index 0a89182449c1..40512a7fc302 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,2 +1,3 @@
--# Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
--sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
-+# Locally computed after checking the signature
-+# https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.4.tar.bz2.sig
-+sha256  ec36fb49080f834690c24008328a5ef42d3cf584ef4060f3a35aa4681cb31b74  libftdi1-1.4.tar.bz2
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index 6b84b953170f..c45c83a71116 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFTDI1_VERSION = 1.3
-+LIBFTDI1_VERSION = 1.4
- LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
- LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
- LIBFTDI1_INSTALL_STAGING = YES
+Build statistics for 2017-08-27
+================================
+
+      successes : 167
+       failures : 8  
+       timeouts : 0  
+          TOTAL : 175
+
+Classification of failures by reason
+====================================
+
+                    vde2-2.3.2 | 3 
+                  cc-tool-0.26 | 1 
+                   mp4v2-2.0.0 | 1 
+                    mpd-0.20.9 | 1 
+                     php-7.1.7 | 1 
+             transmission-2.92 | 1 
+
+
+Detail of failures
+===================
+
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/8877916c24e10b55b89a2836bd168e4fa0e1ee9f |     
+         arm |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/04912164ec330d9dd30c547927ec8f6b76ff7882 |     
+microblazeel |                     mpd-0.20.9 | NOK | http://autobuild.buildroot.net/results/3218f799d6209f043b3e0667156f635e2e53b3a7 |     
+         arm |                      php-7.1.7 | NOK | http://autobuild.buildroot.net/results/7130c6b432a24df27b8c0bbaf1bcc5d5fe22a729 | ORPH
+        mips |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/521b990e5181ed7304d812e5fa62bd46ab7087f0 |     
+         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/9f7fde331bac1ce3a4f379701a1541aca91302f7 |     
+         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/2a1f73bfaf7097d42165d5c5f6c24d1aad72c929 |     
+         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/ed9abb1aed2ae87971ae119f4bca83cbf9861466 |     
+
 -- 
-2.14.1
+http://autobuild.buildroot.net
