@@ -1,34 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Aug 2017 07:18:47 +0200
-Subject: [Buildroot] [PATCH 0/7] glibc: bump to 2.26
-References: <20170827173606.13144-1-romain.naour@gmail.com>
-Message-ID: <nmlc7ex4h4.ln2@ID-313208.user.individual.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 28 Aug 2017 08:34:15 +0300
+Subject: [Buildroot] [PATCH next 1/2] lirc-tools: remove useless
+	libusb-compat dependnecy
+Message-ID: <c21debe1fe36162b182803d45b5e6b0ab4ff575d.1503898456.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 27 Aug 2017 19:35:59 +0200 schrieb Romain Naour:
+The only plugin that uses libusb/libusb-compat is the ftdi plugin. This
+plugin needs libftdi1 that already depends on libusb in Buildroot. So in
+practice libusb-compat is never actually used; we can safely remove it.
+The libusb dependency is implicit in the libftdi1 optional dependency.
 
-> Another C++ namespace change trigger a build issue when the code contain
-> a workaround for math functions:
+Cc: Rhys Williams <github@wilberforce.co.nz>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lirc-tools/lirc-tools.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Hi Romain,
-
-Kodi is also affected by this problem:
-
-/home/buildroot/br8_ffmpeg3_kodi17_github/output/build/kodi-17.4-Krypton/
-xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:55:14: error: 
-'__builtin_isnan' is not a member of 'std'
-   if (!(std::isnan(fPercentage)))
-
-According to https://github.com/voidlinux/void-packages/
-issues/7307#issuecomment-322543154 the problem was solved upstream by 
-these patches: https://sourceware.org/ml/libc-alpha/2017-08/msg00586.html
-
-Voidlinux applied these and other patches from upstream:
-https://github.com/voidlinux/void-packages/
-commit/728afd17c66644ff41fe018ef2be0c0454944a4f
-
-Regards, Bernd
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index 9d46c1b1b042..e767d9d7f02c 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -23,10 +23,6 @@ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ LIRC_TOOLS_DEPENDENCIES += alsa-lib
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
+-LIRC_TOOLS_DEPENDENCIES += libusb-compat
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
+ LIRC_TOOLS_DEPENDENCIES += portaudio
+ endif
+-- 
+2.14.1
