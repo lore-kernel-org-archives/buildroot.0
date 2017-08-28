@@ -1,41 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Aug 2017 09:52:33 +0200
-Subject: [Buildroot] minnowboard_max_defconfig,
- changes to build for 32-bit, fails in the end when installing grub
-In-Reply-To: <CAEUhbmXdy31cqK4tMZsW6ghbS0R78wxJGnaFyfHU8QZkQGyHLg@mail.gmail.com>
-References: <CAEUhbmW6BXHrudGz5LB4=xQYf3-3noyoUzDuryFv39_VUoP_cw@mail.gmail.com>
- <20170828090545.61959c3c@windsurf>
- <CAEUhbmXdy31cqK4tMZsW6ghbS0R78wxJGnaFyfHU8QZkQGyHLg@mail.gmail.com>
-Message-ID: <20170828095233.398ead1c@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 28 Aug 2017 09:59:23 +0200
+Subject: [Buildroot] [PATCH 0/7] glibc: bump to 2.26
+In-Reply-To: <nmlc7ex4h4.ln2@ID-313208.user.individual.net>
+References: <20170827173606.13144-1-romain.naour@gmail.com>
+ <nmlc7ex4h4.ln2@ID-313208.user.individual.net>
+Message-ID: <CANLo3JjBwvUG3Emgi8U44aBgxiv75yv8eUK0P8APFzamMQxPFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd,
 
-On Mon, 28 Aug 2017 15:47:57 +0800, Bin Meng wrote:
+Le 28 ao?t 2017 07:20, "Bernd Kuhls" <bernd.kuhls@t-online.de> a ?crit :
 
-> Thanks for the hints. Since I changed "Target Architecture" to i386 in
-> menuconfig, I see the grub2 platform has also changed to "i386-pc"
-> automatically, but the built modules
-> (BR2_TARGET_GRUB2_BUILTIN_MODULES) remains unchanged, and that
-> explains the build error. Is this a limitation of Kconfig that it
-> cannot switch BR2_TARGET_GRUB2_BUILTIN_MODULES automatically?
+Am Sun, 27 Aug 2017 19:35:59 +0200 schrieb Romain Naour:
 
-Yes.
+> Another C++ namespace change trigger a build issue when the code contain
+> a workaround for math functions:
 
-> I did further testing by switching "Target Architecture" back to
-> x86-64, and I saw grub2 platform did not change to the EFI stuff and
-> remained as "i386-pc".
+Hi Romain,
 
-Yes, welcome to Kconfig :)
+Kodi is also affected by this problem:
 
-Best regards,
+/home/buildroot/br8_ffmpeg3_kodi17_github/output/build/kodi-17.4-Krypton/
+xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:55:14: error:
+'__builtin_isnan' is not a member of 'std'
+   if (!(std::isnan(fPercentage)))
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+According to https://github.com/voidlinux/void-packages/
+issues/7307#issuecomment-322543154 the problem was solved upstream by
+these patches: https://sourceware.org/ml/libc-alpha/2017-08/msg00586.html
+
+Voidlinux applied these and other patches from upstream:
+https://github.com/voidlinux/void-packages/
+commit/728afd17c66644ff41fe018ef2be0c0454944a4f
+
+
+Thanks for testing!
+
+The build issue I reported seems sligly different since using glibc 2.26
+stable branch didn't fix mesa and jsoncpp packages.
+
+I'll test again including the backported patch. Also, it would be great if
+you can test the patch on your side :)
+
+Thanks,
+Romain
+
+
+Regards, Bernd
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170828/fd48efad/attachment.html>
