@@ -1,38 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 28 Aug 2017 20:56:35 +0300
-Subject: [Buildroot] [PATCH] dnsmasq: fix build without NLS
-Message-ID: <ac762b8a4d2444aa2a914c80e419fab74b5a735a.1503942995.git.baruch@tkos.co.il>
+Date: Mon, 28 Aug 2017 21:16:51 +0300
+Subject: [Buildroot] [PATCH] connman: security bump to version 1.35
+Message-ID: <90e8969c73a1c0e21f3c2f060d590de9172853c1.1503944211.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dnsmasq i18n support requires NLS for the provided gettext utilities.
-Locale support, OTOH, is not required.
+Fixes CVE-2017-12865: stack overflow in dns proxy feature.
 
-Fixes:
-http://autobuild.buildroot.net/results/d45/d453aff1ce1f5e1d380bd7692a4a0565505027a3/
-http://autobuild.buildroot.net/results/fb7/fb7844a239472eb48c18778aa7d515552ccfb4b9/
-http://autobuild.buildroot.net/results/d85/d856ec3e6b28bd723176bb892a56dff5262a6b92/
-
+Cc: Martin Bark <martin@barkynet.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/dnsmasq/dnsmasq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 00a59dac0113..63295ce41090 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -35,7 +35,7 @@ ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
- DNSMASQ_DEPENDENCIES += libidn $(TARGET_NLS_DEPENDENCIES)
- DNSMASQ_MAKE_OPTS += LIBS+=$(TARGET_NLS_LIBS)
- DNSMASQ_COPTS += -DHAVE_IDN
--DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
-+DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
- endif
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index e6485b93a61d..c822bb1fe4f5 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	a9a0808c729c1f348fc36d8cecb52d19b72bc34cb411c502608cb0e0190fc71e	connman-1.34.tar.xz
++sha256	66d7deb98371545c6e417239a9b3b3e3201c1529d08eedf40afbc859842cf2aa	connman-1.35.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 4c19b4b98a86..52c45451d902 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+-CONNMAN_VERSION = 1.34
++CONNMAN_VERSION = 1.35
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
 -- 
 2.14.1
