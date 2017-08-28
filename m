@@ -1,41 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 28 Aug 2017 10:59:59 +0300
-Subject: [Buildroot] [PATCH] mtd: bump to version 2.0.1
-Message-ID: <4ef667c5625c27ecc09972d7535c3b45f9ee9d18.1503907199.git.baruch@tkos.co.il>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Mon, 28 Aug 2017 16:26:24 +0800
+Subject: [Buildroot] minnowboard_max_defconfig,
+ changes to build for 32-bit, fails in the end when installing grub
+In-Reply-To: <20170828095233.398ead1c@windsurf>
+References: <CAEUhbmW6BXHrudGz5LB4=xQYf3-3noyoUzDuryFv39_VUoP_cw@mail.gmail.com>
+ <20170828090545.61959c3c@windsurf>
+ <CAEUhbmXdy31cqK4tMZsW6ghbS0R78wxJGnaFyfHU8QZkQGyHLg@mail.gmail.com>
+ <20170828095233.398ead1c@windsurf>
+Message-ID: <CAEUhbmWLe-YCD6x_S9SrG2HjKmbnsVqHq0toiQqKNN8FpYZ1=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/mtd/mtd.hash | 4 ++--
- package/mtd/mtd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Thomas,
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index 6a234d2df27f..c452654bfbe5 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.0.tar.bz2.asc
--sha256	20a377aa86af4c102e930b0d0bb9859e3a10aeb16445f6a1273989b206a717c8	mtd-utils-2.0.0.tar.bz2
-+# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
-+sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 3bac2d5594d5..e666bf077c1d 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MTD_VERSION = 2.0.0
-+MTD_VERSION = 2.0.1
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPL-2.0
--- 
-2.14.1
+On Mon, Aug 28, 2017 at 3:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 28 Aug 2017 15:47:57 +0800, Bin Meng wrote:
+>
+>> Thanks for the hints. Since I changed "Target Architecture" to i386 in
+>> menuconfig, I see the grub2 platform has also changed to "i386-pc"
+>> automatically, but the built modules
+>> (BR2_TARGET_GRUB2_BUILTIN_MODULES) remains unchanged, and that
+>> explains the build error. Is this a limitation of Kconfig that it
+>> cannot switch BR2_TARGET_GRUB2_BUILTIN_MODULES automatically?
+>
+> Yes.
+>
+>> I did further testing by switching "Target Architecture" back to
+>> x86-64, and I saw grub2 platform did not change to the EFI stuff and
+>> remained as "i386-pc".
+>
+> Yes, welcome to Kconfig :)
+>
+
+Thanks. But do you know why does Kconfig changes grub2 platform to
+"i386-pc" when I changed "Target Architecture" to i386. It should just
+remain unchanged, no?
+
+Regards,
+Bin
