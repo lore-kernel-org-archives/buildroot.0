@@ -1,35 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Aug 2017 22:37:30 +0200
-Subject: [Buildroot] [PATCH v2] add package for pdmenu
-In-Reply-To: <1503931855-20693-1-git-send-email-brock@cottonwoodcomputer.com>
-References: <1503931855-20693-1-git-send-email-brock@cottonwoodcomputer.com>
-Message-ID: <40b2b120-b61b-4169-82b2-e7a5cd5202b8@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 28 Aug 2017 20:47:23 +0000
+Subject: [Buildroot] [Bug 10256] New: Kodi-inputstream-adaptive: download
+ fails (patch included)
+Message-ID: <bug-10256-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Brock,
+https://bugs.busybox.net/show_bug.cgi?id=10256
 
- One small nit...
+            Bug ID: 10256
+           Summary: Kodi-inputstream-adaptive: download fails (patch
+                    included)
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: lipkegu at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On 28-08-17 16:50, Brock Williams wrote:
-> +PDMENU_SITE = http://http.debian.net/debian/pool/main/p/pdmenu
+Created attachment 7211
+  --> https://bugs.busybox.net/attachment.cgi?id=7211&action=edit
+Patch to fix the download link
 
- Debian archive URLs are not stable - when the package is updated in debian and
-it is no longer referred to by any Sources file, it is removed from the archive.
+When building kodi with addon inputstream adaptive, the addon fails to compile,
+due to a missing download location. i included the current version of the
+package for krypton.
 
- Therefore, we always use snapshot.debian.org URLs. They are guaranteed to exist
-in all eternity.
+it would be nice when we get this quickly to the relase version :)
 
- Regards,
- Arnout
+signed-of-by: Guido Lipke <lipkegu@gmail.com>
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
