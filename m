@@ -1,67 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Aug 2017 22:28:08 +0200
-Subject: [Buildroot] [PATCH] pppd: Do not overwrite /etc/resolv.conf
-In-Reply-To: <20170828155604.24229-1-jer@airfi.aero>
-References: <20170828155604.24229-1-jer@airfi.aero>
-Message-ID: <140e8e93-df14-fea5-ada5-4e1aa4636f94@mind.be>
+Date: Mon, 28 Aug 2017 22:37:30 +0200
+Subject: [Buildroot] [PATCH v2] add package for pdmenu
+In-Reply-To: <1503931855-20693-1-git-send-email-brock@cottonwoodcomputer.com>
+References: <1503931855-20693-1-git-send-email-brock@cottonwoodcomputer.com>
+Message-ID: <40b2b120-b61b-4169-82b2-e7a5cd5202b8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Brock,
 
+ One small nit...
 
-On 28-08-17 17:56, Jeroen Roovers wrote:
-> With option usepeerdns, pppd by default writes to /etc/ppp/resolv.conf,
-> which is not very useful and might be impossible. However, when more
-> than one interface can be used for DNS resolution, pppd will overwrite
-> any existing entries when /etc/resolv.conf is used instead, which is
-> bad. 
+On 28-08-17 16:50, Brock Williams wrote:
+> +PDMENU_SITE = http://http.debian.net/debian/pool/main/p/pdmenu
 
- I agree that this is bad.
+ Debian archive URLs are not stable - when the package is updated in debian and
+it is no longer referred to by any Sources file, it is removed from the archive.
 
-> Fix this by setting the path to a place we assume is always
-> writeable, /tmp/ppp-resolv.conf, and which does not interfere with other
-> mechanisms that write DNS resolver configurations.
-
- However, this is a regression. People who currently have ppp as their only
-interface, or who never have ppp and ethernet running at the same time,
-currently have a fully working solution. With this change, DNS doesn't work
-anymore over ppp unless you add some script to merge /tmp/ppp-resolv.conf with
-/tmp/resolv.conf
-
- So I think this patch should be combined with a /etc/ppp/ip-up (and ip-down)
-script that updates /etc/resolv.conf, similar like how udhcpc.script does it.
-
- I guess you must have something like that anyway, otherwise you would never
-have DNS over ppp, right?
+ Therefore, we always use snapshot.debian.org URLs. They are guaranteed to exist
+in all eternity.
 
  Regards,
  Arnout
-
-> ---
->  package/pppd/pppd.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-> index 6139c5b085..47937730d5 100644
-> --- a/package/pppd/pppd.mk
-> +++ b/package/pppd/pppd.mk
-> @@ -36,10 +36,10 @@ PPPD_POST_EXTRACT_HOOKS += PPPD_DROP_INTERNAL_IF_PPOL2TP_H
->  
->  # pppd defaults to /etc/ppp/resolv.conf, which not be writable and is
->  # definitely not useful since the C library only uses
-> -# /etc/resolv.conf. Therefore, we change pppd to use /etc/resolv.conf
-> +# /etc/resolv.conf. Therefore, we change pppd to use /tmp/ppp-resolv.conf
->  # instead.
->  define PPPD_SET_RESOLV_CONF
-> -	$(SED) 's,ppp/resolv.conf,resolv.conf,' $(@D)/pppd/pathnames.h
-> +	$(SED) 's,/etc/ppp/resolv.conf,/tmp/ppp-resolv.conf,' $(@D)/pppd/pathnames.h
->  endef
->  PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
->  
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
