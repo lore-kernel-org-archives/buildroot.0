@@ -1,7 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Aug 2017 08:30:51 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-27
-Message-ID: <20170828063051.2115621F23@mail.free-electrons.com>
+Date: Mon, 28 Aug 2017 09:05:45 +0200
+Subject: [Buildroot] minnowboard_max_defconfig,
+ changes to build for 32-bit, fails in the end when installing grub
+In-Reply-To: <CAEUhbmW6BXHrudGz5LB4=xQYf3-3noyoUzDuryFv39_VUoP_cw@mail.gmail.com>
+References: <CAEUhbmW6BXHrudGz5LB4=xQYf3-3noyoUzDuryFv39_VUoP_cw@mail.gmail.com>
+Message-ID: <20170828090545.61959c3c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +13,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-Build statistics for 2017-08-27
-================================
+On Sun, 27 Aug 2017 19:57:48 +0800, Bin Meng wrote:
 
-      successes : 167
-       failures : 8  
-       timeouts : 0  
-          TOTAL : 175
+> I wanted to build a 32-bit rootfs for minnowboard max, so I started by:
+> 
+> $ make minnowboard_max_defconfig
+> $ make menuconfig
+> change "Target options" -> "Target Architecture" to i386, save and exit
+> $ make
+> 
+> It fails in the end.
+> 
+> mkdir -p /buildroot/output/images/
+> /buildroot/output/host/bin/grub-mkimage -d
+> /buildroot/output/host/lib/grub/i386-pc -O i386-pc -o
+> /buildroot/output/images/grub.img -p "(hd0,msdos1)/boot/grub"  boot
+> linux ext2 fat squash4 part_msdos part_gpt normal efi_gop
+> /buildroot/output/host/bin/grub-mkimage: error: cannot open
+> `/buildroot/output/host/lib/grub/i386-pc/efi_gop.mod': No such file or
+> directory.
+> package/pkg-generic.mk:308: recipe for target
+> '/buildroot/output/build/grub2-2.02/.stamp_target_installed' failed
+> make: *** [/buildroot/output/build/grub2-2.02/.stamp_target_installed] Error 1
+> 
+> Am I missing anything?
 
-Classification of failures by reason
-====================================
+Yes: you're changing a defconfig to a different configuration, so
+obviously, you can get build failures.
 
-                    vde2-2.3.2 | 3 
-                  cc-tool-0.26 | 1 
-                   mp4v2-2.0.0 | 1 
-                    mpd-0.20.9 | 1 
-                     php-7.1.7 | 1 
-             transmission-2.92 | 1 
+By switching to i386, grub2 is no longer configured with
+BR2_TARGET_GRUB2_X86_64_EFI (as specified in the defconfig), but with
+BR2_TARGET_GRUB2_I386_PC. But BR2_TARGET_GRUB2_BUILTIN_MODULES still
+contains efi_gop, which isn't built because you're no longer building
+an EFI-capable grub2.
 
-
-Detail of failures
-===================
-
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/8877916c24e10b55b89a2836bd168e4fa0e1ee9f |     
-         arm |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/04912164ec330d9dd30c547927ec8f6b76ff7882 |     
-microblazeel |                     mpd-0.20.9 | NOK | http://autobuild.buildroot.net/results/3218f799d6209f043b3e0667156f635e2e53b3a7 |     
-         arm |                      php-7.1.7 | NOK | http://autobuild.buildroot.net/results/7130c6b432a24df27b8c0bbaf1bcc5d5fe22a729 | ORPH
-        mips |              transmission-2.92 | NOK | http://autobuild.buildroot.net/results/521b990e5181ed7304d812e5fa62bd46ab7087f0 |     
-         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/9f7fde331bac1ce3a4f379701a1541aca91302f7 |     
-         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/2a1f73bfaf7097d42165d5c5f6c24d1aad72c929 |     
-         arm |                     vde2-2.3.2 | NOK | http://autobuild.buildroot.net/results/ed9abb1aed2ae87971ae119f4bca83cbf9861466 |     
-
+Thomas
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
