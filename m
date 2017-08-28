@@ -1,61 +1,46 @@
-From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Date: Mon, 28 Aug 2017 11:15:19 +0200
-Subject: [Buildroot] [PATCH] libkcapi: fix build with gcc 7.x
-Message-ID: <1503911719-25545-1-git-send-email-marcin.nowakowski@imgtec.com>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Mon, 28 Aug 2017 17:24:22 +0800
+Subject: [Buildroot] minnowboard_max_defconfig,
+ changes to build for 32-bit, fails in the end when installing grub
+In-Reply-To: <20170828110746.4efbc22c@windsurf>
+References: <CAEUhbmW6BXHrudGz5LB4=xQYf3-3noyoUzDuryFv39_VUoP_cw@mail.gmail.com>
+ <20170828090545.61959c3c@windsurf>
+ <CAEUhbmXdy31cqK4tMZsW6ghbS0R78wxJGnaFyfHU8QZkQGyHLg@mail.gmail.com>
+ <20170828095233.398ead1c@windsurf>
+ <CAEUhbmWLe-YCD6x_S9SrG2HjKmbnsVqHq0toiQqKNN8FpYZ1=A@mail.gmail.com>
+ <20170828110746.4efbc22c@windsurf>
+Message-ID: <CAEUhbmVhOXDxmx0ZOPjoNfkrvQU8EU9wz-V6tW63pbqWy9TO8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream patch to make libkcapi build with gcc 7.x.
+Hi Thomas,
 
-Fixes:
+On Mon, Aug 28, 2017 at 5:07 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 28 Aug 2017 16:26:24 +0800, Bin Meng wrote:
+>
+>> Thanks. But do you know why does Kconfig changes grub2 platform to
+>> "i386-pc" when I changed "Target Architecture" to i386. It should just
+>> remain unchanged, no?
+>
+> Look at the config option dependencies please.
+>
+> The minnowboard_max_defconfig has:
+>
+> BR2_TARGET_GRUB2_X86_64_EFI=y
+>
+> But BR2_TARGET_GRUB2_X86_64_EFI has "depends on BR2_ARCH_IS_64". So
+> when you switch from x86-64 to i386, this option is no longer
+> available. Therefore Kconfig reverts back to the first possible choice
+> between BR2_TARGET_GRUB2_I386_PC and BR2_TARGET_GRUB2_I386_EFI.
 
-  http://autobuild.buildroot.net/results/01f/01f207ccd1cf5fc030510cb7a4eb2649e124b49b/
+Thank you. That makes perfect sense. I am pretty new to buildroot, but
+I should have read the manual and done some investigation myself!
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
----
- ...1-Have-sufficient-memory-size-for-message.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch
-
-diff --git a/package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch b/package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch
-new file mode 100644
-index 0000000..7526efe
---- /dev/null
-+++ b/package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch
-@@ -0,0 +1,31 @@
-+From b56deda7c13c257050fdbdd71c1a5a47b78aa63e Mon Sep 17 00:00:00 2001
-+From: Stephan Mueller <smueller@chronox.de>
-+Date: Thu, 3 Aug 2017 17:50:51 +0200
-+Subject: [PATCH] Have sufficient memory size for message
-+
-+With GCC 7, the size of the buffer in snprintf is checked. The
-+occurrence here is found to be too small.
-+
-+Signed-off-by: Stephan Mueller <smueller@chronox.de>
-+
-+[Upstream commit: https://github.com/smuellerDD/libkcapi/commit/b56deda7c13c257050fdbdd71c1a5a47b78aa63e]
-+---
-+ speed-test/cryptoperf-base.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/speed-test/cryptoperf-base.c b/speed-test/cryptoperf-base.c
-+index 8766ca7..07384ae 100644
-+--- a/speed-test/cryptoperf-base.c
-++++ b/speed-test/cryptoperf-base.c
-+@@ -172,7 +172,7 @@ char *cp_print_status(struct cp_test *test, int raw)
-+ 			(unsigned long)(processed_bytes/totaltime),
-+ 			(unsigned long)ops);
-+ 	} else {
-+-		#define VALLEN 10
-++		#define VALLEN 23
-+ 		char byteseconds[VALLEN + 1];
-+ 
-+ 		memset(byteseconds, 0, sizeof(byteseconds));
-+-- 
-+2.7.4
-+
--- 
-2.7.4
+Regards,
+Bin
