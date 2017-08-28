@@ -1,63 +1,111 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Aug 2017 22:57:33 +0200
-Subject: [Buildroot] Failed to build libexoxy with nvidia-driver
-In-Reply-To: <1503935622.673191.1087468320.18EAD29A@webmail.messagingengine.com>
-References: <1503935622.673191.1087468320.18EAD29A@webmail.messagingengine.com>
-Message-ID: <d5446a67-383f-a813-58c2-2d51d6999181@mind.be>
+From: Brock Williams <brock@cottonwoodcomputer.com>
+Date: Mon, 28 Aug 2017 16:22:29 -0600
+Subject: [Buildroot] [PATCH v3] add package for pdmenu
+Message-ID: <1503958949-17690-1-git-send-email-brock@cottonwoodcomputer.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Brock Williams <brock@cottonwoodcomputer.com>
+---
+Changes v2 -> v3:
+  - change to debian snapshot url
 
+Changes v1 -> v2:
+  - feedback from Thomas Petazzoni
+  - add to DEVELOPERS
+  - fix sorting in Config.in
+  - change depends on to select
+  - fix whitespace / wrapping 
+  - add hash file
+  - add comment header
 
-On 28-08-17 17:53, Alexandre Maumen? wrote:
-> Hi,
-> 
-> I'm trying to build libepoxy with nvidia-driver but it fails with this
-> error:
-> 
-> checking for EGL... no
-> configure: error: Package requirements (egl) were not met:
-> 
-> Package egl was not found in the pkg-config search path.
-> Perhaps you should add the directory containing `egl.pc'
-> to the PKG_CONFIG_PATH environment variable
-> Package 'egl', required by 'world', not found
+ DEVELOPERS                 |  3 +++
+ package/Config.in          |  1 +
+ package/pdmenu/Config.in   | 15 +++++++++++++++
+ package/pdmenu/pdmenu.hash |  1 +
+ package/pdmenu/pdmenu.mk   | 15 +++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/pdmenu/Config.in
+ create mode 100644 package/pdmenu/pdmenu.hash
+ create mode 100644 package/pdmenu/pdmenu.mk
 
- Indeed, nvidia-driver selects BR2_PACKAGE_HAS_LIBEGL but doesn't install egl.pc
-(it does install gl.pc). And there's also no glesv2.pc. J?r?me, Yann, could you
-look into it?
-
- Perhaps we should add a check in the lib*gl* virtual packages that they install
-a .pc file...
-
- Regards,
- Arnout
-
-> 
-> Consider adjusting the PKG_CONFIG_PATH environment variable if you
-> installed software in a non-standard prefix.
-> 
-> Alternatively, you may set the environment variables EGL_CFLAGS
-> and EGL_LIBS to avoid the need to call pkg-config.
-> See the pkg-config man page for more details.
-> 
-> I'm new to buildroot and I don't know much about Nvidia binary drivers.
-> Any help will be more than welcome.
-> 
-> Regards,
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 73686e2..f3e0dbd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -326,6 +326,9 @@ N:	Bogdan Radulescu <bogdan@nimblex.net>
+ F:	package/iftop/
+ F:	package/ncdu/
+ 
++N:	Brock Williams <brock@cottonwoodcomputer.com>
++F:	package/pdmenu/
++
+ N:	Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+ F:	package/pps-tools/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index a512827..d837a08 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1837,6 +1837,7 @@ comment "Utilities"
+ 	source "package/lockfile-progs/Config.in"
+ 	source "package/logrotate/Config.in"
+ 	source "package/logsurfer/Config.in"
++	source "package/pdmenu/Config.in"
+ 	source "package/pinentry/Config.in"
+ 	source "package/ranger/Config.in"
+ 	source "package/screen/Config.in"
+diff --git a/package/pdmenu/Config.in b/package/pdmenu/Config.in
+new file mode 100644
+index 0000000..8f35f61
+--- /dev/null
++++ b/package/pdmenu/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PDMENU
++	bool "pdmenu"
++	depends on BR2_USE_MMU # slang
++	select BR2_PACKAGE_SLANG
++	help
++	  Pdmenu is a full screen menuing system for Unix. It is
++	  designed to be easy to use, and is suitable as a login shell
++	  for inexperienced users, or it can just be ran at the
++	  command line as a handy menu.
++
++	  Pdmenu features color support and GPM mouse support at the
++	  Linux console. It was developed on Linux, and has now been
++	  compiled on many other unixes without problems.
++
++	  https://joeyh.name/code/pdmenu/
+diff --git a/package/pdmenu/pdmenu.hash b/package/pdmenu/pdmenu.hash
+new file mode 100644
+index 0000000..be6d27a
+--- /dev/null
++++ b/package/pdmenu/pdmenu.hash
+@@ -0,0 +1 @@
++md5	0623b992572511d5fd90d481c426fa40	pdmenu_1.3.4.tar.gz
+diff --git a/package/pdmenu/pdmenu.mk b/package/pdmenu/pdmenu.mk
+new file mode 100644
+index 0000000..f3d9fba
+--- /dev/null
++++ b/package/pdmenu/pdmenu.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# pdmenu
++#
++################################################################################
++
++PDMENU_VERSION = 1.3.4
++PDMENU_SOURCE = pdmenu_$(PDMENU_VERSION).tar.gz
++PDMENU_SITE = http://snapshot.debian.org/archive/debian/20170828T160058Z/pool/main/p/pdmenu
++PDMENU_LICENSE = GPL-2.0+
++PDMENU_LICENSE_FILES = COPYING.GPLv2
++PDMENU_DEPENDENCIES = slang
++PDMENU_INSTALL_TARGET_OPTS = INSTALL_PREFIX=$(TARGET_DIR) install
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
