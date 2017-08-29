@@ -1,66 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 23:27:58 +0200
-Subject: [Buildroot] [git commit] bcusdk: eibd: drop local clock_gettime in
-	USB backends
-Message-ID: <20170829212040.6D172806C1@busybox.osuosl.org>
+Date: Tue, 29 Aug 2017 23:26:26 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 10}.x series
+Message-ID: <20170829212040.5AFA780AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc4f5598dccc191a1e2c6268fdcef1935e2fa212
+commit: https://git.buildroot.net/buildroot/commit/?id=fec74492eefbf077cfaaefd8d78b6582313dddd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-clock_gettime is defined locally, and calls pth_int_time, which
-in turn calls clock_gettime.
-The USB backend shouldn't overrule clock_gettime in the first place.
-This patch fixes this endless recursion by removing the local defition.
-
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...endless-recursion-when-using-USB-backends.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch b/package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch
-new file mode 100644
-index 0000000..3b90289
---- /dev/null
-+++ b/package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch
-@@ -0,0 +1,35 @@
-+From 6bd1b4958e949d83468e053c34bf6c89d14d687a Mon Sep 17 00:00:00 2001
-+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-+Date: Fri, 25 Aug 2017 23:01:14 +0200
-+Subject: [PATCH] eibd: drop local clock_gettime in USB backends
-+
-+clock_gettime is defined locally, and calls pth_int_time, which
-+in turn calls clock_gettime.
-+The USB backend shouldn't overrule clock_gettime in the first place.
-+This patch fixes this endless recursion by removing the local defition.
-+
-+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-+---
-+ eibd/usb/linux_usbfs.c | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/eibd/usb/linux_usbfs.c b/eibd/usb/linux_usbfs.c
-+index c3ec410..957b908 100644
-+--- a/eibd/usb/linux_usbfs.c
-++++ b/eibd/usb/linux_usbfs.c
-+@@ -52,12 +52,6 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex)
-+ 	return 0;
-+ }
-+ 
-+-int clock_gettime(clockid_t clk_id, struct timespec *tp)
-+-{
-+-	pth_int_time (tp);
-+-	return 0;
-+-}
-+-
-+ /* sysfs vs usbfs:
-+  * opening a usbfs node causes the device to be resumed, so we attempt to
-+  * avoid this during enumeration.
-+-- 
-+1.8.5.rc3
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a45172e..992e31b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -231,9 +231,9 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.89"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.92"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.84"	if BR2_KERNEL_HEADERS_4_4
