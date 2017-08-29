@@ -1,78 +1,78 @@
-From: =?utf-8?Q?Alexandre=20Maumen=C3=A9?= <alexandre@maumene.org>
-Date: Tue, 29 Aug 2017 10:13:58 +0800
-Subject: [Buildroot] Failed to build libexoxy with nvidia-driver
-In-Reply-To: <d5446a67-383f-a813-58c2-2d51d6999181@mind.be>
-References: <1503935622.673191.1087468320.18EAD29A@webmail.messagingengine.com>
- <d5446a67-383f-a813-58c2-2d51d6999181@mind.be>
-Message-ID: <1503972838.2604272.1088038088.62A29A8E@webmail.messagingengine.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 29 Aug 2017 06:30:57 +0200
+Subject: [Buildroot] [PATCH] uclibc-ng-test: update to latest
+Message-ID: <20170829043057.GA31651@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ .../uclibc-ng-test/0001-disable-for-glibc.patch    | 40 ----------------------
+ package/uclibc-ng-test/uclibc-ng-test.mk           |  2 +-
+ 2 files changed, 1 insertion(+), 41 deletions(-)
+ delete mode 100644 package/uclibc-ng-test/0001-disable-for-glibc.patch
 
-I've copied the egl.pc from
-package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc to
-package/nvidia-driver and added this line $(INSTALL) -D -m 0644
-package/nvidia-driver/egl.pc $(STAGING_DIR)/usr/lib/pkgconfig/egl.pc to
-package/nvidia-driver/nvidia-drive.mk and it seems to compile fine now.
-
-Thanks for your help :)
-
-On Tue, Aug 29, 2017, at 04:57 AM, Arnout Vandecappelle wrote:
-> 
-> 
-> On 28-08-17 17:53, Alexandre Maumen? wrote:
-> > Hi,
-> > 
-> > I'm trying to build libepoxy with nvidia-driver but it fails with this
-> > error:
-> > 
-> > checking for EGL... no
-> > configure: error: Package requirements (egl) were not met:
-> > 
-> > Package egl was not found in the pkg-config search path.
-> > Perhaps you should add the directory containing `egl.pc'
-> > to the PKG_CONFIG_PATH environment variable
-> > Package 'egl', required by 'world', not found
-> 
->  Indeed, nvidia-driver selects BR2_PACKAGE_HAS_LIBEGL but doesn't install
->  egl.pc
-> (it does install gl.pc). And there's also no glesv2.pc. J?r?me, Yann,
-> could you
-> look into it?
-> 
->  Perhaps we should add a check in the lib*gl* virtual packages that they
->  install
-> a .pc file...
-> 
->  Regards,
->  Arnout
-> 
-> > 
-> > Consider adjusting the PKG_CONFIG_PATH environment variable if you
-> > installed software in a non-standard prefix.
-> > 
-> > Alternatively, you may set the environment variables EGL_CFLAGS
-> > and EGL_LIBS to avoid the need to call pkg-config.
-> > See the pkg-config man page for more details.
-> > 
-> > I'm new to buildroot and I don't know much about Nvidia binary drivers.
-> > Any help will be more than welcome.
-> > 
-> > Regards,
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/uclibc-ng-test/0001-disable-for-glibc.patch b/package/uclibc-ng-test/0001-disable-for-glibc.patch
+deleted file mode 100644
+index 13786c9..0000000
+--- a/package/uclibc-ng-test/0001-disable-for-glibc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 787e584f18afc967d91cfe1a8443df2657579ecb Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Fri, 12 May 2017 00:44:01 +0200
+-Subject: [PATCH] disable for glibc
+-
+-uclibc-ng-test is broken with glibc 2.25 due to pthread_cond_t changes introduced by [1].
+-Disable test-cond22 for glibc based toolchain.
+-
+-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=ed19993b5b0d05d62cc883571519a67dae481a14
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- test/nptl/tst-cond22.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/test/nptl/tst-cond22.c b/test/nptl/tst-cond22.c
+-index 3255cc0..23697dd 100644
+---- a/test/nptl/tst-cond22.c
+-+++ b/test/nptl/tst-cond22.c
+-@@ -2,7 +2,7 @@
+- #include <stdio.h>
+- #include <stdlib.h>
+- 
+--#if defined(__GLIBC__) || defined(__UCLIBC__)
+-+#if defined(__UCLIBC__)
+- static pthread_barrier_t b;
+- static pthread_cond_t c = PTHREAD_COND_INITIALIZER;
+- static pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+-@@ -54,7 +54,7 @@ tf (void *arg)
+- static int
+- do_test (void)
+- {
+--#if defined(__GLIBC__) || defined(__UCLIBC__)
+-+#if defined(__UCLIBC__)
+-   int status = 0;
+- 
+-   if (pthread_barrier_init (&b, NULL, 2) != 0)
+--- 
+-2.9.3
+-
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index 93736ed..3fdfe37 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_NG_TEST_VERSION = c9b9876cefc142a23aa622b821290ed16af80058
++UCLIBC_NG_TEST_VERSION = c4d54bde7772b55df04399ecb355769c5ac31015
+ UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
+ UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
+ UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+-- 
+2.1.4
