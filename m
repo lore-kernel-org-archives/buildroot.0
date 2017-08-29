@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 15:44:56 +0200
-Subject: [Buildroot] [git commit] package/wayland: bump version to 1.14.0
-Message-ID: <20170902130619.A87758016A@busybox.osuosl.org>
+Date: Tue, 29 Aug 2017 21:57:27 +0200
+Subject: [Buildroot] [git commit] tslib: update to version 1.12
+Message-ID: <20170902130620.2E65F8016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9f58bd4da216d2f9af40a0b053cb902dc73243a
+commit: https://git.buildroot.net/buildroot/commit/?id=5ba888a29784c3edd54594da5f72cac60722eaa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream.
+The release page has a short changelog overview:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+    https://github.com/kergoth/tslib/releases/tag/1.12
+
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wayland/wayland.hash | 7 +++++--
- package/wayland/wayland.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 9b2c01d..c46aca2 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,2 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/033193.html
--sha256  69b052c031a61e89af7cc8780893d0da1e301492352aa449dee9345043e6fe51	wayland-1.13.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-August/034748.html
-+md5  0235f6075c32c3be61cff94fa0b9f108  wayland-1.14.0.tar.xz
-+sha1 53a443be3bafe73209bbc49ef2cb134ed16e0141  wayland-1.14.0.tar.xz
-+sha256 ed80cabc0961a759a42092e2c39aabfc1ec9a13c86c98bbe2b812f008da27ab8  wayland-1.14.0.tar.xz
-+sha512 bd38b2b8963d4d98d42c270e5d7dbff6323789a173b19b67a18258424fd8adee5021b282c9d7f6dad0bd25aa0160e76aecd8ed803d4eb25d911ef0a81cd713a5  wayland-1.14.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index bd1030e..10710a8 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 87d72ac..f053c6c 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# https://github.com/kergoth/tslib/releases/download/1.11/tslib-1.11.tar.xz.sha256
+-sha256  90d22b2f1b6dc9899d9491bc0480dfdcb2b55ff6e620ebb999d607aa5389af06  tslib-1.11.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.12/tslib-1.12.tar.xz.sha256
++sha256  237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83  tslib-1.12.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 5190465..2b4320d 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.13.0
-+WAYLAND_VERSION = 1.14.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-TSLIB_VERSION = 1.11
++TSLIB_VERSION = 1.12
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
