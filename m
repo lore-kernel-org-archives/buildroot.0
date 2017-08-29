@@ -1,64 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Aug 2017 23:24:19 +0200
-Subject: [Buildroot] [PATCH 2/5] fs/custom: generate complete,
- partition-based device images
-In-Reply-To: <trinity-8f575ef2-2fac-4332-b16e-a4c7bd66652a-1504006025728@3c-app-gmx-bs19>
-References: <trinity-8f575ef2-2fac-4332-b16e-a4c7bd66652a-1504006025728@3c-app-gmx-bs19>
-Message-ID: <20170829212419.GC3338@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Aug 2017 23:26:01 +0200
+Subject: [Buildroot] [git commit] package/squid: fix typo
+Message-ID: <20170829211840.C190381E4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7c5526c79cd74592cff55f8344216ad0a968119a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-08-29 13:27 +0200, Jan Schmidt spake thusly:
-> I was looking for a way to customize the root file system in the
-> way, that all except /var is read only. And /var is at a separate
-> partition which will be enlarged at the first start to the
-> maximum size of the storage media. (I'm using RPi 3)
-> 
-> I'm using BR 2017.02.1. The above patch seems not to be included
-> yet. And I didn't fount any discussion about accepting the patch.
-> Is there a other way to solve my issue?
+Fixed typo added by
+https://git.buildroot.net/buildroot/commit/package/squid?id=d2f7d0d72cd7e00ffbe869011d200f0a4a53e7a5
 
-At first, I was very puzzled about what patch this was refering to. ANd
-it truns out it was something I wrote almost 4 years ago... Damn, time
-flies...
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Anyway, back on topic: no, that was not accepted at all, see the
-discussion in the thread:
-    https://patchwork.ozlabs.org/patch/306631/
-
-So, the best option for you is that you do something like:
-
-  - only generate a tarball out of Buildroot,
-  - provide a post-image script that:
-    - extract the tarball into ${TMP_ROOT_DIR}
-    - generate an ext2 (or other writable FS) out of ${TMP_ROOT_DIR}/var
-    - remove ${TMP_ROOT_DIR}/var/*
-    - tweak ${TMP_ROOT_DIR}/etc/fstab to add the mountpoint for /var
-    - create the readonly root fs with out of ${TMP_ROOT_DIR}/
-
-Note that the post-image script should run under fakeroot, and Buildroot
-does not guarantee that, so your script would probalby need to start
-with something like:
-
-    if [ $(id -u) -ne 0 ]; then
-        fakeroot "${0}" "${@}"
-        exit ${?}
-    fi
-
-which would ensure that the script runs under fakeroot.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index bcb3744..d334d14 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -21,7 +21,7 @@ SQUID_CONF_ENV = \
+ 	ac_cv_func___va_copy=yes \
+ 	ac_cv_func_strnstr=no \
+ 	ac_cv_have_squid=yes \
+-	BUILXCXX="$(HOSTCXX)" \
++	BUILDCXX="$(HOSTCXX)" \
+ 	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
+ SQUID_CONF_OPTS = \
+ 	--enable-async-io=8 \
