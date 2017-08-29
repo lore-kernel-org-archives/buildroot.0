@@ -1,33 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 22:10:19 +0200
-Subject: [Buildroot] [git commit] package/iucode-tool: fix upstream source
-	URL
-Message-ID: <20170829200313.E7B4E81F8A@busybox.osuosl.org>
+Date: Tue, 29 Aug 2017 22:11:16 +0200
+Subject: [Buildroot] [PATCH 3/6] package/iucode-tool: fix upstream
+ source URL
+In-Reply-To: <20170829191005.19697-3-bernd.kuhls@t-online.de>
+References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
+ <20170829191005.19697-3-bernd.kuhls@t-online.de>
+Message-ID: <20170829221116.101d28c7@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f2369b5f078df99ea32d14e30803f3c46200c07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iucode-tool/iucode-tool.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 29 Aug 2017 21:10:02 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/iucode-tool/iucode-tool.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index f28698b..e8ae36c 100644
---- a/package/iucode-tool/iucode-tool.mk
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -6,7 +6,7 @@
- 
- IUCODE_TOOL_VERSION = 1.5
- IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
--IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/latest
-+IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- IUCODE_TOOL_CONF_ENV = LIBS="-largp"
- IUCODE_TOOL_DEPENDENCIES = argp-standalone
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
