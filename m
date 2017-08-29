@@ -1,47 +1,52 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Tue, 29 Aug 2017 17:02:33 -0500
-Subject: [Buildroot] [PATCH 1/1] package/strongswan: Install libraries
-	to /usr/lib
-In-Reply-To: <20170829215144.GA3684@scaer>
-References: <1504042220-54681-1-git-send-email-sam.voss@rockwellcollins.com>
- <20170829215144.GA3684@scaer>
-Message-ID: <CAH=K+6nip-5u+jh7dDhZWHuu58c60MA83k_KNqZTb-SR6amaRA@mail.gmail.com>
+From: Brett Stahlman <brettstahlman@gmail.com>
+Date: Tue, 29 Aug 2017 17:19:52 -0500
+Subject: [Buildroot] Buildroot linux kernel configuration confusion
+Message-ID: <CAOyxqKmX1VPDxcj-m_2jj1WcbujtjS6DFAYqAWkf3nK1dPcxUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+I've read the sections in the manual discussing linux kernel
+configuration, and there are several points I on which I could use
+clarification...
 
-On Tue, Aug 29, 2017 at 4:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Sam, All,
-[..]
->> --- a/package/strongswan/strongswan.mk
->> +++ b/package/strongswan/strongswan.mk
->> @@ -36,7 +36,8 @@ STRONGSWAN_CONF_OPTS += \
->>       --enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no) \
->>       --enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
->>       --enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
->> -     --enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
->> +     --enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
->> +     --with-ipseclibdir=/usr/lib
->
-> The issue behind that, is that this directory is also used to derive the
-> location where to store plugins and the "IMC and IMV dynamic librariers"
-> (typo not mine for once!).
->
-> So, the plugins would end up in /usr/lib/plugins and the libs in
-> /usr/lib/imcvs.
+IIUC, BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG and
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE are a pair: when the former is set
+(y), the latter is expected to point to a file that will be filled in
+by either `make linux-menuconfig` or `make linux-update-defconfig`.
+The documentation seems to suggest that the former will create, but
+the latter merely updates an existing file. But where do the settings
+come from? And when are these commands meant to be run? As part of a
+normal build, or do I need to invoke manually only after making
+changes to the configuration somehow?
 
-Good point, I didn't realize this propagates that way!
+I'm also a bit confused about BR2_LINUX_KERNEL_USE_DEFCONFIG and the
+associated BR2_LINUX_KERNEL_DEFCONFIG. IIUC, the former enables the
+feature, and the latter specifies a file that (in contrast to
+BR2_LINUX_CUSTOM_CONFIG_FILE) is meant to be created manually by the
+user, possibly using an arch-specific defconfig file as a starting
+point. Correct so far? It appears to me that this file is used with
+`scripts/kconfig/conf --defconfig` to generate an initial .config
+file, and that this initial .config file is subsequently updated by a
+call to merge_config.sh, which uses the settings in a "fragment file"
+to override the defaults. Finally, I can see that there's a call to
+`scripts/kconfig/conf --olddefconfig Kconfig`, which IIUC is meant to
+allow user the option of overriding the defaults. But since this is
+being run in a non-interactive build, I'm not sure what the purpose of
+this call is...
 
-> This is not satifactory (at least the plugins stuff), so I'd suggest we
-> also force those locations (to their original values):
->
->     --with-plugindir=/usr/lib/ipsec/plugins
->     --with-imcvdir=/usr/lib/ipsec/imcvs
->
-> Could you check that, please? ;-)
+Finally, I'm fuzzy on manual vs automatic updates of .config. I know
+.config can be updated by commands like `make menuconfig`, which allow
+the user to make changes interactively, but I can see that it's also
+updated automatically by a standard buildroot `make all`. Once I've
+updated the .config file, when will it be overwritten? I'm assuming it
+shouldn't be overwritten by a standard make, provided that none of the
+fragment files or defconfig files has changed. Correct?
 
-Absolutely, I will submit a v2 after testing
+Any big picture overview of the configuration mechanism would be
+greatly appreciated...
+
+Thanks,
+Brett S.
