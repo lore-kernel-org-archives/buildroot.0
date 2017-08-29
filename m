@@ -1,24 +1,25 @@
-From: Jan Schmidt <Jan.Schmidt@gmx.de>
-Date: Tue, 29 Aug 2017 13:27:05 +0200
-Subject: [Buildroot] [PATCH 2/5] fs/custom: generate complete,
- partition-based device images
-Message-ID: <trinity-8f575ef2-2fac-4332-b16e-a4c7bd66652a-1504006025728@3c-app-gmx-bs19>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 Aug 2017 12:02:12 +0000
+Subject: [Buildroot] [Bug 10261] Grub2 fails to build for x86_64
+In-Reply-To: <bug-10261-163@https.bugs.busybox.net/>
+References: <bug-10261-163@https.bugs.busybox.net/>
+Message-ID: <bug-10261-163-fyX7K9PkQp@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=10261
 
-I was looking for a way to customize the root file system in the
-way, that all except /var is read only. And /var is at a separate
-partition which will be enlarged at the first start to the
-maximum size of the storage media. (I'm using RPi 3)
+--- Comment #3 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
+Created attachment 7216
+  --> https://bugs.busybox.net/attachment.cgi?id=7216&action=edit
+Config file
 
-I'm using BR 2017.02.1. The above patch seems not to be included
-yet. And I didn't fount any discussion about accepting the patch.
-Is there a other way to solve my issue?
+Sorry I thought I had attached the config file, but it turns out it is too
+large to attach. So I've bzip2'ed it now
 
-Thanks and regards,
-Jan Schmidt
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
