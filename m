@@ -1,109 +1,51 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 Aug 2017 08:03:12 +0300
-Subject: [Buildroot] [PATCH next 2/2] dnsmasq: simplify build configuration
-In-Reply-To: <1026a6ca932ca0b0fca113a766ecd2d5d3ad89c7.1503982992.git.baruch@tkos.co.il>
-References: <1026a6ca932ca0b0fca113a766ecd2d5d3ad89c7.1503982992.git.baruch@tkos.co.il>
-Message-ID: <63b4508028ac952e2bb27b1708975fc6c938e0a8.1503982992.git.baruch@tkos.co.il>
+Date: Tue, 29 Aug 2017 08:03:11 +0300
+Subject: [Buildroot] [PATCH next 1/2] dnsmasq: bump to version 2.77
+Message-ID: <1026a6ca932ca0b0fca113a766ecd2d5d3ad89c7.1503982992.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop direct sed'ing of config.h for HAVE_CONNTRACK, HAVE_LUASCRIPT, and
-HAVE_DBUS. Use MAKE_OPTS COPTS parameters instead, like we do already
-for all other options.
-
-Rename DNSMASQ_ENABLE_LUA to DNSMASQ_TWEAK_LIBLUA since it now does only
-that.
-
-Merge two conntrack and three dbus conditional sections.
+Supported Lua version is now 5.2.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/dnsmasq/dnsmasq.mk | 42 ++++++++++--------------------------------
- 1 file changed, 10 insertions(+), 32 deletions(-)
+ package/dnsmasq/dnsmasq.hash | 3 ++-
+ package/dnsmasq/dnsmasq.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index a73e911a2654..f7e9190f2390 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256	4b92698dee19ca0cb2a8f2e48f1d2dffd01a21eb15d1fbed4cf085630c8c9f96	dnsmasq-2.76.tar.xz
++# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.77.tar.xz.asc
++sha256	6eac3b1c50ae25170e3ff8c96ddb55236cf45007633fdb8a35b1f3e02f5f8b8a	dnsmasq-2.77.tar.xz
 diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index ffbbeb8f8768..925cd7b6dabd 100644
+index 63295ce41090..ffbbeb8f8768 100644
 --- a/package/dnsmasq/dnsmasq.mk
 +++ b/package/dnsmasq/dnsmasq.mk
-@@ -40,32 +40,31 @@ endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
- DNSMASQ_DEPENDENCIES += libnetfilter_conntrack
--endif
--
--ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
--define DNSMASQ_ENABLE_CONNTRACK
--	$(SED) 's^.*#define HAVE_CONNTRACK.*^#define HAVE_CONNTRACK^' \
--		$(DNSMASQ_DIR)/src/config.h
--endef
-+DNSMASQ_COPTS += -DHAVE_CONNTRACK
+-DNSMASQ_VERSION = 2.76
++DNSMASQ_VERSION = 2.77
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -58,7 +58,7 @@ DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
  endif
  
- ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
- DNSMASQ_DEPENDENCIES += lua
-+DNSMASQ_COPTS += -DHAVE_LUASCRIPT
- 
- # liblua uses dlopen when dynamically linked
- ifneq ($(BR2_STATIC_LIBS),y)
- DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
- endif
- 
--define DNSMASQ_ENABLE_LUA
-+define DNSMASQ_TWEAK_LIBLUA
- 	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
--	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
--		$(DNSMASQ_DIR)/src/config.h
+ define DNSMASQ_ENABLE_LUA
+-	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
++	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
+ 	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
+ 		$(DNSMASQ_DIR)/src/config.h
  endef
- endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
- DNSMASQ_DEPENDENCIES += dbus
-+DNSMASQ_COPTS += -DHAVE_DBUS
-+
-+define DNSMASQ_INSTALL_DBUS
-+	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
-+		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
-+endef
- endif
- 
- define DNSMASQ_FIX_PKGCONFIG
-@@ -73,33 +72,12 @@ define DNSMASQ_FIX_PKGCONFIG
- 		$(DNSMASQ_DIR)/Makefile
- endef
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--define DNSMASQ_ENABLE_DBUS
--	$(SED) 's^.*#define HAVE_DBUS.*^#define HAVE_DBUS^' \
--		$(DNSMASQ_DIR)/src/config.h
--endef
--else
--define DNSMASQ_ENABLE_DBUS
--	$(SED) 's^.*#define HAVE_DBUS.*^/* #define HAVE_DBUS */^' \
--		$(DNSMASQ_DIR)/src/config.h
--endef
--endif
--
- define DNSMASQ_BUILD_CMDS
- 	$(DNSMASQ_FIX_PKGCONFIG)
--	$(DNSMASQ_ENABLE_DBUS)
--	$(DNSMASQ_ENABLE_LUA)
--	$(DNSMASQ_ENABLE_CONNTRACK)
-+	$(DNSMASQ_TWEAK_LIBLUA)
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
- endef
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--define DNSMASQ_INSTALL_DBUS
--	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
--		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
--endef
--endif
--
- define DNSMASQ_INSTALL_TARGET_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
- 	mkdir -p $(TARGET_DIR)/var/lib/misc/
 -- 
 2.14.1
