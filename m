@@ -1,26 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 29 Aug 2017 09:56:28 +0000
-Subject: [Buildroot] [Bug 10261] Grub2 fails to build for x86_64
-In-Reply-To: <bug-10261-163@https.bugs.busybox.net/>
-References: <bug-10261-163@https.bugs.busybox.net/>
-Message-ID: <bug-10261-163-MfwAnaAA4K@https.bugs.busybox.net/>
+From: Jan Schmidt <Jan.Schmidt@gmx.de>
+Date: Tue, 29 Aug 2017 13:27:05 +0200
+Subject: [Buildroot] [PATCH 2/5] fs/custom: generate complete,
+ partition-based device images
+Message-ID: <trinity-8f575ef2-2fac-4332-b16e-a4c7bd66652a-1504006025728@3c-app-gmx-bs19>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10261
+Hi,
 
---- Comment #2 from Erico Nunes <nunes.erico@gmail.com> ---
-I have done a lot of grub2 builds for x86_64 on Fedora 25 and even recently
-tested the pc_x86_64_bios_defconfig and pc_x86_64_efi_defconfig configs on
-Fedora 26 as well and did not hit this issue.
+I was looking for a way to customize the root file system in the
+way, that all except /var is read only. And /var is at a separate
+partition which will be enlarged at the first start to the
+maximum size of the storage media. (I'm using RPi 3)
 
-Is this a clean build (make clean all)?
-Can you please attach a .config file where you see the problem, for us to try
-to reproduce it?
+I'm using BR 2017.02.1. The above patch seems not to be included
+yet. And I didn't fount any discussion about accepting the patch.
+Is there a other way to solve my issue?
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thanks and regards,
+Jan Schmidt
