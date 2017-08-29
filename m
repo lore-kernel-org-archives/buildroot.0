@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 23:26:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/squid: fix typo
-In-Reply-To: <20170827134336.6698-1-bernd.kuhls@t-online.de>
-References: <20170827134336.6698-1-bernd.kuhls@t-online.de>
-Message-ID: <20170829232611.01ca927c@windsurf.lan>
+Date: Tue, 29 Aug 2017 23:26:32 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 3.{2, 10}.x series
+In-Reply-To: <20170827152926.26350-1-bernd.kuhls@t-online.de>
+References: <20170827152926.26350-1-bernd.kuhls@t-online.de>
+Message-ID: <20170829232632.43b4d862@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 27 Aug 2017 15:43:36 +0200, Bernd Kuhls wrote:
-> Fixed typo added by
-> https://git.buildroot.net/buildroot/commit/package/squid?id=d2f7d0d72cd7e00ffbe869011d200f0a4a53e7a5
-> 
+On Sun, 27 Aug 2017 17:29:26 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/squid/squid.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/linux-headers/Config.in.host | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
