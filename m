@@ -1,37 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 17:53:48 +0200
-Subject: [Buildroot] Failed to build libexoxy with nvidia-driver
-In-Reply-To: <20170829154054.GA3338@scaer>
-References: <1503935622.673191.1087468320.18EAD29A@webmail.messagingengine.com>
- <d5446a67-383f-a813-58c2-2d51d6999181@mind.be>
- <20170829154054.GA3338@scaer>
-Message-ID: <20170829175348.711eccb0@windsurf.lan>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Tue, 29 Aug 2017 19:02:27 +0200
+Subject: [Buildroot] [PATCH] tslib: update to version 1.12
+Message-ID: <20170829170227.26431-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The release page has a short changelog overview:
 
-On Tue, 29 Aug 2017 17:40:54 +0200, Yann E. MORIN wrote:
+    https://github.com/kergoth/tslib/releases/tag/1.12
 
-> >  Perhaps we should add a check in the lib*gl* virtual packages that they install
-> > a .pc file...  
-> 
-> Gut feelings only, but no. It is perfectly legit to be a provider of EGL
-> (or whatever other GL stuff) and not provide a .pc file with that.
-> 
-> However, I can see the benefit for consistency. But then, it puts some
-> burden on the packager which upstream do not provide a .pc file, to
-> write their own... :-/
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Not having a .pc file for EGL/OpenGLES, etc. will break lots and lots
-of packages. So I think it is a good idea to force people submitting
-OpenGL implementations to make sure a .pc file is installed.
-
-Thomas
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 87d72acc0..f053c6cab 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# https://github.com/kergoth/tslib/releases/download/1.11/tslib-1.11.tar.xz.sha256
+-sha256  90d22b2f1b6dc9899d9491bc0480dfdcb2b55ff6e620ebb999d607aa5389af06  tslib-1.11.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.12/tslib-1.12.tar.xz.sha256
++sha256  237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83  tslib-1.12.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 5190465f1..2b4320dca 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.11
++TSLIB_VERSION = 1.12
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
