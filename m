@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 29 Aug 2017 21:10:00 +0200
-Subject: [Buildroot] [PATCH 1/6] package/dialog: fix upstream source URL
-Message-ID: <20170829191005.19697-1-bernd.kuhls@t-online.de>
+Date: Tue, 29 Aug 2017 21:10:01 +0200
+Subject: [Buildroot] [PATCH 2/6] package/iostat: fix upstream source URL
+In-Reply-To: <20170829191005.19697-1-bernd.kuhls@t-online.de>
+References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
+Message-ID: <20170829191005.19697-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dialog/dialog.mk | 2 +-
+ package/iostat/iostat.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index 61ec2659a..73fabe07c 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index d591c67dc..4953c73ec 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- DIALOG_VERSION = 1.3-20170509
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
--DIALOG_SITE = ftp://invisible-island.net/dialog
-+DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
- 	--disable-rpath-hack
- DIALOG_DEPENDENCIES = host-pkgconf ncurses
+ IOSTAT_VERSION = 2.2
+-IOSTAT_SITE = http://www.linuxinsight.com/files
++IOSTAT_SITE = http://linuxinsight.com/sites/default/files
+ IOSTAT_LICENSE = GPL
+ IOSTAT_LICENSE_FILES = LICENSE
+ 
 -- 
 2.11.0
