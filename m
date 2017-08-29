@@ -1,37 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 23:12:11 +0200
-Subject: [Buildroot] [PATCH] connman: security bump to version 1.35
-In-Reply-To: <90e8969c73a1c0e21f3c2f060d590de9172853c1.1503944211.git.baruch@tkos.co.il>
-References: <90e8969c73a1c0e21f3c2f060d590de9172853c1.1503944211.git.baruch@tkos.co.il>
-Message-ID: <20170829231211.716e5591@windsurf.lan>
+Date: Tue, 29 Aug 2017 23:18:56 +0200
+Subject: [Buildroot] [git commit] toolchain/buildroot: not available for a
+	few mips cores
+Message-ID: <20170829211143.4217480DBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6eaa6460bad197daf1d8d3318aff8e187fe36301
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 28 Aug 2017 21:16:51 +0300, Baruch Siach wrote:
-> Fixes CVE-2017-12865: stack overflow in dns proxy feature.
-> 
-> Cc: Martin Bark <martin@barkynet.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/connman/connman.hash | 2 +-
->  package/connman/connman.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Commit 1b974425 (MIPS: add support for M6201 cores) explained that the
+new core was not supported by upstream gcc, and as of gcc-8-trunk
+that's still the case.
 
-Applied to master, thanks. I have to say I was a bit surprised to not
-see this CVE mentioned on the Connman page about the 1.35 release. But
-indeed, Debian says it has been fixed in 1.35, and there is a fix for a
-crash in dnsproxy.c, which matches the CVE.
+Ditto for 3cfbeb83 (MIPS: add support for P6600 cores).
 
-Upstream could be a little bit clearer though. Or maybe the CVE was
-filled after 1.35 was released ?
+This means that we currently allow to build an internal tolchain for
+those cores, yet we have no suitable gcc version.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Disable the internal backend in this case.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host | 7 +------
+ toolchain/Config.in        | 2 ++
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 6f82fe0..ec7b692 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -50,8 +50,7 @@ config BR2_GCC_VERSION_5_X
+ 	# musl ppc64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 	# Unsupported MIPS cores
+-	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && \
+-		!BR2_mips_m6250 && !BR2_mips_i6400 && !BR2_mips_p6600
++	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && !BR2_mips_i6400
+ 	# musl mips64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -61,8 +60,6 @@ config BR2_GCC_VERSION_6_X
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
+ 	depends on !BR2_or1k
+-	# Unsupported MIPS cores
+-	depends on !BR2_mips_m6250 && !BR2_mips_p6600
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_GCC_VERSION_7_X
+@@ -70,8 +67,6 @@ config BR2_GCC_VERSION_7_X
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
+ 	depends on !BR2_or1k
+-	# Unsupported MIPS cores
+-	depends on !BR2_mips_m6250 && !BR2_mips_p6600
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ endchoice
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 15ee335..584d053 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -48,6 +48,8 @@ config BR2_TOOLCHAIN_BUILDROOT
+ 	depends on !BR2_bf608
+ 	depends on !BR2_bf609
+ 	depends on !BR2_csky
++	depends on !BR2_mips_m6250
++	depends on !BR2_mips_p6600
+ 
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool "External toolchain"
