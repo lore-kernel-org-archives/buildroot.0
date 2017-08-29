@@ -1,44 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 23:19:35 +0200
-Subject: [Buildroot] [PATCH] toolchain/internal: not aailable for a few
- mips cores
-In-Reply-To: <20170817202647.26738-1-yann.morin.1998@free.fr>
-References: <20170817202647.26738-1-yann.morin.1998@free.fr>
-Message-ID: <20170829231935.71e6bb85@windsurf.lan>
+Date: Tue, 29 Aug 2017 23:20:27 +0200
+Subject: [Buildroot] [git commit] libkcapi: fix build with gcc 7.x
+Message-ID: <20170829211319.2804181F77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=84bfe9cbbeb36cb084910e65364efcaa2926ca46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Aug 2017 22:26:47 +0200, Yann E. MORIN wrote:
-> Commit 1b974425 (MIPS: add support for M6201 cores) xplained that the
-> new core was not supported by upstream gcc, and as of gcc-8-trunk that's
-> stil lthe case.
-> 
-> Ditto for 3cfbeb83 (MIPS: add support for P6600 cores).
-> 
-> This means that we currently elect to build an internal tolchain for
-> those cores, yet we have no suitable gcc version.
-> 
-> Disable the internal backend in this case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gcc/Config.in.host | 7 +------
->  toolchain/Config.in        | 2 ++
->  2 files changed, 3 insertions(+), 6 deletions(-)
+Add an upstream patch to make libkcapi build with gcc 7.x.
 
-Applied to master, after fixing a number of typos here and there :)
+Fixes:
 
-Thanks!
+  http://autobuild.buildroot.net/results/01f/01f207ccd1cf5fc030510cb7a4eb2649e124b49b/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...1-Have-sufficient-memory-size-for-message.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch b/package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch
+new file mode 100644
+index 0000000..39e683f
+--- /dev/null
++++ b/package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch
+@@ -0,0 +1,31 @@
++From b56deda7c13c257050fdbdd71c1a5a47b78aa63e Mon Sep 17 00:00:00 2001
++From: Stephan Mueller <smueller@chronox.de>
++Date: Thu, 3 Aug 2017 17:50:51 +0200
++Subject: [PATCH] Have sufficient memory size for message
++
++With GCC 7, the size of the buffer in snprintf is checked. The
++occurrence here is found to be too small.
++
++Signed-off-by: Stephan Mueller <smueller@chronox.de>
++[Upstream commit: https://github.com/smuellerDD/libkcapi/commit/b56deda7c13c257050fdbdd71c1a5a47b78aa63e]
++Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
++---
++ speed-test/cryptoperf-base.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/speed-test/cryptoperf-base.c b/speed-test/cryptoperf-base.c
++index 8766ca7..07384ae 100644
++--- a/speed-test/cryptoperf-base.c
+++++ b/speed-test/cryptoperf-base.c
++@@ -172,7 +172,7 @@ char *cp_print_status(struct cp_test *test, int raw)
++ 			(unsigned long)(processed_bytes/totaltime),
++ 			(unsigned long)ops);
++ 	} else {
++-		#define VALLEN 10
+++		#define VALLEN 23
++ 		char byteseconds[VALLEN + 1];
++ 
++ 		memset(byteseconds, 0, sizeof(byteseconds));
++-- 
++2.7.4
++
