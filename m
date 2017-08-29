@@ -1,78 +1,109 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 29 Aug 2017 06:30:57 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng-test: update to latest
-Message-ID: <20170829043057.GA31651@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 Aug 2017 08:03:12 +0300
+Subject: [Buildroot] [PATCH next 2/2] dnsmasq: simplify build configuration
+In-Reply-To: <1026a6ca932ca0b0fca113a766ecd2d5d3ad89c7.1503982992.git.baruch@tkos.co.il>
+References: <1026a6ca932ca0b0fca113a766ecd2d5d3ad89c7.1503982992.git.baruch@tkos.co.il>
+Message-ID: <63b4508028ac952e2bb27b1708975fc6c938e0a8.1503982992.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .../uclibc-ng-test/0001-disable-for-glibc.patch    | 40 ----------------------
- package/uclibc-ng-test/uclibc-ng-test.mk           |  2 +-
- 2 files changed, 1 insertion(+), 41 deletions(-)
- delete mode 100644 package/uclibc-ng-test/0001-disable-for-glibc.patch
+Drop direct sed'ing of config.h for HAVE_CONNTRACK, HAVE_LUASCRIPT, and
+HAVE_DBUS. Use MAKE_OPTS COPTS parameters instead, like we do already
+for all other options.
 
-diff --git a/package/uclibc-ng-test/0001-disable-for-glibc.patch b/package/uclibc-ng-test/0001-disable-for-glibc.patch
-deleted file mode 100644
-index 13786c9..0000000
---- a/package/uclibc-ng-test/0001-disable-for-glibc.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 787e584f18afc967d91cfe1a8443df2657579ecb Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Fri, 12 May 2017 00:44:01 +0200
--Subject: [PATCH] disable for glibc
--
--uclibc-ng-test is broken with glibc 2.25 due to pthread_cond_t changes introduced by [1].
--Disable test-cond22 for glibc based toolchain.
--
--[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=ed19993b5b0d05d62cc883571519a67dae481a14
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- test/nptl/tst-cond22.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/test/nptl/tst-cond22.c b/test/nptl/tst-cond22.c
--index 3255cc0..23697dd 100644
----- a/test/nptl/tst-cond22.c
--+++ b/test/nptl/tst-cond22.c
--@@ -2,7 +2,7 @@
-- #include <stdio.h>
-- #include <stdlib.h>
-- 
---#if defined(__GLIBC__) || defined(__UCLIBC__)
--+#if defined(__UCLIBC__)
-- static pthread_barrier_t b;
-- static pthread_cond_t c = PTHREAD_COND_INITIALIZER;
-- static pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
--@@ -54,7 +54,7 @@ tf (void *arg)
-- static int
-- do_test (void)
-- {
---#if defined(__GLIBC__) || defined(__UCLIBC__)
--+#if defined(__UCLIBC__)
--   int status = 0;
-- 
--   if (pthread_barrier_init (&b, NULL, 2) != 0)
---- 
--2.9.3
--
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 93736ed..3fdfe37 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Rename DNSMASQ_ENABLE_LUA to DNSMASQ_TWEAK_LIBLUA since it now does only
+that.
+
+Merge two conntrack and three dbus conditional sections.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dnsmasq/dnsmasq.mk | 42 ++++++++++--------------------------------
+ 1 file changed, 10 insertions(+), 32 deletions(-)
+
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index ffbbeb8f8768..925cd7b6dabd 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -40,32 +40,31 @@ endif
  
--UCLIBC_NG_TEST_VERSION = c9b9876cefc142a23aa622b821290ed16af80058
-+UCLIBC_NG_TEST_VERSION = c4d54bde7772b55df04399ecb355769c5ac31015
- UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
- UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
- UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+ ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+ DNSMASQ_DEPENDENCIES += libnetfilter_conntrack
+-endif
+-
+-ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+-define DNSMASQ_ENABLE_CONNTRACK
+-	$(SED) 's^.*#define HAVE_CONNTRACK.*^#define HAVE_CONNTRACK^' \
+-		$(DNSMASQ_DIR)/src/config.h
+-endef
++DNSMASQ_COPTS += -DHAVE_CONNTRACK
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+ DNSMASQ_DEPENDENCIES += lua
++DNSMASQ_COPTS += -DHAVE_LUASCRIPT
+ 
+ # liblua uses dlopen when dynamically linked
+ ifneq ($(BR2_STATIC_LIBS),y)
+ DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
+ endif
+ 
+-define DNSMASQ_ENABLE_LUA
++define DNSMASQ_TWEAK_LIBLUA
+ 	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
+-	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
+-		$(DNSMASQ_DIR)/src/config.h
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ DNSMASQ_DEPENDENCIES += dbus
++DNSMASQ_COPTS += -DHAVE_DBUS
++
++define DNSMASQ_INSTALL_DBUS
++	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
++		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
++endef
+ endif
+ 
+ define DNSMASQ_FIX_PKGCONFIG
+@@ -73,33 +72,12 @@ define DNSMASQ_FIX_PKGCONFIG
+ 		$(DNSMASQ_DIR)/Makefile
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-define DNSMASQ_ENABLE_DBUS
+-	$(SED) 's^.*#define HAVE_DBUS.*^#define HAVE_DBUS^' \
+-		$(DNSMASQ_DIR)/src/config.h
+-endef
+-else
+-define DNSMASQ_ENABLE_DBUS
+-	$(SED) 's^.*#define HAVE_DBUS.*^/* #define HAVE_DBUS */^' \
+-		$(DNSMASQ_DIR)/src/config.h
+-endef
+-endif
+-
+ define DNSMASQ_BUILD_CMDS
+ 	$(DNSMASQ_FIX_PKGCONFIG)
+-	$(DNSMASQ_ENABLE_DBUS)
+-	$(DNSMASQ_ENABLE_LUA)
+-	$(DNSMASQ_ENABLE_CONNTRACK)
++	$(DNSMASQ_TWEAK_LIBLUA)
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-define DNSMASQ_INSTALL_DBUS
+-	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
+-		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
+-endef
+-endif
+-
+ define DNSMASQ_INSTALL_TARGET_CMDS
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
+ 	mkdir -p $(TARGET_DIR)/var/lib/misc/
 -- 
-2.1.4
+2.14.1
