@@ -1,39 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 17:37:09 +0200
-Subject: [Buildroot] simicsfs 1.18 does not build with kernel 4.12.2
-In-Reply-To: <CAEUhbmWR58b2Ykg0N1_7eS01wse=mimS+G-ZcDe=xAWMVFBOJA@mail.gmail.com>
-References: <CAEUhbmWTZY-zU6c_yEFpp+HR2xuGj5FiZjGVDumSrAuAg+kG5A@mail.gmail.com>
- <20170824193354.782bae38@windsurf>
- <CANQCQpY+iyQ5XtTA5tCh9V9awNa4fhGzJ+bmBdY1YWODuxjppQ@mail.gmail.com>
- <20170824230211.4c0ea814@windsurf>
- <CANQCQpY3p9GK58EE1weGjnJ1H-YwALk5nrSUQvG-UwF4RczWkw@mail.gmail.com>
- <CAEUhbmWiyHVrHdXED1nQV4Lm3JLgwmDNAUr3HiAfOMD+hLAP6A@mail.gmail.com>
- <CAEUhbmWR58b2Ykg0N1_7eS01wse=mimS+G-ZcDe=xAWMVFBOJA@mail.gmail.com>
-Message-ID: <20170829173709.23c345a6@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Aug 2017 17:40:54 +0200
+Subject: [Buildroot] Failed to build libexoxy with nvidia-driver
+In-Reply-To: <d5446a67-383f-a813-58c2-2d51d6999181@mind.be>
+References: <1503935622.673191.1087468320.18EAD29A@webmail.messagingengine.com>
+ <d5446a67-383f-a813-58c2-2d51d6999181@mind.be>
+Message-ID: <20170829154054.GA3338@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, All,
 
-On Tue, 29 Aug 2017 22:26:59 +0800, Bin Meng wrote:
+On 2017-08-28 22:57 +0200, Arnout Vandecappelle spake thusly:
+> On 28-08-17 17:53, Alexandre Maumen? wrote:
+> > Hi,
+> > 
+> > I'm trying to build libepoxy with nvidia-driver but it fails with this
+> > error:
+> > 
+> > checking for EGL... no
+> > configure: error: Package requirements (egl) were not met:
+> > 
+> > Package egl was not found in the pkg-config search path.
+> > Perhaps you should add the directory containing `egl.pc'
+> > to the PKG_CONFIG_PATH environment variable
+> > Package 'egl', required by 'world', not found
+> 
+>  Indeed, nvidia-driver selects BR2_PACKAGE_HAS_LIBEGL but doesn't install egl.pc
+> (it does install gl.pc). And there's also no glesv2.pc. J?r?me, Yann, could you
+> look into it?
 
-> The latest simicsfs kernel module (v1.22) supports latest kernel, and
-> is available in the simics open source package.
+I see Alexandre already reported sucess and explained the hack he did.
+I'll look into submiting a proper patch soonish.
 
-Is this "simics open source package" publicly available ?
+>  Perhaps we should add a check in the lib*gl* virtual packages that they install
+> a .pc file...
 
-> However they are moving away from the simicsfs kernel module,
-> replacing it with the user mode Simics Agent (Matic). They've seen
-> that the kernel module has required too much maintenance work. For
-> this reason they don't want to encourage use of it.
+Gut feelings only, but no. It is perfectly legit to be a provider of EGL
+(or whatever other GL stuff) and not provide a .pc file with that.
 
-So, we want to get rid of the simicsfs package in Buildroot ?
+However, I can see the benefit for consistency. But then, it puts some
+burden on the packager which upstream do not provide a .pc file, to
+write their own... :-/
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
