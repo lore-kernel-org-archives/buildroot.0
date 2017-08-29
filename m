@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Aug 2017 21:46:49 +0200
-Subject: [Buildroot] [PATCH 4/6] package/libconfig: switch to github
-In-Reply-To: <20170829191005.19697-4-bernd.kuhls@t-online.de>
+Date: Tue, 29 Aug 2017 21:52:19 +0200
+Subject: [Buildroot] [PATCH 6/6] package/linphone: fix URL of Debian
+ patches
+In-Reply-To: <20170829191005.19697-6-bernd.kuhls@t-online.de>
 References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
- <20170829191005.19697-4-bernd.kuhls@t-online.de>
-Message-ID: <20170829214649.0c3bf1b4@windsurf.lan>
+ <20170829191005.19697-6-bernd.kuhls@t-online.de>
+Message-ID: <20170829215219.3024113c@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 29 Aug 2017 21:10:03 +0200, Bernd Kuhls wrote:
-> The previous site does not provide the package anymore.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libconfig/libconfig.hash | 2 +-
->  package/libconfig/libconfig.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libconfig/libconfig.hash b/package/libconfig/libconfig.hash
-> index 30110cbbd..00d3bd6bd 100644
-> --- a/package/libconfig/libconfig.hash
-> +++ b/package/libconfig/libconfig.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed:
-> -sha256  e31daa390d8e4461c8830512fe2e13ba1a3d6a02a2305a02429eec61e68703f6  libconfig-1.5.tar.gz
-> +sha256 cae5c02361d8a9b2bb26946c64f089d2e5e599972f386203fbc48975c0d885c8  libconfig-v1.5.tar.gz
+On Tue, 29 Aug 2017 21:10:05 +0200, Bernd Kuhls wrote:
 
-Are there some important source code changes between those two versions
-labeled 1.5 ?
+> -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav9.patch \
+> -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav10.patch \
+> -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav11.patch \
+> -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/ffmpeg_2.9.patch
+> +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/libav9.patch \
+> +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/libav10.patch \
+> +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/libav11.patch \
+> +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/ffmpeg_2.9.patch
+
+We will have to constantly update those, because sources.debian.net
+doesn't keep all versions of a package, only the most recent ones.
+
+Can we use
+http://snapshot.debian.org/archive/debian/20161118T211932Z/pool/main/l/linphone/linphone_3.6.1-3.debian.tar.xz
+instead ? This URL is guaranteed to not change.
+
+Thanks,
 
 Thomas
 -- 
