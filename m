@@ -1,63 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Aug 2017 00:05:29 +0200
-Subject: [Buildroot] [git commit] linux-firmware: Add QLogic FC Adapters
-Message-ID: <20170902130619.7D9E881DA2@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 22:30:09 +0200
+Subject: [Buildroot] [git commit] libftdi1: bump to version 1.4
+Message-ID: <20170902130620.CB2038016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91983091455e2b82432509c11f958409e7bbefcd
+commit: https://git.buildroot.net/buildroot/commit/?id=1b191d64d381a08d4bff4e004b273b4b0e89bc06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a config option to install the ql2xxx firmware binaries for QLogic
-Fibre Channel adapters.
-Since this doesn't quite fit under the existing categories in Config.in,
-include it under a new category named "Fibre Channel Adapter Firmware".
-
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Cc: Daniel Sangue <daniel.sangue@sangue.ch>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         | 9 +++++++++
- package/linux-firmware/linux-firmware.mk | 8 ++++++++
- 2 files changed, 17 insertions(+)
+ package/libftdi1/libftdi1.hash | 5 +++--
+ package/libftdi1/libftdi1.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index f0d6476..ad750e8 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -329,4 +329,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
+index 0a89182..40512a7 100644
+--- a/package/libftdi1/libftdi1.hash
++++ b/package/libftdi1/libftdi1.hash
+@@ -1,2 +1,3 @@
+-# Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
+-sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
++# Locally computed after checking the signature
++# https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.4.tar.bz2.sig
++sha256  ec36fb49080f834690c24008328a5ef42d3cf584ef4060f3a35aa4681cb31b74  libftdi1-1.4.tar.bz2
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index 6b84b95..c45c83a 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endmenu
- 
-+menu "Fibre Channel Adapter Firmware"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
-+	bool "QLogic 2xxx Fibre Channel Adapters"
-+	help
-+	  Firmware files for ql2xxx adapters
-+
-+endmenu
-+
- endif
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index e03788a..b01585f 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -414,6 +414,14 @@ LINUX_FIRMWARE_FILES += \
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
- endif
- 
-+# ql2xxx
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX),y)
-+LINUX_FIRMWARE_FILES += \
-+	ql2100_fw.bin ql2200_fw.bin ql2300_fw.bin ql2322_fw.bin \
-+	ql2400_fw.bin ql2500_fw.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qla2xxx
-+endif
-+
- ifneq ($(LINUX_FIRMWARE_FILES),)
- define LINUX_FIRMWARE_INSTALL_FILES
- 	cd $(@D) ; \
+-LIBFTDI1_VERSION = 1.3
++LIBFTDI1_VERSION = 1.4
+ LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
+ LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
+ LIBFTDI1_INSTALL_STAGING = YES
