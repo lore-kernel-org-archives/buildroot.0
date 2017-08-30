@@ -1,45 +1,38 @@
-From: =?utf-8?Q?Alexandre=20Maumen=C3=A9?= <alexandre@maumene.org>
-Date: Wed, 30 Aug 2017 14:29:24 +0800
-Subject: [Buildroot] Error while build Xorg with nvidia-driver
-In-Reply-To: <1504074056.2980358.1089439320.4C40BE81@webmail.messagingengine.com>
-References: <1504074056.2980358.1089439320.4C40BE81@webmail.messagingengine.com>
-Message-ID: <1504074564.2982046.1089445256.02D2BA69@webmail.messagingengine.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Aug 2017 08:31:14 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-08-29
+Message-ID: <20170830063114.7061720920@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-According to this https://elrepo.org/tiki/kmod-nvidia (scroll to the
-bottom of the page), glamor is conflicting with nvidia-driver.
-It seems to build fine with:
-ifeq
-($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_NVIDIA_DRIVER),yyn)
-instead of 
-ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
+Build statistics for 2017-08-29
+================================
 
-Regards,
+      successes : 196
+       failures : 4  
+       timeouts : 0  
+          TOTAL : 200
 
-On Wed, Aug 30, 2017, at 02:20 PM, Alexandre Maumen? wrote:
-> Hi,
-> 
-> I'm trying to build Xorg (with nvidia-driver) and I have this error:
-> [...]
-> checking for GLAMOR... yes
-> checking for GBM... no
-> configure: error: Glamor for Xorg requires gbm >= 10.2.0
-> 
-> I'm not sure to understand if I the Nvidia proprietary drivers support
-> gbm or not and if I actually need to build Xorg with glamor. I have
-> found much examples on internet on how to build buildroot with Nvidia
-> drivers. (but nouveau isn't really good for what I'm trying to build).
-> 
-> Any help would be appreciate !
-> 
-> Regards,
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Classification of failures by reason
+====================================
+
+             lttng-tools-2.9.5 | 2 
+               wireshark-2.2.7 | 1 
+                      x265-2.5 | 1 
+
+
+Detail of failures
+===================
+
+      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/9b311b92a8ec9fff366a9011e3dd10c97cd968af |     
+        i586 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/8305d3fb24bbf1eb51d55f35541168ad1ee4d4c8 |     
+ powerpc64le |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/d3133d9ac06b8473a7f5584dd53e3696be79e7a9 |     
+         arm |                       x265-2.5 | NOK | http://autobuild.buildroot.net/results/1aaa5f65305b4d656513614e6bdfef978cb4a7d5 |     
+
+-- 
+http://autobuild.buildroot.net
