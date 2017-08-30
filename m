@@ -1,103 +1,39 @@
-From: Erik Stromdahl <erik.stromdahl@gmail.com>
-Date: Wed, 30 Aug 2017 17:02:20 +0200
-Subject: [Buildroot] [PATCH v2 1/4] board/raspberrypi/post-image.sh: add
- multi arg support
-In-Reply-To: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
-References: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
-Message-ID: <807d7b0a-25f6-5d76-6e94-23b5a1eb870f@gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 30 Aug 2017 12:47:42 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.12.10
+Message-ID: <1504108063-30290-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just noticed a few flaws in this patch series and I will most
-likely rework them somewhat before/if submitting a new version.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I haven't heard anything regarding these patches so I assume no one
-have had the time to take a look at them.
-
-Anyway, please don't spend any time on them (in case someone had planned
-to do so).
-
-On 2017-07-15 14:50, Erik Stromdahl wrote:
-> Add possibility to supply multiple arguments to
-> post-image.sh
-> 
-> Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
-> ---
-> Changes v1 -> v2:
->    - Fixed bad print in patch 2
->    - Fixed commit comment and removed parenthesis in patch 4
->      (comment from Ricardo Martincoski)
-> 
->   board/raspberrypi/post-image.sh | 40 ++++++++++++++++++++++------------------
->   1 file changed, 22 insertions(+), 18 deletions(-)
-> 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-> index de97299..4f136f6 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -5,39 +5,43 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
->   GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
->   GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->   
-> -case "${2}" in
-> -	--add-pi3-miniuart-bt-overlay)
-> -	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> -		echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
-> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +for arg in "$@"
-> +do
-> +	case "${arg}" in
-> +		--add-pi3-miniuart-bt-overlay)
-> +		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
->   
->   # fixes rpi3 ttyAMA0 serial console
->   dtoverlay=pi3-miniuart-bt
->   __EOF__
-> -	fi
-> -	;;
-> -	--aarch64)
-> -	# Run a 64bits kernel (armv8)
-> -	sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
-> -	if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +		fi
-> +		;;
-> +		--aarch64)
-> +		# Run a 64bits kernel (armv8)
-> +		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +		if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
->   
->   # enable 64bits support
->   arm_control=0x200
->   __EOF__
-> -	fi
-> +		fi
->   
-> -	# Enable uart console
-> -	if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +		# Enable uart console
-> +		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
->   
->   # enable rpi3 ttyS0 serial console
->   enable_uart=1
->   __EOF__
-> -	fi
-> -	;;
-> +		fi
-> +		;;
->   esac
->   
-> +done
-> +
->   rm -rf "${GENIMAGE_TMP}"
->   
->   genimage                           \
-> 
+diff --git a/linux/Config.in b/linux/Config.in
+index 8de47f3..036799f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.12.9)"
++	bool "Latest version (4.12.10)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.75-cip6)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.12.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.12.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.75-cip6" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
