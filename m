@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:51 +0200
-Subject: [Buildroot] [git commit] perl-mail-dkim: bump to version 0.42
-Message-ID: <20170902130618.C11CD80337@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 23:26:14 +0200
+Subject: [Buildroot] [git commit] package/terminology: bump to 1.1.0
+Message-ID: <20170902130621.0A9A38016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5c319aa50af5b697b2330e49c690b4d698ac9c0
+commit: https://git.buildroot.net/buildroot/commit/?id=a7614e6336d6148afebaece968445c94795658a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+See: https://sourceforge.net/p/enlightenment/mailman/message/36004555/
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/terminology/terminology.hash | 4 ++--
+ package/terminology/terminology.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index b6bb545..c40e66e 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9ceb8a0397aff83928e7a9760b1b190f Mail-DKIM-0.40.tar.gz
--sha256 3c5ea0c3a2028a5a2c3b64bbcd6bd9de6a5fa5ee4e16046dd8875c4796aaa6f1 Mail-DKIM-0.40.tar.gz
-+md5    60ebe54760f6633f07b25228272b9473 Mail-DKIM-0.42.tar.gz
-+sha256 f4e3a6344517aeee9a7516c0f58197f41dce81461f74ce9ba8401a143aa2577c Mail-DKIM-0.42.tar.gz
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index 03a3b74..e088ecf 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index 86f6606..c203226 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
+@@ -1,2 +1,2 @@
+-# From https://sourceforge.net/p/enlightenment/mailman/message/35600707/
+-sha256	bfed42b83bce854d35ba33a4d38373c6d42fb2c0ea0335d76420488c091692f4	terminology-1.0.0.tar.xz
++# Locally calculated
++sha256	eb9136e487ab9e6ff3c98173919b5ad105626434d096dafecd18392fc40c348f	terminology-1.1.0.tar.xz
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index dbfec2e..817521d 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 0.40
-+PERL_MAIL_DKIM_VERSION = 0.42
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
--PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JA/JASLONG
-+PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_DEPENDENCIES = perl-crypt-openssl-rsa perl-mailtools perl-net-dns
--PERL_MAIL_DKIM_LICENSE_FILES = README
- 
- $(eval $(perl-package))
+-TERMINOLOGY_VERSION = 1.0.0
++TERMINOLOGY_VERSION = 1.1.0
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
