@@ -1,59 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:41:02 +0200
-Subject: [Buildroot] [git commit] perl-uri: bump to version 1.72
-Message-ID: <20170902130619.39B4B81D34@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 22:12:00 +0200
+Subject: [Buildroot] [git commit] poppler: bump version to 0.57.0
+Message-ID: <20170902130620.58A638016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98e97d2f3e32a5d110bfabda9e0a338fe45b609a
+commit: https://git.buildroot.net/buildroot/commit/?id=1c5385541a2147241535979ee4ba3f452ceff150
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-uri/Config.in     | 6 ++----
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-uri/Config.in b/package/perl-uri/Config.in
-index 62a53f2..23e5c50 100644
---- a/package/perl-uri/Config.in
-+++ b/package/perl-uri/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_PERL_URI
- 	bool "perl-uri"
- 	help
--	  The module implements the URI class. Objects of this class represent
--	  Uniform Resource Identifier references as specified in RFC 2396 and
--	  updated by RFC 2732.
-+	  Uniform Resource Identifiers (absolute and relative)
- 
--	  https://github.com/libwww-perl/uri
-+	  https://github.com/libwww-perl/URI
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index 8a265bf..a11924f 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    247c3da29a794f72730e01aa5a715daf URI-1.71.tar.gz
--sha256 9c8eca0d7f39e74bbc14706293e653b699238eeb1a7690cc9c136fb8c2644115 URI-1.71.tar.gz
-+md5    cd56d81ed429efaa97e7f3ff08851b48 URI-1.72.tar.gz
-+sha256 35f14431d4b300de4be1163b0b5332de2d7fbda4f05ff1ed198a8e9330d40a32 URI-1.72.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index effeb16..75f374a 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 699e705..ffcc71e 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 537f2bc60d796525705ad9ca8e46899dcc99c2e9480b80051808bae265cdc658  poppler-0.55.0.tar.xz
++sha256 0ea37de71b7db78212ebc79df59f99b66409a29c2eac4d882dae9f2397fe44d8  poppler-0.57.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 9ccf2ea..6796437 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 1.71
-+PERL_URI_VERSION = 1.72
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_LICENSE = Artistic or GPL-1.0+
+-POPPLER_VERSION = 0.55.0
++POPPLER_VERSION = 0.57.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
