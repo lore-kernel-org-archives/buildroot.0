@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 22:07:52 +0200
-Subject: [Buildroot] [PATCH] gnupg: security bump to version 1.4.22
-In-Reply-To: <10033e7b173d98374eac45d28e1fb97f68e82118.1504094464.git.baruch@tkos.co.il>
-References: <10033e7b173d98374eac45d28e1fb97f68e82118.1504094464.git.baruch@tkos.co.il>
-Message-ID: <20170830220752.118abfee@windsurf.lan>
+Date: Wed, 30 Aug 2017 22:08:29 +0200
+Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.9
+In-Reply-To: <162b5a636bb13959aa40bd3ccc1479b9228bfa75.1504109223.git.baruch@tkos.co.il>
+References: <162b5a636bb13959aa40bd3ccc1479b9228bfa75.1504109223.git.baruch@tkos.co.il>
+Message-ID: <20170830220829.0d3e1269@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 30 Aug 2017 15:01:04 +0300, Baruch Siach wrote:
-> Mitigate a flush+reload side-channel attack on RSA secret keys
-> dubbed "Sliding right into disaster".  For details see
-> <https://eprint.iacr.org/2017/627>.  [CVE-2017-7526]
+On Wed, 30 Aug 2017 19:07:03 +0300, Baruch Siach wrote:
+> Fixes CVE-2017-0379: Mitigate a local side-channel attack on Curve25519
+> dubbed "May the Fourth be With You".
 > 
-> Switch to https site for better firewall compatibility and security.
+> As we are close to release, don't update to the latest 1.8.1 version,
+> but to a maintenance release from the 1.7 branch.
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/gnupg/gnupg.hash | 7 +++----
->  package/gnupg/gnupg.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 6 deletions(-)
+>  package/libgcrypt/libgcrypt.hash | 6 ++----
+>  package/libgcrypt/libgcrypt.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
