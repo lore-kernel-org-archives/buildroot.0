@@ -1,76 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 30 Aug 2017 21:48:23 +0300
-Subject: [Buildroot] Need help with cross-compiler configuration
-In-Reply-To: <CANK3ZEf0_A2aexR9mDJK3pi_CZhbBcujAnmsStvoJ6+DRZSVnA@mail.gmail.com>
-References: <CANK3ZEf0_A2aexR9mDJK3pi_CZhbBcujAnmsStvoJ6+DRZSVnA@mail.gmail.com>
-Message-ID: <20170830184823.i43svfizch3f3m75@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Aug 2017 19:06:20 +0000
+Subject: [Buildroot] [Bug 10276] BR2_PACKAGE_LINUX_TOOLS_GPIO fails for MIPS
+ with "gpio-hammer.o: ABI is incompatible with that of the selected
+ emulation"
+In-Reply-To: <bug-10276-163@https.bugs.busybox.net/>
+References: <bug-10276-163@https.bugs.busybox.net/>
+Message-ID: <bug-10276-163-jjhIzHDO6J@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Aseem,
+https://bugs.busybox.net/show_bug.cgi?id=10276
 
-On Wed, Aug 30, 2017 at 08:19:33PM +0530, Aseem Sharma wrote:
-> I am naive to buildroot & processor world trying to compile
-> "buildroot-2017.02.5" for "Marvell ARM Armada 166E processor (compatible to
-> ARMv5TE instruction-set)" based old system.
-> 
-> I compiled the buildroot (kernel, rootfs & cross-compiler) by setting arm926t
-> (little-endian) as target arch/variant as suggested by Arnout/Baruch in
-> response to my old query. However, now I am having trouble booting the
-> system with the new buildroot created zImage. I do not seem to get any
-> output/log on the system screen after flashing this new image onto the
-> system.
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Thomas, I can very easily reproduce the truncated file issue, and it
+indeed always happen with parallel builds, but not always.
 
-Which kernel did you use?
+And I can even reproduce it in a native build, on Linus' linux master:
 
-> To verify if the buildroot is configured correctly for my system, I tried
-> to create a helloWorld program using the buildroot internal cross-compiler
-> and then tried to run it on the arm based system (running old 2005
-> buildroot release). Following is the exact error message that I observe:
-> *hello.c on Host:*
-> 
-> #include <stdio.h>
-> int main()
-> {
->    printf("Hello, World!");
->    return 0;
-> }
-> 
-> *Command Line used to Compile on Host:*
-> 
-> sudo /home/administrator/Downloads/buildroot_2017/buildroot-2017.0
-> 2.5/output/host/usr/bin/arm-linux-gcc --sysroot=/home/administrator/
-> Downloads/buildroot_2017/buildroot-2017.02.5/output/staging -o test hello.c
-> 
-> *Screen Output on Target:*
-> 
-> *# *./test
-> *./test: line 1: syntax error: unexpected ")"*
-> *#*
-> *#* cat ./test | more   *                              ------->  Just to
-> prove its not a shell script!*
-> bFLTD? ?c0 ?eY??)? ?? ?? ? -?-? ??-?
->                                     ?
->                                      0???R??X at -? ? 0?0`?S?0?S3?/??
->  ?, at -?`?A ?????0?S3?/??  40?@-? ??@ ?R??????0?S?
-> ? ?0 ?0???? @-?80?S?
-> 
-> *Please let me know if I am missing something. *
+$ make -j1000
+mkdir -p include/linux 2>&1 || true
+ln -sf /home/ymorin/dev/linux/linux/tools/gpio/../../include/uapi/linux/gpio.h
+include/linux/gpio.h
+make -f /home/ymorin/dev/linux/linux/tools/build/Makefile.build dir=.
+obj=lsgpio
+make -f /home/ymorin/dev/linux/linux/tools/build/Makefile.build dir=.
+obj=gpio-hammer
+make -f /home/ymorin/dev/linux/linux/tools/build/Makefile.build dir=.
+obj=gpio-event-mon
+make[1]: Entering directory '/home/ymorin/dev/linux/linux/tools/gpio'
+make[1]: Entering directory '/home/ymorin/dev/linux/linux/tools/gpio'
+make[1]: Entering directory '/home/ymorin/dev/linux/linux/tools/gpio'
+  CC       gpio-event-mon.o
+  CC       lsgpio.o
+  CC       gpio-hammer.o
+  CC       gpio-utils.o
+  CC       gpio-utils.o
+  CC       gpio-utils.o
+gpio-event-mon.c: In function ?monitor_device?:
+gpio-event-mon.c:100:19: warning: format ?%lu? expects argument of type ?long
+unsigned int?, but argument 3 has type ?__u64 {aka long long unsigned int}?
+[-Wformat=]
+   fprintf(stdout, "GPIO EVENT %" PRIu64 ": ", event.timestamp);
+                   ^~~~~~~~~~~~~~
+  LD       gpio-event-mon-in.o
+gpio-utils.o: file not recognized: File truncated
+/home/ymorin/dev/linux/linux/tools/build/Makefile.build:143: recipe for target
+'gpio-event-mon-in.o' failed
+make[1]: *** [gpio-event-mon-in.o] Error 1
+make[1]: Leaving directory '/home/ymorin/dev/linux/linux/tools/gpio'
+Makefile:58: recipe for target 'gpio-event-mon-in.o' failed
+make: *** [gpio-event-mon-in.o] Error 2
+make: *** Waiting for unfinished jobs....
+  LD       lsgpio-in.o
+make[1]: Leaving directory '/home/ymorin/dev/linux/linux/tools/gpio'
+  LD       gpio-hammer-in.o
+make[1]: Leaving directory '/home/ymorin/dev/linux/linux/tools/gpio'
 
-Did you build your test program statically? If not, which libc variant do you 
-use?
 
-Do you use compatible ARM ABI? The so called OABI (for old ABI) has still been 
-in use at that time. See https://wiki.debian.org/ArmEabiPort.
+Yet, you are right that there is also (and more importantly) a
+problem with using ld instead of gcc.
 
-Buildroot dropped support for ARM OABI a few years ago.
-
-baruch
+So, there are two issues in one. ;-)
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+You are receiving this mail because:
+You are on the CC list for the bug.
