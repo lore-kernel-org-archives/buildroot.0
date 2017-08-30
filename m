@@ -1,27 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Aug 2017 22:18:57 +0200
-Subject: [Buildroot] [PATCH 4/6] package/libconfig: switch to github
-References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
- <20170829191005.19697-4-bernd.kuhls@t-online.de>
- <20170829214649.0c3bf1b4@windsurf.lan>
-Message-ID: <h6jj7ex73j.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Aug 2017 22:19:38 +0200
+Subject: [Buildroot] [PATCH] package: Drop simicsfs support
+In-Reply-To: <1504108525-27529-1-git-send-email-bmeng.cn@gmail.com>
+References: <1504108525-27529-1-git-send-email-bmeng.cn@gmail.com>
+Message-ID: <20170830221938.2b4423ba@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 29 Aug 2017 21:46:49 +0200 schrieb Thomas Petazzoni:
+Hello,
 
-> Are there some important source code changes between those two versions
-> labeled 1.5 ?
+On Wed, 30 Aug 2017 08:55:25 -0700, Bin Meng wrote:
+> At present buildroot integrated simicfs v1.18 package is quite out
+> of date, and does not compile with latest Linux kernel v4.12+. The
+> latest package v1.22 supports recent kernels, however that is not
+> public available anymore like the older versions.
+> 
+> In fact Simics is now moving away from the simicsfs kernel module,
+> as the kernel module has required too much maintenance work. Users
+> should move to the new user mode Simics agent instead.
+> 
+> Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
+> ---
+>  Config.in.legacy               | 12 ++++++++++++
+>  DEVELOPERS                     |  1 -
+>  package/Config.in              |  1 -
+>  package/simicsfs/Config.in     | 11 -----------
+>  package/simicsfs/simicsfs.hash |  2 --
+>  package/simicsfs/simicsfs.mk   | 13 -------------
+>  6 files changed, 12 insertions(+), 28 deletions(-)
+>  delete mode 100644 package/simicsfs/Config.in
+>  delete mode 100644 package/simicsfs/simicsfs.hash
+>  delete mode 100644 package/simicsfs/simicsfs.mk
 
-Hi Thomas,
+Applied to master with some minor tweaks. Thanks!
 
-the two tarballs do not have the same content, I failed to find a github 
-hash which is equivalent to the previous tarball so I marked my patch as 
-rejected. Today I tried to build 1.6 but it failed, even after adding 
-https://github.com/hyperrealm/libconfig/pull/75, so we should keep things 
-the way they are atm.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
