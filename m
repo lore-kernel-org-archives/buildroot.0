@@ -1,66 +1,26 @@
-From: Alan Yaniger <alan@tkos.co.il>
-Date: Wed, 30 Aug 2017 09:03:30 +0300
-Subject: [Buildroot] [RFC PATCH] qt5tools: Install QDesignerExportWidget
-	include
-Message-ID: <1504073010-14243-1-git-send-email-alan@tkos.co.il>
+From: =?utf-8?Q?Alexandre=20Maumen=C3=A9?= <alexandre@maumene.org>
+Date: Wed, 30 Aug 2017 14:20:56 +0800
+Subject: [Buildroot] Error while build Xorg with nvidia-driver
+Message-ID: <1504074056.2980358.1089439320.4C40BE81@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To build a custom widget exposed to QtDesigner, the widget should 
-include the file QtUiPlugin/QDesignerExportWidget. Without this patch,
-the include file is not installed in ${STAGING_DIR}/usr/include/qt5. 
+Hi,
 
-The file QDesignerExportWidget in the qt5tools tarball is just an 
-include of the file qdesignerexportwidget.h, which itself includes the
-file qdesignerexportwidget.h, identified by a relative path 
-"../../src/designer/src/uiplugin/qdesignerexportwidget.h". That 
-relative path will not work in the staging dir, so just copy 
-qdesignerexportwidget.h into staging, and give it the name 
-QtUiPlugin/QDesignerExportWidget.
+I'm trying to build Xorg (with nvidia-driver) and I have this error:
+[...]
+checking for GLAMOR... yes
+checking for GBM... no
+configure: error: Glamor for Xorg requires gbm >= 10.2.0
 
-If anyone has a better way to install this file, using the Qt build 
-system instead of "cp", I would be happy to revise the patch.
+I'm not sure to understand if I the Nvidia proprietary drivers support
+gbm or not and if I actually need to build Xorg with glamor. I have
+found much examples on internet on how to build buildroot with Nvidia
+drivers. (but nouveau isn't really good for what I'm trying to build).
 
-Signed-off-by: Alan Yaniger <alan@tkos.co.il>
----
- package/qt5/qt5tools/qt5tools.mk | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Any help would be appreciate !
 
-diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
-index 3638b74..96a3c65 100644
---- a/package/qt5/qt5tools/qt5tools.mk
-+++ b/package/qt5/qt5tools/qt5tools.mk
-@@ -31,7 +31,7 @@ QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
- 	linguist/lconvert linguist/lrelease linguist/lupdate
- ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
- # use install target to copy cmake module files
--define QT5TOOLS_INSTALL_STAGING_CMDS
-+define QT5TOOLS_LINGUIST_TOOLS_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
- endef
- endif
-@@ -58,6 +58,19 @@ define QT5TOOLS_BUILD_CMDS
- 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
- endef
- 
-+ifeq ($(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO),y)
-+define QT5TOOLS_QTPLUGININFO_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m0644 \
-+		$(@D)/src/designer/src/uiplugin/qdesignerexportwidget.h \
-+		$(STAGING_DIR)/usr/include/qt5/QtUiPlugin/QDesignerExportWidget
-+endef
-+endif
-+
-+define QT5TOOLS_INSTALL_STAGING_CMDS
-+	$(QT5TOOLS_LINGUIST_TOOLS_INSTALL_STAGING_CMDS)
-+	$(QT5TOOLS_QTPLUGININFO_INSTALL_STAGING_CMDS)
-+endef
-+
- define QT5TOOLS_INSTALL_TARGET_CMDS
- 	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
- 		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
--- 
-2.7.4
+Regards,
