@@ -1,43 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Aug 2017 21:25:41 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools: gpio does not build in
-	parallel
-Message-ID: <20170830192541.14873-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Aug 2017 21:28:51 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/opus: bump version to 1.2.1
+Message-ID: <20170830192853.24222-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Partially fixes #10276.
+Switch upstream URL to https.
 
-Reported-by: Ciro Santilli <ciro.santilli@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Ciro Santilli <ciro.santilli@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-tools/linux-tool-gpio.mk.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/opus/opus.hash | 2 +-
+ package/opus/opus.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-gpio.mk.in b/package/linux-tools/linux-tool-gpio.mk.in
-index ba75ab4c3f..d5a0dbda38 100644
---- a/package/linux-tools/linux-tool-gpio.mk.in
-+++ b/package/linux-tools/linux-tool-gpio.mk.in
-@@ -15,13 +15,13 @@ define GPIO_BUILD_CMDS
- 		exit 1 ; \
- 	fi
+diff --git a/package/opus/opus.hash b/package/opus/opus.hash
+index 7349ec4b7..32fe2e245 100644
+--- a/package/opus/opus.hash
++++ b/package/opus/opus.hash
+@@ -1,2 +1,2 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	9122b6b380081dd2665189f97bfd777f04f92dc3ab6698eea1dbb27ad59d8692	opus-1.1.4.tar.gz
++sha256 cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732  opus-1.2.1.tar.gz
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index b810b7787..44de5db25 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools \
- 		$(GPIO_MAKE_OPTS) \
- 		gpio
- endef
- 
- define GPIO_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools \
- 		$(GPIO_MAKE_OPTS) \
- 		DESTDIR=$(TARGET_DIR) \
- 		gpio_install
+-OPUS_VERSION = 1.1.4
+-OPUS_SITE = http://downloads.xiph.org/releases/opus
++OPUS_VERSION = 1.2.1
++OPUS_SITE = https://downloads.xiph.org/releases/opus
+ OPUS_LICENSE = BSD-3-Clause
+ OPUS_LICENSE_FILES = COPYING
+ OPUS_INSTALL_STAGING = YES
 -- 
 2.11.0
