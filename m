@@ -1,38 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Aug 2017 20:06:29 +0000
-Subject: [Buildroot] [Bug 10281] New: lsblk does not compile for util-linux
-Message-ID: <bug-10281-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Aug 2017 22:07:00 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.12.10
+Message-ID: <20170830195941.E613B81D36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10281
+commit: https://git.buildroot.net/buildroot/commit/?id=172618a3400b137d221415d76448d9a3e8a06d96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-            Bug ID: 10281
-           Summary: lsblk does not compile for util-linux
-           Product: buildroot
-           Version: 2017.05.1
-          Hardware: All
-                OS: All
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: adyke at harris.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-lsblk is not compiled with util-linux
-
-Commit 031659024b3cf27bb68dc58d07519b563ef472a1 indicates the
-BR2_PACKAGE_UTIL_LINUX_LSBLK option was removed when upgrading to util-linux
-2.28.2 since that version always built lsblk. 
-However, in when using buildroot 2017.05.2 (which uses util-linux 2.29.2) lsblk
-is not built.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/linux/Config.in b/linux/Config.in
+index 8de47f3..036799f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.12.9)"
++	bool "Latest version (4.12.10)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.75-cip6)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.12.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.12.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.75-cip6" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
