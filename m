@@ -1,46 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Aug 2017 21:28:53 +0200
-Subject: [Buildroot] [PATCH/next 3/3] package/opus-tools: bump version to
-	0.1.10
-In-Reply-To: <20170830192853.24222-1-bernd.kuhls@t-online.de>
-References: <20170830192853.24222-1-bernd.kuhls@t-online.de>
-Message-ID: <20170830192853.24222-3-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Aug 2017 22:00:20 +0200
+Subject: [Buildroot] Location of the next Buildroot Developers meeting
+Message-ID: <20170830220020.0b94e178@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch upstream URL to https.
+Hello!
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/opus-tools/opus-tools.hash | 2 +-
- package/opus-tools/opus-tools.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The next Buildroot Developers meeting will take place on October 21 and
+October 22 in Prague, right before the Embedded Linux Conference Europe.
 
-diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
-index 486384c31..185c94ce7 100644
---- a/package/opus-tools/opus-tools.hash
-+++ b/package/opus-tools/opus-tools.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256	b1873dd78c7fbc98cf65d6e10cfddb5c2c03b3af93f922139a2104baedb4643a	opus-tools-0.1.9.tar.gz
-+sha256 a2357532d19471b70666e0e0ec17d514246d8b3cb2eb168f68bb0f6fd372b28c  opus-tools-0.1.10.tar.gz
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index 9b3953c8b..a81e75eb0 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPUS_TOOLS_VERSION = 0.1.9
--OPUS_TOOLS_SITE = http://downloads.xiph.org/releases/opus
-+OPUS_TOOLS_VERSION = 0.1.10
-+OPUS_TOOLS_SITE = https://downloads.xiph.org/releases/opus
- OPUS_TOOLS_LICENSE = BSD-2-Clause
- OPUS_TOOLS_LICENSE_FILES = COPYING
- OPUS_TOOLS_CONF_OPTS = --disable-oggtest --disable-opustest
+The meeting will be hosted by the MacGyver hackerspace! See
+http://macgyver.siliconhill.cz/ (in Czech).
+
+We already have six participants registered. Attending the meeting is
+free, and it's a great opportunity to meet the Buildroot community, and
+work during two days on things you dream of working on since such a
+long time, and never get to it. So if you're attending ELCE and
+working with Buildroot, you should really consider joining our meeting.
+If you have any question about it, do not hesitate to contact me for
+details.
+
+See http://elinux.org/Buildroot:DeveloperDaysELCE2017 for all the
+details about the meeting.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
