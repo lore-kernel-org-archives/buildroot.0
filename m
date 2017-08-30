@@ -1,65 +1,103 @@
-From: Aseem Sharma <aseem.sharma19@gmail.com>
-Date: Wed, 30 Aug 2017 20:19:33 +0530
-Subject: [Buildroot] Need help with cross-compiler configuration
-Message-ID: <CANK3ZEf0_A2aexR9mDJK3pi_CZhbBcujAnmsStvoJ6+DRZSVnA@mail.gmail.com>
+From: Erik Stromdahl <erik.stromdahl@gmail.com>
+Date: Wed, 30 Aug 2017 17:02:20 +0200
+Subject: [Buildroot] [PATCH v2 1/4] board/raspberrypi/post-image.sh: add
+ multi arg support
+In-Reply-To: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
+References: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
+Message-ID: <807d7b0a-25f6-5d76-6e94-23b5a1eb870f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I just noticed a few flaws in this patch series and I will most
+likely rework them somewhat before/if submitting a new version.
 
-I am naive to buildroot & processor world trying to compile
-"buildroot-2017.02.5" for "Marvell ARM Armada 166E processor (compatible to
-ARMv5TE instruction-set)" based old system.
+I haven't heard anything regarding these patches so I assume no one
+have had the time to take a look at them.
 
-I compiled the buildroot (kernel, rootfs & cross-compiler) by setting arm926t
-(little-endian) as target arch/variant as suggested by Arnout/Baruch in
-response to my old query. However, now I am having trouble booting the
-system with the new buildroot created zImage. I do not seem to get any
-output/log on the system screen after flashing this new image onto the
-system.
+Anyway, please don't spend any time on them (in case someone had planned
+to do so).
 
-To verify if the buildroot is configured correctly for my system, I tried
-to create a helloWorld program using the buildroot internal cross-compiler
-and then tried to run it on the arm based system (running old 2005
-buildroot release). Following is the exact error message that I observe:
-*hello.c on Host:*
-
-#include <stdio.h>
-int main()
-{
-   printf("Hello, World!");
-   return 0;
-}
-
-*Command Line used to Compile on Host:*
-
-sudo /home/administrator/Downloads/buildroot_2017/buildroot-2017.0
-2.5/output/host/usr/bin/arm-linux-gcc --sysroot=/home/administrator/
-Downloads/buildroot_2017/buildroot-2017.02.5/output/staging -o test hello.c
-
-*Screen Output on Target:*
-
-*# *./test
-*./test: line 1: syntax error: unexpected ")"*
-*#*
-*#* cat ./test | more   *                              ------->  Just to
-prove its not a shell script!*
-bFLTD? ?c0 ?eY??)? ?? ?? ? -?-? ??-?
-                                    ?
-                                     0???R??X at -? ? 0?0`?S?0?S3?/??
- ?, at -?`?A ?????0?S3?/??  40?@-? ??@ ?R??????0?S?
-? ?0 ?0???? @-?80?S?
-
-
-*Please let me know if I am missing something. *
-
-Thanks in advance.
-
-Best Regards,
-Aseem
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170830/2213192c/attachment.html>
+On 2017-07-15 14:50, Erik Stromdahl wrote:
+> Add possibility to supply multiple arguments to
+> post-image.sh
+> 
+> Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
+> ---
+> Changes v1 -> v2:
+>    - Fixed bad print in patch 2
+>    - Fixed commit comment and removed parenthesis in patch 4
+>      (comment from Ricardo Martincoski)
+> 
+>   board/raspberrypi/post-image.sh | 40 ++++++++++++++++++++++------------------
+>   1 file changed, 22 insertions(+), 18 deletions(-)
+> 
+> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+> index de97299..4f136f6 100755
+> --- a/board/raspberrypi/post-image.sh
+> +++ b/board/raspberrypi/post-image.sh
+> @@ -5,39 +5,43 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
+>   GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
+>   GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+>   
+> -case "${2}" in
+> -	--add-pi3-miniuart-bt-overlay)
+> -	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+> -		echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+> +for arg in "$@"
+> +do
+> +	case "${arg}" in
+> +		--add-pi3-miniuart-bt-overlay)
+> +		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+> +			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+>   
+>   # fixes rpi3 ttyAMA0 serial console
+>   dtoverlay=pi3-miniuart-bt
+>   __EOF__
+> -	fi
+> -	;;
+> -	--aarch64)
+> -	# Run a 64bits kernel (armv8)
+> -	sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+> -	if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+> +		fi
+> +		;;
+> +		--aarch64)
+> +		# Run a 64bits kernel (armv8)
+> +		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+> +		if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+>   
+>   # enable 64bits support
+>   arm_control=0x200
+>   __EOF__
+> -	fi
+> +		fi
+>   
+> -	# Enable uart console
+> -	if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+> +		# Enable uart console
+> +		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+>   
+>   # enable rpi3 ttyS0 serial console
+>   enable_uart=1
+>   __EOF__
+> -	fi
+> -	;;
+> +		fi
+> +		;;
+>   esac
+>   
+> +done
+> +
+>   rm -rf "${GENIMAGE_TMP}"
+>   
+>   genimage                           \
+> 
