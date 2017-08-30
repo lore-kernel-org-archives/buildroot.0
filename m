@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 23:27:32 +0200
-Subject: [Buildroot] [git commit branch/next]
-	package/kodi-inputstream-adaptive: bump version to latest
-	Krypton release
-Message-ID: <20170830212016.1F5C281677@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 23:27:37 +0200
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-*: mass
+	version bump
+Message-ID: <20170830212016.3106681677@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b7cbd65d65a86c54304cdd0013fe2dadc5bcc0c
+commit: https://git.buildroot.net/buildroot/commit/?id=136e1533ab24bdba13385ee26ba9f0a20dc853e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Upstream does not depend on a fixed version anymore but uses the latest
-commit of the Krypton branch:
-https://github.com/xbmc/repo-binary-addons/commit/2f3dfcfa97249ab01808c79a88d5b3d33bf5d620
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-pvr-hts/kodi-pvr-hts.hash               | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk                 | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index e461bd9..c7de62a 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index 5656e8e..bf0a736 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 cb0fa6f8326b439006701890d3fd90621b4f6f2db6055a9abe781b089170d28f  kodi-inputstream-adaptive-1.0.8_k17.tar.gz
-+sha256 4691ac8bde78b5abb2847cf6ad64d36141c0582f944ba435eafe7702cc2d1187  kodi-inputstream-adaptive-161f319bb2cd946f4659d841a54f19b1fb6143cc.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index e5a197c..8d7daef 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256 29867bd1fad4c4d69ec0d25ea1bb1507fd4543442aef890a2124f63f67318d92  kodi-pvr-hts-3.4.24-Krypton.tar.gz
++sha256 4fb24496622762ea8c894368bdababd2104c5f70978b901b983974ef389b83e1  kodi-pvr-hts-3.4.27.tar.gz
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index fb5873b..182fd4b 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -6,7 +6,7 @@
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 1.0.8_k17
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 161f319bb2cd946f4659d841a54f19b1fb6143cc
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_HTS_VERSION = 3.4.24-Krypton
++KODI_PVR_HTS_VERSION = 3.4.27
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 906cbb5..0b0406f 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0a006e275cddba02d5d3fd22a95cec6411a765719509a9bc8fcc93dfa247bd4c  kodi-pvr-iptvsimple-2.4.11-Krypton.tar.gz
++sha256 329bd71e5c786d7b037bf5fd103ee4abff892afc6e5186a5d0a797194a8c4c7c  kodi-pvr-iptvsimple-2.4.14-Krypton.tar.gz
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 5ea0a45..0df509e 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_IPTVSIMPLE_VERSION = 2.4.11-Krypton
++KODI_PVR_IPTVSIMPLE_VERSION = 2.4.14-Krypton
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
