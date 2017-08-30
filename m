@@ -1,125 +1,49 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Wed, 30 Aug 2017 08:55:25 -0700
-Subject: [Buildroot] [PATCH] package: Drop simicsfs support
-Message-ID: <1504108525-27529-1-git-send-email-bmeng.cn@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 30 Aug 2017 19:07:03 +0300
+Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.9
+Message-ID: <162b5a636bb13959aa40bd3ccc1479b9228bfa75.1504109223.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At present buildroot integrated simicfs v1.18 package is quite out
-of date, and does not compile with latest Linux kernel v4.12+. The
-latest package v1.22 supports recent kernels, however that is not
-public available anymore like the older versions.
+Fixes CVE-2017-0379: Mitigate a local side-channel attack on Curve25519
+dubbed "May the Fourth be With You".
 
-In fact Simics is now moving away from the simicsfs kernel module,
-as the kernel module has required too much maintenance work. Users
-should move to the new user mode Simics agent instead.
+As we are close to release, don't update to the latest 1.8.1 version,
+but to a maintenance release from the 1.7 branch.
 
-Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- Config.in.legacy               | 12 ++++++++++++
- DEVELOPERS                     |  1 -
- package/Config.in              |  1 -
- package/simicsfs/Config.in     | 11 -----------
- package/simicsfs/simicsfs.hash |  2 --
- package/simicsfs/simicsfs.mk   | 13 -------------
- 6 files changed, 12 insertions(+), 28 deletions(-)
- delete mode 100644 package/simicsfs/Config.in
- delete mode 100644 package/simicsfs/simicsfs.hash
- delete mode 100644 package/simicsfs/simicsfs.mk
+ package/libgcrypt/libgcrypt.hash | 6 ++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 693dc95..1fc7b9f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,18 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 8ac9f0a92bbc..56a45c5398aa 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,5 +1,3 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000408.html
+-sha1  65a4a495aa858483e66868199eaa8238572ca6cd  libgcrypt-1.7.8.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.8.tar.bz2.sig
+-sha256  948276ea47e6ba0244f36a17b51dcdd52cfd1e664b0a1ac3bc82134fb6cec199  libgcrypt-1.7.8.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.9.tar.bz2.sig
++sha256  bfe9bb703c1126c3647da2810fd23039c2f09d46969f71612c2065dc3fa9373b  libgcrypt-1.7.9.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index bc194addb384..fe3ac5cfff03 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_SIMICSFS
-+	bool "simicsfs support removed"
-+	select BR2_LEGACY
-+	help
-+	  Support for simicsfs kernel driver that provides access to a host
-+	  computer's local filesystem when the target is executing within a
-+	  SIMICS simulation has been removed.
-+
-+	  Simics is now moving away from the simicsfs kernel module, as the
-+	  kernel module has required too much maintenance work. Users should
-+	  move to the user mode Simics agent instead.
-+
- config BR2_BINUTILS_VERSION_2_26_X
- 	bool "binutils version 2.26 support removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 73686e2..1453486 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1162,7 +1162,6 @@ F:	package/python-pyrex/
- F:	package/raptor/
- F:	package/sepolgen/
- F:	package/setools/
--F:	package/simicsfs/
- F:	package/smcroute/
- F:	package/tclap/
- F:	package/valijson/
-diff --git a/package/Config.in b/package/Config.in
-index a0868d9..ba101db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -189,7 +189,6 @@ menu "Filesystem and flash utilities"
- 	source "package/mtools/Config.in"
- 	source "package/nfs-utils/Config.in"
- 	source "package/ntfs-3g/Config.in"
--	source "package/simicsfs/Config.in"
- 	source "package/sp-oops-extract/Config.in"
- 	source "package/squashfs/Config.in"
- 	source "package/sshfs/Config.in"
-diff --git a/package/simicsfs/Config.in b/package/simicsfs/Config.in
-deleted file mode 100644
-index 12b05c1..0000000
---- a/package/simicsfs/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--comment "simicsfs needs a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL
--
--config BR2_PACKAGE_SIMICSFS
--	bool "simicsfs"
--	depends on BR2_LINUX_KERNEL
--	help
--	  A kernel driver that provides access to a host computer's local
--	  filesystem when the target is executing within a SIMICS simulation.
--
--	  http://www.cs.sfu.ca/~fedorova/Tech/simics-guides-3.0.26/simics-user-guide-unix/topic33.html
-diff --git a/package/simicsfs/simicsfs.hash b/package/simicsfs/simicsfs.hash
-deleted file mode 100644
-index 42ada91..0000000
---- a/package/simicsfs/simicsfs.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256	d0cf7caf888dc1e7dc9496c4b59af98eb2b69d6113d6920757465902e1f21f38	simicsfs-1.18.tar.gz
-diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
-deleted file mode 100644
-index fe05302..0000000
---- a/package/simicsfs/simicsfs.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# simicsfs
--#
--################################################################################
--
--SIMICSFS_VERSION = 1.18
--SIMICSFS_SITE = http://download.simics.net/pub
--SIMICSFS_LICENSE = GPL-2.0+
--SIMICSFS_LICENSE_FILES = hostfs.h
--
--$(eval $(kernel-module))
--$(eval $(generic-package))
+-LIBGCRYPT_VERSION = 1.7.8
++LIBGCRYPT_VERSION = 1.7.9
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
-2.7.4
+2.14.1
