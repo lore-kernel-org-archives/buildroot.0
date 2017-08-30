@@ -1,36 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 22:00:20 +0200
-Subject: [Buildroot] Location of the next Buildroot Developers meeting
-Message-ID: <20170830220020.0b94e178@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Aug 2017 20:06:29 +0000
+Subject: [Buildroot] [Bug 10281] New: lsblk does not compile for util-linux
+Message-ID: <bug-10281-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+https://bugs.busybox.net/show_bug.cgi?id=10281
 
-The next Buildroot Developers meeting will take place on October 21 and
-October 22 in Prague, right before the Embedded Linux Conference Europe.
+            Bug ID: 10281
+           Summary: lsblk does not compile for util-linux
+           Product: buildroot
+           Version: 2017.05.1
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: adyke at harris.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-The meeting will be hosted by the MacGyver hackerspace! See
-http://macgyver.siliconhill.cz/ (in Czech).
+lsblk is not compiled with util-linux
 
-We already have six participants registered. Attending the meeting is
-free, and it's a great opportunity to meet the Buildroot community, and
-work during two days on things you dream of working on since such a
-long time, and never get to it. So if you're attending ELCE and
-working with Buildroot, you should really consider joining our meeting.
-If you have any question about it, do not hesitate to contact me for
-details.
+Commit 031659024b3cf27bb68dc58d07519b563ef472a1 indicates the
+BR2_PACKAGE_UTIL_LINUX_LSBLK option was removed when upgrading to util-linux
+2.28.2 since that version always built lsblk. 
+However, in when using buildroot 2017.05.2 (which uses util-linux 2.29.2) lsblk
+is not built.
 
-See http://elinux.org/Buildroot:DeveloperDaysELCE2017 for all the
-details about the meeting.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
