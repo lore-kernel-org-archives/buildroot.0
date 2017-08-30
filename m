@@ -1,50 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Aug 2017 15:44:55 +0200
-Subject: [Buildroot] [git commit] package/wayland-protocols: bump version to
-	1.10
-Message-ID: <20170902130619.99F358016A@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 23:27:32 +0200
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+	version to latest Krypton release
+Message-ID: <20170902130621.284498016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a5bf83802ed00d40d867c580e8f8c887b974588
+commit: https://git.buildroot.net/buildroot/commit/?id=4b7cbd65d65a86c54304cdd0013fe2dadc5bcc0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream.
-
-Upcoming mesa3d 17.2.0 needs version >= 1.8:
-https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=17.2&id=02cc359372773800de817950aebdf9be2c7973d1
+Upstream does not depend on a fixed version anymore but uses the latest
+commit of the Krypton branch:
+https://github.com/xbmc/repo-binary-addons/commit/2f3dfcfa97249ab01808c79a88d5b3d33bf5d620
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wayland-protocols/wayland-protocols.hash | 6 ++++--
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index a316698..bfda1d8 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,2 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030606.html
--sha256	635f2a937d318f1fecb97b54074ca211486e38af943868dd0fa82ea38d091c1f	wayland-protocols-1.7.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-July/034706.html
-+md5 84a7846c2b6a6a3e265fc9be36453e60  wayland-protocols-1.10.tar.xz
-+sha1 4f1322f03fa8b2e6467b8f71471f53eff82728a4  wayland-protocols-1.10.tar.xz
-+sha256 5719c51d7354864983171c5083e93a72ac99229e2b460c4bb10513de08839c0a  wayland-protocols-1.10.tar.xz
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 54c2ec1..a4b3376 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index e461bd9..c7de62a 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 cb0fa6f8326b439006701890d3fd90621b4f6f2db6055a9abe781b089170d28f  kodi-inputstream-adaptive-1.0.8_k17.tar.gz
++sha256 4691ac8bde78b5abb2847cf6ad64d36141c0582f944ba435eafe7702cc2d1187  kodi-inputstream-adaptive-161f319bb2cd946f4659d841a54f19b1fb6143cc.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index e5a197c..8d7daef 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_PROTOCOLS_VERSION = 1.7
-+WAYLAND_PROTOCOLS_VERSION = 1.10
- WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 1.0.8_k17
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 161f319bb2cd946f4659d841a54f19b1fb6143cc
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
