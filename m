@@ -1,45 +1,40 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Wed, 30 Aug 2017 03:47:56 +0200
-Subject: [Buildroot] [PATCH 1/1] grub2: force -fno-stack-protector in CFLAGS
-Message-ID: <20170830014756.1025-1-nunes.erico@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Aug 2017 01:50:09 +0000
+Subject: [Buildroot] [Bug 10261] Grub2 fails to build for x86_64
+In-Reply-To: <bug-10261-163@https.bugs.busybox.net/>
+References: <bug-10261-163@https.bugs.busybox.net/>
+Message-ID: <bug-10261-163-SDFFBKFJ3X@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-grub2 fails to configure when BR2_SSP_ALL is enabled, with the following
-configure error:
+https://bugs.busybox.net/show_bug.cgi?id=10261
 
-  checking whether -fno-asynchronous-unwind-tables works... yes
-  checking whether -fno-unwind-tables works... yes
-  checking for target linking format... unknown
-  configure: error: no suitable link format found
+Erico Nunes <nunes.erico@gmail.com> changed:
 
-This can be worked around by enforcing -fno-stack-protector in the
-package CFLAGS in a way that overrides the SSP flag, as is already done
-for the valgrind package.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|unassigned at buildroot.uclibc |nunes.erico at gmail.com
+                   |.org                        |
 
-Fixes bug #10261.
+--- Comment #6 from Erico Nunes <nunes.erico@gmail.com> ---
+It turns out that grub2 fails to build with BR2_SSP_ALL=y.
+The following defconfig is enough to reproduce the issue:
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Reported-by: Dr I J Ormshaw <ian_ormshaw@waters.com>
----
- boot/grub2/grub2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+BR2_x86_64=y
+BR2_SSP_ALL=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_X86_64_EFI=y
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 36f27d14ea..492cddf1a5 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -53,7 +53,7 @@ GRUB2_CONF_ENV = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CPP="$(HOSTCC) -E" \
- 	TARGET_CC="$(TARGET_CC)" \
--	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+	TARGET_CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector" \
- 	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
- 	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
- 	NM="$(TARGET_NM)" \
+We already had Bug 8946 in the past with a very similar issue and from which we
+can borrow a solution. So I sent the following patch as an attempt to address
+this issue before 2017.08 is cut out:
+https://patchwork.ozlabs.org/patch/807377/
+
 -- 
-2.13.5
+You are receiving this mail because:
+You are on the CC list for the bug.
