@@ -1,33 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 22:14:46 +0200
-Subject: [Buildroot] [PATCH/next 1/3] package/opus: bump version to 1.2.1
-In-Reply-To: <20170830192853.24222-1-bernd.kuhls@t-online.de>
-References: <20170830192853.24222-1-bernd.kuhls@t-online.de>
-Message-ID: <20170830221446.14887f29@windsurf.lan>
+Date: Wed, 30 Aug 2017 22:18:57 +0200
+Subject: [Buildroot] [git commit] CHANGES: start preparing for the final
+	2017.08
+Message-ID: <20170830201149.0168D7FE16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0ea3d7ba0e162c68990919e3187749f24268866d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Aug 2017 21:28:51 +0200, Bernd Kuhls wrote:
-> Switch upstream URL to https.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/opus/opus.hash | 2 +-
->  package/opus/opus.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ CHANGES | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-All three patches applied to next. Could you reply on the libconfig and
-linphone patches, so that we can move forward with them?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/CHANGES b/CHANGES
+index 74a80ef..352c3a9 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,16 @@
++2017.08, To be released
++
++	Fixes all over the tree.
++
++	Updated/fixed packages:
++
++	Updated/fixed defconfigs:
++
++	Removed packages: simicfs.
++
++	Issues resolved (http://bugs.buildroot.org):
++	#10261: Grub2 fails to build for x86_64
++
+ 2017.08-rc3, Released August 23rd, 2017
+ 
+ 	Fixes all over the tree.
