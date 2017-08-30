@@ -1,52 +1,66 @@
-From: Brett Stahlman <brettstahlman@gmail.com>
-Date: Tue, 29 Aug 2017 17:19:52 -0500
-Subject: [Buildroot] Buildroot linux kernel configuration confusion
-Message-ID: <CAOyxqKmX1VPDxcj-m_2jj1WcbujtjS6DFAYqAWkf3nK1dPcxUw@mail.gmail.com>
+From: Rosario Vumbaca <rosario.vumbaca@allieddata.com.au>
+Date: Wed, 30 Aug 2017 10:07:31 +1000
+Subject: [Buildroot] Genimage limitations?
+Message-ID: <2f6624e0-deab-6420-995c-52c40bda9986@allieddata.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've read the sections in the manual discussing linux kernel
-configuration, and there are several points I on which I could use
-clarification...
+Hi,
 
-IIUC, BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG and
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE are a pair: when the former is set
-(y), the latter is expected to point to a file that will be filled in
-by either `make linux-menuconfig` or `make linux-update-defconfig`.
-The documentation seems to suggest that the former will create, but
-the latter merely updates an existing file. But where do the settings
-come from? And when are these commands meant to be run? As part of a
-normal build, or do I need to invoke manually only after making
-changes to the configuration somehow?
+I am a new user to Buildroot and I am creating an image for a 
+RaspberryPi Compute Module on a custom carrier board.
 
-I'm also a bit confused about BR2_LINUX_KERNEL_USE_DEFCONFIG and the
-associated BR2_LINUX_KERNEL_DEFCONFIG. IIUC, the former enables the
-feature, and the latter specifies a file that (in contrast to
-BR2_LINUX_CUSTOM_CONFIG_FILE) is meant to be created manually by the
-user, possibly using an arch-specific defconfig file as a starting
-point. Correct so far? It appears to me that this file is used with
-`scripts/kconfig/conf --defconfig` to generate an initial .config
-file, and that this initial .config file is subsequently updated by a
-call to merge_config.sh, which uses the settings in a "fragment file"
-to override the defaults. Finally, I can see that there's a call to
-`scripts/kconfig/conf --olddefconfig Kconfig`, which IIUC is meant to
-allow user the option of overriding the defaults. But since this is
-being run in a non-interactive build, I'm not sure what the purpose of
-this call is...
+It is well known that the RaspberryPi requires an "overlays" directory 
+on the fat16/fat32 boot partition, with optional overlay files inside 
+that directory.
 
-Finally, I'm fuzzy on manual vs automatic updates of .config. I know
-.config can be updated by commands like `make menuconfig`, which allow
-the user to make changes interactively, but I can see that it's also
-updated automatically by a standard buildroot `make all`. Once I've
-updated the .config file, when will it be overwritten? I'm assuming it
-shouldn't be overwritten by a standard make, provided that none of the
-fragment files or defconfig files has changed. Correct?
+For example: overlays/i2c-rtc.dtbo (a fairly fundamental overlay file!)
 
-Any big picture overview of the configuration mechanism would be
-greatly appreciated...
+However
+
+1. genimage doesn't seem to be able to create a directory on the target 
+image
+
+2. Or Alternatively to copy a single file to the target image with the 
+directory structure intact.
+
+
+- If I specify "rpi-firmware/overlays" in the genimage.cfg file, it 
+keeps the directory tree intact but copies the entire overlays directory 
+to the target image.
+
+- If I specify the single file "rpi-firmware/overlays/i2c-rtc.dtbo" it 
+copies only that file into the root, and fails to create the directory 
+tree on the target image.
+
+The behaviour of genimage in this regard seems to be undocumented and 
+inconsistent.
+
+I searched the mailing list archives, and read the (very minimal) 
+genimage documentation but I can't find a solution, short of modifying 
+the image after it is created.
+
+Does anyone know if it is possible to do this with genimage, or if there 
+is some other best practices technique that can be applied?
+
+All I can think of is to mount and modify the vfat image after it is 
+built, but this seems like a poor practice, especially when it could be 
+done correctly when the image is first built.
 
 Thanks,
-Brett S.
+
+Regards,
+
+Rosario
+
+-- 
+Rosario Vumbaca
+Electrical Engineer
+
+Allied Data Systems Pty Limited
+67/176 South Creek Road, Cromer NSW 2099 Australia
+Tel. +61 2 9982 1510 | Fax. +61 2 9984 7807
+E-mail: rosario.vumbaca at allieddata.com.au | Web: www.allieddata.com.au
