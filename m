@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 22:29:46 +0200
-Subject: [Buildroot] [PATCH next 1/2] lirc-tools: remove useless
- libusb-compat dependnecy
-In-Reply-To: <c21debe1fe36162b182803d45b5e6b0ab4ff575d.1503898456.git.baruch@tkos.co.il>
-References: <c21debe1fe36162b182803d45b5e6b0ab4ff575d.1503898456.git.baruch@tkos.co.il>
-Message-ID: <20170830222946.5ad6f28b@windsurf.lan>
+Date: Wed, 30 Aug 2017 22:30:09 +0200
+Subject: [Buildroot] [git commit branch/next] libftdi1: bump to version 1.4
+Message-ID: <20170830202306.BDC8781970@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b191d64d381a08d4bff4e004b273b4b0e89bc06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 28 Aug 2017 08:34:15 +0300, Baruch Siach wrote:
-> The only plugin that uses libusb/libusb-compat is the ftdi plugin. This
-> plugin needs libftdi1 that already depends on libusb in Buildroot. So in
-> practice libusb-compat is never actually used; we can safely remove it.
-> The libusb dependency is implicit in the libftdi1 optional dependency.
+Cc: Daniel Sangue <daniel.sangue@sangue.ch>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libftdi1/libftdi1.hash | 5 +++--
+ package/libftdi1/libftdi1.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Are you sure ?
-
-From the configure.ac script:
-
-AC_CHECK_HEADERS([usb.h libusb-1.0/libusb.h libusb.h])
-AC_CHECK_LIB([usb],[usb_get_string],[usb_libs="-lusb"],,)
-AM_CONDITIONAL([BUILD_USB],[test x$usb_libs != x])
-AC_CHECK_LIB([usb-1.0],[libusb_lock_events],[usb_libs="$usb_libs -lusb-1.0"],,)
-
-In addition, I do see a number of plugins linked with libusb-0.1:
-
-$ readelf -d output/target/usr/lib/lirc/plugins/* | grep libusb-0.1
- 0x00000001 (NEEDED)                     Shared library: [libusb-0.1.so.4]
- 0x00000001 (NEEDED)                     Shared library: [libusb-0.1.so.4]
- 0x00000001 (NEEDED)                     Shared library: [libusb-0.1.so.4]
- 0x00000001 (NEEDED)                     Shared library: [libusb-0.1.so.4]
- 0x00000001 (NEEDED)                     Shared library: [libusb-0.1.so.4]
-
-Am I missing something ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
+index 0a89182..40512a7 100644
+--- a/package/libftdi1/libftdi1.hash
++++ b/package/libftdi1/libftdi1.hash
+@@ -1,2 +1,3 @@
+-# Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
+-sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
++# Locally computed after checking the signature
++# https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.4.tar.bz2.sig
++sha256  ec36fb49080f834690c24008328a5ef42d3cf584ef4060f3a35aa4681cb31b74  libftdi1-1.4.tar.bz2
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index 6b84b95..c45c83a 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFTDI1_VERSION = 1.3
++LIBFTDI1_VERSION = 1.4
+ LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
+ LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
+ LIBFTDI1_INSTALL_STAGING = YES
