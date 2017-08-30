@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:53 +0200
-Subject: [Buildroot] [git commit] perl-module-build: bump to version 0.4224
-Message-ID: <20170902130618.CD37E80337@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 22:11:02 +0200
+Subject: [Buildroot] [git commit] mtd: bump to version 2.0.1
+Message-ID: <20170902130620.3A9688016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68fb9044be4f380504ff8fa40720f852060a336c
+commit: https://git.buildroot.net/buildroot/commit/?id=61264acf8efff8931167cb56d26ef7d551c6c027
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-module-build/perl-module-build.hash | 4 ++--
- package/perl-module-build/perl-module-build.mk   | 2 +-
+ package/mtd/mtd.hash | 4 ++--
+ package/mtd/mtd.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
-index 0363ac5..17e8b4e 100644
---- a/package/perl-module-build/perl-module-build.hash
-+++ b/package/perl-module-build/perl-module-build.hash
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index 6a234d2..c452654 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
 @@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9df204e188462a4410d496f316c2c531 Module-Build-0.4220.tar.gz
--sha256 fb1207c7e799366f7a8adda3f135bf8141c4d6068505650d4db2b2d3ce34b5a2 Module-Build-0.4220.tar.gz
-+md5    b74c2f6e84b60aad3a3defd30b6f0f4d Module-Build-0.4224.tar.gz
-+sha256 a6ca15d78244a7b50fdbf27f85c85f4035aa799ce7dd018a0d98b358ef7bc782 Module-Build-0.4224.tar.gz
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 080e817..42c9c11 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
+ # Locally calculated after checking pgp signature
+-# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.0.tar.bz2.asc
+-sha256	20a377aa86af4c102e930b0d0bb9859e3a10aeb16445f6a1273989b206a717c8	mtd-utils-2.0.0.tar.bz2
++# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
++sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 3bac2d5..e666bf0 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MODULE_BUILD_VERSION = 0.4220
-+PERL_MODULE_BUILD_VERSION = 0.4224
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
+-MTD_VERSION = 2.0.0
++MTD_VERSION = 2.0.1
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ MTD_LICENSE = GPL-2.0
