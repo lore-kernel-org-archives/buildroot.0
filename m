@@ -1,79 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Aug 2017 23:31:50 +0200
-Subject: [Buildroot] [git commit] uclibc-ng-test: update to latest
-Message-ID: <20170902130621.6470F81DA2@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 22:13:55 +0200
+Subject: [Buildroot] [git commit] package/opusfile: bump version to 0.9
+Message-ID: <20170902130620.9E5348016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f80572547038373ff58d2e7a0c89f9c014d12e22
+commit: https://git.buildroot.net/buildroot/commit/?id=828cdd7f507698ddc7c31e04b21b069de6408b25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Switch upstream URL to https.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../uclibc-ng-test/0001-disable-for-glibc.patch    | 40 ----------------------
- package/uclibc-ng-test/uclibc-ng-test.mk           |  2 +-
- 2 files changed, 1 insertion(+), 41 deletions(-)
+ package/opusfile/opusfile.hash | 2 +-
+ package/opusfile/opusfile.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc-ng-test/0001-disable-for-glibc.patch b/package/uclibc-ng-test/0001-disable-for-glibc.patch
-deleted file mode 100644
-index 13786c9..0000000
---- a/package/uclibc-ng-test/0001-disable-for-glibc.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 787e584f18afc967d91cfe1a8443df2657579ecb Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Fri, 12 May 2017 00:44:01 +0200
--Subject: [PATCH] disable for glibc
--
--uclibc-ng-test is broken with glibc 2.25 due to pthread_cond_t changes introduced by [1].
--Disable test-cond22 for glibc based toolchain.
--
--[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=ed19993b5b0d05d62cc883571519a67dae481a14
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- test/nptl/tst-cond22.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/test/nptl/tst-cond22.c b/test/nptl/tst-cond22.c
--index 3255cc0..23697dd 100644
----- a/test/nptl/tst-cond22.c
--+++ b/test/nptl/tst-cond22.c
--@@ -2,7 +2,7 @@
-- #include <stdio.h>
-- #include <stdlib.h>
-- 
---#if defined(__GLIBC__) || defined(__UCLIBC__)
--+#if defined(__UCLIBC__)
-- static pthread_barrier_t b;
-- static pthread_cond_t c = PTHREAD_COND_INITIALIZER;
-- static pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
--@@ -54,7 +54,7 @@ tf (void *arg)
-- static int
-- do_test (void)
-- {
---#if defined(__GLIBC__) || defined(__UCLIBC__)
--+#if defined(__UCLIBC__)
--   int status = 0;
-- 
--   if (pthread_barrier_init (&b, NULL, 2) != 0)
---- 
--2.9.3
--
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 93736ed..3fdfe37 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
+index 541a21f..528ded2 100644
+--- a/package/opusfile/opusfile.hash
++++ b/package/opusfile/opusfile.hash
+@@ -1,2 +1,2 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	2c231ed3cfaa1b3173f52d740e5bbd77d51b9dfecb87014b404917fba4b855a4	opusfile-0.8.tar.gz
++sha256 f75fb500e40b122775ac1a71ad80c4477698842a8fe9da4a1b4a1a9f16e4e979  opusfile-0.9.tar.gz
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index 846eedd..186288d 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--UCLIBC_NG_TEST_VERSION = c9b9876cefc142a23aa622b821290ed16af80058
-+UCLIBC_NG_TEST_VERSION = c4d54bde7772b55df04399ecb355769c5ac31015
- UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
- UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
- UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+-OPUSFILE_VERSION = 0.8
+-OPUSFILE_SITE = http://downloads.xiph.org/releases/opus
++OPUSFILE_VERSION = 0.9
++OPUSFILE_SITE = https://downloads.xiph.org/releases/opus
+ OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
+ OPUSFILE_LICENSE = BSD-3-Clause
+ OPUSFILE_LICENSE_FILES = COPYING
