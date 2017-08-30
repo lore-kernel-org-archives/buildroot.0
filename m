@@ -1,71 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Aug 2017 23:40:50 +0200
-Subject: [Buildroot] [git commit] perl-libwww-perl: bump to version 6.26
-Message-ID: <20170902130618.B440B80337@busybox.osuosl.org>
+Date: Wed, 30 Aug 2017 23:26:02 +0200
+Subject: [Buildroot] [git commit] package/efl: bump to 1.20.2
+Message-ID: <20170902130620.E6B378016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55acd64d896ea4ef3b6e26b16ff0af94dac71b2e
+commit: https://git.buildroot.net/buildroot/commit/?id=688fff1403c5aaceef4fb937cc60d28cb6629dad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+See: https://www.enlightenment.org/news/efl-1.20.2
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-libwww-perl/Config.in             | 3 ++-
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-libwww-perl/Config.in b/package/perl-libwww-perl/Config.in
-index fc46bf1..09fc005 100644
---- a/package/perl-libwww-perl/Config.in
-+++ b/package/perl-libwww-perl/Config.in
-@@ -11,12 +11,13 @@ config BR2_PACKAGE_PERL_LIBWWW_PERL
- 	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
- 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
- 	select BR2_PACKAGE_PERL_NET_HTTP
-+	select BR2_PACKAGE_PERL_TRY_TINY
- 	select BR2_PACKAGE_PERL_URI
- 	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
- 	help
- 	  The World-Wide Web library for Perl
- 
--	  https://metacpan.org/release/libwww-perl
-+	  https://github.com/libwww-perl/libwww-perl
- 
- comment "perl-libwww-perl needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index d3b3328..24e077d 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    0880fade10edcf5f60087e42f1db4481 libwww-perl-6.16.tar.gz
--sha256 daffd268000f92d241f8ae5508ae5616dbd02f15a587b4fbcd14998ccc15ce22 libwww-perl-6.16.tar.gz
-+md5    457bf4a4f40af3e2f43653329a9c6ab7 libwww-perl-6.26.tar.gz
-+sha256 d0c5435275f8638ff36fff8f655ad2ccad1156e66cc47bfacfb9e44fc585b24f libwww-perl-6.26.tar.gz
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index fe5bd98..fd4857c 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index eefcbef..9d553ad 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.19.1.tar.xz.sha256
+-sha256	8c69eaf5f3489245dff6112394bf3685fb9d6fd3915035fe022f27c554e6cd3a	efl-1.19.1.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.2.tar.xz.sha256
++sha256	a540cb96f0a2a8f2e3001108d8432d2f21b45f6b12bd511eeebaadd5c934947e	efl-1.20.2.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 9cbbabb..b4cdeed 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.16
-+PERL_LIBWWW_PERL_VERSION = 6.26
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_DEPENDENCIES = \
-@@ -18,6 +18,7 @@ PERL_LIBWWW_PERL_DEPENDENCIES = \
- 	perl-http-negotiate \
- 	perl-lwp-mediatypes \
- 	perl-net-http \
-+	perl-try-tiny \
- 	perl-uri \
- 	perl-www-robotrules
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+-EFL_VERSION = 1.19.1
++EFL_VERSION = 1.20.2
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
