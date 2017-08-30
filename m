@@ -1,24 +1,146 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Aug 2017 18:05:08 +0000
-Subject: [Buildroot] [Bug 10276] BR2_PACKAGE_LINUX_TOOLS_GPIO fails for MIPS
- with "gpio-hammer.o: ABI is incompatible with that of the selected
- emulation"
-In-Reply-To: <bug-10276-163@https.bugs.busybox.net/>
-References: <bug-10276-163@https.bugs.busybox.net/>
-Message-ID: <bug-10276-163-YsPGmK0lFK@https.bugs.busybox.net/>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed, 30 Aug 2017 20:32:49 +0200
+Subject: [Buildroot] [PATCH] libostree: new package
+Message-ID: <20170830183249.8257-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10276
+OSTree is an upgrade system for Linux-based operating systems
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Well, I'm pretty sure its the issue fixed for perf by
-https://patchwork.ozlabs.org/patch/729154/. When ld is used directly for
-linking, it needs to be explicitly told the endianness.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ ...Use-autoreconf-from-the-build-environment.patch | 42 ++++++++++++++++++++++
+ package/libostree/Config.in                        | 12 +++++++
+ package/libostree/libostree.mk                     | 22 ++++++++++++
+ 5 files changed, 80 insertions(+)
+ create mode 100644 package/libostree/0001-Use-autoreconf-from-the-build-environment.patch
+ create mode 100644 package/libostree/Config.in
+ create mode 100644 package/libostree/libostree.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f3944e2748..a1cfd9e1bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1100,6 +1100,9 @@ F:	package/turbolua/
+ N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+ F:	package/libkcapi/
+ 
++N:	Marcus Folkesson <marcus.folkesson@gmail.com>
++F:	package/libostree/
++
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+ F:	package/libatasmart/
+ F:	package/polkit/
+diff --git a/package/Config.in b/package/Config.in
+index a0868d92ee..12cd6187a5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1883,6 +1883,7 @@ menu "System tools"
+ 	source "package/numactl/Config.in"
+ 	source "package/nut/Config.in"
+ 	source "package/openvmtools/Config.in"
++	source "package/libostree/Config.in"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+ 	source "package/procps-ng/Config.in"
+diff --git a/package/libostree/0001-Use-autoreconf-from-the-build-environment.patch b/package/libostree/0001-Use-autoreconf-from-the-build-environment.patch
+new file mode 100644
+index 0000000000..36d9b3f15e
+--- /dev/null
++++ b/package/libostree/0001-Use-autoreconf-from-the-build-environment.patch
+@@ -0,0 +1,42 @@
++From e4b940cc02776edee63c5a706746dc237862151d Mon Sep 17 00:00:00 2001
++From: Marcus Folkesson <marcus.folkesson@gmail.com>
++Date: Wed, 30 Aug 2017 19:20:35 +0200
++Subject: [PATCH] Use autoreconf from the build environment
++
++OSTree workarounds a bug in automake in their autogen.sh file.
++Use the script but do not call autoreconf from it.
++
++Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
++---
++ autogen.sh | 11 -----------
++ 1 file changed, 11 deletions(-)
++
++diff --git a/autogen.sh b/autogen.sh
++index 17f6abf4..0dfbb15a 100755
++--- a/autogen.sh
+++++ b/autogen.sh
++@@ -6,12 +6,6 @@ test -n "$srcdir" || srcdir=.
++ olddir=`pwd`
++ cd $srcdir
++ 
++-AUTORECONF=`which autoreconf`
++-if test -z $AUTORECONF; then
++-        echo "*** No autoreconf found, please install it ***"
++-        exit 1
++-fi
++-
++ set -e
++ 
++ mkdir -p m4
++@@ -37,8 +31,3 @@ sed -e 's,$(libbsdiff_srcpath),bsdiff,g' < bsdiff/Makefile-bsdiff.am >bsdiff/Mak
++ 
++ # FIXME - figure out how to get aclocal to find this by default
++ ln -sf ../libglnx/libglnx.m4 buildutil/libglnx.m4
++-
++-autoreconf --force --install --verbose
++-
++-cd $olddir
++-test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
++-- 
++2.13.1
++
+diff --git a/package/libostree/Config.in b/package/libostree/Config.in
+new file mode 100644
+index 0000000000..520e76ce6a
+--- /dev/null
++++ b/package/libostree/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBOSTREE
++	bool "libostree"
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_PKGCONF
++	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_LIBFUSE
++	select BR2_PACKAGE_LIBGPGME
++	help
++	  OSTree is an upgrade system for Linux-based operating systems.
++
++	  https://ostree.readthedocs.io/en/latest/
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+new file mode 100644
+index 0000000000..28d80343b7
+--- /dev/null
++++ b/package/libostree/libostree.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libostree
++#
++################################################################################
++
++LIBOSTREE_VERSION = v2017.10
++LIBOSTREE_SITE = https://github.com/ostreedev/ostree.git
++LIBOSTREE_SITE_METHOD = git
++LIBOSTREE_GIT_SUBMODULES = yes
++LIBOSTREE_LICENSE = GPLv2
++LIBOSTREE_LICENSE_FILES = COPYING
++LIBOSTREE_AUTORECONF = YES
++LIBOSTREE_DEPENDENCIES = libgpgme libglib2 xz libfuse pkgconf
++
++# Use their special autogen.sh script to workaround automake bug with subdir-objects and computed paths
++define LIBOSTREE_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++LIBOSTREE_PRE_CONFIGURE_HOOKS += LIBOSTREE_RUN_AUTOGEN
++
++$(eval $(autotools-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.13.1
