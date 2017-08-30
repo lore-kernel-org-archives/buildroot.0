@@ -1,66 +1,45 @@
-From: Rosario Vumbaca <rosario.vumbaca@allieddata.com.au>
-Date: Wed, 30 Aug 2017 10:07:31 +1000
-Subject: [Buildroot] Genimage limitations?
-Message-ID: <2f6624e0-deab-6420-995c-52c40bda9986@allieddata.com.au>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Wed, 30 Aug 2017 03:47:56 +0200
+Subject: [Buildroot] [PATCH 1/1] grub2: force -fno-stack-protector in CFLAGS
+Message-ID: <20170830014756.1025-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+grub2 fails to configure when BR2_SSP_ALL is enabled, with the following
+configure error:
 
-I am a new user to Buildroot and I am creating an image for a 
-RaspberryPi Compute Module on a custom carrier board.
+  checking whether -fno-asynchronous-unwind-tables works... yes
+  checking whether -fno-unwind-tables works... yes
+  checking for target linking format... unknown
+  configure: error: no suitable link format found
 
-It is well known that the RaspberryPi requires an "overlays" directory 
-on the fat16/fat32 boot partition, with optional overlay files inside 
-that directory.
+This can be worked around by enforcing -fno-stack-protector in the
+package CFLAGS in a way that overrides the SSP flag, as is already done
+for the valgrind package.
 
-For example: overlays/i2c-rtc.dtbo (a fairly fundamental overlay file!)
+Fixes bug #10261.
 
-However
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Reported-by: Dr I J Ormshaw <ian_ormshaw@waters.com>
+---
+ boot/grub2/grub2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. genimage doesn't seem to be able to create a directory on the target 
-image
-
-2. Or Alternatively to copy a single file to the target image with the 
-directory structure intact.
-
-
-- If I specify "rpi-firmware/overlays" in the genimage.cfg file, it 
-keeps the directory tree intact but copies the entire overlays directory 
-to the target image.
-
-- If I specify the single file "rpi-firmware/overlays/i2c-rtc.dtbo" it 
-copies only that file into the root, and fails to create the directory 
-tree on the target image.
-
-The behaviour of genimage in this regard seems to be undocumented and 
-inconsistent.
-
-I searched the mailing list archives, and read the (very minimal) 
-genimage documentation but I can't find a solution, short of modifying 
-the image after it is created.
-
-Does anyone know if it is possible to do this with genimage, or if there 
-is some other best practices technique that can be applied?
-
-All I can think of is to mount and modify the vfat image after it is 
-built, but this seems like a poor practice, especially when it could be 
-done correctly when the image is first built.
-
-Thanks,
-
-Regards,
-
-Rosario
-
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 36f27d14ea..492cddf1a5 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -53,7 +53,7 @@ GRUB2_CONF_ENV = \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	CPP="$(HOSTCC) -E" \
+ 	TARGET_CC="$(TARGET_CC)" \
+-	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
++	TARGET_CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector" \
+ 	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
+ 	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	NM="$(TARGET_NM)" \
 -- 
-Rosario Vumbaca
-Electrical Engineer
-
-Allied Data Systems Pty Limited
-67/176 South Creek Road, Cromer NSW 2099 Australia
-Tel. +61 2 9982 1510 | Fax. +61 2 9984 7807
-E-mail: rosario.vumbaca at allieddata.com.au | Web: www.allieddata.com.au
+2.13.5
