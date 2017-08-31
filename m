@@ -1,106 +1,155 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Aug 2017 19:26:15 +0200
-Subject: [Buildroot] [PATCH 0/2] package/grub: drop grub-legacy
-In-Reply-To: <20170831170639.w7b6k5tgsd56ll3c@tarshish>
-References: <cover.1504194830.git.yann.morin.1998@free.fr>
- <20170831170639.w7b6k5tgsd56ll3c@tarshish>
-Message-ID: <20170831172615.GE3964@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 31 Aug 2017 20:42:10 +0200
+Subject: [Buildroot] [PATCH] package/xmlstarlet: fix host build
+In-Reply-To: <20170831131049.5541217e@windsurf.lan>
+References: <20170830224010.15658-1-romain.naour@gmail.com>
+ <20170831091419.3d0039cc@windsurf.lan>
+ <CANLo3Jix+ojJWq6QTRaxxpOMDHBJtkUkiZnAzy6neY95h=OGCA@mail.gmail.com>
+ <20170831093921.11448124@windsurf.lan>
+ <CANLo3Jj1_a7+n1on26o94mzxRVKhZFGH4+g981GxyqmUng-2Gg@mail.gmail.com>
+ <20170831131049.5541217e@windsurf.lan>
+Message-ID: <7d358a39-0c49-204c-f784-d0e7efc646bd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hi Thomas,
 
-On 2017-08-31 20:06 +0300, Baruch Siach spake thusly:
-> On Thu, Aug 31, 2017 at 05:53:56PM +0200, Yann E. MORIN wrote:
-> > This two-patch series removes grub, aka grub-legacy.
-> > 
-> > The reasioning is explained in the first patch, which actually gets rid
-> > of grub.
-> > 
-> > The second patch then removes grub support in the iso8660 filesystem, as
-> > grub is no longer available then.
-> > 
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> > 
-> > The following changes since commit 0ea3d7ba0e162c68990919e3187749f24268866d
-> > 
-> >   CHANGES: start preparing for the final 2017.08 (2017-08-30 22:18:57 +0200)
-> > 
-> > 
-> > are available in the git repository at:
-> > 
-> >   git://git.buildroot.org/~ymorin/git/buildroot.git
+Le 31/08/2017 ? 13:10, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> That's the 'yem/no-grub-legacy' branch right?
-
-Yep it is.
-
-> The first patch exceeds the list limit so anyone interested in seeing it must 
-> use git for that.
-
-But hopefully a list admin will let the patch go through soon! ;-)
-
-> Here is the git web interface link:
->   https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/no-grub-legacy
-
-Maybe I should automatically add such an URL when I send the cover
-letter. Good idea! ;-)
-
-Regards,
-Yann E. MORIN.
-
-> baruch
+> On Thu, 31 Aug 2017 12:51:24 +0200, Romain Naour wrote:
 > 
-> > for you to fetch changes up to 89462d4b3d365f2c6585eefeb35175813b5a8af2
-> > 
-> >   fs/iso9660: remove support for grub (2017-08-31 17:49:12 +0200)
-> > 
-> > 
-> > ----------------------------------------------------------------
-> > Yann E. MORIN (2):
-> >       boot/grub: remove
-> >       fs/iso9660: remove support for grub
-> > 
-> >  Config.in.legacy                              |     9 +
-> >  boot/Config.in                                |     1 -
-> >  boot/grub/Config.in                           |   200 -
-> >  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
-> >  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
-> >  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
-> >  boot/grub/grub.hash                           |     3 -
-> >  boot/grub/grub.mk                             |   109 -
-> >  boot/grub/menu.lst                            |    16 -
-> >  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
-> >  fs/iso9660/Config.in                          |    16 +-
-> >  fs/iso9660/grub.cfg                           |     7 -
-> >  fs/iso9660/iso9660.mk                         |    32 +-
-> >  support/testing/tests/fs/test_iso9660.py      |    37 -
-> >  14 files changed, 14 insertions(+), 47529 deletions(-)
-> >  delete mode 100644 boot/grub/Config.in
-> >  delete mode 100644 boot/grub/grub.200-fix_mbr_handling.patch
-> >  delete mode 100644 boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
-> >  delete mode 100644 boot/grub/grub.400-nic_update2.patch
-> >  delete mode 100644 boot/grub/grub.hash
-> >  delete mode 100644 boot/grub/grub.mk
-> >  delete mode 100644 boot/grub/menu.lst
-> >  delete mode 100644 boot/grub/splash.xpm.gz
-> >  delete mode 100644 fs/iso9660/grub.cfg
+>> Well, gmail app on my phone...
 > 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> Gaah, horrible (again with this e-mail).
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+The phone is now in RO mode :)
+
+> 
+>> Libxml-dev wasn't installed on my host.
+>> I'll take a look later today.
+>>
+>> Btw, host-xmlstarlet is a dependendy of kodi package which depends on java
+>> installed on the host.
+>>
+>> Maybe host-xmlstarlet is never build on the autobuiders ?
+>>
+>> Can you try to build it ?
+> 
+> It builds fine on my autobuilder:
+> 
+>>>> host-xmlstarlet 1.6.1 Building
+> PATH="/home/test/foo/host/bin:/home/test/foo/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games" PKG_CONFIG="/home/test/foo/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_LIBDIR="/home/test/foo/host/lib/pkgconfig:/home/test/foo/host/share/pkgconfig"  /usr/bin/make -j9  -C /home/test/foo/build/host-xmlstarlet-1.6.1/
+> /usr/bin/make  all-am
+>   GEN      src/usage.c
+>   GEN      src/c14n-usage.c
+>   GEN      src/depyx-usage.c
+>   GEN      src/edit-usage.c
+>   GEN      src/elem-usage.c
+>   GEN      src/escape-usage.c
+>   GEN      src/format-usage.c
+>   GEN      src/ls-usage.c
+>   GEN      src/pyx-usage.c
+>   GEN      src/select-usage.c
+>   GEN      src/trans-usage.c
+>   GEN      src/unescape-usage.c
+>   GEN      src/validate-usage.c
+>   CC       src/trans.o
+>   CC       src/xml.o
+>   CC       src/xml_C14N.o
+>   CC       src/xml_depyx.o
+>   CC       src/xml_edit.o
+>   CC       src/xml_elem.o
+>   CC       src/xml_escape.o
+>   CC       src/xml_format.o
+>   CC       src/xml_ls.o
+> src/xml_edit.c: In function 'edInsert':
+> src/xml_edit.c:371:27: warning: 'node' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>   CC       src/xml_pyx.o
+>   CC       src/xml_select.o
+>   CC       src/xml_trans.o
+>   CC       src/xml_validate.o
+>   CC       src/usage.o
+>   CC       src/c14n-usage.o
+>   CC       src/depyx-usage.o
+>   CC       src/edit-usage.o
+>   CC       src/elem-usage.o
+> src/xml_select.c: In function 'selPrepareXslt':
+> src/xml_select.c:552:17: warning: pointer targets in passing argument 3 of 'xmlStrPrintf' differ in signedness [-Wpointer-sign]
+> In file included from /home/test/foo/host/include/libxml2/libxml/tree.h:18:0,
+>                  from src/xml_select.c:38:
+> /home/test/foo/host/include/libxml2/libxml/xmlstring.h:98:17: note: expected 'const char *' but argument is of type 'xmlChar *'
+>   CC       src/escape-usage.o
+>   CC       src/format-usage.o
+>   CC       src/ls-usage.o
+>   CC       src/pyx-usage.o
+>   CC       src/select-usage.o
+>   CC       src/trans-usage.o
+>   CC       src/unescape-usage.o
+>   CC       src/validate-usage.o
+>   CCLD     xml
+>>>> host-xmlstarlet 1.6.1 Installing to host directory
+> PATH="/home/test/foo/host/bin:/home/test/foo/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games" PKG_CONFIG="/home/test/foo/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_LIBDIR="/home/test/foo/host/lib/pkgconfig:/home/test/foo/host/share/pkgconfig"  /usr/bin/make -j9 install -C /home/test/foo/build/host-xmlstarlet-1.6.1/
+>  /bin/mkdir -p '/home/test/foo/host/share/doc/xmlstarlet'
+>  /bin/mkdir -p '/home/test/foo/host/share/man/man1'
+>  /usr/bin/install -c -m 644 doc/xmlstarlet-ug.html doc/html.css doc/xmlstarlet.txt '/home/test/foo/host/share/doc/xmlstarlet'
+>  /usr/bin/install -c -m 644 doc/xmlstarlet.1 '/home/test/foo/host/share/man/man1'
+>  /bin/mkdir -p '/home/test/foo/host/bin'
+>   /usr/bin/install -c xml '/home/test/foo/host/bin'
+> 
+> It detects libxml and libxslt in $(HOST_DIR), according to the
+> configure script:
+> 
+> checking for xml2-config... /home/test/foo/host/bin/xml2-config
+> configure: using libxml-2.9.4
+> checking for xslt-config... /home/test/foo/host/bin/xslt-config
+> configure: using libxslt-1.1.29
+
+I haven't the same result here:
+
+checking for xml2-config... /bin/xml2-config
+configure: using libxml-2.9.4
+checking for xslt-config...
+/home/naourr/buildroot-test/test/arete-glibc2.26/host/bin/xslt-config
+configure: using libxslt-1.1.29
+
+That trigger the issue (see -I//include/libxml2):
+
+/usr/bin/gcc -DHAVE_CONFIG_H -I.  -I[...]/host/include -I//include/libxml2
+-I[...]/host/include -Wall -pedantic -ansi -O2 -I[...]/host/include -c -o
+src/trans.o src/trans.c
+[...]
+src/xml_C14N.c:12:31: fatal error: libxml/xmlversion.h: No such file or directory
+ #include <libxml/xmlversion.h>
+                               ^
+In file included from src/trans.c:4:0:
+src/trans.h:32:30: fatal error: libxml/xmlmemory.h: No such file or directory
+ #include <libxml/xmlmemory.h>
+                              ^
+
+> 
+> Indeed $(HOST_DIR)/bin is before /usr/bin in the PATH so it uses the
+> Buildroot-built libraries.
+> 
+> Could you investigate a little bit more what's going on in your case? I
+> believe your patch is OK, but I'd feel more comfortable with a more
+> solid explanation.
+
+Ok I'll respin...
+
+What's about this instead ?
+
+HOST_XMLSTARLET_CONF_ENV += \
+	ac_cv_path_LIBXML_CONFIG=$(HOST_DIR)/bin/xml2-config \
+	ac_cv_path_LIBXSLT_CONFIG=$(HOST_DIR)/bin/xslt-config
+
+Best regards,
+Romain
+> 
+> Best regards,
+> 
+> Thomas
+> 
