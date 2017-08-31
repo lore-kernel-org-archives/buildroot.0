@@ -1,36 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Aug 2017 21:33:37 +0200
-Subject: [Buildroot] [PATCH] package/xmlstarlet: fix host build
-In-Reply-To: <7d358a39-0c49-204c-f784-d0e7efc646bd@gmail.com>
-References: <20170830224010.15658-1-romain.naour@gmail.com>
- <20170831091419.3d0039cc@windsurf.lan>
- <CANLo3Jix+ojJWq6QTRaxxpOMDHBJtkUkiZnAzy6neY95h=OGCA@mail.gmail.com>
- <20170831093921.11448124@windsurf.lan>
- <CANLo3Jj1_a7+n1on26o94mzxRVKhZFGH4+g981GxyqmUng-2Gg@mail.gmail.com>
- <20170831131049.5541217e@windsurf.lan>
- <7d358a39-0c49-204c-f784-d0e7efc646bd@gmail.com>
-Message-ID: <20170831213337.707c6ca9@windsurf.lan>
+From: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
+Date: Thu, 31 Aug 2017 16:29:31 -0400
+Subject: [Buildroot] [PATCH] configs/ts4900: bump kernel version to 4.12
+Message-ID: <1504211371-457-1-git-send-email-mathieu.audat@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ts4900 defconfig is upstream in Linux since v4.9:
+       a2f1145 ARM: dts: TS-4900: add basic device tree
 
-On Thu, 31 Aug 2017 20:42:10 +0200, Romain Naour wrote:
+Bump kernel version to v4.12 and use the upstreamed defconfig
+imx_v6_v7.
 
-> checking for xml2-config... /bin/xml2-config
-> configure: using libxml-2.9.4
-> checking for xslt-config...
-> /home/naourr/buildroot-test/test/arete-glibc2.26/host/bin/xslt-config
-> configure: using libxslt-1.1.29
+Signed-off-by: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
+---
+ configs/ts4900_defconfig | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Is HOST_DIR/bin in the PATH when calling configure? Why does it
-use /bin/xml2-config and not the one in HOST_DIR/bin ?
-
-Thomas
+diff --git a/configs/ts4900_defconfig b/configs/ts4900_defconfig
+index 7d5d02b..082234f 100644
+--- a/configs/ts4900_defconfig
++++ b/configs/ts4900_defconfig
+@@ -1,12 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4900/post-image.sh"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/embeddedarm/linux-3.10.17-imx6.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="70d1e85a22879e27cc9e36384438d5a9793e44b0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
