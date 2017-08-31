@@ -1,87 +1,106 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 31 Aug 2017 20:06:39 +0300
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 31 Aug 2017 19:26:15 +0200
 Subject: [Buildroot] [PATCH 0/2] package/grub: drop grub-legacy
-In-Reply-To: <cover.1504194830.git.yann.morin.1998@free.fr>
+In-Reply-To: <20170831170639.w7b6k5tgsd56ll3c@tarshish>
 References: <cover.1504194830.git.yann.morin.1998@free.fr>
-Message-ID: <20170831170639.w7b6k5tgsd56ll3c@tarshish>
+ <20170831170639.w7b6k5tgsd56ll3c@tarshish>
+Message-ID: <20170831172615.GE3964@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Baruch, All,
 
-On Thu, Aug 31, 2017 at 05:53:56PM +0200, Yann E. MORIN wrote:
-> This two-patch series removes grub, aka grub-legacy.
+On 2017-08-31 20:06 +0300, Baruch Siach spake thusly:
+> On Thu, Aug 31, 2017 at 05:53:56PM +0200, Yann E. MORIN wrote:
+> > This two-patch series removes grub, aka grub-legacy.
+> > 
+> > The reasioning is explained in the first patch, which actually gets rid
+> > of grub.
+> > 
+> > The second patch then removes grub support in the iso8660 filesystem, as
+> > grub is no longer available then.
+> > 
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> > 
+> > The following changes since commit 0ea3d7ba0e162c68990919e3187749f24268866d
+> > 
+> >   CHANGES: start preparing for the final 2017.08 (2017-08-30 22:18:57 +0200)
+> > 
+> > 
+> > are available in the git repository at:
+> > 
+> >   git://git.buildroot.org/~ymorin/git/buildroot.git
 > 
-> The reasioning is explained in the first patch, which actually gets rid
-> of grub.
-> 
-> The second patch then removes grub support in the iso8660 filesystem, as
-> grub is no longer available then.
-> 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> The following changes since commit 0ea3d7ba0e162c68990919e3187749f24268866d
-> 
->   CHANGES: start preparing for the final 2017.08 (2017-08-30 22:18:57 +0200)
-> 
-> 
-> are available in the git repository at:
-> 
->   git://git.buildroot.org/~ymorin/git/buildroot.git
+> That's the 'yem/no-grub-legacy' branch right?
 
-That's the 'yem/no-grub-legacy' branch right?
+Yep it is.
 
-The first patch exceeds the list limit so anyone interested in seeing it must 
-use git for that.
+> The first patch exceeds the list limit so anyone interested in seeing it must 
+> use git for that.
 
-Here is the git web interface link:
+But hopefully a list admin will let the patch go through soon! ;-)
 
-  https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/no-grub-legacy
+> Here is the git web interface link:
+>   https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/no-grub-legacy
 
-baruch
+Maybe I should automatically add such an URL when I send the cover
+letter. Good idea! ;-)
 
-> for you to fetch changes up to 89462d4b3d365f2c6585eefeb35175813b5a8af2
+Regards,
+Yann E. MORIN.
+
+> baruch
 > 
->   fs/iso9660: remove support for grub (2017-08-31 17:49:12 +0200)
+> > for you to fetch changes up to 89462d4b3d365f2c6585eefeb35175813b5a8af2
+> > 
+> >   fs/iso9660: remove support for grub (2017-08-31 17:49:12 +0200)
+> > 
+> > 
+> > ----------------------------------------------------------------
+> > Yann E. MORIN (2):
+> >       boot/grub: remove
+> >       fs/iso9660: remove support for grub
+> > 
+> >  Config.in.legacy                              |     9 +
+> >  boot/Config.in                                |     1 -
+> >  boot/grub/Config.in                           |   200 -
+> >  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
+> >  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
+> >  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
+> >  boot/grub/grub.hash                           |     3 -
+> >  boot/grub/grub.mk                             |   109 -
+> >  boot/grub/menu.lst                            |    16 -
+> >  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
+> >  fs/iso9660/Config.in                          |    16 +-
+> >  fs/iso9660/grub.cfg                           |     7 -
+> >  fs/iso9660/iso9660.mk                         |    32 +-
+> >  support/testing/tests/fs/test_iso9660.py      |    37 -
+> >  14 files changed, 14 insertions(+), 47529 deletions(-)
+> >  delete mode 100644 boot/grub/Config.in
+> >  delete mode 100644 boot/grub/grub.200-fix_mbr_handling.patch
+> >  delete mode 100644 boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
+> >  delete mode 100644 boot/grub/grub.400-nic_update2.patch
+> >  delete mode 100644 boot/grub/grub.hash
+> >  delete mode 100644 boot/grub/grub.mk
+> >  delete mode 100644 boot/grub/menu.lst
+> >  delete mode 100644 boot/grub/splash.xpm.gz
+> >  delete mode 100644 fs/iso9660/grub.cfg
 > 
-> 
-> ----------------------------------------------------------------
-> Yann E. MORIN (2):
->       boot/grub: remove
->       fs/iso9660: remove support for grub
-> 
->  Config.in.legacy                              |     9 +
->  boot/Config.in                                |     1 -
->  boot/grub/Config.in                           |   200 -
->  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
->  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
->  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
->  boot/grub/grub.hash                           |     3 -
->  boot/grub/grub.mk                             |   109 -
->  boot/grub/menu.lst                            |    16 -
->  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
->  fs/iso9660/Config.in                          |    16 +-
->  fs/iso9660/grub.cfg                           |     7 -
->  fs/iso9660/iso9660.mk                         |    32 +-
->  support/testing/tests/fs/test_iso9660.py      |    37 -
->  14 files changed, 14 insertions(+), 47529 deletions(-)
->  delete mode 100644 boot/grub/Config.in
->  delete mode 100644 boot/grub/grub.200-fix_mbr_handling.patch
->  delete mode 100644 boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
->  delete mode 100644 boot/grub/grub.400-nic_update2.patch
->  delete mode 100644 boot/grub/grub.hash
->  delete mode 100644 boot/grub/grub.mk
->  delete mode 100644 boot/grub/menu.lst
->  delete mode 100644 boot/grub/splash.xpm.gz
->  delete mode 100644 fs/iso9660/grub.cfg
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
