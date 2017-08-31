@@ -1,70 +1,84 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 31 Aug 2017 11:49:32 +0200
-Subject: [Buildroot] [PATCH 2/2] bluez5_utils: add upstream patch to fix
-	timeout issue with fw download
-In-Reply-To: <20170831094932.11121-1-joerg.krause@embedded.rocks>
-References: <20170831094932.11121-1-joerg.krause@embedded.rocks>
-Message-ID: <20170831094932.11121-2-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 31 Aug 2017 12:51:24 +0200
+Subject: [Buildroot] [PATCH] package/xmlstarlet: fix host build
+In-Reply-To: <20170831093921.11448124@windsurf.lan>
+References: <20170830224010.15658-1-romain.naour@gmail.com>
+ <20170831091419.3d0039cc@windsurf.lan>
+ <CANLo3Jix+ojJWq6QTRaxxpOMDHBJtkUkiZnAzy6neY95h=OGCA@mail.gmail.com>
+ <20170831093921.11448124@windsurf.lan>
+Message-ID: <CANLo3Jj1_a7+n1on26o94mzxRVKhZFGH4+g981GxyqmUng-2Gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch [1] for the hciattach tool to fix timeout issue when
-downloading firmware to Broadcom bluetooth chips.
+Hi Thomas,
 
-[1] https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=76255f732d68aef2b90d36d9c7be51a9e1739ce7
+Le 31 ao?t 2017 09:39, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> a ?crit :
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...cm43xx-fix-the-delay-timer-for-firmware-d.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/bluez5_utils/0002-hciattach-bcm43xx-fix-the-delay-timer-for-firmware-d.patch
+Hello,
 
-diff --git a/package/bluez5_utils/0002-hciattach-bcm43xx-fix-the-delay-timer-for-firmware-d.patch b/package/bluez5_utils/0002-hciattach-bcm43xx-fix-the-delay-timer-for-firmware-d.patch
-new file mode 100644
-index 0000000000..2802510b98
---- /dev/null
-+++ b/package/bluez5_utils/0002-hciattach-bcm43xx-fix-the-delay-timer-for-firmware-d.patch
-@@ -0,0 +1,38 @@
-+From 3b341fb421ef61db7782bf1314ec693828467de9 Mon Sep 17 00:00:00 2001
-+From: Andy Duan <fugang.duan@nxp.com>
-+Date: Wed, 23 Nov 2016 17:12:12 +0800
-+Subject: [PATCH] hciattach: bcm43xx: fix the delay timer for firmware download
-+
-+From the log in .bcm43xx_load_firmware():
-+        /* Wait 50ms to let the firmware placed in download mode */
-+        nanosleep(&tm_mode, NULL);
-+
-+But timespec tm_mode is real is 50us. Correct the delayed timer count.
-+
-+Backported from:
-+https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=76255f732d68aef2b90d36d9c7be51a9e1739ce7
-+
-+Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ tools/hciattach_bcm43xx.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/tools/hciattach_bcm43xx.c b/tools/hciattach_bcm43xx.c
-+index 81f38cb..ac1b3c1 100644
-+--- a/tools/hciattach_bcm43xx.c
-++++ b/tools/hciattach_bcm43xx.c
-+@@ -228,8 +228,8 @@ static int bcm43xx_set_speed(int fd, struct termios *ti, uint32_t speed)
-+ static int bcm43xx_load_firmware(int fd, const char *fw)
-+ {
-+ 	unsigned char cmd[] = { HCI_COMMAND_PKT, 0x2e, 0xfc, 0x00 };
-+-	struct timespec tm_mode = { 0, 50000 };
-+-	struct timespec tm_ready = { 0, 2000000 };
-++	struct timespec tm_mode = { 0, 50000000 };
-++	struct timespec tm_ready = { 0, 200000000 };
-+ 	unsigned char resp[CC_MIN_SIZE];
-+ 	unsigned char tx_buf[1024];
-+ 	int len, fd_fw, n;
-+-- 
-+1.9.1
-+
--- 
-2.14.1
+Your e-mail is badly quoted. What happened?
+
+
+Well, gmail app on my phone...
+
+
+On Thu, 31 Aug 2017 09:25:16 +0200, Romain Naour wrote:
+
+> It would be nice to use LANG=C when building and copy/pasting error
+> messages, to avoid French words in the middle :)
+>
+> "No such file or directory" looks english to me at 0h40 :p
+
+But "erreur fatale" doesn't look very english, even at 0h40 :-)
+
+
+I mean I missed it while copy paste ;)
+
+
+> I had the issue locally, I think libxml-dev is installed on autobuilders.
+> I was trying to reproduce the kodi build issue with glibc 2.26.
+
+I'd be good to understand a little bit better what's happening. My
+autobuilder definitely doesn't have libxml-dev installed:
+
+$ dpkg -l | grep libxml
+ii  libxml2:amd64                   2.8.0+dfsg1-7+wheezy8            amd64
+      GNOME XML library
+
+I think it could actually be the opposite: you have libxml-dev
+installed locally, and therefore the system-wide libxml installation
+gets picked up, instead of the libxml built by Buildroot in
+$(HOST_DIR). Could you verify this by checking if you have libxml-dev
+installed on your system, reproducing the issue, then see what happens
+when you uninstall libxml-dev ?
+
+
+Libxml-dev wasn't installed on my host.
+I'll take a look later today.
+
+Btw, host-xmlstarlet is a dependendy of kodi package which depends on java
+installed on the host.
+
+Maybe host-xmlstarlet is never build on the autobuiders ?
+
+Can you try to build it ?
+
+Best regard,
+Romain
+
+
+
+Thanks,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170831/2fde888d/attachment.html>
