@@ -1,65 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 31 Aug 2017 09:25:16 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Aug 2017 09:39:21 +0200
 Subject: [Buildroot] [PATCH] package/xmlstarlet: fix host build
-In-Reply-To: <20170831091419.3d0039cc@windsurf.lan>
+In-Reply-To: <CANLo3Jix+ojJWq6QTRaxxpOMDHBJtkUkiZnAzy6neY95h=OGCA@mail.gmail.com>
 References: <20170830224010.15658-1-romain.naour@gmail.com>
  <20170831091419.3d0039cc@windsurf.lan>
-Message-ID: <CANLo3Jix+ojJWq6QTRaxxpOMDHBJtkUkiZnAzy6neY95h=OGCA@mail.gmail.com>
+ <CANLo3Jix+ojJWq6QTRaxxpOMDHBJtkUkiZnAzy6neY95h=OGCA@mail.gmail.com>
+Message-ID: <20170831093921.11448124@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Le 31 ao?t 2017 09:14, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> a ?crit :
-
 Hello,
 
-On Thu, 31 Aug 2017 00:40:10 +0200, Romain Naour wrote:
-> Provide the path to HOST_DIR for libxml, libxslt and libiconv like for
-> the target variant.
->
-> Fixes:
-> src/xml_C14N.c:12:31: erreur fatale : libxml/xmlversion.h : No such file
-or directory
->  #include <libxml/xmlversion.h>
->                                ^
-> In file included from src/trans.c:4:0:
-> src/trans.h:32:30: erreur fatale : libxml/xmlmemory.h : No such file or
-directory
->  #include <libxml/xmlmemory.h>
+Your e-mail is badly quoted. What happened?
 
-It would be nice to use LANG=C when building and copy/pasting error
-messages, to avoid French words in the middle :)
+On Thu, 31 Aug 2017 09:25:16 +0200, Romain Naour wrote:
 
+> It would be nice to use LANG=C when building and copy/pasting error
+> messages, to avoid French words in the middle :)
+> 
+> "No such file or directory" looks english to me at 0h40 :p
 
-"No such file or directory" looks english to me at 0h40 :p
+But "erreur fatale" doesn't look very english, even at 0h40 :-)
 
-I'll fix this.
+> I had the issue locally, I think libxml-dev is installed on autobuilders.
+> I was trying to reproduce the kodi build issue with glibc 2.26.
 
+I'd be good to understand a little bit better what's happening. My
+autobuilder definitely doesn't have libxml-dev installed:
 
-However: under which conditions does it fail? Why do we suddenly have
-this failure? Have the autobuilders noticed?
+$ dpkg -l | grep libxml
+ii  libxml2:amd64                   2.8.0+dfsg1-7+wheezy8            amd64        GNOME XML library
 
+I think it could actually be the opposite: you have libxml-dev
+installed locally, and therefore the system-wide libxml installation
+gets picked up, instead of the libxml built by Buildroot in
+$(HOST_DIR). Could you verify this by checking if you have libxml-dev
+installed on your system, reproducing the issue, then see what happens
+when you uninstall libxml-dev ?
 
-I had the issue locally, I think libxml-dev is installed on autobuilders.
-I was trying to reproduce the kodi build issue with glibc 2.26.
-
-Bernd added recently a host variant for this package maybe that is why it
-was not noticed until now.
-
-Best regards,
-Romain
-
+Thanks,
 
 Thomas
---
+-- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
 http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170831/e82333ac/attachment.html>
