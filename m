@@ -1,49 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 Sep 2017 01:17:26 +0200
+Date: Sat, 02 Sep 2017 01:18:52 +0200
 Subject: [Buildroot] [PATCH 1/1] package/transmission: fix gtk support
-In-Reply-To: <20170710175137.1402-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 10 Jul 2017 19:51:37 +0200")
+In-Reply-To: <5fe9c108-7a04-ca7c-9bd8-aed7ac639026@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 12 Jul 2017 12:04:42 +0200")
 References: <20170710175137.1402-1-bernd.kuhls@t-online.de>
-Message-ID: <877exiqa9l.fsf@dell.be.48ers.dk>
+ <87a84asr2s.fsf@dell.be.48ers.dk>
+ <20170711231701.3850d479@windsurf.lan>
+ <a69e0db5-ae3c-fa51-7864-8fd8c98dd71c@mind.be>
+ <20170712094924.435a5c54@windsurf.lan>
+ <5fe9c108-7a04-ca7c-9bd8-aed7ac639026@mind.be>
+Message-ID: <873786qa77.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > Gtk support is controlled by ARG_WITH since
- > https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4
+Hi,
 
- > Fixes a build error if libgtk2/3 was built before transmission:
- > http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/
+ >> Why should we randomly pass --enable-nls to some packages? Why should
+ >> this package depends on BR2_SYSTEM_ENABLE_NLS, if it needs NLS support?
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/transmission/transmission.mk | 4 ++--
- >  1 file changed, 2 insertions(+), 2 deletions(-)
+ >  Because BR2_SYSTEM_ENABLE_NLS does not really say that NLS *support* is
+ > enabled, it says that NLS *installation* is enabled. NLS support is always
+ > "enabled" through the stubs in musl/uClibc.
 
- > diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
- > index f8abb2b8b..d84e5cb77 100644
- > --- a/package/transmission/transmission.mk
- > +++ b/package/transmission/transmission.mk
- > @@ -82,10 +82,10 @@ TRANSMISSION_CONF_OPTS += --disable-remote
- >  endif
- 
- >  ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
- > -TRANSMISSION_CONF_OPTS += --enable-gtk
- > +TRANSMISSION_CONF_OPTS += --with-gtk
- >  TRANSMISSION_DEPENDENCIES += libgtk2
+ >  As far as I understand, the configure error is just there because the
+ > transmission guys are too lazy to have conditional use of the intl functions. I
+ > don't see how there could be a hard requirement on non-stub implementations of
+ > the intl functions - except if they start calling internals. So the better
+ > solution, actually, would be to patch out this check in configure and instead
+ > check for intl and error out if that is not available, independent on the
+ > --enable-nls option - just like most packages do, I think.
 
-Committed, thanks. I also pushed two followup patches to actually get it
-to build:
+ >  If you're not actually interested in translations, there is no reason really
+ > why you should pull them in just because this package is calling gettext stuff
+ > unconditionally.
 
-- transmission-gtk needs libgtk3 instead of libgtk2 since 2.61
-  (E.G. your version bump in 2013)
+ >  That said, probably nobody really cares, we're just fixing build failures here.
+ > So in the end I don't really mind if we depend on BR2_SYSTEM_ENABLE_NLS as the
+ > easy way out. Though then the commit message should at least provide the full
+ > story, as a hint for future contributors who want to fix it properly.
 
-- Adjusted NLS dependencies after the recent NLS rework
-  (BR2_SYSTEM_ENABLE_NLS).
+Correct. I went with depending on BR2_SYSTEM_ENABLE_NLS, but I added a
+comment explaining that we could also explictly pass --enable-nls.
 
 -- 
 Bye, Peter Korsgaard
