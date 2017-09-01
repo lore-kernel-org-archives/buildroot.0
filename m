@@ -1,84 +1,78 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri,  1 Sep 2017 17:51:21 +0200
-Subject: [Buildroot] [PATCH] package/sysdig: fix missing curlbuild include
-Message-ID: <1504281081-11201-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Sep 2017 20:23:36 +0200
+Subject: [Buildroot] [PATCH 1/2] boot/grub: remove
+In-Reply-To: <59a8a70c74acb_4c3212b6eec928af@ultri3.mail>
+References: <dcfdaefd6117d329079c5b6fbea1fbf00fe2094c.1504194830.git.yann.morin.1998@free.fr>
+ <59a8a70c74acb_4c3212b6eec928af@ultri3.mail>
+Message-ID: <20170901182336.GA2866@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-curlbuild.h was removed in recent versions of curl, backporting a
-patch from mainline to fix sysdig until a newer version is
-released.
+Ricardo, All,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- .../sysdig/0001-Don-t-include-curlbuild.h.patch    | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/sysdig/0001-Don-t-include-curlbuild.h.patch
+On 2017-08-31 21:17 -0300, Ricardo Martincoski spake thusly:
+> I don't see this patch on patchwork.
 
-diff --git a/package/sysdig/0001-Don-t-include-curlbuild.h.patch b/package/sysdig/0001-Don-t-include-curlbuild.h.patch
-new file mode 100644
-index 0000000..ae406c0
---- /dev/null
-+++ b/package/sysdig/0001-Don-t-include-curlbuild.h.patch
-@@ -0,0 +1,56 @@
-+From 8a6670ea4b57c0e2bf8588d4534b22d1ea860989 Mon Sep 17 00:00:00 2001
-+From: Mark Stemm <mark.stemm@gmail.com>
-+Date: Tue, 15 Aug 2017 17:49:53 -0700
-+Subject: [PATCH] Don't include curlbuild.h
-+
-+It's not required to build and it's not present with some newer versions
-+of libcurl, so removing it.
-+
-+Thanks to https://github.com/hhoffstaette for the tip.
-+
-+This fixes https://github.com/draios/sysdig/issues/895.
-+---
-+ userspace/libsinsp/marathon_http.cpp | 1 -
-+ userspace/libsinsp/mesos_http.cpp    | 1 -
-+ userspace/sysdig.project             | 1 -
-+ 3 files changed, 3 deletions(-)
-+
-+diff --git a/userspace/libsinsp/marathon_http.cpp b/userspace/libsinsp/marathon_http.cpp
-+index f7937b6..2e4449a 100644
-+--- a/userspace/libsinsp/marathon_http.cpp
-++++ b/userspace/libsinsp/marathon_http.cpp
-+@@ -7,7 +7,6 @@
-+ #include "marathon_http.h"
-+ #include "curl/curl.h"
-+ #include "curl/easy.h"
-+-#include "curl/curlbuild.h"
-+ #define BUFFERSIZE 512 // b64 needs this macro
-+ #include "b64/encode.h"
-+ #include "sinsp.h"
-+diff --git a/userspace/libsinsp/mesos_http.cpp b/userspace/libsinsp/mesos_http.cpp
-+index 18ac9f5..c6bfb58 100644
-+--- a/userspace/libsinsp/mesos_http.cpp
-++++ b/userspace/libsinsp/mesos_http.cpp
-+@@ -7,7 +7,6 @@
-+ #include "mesos_http.h"
-+ #include "curl/curl.h"
-+ #include "curl/easy.h"
-+-#include "curl/curlbuild.h"
-+ #include "sinsp.h"
-+ #include "sinsp_int.h"
-+ #include "sinsp_curl.h"
-+diff --git a/userspace/sysdig.project b/userspace/sysdig.project
-+index 5d00f18..76a18f0 100644
-+--- a/userspace/sysdig.project
-++++ b/userspace/sysdig.project
-+@@ -752,7 +752,6 @@
-+             </VirtualDirectory>
-+             <VirtualDirectory Name="include">
-+               <VirtualDirectory Name="curl">
-+-                <File Name="../build/release/curl-prefix/src/curl/include/curl/curlbuild.h"/>
-+                 <File Name="../build/release/curl-prefix/src/curl/include/curl/easy.h"/>
-+                 <File Name="../build/release/curl-prefix/src/curl/include/curl/stdcheaders.h"/>
-+                 <File Name="../build/release/curl-prefix/src/curl/include/curl/curlrules.h"/>
-+-- 
-+2.7.4
-+
+No, it is too big... :-/
+
+And it's not on nte list either... :-/
+
+> On Thu, Aug 31, 2017 at 12:54 PM, Yann E. MORIN wrote:
+> 
+> [snip]
+> > ---
+> >  Config.in.legacy                              |     9 +
+> >  boot/Config.in                                |     1 -
+> >  boot/grub/Config.in                           |   200 -
+> >  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
+> >  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
+> >  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
+> >  boot/grub/grub.hash                           |     3 -
+> >  boot/grub/grub.mk                             |   109 -
+> >  boot/grub/menu.lst                            |    16 -
+> >  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
+> >  support/testing/tests/fs/test_iso9660.py      |    37 -
+> 
+> The update to .gitlab-ci.yml is missing.
+
+OK, good catch!
+
+> >  11 files changed, 9 insertions(+), 47479 deletions(-)
+> [snip]
+> > +++ b/support/testing/tests/fs/test_iso9660.py
+> > @@ -85,43 +85,6 @@ BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
+> >          self.assertEqual(exit_code, 0)
+> >  
+> >  #
+> > -# Grub
+> > -#
+> > -
+> > -class TestIso9660GrubExternal(infra.basetest.BRTest):
+> > -    config = BASIC_CONFIG + \
+> > -"""
+> > -BR2_TARGET_ROOTFS_ISO9660=y
+> > -# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
+> > -BR2_TARGET_GRUB=y
+> > -BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
+> > -""".format(infra.filepath("conf/grub-menu.lst"))
+> 
+> This file is not used by remaining test cases so it can be removed:
+> support/testing/conf/grub-menu.lst
+
+Yup!
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
