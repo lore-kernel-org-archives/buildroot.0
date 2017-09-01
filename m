@@ -1,11 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 00:14:42 +0200
-Subject: [Buildroot] [PATCH 2/2] boot/syslinux: Drop patch 0008,
- integrated in the dependency upstream
-In-Reply-To: <1498820316-2715-2-git-send-email-benoit.allard@greenbone.net>
-References: <1498820316-2715-1-git-send-email-benoit.allard@greenbone.net>
- <1498820316-2715-2-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <20170701001442.2f6120bc@windsurf.home>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 31 Aug 2017 21:17:16 -0300
+Subject: [Buildroot] [PATCH 1/2] boot/grub: remove
+References: <dcfdaefd6117d329079c5b6fbea1fbf00fe2094c.1504194830.git.yann.morin.1998@free.fr>
+Message-ID: <59a8a70c74acb_4c3212b6eec928af@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +11,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 30 Jun 2017 12:58:36 +0200, Beno?t Allard wrote:
-> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+I don't see this patch on patchwork.
+
+On Thu, Aug 31, 2017 at 12:54 PM, Yann E. MORIN wrote:
+
+[snip]
 > ---
->  ..._BASE_CODE-struct-has-been-renamed-to-EFI.patch | 30 ----------------------
->  1 file changed, 30 deletions(-)
->  delete mode 100644 boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
+>  Config.in.legacy                              |     9 +
+>  boot/Config.in                                |     1 -
+>  boot/grub/Config.in                           |   200 -
+>  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
+>  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
+>  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
+>  boot/grub/grub.hash                           |     3 -
+>  boot/grub/grub.mk                             |   109 -
+>  boot/grub/menu.lst                            |    16 -
+>  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
+>  support/testing/tests/fs/test_iso9660.py      |    37 -
 
-I've applied to master, but after rewriting the commit log to add more
-details. It took me a while to understand what you meant by "integrated
-in the dependency upstream", so it should have been made clearer in the
-commit log.
+The update to .gitlab-ci.yml is missing.
 
-Thanks!
+>  11 files changed, 9 insertions(+), 47479 deletions(-)
+[snip]
+> +++ b/support/testing/tests/fs/test_iso9660.py
+> @@ -85,43 +85,6 @@ BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
+>          self.assertEqual(exit_code, 0)
+>  
+>  #
+> -# Grub
+> -#
+> -
+> -class TestIso9660GrubExternal(infra.basetest.BRTest):
+> -    config = BASIC_CONFIG + \
+> -"""
+> -BR2_TARGET_ROOTFS_ISO9660=y
+> -# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
+> -BR2_TARGET_GRUB=y
+> -BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
+> -""".format(infra.filepath("conf/grub-menu.lst"))
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This file is not used by remaining test cases so it can be removed:
+support/testing/conf/grub-menu.lst
+
+Regards,
+Ricardo
