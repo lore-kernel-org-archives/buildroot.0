@@ -1,38 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Sep 2017 17:06:23 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20170901231151.C3ABC818D4@busybox.osuosl.org>
+Date: Fri, 1 Sep 2017 23:58:40 +0200
+Subject: [Buildroot] [git commit] package/transmission: fix gtk support
+Message-ID: <20170901231151.D50C2818D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13c443963f21a2949b21d85f9078746dfcb5b875
+commit: https://git.buildroot.net/buildroot/commit/?id=e67fbcfa94e58a4d04e081be5e318953233492c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Gtk support is controlled by ARG_WITH since
+https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4
+
+Fixes a build error if libgtk2/3 was built before transmission:
+http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/transmission/transmission.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d571180..9f1d389 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,14 @@
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 0fce642..f2333cb 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -82,10 +82,10 @@ TRANSMISSION_CONF_OPTS += --disable-remote
+ endif
  
- 	Fixes all over the tree.
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
+-TRANSMISSION_CONF_OPTS += --enable-gtk
++TRANSMISSION_CONF_OPTS += --with-gtk
+ TRANSMISSION_DEPENDENCIES += libgtk2
+ else
+-TRANSMISSION_CONF_OPTS += --disable-gtk
++TRANSMISSION_CONF_OPTS += --without-gtk
+ endif
  
--	Updated/fixed packages:
-+	Toolchain: Don't allow internal toolchain builds for MIPS
-+	M6201/P6600, as support for these are not yet in mainline GCC.
-+
-+	Updated/fixed packages: bcusdk, connman, dialog, dnsmasq,
-+	gnupg, grub2, iostat, iucode-tool, libgcrypt, libkcapi,
-+	libphidget, libv4l, linux-tools, mediastreamer, minidlna,
-+	nss-pam-ldapd, nvidia-driver, qt-webkit-kiosk, rpcbind, squid,
-+	transmission, vde2, vim
- 
- 	Updated/fixed defconfigs:
- 
+ $(eval $(autotools-package))
