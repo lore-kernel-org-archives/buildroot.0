@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 31 Aug 2017 21:17:16 -0300
-Subject: [Buildroot] [PATCH 1/2] boot/grub: remove
-References: <dcfdaefd6117d329079c5b6fbea1fbf00fe2094c.1504194830.git.yann.morin.1998@free.fr>
-Message-ID: <59a8a70c74acb_4c3212b6eec928af@ultri3.mail>
+Date: Thu, 31 Aug 2017 21:19:35 -0300
+Subject: [Buildroot] [PATCH 2/2] fs/iso9660: remove support for grub
+References: <89462d4b3d365f2c6585eefeb35175813b5a8af2.1504194830.git.yann.morin.1998@free.fr>
+Message-ID: <59a8a7979c191_5721ce62d87080@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,47 +11,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-I don't see this patch on patchwork.
-
 On Thu, Aug 31, 2017 at 12:54 PM, Yann E. MORIN wrote:
 
-[snip]
+> grub has just been removed.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  Config.in.legacy                              |     9 +
->  boot/Config.in                                |     1 -
->  boot/grub/Config.in                           |   200 -
->  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
->  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
->  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
->  boot/grub/grub.hash                           |     3 -
->  boot/grub/grub.mk                             |   109 -
->  boot/grub/menu.lst                            |    16 -
->  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
->  support/testing/tests/fs/test_iso9660.py      |    37 -
+>  fs/iso9660/Config.in  | 16 ++++------------
+>  fs/iso9660/grub.cfg   |  7 -------
+>  fs/iso9660/iso9660.mk | 32 +-------------------------------
+>  3 files changed, 5 insertions(+), 50 deletions(-)
+>  delete mode 100644 fs/iso9660/grub.cfg
 
-The update to .gitlab-ci.yml is missing.
+Don't remove it. Despite the name it is used by grub2 ...
 
->  11 files changed, 9 insertions(+), 47479 deletions(-)
+> 
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index d162586f38..842c987f21 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
 [snip]
-> +++ b/support/testing/tests/fs/test_iso9660.py
-> @@ -85,43 +85,6 @@ BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
->          self.assertEqual(exit_code, 0)
+> @@ -48,13 +42,11 @@ endchoice
 >  
->  #
-> -# Grub
-> -#
-> -
-> -class TestIso9660GrubExternal(infra.basetest.BRTest):
-> -    config = BASIC_CONFIG + \
-> -"""
-> -BR2_TARGET_ROOTFS_ISO9660=y
-> -# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
-> -BR2_TARGET_GRUB=y
-> -BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-> -""".format(infra.filepath("conf/grub-menu.lst"))
+>  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+>  	string "Boot menu config file"
+> -	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
+>  	default "fs/iso9660/grub.cfg" if BR2_TARGET_ROOTFS_ISO9660_GRUB2
 
-This file is not used by remaining test cases so it can be removed:
-support/testing/conf/grub-menu.lst
+... here. Instead you can remove
+fs/iso9660/menu.lst
+
+>  	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+>  	help
+>  	  Use this option to provide a custom bootloader configuration
+> -	  file (menu.lst for Grub, grub.cfg for Grub 2, isolinux.cfg for
+> -	  isolinux).
+> +	  file (grub.cfg for Grub 2, isolinux.cfg for isolinux).
+[snip]
 
 Regards,
 Ricardo
