@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Sep 2017 22:54:15 +0200
-Subject: [Buildroot] [PATCH v2 03/11] package/mesa3d: fix build issue with
-	glibc >= 2.26
+Date: Sat,  2 Sep 2017 22:54:16 +0200
+Subject: [Buildroot] [PATCH v2 04/11] package/jsoncpp: fix build with glibc
+	>= 2.26
 In-Reply-To: <20170902205423.21288-1-romain.naour@gmail.com>
 References: <20170902205423.21288-1-romain.naour@gmail.com>
-Message-ID: <20170902205423.21288-4-romain.naour@gmail.com>
+Message-ID: <20170902205423.21288-5-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,97 +13,56 @@ To: buildroot@busybox.net
 
 Issue found while testing glibc 2.26 bump.
 
+Fixes:
+src/lib_json/json_writer.cpp:45:23: error: 'isfinite' is not a member of 'std'
+ #define isfinite std::isfinite
+                       ^
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...-c99_math-fix-build-issue-with-glibc-2.26.patch | 82 ++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
+v2: fix build with musl (ThomasP)
+---
+ ...001-json_writer-fix-build-with-glibc-2.26.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
 
-diff --git a/package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch b/package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
+diff --git a/package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch b/package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
 new file mode 100644
-index 0000000..55e4fcf
+index 0000000..fe7df85
 --- /dev/null
-+++ b/package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
-@@ -0,0 +1,82 @@
-+From f8ef875d8b5313d8f15f8680dc0c512c10756ea8 Mon Sep 17 00:00:00 2001
++++ b/package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
+@@ -0,0 +1,34 @@
++From 2cb87c456f95510d55dd40f783435ecd1177c453 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 26 Aug 2017 19:20:56 +0200
-+Subject: [PATCH] c99_math: fix build issue with glibc >= 2.26
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++Date: Sat, 26 Aug 2017 19:39:03 +0200
++Subject: [PATCH] json_writer: fix build with glibc >= 2.26
 +
-+The workaround is not required anymore since glibc 2.26 and
-+trigger a build issue:
-+
-+In file included from ../../src/gallium/auxiliary/util/u_math.h:44:0,
-+                 from ../../src/mesa/main/macros.h:35,
-+                 from glsl_types.cpp:25:
-+../../include/c99_math.h:196:12: error: ??std::fpclassify??  was not declared in this scope
-+ using std::fpclassify;
-+            ^~~~~~~~~~
-+../../include/c99_math.h:197:12: error: ??std::isfinite??  was not declared in this scope
-+ using std::isfinite;
-+            ^~~~~~~~
-+../../include/c99_math.h:198:12: error: ??std::isinf??  was not declared in this scope
-+ using std::isinf;
-+            ^~~~~
-+../../include/c99_math.h:199:12: error: ??std::isnan??  was not declared in this scope
-+ using std::isnan;
-+            ^~~~~
-+../../include/c99_math.h:200:12: error: ??std::isnormal??  was not declared in this scope
-+ using std::isnormal;
-+            ^~~~~~~~
-+../../include/c99_math.h:201:12: error: ??std::signbit??  was not declared in this scope
-+ using std::signbit;
-+            ^~~~~~~
-+../../include/c99_math.h:202:12: error: ??std::isgreater??  was not declared in this scope
-+ using std::isgreater;
-+            ^~~~~~~~~
-+../../include/c99_math.h:203:12: error: ??std::isgreaterequal??  was not declared in this scope
-+ using std::isgreaterequal;
-+            ^~~~~~~~~~~~~~
-+../../include/c99_math.h:204:12: error: ??std::isless??  was not declared in this scope
-+ using std::isless;
-+            ^~~~~~
-+../../include/c99_math.h:205:12: error: ??std::islessequal??  was not declared in this scope
-+ using std::islessequal;
-+            ^~~~~~~~~~~
-+../../include/c99_math.h:206:12: error: ??std::islessgreater??  was not declared in this scope
-+ using std::islessgreater;
-+            ^~~~~~~~~~~~~
-+../../include/c99_math.h:207:12: error: ??std::isunordered??  was not declared in this scope
-+ using std::isunordered;
-+            ^~~~~~~~~~~
++src/lib_json/json_writer.cpp:45:23: error: 'isfinite' is not a member of 'std'
++ #define isfinite std::isfinite
++                       ^
 +
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ include/c99_math.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
++ src/lib_json/json_writer.cpp | 3 +++
++ 1 file changed, 3 insertions(+)
 +
-+diff --git a/include/c99_math.h b/include/c99_math.h
-+index e906c26..6fd257e 100644
-+--- a/include/c99_math.h
-++++ b/include/c99_math.h
-+@@ -193,6 +193,10 @@ fpclassify(double x)
-+ #if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23))
++diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
++index 02f1cb1..a3189cb 100644
++--- a/src/lib_json/json_writer.cpp
+++++ b/src/lib_json/json_writer.cpp
++@@ -42,9 +42,12 @@
++ #else
 + #include <cmath>
-+ 
-++/* This workaround is not necessary since Glibc 2.26
-++ * https://sourceware.org/git/?p=glibc.git;a=commit;h=2072f5c34ede81dde9e0d953d57a0690a66b0f12
-++ */
-++#if (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 25)
-+ using std::fpclassify;
-+ using std::isfinite;
-+ using std::isinf;
-+@@ -206,6 +210,7 @@ using std::islessequal;
-+ using std::islessgreater;
-+ using std::isunordered;
++ #if !(defined(__QNXNTO__)) // QNX already defines isfinite
+++// std::isfinite is not defined on glibc >= 2.26
+++#if !(defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 26)))
++ #define isfinite std::isfinite
++ #endif
 + #endif
 ++#endif
 + 
-+ 
-+ #endif /* #define _C99_MATH_H_ */
++ #if defined(_MSC_VER)
++ #if !defined(WINCE) && defined(__STDC_SECURE_LIB__) && _MSC_VER >= 1500 // VC++ 9.0 and above
 +-- 
 +2.9.5
 +
