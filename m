@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  2 Sep 2017 18:56:40 +0200
-Subject: [Buildroot] [PATCH 10/12] xavante: bump to version 2.4.0
+Date: Sat,  2 Sep 2017 18:56:41 +0200
+Subject: [Buildroot] [PATCH 11/12] wsapi-xavante: new package
 In-Reply-To: <20170902165642.22943-1-francois.perrad@gadz.org>
 References: <20170902165642.22943-1-francois.perrad@gadz.org>
-Message-ID: <20170902165642.22943-10-francois.perrad@gadz.org>
+Message-ID: <20170902165642.22943-11-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/xavante/Config.in    | 8 ++++----
- package/xavante/xavante.hash | 2 +-
- package/xavante/xavante.mk   | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/Config.in                        |  1 +
+ package/wsapi-xavante/Config.in          | 13 +++++++++++++
+ package/wsapi-xavante/wsapi-xavante.hash |  2 ++
+ package/wsapi-xavante/wsapi-xavante.mk   | 12 ++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/wsapi-xavante/Config.in
+ create mode 100644 package/wsapi-xavante/wsapi-xavante.hash
+ create mode 100644 package/wsapi-xavante/wsapi-xavante.mk
 
-diff --git a/package/xavante/Config.in b/package/xavante/Config.in
-index be8e6d905..d66ca1f0a 100644
---- a/package/xavante/Config.in
-+++ b/package/xavante/Config.in
-@@ -1,14 +1,14 @@
- config BR2_PACKAGE_XAVANTE
- 	bool "xavante"
- 	# Runtime dependency only
--	select BR2_PACKAGE_CGILUA
- 	select BR2_PACKAGE_COPAS
--	select BR2_PACKAGE_COXPCALL
- 	select BR2_PACKAGE_LUAFILESYSTEM
- 	select BR2_PACKAGE_LUASOCKET
--	select BR2_PACKAGE_WSAPI
- 	help
- 	  Xavante is a Lua HTTP 1.1 Web server that uses a modular
--	  architecture based on URI mapped handlers.
-+	  architecture based on URI mapped handlers. Xavante currently
-+	  offers a file handler, a redirect handler and a WSAPI handler.
-+	  Those are used for general files, URI remapping and WSAPI
-+	  applications respectively.
- 
- 	  http://keplerproject.github.com/xavante/
-diff --git a/package/xavante/xavante.hash b/package/xavante/xavante.hash
-index d960c2d06..09b2a22d4 100644
---- a/package/xavante/xavante.hash
-+++ b/package/xavante/xavante.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d683bebdb3e1b497dc04ceb3fb8f1c8c67a6486ab0c6da0c23f281cc07a63657  xavante-2.3.0-1.src.rock
-+sha256 67c738f981e7d65d18c717f3acac59a37f95d5139c00fb0de5d3167262025273  xavante-2.4.0-1.src.rock
-diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
-index 07f9ee6fd..20e4aabed 100644
---- a/package/xavante/xavante.mk
-+++ b/package/xavante/xavante.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAVANTE_VERSION = 2.3.0-1
-+XAVANTE_VERSION = 2.4.0-1
- XAVANTE_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+diff --git a/package/Config.in b/package/Config.in
+index ba101dba4..5d7ec7f26 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -605,6 +605,7 @@ menu "Lua libraries/modules"
+ 	source "package/rings/Config.in"
+ 	source "package/turbolua/Config.in"
+ 	source "package/wsapi/Config.in"
++	source "package/wsapi-xavante/Config.in"
+ 	source "package/xavante/Config.in"
+ endmenu
+ endif
+diff --git a/package/wsapi-xavante/Config.in b/package/wsapi-xavante/Config.in
+new file mode 100644
+index 000000000..70c725413
+--- /dev/null
++++ b/package/wsapi-xavante/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_WSAPI_XAVANTE
++	bool "wsapi-xavante"
++	# Runtime dependency only
++	select BR2_PACKAGE_COXPCALL
++	select BR2_PACKAGE_RINGS
++	select BR2_PACKAGE_WSAPI
++	select BR2_PACKAGE_XAVANTE
++	help
++	  WSAPI is an API that abstracts the web server from Lua web
++	  applications. This is the rock that contains the Xavante adapter
++	  and launcher.
++
++	  http://keplerproject.github.com/wsapi/
+diff --git a/package/wsapi-xavante/wsapi-xavante.hash b/package/wsapi-xavante/wsapi-xavante.hash
+new file mode 100644
+index 000000000..9e8132df5
+--- /dev/null
++++ b/package/wsapi-xavante/wsapi-xavante.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 b30b171e3d4d6fd7e129f14576e1cfc5adf00c0780ef8350f2f9e6f1d4259346  wsapi-xavante-1.6.1-1.src.rock
+diff --git a/package/wsapi-xavante/wsapi-xavante.mk b/package/wsapi-xavante/wsapi-xavante.mk
+new file mode 100644
+index 000000000..937d2048a
+--- /dev/null
++++ b/package/wsapi-xavante/wsapi-xavante.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# wsapi-xavante
++#
++################################################################################
++
++WSAPI_XAVANTE_VERSION_MAJOR = 1.6.1
++WSAPI_XAVANTE_VERSION = $(WSAPI_XAVANTE_VERSION_MAJOR)-1
++WSAPI_XAVANTE_SUBDIR = wsapi-$(WSAPI_XAVANTE_VERSION_MAJOR)
++WSAPI_XAVANTE_LICENSE = MIT
++
++$(eval $(luarocks-package))
 -- 
 2.11.0
