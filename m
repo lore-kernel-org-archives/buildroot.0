@@ -1,80 +1,116 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  2 Sep 2017 18:56:42 +0200
-Subject: [Buildroot] [PATCH 12/12] wsapi-fcgi: new package
-In-Reply-To: <20170902165642.22943-1-francois.perrad@gadz.org>
-References: <20170902165642.22943-1-francois.perrad@gadz.org>
-Message-ID: <20170902165642.22943-12-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Sep 2017 19:02:06 +0200
+Subject: [Buildroot] [git commit] Revert "package/fontconfig: bump version
+	to 2.12.4"
+Message-ID: <20170902165543.8CCEF819D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                  |  1 +
- package/wsapi-fcgi/Config.in       | 11 +++++++++++
- package/wsapi-fcgi/wsapi-fcgi.hash |  2 ++
- package/wsapi-fcgi/wsapi-fcgi.mk   | 12 ++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/wsapi-fcgi/Config.in
- create mode 100644 package/wsapi-fcgi/wsapi-fcgi.hash
- create mode 100644 package/wsapi-fcgi/wsapi-fcgi.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=9f644a9604bd5449f6efb87d9cb376fcda2baa20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 5d7ec7f26..b826bdbc3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -605,6 +605,7 @@ menu "Lua libraries/modules"
- 	source "package/rings/Config.in"
- 	source "package/turbolua/Config.in"
- 	source "package/wsapi/Config.in"
-+	source "package/wsapi-fcgi/Config.in"
- 	source "package/wsapi-xavante/Config.in"
- 	source "package/xavante/Config.in"
- endmenu
-diff --git a/package/wsapi-fcgi/Config.in b/package/wsapi-fcgi/Config.in
+This reverts commit 72e89edfcb9821121a2785ddf193a1d836ae0b8f. Due to
+some change in fontconfig, it tries to re-generate a file using
+gperf. Adding a dependency on host-gperf would solve the problem, but
+really this is an upstream bug that should be reported and fixed
+rather than worked around by adding the host-gperf dependency.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ts-with-integer-width-macros-from-TS-1866.patch | 50 ++++++++++++++++++++++
+ package/fontconfig/fontconfig.hash                 |  4 +-
+ package/fontconfig/fontconfig.mk                   | 10 +++--
+ 3 files changed, 59 insertions(+), 5 deletions(-)
+
+diff --git a/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch b/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
 new file mode 100644
-index 000000000..634903836
+index 0000000..80bf7a7
 --- /dev/null
-+++ b/package/wsapi-fcgi/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_WSAPI_FCGI
-+	bool "wsapi-fcgi"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBFCGI
-+	# Runtime dependency only
-+	select BR2_PACKAGE_WSAPI
-+	help
-+	  WSAPI is an API that abstracts the web server from Lua web
-+	  applications. This is the rock that contains the FCGI module lfcgi.
++++ b/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
+@@ -0,0 +1,50 @@
++From 1ab5258f7c2abfafcd63a760ca08bf93591912da Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Wed, 14 Dec 2016 16:11:05 -0800
++Subject: [PATCH] Avoid conflicts with integer width macros from TS
++ 18661-1:2014
 +
-+	  http://keplerproject.github.com/wsapi/
-diff --git a/package/wsapi-fcgi/wsapi-fcgi.hash b/package/wsapi-fcgi/wsapi-fcgi.hash
-new file mode 100644
-index 000000000..f82ce9cfc
---- /dev/null
-+++ b/package/wsapi-fcgi/wsapi-fcgi.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 73dc200889bc185953cd3a7c5350c998c090f901fcd10771273b7a63a3ffcdcf  wsapi-fcgi-1.6.1-1.src.rock
-diff --git a/package/wsapi-fcgi/wsapi-fcgi.mk b/package/wsapi-fcgi/wsapi-fcgi.mk
-new file mode 100644
-index 000000000..88daade5a
---- /dev/null
-+++ b/package/wsapi-fcgi/wsapi-fcgi.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# wsapi-fcgi
-+#
-+################################################################################
++glibc 2.25+ has now defined these macros in <limits.h>
++https://sourceware.org/git/?p=glibc.git;a=commit;h=5b17fd0da62bf923cb61d1bb7b08cf2e1f1f9c1a
 +
-+WSAPI_FCGI_VERSION_MAJOR = 1.6.1
-+WSAPI_FCGI_VERSION = $(WSAPI_FCGI_VERSION_MAJOR)-1
-+WSAPI_FCGI_SUBDIR = wsapi-$(WSAPI_FCGI_VERSION_MAJOR)
-+WSAPI_FCGI_DEPENDENCIES = libfcgi
++Create an alias for FC_CHAR_WIDTH for ABI compatibility
 +
-+$(eval $(luarocks-package))
--- 
-2.11.0
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: upstream
++
++ fontconfig/fontconfig.h | 3 ++-
++ src/fcobjs.h            | 2 +-
++ 2 files changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
++index 5c72b22..070a557 100644
++--- a/fontconfig/fontconfig.h
+++++ b/fontconfig/fontconfig.h
++@@ -128,7 +128,8 @@ typedef int		FcBool;
++ #define FC_USER_CACHE_FILE	    ".fonts.cache-" FC_CACHE_VERSION
++ 
++ /* Adjust outline rasterizer */
++-#define FC_CHAR_WIDTH	    "charwidth"	/* Int */
+++#define FC_CHARWIDTH	    "charwidth"	/* Int */
+++#define FC_CHAR_WIDTH	    FC_CHARWIDTH
++ #define FC_CHAR_HEIGHT	    "charheight"/* Int */
++ #define FC_MATRIX	    "matrix"    /* FcMatrix */
++ 
++diff --git a/src/fcobjs.h b/src/fcobjs.h
++index 1fc4f65..d27864b 100644
++--- a/src/fcobjs.h
+++++ b/src/fcobjs.h
++@@ -51,7 +51,7 @@ FC_OBJECT (DPI,			FcTypeDouble,	NULL)
++ FC_OBJECT (RGBA,		FcTypeInteger,	NULL)
++ FC_OBJECT (SCALE,		FcTypeDouble,	NULL)
++ FC_OBJECT (MINSPACE,		FcTypeBool,	NULL)
++-FC_OBJECT (CHAR_WIDTH,		FcTypeInteger,	NULL)
+++FC_OBJECT (CHARWIDTH,		FcTypeInteger,	NULL)
++ FC_OBJECT (CHAR_HEIGHT,		FcTypeInteger,	NULL)
++ FC_OBJECT (MATRIX,		FcTypeMatrix,	NULL)
++ FC_OBJECT (CHARSET,		FcTypeCharSet,	FcCompareCharSet)
++-- 
++2.10.2
++
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index e9963f6..ad35825 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/fontconfig/2017-July/005961.html
+-sha256 668293fcc4b3c59765cdee5cee05941091c0879edcc24dfec5455ef83912e45c  fontconfig-2.12.4.tar.bz2
++# From https://lists.freedesktop.org/archives/fontconfig/2016-August/005794.html
++sha256	b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3	fontconfig-2.12.1.tar.bz2
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index d8a2f54..8d395bc 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -4,12 +4,16 @@
+ #
+ ################################################################################
+ 
+-FONTCONFIG_VERSION = 2.12.4
++FONTCONFIG_VERSION = 2.12.1
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
+-FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
+-HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
++
++# When
++# 0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch is
++# removed, the host-gperf dependency should be removed.
++FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf host-gperf
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ 
