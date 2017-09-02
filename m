@@ -1,30 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 18:44:28 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libpng: bump version to 1.6.32
-In-Reply-To: <20170902142956.22181-1-bernd.kuhls@t-online.de>
-References: <20170902142956.22181-1-bernd.kuhls@t-online.de>
-Message-ID: <20170902184428.74702a3b@windsurf.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  2 Sep 2017 18:51:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fontconfig: needs host-gperf
+Message-ID: <20170902165117.19639-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes
+http://autobuild.buildroot.net/results/25e/25e6f9425e460909507a0b995d4496cf5b6547d9/
 
-On Sat,  2 Sep 2017 16:29:55 +0200, Bernd Kuhls wrote:
-> Added md5 hash provided by upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libpng/libpng.hash | 7 ++++---
->  package/libpng/libpng.mk   | 2 +-
->  2 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/fontconfig/fontconfig.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index d8a2f5491..095d6a6c3 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -8,8 +8,9 @@ FONTCONFIG_VERSION = 2.12.4
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
+-FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
+-HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
++FONTCONFIG_DEPENDENCIES = freetype expat host-gperf host-pkgconf
++HOST_FONTCONFIG_DEPENDENCIES = \
++	host-freetype host-expat host-gperf host-pkgconf
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
