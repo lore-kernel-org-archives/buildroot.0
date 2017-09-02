@@ -1,65 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 23:54:54 +0200
-Subject: [Buildroot] [git commit] libcgi: add patch to not require C++
-	support
-Message-ID: <20170902214828.0490F7FE30@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Sep 2017 00:23:40 +0200
+Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
+In-Reply-To: <20170902231252.44d10e64@windsurf.lan>
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <20170902205423.21288-8-romain.naour@gmail.com>
+ <20170902231252.44d10e64@windsurf.lan>
+Message-ID: <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1212fd9cc627851d3679a83cee88cd9f3e58f8c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-libcgi is written in C, there is no need for a C++ compiler, but CMake
-by default assumes that both C and C++ are needed. To fix that, this
-commit adds a patch, submitted upstream, to adjust the CMakeLists.txt.
+Le 02/09/2017 ? 23:12, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Sat,  2 Sep 2017 22:54:19 +0200, Romain Naour wrote:
+>> This doesn't compile with glibc 2.26 where reallocarray() as been introduced.
+>>
+>> Fixes:
+>> stage1flex-misc.o: In function `allocate_array':
+>> misc.c:(.text+0x38f): undefined reference to `reallocarray'
+>> stage1flex-misc.o: In function `reallocate_array':
+>> misc.c:(.text+0xc8a): undefined reference to `reallocarray'
+>> collect2: error: ld returned 1 exit status
+> 
+> This commit log is a bit mysterious: if reallocarray() has been
+> introduced in glibc 2.26, why isn't flex able to use it ?
 
-Fixes:
+It's a nasty issue, when reallocarray() is available for the target, flex will
+build a small tool called stage1flex for the host (using _FOR_BUILD) but with
+the config.h generated for the target.
 
-  http://autobuild.buildroot.net/results/d0b4740bdbd84ed6fcbba706caf42ebba4c07d15/
+My host doesn't have glibc 2.26, so reallocarray() is never defined while
+building stage1flex:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-CMakeLists.txt-libcgi-is-in-C.patch       | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
+[-Wimplicit-function-declaration]
+  mem = reallocarray(NULL, (size_t) size, element_size);
+        ^~~~~~~~~~~~
+misc.c:147:6: warning : assignment makes pointer from integer without a cast
+[-Wint-conversion]
+  mem = reallocarray(NULL, (size_t) size, element_size);
+      ^
 
-diff --git a/package/libcgi/0001-CMakeLists.txt-libcgi-is-in-C.patch b/package/libcgi/0001-CMakeLists.txt-libcgi-is-in-C.patch
-new file mode 100644
-index 0000000..682bfe5
---- /dev/null
-+++ b/package/libcgi/0001-CMakeLists.txt-libcgi-is-in-C.patch
-@@ -0,0 +1,32 @@
-+From 043f7a470e32c036f0fe933ec5cd2003087d6b2e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 2 Sep 2017 23:50:42 +0200
-+Subject: [PATCH] CMakeLists.txt: libcgi is in C
-+
-+By default, CMake checks that both C and C++ compilers are
-+available. However, since libcgi is only C, there's no need for a C++
-+compiler check. Therefore, this commit adjusts the project() variable
-+definition to only require C language support.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Submitted-upstream: https://github.com/rafaelsteil/libcgi/pull/38
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f98a99d..c599ca9 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -3,7 +3,7 @@
-+ #
-+ cmake_minimum_required(VERSION 2.8.8)
-+ 
-+-project(cgi)
-++project(cgi C)
-+ string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UC)
-+ string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LC)
-+ set(LIBPREFIX ${PROJECT_NAME})
-+-- 
-+2.13.5
-+
+I don't know how to fix this, except by disabling reallocarray() for the target...
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
