@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 21:47:04 +0200
-Subject: [Buildroot] [PATCH 1/4] arch: add option to disable internal
- toolchain backend
-In-Reply-To: <5326fe3900e51f3b0a2ac4fc9d750245d560802c.1504381100.git.yann.morin.1998@free.fr>
+Date: Sat, 2 Sep 2017 21:48:12 +0200
+Subject: [Buildroot] [PATCH 3/4] arch/bfin: internal backend not
+ suitable for some cores
+In-Reply-To: <fd7e5dc963d17a2a1c33f575fbf73ab1140099f2.1504381100.git.yann.morin.1998@free.fr>
 References: <cover.1504381100.git.yann.morin.1998@free.fr>
- <5326fe3900e51f3b0a2ac4fc9d750245d560802c.1504381100.git.yann.morin.1998@free.fr>
-Message-ID: <20170902214704.0a01ba92@windsurf.lan>
+ <fd7e5dc963d17a2a1c33f575fbf73ab1140099f2.1504381100.git.yann.morin.1998@free.fr>
+Message-ID: <20170902214812.70fc882f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for working on this!
+On Sat,  2 Sep 2017 21:38:51 +0200, Yann E. MORIN wrote:
 
-On Sat,  2 Sep 2017 21:38:49 +0200, Yann E. MORIN wrote:
+> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+> index 90e4ab97b0..8c1c80ad52 100644
+> --- a/arch/Config.in.bfin
+> +++ b/arch/Config.in.bfin
+> @@ -6,12 +6,16 @@ choice
+>  	  Specify target CPU
+>  config BR2_bf606
+>  	bool "bf606"
+> +	select BR2_ARCH_NOT_UPSTREAM_GCC
 
-> +# For some architectures or specific cores, our internal toolchain
-> +# backend is not suitable (like, missing support in upstream gcc, or
-> +# no ChipCo fork exists...)
-> +config BR2_ARCH_NO_INTERNAL_BACKEND
-> +	bool
+Where is this symbol introduced?
 
-I'm not a big fan of the option name. What about:
+Seems like there is some issue in your patch series.
 
-config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
-	bool
-	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-
-config BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-	bool
-
-So, arches can select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT, and else
-we can "depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT".
-
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 584d053058..919757e558 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -43,6 +43,7 @@ choice
->  config BR2_TOOLCHAIN_BUILDROOT
->  	bool "Buildroot toolchain"
->  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-> +	depends on !BR2_ARCH_NO_INTERNAL_BACKEND
->  	depends on !BR2_bf606
->  	depends on !BR2_bf607
->  	depends on !BR2_bf608
-
-Now that I think of it: we have dropped the Blackfin ADI external
-toolchain. Therefore, we currently have no in-tree solution to use/test
-bf606, bf607, bf608, etc. Perhaps we should drop them instead ?
+Also, as said in my review of PATCH 1/4, perhaps we should simply drop
+those Blackfin variants ?
 
 Thomas
 -- 
