@@ -1,93 +1,121 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:48 -0000
-Subject: [Buildroot] [git commit] package/sysdig: bump to version 0.17.0
-Message-ID: <20170902130617.82E6D818F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mono: bump to version 5.0.1.1 and
+	monolite to version 1050001000
+Message-ID: <20170902130617.24EBA818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a04b0b519e89a2fa9f82ff81376509b8d4e6a32
+commit: https://git.buildroot.net/buildroot/commit/?id=309b466a1d80c5cbf254478348c06996ea914700
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps sysdig to version 0.17.0 and updates the
-dependencies accordingly.
+This patch bumps to mono 5.0.1.1 and updates the unit tests patch
+accordingly.
 
-According to [1], the minimum GCC version is 4.8 so encode that as
-well.
+The latest version of mono carries a bit of changes in the monolite
+package: the version string changes and from now on, monolite should
+be installed in a subdirectory with the exact version string as a name.
+Therefore, mono and monolite are bumped in a single commit.
 
-[1] https://www.sysdig.org/wiki/how-to-install-sysdig-from-the-source-code/
+Patch 0004, although applied in upstream master, is not yet in this
+(stable) release.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Arnout: also bump gcc dependency to 4.8]
+[Arnout: squashed the patches, removed /usr part from HOST_DIR]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/sysdig/Config.in   | 11 ++++++++---
- package/sysdig/sysdig.hash |  2 +-
- package/sysdig/sysdig.mk   |  8 +++++---
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ .../0006-Remove-unit-tests-from-mono-compilation.patch     | 14 +++++++-------
+ package/mono/mono.hash                                     |  2 +-
+ package/mono/mono.mk                                       |  2 +-
+ package/monolite/monolite.hash                             |  2 +-
+ package/monolite/monolite.mk                               |  6 +++---
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index dfb9db5..d3f73e6 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -3,11 +3,16 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on !BR2_STATIC_LIBS # luajit
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_JSONCPP
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_JQ
-+	select BR2_PACKAGE_LIBB64
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux instance,
-@@ -17,7 +22,7 @@ config BR2_PACKAGE_SYSDIG
+diff --git a/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch b/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
+index 6adbd81..a3e88e7 100644
+--- a/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
++++ b/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
+@@ -1,6 +1,6 @@
+-From 357bea890354acda52aa6dfaec7fa232fa0b8208 Mon Sep 17 00:00:00 2001
++From 26e31fc54af591bdd88d6a4a79b7fa91c57f4b0c Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+-Date: Tue, 23 May 2017 11:19:58 +0200
++Date: Thu, 10 Aug 2017 23:30:05 +0200
+ Subject: [PATCH] Remove unit-tests from mono compilation
  
- 	  http://sysdig.org
+ This patch fixes compiling errors with unit-tests under linux.
+@@ -15,15 +15,15 @@ index 8c9c2cb..7af36ec 100644
+ --- a/mono/Makefile.am
+ +++ b/mono/Makefile.am
+ @@ -34,7 +34,7 @@ monotouch-do-clean:
+-          (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target); \
++ 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target); \
+      done;
+  else
+--SUBDIRS = $(btls_dirs) arch utils io-layer cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
+-+SUBDIRS = $(btls_dirs) arch utils io-layer cil metadata $(sgen_dirs) mini dis tests benchmark profiler
++-SUBDIRS = $(btls_dirs) arch utils cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
+++SUBDIRS = $(btls_dirs) arch utils cil metadata $(sgen_dirs) mini dis tests benchmark profiler
+  endif
+  endif
+--DIST_SUBDIRS = btls arch utils io-layer cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
+-+DIST_SUBDIRS = btls arch utils io-layer cil metadata $(sgen_dirs) mini dis tests benchmark profiler
++-DIST_SUBDIRS = btls arch utils cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
+++DIST_SUBDIRS = btls arch utils cil metadata $(sgen_dirs) mini dis tests benchmark profiler
+ -- 
+ 2.7.4
  
--comment "sysdig needs a toolchain w/ C++, gcc >= 4.7, dynamic library and a Linux kernel to be built"
-+comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index f64ef9e..8305413 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 89b8ed0..5d14a52 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
 @@ -1,2 +1,2 @@
- # locally computed
--sha256  e72490eaf413745aef87965a5abb1024908053064f86593b257f12bf5b0d6b97  sysdig-0.1.100.tar.gz
-+sha256  f009acc32f2b15fcb0d2267bde6f6de9b3445179003c979ba61a8836abdb78f9  sysdig-0.17.0.tar.gz
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index f967727..2d5ad23 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,13 +4,15 @@
+ # sha256 locally computed
+-sha256 18cb38a670e51609c36c687ed90ad42cfedabeffd0a2dc5f7f0c46249eb8dbef  mono-4.8.1.0.tar.bz2
++sha256 48d6ae71d593cd01bf0f499de569359d45856cda325575e1bacb5fabaa7e9718  mono-5.0.1.1.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index ec7e14e..ec2f38f 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSDIG_VERSION = 0.1.100
-+SYSDIG_VERSION = 0.17.0
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
- SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
--	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
--SYSDIG_DEPENDENCIES = zlib luajit jsoncpp
-+	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
-+	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
-+	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
-+SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+-MONO_VERSION = 4.8.1.0
++MONO_VERSION = 5.0.1.1
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 09f9554..7638ce2 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 2cdf6cff1d82d76412461a4c8a3616bb2aa1e835fb55479941662dec3799c924  monolite-156-latest.tar.gz
++sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index 5317898..a2815ef 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
  
- # sysdig creates the module Makefile from a template, which contains a
+-MONOLITE_VERSION = 156
++MONOLITE_VERSION = 1050001000
+ MONOLITE_SITE = http://download.mono-project.com/monolite/
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPL-2.0 or commercial
+ 
+ define HOST_MONOLITE_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/lib/monolite
+-	cp $(@D)/* $(HOST_DIR)/lib/monolite
++	mkdir -p $(HOST_DIR)/lib/monolite/$(MONOLITE_VERSION)
++	cp -r $(@D)/* $(HOST_DIR)/lib/monolite/$(MONOLITE_VERSION)
+ endef
+ 
+ $(eval $(host-generic-package))
