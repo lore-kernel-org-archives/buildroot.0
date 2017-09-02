@@ -1,45 +1,82 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:43 -0000
-Subject: [Buildroot] [git commit] package/lzo: bump version to 2.10
-Message-ID: <20170902130616.7631880424@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mcelog: bump version to 153
+Message-ID: <20170902130616.8648080424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ad2d40c65af7a346d79d38ec2999633795c051f
+commit: https://git.buildroot.net/buildroot/commit/?id=84160165a18e2962df2c013f35cb1f7eee0069cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added locally computed sha256 hash.
+Removed patch applied upstream:
+https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=524ed1cd16de5adcb4a5015777d3dfc63afda1fe
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lzo/lzo.hash | 4 +++-
- package/lzo/lzo.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ ...memutil.h-add-missing-include-for-va_list.patch | 31 ----------------------
+ package/mcelog/mcelog.hash                         |  2 +-
+ package/mcelog/mcelog.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
-index 415ed99..cf2734f 100644
---- a/package/lzo/lzo.hash
-+++ b/package/lzo/lzo.hash
-@@ -1,2 +1,4 @@
- # From http://www.oberhumer.com/opensource/lzo/
--sha1 e2a60aca818836181e7e6f8c4f2c323aca6ac057 lzo-2.09.tar.gz
-+sha1 4924676a9bae5db58ef129dc1cebce3baa3c4b5d  lzo-2.10.tar.gz
-+# Locally computed
-+sha256 c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072  lzo-2.10.tar.gz
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index 17d8d0f..5b8efdd 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
+diff --git a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
+deleted file mode 100644
+index f9e08be..0000000
+--- a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 36aad32283eae5b47a05e3adfa3f5f6a7b1b55c0 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 11 Jun 2017 10:02:39 +0200
+-Subject: [PATCH] memutil.h: add missing include for va_list
+-
+-Fixes compile error with uclibc-ng:
+-
+-In file included from mcelog.c:51:0:
+-memutil.h:4:48: error: unknown type name 'va_list'
+- int xvasprintf(char **ret, const char *format, va_list ap);
+-
+-Patch sent upstream: https://github.com/andikleen/mcelog/pull/54
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- memutil.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/memutil.h b/memutil.h
+-index 81028e9..dbed7fa 100644
+---- a/memutil.h
+-+++ b/memutil.h
+-@@ -1,4 +1,5 @@
+- #include <stdlib.h>
+-+#include <stdarg.h>
+- 
+- int xasprintf(char **strp, const char *fmt, ...);
+- int xvasprintf(char **ret, const char *format, va_list ap);
+--- 
+-2.11.0
+-
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+index f1c0cd5..1a9dd60 100644
+--- a/package/mcelog/mcelog.hash
++++ b/package/mcelog/mcelog.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 825644a6cfd9b149e848d91d322724f2fb48f3a98441a25d9d38a5dbe02fe1ef  mcelog-v152.tar.gz
++sha256 d8f3dde21b2e0d76740f374385817c11b3fd69b095a186a6dd12c7b0ba0cca8f  mcelog-v153.tar.gz
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index d12fc44..dca6a18 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LZO_VERSION = 2.09
-+LZO_VERSION = 2.10
- LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
- LZO_LICENSE = GPL-2.0+
- LZO_LICENSE_FILES = COPYING
+-MCELOG_VERSION = v152
++MCELOG_VERSION = v153
+ MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+ MCELOG_SITE_METHOD = git
+ MCELOG_LICENSE = GPL-2.0
