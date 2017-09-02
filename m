@@ -1,57 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:43 -0000
-Subject: [Buildroot] [git commit] fs/squashfs: honour the number of parallel
-	jobs
-Message-ID: <20170902130615.E37C280332@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lzo: bump version to 2.10
+Message-ID: <20170902130616.7631880424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62e626b2ab9f60b21b8c8c392b0dc4ccd509f69b
+commit: https://git.buildroot.net/buildroot/commit/?id=3ad2d40c65af7a346d79d38ec2999633795c051f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, mksquashfs uses all the CPUs available, like us with
-BR2_JLEVEL=0.
+Added locally computed sha256 hash.
 
-However, by setting BR21_JLEVEL to non-zero, a user volutarily limits
-the number of jobbs allowed to run concurrently (for various reasons,
-like this is not a priority task on the machine; or like the
-autobuilders, to spread the load accross multiple runs without
-overloading the machine).
-
-So, propagate tthe parallelisn settings down to mksquashfs, to repect
-the user's will.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Tested-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/squashfs/squashfs.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/lzo/lzo.hash | 4 +++-
+ package/lzo/lzo.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 342c7a8..7de7f51 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
+index 415ed99..cf2734f 100644
+--- a/package/lzo/lzo.hash
++++ b/package/lzo/lzo.hash
+@@ -1,2 +1,4 @@
+ # From http://www.oberhumer.com/opensource/lzo/
+-sha1 e2a60aca818836181e7e6f8c4f2c323aca6ac057 lzo-2.09.tar.gz
++sha1 4924676a9bae5db58ef129dc1cebce3baa3c4b5d  lzo-2.10.tar.gz
++# Locally computed
++sha256 c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072  lzo-2.10.tar.gz
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 17d8d0f..5b8efdd 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
-+ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
-+
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
- else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
-@@ -19,8 +21,7 @@ ROOTFS_SQUASHFS_ARGS += -comp gzip
- endif
- 
- define ROOTFS_SQUASHFS_CMD
--	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
--		$(ROOTFS_SQUASHFS_ARGS)
-+	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
- endef
- 
- $(eval $(call ROOTFS_TARGET,squashfs))
+-LZO_VERSION = 2.09
++LZO_VERSION = 2.10
+ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPL-2.0+
+ LZO_LICENSE_FILES = COPYING
