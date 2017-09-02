@@ -1,42 +1,30 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:46 -0000
-Subject: [Buildroot] [git commit] package/libhttpparser: bump version to
-	2.7.1
-Message-ID: <20170902130617.32237818F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/logsurfer: use hashes provided by
+	upstream
+Message-ID: <20170902130616.1DC2680424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b719de9d3c1c2a32f8dc2486695c6d71293a0d4f
+commit: https://git.buildroot.net/buildroot/commit/?id=2fa8937c98eb4e9b6dbba8ac08d645a962f31c54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libhttpparser/libhttpparser.hash | 2 +-
- package/libhttpparser/libhttpparser.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/logsurfer/logsurfer.hash | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
-index e11006e..a1b772e 100644
---- a/package/libhttpparser/libhttpparser.hash
-+++ b/package/libhttpparser/libhttpparser.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 a11c5ccb9808496f3de66d54ea1f89271919923307e31c75de2a3a77a6754c97 libhttpparser-v2.6.0.tar.gz
-+sha256 70409ad324e5de2da6a0f39e859e566d497c1ff0a249c0c38a5012df91b386b3  libhttpparser-v2.7.1.tar.gz
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 015efc0..8ff0413 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHTTPPARSER_VERSION = v2.6.0
-+LIBHTTPPARSER_VERSION = v2.7.1
- LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
+diff --git a/package/logsurfer/logsurfer.hash b/package/logsurfer/logsurfer.hash
+index 2c14078..539a41a 100644
+--- a/package/logsurfer/logsurfer.hash
++++ b/package/logsurfer/logsurfer.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  74a36e8530a884031b4ae2344a46b9aaa07a1ee36d143802f6b64f817c5bd1af  logsurfer-1.8.tar.gz
++# From https://www.crypt.gen.nz/logsurfer/
++md5 4c26a74d813ccf766117c95c644aa601  logsurfer-1.8.tar.gz
++sha256 74a36e8530a884031b4ae2344a46b9aaa07a1ee36d143802f6b64f817c5bd1af  logsurfer-1.8.tar.gz
