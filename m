@@ -1,38 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Sep 2017 15:19:05 +0200
-Subject: [Buildroot] [PATCH] mtd: be explicit about config options for the
-	host
-Message-ID: <20170902131905.23134-1-thomas.petazzoni@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  2 Sep 2017 15:31:43 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20170902133143.29983-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of letting auto-detection do its job, be explicit about the
-fact that we want the JFFS2 and UBIFS utilities when building the host
-variant of mtd.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mtd/mtd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index e666bf077c..824003c691 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -45,7 +45,10 @@ MTD_CONF_OPTS += --without-xattr
- endif
- 
- HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
--HOST_MTD_CONF_OPTS = --disable-tests
-+HOST_MTD_CONF_OPTS = \
-+	--with-jffs \
-+	--with-ubifs \
-+	--disable-tests
- 
- MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
- SUMTOOL = $(HOST_DIR)/sbin/sumtool
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c83804456..e7df0b9ac 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.85"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.46"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.86"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.47"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.10"	if BR2_KERNEL_HEADERS_4_12
 -- 
-2.13.5
+2.11.0
