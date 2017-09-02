@@ -1,116 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 20:12:04 +0200
-Subject: [Buildroot] [git commit] package/fontconfig: bump version to 2.12.4
-Message-ID: <20170902180512.466A181DA3@busybox.osuosl.org>
+Date: Sat, 2 Sep 2017 20:12:02 +0200
+Subject: [Buildroot] [git commit] package/netatalk: bump version to 3.1.11
+Message-ID: <20170902180512.380E981DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab6ce221e6e59cc79ef6e01c5ec45ef2e4d7887a
+commit: https://git.buildroot.net/buildroot/commit/?id=38745672c1b214ceee69bdbb24057c5c0f4936e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream:
-https://cgit.freedesktop.org/fontconfig/commit/?id=1ab5258f7c2abfafcd63a760ca08bf93591912da
+Building 3.1.9 still fails after removing patch 0002:
 
-We need to keep the host-gperf dependency even when upstream ships the
-generated file fcobjshash.gperf in its release tarball because in the
-next release this file is removed:
-https://cgit.freedesktop.org/fontconfig/commit/?id=651f1227646174b5be0186b4b6cdff3a7134d869
-and is always generated during build:
-https://bugs.freedesktop.org/show_bug.cgi?id=101280
+volume.c:383:26: error: 'ldap_config_valid' undeclared (first use in this function)
+                     if (!ldap_config_valid || vol->v_flags & AFPVOL_NONETIDS)
+
+Bumping to 3.1.11 solves the problem.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ts-with-integer-width-macros-from-TS-1866.patch | 50 ----------------------
- package/fontconfig/fontconfig.hash                 |  4 +-
- package/fontconfig/fontconfig.mk                   |  6 +--
- 3 files changed, 3 insertions(+), 57 deletions(-)
+ package/netatalk/netatalk.hash | 6 +++---
+ package/netatalk/netatalk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch b/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
-deleted file mode 100644
-index 80bf7a7..0000000
---- a/package/fontconfig/0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 1ab5258f7c2abfafcd63a760ca08bf93591912da Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Wed, 14 Dec 2016 16:11:05 -0800
--Subject: [PATCH] Avoid conflicts with integer width macros from TS
-- 18661-1:2014
--
--glibc 2.25+ has now defined these macros in <limits.h>
--https://sourceware.org/git/?p=glibc.git;a=commit;h=5b17fd0da62bf923cb61d1bb7b08cf2e1f1f9c1a
--
--Create an alias for FC_CHAR_WIDTH for ABI compatibility
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Patch status: upstream
--
-- fontconfig/fontconfig.h | 3 ++-
-- src/fcobjs.h            | 2 +-
-- 2 files changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
--index 5c72b22..070a557 100644
----- a/fontconfig/fontconfig.h
--+++ b/fontconfig/fontconfig.h
--@@ -128,7 +128,8 @@ typedef int		FcBool;
-- #define FC_USER_CACHE_FILE	    ".fonts.cache-" FC_CACHE_VERSION
-- 
-- /* Adjust outline rasterizer */
---#define FC_CHAR_WIDTH	    "charwidth"	/* Int */
--+#define FC_CHARWIDTH	    "charwidth"	/* Int */
--+#define FC_CHAR_WIDTH	    FC_CHARWIDTH
-- #define FC_CHAR_HEIGHT	    "charheight"/* Int */
-- #define FC_MATRIX	    "matrix"    /* FcMatrix */
-- 
--diff --git a/src/fcobjs.h b/src/fcobjs.h
--index 1fc4f65..d27864b 100644
----- a/src/fcobjs.h
--+++ b/src/fcobjs.h
--@@ -51,7 +51,7 @@ FC_OBJECT (DPI,			FcTypeDouble,	NULL)
-- FC_OBJECT (RGBA,		FcTypeInteger,	NULL)
-- FC_OBJECT (SCALE,		FcTypeDouble,	NULL)
-- FC_OBJECT (MINSPACE,		FcTypeBool,	NULL)
---FC_OBJECT (CHAR_WIDTH,		FcTypeInteger,	NULL)
--+FC_OBJECT (CHARWIDTH,		FcTypeInteger,	NULL)
-- FC_OBJECT (CHAR_HEIGHT,		FcTypeInteger,	NULL)
-- FC_OBJECT (MATRIX,		FcTypeMatrix,	NULL)
-- FC_OBJECT (CHARSET,		FcTypeCharSet,	FcCompareCharSet)
---- 
--2.10.2
--
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index ad35825..e9963f6 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/fontconfig/2016-August/005794.html
--sha256	b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3	fontconfig-2.12.1.tar.bz2
-+# From https://lists.freedesktop.org/archives/fontconfig/2017-July/005961.html
-+sha256 668293fcc4b3c59765cdee5cee05941091c0879edcc24dfec5455ef83912e45c  fontconfig-2.12.4.tar.bz2
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 8d395bc..71a0b45 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -4,14 +4,10 @@
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index 1b974f5..ce78373 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.9/
+-md5	d1d385ae6c3dc45eef4c923472f8fa5f	netatalk-3.1.9.tar.bz2
+-sha1	ac746efc00e8cfbe5042a7835b27480bb83505cd	netatalk-3.1.9.tar.bz2
++# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.11/
++md5 8f79ce2a275b128ebb07188766f088fc  netatalk-3.1.11.tar.bz2
++sha1 5aa7900e6f7de3c7ee812aa1130c1245d1974586  netatalk-3.1.11.tar.bz2
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index e0085db..28a8750 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FONTCONFIG_VERSION = 2.12.1
-+FONTCONFIG_VERSION = 2.12.4
- FONTCONFIG_SITE = http://fontconfig.org/release
- FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
- FONTCONFIG_INSTALL_STAGING = YES
--
--# When
--# 0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch is
--# removed, the host-gperf dependency should be removed.
- FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf
- HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf host-gperf
- FONTCONFIG_LICENSE = fontconfig license
+-NETATALK_VERSION = 3.1.9
++NETATALK_VERSION = 3.1.11
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+ # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
