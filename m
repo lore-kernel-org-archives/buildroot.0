@@ -1,33 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 22:53:45 +0200
-Subject: [Buildroot] [PATCH] package/python-web2py: bump to version
- R-2.15.3
-In-Reply-To: <1504248347-24424-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1504248347-24424-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20170902225345.0c6797b2@windsurf.lan>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  2 Sep 2017 22:54:12 +0200
+Subject: [Buildroot] [PATCH v2 00/11] glibc: bump to 2.26
+Message-ID: <20170902205423.21288-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This series bump glibc to the latest release and allow to remove all
+local patches! Sadly this new release come with some C++ regressions
+or changes needed in packages.
 
-On Fri,  1 Sep 2017 08:45:47 +0200, Angelo Compagnucci wrote:
+While testing this new version, some build issues has been dicovered.
+Two gcc patch are needed to build a toolchain with older compiler
+(gcc 4.9 to 6.4), gcc 7.2 contain already the fix.
 
-> -PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
-> +PYTHON_WEB2PY_DEPENDENCIES = python-pydal host-python-pydal
+Another C++ namespace change trigger a build issue when the code
+contain a workaround for math functions:
 
-We want to keep a dependency on Python here I believe, because this
-package is not using python-package, but generic-package. So perhaps we
-should do like python-package is doing, i.e:
+mesa3d:
+"using std::fpclassify;"
 
-$(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
+https://github.com/mesa3d/mesa/blob/master/include/c99_math.h#L197
 
-Yegor, what do you think ?
+jsoncpp:
+"#define isfinite std::isfinite"
 
-Thomas
+It's not easy to catch all packages affected by this issue before
+bumping glibc. So here is the v2 for testing and review containing
+additional fixes.
+
+This series is rebased on master after 2017.08 release.
+
+Best regards,
+Romain
+
+Romain Naour (11):
+  package/gcc: fix build issue with glibc 2.26
+  package/gcc: fix build issue with glibc 2.26
+  package/mesa3d: fix build issue with glibc >= 2.26
+  package/jsoncpp: fix build with glibc >= 2.26
+  package/glibc: needs kernel headers >= 3.10 on powerpc64le
+  package/gcc: enable float128 on powerpc64le with glibc >= 2.26
+    toolchains
+  package/flex: disable reallocarray
+  package/diffutils: fix build with glibc 2.26
+  package/kodi: fix build with glibc 2.26
+  package/glibc: bump to 2.26
+  package/glibc: backport fixes for glibc bug 21930
+
+ package/diffutils/diffutils.mk                     |   6 +
+ package/flex/flex.mk                               |   3 +-
+ ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 190 ++++++++++++
+ package/gcc/4.9.4/944-sanitizer-linux.patch        |  88 ++++++
+ ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 192 +++++++++++++
+ package/gcc/5.4.0/944-sanitizer-linux.patch        |  87 ++++++
+ ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 191 +++++++++++++
+ package/gcc/6.4.0/943-sanitizer-linux.patch        |  87 ++++++
+ package/gcc/Config.in.host                         |   4 +
+ package/gcc/gcc.mk                                 |   8 +
+ ...__builtin_types_compatible_p-in-C-mode-bu.patch |  50 ++++
+ .../glibc/0001-sh-Fix-building-with-gcc5-6.patch   |  56 ----
+ ...00366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch |  35 ---
+ ...02-Do-not-use-generic-selection-in-C-mode.patch |  56 ++++
+ ...-version-of-issignaling-that-does-not-use.patch | 225 +++++++++++++++
+ ...ject-overly-long-LD_PRELOAD-path-elements.patch | 122 --------
+ ...ersion-of-issignaling-when-__NO_LONG_DOUB.patch |  47 +++
+ ...Reject-overly-long-LD_AUDIT-path-elements.patch | 204 -------------
+ ...-version-of-iszero-that-does-not-use-__MA.patch | 210 ++++++++++++++
+ package/glibc/0005-fix-binutils-2-29-build.patch   |  65 -----
+ ...g-IS_IN-libc-guards-to-vectorized-strcspn.patch |  47 ---
+ package/glibc/0006-sh4-trap.patch                  | 318 ---------------------
+ package/glibc/glibc.hash                           |   2 +-
+ package/glibc/glibc.mk                             |   2 +-
+ ...001-json_writer-fix-build-with-glibc-2.26.patch |  28 ++
+ ...3-dialogs-fix-build-issue-with-glibc-2.26.patch |  37 +++
+ ...-c99_math-fix-build-issue-with-glibc-2.26.patch |  82 ++++++
+ toolchain/toolchain-buildroot/Config.in            |   8 +-
+ 28 files changed, 1599 insertions(+), 851 deletions(-)
+ create mode 100644 package/gcc/4.9.4/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+ create mode 100644 package/gcc/4.9.4/944-sanitizer-linux.patch
+ create mode 100644 package/gcc/5.4.0/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+ create mode 100644 package/gcc/5.4.0/944-sanitizer-linux.patch
+ create mode 100644 package/gcc/6.4.0/942-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+ create mode 100644 package/gcc/6.4.0/943-sanitizer-linux.patch
+ create mode 100644 package/glibc/0001-Do-not-use-__builtin_types_compatible_p-in-C-mode-bu.patch
+ delete mode 100644 package/glibc/0001-sh-Fix-building-with-gcc5-6.patch
+ delete mode 100644 package/glibc/0002-CVE-2017-1000366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch
+ create mode 100644 package/glibc/0002-Do-not-use-generic-selection-in-C-mode.patch
+ create mode 100644 package/glibc/0003-Provide-a-C-version-of-issignaling-that-does-not-use.patch
+ delete mode 100644 package/glibc/0003-ld.so-Reject-overly-long-LD_PRELOAD-path-elements.patch
+ create mode 100644 package/glibc/0004-Fix-the-C-version-of-issignaling-when-__NO_LONG_DOUB.patch
+ delete mode 100644 package/glibc/0004-ld.so-Reject-overly-long-LD_AUDIT-path-elements.patch
+ create mode 100644 package/glibc/0005-Provide-a-C-version-of-iszero-that-does-not-use-__MA.patch
+ delete mode 100644 package/glibc/0005-fix-binutils-2-29-build.patch
+ delete mode 100644 package/glibc/0006-i686-Add-missing-IS_IN-libc-guards-to-vectorized-strcspn.patch
+ delete mode 100644 package/glibc/0006-sh4-trap.patch
+ create mode 100644 package/jsoncpp/0001-json_writer-fix-build-with-glibc-2.26.patch
+ create mode 100644 package/kodi/0003-dialogs-fix-build-issue-with-glibc-2.26.patch
+ create mode 100644 package/mesa3d/0005-c99_math-fix-build-issue-with-glibc-2.26.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.5
