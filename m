@@ -1,50 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 18:41:01 +0200
-Subject: [Buildroot] [git commit] package/lzo: enable shared/static libs
-	when needed
-Message-ID: <20170902163603.6EBA481E8C@busybox.osuosl.org>
+Date: Sat, 2 Sep 2017 18:41:03 +0200
+Subject: [Buildroot] [git commit] package/libpng: bump version to 1.6.32
+Message-ID: <20170902163603.7D97880E47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=802aaa55b9aece24db79b243e0fdf3f60ea6e69b
+commit: https://git.buildroot.net/buildroot/commit/?id=3b8e197241448ca7173cad9f0d930526e94f04c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In 61c4c63 (package/lzo: switch to cmake), building lzo has switched
-from autotools to cmake. In the conversion, we've lost the build of the
-shared library, because the cmake-based buildsystem of lzo explcitly
-disables it by default.
+Added md5 hash provided by upstream.
 
-Restore the shared library build.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lzo/lzo.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/libpng/libpng.hash | 7 ++++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index dba965f..27ca459 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -11,5 +11,17 @@ LZO_LICENSE_FILES = COPYING
- LZO_INSTALL_STAGING = YES
- LZO_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 4bc7b87..074cf5f 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,4 +1,5 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.31/
+-sha1 de695064363df331734466981ef7f6546ef516bf  libpng-1.6.31.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.32/
++md5 e01be057a9369183c959b793a685ad15  libpng-1.6.32.tar.xz
++sha1 161d91d15cfd739773e0a73b41032b9f27322914  libpng-1.6.32.tar.xz
+ # Locally computed:
+-sha256 232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41  libpng-1.6.31.tar.xz
++sha256 c918c3113de74a692f0a1526ce881dc26067763eb3915c57ef3a0f7b6886f59b  libpng-1.6.32.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 0c19b29..2aa0217 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LZO_CONF_OPTS += -DENABLE_SHARED=ON
-+else
-+LZO_CONF_OPTS += -DENABLE_SHARED=OFF
-+endif
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LZO_CONF_OPTS += -DENABLE_STATIC=ON
-+else
-+LZO_CONF_OPTS += -DENABLE_STATIC=OFF
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+-LIBPNG_VERSION = 1.6.31
++LIBPNG_VERSION = 1.6.32
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
