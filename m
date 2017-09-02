@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  2 Sep 2017 18:56:34 +0200
-Subject: [Buildroot] [PATCH 04/12] dado: bump to version 1.8.3
+Date: Sat,  2 Sep 2017 18:56:35 +0200
+Subject: [Buildroot] [PATCH 05/12] luajson: bump to version 1.3.4
 In-Reply-To: <20170902165642.22943-1-francois.perrad@gadz.org>
 References: <20170902165642.22943-1-francois.perrad@gadz.org>
-Message-ID: <20170902165642.22943-4-francois.perrad@gadz.org>
+Message-ID: <20170902165642.22943-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/dado/dado.hash | 2 +-
- package/dado/dado.mk   | 2 +-
+ package/luajson/luajson.hash | 2 +-
+ package/luajson/luajson.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dado/dado.hash b/package/dado/dado.hash
-index 984ef3f85..973bdb3ff 100644
---- a/package/dado/dado.hash
-+++ b/package/dado/dado.hash
+diff --git a/package/luajson/luajson.hash b/package/luajson/luajson.hash
+index deda5efd6..36534fe34 100644
+--- a/package/luajson/luajson.hash
++++ b/package/luajson/luajson.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	dea331051c92ef2fbb22025a4f02e84e63d63148a66589401404877727f59941  dado-1.8.0-1.src.rock
-+sha256 5a10ed7ff7be34ac004d10d6ea62ee8efc2b594c50ffc93e840e7fb7a2e6b4d0  dado-1.8.3-1.src.rock
-diff --git a/package/dado/dado.mk b/package/dado/dado.mk
-index 7ae4edfbc..acef04777 100644
---- a/package/dado/dado.mk
-+++ b/package/dado/dado.mk
+-sha256	4898e5575713b37a1eb9badbd3968e15ec1856115daaed9819acf39113616619  luajson-1.3.3-1.src.rock
++sha256 28a5928cf2e4fd79fa9a9aceaef5ebf1dccb1146489b7de4c2726f561700f01c  luajson-1.3.4-1.src.rock
+diff --git a/package/luajson/luajson.mk b/package/luajson/luajson.mk
+index 67bc26644..81a9f8113 100644
+--- a/package/luajson/luajson.mk
++++ b/package/luajson/luajson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DADO_VERSION = 1.8.0-1
-+DADO_VERSION = 1.8.3-1
- DADO_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+-LUAJSON_VERSION = 1.3.3-1
++LUAJSON_VERSION = 1.3.4-1
+ LUAJSON_SUBDIR = luajson
+ LUAJSON_LICENSE = MIT
+ LUAJSON_LICENSE_FILES = $(LUAJSON_SUBDIR)/LICENSE
 -- 
 2.11.0
