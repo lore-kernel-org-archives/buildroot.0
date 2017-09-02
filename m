@@ -1,53 +1,78 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Sep 2017 22:54:17 +0200
-Subject: [Buildroot] [PATCH v2 05/11] package/glibc: needs kernel headers >=
-	3.10 on powerpc64le
+Date: Sat,  2 Sep 2017 22:54:18 +0200
+Subject: [Buildroot] [PATCH v2 06/11] package/gcc: enable float128 on
+	powerpc64le with glibc >= 2.26 toolchains
 In-Reply-To: <20170902205423.21288-1-romain.naour@gmail.com>
 References: <20170902205423.21288-1-romain.naour@gmail.com>
-Message-ID: <20170902205423.21288-6-romain.naour@gmail.com>
+Message-ID: <20170902205423.21288-7-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since glibc 2.26, kernel headers >= 3.10 are needed on powerpc64le [1].
-In order to prepare the glibc bump to this version, we don't allow to
-build a Buildroot toolchain with kernel headers older than 3.10.
+float128 is now required on powerpc64le with glibc >= 2.26 toolchains.
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=c2ff5ec13fca1bdd1cd646a0260808386d7bd7ff
+Fixes:
+running configure fragment for sysdeps/gnu
+running configure fragment for sysdeps/powerpc/powerpc64le
+checking if [...]powerpc64le-buildroot-linux-gnu-gcc supports binary128 floating point type... no
+checking if the target machine is at least POWER8... yes
+configure: error: ***  binary128 floating point type (GCC >= 6.2) is required on powerpc64le.
+
+In order to prepare the glibc bump to this version, we enable
+binary128 floating point in gcc. This require at least gcc >= 6.2.
+
+Disable gcc 4.x and 5.x for internal toolchain.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+v2: Disable gcc 4.x and 5.x for internal toolchain.
+---
+ package/gcc/Config.in.host | 4 ++++
+ package/gcc/gcc.mk         | 8 ++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index f47001f..8ffad61 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -45,7 +45,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
- 		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
- 		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
--		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
-+		   BR2_powerpc     || BR2_powerpc64  || \
-+		   (BR2_powerpc64le && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10) || \
- 		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
- 		   BR2_microblaze || BR2_nios2
- 	depends on BR2_USE_MMU
-@@ -65,6 +66,11 @@ comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 3.2"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index ec7b692..0926560 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -39,6 +39,8 @@ config BR2_GCC_VERSION_4_9_X
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 	# musl mips64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
++	# glibc >= 2.26 needs gcc >= 6.2
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
-+# glibc >= 2.26 require kernel headers >= 3.10 on powerpc64le.
-+comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
-+	depends on BR2_powerpc64le
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ config BR2_GCC_VERSION_5_X
+@@ -53,6 +55,8 @@ config BR2_GCC_VERSION_5_X
+ 	depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && !BR2_mips_i6400
+ 	# musl mips64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
++	# glibc >= 2.26 needs gcc >= 6.2
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ config BR2_GCC_VERSION_6_X
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 49ccccf..54ef70c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -254,6 +254,14 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--without-long-double-128
+ endif
+ 
++# Since glibc >= 2.26, poerpc64le requires double/long double which
++# requires at least gcc 6.2.
++# See sysdeps/powerpc/powerpc64le/configure.ac
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC)$(BR2_TOOLCHAIN_GCC_AT_LEAST_6)$(BR2_powerpc64le),yyy)
++HOST_GCC_COMMON_CONF_OPTS += \
++	--with-long-double-128
++endif
 +
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl"
- 	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
+ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+ ifeq ($(BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS),)
+ ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
 -- 
 2.9.5
