@@ -1,41 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 22:50:35 +0200
-Subject: [Buildroot] [git commit] linux: bump cip version to v4.4.83-cip8
-Message-ID: <20170902205841.2500C81EB0@busybox.osuosl.org>
+Date: Sat, 2 Sep 2017 23:12:17 +0200
+Subject: [Buildroot] [PATCH v2] package/xmlstarlet: fix host build
+In-Reply-To: <20170902200741.2878-1-romain.naour@gmail.com>
+References: <20170902200741.2878-1-romain.naour@gmail.com>
+Message-ID: <20170902231217.530a9008@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=110a76baa085b1f164a1a0a8801e2258ef15f916
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat,  2 Sep 2017 22:07:41 +0200, Romain Naour wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 036799f..9648ce9 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.12.10)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.75-cip6)"
-+	bool "Latest CIP SLTS version (v4.4.83-cip8)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -117,7 +117,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.12.10" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.75-cip6" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+> Fixes:
+> src/xml_C14N.c:12:31: erreur fatale?: libxml/xmlversion.h : No such file or directory
+>  #include <libxml/xmlversion.h>
+>                                ^
+> In file included from src/trans.c:4:0:
+> src/trans.h:32:30: erreur fatale?: libxml/xmlmemory.h : No such file or directory
+>  #include <libxml/xmlmemory.h>
+
+Still some french messages here, so I've fixed that.
+
+> +HOST_XMLSTARLET_CONF_OPTS += \
+> +	--with-libxml-prefix=$(HOST_DIR)/usr \
+> +	--with-libxslt-prefix=$(HOST_DIR)/usr \
+> +	--with-libiconv-prefix=$(HOST_DIR)/usr
+
+The last option is not needed, we don't have libiconv on the host.
+
+Committed with those issues fixed. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
