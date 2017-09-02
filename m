@@ -1,46 +1,82 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 02 Sep 2017 13:13:50 -0000
-Subject: [Buildroot] [git commit] python-netifaces: bump to version 0.10.6
-Message-ID: <20170902130617.90E94818F3@busybox.osuosl.org>
+Date: Sat, 02 Sep 2017 13:13:51 -0000
+Subject: [Buildroot] [git commit] python-m2r: new package
+Message-ID: <20170902130617.CB735818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d111cc63b690f65b3e17c2b66d4e29cb01c3dec
+commit: https://git.buildroot.net/buildroot/commit/?id=800b808bad629c27df900bfee76367b478d6d2fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Host variant is needed to generate long description
+for python-automat package.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-netifaces/python-netifaces.hash | 4 ++--
- package/python-netifaces/python-netifaces.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                  |  1 +
+ package/python-m2r/Config.in       |  8 ++++++++
+ package/python-m2r/python-m2r.hash |  3 +++
+ package/python-m2r/python-m2r.mk   | 16 ++++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
-index 6f3e358..335f907 100644
---- a/package/python-netifaces/python-netifaces.hash
-+++ b/package/python-netifaces/python-netifaces.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/netifaces/json, sha256 locally computed
--md5     5b4d1f1310ed279e6df27ef3a9b71519                                  netifaces-0.10.5.tar.gz
--sha256  59d8ad52dd3116fcb6635e175751b250dc783fb011adba539558bd764e5d628b  netifaces-0.10.5.tar.gz
-+md5	1d424cb5ef52907c5ab913011122a98b  netifaces-0.10.6.tar.gz
-+sha256	0c4da523f36d36f1ef92ee183f2512f3ceb9a9d2a45f7d19cda5a42c6689ebe0  netifaces-0.10.6.tar.gz
-diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
-index 3e01c24..3258be7 100644
---- a/package/python-netifaces/python-netifaces.mk
-+++ b/package/python-netifaces/python-netifaces.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_NETIFACES_VERSION = 0.10.5
-+PYTHON_NETIFACES_VERSION = 0.10.6
- PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
--PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/a7/4c/8e0771a59fd6e55aac993a7cc1b6a0db993f299514c464ae6a1ecf83b31d
-+PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/72/01/ba076082628901bca750bf53b322a8ff10c1d757dc29196a8e6082711c9d
- PYTHON_NETIFACES_LICENSE = MIT
- PYTHON_NETIFACES_LICENSE_FILES = README.rst
- PYTHON_NETIFACES_SETUP_TYPE = setuptools
+diff --git a/package/Config.in b/package/Config.in
+index 34ce399..9bc3209 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -772,6 +772,7 @@ menu "External python modules"
+ 	source "package/python-lmdb/Config.in"
+ 	source "package/python-logbook/Config.in"
+ 	source "package/python-lxml/Config.in"
++	source "package/python-m2r/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+ 	source "package/python-markdown/Config.in"
+diff --git a/package/python-m2r/Config.in b/package/python-m2r/Config.in
+new file mode 100644
+index 0000000..44dafaa
+--- /dev/null
++++ b/package/python-m2r/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_M2R
++	bool "python-m2r"
++	select BR2_PACKAGE_PYTHON_MISTUNE # runtime
++	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
++	help
++	  Markdown to reStructuredText converter.
++
++	  https://github.com/miyakogi/m2r
+diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
+new file mode 100644
+index 0000000..102da33
+--- /dev/null
++++ b/package/python-m2r/python-m2r.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/m2r/json, sha256 locally computed
++md5	aac67f2167a3d81c8ccd7615e9c2cb7a  m2r-0.1.6.tar.gz
++sha256	a26bc2e25e0ad3f8650385aea25cf734ac4fcd30e54faec92fd39675da75e527  m2r-0.1.6.tar.gz
+diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
+new file mode 100644
+index 0000000..b506ad8
+--- /dev/null
++++ b/package/python-m2r/python-m2r.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-m2r
++#
++################################################################################
++
++PYTHON_M2R_VERSION = 0.1.6
++PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
++PYTHON_M2R_SITE = https://pypi.python.org/packages/8d/74/558f9aba132bb34cd661fad9e17d42bfa1332363466ff314e600096f78c3
++PYTHON_M2R_SETUP_TYPE = setuptools
++PYTHON_M2R_LICENSE = MIT
++PYTHON_M2R_LICENSE_FILES = LICENSE
++HOST_PYTHON_M2R_DEPENDENCIES = host-python-docutils host-python-mistune
++
++$(eval $(python-package))
++$(eval $(host-python-package))
