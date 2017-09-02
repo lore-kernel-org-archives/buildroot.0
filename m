@@ -1,53 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 22:49:30 +0200
-Subject: [Buildroot] [PATCH v5] util-linux: add menu items for login
- utilities
-In-Reply-To: <20170902004138.17967-1-casantos@datacom.ind.br>
-References: <20170825212645.1467-1-casantos@datacom.ind.br>
- <20170902004138.17967-1-casantos@datacom.ind.br>
-Message-ID: <20170902224930.26add89b@windsurf.lan>
+Date: Sat, 2 Sep 2017 22:50:03 +0200
+Subject: [Buildroot] [git commit] configs/ts4900: bump kernel version to 4.12
+Message-ID: <20170902204304.3744F80DF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7c3a7d808e751d4b608a4c50a0ae4d13dedebab7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Sep 2017 21:41:38 -0300, Carlos Santos wrote:
-> This change extends to the login utilities the current policy of having
-> a selection item in the configuration menu for each utility that has an
-> --enable/--disable knob in the "configure" script:
-> 
-> - add selection items for login, runuser, su and sulogin (there was
->   already an item for "last")
-> - move "login utilities" to Config.in.legacy
-> - make "login utilities" select last, login, runuser, su and sulogin
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> ---
-> Changes v1->v2
->   - do not add section titles
->   - deprecate the "login utilities" group
-> Changes v2->v3
->   - improve comments
->   - fix spelling errors
->   - add comment to show when "login" is unavailable
-> Changes v3->v4
->   - install PAM files only if linux-pam is selected
-> Changes v4->v5
->   - Fix merge conflict in Config.in.legacy
-> ---
->  Config.in.legacy                 | 15 ++++++++++++++
->  package/util-linux/Config.in     | 45 ++++++++++++++++++++++++++++------------
->  package/util-linux/util-linux.mk | 10 +++++----
->  3 files changed, 53 insertions(+), 17 deletions(-)
+ts4900 defconfig is upstream in Linux since v4.9:
+       a2f1145 ARM: dts: TS-4900: add basic device tree
 
-Applied to master, thanks.
+Bump kernel version to v4.12 and use the upstreamed defconfig
+imx_v6_v7.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/ts4900_defconfig | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/configs/ts4900_defconfig b/configs/ts4900_defconfig
+index 7d5d02b..082234f 100644
+--- a/configs/ts4900_defconfig
++++ b/configs/ts4900_defconfig
+@@ -1,12 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4900/post-image.sh"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/embeddedarm/linux-3.10.17-imx6.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="70d1e85a22879e27cc9e36384438d5a9793e44b0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
