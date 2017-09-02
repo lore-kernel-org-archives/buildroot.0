@@ -1,51 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Sep 2017 08:30:54 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-09-01
-Message-ID: <20170902063054.C839521D61@mail.free-electrons.com>
+From: Nicholas Sielicki <sielicki@yandex.com>
+Date: Sat,  2 Sep 2017 02:20:01 -0500
+Subject: [Buildroot] [PATCH 1/1] configs: more grub2 WCHAR fixes
+Message-ID: <20170902072001.685-1-sielicki@yandex.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since commit 5ffafd2353f5d67 (grub2: bump up version), grub2 needs a
+toolchain with WCHAR support. Add BR2_TOOLCHAIN_BUILDROOT_WCHAR=y to all
+configs with BR2_TARGET_GRUB2=y
 
-Build statistics for 2017-09-01
-================================
+Signed-off-by: Nicholas Sielicki <sielicki@yandex.com>
+---
+ configs/galileo_defconfig                   | 2 ++
+ configs/minnowboard_max-graphical_defconfig | 2 ++
+ configs/minnowboard_max_defconfig           | 2 +-
+ configs/pc_x86_64_bios_defconfig            | 2 +-
+ configs/pc_x86_64_efi_defconfig             | 2 +-
+ 5 files changed, 7 insertions(+), 3 deletions(-)
 
-      successes : 181
-       failures : 9  
-       timeouts : 1  
-          TOTAL : 191
-
-Classification of failures by reason
-====================================
-
-                  cc-tool-0.26 | 1 
-gmrender-resurrect-33600ab6... | 1 
-                libressl-2.5.5 | 1 
-             lttng-tools-2.9.5 | 1 
-make: *** [/home/peko/autob... | 1 
-                    mpv-0.25.0 | 1 
-                poppler-0.55.0 | 1 
-                       unknown | 1 
-          usb_modeswitch-2.5.0 | 1 
-               wireshark-2.2.7 | 1 
-
-
-Detail of failures
-===================
-
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/b214126d68ef574bc520795d693044d9f5e7d6b3 |     
-        or1k | gmrender-resurrect-33600ab6... | NOK | http://autobuild.buildroot.net/results/91406861f0d726756630be166be69bf892adf277 |     
-        m68k |                 libressl-2.5.5 | NOK | http://autobuild.buildroot.net/results/1e592f809bbf08714404c147c3baf0968dacfd8c |     
-        i686 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/4aef36977f039a1533b409a7c172f0ceaa2c6088 |     
-microblazeel | make: *** [/home/peko/autob... | TIM | http://autobuild.buildroot.net/results/a51b51a804ebe8366d976f451a43a5676ec45054 |     
-     aarch64 |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/38c158008ad91cf8b8232caba57ad77b8fa0bae0 |     
-    mips64el |                 poppler-0.55.0 | NOK | http://autobuild.buildroot.net/results/fa0d7926c13bf503fbf30c507f50efaea000255a |     
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/af5da1c8ee23d1523a1d810584dcbc84b7a9d657 |     
-microblazeel |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/4d51cabcdd397e3a18fd4af3a7cde044ebd21dd5 | ORPH
-       nios2 |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/b3d2b4a88a32ef4df8121a58aa647fb2fd13905f |     
-
+diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
+index 43639a41a..39622e331 100644
+--- a/configs/galileo_defconfig
++++ b/configs/galileo_defconfig
+@@ -1,4 +1,6 @@
+ BR2_x86_x1000=y
++# Needed for TARGET_GRUB2
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Linux headers same as kernel, a 3.14 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index ef0947cb7..2c11fb378 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -6,6 +6,8 @@ BR2_x86_atom=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+ BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
++# needed for TARGET_GRUB2
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ 
+ # System configuration
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index db6e59577..c32e5b460 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+ 
+ # Linux headers same as kernel, a 4.12 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
+-# Needed for grub2
++# Needed for TARGET_GRUB2
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ 
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 7e852f365..22032294b 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -1,7 +1,7 @@
+ # Architecture
+ BR2_x86_64=y
+ 
+-# Toolchain, required for eudev (to autoload drivers)
++# Toolchain, required for eudev (to autoload drivers) and for TARGET_GRUB2
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ 
+ # System
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index f558c3e8c..a347555d1 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -1,7 +1,7 @@
+ # Architecture
+ BR2_x86_64=y
+ 
+-# Toolchain, required for eudev (to autoload drivers)
++# Toolchain, required for eudev (to autoload drivers) and for TARGET_GRUB2
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ 
+ # System
 -- 
-http://autobuild.buildroot.net
+2.14.1
