@@ -1,48 +1,49 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Sat, 2 Sep 2017 19:33:13 +0300
-Subject: [Buildroot] [PATCH] xl2tp: Drop OpenSSL dependency
-Message-ID: <CADmjQguHchEn_Tg7yC+4UjD8mW79ySOn-Ko7V=wicmsmPtz_ZQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Sep 2017 18:43:16 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libpng: switch to cmake
+In-Reply-To: <20170902143908.GA3396@scaer>
+References: <20170902142956.22181-1-bernd.kuhls@t-online.de>
+ <20170902142956.22181-2-bernd.kuhls@t-online.de>
+ <20170902143908.GA3396@scaer>
+Message-ID: <20170902184316.666a6986@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xl2tp does not depend on OpenSSL since version 1.3.4.
+Hello,
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
----
- package/xl2tp/Config.in | 1 -
- package/xl2tp/xl2tp.mk  | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+On Sat, 2 Sep 2017 16:39:08 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/xl2tp/Config.in b/package/xl2tp/Config.in
-index f0b1e83..7e2d2f6 100644
---- a/package/xl2tp/Config.in
-+++ b/package/xl2tp/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_XL2TP
-        bool "xl2tp"
-        depends on BR2_USE_MMU # fork()
-        select BR2_PACKAGE_LIBPCAP
--       select BR2_PACKAGE_OPENSSL
-        help
-          Layer 2 Tunnelling Protocol (RFC2661).
+> On 2017-09-02 16:29 +0200, Bernd Kuhls spake thusly:
+> > We have no arch-specific options to control mips msa and powerpc vsx
+> > support so we disable these options atm to prevent build errors.  
+> 
+> I'm not even reviewing the patch, because I noticed that a lot of
+> switch-to-cmake patches actually broke the build one way or the other.
+> 
+> So I would suggest that we forgo switching the buildsyustem of package
+> just to switch.
+> 
+> If upstream has changed, or there is a *compelling* reason to switch,
+> then so be it. In this case, the commit log *must* explain the rationale
+> for switching.
+> 
+> But switching for the sake of switching is a big no-no from me.
 
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index ff802a4..26f4d1e 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -6,7 +6,7 @@
+I agree that there needs to be an explanation for the switch. Is
+upstream moving to CMake, and getting rid of autotools support in the
+future ? Other reason ?
 
- XL2TP_VERSION = v1.3.8
- XL2TP_SITE = $(call github,xelerance,xl2tpd,$(XL2TP_VERSION))
--XL2TP_DEPENDENCIES = libpcap openssl
-+XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPLv2
- XL2TP_LICENSE_FILES = LICENSE
+Also Bernd: for libraries, a test-pkg test is by far not enough to
+indicate that everything is alright. Look at the switch of cmake in the
+lzo package that you contributed: it was bogus because it was only
+building the static library, and no longer the shared library. A
+test-pkg test doesn't catch this kind of stuff.
 
+Thomas
 -- 
-2.14.1
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170902/ce788202/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
