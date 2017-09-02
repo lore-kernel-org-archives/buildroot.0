@@ -1,41 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 22:00:00 +0200
-Subject: [Buildroot] [git commit] luaossl: bump to version 20170901
-Message-ID: <20170902195515.0640C8041D@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  2 Sep 2017 22:07:41 +0200
+Subject: [Buildroot] [PATCH v2] package/xmlstarlet: fix host build
+Message-ID: <20170902200741.2878-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1348dd042987a30628279b613fb579329964660e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Provide the path to HOST_DIR for libxml, libxslt and libiconv like for
+the target variant to avoid a build issue on host where /bin is a
+symlink to /usr/bin.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Indeed, the configure script use a custom m4 macro XSTAR_LIB_CHECK to
+find xml2-config:
+
+XSTAR_LIB_CHECK([LIBXML], [xml2-config])
+
+This macro come from a local m4 file m4/xstar-check-libs.m4 where it
+use:
+
+AC_PATH_PROG(LIBXXX()_CONFIG, xxx_config(),
+               [], [$LIBXXX()_PREFIX/bin$PATH_SEPARATOR$PATH]
+
+Since no prefix seems to be defined by $LIBXXX()_PREFIX, AC_PATH_PROG
+look by itself at /bin/ for xml2-config. So the PATH variable set
+by Buildroot containing HOST_DIR/bin is ignored.
+
+The wrong xml2-config is used during the build and the build fail
+when no xml2 headers are installed on the host.
+
+Fixes:
+src/xml_C14N.c:12:31: erreur fatale?: libxml/xmlversion.h : No such file or directory
+ #include <libxml/xmlversion.h>
+                               ^
+In file included from src/trans.c:4:0:
+src/trans.h:32:30: erreur fatale?: libxml/xmlmemory.h : No such file or directory
+ #include <libxml/xmlmemory.h>
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/luaossl/luaossl.hash | 2 +-
- package/luaossl/luaossl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: improve the commit message (ThomasP)
+---
+ package/xmlstarlet/xmlstarlet.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
-index ea9f5e3..84e6e64 100644
---- a/package/luaossl/luaossl.hash
-+++ b/package/luaossl/luaossl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	51641d8971c19b2c65d3954ded12c306d4ecf6315ff8f1ec584e9a23ca998576  luaossl-20161214-0.src.rock
-+sha256 9c1df5a0e83f0f867850047f5e42009a15864fb7e40afa028d86523bcc840fae  luaossl-20170901-0.src.rock
-diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
-index 5bb3e82..07d4ef2 100644
---- a/package/luaossl/luaossl.mk
-+++ b/package/luaossl/luaossl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+index 9920dcf..673eedb 100644
+--- a/package/xmlstarlet/xmlstarlet.mk
++++ b/package/xmlstarlet/xmlstarlet.mk
+@@ -26,5 +26,10 @@ endif
  
--LUAOSSL_VERSION_UPSTREAM = 20161214
-+LUAOSSL_VERSION_UPSTREAM = 20170901
- LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
- LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
- LUAOSSL_LICENSE = MIT
+ HOST_XMLSTARLET_DEPENDENCIES += host-libxml2 host-libxslt
+ 
++HOST_XMLSTARLET_CONF_OPTS += \
++	--with-libxml-prefix=$(HOST_DIR)/usr \
++	--with-libxslt-prefix=$(HOST_DIR)/usr \
++	--with-libiconv-prefix=$(HOST_DIR)/usr
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.9.5
