@@ -1,46 +1,41 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:42 -0000
-Subject: [Buildroot] [git commit] netatalk: bump to version 3.1.9
-Message-ID: <20170902130615.7F7B880285@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lvm2: bump version to 2.02.173
+Message-ID: <20170902130616.59EA180424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb7a53e5afa24077f3a8210d07a12f9ee9de9473
+commit: https://git.buildroot.net/buildroot/commit/?id=1dbf315f4eaece8fc64159cb750d4fd4f979dfaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version is compatible with LibreSSL.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/netatalk/netatalk.hash | 6 +++---
- package/netatalk/netatalk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
-index 955ffd4..1b974f5 100644
---- a/package/netatalk/netatalk.hash
-+++ b/package/netatalk/netatalk.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.8/
--md5	9cab934ca32b8979f389da52d44c69c2	netatalk-3.1.8.tar.bz2
--sha1	00518461a311e6c17c95738ac214c8f06f863b4b	netatalk-3.1.8.tar.bz2
-+# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.9/
-+md5	d1d385ae6c3dc45eef4c923472f8fa5f	netatalk-3.1.9.tar.bz2
-+sha1	ac746efc00e8cfbe5042a7835b27480bb83505cd	netatalk-3.1.9.tar.bz2
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 8e661a0..e0085db 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 81d0e97..9f7a6c6 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 801adcc2ae483f81edf6bfba73090b6b8f710370e48764f08a62da71d617157075bea01593c2535ad5ba71dcb5e0cfe83cec9a65180a6e8b9e0d214bdee79883  LVM2.2.02.171.tgz
++sha512 c2ea8beafe006abf9282f51ec98600fd0ebff816d53c10ecbb19bbf336ada4825135cf9c92ccd364afb18f8b1d7e163eff5bdec8dfdd70dfb9ba45db2f6bdd5e  LVM2.2.02.173.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index f5cd0b5..63ac109 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETATALK_VERSION = 3.1.8
-+NETATALK_VERSION = 3.1.9
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
+-LVM2_VERSION = 2.02.171
++LVM2_VERSION = 2.02.173
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
