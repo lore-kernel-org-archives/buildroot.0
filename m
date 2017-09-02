@@ -1,42 +1,74 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Sep 2017 22:54:19 +0200
-Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
+Date: Sat,  2 Sep 2017 22:54:21 +0200
+Subject: [Buildroot] [PATCH v2 09/11] package/kodi: fix build with glibc 2.26
 In-Reply-To: <20170902205423.21288-1-romain.naour@gmail.com>
 References: <20170902205423.21288-1-romain.naour@gmail.com>
-Message-ID: <20170902205423.21288-8-romain.naour@gmail.com>
+Message-ID: <20170902205423.21288-10-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This doesn't compile with glibc 2.26 where reallocarray() as been introduced.
-
-Fixes:
-stage1flex-misc.o: In function `allocate_array':
-misc.c:(.text+0x38f): undefined reference to `reallocarray'
-stage1flex-misc.o: In function `reallocate_array':
-misc.c:(.text+0xc8a): undefined reference to `reallocarray'
-collect2: error: ld returned 1 exit status
+Kodi fail to build with glibc 2.26 release:
+In file included from [...]/host/x86_64-buildroot-linux-gnu/include/c++/7.2.0/cmath:45:0,
+                 from [...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:21:
+[...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp: In member function 'void CGUIDialogProgressBarHandle::SetProgress(int, int)':
+[...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:55:13: error: '__builtin_isnan' is not a member of 'std'
+   if (!std::isnan(fPercentage))
+             ^
+[...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:55:13: note: suggested alternative:
+<built-in>: note:   '__builtin_isnan'
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/flex/flex.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...3-dialogs-fix-build-issue-with-glibc-2.26.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/kodi/0003-dialogs-fix-build-issue-with-glibc-2.26.patch
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index b782699..0196624 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -10,7 +10,8 @@ FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
- FLEX_LICENSE_FILES = COPYING
- FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
--FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
-+FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4 \
-+	ac_cv_func_reallocarray=no
- HOST_FLEX_DEPENDENCIES = host-m4
- 
- define FLEX_DISABLE_PROGRAM
+diff --git a/package/kodi/0003-dialogs-fix-build-issue-with-glibc-2.26.patch b/package/kodi/0003-dialogs-fix-build-issue-with-glibc-2.26.patch
+new file mode 100644
+index 0000000..5c12173
+--- /dev/null
++++ b/package/kodi/0003-dialogs-fix-build-issue-with-glibc-2.26.patch
+@@ -0,0 +1,37 @@
++From 55f51f883ba2d38509f0b9d0a5092a92af71f71e Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 2 Sep 2017 19:06:57 +0200
++Subject: [PATCH] dialogs: fix build issue with glibc 2.26
++
++Kodi fail to build with glibc 2.26 release:
++In file included from [...]/host/x86_64-buildroot-linux-gnu/include/c++/7.2.0/cmath:45:0,
++                 from [...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:21:
++[...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp: In member function 'void CGUIDialogProgressBarHandle::SetProgress(int, int)':
++[...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:55:13: error: '__builtin_isnan' is not a member of 'std'
++   if (!std::isnan(fPercentage))
++             ^
++[...]/build/kodi-17.3-Krypton/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp:55:13: note: suggested alternative:
++<built-in>: note:   '__builtin_isnan'
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/dialogs/GUIDialogExtendedProgressBar.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp b/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp
++index 42c2238..043a25f 100644
++--- a/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp
+++++ b/xbmc/dialogs/GUIDialogExtendedProgressBar.cpp
++@@ -52,7 +52,7 @@ void CGUIDialogProgressBarHandle::SetTitle(const std::string &strTitle)
++ void CGUIDialogProgressBarHandle::SetProgress(int currentItem, int itemCount)
++ {
++   float fPercentage = (currentItem*100.0f)/itemCount;
++-  if (!std::isnan(fPercentage))
+++  if (!isnan(fPercentage))
++     m_fPercentage = std::min(100.0f, fPercentage);
++ }
++ 
++-- 
++2.9.5
++
 -- 
 2.9.5
