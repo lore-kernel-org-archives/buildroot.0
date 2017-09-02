@@ -1,46 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:46 -0000
-Subject: [Buildroot] [git commit] package/lzip: bump version to 1.19
-Message-ID: <20170902130616.677EA80424@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/memcached: bump version to 1.5.0
+Message-ID: <20170902130616.A3281818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbfe5846b57334ccf7d6653a70a60b12a94c56a1
+commit: https://git.buildroot.net/buildroot/commit/?id=bb49ca5965495eb011b164e9e6f053687538d6d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Switched to sha256 hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lzip/lzip.hash | 6 ++----
- package/lzip/lzip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
-index 8855231..e074c76 100644
---- a/package/lzip/lzip.hash
-+++ b/package/lzip/lzip.hash
-@@ -1,4 +1,2 @@
--# From http://lists.nongnu.org/archive/html/lzip-bug/2016-06/msg00002.html
--sha1	ef42f3209d02c3b3c217a61c8f127bcb8747b128	lzip-1.18.tar.gz
--# Locally calculated after checking pgp signature
--sha256	47f9882a104ab05532f467a7b8f4ddbb898fa2f1e8d9d468556d6c2d04db14dd	lzip-1.18.tar.gz
-+# From http://lists.nongnu.org/archive/html/lzip-bug/2017-05/msg00000.html
-+sha256 ffadc4f56be1bc0d3ae155ec4527bd003133bdc703a753b2cc683f610e646ba9 lzip-1.19.tar.gz
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index cb88037..b7ba5dd 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 1a88cc7..204590d 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.37.tar.gz.sha1
+-sha1 6a6c2ab70e9470fef939afff1cb58b7602077611  memcached-1.4.37.tar.gz
++# From http://www.memcached.org/files/memcached-1.5.0.tar.gz.sha1
++sha1 e12af93e63c05ab7e89398e4cfd0bfc7b7bff1c5  memcached-1.5.0.tar.gz
+ # Calculated based on the hash above
+-sha256 2f335ab9110ce39036c5271ef39a582a852e424bc9659e421844073cfdf8606b  memcached-1.4.37.tar.gz
++sha256 c001f812024bb461b5e4d7d0506daab63dff9614eea26f46536c3b7e1e601c32  memcached-1.5.0.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 087be57..d0e3bc0 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LZIP_VERSION = 1.18
-+LZIP_VERSION = 1.19
- LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
- LZIP_LICENSE = GPL-2.0+
- LZIP_LICENSE_FILES = COPYING
+-MEMCACHED_VERSION = 1.4.37
++MEMCACHED_VERSION = 1.5.0
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
