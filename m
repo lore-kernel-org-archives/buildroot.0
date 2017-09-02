@@ -1,171 +1,89 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:42 -0000
-Subject: [Buildroot] [git commit] azmq: Add new package
-Message-ID: <20170902130615.6BA7B81DA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/log4cpp: bump version to 1.1.3
+Message-ID: <20170902130615.F39C580332@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fdc07c335481a05de31beacb73fb82818f6f117
+commit: https://git.buildroot.net/buildroot/commit/?id=2146a779b8a198f908bf3387e893cfba318e109a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The azmq library provides Boost Asio style bindings for ZeroMQ. This
-library is built on top of ZeroMQ's standard C interface and is intended
-to work well with C++ applications which use the Boost libraries in
-general, and Asio in particular.
+Added sha256 hash, removed patch applied upstream:
+https://sourceforge.net/p/log4cpp/codegit/ci/fe4ed0
 
-Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...Conditionally-disable-test-and-doc-builds.patch | 43 ++++++++++++++++++++++
- package/azmq/Config.in                             | 28 ++++++++++++++
- package/azmq/azmq.hash                             |  3 ++
- package/azmq/azmq.mk                               | 18 +++++++++
- 6 files changed, 96 insertions(+)
+ package/log4cpp/0001-Fix-musl-compile.patch | 34 -----------------------------
+ package/log4cpp/log4cpp.hash                |  6 +++--
+ package/log4cpp/log4cpp.mk                  |  2 +-
+ 3 files changed, 5 insertions(+), 37 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ee2c9a0..474999b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1426,6 +1426,9 @@ N:	Rico Bachmann <bachmann@tofwerk.com>
- F:	package/apr-util/
- F:	package/subversion/
+diff --git a/package/log4cpp/0001-Fix-musl-compile.patch b/package/log4cpp/0001-Fix-musl-compile.patch
+deleted file mode 100644
+index f1a13a0..0000000
+--- a/package/log4cpp/0001-Fix-musl-compile.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 17562259fb6684f351a70b98b4f3b438927ba1aa Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 11 Jul 2016 22:58:31 +0200
+-Subject: [PATCH] Fix musl compile.
+-
+-Include proper config.h (via log4cpp/Portability.hh) to fix the
+-evaluate of LOG4CPP_HAVE_STDINT_H in the file tests/Clock.hh
+-
+-Fixes:
+-
+-  Clock.hh:17:13: error: 'int64_t' does not name a type
+-       typedef int64_t usec_t;
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- log4cpp/tests/Clock.hh | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/log4cpp/tests/Clock.hh b/log4cpp/tests/Clock.hh
+-index 4bf0ca4..45c6467 100644
+---- a/log4cpp/tests/Clock.hh
+-+++ b/log4cpp/tests/Clock.hh
+-@@ -6,6 +6,8 @@
+- #ifndef __CLOCK_H
+- #define __CLOCK_H
+- 
+-+#include <log4cpp/Portability.hh>
+-+
+- #ifdef LOG4CPP_HAVE_STDINT_H
+- #include <stdint.h>
+- #endif // LOG4CPP_HAVE_STDINT_H
+--- 
+-2.8.1
+-
+diff --git a/package/log4cpp/log4cpp.hash b/package/log4cpp/log4cpp.hash
+index 6467aab..fd73988 100644
+--- a/package/log4cpp/log4cpp.hash
++++ b/package/log4cpp/log4cpp.hash
+@@ -1,3 +1,5 @@
+ # From http://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/
+-md5		1e173df8ee97205f412ff84aa93b8fbe	log4cpp-1.1.1.tar.gz
+-sha1	23aa5bd7d6f79992c92bad3e1c6d64a34f8fcf68	log4cpp-1.1.1.tar.gz
++md5 b9e2cee932da987212f2c74b767b4d8b  log4cpp-1.1.3.tar.gz
++sha1 74f0fea7931dc1bc4e5cd34a6318cd2a51322041  log4cpp-1.1.3.tar.gz
++# Locally computed
++sha256 2cbbea55a5d6895c9f0116a9a9ce3afb86df383cd05c9d6c1a4238e5e5c8f51d  log4cpp-1.1.3.tar.gz
+diff --git a/package/log4cpp/log4cpp.mk b/package/log4cpp/log4cpp.mk
+index 1801cff..aab05f2 100644
+--- a/package/log4cpp/log4cpp.mk
++++ b/package/log4cpp/log4cpp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+N:	RJ Ascani <rj.ascani@gmail.com>
-+F:	package/azmq/
-+
- N:	Rodrigo Rebello <rprebello@gmail.com>
- F:	package/chocolate-doom/
- F:	package/irssi/
-diff --git a/package/Config.in b/package/Config.in
-index b5170b0..85416af 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1284,6 +1284,7 @@ menu "Networking"
- 	source "package/alljoyn-base/Config.in"
- 	source "package/alljoyn-tcl/Config.in"
- 	source "package/alljoyn-tcl-base/Config.in"
-+	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
-diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-new file mode 100644
-index 0000000..98975d2
---- /dev/null
-+++ b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-@@ -0,0 +1,43 @@
-+From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
-+From: RJ Ascani <rj.ascani@gmail.com>
-+Date: Thu, 20 Jul 2017 15:53:40 -0700
-+Subject: [PATCH] Conditionally disable test and doc builds
-+
-+Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
-+---
-+ CMakeLists.txt | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 5b5b9cc..97006a4 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
-+                     ${ZeroMQ_INCLUDE_DIRS}
-+                     ${PROJECT_SOURCE_DIR})
-+
-+-enable_testing()
-++if (BUILD_TESTING)
-++    enable_testing()
-++endif()
-+
-+ macro(add_catch_test name)
-+     if (TEST_REPORT_FORMAT)
-+@@ -59,8 +61,12 @@ macro(add_catch_test name)
-+     endif()
-+ endmacro()
-+
-+-add_subdirectory(test)
-+-add_subdirectory(doc)
-++if (BUILD_TESTING)
-++    add_subdirectory(test)
-++endif()
-++if (BUILD_DOC)
-++    add_subdirectory(doc)
-++endif()
-+
-+ install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
-+         DESTINATION include)
-+--
-+2.13.3
-+
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-new file mode 100644
-index 0000000..422a058
---- /dev/null
-+++ b/package/azmq/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_AZMQ
-+	bool "azmq"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_USE_WCHAR # boost
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	select BR2_PACKAGE_ZEROMQ
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_LOG
-+	select BR2_PACKAGE_BOOST_RANDOM
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	help
-+	  This library provides Boost Asio style bindings for ZeroMQ.
-+
-+	  https://github.com/zeromq/azmq
-+
-+comment "azmq needs a toolchain w/ C++11, wchar and threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+
-+comment "azmq needs exception_ptr"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
-new file mode 100644
-index 0000000..d3993f4
---- /dev/null
-+++ b/package/azmq/azmq.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
-+sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
-diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-new file mode 100644
-index 0000000..427ad0f
---- /dev/null
-+++ b/package/azmq/azmq.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# azmq
-+#
-+################################################################################
-+
-+AZMQ_VERSION = v1.0
-+AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
-+AZMQ_DEPENDENCIES = boost zeromq
-+AZMQ_LICENSE = BSL-1.0
-+AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
-+
-+# AZMQ is a header only library, so it does not need to be installed on the
-+# target.
-+AZMQ_INSTALL_STAGING = YES
-+AZMQ_INSTALL_TARGET = NO
-+
-+$(eval $(cmake-package))
+ LOG4CPP_VERSION_MAJOR = 1.1
+-LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).1
++LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).3
+ LOG4CPP_SITE = http://downloads.sourceforge.net/project/log4cpp/log4cpp-1.1.x%20%28new%29/log4cpp-$(LOG4CPP_VERSION_MAJOR)
+ LOG4CPP_SUBDIR = log4cpp
+ # The "or later" is indicated in the HTML documentation
