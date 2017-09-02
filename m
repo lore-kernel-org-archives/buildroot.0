@@ -1,75 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Sep 2017 22:10:10 +0200
-Subject: [Buildroot] [PATCH 1/4] arch: add option to disable internal
- toolchain backend
-In-Reply-To: <20170902214704.0a01ba92@windsurf.lan>
-References: <cover.1504381100.git.yann.morin.1998@free.fr>
- <5326fe3900e51f3b0a2ac4fc9d750245d560802c.1504381100.git.yann.morin.1998@free.fr>
- <20170902214704.0a01ba92@windsurf.lan>
-Message-ID: <20170902201010.GD3396@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Sep 2017 22:06:18 +0200
+Subject: [Buildroot] [git commit] wsapi-xavante: new package
+Message-ID: <20170902200654.4FF2080E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=064b47503343d4c20f496a480a7fca80ff3b5ec6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-09-02 21:47 +0200, Thomas Petazzoni spake thusly:
-> On Sat,  2 Sep 2017 21:38:49 +0200, Yann E. MORIN wrote:
-> > +# For some architectures or specific cores, our internal toolchain
-> > +# backend is not suitable (like, missing support in upstream gcc, or
-> > +# no ChipCo fork exists...)
-> > +config BR2_ARCH_NO_INTERNAL_BACKEND
-> > +	bool
-> 
-> I'm not a big fan of the option name. What about:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: add to DEVELOPERS file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/wsapi-xavante/Config.in          | 13 +++++++++++++
+ package/wsapi-xavante/wsapi-xavante.hash |  2 ++
+ package/wsapi-xavante/wsapi-xavante.mk   | 12 ++++++++++++
+ 5 files changed, 29 insertions(+)
 
-Oh, neither am I, neither am I. You know well that I am very bad at
-finding good names. ;-)
-
-> config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
-> 	bool
-> 	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-> 
-> config BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-> 	bool
-> 
-> So, arches can select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT, and else
-> we can "depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT".
-
-I also thought about doing so, yes, but is it really necessary to
-introduce two blind options just to have a positive logic in the only
-location we need it?
-
-> > diff --git a/toolchain/Config.in b/toolchain/Config.in
-> > index 584d053058..919757e558 100644
-> > --- a/toolchain/Config.in
-> > +++ b/toolchain/Config.in
-> > @@ -43,6 +43,7 @@ choice
-> >  config BR2_TOOLCHAIN_BUILDROOT
-> >  	bool "Buildroot toolchain"
-> >  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-> > +	depends on !BR2_ARCH_NO_INTERNAL_BACKEND
-> >  	depends on !BR2_bf606
-> >  	depends on !BR2_bf607
-> >  	depends on !BR2_bf608
-> 
-> Now that I think of it: we have dropped the Blackfin ADI external
-> toolchain. Therefore, we currently have no in-tree solution to use/test
-> bf606, bf607, bf608, etc. Perhaps we should drop them instead ?
-
-As already said: I don;t care about bfin, so I'm fine with dropping
-those bfin cores. But we'd still need BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
-and BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT for the rest, no?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff9d17d..91da321 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -618,6 +618,7 @@ F:	package/qemu/
+ F:	package/sdl2_mixer/
+ F:	package/sdl2_net/
+ F:	package/tekui/
++F:	package/wsapi-xavante/
+ F:	utils/scancpan
+ 
+ N:	Frank Hunleth <fhunleth@troodon-software.com>
+diff --git a/package/Config.in b/package/Config.in
+index 2f7042a..bb94ae8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -606,6 +606,7 @@ menu "Lua libraries/modules"
+ 	source "package/rings/Config.in"
+ 	source "package/turbolua/Config.in"
+ 	source "package/wsapi/Config.in"
++	source "package/wsapi-xavante/Config.in"
+ 	source "package/xavante/Config.in"
+ endmenu
+ endif
+diff --git a/package/wsapi-xavante/Config.in b/package/wsapi-xavante/Config.in
+new file mode 100644
+index 0000000..3e494bb
+--- /dev/null
++++ b/package/wsapi-xavante/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_WSAPI_XAVANTE
++	bool "wsapi-xavante"
++	# Runtime dependencies
++	select BR2_PACKAGE_COXPCALL
++	select BR2_PACKAGE_RINGS
++	select BR2_PACKAGE_WSAPI
++	select BR2_PACKAGE_XAVANTE
++	help
++	  WSAPI is an API that abstracts the web server from Lua web
++	  applications. This is the rock that contains the Xavante
++	  adapter and launcher.
++
++	  http://keplerproject.github.com/wsapi/
+diff --git a/package/wsapi-xavante/wsapi-xavante.hash b/package/wsapi-xavante/wsapi-xavante.hash
+new file mode 100644
+index 0000000..9e8132d
+--- /dev/null
++++ b/package/wsapi-xavante/wsapi-xavante.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 b30b171e3d4d6fd7e129f14576e1cfc5adf00c0780ef8350f2f9e6f1d4259346  wsapi-xavante-1.6.1-1.src.rock
+diff --git a/package/wsapi-xavante/wsapi-xavante.mk b/package/wsapi-xavante/wsapi-xavante.mk
+new file mode 100644
+index 0000000..937d204
+--- /dev/null
++++ b/package/wsapi-xavante/wsapi-xavante.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# wsapi-xavante
++#
++################################################################################
++
++WSAPI_XAVANTE_VERSION_MAJOR = 1.6.1
++WSAPI_XAVANTE_VERSION = $(WSAPI_XAVANTE_VERSION_MAJOR)-1
++WSAPI_XAVANTE_SUBDIR = wsapi-$(WSAPI_XAVANTE_VERSION_MAJOR)
++WSAPI_XAVANTE_LICENSE = MIT
++
++$(eval $(luarocks-package))
