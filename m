@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 18:44:25 +0200
-Subject: [Buildroot] [PATCH] package/lzo: enable shared/static libs when
- needed
-In-Reply-To: <20170902142853.18011-1-yann.morin.1998@free.fr>
-References: <20170902142853.18011-1-yann.morin.1998@free.fr>
-Message-ID: <20170902184425.071b21be@windsurf.lan>
+Date: Sat, 2 Sep 2017 18:44:28 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpng: bump version to 1.6.32
+In-Reply-To: <20170902142956.22181-1-bernd.kuhls@t-online.de>
+References: <20170902142956.22181-1-bernd.kuhls@t-online.de>
+Message-ID: <20170902184428.74702a3b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Sep 2017 16:28:53 +0200, Yann E. MORIN wrote:
-> In 61c4c63 (package/lzo: switch to cmake), building lzo has switched
-> from autotools to cmake. In the conversion, we've lost the build of the
-> shared library, because the cmake-based buildsystem of lzo explcitly
-> disables it by default.
+On Sat,  2 Sep 2017 16:29:55 +0200, Bernd Kuhls wrote:
+> Added md5 hash provided by upstream.
 > 
-> Restore the shared library build.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> Note: it was noticed because of an autobuild failure of cairo:
-> http://autobuild.buildroot.org/results/d51/d51888cbc3a743d53ce38f736ee43953e50bdf61/
-> but it has not been checked wether this patch fixes the build at all.
-> Yet, the patch is still valid even without fixing the autobuild failure.
-> ---
->  package/lzo/lzo.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  package/libpng/libpng.hash | 7 ++++---
+>  package/libpng/libpng.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
