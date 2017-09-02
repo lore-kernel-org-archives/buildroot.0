@@ -1,27 +1,180 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 22:47:59 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.{4, 9}.x series
-In-Reply-To: <20170902133143.29983-1-bernd.kuhls@t-online.de>
-References: <20170902133143.29983-1-bernd.kuhls@t-online.de>
-Message-ID: <20170902224759.048450ae@windsurf.lan>
+Date: Sat, 2 Sep 2017 22:49:12 +0200
+Subject: [Buildroot] [git commit] util-linux: add menu items for login
+	utilities
+Message-ID: <20170902204153.AF3E781729@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f52af619185df072c2b43f4d7dc21c70d86b2e2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 Sep 2017 15:31:43 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+This change extends to the login utilities the current policy of having
+a selection item in the configuration menu for each utility that has an
+--enable/--disable knob in the "configure" script:
 
-Applied to master, thanks.
+- add selection items for login, runuser, su and sulogin (there was
+  already an item for "last")
+- move "login utilities" to Config.in.legacy
+- make "login utilities" select last, login, runuser, su and sulogin
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy                 | 15 ++++++++++++++
+ package/util-linux/Config.in     | 45 ++++++++++++++++++++++++++++------------
+ package/util-linux/util-linux.mk | 10 +++++----
+ 3 files changed, 53 insertions(+), 17 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d35b409..44303a4 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,6 +143,21 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2017.11"
++
++config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
++	bool "util-linux login utilities option removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_UTIL_LINUX_LAST
++	select BR2_PACKAGE_UTIL_LINUX_LOGIN
++	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
++	select BR2_PACKAGE_UTIL_LINUX_SU
++	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
++	help
++	  Login utilities (last, login, runuser, su, sulogin) now have
++	  their own configuration options in the util-linux menu.
++
++###############################################################################
+ comment "Legacy options removed in 2017.08"
+ 
+ config BR2_PACKAGE_SIMICSFS
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index cba590c..b3494af 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -164,26 +164,25 @@ config BR2_PACKAGE_UTIL_LINUX_LINE
+ 	help
+ 	  Read one line
+ 
+-config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+-	bool "login utilities"
+-	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
+-	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+-	depends on !BR2_STATIC_LIBS
++config BR2_PACKAGE_UTIL_LINUX_LOGGER
++	bool "logger"
++	help
++	  Enter messages into the system log
++
++config BR2_PACKAGE_UTIL_LINUX_LOGIN
++	bool "login"
++	depends on BR2_ENABLE_LOCALE # linux-pam
++	depends on BR2_USE_WCHAR # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+-	depends on BR2_USE_MMU # linux-pam
++	depends on BR2_USE_MMU # fork(), linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+-	  Login utilities (last, login, runuser, su, sulogin)
++	  Begin a session on the system
+ 
+-comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "login needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+ 		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+-config BR2_PACKAGE_UTIL_LINUX_LOGGER
+-	bool "logger"
+-	help
+-	  Enter messages into the system log
+-
+ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ 	bool "losetup"
+ 	depends on BR2_USE_MMU # libsmartcols
+@@ -296,6 +295,14 @@ config BR2_PACKAGE_UTIL_LINUX_RESET
+ 	help
+ 	  Reset the terminal
+ 
++config BR2_PACKAGE_UTIL_LINUX_RUNUSER
++	bool "runuser"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Run a command with substitute user and group ID (does not need
++	  to ask for a password, because it may be executed by the root
++	  user only)
++
+ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+ 	bool "scheduling utilities"
+ 	help
+@@ -313,6 +320,18 @@ config BR2_PACKAGE_UTIL_LINUX_SETTERM
+ 	help
+ 	  Set terminal attributes
+ 
++config BR2_PACKAGE_UTIL_LINUX_SU
++	bool "su"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Run a command with substitute user and group ID
++
++config BR2_PACKAGE_UTIL_LINUX_SULOGIN
++	bool "sulogin"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Single-user login
++
+ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ 	bool "switch_root"
+ 	depends on BR2_USE_MMU # fork()
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index fc32668..5ebb5e6 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -118,7 +118,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
+@@ -136,9 +136,12 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset,--disable-reset) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_RUNUSER),--enable-runuser,--disable-runuser) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETTERM),--enable-setterm,--disable-setterm) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_SU),--enable-su,--disable-su) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_SULOGIN),--enable-sulogin,--disable-sulogin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT),--enable-switch_root,--disable-switch_root) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_TUNELP),--enable-tunelp,--disable-tunelp) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UL),--enable-ul,--disable-ul) \
+@@ -200,7 +203,7 @@ UTIL_LINUX_CONF_OPTS += --without-audit
+ endif
+ 
+ # Install PAM configuration files
+-ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
+ define UTIL_LINUX_INSTALL_PAMFILES
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su
+@@ -208,9 +211,8 @@ define UTIL_LINUX_INSTALL_PAMFILES
+ 		$(TARGET_DIR)/etc/pam.d/su-l
+ 	$(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
+ endef
+-endif
+-
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
++endif
+ 
+ # Install agetty->getty symlink to avoid breakage when there's no busybox
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
