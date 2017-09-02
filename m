@@ -1,114 +1,201 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 02 Sep 2017 13:13:47 -0000
-Subject: [Buildroot] [git commit] package/libb64: new package
-Message-ID: <20170902130617.63785818F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libcgi: bump to version 1.1
+Message-ID: <20170902130617.419C2818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69911ee1e0389ae84b083ec30844fb14676d9551
+commit: https://git.buildroot.net/buildroot/commit/?id=14b0118216e5b3e67556703fa214c33944c75f9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds libb64, a library of ANSI C routines for fast
-encoding/decoding data into and from a base64-encoded format.
+Cleanup the libcgi package,
+by using https://github.com/rafaelsteil/libcgi as an upstream.
+Remove old patch and use cmake to build new version.
 
-The package contains a static library, headers, and an executable.
-The latter, however, requires C++ and offers no advantages over busybox
-or coreutils base64, so it is not installed. Therefore, nothing is
-installed to target.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Joe Lin <xlcwu.taiwan@gmail.com>
+[Mario:
+- Use github URL in Config.in
+- Use upstream sha256 hash]
+Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
 [Arnout:
-- properly wrap Config.in
-- move from Crypto to Other menu
-- don't install to target
-- don't make headers executable
-- don't add -D to install with multiple source files
-- extend commit log]
+- Add reference to upstream hash file
+- Remove unneeded LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in          |  1 +
- package/libb64/Config.in   | 14 ++++++++++++++
- package/libb64/libb64.hash |  3 +++
- package/libb64/libb64.mk   | 30 ++++++++++++++++++++++++++++++
- 4 files changed, 48 insertions(+)
+ package/libcgi/0001-misc-fixes.patch | 122 -----------------------------------
+ package/libcgi/Config.in             |   2 +-
+ package/libcgi/libcgi.hash           |   4 +-
+ package/libcgi/libcgi.mk             |  10 ++-
+ 4 files changed, 7 insertions(+), 131 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 85416af..34ce399 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1413,6 +1413,7 @@ menu "Other"
- 	source "package/lapack/Config.in"
- 	source "package/libargtable2/Config.in"
- 	source "package/libatomic_ops/Config.in"
-+	source "package/libb64/Config.in"
- 	source "package/libbsd/Config.in"
- 	source "package/libcap/Config.in"
- 	source "package/libcap-ng/Config.in"
-diff --git a/package/libb64/Config.in b/package/libb64/Config.in
-new file mode 100644
-index 0000000..405d0b8
---- /dev/null
-+++ b/package/libb64/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBB64
-+	bool "libb64"
-+	help
-+	  libb64 is a library of ANSI C routines for fast encoding
-+	  and decoding of data into and from a base64-encoded format.
-+	  C++ wrappers are included, as well as the source code for
-+	  standalone encoding and decoding executables.
+diff --git a/package/libcgi/0001-misc-fixes.patch b/package/libcgi/0001-misc-fixes.patch
+deleted file mode 100644
+index b576178..0000000
+--- a/package/libcgi/0001-misc-fixes.patch
++++ /dev/null
+@@ -1,122 +0,0 @@
+-Index: b/src/cgi.c
+-===================================================================
+---- a/src/cgi.c
+-+++ b/src/cgi.c
+-@@ -336,7 +336,7 @@
+- 	hextable['b'] = 11;
+- 	hextable['c'] = 12;
+- 	hextable['d'] = 13;
+--	hextable['e'] = 13;
+-+	hextable['e'] = 14;
+- 	hextable['f'] = 15;
+- 	hextable['A'] = 10;
+- 	hextable['B'] = 11;
+-Index: b/src/string.c
+-===================================================================
+---- a/src/string.c
+-+++ b/src/string.c
+-@@ -584,7 +584,7 @@
+- 
+- 	va_start(ptr, s);
+- 
+--	va_copy(bkp, str);
+-+	va_copy(bkp, ptr);
+- 	len = strlen(s);
+- 
+- 	while (*str) {
+-Index: b/Makefile.in
+-===================================================================
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -5,22 +5,32 @@
+- prefix = @prefix@
+- exec_prefix = @exec_prefix@
+- 
+--SHAREDOPT = -shared
+-+SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
+- LIBDIR = $(prefix)/lib
+--INCDIR = $(prefix)/include
+-+INCDIR = $(prefix)/include/libcgi/
+- MANDIR	= $(prefix)/man/man3
+- SHELL = /bin/sh
+- EXTRA_LIBS = 
+- 
+- INCS =  -Isrc
+--FLAGS = -Wall -fpic
+-+FLAGS = -Wall -D_REENTRANT
+- 
+- OBJS = src/error.o src/cgi.o src/session.o src/base64.o src/md5.o \
+- 	src/string.o src/general.o src/list.o src/cookie.o
+-+SHOBJS=$(OBJS:.o=.sh.o)
+- 
+--.c.o: $(CC) $(FLAGS) -c $<
+-+ALL_TARGETS = src/libcgi.a
+-+ifeq ($(STATIC),)
+-+ALL_TARGETS += src/libcgi.so
+-+endif
+- 
+--all: $(OBJS) src/libcgi.so
+-+%.o: %.c
+-+	$(CC) $(FLAGS) -c $*.c -o $@
+-+
+-+%.sh.o: %.c
+-+	$(CC) $(FLAGS) -fPIC -c $*.c -o $@
+-+
+-+all: $(ALL_TARGETS)
+- 
+- 	@echo ""
+- 	@echo ""
+-@@ -48,14 +58,17 @@
+- src/libcgi.a: $(OBJS)
+- 	$(AR) rc src/libcgi.a $(OBJS)
+- 
+--src/libcgi.so: src/libcgi.a
+--	$(CC) $(SHAREDOPT) -o src/libcgi.so $(OBJS) $(EXTRA_LIBS)
+-+src/libcgi.so: $(SHOBJS)
+-+	$(CC) $(SHAREDOPT) -o src/libcgi.so $(SHOBJS) $(EXTRA_LIBS)
+- 
+- install:
+--	cp src/libcgi.a $(LIBDIR)
+--	cp src/libcgi.so $(LIBDIR)
+--	cp src/cgi.h $(INCDIR)
+--	cp src/session.h $(INCDIR)
+-+	cp src/libcgi.a $(DESTDIR)/$(LIBDIR)
+-+ifeq ($(STATIC),)
+-+	cp src/libcgi.so $(DESTDIR)/$(LIBDIR)
+-+endif
+-+	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir -p $(DESTDIR)/$(INCDIR)
+-+	cp src/cgi.h $(DESTDIR)/$(INCDIR)
+-+	cp src/session.h $(DESTDIR)/$(INCDIR)
+- 
+- 
+- src/error.o: src/error.c src/error.h
+-@@ -69,8 +82,9 @@
+- src/list.o: src/list.c
+- 
+- clean:
+--	find src/ -name *.*o -exec rm -f {} \;
+-+	find src/ -name *.o -exec rm -f {} \;
+- 	find src/ -name *.a -exec rm -f {} \;
+-+	find src/ -name *.so -exec rm -f {} \;
+- 
+- uninstall: clean
+- 	rm -f $(LIBDIR)/libcgi.*
+-@@ -78,11 +92,11 @@
+- 	rm -f $(INCDIR)/session.h
+- 	rm -f $(MANDIR)/libcgi*
+- 
+--install_man:
+--	cp doc/man/man3/libcgi_base64.3 $(MANDIR)
+--	cp doc/man/man3/libcgi_cgi.3 $(MANDIR)
+--	cp doc/man/man3/libcgi_general.3 $(MANDIR)
+--	cp doc/man/man3/libcgi_string.3 $(MANDIR)
+--	cp doc/man/man3/libcgi_session.3 $(MANDIR)
+--	cp doc/man/man3/libcgi_cookie.3 $(MANDIR)
+-+#install_man:
+-+#	cp doc/man/man3/libcgi_base64.3 $(MANDIR)
+-+#	cp doc/man/man3/libcgi_cgi.3 $(MANDIR)
+-+#	cp doc/man/man3/libcgi_general.3 $(MANDIR)
+-+#	cp doc/man/man3/libcgi_string.3 $(MANDIR)
+-+#	cp doc/man/man3/libcgi_session.3 $(MANDIR)
+-+#	cp doc/man/man3/libcgi_cookie.3 $(MANDIR)
+- 
+diff --git a/package/libcgi/Config.in b/package/libcgi/Config.in
+index 430039e..3336907 100644
+--- a/package/libcgi/Config.in
++++ b/package/libcgi/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBCGI
+ 	  session and cookie support, GET and POST methods manipulation
+ 	  etc..., to help you to quickly write powerful CGI programs.
+ 
+-	  http://libcgi.sourceforge.net/
++	  https://github.com/rafaelsteil/libcgi/
+diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
+index 6bd7c0c..3d9f791 100644
+--- a/package/libcgi/libcgi.hash
++++ b/package/libcgi/libcgi.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256  861df39cc0195d43419c4c3de8dff4f42478db66c9ba0b0c1e994c99400e130c  libcgi-1.0.tar.gz
++# From https://github.com/rafaelsteil/libcgi/releases/download/v1.1/libcgi-1.1.tar.gz.sha256sum
++sha256  128445f2f828e84905d51bd53d11e2e08c489df3a07225ff9f198c1318092fe6  libcgi-1.1.tar.gz
+diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
+index de2a1e4..0d51de7 100644
+--- a/package/libcgi/libcgi.mk
++++ b/package/libcgi/libcgi.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBCGI_VERSION = 1.0
+-LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
++LIBCGI_VERSION = 1.1
++LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
 +
-+	  Base64 uses a subset of displayable ASCII characters, and is
-+	  therefore a useful encoding for storing binary data in a text
-+	  file, such as XML, or sending binary data over text-only
-+	  email.
-+
-+	  http://libb64.sourceforge.net
-diff --git a/package/libb64/libb64.hash b/package/libb64/libb64.hash
-new file mode 100644
-index 0000000..012a7b0
---- /dev/null
-+++ b/package/libb64/libb64.hash
-@@ -0,0 +1,3 @@
-+# sha1 from sourceforge, sha256 locally computed
-+sha1  04b3e21b8c951d27f02fe91249ca3474554af0b9  libb64-1.2.1.zip
-+sha256  20106f0ba95cfd9c35a13c71206643e3fb3e46512df3e2efb2fdbf87116314b2  libb64-1.2.1.zip
-diff --git a/package/libb64/libb64.mk b/package/libb64/libb64.mk
-new file mode 100644
-index 0000000..4dea959
---- /dev/null
-+++ b/package/libb64/libb64.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# libb64
-+#
-+################################################################################
-+
-+LIBB64_VERSION = 1.2.1
-+LIBB64_SOURCE = libb64-$(LIBB64_VERSION).zip
-+LIBB64_SITE = https://downloads.sourceforge.net/project/libb64/libb64/libb64
-+LIBB64_LICENSE = Public Domain
-+LIBB64_LICENSE_FILES = LICENSE
-+LIBB64_INSTALL_STAGING = YES
-+# Only static lib and headers
-+LIBB64_INSTALL_TARGET = NO
-+
-+define LIBB64_EXTRACT_CMDS
-+	unzip $(DL_DIR)/$(LIBB64_SOURCE) -d $(BUILD_DIR)
-+endef
-+
-+define LIBB64_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CCFLAGS="$(TARGET_CFLAGS)" -C $(@D) all_src
-+endef
-+
-+define LIBB64_INSTALL_STAGING_CMDS
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/b64
-+	$(INSTALL) -m 0644 $(@D)/include/b64/* $(STAGING_DIR)/usr/include/b64
-+	$(INSTALL) -D -m 0755 $(@D)/src/libb64.a $(STAGING_DIR)/usr/lib
-+endef
-+
-+$(eval $(generic-package))
+ LIBCGI_INSTALL_STAGING = YES
+-# use cross CC/AR rather than host
+-LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
+-	$(if $(BR2_STATIC_LIBS),STATIC=1)
+ LIBCGI_LICENSE = LGPL-2.1+
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
