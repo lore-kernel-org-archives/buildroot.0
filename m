@@ -1,59 +1,42 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Sep 2017 22:54:20 +0200
-Subject: [Buildroot] [PATCH v2 08/11] package/diffutils: fix build with
-	glibc 2.26
+Date: Sat,  2 Sep 2017 22:54:19 +0200
+Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
 In-Reply-To: <20170902205423.21288-1-romain.naour@gmail.com>
 References: <20170902205423.21288-1-romain.naour@gmail.com>
-Message-ID: <20170902205423.21288-9-romain.naour@gmail.com>
+Message-ID: <20170902205423.21288-8-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since glibc >= 2.26, don't try to use getopt_long replacement bundled
-with diffutils. It will conflict with the one from glibc.
-The getopt copy bundled in glibc has been updated with the one from gnulib.
+This doesn't compile with glibc 2.26 where reallocarray() as been introduced.
 
-After a lot of warnings...
 Fixes:
-xstrtol-error.c: In function 'xstrtol_error':
-xstrtol-error.c:84:26: error: invalid use of undefined type 'struct rpl_option'
-     option = long_options[opt_idx].name;
-                          ^
-xstrtol-error.c:84:26: error: dereferencing pointer to incomplete type 'const struct rpl_option'
-
-[...]
-
-xstrtol-error.c:92:1: error: conflicting types for 'xstrtol_fatal'
- xstrtol_fatal (enum strtol_error err,
- ^~~~~~~~~~~~~
-In file included from xstrtol-error.c:20:0:
-xstrtol.h:69:16: note: previous declaration of 'xstrtol_fatal' was here
- _Noreturn void xstrtol_fatal (enum strtol_error,
-                ^~~~~~~~~~~~~
+stage1flex-misc.o: In function `allocate_array':
+misc.c:(.text+0x38f): undefined reference to `reallocarray'
+stage1flex-misc.o: In function `reallocate_array':
+misc.c:(.text+0xc8a): undefined reference to `reallocarray'
+collect2: error: ld returned 1 exit status
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/diffutils/diffutils.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/flex/flex.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 6e5b9b6..79785d6 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -11,6 +11,12 @@ DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- DIFFUTILS_LICENSE = GPL-3.0+
- DIFFUTILS_LICENSE_FILES = COPYING
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index b782699..0196624 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -10,7 +10,8 @@ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
+-FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
++FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4 \
++	ac_cv_func_reallocarray=no
+ HOST_FLEX_DEPENDENCIES = host-m4
  
-+# Since glibc >= 2.26, don't try to use getopt_long replacement bundled
-+# with diffutils. It will conflict with the one from glibc.
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+DIFFUTILS_CONF_ENV += gl_cv_func_getopt_gnu=yes
-+endif
-+
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- DIFFUTILS_DEPENDENCIES += busybox
- endif
+ define FLEX_DISABLE_PROGRAM
 -- 
 2.9.5
