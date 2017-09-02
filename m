@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Sep 2017 23:12:52 +0200
-Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
-In-Reply-To: <20170902205423.21288-8-romain.naour@gmail.com>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
- <20170902205423.21288-8-romain.naour@gmail.com>
-Message-ID: <20170902231252.44d10e64@windsurf.lan>
+Date: Sat, 2 Sep 2017 23:17:28 +0200
+Subject: [Buildroot] [PATCH] package/sysdig: fix missing curlbuild
+ include
+In-Reply-To: <1504281081-11201-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1504281081-11201-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20170902231728.2be2989f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Sep 2017 22:54:19 +0200, Romain Naour wrote:
-> This doesn't compile with glibc 2.26 where reallocarray() as been introduced.
+On Fri,  1 Sep 2017 17:51:21 +0200, Angelo Compagnucci wrote:
+> curlbuild.h was removed in recent versions of curl, backporting a
+> patch from mainline to fix sysdig until a newer version is
+> released.
 > 
-> Fixes:
-> stage1flex-misc.o: In function `allocate_array':
-> misc.c:(.text+0x38f): undefined reference to `reallocarray'
-> stage1flex-misc.o: In function `reallocate_array':
-> misc.c:(.text+0xc8a): undefined reference to `reallocarray'
-> collect2: error: ld returned 1 exit status
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-This commit log is a bit mysterious: if reallocarray() has been
-introduced in glibc 2.26, why isn't flex able to use it ?
+Thanks a lot, looks good, except...
+
+> ---
+>  .../sysdig/0001-Don-t-include-curlbuild.h.patch    | 56 ++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/sysdig/0001-Don-t-include-curlbuild.h.patch
+> 
+> diff --git a/package/sysdig/0001-Don-t-include-curlbuild.h.patch b/package/sysdig/0001-Don-t-include-curlbuild.h.patch
+> new file mode 100644
+> index 0000000..ae406c0
+> --- /dev/null
+> +++ b/package/sysdig/0001-Don-t-include-curlbuild.h.patch
+> @@ -0,0 +1,56 @@
+> +From 8a6670ea4b57c0e2bf8588d4534b22d1ea860989 Mon Sep 17 00:00:00 2001
+> +From: Mark Stemm <mark.stemm@gmail.com>
+> +Date: Tue, 15 Aug 2017 17:49:53 -0700
+> +Subject: [PATCH] Don't include curlbuild.h
+> +
+> +It's not required to build and it's not present with some newer versions
+> +of libcurl, so removing it.
+> +
+> +Thanks to https://github.com/hhoffstaette for the tip.
+> +
+> +This fixes https://github.com/draios/sysdig/issues/895.
+
+You must add your Signed-off-by here.
+
+Could you resend with this fixed ?
+
+Thanks!
 
 Thomas
 -- 
