@@ -1,82 +1,82 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 02 Sep 2017 13:13:51 -0000
-Subject: [Buildroot] [git commit] python-m2r: new package
-Message-ID: <20170902130617.CB735818F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] get-developers: add option to get
+	developers for files
+Message-ID: <20170902130618.0DE8F818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=800b808bad629c27df900bfee76367b478d6d2fe
+commit: https://git.buildroot.net/buildroot/commit/?id=009ae96c6f6c4ab18b120d3923583efaea29cfba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Host variant is needed to generate long description
-for python-automat package.
+The DEVELOPERS file lists file patterns, but the get-developers script
+only supports getting packages and CPU architectures. Some files are
+neither of those, e.g. defconfigs, support files, package infras, ...
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Add a '-f' option that allows to give a list of files for which to get
+the developer(s).
+
+Note that the DEVELOPERS file contains directories as well as files,
+and the directories are not expanded into individual files. Therefore,
+we have to use f.startswith(devfile) to match a directory. This assumes
+that the directory name ends with /, otherwise 'package/python' would
+also match 'package/python-foo'. Since we make sure that directories do
+end with / in the DEVELOPERS file, and since false positives are not
+much of an issue in this case, this isn't a problem.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                  |  1 +
- package/python-m2r/Config.in       |  8 ++++++++
- package/python-m2r/python-m2r.hash |  3 +++
- package/python-m2r/python-m2r.mk   | 16 ++++++++++++++++
- 4 files changed, 28 insertions(+)
+ utils/get-developers | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 34ce399..9bc3209 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -772,6 +772,7 @@ menu "External python modules"
- 	source "package/python-lmdb/Config.in"
- 	source "package/python-logbook/Config.in"
- 	source "package/python-lxml/Config.in"
-+	source "package/python-m2r/Config.in"
- 	source "package/python-mad/Config.in"
- 	source "package/python-mako/Config.in"
- 	source "package/python-markdown/Config.in"
-diff --git a/package/python-m2r/Config.in b/package/python-m2r/Config.in
-new file mode 100644
-index 0000000..44dafaa
---- /dev/null
-+++ b/package/python-m2r/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_M2R
-+	bool "python-m2r"
-+	select BR2_PACKAGE_PYTHON_MISTUNE # runtime
-+	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
-+	help
-+	  Markdown to reStructuredText converter.
+diff --git a/utils/get-developers b/utils/get-developers
+index fa6fc2f..6a028b4 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -3,6 +3,7 @@
+ import argparse
+ import getdeveloperlib
+ import sys
++import os
+ 
+ def parse_args():
+     parser = argparse.ArgumentParser()
+@@ -12,6 +13,8 @@ def parse_args():
+                         help='find developers in charge of this architecture')
+     parser.add_argument('-p', dest='package', action='store',
+                         help='find developers in charge of this package')
++    parser.add_argument('-f', dest='files', nargs='*',
++                        help='find developers in charge of these files')
+     parser.add_argument('-c', dest='check', action='store_const',
+                         const=True, help='list files not handled by any developer')
+     return parser.parse_args()
+@@ -28,6 +31,8 @@ def __main__():
+         action += 1
+     if args.package is not None:
+         action += 1
++    if args.files:
++        action += 1
+     if args.check:
+         action += 1
+     if len(args.patches) != 0:
+@@ -59,6 +64,16 @@ def __main__():
+                 print(dev.name)
+         return
+ 
++    # Handle the files action
++    if args.files is not None:
++        args.files = [os.path.abspath(f) for f in args.files]
++        for dev in devs:
++            for devfile in dev.files:
++                commonfiles = [f for f in args.files if f.startswith(devfile)]
++                if commonfiles:
++                    print(dev.name)
++                    break
 +
-+	  https://github.com/miyakogi/m2r
-diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
-new file mode 100644
-index 0000000..102da33
---- /dev/null
-+++ b/package/python-m2r/python-m2r.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/m2r/json, sha256 locally computed
-+md5	aac67f2167a3d81c8ccd7615e9c2cb7a  m2r-0.1.6.tar.gz
-+sha256	a26bc2e25e0ad3f8650385aea25cf734ac4fcd30e54faec92fd39675da75e527  m2r-0.1.6.tar.gz
-diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
-new file mode 100644
-index 0000000..b506ad8
---- /dev/null
-+++ b/package/python-m2r/python-m2r.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-m2r
-+#
-+################################################################################
-+
-+PYTHON_M2R_VERSION = 0.1.6
-+PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
-+PYTHON_M2R_SITE = https://pypi.python.org/packages/8d/74/558f9aba132bb34cd661fad9e17d42bfa1332363466ff314e600096f78c3
-+PYTHON_M2R_SETUP_TYPE = setuptools
-+PYTHON_M2R_LICENSE = MIT
-+PYTHON_M2R_LICENSE_FILES = LICENSE
-+HOST_PYTHON_M2R_DEPENDENCIES = host-python-docutils host-python-mistune
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
+     # Handle the patches action
+     if len(args.patches) != 0:
+         (files, infras) = getdeveloperlib.analyze_patches(args.patches)
