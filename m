@@ -1,93 +1,219 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Sep 2017 15:17:44 +0200
-Subject: [Buildroot] [pull request] arch/arm: add some new armv8a cores
-In-Reply-To: <cover.1504432422.git.yann.morin.1998@free.fr>
-References: <cover.1504432422.git.yann.morin.1998@free.fr>
-Message-ID: <cover.1504444617.git.yann.morin.1998@free.fr>
+Date: Sun,  3 Sep 2017 15:17:41 +0200
+Subject: [Buildroot] [PATCH 1/9] arch/arm: re-order cores choice
+In-Reply-To: <cover.1504444617.git.yann.morin.1998@free.fr>
+References: <cover.1504444617.git.yann.morin.1998@free.fr>
+Message-ID: <680be9794b151eff3eb02d589aa5f86ca1e8a9f6.1504444617.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, the logic for ordering the ARM cores in the choice is all but
+obvious. ;-)
 
-This series adds all the armv8a cores currently known to any released
-version of gcc.
+Reorder the choice by architecture generation, starting with armv4,
+ending with armv8.
 
-First, we do a bit of cleanups in the existing menu: re-order the cores,
-simplify hiding non-64-bit cores, rename armv8 to armv8a.
+Add a comment before each generation, just for ease of use. Add a
+separate comment for armv7a and armv7m.
 
-Second, as all armv8a cores are guaranteed by the ISA to have a VFPv4,
-we disallow building a soft-float toolchain on those cores when in
-64-bit mode.
+Finally, order cores alphabetically inside the same generation (except
+for armv7m cores, listed after all armv7a cores.)
 
-Now we add a bunch of armv8a cores, cortex and non-cortex alike, with a
-few armv8.1a variants as well.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm | 116 +++++++++++++++++++++++++++++++----------------------
+ 1 file changed, 69 insertions(+), 47 deletions(-)
 
-It is to be noted that we do have at least one armv8a core that is in
-fact 32-bit only, while we also do have a few armv8a cores that are
-64-bit only (or at least gcc does not recognises them in arm mode).
-
-Eventually, we add a build-only test for all those toolchains, to check
-that at least the toolchains do build. This final commit is not meant to
-be applied, it adds way too many tests.
-
-This series relies on the previous architecture series I've recently
-sent:
-    http://lists.busybox.net/pipermail/buildroot/2017-September/201403.html
-    http://lists.busybox.net/pipermail/buildroot/2017-September/201409.html
-
-Regards,
-Yann E. MORIN.
-
-PS. I've sent this series as a real pull-request, just to see how
-the new patchwork handles it: currently, series are sorted by the
-first patch, and patchwork misses the cover-letter. Let's see if
-a cover-letter that is a pull-request gets noticed.
-
-
-The following changes since commit 41eeac74f986790fe26f03ebf05322120d2c04da
-
-  package/gcc: slight cleanup and reorg in remaining arch depends (2017-09-03 11:14:53 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to a876f6b64754ba3b96492c57b18654f8ec465ca0
-
-  [DON'T COMMIT] tests for all new arm cores (2017-09-03 15:02:47 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (9):
-      arch/arm: re-order cores choice
-      arch/arm: simplify hiding non 64-bit cores
-      arch/arm: armv8 is really armv8a
-      arch/arm: do not allow soft-float for armv8a
-      arch/arm: add cortex-A32
-      arch/arm: add some armv8a cortex variants
-      arch/arm: add some non-cortex armv8a cores
-      arch/arm: add armv8.1a cores
-      [DON'T COMMIT] tests for all new arm cores
-
- arch/Config.in.arm                                 | 297 ++++++++++++++++-----
- package/pkg-cmake.mk                               |   2 +-
- .../tests/toolchain/test_internal_aarch64_all.py   | 162 +++++++++++
- .../tests/toolchain/test_internal_arm_all.py       |  95 +++++++
- .../toolchain-external-codesourcery-arm/Config.in  |   2 +-
- .../toolchain-external-linaro-arm/Config.in        |   2 +-
- .../toolchain-external-linaro-armeb/Config.in      |   2 +-
- 7 files changed, 489 insertions(+), 73 deletions(-)
- create mode 100644 support/testing/tests/toolchain/test_internal_aarch64_all.py
- create mode 100644 support/testing/tests/toolchain/test_internal_arm_all.py
-
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index b58be6bce0..66dce3a562 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -68,6 +68,8 @@ choice
+ 	help
+ 	  Specific CPU variant to use
+ 
++comment "armv4 cores"
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm920t
+ 	bool "arm920t"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -82,6 +84,21 @@ config BR2_arm922t
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	depends on !BR2_ARCH_IS_64
++config BR2_fa526
++	bool "fa526/626"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_ARMV4
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
++config BR2_strongarm
++	bool "strongarm sa110/sa1100"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_ARMV4
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
++
++comment "armv5 cores"
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm926t
+ 	bool "arm926t"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -90,6 +107,22 @@ config BR2_arm926t
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	depends on !BR2_ARCH_IS_64
++config BR2_iwmmxt
++	bool "iwmmxt"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_ARMV5
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
++config BR2_xscale
++	bool "xscale"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV5
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
++
++comment "armv6 cores"
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm1136j_s
+ 	bool "arm1136j-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -128,6 +161,9 @@ config BR2_arm11mpcore
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	depends on !BR2_ARCH_IS_64
++
++comment "armv7a cores"
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -212,6 +248,28 @@ config BR2_cortex_a17_a7
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	depends on !BR2_ARCH_IS_64
++config BR2_pj4
++	bool "pj4"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_VFPV3
++	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
++
++comment "armv7m cores"
++	depends on !BR2_ARCH_IS_64
++config BR2_cortex_m3
++	bool "cortex-M3"
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7M
++	depends on !BR2_ARCH_IS_64
++config BR2_cortex_m4
++	bool "cortex-M4"
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7M
++	depends on !BR2_ARCH_IS_64
++
++comment "armv8 cores"
+ config BR2_cortex_a53
+ 	bool "cortex-A53"
+ 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+@@ -255,48 +313,6 @@ config BR2_cortex_a72_a53
+ 	select BR2_ARM_CPU_ARMV8
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+-config BR2_cortex_m3
+-	bool "cortex-M3"
+-	select BR2_ARM_CPU_HAS_THUMB2
+-	select BR2_ARM_CPU_ARMV7M
+-	depends on !BR2_ARCH_IS_64
+-config BR2_cortex_m4
+-	bool "cortex-M4"
+-	select BR2_ARM_CPU_HAS_THUMB2
+-	select BR2_ARM_CPU_ARMV7M
+-	depends on !BR2_ARCH_IS_64
+-config BR2_fa526
+-	bool "fa526/626"
+-	select BR2_ARM_CPU_HAS_ARM
+-	select BR2_ARM_CPU_ARMV4
+-	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+-config BR2_pj4
+-	bool "pj4"
+-	select BR2_ARM_CPU_HAS_ARM
+-	select BR2_ARM_CPU_HAS_VFPV3
+-	select BR2_ARM_CPU_ARMV7A
+-	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+-config BR2_strongarm
+-	bool "strongarm sa110/sa1100"
+-	select BR2_ARM_CPU_HAS_ARM
+-	select BR2_ARM_CPU_ARMV4
+-	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+-config BR2_xscale
+-	bool "xscale"
+-	select BR2_ARM_CPU_HAS_ARM
+-	select BR2_ARM_CPU_HAS_THUMB
+-	select BR2_ARM_CPU_ARMV5
+-	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+-config BR2_iwmmxt
+-	bool "iwmmxt"
+-	select BR2_ARM_CPU_HAS_ARM
+-	select BR2_ARM_CPU_ARMV5
+-	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ endchoice
+ 
+ config BR2_ARM_ENABLE_NEON
+@@ -551,15 +567,23 @@ config BR2_ENDIAN
+ 	default "BIG"	 if (BR2_armeb || BR2_aarch64_be)
+ 
+ config BR2_GCC_TARGET_CPU
++	# armv4
+ 	default "arm920t"	if BR2_arm920t
+ 	default "arm922t"	if BR2_arm922t
++	default "fa526"		if BR2_fa526
++	default "strongarm"	if BR2_strongarm
++	# armv5
+ 	default "arm926ej-s"	if BR2_arm926t
++	default "iwmmxt"	if BR2_iwmmxt
++	default "xscale"	if BR2_xscale
++	# armv6
+ 	default "arm1136j-s"	if BR2_arm1136j_s
+ 	default "arm1136jf-s"	if BR2_arm1136jf_s
+ 	default "arm1176jz-s"	if BR2_arm1176jz_s
+ 	default "arm1176jzf-s"	if BR2_arm1176jzf_s
+ 	default "mpcore"	if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
+ 	default "mpcorenovfp"	if BR2_arm11mpcore
++	# armv7a
+ 	default "cortex-a5"	if BR2_cortex_a5
+ 	default "cortex-a7"	if BR2_cortex_a7
+ 	default "cortex-a8"	if BR2_cortex_a8
+@@ -569,13 +593,11 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a15.cortex-a7"	if BR2_cortex_a15_a7
+ 	default "cortex-a17"	if BR2_cortex_a17
+ 	default "cortex-a17.cortex-a7"	if BR2_cortex_a17_a7
++	default "marvell-pj4"	if BR2_pj4
++	# armv7m
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "cortex-m4"	if BR2_cortex_m4
+-	default "fa526"		if BR2_fa526
+-	default "marvell-pj4"	if BR2_pj4
+-	default "strongarm"	if BR2_strongarm
+-	default "xscale"	if BR2_xscale
+-	default "iwmmxt"	if BR2_iwmmxt
++	# armv8
+ 	default "cortex-a53"	if BR2_cortex_a53
+ 	default "cortex-a57"	if BR2_cortex_a57
+ 	default "cortex-a57.cortex-a53"	if BR2_cortex_a57_a53
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
