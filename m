@@ -1,55 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Sep 2017 11:44:34 +0200
-Subject: [Buildroot] [PATCH 8/8] package/gcc: slight cleanup and reorg in
-	remaining arch depends
-In-Reply-To: <cover.1504431850.git.yann.morin.1998@free.fr>
-References: <cover.1504431850.git.yann.morin.1998@free.fr>
-Message-ID: <41eeac74f986790fe26f03ebf05322120d2c04da.1504431850.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Sep 2017 09:14:32 +0200
+Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
+In-Reply-To: <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <20170902205423.21288-8-romain.naour@gmail.com>
+ <20170902231252.44d10e64@windsurf.lan>
+ <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
+Message-ID: <20170903091432.659bd28f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/Config.in.host | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+Hello,
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index d8479008d8..4ceb5b18c7 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -24,12 +24,11 @@ config BR2_GCC_VERSION_4_9_X
- 	bool "gcc 4.9.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	# Broken or unsupported architectures
--	depends on !BR2_arc && !BR2_or1k
--	# musl microblaze unsupported
-+	depends on !BR2_arc
-+	depends on !BR2_or1k
-+	# musl on microblaze, ppc64 and mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
--	# musl ppc64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
--	# musl mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
-@@ -37,10 +36,10 @@ config BR2_GCC_VERSION_5_X
- 	bool "gcc 5.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	# Broken or unsupported architectures
--	depends on !BR2_arc && !BR2_or1k
--	# musl ppc64 unsupported
-+	depends on !BR2_arc
-+	depends on !BR2_or1k
-+	# musl on ppc64 and mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
--	# musl mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
+On Sun, 3 Sep 2017 00:23:40 +0200, Romain Naour wrote:
+
+> > This commit log is a bit mysterious: if reallocarray() has been
+> > introduced in glibc 2.26, why isn't flex able to use it ?  
+> 
+> It's a nasty issue, when reallocarray() is available for the target, flex will
+> build a small tool called stage1flex for the host (using _FOR_BUILD) but with
+> the config.h generated for the target.
+> 
+> My host doesn't have glibc 2.26, so reallocarray() is never defined while
+> building stage1flex:
+> 
+> misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
+> [-Wimplicit-function-declaration]
+>   mem = reallocarray(NULL, (size_t) size, element_size);
+>         ^~~~~~~~~~~~
+> misc.c:147:6: warning : assignment makes pointer from integer without a cast
+> [-Wint-conversion]
+>   mem = reallocarray(NULL, (size_t) size, element_size);
+>       ^
+> 
+> I don't know how to fix this, except by disabling reallocarray() for the target...
+
+This should all be explained in the commit log, and a short comment in
+flex.mk should be added as well.
+
+Generally speaking, the commit logs in this series are too terse: they
+just say "fix build with glibc 2.26" with no explanations, or they
+backport some seemingly random glibc patches, without explaining why
+they are needed. Could you improve this a bit ?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
