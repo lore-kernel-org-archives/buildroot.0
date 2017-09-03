@@ -1,47 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Sep 2017 09:48:29 +0200
-Subject: [Buildroot] [PATCH 1/1] util-linux: linux-pam is needed for su
-Message-ID: <20170903074829.3782-1-bernd.kuhls@t-online.de>
+Date: Sun,  3 Sep 2017 09:54:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.20.1
+Message-ID: <20170903075452.1980-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With linux-pam, the configure script bails out with:
-
-configure: error: su selected, but required PAM header file not available
-
-Fixes:
-http://autobuild.buildroot.net/results/338/3381a49d17aa0d4b9711cbb36a5d7b563a8ae08f/
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/util-linux/Config.in | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index d2a925c1b..80aab881a 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -330,10 +330,18 @@ config BR2_PACKAGE_UTIL_LINUX_SETTERM
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index bed2aefb1..22882c953 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 2a451bcf42dc0865840463f7efc3f51cebeb4ea8  sqlite-autoconf-3200000.tar.gz
++sha1 48593dcd19473f25fe6fcd08048e13ddbff4c983  sqlite-autoconf-3200100.tar.gz
+ # Calculated based on the hash above
+-sha256 3814c6f629ff93968b2b37a70497cfe98b366bf587a2261a56a5f750af6ae6a0  sqlite-autoconf-3200000.tar.gz
++sha256 ec66595b29bc0798b023a5122021ea646ab4fa9e2f735937c5426feeba950742  sqlite-autoconf-3200100.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 1bfa6ca4a..39ea9ce36 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_UTIL_LINUX_SU
- 	bool "su"
--	depends on BR2_USE_MMU # fork()
-+	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
-+	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # fork(), linux-pam
-+	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Run a command with substitute user and group ID
- 
-+comment "su needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+
- config BR2_PACKAGE_UTIL_LINUX_SULOGIN
- 	bool "sulogin"
- 	depends on BR2_USE_MMU # fork()
+-SQLITE_VERSION = 3200000
++SQLITE_VERSION = 3200100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2017
+ SQLITE_LICENSE = Public domain
 -- 
 2.11.0
