@@ -1,57 +1,41 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sun, 3 Sep 2017 22:30:28 +1000
-Subject: [Buildroot] [PATCH 1/1] toolchain: detect external glibc in
-	symlinked /lib
-In-Reply-To: <20170903142517.088907a8@windsurf.lan>
-References: <20170903120835.16190-1-camh@xdna.net>
- <20170903141738.20c0d621@windsurf.lan>
- <CABa6e=pwRghNUx+WHY_AH22_Wh8mtvR54x8ApqH3Y11732mhng@mail.gmail.com>
- <20170903142517.088907a8@windsurf.lan>
-Message-ID: <CABa6e=rrW8YTJiUxGXfSGxGnQ0-k5q57hFAng8JL9Qo9r+wU+w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Sep 2017 14:34:13 +0200
+Subject: [Buildroot] [git commit] package/stella: bump version to 5.0.2
+Message-ID: <20170903122654.3EA5381EAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3 September 2017 at 22:25, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sun, 3 Sep 2017 22:22:24 +1000, Cam Hutchison wrote:
->
->> > > When building a toolchain with buildroot and a merged /usr, /lib is
->> > > a symlink to usr/lib. This is copied from the target to the staging
->> > > directory, and then to the sysroot, and the ultimate location of the
->> > > required files is in /usr/lib in the sysroot.
->> >
->> > I don't understand this sentence. Nothing gets copied from target to
->> > staging, and staging *is* the sysroot, so there's no copy. Could you
->> > explain what you wanted to say here, we can perhaps find a better
->> > phrasing.
->>
->> Ok, I wasn't sure on how staging became sysroot - I thought it was
->> copied.
->>
->> I misinterpreted 175a96c4909104bde706fa0e1f9010af8b252caa
->> (package/skeleton-common: simplify staging install) to mean it was
->> copying from the target, but it was the skeleton, not the target.
->>
->> Would you like me to respin this with an updated comment, or will
->> you take it and change it as appropriate?
->
-> In fact, I would first like to understand what you meant :)
->
-> Maybe what you meant is that: when the Buildroot toolchain is built
-> with a merged /usr, lib is a symlink to usr/lib in the staging
-> directory. Therefore, the resulting toolchain has such a symlink in its
-> sysroot, and such a symlink is present in the staging directory when
-> the toolchain is re-used as an external toolchain. The consequence is
-> that the dynamic linker is not located in /lib, but in /usr/lib, even
-> though it is accessible from /lib from a symlink.
+commit: https://git.buildroot.net/buildroot/commit/?id=375cf705b13c68fd4a8c3a7a57dd205ec4f6e5ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, that's what I meant. The find command that I modified was not finding
-the files it was looking for because it would not look in usr/lib (it has a
-maxdepth of 2). But it would not look in lib because it was not following
-symlinks. So check_glibc never found the files it was looking for and
-produced an error.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/stella/stella.hash | 2 +-
+ package/stella/stella.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index 15e75c1..ef17ff7 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 34ff90b60a4d277ada2815c4d65eda18c87371d0fb15e872b8ac82aac3e0b07a  stella-5.0.1-src.tar.xz
++sha256 74ee708b68340b65519a04a22c61921cdcf69a1d308600c212414b28e9e689ac  stella-5.0.2-src.tar.xz
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 7f4e45e..158a511 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STELLA_VERSION = 5.0.1
++STELLA_VERSION = 5.0.2
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
