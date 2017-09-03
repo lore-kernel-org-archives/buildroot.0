@@ -1,49 +1,40 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sun,  3 Sep 2017 22:08:35 +1000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Sep 2017 14:17:38 +0200
 Subject: [Buildroot] [PATCH 1/1] toolchain: detect external glibc in
 	symlinked /lib
-Message-ID: <20170903120835.16190-1-camh@xdna.net>
+In-Reply-To: <20170903120835.16190-1-camh@xdna.net>
+References: <20170903120835.16190-1-camh@xdna.net>
+Message-ID: <20170903141738.20c0d621@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-check_glibc checks for a valid glibc in an external toolchain, but
-assumes that the files indicating the presence of glibc (ld-linux*.so.*,
-ld.so.* or ld64.so.*) are in a top-level directory of the sysroot.
+Hello,
 
-When building a toolchain with buildroot and a merged /usr, /lib is
-a symlink to usr/lib. This is copied from the target to the staging
-directory, and then to the sysroot, and the ultimate location of the
-required files is in /usr/lib in the sysroot.
+This generally looks ok, to me, except one paragraph of explanation,
+see below.
 
-check_glibc fails to find the necessary files in this layout due to it
-using find(1) with -maxdepth 2 and not following symlinks. This causes
-the error 'Incorrect selection of the C library' when trying to use a
-buildroot toolchain as an external toolchain that was built with a
-merged /usr.
+On Sun,  3 Sep 2017 22:08:35 +1000, Cam Hutchison wrote:
+> check_glibc checks for a valid glibc in an external toolchain, but
+> assumes that the files indicating the presence of glibc (ld-linux*.so.*,
+> ld.so.* or ld64.so.*) are in a top-level directory of the sysroot.
+> 
+> When building a toolchain with buildroot and a merged /usr, /lib is
+> a symlink to usr/lib. This is copied from the target to the staging
+> directory, and then to the sysroot, and the ultimate location of the
+> required files is in /usr/lib in the sysroot.
 
-Tell find(1) to follow symlinks so that it can find the required files
-to determine glibc availability in the external toolchain.
+I don't understand this sentence. Nothing gets copied from target to
+staging, and staging *is* the sysroot, so there's no copy. Could you
+explain what you wanted to say here, we can perhaps find a better
+phrasing.
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
----
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index e9e36d2069..63ef6fb4b0 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -227,7 +227,7 @@ check_glibc_rpc_feature = \
- #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
-+	if test `find -L $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
