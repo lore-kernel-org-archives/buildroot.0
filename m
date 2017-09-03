@@ -1,51 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Sep 2017 11:22:20 +0200
-Subject: [Buildroot] [PATCH 5/5 v2] arc/bfin: remove 60x cores
+Date: Sun,  3 Sep 2017 11:22:16 +0200
+Subject: [Buildroot] [PATCH 1/5 v2] arch: add option to disable internal
+	toolchain backend
 In-Reply-To: <cover.1504430497.git.yann.morin.1998@free.fr>
 References: <cover.1504430497.git.yann.morin.1998@free.fr>
-Message-ID: <0335a8a1164bfeb7c006c7d248d8f1923069c98f.1504430497.git.yann.morin.1998@free.fr>
+Message-ID: <cbbc339ea43737ec4790a45e5f6cd3102b466041.1504430497.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those cores are not supported in upstream gcc, not even in master.
+Some architectures or specific cores do not have support in upstream
+gcc. Currently, they are individually listed as exclusions in the
+toolchain choice.
 
-The only toolchain that supported those core was the 2014R1 ADI
-rebuilt toolchain, but we removed it in 311bc13 (toolchain: kill
-ADI Blackfin toolchain) because there was too many issues with it.
-ADI has not released any newer toolchain since then.
+This poses a maintainance burden, as the knowledge about what gcc
+version supports what architecture is split across many places: the
+toolchain choice, the gcc version choice, the external toolchains.
 
-There is little hope for those cores now, so remove them.
+As a first step, add a blind option that architectures or individual
+cores may select to indicate they lack support in our internal backend.
+
+Actual use of the option will come in followup patches.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- arch/Config.in.bfin | 12 ------------
- 1 file changed, 12 deletions(-)
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index 9ad2dd7ef4..bd9589c71d 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -4,18 +4,6 @@ choice
- 	default BR2_bf532
- 	help
- 	  Specify target CPU
--config BR2_bf606
--	bool "bf606"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--config BR2_bf607
--	bool "bf607"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--config BR2_bf608
--	bool "bf608"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--config BR2_bf609
--	bool "bf609"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
- config BR2_bf512
- 	bool "bf512"
- config BR2_bf514
+---
+Changes v1 ->v2:
+  - introduce an extra kconfig symbol for positive logic  (Thomas)
+---
+ arch/Config.in      | 10 ++++++++++
+ toolchain/Config.in |  1 +
+ 2 files changed, 11 insertions(+)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index f385745e47..caf5a318ab 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -250,6 +250,16 @@ config BR2_xtensa
+ 
+ endchoice
+ 
++# For some architectures or specific cores, our internal toolchain
++# backend is not suitable (like, missing support in upstream gcc, or
++# no ChipCo fork exists...)
++config BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
++	bool
++
++config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
++	bool
++	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 584d053058..8866b7da75 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -43,6 +43,7 @@ choice
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
++	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
+ 	depends on !BR2_bf606
+ 	depends on !BR2_bf607
+ 	depends on !BR2_bf608
 -- 
 2.11.0
