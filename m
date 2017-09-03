@@ -1,17 +1,17 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Sep 2017 11:53:50 +0200
-Subject: [Buildroot] [PATCH 1/3] arch/mips: inverse the NaN logic
+Date: Sun,  3 Sep 2017 11:53:51 +0200
+Subject: [Buildroot] [PATCH 2/3] arch/mips: inverse the mfpxx logic
 In-Reply-To: <cover.1504432422.git.yann.morin.1998@free.fr>
 References: <cover.1504432422.git.yann.morin.1998@free.fr>
-Message-ID: <585dda9412d61d550fc9c6fa76a29e7e878ceec0.1504432422.git.yann.morin.1998@free.fr>
+Message-ID: <97a1396440baea0fec1c3fb6593d9cf7f3655f99.1504432422.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currentlym the possibility to choose the NaN encoding is conditional to
-having a sufficiently recent gcc version.
+Currently, the possibility to choose the floating point mode (32, xx or
+64) is conditional on having a sufficiently recent gcc version.
 
 Which means that the architecture selection depends on the gcc version.
 
@@ -22,52 +22,56 @@ can restrict ourselves to using software that is working on said
 hardware.
 
 Thus, we inverse the logic, to move the condition onto the software
-side: whenever NaN-2008 are selected, we restrict the toolchain
-selection to at least a gcc-4.9.
+side: whenever mfpxx is selected, we restrict the toolchain selection to
+at least a gcc-5.
 
-But now, the option with the NaN type is always set, so we must enclose
-the code in gcc.mk inside a HAS_NAN_OPTION condition, as is already done
-for the external toolchain case.
+And now, the blind BR2_TOOLCHAIN_HAS_MFPXX_OPTION symbol is no longer
+needed, so we get rid of it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- arch/Config.in.mips | 2 +-
- package/gcc/gcc.mk  | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/Config.in.mips           | 4 ++--
+ toolchain/toolchain-common.in | 4 ----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index c08b2a2968..13d1a477e6 100644
+index 13d1a477e6..f8e57bab33 100644
 --- a/arch/Config.in.mips
 +++ b/arch/Config.in.mips
-@@ -176,10 +176,10 @@ config BR2_MIPS_NAN_LEGACY
- 
- config BR2_MIPS_NAN_2008
- 	bool
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- 
+@@ -146,7 +146,7 @@ config BR2_MIPS_SOFT_FLOAT
  choice
- 	prompt "Target NaN"
--	depends on BR2_TOOLCHAIN_HAS_MNAN_OPTION
- 	depends on BR2_mips_32r5 || BR2_mips_64r5
- 	default BR2_MIPS_ENABLE_NAN_2008
+ 	prompt "FP mode"
+ 	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
+-	default BR2_MIPS_FP32_MODE_XX if BR2_TOOLCHAIN_HAS_MFPXX_OPTION
++	default BR2_MIPS_FP32_MODE_XX
  	help
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 49ccccf56f..d45b6d7a06 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -207,9 +207,11 @@ endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
- endif
-+ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
- endif
-+endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_FP32_MODE)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-fp-32=$(BR2_GCC_TARGET_FP32_MODE)
- endif
+ 	  MIPS32 supports different FP modes (32,xx,64). Information about FP
+ 	  modes can be found here:
+@@ -159,7 +159,7 @@ config BR2_MIPS_FP32_MODE_32
+ 
+ config BR2_MIPS_FP32_MODE_XX
+ 	bool "xx"
+-	depends on BR2_TOOLCHAIN_HAS_MFPXX_OPTION
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 
+ config BR2_MIPS_FP32_MODE_64
+ 	bool "64"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index dd192b9ba4..0002682e12 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -346,10 +346,6 @@ config BR2_TOOLCHAIN_HAS_MNAN_OPTION
+ 	bool
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+-config BR2_TOOLCHAIN_HAS_MFPXX_OPTION
+-	bool
+-	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_5
+-
+ config BR2_TOOLCHAIN_HAS_SYNC_1
+ 	bool
+ 	default y
 -- 
 2.11.0
