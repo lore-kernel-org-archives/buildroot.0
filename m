@@ -1,73 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Sep 2017 11:22:16 +0200
-Subject: [Buildroot] [PATCH 1/5 v2] arch: add option to disable internal
-	toolchain backend
+Date: Sun,  3 Sep 2017 11:22:17 +0200
+Subject: [Buildroot] [PATCH 2/5 v2] arch/csky: internal backend not suitable
 In-Reply-To: <cover.1504430497.git.yann.morin.1998@free.fr>
 References: <cover.1504430497.git.yann.morin.1998@free.fr>
-Message-ID: <cbbc339ea43737ec4790a45e5f6cd3102b466041.1504430497.git.yann.morin.1998@free.fr>
+Message-ID: <98b7fb521d2e89d3c8329757e1af314a547f33b3.1504430497.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some architectures or specific cores do not have support in upstream
-gcc. Currently, they are individually listed as exclusions in the
-toolchain choice.
+Upstream gcc does not have support for C-Sky, and we do not have a
+vendor tree for it either (yet?).
 
-This poses a maintainance burden, as the knowledge about what gcc
-version supports what architecture is split across many places: the
-toolchain choice, the gcc version choice, the external toolchains.
-
-As a first step, add a blind option that architectures or individual
-cores may select to indicate they lack support in our internal backend.
-
-Actual use of the option will come in followup patches.
+Use the newly-introduced symbol to state so, rather than have the
+exclusion in the toolchain choice.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
 ---
-Changes v1 ->v2:
-  - introduce an extra kconfig symbol for positive logic  (Thomas)
----
- arch/Config.in      | 10 ++++++++++
- toolchain/Config.in |  1 +
- 2 files changed, 11 insertions(+)
+ arch/Config.in      | 1 +
+ toolchain/Config.in | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/Config.in b/arch/Config.in
-index f385745e47..caf5a318ab 100644
+index caf5a318ab..c10bf16809 100644
 --- a/arch/Config.in
 +++ b/arch/Config.in
-@@ -250,6 +250,16 @@ config BR2_xtensa
+@@ -87,6 +87,7 @@ config BR2_bfin
  
- endchoice
- 
-+# For some architectures or specific cores, our internal toolchain
-+# backend is not suitable (like, missing support in upstream gcc, or
-+# no ChipCo fork exists...)
-+config BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-+	bool
-+
-+config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
-+	bool
-+	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-+
- # The following string values are defined by the individual
- # Config.in.$ARCH files
- config BR2_ARCH
+ config BR2_csky
+ 	bool "csky"
++	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  csky is processor IP from china.
 diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 584d053058..8866b7da75 100644
+index 8866b7da75..890b874e38 100644
 --- a/toolchain/Config.in
 +++ b/toolchain/Config.in
-@@ -43,6 +43,7 @@ choice
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
- 	depends on !BR2_bf606
+@@ -48,7 +48,6 @@ config BR2_TOOLCHAIN_BUILDROOT
  	depends on !BR2_bf607
  	depends on !BR2_bf608
+ 	depends on !BR2_bf609
+-	depends on !BR2_csky
+ 	depends on !BR2_mips_m6250
+ 	depends on !BR2_mips_p6600
+ 
 -- 
 2.11.0
