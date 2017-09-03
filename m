@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Sep 2017 14:17:38 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain: detect external glibc in
-	symlinked /lib
-In-Reply-To: <20170903120835.16190-1-camh@xdna.net>
-References: <20170903120835.16190-1-camh@xdna.net>
-Message-ID: <20170903141738.20c0d621@windsurf.lan>
+Date: Sun, 3 Sep 2017 14:19:17 +0200
+Subject: [Buildroot] [git commit] gnupg2: switch optional dependency to
+	libusb
+Message-ID: <20170903121429.0AD6B819CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=65818acad6b419f8a595f804aa589dfc8a1f13a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This generally looks ok, to me, except one paragraph of explanation,
-see below.
+gnupg2 migrated to libusb-1.0 in version 2.1.12.
 
-On Sun,  3 Sep 2017 22:08:35 +1000, Cam Hutchison wrote:
-> check_glibc checks for a valid glibc in an external toolchain, but
-> assumes that the files indicating the presence of glibc (ld-linux*.so.*,
-> ld.so.* or ld64.so.*) are in a top-level directory of the sysroot.
-> 
-> When building a toolchain with buildroot and a merged /usr, /lib is
-> a symlink to usr/lib. This is copied from the target to the staging
-> directory, and then to the sysroot, and the ultimate location of the
-> required files is in /usr/lib in the sysroot.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnupg2/gnupg2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I don't understand this sentence. Nothing gets copied from target to
-staging, and staging *is* the sysroot, so there's no copy. Could you
-explain what you wanted to say here, we can perhaps find a better
-phrasing.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index e545163..4bf9cfc 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -42,10 +42,10 @@ else
+ GNUPG2_CONF_OPTS += --disable-gnutls
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ GNUPG2_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/libusb-1.0"
+ GNUPG2_CONF_OPTS += --enable-ccid-driver
+-GNUPG2_DEPENDENCIES += libusb-compat
++GNUPG2_DEPENDENCIES += libusb
+ else
+ GNUPG2_CONF_OPTS += --disable-ccid-driver
+ endif
