@@ -1,28 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Sep 2017 13:55:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.20.1
-In-Reply-To: <20170903075452.1980-1-bernd.kuhls@t-online.de>
-References: <20170903075452.1980-1-bernd.kuhls@t-online.de>
-Message-ID: <20170903135549.63aafb6a@windsurf.lan>
+From: Cam Hutchison <camh@xdna.net>
+Date: Sun,  3 Sep 2017 22:08:35 +1000
+Subject: [Buildroot] [PATCH 1/1] toolchain: detect external glibc in
+	symlinked /lib
+Message-ID: <20170903120835.16190-1-camh@xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+check_glibc checks for a valid glibc in an external toolchain, but
+assumes that the files indicating the presence of glibc (ld-linux*.so.*,
+ld.so.* or ld64.so.*) are in a top-level directory of the sysroot.
 
-On Sun,  3 Sep 2017 09:54:52 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/sqlite/sqlite.hash | 4 ++--
->  package/sqlite/sqlite.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+When building a toolchain with buildroot and a merged /usr, /lib is
+a symlink to usr/lib. This is copied from the target to the staging
+directory, and then to the sysroot, and the ultimate location of the
+required files is in /usr/lib in the sysroot.
 
-Applied to master, thanks.
+check_glibc fails to find the necessary files in this layout due to it
+using find(1) with -maxdepth 2 and not following symlinks. This causes
+the error 'Incorrect selection of the C library' when trying to use a
+buildroot toolchain as an external toolchain that was built with a
+merged /usr.
 
-Thomas
+Tell find(1) to follow symlinks so that it can find the required files
+to determine glibc availability in the external toolchain.
+
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+---
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index e9e36d2069..63ef6fb4b0 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -227,7 +227,7 @@ check_glibc_rpc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
++	if test `find -L $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
