@@ -1,61 +1,113 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Sep 2017 11:44:28 +0200
-Subject: [Buildroot] [PATCH 2/8] package/gcc: hide versions too old for the
-	current arch
+Date: Sun,  3 Sep 2017 11:44:29 +0200
+Subject: [Buildroot] [PATCH 3/8] toolchain/external-custom: hide versions
+	too old for the current arch
 In-Reply-To: <cover.1504431850.git.yann.morin.1998@free.fr>
 References: <cover.1504431850.git.yann.morin.1998@free.fr>
-Message-ID: <dc9aa0e8f3f64c074e08c8fc0bc949eda81f98c1.1504431850.git.yann.morin.1998@free.fr>
+Message-ID: <a9dc18ece6b62e3ac4ce274b708081a9d16bb6aa.1504431850.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Begin the conversion from hard-coded dependencies on architectures, to
-architecture-specified version requirement, using the newly introduced
-BR2_ARCH_NEEDS_GCC_AT_LEAST_XXX symbols.
+When an architecture expresses a requirement on the gcc version, limit
+the version choice in the custom external toolchain.
 
-Hard-coded dependencies will be removed progressively, as archs are
-individually coonverted over to using the new symbols.
+The ratioanle being that there is no point in offering that version to
+the user if we know before-hand that the gcc version will not work for
+that architecture.
 
-We do not change the architecture-specific versions for arc and
-openrisc, because there is no point in doing so for those, as they
-use special, non-upstream versions anyway.
+All versions below the minimum we support is just made conditional to
+that minimum as well, including the "older" entry.
+
+However, this means that the "older" entry is no longer available when
+the architecture requires a minimum gcc version. A user who wants to use
+a toolchain with a gcc older than the minimum will have no choice but to
+realise the toolchain is not suitable (or lie and we would catch that
+when checking the gcc version anyway).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- package/gcc/Config.in.host | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ec7b6924ee..69bebc1f9e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -22,6 +22,7 @@ config BR2_GCC_VERSION_OR1K
+---
+Note: this implies that it is no longer possible to use a custom
+external toolchain in which a specific core has been back-ported
+Thus, this patch may cause regressions in very specific and rare
+corner cases. Do we want to support those cases? If yes, then we
+should drop this patch.
+---
+ .../toolchain-external-custom/Config.in.options           | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index ae343ddad5..eb7c30f171 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -18,6 +18,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
- config BR2_GCC_VERSION_4_9_X
- 	bool "gcc 4.9.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	# Broken or unsupported architectures
- 	depends on !BR2_arc && !BR2_bfin && !BR2_or1k
- 	# Broken or unsupported ARM cores
-@@ -43,6 +44,7 @@ config BR2_GCC_VERSION_4_9_X
+ choice
+ 	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	help
+ 	  Set to the gcc version that is used by your external
+@@ -29,42 +34,52 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
  
- config BR2_GCC_VERSION_5_X
- 	bool "gcc 5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	# Broken or unsupported architectures
- 	depends on !BR2_arc && !BR2_bfin && !BR2_or1k
- 	# Broken or unsupported ARM cores
-@@ -57,6 +59,7 @@ config BR2_GCC_VERSION_5_X
- 
- config BR2_GCC_VERSION_6_X
- 	bool "gcc 6.x"
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+ 	bool "6.x"
 +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	# Broken or unsupported architectures
- 	depends on !BR2_arc
- 	depends on !BR2_or1k
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+ 	bool "4.9.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+ 	bool "4.8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+ 	bool "4.7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+ 	bool "4.6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+ 	bool "4.5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+ 	bool "4.4.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 	bool "older"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	help
+ 	  Use this option if your GCC version is older than any of the
+ 	  above.
 -- 
 2.11.0
