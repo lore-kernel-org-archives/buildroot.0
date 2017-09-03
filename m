@@ -1,60 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Sep 2017 17:16:38 +0200
-Subject: [Buildroot] [PATCH 7/9] arch/arm: add some non-cortex armv8a
-	cores
-In-Reply-To: <20170903160409.57196eed@windsurf.lan>
-References: <cover.1504444617.git.yann.morin.1998@free.fr>
- <3447db07fd4678fa60261dd0e400218072d33482.1504444617.git.yann.morin.1998@free.fr>
- <20170903160409.57196eed@windsurf.lan>
-Message-ID: <20170903151638.GD2786@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  3 Sep 2017 17:38:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.1.9
+Message-ID: <20170903153806.5907-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2017-09-03 16:04 +0200, Thomas Petazzoni spake thusly:
-> On Sun,  3 Sep 2017 15:17:47 +0200, Yann E. MORIN wrote:
-> > Some need gcc-5, some gcc-6 and some gcc-7.
-> > 
-> > The thunderx familly does not build in 32-bit mode (gcc complains
-> > that the CPU is unknown, and even gcc master only knows them as
-> > aarch64-only).
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  arch/Config.in.arm | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 77 insertions(+)
-> 
-> Series looks good, but on this one, I'm wondering: do we really want to
-> add this long list of CPU cores, that most likely nobody is ever going
-> to use with Buildroot ?
-
-Well, I'm not sure, but I would not bet either...
-
-I know for sure that some people are using Buildroot to build small
-systems that they use as docker roots for example (they've spoken so
-either on the list or on the IRC channel some time ago). Those are
-mostly expected to run on server-class machines. The Thunder familly
-of CPUs are just meant for those kind of server-class machines.
-
-So I do see a direct use-case for adding the ThunderX familly of cores,
-yes.
-
-For the others, I'm not as positive, but I still added them while I was
-at it. Not much additional work, except waiting for more tests to run...
-;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index c724f6d8c..2c53d8449 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
++sha256 ec9ca348dd51f19a84dc5d33acfff1fba1f977300604bdac08ed46ae2c281e8c  php-7.1.9.tar.xz
+ 
+ # License file
+ sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b1bd97ca9..a58b8a5bd 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.7
++PHP_VERSION = 7.1.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
