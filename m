@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  4 Sep 2017 19:50:35 +0200
-Subject: [Buildroot] [PATCH 01/12] cgilua: add LICENSE_FILES
-Message-ID: <20170904175046.21530-1-francois.perrad@gadz.org>
+Date: Mon,  4 Sep 2017 19:50:36 +0200
+Subject: [Buildroot] [PATCH 02/12] copas: add LICENSE_FILES
+In-Reply-To: <20170904175046.21530-1-francois.perrad@gadz.org>
+References: <20170904175046.21530-1-francois.perrad@gadz.org>
+Message-ID: <20170904175046.21530-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/cgilua/cgilua.mk | 1 +
+ package/copas/copas.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
-index 73006ff8b..cd78841fd 100644
---- a/package/cgilua/cgilua.mk
-+++ b/package/cgilua/cgilua.mk
-@@ -6,5 +6,6 @@
- 
- CGILUA_VERSION = 5.2.1-1
- CGILUA_LICENSE = MIT
-+CGILUA_LICENSE_FILES = $(CGILUA_SUBDIR)/doc/us/license.html
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index 5ab547378..988692c4a 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -7,5 +7,6 @@
+ COPAS_VERSION = 2.0.2-1
+ COPAS_SUBDIR = copas-2_0_2
+ COPAS_LICENSE = MIT
++COPAS_LICENSE_FILES = $(COPAS_SUBDIR)/doc/us/license.html
  
  $(eval $(luarocks-package))
 -- 
