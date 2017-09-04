@@ -1,52 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 08:43:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mariadb: bump version to
-	10.1.25
-Message-ID: <20170904205600.9D7EB8211C@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 08:43:13 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] host-mariadb: compile
+	against bundled yassl
+Message-ID: <20170904205600.B1FC881EC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21e5d6a6a7486dd34cfc9ef918481b6066841be3
+commit: https://git.buildroot.net/buildroot/commit/?id=0813899c435a41240898b94df73c54e8aa8e94f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-release notes: https://mariadb.com/kb/en/mariadb-10125-release-notes/
-changelog: https://mariadb.com/kb/en/mariadb-10125-changelog/
+On Fedora26, openssl 1.1.x is included by default.  This causes build
+errors when building the host variant of mariadb.
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 5ec9bd15f7ef9c9e38e281be85377090d1d4f76e)
+Adding -DWITH_SSL=bundled fixes this issue.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 6103ce335acabd8f336f8eb7c239da6f1c080e04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 8 ++++++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/mariadb/mariadb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 580fe98..4ef3551 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,2 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.1.23/
--sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.25/
-+sha256 7205ecaa6f1bc16335ad88faa5c46be52b3ac628a5e795cb942a3f4335b2a0d6  mariadb-10.1.25.tar.gz
-+
-+# Hash for license files
-+sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
 diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index e171e0e..ec41726 100644
+index ec41726..d2d55b5 100644
 --- a/package/mariadb/mariadb.mk
 +++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -67,6 +67,8 @@ MARIADB_CONF_OPTS += \
+ 	-DMYSQL_DATADIR=/var/lib/mysql \
+ 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
  
--MARIADB_VERSION = 10.1.23
-+MARIADB_VERSION = 10.1.25
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
- # Tarball no longer contains LGPL license text
++HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
++
+ # Some helpers must be compiled for host in order to crosscompile mariadb for
+ # the target. They are then included by import_executables.cmake which is
+ # generated during the build of the host helpers. It is not necessary to build
