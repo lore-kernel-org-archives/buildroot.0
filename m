@@ -1,33 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Sep 2017 23:27:42 +0200
-Subject: [Buildroot] [PATCH] gdb: force to use ncurses and not termcap
-	for host-gdb
-In-Reply-To: <20170729200626.2403-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 29 Jul 2017 22:06:26 +0200")
-References: <20170729200626.2403-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <87h8wim9wx.fsf@dell.be.48ers.dk>
+Date: Mon, 04 Sep 2017 23:33:54 +0200
+Subject: [Buildroot] [PATCH 2/3] package/samba4: add optional dependency
+	to dbus
+In-Reply-To: <20170723133620.13487-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 23 Jul 2017 15:36:19 +0200")
+References: <20170723133620.13487-1-bernd.kuhls@t-online.de>
+ <20170723133620.13487-2-bernd.kuhls@t-online.de>
+Message-ID: <87d176m9ml.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Both our target and host gdb depend on ncurses (host-ncurses for
- > host-gdb, of course). However, while for the target we passs
- > --with-curses, we are not doing this for the host variant. Due to
- > this, host-gdb default to using the termcap library: if such a library
- > is available on the build system, it will be used instead of the
- > host-ncurses we have built. This causes the host gdb binary to depend
- > on a library that we do not provide in $(HOST_DIR), breaking the
- > principle of a standalone SDK (which should only depend on the C
- > library).
+ > samba4 picks up dbus as dependency if it was built before:
+ > Checking for dbus                : yes
+ > Checking for header dbus/dbus.h  : yes
+ > Checking for library dbus-1      : yes
 
- > To solve this, we simply pass --with-curses in HOST_GDB_CONF_OPTS,
- > which forces host-gdb to use the host-ncurses library.
+ > There is no configure option to control dbus support so we just make
+ > sure dbus is built before samba4 to have reproducible builds.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
