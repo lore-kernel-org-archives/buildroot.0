@@ -1,45 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 23:59:07 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] samba4: bump to version
-	4.5.13
-Message-ID: <20170904215238.8847C8211C@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 23:28:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gdb: force to use ncurses
+	and not termcap for host-gdb
+Message-ID: <20170904215238.66A38820E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb82c24ce005f216e7b7e475a172127e2a55f253
+commit: https://git.buildroot.net/buildroot/commit/?id=64e480fd7ae7554a95b748448fc92cf369c9940e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-4.5.13 is a bugfix release, fixing a number of important issues:
+Both our target and host gdb depend on ncurses (host-ncurses for
+host-gdb, of course). However, while for the target we passs
+--with-curses, we are not doing this for the host variant. Due to
+this, host-gdb default to using the termcap library: if such a library
+is available on the build system, it will be used instead of the
+host-ncurses we have built. This causes the host gdb binary to depend
+on a library that we do not provide in $(HOST_DIR), breaking the
+principle of a standalone SDK (which should only depend on the C
+library).
 
-https://www.samba.org/samba/history/samba-4.5.13.html
+To solve this, we simply pass --with-curses in HOST_GDB_CONF_OPTS,
+which forces host-gdb to use the host-ncurses library.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 8c36c65ab8d4ebbac76799fe956a218d9c382bc1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gdb/gdb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 0783b37..0d8b111 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f4c17123e3cc852a5ecc7e38884b00deab57632b9519aebc243e2a94b9b5ace4  samba-4.5.12.tar.gz
-+sha256  5fc4762d2259469bfb0067c10f77378cb720f2ebdaf2f37b5ca1918dbe84d04d samba-4.5.13.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4301393..08fa400 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index d829990..618111d 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -189,6 +189,7 @@ HOST_GDB_CONF_OPTS = \
+ 	--enable-threads \
+ 	--disable-werror \
+ 	--without-included-gettext \
++	--with-curses \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
  
--SAMBA4_VERSION = 4.5.12
-+SAMBA4_VERSION = 4.5.13
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
