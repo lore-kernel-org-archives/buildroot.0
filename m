@@ -1,275 +1,80 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 4 Sep 2017 16:56:10 +0200
-Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
-In-Reply-To: <178556773.368025.1502922075670.JavaMail.zimbra@savoirfairelinux.com>
-References: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
- <488835700.260243.1502835037832.JavaMail.zimbra@savoirfairelinux.com>
- <178556773.368025.1502922075670.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <3a741945-7242-c931-ad9c-231b86c70b30@gmail.com>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Mon,  4 Sep 2017 17:19:54 +0200
+Subject: [Buildroot] PATCH python-libusb1: new package
+Message-ID: <20170904151954.9550-1-jaap@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/17/2017 12:21 AM, Julien Grossholtz wrote:
-> Hi,
->
-> I have been able to compile Qt WebEngine for the Beaglebone black. I ran the quicknanobrowser successfully even if performances are poor with this board and colors are not correct. I used the HDMI output and a mouse for this test.
->
-> It was necessary to add some fonts to the system to run quicknanobrowser.
->
-> It was also necessary to set QT_QPA_EGLFS_INTEGRATION to none, it fails without it:
->
-> $ cd /usr/lib/qt/examples/webengine/quicknanobrowser/
-> $ ./quicknanobrowser
-> QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
-> PVR: Hint: Setting WindowSystem to libpvrDRMWSEGL_FRONT.so
->
-> mode for connector 20 is 1280x1024
-> mode for CRTC of connector 20 is 1280x1024
-> DRM SET CRTC: index: 0 fd: 5, crtc: 12, fb: 1e, conn: 14, mode: 1280x1024
-> EGL library doesn't support Emulator extensions
-> Aborted
->
-> $ QT_QPA_EGLFS_INTEGRATION=none ./quicknanobrowser www.google.com
-> QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
-> PVR: Hint: Setting WindowSystem to libpvrDRMWSEGL_FRONT.so
->
-> mode for connector 20 is 1280x1024
-> mode for CRTC of connector 20 is 1280x1024
-> fDRM SET CRTC: index: 0 fd: 6, crtc: 12, fb: 1e, conn: 14, mode: 1280x1024
-> Unable to query physical screen size, defaulting to 100 dpi.
-> To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and QT_QPA_EGLFS_PHYSICAL_HEIGHT (in millimeters).
-> PVR: Hint: Setting DisableHWTQTextureUpload to 1
->
-> [0101/001546.323753:WARNING:resource_bundle_qt.cpp(114)] locale_file_path.empty() for locale 
-> [0101/001546.688823:WARNING:resource_bundle_qt.cpp(114)] locale_file_path.empty() for locale 
-> PVR: Hint: Setting DisableHWTQTextureUpload to 1
->
-> PVR: Hint: Setting DisableHWTQTextureUpload to 1
->
-> PVR: Hint: Setting DisableHWTQTextureUpload to 1
->
-> PVR: Hint: Setting DisableHWTQTextureUpload to 1
->
->
-> So it is functional, but colors are somehow reversed.
->
->
-> Julien
->
-> ----- Original Message -----
->> From: "Julien Grossholtz" <julien.grossholtz@savoirfairelinux.com>
->> To: "Ga?l Portay" <gael.portay@savoirfairelinux.com>
->> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Joshua Henderson" <joshua.henderson@microchip.com>,
->> "Jean-Daniel Michaud" <jean.daniel.michaud@gmail.com>, "brents 3" <brents_3@hotmail.com>, "Peter Seiderer"
->> <ps.report@gmx.net>, "buildroot @ busybox . net" <buildroot@busybox.net>, "gomis" <tuzaklirefik@gmail.com>, "Akihiko
->> Odaki" <akihiko.odaki.4i@stu.hosei.ac.jp>
->> Sent: Tuesday, August 15, 2017 6:10:37 PM
->> Subject: Re: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
->> Hi,
->>
->> I will test these patchs on a Beaglebone black.
->>
->> Julien
->>
->>
->> ----- Original Message -----
->>> From: "Ga?l Portay" <gael.portay@savoirfairelinux.com>
->>> To: "buildroot @ busybox . net" <buildroot@busybox.net>, "Thomas Petazzoni"
->>> <thomas.petazzoni@free-electrons.com>,
->>> "Peter Seiderer" <ps.report@gmx.net>, "Arnout Vandecappelle" <arnout@mind.be>,
->>> "Julien CORJON" <corjon.j@ecagroup.com>
->>> Cc: "Joshua Henderson" <joshua.henderson@microchip.com>, "Jean-Daniel Michaud"
->>> <jean.daniel.michaud@gmail.com>, "brents
->>> 3" <brents_3@hotmail.com>, "Ga?l Portay" <gael.portay@savoirfairelinux.com>,
->>> "gomis" <tuzaklirefik@gmail.com>, "Akihiko
->>> Odaki" <akihiko.odaki.4i@stu.hosei.ac.jp>
->>> Sent: Tuesday, August 15, 2017 4:38:52 PM
->>> Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
->>> Hi all,
->>>
->>> The purpose of this patch series is to continue the integration of Qt5 WebEngine
->>> in buildroot; started long time ago by Akihiko Odaki [1] and Julien Corjon [2].
->>>
->>> The first patch provides the Qt WebEngine package.
->>>
->>> The second patch is a special defconfig that provides a Qt WebEngine setup on
->>> raspberrypi3 to provide a demo.
->>>
->>> I have tested it with a rpi 3; and I will be glad if someone else has another
->>> EGL platform to test it. You will find instructions to try qtwebengine on rpi3
->>> in the commit message of the first patch.
->>>
->>> Enjoy ;)
->>>
->>> Note: Tested against:
->>>        - GCC 6.x and binutils 2.27 on rpi 3.
->>>        - GCC 7.x and binutils 2.28 on rpi 3.
->>>
->>> [1] https://patchwork.ozlabs.org/patch/640633/
->>> [2] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
->>>
->>> Changes since RFC:
->>> - rebase to master (use SPDX licenses, remove license approved, update
->>>   qt5_defconfig...)
->>> - remove the patch "prefer arm tune"
->>> - disable build with Qt 5.6 LTS (not working, waiting for 5.6.3 in August)
->>> - re-order patches
->>>
->>> Changes since v1:
->>> - manually create symlinks to preserve SONAME
->>> - add my signed-off-by to the qt webengine patch
->>> - make qtwe package depends on supported architectures
->>> - fix Kconfig comment about Qt 5.6
->>> - sort alphabetically chromium licenses
->>>
->>> Changes since v2:
->>> - fix build issue when I sorted alphabetically the chromium licenses
->>> - replace legacy option BR2_TARGET_ROOTFS_EXT2_BLOCK to
->>>   new option BR2_TARGET_ROOTFS_EXT2_SIZE
->>>
->>> Changes since v3:
->>> - add my signed-off-by and the PR link to the rpi-userland patch
->>> - move rpi patch index from 0001 to 0007
->>>
->>> Changes since v4:
->>> - bump to Qt WebEngine to 5.9.1
->>> - added the mainlined patch that fixes the build issue with samples when print
->>>   is not supported
->>> - udev is selected (required by chromium)
->>> - add config entry to use system ffmpeg and set it to yes by default
->>> - the patch concerning the path to CA certificates has been removed since it is
->>>   no more relevant in 5.9.x
->>> - increase BR2_TARGET_ROOTFS_EXT2_SIZE to 360MB to support
->>>   $ du -sk target/
->>>   312480	target/
->>>
->>> Changes since v5:
->>> - really add the mainlined patch that fixes the build issue with samples when
->>>   print is not supported
->>> - add BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS to list all supported
->>>   architectures
->>> - add BR2_PACKAGE_QT5WEBENGINE missing dependencies (tc, mmu, wchar...)
->>> - stop using && for depends on relationships
->>> - update chromium licence list in chromium.inc
->>> - remove option BR2_PACKAGE_QT5WEBENGINE_SYSTEM_FFMPEG;
->>>   and compile ffmpeg, opus, libvpx and webp packages
->>> - reword help and add url to documentation of package qt5webengine
->>> - remove hash of 5.6.2 version
->>> - add QT5WEBENGINE_ namespace to QMAKEFLAGS
->>> - add missing TARGET_MAKE_ENV to BUILD_CMD
->>> - create python symlink form $(HOST_DIR)/bin (was $(HOST_DIR)/usr/bin)
->>> - add myself to DEVELOPERS
->>>
->>> Changes since v6:
->>> - rpi-userland commit message:
->>>   fix output of ls -l snippet
->>>   update url to link to qtwe-5.9.1
->>>   add upstream-status
->>> - qtwe:
->>>   add missing host-bison, host-flex and host-pkgconf dependencies
->>>   select BR2_HOSTARCH_NEEDS_IA32_COMPILER to let v8 compiles its host-tools
->>>   with the same word-size as the target.
->>>
->>> Changes since v7:
->>> - rpi-userland:
->>>   remove rpi-userland patch and apply upstreamed commit suggested by Yann.
->>> - qtwe:
->>>   reword the commit message to include notes from the coverletter
->>>   depends on has udev + comment (udev is needed at runtime)
->>>   depends on uses glibc + comment (for now, it builds only with glibc)
->>>   select qtquickcontrols2 (may be needed at runtime)
->>>   reword BR2_HOSTARCH_NEEDS_IA32_COMPILER comment
->>> - raspberrypi3_qt5we_defconfig:
->>>   rename raspberrypi3_qt5_defconfig into raspberrypi3_qt5we_defconfig
->>>   bump kernel (synced with all rpi defconfigs)
->>>   add gif, jpeg and options to raspberrypi3_qt5we_defconfig
->>>   use M suffix with BR2_TARGET_ROOTFS_EXT2_SIZE option
->>>
->>> Ga?l PORTAY (3):
->>>  qt5webengine: new package
->>>  configs: new raspberrypi3 qt5we config
->>>
->>> DEVELOPERS                                         |   1 +
->>> configs/raspberrypi3_qt5we_defconfig               |  50 ++++
->>> package/qt5/Config.in                              |   1 +
->>> .../0001-Always-compile-QWebEnginePage-print.patch | 246 ++++++++++++++++
->>> ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |  89 ++++++
->>> package/qt5/qt5webengine/Config.in                 |  86 ++++++
->>> package/qt5/qt5webengine/chromium.inc              | 310 +++++++++++++++++++++
->>> package/qt5/qt5webengine/qt5webengine.hash         |   2 +
->>> package/qt5/qt5webengine/qt5webengine.mk           |  80 ++++++
->>> 9 files changed, 865 insertions(+)
->>> create mode 100644 configs/raspberrypi3_qt5we_defconfig
->>> create mode 100644
->>> package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
->>> create mode 100644
->>> package/qt5/qt5webengine/5.9.1/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
->>> create mode 100644 package/qt5/qt5webengine/Config.in
->>> create mode 100644 package/qt5/qt5webengine/chromium.inc
->>> create mode 100644 package/qt5/qt5webengine/qt5webengine.hash
->>> create mode 100644 package/qt5/qt5webengine/qt5webengine.mk
->>>
->>> --
->>> 2.13.2
->>>
+Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+---
+ package/Config.in                          |  1 +
+ package/python-libusb1/Config.in           | 10 ++++++++++
+ package/python-libusb1/python-libusb1.hash |  2 ++
+ package/python-libusb1/python-libusb1.mk   | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-libusb1/Config.in
+ create mode 100644 package/python-libusb1/python-libusb1.hash
+ create mode 100644 package/python-libusb1/python-libusb1.mk
 
-
-Dear Ga?l & All
-
-first of all: thanks for your persistenceon this!
-
-I've tested the current config on RPi3, and with the
-webenginewidgets/minimal example the qt.io webpage starts to load, but
-after a short while the content on the screen is collapsing, and i get
-this on the console:
-
-> # /usr/lib/qt/examples/webenginewidgets/minimal/minimal
-> QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
-> Unable to query physical screen size, defaulting to 100 dpi.
-> To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and
-> QT_QPA_EGLFS_PHYSICAL_HEIGHT (in millimeters).
-> [0904/143017.960529:WARNING:resource_bundle_qt.cpp(114)]
-> locale_file_path.empty() for locale
-> [0904/143018.185769:WARNING:resource_bundle_qt.cpp(114)]
-> locale_file_path.empty() for locale
-> glGetError 0x505
-> [790:814:0904/143024.028196:ERROR:texture_manager.cc(3235)]
-> [.RenderCompositor-0x6c706918]GL ERROR :GL_OUT_OF_MEMORY : glTexImage2D:
-> [790:814:0904/143024.028386:ERROR:gles2_cmd_decoder.cc(5202)] Error: 5
-> for Command kTexImage2D
-> [790:814:0904/143024.028574:ERROR:gles2_cmd_decoder.cc(4169)]  
-> GLES2DecoderImpl: Trying to make lost context current.
-> [790:814:0904/143024.028688:ERROR:gles2_cmd_decoder.cc(4169)]  
-> GLES2DecoderImpl: Trying to make lost context current.
-> [790:814:0904/143024.028764:ERROR:gles2_cmd_decoder.cc(4169)]  
-> GLES2DecoderImpl: Trying to make lost context current.
-> [790:814:0904/143024.028840:ERROR:gles2_cmd_decoder.cc(4169)]  
-> GLES2DecoderImpl: Trying to make lost context current.
-
-Increasing the GPU memory to 192MB in config.txt seems to be fixing it
-(for the qt.io homepage at least...), so i think it worth to consider to
-increase the gpu_memory for raspberrypi3_qt5we_defconfig.
-Apart from this (and from the general fact that Qt WebEngine is a
-PITA...), it looks good to me. Unfortunately i don't have other
-applicable HW around to test this, just a BBB which already has been
-tested by Julien, but if needed, i'm happy to reproduce his test.
-
-
-Regards
-
-Zoltan Gyarmati
-https://zgyarmati.de
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170904/918289ad/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170904/918289ad/attachment.asc>
+diff --git a/package/Config.in b/package/Config.in
+index 66ce307018..8992751310 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -772,6 +772,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-libusb1/Config.in"
+ 	source "package/python-lmdb/Config.in"
+ 	source "package/python-logbook/Config.in"
+ 	source "package/python-lxml/Config.in"
+diff --git a/package/python-libusb1/Config.in b/package/python-libusb1/Config.in
+new file mode 100644
+index 0000000000..1d08a8e170
+--- /dev/null
++++ b/package/python-libusb1/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_LIBUSB1
++	bool "python-libusb1"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Pure-python wrapper for libusb-1.0
++
++
++comment "python-libusb1 needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
+new file mode 100644
+index 0000000000..f39d25234e
+--- /dev/null
++++ b/package/python-libusb1/python-libusb1.hash
+@@ -0,0 +1,2 @@
++md5     9c2eb6032deda59f287a443091d38cb4 libusb1-1.6.4.tar.gz
++sha256  8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
+diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
+new file mode 100644
+index 0000000000..0740b954d5
+--- /dev/null
++++ b/package/python-libusb1/python-libusb1.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-libusb1
++#
++################################################################################
++
++PYTHON_LIBUSB1_VERSION = 1.6.4
++PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
++PYTHON_LIBUSB1_SITE = https://pypi.python.org/packages/ec/5d/4fdac6c53525786fe35cff035c3345452e24e2bee5627893be65d12555cb
++PYTHON_LIBUSB1_LICENSE = LGPL v2.1+
++PYTHON_LIBUSB1_LICENSE_FILES = COPYING COPYING.LESSER
++PYTHON_LIBUSB1_SETUP_TYPE = distutils
++PYTHON_LIBUSB1_DEPENDENCIES = libusb
++
++$(eval $(python-package))
+-- 
+2.14.1
