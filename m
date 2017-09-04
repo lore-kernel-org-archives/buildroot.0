@@ -1,131 +1,179 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Sep 2017 20:57:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-Message-ID: <20170904185738.31182-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  4 Sep 2017 22:11:21 +0300
+Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.43.6
+Message-ID: <40f53a4f200ebfe8ba96d861513bd54c16c1107b.1504552281.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add optional dependencies to
+Drop upstream patch.
 
-- libva
-  ffmpeg depends on libva, libva depends on xorg, so no need to add them
-  to _DEPENDENCIES
-- libtheora, libvorbis, libvpx, opus, x264, x265
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/tvheadend/Config.in      |  2 --
- package/tvheadend/tvheadend.hash |  2 +-
- package/tvheadend/tvheadend.mk   | 51 ++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 50 insertions(+), 5 deletions(-)
+ .../0002-include-sys-sysmacros.h-as-needed.patch   | 129 ---------------------
+ package/e2fsprogs/e2fsprogs.hash                   |   4 +-
+ package/e2fsprogs/e2fsprogs.mk                     |   2 +-
+ 3 files changed, 3 insertions(+), 132 deletions(-)
+ delete mode 100644 package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index fc39d6f48..67a4b1419 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -12,8 +12,6 @@ config BR2_PACKAGE_TVHEADEND
- 	select BR2_PACKAGE_DTV_SCAN_TABLES
- 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
--	select BR2_PACKAGE_LIBVPX if BR2_PACKAGE_FFMPEG && !BR2_bfin # libvpx
--	select BR2_PACKAGE_X264 if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_OPENSSL
- 	help
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 3154b3276..a69f8590c 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
+diff --git a/package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch b/package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
+deleted file mode 100644
+index c58fcb321709..000000000000
+--- a/package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
++++ /dev/null
+@@ -1,129 +0,0 @@
+-From 3fb715b55426875902dfef3056b2cf7335953178 Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Fri, 19 May 2017 13:25:59 -0400
+-Subject: [PATCH] include sys/sysmacros.h as needed
+-
+-The minor/major/makedev macros are not entirely standard.  glibc has had
+-the definitions in sys/sysmacros.h since the start, and wants to move away
+-from always defining them implicitly via sys/types.h (as this pollutes the
+-namespace in violation of POSIX).  Other C libraries have already dropped
+-them.  Since the configure script already checks for this header, use that
+-to pull in the header in files that use these macros.
+-
+-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+-
+-Upstream commit 3fb715b55426875902dfef3056b2cf7335953178
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- debugfs/debugfs.c      | 3 +++
+- lib/blkid/devname.c    | 3 +++
+- lib/blkid/devno.c      | 3 +++
+- lib/ext2fs/finddev.c   | 3 +++
+- lib/ext2fs/ismounted.c | 3 +++
+- misc/create_inode.c    | 4 ++++
+- misc/mk_hugefiles.c    | 3 +++
+- 7 files changed, 22 insertions(+)
+-
+-diff --git a/debugfs/debugfs.c b/debugfs/debugfs.c
+-index 059ddc39..453f5b52 100644
+---- a/debugfs/debugfs.c
+-+++ b/debugfs/debugfs.c
+-@@ -26,6 +26,9 @@ extern char *optarg;
+- #include <errno.h>
+- #endif
+- #include <fcntl.h>
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+- 
+- #include "debugfs.h"
+- #include "uuid/uuid.h"
+-diff --git a/lib/blkid/devname.c b/lib/blkid/devname.c
+-index 3e2efa9d..671e781f 100644
+---- a/lib/blkid/devname.c
+-+++ b/lib/blkid/devname.c
+-@@ -36,6 +36,9 @@
+- #if HAVE_SYS_MKDEV_H
+- #include <sys/mkdev.h>
+- #endif
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+- #include <time.h>
+- 
+- #include "blkidP.h"
+-diff --git a/lib/blkid/devno.c b/lib/blkid/devno.c
+-index aa6eb907..480030f2 100644
+---- a/lib/blkid/devno.c
+-+++ b/lib/blkid/devno.c
+-@@ -31,6 +31,9 @@
+- #if HAVE_SYS_MKDEV_H
+- #include <sys/mkdev.h>
+- #endif
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+- 
+- #include "blkidP.h"
+- 
+-diff --git a/lib/ext2fs/finddev.c b/lib/ext2fs/finddev.c
+-index 311608de..62fa0dbe 100644
+---- a/lib/ext2fs/finddev.c
+-+++ b/lib/ext2fs/finddev.c
+-@@ -31,6 +31,9 @@
+- #if HAVE_SYS_MKDEV_H
+- #include <sys/mkdev.h>
+- #endif
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+- 
+- #include "ext2_fs.h"
+- #include "ext2fs.h"
+-diff --git a/lib/ext2fs/ismounted.c b/lib/ext2fs/ismounted.c
+-index bcac0f15..7d524715 100644
+---- a/lib/ext2fs/ismounted.c
+-+++ b/lib/ext2fs/ismounted.c
+-@@ -49,6 +49,9 @@
+- #if HAVE_SYS_TYPES_H
+- #include <sys/types.h>
+- #endif
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+- 
+- #include "ext2_fs.h"
+- #include "ext2fs.h"
+-diff --git a/misc/create_inode.c b/misc/create_inode.c
+-index ae22ff6f..8ce3fafa 100644
+---- a/misc/create_inode.c
+-+++ b/misc/create_inode.c
+-@@ -22,6 +22,10 @@
+- #include <attr/xattr.h>
+- #endif
+- #include <sys/ioctl.h>
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+-+
+- #include <ext2fs/ext2fs.h>
+- #include <ext2fs/ext2_types.h>
+- #include <ext2fs/fiemap.h>
+-diff --git a/misc/mk_hugefiles.c b/misc/mk_hugefiles.c
+-index 049c6f41..5882394d 100644
+---- a/misc/mk_hugefiles.c
+-+++ b/misc/mk_hugefiles.c
+-@@ -35,6 +35,9 @@ extern int optind;
+- #include <sys/ioctl.h>
+- #include <sys/types.h>
+- #include <sys/stat.h>
+-+#ifdef HAVE_SYS_SYSMACROS_H
+-+#include <sys/sysmacros.h>
+-+#endif
+- #include <libgen.h>
+- #include <limits.h>
+- #include <blkid/blkid.h>
+--- 
+-2.13.3
+-
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index cf41e3a3d5f7..2c29b853e0c7 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 1994e379c798b118243e70f7fa38064a9b288d6e38b9ced0e8ad465f5d2e8fd9  tvheadend-54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732.tar.gz
-+sha256 5265960bb5569d5d978c434042824484b946945d6ca3b6f530f14f8b3ff2fc02  tvheadend-aa052acbe8cc3873bf9ed2c64dbc953124bcda16.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 6c0eb6375..e989c0d56 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.4/sha256sums.asc
+-sha256 54b3f21123a531a6a536b9cdcc21344b0122a72790dbe4dacc98e64db25e4a24  e2fsprogs-1.43.4.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.6/sha256sums.asc
++sha256 c9b226234ee878a8d89951f3b155cec7416dd0ec09c932c855f1b1df8ad93402  e2fsprogs-1.43.6.tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 75e92133510b..59499bc2c9a8 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732
-+TVHEADEND_VERSION = aa052acbe8cc3873bf9ed2c64dbc953124bcda16
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
-@@ -29,8 +29,13 @@ endif
- ifeq ($(BR2_PACKAGE_FFMPEG),y)
- TVHEADEND_DEPENDENCIES += ffmpeg
- TVHEADEND_CONF_OPTS += --enable-libav
-+ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_XORG7),yy)
-+TVHEADEND_CONF_OPTS += --enable-vaapi
- else
--TVHEADEND_CONF_OPTS += --disable-libav
-+TVHEADEND_CONF_OPTS += --disable-vaapi
-+endif
-+else
-+TVHEADEND_CONF_OPTS += --disable-libav --disable-vaapi
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
-@@ -57,6 +62,34 @@ TVHEADEND_DEPENDENCIES += liburiparser
- TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
-+TVHEADEND_CONF_OPTS += --enable-libtheora
-+TVHEADEND_DEPENDENCIES += libtheora
-+else
-+TVHEADEND_CONF_OPTS += --disable-libtheora
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
-+TVHEADEND_CONF_OPTS += --enable-libvorbis
-+TVHEADEND_DEPENDENCIES += libvorbis
-+else
-+TVHEADEND_CONF_OPTS += --disable-libvorbis
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVPX),y)
-+TVHEADEND_CONF_OPTS += --enable-libvpx
-+TVHEADEND_DEPENDENCIES += libvpx
-+else
-+TVHEADEND_CONF_OPTS += --disable-libvpx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+TVHEADEND_DEPENDENCIES += opus
-+TVHEADEND_CONF_OPTS += --enable-libopus
-+else
-+TVHEADEND_CONF_OPTS += --disable-libopus
-+endif
-+
- ifeq ($(BR2_PACKAGE_PCRE),y)
- TVHEADEND_DEPENDENCIES += pcre
- TVHEADEND_CONF_OPTS += --enable-pcre
-@@ -64,6 +97,20 @@ else
- TVHEADEND_CONF_OPTS += --disable-pcre
- endif
- 
-+ifeq ($(BR2_PACKAGE_X264),y)
-+TVHEADEND_CONF_OPTS += --enable-libx264
-+TVHEADEND_DEPENDENCIES += x264
-+else
-+TVHEADEND_CONF_OPTS += --disable-libx264
-+endif
-+
-+ifeq ($(BR2_PACKAGE_X265),y)
-+TVHEADEND_CONF_OPTS += --enable-libx265
-+TVHEADEND_DEPENDENCIES += x265
-+else
-+TVHEADEND_CONF_OPTS += --disable-libx265
-+endif
-+
- TVHEADEND_DEPENDENCIES += dtv-scan-tables
- 
- # The tvheadend build system expects the transponder data to be present inside
+-E2FSPROGS_VERSION = 1.43.4
++E2FSPROGS_VERSION = 1.43.6
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 -- 
-2.11.0
+2.14.1
