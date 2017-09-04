@@ -1,41 +1,36 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  4 Sep 2017 07:35:47 +0200
-Subject: [Buildroot] [PATCH] scons: bump to version 2.5.1
-Message-ID: <1504503347-8424-1-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 4 Sep 2017 07:41:07 +0200
+Subject: [Buildroot] [PATCH] package/python-web2py: bump to version
+	R-2.15.3
+In-Reply-To: <20170902225345.0c6797b2@windsurf.lan>
+References: <1504248347-24424-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170902225345.0c6797b2@windsurf.lan>
+Message-ID: <CAGm1_ku+3_=uh267DpC=hmCMcjfSKLsNbSqQzcYoiMMsuvt5Fw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Thomas,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/scons/scons.hash | 2 +-
- package/scons/scons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sat, Sep 2, 2017 at 10:53 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri,  1 Sep 2017 08:45:47 +0200, Angelo Compagnucci wrote:
+>
+>> -PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
+>> +PYTHON_WEB2PY_DEPENDENCIES = python-pydal host-python-pydal
+>
+> We want to keep a dependency on Python here I believe, because this
+> package is not using python-package, but generic-package. So perhaps we
+> should do like python-package is doing, i.e:
+>
+> $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
+>
+> Yegor, what do you think ?
 
-diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-index 1b47d64..b3cdea0 100644
---- a/package/scons/scons.hash
-+++ b/package/scons/scons.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  9442069999cf4b2caa94a5886ab4c2c71de1718ed5e9176c18e2b6dbca463b4b  scons-2.3.0.tar.gz
-+sha256  0b25218ae7b46a967db42f2a53721645b3d42874a65f9552ad16ce26d30f51f2  scons-2.5.1.tar.gz
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index c56526c..14be589 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SCONS_VERSION = 2.3.0
-+SCONS_VERSION = 2.5.1
- SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
- SCONS_LICENSE = MIT
- SCONS_LICENSE_FILES = LICENSE.txt
--- 
-2.1.4
+I agree.
+
+Yegor
