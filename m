@@ -1,47 +1,89 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Sep 2017 07:31:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luvi: needs git submodules
-Message-ID: <20170904053114.16477-1-bernd.kuhls@t-online.de>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  4 Sep 2017 07:35:15 +0200
+Subject: [Buildroot] [PATCH] libcoap: bump to version 4.1.2
+Message-ID: <1504503315-8368-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luvi bundles several libraries previously provided by the upstream
-tarball. Since the tarball is not available anymore we need to fetch
-the git submodules.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes
-http://autobuild.buildroot.net/results/26d/26d04350a761d362f40e7bd1ac09b639d61de91a/
+Remove upstreamed patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/luvi/luvi.hash | 2 +-
- package/luvi/luvi.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...nly-add-Wunused-result-if-supported-by-th.patch | 38 ----------------------
+ package/libcoap/libcoap.hash                       |  2 +-
+ package/libcoap/libcoap.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
+ delete mode 100644 package/libcoap/0001-configure-only-add-Wunused-result-if-supported-by-th.patch
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 7f7abdbf4..ce3785eb8 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
+diff --git a/package/libcoap/0001-configure-only-add-Wunused-result-if-supported-by-th.patch b/package/libcoap/0001-configure-only-add-Wunused-result-if-supported-by-th.patch
+deleted file mode 100644
+index bc93890..0000000
+--- a/package/libcoap/0001-configure-only-add-Wunused-result-if-supported-by-th.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From d5914ecbb0285aea1eb2b9432d6e91155877fd95 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 9 Jun 2016 21:53:59 +0200
+-Subject: [PATCH] configure: only add -Wunused-result if supported by the
+- compiler
+-
+-Old gcc versions such as 4.3.x do not support -Wunused-result, so
+-instead of unconditionally using this warning, only use it if supported
+-by the compiler.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+-Submitted upstream: https://github.com/obgm/libcoap/pull/32
+-
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index f4452ac..6354fcf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -110,12 +110,12 @@ WARNING_CFLAGS="\
+- -Wswitch-default \
+- -Wswitch-enum \
+- -Wunused \
+---Wunused-result \
+- "
+- 
+- # check whether or not the compiler supports -Wlogical-op (clang does not...)
+- AX_CHECK_COMPILE_FLAG([-Wlogical-op], [WARNING_CFLAGS="$WARNING_CFLAGS -Wlogical-op"],,[-Werror])
+- AX_CHECK_COMPILE_FLAG([-fdiagnostics-color], [CFLAGS="$CFLAGS -fdiagnostics-color"],,[-Werror])
+-+AX_CHECK_COMPILE_FLAG([-Wunused-result], [WARNING_CFLAGS="$WARNING_CFLAGS -Wunused-result"])
+- 
+- AC_SUBST([WARNING_CFLAGS])
+- 
+--- 
+-2.7.4
+-
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index dce491b..708ca1b 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 65d3ded5007d5bb58fc3b76013913596fd42ed7326310d67c668ddf9a017a179  luvi-v2.7.6.tar.gz
-+sha256 6d2297751b4d4023c1fa8b723b6f04e09584c67694958edbfa0d284f384759d5  luvi-v2.7.6.tar.gz
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index 7dd5e5a32..fc89d4d65 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -5,7 +5,8 @@
+-sha256 f66e91742c2b027fcd7c575d8e7b53d79d3624aad1b3baba481dd88f6e2bc44d libcoap-c909bf802034b7762a2182848304b2530e58444f.tar.gz
++sha256 f7e26dc232c177336474a14487771037a8fb32e311f5ccd076a00dc04b6d7b7a libcoap-v4.1.2.tar.gz
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index fb5d2bf..31a6822 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LUVI_VERSION = v2.7.6
--LUVI_SITE = $(call github,luvit,luvi,$(LUVI_VERSION))
-+LUVI_SITE = git://github.com/luvit/luvi.git
-+LUVI_GIT_SUBMODULES = YES
- LUVI_LICENSE = Apache-2.0
- LUVI_LICENSE_FILES = LICENSE.txt
- LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+-LIBCOAP_VERSION = c909bf802034b7762a2182848304b2530e58444f
++LIBCOAP_VERSION = v4.1.2
+ LIBCOAP_SITE = $(call github,obgm,libcoap,$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = GPL-2.0+ or BSD-2-Clause
 -- 
-2.11.0
+2.1.4
