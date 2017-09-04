@@ -1,48 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 23:28:14 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gdb: force to use ncurses
-	and not termcap for host-gdb
-Message-ID: <20170904215238.66A38820E2@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 23:30:50 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/samba4: add
+	optional dependency to dbus
+Message-ID: <20170904215238.83ABF7FFA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64e480fd7ae7554a95b748448fc92cf369c9940e
+commit: https://git.buildroot.net/buildroot/commit/?id=85a32431a7b6918282fbd6a1b450791c321a9d37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Both our target and host gdb depend on ncurses (host-ncurses for
-host-gdb, of course). However, while for the target we passs
---with-curses, we are not doing this for the host variant. Due to
-this, host-gdb default to using the termcap library: if such a library
-is available on the build system, it will be used instead of the
-host-ncurses we have built. This causes the host gdb binary to depend
-on a library that we do not provide in $(HOST_DIR), breaking the
-principle of a standalone SDK (which should only depend on the C
-library).
+samba4 picks up dbus as dependency if it was built before:
 
-To solve this, we simply pass --with-curses in HOST_GDB_CONF_OPTS,
-which forces host-gdb to use the host-ncurses library.
+Checking for dbus                : yes
+Checking for header dbus/dbus.h  : yes
+Checking for library dbus-1      : yes
 
+There is no configure option to control dbus support so we just make
+sure dbus is built before samba4 to have reproducible builds.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8c36c65ab8d4ebbac76799fe956a218d9c382bc1)
+(cherry picked from commit 17f6c26590d22365968e7fd0d246b315b255d204)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index d829990..618111d 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -189,6 +189,7 @@ HOST_GDB_CONF_OPTS = \
- 	--enable-threads \
- 	--disable-werror \
- 	--without-included-gettext \
-+	--with-curses \
- 	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 3ffe11e..4301393 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -32,6 +32,10 @@ else
+ SAMBA4_CONF_OPTS += --disable-cups
+ endif
  
- ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
++ifeq ($(BR2_PACKAGE_DBUS),y)
++SAMBA4_DEPENDENCIES += dbus
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
+ SAMBA4_CONF_OPTS += --enable-avahi
+ SAMBA4_DEPENDENCIES += avahi
