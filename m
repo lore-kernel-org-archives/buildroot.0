@@ -1,7 +1,7 @@
 From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Mon, 4 Sep 2017 11:49:16 +0200
+Date: Mon, 4 Sep 2017 11:42:19 +0200
 Subject: [Buildroot] [PATCH 1/1] New board: SolidRun ClearFog Base
-Message-ID: <mailman.0.1504518596.13310.buildroot@busybox.net>
+Message-ID: <mailman.1.1504518752.13310.buildroot@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
