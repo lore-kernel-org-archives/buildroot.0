@@ -1,34 +1,23 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Mon, 04 Sep 2017 22:30:01 +0200
-Subject: [Buildroot] [PATCH v2 1/1] New board: SolidRun ClearFog Base
-In-Reply-To: <20170904174220.xeweolump7hsgfqm@tarshish>
-References: <20170904104128.rbpp3qjkgyi6kafu@sapphire.tkos.co.il>
- <286913cf8082a174d123f2581b9e61ad5250d8b7.1504541978.git.jan.kundrat@cesnet.cz>
- <20170904174220.xeweolump7hsgfqm@tarshish>
-Message-ID: <6bf8fe54-ece2-4dd7-8675-0d59e764d633@cesnet.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Sep 2017 22:35:16 +0200
+Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9,
+	12}.x series
+In-Reply-To: <1501263989-15573-2-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Fri, 28 Jul 2017 14:46:29 -0300")
+References: <1501263989-15573-1-git-send-email-fabio.estevam@nxp.com>
+ <1501263989-15573-2-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <877exenqwr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This information belongs (also) in the readme.txt file, I believe.
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
-Right, I've added this in v3.
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-> As far as I know all eMMC SOMs are pre-loaded with a 
-> bootloader. But you are 
-> right that this README doesn't cover these.
+Committed to 2017.02.x after dropping the 4.12.x change, thanks.
 
-I didn't know that. In fact, I specifically ordered the no-eMMC version 
-based on the information on the web in order to make my life easier. 
-Thanks. I'll leave the comment as-is for now though.
-
-> These DIP switches settings looks exactly the same as in the wiki page[1]. 
-> Note the comment below the diagram.
-
-You're right. However, the PDF manual on the web [1] mentions 11000 on page 
-10.
-
-[1] 
-https://wiki.solid-run.com/lib/exe/fetch.php?media=a38x:carrierboard:docs:sr-a38x-clearfog_base-manual-rev1.1.pdf
+-- 
+Bye, Peter Korsgaard
