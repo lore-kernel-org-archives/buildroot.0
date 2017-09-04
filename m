@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Sep 2017 09:09:08 +0200
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: Add upstream patch needed
-	for builds with ENABLE_VIDEO=OFF
-In-Reply-To: <20170729192705.19493-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Sat, 29 Jul 2017 22:27:05 +0300")
-References: <20170729192705.19493-1-aperez@igalia.com>
-Message-ID: <87fuc3ndnv.fsf@dell.be.48ers.dk>
+Date: Mon, 04 Sep 2017 09:10:07 +0200
+Subject: [Buildroot] [PATCH v2 1/1] webkitgtk: Add patch for properly
+	picking GL flags when building
+In-Reply-To: <20170803113109.20158-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Thu, 3 Aug 2017 14:31:09 +0300")
+References: <20170803113109.20158-1-aperez@igalia.com>
+Message-ID: <87bmmrndm8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,19 @@ To: buildroot@busybox.net
 
 >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > This includes a slightly modified version of the patch for bug
- > https://bugs.webkit.org/show_bug.cgi?id=174940
+ > This solves build failures caused by WebKit trying to include X11 headers
+ > when support for X11 is disabled in Mesa3D. A common situation is when
+ > configuring both GTK+ and WebKitGTK+ only with Wayland support.
+
+ > Once the fix for https://bugs.webkit.org/show_bug.cgi?id=175125 makes it
+ > into a release, the patch can be dropped.
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
- > ---
- >  ...roken-build-when-ENABLE_VIDEO-is-disabled.patch | 207 +++++++++++++++++++++
- >  1 file changed, 207 insertions(+)
- >  create mode 100644 package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
 
  > ---
- > This is a follow-up to https://patchwork.ozlabs.org/patch/795207/ which should
- > have included the patch added by this commit, but I sent it too early without
- > waiting for a build to finish. With this added, builds with ENABLE_VIDEO=OFF
- > (as made when BR2_PACKAGE_WEBKITGTK_MULTIMEDIA is unset). And this time I did
- > wait for a full clean build to complete.
+ > Changes v1 -> v2:
+ >     - Remove hunk in patch for the ChangeLog file, as it is not present
+ >       in release tarballs.
 
 Committed to 2017.02.x, thanks.
 
