@@ -1,22 +1,34 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 4 Sep 2017 17:12:38 -0300 (BRT)
-Subject: [Buildroot] Use of $(BR2_PATH) in recipes
-Message-ID: <1038181832.8086036.1504555958424.JavaMail.zimbra@datacom.ind.br>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Mon, 04 Sep 2017 22:30:01 +0200
+Subject: [Buildroot] [PATCH v2 1/1] New board: SolidRun ClearFog Base
+In-Reply-To: <20170904174220.xeweolump7hsgfqm@tarshish>
+References: <20170904104128.rbpp3qjkgyi6kafu@sapphire.tkos.co.il>
+ <286913cf8082a174d123f2581b9e61ad5250d8b7.1504541978.git.jan.kundrat@cesnet.cz>
+ <20170904174220.xeweolump7hsgfqm@tarshish>
+Message-ID: <6bf8fe54-ece2-4dd7-8675-0d59e764d633@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> This information belongs (also) in the readme.txt file, I believe.
 
-Is it safe to use $(BR2_PATH) in my private recipes? I noticed that it
-is used in 10 packages (alljoyn-base, alljoyn, autofs, faifa, freetype,
-gpm, libhid, nodejs, runc, sdl) even though it is not documented in the
-Buildroot manual.
+Right, I've added this in v3.
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-Rua Am?rica, 1000 - Eldorado do Sul, RS, Brasil - 92990-000
-casantos at datacom.ind.br          +55 51 3933.3000 ext. 3627
-http://www.datacom.ind.br
+> As far as I know all eMMC SOMs are pre-loaded with a 
+> bootloader. But you are 
+> right that this README doesn't cover these.
+
+I didn't know that. In fact, I specifically ordered the no-eMMC version 
+based on the information on the web in order to make my life easier. 
+Thanks. I'll leave the comment as-is for now though.
+
+> These DIP switches settings looks exactly the same as in the wiki page[1]. 
+> Note the comment below the diagram.
+
+You're right. However, the PDF manual on the web [1] mentions 11000 on page 
+10.
+
+[1] 
+https://wiki.solid-run.com/lib/exe/fetch.php?media=a38x:carrierboard:docs:sr-a38x-clearfog_base-manual-rev1.1.pdf
