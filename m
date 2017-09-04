@@ -1,105 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 4 Sep 2017 19:21:34 +0200
-Subject: [Buildroot] PATCH python-libusb1: new package
-In-Reply-To: <20170904151954.9550-1-jaap@jcz.nl>
-References: <20170904151954.9550-1-jaap@jcz.nl>
-Message-ID: <CAGm1_ku+ASG+cBqfrdEphqTxQ_vOhDj8p=_dp0TGoFu2NeEjyg@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 4 Sep 2017 19:31:24 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-09-03
+In-Reply-To: <CALdGskJ+t_1CRGhS1A-9HradbW2UhAmNgGX5h53_VDboRSXe0A@mail.gmail.com>
+References: <20170904063112.61D1E2085B@mail.free-electrons.com>
+ <CALdGskKWPKBPC8gRdZKhOgMXbWoKgMzVxVOzau6HiBc+Sp6ohg@mail.gmail.com>
+ <20170904150903.1ea53556@windsurf.lan>
+ <CALdGskJ+t_1CRGhS1A-9HradbW2UhAmNgGX5h53_VDboRSXe0A@mail.gmail.com>
+Message-ID: <96835C3F-D03F-4FE6-8A03-08B5CE55F411@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jaap,
+Hi,
+does it happen for musl or glibc toolchains? All support NPTL for ARM.
 
-On Mon, Sep 4, 2017 at 5:19 PM, Jaap Crezee <jaap@jcz.nl> wrote:
-> Signed-off-by: Jaap Crezee <jaap@jcz.nl>
-> ---
->  package/Config.in                          |  1 +
->  package/python-libusb1/Config.in           | 10 ++++++++++
->  package/python-libusb1/python-libusb1.hash |  2 ++
->  package/python-libusb1/python-libusb1.mk   | 15 +++++++++++++++
+best regards
+ Waldemar 
 
-DEVELOPERS file entry missing.
+sorry for tofu
 
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-libusb1/Config.in
->  create mode 100644 package/python-libusb1/python-libusb1.hash
->  create mode 100644 package/python-libusb1/python-libusb1.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 66ce307018..8992751310 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -772,6 +772,7 @@ menu "External python modules"
->         source "package/python-json-schema-validator/Config.in"
->         source "package/python-keyring/Config.in"
->         source "package/python-libconfig/Config.in"
-> +       source "package/python-libusb1/Config.in"
->         source "package/python-lmdb/Config.in"
->         source "package/python-logbook/Config.in"
->         source "package/python-lxml/Config.in"
-> diff --git a/package/python-libusb1/Config.in b/package/python-libusb1/Config.in
-> new file mode 100644
-> index 0000000000..1d08a8e170
-> --- /dev/null
-> +++ b/package/python-libusb1/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_LIBUSB1
-> +       bool "python-libusb1"
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-> +       select BR2_PACKAGE_LIBUSB
-> +       help
-> +         Pure-python wrapper for libusb-1.0
-
-Homepage link missing. https://github.com/vpelletier/python-libusb1
-
-> +
-> +
-> +comment "python-libusb1 needs a toolchain w/ threads"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
-> new file mode 100644
-> index 0000000000..f39d25234e
-> --- /dev/null
-> +++ b/package/python-libusb1/python-libusb1.hash
-> @@ -0,0 +1,2 @@
-
-Comment about checksum origins missing. See
-package/python-tornado/python-tornado.hash for the reference.
-
-> +md5     9c2eb6032deda59f287a443091d38cb4 libusb1-1.6.4.tar.gz
-> +sha256  8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
-> diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
-> new file mode 100644
-> index 0000000000..0740b954d5
-> --- /dev/null
-> +++ b/package/python-libusb1/python-libusb1.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-libusb1
-> +#
-> +################################################################################
-> +
-> +PYTHON_LIBUSB1_VERSION = 1.6.4
-> +PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
-> +PYTHON_LIBUSB1_SITE = https://pypi.python.org/packages/ec/5d/4fdac6c53525786fe35cff035c3345452e24e2bee5627893be65d12555cb
-> +PYTHON_LIBUSB1_LICENSE = LGPL v2.1+
-> +PYTHON_LIBUSB1_LICENSE_FILES = COPYING COPYING.LESSER
-> +PYTHON_LIBUSB1_SETUP_TYPE = distutils
-
-Should be setuptools
-
-Yegor
-
-> +PYTHON_LIBUSB1_DEPENDENCIES = libusb
-> +
-> +$(eval $(python-package))
-> --
-> 2.14.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Am 04.09.2017 um 15:38 schrieb Olivier Schonken <olivier.schonken@gmail.com>:
+> 
+> Hi All
+> 
+> Sorry for the noise.  Think I have found the issue.  The OpenJpeg team added threading which can be disabled.  I'm guessing this is the build issue.
+> Will create and test a patch for this before submitting.
+> 
+> Regards
+> 
+> Olivier
+> 
+>> On 4 September 2017 at 15:09, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>> 
+>> On Mon, 4 Sep 2017 15:04:33 +0200, Olivier Schonken wrote:
+>> > Hi Thomas
+>> >
+>> > Looks like these errors are from uclibc builds.
+>> >
+>> > In file included from
+>> > /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sched.h:34:0,
+>> >                  from
+>> > /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/pthread.h:24,
+>> >                  from
+>> > /home/buildroot/autobuild/run/instance-3/output/build/openjpeg-2.2.0/src/lib/openjp2/thread.c:288:
+>> > /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/sched.h:210:46:
+>> > error: attempt to use poisoned "malloc"
+>> >  # define __sched_cpualloc(cnt) ((cpu_set_t *)malloc(__CPU_ALLOC_SIZE(cnt)))
+>> >                                               ^
+>> > /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/sched.h:211:33:
+>> > error: attempt to use poisoned "free"
+>> >  # define __sched_cpufree(__set) free(__set)
+>> >
+>> > Not sure what the best course of action will be. Try to fix it for
+>> > uclibc, do a rollback or disable build for uclibc and open issue on
+>> > github for openjpeg.
+>> >
+>> > Your thoughts?
+>> 
+>> I'm not sure here, since I haven't investigated those build issues.
+>> Let's Cc the Buildroot mailing list and uClibc-ng maintainer Waldemar
+>> to see what they think.
+>> 
+>> Thanks!
+>> 
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+> 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170904/5c75eee8/attachment.html>
