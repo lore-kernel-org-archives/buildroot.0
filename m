@@ -1,238 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 09:01:41 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: Add upstream
-	patch needed for builds with ENABLE_VIDEO=OFF
-Message-ID: <20170904205601.1DF287FB5D@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 09:02:17 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: Add patch for
+	properly picking GL flags when building
+Message-ID: <20170904205601.5DF547FB5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a1fa0809581cf5eb99ab98ee93ecc1ffb0af8fa
+commit: https://git.buildroot.net/buildroot/commit/?id=904d5330a34ad46bd03cc6de9606e379edf6740c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This includes a slightly modified version of the patch for bug
-https://bugs.webkit.org/show_bug.cgi?id=174940
+This solves build failures caused by WebKit trying to include X11 headers
+when support for X11 is disabled in Mesa3D. A common situation is when
+configuring both GTK+ and WebKitGTK+ only with Wayland support.
+
+Once the fix for https://bugs.webkit.org/show_bug.cgi?id=175125 makes it
+into a release, the patch can be dropped.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit f2b9399c769001d790e4a6ea199e1f36f181db8a)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c2da653d085df1015f869bb3c89d43e6973239d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...roken-build-when-ENABLE_VIDEO-is-disabled.patch | 207 +++++++++++++++++++++
- 1 file changed, 207 insertions(+)
+ ...AGS-from-pkg-config-for-E-GL-are-not-pass.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch b/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
+diff --git a/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch b/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch
 new file mode 100644
-index 0000000..b460b0c
+index 0000000..91c5116
 --- /dev/null
-+++ b/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
-@@ -0,0 +1,207 @@
-+From c054224e551547c3e3593b60ca1226fa4ac41c01 Mon Sep 17 00:00:00 2001
-+From: "timothy at hatcher.name"
-+ <timothy@hatcher.name@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Tue, 11 Jul 2017 18:07:24 +0000
-+Subject: [PATCH] Fix broken build when ENABLE_VIDEO is disabled.
-+ https://bugs.webkit.org/show_bug.cgi?id=174368
++++ b/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch
+@@ -0,0 +1,64 @@
++From 6579c307d85a9b447d3b7f13b25fb0a52177ed09 Mon Sep 17 00:00:00 2001
++From: Carlos Alberto Lopez Perez <clopez@igalia.com>
++Date: Thu, 3 Aug 2017 13:57:14 +0300
++Subject: [PATCH] [GTK][WPE] CFLAGS from pkg-config for (E)GL are not passed to
++ WebKit https://bugs.webkit.org/show_bug.cgi?id=175125
 +
-+Reviewed by Alex Christensen.
++Patch by Carlos Alberto Lopez Perez <clopez@igalia.com> on 2017-08-03
++Reviewed by NOBODY (OOPS!).
 +
-+* dom/Document.cpp:
-+* html/canvas/WebGLRenderingContextBase.cpp:
-+(WebCore::WebGLRenderingContextBase::texSubImage2D):
-+(WebCore::WebGLRenderingContextBase::texImage2D):
-+* html/canvas/WebGLRenderingContextBase.h:
-+* html/canvas/WebGLRenderingContextBase.idl:
-+* testing/Internals.cpp:
-+(WebCore::Internals::mediaResponseSources):
-+(WebCore::Internals::mediaResponseContentRanges):
-+* testing/Internals.h:
-+* testing/Internals.idl:
++* CMakeLists.txt: Pass GL-related flags to the WebKit component when
++  appropriate.
 +
 +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 +
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219343 268f45cc-cd09-0410-ab3c-d52691b4dbfc
 +---
-+ .../html/canvas/WebGLRenderingContextBase.cpp      | 16 +++++++++++----
-+ .../html/canvas/WebGLRenderingContextBase.h        | 12 ++++++++++-
-+ .../html/canvas/WebGLRenderingContextBase.idl      |  4 ++++
-+ Source/WebCore/testing/Internals.cpp               | 24 ++++++++++++++++++++++
-+ Source/WebCore/testing/Internals.h                 |  2 ++
-+ Source/WebCore/testing/Internals.idl               |  2 ++
-+ 6 files changed, 55 insertions(+), 5 deletions(-)
++ Source/WebKit2/CMakeLists.txt | 31 +++++++++++++++++++++++++++++++
++ Source/WebKit2/ChangeLog      | 10 ++++++++++
++ 2 files changed, 41 insertions(+)
 +
-+diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp b/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
-+index f8fd63f7d87..a76a44ff06b 100644
-+--- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
-++++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
-+@@ -3597,7 +3597,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texSubImage2D(GC3Denum target, GC3D
-+         else
-+             texSubImage2DImpl(target, level, xoffset, yoffset, format, type, canvas->copiedImage(), GraphicsContext3D::HtmlDomCanvas, m_unpackFlipY, m_unpackPremultiplyAlpha);
-+         return { };
-+-    }, [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
-++    }
-++#if ENABLE(VIDEO)
-++    , [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
-+         ExceptionCode ec = 0;
-+         if (isContextLostOrPending() || !validateHTMLVideoElement("texSubImage2D", video.get(), ec))
-+             return ec ? Exception { ec } : ExceptionOr<void> { };
-+@@ -3620,7 +3622,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texSubImage2D(GC3Denum target, GC3D
-+             return { };
-+         texSubImage2DImpl(target, level, xoffset, yoffset, format, type, image.get(), GraphicsContext3D::HtmlDomVideo, m_unpackFlipY, m_unpackPremultiplyAlpha);
-+         return { };
-+-    });
-++    }
-++#endif
-++    );
++diff --git a/Source/WebKit2/CMakeLists.txt b/Source/WebKit2/CMakeLists.txt
++index 2d8215f6a35..b25e9872de2 100644
++--- a/Source/WebKit2/CMakeLists.txt
+++++ b/Source/WebKit2/CMakeLists.txt
++@@ -88,6 +88,37 @@ set(WebKit2_SYSTEM_INCLUDE_DIRECTORIES
++ )
 + 
-+     return WTF::visit(visitor, source.value());
-+ }
-+@@ -4107,7 +4111,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texImage2D(GC3Denum target, GC3Dint
-+         else
-+             texImage2DImpl(target, level, internalformat, format, type, canvas->copiedImage(), GraphicsContext3D::HtmlDomCanvas, m_unpackFlipY, m_unpackPremultiplyAlpha);
-+         return { };
-+-    }, [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
-++    }
-++#if ENABLE(VIDEO)
-++    , [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
-+         ExceptionCode ec = 0;
-+         if (isContextLostOrPending() || !validateHTMLVideoElement("texImage2D", video.get(), ec)
-+             || !validateTexFunc("texImage2D", TexImage, SourceHTMLVideoElement, target, level, internalformat, video->videoWidth(), video->videoHeight(), 0, format, type, 0, 0))
-+@@ -4137,7 +4143,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texImage2D(GC3Denum target, GC3Dint
-+             return { };
-+         texImage2DImpl(target, level, internalformat, format, type, image.get(), GraphicsContext3D::HtmlDomVideo, m_unpackFlipY, m_unpackPremultiplyAlpha);
-+         return { };
-+-    });
-++    }
-++#endif
-++    );
-+ 
-+     return WTF::visit(visitor, source.value());
-+ }
-+diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.h b/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
-+index 31e5542e612..d4738e834a1 100644
-+--- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
-++++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
-+@@ -57,7 +57,6 @@ class EXTShaderTextureLOD;
-+ class EXTsRGB;
-+ class EXTFragDepth;
-+ class HTMLImageElement;
-+-class HTMLVideoElement;
-+ class ImageData;
-+ class IntSize;
-+ class OESStandardDerivatives;
-+@@ -85,6 +84,10 @@ class WebGLSharedObject;
-+ class WebGLShaderPrecisionFormat;
-+ class WebGLUniformLocation;
-+ 
-++#if ENABLE(VIDEO)
-++class HTMLVideoElement;
-++#endif
++ if (ENABLE_GRAPHICS_CONTEXT_3D)
+++    # For platforms that want to use system-provided OpenGL (ES) / EGL headers,
+++    # these include directories, libraries or definitions need to be
+++    # added before the ANGLE directories.
+++    if (USE_OPENGL)
+++        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+++            ${OPENGL_INCLUDE_DIRS}
+++        )
+++        list(APPEND WebKit2_LIBRARIES
+++            ${OPENGL_LIBRARIES}
+++        )
+++        add_definitions(${OPENGL_DEFINITIONS})
+++    elseif (USE_OPENGL_ES_2)
+++        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+++            ${OPENGLES2_INCLUDE_DIRS}
+++        )
+++        list(APPEND WebKit2_LIBRARIES
+++            ${OPENGLES2_LIBRARIES}
+++        )
+++        add_definitions(${OPENGLES2_DEFINITIONS})
+++    endif ()
 ++
-+ inline void clip1D(GC3Dint start, GC3Dsizei range, GC3Dsizei sourceRange, GC3Dint* clippedStart, GC3Dsizei* clippedRange)
-+ {
-+     ASSERT(clippedStart && clippedRange);
-+@@ -244,7 +247,12 @@ public:
-+ 
-+     void texImage2D(GC3Denum target, GC3Dint level, GC3Denum internalformat, GC3Dsizei width, GC3Dsizei height, GC3Dint border, GC3Denum format, GC3Denum type, RefPtr<ArrayBufferView>&&);
-+ 
-++#if ENABLE(VIDEO)
-+     using TexImageSource = WTF::Variant<RefPtr<ImageData>, RefPtr<HTMLImageElement>, RefPtr<HTMLCanvasElement>, RefPtr<HTMLVideoElement>>;
-++#else
-++    using TexImageSource = WTF::Variant<RefPtr<ImageData>, RefPtr<HTMLImageElement>, RefPtr<HTMLCanvasElement>>;
-++#endif
+++    if (USE_EGL)
+++        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+++            ${EGL_INCLUDE_DIRS}
+++        )
+++        list(APPEND WebKit2_LIBRARIES
+++            ${EGL_LIBRARIES}
+++        )
+++        add_definitions(${EGL_DEFINITIONS})
+++    endif ()
 ++
-+     ExceptionOr<void> texImage2D(GC3Denum target, GC3Dint level, GC3Denum internalformat, GC3Denum format, GC3Denum type, std::optional<TexImageSource>);
-+ 
-+     void texParameterf(GC3Denum target, GC3Denum pname, GC3Dfloat param);
-+@@ -677,7 +685,9 @@ protected:
-+         SourceImageData,
-+         SourceHTMLImageElement,
-+         SourceHTMLCanvasElement,
-++#if ENABLE(VIDEO)
-+         SourceHTMLVideoElement,
-++#endif
-+     };
-+ 
-+     // Helper function for tex{Sub}Image2D to check if the input format/type/level/target/width/height/border/xoffset/yoffset are valid.
-+diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl b/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
-+index 63b64cdebd2..3111e798a89 100644
-+--- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
-++++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
-+@@ -42,7 +42,11 @@ typedef (Float32Array or sequence<GLfloat>) Float32List;
-+ typedef (Int32Array or sequence<GLint>) Int32List;
-+ 
-+ // FIXME: Should allow ImageBitmap too.
-++#ifdef ENABLE_VIDEO
-+ typedef (ImageData or HTMLImageElement or HTMLCanvasElement or HTMLVideoElement) TexImageSource;
-++#else
-++typedef (ImageData or HTMLImageElement or HTMLCanvasElement) TexImageSource;
-++#endif
-+ 
-+ [
-+     Conditional=WEBGL,
-+diff --git a/Source/WebCore/testing/Internals.cpp b/Source/WebCore/testing/Internals.cpp
-+index 6d26d556e33..6d64845fd27 100644
-+--- a/Source/WebCore/testing/Internals.cpp
-++++ b/Source/WebCore/testing/Internals.cpp
-+@@ -2765,6 +2765,30 @@ String Internals::getImageSourceURL(Element& element)
-+ 
-+ #if ENABLE(VIDEO)
-+ 
-++Vector<String> Internals::mediaResponseSources(HTMLMediaElement& media)
-++{
-++    auto* resourceLoader = media.lastMediaResourceLoaderForTesting();
-++    if (!resourceLoader)
-++        return { };
-++    Vector<String> result;
-++    auto responses = resourceLoader->responsesForTesting();
-++    for (auto& response : responses)
-++        result.append(responseSourceToString(response));
-++    return result;
-++}
-++
-++Vector<String> Internals::mediaResponseContentRanges(HTMLMediaElement& media)
-++{
-++    auto* resourceLoader = media.lastMediaResourceLoaderForTesting();
-++    if (!resourceLoader)
-++        return { };
-++    Vector<String> result;
-++    auto responses = resourceLoader->responsesForTesting();
-++    for (auto& response : responses)
-++        result.append(response.httpHeaderField(HTTPHeaderName::ContentRange));
-++    return result;
-++}
-++
-+ void Internals::simulateAudioInterruption(HTMLMediaElement& element)
-+ {
-+ #if USE(GSTREAMER)
-+diff --git a/Source/WebCore/testing/Internals.h b/Source/WebCore/testing/Internals.h
-+index f5c08a87dfd..d35f651e452 100644
-+--- a/Source/WebCore/testing/Internals.h
-++++ b/Source/WebCore/testing/Internals.h
-+@@ -401,6 +401,8 @@ public:
-+     String getImageSourceURL(Element&);
-+ 
-+ #if ENABLE(VIDEO)
-++    Vector<String> mediaResponseSources(HTMLMediaElement&);
-++    Vector<String> mediaResponseContentRanges(HTMLMediaElement&);
-+     void simulateAudioInterruption(HTMLMediaElement&);
-+     ExceptionOr<bool> mediaElementHasCharacteristic(HTMLMediaElement&, const String&);
-+ #endif
-+diff --git a/Source/WebCore/testing/Internals.idl b/Source/WebCore/testing/Internals.idl
-+index 155b70b4abf..3fe6885d362 100644
-+--- a/Source/WebCore/testing/Internals.idl
-++++ b/Source/WebCore/testing/Internals.idl
-+@@ -386,6 +386,8 @@ enum EventThrottlingBehavior {
-+ 
-+     void enableAutoSizeMode(boolean enabled, long minimumWidth, long minimumHeight, long maximumWidth, long maximumHeight);
-+ 
-++    [Conditional=VIDEO] sequence<DOMString> mediaResponseSources(HTMLMediaElement media);
-++    [Conditional=VIDEO] sequence<DOMString> mediaResponseContentRanges(HTMLMediaElement media);
-+     [Conditional=VIDEO] void simulateAudioInterruption(HTMLMediaElement element);
-+     [Conditional=VIDEO, MayThrowException] boolean mediaElementHasCharacteristic(HTMLMediaElement element, DOMString characteristic);
-+ 
-+-- 
-+2.13.3
++     list(APPEND WebKit2_INCLUDE_DIRECTORIES
++         "${THIRDPARTY_DIR}/ANGLE"
++         "${THIRDPARTY_DIR}/ANGLE/include/KHR"
++--
++2.13.4
 +
