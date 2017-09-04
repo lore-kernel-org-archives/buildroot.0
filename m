@@ -1,77 +1,74 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Mon, 4 Sep 2017 15:38:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-09-03
-In-Reply-To: <20170904150903.1ea53556@windsurf.lan>
-References: <20170904063112.61D1E2085B@mail.free-electrons.com>
- <CALdGskKWPKBPC8gRdZKhOgMXbWoKgMzVxVOzau6HiBc+Sp6ohg@mail.gmail.com>
- <20170904150903.1ea53556@windsurf.lan>
-Message-ID: <CALdGskJ+t_1CRGhS1A-9HradbW2UhAmNgGX5h53_VDboRSXe0A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Sep 2017 16:01:51 +0200
+Subject: [Buildroot] [git commit] support/scripts/check-bin-arch: ignore
+	symbolic links
+Message-ID: <20170904135435.EEB6D80DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All
+commit: https://git.buildroot.net/buildroot/commit/?id=c96b8675ea03a5d3194d439f740c725dd239ed1a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Sorry for the noise.  Think I have found the issue.  The OpenJpeg team
-added threading which can be disabled.  I'm guessing this is the build
-issue.
-Will create and test a patch for this before submitting.
+Since commit da32b49f0091ee9dfb613e0f00973bf6893bfa84
+("instrumentation: extend packages-file-list.txt with symlinks and
+directories"), the packages-file-list.txt also contains symbolic
+links. Therefore, check-bin-arch is now also checking symbolic links.
 
-Regards
+However, symbolic links in $(TARGET_DIR) can have absolute path as
+targets, such as:
 
-Olivier
+$ ls -l output/target/sbin/ifdown
+lrwxrwxrwx 1 thomas thomas 10 Sep  3 15:55 output/target/sbin/ifdown -> /sbin/ifup
 
-On 4 September 2017 at 15:09, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Therefore, we are now potentially checking a host binary, which
+obviously makes check-bin-arch fail.
 
-> Hello,
->
-> On Mon, 4 Sep 2017 15:04:33 +0200, Olivier Schonken wrote:
-> > Hi Thomas
-> >
-> > Looks like these errors are from uclibc builds.
-> >
-> > In file included from
-> > /home/buildroot/autobuild/run/instance-3/output/host/arm-
-> buildroot-linux-uclibcgnueabi/sysroot/usr/include/sched.h:34:0,
-> >                  from
-> > /home/buildroot/autobuild/run/instance-3/output/host/arm-
-> buildroot-linux-uclibcgnueabi/sysroot/usr/include/pthread.h:24,
-> >                  from
-> > /home/buildroot/autobuild/run/instance-3/output/build/
-> openjpeg-2.2.0/src/lib/openjp2/thread.c:288:
-> > /home/buildroot/autobuild/run/instance-3/output/host/arm-
-> buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/sched.h:210:46:
-> > error: attempt to use poisoned "malloc"
-> >  # define __sched_cpualloc(cnt) ((cpu_set_t
-> *)malloc(__CPU_ALLOC_SIZE(cnt)))
-> >                                               ^
-> > /home/buildroot/autobuild/run/instance-3/output/host/arm-
-> buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/sched.h:211:33:
-> > error: attempt to use poisoned "free"
-> >  # define __sched_cpufree(__set) free(__set)
-> >
-> > Not sure what the best course of action will be. Try to fix it for
-> > uclibc, do a rollback or disable build for uclibc and open issue on
-> > github for openjpeg.
-> >
-> > Your thoughts?
->
-> I'm not sure here, since I haven't investigated those build issues.
-> Let's Cc the Buildroot mailing list and uClibc-ng maintainer Waldemar
-> to see what they think.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170904/4ddc932b/attachment.html>
+This commit changes check-bin-arch to ignore symbolic links. Indeed,
+we have two cases:
+
+ - The symbolic link really points to something that will in the
+   rootfs (such as /sbin/ifup above). In this case, /sbin/ifup will be
+   checked separately by check-bin-arch.
+
+ - The symbolic link doesn't point to something that will be in the
+   rootfs, and that is not a problem from the perspective of
+   check-bin-arch, which checks the architecture of target binaries.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/16d384a0183d477646ac7692feb65f00dde7d068/
+  (vim)
+
+  http://autobuild.buildroot.net/results/50429c0f63a8befff9e20899327b9a8d754d99be/
+  (ifupdown)
+
+  http://autobuild.buildroot.net/results/1db65973e782bfa61abcbccd3501bfd235f77288/
+  (gawk)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/check-bin-arch | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index b822cdd..700ee3f 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -36,6 +36,12 @@ while read f; do
+ 		continue
+ 	fi
+ 
++	# Skip symlinks. Some symlinks may have absolute paths as
++	# target, pointing to host binaries while we're building.
++	if [[ -L "${f}" ]]; then
++		continue
++	fi
++
+ 	# Get architecture using readelf. We pipe through 'head -1' so
+ 	# that when the file is a static library (.a), we only take
+ 	# into account the architecture of the first object file.
