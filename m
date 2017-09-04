@@ -1,40 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 08:43:13 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] host-mariadb: compile
-	against bundled yassl
-Message-ID: <20170904205600.B1FC881EC5@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 08:57:52 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] python-libconfig: fix
+	Python3 build
+Message-ID: <20170904205600.DC66E8211C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0813899c435a41240898b94df73c54e8aa8e94f9
+commit: https://git.buildroot.net/buildroot/commit/?id=ef7ff0f445fe2749267bc8b100b8535bf64e2637
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-On Fedora26, openssl 1.1.x is included by default.  This causes build
-errors when building the host variant of mariadb.
+boost_python library is named boost_python3, if boost is built
+under Python3 environment. The patch fixes setup.py accordingly.
 
-Adding -DWITH_SSL=bundled fixes this issue.
+Fixes:
+http://autobuild.buildroot.net/results/975/97533965180436c2f7a99de07fdc360ef57f84b0
+http://autobuild.buildroot.net/results/b49/b49de32704f0f7ce5a610cf4363c6dcc2d8bafa1
+http://autobuild.buildroot.net/results/e26/e26b4b9b486c582fb55826817a3428569968320f
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 6103ce335acabd8f336f8eb7c239da6f1c080e04)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 3cd8023c73cef082ccaca86d7bb43ec7ec7ce56e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...oost_python-name-depending-on-current-Pyt.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index ec41726..d2d55b5 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -67,6 +67,8 @@ MARIADB_CONF_OPTS += \
- 	-DMYSQL_DATADIR=/var/lib/mysql \
- 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
- 
-+HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
+diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+new file mode 100644
+index 0000000..b30efc1
+--- /dev/null
++++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+@@ -0,0 +1,40 @@
++From 3bc4b9c0d60a735b1d63e52f74492ace39f02824 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 27 Jul 2017 09:46:07 +0200
++Subject: [PATCH] Determine boost_python name depending on current Python
++ version
 +
- # Some helpers must be compiled for host in order to crosscompile mariadb for
- # the target. They are then included by import_executables.cmake which is
- # generated during the build of the host helpers. It is not necessary to build
++Python2 requires boost_python and Python3 requires boost_python3.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ setup.py | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index fdf5c27..4b38569 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -3,6 +3,10 @@
++ from setuptools import setup, find_packages, Extension
++ import sys, os
++ 
+++boostlib = "boost_python3"
+++if sys.version_info < (3, 0):
+++    boostlib = "boost_python"
+++
++ setup(
++     name				= 'pylibconfig',
++     description			= "libconfig bindings for Python",
++@@ -19,7 +23,7 @@ setup(
++         Extension(
++             "pylibconfig",
++             ["src/pylibconfig.cc"],
++-            libraries=["boost_python", "config++"]
+++            libraries=[boostlib, "config++"]
++             #include_dirs=includes,
++             #extra_link_args=lflags
++                  )
++-- 
++2.11.0
++
