@@ -1,76 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 08:57:52 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] python-libconfig: fix
-	Python3 build
-Message-ID: <20170904205600.DC66E8211C@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 08:43:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mariadb: security bump
+	version to 10.1.26
+Message-ID: <20170904205600.C397581EC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef7ff0f445fe2749267bc8b100b8535bf64e2637
+commit: https://git.buildroot.net/buildroot/commit/?id=e0b2bd6dff25e79043851e26e7c38899ed4c79d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-boost_python library is named boost_python3, if boost is built
-under Python3 environment. The patch fixes setup.py accordingly.
+Release notes: https://mariadb.com/kb/en/mariadb-10126-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10126-changelog/
 
-Fixes:
-http://autobuild.buildroot.net/results/975/97533965180436c2f7a99de07fdc360ef57f84b0
-http://autobuild.buildroot.net/results/b49/b49de32704f0f7ce5a610cf4363c6dcc2d8bafa1
-http://autobuild.buildroot.net/results/e26/e26b4b9b486c582fb55826817a3428569968320f
+Fixes the following security vulnerabilities:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+CVE-2017-3636 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Client programs). Supported versions that are affected are
+5.5.56 and earlier and 5.6.36 and earlier. Easily exploitable vulnerability
+allows low privileged attacker with logon to the infrastructure where MySQL
+Server executes to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized update, insert or delete access to
+some of MySQL Server accessible data as well as unauthorized read access to
+a subset of MySQL Server accessible data and unauthorized ability to cause
+a partial denial of service (partial DOS) of MySQL Server.
+
+CVE-2017-3641 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DML). Supported versions that are affected are
+5.5.56 and earlier, 5.6.36 and earlier and 5.7.18 and earlier. Easily
+exploitable vulnerability allows high privileged attacker with network
+access via multiple protocols to compromise MySQL Server. Successful
+attacks of this vulnerability can result in unauthorized ability to cause
+a hang or frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2017-3653 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are
+5.5.56 and earlier, 5.6.36 and earlier and 5.7.18 and earlier. Difficult
+to exploit vulnerability allows low privileged attacker with network access
+via multiple protocols to compromise MySQL Server. Successful attacks of
+this vulnerability can result in unauthorized update, insert or delete
+access to some of MySQL Server accessible data.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3cd8023c73cef082ccaca86d7bb43ec7ec7ce56e)
+(cherry picked from commit ff0cf723b7cb0aa621aa81f171814be63b179a4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...oost_python-name-depending-on-current-Pyt.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-new file mode 100644
-index 0000000..b30efc1
---- /dev/null
-+++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-@@ -0,0 +1,40 @@
-+From 3bc4b9c0d60a735b1d63e52f74492ace39f02824 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Thu, 27 Jul 2017 09:46:07 +0200
-+Subject: [PATCH] Determine boost_python name depending on current Python
-+ version
-+
-+Python2 requires boost_python and Python3 requires boost_python3.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ setup.py | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index fdf5c27..4b38569 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -3,6 +3,10 @@
-+ from setuptools import setup, find_packages, Extension
-+ import sys, os
-+ 
-++boostlib = "boost_python3"
-++if sys.version_info < (3, 0):
-++    boostlib = "boost_python"
-++
-+ setup(
-+     name				= 'pylibconfig',
-+     description			= "libconfig bindings for Python",
-+@@ -19,7 +23,7 @@ setup(
-+         Extension(
-+             "pylibconfig",
-+             ["src/pylibconfig.cc"],
-+-            libraries=["boost_python", "config++"]
-++            libraries=[boostlib, "config++"]
-+             #include_dirs=includes,
-+             #extra_link_args=lflags
-+                  )
-+-- 
-+2.11.0
-+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 4ef3551..fd5625c 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.25/
+-sha256 7205ecaa6f1bc16335ad88faa5c46be52b3ac628a5e795cb942a3f4335b2a0d6  mariadb-10.1.25.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.26/
++sha256 ba88b1cb9967dea2909938a34ba89373b162b0d83e5c98a0f1c94540156bf73d  mariadb-10.1.26.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index d2d55b5..86b3a23 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.25
++MARIADB_VERSION = 10.1.26
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
+ # Tarball no longer contains LGPL license text
