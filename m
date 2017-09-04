@@ -1,58 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 4 Sep 2017 14:53:20 +0300
-Subject: [Buildroot] [PATCH 1/1] New board: SolidRun ClearFog Base
-In-Reply-To: <199cf974-e7bb-433a-b3eb-ff1ec4f171fa@cesnet.cz>
-References: <20170904104128.rbpp3qjkgyi6kafu@sapphire.tkos.co.il>
- <199cf974-e7bb-433a-b3eb-ff1ec4f171fa@cesnet.cz>
-Message-ID: <20170904115319.nsjf2xu3ih6qlxwe@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Sep 2017 15:09:03 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-09-03
+In-Reply-To: <CALdGskKWPKBPC8gRdZKhOgMXbWoKgMzVxVOzau6HiBc+Sp6ohg@mail.gmail.com>
+References: <20170904063112.61D1E2085B@mail.free-electrons.com>
+ <CALdGskKWPKBPC8gRdZKhOgMXbWoKgMzVxVOzau6HiBc+Sp6ohg@mail.gmail.com>
+Message-ID: <20170904150903.1ea53556@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jan,
+Hello,
 
-On Mon, Sep 04, 2017 at 01:35:57PM +0200, Jan Kundr?t wrote:
-> > > diff --git a/configs/clearfog_defconfig b/configs/clearfog_defconfig
-> > > new file mode 100644
-> > > index 0000000..797c072
-> > > --- /dev/null
-> > > +++ b/configs/clearfog_defconfig ...
-> > 
-> > Please use the internal toolchain for the basic defconfig.
+On Mon, 4 Sep 2017 15:04:33 +0200, Olivier Schonken wrote:
+> Hi Thomas
 > 
-> I can make that change, but I wonder what the rationale is. I see that it's
-> probably not obvious from the attached config, but it is actually set to use
-> the Linaro toolchain to save time during the build. Do you still want me to
-> change this?
-
-All defconfigs use a Buildroot internal toolchain. These are sort of demo to 
-the capabilities of Buildroot. Also, the internal toolcain generates smaller 
-images since it uses uClibc.
-
-> > > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/clearfog/post-image.sh"
-> > > +BR2_LINUX_KERNEL=y
-> > > +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.10"
-> > > +BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7" ...
-> > 
-> > Please set BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE to the version you tested.
+> Looks like these errors are from uclibc builds.
 > 
-> I created this file via `make menuconfig` followed by `make savedefconfig`.
-> In there, I used the default version of U-Boot, the 2017.07. Should I really
-> go and change this to hardcode a version which will eventually get obsolete
-> in future? I'm not familiar with U-Boot's releases, just double-checking
-> here.
+> In file included from
+> /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sched.h:34:0,
+>                  from
+> /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/pthread.h:24,
+>                  from
+> /home/buildroot/autobuild/run/instance-3/output/build/openjpeg-2.2.0/src/lib/openjp2/thread.c:288:
+> /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/sched.h:210:46:
+> error: attempt to use poisoned "malloc"
+>  # define __sched_cpualloc(cnt) ((cpu_set_t *)malloc(__CPU_ALLOC_SIZE(cnt)))
+>                                               ^
+> /home/buildroot/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/sched.h:211:33:
+> error: attempt to use poisoned "free"
+>  # define __sched_cpufree(__set) free(__set)
+> 
+> Not sure what the best course of action will be. Try to fix it for
+> uclibc, do a rollback or disable build for uclibc and open issue on
+> github for openjpeg.
+> 
+> Your thoughts?
 
-As long as you build the same sources you should get the same result, sans 
-toolchain issues. The bootloader and the kernel are sensitive packages that 
-frequently break between releases on any given target board. For that reason 
-Buildroot defconfigs always set known working versions of both.
+I'm not sure here, since I haven't investigated those build issues.
+Let's Cc the Buildroot mailing list and uClibc-ng maintainer Waldemar
+to see what they think.
 
-baruch
+Thanks!
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
