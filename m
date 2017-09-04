@@ -1,41 +1,36 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Mon, 4 Sep 2017 21:28:23 +0200
-Subject: [Buildroot] PATCH python-libusb1: new package
-In-Reply-To: <CAGm1_ku+ASG+cBqfrdEphqTxQ_vOhDj8p=_dp0TGoFu2NeEjyg@mail.gmail.com>
-References: <20170904151954.9550-1-jaap@jcz.nl>
- <CAGm1_ku+ASG+cBqfrdEphqTxQ_vOhDj8p=_dp0TGoFu2NeEjyg@mail.gmail.com>
-Message-ID: <986c8b52-a53f-f7ab-7706-f41ad73b8e6c@jcz.nl>
+From: =?UTF-8?B?15nXkNeZ16gg15fXkdeV15nXoNeZ16c=?= <yairhav@gmail.com>
+Date: Mon, 4 Sep 2017 22:50:18 +0300
+Subject: [Buildroot] buildroot - making bootable USB for CORE I7 desktop
+Message-ID: <CAFG2245+Fzmm8KM_iCvNDX_2WRoW0ONmTxdNJ9WUSQTbOZCdpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor, all,
+Hi,
+
+My name is Yair Havoynik, I am a software engineer and in the last 6 months
+I started
+Learn Linux.
+My goal is to generate custom version of Linux from scratch for embedded
+systems.
+My demo target is Dell 7040 which include Intel Core i7 processor.
+The buildroot documentation are very good and I succeeded
+to generate the following files with buildroot:
+ 1. rootfs.tar
+ 2. rootfs.romfs
+ 3. rootfs.iso9660
+ 4. bzImage
+ 5. grub-eltorito.img
+ 6. grub.img
+
+I want to create bootable USB/Hard disk with the files I mentioned.
+What is the exact procedure I need to do?
 
 
-On 09/04/17 19:21, Yegor Yefremov wrote:
-> DEVELOPERS file entry missing.
-> 
-> Homepage link missing. https://github.com/vpelletier/python-libusb1
-> 
-> Comment about checksum origins missing. See
-> package/python-tornado/python-tornado.hash for the reference.
-> 
->> +md5     9c2eb6032deda59f287a443091d38cb4 libusb1-1.6.4.tar.gz
->> +sha256  8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
->> +PYTHON_LIBUSB1_SETUP_TYPE = distutils
-> 
-> Should be setuptools
-
-Agree on all; hashes calculated locally after download.
-
-Can anybody else make those corrections? I will not be able to do that within short notice.
-
-I saw about the PyPI scanner in the BR documentation. Would that have generated some of
-the missing points above? I assebled the patch manually.
-
-Kind regards,
-
-
-Jaap
+Thanks for advanced,
+Yair Havoynik
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170904/fd04a7aa/attachment.html>
