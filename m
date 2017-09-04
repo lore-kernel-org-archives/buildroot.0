@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Sep 2017 23:50:55 +0200
-Subject: [Buildroot] Orange Pi HDMI to VGA output
-In-Reply-To: <CAOJD9H+8eSuY_Rm+E-yzCOTSe2KjohLz28fcvH1tv6RDLHefkg@mail.gmail.com>
- (apin prastya's message of "Sun, 13 Aug 2017 21:32:06 +0700")
-References: <CAOJD9H+8eSuY_Rm+E-yzCOTSe2KjohLz28fcvH1tv6RDLHefkg@mail.gmail.com>
-Message-ID: <878thum8u8.fsf@dell.be.48ers.dk>
+Date: Mon, 4 Sep 2017 23:59:07 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] samba4: bump to version
+	4.5.13
+Message-ID: <20170904215238.8847C8211C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "apin" == apin prastya <apin.klas@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bb82c24ce005f216e7b7e475a172127e2a55f253
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Hello All,
- > I have successfully build the orangepi_one_defconfig. And able to boot and
- > output to serial console.
- > Its been a while I struggle with the HDMI output (I am using HDMI to VGA
- > converter) and no success to make the console output to HDMI.
+4.5.13 is a bugfix release, fixing a number of important issues:
 
- > Here what i have done so far :
+https://www.samba.org/samba/history/samba-4.5.13.html
 
- >    1. enable sunxi board on buildroot config and set the .fex to
- >    a20/orangepi.fex (attached orangepi.fex)
- >    2. modify the boot.cmd to : setenv bootargs console=ttyS0,115200
- >    console=tty0 console=tty1 hdmi.audio=EDID:0
- >    disp.screen0_output_mode=1280x720p60 root=/dev/mmcblk0p2 rootwait panic=10
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Anyone has clue to enable HDMI output please let me know.
- > Thanks,
-
-The orangepi_one_defconfig uses the mainline Linux kernel, which doesn't
-support the HDMI output yet or use .fex files, so this won't work.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 0783b37..0d8b111 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 f4c17123e3cc852a5ecc7e38884b00deab57632b9519aebc243e2a94b9b5ace4  samba-4.5.12.tar.gz
++sha256  5fc4762d2259469bfb0067c10f77378cb720f2ebdaf2f37b5ca1918dbe84d04d samba-4.5.13.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4301393..08fa400 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.5.12
++SAMBA4_VERSION = 4.5.13
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
