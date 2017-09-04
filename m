@@ -1,46 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 23:30:50 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/samba4: add
-	optional dependency to dbus
-Message-ID: <20170904215238.83ABF7FFA2@busybox.osuosl.org>
+From: Nicholas Sielicki <sielicki@yandex.com>
+Date: Mon,  4 Sep 2017 17:48:39 -0500
+Subject: [Buildroot] [PATCH 1/1] configs/galileo: update to kernel with gcc6
+	fix
+Message-ID: <20170904224839.8036-1-sielicki@yandex.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85a32431a7b6918282fbd6a1b450791c321a9d37
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+The kernel used for the galileo boards would not successfully build with
+GCC versions greater than 5.
 
-samba4 picks up dbus as dependency if it was built before:
+See: https://github.com/mdr78/Linux-x1000/pull/2
 
-Checking for dbus                : yes
-Checking for header dbus/dbus.h  : yes
-Checking for library dbus-1      : yes
-
-There is no configure option to control dbus support so we just make
-sure dbus is built before samba4 to have reproducible builds.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 17f6c26590d22365968e7fd0d246b315b255d204)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Nicholas Sielicki <sielicki@yandex.com>
 ---
- package/samba4/samba4.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ configs/galileo_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 3ffe11e..4301393 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -32,6 +32,10 @@ else
- SAMBA4_CONF_OPTS += --disable-cups
- endif
- 
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+SAMBA4_DEPENDENCIES += dbus
-+endif
-+
- ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
- SAMBA4_CONF_OPTS += --enable-avahi
- SAMBA4_DEPENDENCIES += avahi
+diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
+index 43639a41a..7db3cfe8a 100644
+--- a/configs/galileo_defconfig
++++ b/configs/galileo_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/intel/galileo/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mdr78/Linux-x1000.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0feded4f96ddca9816c6c1b8a4780cb4065747b9"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8b3c9d8ce1656a26b1097d9091d53bfb39fef640"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/intel/galileo/linux-3.14.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-- 
+2.14.1
