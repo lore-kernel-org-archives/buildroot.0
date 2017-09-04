@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  4 Sep 2017 19:50:41 +0200
-Subject: [Buildroot] [PATCH 07/12] luasql-sqlite3: fix LICENSE_FILES
+Date: Mon,  4 Sep 2017 19:50:42 +0200
+Subject: [Buildroot] [PATCH 08/12] rings: add LICENSE_FILES
 In-Reply-To: <20170904175046.21530-1-francois.perrad@gadz.org>
 References: <20170904175046.21530-1-francois.perrad@gadz.org>
-Message-ID: <20170904175046.21530-7-francois.perrad@gadz.org>
+Message-ID: <20170904175046.21530-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luasql-sqlite3/luasql-sqlite3.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rings/rings.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/luasql-sqlite3/luasql-sqlite3.mk b/package/luasql-sqlite3/luasql-sqlite3.mk
-index 23983a84f..51178db22 100644
---- a/package/luasql-sqlite3/luasql-sqlite3.mk
-+++ b/package/luasql-sqlite3/luasql-sqlite3.mk
-@@ -7,7 +7,7 @@
- LUASQL_SQLITE3_VERSION = 2.3.0-1
- LUASQL_SQLITE3_SUBDIR = luasql
- LUASQL_SQLITE3_LICENSE = MIT
--LUASQL_SQLITE3_LICENSE_FILES = $(LUASQL_SQLITE3_SUBDIR)/README
-+LUASQL_SQLITE3_LICENSE_FILES = $(LUASQL_SQLITE3_SUBDIR)/doc/us/license.html
- LUASQL_SQLITE3_DEPENDENCIES = sqlite
+diff --git a/package/rings/rings.mk b/package/rings/rings.mk
+index 151546aea..92001bbf4 100644
+--- a/package/rings/rings.mk
++++ b/package/rings/rings.mk
+@@ -8,5 +8,6 @@ RINGS_VERSION_MAJOR = 1.3.0
+ RINGS_VERSION = $(RINGS_VERSION_MAJOR)-1
+ RINGS_SUBDIR = rings-v_$(subst .,_,$(RINGS_VERSION_MAJOR))
+ RINGS_LICENSE = MIT
++RINGS_LICENSE_FILES = $(RINGS_SUBDIR)/doc/us/license.html
  
  $(eval $(luarocks-package))
 -- 
