@@ -1,113 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Sep 2017 09:00:29 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: Add patches
-	which allow building for ARMv8-A
-Message-ID: <20170904205600.EC4068211C@busybox.osuosl.org>
+Date: Mon, 4 Sep 2017 22:32:12 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+	9, 12}.x series
+Message-ID: <20170904205601.740317FB5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=075494dd3f5f6b4012a77979067fa2f3065a93e6
+commit: https://git.buildroot.net/buildroot/commit/?id=66ceb5ba45d1e28179dfc960205b04c8b1378ce8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The two added patches allow building WebKitGTK+ when the compiler
-scpecifically targets ARMv8-A, and reports as such be pre-defining
-__ARCH_ARM_8A__ instead of just __ARCH_ARM_8__. Both patches were
-pulled from the corresponding upstream bug reports and edited to
-remove the conflicting parts which edit the ChangeLog files.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[Peter: Drop 4.12.x bump]
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3e4efb30f3bf96cad33e2f8982d469803dded145)
+(cherry picked from commit f43096034b15e0e5f9414dd3162ea28612989d54)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-to-build-when-the-compiler-specifically-.patch | 36 ++++++++++++++++++++++
- ...lure-to-build-when-the-compiler-specifica.patch | 36 ++++++++++++++++++++++
- 2 files changed, 72 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/0001-WTF-Failure-to-build-when-the-compiler-specifically-.patch b/package/webkitgtk/0001-WTF-Failure-to-build-when-the-compiler-specifically-.patch
-new file mode 100644
-index 0000000..017771a
---- /dev/null
-+++ b/package/webkitgtk/0001-WTF-Failure-to-build-when-the-compiler-specifically-.patch
-@@ -0,0 +1,36 @@
-+From 09d5520d910b63fba67bea1d8c71f5d426f345b7 Mon Sep 17 00:00:00 2001
-+From: "aperez at igalia.com"
-+ <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Wed, 12 Jul 2017 18:42:29 +0000
-+Subject: [PATCH] [WTF] Failure to build when the compiler specifically targets
-+ ARMv8-A / defines __ARM_ARCH_8A__
-+ https://bugs.webkit.org/show_bug.cgi?id=174425
-+
-+Reviewed by Michael Catanzaro.
-+
-+* wtf/Platform.h: Also check for __ARCH_ARM_8A__ to detect ARMv8.
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219415 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+---
-+ Source/WTF/wtf/Platform.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
-+index 44d929c333c..7dccb44fcbf 100644
-+--- a/Source/WTF/wtf/Platform.h
-++++ b/Source/WTF/wtf/Platform.h
-+@@ -238,7 +238,8 @@
-+     || defined(__ARM_ARCH_7S__)
-+ #define WTF_ARM_ARCH_VERSION 7
-+ 
-+-#elif defined(__ARM_ARCH_8__)
-++#elif defined(__ARM_ARCH_8__) \
-++    || defined(__ARM_ARCH_8A__)
-+ #define WTF_ARM_ARCH_VERSION 8
-+ 
-+ /* MSVC sets _M_ARM */
-+-- 
-+2.13.3
-+
-diff --git a/package/webkitgtk/0002-bmalloc-Failure-to-build-when-the-compiler-specifica.patch b/package/webkitgtk/0002-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
-new file mode 100644
-index 0000000..e1623bf
---- /dev/null
-+++ b/package/webkitgtk/0002-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
-@@ -0,0 +1,36 @@
-+From 07dab7fe552c53e7840e34d3c8bb1cc43a921706 Mon Sep 17 00:00:00 2001
-+From: "aperez at igalia.com"
-+ <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Wed, 12 Jul 2017 18:43:36 +0000
-+Subject: [PATCH] bmalloc: Failure to build when the compiler specifically
-+ targets ARMv8-A / defines __ARM_ARCH_8A__
-+ https://bugs.webkit.org/show_bug.cgi?id=174424
-+
-+Reviewed by Michael Catanzaro.
-+
-+* bmalloc/BPlatform.h: Also check for __ARCH_ARM_8A__ to detect ARMv8.
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219416 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+---
-+ Source/bmalloc/bmalloc/BPlatform.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Source/bmalloc/bmalloc/BPlatform.h b/Source/bmalloc/bmalloc/BPlatform.h
-+index 8d768db63fb..400143a63fb 100644
-+--- a/Source/bmalloc/bmalloc/BPlatform.h
-++++ b/Source/bmalloc/bmalloc/BPlatform.h
-+@@ -120,7 +120,8 @@
-+ || defined(__ARM_ARCH_7S__)
-+ #define BARM_ARCH_VERSION 7
-+ 
-+-#elif defined(__ARM_ARCH_8__)
-++#elif defined(__ARM_ARCH_8__) \
-++|| defined(__ARM_ARCH_8A__)
-+ #define BARM_ARCH_VERSION 8
-+ 
-+ /* MSVC sets _M_ARM */
-+-- 
-+2.13.3
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 99c8b2a..4cf4667 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.78"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.79"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.39"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.40"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
