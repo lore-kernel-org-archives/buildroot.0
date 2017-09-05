@@ -1,50 +1,41 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Tue, 5 Sep 2017 11:41:03 +0200
-Subject: [Buildroot] Orange Pi HDMI to VGA output
-In-Reply-To: <878thum8u8.fsf@dell.be.48ers.dk>
-References: <CAOJD9H+8eSuY_Rm+E-yzCOTSe2KjohLz28fcvH1tv6RDLHefkg@mail.gmail.com>
- <878thum8u8.fsf@dell.be.48ers.dk>
-Message-ID: <20170905094103.GA5082@airbook.vandijck-laurijssen.be>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Tue,  5 Sep 2017 11:54:56 +0200
+Subject: [Buildroot] [PATCH v2] package/netplug: init script create needed
+	lock directory
+In-Reply-To: <20170905083917.8625-1-corjon.j@ecagroup.com>
+References: <20170905083917.8625-1-corjon.j@ecagroup.com>
+Message-ID: <20170905095456.15776-1-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >>>>> "apin" == apin prastya <apin.klas@gmail.com> writes:
-> 
->  > Hello All,
->  > I have successfully build the orangepi_one_defconfig. And able to boot and
->  > output to serial console.
->  > Its been a while I struggle with the HDMI output (I am using HDMI to VGA
->  > converter) and no success to make the console output to HDMI.
-> 
->  > Here what i have done so far :
-> 
->  >    1. enable sunxi board on buildroot config and set the .fex to
->  >    a20/orangepi.fex (attached orangepi.fex)
->  >    2. modify the boot.cmd to : setenv bootargs console=ttyS0,115200
->  >    console=tty0 console=tty1 hdmi.audio=EDID:0
->  >    disp.screen0_output_mode=1280x720p60 root=/dev/mmcblk0p2 rootwait panic=10
-> 
->  > Anyone has clue to enable HDMI output please let me know.
->  > Thanks,
-> 
-> The orangepi_one_defconfig uses the mainline Linux kernel, which doesn't
-> support the HDMI output yet or use .fex files, so this won't work.
-> 
+Init script use /var/lock/subsys/netplugd but directory
+/var/lock/subsys can be missing.
 
-My experience with HDMI to VGA convertors, on a beaglebone:
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
 
-an "HDMI to VGA" convertor needs power.
-An HDMI port provides, per spec, up to 10mA or so.
-So, if you're using such HDMI to VGA convertor:
-The beaglebone has a polyfuse to enforce this current limit.
-Then the HDMI to VGA will never actually power up and fail to
-emit VGA signal.
-I once managed to succeed here with bypassing the polyfuse with a wire.
-Again, this experience was on a beaglebone!
-Peters comment above still applies :-)
+v2:
+- dont test already existing directory
 
-Kind regards,
-Kurt
+ package/netplug/S29netplug | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+index 88f933d556..d3df9ddff5 100755
+--- a/package/netplug/S29netplug
++++ b/package/netplug/S29netplug
+@@ -11,6 +11,9 @@
+ 
+ # Copyright 2003 Key Research, Inc.
+ 
++# Create needed directories
++mkdir -p /var/lock/subsys
++
+ # Source function library.
+ if [ -f /etc/init.d/functions ]; then
+ 	. /etc/init.d/functions
+-- 
+2.11.0
