@@ -1,57 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:19:29 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: aarch64:
-	Prevent selecting unsupported versions
-Message-ID: <20170905220138.8177C81ED2@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:14:52 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.1.x
+	series
+Message-ID: <20170905220138.6DCA47FA06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=246df454ff55c463ebee0d446ccd115ab1423dac
+commit: https://git.buildroot.net/buildroot/commit/?id=f1b0e69d92f137e1b2d7778b1a335005674d655b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-
-Versions older than Linux v3.7 do not support the aarch64 architecture
-so disable them, for reference see https://kernelnewbies.org/Linux_3.7
-
-Without this patch these defconfigs fail to build
-
-BR2_aarch64=y
-BR2_KERNEL_HEADERS_3_2=y
-
-BR2_aarch64=y
-BR2_KERNEL_HEADERS_3_4=y
-
-with error messages like this:
-
-make[1]: Entering directory '/home/buildroot/br5_next/output/build/linux-headers-3.2.89'
-Makefile:567: /home/buildroot/br5_next/output/build/linux-headers-3.2.89/arch/arm64/Makefile: No such file or directory
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 1291528bde602120ab4b60d23d1a362d44cc5e04)
+(cherry picked from commit d38797edee9b3e09492616a33c79c23a46d5a7ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4a3afd4..6440dee 100644
+index 4cf4667..cf2dc07 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -28,12 +28,12 @@ choice
- 
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
--		depends on !BR2_arc && !BR2_nios2
-+		depends on !BR2_aarch64 && !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
--		depends on !BR2_arc && !BR2_nios2
-+		depends on !BR2_aarch64 && !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 
- 	config BR2_KERNEL_HEADERS_3_10
+@@ -221,7 +221,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.18.61"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.42"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.79"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+ 	default "4.9.40"	if BR2_KERNEL_HEADERS_4_9
