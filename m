@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  5 Sep 2017 08:20:06 -0400
-Subject: [Buildroot] [PATCH 1/1] cairo: bump to 1.14.10
+Date: Tue,  5 Sep 2017 08:20:09 -0400
+Subject: [Buildroot] [PATCH 1/1] pango: bump to 1.40.12
 In-Reply-To: <20170905122010.19409-1-aduskett@gmail.com>
 References: <20170905122010.19409-1-aduskett@gmail.com>
-Message-ID: <20170905122010.19409-2-aduskett@gmail.com>
+Message-ID: <20170905122010.19409-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,89 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/cairo/cairo.hash | 6 +++---
- package/cairo/cairo.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-build-disable-tests-from-building.patch   | 28 +++++++++++-----------
+ package/pango/pango.hash                           |  4 ++--
+ package/pango/pango.mk                             |  2 +-
+ 3 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index dd5365ba7..f3aa01f2c 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,4 +1,4 @@
--# From http://cairographics.org/releases/cairo-1.14.8.tar.xz.sha1
--sha1	c6f7b99986f93c9df78653c3e6a3b5043f65145e	cairo-1.14.8.tar.xz
-+# From http://cairographics.org/releases/cairo-1.14.10.tar.xz.sha1
-+sha1	28c59d85d6b790c21b8b59ece73a6a1dda28d69a	cairo-1.14.10.tar.xz
- # Calculated based on the hash above
--sha256	d1f2d98ae9a4111564f6de4e013d639cf77155baf2556582295a0f00a9bc5e20	cairo-1.14.8.tar.xz
-+sha256	7e87878658f2c9951a14fc64114d4958c0e65ac47530b8ac3078b2ce41b66a09	cairo-1.14.10.tar.xz
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 0d62dc393..974905677 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/pango/0001-build-disable-tests-from-building.patch b/package/pango/0001-build-disable-tests-from-building.patch
+index c518a34d3..51b645bae 100644
+--- a/package/pango/0001-build-disable-tests-from-building.patch
++++ b/package/pango/0001-build-disable-tests-from-building.patch
+@@ -1,16 +1,16 @@
+-From cde9a78711e8eaed0aefb9e36288f22918e8d4b2 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 2 Mar 2017 09:41:41 -0300
+-Subject: [PATCH] build: disable tests from building
++From 1c503a8b2f127c12e58a6e8ba01743c04061df50 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Tue, 5 Sep 2017 07:25:17 -0400
++Subject: [PATCH] disable tests from building
+ 
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ ---
+  Makefile.am | 2 +-
+  Makefile.in | 2 +-
+  2 files changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/Makefile.am b/Makefile.am
+-index 9e31b34..32e5c29 100644
++index 70bf8b0..c69daf0 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+ @@ -1,6 +1,6 @@
+@@ -19,21 +19,21 @@ index 9e31b34..32e5c29 100644
+ -SUBDIRS= pango pango-view examples docs tools tests win32
+ +SUBDIRS= pango pango-view examples docs tools win32
+  
+- EXTRA_DIST = 			\
+- 	autogen.sh		\
++ meson_dist_files = \
++ 	pango/pango-features.h.meson \
+ diff --git a/Makefile.in b/Makefile.in
+-index 6b6f6c7..ed0cfa2 100644
++index 8489ca1..51f6ada 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -418,7 +418,7 @@ target_alias = @target_alias@
++@@ -412,7 +412,7 @@ target_alias = @target_alias@
+  top_build_prefix = @top_build_prefix@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+ -SUBDIRS = pango pango-view examples docs tools tests win32
+ +SUBDIRS = pango pango-view examples docs tools win32
+- EXTRA_DIST = \
+- 	autogen.sh		\
+- 	pango.pc.in		\
++ meson_dist_files = \
++ 	pango/pango-features.h.meson \
++ 	pango-view/meson.build \
+ -- 
+-2.10.2
++2.13.5
+ 
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 9908c4a53..1b6da7d32 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.4.sha256sum
+-sha256	f8fdc5fc66356dc4edf915048cceeee065a0e0cb70b3b2598f62bda320129a3e	pango-1.40.4.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.12.sha256sum
++sha256	75f1a9a8e4e2b28cbc078b50c1fa927ee4ded994d1ade97c5603e2d1f3161cfc	pango-1.40.12.tar.xz
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 7556f0ba8..79283e885 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CAIRO_VERSION = 1.14.8
-+CAIRO_VERSION = 1.14.10
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+ PANGO_VERSION_MAJOR = 1.40
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
 -- 
 2.13.5
