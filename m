@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:57:12 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.43.6
-In-Reply-To: <40f53a4f200ebfe8ba96d861513bd54c16c1107b.1504552281.git.baruch@tkos.co.il>
-References: <40f53a4f200ebfe8ba96d861513bd54c16c1107b.1504552281.git.baruch@tkos.co.il>
-Message-ID: <20170905215712.25fec5de@windsurf.lan>
+Date: Tue, 5 Sep 2017 21:57:18 +0200
+Subject: [Buildroot] [PATCH] ethtool: bump to version 4.11
+In-Reply-To: <92cc11e8f80f457f082c131bd7d7e8b762ae6b03.1504552860.git.baruch@tkos.co.il>
+References: <92cc11e8f80f457f082c131bd7d7e8b762ae6b03.1504552860.git.baruch@tkos.co.il>
+Message-ID: <20170905215718.611149fd@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Sep 2017 22:11:21 +0300, Baruch Siach wrote:
-> Drop upstream patch.
+On Mon,  4 Sep 2017 22:21:00 +0300, Baruch Siach wrote:
+> Add license file hash.
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  .../0002-include-sys-sysmacros.h-as-needed.patch   | 129 ---------------------
->  package/e2fsprogs/e2fsprogs.hash                   |   4 +-
->  package/e2fsprogs/e2fsprogs.mk                     |   2 +-
->  3 files changed, 3 insertions(+), 132 deletions(-)
->  delete mode 100644 package/e2fsprogs/0002-include-sys-sysmacros.h-as-needed.patch
+>  package/ethtool/ethtool.hash | 4 +++-
+>  package/ethtool/ethtool.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
