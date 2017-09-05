@@ -1,44 +1,133 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:55:40 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: bump version to
-	7.54.1
-Message-ID: <20170905220138.E61C481ED2@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:23:34 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] jack2: don't download
+	patch from Github
+Message-ID: <20170905220138.8CAAF81ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fea005f3c2717e5d8443ac8e41ef8349740a7948
+commit: https://git.buildroot.net/buildroot/commit/?id=cbadc716d3f427a0c660a9ed83378fba676b3db4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Patches downloaded from Github are not stable, so bring them in the
+tree.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c52d50336eb6c51eb9d590cebdee72623d76dd51)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d8e0a2d4ae30e19b80d71777e2e844e966c337e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-initialization-in-test-iodelay.patch  | 65 ++++++++++++++++++++++
+ ...patch => 0002-Improve-check-for-ucontext.patch} |  0
+ ...ce-support-depends-on-execinfo.h-existen.patch} |  0
+ ...=> 0004-tests-define-__STDC_LIMIT_MACROS.patch} |  0
+ package/jack2/jack2.hash                           |  1 -
+ package/jack2/jack2.mk                             |  1 -
+ 6 files changed, 65 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index f8885e0..1b8d80f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
-+sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 6f4803e..45bd080 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/jack2/0001-Fix-initialization-in-test-iodelay.patch b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
+new file mode 100644
+index 0000000..ee24938
+--- /dev/null
++++ b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
+@@ -0,0 +1,65 @@
++From ff1ed2c4524095055140370c1008a2d9cccc5645 Mon Sep 17 00:00:00 2001
++From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
++Date: Sat, 11 Jun 2016 05:35:07 +0200
++Subject: [PATCH] Fix initialization in test/iodelay.cpp
++
++jack_latency_range_t is
++
++struct _jack_latency_range {
++    jack_nframes_t min;
++    jack_nframes_t max;
++};
++
++and jack_nframes_t is
++
++typedef uint32_t        jack_nframes_t;
++
++so it's unsigned. Initialising it with -1 is invalid (at least in C++14). We cannot use {0, 0}, because latency_cb has
++
++   jack_latency_range_t range;
++   range.min = range.max = 0;
++   if ((range.min != capture_latency.min) || (range.max !=
++       capture_latency.max)) {
++       capture_latency = range;
++   }
++
++so we must not have {0, 0}, otherwise the condition would never be true.
++
++Using UINT32_MAX should be equivalent to the previous -1.
++
++[Upstream commit https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ tests/iodelay.cpp | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/tests/iodelay.cpp b/tests/iodelay.cpp
++index e1ba63fa..1ef470fd 100644
++--- a/tests/iodelay.cpp
+++++ b/tests/iodelay.cpp
++@@ -20,6 +20,7 @@
++ 
++ #include <stdlib.h>
++ #include <stdio.h>
+++#include <stdint.h>
++ #include <math.h>
++ #include <unistd.h>
++ #include <jack/jack.h>
++@@ -167,8 +168,8 @@ static jack_client_t  *jack_handle;
++ static jack_port_t    *jack_capt;
++ static jack_port_t    *jack_play;
++ 
++-jack_latency_range_t   capture_latency = {-1, -1};
++-jack_latency_range_t   playback_latency = {-1, -1};
+++jack_latency_range_t   capture_latency = {UINT32_MAX, UINT32_MAX};
+++jack_latency_range_t   playback_latency = {UINT32_MAX, UINT32_MAX};
++ 
++ void
++ latency_cb (jack_latency_callback_mode_t mode, void *arg)
++@@ -266,4 +267,4 @@ int main (int ac, char *av [])
++     return 0;
++ }
++ 
++-// --------------------------------------------------------------------------------
++\ No newline at end of file
+++// --------------------------------------------------------------------------------
+diff --git a/package/jack2/0001-Improve-check-for-ucontext.patch b/package/jack2/0002-Improve-check-for-ucontext.patch
+similarity index 100%
+rename from package/jack2/0001-Improve-check-for-ucontext.patch
+rename to package/jack2/0002-Improve-check-for-ucontext.patch
+diff --git a/package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch b/package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
+similarity index 100%
+rename from package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch
+rename to package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
+diff --git a/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch b/package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
+similarity index 100%
+rename from package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch
+rename to package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+index 1b981a4..ab031b9 100644
+--- a/package/jack2/jack2.hash
++++ b/package/jack2/jack2.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+ sha256 88f1b6601b7c8950e6a2d5940b423a33ee628ae5583da40bdce3d9317d8c600d  jack2-v1.9.10.tar.gz
+-sha256 f372c4300e3fb2c1ce053e47829df44f3f8b933feb820759392187723ae8e640  ff1ed2c4524095055140370c1008a2d9cccc5645.patch
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 23c9723..7801840 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -9,7 +9,6 @@ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
+ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+ JACK2_INSTALL_STAGING = YES
+-JACK2_PATCH = https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch
  
--LIBCURL_VERSION = 7.54.0
-+LIBCURL_VERSION = 7.54.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ JACK2_CONF_OPTS = --alsa
+ 
