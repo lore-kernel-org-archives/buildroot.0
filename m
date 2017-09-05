@@ -1,36 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 00:27:33 +0200
-Subject: [Buildroot] [PATCH] lua: fix install of lua.pc
-In-Reply-To: <20170814222528.1ca21238@windsurf> (Thomas Petazzoni's message of
- "Mon, 14 Aug 2017 22:25:28 +0200")
-References: <20170813133111.3959-1-francois.perrad@gadz.org>
- <20170814222528.1ca21238@windsurf>
-Message-ID: <87vakwixwq.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 00:35:15 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: add patch for recent glibc
+In-Reply-To: <20170812162255.23034-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sat, 12 Aug 2017 18:22:55 +0200")
+References: <20170811110549.6278-1-daggs@gmx.com>
+ <20170812162255.23034-1-arnout@mind.be>
+Message-ID: <87r2vkixjw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Hello,
- > On Sun, 13 Aug 2017 15:31:11 +0200, Francois Perrad wrote:
- >> `install` works even when the directory pkgconfig is not already created
- >> 
- >> see http://autobuild.buildroot.net/results/101/101c89e1d6aee942a0b1c4e4f3daf8ac2414a56c/
- >> 
- >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > Recent glibc have deprecated the implicit include of sys/sysmacros.h
+ > from sys/types.h. That means that the macros major and minor are no
+ > longer defined unless this header is included.
 
- > This commit log doesn't explain why you're moving things to configure
- > commands. And in fact, I believe the original code in which we do the
- > SED at install time was more logical. So I've kept that, and just added
- > the missing "mkdir -p" first.
+ > This problem was observed for host-e2fsprogs when building on a host
+ > with recent glibc.
 
- > See:
- > https://git.buildroot.org/buildroot/commit/?id=25a2650086ad9fe0e22e2a2c3d4e64cae396fcf1
+ > Add an upstream patch that includes sys/sysmacros.h when needed.
 
-Committed to 2017.02.x (after adding back /usr to HOST_DIR), thanks.
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Dagg Stompler <daggs@gmx.com>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > Dagg, I prefer to cherry-pick this single commit on master instead of
+ > bumping the package, since the bump does quite a lot more than just
+ > this single change. Can you undo the bump, apply this patch, and see
+ > if that fixes the issue for you? If yes, please add your Tested-by.
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
