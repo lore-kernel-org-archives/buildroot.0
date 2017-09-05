@@ -1,27 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Sep 2017 23:25:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jack2: backport two build fixes
-In-Reply-To: <20170806125840.5694-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 6 Aug 2017 14:58:40 +0200")
-References: <20170806125840.5694-1-bernd.kuhls@t-online.de>
-Message-ID: <877excltwj.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Sep 2017 23:27:35 +0200
+Subject: [Buildroot] [PATCH v1] bind: fix configure in case lmdb devel
+	files are present on the host
+In-Reply-To: <20170808165758.14788-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 8 Aug 2017 18:57:58 +0200")
+References: <20170808165758.14788-1-ps.report@gmx.net>
+Message-ID: <873780lttk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > 0005-gcc7.patch fixes
- > http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
+ > Fix configure failure in case lmdb devel files are present on the host
+ > by adding --without-lmdb option (reported [1] and fix tested [2],[3] by
+ > grunpferd at netscape.net).
 
- > 0006-fix-ftbfs-with-clang.patch
- > fixes the subsequent build error:
- > common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
- > memops.c:(.text+0x4dc): undefined reference to `fast_rand'
+ > Fixes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >   checking for lmdb library... yes
+ >   checking for library containing mdb_env_create... no
+ >   configure: error: found lmdb include but not library.
+
+ > [1] http://lists.busybox.net/pipermail/buildroot/2017-August/199945.html
+ > [2] http://lists.busybox.net/pipermail/buildroot/2017-August/199963.html
+ > [3] http://lists.busybox.net/pipermail/buildroot/2017-August/199964.html
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed to 2017.02.x, thanks.
 
