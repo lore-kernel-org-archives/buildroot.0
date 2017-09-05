@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 08:55:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <20170905201638.GA9106@scaer>
-References: <20170904185738.31182-1-bernd.kuhls@t-online.de>
- <20170905221325.71f98014@windsurf.lan>
- <20170905201638.GA9106@scaer>
-Message-ID: <20170906085535.691808b9@windsurf.lan>
+Date: Tue, 5 Sep 2017 21:09:54 +0200
+Subject: [Buildroot] [PATCH] support/tests: use relative test_dir
+In-Reply-To: <20170905162137.18087-1-yann.morin.1998@free.fr>
+References: <20170905162137.18087-1-yann.morin.1998@free.fr>
+Message-ID: <20170905210954.119de6be@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 5 Sep 2017 22:16:38 +0200, Yann E. MORIN wrote:
-> Thomas, All,
+On Tue,  5 Sep 2017 18:21:37 +0200, Yann E. MORIN wrote:
+> When we list the available tests, we use test_dir, which is set from
+> the path of the script. However, when we run the tests, we use the
+> hard-coded path.
 > 
-> On 2017-09-05 22:13 +0200, Thomas Petazzoni spake thusly:
-> > On Mon,  4 Sep 2017 20:57:38 +0200, Bernd Kuhls wrote:  
-> > > Add optional dependencies to
-> > > 
-> > > - libva
-> > >   ffmpeg depends on libva, libva depends on xorg, so no need to add them
-> > >   to _DEPENDENCIES  
-> > 
-> > I don't see ffmpeg depending on libva, where do you see that ?  
+> Ditto to find the config file.
 > 
-> Yet it does, see line 243. ;-)
+> For consistency, always use test_dir.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> ---
+>  support/testing/run-tests | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Well, it will depend on libva if it's enabled. But I don't see anything
-in tvheadend or ffmpeg that forces libva to be enabled.
-
-Perhaps I'm missing something obvious here.
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
