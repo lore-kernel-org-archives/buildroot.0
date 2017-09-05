@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:46:13 +0200
-Subject: [Buildroot] [PATCH 2/2] docs/manual: add appendix about
-	$(HOST_DIR)/usr
-In-Reply-To: <027bc1ba0e0b06cd2e353ef8683084b6f9fec926.1504640557.git.yann.morin.1998@free.fr>
+Date: Tue, 5 Sep 2017 21:46:45 +0200
+Subject: [Buildroot] [PATCH 0/2] docs/manual: add appendix about
+ migratinf from older versions
+In-Reply-To: <cover.1504640557.git.yann.morin.1998@free.fr>
 References: <cover.1504640557.git.yann.morin.1998@free.fr>
- <027bc1ba0e0b06cd2e353ef8683084b6f9fec926.1504640557.git.yann.morin.1998@free.fr>
-Message-ID: <20170905214613.078ce5b5@windsurf.lan>
+Message-ID: <20170905214645.2366530f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  5 Sep 2017 21:42:55 +0200, Yann E. MORIN wrote:
+On Tue,  5 Sep 2017 21:42:49 +0200, Yann E. MORIN wrote:
 
-> +Whenever a package installs an executable that is linked with a library
-> +in +$(HOST_DIR)/usr/lib+, it must have an RPATH pointing to that directory.
+>  docs/manual/appendix.txt                                   |  2 +-
+>  ...-external-converting.txt => migrating-br2-external.txt} |  2 +-
+>  docs/manual/migrating-host-usr.txt                         | 14 ++++++++++++++
+>  docs/manual/migrating.txt                                  |  8 ++++++++
 
-in $(HOST_DIR)/lib, no ?
+Separate files for each migration issue is a bit overkill for now.
+Could you please put everything in "migrating.txt" instead ?
 
-> +
-> +An RPATH pointing to +$(HOST_DIR)/usr/lib+ is no longer accepted.
-
-Otherwise, it is a bit contradictory with what you're saying here.
+Thanks!
 
 Thomas
 -- 
