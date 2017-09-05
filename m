@@ -1,83 +1,43 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Tue,  5 Sep 2017 12:03:27 +0200
-Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
-Message-ID: <20170905100327.21421-1-aleksander@aleksander.es>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  5 Sep 2017 13:27:41 +0300
+Subject: [Buildroot] [PATCH] e2fsprogs: remove unneeded patch
+Message-ID: <f8a6a05d98b19227a150f07af7ac04877803fb4c.1504607261.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't always build without udev, as qmi-firmware-update would be very
-very limited in that case. Instead, make it optional: if there is udev
-support in the setup, require libgudev and configure using --with-udev
-explicitly; otherwise just --without-udev.
+Commit 44b5637ab2 (e2fsprogs: add a patch to link against SEM_INIT libs)
+introduced a patch that effectively adds -lpthread to the link command
+with libcom_err. Today the only libc with separate libpthread is glibc
+that does not support static build. The generated libcom_err.so.2.1
+library links with libpthread with or without this patch. Drop this
+patch.
 
-Also, add the qmi-over-mbim feature as optional, and require libmbim
-if we're building with it enabled.
-
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Cc: Daniel Mack <daniel@zonque.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libqmi/Config.in | 18 ++++++++++++++++++
- package/libqmi/libqmi.mk | 18 ++++++++++++++++--
- 2 files changed, 34 insertions(+), 2 deletions(-)
+ package/e2fsprogs/0001-sem-init-libs.patch | 11 -----------
+ 1 file changed, 11 deletions(-)
+ delete mode 100644 package/e2fsprogs/0001-sem-init-libs.patch
 
-diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
-index f1d111b7c..a536650b5 100644
---- a/package/libqmi/Config.in
-+++ b/package/libqmi/Config.in
-@@ -10,6 +10,24 @@ config BR2_PACKAGE_LIBQMI
- 
- 	  http://www.freedesktop.org/wiki/Software/libqmi/
- 
-+if BR2_PACKAGE_LIBQMI
-+
-+config BR2_PACKAGE_LIBQMI_UDEV
-+	bool "qmi-firmware-update udev support"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_LIBGUDEV
-+	help
-+	  This option enables udev support in the qmi-firmware-update tool
-+
-+config BR2_PACKAGE_LIBQMI_MBIM_QMUX
-+	bool "QMI-over-MBIM support"
-+	select BR2_PACKAGE_LIBMBIM
-+	help
-+	  This option enables support to use the QMI protocol over MBIM
-+	  for modems with MBIM_SERVICE_QMI capabilities
-+
-+endif
-+
- comment "libqmi needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 917265f4b..129fd0fb6 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -15,7 +15,21 @@ LIBQMI_AUTORECONF = YES
- 
- LIBQMI_DEPENDENCIES = libglib2
- 
--# we don't want -Werror and disable gudev Gobject bindings
--LIBQMI_CONF_OPTS = --enable-more-warnings=no --without-udev
-+# we don't want -Werror
-+LIBQMI_CONF_OPTS = --enable-more-warnings=no
-+
-+ifeq ($(BR2_PACKAGE_LIBQMI_UDEV),y)
-+LIBQMI_DEPENDENCIES += libgudev
-+LIBQMI_CONF_OPTS += --with-udev
-+else
-+LIBQMI_CONF_OPTS += --without-udev
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBQMI_MBIM_QMUX),y)
-+LIBQMI_DEPENDENCIES += libmbim
-+LIBQMI_CONF_OPTS += --enable-mbim-qmux
-+else
-+LIBQMI_CONF_OPTS += --disable-mbim-qmux
-+endif
- 
- $(eval $(autotools-package))
+diff --git a/package/e2fsprogs/0001-sem-init-libs.patch b/package/e2fsprogs/0001-sem-init-libs.patch
+deleted file mode 100644
+index 56f1cc2c1595..000000000000
+--- a/package/e2fsprogs/0001-sem-init-libs.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- e2fsprogs-1.41.9/MCONFIG.in.orig	2009-10-07 20:25:07.000000000 +0800
+-+++ e2fsprogs-1.41.9/MCONFIG.in	2009-10-07 20:21:41.000000000 +0800
+-@@ -85,7 +85,7 @@
+- #
+- LIB = $(top_builddir)/lib
+- LIBSS = $(LIB)/libss at LIB_EXT@ @PRIVATE_LIBS_CMT@ @DLOPEN_LIB@
+--LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
+-+LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
+- LIBE2P = $(LIB)/libe2p at LIB_EXT@
+- LIBEXT2FS = $(LIB)/libext2fs at LIB_EXT@
+- LIBUUID = @LIBUUID@ @SOCKET_LIB@
 -- 
-2.13.1
+2.14.1
