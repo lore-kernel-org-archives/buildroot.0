@@ -1,63 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Sep 2017 22:34:48 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] docs/manual: add appendix about
-	migratinf from older versions
-Message-ID: <cover.1504643670.git.yann.morin.1998@free.fr>
+Date: Tue,  5 Sep 2017 22:34:52 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] docs/manual: add appendix about
+	migration from older versions
+In-Reply-To: <cover.1504643670.git.yann.morin.1998@free.fr>
+References: <cover.1504643670.git.yann.morin.1998@free.fr>
+Message-ID: <10e9b4eda0189190444421da07e98c7f43cd56dd.1504643670.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+... and move the br2-external migration to it.
 
-When we release a new version that voluntarliy breaks compatibility with
-previous versions, we must document it to hepl the uesr migrate more
-easily.
+Reported-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
 
-In 2017.08, we broke the compatibility with previous versions because we
-no longer accept an RPATH pointing to $(HOST_DIR)/usr/lib, even though
-that would technically functional.
-
-Add an appendix about that.
-
+---
 Changes v1 -> v2:
-  - move all to a single file  (Thomas)
-  - fix typoes  (Thomas)
+  - move in a sing;e file  (Thomas)
+  - fix title typo  (ThomaS)
+---
+ docs/manual/appendix.txt                                   | 2 +-
+ docs/manual/{br2-external-converting.txt => migrating.txt} | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+ rename docs/manual/{br2-external-converting.txt => migrating.txt} (81%)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 8e4935586226880b1b6d772cd89f8299f5ffc181
-
-  package/pngquant: bump version to 2.10.1 (2017-09-05 22:01:35 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 8d12cdf3606e18c28219b5e37521aa6facb73605
-
-  docs/manual: add appendix about $(HOST_DIR)/usr (2017-09-05 22:29:44 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      docs/manual: add appendix about migration from older versions
-      docs/manual: add appendix about $(HOST_DIR)/usr
-
- docs/manual/appendix.txt                            |  2 +-
- .../{br2-external-converting.txt => migrating.txt}  | 21 ++++++++++++++++++++-
- 2 files changed, 21 insertions(+), 2 deletions(-)
- rename docs/manual/{br2-external-converting.txt => migrating.txt} (62%)
-
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 4d4bbecc18..86afa4bdaa 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -3,4 +3,4 @@
+ 
+ include::makedev-syntax.txt[]
+ include::makeusers-syntax.txt[]
+-include::br2-external-converting.txt[]
++include::migrating.txt[]
+diff --git a/docs/manual/br2-external-converting.txt b/docs/manual/migrating.txt
+similarity index 81%
+rename from docs/manual/br2-external-converting.txt
+rename to docs/manual/migrating.txt
+index 831addf5af..5dd83ce8d6 100644
+--- a/docs/manual/br2-external-converting.txt
++++ b/docs/manual/migrating.txt
+@@ -1,8 +1,15 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
++[[migrating-from-ol-versions]]
++== Migrating from older Buildroot versions
++
++Some versions have introduced backaward incompatibilities. This section
++explains those incompatibilities, and for each explains what to do to
++complete the migration.
++
+ [[br2-external-converting]]
+-== Converting old br2-external trees
++=== Migrating to 2016.11
+ 
+ Before Buildroot 2016.11, it was possible to use only one br2-external
+ tree at once. With Buildroot 2016.11 came the possibility to use more
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
