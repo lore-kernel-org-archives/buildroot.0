@@ -1,43 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  5 Sep 2017 13:27:41 +0300
-Subject: [Buildroot] [PATCH] e2fsprogs: remove unneeded patch
-Message-ID: <f8a6a05d98b19227a150f07af7ac04877803fb4c.1504607261.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Sep 2017 12:33:56 +0200
+Subject: [Buildroot] Orange Pi HDMI to VGA output
+In-Reply-To: <20170905094103.GA5082@airbook.vandijck-laurijssen.be> (Kurt Van
+ Dijck's message of "Tue, 5 Sep 2017 11:41:03 +0200")
+References: <CAOJD9H+8eSuY_Rm+E-yzCOTSe2KjohLz28fcvH1tv6RDLHefkg@mail.gmail.com>
+ <878thum8u8.fsf@dell.be.48ers.dk>
+ <20170905094103.GA5082@airbook.vandijck-laurijssen.be>
+Message-ID: <874lshmo2z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 44b5637ab2 (e2fsprogs: add a patch to link against SEM_INIT libs)
-introduced a patch that effectively adds -lpthread to the link command
-with libcom_err. Today the only libc with separate libpthread is glibc
-that does not support static build. The generated libcom_err.so.2.1
-library links with libpthread with or without this patch. Drop this
-patch.
+>>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
 
-Cc: Daniel Mack <daniel@zonque.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/e2fsprogs/0001-sem-init-libs.patch | 11 -----------
- 1 file changed, 11 deletions(-)
- delete mode 100644 package/e2fsprogs/0001-sem-init-libs.patch
+Hi,
 
-diff --git a/package/e2fsprogs/0001-sem-init-libs.patch b/package/e2fsprogs/0001-sem-init-libs.patch
-deleted file mode 100644
-index 56f1cc2c1595..000000000000
---- a/package/e2fsprogs/0001-sem-init-libs.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- e2fsprogs-1.41.9/MCONFIG.in.orig	2009-10-07 20:25:07.000000000 +0800
--+++ e2fsprogs-1.41.9/MCONFIG.in	2009-10-07 20:21:41.000000000 +0800
--@@ -85,7 +85,7 @@
-- #
-- LIB = $(top_builddir)/lib
-- LIBSS = $(LIB)/libss at LIB_EXT@ @PRIVATE_LIBS_CMT@ @DLOPEN_LIB@
---LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
--+LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
-- LIBE2P = $(LIB)/libe2p at LIB_EXT@
-- LIBEXT2FS = $(LIB)/libext2fs at LIB_EXT@
-- LIBUUID = @LIBUUID@ @SOCKET_LIB@
+ > My experience with HDMI to VGA convertors, on a beaglebone:
+
+ > an "HDMI to VGA" convertor needs power.
+ > An HDMI port provides, per spec, up to 10mA or so.
+ > So, if you're using such HDMI to VGA convertor:
+ > The beaglebone has a polyfuse to enforce this current limit.
+ > Then the HDMI to VGA will never actually power up and fail to
+ > emit VGA signal.
+ > I once managed to succeed here with bypassing the polyfuse with a wire.
+
+Alternatively, the HDMI-to-VGA adapters I've seen typically can be
+powered through USB (sometimes not exposed on the outside though).
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
