@@ -1,30 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Sep 2017 23:04:26 +0200
-Subject: [Buildroot] [PATCH] package/binutils: fix crash caused by buggy
-	xtensa overlay
-In-Reply-To: <1501699220-3055-1-git-send-email-jcmvbkbc@gmail.com> (Max
- Filippov's message of "Wed, 2 Aug 2017 11:40:20 -0700")
-References: <1501699220-3055-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <87vakwluw5.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Sep 2017 23:13:14 +0200
+Subject: [Buildroot] [PATCH] dbus: add upstream patch to fix startup
+	hang with with expat >= 2.2.1
+In-Reply-To: <20170804165832.6869-1-m.hoffmann@cartelsol.com> (Marcus
+ Hoffmann's message of "Fri, 4 Aug 2017 18:58:32 +0200")
+References: <20170804165832.6869-1-m.hoffmann@cartelsol.com>
+Message-ID: <87r2vkluhh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+>>>>> "Marcus" == Marcus Hoffmann <m.hoffmann@cartelsol.com> writes:
 
- > In some xtensa configurations there may be system/user registers in
- > xtensa-modules with negative index. ISA initialization for such config
- > may clobber heap and result in program termination.
- > Don't update lookup table entries for register with negative indices.
+ > After c0ad6ded018ffbc33f7f5 expat: security bump to version 2.2.1
+ > the system can hang on startup under certain circumstances.
 
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ > This happens when:
+ >   * we use systemd as init system
+ >   * the random nonblocking pool takes a while to initialize
+ >     * this apparently doesn't happen on qemu, so this would not have
+ >       been caught by the runtime testing infrastructure
+ >     * it also doesn't seem to happen when network booting
 
-Committed to 2017.02.x after dropping the 2.28.1/2.29 patches, thanks.
+ > For a more detailed description of the bug see here:
+ > https://bugs.freedesktop.org/show_bug.cgi?id=101858
 
-Is this patch also needed for the older 2.25.1 / 2.26.1 variants we have
-in 2027.02.x? If so, could you send a patch?
+ > The patch should be in next dbus version 1.10.24
+
+ > Set DBUS_AUTORECONF = YES because configure.ac is changed.
+
+ > Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+ > ---
+ > I think this should also go into the stable 2017.02.x and 2017.05.x branches as
+ > they received the expat bump but won't be receiving the fix in the next dbus 
+ > version.
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
