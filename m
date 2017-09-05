@@ -1,49 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  5 Sep 2017 22:05:25 +0300
-Subject: [Buildroot] [PATCH 1/2] shairport-sync: fix static link with mbedtls
-Message-ID: <87aa32f0dbacc3252ade43fc605e7f2c310e6465.1504638326.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Sep 2017 20:59:04 +0200
+Subject: [Buildroot] [git commit] support/scripts/check-bin-arch: fix
+	symbolic link check
+Message-ID: <20170905190117.BA95C80E2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mbedtls provided libraries are interdependent. libmbedtls depends on
-libmbedx509. Both depend on libmbedcrypto. When compression is enabled
-libz is also needed.
+commit: https://git.buildroot.net/buildroot/commit/?id=cb0f3fa13f315a1aa0469d3479673860dcba8eb9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/79d/79d9aff5edb6a767c38efb54256a4f20fc36a6ee/
+Commit c96b8675ea03a5d3194d439f740c725dd239ed1a
+("support/scripts/check-bin-arch: ignore symbolic links") was bogus,
+because it tested ${f}, which is the relative path of the file inside
+${TARGET_DIR}, so we end up testing if ${f} on the system is a
+symbolic link.
 
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This commit fixes that by testing ${TARGET_DIR}/${f}.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shairport-sync/shairport-sync.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ support/scripts/check-bin-arch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 208a9b3b1e33..75e1ae85e3d2 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -19,6 +19,8 @@ SHAIRPORT_SYNC_CONF_OPTS = --with-alsa \
- 	--with-pipe \
- 	--with-stdout
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index 700ee3f..887b661 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -38,7 +38,7 @@ while read f; do
  
-+SHAIRPORT_SYNC_CONF_ENV += LIBS="$(SHAIRPORT_SYNC_CONF_LIBS)"
-+
- # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
- # Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
- # and dbus is selected. Since there is no BR2_PACKAGE_LIBAVAHI_CLIENT config
-@@ -38,6 +40,10 @@ SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
- else
- SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
- SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
-+SHAIRPORT_SYNC_CONF_LIBS += -lmbedx509 -lmbedcrypto
-+ifeq ($(BR2_PACKAGE_MBEDTLS_COMPRESSION),y)
-+SHAIRPORT_SYNC_CONF_LIBS += -lz
-+endif
- endif
+ 	# Skip symlinks. Some symlinks may have absolute paths as
+ 	# target, pointing to host binaries while we're building.
+-	if [[ -L "${f}" ]]; then
++	if [[ -L "${TARGET_DIR}/${f}" ]]; then
+ 		continue
+ 	fi
  
- ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
--- 
-2.14.1
