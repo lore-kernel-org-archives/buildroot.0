@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Sep 2017 23:20:37 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-headers: aarch64: Prevent
-	selecting unsupported versions
-In-Reply-To: <20170806134011.30228-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 6 Aug 2017 15:40:11 +0200")
-References: <20170806134011.30228-1-bernd.kuhls@t-online.de>
-Message-ID: <87bmmolu56.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Sep 2017 23:25:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jack2: backport two build fixes
+In-Reply-To: <20170806125840.5694-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 6 Aug 2017 14:58:40 +0200")
+References: <20170806125840.5694-1-bernd.kuhls@t-online.de>
+Message-ID: <877excltwj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Versions older than Linux v3.7 do not support the aarch64 architecture
- > so disable them, for reference see https://kernelnewbies.org/Linux_3.7
+ > 0005-gcc7.patch fixes
+ > http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
 
- > Without this patch these defconfigs fail to build
-
- > BR2_aarch64=y
- > BR2_KERNEL_HEADERS_3_2=y
-
- > BR2_aarch64=y
- > BR2_KERNEL_HEADERS_3_4=y
-
- > with error messages like this:
-
- > make[1]: Entering directory '/home/buildroot/br5_next/output/build/linux-headers-3.2.89'
- > Makefile:567: /home/buildroot/br5_next/output/build/linux-headers-3.2.89/arch/arm64/Makefile: No such file or directory
+ > 0006-fix-ftbfs-with-clang.patch
+ > fixes the subsequent build error:
+ > common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
+ > memops.c:(.text+0x4dc): undefined reference to `fast_rand'
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
