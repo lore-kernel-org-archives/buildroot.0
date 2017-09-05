@@ -1,150 +1,59 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Tue,  5 Sep 2017 10:57:45 +0200
-Subject: [Buildroot] [PATCH v2] libostree: new package
-Message-ID: <20170905085745.18783-1-marcus.folkesson@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 Sep 2017 11:01:17 +0200
+Subject: [Buildroot] [PATCH] package/netplug: init script create needed
+ lock directory
+In-Reply-To: <20170905083917.8625-1-corjon.j@ecagroup.com>
+References: <20170905083917.8625-1-corjon.j@ecagroup.com>
+Message-ID: <20170905090117.GA3713@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OSTree is an upgrade system for Linux-based operating systems
+Julien, All,
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
+On 2017-09-05 10:39 +0200, Julien Corjon spake thusly:
+> Init script use /var/lock/subsys/netplugd but directory
+> /var/lock/subsys can be missing.
+> 
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  package/netplug/S29netplug | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+> index 88f933d556..fe63c1b79a 100755
+> --- a/package/netplug/S29netplug
+> +++ b/package/netplug/S29netplug
+> @@ -11,6 +11,9 @@
+>  
+>  # Copyright 2003 Key Research, Inc.
+>  
+> +# Create needed directories
+> +[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
 
-v2:
-- add e2fsprogs as dependency
+mkdir -p will only create what is needed, so if the directory already exists,
+it will do nothing, and will not whine either. So, don't test, just mkdir.
 
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...Use-autoreconf-from-the-build-environment.patch | 42 ++++++++++++++++++++++
- package/libostree/Config.in                        | 12 +++++++
- package/libostree/libostree.mk                     | 22 ++++++++++++
- 5 files changed, 80 insertions(+)
- create mode 100644 package/libostree/0001-Use-autoreconf-from-the-build-environment.patch
- create mode 100644 package/libostree/Config.in
- create mode 100644 package/libostree/libostree.mk
+Regards,
+Yann E. MORIN.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f3944e2748..a1cfd9e1bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1100,6 +1100,9 @@ F:	package/turbolua/
- N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
- F:	package/libkcapi/
- 
-+N:	Marcus Folkesson <marcus.folkesson@gmail.com>
-+F:	package/libostree/
-+
- N:	Marek Belisko <marek.belisko@open-nandra.com>
- F:	package/libatasmart/
- F:	package/polkit/
-diff --git a/package/Config.in b/package/Config.in
-index a0868d92ee..12cd6187a5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1883,6 +1883,7 @@ menu "System tools"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
- 	source "package/openvmtools/Config.in"
-+	source "package/libostree/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
-diff --git a/package/libostree/0001-Use-autoreconf-from-the-build-environment.patch b/package/libostree/0001-Use-autoreconf-from-the-build-environment.patch
-new file mode 100644
-index 0000000000..36d9b3f15e
---- /dev/null
-+++ b/package/libostree/0001-Use-autoreconf-from-the-build-environment.patch
-@@ -0,0 +1,42 @@
-+From e4b940cc02776edee63c5a706746dc237862151d Mon Sep 17 00:00:00 2001
-+From: Marcus Folkesson <marcus.folkesson@gmail.com>
-+Date: Wed, 30 Aug 2017 19:20:35 +0200
-+Subject: [PATCH] Use autoreconf from the build environment
-+
-+OSTree workarounds a bug in automake in their autogen.sh file.
-+Use the script but do not call autoreconf from it.
-+
-+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-+---
-+ autogen.sh | 11 -----------
-+ 1 file changed, 11 deletions(-)
-+
-+diff --git a/autogen.sh b/autogen.sh
-+index 17f6abf4..0dfbb15a 100755
-+--- a/autogen.sh
-++++ b/autogen.sh
-+@@ -6,12 +6,6 @@ test -n "$srcdir" || srcdir=.
-+ olddir=`pwd`
-+ cd $srcdir
-+ 
-+-AUTORECONF=`which autoreconf`
-+-if test -z $AUTORECONF; then
-+-        echo "*** No autoreconf found, please install it ***"
-+-        exit 1
-+-fi
-+-
-+ set -e
-+ 
-+ mkdir -p m4
-+@@ -37,8 +31,3 @@ sed -e 's,$(libbsdiff_srcpath),bsdiff,g' < bsdiff/Makefile-bsdiff.am >bsdiff/Mak
-+ 
-+ # FIXME - figure out how to get aclocal to find this by default
-+ ln -sf ../libglnx/libglnx.m4 buildutil/libglnx.m4
-+-
-+-autoreconf --force --install --verbose
-+-
-+-cd $olddir
-+-test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
-+-- 
-+2.13.1
-+
-diff --git a/package/libostree/Config.in b/package/libostree/Config.in
-new file mode 100644
-index 0000000000..520e76ce6a
---- /dev/null
-+++ b/package/libostree/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBOSTREE
-+	bool "libostree"
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_PKGCONF
-+	select BR2_PACKAGE_XZ
-+	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_LIBFUSE
-+	select BR2_PACKAGE_LIBGPGME
-+	help
-+	  OSTree is an upgrade system for Linux-based operating systems.
-+
-+	  https://ostree.readthedocs.io/en/latest/
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-new file mode 100644
-index 0000000000..75ee53f01c
---- /dev/null
-+++ b/package/libostree/libostree.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# libostree
-+#
-+################################################################################
-+
-+LIBOSTREE_VERSION = v2017.10
-+LIBOSTREE_SITE = https://github.com/ostreedev/ostree.git
-+LIBOSTREE_SITE_METHOD = git
-+LIBOSTREE_GIT_SUBMODULES = yes
-+LIBOSTREE_LICENSE = GPLv2
-+LIBOSTREE_LICENSE_FILES = COPYING
-+LIBOSTREE_AUTORECONF = YES
-+LIBOSTREE_DEPENDENCIES = libgpgme libglib2 xz libfuse pkgconf e2fsprogs
-+
-+# Use their special autogen.sh script to workaround automake bug with subdir-objects and computed paths
-+define LIBOSTREE_RUN_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+LIBOSTREE_PRE_CONFIGURE_HOOKS += LIBOSTREE_RUN_AUTOGEN
-+
-+$(eval $(autotools-package))
+>  # Source function library.
+>  if [ -f /etc/init.d/functions ]; then
+>  	. /etc/init.d/functions
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.13.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
