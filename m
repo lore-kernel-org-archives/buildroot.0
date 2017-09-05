@@ -1,32 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Sep 2017 22:16:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <20170905221325.71f98014@windsurf.lan>
-References: <20170904185738.31182-1-bernd.kuhls@t-online.de>
- <20170905221325.71f98014@windsurf.lan>
-Message-ID: <20170905201638.GA9106@scaer>
+Date: Tue,  5 Sep 2017 22:34:48 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] docs/manual: add appendix about
+	migratinf from older versions
+Message-ID: <cover.1504643670.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello All!
 
-On 2017-09-05 22:13 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  4 Sep 2017 20:57:38 +0200, Bernd Kuhls wrote:
-> > Add optional dependencies to
-> > 
-> > - libva
-> >   ffmpeg depends on libva, libva depends on xorg, so no need to add them
-> >   to _DEPENDENCIES
-> 
-> I don't see ffmpeg depending on libva, where do you see that ?
+When we release a new version that voluntarliy breaks compatibility with
+previous versions, we must document it to hepl the uesr migrate more
+easily.
 
-Yet it does, see line 243. ;-)
+In 2017.08, we broke the compatibility with previous versions because we
+no longer accept an RPATH pointing to $(HOST_DIR)/usr/lib, even though
+that would technically functional.
+
+Add an appendix about that.
+
+Changes v1 -> v2:
+  - move all to a single file  (Thomas)
+  - fix typoes  (Thomas)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 8e4935586226880b1b6d772cd89f8299f5ffc181
+
+  package/pngquant: bump version to 2.10.1 (2017-09-05 22:01:35 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 8d12cdf3606e18c28219b5e37521aa6facb73605
+
+  docs/manual: add appendix about $(HOST_DIR)/usr (2017-09-05 22:29:44 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      docs/manual: add appendix about migration from older versions
+      docs/manual: add appendix about $(HOST_DIR)/usr
+
+ docs/manual/appendix.txt                            |  2 +-
+ .../{br2-external-converting.txt => migrating.txt}  | 21 ++++++++++++++++++++-
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+ rename docs/manual/{br2-external-converting.txt => migrating.txt} (62%)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
