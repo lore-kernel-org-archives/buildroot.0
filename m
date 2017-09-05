@@ -1,102 +1,42 @@
-From: MAVINDI Dimitri <dimitri.mavindi@thalesgroup.com>
-Date: Tue, 5 Sep 2017 16:28:55 +0200
-Subject: [Buildroot] Buildroot : RTAI Real-time patch issue
-Message-ID: <B0E42342CF573846B53369E0E3AD66A8E7C04571F0@THSONEA01CMS12P.one.grp>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  5 Sep 2017 18:21:37 +0200
+Subject: [Buildroot] [PATCH] support/tests: use relative test_dir
+Message-ID: <20170905162137.18087-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When we list the available tests, we use test_dir, which is set from
+the path of the script. However, when we run the tests, we use the
+hard-coded path.
 
-By way of introduction, this is my working configuration :
-Buildroot version : 2016.02
-Linux Kernel Version : 3.16.0
-RTAI package version : 4.1 (by default, the version 4.0.1 is provided by Buildroot. Nevertheless, the version version 4.1 of RTAI contains the file base/arch/x86/patches/hal-linux-3.16-x86-3.patch).
+Ditto to find the config file.
 
-So, in make menuconfig, I have selected the rtai module in Kernel > Linux Kernel Extensions > [*] RTAI Real-time patch.
-Then I run make and met the following issue :
-Configure : error: HAL patch not applied/enabled in $(MyBuildrootWorkspace)/output/build/linux-3.16
-Does anyone have ever met this issue? How can it be solved?
+For consistency, always use test_dir.
 
-Best Regards,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ support/testing/run-tests | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Dimitri MAVINDI
-Apprentice Software Engineer
-
-Thales Communications & Security
-
-www.thalesgroup.com<http://www.thalesgroup.com/>
-
-
-[cid:image001.png at 01D3264E.8F7E25B0]
-
-
-  [cid:image002.png at 01D3264E.8F7E25B0] <http://www.linkedin.com/company/thales>
-
-  [cid:image003.png at 01D3264E.8F7E25B0] <https://twitter.com/thalesjobs>
-
-  [cid:image004.png at 01D3264E.8F7E25B0] <https://www.facebook.com/thalesfrance>
-
-  [cid:image005.png at 01D3264E.8F7E25B0] <https://www.youtube.com/user/thethalesgroup>
-
-  [cid:image006.png at 01D3264E.8F7E25B0] <https://pinterest.com/thalesgroup/>
-
-  [cid:image007.png at 01D3264E.8F7E25B0] <https://plus.google.com/+thales>
-
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.png
-Type: image/png
-Size: 42416 bytes
-Desc: image001.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image002.png
-Type: image/png
-Size: 1621 bytes
-Desc: image002.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment-0001.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image003.png
-Type: image/png
-Size: 1621 bytes
-Desc: image003.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment-0002.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image004.png
-Type: image/png
-Size: 1488 bytes
-Desc: image004.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment-0003.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image005.png
-Type: image/png
-Size: 1490 bytes
-Desc: image005.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment-0004.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image006.png
-Type: image/png
-Size: 1709 bytes
-Desc: image006.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment-0005.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image007.png
-Type: image/png
-Size: 1802 bytes
-Desc: image007.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170905/5820b4fd/attachment-0006.png>
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 95c1565f72..ae0bd336b5 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -108,8 +108,8 @@ def main():
+ 
+     nose2_args = ["-v",
+                   "-N", str(args.testcases),
+-                  "-s", "support/testing",
+-                  "-c", "support/testing/conf/unittest.cfg"]
++                  "-s", test_dir,
++                  "-c", os.path.join(test_dir, "conf/unittest.cfg")]
+ 
+     if len(args.testname) != 0:
+         nose2_args += args.testname
+-- 
+2.11.0
