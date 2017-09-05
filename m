@@ -1,44 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:31:52 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: remove unneeded patch
-Message-ID: <20170905192441.CB26881E71@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 21:36:04 +0200
+Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
+In-Reply-To: <20170905100327.21421-1-aleksander@aleksander.es>
+References: <20170905100327.21421-1-aleksander@aleksander.es>
+Message-ID: <20170905213604.61141da0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=436291d3f03c5e30610b9f9ac5b797be3348aa45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit 44b5637ab2 (e2fsprogs: add a patch to link against SEM_INIT libs)
-introduced a patch that effectively adds -lpthread to the link command
-with libcom_err. Today the only libc with separate libpthread is glibc
-that does not support static build. The generated libcom_err.so.2.1
-library links with libpthread with or without this patch. Drop this
-patch.
+On Tue,  5 Sep 2017 12:03:27 +0200, Aleksander Morgado wrote:
+> Don't always build without udev, as qmi-firmware-update would be very
+> very limited in that case. Instead, make it optional: if there is udev
+> support in the setup, require libgudev and configure using --with-udev
+> explicitly; otherwise just --without-udev.
+> 
+> Also, add the qmi-over-mbim feature as optional, and require libmbim
+> if we're building with it enabled.
+> 
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> ---
+>  package/libqmi/Config.in | 18 ++++++++++++++++++
+>  package/libqmi/libqmi.mk | 18 ++++++++++++++++--
+>  2 files changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
+> index f1d111b7c..a536650b5 100644
+> --- a/package/libqmi/Config.in
+> +++ b/package/libqmi/Config.in
+> @@ -10,6 +10,24 @@ config BR2_PACKAGE_LIBQMI
+>  
+>  	  http://www.freedesktop.org/wiki/Software/libqmi/
+>  
+> +if BR2_PACKAGE_LIBQMI
+> +
+> +config BR2_PACKAGE_LIBQMI_UDEV
+> +	bool "qmi-firmware-update udev support"
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_LIBGUDEV
 
-Cc: Daniel Mack <daniel@zonque.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/e2fsprogs/0001-sem-init-libs.patch | 11 -----------
- 1 file changed, 11 deletions(-)
+libgudev has plenty of other dependencies that you need to propagate
+here.
 
-diff --git a/package/e2fsprogs/0001-sem-init-libs.patch b/package/e2fsprogs/0001-sem-init-libs.patch
-deleted file mode 100644
-index 56f1cc2..0000000
---- a/package/e2fsprogs/0001-sem-init-libs.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- e2fsprogs-1.41.9/MCONFIG.in.orig	2009-10-07 20:25:07.000000000 +0800
--+++ e2fsprogs-1.41.9/MCONFIG.in	2009-10-07 20:21:41.000000000 +0800
--@@ -85,7 +85,7 @@
-- #
-- LIB = $(top_builddir)/lib
-- LIBSS = $(LIB)/libss at LIB_EXT@ @PRIVATE_LIBS_CMT@ @DLOPEN_LIB@
---LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
--+LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
-- LIBE2P = $(LIB)/libe2p at LIB_EXT@
-- LIBEXT2FS = $(LIB)/libext2fs at LIB_EXT@
-- LIBUUID = @LIBUUID@ @SOCKET_LIB@
+> +	help
+> +	  This option enables udev support in the qmi-firmware-update tool
+> +
+> +config BR2_PACKAGE_LIBQMI_MBIM_QMUX
+> +	bool "QMI-over-MBIM support"
+> +	select BR2_PACKAGE_LIBMBIM
+
+... and libmbim also has plenty of dependencies that you need to
+propagate here, including BR2_PACKAGE_HAS_UDEV.
+
+All in all, isn't it simpler to get rid of those options, and simply do:
+
+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+... enable support
+else
+... disable support
+endif
+
+ifeq ($(BR2_PACKAGE_LIBMBIM),y)
+... enable support
+else
+... disable support
+endif
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
