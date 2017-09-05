@@ -1,42 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Sep 2017 18:21:37 +0200
-Subject: [Buildroot] [PATCH] support/tests: use relative test_dir
-Message-ID: <20170905162137.18087-1-yann.morin.1998@free.fr>
+Date: Tue,  5 Sep 2017 19:55:45 +0200
+Subject: [Buildroot] [PATCH] Revert "check-host-rpath: no longer allow
+	$(HOST_DIR)/usr"
+Message-ID: <20170905175545.3243-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we list the available tests, we use test_dir, which is set from
-the path of the script. However, when we run the tests, we use the
-hard-coded path.
+We no longer have any host package that installs files in
+$(HOST_DIR)/usr, so we indeed no longer have any package that is
+supposed to have an RPATH to $(HOST_DIR)/usr/lib.
 
-Ditto to find the config file.
+However, there exists out-of-tree packages that hard-code that path in
+there build-system, and they are now broken.
 
-For consistency, always use test_dir.
+This reverts commit 1d11d6314cd5ab793b5f2db784d11614f2d2d604.
 
+Reported-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
- support/testing/run-tests | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 95c1565f72..ae0bd336b5 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -108,8 +108,8 @@ def main():
+---
+Note: I'm not sure we really want to revert it; this is just to
+kickstart the discussion.
+---
+ support/scripts/check-host-rpath | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 74a25ba99c..2846d5eb51 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
  
-     nose2_args = ["-v",
-                   "-N", str(args.testcases),
--                  "-s", "support/testing",
--                  "-c", "support/testing/conf/unittest.cfg"]
-+                  "-s", test_dir,
-+                  "-c", os.path.join(test_dir, "conf/unittest.cfg")]
+ # This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
+-# they have an RPATH to $(HOST_DIR)/lib if they need libraries from
++# they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
+ # there.
  
-     if len(args.testname) != 0:
-         nose2_args += args.testname
+ # Override the user's locale so we are sure we can parse the output of
+@@ -59,6 +59,8 @@ check_elf_has_rpath() {
+             # Remove duplicate and trailing '/' for proper match
+             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+             [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
++            # For the time being, the rpath is allowed with both usr/lib and lib
++            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
+         done
+     done < <( readelf -d "${file}"                                              \
+               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
 -- 
 2.11.0
