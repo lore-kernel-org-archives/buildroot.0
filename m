@@ -1,76 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:02:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/binutils: fix
-	crash caused by buggy xtensa overlay
-Message-ID: <20170905220138.51BEF7FA06@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:19:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: aarch64:
+	Prevent selecting unsupported versions
+Message-ID: <20170905220138.8177C81ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e8fa575370141121f5ae2666d4238edef3ec3dc
+commit: https://git.buildroot.net/buildroot/commit/?id=246df454ff55c463ebee0d446ccd115ab1423dac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-In some xtensa configurations there may be system/user registers in
-xtensa-modules with negative index. ISA initialization for such config
-may clobber heap and result in program termination.
-Don't update lookup table entries for register with negative indices.
+Versions older than Linux v3.7 do not support the aarch64 architecture
+so disable them, for reference see https://kernelnewbies.org/Linux_3.7
 
-[Peter: drop 2.28.x/2.29.x variants]
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 83f7fb0d5bdbae3c50bac0eb1d4efe1c71692af8)
+Without this patch these defconfigs fail to build
+
+BR2_aarch64=y
+BR2_KERNEL_HEADERS_3_2=y
+
+BR2_aarch64=y
+BR2_KERNEL_HEADERS_3_4=y
+
+with error messages like this:
+
+make[1]: Entering directory '/home/buildroot/br5_next/output/build/linux-headers-3.2.89'
+Makefile:567: /home/buildroot/br5_next/output/build/linux-headers-3.2.89/arch/arm64/Makefile: No such file or directory
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 1291528bde602120ab4b60d23d1a362d44cc5e04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-new file mode 100644
-index 0000000..30103ee
---- /dev/null
-+++ b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-@@ -0,0 +1,42 @@
-+From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 2 Aug 2017 00:36:05 -0700
-+Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
-+
-+In some xtensa configurations there may be system/user registers in
-+xtensa-modules with negative index. ISA initialization for such config
-+may clobber heap and result in program termination.
-+Don't update lookup table entries for register with negative indices.
-+They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
-+change should not affect processing of valid assembly/binary code.
-+
-+bfd/
-+2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
-+	entries for sysregs with negative indices.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
-+
-+ bfd/xtensa-isa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
-+index 8da75bea8109..8c6ee88fdeae 100644
-+--- a/bfd/xtensa-isa.c
-++++ b/bfd/xtensa-isa.c
-+@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
-+       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
-+       is_user = sreg->is_user;
-+ 
-+-      isa->sysreg_table[is_user][sreg->number] = n;
-++      if (sreg->number >= 0)
-++	isa->sysreg_table[is_user][sreg->number] = n;
-+     }
-+ 
-+   /* Set up the interface lookup table.  */
-+-- 
-+2.1.4
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4a3afd4..6440dee 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -28,12 +28,12 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_3_2
+ 		bool "Linux 3.2.x kernel headers"
+-		depends on !BR2_arc && !BR2_nios2
++		depends on !BR2_aarch64 && !BR2_arc && !BR2_nios2
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
+ 	config BR2_KERNEL_HEADERS_3_4
+ 		bool "Linux 3.4.x kernel headers"
+-		depends on !BR2_arc && !BR2_nios2
++		depends on !BR2_aarch64 && !BR2_arc && !BR2_nios2
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+ 	config BR2_KERNEL_HEADERS_3_10
