@@ -1,37 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 00:02:29 +0200
-Subject: [Buildroot] [PATCH] libcurl: fix build on uncommon architectures
-In-Reply-To: <20170811183420.12238-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 11 Aug 2017 20:34:20 +0200")
-References: <20170811183420.12238-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <878thskdmy.fsf@dell.be.48ers.dk>
+Date: Tue, 5 Sep 2017 23:02:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/binutils: fix
+	crash caused by buggy xtensa overlay
+Message-ID: <20170905220138.51BEF7FA06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7e8fa575370141121f5ae2666d4238edef3ec3dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Since the bump to 7.55.0, libcurl fails to build on a number of
- > uncommon architectures (ARC, OpenRISC, etc.). This is due to upstream
- > commit 73a2fcea0b4adea6ba342cd7ed1149782c214ae3 ("includes: remove
- > curl/curlbuild.h and curl/curlrules.h"), which makes libcurl rely on
- > more architecture-specific related defines in include/curl/system.h.
+In some xtensa configurations there may be system/user registers in
+xtensa-modules with negative index. ISA initialization for such config
+may clobber heap and result in program termination.
+Don't update lookup table entries for register with negative indices.
 
- > This commit therefore adds a patch that fixes the 32-bit vs. 64-bit
- > detection for all architecture, using gcc's __SIZEOF_LONG__
- > definition. It has been tested successfully with test-pkg on all 47
- > toolchain configurations.
+[Peter: drop 2.28.x/2.29.x variants]
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 83f7fb0d5bdbae3c50bac0eb1d4efe1c71692af8)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/bf26c08cf3267214278674472f931603f69951ae/
- >   (and many similar issues)
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+new file mode 100644
+index 0000000..30103ee
+--- /dev/null
++++ b/package/binutils/2.27/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+@@ -0,0 +1,42 @@
++From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 2 Aug 2017 00:36:05 -0700
++Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
++
++In some xtensa configurations there may be system/user registers in
++xtensa-modules with negative index. ISA initialization for such config
++may clobber heap and result in program termination.
++Don't update lookup table entries for register with negative indices.
++They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
++change should not affect processing of valid assembly/binary code.
++
++bfd/
++2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
++	entries for sysregs with negative indices.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
++
++ bfd/xtensa-isa.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
++index 8da75bea8109..8c6ee88fdeae 100644
++--- a/bfd/xtensa-isa.c
+++++ b/bfd/xtensa-isa.c
++@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
++       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
++       is_user = sreg->is_user;
++ 
++-      isa->sysreg_table[is_user][sreg->number] = n;
+++      if (sreg->number >= 0)
+++	isa->sysreg_table[is_user][sreg->number] = n;
++     }
++ 
++   /* Set up the interface lookup table.  */
++-- 
++2.1.4
++
