@@ -1,90 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 00:01:25 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: fix build on
-	uncommon architectures
-Message-ID: <20170905220139.1B9B880466@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:15:53 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+	9, 12}.x series
+Message-ID: <20170905220138.7785981ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0973b7b475f6c0ee6a09594e7834621b432b701
+commit: https://git.buildroot.net/buildroot/commit/?id=99c6d668a6c6e893fb12be04099d727b4c482189
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Since the bump to 7.55.0, libcurl fails to build on a number of
-uncommon architectures (ARC, OpenRISC, etc.). This is due to upstream
-commit 73a2fcea0b4adea6ba342cd7ed1149782c214ae3 ("includes: remove
-curl/curlbuild.h and curl/curlrules.h"), which makes libcurl rely on
-more architecture-specific related defines in include/curl/system.h.
-
-This commit therefore adds a patch that fixes the 32-bit vs. 64-bit
-detection for all architecture, using gcc's __SIZEOF_LONG__
-definition. It has been tested successfully with test-pkg on all 47
-toolchain configurations.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/bf26c08cf3267214278674472f931603f69951ae/
-  (and many similar issues)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6361a50e3f813c81d49636ee92a427442b9a2160)
+[Peter: drop 4.12.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit a4a6c74171d2411fa95d92ce489582b3f10ba705)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-curl-system.h-support-more-architectures.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/0001-curl-system.h-support-more-architectures.patch b/package/libcurl/0001-curl-system.h-support-more-architectures.patch
-new file mode 100644
-index 0000000..94d9a2a
---- /dev/null
-+++ b/package/libcurl/0001-curl-system.h-support-more-architectures.patch
-@@ -0,0 +1,47 @@
-+From 7d84bd820ef412d251b643a4faced105668f4ebd Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 11 Aug 2017 18:52:37 +0200
-+Subject: [PATCH] curl/system.h: support more architectures
-+
-+The long list of architectures in include/curl/system.h is annoying to
-+maintain, and needs to be extended for each and every architecture to
-+support.
-+
-+Instead, let's rely on the __SIZEOF_LONG__ define of the gcc compiler
-+(we are in the GNUC condition anyway), which tells us if long is 4
-+bytes or 8 bytes.
-+
-+This fixes the build of libcurl 7.55.0 on architectures such as
-+OpenRISC or ARC.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/curl/system.h | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/include/curl/system.h b/include/curl/system.h
-+index 79abf8f..0e13075 100644
-+--- a/include/curl/system.h
-++++ b/include/curl/system.h
-+@@ -403,7 +403,7 @@
-+ #  if !defined(__LP64__) && (defined(__ILP32__) || \
-+       defined(__i386__) || defined(__ppc__) || defined(__arm__) || \
-+       defined(__sparc__) || defined(__mips__) || defined(__sh__) || \
-+-      defined(__XTENSA__))
-++      defined(__XTENSA__) || (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 4))
-+ #    define CURL_SIZEOF_LONG           4
-+ #    define CURL_TYPEOF_CURL_OFF_T     long long
-+ #    define CURL_FORMAT_CURL_OFF_T     "lld"
-+@@ -412,7 +412,8 @@
-+ #    define CURL_SUFFIX_CURL_OFF_T     LL
-+ #    define CURL_SUFFIX_CURL_OFF_TU    ULL
-+ #  elif defined(__LP64__) || \
-+-        defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__)
-++        defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__) || \
-++        (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 8)
-+ #    define CURL_SIZEOF_LONG           8
-+ #    define CURL_TYPEOF_CURL_OFF_T     long
-+ #    define CURL_FORMAT_CURL_OFF_T     "ld"
-+-- 
-+2.9.4
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cf2dc07..4a3afd4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.79"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.80"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.40"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.41"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
