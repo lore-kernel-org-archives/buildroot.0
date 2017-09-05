@@ -1,28 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Sep 2017 23:58:06 +0200
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.55.0
-In-Reply-To: <4f33b3435349660c4e3f2b444104442e6a9498b1.1502386545.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 10 Aug 2017 20:35:45 +0300")
-References: <4f33b3435349660c4e3f2b444104442e6a9498b1.1502386545.git.baruch@tkos.co.il>
-Message-ID: <87h8wgkdu9.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 00:00:01 +0200
+Subject: [Buildroot] [PATCH] package/valgrind: hide comment when arch is
+	not supported
+In-Reply-To: <20170810215111.32360-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 10 Aug 2017 23:51:11 +0200")
+References: <20170810215111.32360-1-yann.morin.1998@free.fr>
+Message-ID: <87d174kdr2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes:
- >  glob: do not parse after a strtoul() overflow range (CVE-2017-1000101)
- >  tftp: reject file name lengths that don't fit (CVE-2017-1000100)
- >  file: output the correct buffer to the user (CVE-2017-1000099)
+ > Currently, the comment that "valgrind needs shared libs" is not hidden
+ > when the architecture dependencies are not met, which can confuse some
+ > users (as recently seen on IRC).
 
- > Switch to .tar.xz to save bandwidth.
+ > Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
+ > the comment and the symbol depend on that.
 
- > Add reference to tarball signature.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
+ > Cc: J?r?me Pouiller <jezz@sysmic.org>
+ > Cc: Peter Seiderer <ps.report@gmx.net>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > Note: Cc-ing the people that have touched valgrind in the past 12
+ > months-or-so...
 
 Committed to 2017.02.x, thanks.
 
