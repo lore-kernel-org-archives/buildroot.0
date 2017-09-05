@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 00:00:01 +0200
-Subject: [Buildroot] [PATCH] package/valgrind: hide comment when arch is
-	not supported
-In-Reply-To: <20170810215111.32360-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 10 Aug 2017 23:51:11 +0200")
-References: <20170810215111.32360-1-yann.morin.1998@free.fr>
-Message-ID: <87d174kdr2.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 00:02:29 +0200
+Subject: [Buildroot] [PATCH] libcurl: fix build on uncommon architectures
+In-Reply-To: <20170811183420.12238-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 11 Aug 2017 20:34:20 +0200")
+References: <20170811183420.12238-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <878thskdmy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Currently, the comment that "valgrind needs shared libs" is not hidden
- > when the architecture dependencies are not met, which can confuse some
- > users (as recently seen on IRC).
+ > Since the bump to 7.55.0, libcurl fails to build on a number of
+ > uncommon architectures (ARC, OpenRISC, etc.). This is due to upstream
+ > commit 73a2fcea0b4adea6ba342cd7ed1149782c214ae3 ("includes: remove
+ > curl/curlbuild.h and curl/curlrules.h"), which makes libcurl rely on
+ > more architecture-specific related defines in include/curl/system.h.
 
- > Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
- > the comment and the symbol depend on that.
+ > This commit therefore adds a patch that fixes the 32-bit vs. 64-bit
+ > detection for all architecture, using gcc's __SIZEOF_LONG__
+ > definition. It has been tested successfully with test-pkg on all 47
+ > toolchain configurations.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
- > Cc: J?r?me Pouiller <jezz@sysmic.org>
- > Cc: Peter Seiderer <ps.report@gmx.net>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Fixes:
 
- > ---
- > Note: Cc-ing the people that have touched valgrind in the past 12
- > months-or-so...
+ >   http://autobuild.buildroot.net/results/bf26c08cf3267214278674472f931603f69951ae/
+ >   (and many similar issues)
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
