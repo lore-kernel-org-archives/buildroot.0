@@ -1,78 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:36:04 +0200
-Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
-In-Reply-To: <20170905100327.21421-1-aleksander@aleksander.es>
-References: <20170905100327.21421-1-aleksander@aleksander.es>
-Message-ID: <20170905213604.61141da0@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  5 Sep 2017 21:42:49 +0200
+Subject: [Buildroot] [PATCH 0/2] docs/manual: add appendix about migratinf
+	from older versions
+Message-ID: <cover.1504640557.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-On Tue,  5 Sep 2017 12:03:27 +0200, Aleksander Morgado wrote:
-> Don't always build without udev, as qmi-firmware-update would be very
-> very limited in that case. Instead, make it optional: if there is udev
-> support in the setup, require libgudev and configure using --with-udev
-> explicitly; otherwise just --without-udev.
-> 
-> Also, add the qmi-over-mbim feature as optional, and require libmbim
-> if we're building with it enabled.
-> 
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
->  package/libqmi/Config.in | 18 ++++++++++++++++++
->  package/libqmi/libqmi.mk | 18 ++++++++++++++++--
->  2 files changed, 34 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
-> index f1d111b7c..a536650b5 100644
-> --- a/package/libqmi/Config.in
-> +++ b/package/libqmi/Config.in
-> @@ -10,6 +10,24 @@ config BR2_PACKAGE_LIBQMI
->  
->  	  http://www.freedesktop.org/wiki/Software/libqmi/
->  
-> +if BR2_PACKAGE_LIBQMI
-> +
-> +config BR2_PACKAGE_LIBQMI_UDEV
-> +	bool "qmi-firmware-update udev support"
-> +	depends on BR2_PACKAGE_HAS_UDEV
-> +	select BR2_PACKAGE_LIBGUDEV
+When we release a new version that voluntarliy breaks compatibility with
+previous versions, we must document it to hepl the uesr migrate more
+easily.
 
-libgudev has plenty of other dependencies that you need to propagate
-here.
+In 2017.08, we broke the compatibility with previous versions because we
+no longer accept an RPATH pointing to $(HOST_DIR)/usr/lib, even though
+that would technically functional.
 
-> +	help
-> +	  This option enables udev support in the qmi-firmware-update tool
-> +
-> +config BR2_PACKAGE_LIBQMI_MBIM_QMUX
-> +	bool "QMI-over-MBIM support"
-> +	select BR2_PACKAGE_LIBMBIM
+Add an appendix about that.
 
-... and libmbim also has plenty of dependencies that you need to
-propagate here, including BR2_PACKAGE_HAS_UDEV.
 
-All in all, isn't it simpler to get rid of those options, and simply do:
+Regards,
+Yann E. MORIN.
 
-ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-... enable support
-else
-... disable support
-endif
 
-ifeq ($(BR2_PACKAGE_LIBMBIM),y)
-... enable support
-else
-... disable support
-endif
+The following changes since commit c96b8675ea03a5d3194d439f740c725dd239ed1a
 
-Thanks!
+  support/scripts/check-bin-arch: ignore symbolic links (2017-09-04 16:01:51 +0200)
 
-Thomas
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 027bc1ba0e0b06cd2e353ef8683084b6f9fec926
+
+  docs/manual: add appendix about $(HOST_DIR)/usr (2017-09-05 21:41:18 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      docs/manual: add appendis about migration from older versions
+      docs/manual: add appendix about $(HOST_DIR)/usr
+
+ docs/manual/appendix.txt                                   |  2 +-
+ ...-external-converting.txt => migrating-br2-external.txt} |  2 +-
+ docs/manual/migrating-host-usr.txt                         | 14 ++++++++++++++
+ docs/manual/migrating.txt                                  |  8 ++++++++
+ 4 files changed, 24 insertions(+), 2 deletions(-)
+ rename docs/manual/{br2-external-converting.txt => migrating-br2-external.txt} (96%)
+ create mode 100644 docs/manual/migrating-host-usr.txt
+ create mode 100644 docs/manual/migrating.txt
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
