@@ -1,36 +1,31 @@
 From: Nicholas Sielicki <sielicki@yandex.com>
-Date: Mon,  4 Sep 2017 17:48:39 -0500
-Subject: [Buildroot] [PATCH 1/1] configs/galileo: update to kernel with gcc6
-	fix
-Message-ID: <20170904224839.8036-1-sielicki@yandex.com>
+Date: Mon,  4 Sep 2017 19:08:04 -0500
+Subject: [Buildroot] [PATCH v2 0/2] grub2 wchar defconfig fixes
+Message-ID: <20170905000806.13295-1-sielicki@yandex.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The kernel used for the galileo boards would not successfully build with
-GCC versions greater than 5.
+Since a version bump of grub2 (5ffafd2353f5d67) it requires a toolchain
+with wide character support. Some defconfigs have lines to build grub2
+(BR_TARGET_GRUB2=y) but this doesn't always take place, depending on
+whether BR2_USE_WCHAR is set. Because of this, some defconfigs will fail
+to successfully build images.
 
-See: https://github.com/mdr78/Linux-x1000/pull/2
+This v2 cuts out some unnecessary changes from v1 (ie: comments in
+configs to explicitly note this dependency without any other change) and
+splits up the remaining changes into individual patches. I did not test
+the minnowboard change, but the galileo change is tested.
 
-Signed-off-by: Nicholas Sielicki <sielicki@yandex.com>
----
- configs/galileo_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Nicholas Sielicki (2):
+  configs/galileo: grub2 needs wchar toolchain
+  configs/minnowboard_max-graphical: wchar/grub2 fix
 
-diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
-index 43639a41a..7db3cfe8a 100644
---- a/configs/galileo_defconfig
-+++ b/configs/galileo_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/intel/galileo/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mdr78/Linux-x1000.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0feded4f96ddca9816c6c1b8a4780cb4065747b9"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8b3c9d8ce1656a26b1097d9091d53bfb39fef640"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/intel/galileo/linux-3.14.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ configs/galileo_defconfig                   | 2 ++
+ configs/minnowboard_max-graphical_defconfig | 2 ++
+ 2 files changed, 4 insertions(+)
+
 -- 
 2.14.1
