@@ -1,91 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:39:16 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] pkg-cmake.mk: set
-	pkg-config env. vars. in the host configure environment
-Message-ID: <20170905220138.C0B5781ED2@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:31:46 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] faad2: security bump to
+	version 2.8.1
+Message-ID: <20170905220138.B10ED81ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2e4924597bd57c3b1d0cff2a2a38adb94f6c960
+commit: https://git.buildroot.net/buildroot/commit/?id=214343add7a6e6ac5656a06a3d4b8b7ab25c153c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This change is fixing the bug reported in [1].
+Fixes: CVE-2017-9218, CVE-2017-9219, CVE-2017-9220, CVE-2017-9221,
+CVE-2017-9222, CVE-2017-9223, CVE-2017-9253, CVE-2017-9254,
+CVE-2017-9255, CVE-2017-9256, CVE-2017-9257
 
-Cmake may run pkg-config to find the dependencies when configuring a
-package. Because of the value of PATH, and it will use the Buildroot's
-pkg-config wrapper, which, by default, is configured (via some
-environment variables) to find the target dependencies.
+http://seclists.org/fulldisclosure/2017/Jun/32
 
-When configuring a host package using cmake, to prevent cmake from
-wrongly solving dependencies from the target tree (when the
-*-config.cmake files are using pkg-config) instead of looking for them
-in the Buildroot's host tree or in the host system itself, we need to
-set the environment variables altering the pkg-config behavior in the
-cmake configure environment.
+Switch to .tar.bz2 to save some bandwidth.
 
-So, this change is fixing the cmake host-packages configuration step,
-by properly setting the pkg-config environment variables to their values
-for finding host dependencies.
+Add autoreconf since unfortunately upstream tarball does not ship the
+configure script.
 
-Before this patch:
-
-  make O=/opt/br/abo/cmake-host-find-root-path libxml2 host-mariadb{-dirclean,-configure} && echo $?
-  [...]
-  >>> host-mariadb 10.1.25 Configuring
-  (mkdir -p /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && cd /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && rm -f CMakeCache.txt && PATH="/opt/br/abo/cmake-host-find-root-path/host/bin:/opt/br/abo/cmake-host-find-root-path/host/sbin:/home/sam/.local/bin:/sbin:/usr/sbin:/bin:/usr/bin"  /usr/bin/cmake /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_C_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_CXX_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_EXE_LINKER_FLAGS="-L/opt/br/abo/cmake-host-find-root-path/host/lib -Wl,-rpath,/opt/br/abo/cmake-host-find-root-path/host/lib"
-  -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_CXX_COMPILER="/usr/bin/g++"  -DCMAKE_C_COMPILER_ARG1="" -DCMAKE_CXX_COMPILER_ARG1=""  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF  -DWITH_SSL=bundled )
-  -- Running cmake version 3.8.2
-  [...]
-  -- Found PkgConfig: /opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config (found version "0.28")
-  [...]
-  -- Found LibXml2: /opt/br/abo/cmake-host-find-root-path/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libxml2.so (found version "2.9.4")
-  [...]
-  0
-
-After this patch is applied:
-
-  make O=/opt/br/abo/cmake-host-find-root-path libxml2 host-mariadb{-dirclean,-configure} && echo $?
-  [...]
-  >>> host-mariadb 10.1.25 Configuring
-  (mkdir -p /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && cd /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && rm -f CMakeCache.txt && PATH="/opt/br/abo/cmake-host-find-root-path/host/bin:/opt/br/abo/cmake-host-find-root-path/host/sbin:/home/sam/.local/bin:/sbin:/usr/sbin:/bin:/usr/bin" PKG_CONFIG="/opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_LIBDIR="/opt/br/abo/cmake-host-find-root-path/host/lib/pkgconfig:/opt/br/abo/cmake-host-find-root-path/host/share/pkgconfig" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1  /usr/bin/cmake /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="/opt/br/abo/cmake-host-find-roo
- t-path/host" -DCMAKE_C_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_CXX_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_EXE_LINKER_FLAGS="-L/opt/br/abo/cmake-host-find-root-path/host/lib -Wl,-rpath,/opt/br/abo/cmake-host-find-root-path/host/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_CXX_COMPILER="/usr/bin/g++"  -DCMAKE_C_COMPILER_ARG1="" -DCMAKE_CXX_COMPILER_ARG1=""  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF  -DWITH_SSL=bundled )
-  -- Running cmake version 3.8.2
-  [...]
-  -- Found PkgConfig: /opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config (found version "0.28")
-  [...]
-  -- Found LibXml2: /usr/lib/libxml2.so (found version "2.9.4")
-  [...]
-  0
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-August/199776.html
-
-Reported-by: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
-Cc: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c9f9b16a2f37caeeced47cb562b642ec0c166652)
+(cherry picked from commit 1e2c245bf4f21e9da41a60856cfa50eff5671e19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/faad2/faad2.hash | 6 +++---
+ package/faad2/faad2.mk   | 8 ++++++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index a7c8dc3..f1c12b9 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -109,6 +109,11 @@ define $(2)_CONFIGURE_CMDS
- 	cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
-+	PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
-+	PKG_CONFIG_SYSROOT_DIR="/" \
-+	PKG_CONFIG_LIBDIR="$$(HOST_DIR)/lib/pkgconfig:$$(HOST_DIR)/share/pkgconfig" \
-+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
+index 691645b..d298e90 100644
+--- a/package/faad2/faad2.hash
++++ b/package/faad2/faad2.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.7/ (used by upstream):
+-sha1	80eaaa5cc576c35dd28863767b795c50cbcc0511  faad2-2.7.tar.gz
++# From http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.8.0/ (used by upstream):
++sha1	a5caa71cd915acd502d96cba56f38296277f2350  faad2-2.8.1.tar.bz2
+ # Locally computed
+-sha256  ee26ed1e177c0cd8fa8458a481b14a0b24ca0b51468c8b4c8b676fd3ceccd330  faad2-2.7.tar.gz
++sha256  f4042496f6b0a60f5ded6acd11093230044ef8a2fd965360c1bbd5b58780933d  faad2-2.8.1.tar.bz2
+diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
+index 8c4fc1a..67c5293 100644
+--- a/package/faad2/faad2.mk
++++ b/package/faad2/faad2.mk
+@@ -4,10 +4,14 @@
+ #
+ ################################################################################
+ 
+-FAAD2_VERSION = 2.7
+-FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION)
++FAAD2_VERSION_MAJOR = 2.8
++FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
++FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
++FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
+ FAAD2_LICENSE = GPLv2
+ FAAD2_LICENSE_FILES = COPYING
++# No configure script in upstream tarball
++FAAD2_AUTORECONF = YES
+ # frontend/faad calls frexp()
+ FAAD2_CONF_ENV = LIBS=-lm
+ FAAD2_INSTALL_STAGING = YES
