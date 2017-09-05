@@ -1,102 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:24:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/jack2: backport
-	two build fixes
-Message-ID: <20170905220138.9707C81ED2@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:43:12 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gdb: add fix for gdb 7.12
+	and gdb 8.0 build on noMMU platforms
+Message-ID: <20170905220138.D221381ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e40be53f7b3d634f1e15ead62bea3c52b4cdb470
+commit: https://git.buildroot.net/buildroot/commit/?id=e8f6630b1039a6a4e4f1093e764be16fa16e482c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-0005-gcc7.patch fixes
-http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
+This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
+noMMU platforms. It is not needed for older versions of gdb, since
+it's related to the switch of gdb to C++ in the 7.12 release.
 
-0006-fix-ftbfs-with-clang.patch
-fixes the subsequent build error:
-common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
-memops.c:(.text+0x4dc): undefined reference to `fast_rand'
+Fixes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
+../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
+       child_stack = xmalloc (STACK_SIZE * 4);
+
+The patch has already been merged upstream, as of commit
+ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
+of future gdb releases.
+
+[Peter: drop gdb-8.0 patch]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 50ace0bcc31e375adde289215e2b0c728211f886)
+(cherry picked from commit 5c12506f4da21fcc7a4f1514670c4bfd4f23b466)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jack2/0005-gcc7.patch                 | 31 +++++++++++++++++++++++++++
- package/jack2/0006-fix-ftbfs-with-clang.patch | 28 ++++++++++++++++++++++++
- 2 files changed, 59 insertions(+)
+ ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/jack2/0005-gcc7.patch b/package/jack2/0005-gcc7.patch
+diff --git a/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
 new file mode 100644
-index 0000000..dadaf44
+index 0000000..4eb72e4
 --- /dev/null
-+++ b/package/jack2/0005-gcc7.patch
-@@ -0,0 +1,31 @@
-+From f7bccdca651592cc4082b28fd4a01ed6ef8ab655 Mon Sep 17 00:00:00 2001
-+From: Kjetil Matheussen <k.s.matheussen@notam02.no>
-+Date: Sat, 15 Jul 2017 13:21:59 +0200
-+Subject: [PATCH] Tests: Fix compilation with gcc7
++++ b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+@@ -0,0 +1,41 @@
++From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 18 Jun 2017 23:09:43 +0200
++Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
 +
-+Fixes
-+../tests/test.cpp: In function ???int process4(jack_nframes_t, void*)???:
-+../tests/test.cpp:483:73: error: call of overloaded ???abs(jack_nframes_t)??? is ambiguous
-+  if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
++On noMMU platforms, the following code gets compiled:
 +
-+Downloaded from upstream commit
-+https://github.com/jackaudio/jack2/commit/f7bccdca651592cc4082b28fd4a01ed6ef8ab655
++  child_stack = xmalloc (STACK_SIZE * 4);
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
++the lack of cast is valid in C, it is not in C++, causing the
++following build failure:
++
++../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
++../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
++       child_stack = xmalloc (STACK_SIZE * 4);
++
++Therefore, this commit adds the appropriate cast.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
 +---
-+ tests/test.cpp | 2 +-
++ gdb/nat/linux-ptrace.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/tests/test.cpp b/tests/test.cpp
-+index 8a8a8117..d2ef9a05 100644
-+--- a/tests/test.cpp
-++++ b/tests/test.cpp
-+@@ -479,7 +479,7 @@ int process4(jack_nframes_t nframes, void *arg)
-+ 	jack_nframes_t delta_time = cur_time - last_time;
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 3447e07..33833e2 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
++ #define STACK_SIZE 4096
 + 
-+ 	Log("calling process4 callback : jack_frame_time = %ld delta_time = %ld\n", cur_time, delta_time);
-+-	if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
-++	if (delta_time > 0  && abs((int64_t)delta_time - (int64_t)cur_buffer_size) > (int64_t)tolerance) {
-+ 		printf("!!! ERROR !!! jack_frame_time seems to return incorrect values cur_buffer_size = %d, delta_time = %d tolerance %d\n", cur_buffer_size, delta_time, tolerance);
-+ 	}
++     if (child_stack == NULL)
++-      child_stack = xmalloc (STACK_SIZE * 4);
+++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
 + 
-diff --git a/package/jack2/0006-fix-ftbfs-with-clang.patch b/package/jack2/0006-fix-ftbfs-with-clang.patch
-new file mode 100644
-index 0000000..a73fe69
---- /dev/null
-+++ b/package/jack2/0006-fix-ftbfs-with-clang.patch
-@@ -0,0 +1,28 @@
-+From d3c8e2d8d78899fba40a3e677ed4dbe388d82269 Mon Sep 17 00:00:00 2001
-+From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
-+Date: Thu, 18 Sep 2014 18:29:23 +0200
-+Subject: [PATCH] Fix FTBFS with clang++
++     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
++ #ifdef __ia64__
++-- 
++2.9.4
 +
-+Forwarded from http://bugs.debian.org/757820
-+
-+Downloaded from upstream commit
-+https://github.com/jackaudio/jack2/commit/d3c8e2d8d78899fba40a3e677ed4dbe388d82269
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ common/memops.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/common/memops.c b/common/memops.c
-+index 27f6194a..2d416b64 100644
-+--- a/common/memops.c
-++++ b/common/memops.c
-+@@ -198,7 +198,7 @@ static inline __m128i float_24_sse(__m128 s)
-+  */
-+ static unsigned int seed = 22222;
-+ 
-+-inline unsigned int fast_rand() {
-++static inline unsigned int fast_rand() {
-+ 	seed = (seed * 96314165) + 907633515;
-+ 	return seed;
-+ }
