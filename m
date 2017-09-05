@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:09:06 +0200
-Subject: [Buildroot] [git commit] support/tests: use relative test_dir
-Message-ID: <20170905190220.36DBF81971@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 21:11:54 +0200
+Subject: [Buildroot] [git commit] libtommath: set PREFIX when installing
+Message-ID: <20170905190456.C7E4F80794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebe61135c9a242ac39204cbd901fa9f407dae069
+commit: https://git.buildroot.net/buildroot/commit/?id=fe6afbfa03b21a45fba549ab1d8bb387a17ae21b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When we list the available tests, we use test_dir, which is set from
-the path of the script. However, when we run the tests, we use the
-hard-coded path.
+The default value is /usr/local and causes breakage in libtomcrypt & moarvm
 
-Ditto to find the config file.
+Fixes:
 
-For consistency, always use test_dir.
+  http://autobuild.buildroot.net/results/a760063f05ae23f79920bc89ffc37e7dcf77aeab/
+  http://autobuild.buildroot.net/results/78c9bc9a21cfce48615b70d80b25dd4847bd803b/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/run-tests | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libtommath/libtommath.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 95c1565..ae0bd33 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -108,8 +108,8 @@ def main():
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+index 8e0b10c..ceb2e68 100644
+--- a/package/libtommath/libtommath.mk
++++ b/package/libtommath/libtommath.mk
+@@ -17,7 +17,7 @@ define LIBTOMMATH_BUILD_CMDS
+ endef
  
-     nose2_args = ["-v",
-                   "-N", str(args.testcases),
--                  "-s", "support/testing",
--                  "-c", "support/testing/conf/unittest.cfg"]
-+                  "-s", test_dir,
-+                  "-c", os.path.join(test_dir, "conf/unittest.cfg")]
+ define LIBTOMMATH_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" PREFIX=/usr install
+ endef
  
-     if len(args.testname) != 0:
-         nose2_args += args.testname
+ $(eval $(generic-package))
