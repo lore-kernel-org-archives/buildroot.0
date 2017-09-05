@@ -1,133 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:23:34 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] jack2: don't download
-	patch from Github
-Message-ID: <20170905220138.8CAAF81ED2@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:24:04 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/jack2: backport
+	two build fixes
+Message-ID: <20170905220138.9707C81ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbadc716d3f427a0c660a9ed83378fba676b3db4
+commit: https://git.buildroot.net/buildroot/commit/?id=e40be53f7b3d634f1e15ead62bea3c52b4cdb470
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Patches downloaded from Github are not stable, so bring them in the
-tree.
+0005-gcc7.patch fixes
+http://autobuild.buildroot.net/results/c06/c0610325d7785dfa51c5d36775623ca8fa517f24/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d8e0a2d4ae30e19b80d71777e2e844e966c337e6)
+0006-fix-ftbfs-with-clang.patch
+fixes the subsequent build error:
+common/memops.c.31.o: In function `sample_move_dither_rect_d16_sSs':
+memops.c:(.text+0x4dc): undefined reference to `fast_rand'
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 50ace0bcc31e375adde289215e2b0c728211f886)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-initialization-in-test-iodelay.patch  | 65 ++++++++++++++++++++++
- ...patch => 0002-Improve-check-for-ucontext.patch} |  0
- ...ce-support-depends-on-execinfo.h-existen.patch} |  0
- ...=> 0004-tests-define-__STDC_LIMIT_MACROS.patch} |  0
- package/jack2/jack2.hash                           |  1 -
- package/jack2/jack2.mk                             |  1 -
- 6 files changed, 65 insertions(+), 2 deletions(-)
+ package/jack2/0005-gcc7.patch                 | 31 +++++++++++++++++++++++++++
+ package/jack2/0006-fix-ftbfs-with-clang.patch | 28 ++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-diff --git a/package/jack2/0001-Fix-initialization-in-test-iodelay.patch b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
+diff --git a/package/jack2/0005-gcc7.patch b/package/jack2/0005-gcc7.patch
 new file mode 100644
-index 0000000..ee24938
+index 0000000..dadaf44
 --- /dev/null
-+++ b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
-@@ -0,0 +1,65 @@
-+From ff1ed2c4524095055140370c1008a2d9cccc5645 Mon Sep 17 00:00:00 2001
-+From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
-+Date: Sat, 11 Jun 2016 05:35:07 +0200
-+Subject: [PATCH] Fix initialization in test/iodelay.cpp
++++ b/package/jack2/0005-gcc7.patch
+@@ -0,0 +1,31 @@
++From f7bccdca651592cc4082b28fd4a01ed6ef8ab655 Mon Sep 17 00:00:00 2001
++From: Kjetil Matheussen <k.s.matheussen@notam02.no>
++Date: Sat, 15 Jul 2017 13:21:59 +0200
++Subject: [PATCH] Tests: Fix compilation with gcc7
 +
-+jack_latency_range_t is
++Fixes
++../tests/test.cpp: In function ???int process4(jack_nframes_t, void*)???:
++../tests/test.cpp:483:73: error: call of overloaded ???abs(jack_nframes_t)??? is ambiguous
++  if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
 +
-+struct _jack_latency_range {
-+    jack_nframes_t min;
-+    jack_nframes_t max;
-+};
++Downloaded from upstream commit
++https://github.com/jackaudio/jack2/commit/f7bccdca651592cc4082b28fd4a01ed6ef8ab655
 +
-+and jack_nframes_t is
-+
-+typedef uint32_t        jack_nframes_t;
-+
-+so it's unsigned. Initialising it with -1 is invalid (at least in C++14). We cannot use {0, 0}, because latency_cb has
-+
-+   jack_latency_range_t range;
-+   range.min = range.max = 0;
-+   if ((range.min != capture_latency.min) || (range.max !=
-+       capture_latency.max)) {
-+       capture_latency = range;
-+   }
-+
-+so we must not have {0, 0}, otherwise the condition would never be true.
-+
-+Using UINT32_MAX should be equivalent to the previous -1.
-+
-+[Upstream commit https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ tests/iodelay.cpp | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
++ tests/test.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/tests/iodelay.cpp b/tests/iodelay.cpp
-+index e1ba63fa..1ef470fd 100644
-+--- a/tests/iodelay.cpp
-++++ b/tests/iodelay.cpp
-+@@ -20,6 +20,7 @@
++diff --git a/tests/test.cpp b/tests/test.cpp
++index 8a8a8117..d2ef9a05 100644
++--- a/tests/test.cpp
+++++ b/tests/test.cpp
++@@ -479,7 +479,7 @@ int process4(jack_nframes_t nframes, void *arg)
++ 	jack_nframes_t delta_time = cur_time - last_time;
 + 
-+ #include <stdlib.h>
-+ #include <stdio.h>
-++#include <stdint.h>
-+ #include <math.h>
-+ #include <unistd.h>
-+ #include <jack/jack.h>
-+@@ -167,8 +168,8 @@ static jack_client_t  *jack_handle;
-+ static jack_port_t    *jack_capt;
-+ static jack_port_t    *jack_play;
++ 	Log("calling process4 callback : jack_frame_time = %ld delta_time = %ld\n", cur_time, delta_time);
++-	if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
+++	if (delta_time > 0  && abs((int64_t)delta_time - (int64_t)cur_buffer_size) > (int64_t)tolerance) {
++ 		printf("!!! ERROR !!! jack_frame_time seems to return incorrect values cur_buffer_size = %d, delta_time = %d tolerance %d\n", cur_buffer_size, delta_time, tolerance);
++ 	}
 + 
-+-jack_latency_range_t   capture_latency = {-1, -1};
-+-jack_latency_range_t   playback_latency = {-1, -1};
-++jack_latency_range_t   capture_latency = {UINT32_MAX, UINT32_MAX};
-++jack_latency_range_t   playback_latency = {UINT32_MAX, UINT32_MAX};
+diff --git a/package/jack2/0006-fix-ftbfs-with-clang.patch b/package/jack2/0006-fix-ftbfs-with-clang.patch
+new file mode 100644
+index 0000000..a73fe69
+--- /dev/null
++++ b/package/jack2/0006-fix-ftbfs-with-clang.patch
+@@ -0,0 +1,28 @@
++From d3c8e2d8d78899fba40a3e677ed4dbe388d82269 Mon Sep 17 00:00:00 2001
++From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
++Date: Thu, 18 Sep 2014 18:29:23 +0200
++Subject: [PATCH] Fix FTBFS with clang++
++
++Forwarded from http://bugs.debian.org/757820
++
++Downloaded from upstream commit
++https://github.com/jackaudio/jack2/commit/d3c8e2d8d78899fba40a3e677ed4dbe388d82269
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ common/memops.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/common/memops.c b/common/memops.c
++index 27f6194a..2d416b64 100644
++--- a/common/memops.c
+++++ b/common/memops.c
++@@ -198,7 +198,7 @@ static inline __m128i float_24_sse(__m128 s)
++  */
++ static unsigned int seed = 22222;
 + 
-+ void
-+ latency_cb (jack_latency_callback_mode_t mode, void *arg)
-+@@ -266,4 +267,4 @@ int main (int ac, char *av [])
-+     return 0;
++-inline unsigned int fast_rand() {
+++static inline unsigned int fast_rand() {
++ 	seed = (seed * 96314165) + 907633515;
++ 	return seed;
 + }
-+ 
-+-// --------------------------------------------------------------------------------
-+\ No newline at end of file
-++// --------------------------------------------------------------------------------
-diff --git a/package/jack2/0001-Improve-check-for-ucontext.patch b/package/jack2/0002-Improve-check-for-ucontext.patch
-similarity index 100%
-rename from package/jack2/0001-Improve-check-for-ucontext.patch
-rename to package/jack2/0002-Improve-check-for-ucontext.patch
-diff --git a/package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch b/package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-similarity index 100%
-rename from package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-rename to package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-diff --git a/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch b/package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
-similarity index 100%
-rename from package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch
-rename to package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
-diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
-index 1b981a4..ab031b9 100644
---- a/package/jack2/jack2.hash
-+++ b/package/jack2/jack2.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
- sha256 88f1b6601b7c8950e6a2d5940b423a33ee628ae5583da40bdce3d9317d8c600d  jack2-v1.9.10.tar.gz
--sha256 f372c4300e3fb2c1ce053e47829df44f3f8b933feb820759392187723ae8e640  ff1ed2c4524095055140370c1008a2d9cccc5645.patch
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 23c9723..7801840 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -9,7 +9,6 @@ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
- JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
- JACK2_INSTALL_STAGING = YES
--JACK2_PATCH = https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch
- 
- JACK2_CONF_OPTS = --alsa
- 
