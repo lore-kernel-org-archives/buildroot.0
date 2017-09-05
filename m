@@ -1,54 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Sep 2017 21:42:55 +0200
-Subject: [Buildroot] [PATCH 2/2] docs/manual: add appendix about
-	$(HOST_DIR)/usr
-In-Reply-To: <cover.1504640557.git.yann.morin.1998@free.fr>
-References: <cover.1504640557.git.yann.morin.1998@free.fr>
-Message-ID: <027bc1ba0e0b06cd2e353ef8683084b6f9fec926.1504640557.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Sep 2017 21:44:47 +0200
+Subject: [Buildroot] [PATCH 1/2] shairport-sync: fix static link with
+ mbedtls
+In-Reply-To: <87aa32f0dbacc3252ade43fc605e7f2c310e6465.1504638326.git.baruch@tkos.co.il>
+References: <87aa32f0dbacc3252ade43fc605e7f2c310e6465.1504638326.git.baruch@tkos.co.il>
+Message-ID: <20170905214447.7e75c2da@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Adam Duskett <aduskett@gmail.com>
----
- docs/manual/migrating-host-usr.txt | 14 ++++++++++++++
- docs/manual/migrating.txt          |  1 +
- 2 files changed, 15 insertions(+)
- create mode 100644 docs/manual/migrating-host-usr.txt
+Hello,
 
-diff --git a/docs/manual/migrating-host-usr.txt b/docs/manual/migrating-host-usr.txt
-new file mode 100644
-index 0000000000..7583452b1b
---- /dev/null
-+++ b/docs/manual/migrating-host-usr.txt
-@@ -0,0 +1,14 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[migrating-host-usr]]
-+=== Migrating host packages out of $(HOST_DIR)/usr/
-+
-+Before Buildroot 2017.08, host packages were installed in +$(HOST_DIR)/usr+
-+(with e.g. the autotools' +--prefix=$(HOST_DIR)/usr+). With Buildroot
-+2017.08, they are now installed directly in +$(HOST_DIR)+.
-+
-+Whenever a package installs an executable that is linked with a library
-+in +$(HOST_DIR)/usr/lib+, it must have an RPATH pointing to that directory.
-+
-+An RPATH pointing to +$(HOST_DIR)/usr/lib+ is no longer accepted.
-diff --git a/docs/manual/migrating.txt b/docs/manual/migrating.txt
-index 068d803a83..12d6233b80 100644
---- a/docs/manual/migrating.txt
-+++ b/docs/manual/migrating.txt
-@@ -5,3 +5,4 @@
- == Migrating from older Buildroot versions
- 
- include::migrating-br2-external.txt[]
-+include::migrating-host-usr.txt[]
+On Tue,  5 Sep 2017 22:05:25 +0300, Baruch Siach wrote:
+
+>  # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
+>  # Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
+>  # and dbus is selected. Since there is no BR2_PACKAGE_LIBAVAHI_CLIENT config
+> @@ -38,6 +40,10 @@ SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
+>  else
+>  SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
+>  SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
+> +SHAIRPORT_SYNC_CONF_LIBS += -lmbedx509 -lmbedcrypto
+> +ifeq ($(BR2_PACKAGE_MBEDTLS_COMPRESSION),y)
+> +SHAIRPORT_SYNC_CONF_LIBS += -lz
+> +endif
+>  endif
+
+This is crazy. Can we submit a mbedtls patch adding a pkg-config file ?
+They are open to it it seems:
+https://github.com/ARMmbed/mbedtls/issues/228. Of course,
+shairport-sync would have to be modified to use it.
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
