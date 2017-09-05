@@ -1,86 +1,33 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Tue, 5 Sep 2017 21:45:19 +0200
-Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
-In-Reply-To: <20170905213604.61141da0@windsurf.lan>
-References: <20170905100327.21421-1-aleksander@aleksander.es>
- <20170905213604.61141da0@windsurf.lan>
-Message-ID: <CAAP7ucKNVWs7G-XkDk-9QCRadWdDMTLN6nG2NevSrMjw6Uii0g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Sep 2017 21:46:13 +0200
+Subject: [Buildroot] [PATCH 2/2] docs/manual: add appendix about
+	$(HOST_DIR)/usr
+In-Reply-To: <027bc1ba0e0b06cd2e353ef8683084b6f9fec926.1504640557.git.yann.morin.1998@free.fr>
+References: <cover.1504640557.git.yann.morin.1998@free.fr>
+ <027bc1ba0e0b06cd2e353ef8683084b6f9fec926.1504640557.git.yann.morin.1998@free.fr>
+Message-ID: <20170905214613.078ce5b5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey
+Hello,
 
->
-> On Tue,  5 Sep 2017 12:03:27 +0200, Aleksander Morgado wrote:
->> Don't always build without udev, as qmi-firmware-update would be very
->> very limited in that case. Instead, make it optional: if there is udev
->> support in the setup, require libgudev and configure using --with-udev
->> explicitly; otherwise just --without-udev.
->>
->> Also, add the qmi-over-mbim feature as optional, and require libmbim
->> if we're building with it enabled.
->>
->> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
->> ---
->>  package/libqmi/Config.in | 18 ++++++++++++++++++
->>  package/libqmi/libqmi.mk | 18 ++++++++++++++++--
->>  2 files changed, 34 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
->> index f1d111b7c..a536650b5 100644
->> --- a/package/libqmi/Config.in
->> +++ b/package/libqmi/Config.in
->> @@ -10,6 +10,24 @@ config BR2_PACKAGE_LIBQMI
->>
->>         http://www.freedesktop.org/wiki/Software/libqmi/
->>
->> +if BR2_PACKAGE_LIBQMI
->> +
->> +config BR2_PACKAGE_LIBQMI_UDEV
->> +     bool "qmi-firmware-update udev support"
->> +     depends on BR2_PACKAGE_HAS_UDEV
->> +     select BR2_PACKAGE_LIBGUDEV
->
-> libgudev has plenty of other dependencies that you need to propagate
-> here.
->
->> +     help
->> +       This option enables udev support in the qmi-firmware-update tool
->> +
->> +config BR2_PACKAGE_LIBQMI_MBIM_QMUX
->> +     bool "QMI-over-MBIM support"
->> +     select BR2_PACKAGE_LIBMBIM
->
-> ... and libmbim also has plenty of dependencies that you need to
-> propagate here, including BR2_PACKAGE_HAS_UDEV.
->
+On Tue,  5 Sep 2017 21:42:55 +0200, Yann E. MORIN wrote:
 
-Oh, I assumed that was somehow automatic... Does this mean that if the
-deps of a library are updated at some point in time, all the apps
-depending on the library also need to get updated to add the new dep?
+> +Whenever a package installs an executable that is linked with a library
+> +in +$(HOST_DIR)/usr/lib+, it must have an RPATH pointing to that directory.
 
-> All in all, isn't it simpler to get rid of those options, and simply do:
->
-> ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-> ... enable support
-> else
-> ... disable support
-> endif
->
-> ifeq ($(BR2_PACKAGE_LIBMBIM),y)
-> ... enable support
-> else
-> ... disable support
-> endif
->
+in $(HOST_DIR)/lib, no ?
 
-Yes, probably that's a much simpler option. Will suggest a new patch.
+> +
+> +An RPATH pointing to +$(HOST_DIR)/usr/lib+ is no longer accepted.
 
-Thanks for reviewing!
+Otherwise, it is a bit contradictory with what you're saying here.
 
+Thomas
 -- 
-Aleksander
-https://aleksander.es
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
