@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  5 Sep 2017 08:20:09 -0400
-Subject: [Buildroot] [PATCH 1/1] pango: bump to 1.40.12
+Date: Tue,  5 Sep 2017 08:20:08 -0400
+Subject: [Buildroot] [PATCH 1/1] libxml2: bump to version 2.9.5
 In-Reply-To: <20170905122010.19409-1-aduskett@gmail.com>
 References: <20170905122010.19409-1-aduskett@gmail.com>
-Message-ID: <20170905122010.19409-5-aduskett@gmail.com>
+Message-ID: <20170905122010.19409-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,89 +12,477 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- .../0001-build-disable-tests-from-building.patch   | 28 +++++++++++-----------
- package/pango/pango.hash                           |  4 ++--
- package/pango/pango.mk                             |  2 +-
- 3 files changed, 17 insertions(+), 17 deletions(-)
+ ...ix-XPointer-paths-beginning-with-range-to.patch | 178 ---------------
+ ...sallow-namespace-nodes-in-XPointer-ranges.patch | 253 ---------------------
+ package/libxml2/libxml2.hash                       |   2 +-
+ package/libxml2/libxml2.mk                         |   2 +-
+ 4 files changed, 2 insertions(+), 433 deletions(-)
+ delete mode 100644 package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch
+ delete mode 100644 package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch
 
-diff --git a/package/pango/0001-build-disable-tests-from-building.patch b/package/pango/0001-build-disable-tests-from-building.patch
-index c518a34d3..51b645bae 100644
---- a/package/pango/0001-build-disable-tests-from-building.patch
-+++ b/package/pango/0001-build-disable-tests-from-building.patch
-@@ -1,16 +1,16 @@
--From cde9a78711e8eaed0aefb9e36288f22918e8d4b2 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Thu, 2 Mar 2017 09:41:41 -0300
--Subject: [PATCH] build: disable tests from building
-+From 1c503a8b2f127c12e58a6e8ba01743c04061df50 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Tue, 5 Sep 2017 07:25:17 -0400
-+Subject: [PATCH] disable tests from building
- 
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
- ---
-  Makefile.am | 2 +-
-  Makefile.in | 2 +-
-  2 files changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/Makefile.am b/Makefile.am
--index 9e31b34..32e5c29 100644
-+index 70bf8b0..c69daf0 100644
- --- a/Makefile.am
- +++ b/Makefile.am
- @@ -1,6 +1,6 @@
-@@ -19,21 +19,21 @@ index 9e31b34..32e5c29 100644
- -SUBDIRS= pango pango-view examples docs tools tests win32
- +SUBDIRS= pango pango-view examples docs tools win32
-  
-- EXTRA_DIST = 			\
-- 	autogen.sh		\
-+ meson_dist_files = \
-+ 	pango/pango-features.h.meson \
- diff --git a/Makefile.in b/Makefile.in
--index 6b6f6c7..ed0cfa2 100644
-+index 8489ca1..51f6ada 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -418,7 +418,7 @@ target_alias = @target_alias@
-+@@ -412,7 +412,7 @@ target_alias = @target_alias@
-  top_build_prefix = @top_build_prefix@
-  top_builddir = @top_builddir@
-  top_srcdir = @top_srcdir@
- -SUBDIRS = pango pango-view examples docs tools tests win32
- +SUBDIRS = pango pango-view examples docs tools win32
-- EXTRA_DIST = \
-- 	autogen.sh		\
-- 	pango.pc.in		\
-+ meson_dist_files = \
-+ 	pango/pango-features.h.meson \
-+ 	pango-view/meson.build \
- -- 
+diff --git a/package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch b/package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch
+deleted file mode 100644
+index 42570c635..000000000
+--- a/package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch
++++ /dev/null
+@@ -1,178 +0,0 @@
+-From 9ab01a277d71f54d3143c2cf333c5c2e9aaedd9e Mon Sep 17 00:00:00 2001
+-From: Nick Wellnhofer <wellnhofer@aevum.de>
+-Date: Tue, 28 Jun 2016 14:22:23 +0200
+-Subject: [PATCH] Fix XPointer paths beginning with range-to
+-
+-The old code would invoke the broken xmlXPtrRangeToFunction. range-to
+-isn't really a function but a special kind of location step. Remove
+-this function and always handle range-to in the XPath code.
+-
+-The old xmlXPtrRangeToFunction could also be abused to trigger a
+-use-after-free error with the potential for remote code execution.
+-
+-Found with afl-fuzz.
+-
+-Fixes CVE-2016-5131.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 9ab01a277d7
+-
+- result/XPath/xptr/vidbase | 13 ++++++++
+- test/XPath/xptr/vidbase   |  1 +
+- xpath.c                   |  7 ++++-
+- xpointer.c                | 76 ++++-------------------------------------------
+- 4 files changed, 26 insertions(+), 71 deletions(-)
+-
+-diff --git a/result/XPath/xptr/vidbase b/result/XPath/xptr/vidbase
+-index 8b9e92d66d97..f19193e70edb 100644
+---- a/result/XPath/xptr/vidbase
+-+++ b/result/XPath/xptr/vidbase
+-@@ -17,3 +17,16 @@ Object is a Location Set:
+-   To node
+-     ELEMENT p
+- 
+-+
+-+========================
+-+Expression: xpointer(range-to(id('chapter2')))
+-+Object is a Location Set:
+-+1 :   Object is a range :
+-+  From node
+-+     /
+-+  To node
+-+    ELEMENT chapter
+-+      ATTRIBUTE id
+-+        TEXT
+-+          content=chapter2
+-+
+-diff --git a/test/XPath/xptr/vidbase b/test/XPath/xptr/vidbase
+-index b1463830570a..884b1065d7fd 100644
+---- a/test/XPath/xptr/vidbase
+-+++ b/test/XPath/xptr/vidbase
+-@@ -1,2 +1,3 @@
+- xpointer(id('chapter1')/p)
+- xpointer(id('chapter1')/p[1]/range-to(following-sibling::p[2]))
+-+xpointer(range-to(id('chapter2')))
+-diff --git a/xpath.c b/xpath.c
+-index d992841ef0c2..5a01b1b399a2 100644
+---- a/xpath.c
+-+++ b/xpath.c
+-@@ -10691,13 +10691,18 @@ xmlXPathCompPathExpr(xmlXPathParserContextPtr ctxt) {
+- 		    lc = 1;
+- 		    break;
+- 		} else if ((NXT(len) == '(')) {
+--		    /* Note Type or Function */
+-+		    /* Node Type or Function */
+- 		    if (xmlXPathIsNodeType(name)) {
+- #ifdef DEBUG_STEP
+- 		        xmlGenericError(xmlGenericErrorContext,
+- 				"PathExpr: Type search\n");
+- #endif
+- 			lc = 1;
+-+#ifdef LIBXML_XPTR_ENABLED
+-+                    } else if (ctxt->xptr &&
+-+                               xmlStrEqual(name, BAD_CAST "range-to")) {
+-+                        lc = 1;
+-+#endif
+- 		    } else {
+- #ifdef DEBUG_STEP
+- 		        xmlGenericError(xmlGenericErrorContext,
+-diff --git a/xpointer.c b/xpointer.c
+-index 676c5105837a..d74174a318f1 100644
+---- a/xpointer.c
+-+++ b/xpointer.c
+-@@ -1332,8 +1332,6 @@ xmlXPtrNewContext(xmlDocPtr doc, xmlNodePtr here, xmlNodePtr origin) {
+-     ret->here = here;
+-     ret->origin = origin;
+- 
+--    xmlXPathRegisterFunc(ret, (xmlChar *)"range-to",
+--	                 xmlXPtrRangeToFunction);
+-     xmlXPathRegisterFunc(ret, (xmlChar *)"range",
+- 	                 xmlXPtrRangeFunction);
+-     xmlXPathRegisterFunc(ret, (xmlChar *)"range-inside",
+-@@ -2243,76 +2241,14 @@ xmlXPtrRangeInsideFunction(xmlXPathParserContextPtr ctxt, int nargs) {
+-  * @nargs:  the number of args
+-  *
+-  * Implement the range-to() XPointer function
+-+ *
+-+ * Obsolete. range-to is not a real function but a special type of location
+-+ * step which is handled in xpath.c.
+-  */
+- void
+--xmlXPtrRangeToFunction(xmlXPathParserContextPtr ctxt, int nargs) {
+--    xmlXPathObjectPtr range;
+--    const xmlChar *cur;
+--    xmlXPathObjectPtr res, obj;
+--    xmlXPathObjectPtr tmp;
+--    xmlLocationSetPtr newset = NULL;
+--    xmlNodeSetPtr oldset;
+--    int i;
+--
+--    if (ctxt == NULL) return;
+--    CHECK_ARITY(1);
+--    /*
+--     * Save the expression pointer since we will have to evaluate
+--     * it multiple times. Initialize the new set.
+--     */
+--    CHECK_TYPE(XPATH_NODESET);
+--    obj = valuePop(ctxt);
+--    oldset = obj->nodesetval;
+--    ctxt->context->node = NULL;
+--
+--    cur = ctxt->cur;
+--    newset = xmlXPtrLocationSetCreate(NULL);
+--
+--    for (i = 0; i < oldset->nodeNr; i++) {
+--	ctxt->cur = cur;
+--
+--	/*
+--	 * Run the evaluation with a node list made of a single item
+--	 * in the nodeset.
+--	 */
+--	ctxt->context->node = oldset->nodeTab[i];
+--	tmp = xmlXPathNewNodeSet(ctxt->context->node);
+--	valuePush(ctxt, tmp);
+--
+--	xmlXPathEvalExpr(ctxt);
+--	CHECK_ERROR;
+--
+--	/*
+--	 * The result of the evaluation need to be tested to
+--	 * decided whether the filter succeeded or not
+--	 */
+--	res = valuePop(ctxt);
+--	range = xmlXPtrNewRangeNodeObject(oldset->nodeTab[i], res);
+--	if (range != NULL) {
+--	    xmlXPtrLocationSetAdd(newset, range);
+--	}
+--
+--	/*
+--	 * Cleanup
+--	 */
+--	if (res != NULL)
+--	    xmlXPathFreeObject(res);
+--	if (ctxt->value == tmp) {
+--	    res = valuePop(ctxt);
+--	    xmlXPathFreeObject(res);
+--	}
+--
+--	ctxt->context->node = NULL;
+--    }
+--
+--    /*
+--     * The result is used as the new evaluation set.
+--     */
+--    xmlXPathFreeObject(obj);
+--    ctxt->context->node = NULL;
+--    ctxt->context->contextSize = -1;
+--    ctxt->context->proximityPosition = -1;
+--    valuePush(ctxt, xmlXPtrWrapLocationSet(newset));
+-+xmlXPtrRangeToFunction(xmlXPathParserContextPtr ctxt,
+-+                       int nargs ATTRIBUTE_UNUSED) {
+-+    XP_ERROR(XPATH_EXPR_ERROR);
+- }
+- 
+- /**
+--- 
 -2.10.2
-+2.13.5
- 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 9908c4a53..1b6da7d32 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+-
+diff --git a/package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch b/package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch
+deleted file mode 100644
+index 45c1a07ca..000000000
+--- a/package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch
++++ /dev/null
+@@ -1,253 +0,0 @@
+-From c1d1f7121194036608bf555f08d3062a36fd344b Mon Sep 17 00:00:00 2001
+-From: Nick Wellnhofer <wellnhofer@aevum.de>
+-Date: Tue, 28 Jun 2016 18:34:52 +0200
+-Subject: [PATCH] Disallow namespace nodes in XPointer ranges
+-
+-Namespace nodes must be copied to avoid use-after-free errors.
+-But they don't necessarily have a physical representation in a
+-document, so simply disallow them in XPointer ranges.
+-
+-Found with afl-fuzz.
+-
+-Fixes CVE-2016-4658.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit c1d1f712119403
+-
+- xpointer.c | 149 +++++++++++++++++++++++--------------------------------------
+- 1 file changed, 56 insertions(+), 93 deletions(-)
+-
+-diff --git a/xpointer.c b/xpointer.c
+-index a7b03fbdae16..694d120e2e0b 100644
+---- a/xpointer.c
+-+++ b/xpointer.c
+-@@ -320,6 +320,45 @@ xmlXPtrRangesEqual(xmlXPathObjectPtr range1, xmlXPathObjectPtr range2) {
+- }
+- 
+- /**
+-+ * xmlXPtrNewRangeInternal:
+-+ * @start:  the starting node
+-+ * @startindex:  the start index
+-+ * @end:  the ending point
+-+ * @endindex:  the ending index
+-+ *
+-+ * Internal function to create a new xmlXPathObjectPtr of type range
+-+ *
+-+ * Returns the newly created object.
+-+ */
+-+static xmlXPathObjectPtr
+-+xmlXPtrNewRangeInternal(xmlNodePtr start, int startindex,
+-+                        xmlNodePtr end, int endindex) {
+-+    xmlXPathObjectPtr ret;
+-+
+-+    /*
+-+     * Namespace nodes must be copied (see xmlXPathNodeSetDupNs).
+-+     * Disallow them for now.
+-+     */
+-+    if ((start != NULL) && (start->type == XML_NAMESPACE_DECL))
+-+	return(NULL);
+-+    if ((end != NULL) && (end->type == XML_NAMESPACE_DECL))
+-+	return(NULL);
+-+
+-+    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+-+    if (ret == NULL) {
+-+        xmlXPtrErrMemory("allocating range");
+-+	return(NULL);
+-+    }
+-+    memset(ret, 0, sizeof(xmlXPathObject));
+-+    ret->type = XPATH_RANGE;
+-+    ret->user = start;
+-+    ret->index = startindex;
+-+    ret->user2 = end;
+-+    ret->index2 = endindex;
+-+    return(ret);
+-+}
+-+
+-+/**
+-  * xmlXPtrNewRange:
+-  * @start:  the starting node
+-  * @startindex:  the start index
+-@@ -344,17 +383,7 @@ xmlXPtrNewRange(xmlNodePtr start, int startindex,
+-     if (endindex < 0)
+- 	return(NULL);
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start;
+--    ret->index = startindex;
+--    ret->user2 = end;
+--    ret->index2 = endindex;
+-+    ret = xmlXPtrNewRangeInternal(start, startindex, end, endindex);
+-     xmlXPtrRangeCheckOrder(ret);
+-     return(ret);
+- }
+-@@ -381,17 +410,8 @@ xmlXPtrNewRangePoints(xmlXPathObjectPtr start, xmlXPathObjectPtr end) {
+-     if (end->type != XPATH_POINT)
+- 	return(NULL);
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start->user;
+--    ret->index = start->index;
+--    ret->user2 = end->user;
+--    ret->index2 = end->index;
+-+    ret = xmlXPtrNewRangeInternal(start->user, start->index, end->user,
+-+                                  end->index);
+-     xmlXPtrRangeCheckOrder(ret);
+-     return(ret);
+- }
+-@@ -416,17 +436,7 @@ xmlXPtrNewRangePointNode(xmlXPathObjectPtr start, xmlNodePtr end) {
+-     if (start->type != XPATH_POINT)
+- 	return(NULL);
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start->user;
+--    ret->index = start->index;
+--    ret->user2 = end;
+--    ret->index2 = -1;
+-+    ret = xmlXPtrNewRangeInternal(start->user, start->index, end, -1);
+-     xmlXPtrRangeCheckOrder(ret);
+-     return(ret);
+- }
+-@@ -453,17 +463,7 @@ xmlXPtrNewRangeNodePoint(xmlNodePtr start, xmlXPathObjectPtr end) {
+-     if (end->type != XPATH_POINT)
+- 	return(NULL);
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start;
+--    ret->index = -1;
+--    ret->user2 = end->user;
+--    ret->index2 = end->index;
+-+    ret = xmlXPtrNewRangeInternal(start, -1, end->user, end->index);
+-     xmlXPtrRangeCheckOrder(ret);
+-     return(ret);
+- }
+-@@ -486,17 +486,7 @@ xmlXPtrNewRangeNodes(xmlNodePtr start, xmlNodePtr end) {
+-     if (end == NULL)
+- 	return(NULL);
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start;
+--    ret->index = -1;
+--    ret->user2 = end;
+--    ret->index2 = -1;
+-+    ret = xmlXPtrNewRangeInternal(start, -1, end, -1);
+-     xmlXPtrRangeCheckOrder(ret);
+-     return(ret);
+- }
+-@@ -516,17 +506,7 @@ xmlXPtrNewCollapsedRange(xmlNodePtr start) {
+-     if (start == NULL)
+- 	return(NULL);
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start;
+--    ret->index = -1;
+--    ret->user2 = NULL;
+--    ret->index2 = -1;
+-+    ret = xmlXPtrNewRangeInternal(start, -1, NULL, -1);
+-     return(ret);
+- }
+- 
+-@@ -541,6 +521,8 @@ xmlXPtrNewCollapsedRange(xmlNodePtr start) {
+-  */
+- xmlXPathObjectPtr
+- xmlXPtrNewRangeNodeObject(xmlNodePtr start, xmlXPathObjectPtr end) {
+-+    xmlNodePtr endNode;
+-+    int endIndex;
+-     xmlXPathObjectPtr ret;
+- 
+-     if (start == NULL)
+-@@ -549,7 +531,12 @@ xmlXPtrNewRangeNodeObject(xmlNodePtr start, xmlXPathObjectPtr end) {
+- 	return(NULL);
+-     switch (end->type) {
+- 	case XPATH_POINT:
+-+	    endNode = end->user;
+-+	    endIndex = end->index;
+-+	    break;
+- 	case XPATH_RANGE:
+-+	    endNode = end->user2;
+-+	    endIndex = end->index2;
+- 	    break;
+- 	case XPATH_NODESET:
+- 	    /*
+-@@ -557,39 +544,15 @@ xmlXPtrNewRangeNodeObject(xmlNodePtr start, xmlXPathObjectPtr end) {
+- 	     */
+- 	    if (end->nodesetval->nodeNr <= 0)
+- 		return(NULL);
+-+	    endNode = end->nodesetval->nodeTab[end->nodesetval->nodeNr - 1];
+-+	    endIndex = -1;
+- 	    break;
+- 	default:
+- 	    /* TODO */
+- 	    return(NULL);
+-     }
+- 
+--    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+--    if (ret == NULL) {
+--        xmlXPtrErrMemory("allocating range");
+--	return(NULL);
+--    }
+--    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
+--    ret->type = XPATH_RANGE;
+--    ret->user = start;
+--    ret->index = -1;
+--    switch (end->type) {
+--	case XPATH_POINT:
+--	    ret->user2 = end->user;
+--	    ret->index2 = end->index;
+--	    break;
+--	case XPATH_RANGE:
+--	    ret->user2 = end->user2;
+--	    ret->index2 = end->index2;
+--	    break;
+--	case XPATH_NODESET: {
+--	    ret->user2 = end->nodesetval->nodeTab[end->nodesetval->nodeNr - 1];
+--	    ret->index2 = -1;
+--	    break;
+--	}
+--	default:
+--	    STRANGE
+--	    return(NULL);
+--    }
+-+    ret = xmlXPtrNewRangeInternal(start, -1, endNode, endIndex);
+-     xmlXPtrRangeCheckOrder(ret);
+-     return(ret);
+- }
+--- 
+-2.10.2
+-
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 098121e11..7f9e7dbd3 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.4.sha256sum
--sha256	f8fdc5fc66356dc4edf915048cceeee065a0e0cb70b3b2598f62bda320129a3e	pango-1.40.4.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.12.sha256sum
-+sha256	75f1a9a8e4e2b28cbc078b50c1fa927ee4ded994d1ade97c5603e2d1f3161cfc	pango-1.40.12.tar.xz
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 7556f0ba8..79283e885 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	ffb911191e509b966deb55de705387f14156e1a56b21824357cdf0053233633c	libxml2-2.9.4.tar.gz
++sha256	4031c1ecee9ce7ba4f313e91ef6284164885cdb69937a123f6a83bb6a72dcd38	libxml2-2.9.5.tar.gz
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 7073169fd..1b870c4cb 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.40
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+-LIBXML2_VERSION = 2.9.4
++LIBXML2_VERSION = 2.9.5
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
 -- 
 2.13.5
