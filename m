@@ -1,84 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Sep 2017 23:43:12 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gdb: add fix for gdb 7.12
-	and gdb 8.0 build on noMMU platforms
-Message-ID: <20170905220138.D221381ED2@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:39:16 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] pkg-cmake.mk: set
+	pkg-config env. vars. in the host configure environment
+Message-ID: <20170905220138.C0B5781ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8f6630b1039a6a4e4f1093e764be16fa16e482c
+commit: https://git.buildroot.net/buildroot/commit/?id=c2e4924597bd57c3b1d0cff2a2a38adb94f6c960
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This adds a patch to gdb 7.12 and gdb 8.x, which fixes the build on
-noMMU platforms. It is not needed for older versions of gdb, since
-it's related to the switch of gdb to C++ in the 7.12 release.
+This change is fixing the bug reported in [1].
 
-Fixes:
+Cmake may run pkg-config to find the dependencies when configuring a
+package. Because of the value of PATH, and it will use the Buildroot's
+pkg-config wrapper, which, by default, is configured (via some
+environment variables) to find the target dependencies.
 
-../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-       child_stack = xmalloc (STACK_SIZE * 4);
+When configuring a host package using cmake, to prevent cmake from
+wrongly solving dependencies from the target tree (when the
+*-config.cmake files are using pkg-config) instead of looking for them
+in the Buildroot's host tree or in the host system itself, we need to
+set the environment variables altering the pkg-config behavior in the
+cmake configure environment.
 
-The patch has already been merged upstream, as of commit
-ffce45d2243e5f52f411e314fc4e1a69f431a81f, and will therefore be part
-of future gdb releases.
+So, this change is fixing the cmake host-packages configuration step,
+by properly setting the pkg-config environment variables to their values
+for finding host dependencies.
 
-[Peter: drop gdb-8.0 patch]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Before this patch:
+
+  make O=/opt/br/abo/cmake-host-find-root-path libxml2 host-mariadb{-dirclean,-configure} && echo $?
+  [...]
+  >>> host-mariadb 10.1.25 Configuring
+  (mkdir -p /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && cd /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && rm -f CMakeCache.txt && PATH="/opt/br/abo/cmake-host-find-root-path/host/bin:/opt/br/abo/cmake-host-find-root-path/host/sbin:/home/sam/.local/bin:/sbin:/usr/sbin:/bin:/usr/bin"  /usr/bin/cmake /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_C_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_CXX_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_EXE_LINKER_FLAGS="-L/opt/br/abo/cmake-host-find-root-path/host/lib -Wl,-rpath,/opt/br/abo/cmake-host-find-root-path/host/lib"
+  -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_CXX_COMPILER="/usr/bin/g++"  -DCMAKE_C_COMPILER_ARG1="" -DCMAKE_CXX_COMPILER_ARG1=""  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF  -DWITH_SSL=bundled )
+  -- Running cmake version 3.8.2
+  [...]
+  -- Found PkgConfig: /opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config (found version "0.28")
+  [...]
+  -- Found LibXml2: /opt/br/abo/cmake-host-find-root-path/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libxml2.so (found version "2.9.4")
+  [...]
+  0
+
+After this patch is applied:
+
+  make O=/opt/br/abo/cmake-host-find-root-path libxml2 host-mariadb{-dirclean,-configure} && echo $?
+  [...]
+  >>> host-mariadb 10.1.25 Configuring
+  (mkdir -p /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && cd /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ && rm -f CMakeCache.txt && PATH="/opt/br/abo/cmake-host-find-root-path/host/bin:/opt/br/abo/cmake-host-find-root-path/host/sbin:/home/sam/.local/bin:/sbin:/usr/sbin:/bin:/usr/bin" PKG_CONFIG="/opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_LIBDIR="/opt/br/abo/cmake-host-find-root-path/host/lib/pkgconfig:/opt/br/abo/cmake-host-find-root-path/host/share/pkgconfig" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1  /usr/bin/cmake /opt/br/abo/cmake-host-find-root-path/build/host-mariadb-10.1.25/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="/opt/br/abo/cmake-host-find-root-path/host" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="/opt/br/abo/cmake-host-find-roo
+ t-path/host" -DCMAKE_C_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_CXX_FLAGS="-O2 -I/opt/br/abo/cmake-host-find-root-path/host/include" -DCMAKE_EXE_LINKER_FLAGS="-L/opt/br/abo/cmake-host-find-root-path/host/lib -Wl,-rpath,/opt/br/abo/cmake-host-find-root-path/host/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_CXX_COMPILER="/usr/bin/g++"  -DCMAKE_C_COMPILER_ARG1="" -DCMAKE_CXX_COMPILER_ARG1=""  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF  -DWITH_SSL=bundled )
+  -- Running cmake version 3.8.2
+  [...]
+  -- Found PkgConfig: /opt/br/abo/cmake-host-find-root-path/host/bin/pkg-config (found version "0.28")
+  [...]
+  -- Found LibXml2: /usr/lib/libxml2.so (found version "2.9.4")
+  [...]
+  0
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-August/199776.html
+
+Reported-by: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
+Cc: "Sigalas, Antonios (Nokia - GR/Athens)" <antonios.sigalas@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5c12506f4da21fcc7a4f1514670c4bfd4f23b466)
+(cherry picked from commit c9f9b16a2f37caeeced47cb562b642ec0c166652)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-linux-ptrace.c-add-missing-gdb_byte-cast.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/pkg-cmake.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
-new file mode 100644
-index 0000000..4eb72e4
---- /dev/null
-+++ b/package/gdb/7.12.1/0006-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
-@@ -0,0 +1,41 @@
-+From 09a2c3e0164545324a1ddee70f5c9fdee71e2079 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 18 Jun 2017 23:09:43 +0200
-+Subject: [PATCH] nat/linux-ptrace.c: add missing gdb_byte* cast
-+
-+On noMMU platforms, the following code gets compiled:
-+
-+  child_stack = xmalloc (STACK_SIZE * 4);
-+
-+Where child_stack is a gdb_byte*, and xmalloc() returns a void*. While
-+the lack of cast is valid in C, it is not in C++, causing the
-+following build failure:
-+
-+../nat/linux-ptrace.c: In function 'int linux_fork_to_function(gdb_byte*, int (*)(void*))':
-+../nat/linux-ptrace.c:273:29: error: invalid conversion from 'void*' to 'gdb_byte* {aka unsigned char*}' [-fpermissive]
-+       child_stack = xmalloc (STACK_SIZE * 4);
-+
-+Therefore, this commit adds the appropriate cast.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Upstream commit: ffce45d2243e5f52f411e314fc4e1a69f431a81f]
-+---
-+ gdb/nat/linux-ptrace.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
-+index 3447e07..33833e2 100644
-+--- a/gdb/nat/linux-ptrace.c
-++++ b/gdb/nat/linux-ptrace.c
-+@@ -270,7 +270,7 @@ linux_fork_to_function (gdb_byte *child_stack, int (*function) (void *))
-+ #define STACK_SIZE 4096
-+ 
-+     if (child_stack == NULL)
-+-      child_stack = xmalloc (STACK_SIZE * 4);
-++      child_stack = (gdb_byte*) xmalloc (STACK_SIZE * 4);
-+ 
-+     /* Use CLONE_VM instead of fork, to support uClinux (no MMU).  */
-+ #ifdef __ia64__
-+-- 
-+2.9.4
-+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index a7c8dc3..f1c12b9 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -109,6 +109,11 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
++	PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_LIBDIR="$$(HOST_DIR)/lib/pkgconfig:$$(HOST_DIR)/share/pkgconfig" \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
