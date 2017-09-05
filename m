@@ -1,39 +1,28 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue,  5 Sep 2017 21:09:22 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libuv: bump version to 1.14.0
-Message-ID: <1504642163-21571-1-git-send-email-martin@barkynet.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Sep 2017 22:11:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.10.1
+In-Reply-To: <20170904180318.12131-1-bernd.kuhls@t-online.de>
+References: <20170904180318.12131-1-bernd.kuhls@t-online.de>
+Message-ID: <20170905221159.2370ff83@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index f9fe4fe..169a7be 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 6a4976887594ec9f4e8521c95598dbbc478c59733056a5cf46354e93a1bc8400  libuv-v1.13.1.tar.gz
-+sha256  96088804334a70f84d64f45e4db926fc1dfa42d4a9d22b1812cf47bc0d9b6947  libuv-v1.14.0.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 06c5520..0b62c58 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.13.1
-+LIBUV_VERSION = v1.14.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+On Mon,  4 Sep 2017 20:03:18 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/pngquant/pngquant.hash | 4 ++--
+>  package/pngquant/pngquant.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+
+Applied to master, thanks.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
