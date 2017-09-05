@@ -1,63 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Sep 2017 21:42:49 +0200
-Subject: [Buildroot] [PATCH 0/2] docs/manual: add appendix about migratinf
+Date: Tue,  5 Sep 2017 21:42:54 +0200
+Subject: [Buildroot] [PATCH 1/2] docs/manual: add appendis about migration
 	from older versions
-Message-ID: <cover.1504640557.git.yann.morin.1998@free.fr>
+In-Reply-To: <cover.1504640557.git.yann.morin.1998@free.fr>
+References: <cover.1504640557.git.yann.morin.1998@free.fr>
+Message-ID: <d0deca1f84eb6ac2674a46b0e8a4f8b5ad326f3f.1504640557.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
-
-When we release a new version that voluntarliy breaks compatibility with
-previous versions, we must document it to hepl the uesr migrate more
-easily.
-
-In 2017.08, we broke the compatibility with previous versions because we
-no longer accept an RPATH pointing to $(HOST_DIR)/usr/lib, even though
-that would technically functional.
-
-Add an appendix about that.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit c96b8675ea03a5d3194d439f740c725dd239ed1a
-
-  support/scripts/check-bin-arch: ignore symbolic links (2017-09-04 16:01:51 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 027bc1ba0e0b06cd2e353ef8683084b6f9fec926
-
-  docs/manual: add appendix about $(HOST_DIR)/usr (2017-09-05 21:41:18 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      docs/manual: add appendis about migration from older versions
-      docs/manual: add appendix about $(HOST_DIR)/usr
-
- docs/manual/appendix.txt                                   |  2 +-
- ...-external-converting.txt => migrating-br2-external.txt} |  2 +-
- docs/manual/migrating-host-usr.txt                         | 14 ++++++++++++++
- docs/manual/migrating.txt                                  |  8 ++++++++
- 4 files changed, 24 insertions(+), 2 deletions(-)
+Reported-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ docs/manual/appendix.txt                                           | 2 +-
+ .../{br2-external-converting.txt => migrating-br2-external.txt}    | 2 +-
+ docs/manual/migrating.txt                                          | 7 +++++++
+ 3 files changed, 9 insertions(+), 2 deletions(-)
  rename docs/manual/{br2-external-converting.txt => migrating-br2-external.txt} (96%)
- create mode 100644 docs/manual/migrating-host-usr.txt
  create mode 100644 docs/manual/migrating.txt
 
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 4d4bbecc18..86afa4bdaa 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -3,4 +3,4 @@
+ 
+ include::makedev-syntax.txt[]
+ include::makeusers-syntax.txt[]
+-include::br2-external-converting.txt[]
++include::migrating.txt[]
+diff --git a/docs/manual/br2-external-converting.txt b/docs/manual/migrating-br2-external.txt
+similarity index 96%
+rename from docs/manual/br2-external-converting.txt
+rename to docs/manual/migrating-br2-external.txt
+index 831addf5af..c8a2810ea1 100644
+--- a/docs/manual/br2-external-converting.txt
++++ b/docs/manual/migrating-br2-external.txt
+@@ -2,7 +2,7 @@
+ // vim: set syntax=asciidoc:
+ 
+ [[br2-external-converting]]
+-== Converting old br2-external trees
++=== Converting old br2-external trees
+ 
+ Before Buildroot 2016.11, it was possible to use only one br2-external
+ tree at once. With Buildroot 2016.11 came the possibility to use more
+diff --git a/docs/manual/migrating.txt b/docs/manual/migrating.txt
+new file mode 100644
+index 0000000000..068d803a83
+--- /dev/null
++++ b/docs/manual/migrating.txt
+@@ -0,0 +1,7 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++[[migrating-from-ol-versions]]
++== Migrating from older Buildroot versions
++
++include::migrating-br2-external.txt[]
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
