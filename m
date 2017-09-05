@@ -1,40 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:44:47 +0200
-Subject: [Buildroot] [PATCH 1/2] shairport-sync: fix static link with
- mbedtls
-In-Reply-To: <87aa32f0dbacc3252ade43fc605e7f2c310e6465.1504638326.git.baruch@tkos.co.il>
-References: <87aa32f0dbacc3252ade43fc605e7f2c310e6465.1504638326.git.baruch@tkos.co.il>
-Message-ID: <20170905214447.7e75c2da@windsurf.lan>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Tue, 5 Sep 2017 21:45:19 +0200
+Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
+In-Reply-To: <20170905213604.61141da0@windsurf.lan>
+References: <20170905100327.21421-1-aleksander@aleksander.es>
+ <20170905213604.61141da0@windsurf.lan>
+Message-ID: <CAAP7ucKNVWs7G-XkDk-9QCRadWdDMTLN6nG2NevSrMjw6Uii0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hey
 
-On Tue,  5 Sep 2017 22:05:25 +0300, Baruch Siach wrote:
+>
+> On Tue,  5 Sep 2017 12:03:27 +0200, Aleksander Morgado wrote:
+>> Don't always build without udev, as qmi-firmware-update would be very
+>> very limited in that case. Instead, make it optional: if there is udev
+>> support in the setup, require libgudev and configure using --with-udev
+>> explicitly; otherwise just --without-udev.
+>>
+>> Also, add the qmi-over-mbim feature as optional, and require libmbim
+>> if we're building with it enabled.
+>>
+>> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+>> ---
+>>  package/libqmi/Config.in | 18 ++++++++++++++++++
+>>  package/libqmi/libqmi.mk | 18 ++++++++++++++++--
+>>  2 files changed, 34 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
+>> index f1d111b7c..a536650b5 100644
+>> --- a/package/libqmi/Config.in
+>> +++ b/package/libqmi/Config.in
+>> @@ -10,6 +10,24 @@ config BR2_PACKAGE_LIBQMI
+>>
+>>         http://www.freedesktop.org/wiki/Software/libqmi/
+>>
+>> +if BR2_PACKAGE_LIBQMI
+>> +
+>> +config BR2_PACKAGE_LIBQMI_UDEV
+>> +     bool "qmi-firmware-update udev support"
+>> +     depends on BR2_PACKAGE_HAS_UDEV
+>> +     select BR2_PACKAGE_LIBGUDEV
+>
+> libgudev has plenty of other dependencies that you need to propagate
+> here.
+>
+>> +     help
+>> +       This option enables udev support in the qmi-firmware-update tool
+>> +
+>> +config BR2_PACKAGE_LIBQMI_MBIM_QMUX
+>> +     bool "QMI-over-MBIM support"
+>> +     select BR2_PACKAGE_LIBMBIM
+>
+> ... and libmbim also has plenty of dependencies that you need to
+> propagate here, including BR2_PACKAGE_HAS_UDEV.
+>
 
->  # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
->  # Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
->  # and dbus is selected. Since there is no BR2_PACKAGE_LIBAVAHI_CLIENT config
-> @@ -38,6 +40,10 @@ SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
->  else
->  SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
->  SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
-> +SHAIRPORT_SYNC_CONF_LIBS += -lmbedx509 -lmbedcrypto
-> +ifeq ($(BR2_PACKAGE_MBEDTLS_COMPRESSION),y)
-> +SHAIRPORT_SYNC_CONF_LIBS += -lz
-> +endif
->  endif
+Oh, I assumed that was somehow automatic... Does this mean that if the
+deps of a library are updated at some point in time, all the apps
+depending on the library also need to get updated to add the new dep?
 
-This is crazy. Can we submit a mbedtls patch adding a pkg-config file ?
-They are open to it it seems:
-https://github.com/ARMmbed/mbedtls/issues/228. Of course,
-shairport-sync would have to be modified to use it.
+> All in all, isn't it simpler to get rid of those options, and simply do:
+>
+> ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> ... enable support
+> else
+> ... disable support
+> endif
+>
+> ifeq ($(BR2_PACKAGE_LIBMBIM),y)
+> ... enable support
+> else
+> ... disable support
+> endif
+>
 
-Thomas
+Yes, probably that's a much simpler option. Will suggest a new patch.
+
+Thanks for reviewing!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Aleksander
+https://aleksander.es
