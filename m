@@ -1,44 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 00:08:18 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/git: security
-	bump to version 2.12.4
-Message-ID: <20170905220139.2789B80466@busybox.osuosl.org>
+Date: Tue, 5 Sep 2017 23:59:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/valgrind: hide
+	comment when arch is not supported
+Message-ID: <20170905220139.0F24681ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19d178a5cb9599e1899398fe3e191a4ba1e8a09a
+commit: https://git.buildroot.net/buildroot/commit/?id=1bed722b737617fe480742a75d20d04684dfe2de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-1000117:
-http://www.mail-archive.com/linux-kernel at vger.kernel.org/msg1466490.html
+Currently, the comment that "valgrind needs shared libs" is not hidden
+when the architecture dependencies are not met, which can confuse some
+users (as recently seen on IRC).
 
+Fix that by introducing the traditional _ARCH_SUPPORTS option, and have
+the comment and the symbol depend on that.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
+Cc: J??r??me Pouiller <jezz@sysmic.org>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed--by: Pedro Ribeiro <pedrib@gmail.com>
+Tested-by: Pedro Ribeiro <pedrib@gmail.com>
+[Arnout: put _ARCH_SUPPORTS at the top of the file]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit afb6bc67a6e3a9fa08a61d81e17e0c152ed09f2a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/valgrind/Config.in | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 4782dcb..b657422 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 016124c54ce2db7a4c2bd26b0de21fbf8f6bcaee04842aa221c7243141df4e42  git-2.12.3.tar.xz
-+sha256 f8b8ac499034e9f6e44e67dd54351bc5654e228e4cd3b55f6f1c8e736c977ce6  git-2.12.4.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 04cd577..94cf7a7 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 40e219d..75b779d 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -1,14 +1,19 @@
++config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
++	bool
++	default y if BR2_ARM_CPU_ARMV7A
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	depends on !BR2_MIPS_SOFT_FLOAT
++
+ comment "valgrind needs a toolchain w/ dynamic library"
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS
  
--GIT_VERSION = 2.12.3
-+GIT_VERSION = 2.12.4
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2, LGPLv2.1+
+ config BR2_PACKAGE_VALGRIND
+ 	bool "valgrind"
+-	depends on BR2_ARM_CPU_ARMV7A || BR2_i386 || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		   BR2_x86_64
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_MIPS_SOFT_FLOAT
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
+ 
