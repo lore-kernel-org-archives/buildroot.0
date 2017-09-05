@@ -1,32 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:46:45 +0200
-Subject: [Buildroot] [PATCH 0/2] docs/manual: add appendix about
- migratinf from older versions
-In-Reply-To: <cover.1504640557.git.yann.morin.1998@free.fr>
-References: <cover.1504640557.git.yann.morin.1998@free.fr>
-Message-ID: <20170905214645.2366530f@windsurf.lan>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Tue, 5 Sep 2017 21:46:28 +0200
+Subject: [Buildroot] [PATCH] libmbim: udev is optional
+In-Reply-To: <20170904170324.5426-1-aleksander@aleksander.es>
+References: <20170904170324.5426-1-aleksander@aleksander.es>
+Message-ID: <CAAP7uc+G44Gj3QxsoH-Yt4Ce_Nf4=PL-JHOsc4Z9ea5+-ct2xw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hey,
 
-On Tue,  5 Sep 2017 21:42:49 +0200, Yann E. MORIN wrote:
+On Mon, Sep 4, 2017 at 7:03 PM, Aleksander Morgado
+<aleksander@aleksander.es> wrote:
+> Don't require udev/libgudev when building libmbim, just make it
+> optional. If there is udev support in the setup, require libgudev and
+> configure using --with-udev explicitly; otherwise just --without-udev.
+>
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 
->  docs/manual/appendix.txt                                   |  2 +-
->  ...-external-converting.txt => migrating-br2-external.txt} |  2 +-
->  docs/manual/migrating-host-usr.txt                         | 14 ++++++++++++++
->  docs/manual/migrating.txt                                  |  8 ++++++++
+Please ignore this patch, I'll avoid having extra options in a follow
+up version.
 
-Separate files for each migration issue is a bit overkill for now.
-Could you please put everything in "migrating.txt" instead ?
+> ---
+>  package/libmbim/Config.in  | 16 +++++++++++-----
+>  package/libmbim/libmbim.mk |  9 ++++++++-
+>  2 files changed, 19 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/libmbim/Config.in b/package/libmbim/Config.in
+> index 4f8059264..35fceca67 100644
+> --- a/package/libmbim/Config.in
+> +++ b/package/libmbim/Config.in
+> @@ -2,8 +2,6 @@ config BR2_PACKAGE_LIBMBIM
+>         bool "libmbim"
+>         depends on BR2_USE_WCHAR # libglib2
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> -       depends on BR2_PACKAGE_HAS_UDEV
+> -       select BR2_PACKAGE_LIBGUDEV
+>         select BR2_PACKAGE_LIBGLIB2
+>         help
+>           libmbim is a glib-based library for talking to WWAN modems and
+> @@ -12,6 +10,14 @@ config BR2_PACKAGE_LIBMBIM
+>
+>           http://www.freedesktop.org/wiki/Software/libmbim/
+>
+> -comment "libmbim needs udev /dev management and a toolchain w/ wchar, threads"
+> -       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -               !BR2_PACKAGE_HAS_UDEV
+> +if BR2_PACKAGE_LIBMBIM
+> +config BR2_PACKAGE_LIBMBIM_UDEV
+> +       bool "udev support"
+> +       depends on BR2_PACKAGE_HAS_UDEV
+> +       select BR2_PACKAGE_LIBGUDEV
+> +       help
+> +         This option enables udev support in libmbim
+> +endif
+> +
+> +comment "libmbim needs a toolchain w/ wchar, threads"
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+> index 33e500e53..03291a27f 100644
+> --- a/package/libmbim/libmbim.mk
+> +++ b/package/libmbim/libmbim.mk
+> @@ -11,9 +11,16 @@ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+>  LIBMBIM_LICENSE_FILES = COPYING
+>  LIBMBIM_INSTALL_STAGING = YES
+>
+> -LIBMBIM_DEPENDENCIES = libglib2 udev libgudev
+> +LIBMBIM_DEPENDENCIES = libglib2
+>
+>  # we don't want -Werror
+>  LIBMBIM_CONF_OPTS = --enable-more-warnings=no
+>
+> +ifeq ($(BR2_PACKAGE_LIBMBIM_UDEV),y)
+> +LIBMBIM_DEPENDENCIES += libgudev
+> +LIBMBIM_CONF_OPTS += --with-udev
+> +else
+> +LIBMBIM_CONF_OPTS += --without-udev
+> +endif
+> +
+>  $(eval $(autotools-package))
+> --
+> 2.13.1
+>
 
-Thanks!
 
-Thomas
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Aleksander
+https://aleksander.es
