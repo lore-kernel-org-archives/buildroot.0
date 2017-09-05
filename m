@@ -1,37 +1,122 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 00:23:57 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] sysvinit: adjust help text
-Message-ID: <20170905222811.87A1182146@busybox.osuosl.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue,  5 Sep 2017 15:41:29 -0700
+Subject: [Buildroot] [PATCH for 2017.02.x] package/binutils: fix crash
+	caused by buggy xtensa overlay
+Message-ID: <1504651289-10525-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4dbe2e781c93f425ef82e9c7076f326b90819a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+In some xtensa configurations there may be system/user registers in
+xtensa-modules with negative index. ISA initialization for such config
+may clobber heap and result in program termination.
+Don't update lookup table entries for register with negative indices.
 
-sysvinit is far from ultimate init implementation these days. Update the
-help text to match reality.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e9a2746710eb269cfb29075f3afda58e45627d4a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/sysvinit/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+ ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 ++++++++++++++++++++++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 package/binutils/2.25.1/131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+ create mode 100644 package/binutils/2.26.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
 
-diff --git a/package/sysvinit/Config.in b/package/sysvinit/Config.in
-index 94f1612..7f27a70 100644
---- a/package/sysvinit/Config.in
-+++ b/package/sysvinit/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYSVINIT
- 	depends on BR2_INIT_SYSV
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
--	  /sbin/init - parent of all processes
-+	  System V style implementation of /sbin/init, parent of all
-+	  processes
- 
- 	  http://savannah.nongnu.org/projects/sysvinit
+diff --git a/package/binutils/2.25.1/131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.25.1/131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+new file mode 100644
+index 000000000000..30103ee05eca
+--- /dev/null
++++ b/package/binutils/2.25.1/131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+@@ -0,0 +1,42 @@
++From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 2 Aug 2017 00:36:05 -0700
++Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
++
++In some xtensa configurations there may be system/user registers in
++xtensa-modules with negative index. ISA initialization for such config
++may clobber heap and result in program termination.
++Don't update lookup table entries for register with negative indices.
++They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
++change should not affect processing of valid assembly/binary code.
++
++bfd/
++2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
++	entries for sysregs with negative indices.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
++
++ bfd/xtensa-isa.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
++index 8da75bea8109..8c6ee88fdeae 100644
++--- a/bfd/xtensa-isa.c
+++++ b/bfd/xtensa-isa.c
++@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
++       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
++       is_user = sreg->is_user;
++ 
++-      isa->sysreg_table[is_user][sreg->number] = n;
+++      if (sreg->number >= 0)
+++	isa->sysreg_table[is_user][sreg->number] = n;
++     }
++ 
++   /* Set up the interface lookup table.  */
++-- 
++2.1.4
++
+diff --git a/package/binutils/2.26.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.26.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+new file mode 100644
+index 000000000000..30103ee05eca
+--- /dev/null
++++ b/package/binutils/2.26.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+@@ -0,0 +1,42 @@
++From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 2 Aug 2017 00:36:05 -0700
++Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
++
++In some xtensa configurations there may be system/user registers in
++xtensa-modules with negative index. ISA initialization for such config
++may clobber heap and result in program termination.
++Don't update lookup table entries for register with negative indices.
++They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
++change should not affect processing of valid assembly/binary code.
++
++bfd/
++2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
++	entries for sysregs with negative indices.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
++
++ bfd/xtensa-isa.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
++index 8da75bea8109..8c6ee88fdeae 100644
++--- a/bfd/xtensa-isa.c
+++++ b/bfd/xtensa-isa.c
++@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
++       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
++       is_user = sreg->is_user;
++ 
++-      isa->sysreg_table[is_user][sreg->number] = n;
+++      if (sreg->number >= 0)
+++	isa->sysreg_table[is_user][sreg->number] = n;
++     }
++ 
++   /* Set up the interface lookup table.  */
++-- 
++2.1.4
++
+-- 
+2.1.4
