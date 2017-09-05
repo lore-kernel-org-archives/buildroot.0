@@ -1,57 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:17:30 +0200
-Subject: [Buildroot] [PATCH 1/1] pango: bump to 1.40.12
-In-Reply-To: <20170905124044.jkofou54bfsm5dfs@tarshish>
-References: <20170905122010.19409-1-aduskett@gmail.com>
- <20170905122010.19409-5-aduskett@gmail.com>
- <20170905124044.jkofou54bfsm5dfs@tarshish>
-Message-ID: <20170905211730.6284d6ab@windsurf.lan>
+Date: Tue, 5 Sep 2017 21:17:45 +0200
+Subject: [Buildroot] [git commit] postgresql: bump to version 9.6.5
+Message-ID: <20170905191037.92C367F969@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=95e284bd2732390eb34cb72c798032fd7ac8920c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 5 Sep 2017 15:40:44 +0300, Baruch Siach wrote:
-> Hi Adam,
-> 
-> On Tue, Sep 05, 2017 at 08:20:09AM -0400, Adam Duskett wrote:
-> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> > ---
-> >  .../0001-build-disable-tests-from-building.patch   | 28 +++++++++++-----------
-> >  package/pango/pango.hash                           |  4 ++--
-> >  package/pango/pango.mk                             |  2 +-
-> >  3 files changed, 17 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/package/pango/0001-build-disable-tests-from-building.patch b/package/pango/0001-build-disable-tests-from-building.patch
-> > index c518a34d3..51b645bae 100644
-> > --- a/package/pango/0001-build-disable-tests-from-building.patch
-> > +++ b/package/pango/0001-build-disable-tests-from-building.patch
-> > @@ -1,16 +1,16 @@
-> > -From cde9a78711e8eaed0aefb9e36288f22918e8d4b2 Mon Sep 17 00:00:00 2001
-> > -From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > -Date: Thu, 2 Mar 2017 09:41:41 -0300
-> > -Subject: [PATCH] build: disable tests from building
-> > +From 1c503a8b2f127c12e58a6e8ba01743c04061df50 Mon Sep 17 00:00:00 2001
-> > +From: Adam Duskett <aduskett@gmail.com>
-> > +Date: Tue, 5 Sep 2017 07:25:17 -0400
-> > +Subject: [PATCH] disable tests from building
-> >  
-> > -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > +Signed-off-by: Adam Duskett <aduskett@gmail.com>  
-> 
-> This patch refresh only touches the context, not a complete rewrite. Please 
-> preserve the original subject, authorship and sign-off, and add your sign-off 
-> below the original.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Agreed. Adam, could you fix and resend ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index c65edf7..62ce9a7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.3/postgresql-9.6.3.tar.bz2.sha256
+-sha256 1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6  postgresql-9.6.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2.sha256
++sha256 06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c  postgresql-9.6.5.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 62b41cb..7adb957 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.6.3
++POSTGRESQL_VERSION = 9.6.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
