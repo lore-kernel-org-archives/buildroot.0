@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Sep 2017 21:12:21 +0200
-Subject: [Buildroot] [PATCH] support/tests: use relative test_dir
-In-Reply-To: <20170905162137.18087-1-yann.morin.1998@free.fr>
-References: <20170905162137.18087-1-yann.morin.1998@free.fr>
-Message-ID: <20170905211221.404a52ce@windsurf.lan>
+Date: Tue, 5 Sep 2017 21:12:24 +0200
+Subject: [Buildroot] [PATCH] libtommath: set PREFIX when installing
+In-Reply-To: <20170905185219.9953-1-francois.perrad@gadz.org>
+References: <20170905185219.9953-1-francois.perrad@gadz.org>
+Message-ID: <20170905211224.6e79dc01@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  5 Sep 2017 18:21:37 +0200, Yann E. MORIN wrote:
-> When we list the available tests, we use test_dir, which is set from
-> the path of the script. However, when we run the tests, we use the
-> hard-coded path.
+On Tue,  5 Sep 2017 20:52:19 +0200, Francois Perrad wrote:
+> the default value is /usr/local and causes breakage in libtomcrypt & moarvm
+> see http://autobuild.buildroot.net/results/a76/a760063f05ae23f79920bc89ffc37e7dcf77aeab/
+> see http://autobuild.buildroot.net/results/78c/78c9bc9a21cfce48615b70d80b25dd4847bd803b/
 > 
-> Ditto to find the config file.
-> 
-> For consistency, always use test_dir.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  support/testing/run-tests | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/libtommath/libtommath.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
