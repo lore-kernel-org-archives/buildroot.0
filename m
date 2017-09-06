@@ -1,19 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 23:47:19 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] file: bump to version 5.30
-Message-ID: <20170906214509.8957280435@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 23:47:41 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] file: security bump to
+	version 5.32
+Message-ID: <20170906214509.A6E5680435@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51be260e88916aedef39893c0388375850a4f07c
+commit: https://git.buildroot.net/buildroot/commit/?id=d3463a9907ecd3a64e6ad1c41d4b5c8f983e12ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes CVE-2017-1000249 - Stack buffer overflow with a specially crafted
+.notes section in an ELF binary file.
+
+For more details, see: http://www.openwall.com/lists/oss-security/2017/09/05/3
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit ac82e0ebada7efef4d7fbc4ce3de4748808c00b4)
+(cherry picked from commit 89a38e6397fb316792da19fbde4bfa4f9c43fb52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/file/file.hash | 2 +-
@@ -21,23 +27,23 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/file/file.hash b/package/file/file.hash
-index 9a4c9f1..3fafff8 100644
+index dcf96ec..fee516c 100644
 --- a/package/file/file.hash
 +++ b/package/file/file.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 ea661277cd39bf8f063d3a83ee875432cc3680494169f952787e002bdd3884c0  file-5.29.tar.gz
-+sha256 694c2432e5240187524c9e7cf1ec6acc77b47a0e19554d34c14773e43dbbf214  file-5.30.tar.gz
+-sha256 09c588dac9cff4baa054f51a36141793bcf64926edc909594111ceae60fce4ee  file-5.31.tar.gz
++sha256 8639dc4d1b21e232285cd483604afc4a6ee810710e00e579dbe9591681722b50  file-5.32.tar.gz
 diff --git a/package/file/file.mk b/package/file/file.mk
-index 39d1781..2fa6804 100644
+index 4b86f80..26d3c5f 100644
 --- a/package/file/file.mk
 +++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FILE_VERSION = 5.29
-+FILE_VERSION = 5.30
+-FILE_VERSION = 5.31
++FILE_VERSION = 5.32
  FILE_SITE = ftp://ftp.astron.com/pub/file
  FILE_DEPENDENCIES = host-file zlib
  HOST_FILE_DEPENDENCIES = host-zlib
