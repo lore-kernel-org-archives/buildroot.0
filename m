@@ -1,28 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 23:48:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/eudev: bump version to 3.2.3
-In-Reply-To: <20170904043650.9513-1-bernd.kuhls@t-online.de>
-References: <20170904043650.9513-1-bernd.kuhls@t-online.de>
-Message-ID: <20170906234853.4c1f58f6@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 06 Sep 2017 23:50:45 +0200
+Subject: [Buildroot] [PATCH] subversion: security bump to version 1.9.7
+In-Reply-To: <20170906154039.21569-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 6 Sep 2017 17:40:39 +0200")
+References: <20170906154039.21569-1-peter@korsgaard.com>
+Message-ID: <87vakvcx8q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Mon,  4 Sep 2017 06:36:50 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/eudev/eudev.hash | 4 ++--
->  package/eudev/eudev.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes CVE-2017-9800: Arbitrary code execution on clients through malicious
+ > svn+ssh URLs in svn:externals and svn:sync-from-url
 
-Applied to master, thanks.
+ > For more details, see
+ > http://subversion.apache.org/security/CVE-2017-9800-advisory.txt
 
-Thomas
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
