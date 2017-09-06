@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 22:20:03 +0200
-Subject: [Buildroot] directfb: sources question
-In-Reply-To: <75a027ac-8ace-cdbd-3171-e49558f7d5d2@ginzinger.com>
-References: <75a027ac-8ace-cdbd-3171-e49558f7d5d2@ginzinger.com>
-Message-ID: <20170906222003.6ee5a9b8@windsurf.lan>
+Date: Wed, 6 Sep 2017 22:30:38 +0200
+Subject: [Buildroot] [PATCH 06/12] luaposix: fix LICENSE_FILES
+In-Reply-To: <20170904175046.21530-6-francois.perrad@gadz.org>
+References: <20170904175046.21530-1-francois.perrad@gadz.org>
+ <20170904175046.21530-6-francois.perrad@gadz.org>
+Message-ID: <20170906223038.41aaf78a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 6 Sep 2017 08:46:27 +0200, Martin Kepplinger wrote:
-> Since I looked for the directfb sources and failed to download it
-> manually using directfb.mk: How would I download directfb 1.7.7?
+On Mon,  4 Sep 2017 19:50:40 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luaposix/luaposix.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+> index a24323fd1..98dd8d658 100644
+> --- a/package/luaposix/luaposix.mk
+> +++ b/package/luaposix/luaposix.mk
+> @@ -7,7 +7,7 @@
+>  LUAPOSIX_VERSION = 34.0.1
 
-From: http://sources.buildroot.net/DirectFB-1.7.7.tar.gz
-
-> And are you sure https://github.com/deniskropp/DirectFB.git isn't the
-> the place of the main sources where a possible release would happen?
-
-I don't expect a new release of DirectFB, it's a dead project IMO.
-However, if the sources there are similar to the 1.7.7 tarball we're
-using today, we could use this github repository as our upstream for
-the directfb package.
-
-Best regards,
+We don't have this version of luaposix in Buildroot. Therefore this
+patch doesn't apply, and in fact isn't correct since the license file
+is still named COPYING in the current version of luaposix in Buildroot.
 
 Thomas
 -- 
