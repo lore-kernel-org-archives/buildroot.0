@@ -1,37 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 13:14:05 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/squid: fix typo
-Message-ID: <20170906112608.448558211D@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 13:12:34 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] connman: security bump to
+	version 1.35
+Message-ID: <20170906112608.3783A81932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21d7b1e4fc2000ae98b9fa41d635f238e3e43e64
+commit: https://git.buildroot.net/buildroot/commit/?id=8d5a92e2b666c25e22ba5959e253269a5774e777
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixed typo added by
-https://git.buildroot.net/buildroot/commit/package/squid?id=d2f7d0d72cd7e00ffbe869011d200f0a4a53e7a5
+Fixes CVE-2017-12865: stack overflow in dns proxy feature.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Martin Bark <martin@barkynet.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7c5526c79cd74592cff55f8344216ad0a968119a)
+(cherry picked from commit 104879aab0efc9fe0913af5d3877e0e9c6490607)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index cf0378a..9abf3cd 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -21,7 +21,7 @@ SQUID_CONF_ENV = \
- 	ac_cv_func___va_copy=yes \
- 	ac_cv_func_strnstr=no \
- 	ac_cv_have_squid=yes \
--	BUILXCXX="$(HOSTCXX)" \
-+	BUILDCXX="$(HOSTCXX)" \
- 	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
- SQUID_CONF_OPTS = \
- 	--enable-async-io=8 \
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index e6485b9..c822bb1 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	a9a0808c729c1f348fc36d8cecb52d19b72bc34cb411c502608cb0e0190fc71e	connman-1.34.tar.xz
++sha256	66d7deb98371545c6e417239a9b3b3e3201c1529d08eedf40afbc859842cf2aa	connman-1.35.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index efe08a5..741da9b 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.34
++CONNMAN_VERSION = 1.35
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
