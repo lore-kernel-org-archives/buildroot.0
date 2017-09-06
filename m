@@ -1,38 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 12:30:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/minidlna: Do not
-	mark .service file executable
-Message-ID: <20170906112607.772518211D@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:26:54 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mediastreamer: add
+	dependency on host-vim
+Message-ID: <20170906112607.580588211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ece5e098913d77846908e010fb67711bbb2e500a
+commit: https://git.buildroot.net/buildroot/commit/?id=e72e252af537af079194d8f834a55547a8c191b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Do not mark .service file executable, otherwise systemd
-will give us a warning about it.
+host-vim is needed to provide the xxd tool, otherwise the build fails
+with:
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+checking for xxd... no
+configure: error: "xxd is required (provided by vim package)"
+
+This isn't noticed by the autobuilders, presumably because all of them
+have vim installed locally.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit fb825fbaf9dabce2b22c9a32645802f8f64fca23)
+(cherry picked from commit 377d10577bb47dbe5da5799646f2a05c36739547)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minidlna/minidlna.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mediastreamer/mediastreamer.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 0e765e8..c67373f 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -29,7 +29,7 @@ define MINIDLNA_INSTALL_INIT_SYSV
- endef
- 
- define MINIDLNA_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0755 package/minidlna/minidlnad.service \
-+	$(INSTALL) -D -m 0644 package/minidlna/minidlnad.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/minidlnad.service
- 
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 1d99d19..fa4b163 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -7,7 +7,8 @@
+ MEDIASTREAMER_VERSION = 2.14.0
+ MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
+ MEDIASTREAMER_INSTALL_STAGING = YES
+-MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
++# host-vim needed for the xxd utility
++MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext host-vim
+ # tests fail linking on some architectures, so disable them
+ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPLv2+
