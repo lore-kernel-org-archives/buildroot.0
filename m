@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 12:33:19 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/dialog: fix
+Date: Wed, 6 Sep 2017 12:34:30 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/iostat: fix
 	upstream source URL
-Message-ID: <20170906112607.A31F681838@busybox.osuosl.org>
+Message-ID: <20170906112607.DBF8281932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af76cb192ae57b1f2e1a01e365a849d271780730
+commit: https://git.buildroot.net/buildroot/commit/?id=09549cc322d3989fb439a2da4c4407118e588826
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 5fdebd3b8aad0407c0eeaeef5998562d17c5e42a)
+(cherry picked from commit 3d37cc2c97ddfd89698af121e77e9cebfb085a16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dialog/dialog.mk | 2 +-
+ package/iostat/iostat.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index f207f75..1318770 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index d591c67..4953c73 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- DIALOG_VERSION = 1.2-20150125
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
--DIALOG_SITE = ftp://invisible-island.net/dialog
-+DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
- 	--disable-rpath-hack
- DIALOG_DEPENDENCIES = host-pkgconf ncurses
+ IOSTAT_VERSION = 2.2
+-IOSTAT_SITE = http://www.linuxinsight.com/files
++IOSTAT_SITE = http://linuxinsight.com/sites/default/files
+ IOSTAT_LICENSE = GPL
+ IOSTAT_LICENSE_FILES = LICENSE
+ 
