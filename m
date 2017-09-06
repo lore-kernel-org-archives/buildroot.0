@@ -1,36 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 14:36:37 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
-	9}.x series
-Message-ID: <20170906124610.CB273821D5@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 14:48:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] postgresql: security bump
+	to version 9.6.5
+Message-ID: <20170906124610.EB3D77FD13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=146c38cfcf5fac67f98abd2e612d2a0a617ccd86
+commit: https://git.buildroot.net/buildroot/commit/?id=0e3334e25b9b1ef853a83c3ab67822a88ee97842
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the following security issues (9.6.4):
+
+CVE-2017-7546: Empty password accepted in some authentication methods
+CVE-2017-7547: The "pg_user_mappings" catalog view discloses passwords to users lacking server privileges
+CVE-2017-7548: lo_put() function ignores ACLs
+
+For more info, see https://www.postgresql.org/about/news/1772/
+
+[Peter: extend commit message with security fixes info]
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit fa46a89fe06aa1039274d7fb2408ee76cf137c97)
+(cherry picked from commit 95e284bd2732390eb34cb72c798032fd7ac8920c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d4b40b9..67f9570 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.85"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.86"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.46"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.47"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index c65edf7..62ce9a7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.3/postgresql-9.6.3.tar.bz2.sha256
+-sha256 1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6  postgresql-9.6.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2.sha256
++sha256 06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c  postgresql-9.6.5.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 62b41cb..7adb957 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.6.3
++POSTGRESQL_VERSION = 9.6.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
