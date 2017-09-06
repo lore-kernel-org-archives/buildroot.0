@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 22:31:04 +0200
-Subject: [Buildroot] [git commit] xavante: add LICENSE_FILES
-Message-ID: <20170906203034.BC9838071A@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 22:38:28 +0200
+Subject: [Buildroot] [PATCH 01/12] cgilua: add LICENSE_FILES
+In-Reply-To: <20170904175046.21530-1-francois.perrad@gadz.org>
+References: <20170904175046.21530-1-francois.perrad@gadz.org>
+Message-ID: <20170906223828.58578fa3@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dd0919a473c3aa2ae10cfb5a74d8e81ce34f15e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xavante/xavante.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Mon,  4 Sep 2017 19:50:35 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/cgilua/cgilua.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
-index 20e4aab..d962e7b 100644
---- a/package/xavante/xavante.mk
-+++ b/package/xavante/xavante.mk
-@@ -6,5 +6,6 @@
- 
- XAVANTE_VERSION = 2.4.0-1
- XAVANTE_LICENSE = MIT
-+XAVANTE_LICENSE_FILES = $(XAVANTE_SUBDIR)/doc/us/license.html
- 
- $(eval $(luarocks-package))
+I've applied the series, except patch 06/12.
+
+Also, it's worth mentioning that for some reason, only patches 01/12
+and 02/12 appeared in patchwork, not the other ones from the series.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
