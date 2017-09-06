@@ -1,50 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 13:28:57 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] grub2: force
-	-fno-stack-protector in CFLAGS
-Message-ID: <20170906112608.A5BB682145@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Sep 2017 13:49:56 +0200
+Subject: [Buildroot] [RFC] testing: add python-cryptography tests
+In-Reply-To: <1216716905.8315000.1504697461058.JavaMail.zimbra@datacom.ind.br>
+References: <20170904071500.3858-1-yegorslists@googlemail.com>
+ <59af5dfae6364_331f1091a18551a0@ultri3.mail>
+ <20170906100656.5f5de18d@windsurf.lan>
+ <1216716905.8315000.1504697461058.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20170906134956.7fc5f023@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9064cb3b1d16cb299db656ef6807dc88cf1bc90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Hello,
 
-grub2 fails to configure when BR2_SSP_ALL is enabled, with the following
-configure error:
+On Wed, 6 Sep 2017 08:31:01 -0300 (BRT), Ricardo Martincoski wrote:
 
-  checking whether -fno-asynchronous-unwind-tables works... yes
-  checking whether -fno-unwind-tables works... yes
-  checking for target linking format... unknown
-  configure: error: no suitable link format found
+> > Actually, I am not sure I agree with this last part. I even think we
+> > should probably have a minimal test for each and every Python package,
+> > because the only way to verify that their dependencies are correct is
+> > to have a runtime test for them. So it would be nice to have a very
+> > simple way to write Python related tests, like a list of tuples
+> > (Buildroot package, Python package to import or Python command to run),
+> > and have the test infrastructure "generate" tests for all entries in
+> > this list.  
+> 
+> I will cook a patch for this.
 
-This can be worked around by enforcing -fno-stack-protector in the
-package CFLAGS in a way that overrides the SSP flag, as is already done
-for the valgrind package.
+We were discussing this the other day with Yann on IRC, and we're not
+sure how to do it. Especially, should we have some of the testing
+information in the package recipe itself (package/python-<foo>/) ? Or
+do we keep all the testing related details in support/testing/ ?
 
-Fixes bug #10261.
+The former has the advantage that the testing information is closer to
+the package, and therefore people are more likely to add the
+corresponding test cases when they add a Python package.
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Reported-by: Dr I J Ormshaw <ian_ormshaw@waters.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 2a27294e9ade6130a12ced9a1f152c51431a870e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/grub2/grub2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Something like:
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index dc4e51e..373bce1 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -53,7 +53,7 @@ GRUB2_CONF_ENV = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CPP="$(HOSTCC) -E" \
- 	TARGET_CC="$(TARGET_CC)" \
--	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+	TARGET_CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector" \
- 	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
- 	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
- 	NM="$(TARGET_NM)" \
+define PYTHON_FOO_TEST_CMDS
+	python -c import foo
+endef
+
+On the other hand, it also spreads the testing information all over the
+tree, which may not be desirable. So I guess one needs to play a bit
+with this and see what a good solution could be. I don't have a strong
+opinion yet on how we should do this. Proposals welcome!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
