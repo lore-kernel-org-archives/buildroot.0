@@ -1,44 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 12:26:54 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mediastreamer: add
-	dependency on host-vim
-Message-ID: <20170906112607.580588211D@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:31:25 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/nss-pam-ldapd: Do
+	not mark .service file executable
+Message-ID: <20170906112607.957B181838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e72e252af537af079194d8f834a55547a8c191b8
+commit: https://git.buildroot.net/buildroot/commit/?id=aac336dfd70c50a21098f12784d5236b7d4f0cfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-host-vim is needed to provide the xxd tool, otherwise the build fails
-with:
+Do not mark .service file executable, otherwise systemd
+will give us a warning about it.
 
-checking for xxd... no
-configure: error: "xxd is required (provided by vim package)"
-
-This isn't noticed by the autobuilders, presumably because all of them
-have vim installed locally.
-
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 377d10577bb47dbe5da5799646f2a05c36739547)
+(cherry picked from commit 06cf5c1812e13e9ffd5d4040f2dbaf0f41a8e181)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mediastreamer/mediastreamer.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/nss-pam-ldapd/nss-pam-ldapd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 1d99d19..fa4b163 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -7,7 +7,8 @@
- MEDIASTREAMER_VERSION = 2.14.0
- MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
- MEDIASTREAMER_INSTALL_STAGING = YES
--MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
-+# host-vim needed for the xxd utility
-+MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext host-vim
- # tests fail linking on some architectures, so disable them
- MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
- MEDIASTREAMER_LICENSE = GPLv2+
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+index ba25082..f588e15 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.mk
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+@@ -27,7 +27,7 @@ NSS_PAM_LDAPD_CONF_OPTS += --disable-pam
+ endif
+ 
+ define NSS_PAM_LDAPD_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 755 -D package/nss-pam-ldapd/nslcd.service \
++	$(INSTALL) -m 644 -D package/nss-pam-ldapd/nslcd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/nslcd.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/nslcd.service \
