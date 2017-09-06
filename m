@@ -1,47 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 13:12:34 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] connman: security bump to
-	version 1.35
-Message-ID: <20170906112608.3783A81932@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:36:03 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/libphidget: fix
+	upstream source URL
+Message-ID: <20170906112608.0A82C8211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d5a92e2b666c25e22ba5959e253269a5774e777
+commit: https://git.buildroot.net/buildroot/commit/?id=ec732da99e44ba76982c97dfd936a5d6419cecd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-12865: stack overflow in dns proxy feature.
-
-Cc: Martin Bark <martin@barkynet.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 104879aab0efc9fe0913af5d3877e0e9c6490607)
+(cherry picked from commit dc9cc4d7cfb7dcd4a450e6bafe010b19f4c85e78)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libphidget/libphidget.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index e6485b9..c822bb1 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256	a9a0808c729c1f348fc36d8cecb52d19b72bc34cb411c502608cb0e0190fc71e	connman-1.34.tar.xz
-+sha256	66d7deb98371545c6e417239a9b3b3e3201c1529d08eedf40afbc859842cf2aa	connman-1.35.tar.xz
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index efe08a5..741da9b 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libphidget/libphidget.mk b/package/libphidget/libphidget.mk
+index 1b2557d..cc315b3 100644
+--- a/package/libphidget/libphidget.mk
++++ b/package/libphidget/libphidget.mk
+@@ -6,7 +6,7 @@
  
--CONNMAN_VERSION = 1.34
-+CONNMAN_VERSION = 1.35
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+ LIBPHIDGET_VERSION = 2.1.8.20140319
+ LIBPHIDGET_SOURCE = libphidget_$(LIBPHIDGET_VERSION).tar.gz
+-LIBPHIDGET_SITE = http://www.phidgets.com/downloads/libraries
++LIBPHIDGET_SITE = https://www.phidgets.com/downloads/phidget21/libraries/linux/libphidget
+ LIBPHIDGET_DEPENDENCIES = libusb
+ LIBPHIDGET_CONF_OPTS = --disable-ldconfig
+ LIBPHIDGET_INSTALL_STAGING = YES
