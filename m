@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 23:31:20 +0200
-Subject: [Buildroot] [git commit] mmc-utils: use upstream provided install
-	target
-Message-ID: <20170906212426.92A4181999@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 23:33:34 +0200
+Subject: [Buildroot] [PATCH] mmc-utils: use upstream provided install
+ target
+In-Reply-To: <458a66622f1ede03edf340d7f05d52f971eabc79.1504510840.git.baruch@tkos.co.il>
+References: <458a66622f1ede03edf340d7f05d52f971eabc79.1504510840.git.baruch@tkos.co.il>
+Message-ID: <20170906233334.328e7d87@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371d3a7ab8d10e73243f33c564218306aec54a97
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Cc: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mmc-utils/mmc-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon,  4 Sep 2017 10:40:40 +0300, Baruch Siach wrote:
+>  define MMC_UTILS_INSTALL_TARGET_CMDS
+> -	$(INSTALL) -D -m 0755 $(@D)/mmc $(TARGET_DIR)/usr/bin/mmc
+> +	prefix=$(TARGET_DIR) $(MAKE) -C $(@D) install
+>  endef
 
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 0b9a6d1..9aeaf5c 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -13,7 +13,7 @@ define MMC_UTILS_BUILD_CMDS
- endef
- 
- define MMC_UTILS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/mmc $(TARGET_DIR)/usr/bin/mmc
-+	$(MAKE) -C $(@D) prefix=/usr DESTDIR=$(TARGET_DIR) install
- endef
- 
- $(eval $(generic-package))
+This is not entirely correct, for a few reasons: first, your patch
+introduces a difference as the "mmc" program is now installed
+in /bin/mmc and not /usr/bin/mmc, which isn't nice.
+
+Also, it mis-uses prefix, as DESTDIR should be used. The correct
+use is prefix=/usr (to override the default of /usr/local) and
+DESTDIR=$(TARGET_DIR).
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
