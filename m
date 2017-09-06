@@ -1,80 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 00:47:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gpsd: fix build for
-	microblaze architecture
-Message-ID: <20170906112606.6C52982145@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 11:06:40 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/fakeroot: fix
+	highly parallel uses
+Message-ID: <20170906112606.8C0167FD4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdce421a5fab2d1190a20087ba715dd5f12aad0e
+commit: https://git.buildroot.net/buildroot/commit/?id=ac847623f52c4a3e6c77d6636e19a7681989d270
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Disable O2 and add O0. The suggested flags in the gcc report
-are not enough for gcc >= 6.
+Although the issue can very well occur with low-paralle builds, or even
+with non-parallel builds, the conditions are so strict that the ocasion
+it breaks is extremely rare, to the point where a failure would go
+unnoticed.
 
-Fixes:
+Fixes #10141.
 
-  http://autobuild.buildroot.net/results/3686cd3f3e7b6aee84f4377bd2dded1115321fb3/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Thomas: use Git to format the patch, improve patch description.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit e6d0177f5319457588080b7ed111da2c3b628cf8)
+Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit eff989bab851ab01d190f3771558eb6ac30af255)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...002-SConstruct-do-not-force-O2-by-default.patch | 29 ++++++++++++++++++++++
- package/gpsd/gpsd.mk                               |  2 +-
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ ...communicate-check-return-status-of-msgrcv.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch b/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
+diff --git a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
 new file mode 100644
-index 0000000..641afa3
+index 0000000..3bb4f97
 --- /dev/null
-+++ b/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
-@@ -0,0 +1,29 @@
-+From eb7cce5dbb53a64cf55ac0d9a7fa4dcbebd4b173 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 14 Aug 2017 23:24:38 +0200
-+Subject: [PATCH] SConstruct: do not force -O2 by default
++++ b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
+@@ -0,0 +1,46 @@
++From a853f21633693f9eefc4949660253a5328d2d2f3 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 13 Aug 2017 23:21:54 +0200
++Subject: [PATCH 1/1] communicate: check return status of msgrcv()
 +
-+-O2 can cause problems on some architectures, so do not force it by
-+ default.
++msgrcv can return with -1 to indicate an error condition.
++One such error is to have been interrupted by a signal.
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Being interrupted by a signal is very rare in this code, except in a
++very special condition: a highly-parallel (1000 jobs!) mksquashfs on
++a filesystem with extended attributes, where we see errors like (those
++are mksquashfs errors):
++    llistxattr for titi/603/883 failed in read_attrs, because Unknown
++    error 1716527536
++
++See: https://bugs.busybox.net/show_bug.cgi?id=10141
++
++In this case, we just have to retry the call to msgrcv().
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+ SConstruct | 2 --
-+ 1 file changed, 2 deletions(-)
++ communicate.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
 +
-+diff --git a/SConstruct b/SConstruct
-+index fe444a2..93d91a4 100644
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -330,8 +330,6 @@ if not 'CCFLAGS' in os.environ:
-+     # Should we build with optimisation?
-+     if env['debug'] or env['coveraging']:
-+         env.Append(CCFLAGS=['-O0'])
-+-    else:
-+-        env.Append(CCFLAGS=['-O2'])
++diff --git a/communicate.c b/communicate.c
++index 293f404..787bb63 100644
++--- a/communicate.c
+++++ b/communicate.c
++@@ -553,10 +553,13 @@ void send_get_fakem(struct fake_msg *buf)
++       l=msgrcv(msg_get,
++                (struct my_msgbuf*)buf,
++                sizeof(*buf)-sizeof(buf->mtype),0,0);
++-    while((buf->serial!=serial)||buf->pid!=pid);
+++    while(((l==-1)&&(errno==EINTR))||(buf->serial!=serial)||buf->pid!=pid);
 + 
-+ # Get a slight speedup by not doing automatic RCS and SCCS fetches.
-+ env.SourceCode('.', None)
++     semaphore_down();
++ 
+++    if(l==-1)
+++      buf->xattr.flags_rc=errno;
+++
++     /*
++     (nah, may be wrong, due to allignment)
++ 
 +-- 
-+2.9.4
++2.11.0
 +
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 73067d3..7c2d37b 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -44,7 +44,7 @@ endif
- # A bug was reported to the gcc bug tracker:
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
- ifeq ($(BR2_microblaze),y)
--GPSD_CFLAGS += -fno-expensive-optimizations -fno-schedule-insns
-+GPSD_CFLAGS += -O0
- endif
- 
- # Enable or disable Qt binding
