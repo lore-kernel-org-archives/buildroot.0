@@ -1,50 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  6 Sep 2017 17:40:39 +0200
-Subject: [Buildroot] [PATCH] subversion: security bump to version 1.9.7
-Message-ID: <20170906154039.21569-1-peter@korsgaard.com>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Wed, 6 Sep 2017 16:06:57 +0000
+Subject: [Buildroot] Orange Pi HDMI to VGA output
+In-Reply-To: <874lshmo2z.fsf@dell.be.48ers.dk>
+References: <CAOJD9H+8eSuY_Rm+E-yzCOTSe2KjohLz28fcvH1tv6RDLHefkg@mail.gmail.com>
+ <878thum8u8.fsf@dell.be.48ers.dk>
+ <20170905094103.GA5082@airbook.vandijck-laurijssen.be>
+ <874lshmo2z.fsf@dell.be.48ers.dk>
+Message-ID: <955fd355-3b00-dde9-d629-f55a39a302d0@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-9800: Arbitrary code execution on clients through malicious
-svn+ssh URLs in svn:externals and svn:sync-from-url
+Hi,
 
-For more details, see
-http://subversion.apache.org/security/CVE-2017-9800-advisory.txt
+Le 05/09/2017 ? 12:33, Peter Korsgaard a ?crit :
+>>>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
+> 
+> Hi,
+> 
+>   > My experience with HDMI to VGA convertors, on a beaglebone:
+> 
+>   > an "HDMI to VGA" convertor needs power.
+>   > An HDMI port provides, per spec, up to 10mA or so.
+>   > So, if you're using such HDMI to VGA convertor:
+>   > The beaglebone has a polyfuse to enforce this current limit.
+>   > Then the HDMI to VGA will never actually power up and fail to
+>   > emit VGA signal.
+>   > I once managed to succeed here with bypassing the polyfuse with a wire.
+> 
+> Alternatively, the HDMI-to-VGA adapters I've seen typically can be
+> powered through USB (sometimes not exposed on the outside though).
+> 
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/subversion/subversion.hash | 7 +++----
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+I'm also trying to make a HDMI to VGA converter on an i.MX6 and just 
+discovered that most of them only support CEA resolutions [1]... 
+(720p,1080p, etc.)
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 1a85961fe1..6adb57c1ae 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,4 @@
- # From http://subversion.apache.org/download.cgi#recommended-release
--sha1 8bd6a44a1aed30c4c6b6b068488dafb44eaa6adf  subversion-1.9.5.tar.bz2
--# Locally calculated after checking PGP signature
--# https://www.apache.org/dist/subversion/subversion-1.9.5.tar.bz2.asc
--sha256 8a4fc68aff1d18dcb4dd9e460648d24d9e98657fbed496c582929c6b3ce555e5  subversion-1.9.5.tar.bz2
-+sha1 874b81749cdc3e88152d103243c3623ac6338388  subversion-1.9.7.tar.bz2
-+# From https://www.apache.org/dist/subversion/subversion-1.9.7.tar.bz2.sha512
-+sha512 a55efd3edaddbc099450d849fcc6fe5a8d20b85ece966d8ac2fd73ee9cb4255a0349bbcfceb4e9fca6daf054ce7c648eff8d273c6873f5dade6e62dcea7eeb2b  subversion-1.9.7.tar.bz2
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 05569c11a7..55738a826d 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUBVERSION_VERSION = 1.9.5
-+SUBVERSION_VERSION = 1.9.7
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
- SUBVERSION_LICENSE = Apache-2.0
--- 
-2.11.0
+This can be the issue with your 1280x720 resolution.
+
+I would recommend to take a look in /sys/class/graphics/fbX/modes to see 
+the resolution negociated with your dongle.
+
+Kind regards,
+
+Julien
+
+[1] https://en.wikipedia.org/wiki/Extended_Display_Identification_Data
