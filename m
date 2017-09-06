@@ -1,23 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 12:39:21 +0200
-Subject: [Buildroot] [PATCH 5/6] package/libphidget: fix upstream source
-	URL
-In-Reply-To: <20170829191005.19697-5-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 29 Aug 2017 21:10:04 +0200")
-References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
- <20170829191005.19697-5-bernd.kuhls@t-online.de>
-Message-ID: <871snkglgm.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 12:41:25 +0200
+Subject: [Buildroot] [PATCH] package/nvidia-driver: install an egl.pc
+In-Reply-To: <20170829204959.17003-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 29 Aug 2017 22:49:59 +0200")
+References: <20170829204959.17003-1-yann.morin.1998@free.fr>
+Message-ID: <87wp5cf6sq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > A lot of packages expect an egl.pc to decide that EGL is available. So,
+ > provide one.
 
-Committed, thanks.
+ > As suggested by Alexandre, use the one from nvidia-tegra23 as template.
+
+ > Reported-by: Alexandre Maumen? <alexandre@maumene.org>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Alexandre Maumen? <alexandre@maumene.org>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+
+ > ---
+ > Note: ideally, we should also provide a glesv2.pc, and possibly a
+ > wayland-egl.pc as well. That can be folowup patches.
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
