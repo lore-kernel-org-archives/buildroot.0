@@ -1,41 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 12:18:29 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/rpcbind: Do not
-	mark .service and .socket files executable
-Message-ID: <20170906112607.30B6C819CF@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:26:43 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] vim: add host variant
+Message-ID: <20170906112607.4A4B48211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3df894d83cc1f1822a320f1676a879e8814d3964
+commit: https://git.buildroot.net/buildroot/commit/?id=f21b3b83f8c9d3c19105da4a4cecdda6ea63eea5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Do not mark .service and .socket files executable, otherwise systemd
-will give us a warning about it.
+Vim contains a tool called xxd, which is needed by mediastreamer on
+the host as part of its build process. Therefore, this commit
+introduces a host variant for the vim package, that will be used by
+mediastreamer.
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3a41c96a25a267db77455a668dd4c673a2a6fc39)
+(cherry picked from commit 38d098402e620366d87699a7894d2e7918989156)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpcbind/rpcbind.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/vim/vim.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index 4360d1f..f8f8c41 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -22,9 +22,9 @@ RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index ec49460..9ea3fc2 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -75,4 +75,7 @@ VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
+ VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
  endif
  
- define RPCBIND_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.service \
-+	$(INSTALL) -m 0644 -D package/rpcbind/rpcbind.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
--	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.socket \
-+	$(INSTALL) -m 0644 -D package/rpcbind/rpcbind.socket \
- 		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/rpcbind.socket \
++HOST_VIM_DEPENDENCIES = host-ncurses
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
