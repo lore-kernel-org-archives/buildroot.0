@@ -1,71 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 23:28:18 +0200
-Subject: [Buildroot] [git commit] python-pytablereader: bump to version
-	0.13.3
-Message-ID: <20170906212107.6513A800CA@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 23:28:25 +0200
+Subject: [Buildroot] [git commit] python-pytablewriter: bump to 0.24.0
+Message-ID: <20170906212107.8A8D8800CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57bfe67b77b2aab0f6817cbdaceaa3be200f8dc3
+commit: https://git.buildroot.net/buildroot/commit/?id=06a2d82de741cf4e03c0d2f96634958a51bfe8bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Reorder and fix dependencies.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pytablereader/Config.in                 | 5 ++++-
- package/python-pytablereader/python-pytablereader.hash | 4 ++--
- package/python-pytablereader/python-pytablereader.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-pytablewriter/Config.in                 | 8 ++++++--
+ package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
-index 050ff65..fa3dd29 100644
---- a/package/python-pytablereader/Config.in
-+++ b/package/python-pytablereader/Config.in
-@@ -2,14 +2,17 @@ config BR2_PACKAGE_PYTHON_PYTABLEREADER
- 	bool "python-pytablereader"
- 	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
+diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
+index f270d0d..1ef27be 100644
+--- a/package/python-pytablewriter/Config.in
++++ b/package/python-pytablewriter/Config.in
+@@ -2,12 +2,16 @@ config BR2_PACKAGE_PYTHON_PYTABLEWRITER
+ 	bool "python-pytablewriter"
  	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
- 	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
- 	select BR2_PACKAGE_PYTHON_MARKDOWN2 # runtime
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
- 	select BR2_PACKAGE_PYTHON_PATHPY # runtime
-+	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
-+	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_DOMINATE # runtime
++	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
++	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
++	select BR2_PACKAGE_PYTHON_PYTABLEREADER # runtime
++	select BR2_PACKAGE_PYTHON_SIMPLESQLITE # runtime
  	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_TOML # runtime
 +	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
- 	select BR2_PACKAGE_PYTHON_XLRD # runtime
+ 	select BR2_PACKAGE_PYTHON_XLSXWRITER # runtime
+ 	select BR2_PACKAGE_PYTHON_XLWT # runtime
+-	select BR2_PACKAGE_PYTHON_TOML # runtime
+-	select BR2_PACKAGE_PYTHON_PYTABLEREADER # runtime
  	help
- 	  A python library to load structured table data from
-diff --git a/package/python-pytablereader/python-pytablereader.hash b/package/python-pytablereader/python-pytablereader.hash
-index 7d1438a..5682779 100644
---- a/package/python-pytablereader/python-pytablereader.hash
-+++ b/package/python-pytablereader/python-pytablereader.hash
+ 	  pytablewriter is a python library to write a table in various
+ 	  formats: CSV, HTML, JavaScript, JSON, Markdown, Excel, Pandas,
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index 2987a08..abe5ad0 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pytablereader/json, sha256 locally computed
--md5	ae95462a1a982186d1307ee0d6e275e2  pytablereader-0.8.8.tar.gz
--sha256	6ba95dc699d2c7ab7bc4b3f0224a17404255d110a3ece8ba12217d650aa7de79  pytablereader-0.8.8.tar.gz
-+md5	60a00cb5ca16aaa16cc4813ef094f803  pytablereader-0.13.3.tar.gz
-+sha256	96d5eb060f5ab3bc9072e98c3dbeb22b152ce4ce64f33502e7c2cc394526c60b  pytablereader-0.13.3.tar.gz
-diff --git a/package/python-pytablereader/python-pytablereader.mk b/package/python-pytablereader/python-pytablereader.mk
-index 2b6f2d4..a2dd1b9 100644
---- a/package/python-pytablereader/python-pytablereader.mk
-+++ b/package/python-pytablereader/python-pytablereader.mk
+ # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
+-md5 f45f065cad97c00aaeb72db6768ff6e5  pytablewriter-0.19.9.tar.gz
+-sha256 00f657b656267945d565488f1676d91f22d90748a0a06dd94d513a551e4c12d9  pytablewriter-0.19.9.tar.gz
++md5	f7655aaf8d3b2496e08a36bce4c38b91  pytablewriter-0.24.0.tar.gz
++sha256	94741a1837502fb8172bf6b2f4410a42804efaeffdf34660c375ed0a9424df4e  pytablewriter-0.24.0.tar.gz
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index 1602526..ac1480c 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTABLEREADER_VERSION = 0.8.8
-+PYTHON_PYTABLEREADER_VERSION = 0.13.3
- PYTHON_PYTABLEREADER_SOURCE = pytablereader-$(PYTHON_PYTABLEREADER_VERSION).tar.gz
--PYTHON_PYTABLEREADER_SITE = https://pypi.python.org/packages/05/0c/7801617e60ce0d9b4cc57cb542cc431a95b9f43ac1ac14030017163da29d
-+PYTHON_PYTABLEREADER_SITE = https://pypi.python.org/packages/c3/47/550949034950f43d3db3b60b94aa8ee60d548d9f657612d816ad4420f24b
- PYTHON_PYTABLEREADER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEREADER_LICENSE = MIT
- PYTHON_PYTABLEREADER_LICENSE_FILES = LICENSE
+-PYTHON_PYTABLEWRITER_VERSION = 0.19.9
++PYTHON_PYTABLEWRITER_VERSION = 0.24.0
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/e9/82/0dcdbb1d8386aabda488edc2aa566c1e3c5eaac4415c02f731019be2d0df
++PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/65/b0/efafdd9e4d5b08069371530e46acde684ac7fb18bffa09b635e2af091d82
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
