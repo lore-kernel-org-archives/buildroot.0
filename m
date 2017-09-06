@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 22:06:15 +0200
-Subject: [Buildroot] [PATCH] libmbim: inherit BR2_USE_MMU dependency
- from libglib2
-In-Reply-To: <20170906084327.22928-1-aleksander@aleksander.es>
-References: <20170906084327.22928-1-aleksander@aleksander.es>
-Message-ID: <20170906220615.4b7e5ac2@windsurf.lan>
+Date: Wed, 6 Sep 2017 22:06:37 +0200
+Subject: [Buildroot] [git commit] package/libuv: bump version to 1.14.0
+Message-ID: <20170906200442.399EA820E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=08456f52b0efeea0c384bca198b70a22f937d5f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  6 Sep 2017 10:43:27 +0200, Aleksander Morgado wrote:
-> The USE_MMU dependency was missing from the chain of dependencies.
-> 
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
->  package/libmbim/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index f9fe4fe..169a7be 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 6a4976887594ec9f4e8521c95598dbbc478c59733056a5cf46354e93a1bc8400  libuv-v1.13.1.tar.gz
++sha256  96088804334a70f84d64f45e4db926fc1dfa42d4a9d22b1812cf47bc0d9b6947  libuv-v1.14.0.tar.gz
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 06c5520..0b62c58 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.13.1
++LIBUV_VERSION = v1.14.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
