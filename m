@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 08:54:09 +0200
-Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
-In-Reply-To: <CAAP7ucKNVWs7G-XkDk-9QCRadWdDMTLN6nG2NevSrMjw6Uii0g@mail.gmail.com>
-References: <20170905100327.21421-1-aleksander@aleksander.es>
- <20170905213604.61141da0@windsurf.lan>
- <CAAP7ucKNVWs7G-XkDk-9QCRadWdDMTLN6nG2NevSrMjw6Uii0g@mail.gmail.com>
-Message-ID: <20170906085409.5de05fa2@windsurf.lan>
+Date: Wed, 6 Sep 2017 08:55:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+In-Reply-To: <20170905201638.GA9106@scaer>
+References: <20170904185738.31182-1-bernd.kuhls@t-online.de>
+ <20170905221325.71f98014@windsurf.lan>
+ <20170905201638.GA9106@scaer>
+Message-ID: <20170906085535.691808b9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 5 Sep 2017 21:45:19 +0200, Aleksander Morgado wrote:
-
-> > ... and libmbim also has plenty of dependencies that you need to
-> > propagate here, including BR2_PACKAGE_HAS_UDEV.
-> >  
+On Tue, 5 Sep 2017 22:16:38 +0200, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> Oh, I assumed that was somehow automatic... Does this mean that if the
-> deps of a library are updated at some point in time, all the apps
-> depending on the library also need to get updated to add the new dep?
+> On 2017-09-05 22:13 +0200, Thomas Petazzoni spake thusly:
+> > On Mon,  4 Sep 2017 20:57:38 +0200, Bernd Kuhls wrote:  
+> > > Add optional dependencies to
+> > > 
+> > > - libva
+> > >   ffmpeg depends on libva, libva depends on xorg, so no need to add them
+> > >   to _DEPENDENCIES  
+> > 
+> > I don't see ffmpeg depending on libva, where do you see that ?  
+> 
+> Yet it does, see line 243. ;-)
 
-Yes, exactly. When we review patches adding new dependencies to an
-existing package, we are always careful that those new dependencies are
-propagated.
+Well, it will depend on libva if it's enabled. But I don't see anything
+in tvheadend or ffmpeg that forces libva to be enabled.
 
-> Yes, probably that's a much simpler option. Will suggest a new patch.
-
-Thanks!
+Perhaps I'm missing something obvious here.
 
 Thomas
 -- 
