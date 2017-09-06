@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 12:38:43 +0200
-Subject: [Buildroot] [PATCH 1/6] package/dialog: fix upstream source URL
-In-Reply-To: <20170829191005.19697-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 29 Aug 2017 21:10:00 +0200")
+Date: Wed, 06 Sep 2017 12:38:50 +0200
+Subject: [Buildroot] [PATCH 2/6] package/iostat: fix upstream source URL
+In-Reply-To: <20170829191005.19697-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 29 Aug 2017 21:10:01 +0200")
 References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
-Message-ID: <87efrkglho.fsf@dell.be.48ers.dk>
+ <20170829191005.19697-2-bernd.kuhls@t-online.de>
+Message-ID: <87a828glhh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
