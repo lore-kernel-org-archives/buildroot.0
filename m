@@ -1,25 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 11:04:29 +0200
-Subject: [Buildroot] [PATCH] gpsd: fix compile for microblaze arch
-In-Reply-To: <20170813085926.GA13312@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Sun, 13 Aug 2017 10:59:26 +0200")
-References: <20170813085926.GA13312@waldemar-brodkorb.de>
-Message-ID: <87fuc0i4f6.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 11:07:07 +0200
+Subject: [Buildroot] [PATCH] package/fakeroot: fix highly parallel uses
+In-Reply-To: <20170813214834.24093-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 13 Aug 2017 23:48:34 +0200")
+References: <20170813214834.24093-1-yann.morin.1998@free.fr>
+Message-ID: <87bmmoi4as.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Disable O2 and add O0. The suggested flags in the gcc report
- > are not enough for gcc >= 6.
+ > Although the issue can very well occur with low-paralle builds, or even
+ > with non-parallel builds, the conditions are so strict that the ocasion
+ > it breaks is extremely rare, to the point where a failure would go
+ > unnoticed.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/368/3686cd3f3e7b6aee84f4377bd2dded1115321fb3/
+ > Fixes #10141.
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 Committed to 2017.02.x, thanks.
 
