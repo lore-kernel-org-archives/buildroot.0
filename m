@@ -1,46 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 13:32:45 +0200
-Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
-In-Reply-To: <CAAP7uc+GQ51G_8P6+L4VmBmFJf6i4iD0f4V-LM9=QzRBLKFjKA@mail.gmail.com>
-References: <20170905100327.21421-1-aleksander@aleksander.es>
- <20170905213604.61141da0@windsurf.lan>
- <CAAP7uc+GQ51G_8P6+L4VmBmFJf6i4iD0f4V-LM9=QzRBLKFjKA@mail.gmail.com>
-Message-ID: <20170906133245.716cbbc6@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 06 Sep 2017 13:33:04 +0200
+Subject: [Buildroot] [git commit] package/transmission: fix gtk support
+In-Reply-To: <20170901231151.D50C2818D4@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Fri, 1 Sep 2017 23:58:40 +0200")
+References: <20170901231151.D50C2818D4@busybox.osuosl.org>
+Message-ID: <87tw0gdpu7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Wed, 6 Sep 2017 10:38:25 +0200, Aleksander Morgado wrote:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=e67fbcfa94e58a4d04e081be5e318953233492c8
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > All in all, isn't it simpler to get rid of those options, and simply do:
-> >
-> > ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-> > ... enable support  
-> 
-> When doing this, should I also include a direct dependency on
-> libgudev, so that libgudev is built before libqmi always?
-> LIBQMI_DEPENDENCIES += libgudev
+ > Gtk support is controlled by ARG_WITH since
+ > https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4
 
-Well, if you don't do this, libgudev is not guaranteed to be built
-before libqmi, so you would get a build failure, right ?
+ > Fixes a build error if libgtk2/3 was built before transmission:
+ > http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/
 
-The canonical way to express optional dependencies is:
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-ifeq ($(BR2_PACKAGE_FOO),y)
-BAR_DEPENDENCIES += foo
-BAR_CONF_OPTS += --enable-foo
-else
-BAR_CONF_OPTS += --disable-foo
-endif
+Committed to 2017.02.x, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
