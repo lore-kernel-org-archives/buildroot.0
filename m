@@ -1,61 +1,157 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 22:42:14 +0200
-Subject: [Buildroot] [git commit] expat: bump to version 2.2.4
-Message-ID: <20170906210303.26835817B7@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 22:57:14 +0200
+Subject: [Buildroot] [git commit] lcdproc: bump to version 0.5.9
+Message-ID: <20170906210303.3584F8073F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfa4428d78c67fade7160f0bf0dd358a0bc1ba44
+commit: https://git.buildroot.net/buildroot/commit/?id=028cf5897c4760de0c25bf5dc8eef58946d50d62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream migrated to automake for autotools: the "installlib" target
-no longer exist, and we can use the standard "install" target, and
-therefore drop the special INSTALL_STAGING_OPTS and
-INSTALL_TARGET_OPTS variables.
+This commit bumps lcdproc to version 0.5.9, and switches to the new
+upstream on github.
 
-Add license hash.
+The new version also compiles with musl without any patches.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Sven Haardiek <sven.haardiek@greenbone.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/expat/expat.hash | 10 ++++++----
- package/expat/expat.mk   |  4 +---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/lcdproc/0002-musl.patch | 102 ----------------------------------------
+ package/lcdproc/lcdproc.hash    |   1 +
+ package/lcdproc/lcdproc.mk      |   4 +-
+ 3 files changed, 3 insertions(+), 104 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index ccf74d6..ef01ec9 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,5 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.3/
--md5	f053af63ef5f39bd9b78d01fbc203334	expat-2.2.3.tar.bz2
--sha1	e2be3a2aa8d12ce70184aab418d0d5d96ed86d0e	expat-2.2.3.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.4/
-+md5	6e3980aba29a224a9f478d88ac7ec207	expat-2.2.4.tar.bz2
-+sha1	3394d6390c041a8f5dec1d5fe7c4af0a23ae4504	expat-2.2.4.tar.bz2
- # Calculated based on the hashes above
--sha256	b31890fb02f85c002a67491923f89bda5028a880fd6c374f707193ad81aace5f	expat-2.2.3.tar.bz2
-+sha256	03ad85db965f8ab2d27328abcf0bc5571af6ec0a414874b2066ee3fdd372019e	expat-2.2.4.tar.bz2
-+# Locally calculated
-+sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index a6fa373..ef196ec 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,12 +4,10 @@
+diff --git a/package/lcdproc/0002-musl.patch b/package/lcdproc/0002-musl.patch
+deleted file mode 100644
+index d0425fd..0000000
+--- a/package/lcdproc/0002-musl.patch
++++ /dev/null
+@@ -1,102 +0,0 @@
+-Fix musl build
+-
+-Partly downloaded from
+-http://lists.omnipotent.net/pipermail/lcdproc/2015-November/014291.html
+-http://lists.omnipotent.net/pipermail/lcdproc/2015-November/014281.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr lcdproc-0.5.7.org/clients/lcdproc/machine.h lcdproc-0.5.7/clients/lcdproc/machine.h
+---- lcdproc-0.5.7.org/clients/lcdproc/machine.h	2012-08-19 16:29:07.000000000 +0200
+-+++ lcdproc-0.5.7/clients/lcdproc/machine.h	2016-01-30 14:07:33.641802847 +0100
+-@@ -12,6 +12,7 @@
+- #ifndef _lcdproc_machine_h_
+- #define _lcdproc_machine_h_
+- 
+-+#include <time.h>
+- #include "shared/LL.h"
+- 
+- #ifndef LOADAVG_NSTATS
+-diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-pifacecad.c lcdproc-0.5.7/server/drivers/hd44780-pifacecad.c
+---- lcdproc-0.5.7.org/server/drivers/hd44780-pifacecad.c	2014-03-23 11:22:09.000000000 +0100
+-+++ lcdproc-0.5.7/server/drivers/hd44780-pifacecad.c	2016-01-30 14:12:03.521279729 +0100
+-@@ -54,6 +54,7 @@
+- #include <unistd.h>
+- #include <fcntl.h>
+- #include <sys/ioctl.h>
+-+#include <linux/ioctl.h>
+- #include <stdint.h>
+- #include <linux/spi/spidev.h>
+- 
+-diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-rpi.c lcdproc-0.5.7/server/drivers/hd44780-rpi.c
+---- lcdproc-0.5.7.org/server/drivers/hd44780-rpi.c	2014-03-23 11:22:09.000000000 +0100
+-+++ lcdproc-0.5.7/server/drivers/hd44780-rpi.c	2016-01-30 14:04:10.288112853 +0100
+-@@ -285,7 +285,7 @@
+- 
+- 	/* Unmap and free memory */
+- 	if (gpio_map != NULL)
+--		munmap((caddr_t) gpio_map, GPIO_BLOCK_SIZE);
+-+		munmap((void *) gpio_map, GPIO_BLOCK_SIZE);
+- 	if (p->rpi_gpio != NULL)
+- 		free(p->rpi_gpio);
+- 	p->rpi_gpio = NULL;
+-diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-spi.c lcdproc-0.5.7/server/drivers/hd44780-spi.c
+---- lcdproc-0.5.7.org/server/drivers/hd44780-spi.c	2014-03-23 11:22:09.000000000 +0100
+-+++ lcdproc-0.5.7/server/drivers/hd44780-spi.c	2016-01-30 14:11:11.604763500 +0100
+-@@ -29,6 +29,7 @@
+- #include <unistd.h>
+- #include <fcntl.h>
+- #include <sys/ioctl.h>
+-+#include <linux/ioctl.h>
+- #include <stdint.h>
+- #include <linux/spi/spidev.h>
+- 
+-diff -uNr lcdproc-0.5.7.org/server/drivers/mtc_s16209x.c lcdproc-0.5.7/server/drivers/mtc_s16209x.c
+---- lcdproc-0.5.7.org/server/drivers/mtc_s16209x.c	2011-08-14 14:29:16.000000000 +0200
+-+++ lcdproc-0.5.7/server/drivers/mtc_s16209x.c	2016-01-30 14:13:10.691122839 +0100
+-@@ -49,6 +49,7 @@
+- #include <fcntl.h>
+- #include <string.h>
+- #include <errno.h>
+-+#include <sys/file.h>
+- 
+- #ifdef HAVE_CONFIG_H
+- # include "config.h"
+-diff -uNr lcdproc-0.5.7.org/server/drivers/rawserial.c lcdproc-0.5.7/server/drivers/rawserial.c
+---- lcdproc-0.5.7.org/server/drivers/rawserial.c	2014-03-23 11:22:10.000000000 +0100
+-+++ lcdproc-0.5.7/server/drivers/rawserial.c	2016-01-30 14:03:43.465779507 +0100
+-@@ -60,13 +60,13 @@
+- 	/** \name Event loop timing. refresh_time and refresh_delta form the
+- 	 * event loop timing mechanism for configurable update rates.
+- 	 *@{*/
+--	uint refresh_time;		/**< time at the last screen update */
+--	uint refresh_delta;		/**< time step to next screen update */
+-+	unsigned int refresh_time;		/**< time@the last screen update */
+-+	unsigned int refresh_delta;		/**< time step to next screen update */
+- 	/**@}*/
+- } PrivateData;
+- 
+- /* Local prototypes */
+--static uint get_millisecond_time(void);
+-+static unsigned int get_millisecond_time(void);
+- 
+- 
+- /* Vars for the server core */
+-@@ -303,7 +303,7 @@
+- 	PrivateData *p = drvthis->private_data;
+- 	char out[LCD_MAX_WIDTH * LCD_MAX_HEIGHT];
+- 
+--	uint currentTime = get_millisecond_time();
+-+	unsigned int currentTime = get_millisecond_time();
+- 	int t_delta = currentTime - p->refresh_time;
+- 
+- 	/*
+-@@ -415,7 +415,7 @@
+-  *
+-  * \return  int with current millisecond time.
+-  */
+--static uint
+-+static unsigned int
+- get_millisecond_time(void)
+- {
+- 	struct timeval ts;
+diff --git a/package/lcdproc/lcdproc.hash b/package/lcdproc/lcdproc.hash
+index ea39a9b..00f6854 100644
+--- a/package/lcdproc/lcdproc.hash
++++ b/package/lcdproc/lcdproc.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  843007d377adc856529ed0c7c42c9a7563043f06b1b73add0372bba3a3029804  lcdproc-0.5.7.tar.gz
++sha256  d48a915496c96ff775b377d2222de3150ae5172bfb84a6ec9f9ceab962f97b83  lcdproc-0.5.9.tar.gz
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index e602088..e5b6172 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.2.3
-+EXPAT_VERSION = 2.2.4
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
--EXPAT_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) installlib
--EXPAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) installlib
- EXPAT_DEPENDENCIES = host-pkgconf
- HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
+-LCDPROC_VERSION = 0.5.7
+-LCDPROC_SITE = http://downloads.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
++LCDPROC_VERSION = 0.5.9
++LCDPROC_SITE = https://github.com/lcdproc/lcdproc/releases/download/v$(LCDPROC_VERSION)
+ LCDPROC_LICENSE = GPL-2.0+
+ LCDPROC_LICENSE_FILES = COPYING
+ LCDPROC_MAKE = $(MAKE1)
