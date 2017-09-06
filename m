@@ -1,22 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 14:43:24 +0200
-Subject: [Buildroot] [PATCH 1/1] libxml2: bump to version 2.9.5
-In-Reply-To: <20170905122010.19409-4-aduskett@gmail.com> (Adam Duskett's
- message of "Tue, 5 Sep 2017 08:20:08 -0400")
-References: <20170905122010.19409-1-aduskett@gmail.com>
- <20170905122010.19409-4-aduskett@gmail.com>
-Message-ID: <87d174dmkz.fsf@dell.be.48ers.dk>
+From: Dushara Jayasinghe <nidujay@gmail.com>
+Date: Wed, 6 Sep 2017 22:47:35 +1000
+Subject: [Buildroot] Add package Prosody
+Message-ID: <20170906124735.GA31394@debian>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+Ok... take 2
 
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+This is my first post the BR mailing list so please treat it
+as a request for comments.
 
-Committed to 2017.02.x, thanks.
+I've created a BR package for Prosody, which I've tested on a
+raspberry pi and was able to successfully register with an IM
+client.
 
--- 
-Bye, Peter Korsgaard
+Thank you.
+
+Dushara
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Add-package-Prosody.patch
+Type: text/x-diff
+Size: 3315 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170906/2fcc306b/attachment.patch>
