@@ -1,27 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 14:51:15 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql: bump to version 9.6.5
-In-Reply-To: <20170905122010.19409-6-aduskett@gmail.com> (Adam Duskett's
- message of "Tue, 5 Sep 2017 08:20:10 -0400")
-References: <20170905122010.19409-1-aduskett@gmail.com>
- <20170905122010.19409-6-aduskett@gmail.com>
-Message-ID: <878thsdm7w.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 14:52:27 +0200
+Subject: [Buildroot] [PATCH v2] package/netplug: init script create
+	needed lock directory
+In-Reply-To: <20170905095456.15776-1-corjon.j@ecagroup.com> (Julien Corjon's
+ message of "Tue, 5 Sep 2017 11:54:56 +0200")
+References: <20170905083917.8625-1-corjon.j@ecagroup.com>
+ <20170905095456.15776-1-corjon.j@ecagroup.com>
+Message-ID: <874lsgdm5w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+>>>>> "Julien" == Julien Corjon <corjon.j@ecagroup.com> writes:
 
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ > Init script use /var/lock/subsys/netplugd but directory
+ > /var/lock/subsys can be missing.
 
-It would have been good to mention that 9.6.4 fixed a number of security
-issues:
+ > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+ > ---
 
-https://www.postgresql.org/about/news/1772/
+ > v2:
+ > - dont test already existing directory
 
-Committed to 2017.02.x after extending the commit message with this info, thanks.
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
