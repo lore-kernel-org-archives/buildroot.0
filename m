@@ -1,83 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 11:06:40 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/fakeroot: fix
-	highly parallel uses
-Message-ID: <20170906112606.8C0167FD4F@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:11:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+	9, 12}.x series
+Message-ID: <20170906112606.E0B7C81F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac847623f52c4a3e6c77d6636e19a7681989d270
+commit: https://git.buildroot.net/buildroot/commit/?id=0b51c59e192a1d8b542c470c5943faf750f18a7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Although the issue can very well occur with low-paralle builds, or even
-with non-parallel builds, the conditions are so strict that the ocasion
-it breaks is extremely rare, to the point where a failure would go
-unnoticed.
-
-Fixes #10141.
-
-Reported-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit eff989bab851ab01d190f3771558eb6ac30af255)
+[Peter: drop 4.12.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit ab157dd4d188c42c5b8fa115ab7fab35de2fffcc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...communicate-check-return-status-of-msgrcv.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
-new file mode 100644
-index 0000000..3bb4f97
---- /dev/null
-+++ b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
-@@ -0,0 +1,46 @@
-+From a853f21633693f9eefc4949660253a5328d2d2f3 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 13 Aug 2017 23:21:54 +0200
-+Subject: [PATCH 1/1] communicate: check return status of msgrcv()
-+
-+msgrcv can return with -1 to indicate an error condition.
-+One such error is to have been interrupted by a signal.
-+
-+Being interrupted by a signal is very rare in this code, except in a
-+very special condition: a highly-parallel (1000 jobs!) mksquashfs on
-+a filesystem with extended attributes, where we see errors like (those
-+are mksquashfs errors):
-+    llistxattr for titi/603/883 failed in read_attrs, because Unknown
-+    error 1716527536
-+
-+See: https://bugs.busybox.net/show_bug.cgi?id=10141
-+
-+In this case, we just have to retry the call to msgrcv().
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ communicate.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/communicate.c b/communicate.c
-+index 293f404..787bb63 100644
-+--- a/communicate.c
-++++ b/communicate.c
-+@@ -553,10 +553,13 @@ void send_get_fakem(struct fake_msg *buf)
-+       l=msgrcv(msg_get,
-+                (struct my_msgbuf*)buf,
-+                sizeof(*buf)-sizeof(buf->mtype),0,0);
-+-    while((buf->serial!=serial)||buf->pid!=pid);
-++    while(((l==-1)&&(errno==EINTR))||(buf->serial!=serial)||buf->pid!=pid);
-+ 
-+     semaphore_down();
-+ 
-++    if(l==-1)
-++      buf->xattr.flags_rc=errno;
-++
-+     /*
-+     (nah, may be wrong, due to allignment)
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6440dee..aeb9040 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.80"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.83"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.41"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.44"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
