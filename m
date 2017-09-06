@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 13:27:23 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/linux-tools: gpio
-	does not build in parallel
-Message-ID: <20170906112608.98C848211D@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 13:31:53 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/transmission: fix
+	gtk support
+Message-ID: <20170906112608.B3EF081932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6866015b7017c07a782c3eeb14e7ec90fff31ff8
+commit: https://git.buildroot.net/buildroot/commit/?id=ac5da5e315d2cc7c40ee4644d1aa386e83b35ee8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Partially fixes #10276.
+Gtk support is controlled by ARG_WITH since
+https://github.com/transmission/transmission/commit/2ccc2bbbfe2e4a26dfeaa13b56c412ea0af4ebe4
 
-Reported-by: Ciro Santilli <ciro.santilli@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Ciro Santilli <ciro.santilli@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4a03d1ac29fbd5d67145a7ee4631fd38163939ae)
+Fixes a build error if libgtk2/3 was built before transmission:
+http://autobuild.buildroot.net/results/6b6/6b6ce352a9edfe3aaba82be143092a878e7715ed/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e67fbcfa94e58a4d04e081be5e318953233492c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/linux-tool-gpio.mk | 4 ++--
+ package/transmission/transmission.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-gpio.mk b/package/linux-tools/linux-tool-gpio.mk
-index ba75ab4..d5a0dbd 100644
---- a/package/linux-tools/linux-tool-gpio.mk
-+++ b/package/linux-tools/linux-tool-gpio.mk
-@@ -15,13 +15,13 @@ define GPIO_BUILD_CMDS
- 		exit 1 ; \
- 	fi
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index f4b0d71..6b8e12e 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -82,10 +82,10 @@ TRANSMISSION_CONF_OPTS += --disable-remote
+ endif
  
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools \
- 		$(GPIO_MAKE_OPTS) \
- 		gpio
- endef
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
+-TRANSMISSION_CONF_OPTS += --enable-gtk
++TRANSMISSION_CONF_OPTS += --with-gtk
+ TRANSMISSION_DEPENDENCIES += libgtk2
+ else
+-TRANSMISSION_CONF_OPTS += --disable-gtk
++TRANSMISSION_CONF_OPTS += --without-gtk
+ endif
  
- define GPIO_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools \
- 		$(GPIO_MAKE_OPTS) \
- 		DESTDIR=$(TARGET_DIR) \
- 		gpio_install
+ $(eval $(autotools-package))
