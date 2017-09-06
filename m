@@ -1,33 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 12:41:25 +0200
-Subject: [Buildroot] [PATCH] package/nvidia-driver: install an egl.pc
-In-Reply-To: <20170829204959.17003-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Tue, 29 Aug 2017 22:49:59 +0200")
-References: <20170829204959.17003-1-yann.morin.1998@free.fr>
-Message-ID: <87wp5cf6sq.fsf@dell.be.48ers.dk>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Date: Wed, 6 Sep 2017 08:09:24 -0300 (BRT)
+Subject: [Buildroot] [RFC] testing: add python-cryptography tests
+In-Reply-To: <CAGm1_ktR=czPoLUdFpUnp4q2Ve_o=umgVgWOEkKnHdzkLyxvNQ@mail.gmail.com>
+References: <20170904071500.3858-1-yegorslists@googlemail.com>
+ <59af5dfae6364_331f1091a18551a0@ultri3.mail>
+ <CAGm1_ktR=czPoLUdFpUnp4q2Ve_o=umgVgWOEkKnHdzkLyxvNQ@mail.gmail.com>
+Message-ID: <920595879.8309642.1504696164017.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > A lot of packages expect an egl.pc to decide that EGL is available. So,
- > provide one.
+On Wednesday, September 6, 2017 6:44:17 AM, Yegor Yefremov
 
- > As suggested by Alexandre, use the one from nvidia-tegra23 as template.
+> On Wed, Sep 6, 2017 at 4:31 AM, Ricardo Martincoski
+[snip]
+>> But I run your tests using -k, then I entered the qemu using the command in the
+>> first line of TestPythonPy2Cryptography-run.log, then I called its Python shell
+[snip]
+> 
+> How can I perform tests for this testing framework locally?
 
- > Reported-by: Alexandre Maumen? <alexandre@maumene.org>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Alexandre Maumen? <alexandre@maumene.org>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
+Run this command on the buildroot tree to see all available options:
 
- > ---
- > Note: ideally, we should also provide a glesv2.pc, and possibly a
- > wayland-egl.pc as well. That can be folowup patches.
+support/testing/run-tests -h
 
-Committed to 2017.02.x, thanks.
+-k and -s are very useful when creating/changing tests.
 
--- 
-Bye, Peter Korsgaard
+Regards,
+--
+Ricardo Martincoski
+DATACOM 
+Ethernet Switches 
+Rua Am?rica, 1000 - Eldorado do Sul, RS - 92990-000 - Brasil
++55 51 3933 3000 - Ramal 3307
+ricardo.martincoski at datacom.ind.br
+www.datacom.ind.br
