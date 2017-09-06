@@ -1,37 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 12:26:43 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] vim: add host variant
-Message-ID: <20170906112607.4A4B48211D@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:26:33 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mediastreamer: don't
+	download patch from Github
+Message-ID: <20170906112607.3CFC58211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f21b3b83f8c9d3c19105da4a4cecdda6ea63eea5
+commit: https://git.buildroot.net/buildroot/commit/?id=0e60dd830f610ed1f4cb96d1adb8c741747fd804
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Vim contains a tool called xxd, which is needed by mediastreamer on
-the host as part of its build process. Therefore, this commit
-introduces a host variant for the vim package, that will be used by
-mediastreamer.
+Patches downloaded from Github are not stable, so bring them in the
+tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 38d098402e620366d87699a7894d2e7918989156)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c0369e05ead0443375f25968b8d48f0b9e279828)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...ix-compilation-issue-with-latest-bctoobox.patch | 38 ++++++++++++++++++++++
+ package/mediastreamer/mediastreamer.hash           |  1 -
+ package/mediastreamer/mediastreamer.mk             |  4 ---
+ 3 files changed, 38 insertions(+), 5 deletions(-)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index ec49460..9ea3fc2 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -75,4 +75,7 @@ VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
- endif
- 
-+HOST_VIM_DEPENDENCIES = host-ncurses
+diff --git a/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch b/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
+new file mode 100644
+index 0000000..7bc9733
+--- /dev/null
++++ b/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
+@@ -0,0 +1,38 @@
++From 26f884bf977977041fe6f98a0af186be1580bf22 Mon Sep 17 00:00:00 2001
++From: Simon Morlat <simon.morlat@linphone.org>
++Date: Thu, 29 Sep 2016 15:26:18 +0200
++Subject: [PATCH] fix compilation issue with latest bctoobox
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++[Upstream commit https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac           | 2 +-
++ src/crypto/dtls_srtp.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7ab20a08f..244d87275 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1116,7 +1116,7 @@ fi
++ 
++ 
++ dnl check bctoolbox library
++-PKG_CHECK_MODULES(BCTOOLBOX, bctoolbox >= 0.0.0, found_bctoolbox=true, found_bctoolbox=false)
+++PKG_CHECK_MODULES(BCTOOLBOX, bctoolbox >= 0.4.0, found_bctoolbox=true, found_bctoolbox=false)
++ if test "$found_bctoolbox" = "true" ; then
++ 	LIBS="$LIBS $BCTOOLBOX_LIBS"
++ 	CFLAGS="$CFLAGS $BCTOOLBOX_CFLAGS"
++diff --git a/src/crypto/dtls_srtp.c b/src/crypto/dtls_srtp.c
++index e2c8e1c44..fd37eb5cb 100644
++--- a/src/crypto/dtls_srtp.c
+++++ b/src/crypto/dtls_srtp.c
++@@ -705,7 +705,7 @@ static int ms_dtls_srtp_initialise_bctbx_dtls_context(DtlsBcToolBoxContext *dtls
++ 	bctbx_ssl_config_set_authmode(dtlsContext->ssl_config, BCTBX_SSL_VERIFY_OPTIONAL);
++ 	bctbx_ssl_config_set_own_cert( dtlsContext->ssl_config, dtlsContext->crt, dtlsContext->pkey );
++ 	/* This is useless as peer would certainly be a self signed certificate and we won't verify it but avoid runtime warnings */
++-	bctbx_ssl_config_set_ca_chain(dtlsContext->ssl_config, dtlsContext->crt, NULL);
+++	bctbx_ssl_config_set_ca_chain(dtlsContext->ssl_config, dtlsContext->crt);
++ 
++ 	/* we are not ready yet to actually start the ssl context, this will be done by calling bctbx_ssl_setup when stream starts */
++ 	return 0;
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 0f1ac77..5f26b54 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+ sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
+-sha256  90091ab0aa7a77381ab1ca5d88cdfa4e7f62505fb452a2bea0f70054d9d1aece  26f884bf977977041fe6f98a0af186be1580bf22.patch
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index b4f0c52..1d99d19 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -13,10 +13,6 @@ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPLv2+
+ MEDIASTREAMER_LICENSE_FILES = COPYING
+ 
+-# fix compilation issue with latest bctoolbox (touches configure.ac)
+-MEDIASTREAMER_PATCH = \
+-	https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22.patch
+-
+ # patching configure.ac
+ MEDIASTREAMER_AUTORECONF = YES
+ 
