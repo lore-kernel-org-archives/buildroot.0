@@ -1,78 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 12:07:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] faad2: fix build with
-	musl libc
-Message-ID: <20170906112606.BE28681F7A@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 12:18:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/rpcbind: Do not
+	mark .service and .socket files executable
+Message-ID: <20170906112607.30B6C819CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec88eeaea0c25150da0fb0543dcebc18c043dfbb
+commit: https://git.buildroot.net/buildroot/commit/?id=3df894d83cc1f1822a320f1676a879e8814d3964
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The getopt.c code declares the strncmp() routine in a non confirming way
-under non GNU libc. Patch the code to make the declaration standard
-conforming.
+Do not mark .service and .socket files executable, otherwise systemd
+will give us a warning about it.
 
-Fixes:
-http://autobuild.buildroot.net/results/447/4471be349d7ad2e998a4d55afd33aa046a5d1fd2/
-http://autobuild.buildroot.net/results/2a9/2a90f4f518884fb50f7ad6ab505dee7565ed869e/
-http://autobuild.buildroot.net/results/6b1/6b159b766d791492bab4d897c33ce07845fb7119/
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6f6795d77ddddd8a8ff63e13f9d7fe0a907a434d)
+(cherry picked from commit 3a41c96a25a267db77455a668dd4c673a2a6fc39)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-getopt-fix-strncmp-declaration.patch      | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/rpcbind/rpcbind.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/faad2/0001-getopt-fix-strncmp-declaration.patch b/package/faad2/0001-getopt-fix-strncmp-declaration.patch
-new file mode 100644
-index 0000000..0e5f27e
---- /dev/null
-+++ b/package/faad2/0001-getopt-fix-strncmp-declaration.patch
-@@ -0,0 +1,40 @@
-+From 6787914efad562e4097a153988109c5c7158abf7 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 16 Aug 2017 13:35:57 +0300
-+Subject: [PATCH] getopt: fix strncmp() declaration
-+
-+The strncmp() declaration does not conform with the standard as to the
-+type of the 'n' parameter. Fix this to avoid the following build failure
-+with musl libc:
-+
-+n file included from main.c:61:0:
-+getopt.c:175:13: error: conflicting types for 'strncmp'
-+ extern int  strncmp(const char *s1, const char *s2, unsigned int n);
-+             ^~~~~~~
-+In file included from main.c:49:0:
-+.../host/x86_64-buildroot-linux-musl/sysroot/usr/include/string.h:38:5: note: previous declaration of 'strncmp' was here
-+ int strncmp (const char *, const char *, size_t);
-+     ^~~~~~~
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://sourceforge.net/p/faac/bugs/217/
-+
-+ frontend/getopt.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/frontend/getopt.c b/frontend/getopt.c
-+index 185d49b804dd..40c7a2242551 100644
-+--- a/frontend/getopt.c
-++++ b/frontend/getopt.c
-+@@ -172,7 +172,7 @@ static enum
-+ #if __STDC__ || defined(PROTO)
-+ extern char *getenv(const char *name);
-+ extern int  strcmp (const char *s1, const char *s2);
-+-extern int  strncmp(const char *s1, const char *s2, unsigned int n);
-++extern int  strncmp(const char *s1, const char *s2, size_t n);
-+ 
-+ static int my_strlen(const char *s);
-+ static char *my_index (const char *str, int chr);
-+-- 
-+2.14.1
-+
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 4360d1f..f8f8c41 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -22,9 +22,9 @@ RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
+ endif
+ 
+ define RPCBIND_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.service \
++	$(INSTALL) -m 0644 -D package/rpcbind/rpcbind.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
+-	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.socket \
++	$(INSTALL) -m 0644 -D package/rpcbind/rpcbind.socket \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/rpcbind.socket \
