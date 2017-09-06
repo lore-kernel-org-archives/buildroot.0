@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 22:14:20 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] docs/manual: add appendix about
- migratinf from older versions
-In-Reply-To: <cover.1504643670.git.yann.morin.1998@free.fr>
-References: <cover.1504643670.git.yann.morin.1998@free.fr>
-Message-ID: <20170906221420.47e42349@windsurf.lan>
+Date: Wed, 6 Sep 2017 22:15:17 +0200
+Subject: [Buildroot] [PATCH] scons: bump to version 2.5.1
+In-Reply-To: <1504503347-8424-1-git-send-email-yegorslists@googlemail.com>
+References: <1504503347-8424-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20170906221517.67d6fdca@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  5 Sep 2017 22:34:48 +0200, Yann E. MORIN wrote:
+On Mon,  4 Sep 2017 07:35:47 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/scons/scons.hash | 2 +-
+>  package/scons/scons.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Yann E. MORIN (2):
->       docs/manual: add appendix about migration from older versions
->       docs/manual: add appendix about $(HOST_DIR)/usr
-
-Applied, after fixing a remaining typo in PATCH 1/2: backaward ->
-backward.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
