@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 23:28:19 +0200
-Subject: [Buildroot] [git commit] python-typepy: bump to version 0.0.20
-Message-ID: <20170906212107.722B28213B@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 23:28:21 +0200
+Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.25.6
+Message-ID: <20170906212107.7E9C8800CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4d15237c45401d70f85a42675a480f2aebd696b
+commit: https://git.buildroot.net/buildroot/commit/?id=7a6d0a9dbccaf033ba81697349ce5f39b3811fc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-typepy/python-typepy.hash | 4 ++--
- package/python-typepy/python-typepy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 6 +++---
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
-index 7700390..9ecac88 100644
---- a/package/python-typepy/python-typepy.hash
-+++ b/package/python-typepy/python-typepy.hash
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index e9de5a4..be7eecb 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/typepy/json, sha256 locally computed
--md5	a8ab7edcf8f52bb091121e90d21dc113  typepy-0.0.14.tar.gz
--sha256	ef07125b464a6808b7ac052d7ee35873a4424a95dbc9d7db71a380d0135d9981  typepy-0.0.14.tar.gz
-+md5	b9abd4d661dabe512e95ca69ddb65d55  typepy-0.0.20.tar.gz
-+sha256	a1a5b9438670d4a5d9f882b7499ea85d06dc384577bb7636cb29d903288bca8c  typepy-0.0.20.tar.gz
-diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
-index 10270bb..33d8091 100644
---- a/package/python-typepy/python-typepy.mk
-+++ b/package/python-typepy/python-typepy.mk
+-# md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
+-md5 cdc032e071164aaf31ab3e2b76cd4a1b  DataProperty-0.23.0.tar.gz
+-sha256 be42eba1febaab6e37f5e07d558d87bb79e46092dce7deb2934d788d48e80e82  DataProperty-0.23.0.tar.gz
++# md5 from https://pypi.python.org/pypi/DataProperty/json, sha256 locally computed
++md5	6e757aa2537721681b437cfeacd7c599  DataProperty-0.25.6.tar.gz
++sha256	07c36a290311102fd10552a7855baf5c94e9f60506afa37e0dfb88db5b3f5406  DataProperty-0.25.6.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 65a8fca..96a7739 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPEPY_VERSION = 0.0.14
-+PYTHON_TYPEPY_VERSION = 0.0.20
- PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
--PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/5c/1a/3836e06f2f476e785006bb0f9305160577586a8d4ae2a017fc778f580344
-+PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/88/98/c79a19ae571d713fa0b10bc7e0fe611e53c542720b5a9dd2691ca15b3dd8
- PYTHON_TYPEPY_SETUP_TYPE = setuptools
- PYTHON_TYPEPY_LICENSE = MIT
- PYTHON_TYPEPY_LICENSE_FILES = LICENSE
+-PYTHON_DATAPROPERTY_VERSION = 0.23.0
++PYTHON_DATAPROPERTY_VERSION = 0.25.6
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/6d/40/0e66a33d4f909bc3fff1cb760d1827281207ace7de8dc3f202b5be7d3e65
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/bb/4b/d9a8d24aa27bd2827d70e68f1f389cdd824e5bea7541993fac8cb35100ed
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
