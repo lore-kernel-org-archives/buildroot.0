@@ -1,59 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Sep 2017 21:10:53 +0200
-Subject: [Buildroot] [PATCH 1/1] fixes build crash when building systemd
- with linux-pam, described in more detail here <http://narkive.com/0RdHHA6A>
-In-Reply-To: <CAAV4SYaGDc79SQ7ONFvkGi_Hsw_4GXHSWwhAJ2ChkTKAcp9hZA@mail.gmail.com>
-References: <20170906145409.1085-1-charles@ccxtechnologies.com>
- <20170906182324.GB2885@scaer>
- <CAAV4SYaGDc79SQ7ONFvkGi_Hsw_4GXHSWwhAJ2ChkTKAcp9hZA@mail.gmail.com>
-Message-ID: <20170906191053.GC2885@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Sep 2017 21:35:27 +0200
+Subject: [Buildroot] [git commit] package/pngquant: fix target build
+Message-ID: <20170906192829.60F547F8A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ff9aaa82873f693199e947749f70ed6b5ac3f8ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-09-06 14:48 -0400, Charles Eidsness spake thusly:
-> It also fails in Arch Linux.
+Pngquant 2.10 introduced a bundled library libimagequant, Makefile
+passes $LIQCONFIGUREFLAGS to the configure script of libimagequant
+before building this library:
+https://github.com/pornel/pngquant/blob/master/Makefile#L27
 
-This is interesting to know.
+This variable is filled by configure with the content of $LIQCONFIGURE
+https://github.com/pornel/pngquant/blob/master/configure#L553
 
-> There are other packages with the same setting, binutils, gcc,
-> gutenprint, and thrift.
+We need to pass CC/CFLAGS/LDFLAGS as parameter to configure to fill
+$LIQCONFIGURE with correct values in order to use the target toolchain
+for building libimagequant:
+https://github.com/pornel/pngquant/blob/master/configure#L56
 
-For gcc and binutils, this is expected and normal: those are components
-of the toolcahin, and passing --with-sysroot to them is what makes it
-useless to pass to all other packages.
+Fixes
+http://autobuild.buildroot.net/results/ab1/ab1193db9d76adc02be44d6f273e0986952df3e2/
 
-For gutenprint, it's been there since the package was added, with no
-explanation why it was needed. It's not much better for thrift, added at
-about the same time.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pngquant/pngquant.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Maybe it should be set for all autotools
-> packages.
-
-I don't think so... If at all, it should be removed from thrift and
-gutenprint.
-
-> The issue is that lt_sysroot isn't being set in the libtool script for
-> systemd.
-
-Yes, I believe this is a libtool issue.
-
-> It's cool if you find a better way to fix this issue, I have a fix that
-> will let me built so I'm happy.
-
-Yes, I am looking into that.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index a602cbe..1ce8359 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -22,6 +22,7 @@ define PNGQUANT_CONFIGURE_CMDS
+ 		./configure --prefix=/usr \
+ 		$(if $(BR2_PACKAGE_LCMS2),--with-lcms2,--without-lcms2) \
+ 		$(if $(BR2_X86_CPU_HAS_SSE),--enable-sse,--disable-sse) \
++		$(TARGET_CONFIGURE_OPTS) \
+ 	)
+ endef
+ 
