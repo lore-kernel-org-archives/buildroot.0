@@ -1,11 +1,11 @@
-From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Date: Wed, 6 Sep 2017 08:31:01 -0300 (BRT)
-Subject: [Buildroot] [RFC] testing: add python-cryptography tests
-In-Reply-To: <20170906100656.5f5de18d@windsurf.lan>
-References: <20170904071500.3858-1-yegorslists@googlemail.com>
- <59af5dfae6364_331f1091a18551a0@ultri3.mail>
- <20170906100656.5f5de18d@windsurf.lan>
-Message-ID: <1216716905.8315000.1504697461058.JavaMail.zimbra@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Sep 2017 13:32:45 +0200
+Subject: [Buildroot] [PATCH] libqmi: udev and qmi-over-mbim are optional
+In-Reply-To: <CAAP7uc+GQ51G_8P6+L4VmBmFJf6i4iD0f4V-LM9=QzRBLKFjKA@mail.gmail.com>
+References: <20170905100327.21421-1-aleksander@aleksander.es>
+ <20170905213604.61141da0@windsurf.lan>
+ <CAAP7uc+GQ51G_8P6+L4VmBmFJf6i4iD0f4V-LM9=QzRBLKFjKA@mail.gmail.com>
+Message-ID: <20170906133245.716cbbc6@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,53 +14,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, Wednesday, September 6, 2017 5:06:56 AM, Thomas Petazzoni wrote:
-> On Tue, 05 Sep 2017 23:31:22 -0300, Ricardo Martincoski wrote:
-> 
->> 1) I propose to merge this file into the existing test_python.py
->> 
->> The rationale is:
->> For the long term:
->> As I see, the test infra is used to detect regressions. It is important for both
->> the basic features and also for the complex scenarios (like the dependencies of
->> this package). But I don't expect to see tests added to every single package or
->> python package (it would take a very long time to run all those tests), so this
->> file probably will not grow too much and we can keep the tests together.
-> 
-> Actually, I am not sure I agree with this last part. I even think we
-> should probably have a minimal test for each and every Python package,
-> because the only way to verify that their dependencies are correct is
-> to have a runtime test for them. So it would be nice to have a very
-> simple way to write Python related tests, like a list of tuples
-> (Buildroot package, Python package to import or Python command to run),
-> and have the test infrastructure "generate" tests for all entries in
-> this list.
+On Wed, 6 Sep 2017 10:38:25 +0200, Aleksander Morgado wrote:
 
-I will cook a patch for this.
-
+> > All in all, isn't it simpler to get rid of those options, and simply do:
+> >
+> > ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> > ... enable support  
 > 
-> Yes, it's going to be a long test suite, with lots of tests, but the
-> test suite is anyway going to be long enough that it won't make sense
-> for anyone to run the full test suite. I really see two use cases for
-> the test suite:
-> 
-> - You're doing tests in a specific area, and want to validate that
->   you're not breaking things. For this use case, you'll just run the
->   few test cases you're interested in.
-> 
-> - We regularly run in a CI environment all the tests. For this
->   situation, we don't really care how long it takes. Even if it takes
->   24 hours to run the full test suite, I don't think it's a big
->   problem.
+> When doing this, should I also include a direct dependency on
+> libgudev, so that libgudev is built before libqmi always?
+> LIBQMI_DEPENDENCIES += libgudev
 
-OK, thank you for the explanation.
+Well, if you don't do this, libgudev is not guaranteed to be built
+before libqmi, so you would get a build failure, right ?
 
-Regards,
---
-Ricardo Martincoski
-DATACOM
-Ethernet Switches
-Rua Am?rica, 1000 - Eldorado do Sul, RS - 92990-000 - Brasil
-+55 51 3933 3000 - Ramal 3307
-ricardo.martincoski at datacom.ind.br
-www.datacom.ind.br
+The canonical way to express optional dependencies is:
+
+ifeq ($(BR2_PACKAGE_FOO),y)
+BAR_DEPENDENCIES += foo
+BAR_CONF_OPTS += --enable-foo
+else
+BAR_CONF_OPTS += --disable-foo
+endif
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
