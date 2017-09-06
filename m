@@ -1,34 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 14:14:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.10.1
-In-Reply-To: <20170904180318.12131-1-bernd.kuhls@t-online.de>
-References: <20170904180318.12131-1-bernd.kuhls@t-online.de>
-Message-ID: <20170906141432.50db7dfd@windsurf.lan>
+From: nidujay <nidujay@gmail.com>
+Date: Wed, 6 Sep 2017 22:36:54 +1000
+Subject: [Buildroot] Add package Prosody
+Message-ID: <CABSQcyiARN7+fbNOpZ03g7ug01KzJPsVjr_qA6=QAtvqF8AfKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-On Mon,  4 Sep 2017 20:03:18 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/pngquant/pngquant.hash | 4 ++--
->  package/pngquant/pngquant.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+This is my first post the BR mailing list so please treat it as a request
+for comments.
 
-This bump fails on pretty much all architectures/configurations:
+I've created a BR package for Prosody, which I've tested on a raspberry pi
+and was able to successfully register with an IM client.
 
-  http://autobuild.buildroot.net/?reason=pngquant-2.10.1
-
-Could you have a look ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Dushara
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170906/b7c2e80e/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Add-package-Prosody.patch
+Type: text/x-patch
+Size: 3314 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170906/b7c2e80e/attachment.bin>
