@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 12:38:59 +0200
-Subject: [Buildroot] [PATCH 3/6] package/iucode-tool: fix upstream
-	source URL
-In-Reply-To: <20170829191005.19697-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 29 Aug 2017 21:10:02 +0200")
+Date: Wed, 06 Sep 2017 12:39:21 +0200
+Subject: [Buildroot] [PATCH 5/6] package/libphidget: fix upstream source
+	URL
+In-Reply-To: <20170829191005.19697-5-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 29 Aug 2017 21:10:04 +0200")
 References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
- <20170829191005.19697-3-bernd.kuhls@t-online.de>
-Message-ID: <8760cwglh8.fsf@dell.be.48ers.dk>
+ <20170829191005.19697-5-bernd.kuhls@t-online.de>
+Message-ID: <871snkglgm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +17,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed to 2017.02.x, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
