@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 22:00:19 +0200
-Subject: [Buildroot] [git commit] x11r7/xdriver_xf86-input-tslib: update to
-	1.1.0
-Message-ID: <20170906195307.40FBC82153@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 22:05:21 +0200
+Subject: [Buildroot] [git commit] libmbim: inherit BR2_USE_MMU dependency
+	from libglib2
+Message-ID: <20170906195816.4DCC981DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8d76469a3a01a74ed68c732984e601ea351bef5
+commit: https://git.buildroot.net/buildroot/commit/?id=6c9ffcae1075524ff587d00ee1597a1a415db019
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/merge/xf86-input-tslib/releases has the summary of changes.
+The USE_MMU dependency was missing from the chain of dependencies.
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmbim/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-index 23d7a61..84b3857 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/merge/xf86-input-tslib/releases/download/1.0.0/xf86-input-tslib-1.0.0.tar.bz2.sha256
--sha256 2e888893b766bb987ed4d788555dc221e3974068580ba782753a4a80532a42e7  xf86-input-tslib-1.0.0.tar.bz2
-+# https://github.com/merge/xf86-input-tslib/releases/download/1.1.0/xf86-input-tslib-1.1.0.tar.bz2.sha256
-+sha256 5e5626c1127fe945270d819281ad15f2f924f4e35bad0903db9748635c2af432  xf86-input-tslib-1.1.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-index d2d9df4..d9555b7 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libmbim/Config.in b/package/libmbim/Config.in
+index 4f80592..5db8efb 100644
+--- a/package/libmbim/Config.in
++++ b/package/libmbim/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMBIM
+ 	bool "libmbim"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBGUDEV
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_LIBMBIM
+ 	  http://www.freedesktop.org/wiki/Software/libmbim/
  
--XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.0.0
-+XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.1.0
- XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releases/download/$(XDRIVER_XF86_INPUT_TSLIB_VERSION)
- XDRIVER_XF86_INPUT_TSLIB_LICENSE = MIT
+ comment "libmbim needs udev /dev management and a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_PACKAGE_HAS_UDEV
