@@ -1,54 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Sep 2017 23:14:08 +0200
-Subject: [Buildroot] [PATCH 1/1] Update lcdproc version
-In-Reply-To: <20170906164855.65d6e474@vomer.devel.greenbone.net>
-References: <20170906164855.65d6e474@vomer.devel.greenbone.net>
-Message-ID: <20170906231408.58854606@windsurf.lan>
+Date: Wed, 6 Sep 2017 23:16:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/luvi: needs git submodules
+In-Reply-To: <20170904053114.16477-1-bernd.kuhls@t-online.de>
+References: <20170904053114.16477-1-bernd.kuhls@t-online.de>
+Message-ID: <20170906231657.382c5f79@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sven,
+Hello J?rg,
 
-On Wed, 6 Sep 2017 16:48:55 +0200, Sven Haardiek wrote:
-> Patch title: Update lcdproc version
-> 
-> There is a newer version of lcdproc available and it seems like lcdproc moved
-> to github.
-> 
-> The new version also compiles with musl without any patches.
-> 
-> Signed-off-by: Sven Haardiek <sven.haardiek@greenbone.net>
-> ---
->  package/lcdproc/0002-musl.patch | 102 ----------------------------------------
->  package/lcdproc/lcdproc.hash    |   1 +
->  package/lcdproc/lcdproc.mk      |   4 +-
->  3 files changed, 3 insertions(+), 104 deletions(-)
->  delete mode 100644 package/lcdproc/0002-musl.patch
+Since you are listed in the DEVELOPERS file for this package, could you
+comment/review/ack the below patch from Bernd touching luvi ?
 
-I've applied your patch to master, thanks! I only tweaked a bit the
-commit title and commit log. Indeed, your commit titles should always
-look like:
+Of course, git submodules and bundled libraries are not really nice,
+which is why I'm seeking your opinion.
 
-	<package>: <description>
-
-so, something like:
-
-	lcdproc: bump version to 0.5.9
-
-Also, since you are interested in lcdproc, would you accept to be
-listed in the DEVELOPERS file for this package? This would mean you
-would receive patches sent by others for this package, you would
-receive notifications when this package causes some build failures, and
-generally be a contact if we have questions/issues in terms of
-maintaining this package.
-
-Thanks a lot in advance!
+Thanks!
 
 Thomas
+
+On Mon,  4 Sep 2017 07:31:14 +0200, Bernd Kuhls wrote:
+> Luvi bundles several libraries previously provided by the upstream
+> tarball. Since the tarball is not available anymore we need to fetch
+> the git submodules.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/26d/26d04350a761d362f40e7bd1ac09b639d61de91a/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/luvi/luvi.hash | 2 +-
+>  package/luvi/luvi.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+> index 7f7abdbf4..ce3785eb8 100644
+> --- a/package/luvi/luvi.hash
+> +++ b/package/luvi/luvi.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 65d3ded5007d5bb58fc3b76013913596fd42ed7326310d67c668ddf9a017a179  luvi-v2.7.6.tar.gz
+> +sha256 6d2297751b4d4023c1fa8b723b6f04e09584c67694958edbfa0d284f384759d5  luvi-v2.7.6.tar.gz
+> diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+> index 7dd5e5a32..fc89d4d65 100644
+> --- a/package/luvi/luvi.mk
+> +++ b/package/luvi/luvi.mk
+> @@ -5,7 +5,8 @@
+>  ################################################################################
+>  
+>  LUVI_VERSION = v2.7.6
+> -LUVI_SITE = $(call github,luvit,luvi,$(LUVI_VERSION))
+> +LUVI_SITE = git://github.com/luvit/luvi.git
+> +LUVI_GIT_SUBMODULES = YES
+>  LUVI_LICENSE = Apache-2.0
+>  LUVI_LICENSE_FILES = LICENSE.txt
+>  LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
