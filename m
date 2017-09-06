@@ -1,29 +1,21 @@
-From: nidujay <nidujay@gmail.com>
-Date: Wed, 6 Sep 2017 22:36:54 +1000
-Subject: [Buildroot] Add package Prosody
-Message-ID: <CABSQcyiARN7+fbNOpZ03g7ug01KzJPsVjr_qA6=QAtvqF8AfKQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 06 Sep 2017 14:36:54 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.{4, 9}.x series
+In-Reply-To: <20170902133143.29983-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 2 Sep 2017 15:31:43 +0200")
+References: <20170902133143.29983-1-bernd.kuhls@t-online.de>
+Message-ID: <87h8wgdmvt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-This is my first post the BR mailing list so please treat it as a request
-for comments.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-I've created a BR package for Prosody, which I've tested on a raspberry pi
-and was able to successfully register with an IM client.
+Committed to 2017.02.x, thanks.
 
-Dushara
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170906/b7c2e80e/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Add-package-Prosody.patch
-Type: text/x-patch
-Size: 3314 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170906/b7c2e80e/attachment.bin>
+-- 
+Bye, Peter Korsgaard
