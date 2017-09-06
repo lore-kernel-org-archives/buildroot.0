@@ -1,54 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Sep 2017 13:26:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libgcrypt: security bump
-	to version 1.7.9
-Message-ID: <20170906112608.8CBA88211D@busybox.osuosl.org>
+Date: Wed, 6 Sep 2017 13:25:10 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gnupg: security bump to
+	version 1.4.22
+Message-ID: <20170906112608.7ACBC8211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f107edbef07fe5280e690dffe8332923cfd2b7f
+commit: https://git.buildroot.net/buildroot/commit/?id=1519ba33f5f85f4e5e49ec8318886468b8ca788f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-0379: Mitigate a local side-channel attack on Curve25519
-dubbed "May the Fourth be With You".
+Mitigate a flush+reload side-channel attack on RSA secret keys
+dubbed "Sliding right into disaster".  For details see
+<https://eprint.iacr.org/2017/627>.  [CVE-2017-7526]
 
-As we are close to release, don't update to the latest 1.8.1 version,
-but to a maintenance release from the 1.7 branch.
+Switch to https site for better firewall compatibility and security.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit cd4514109a6bd248d6ca7713d97e3b257ae91c6f)
+(cherry picked from commit 453ca1d6ad6aa3d55f44734ed8479ac5fa909d8a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgcrypt/libgcrypt.hash | 6 ++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/gnupg/gnupg.hash | 7 +++----
+ package/gnupg/gnupg.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 8ac9f0a..56a45c5 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,5 +1,3 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000408.html
--sha1  65a4a495aa858483e66868199eaa8238572ca6cd  libgcrypt-1.7.8.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.8.tar.bz2.sig
--sha256  948276ea47e6ba0244f36a17b51dcdd52cfd1e664b0a1ac3bc82134fb6cec199  libgcrypt-1.7.8.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.9.tar.bz2.sig
-+sha256  bfe9bb703c1126c3647da2810fd23039c2f09d46969f71612c2065dc3fa9373b  libgcrypt-1.7.9.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index c18456e..0e428a7 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
+index 8968b00..abd76cd 100644
+--- a/package/gnupg/gnupg.hash
++++ b/package/gnupg/gnupg.hash
+@@ -1,4 +1,3 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2016-08/msg00008.html
+-sha1	e3bdb585026f752ae91360f45c28e76e4a15d338	gnupg-1.4.21.tar.bz2
+-# Locally computed
+-sha256	6b47a3100c857dcab3c60e6152e56a997f2c7862c1b8b2b25adf3884a1ae2276	gnupg-1.4.21.tar.bz2
++# Locally computed based on signature
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-1.4.22.tar.bz2.sig
++sha256	9594a24bec63a21568424242e3f198b9d9828dea5ff0c335e47b06f835f930b4	gnupg-1.4.22.tar.bz2
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 182abd6..29c4666 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.7.8
-+LIBGCRYPT_VERSION = 1.7.9
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-GNUPG_VERSION = 1.4.21
++GNUPG_VERSION = 1.4.22
+ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+-GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
++GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
+ GNUPG_LICENSE_FILES = COPYING
+ GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
