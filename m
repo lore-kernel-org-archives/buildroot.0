@@ -1,32 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Sep 2017 12:27:29 +0200
-Subject: [Buildroot] [PATCH 3/3] mediastreamer: add dependency on
-	host-vim
-In-Reply-To: <20170821205516.20620-3-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 21 Aug 2017 22:55:16 +0200")
-References: <20170821205516.20620-1-thomas.petazzoni@free-electrons.com>
- <20170821205516.20620-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mv68gm0e.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Sep 2017 12:31:37 +0200
+Subject: [Buildroot] [PATCH 1/3] package/minidlna: Do not mark .service
+	file executable
+In-Reply-To: <20170824214152.5742-1-andrew.smirnov@gmail.com> (Andrey
+ Smirnov's message of "Thu, 24 Aug 2017 14:41:50 -0700")
+References: <20170824214152.5742-1-andrew.smirnov@gmail.com>
+Message-ID: <87ingwglti.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
 
- > host-vim is needed to provide the xxd tool, otherwise the build fails
- > with:
+ > Do not mark .service file executable, otherwise systemd
+ > will give us a warning about it.
 
- > checking for xxd... no
- > configure: error: "xxd is required (provided by vim package)"
+ > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 
- > This isn't noticed by the autobuilders, presumably because all of them
- > have vim installed locally.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed to 2017.02.x, thanks.
+Committed all 3 to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
