@@ -1,71 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  7 Sep 2017 23:21:33 +0200
-Subject: [Buildroot] [PATCH] libzip: security bump to version 1.3.0
-Message-ID: <20170907212133.10036-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 7 Sep 2017 23:32:41 +0200
+Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
+In-Reply-To: <20170903091432.659bd28f@windsurf.lan>
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <20170902205423.21288-8-romain.naour@gmail.com>
+ <20170902231252.44d10e64@windsurf.lan>
+ <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
+ <20170903091432.659bd28f@windsurf.lan>
+Message-ID: <8f568fb6-9ef3-39fc-ba2f-714f60dcd7be@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hi Thomas,
 
-CVE-2017-12858: Double free vulnerability in the _zip_dirent_read function
-in zip_dirent.c in libzip allows attackers to have unspecified impact via
-unknown vectors.
+Le 03/09/2017 ? 09:14, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Sun, 3 Sep 2017 00:23:40 +0200, Romain Naour wrote:
+> 
+>>> This commit log is a bit mysterious: if reallocarray() has been
+>>> introduced in glibc 2.26, why isn't flex able to use it ?  
+>>
+>> It's a nasty issue, when reallocarray() is available for the target, flex will
+>> build a small tool called stage1flex for the host (using _FOR_BUILD) but with
+>> the config.h generated for the target.
+>>
+>> My host doesn't have glibc 2.26, so reallocarray() is never defined while
+>> building stage1flex:
+>>
+>> misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
+>> [-Wimplicit-function-declaration]
+>>   mem = reallocarray(NULL, (size_t) size, element_size);
+>>         ^~~~~~~~~~~~
+>> misc.c:147:6: warning : assignment makes pointer from integer without a cast
+>> [-Wint-conversion]
+>>   mem = reallocarray(NULL, (size_t) size, element_size);
+>>       ^
+>>
+>> I don't know how to fix this, except by disabling reallocarray() for the target...
+> 
+> This should all be explained in the commit log, and a short comment in
+> flex.mk should be added as well.
 
-CVE-2017-14107: The _zip_read_eocd64 function in zip_open.c in libzip before
-1.3.0 mishandles EOCD records, which allows remote attackers to cause a
-denial of service (memory allocation failure in _zip_cdir_grow in
-zip_dirent.c) via a crafted ZIP archive.
+Actually I looked further into this issue after sending the patch.
 
-For more details, see
-https://blogs.gentoo.org/ago/2017/09/01/libzip-use-after-free-in-_zip_buffer_free-zip_buffer-c/
-https://blogs.gentoo.org/ago/2017/09/01/libzip-memory-allocation-failure-in-_zip_cdir_grow-zip_dirent-c/
+> 
+> Generally speaking, the commit logs in this series are too terse: they
+> just say "fix build with glibc 2.26" with no explanations, or they
+> backport some seemingly random glibc patches, without explaining why
+> they are needed. Could you improve this a bit ?
 
-libzip-1.3.0 also adds optional bzip2 support, so handle that.
+Well, the glibc bump is more complicated than expected and I need to spent more
+time on it to understand what's going on...
 
-While we're at it, add a hash for the license file.
+At least we have a link to the upstream reference as a starting point.
+Ok, this patch is really too terse, I added it just before sending the series :-/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libzip/libzip.hash | 3 ++-
- package/libzip/libzip.mk   | 9 ++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+I'll try to continue this week-end.
 
-diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
-index 103c7619e2..d100982bc6 100644
---- a/package/libzip/libzip.hash
-+++ b/package/libzip/libzip.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	ffc0764395fba3d45dc5a6e32282788854618b9e9838337f8218b596007f1376	libzip-1.2.0.tar.xz
-+sha256	aa936efe34911be7acac2ab07fb5c8efa53ed9bb4d44ad1fe8bff19630e0d373  libzip-1.3.0.tar.xz
-+sha256  d159ae325ca0b8236c44dfd980ca99810dbcfc057b077c50dbbda1131cbd263a  LICENSE
-diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-index a4012dd1e3..5ffa1cac00 100644
---- a/package/libzip/libzip.mk
-+++ b/package/libzip/libzip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBZIP_VERSION = 1.2.0
-+LIBZIP_VERSION = 1.3.0
- LIBZIP_SITE = http://www.nih.at/libzip
- LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
- LIBZIP_LICENSE = BSD-3-Clause
-@@ -12,4 +12,11 @@ LIBZIP_LICENSE_FILES = LICENSE
- LIBZIP_INSTALL_STAGING = YES
- LIBZIP_DEPENDENCIES = zlib
- 
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+LIBZIP_CONF_OPTS += --with-bzip2
-+LIBZIP_DEPENDENCIES += bzip2
-+else
-+LIBZIP_CONF_OPTS += --without-bzip2
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.11.0
+Best regards,
+Romain
+
+> 
+> Thanks a lot!
+> 
+> Thomas
+> 
