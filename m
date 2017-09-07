@@ -1,44 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Sep 2017 22:41:13 +0200
-Subject: [Buildroot] [PATCH 3/3] package/terminology: bump to v1.1.1
-In-Reply-To: <20170907204113.14249-1-romain.naour@gmail.com>
-References: <20170907204113.14249-1-romain.naour@gmail.com>
-Message-ID: <20170907204113.14249-3-romain.naour@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 7 Sep 2017 23:15:28 +0200
+Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix build against
+	openjpeg 2.2
+In-Reply-To: <87k21ab9f4.fsf@dell.be.48ers.dk>
+References: <20170907151757.28606-1-ps.report@gmx.net>
+ <87k21ab9f4.fsf@dell.be.48ers.dk>
+Message-ID: <20170907231528.08b02d55@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://sourceforge.net/p/enlightenment/mailman/message/36026490
+Hello Peter,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/terminology/terminology.hash | 4 ++--
- package/terminology/terminology.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, 07 Sep 2017 21:22:55 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index c203226..81ae5d8 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	eb9136e487ab9e6ff3c98173919b5ad105626434d096dafecd18392fc40c348f	terminology-1.1.0.tar.xz
-+# From https://sourceforge.net/p/enlightenment/mailman/message/36026490/
-+sha256	da12b8a24ca5248b2d292d9b1e19cabc61ae29b21f96d4b6f4f3e7b4feeecc16	terminology-1.1.1.tar.xz
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index 817521d..ed811b3 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TERMINOLOGY_VERSION = 1.1.0
-+TERMINOLOGY_VERSION = 1.1.1
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
--- 
-2.9.5
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:  
+> 
+>  > Add upstream patch to fix build against openjpeg 2.2.
+>  > Fixes [1]:  
+> 
+>  >   gstopenjpeg.h:42:37: fatal error: openjpeg-2.1/openjpeg.h: No such file or directory  
+> 
+>  > [1] http://autobuild.buildroot.net/results/90f1f7838f08e3a557be27470406d4d84dbcc828  
+> 
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  > ---
+>  >  ...1-openjpeg-Fix-build-against-openjpeg-2.2.patch | 93 ++++++++++++++++++++++
+>  >  1 file changed, 93 insertions(+)
+>  >  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch  
+> 
+> Hmm, how does this work? We don't have GST1_PLUGINS_BAD_AUTORECONF = YES
+> but the patch changes configure.ac.
+> 
+
+Thanks for spotting it (and do not know why it worked), will send an updated patch version...
+
+Regards,
+Peter
