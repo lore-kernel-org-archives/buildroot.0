@@ -1,44 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Sep 2017 21:02:59 +0200
-Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2.4
-Message-ID: <20170907190433.B48F581002@busybox.osuosl.org>
+Date: Thu, 7 Sep 2017 21:06:03 +0200
+Subject: [Buildroot] [git commit] toolchain: add 4.13.x choice for headers
+Message-ID: <20170907190433.DCB257FC59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d8e2a307dd2efbc75f86644570cb0408f1f42e1
+commit: https://git.buildroot.net/buildroot/commit/?id=1576b892348725db1c3e6f1a89bb15a5e93dba7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/eudev.hash | 4 ++--
- package/eudev/eudev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-common.in                                        | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 513dc7d..75f2cc1 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,4 +1,4 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5 1e91710d6c42f03f803108091be5878f  eudev-3.2.3.tar.gz
-+md5 66acef4c6094aab4aced7ae83b74b0d2  eudev-3.2.4.tar.gz
- # Locally calculated
--sha256 49200c54f63bb0ae922880a9bb64f360959fa83d272239b9cf72111dd53f444a  eudev-3.2.3.tar.gz
-+sha256 dddcf4c89b21f5f3210f7e4d3888c92cbfc657ff734ac21b6bdd3f5bcb146fed  eudev-3.2.4.tar.gz
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index ff94078..b712475 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index dd192b9..d87d4d7 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -249,10 +249,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
  
--EUDEV_VERSION = 3.2.3
-+EUDEV_VERSION = 3.2.4
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+ 	default "4.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	default "4.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+ 	default "4.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index ae343dd..a285340 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -93,6 +93,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13
++	bool "4.13.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12
+ 	bool "4.12.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
