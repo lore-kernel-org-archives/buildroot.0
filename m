@@ -1,77 +1,46 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  7 Sep 2017 09:51:40 +0200
-Subject: [Buildroot] [PATCH 2/2] lua-curl: new package
-In-Reply-To: <20170907075140.20738-1-francois.perrad@gadz.org>
-References: <20170907075140.20738-1-francois.perrad@gadz.org>
-Message-ID: <20170907075140.20738-2-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  7 Sep 2017 10:12:01 +0200
+Subject: [Buildroot] [PATCH] mbedtls: security bump to version 2.6.0
+Message-ID: <20170907081201.8397-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in              |  1 +
- package/lua-curl/Config.in     |  7 +++++++
- package/lua-curl/lua-curl.hash |  2 ++
- package/lua-curl/lua-curl.mk   | 13 +++++++++++++
- 4 files changed, 23 insertions(+)
- create mode 100644 package/lua-curl/Config.in
- create mode 100644 package/lua-curl/lua-curl.hash
- create mode 100644 package/lua-curl/lua-curl.mk
+Fixes CVE-2017-14032: Bypass of authentication of peer possible when the
+authentication mode is configured as 'optional'
 
-diff --git a/package/Config.in b/package/Config.in
-index b826bdbc3..119beabab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -574,6 +574,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-coat/Config.in"
- 	source "package/lua-coatpersistent/Config.in"
- 	source "package/lua-csnappy/Config.in"
-+	source "package/lua-curl/Config.in"
- 	source "package/lua-ev/Config.in"
- 	source "package/lua-flu/Config.in"
- 	source "package/lua-iconv/Config.in"
-diff --git a/package/lua-curl/Config.in b/package/lua-curl/Config.in
-new file mode 100644
-index 000000000..88cdaf10c
---- /dev/null
-+++ b/package/lua-curl/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LUA_CURL
-+	bool "lua-curl"
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  Lua binding to libcurl.
-+
-+	  https://lua-curl.github.io/
-diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
-new file mode 100644
-index 000000000..e73810ced
---- /dev/null
-+++ b/package/lua-curl/lua-curl.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 4cc6389bf5d4a868cc1e6017733b9b6306f2fc8b5083aa928d66399195697f34  lua-curl-0.3.7-1.src.rock
-diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
-new file mode 100644
-index 000000000..e5fa10a1e
---- /dev/null
-+++ b/package/lua-curl/lua-curl.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# lua-curl
-+#
-+################################################################################
-+
-+LUA_CURL_VERSION = 0.3.7-1
-+LUA_CURL_SUBDIR = Lua-cURLv3-0.3.7
-+LUA_CURL_LICENSE = MIT
-+LUA_CURL_LICENSE_FILES = $(LUA_CURL_SUBDIR)/LICENSE
-+LUA_CURL_DEPENDENCIES = libcurl
-+
-+$(eval $(luarocks-package))
+For more details, see
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2017-02
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 70a0dc506d..0dea548431 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,2 +1,2 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
+-sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
++sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index a571ed0e52..64ce18cf6f 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.4.2
++MBEDTLS_VERSION = 2.6.0
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
 -- 
 2.11.0
