@@ -1,52 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  7 Sep 2017 17:26:55 +0200
-Subject: [Buildroot] [PATCH] strongswan: add upstream security patch
-Message-ID: <20170907152655.23933-1-peter@korsgaard.com>
+From: Bradford Barr <bradford@density.io>
+Date: Thu,  7 Sep 2017 11:51:08 -0400
+Subject: [Buildroot] [PATCH 1/1] msgpack: bump to version 2.1.5
+Message-ID: <20170907155108.3449-1-bradford@density.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-11185: The gmp plugin in strongSwan before 5.6.0 allows
-remote attackers to cause a denial of service (NULL pointer dereference and
-daemon crash) via a crafted RSA signature.
+From: bradford barr <bradford@density.io>
 
-For more details, see
-https://www.strongswan.org/blog/2017/08/14/strongswan-vulnerability-%28cve-2017-11185%29.html
-
-While we're at it, add hashes for the license files.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: bradford barr <bradford@density.io>
 ---
- package/strongswan/strongswan.hash | 3 +++
- package/strongswan/strongswan.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/msgpack/Config.in    | 12 ++++++++++++
+ package/msgpack/msgpack.hash |  2 +-
+ package/msgpack/msgpack.mk   | 16 ++++++++++++----
+ 3 files changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index cbc4e3857a..820c712843 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -5,3 +5,6 @@ sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongsw
- # Locally calculated
- sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
- sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
-+sha256	c80e02c9a5eeaf10f0a8bdde3be6375dd2833e515af03dad3a700e93c4fd041a  strongswan-4.4.0-5.5.3_gmp_mpz_export.patch
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 1070eeaf8b..30bbc6c852 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -9,7 +9,8 @@ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_PATCH = \
- 	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
--	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
-+	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch \
-+	$(STRONGSWAN_SITE)/patches/23_gmp_mpz_export_patch/strongswan-4.4.0-5.5.3_gmp_mpz_export.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index b8e8213..e0626b2 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -13,3 +13,15 @@ config BR2_PACKAGE_MSGPACK
+ comment "msgpack needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++
++if BR2_PACKAGE_MSGPACK
++
++config BR2_PACKAGE_MSGPACK_HEADER_ONLY
++	bool "header only"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  MessagePack can be installed as a header only library.
++
++	  https://github.com/msgpack/msgpack-c#c-header-only-library
++
++endif
+diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
+index 8cd8cb6..173717d 100644
+--- a/package/msgpack/msgpack.hash
++++ b/package/msgpack/msgpack.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  97a371ef950c89f48e8dba6abeccab07f1887e9ba6dab921de0f985c7d5075fe  msgpack-0.5.4.tar.gz
++sha256  9c87f80fc651b900772deaef0ab154b63160c74d292529b5be6d06d6485d4640	msgpack-2.1.5.tar.gz
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index 9e23948..0d6217d 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
+@@ -4,9 +4,17 @@
+ #
+ ################################################################################
+ 
+-MSGPACK_VERSION = 0.5.4
+-MSGPACK_SITE = http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
+-MSGPACK_LICENSE = Apache-2.0
++MSGPACK_VERSION = 2.1.5
++MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
++MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING
+ 
+-$(eval $(autotools-package))
++MSGPACK_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_MSGPACK_HEADER_ONLY),y)
++MSGPACK_INSTALL_TARGET = NO
++else
++MSGPACK_INSTALL_TARGET = YES
++endif
++
++$(eval $(cmake-package))
 -- 
-2.11.0
+2.9.3
