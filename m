@@ -1,55 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Sep 2017 15:14:49 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mbedtls: security bump to
-	version 2.6.0
-Message-ID: <20170907130825.49B5780FBC@busybox.osuosl.org>
+Date: Thu, 7 Sep 2017 15:10:40 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openjpeg: security bump
+	to version 2.2.0
+Message-ID: <20170907130825.3A0DE80FBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f6388e374a791d8e9f09434f75481702978c2e1
+commit: https://git.buildroot.net/buildroot/commit/?id=4a944b6a2d3ee42bc5b1629816c4aeec146841cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-14032: authentication bypass.
+Fixes the following security issues:
 
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2017-02
+CVE-2016-10504: Heap-based buffer overflow vulnerability in the
+opj_mqc_byteout function in mqc.c in OpenJPEG before 2.2.0 allows remote
+attackers to cause a denial of service (application crash) via a crafted bmp
+file.
 
-Add license hash.
+CVE-2016-10505: NULL pointer dereference vulnerabilities in the imagetopnm
+function in convert.c, sycc444_to_rgb function in color.c,
+color_esycc_to_rgb function in color.c, and sycc422_to_rgb function in
+color.c in OpenJPEG before 2.2.0 allow remote attackers to cause a denial of
+service (application crash) via crafted j2k files.
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aa70897e292dc5a97a2ec99db3fe3f2b9aeea33b)
+CVE-2016-10506: Division-by-zero vulnerabilities in the functions
+opj_pi_next_cprl, opj_pi_next_pcrl, and opj_pi_next_rpcl in pi.c in OpenJPEG
+before 2.2.0 allow remote attackers to cause a denial of service
+(application crash) via crafted j2k files.
+
+CVE-2016-10507: Integer overflow vulnerability in the bmp24toimage function
+in convertbmp.c in OpenJPEG before 2.2.0 allows remote attackers to cause a
+denial of service (heap-based buffer over-read and application crash) via a
+crafted bmp file.
+
+[Peter: extend commit message with security fixes info]
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 37b2fe73cff726ac05cdb200e803f267a48721f9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 7 +++++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/openjpeg/openjpeg.hash | 2 +-
+ package/openjpeg/openjpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 70a0dc5..d04b867 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,2 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
--sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
-+sha1	e914288da50977f541773f9d36e26f14926594a5	mbedtls-2.6.0-apache.tgz
-+sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
-+# Locally calculated
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index a571ed0..64ce18c 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
+index c0abd0c..0e51aae 100644
+--- a/package/openjpeg/openjpeg.hash
++++ b/package/openjpeg/openjpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	4ce77b6ef538ef090d9bde1d5eeff8b3069ab56c4906f083475517c2c023dfa7  openjpeg-2.1.2.tar.gz
++sha256	6fddbce5a618e910e03ad00d66e7fcd09cc6ee307ce69932666d54c73b7c6e7b  openjpeg-2.2.0.tar.gz
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+index ca22068..e671713 100644
+--- a/package/openjpeg/openjpeg.mk
++++ b/package/openjpeg/openjpeg.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.4.2
-+MBEDTLS_VERSION = 2.6.0
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-OPENJPEG_VERSION = 2.1.2
++OPENJPEG_VERSION = 2.2.0
+ OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
+ OPENJPEG_LICENSE = BSD-2c
+ OPENJPEG_LICENSE_FILES = LICENSE
