@@ -1,51 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 7 Sep 2017 14:02:25 +0300
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx: add support for
- i.MX6UL
-In-Reply-To: <1504781111-21406-1-git-send-email-julien.boibessot@free.fr>
-References: <1504781111-21406-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20170907110225.e2irdmlt2ojvtl26@tarshish>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Thu,  7 Sep 2017 13:49:46 +0200
+Subject: [Buildroot] [PATCH v2] DEVELOPERS: add myself for modem-manager
+	related packages
+In-Reply-To: <20170907074814.ot7udjrtazfdibv5@tarshish>
+References: <20170907074814.ot7udjrtazfdibv5@tarshish>
+Message-ID: <20170907114946.17687-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ DEVELOPERS | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-On Thu, Sep 07, 2017 at 12:45:11PM +0200, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> ---
->  package/freescale-imx/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-> index 656b44b..fa3f9a0 100644
-> --- a/package/freescale-imx/Config.in
-> +++ b/package/freescale-imx/Config.in
-> @@ -31,6 +31,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
->  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
->  	bool "imx6q"
->  
-> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
-> +	bool "imx6ul"
-> +
->  endchoice
->  
->  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-> @@ -42,6 +45,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
->  	default "IMX51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
->  	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
->  	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-> +	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff0b58059..6c15a61f9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -49,6 +49,11 @@ F:	package/sngrep/
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/webkitgtk/
 
-What package do you need this for? Please elaborate on that in the commit log.
++N:	Aleksander Morgado <aleksander@aleksander.es>
++F:	package/libmbim/
++F:	package/libqmi/
++F:	package/modem-manager/
++
+ N:	Alex Suykov <alex.suykov@gmail.com>
+ F:	package/vboot-utils/
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+--
+2.13.1
