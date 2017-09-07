@@ -1,28 +1,64 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 7 Sep 2017 22:22:10 +0200
-Subject: [Buildroot] [Patch v7 00/10] Add support for the Rust
- programming language
-In-Reply-To: <03972004-18b2-3889-8645-7cb8366f7346@mind.be>
-References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
- <03972004-18b2-3889-8645-7cb8366f7346@mind.be>
-Message-ID: <20170907202210.GF6001@ned>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu,  7 Sep 2017 22:41:11 +0200
+Subject: [Buildroot] [PATCH 1/3] package/efl: fix build issue on big endian
+	system
+Message-ID: <20170907204113.14249-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-08-11 01:59:27, Arnout Vandecappelle wrote:
->
-> On 23-07-17 10:11, Eric Le Bihan wrote:
-> > This series adds support for the Rust programming language by adding the
-> > following packages:
->
->  I commented on all patches, and marked all as Changes Requested in patchwork.
+Fixes:
+http://autobuild.buildroot.net/results/0f1/0f12919f59dc92a8d91e23d3b0c1120bc06720db
+http://autobuild.buildroot.net/results/62e/62e96be61601347e92f9c115209af4962fe82492
 
-Thanks for the review!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...g-add-missing-header-for-big-endian-build.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
 
-Best regards,
-
---
-ELB
+diff --git a/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
+new file mode 100644
+index 0000000..9f0653d
+--- /dev/null
++++ b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
+@@ -0,0 +1,35 @@
++From 135f4233266443a4546bdf8217f145a0f7bbb90d Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 7 Sep 2017 22:25:48 +0200
++Subject: [PATCH] eina_debug: add missing header for big endian build
++
++The build fail for big endian system due to missing eina_swap32
++definition.
++Add "eina_cpu.h" include where eina_swap32 prototype is defined.
++
++Patch provided by sharkcz in [1].
++
++Uptream status: pending
++
++[1] https://phab.enlightenment.org/D5158
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/lib/eina/eina_debug.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/lib/eina/eina_debug.c b/src/lib/eina/eina_debug.c
++index ca1bdad..468ca43 100644
++--- a/src/lib/eina/eina_debug.c
+++++ b/src/lib/eina/eina_debug.c
++@@ -60,6 +60,7 @@
++ #endif
++ 
++ #include "eina_debug.h"
+++#include "eina_cpu.h"
++ #include "eina_types.h"
++ #include "eina_list.h"
++ #include "eina_mempool.h"
++-- 
++2.9.5
++
+-- 
+2.9.5
