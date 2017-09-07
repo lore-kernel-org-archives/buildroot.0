@@ -1,51 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Sep 2017 16:49:21 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/botan: security
-	bump to version 1.10.16
-Message-ID: <20170907144418.1C2CD81048@busybox.osuosl.org>
+Date: Thu,  7 Sep 2017 17:07:54 +0200
+Subject: [Buildroot] [PATCH] libsoup: security bump to version 2.56.1
+Message-ID: <20170907150754.8147-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a673badcb1ec994b8fb8dd1891de4f3de0fc5fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Fixes CVE-2017-2885: stack based buffer overflow with HTTP Chunked Encoding
 
-Fixes CVE-2017-2801: A programming error exists in a way Randombit Botan
-cryptographic library version 2.0.1 implements x500 string comparisons which
-could lead to certificate verification issues and abuse.  A specially
-crafted X509 certificate would need to be delivered to the client or server
-application in order to trigger this vulnerability.
+For more details, see
+https://bugzilla.gnome.org/show_bug.cgi?id=785774
 
-[Peter: extend commit message with security fixes info]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 033aa8d4e9ad13ee56dbb372ad45a7d83bca4f53)
+While we're at it, add a hash for the license file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsoup/libsoup.hash | 6 ++++--
+ package/libsoup/libsoup.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 3da5f69..3d46a13 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23ec973d4b4a4fe04f490d409e08ac5638afe3aa09acd7f520daaff38ba19b90  Botan-1.10.13.tgz
-+sha256 6c5472401d06527e87adcb53dd270f3c9b1fb688703b04dd7a7cfb86289efe52  Botan-1.10.16.tgz
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index fc8fa69..2829552 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index b42cf2f711..6e1ff428af 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,2 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.0.sha256sum
+-sha256	d8216b71de8247bc6f274ec054c08547b2e04369c1f8add713e9350c8ef81fe5	libsoup-2.56.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.1.sha256sum
++sha256	c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3  libsoup-2.56.1.tar.xz
++# Locally calculated
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 1c27138f02..a3ce686aa7 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BOTAN_VERSION = 1.10.13
-+BOTAN_VERSION = 1.10.16
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2c
+ LIBSOUP_VERSION_MAJOR = 2.56
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
+-- 
+2.11.0
