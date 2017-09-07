@@ -1,71 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 7 Sep 2017 23:32:41 +0200
-Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
-In-Reply-To: <20170903091432.659bd28f@windsurf.lan>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
- <20170902205423.21288-8-romain.naour@gmail.com>
- <20170902231252.44d10e64@windsurf.lan>
- <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
- <20170903091432.659bd28f@windsurf.lan>
-Message-ID: <8f568fb6-9ef3-39fc-ba2f-714f60dcd7be@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu,  7 Sep 2017 23:43:55 +0200
+Subject: [Buildroot] [PATCH] package/openpowerlink: bump to v2.6.1
+Message-ID: <20170907214355.16856-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+http://openpowerlink.sourceforge.net/web/openPOWERLINK/Download/openPOWERLINK%202.6.html
 
-Le 03/09/2017 ? 09:14, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Sun, 3 Sep 2017 00:23:40 +0200, Romain Naour wrote:
-> 
->>> This commit log is a bit mysterious: if reallocarray() has been
->>> introduced in glibc 2.26, why isn't flex able to use it ?  
->>
->> It's a nasty issue, when reallocarray() is available for the target, flex will
->> build a small tool called stage1flex for the host (using _FOR_BUILD) but with
->> the config.h generated for the target.
->>
->> My host doesn't have glibc 2.26, so reallocarray() is never defined while
->> building stage1flex:
->>
->> misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
->> [-Wimplicit-function-declaration]
->>   mem = reallocarray(NULL, (size_t) size, element_size);
->>         ^~~~~~~~~~~~
->> misc.c:147:6: warning : assignment makes pointer from integer without a cast
->> [-Wint-conversion]
->>   mem = reallocarray(NULL, (size_t) size, element_size);
->>       ^
->>
->> I don't know how to fix this, except by disabling reallocarray() for the target...
-> 
-> This should all be explained in the commit log, and a short comment in
-> flex.mk should be added as well.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/openpowerlink/openpowerlink.hash | 8 ++++----
+ package/openpowerlink/openpowerlink.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Actually I looked further into this issue after sending the patch.
-
-> 
-> Generally speaking, the commit logs in this series are too terse: they
-> just say "fix build with glibc 2.26" with no explanations, or they
-> backport some seemingly random glibc patches, without explaining why
-> they are needed. Could you improve this a bit ?
-
-Well, the glibc bump is more complicated than expected and I need to spent more
-time on it to understand what's going on...
-
-At least we have a link to the upstream reference as a starting point.
-Ok, this patch is really too terse, I added it just before sending the series :-/
-
-I'll try to continue this week-end.
-
-Best regards,
-Romain
-
-> 
-> Thanks a lot!
-> 
-> Thomas
-> 
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index 2a3c1f0..5c95431 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.0/
+-md5	afe5c1ed2d329d5b3784eb6999ab9d17	openPOWERLINK_V2.6.0.tar.gz
+-sha1	c8b317f118f69e416bc812e93a97e073d62a29d9	openPOWERLINK_V2.6.0.tar.gz
++# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.1/
++md5	9f53ccc72356cf421ecd089f91421393	openPOWERLINK_V2.6.1.tar.gz
++sha1	dfb97845937e8d1de3e554c17b951a115352faa6	openPOWERLINK_V2.6.1.tar.gz
+ # sha256 locally computed
+-sha256	a53dd279a5341fc350e4be94949d4642579c4c4eb27706f1b36d41136b400ff8	openPOWERLINK_V2.6.0.tar.gz
++sha256	89a8b321938f965aa03610f40c38d2f17242aab1b0b5f24b93c4542f2f3fbd5c	openPOWERLINK_V2.6.1.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 660dd60..c9ca4cc 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENPOWERLINK_VERSION = V2.6.0
++OPENPOWERLINK_VERSION = V2.6.1
+ OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
+-- 
+2.9.5
