@@ -1,64 +1,44 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Sep 2017 22:41:11 +0200
-Subject: [Buildroot] [PATCH 1/3] package/efl: fix build issue on big endian
-	system
-Message-ID: <20170907204113.14249-1-romain.naour@gmail.com>
+Date: Thu,  7 Sep 2017 22:41:12 +0200
+Subject: [Buildroot] [PATCH 2/3] package/efl: bump to 1.20.3
+In-Reply-To: <20170907204113.14249-1-romain.naour@gmail.com>
+References: <20170907204113.14249-1-romain.naour@gmail.com>
+Message-ID: <20170907204113.14249-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/0f1/0f12919f59dc92a8d91e23d3b0c1120bc06720db
-http://autobuild.buildroot.net/results/62e/62e96be61601347e92f9c115209af4962fe82492
+https://www.enlightenment.org/news/efl-1.20.3
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...g-add-missing-header-for-big-endian-build.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
-new file mode 100644
-index 0000000..9f0653d
---- /dev/null
-+++ b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
-@@ -0,0 +1,35 @@
-+From 135f4233266443a4546bdf8217f145a0f7bbb90d Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 7 Sep 2017 22:25:48 +0200
-+Subject: [PATCH] eina_debug: add missing header for big endian build
-+
-+The build fail for big endian system due to missing eina_swap32
-+definition.
-+Add "eina_cpu.h" include where eina_swap32 prototype is defined.
-+
-+Patch provided by sharkcz in [1].
-+
-+Uptream status: pending
-+
-+[1] https://phab.enlightenment.org/D5158
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/lib/eina/eina_debug.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lib/eina/eina_debug.c b/src/lib/eina/eina_debug.c
-+index ca1bdad..468ca43 100644
-+--- a/src/lib/eina/eina_debug.c
-++++ b/src/lib/eina/eina_debug.c
-+@@ -60,6 +60,7 @@
-+ #endif
-+ 
-+ #include "eina_debug.h"
-++#include "eina_cpu.h"
-+ #include "eina_types.h"
-+ #include "eina_list.h"
-+ #include "eina_mempool.h"
-+-- 
-+2.9.5
-+
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 9d553ad..ceeb788 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.2.tar.xz.sha256
+-sha256	a540cb96f0a2a8f2e3001108d8432d2f21b45f6b12bd511eeebaadd5c934947e	efl-1.20.2.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.3.tar.xz.sha256
++sha256	1273014aff3cd313a315f6745b02958668083726d830873b681fe726b9421191	efl-1.20.3.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index b4cdeed..f1bcd53 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.20.2
++EFL_VERSION = 1.20.3
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
 -- 
 2.9.5
