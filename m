@@ -1,44 +1,44 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Sep 2017 22:41:12 +0200
-Subject: [Buildroot] [PATCH 2/3] package/efl: bump to 1.20.3
+Date: Thu,  7 Sep 2017 22:41:13 +0200
+Subject: [Buildroot] [PATCH 3/3] package/terminology: bump to v1.1.1
 In-Reply-To: <20170907204113.14249-1-romain.naour@gmail.com>
 References: <20170907204113.14249-1-romain.naour@gmail.com>
-Message-ID: <20170907204113.14249-2-romain.naour@gmail.com>
+Message-ID: <20170907204113.14249-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.enlightenment.org/news/efl-1.20.3
+https://sourceforge.net/p/enlightenment/mailman/message/36026490
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
+ package/terminology/terminology.hash | 4 ++--
+ package/terminology/terminology.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 9d553ad..ceeb788 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index c203226..81ae5d8 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
 @@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.2.tar.xz.sha256
--sha256	a540cb96f0a2a8f2e3001108d8432d2f21b45f6b12bd511eeebaadd5c934947e	efl-1.20.2.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.3.tar.xz.sha256
-+sha256	1273014aff3cd313a315f6745b02958668083726d830873b681fe726b9421191	efl-1.20.3.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index b4cdeed..f1bcd53 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
+-# Locally calculated
+-sha256	eb9136e487ab9e6ff3c98173919b5ad105626434d096dafecd18392fc40c348f	terminology-1.1.0.tar.xz
++# From https://sourceforge.net/p/enlightenment/mailman/message/36026490/
++sha256	da12b8a24ca5248b2d292d9b1e19cabc61ae29b21f96d4b6f4f3e7b4feeecc16	terminology-1.1.1.tar.xz
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index 817521d..ed811b3 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFL_VERSION = 1.20.2
-+EFL_VERSION = 1.20.3
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
+-TERMINOLOGY_VERSION = 1.1.0
++TERMINOLOGY_VERSION = 1.1.1
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
 -- 
 2.9.5
