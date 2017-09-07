@@ -1,30 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Sep 2017 11:19:09 +0200
-Subject: [Buildroot] [PATCH] mbedtls: security bump to version 2.6.0
-In-Reply-To: <20170907081851.5x6mxczcydx7ut4t@tarshish> (Baruch Siach's
- message of "Thu, 7 Sep 2017 11:18:51 +0300")
-References: <20170907081201.8397-1-peter@korsgaard.com>
- <20170907081851.5x6mxczcydx7ut4t@tarshish>
-Message-ID: <87ingudfxu.fsf@dell.be.48ers.dk>
+Date: Thu, 7 Sep 2017 11:18:26 +0200
+Subject: [Buildroot] [git commit] mbedtls: security bump to version 2.6.0
+Message-ID: <20170907091243.D785782141@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa70897e292dc5a97a2ec99db3fe3f2b9aeea33b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Peter,
- > On Thu, Sep 07, 2017 at 10:12:01AM +0200, Peter Korsgaard wrote:
- >> Fixes CVE-2017-14032: Bypass of authentication of peer possible when the
- >> authentication mode is configured as 'optional'
- >> 
- >> For more details, see
- >> https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2017-02
+Fixes CVE-2017-14032: authentication bypass.
 
- > Posted already: http://patchwork.ozlabs.org/patch/810255/.
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2017-02
 
-Ups, I missed that - Sorry.
+Add license hash.
 
--- 
-Bye, Peter Korsgaard
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mbedtls/mbedtls.hash | 7 +++++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 70a0dc5..d04b867 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,2 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
+-sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
++sha1	e914288da50977f541773f9d36e26f14926594a5	mbedtls-2.6.0-apache.tgz
++sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
++# Locally calculated
++sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index a571ed0..64ce18c 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.4.2
++MBEDTLS_VERSION = 2.6.0
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
