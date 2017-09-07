@@ -1,34 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Sep 2017 21:22:55 +0200
-Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix build against
-	openjpeg 2.2
-In-Reply-To: <20170907151757.28606-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Thu, 7 Sep 2017 17:17:57 +0200")
-References: <20170907151757.28606-1-ps.report@gmx.net>
-Message-ID: <87k21ab9f4.fsf@dell.be.48ers.dk>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 7 Sep 2017 21:33:58 +0200
+Subject: [Buildroot] [Patch v7 04/10] rust-bootstrap: new package
+In-Reply-To: <170ae612-1cc1-434c-bafb-6cfab9e65d8b@mind.be>
+References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
+ <20170723081206.7774-5-eric.le.bihan.dev@free.fr>
+ <170ae612-1cc1-434c-bafb-6cfab9e65d8b@mind.be>
+Message-ID: <20170907193358.GC6001@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Hi!
 
- > Add upstream patch to fix build against openjpeg 2.2.
- > Fixes [1]:
+On 17-08-11 01:13:38, Arnout Vandecappelle wrote:
+>
+>
+> On 23-07-17 10:12, Eric Le Bihan wrote:
+> > This new package fetches a binary snapshot of the Rust compiler,
+> > suitable to bootstrap the host variant of the Rust compiler.
+> >
+> > To bootstrap rustc version N, rustc N-1 is used.
+>
+>  Is it really needed/useful to use N-1 to bootstrap with? From the user's
+> perspective, that's just another useless download, right?
 
- >   gstopenjpeg.h:42:37: fatal error: openjpeg-2.1/openjpeg.h: No such file or directory
+AFAIK, rust N should be able to compile N, so it seems logical to get
+rid of rust-bootstrap and use rustc-bin (with rust-std-bin) instead.
+I'll make some tests, though.
 
- > [1] http://autobuild.buildroot.net/results/90f1f7838f08e3a557be27470406d4d84dbcc828
+So, should host-rustc-bin provide $(BR2_PACKAGE_HOST_RUSTC_BIN_AS_BOOTSTRAP),
+which should disable traditional installation if set?
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- >  ...1-openjpeg-Fix-build-against-openjpeg-2.2.patch | 93 ++++++++++++++++++++++
- >  1 file changed, 93 insertions(+)
- >  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
+>  In fact, this way rust-bootstrap can be eliminated entirely: host-rust-bin can
+> be used instead. It does complicate things a little bit, because in that case we
+> should NOT depend on (target) rust-std-bin. So that means that host-rust-bin
+> shouldn't depend on rust-std-bin, so that dependency should be added in some
+> different way...
 
-Hmm, how does this work? We don't have GST1_PLUGINS_BAD_AUTORECONF = YES
-but the patch changes configure.ac.
+It is true that, in that case, we only need the standard library for
+host from host-rust-std-bin. If it installs target and host versions of
+the library, we have a useless download.
 
--- 
-Bye, Peter Korsgaard
+--
+ELB
