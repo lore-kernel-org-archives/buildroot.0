@@ -1,37 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Sep 2017 21:37:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
-	9, 12}.x series
-Message-ID: <20170907193103.C3DCF7FFDE@busybox.osuosl.org>
+Date: Thu, 07 Sep 2017 21:43:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.1.9
+In-Reply-To: <20170903153806.5907-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 3 Sep 2017 17:38:06 +0200")
+References: <20170903153806.5907-1-bernd.kuhls@t-online.de>
+Message-ID: <87bmmmb8gx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a711d9e25b524b5b2d90d5946b3992c2d64aee1c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-[Peter: drop 4.12.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 19af2fe70cf8764139bcf16e2b364126cfa2456b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 986b3b0..da68869 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.86"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.87"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.47"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.48"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
