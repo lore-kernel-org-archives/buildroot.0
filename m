@@ -1,52 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Sep 2017 11:18:26 +0200
-Subject: [Buildroot] [git commit] mbedtls: security bump to version 2.6.0
-Message-ID: <20170907091243.D785782141@busybox.osuosl.org>
+Date: Thu,  7 Sep 2017 11:44:59 +0200
+Subject: [Buildroot] [PATCH] supervisor: security bump to version 3.1.4
+Message-ID: <20170907094459.10277-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa70897e292dc5a97a2ec99db3fe3f2b9aeea33b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes CVE-2017-11610 - The XML-RPC server in supervisor before 3.0.1, 3.1.x
+before 3.1.4, 3.2.x before 3.2.4, and 3.3.x before 3.3.3 allows remote
+authenticated users to execute arbitrary commands via a crafted XML-RPC
+request, related to nested supervisord namespace lookups.
 
-Fixes CVE-2017-14032: authentication bypass.
+For more details, see
+https://github.com/Supervisor/supervisor/issues/964
 
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2017-02
+While we're at it, add hashes for the license files.
 
-Add license hash.
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 7 +++++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/supervisor/supervisor.hash | 4 +++-
+ package/supervisor/supervisor.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 70a0dc5..d04b867 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,2 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
--sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
-+sha1	e914288da50977f541773f9d36e26f14926594a5	mbedtls-2.6.0-apache.tgz
-+sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
-+# Locally calculated
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index a571ed0..64ce18c 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
+index 03f337e7d0..0ebc663be9 100644
+--- a/package/supervisor/supervisor.hash
++++ b/package/supervisor/supervisor.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 e32c546fe8d2a6e079ec4819c49fd24534d4075a58af39118d04367918b3c282  supervisor-3.1.3.tar.gz
++sha256 82f75089f719a7a3ca87f35c89a03c20fd3c0912552c96eb6fa40274ced6604e  supervisor-3.1.4.tar.gz
++sha256 a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491  COPYRIGHT.txt
++sha256 27ba0b2357ed6974d755ed53232c5ab8595622b3111bb91682708ea188cc3696  LICENSES.txt
+diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
+index 4c62b66feb..9b93b449a7 100644
+--- a/package/supervisor/supervisor.mk
++++ b/package/supervisor/supervisor.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.4.2
-+MBEDTLS_VERSION = 2.6.0
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-SUPERVISOR_VERSION = 3.1.3
+-SUPERVISOR_SITE = http://pypi.python.org/packages/source/s/supervisor
++SUPERVISOR_VERSION = 3.1.4
++SUPERVISOR_SITE = https://pypi.python.org/packages/12/50/cd330d1a0daffbbe54803cb0c4c1ada892b5d66db08befac385122858eee
+ SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa), ZPL-2.1
+ SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
+ SUPERVISOR_SETUP_TYPE = setuptools
+-- 
+2.11.0
