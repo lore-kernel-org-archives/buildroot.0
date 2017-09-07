@@ -1,53 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  7 Sep 2017 11:44:59 +0200
-Subject: [Buildroot] [PATCH] supervisor: security bump to version 3.1.4
-Message-ID: <20170907094459.10277-1-peter@korsgaard.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 07 Sep 2017 12:10:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/luvi: needs git submodules
+In-Reply-To: <20170906231657.382c5f79@windsurf.lan>
+References: <20170904053114.16477-1-bernd.kuhls@t-online.de>
+ <20170906231657.382c5f79@windsurf.lan>
+Message-ID: <1504779004.21841.17.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-11610 - The XML-RPC server in supervisor before 3.0.1, 3.1.x
-before 3.1.4, 3.2.x before 3.2.4, and 3.3.x before 3.3.3 allows remote
-authenticated users to execute arbitrary commands via a crafted XML-RPC
-request, related to nested supervisord namespace lookups.
+Hello,
 
-For more details, see
-https://github.com/Supervisor/supervisor/issues/964
+On Wed, 2017-09-06 at 23:16 +0200, Thomas Petazzoni wrote:
+> Hello J?rg,
+> 
+> Since you are listed in the DEVELOPERS file for this package, could you
+> comment/review/ack the below patch from Bernd touching luvi ?
+> 
+> Of course, git submodules and bundled libraries are not really nice,
+> which is why I'm seeking your opinion.
+> 
+> Thanks!
+> 
+> Thomas
+> 
+> On Mon,  4 Sep 2017 07:31:14 +0200, Bernd Kuhls wrote:
+> > Luvi bundles several libraries previously provided by the upstream
+> > tarball. Since the tarball is not available anymore we need to fetch
+> > the git submodules.
 
-While we're at it, add hashes for the license files.
+I am quite sure that the maintainer simply forgot to add the release
+tarball (he already did before), that's why I opened an issue [1]
+asking for a tarball of the sources.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/supervisor/supervisor.hash | 4 +++-
- package/supervisor/supervisor.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+> > Fixes
+> > http://autobuild.buildroot.net/results/26d/26d04350a761d362f40e7bd1ac09b639d61de91a/
 
-diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
-index 03f337e7d0..0ebc663be9 100644
---- a/package/supervisor/supervisor.hash
-+++ b/package/supervisor/supervisor.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 e32c546fe8d2a6e079ec4819c49fd24534d4075a58af39118d04367918b3c282  supervisor-3.1.3.tar.gz
-+sha256 82f75089f719a7a3ca87f35c89a03c20fd3c0912552c96eb6fa40274ced6604e  supervisor-3.1.4.tar.gz
-+sha256 a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491  COPYRIGHT.txt
-+sha256 27ba0b2357ed6974d755ed53232c5ab8595622b3111bb91682708ea188cc3696  LICENSES.txt
-diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
-index 4c62b66feb..9b93b449a7 100644
---- a/package/supervisor/supervisor.mk
-+++ b/package/supervisor/supervisor.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SUPERVISOR_VERSION = 3.1.3
--SUPERVISOR_SITE = http://pypi.python.org/packages/source/s/supervisor
-+SUPERVISOR_VERSION = 3.1.4
-+SUPERVISOR_SITE = https://pypi.python.org/packages/12/50/cd330d1a0daffbbe54803cb0c4c1ada892b5d66db08befac385122858eee
- SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa), ZPL-2.1
- SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
- SUPERVISOR_SETUP_TYPE = setuptools
--- 
-2.11.0
+Until then, we need to fetch the git submodules to fix the build issue.
+
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> >  package/luvi/luvi.hash | 2 +-
+> >  package/luvi/luvi.mk   | 3 ++-
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+> > index 7f7abdbf4..ce3785eb8 100644
+> > --- a/package/luvi/luvi.hash
+> > +++ b/package/luvi/luvi.hash
+> > @@ -1,2 +1,2 @@
+> >  # Locally calculated
+> > -sha256 65d3ded5007d5bb58fc3b76013913596fd42ed7326310d67c668ddf9a017a179  luvi-v2.7.6.tar.gz
+> > +sha256 6d2297751b4d4023c1fa8b723b6f04e09584c67694958edbfa0d284f384759d5  luvi-v2.7.6.tar.gz
+> > diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+> > index 7dd5e5a32..fc89d4d65 100644
+> > --- a/package/luvi/luvi.mk
+> > +++ b/package/luvi/luvi.mk
+> > @@ -5,7 +5,8 @@
+> >  ################################################################################
+> >  
+> >  LUVI_VERSION = v2.7.6
+> > -LUVI_SITE = $(call github,luvit,luvi,$(LUVI_VERSION))
+> > +LUVI_SITE = git://github.com/luvit/luvi.git
+> > +LUVI_GIT_SUBMODULES = YES
+> >  LUVI_LICENSE = Apache-2.0
+> >  LUVI_LICENSE_FILES = LICENSE.txt
+> >  LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+> 
+
+[1] https://github.com/luvit/luvi/issues/161
+
+Acked-by: "J?rg Krause <joerg.krause@embedded.rocks>"
