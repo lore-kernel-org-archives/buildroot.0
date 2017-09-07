@@ -1,85 +1,153 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 7 Sep 2017 15:27:24 +0200
-Subject: [Buildroot] [PATCH v2] testing: add python-cryptography tests
-In-Reply-To: <1504790742-27831-1-git-send-email-yegorslists@googlemail.com>
-References: <1504790742-27831-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kum3-8hb6ehmBS-6T=Bo-qWEnhamytvwqReA47hEVpSQw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  7 Sep 2017 16:45:51 +0200
+Subject: [Buildroot] [PATCH] gd: security bump to version 2.2.5
+Message-ID: <20170907144551.23275-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 7, 2017 at 3:25 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
->   - rename test file to have only '_' delimiters (suggested by Ricardo Martincoski)
->   - use intermediate class to avoid duplicate code (suggested by Ricardo Martincoski)
->
->  .gitlab-ci.yml                                     |  2 ++
->  .../tests/package/test_python_cryptography.py      | 31 ++++++++++++++++++++++
->  2 files changed, 33 insertions(+)
->  create mode 100644 support/testing/tests/package/test_python_cryptography.py
->
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index b44c935..091b016 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -250,6 +250,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
->  tests.package.test_ipython.TestIPythonPy3: *runtime_test
->  tests.package.test_python.TestPython2: *runtime_test
->  tests.package.test_python.TestPython3: *runtime_test
-> +tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
-> +tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
->  tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
-> diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
-> new file mode 100644
-> index 0000000..b60152d
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_cryptography.py
-> @@ -0,0 +1,31 @@
-> +import os
-> +
-> +from tests.package.test_python import TestPythonBase
-> +
-> +class TestPythonCryptography(TestPythonBase):
-> +    def fernet_test(self, timeout=-1):
-> +        cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
-> +        cmd += "key = Fernet.generate_key();"
-> +        cmd += "f = Fernet(key)'"
-> +        _, exit_code = self.emulator.run(cmd, timeout)
-> +        self.assertEqual(exit_code, 0)
-> +
-> +class TestPythonPy2Cryptography(TestPythonCryptography):
-> +    config = TestPythonBase.config + \
-> +"""
-> +BR2_PACKAGE_PYTHON=y
-> +BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> +"""
-> +    def test_run(self):
-> +        self.login()
-> +        self.fernet_test(40)
-> +
-> +class TestPythonPy3Cryptography(TestPythonCryptography):
-> +    config = TestPythonBase.config + \
-> +"""
-> +BR2_PACKAGE_PYTHON3=y
-> +BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> +"""
-> +    def test_run(self):
-> +        self.login()
-> +        self.fernet_test(40)
-> --
-> 2.1.4
+Fixes the following security issues:
 
-Following patch [1] is required for error less execution in Python 2
-environment.
+CVE-2017-6362: Double-free in gdImagePngPtr()
+CVE-2017-7890: Buffer over-read into uninitialized memory
 
-[1] http://patchwork.ozlabs.org/patch/810953/
+Drop patches no more needed:
 
-Yegor
+0001-gdlib-config.patch: @LIBICONV@ is nowadays correct AC_SUBST'ed by
+configure
+
+0002-gd_bmp-fix-build-with-uClibc.patch: upstream uses ceil() since
+https://github.com/libgd/libgd/commit/6913dd3cd2a7c2914ad9622419f9343bfe956135
+
+While we're at it, add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gd/0001-gdlib-config.patch                 | 32 --------------
+ package/gd/0002-gd_bmp-fix-build-with-uClibc.patch | 50 ----------------------
+ package/gd/gd.hash                                 |  3 +-
+ package/gd/gd.mk                                   |  2 +-
+ 4 files changed, 3 insertions(+), 84 deletions(-)
+ delete mode 100644 package/gd/0001-gdlib-config.patch
+ delete mode 100644 package/gd/0002-gd_bmp-fix-build-with-uClibc.patch
+
+diff --git a/package/gd/0001-gdlib-config.patch b/package/gd/0001-gdlib-config.patch
+deleted file mode 100644
+index 7756bf1240..0000000000
+--- a/package/gd/0001-gdlib-config.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Fix gdlib-config
+-
+-Since the @LIBICONV@ macro doesn't get replaced at compile time, we
+-end up installing an invalid gdlib-config: the gdlib-config --libs
+-says that one should link against @LIBICONV@ which obviously doesn't
+-work.
+-
+-Use the OpenWRT patch from
+-https://dev.openwrt.org/browser/packages/libs/gd/patches/101-gdlib-config.patch
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+---- a/config/gdlib-config.in
+-+++ b/config/gdlib-config.in
+-@@ -71,7 +71,7 @@ while test $# -gt 0; do
+- 	echo @LDFLAGS@
+- 	;;
+-     --libs)
+--	echo -lgd @LIBS@ @LIBICONV@
+-+	echo -lgd @LIBS@
+- 	;;
+-     --cflags|--includes)
+- 	echo -I at includedir@
+-@@ -84,7 +84,7 @@ while test $# -gt 0; do
+- 	echo "includedir: $includedir"
+- 	echo "cflags:     -I at includedir@"
+- 	echo "ldflags:    @LDFLAGS@"
+--	echo "libs:       @LIBS@ @LIBICONV@"
+-+	echo "libs:       @LIBS@"
+- 	echo "libdir:     $libdir"
+- 	echo "features:   @FEATURES@"
+- 	;;
+diff --git a/package/gd/0002-gd_bmp-fix-build-with-uClibc.patch b/package/gd/0002-gd_bmp-fix-build-with-uClibc.patch
+deleted file mode 100644
+index 89bc39186e..0000000000
+--- a/package/gd/0002-gd_bmp-fix-build-with-uClibc.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From ea2a03e983acf34a1320b460dcad43b7e0b0b14f Mon Sep 17 00:00:00 2001
+-Message-Id: <ea2a03e983acf34a1320b460dcad43b7e0b0b14f.1397134306.git.baruch@tkos.co.il>
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 10 Apr 2014 15:49:13 +0300
+-Subject: [PATCH] gd_bmp: fix build with uClibc
+-
+-Some architectures (like ARM) don't have the long double variants of math
+-functions under uClibc. Add a local ceill definition in this case.
+-
+-Patch status: reported upstream, 
+-https://bitbucket.org/libgd/gd-libgd/issue/123/build-failure-agains-uclibc-arm
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- src/gd_bmp.c | 12 ++++++++++++
+- 1 file changed, 12 insertions(+)
+-
+-diff --git a/src/gd_bmp.c b/src/gd_bmp.c
+-index 0fc021909f1b..11b3ec1baa01 100644
+---- a/src/gd_bmp.c
+-+++ b/src/gd_bmp.c
+-@@ -25,6 +25,11 @@
+- #include "gdhelpers.h"
+- #include "bmp.h"
+- 
+-+#include <features.h>
+-+#if defined (__UCLIBC__) && !defined(__UCLIBC_HAS_LONG_DOUBLE_MATH__)
+-+#define NO_LONG_DOUBLE
+-+#endif
+-+
+- static int compress_row(unsigned char *uncompressed_row, int length);
+- static int build_rle_packet(unsigned char *row, int packet_type, int length, unsigned char *data);
+- 
+-@@ -42,6 +47,13 @@ static int bmp_read_rle(gdImagePtr im, gdIOCtxPtr infile, bmp_info_t *info);
+- 
+- #define BMP_DEBUG(s)
+- 
+-+#ifdef NO_LONG_DOUBLE
+-+long double ceill(long double x)
+-+{
+-+	return (long double) ceil((double) x);
+-+}
+-+#endif
+-+
+- static int gdBMPPutWord(gdIOCtx *out, int w)
+- {
+- 	/* Byte order is little-endian */
+--- 
+-1.9.1
+-
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
+index a1991b1820..1cd9e56b18 100644
+--- a/package/gd/gd.hash
++++ b/package/gd/gd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	137f13a7eb93ce72e32ccd7cebdab6874f8cf7ddf31d3a455a68e016ecd9e4e6	libgd-2.2.4.tar.xz
++sha256	8c302ccbf467faec732f0741a859eef4ecae22fea2d2ab87467be940842bde51	libgd-2.2.5.tar.xz
++sha256  d02dae2141d49b8a6b09b2b73e68a8f17d7bbeaaf02b3b841ee11fea2d9e328d	COPYING
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 63d16eb3ca..e2a46dca3c 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GD_VERSION = 2.2.4
++GD_VERSION = 2.2.5
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
+ GD_INSTALL_STAGING = YES
+-- 
+2.11.0
