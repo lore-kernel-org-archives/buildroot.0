@@ -1,77 +1,48 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 7 Sep 2017 19:02:03 +0200
-Subject: [Buildroot] [Patch v7 01/10] rustc: new virtual package
-In-Reply-To: <804837fe-f89d-175a-129f-6061d9f11b08@mind.be>
-References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
- <20170723081206.7774-2-eric.le.bihan.dev@free.fr>
- <804837fe-f89d-175a-129f-6061d9f11b08@mind.be>
-Message-ID: <20170907170203.GA6001@ned>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  7 Sep 2017 20:32:44 +0300
+Subject: [Buildroot] [PATCH] strace: bump to version 4.19
+Message-ID: <70023f759a6d000e365e375ddebd58b8e389218f.1504805564.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Add license hash.
 
-On 17-08-11 00:34:43, Arnout Vandecappelle wrote:
->
->
-> On 23-07-17 10:11, Eric Le Bihan wrote:
-> [snip]
-> > +RUST_TARGET_NAME := $(subst buildroot,unknown,$(GNU_TARGET_NAME))
->
->  GNU_TARGET_NAME is not exactly predictable - in particular, the buildroot bit
-> depends on (or may depend on) BR2_TOOLCHAIN_BUILDROOT_VENDOR. So instead, I'd
-> build up RUST_TARGET_NAME explicitly as
-> $(RUST_ARCH)-unknown-$(TARGET_OS)-$(LIBC)$(RUST_ABI)
->
->  As you can see, instead of redefining RUST_TARGET_NAME below, it's also better
-> to first define its components and then build it properly.
->
->  And finally, does rust work with TARGET_OS == uclinux, LIBC == uclibc/musl, ABI
-> == spe/gnueabi/eabihf ?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/strace/strace.hash | 10 +++++++---
+ package/strace/strace.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-This looks like a good solution. Rust supports musl, but not uclibc. I
-prefered to focus on glibc first. Then later, I'll add musl support.
->
->
-> > +
-> > +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-> > +RUST_TARGET_NAME := $(subst arm-,armv7-,$(RUST_TARGET_NAME))
-> > +endif
-> > +
-> > +ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-> > +RUST_TARGET_NAME := $(subst -gnu,-gnuabi64,$(RUST_TARGET_NAME))
-> > +endif
-> > +
-> > +ifeq ($(HOSTARCH),x86_64)
-> > +RUST_HOST_ARCH = x86_64
-> > +else ifeq ($(HOSTARCH),x86)
-> > +RUST_HOST_ARCH = i686
->
->  And in other cases? I guess Config.in somewhere should specify the constraints
-> on the host arch as well.
-
-Rust provides rustc binaries for aarch64, arm, armv7, i686/x86, mips,
-mipsel, mips64, mips64el powerpc, powerpc64, powerpc64le.
-
-I only handled the x86/x86_64, without thinking about users running
-Buildroot on these other architectures. I'll check this.
-
-Anyway, the rust-bin patch modifies package/rustc/Config.in.host to add
-$(BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS) which sets:
-
-  depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-
->  Also, this is better expressed as
->
-> ifeq ($(HOSTARCH),x86)
-> RUST_HOST_ARCH = i686
-> else
-> RUST_HOST_ARCH = $(HOSTARCH)
-> endif
-
-OK.
-
-Thanks for the review!
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index b5c4c79327ff..cd3ba1de1afb 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,3 +1,7 @@
+-# From https://sourceforge.net/projects/strace/files/strace/4.17/
+-md5	3579b3266bb096cebaefbe2cdb1a3a78	strace-4.18.tar.xz
+-sha1	ac2e6f746260dd71f6d22920d9ca8f4bfbe708a8	strace-4.18.tar.xz
++# From https://sourceforge.net/projects/strace/files/strace/4.19/
++md5	846a9a26e74e797f42d77a0348104072	strace-4.19.tar.xz
++sha1	43091b8a07c227a6ffafd6d0f9536917c9447011	strace-4.19.tar.xz
++# Locally calculated after checking signature
++# https://sourceforge.net/projects/strace/files/strace/4.19/strace-4.19.tar.xz.asc
++sha256	7c93ebc6c29280f47c24a0eb86873a99ccb2cac6512c60a60ba4ef99ab807281	strace-4.19.tar.xz
++sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index c4c45233cfbc..dc36021f26a8 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 4.18
++STRACE_VERSION = 4.19
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3-Clause
+-- 
+2.14.1
