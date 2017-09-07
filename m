@@ -1,45 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 7 Sep 2017 10:48:14 +0300
-Subject: [Buildroot] [PATCH] DEVELOPERS: add myself for modem-manager
- related packages
-In-Reply-To: <20170907074633.26716-1-aleksander@aleksander.es>
-References: <20170907074633.26716-1-aleksander@aleksander.es>
-Message-ID: <20170907074814.ot7udjrtazfdibv5@tarshish>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 7 Sep 2017 09:50:56 +0200
+Subject: [Buildroot] [PATCH 01/12] cgilua: add LICENSE_FILES
+In-Reply-To: <20170906223828.58578fa3@windsurf.lan>
+References: <20170904175046.21530-1-francois.perrad@gadz.org>
+ <20170906223828.58578fa3@windsurf.lan>
+Message-ID: <CAB0FRssm2WzLV8dOmA18k+v6ufK3fmf=4aByfx9v7nBEPkESmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Aleksander,
+2017-09-06 22:38 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-On Thu, Sep 07, 2017 at 09:46:33AM +0200, Aleksander Morgado wrote:
-> ---
+> Hello,
+>
+> On Mon,  4 Sep 2017 19:50:35 +0200, Francois Perrad wrote:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  package/cgilua/cgilua.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> I've applied the series, except patch 06/12.
+>
+> Also, it's worth mentioning that for some reason, only patches 01/12
+> and 02/12 appeared in patchwork, not the other ones from the series.
+>
 
-Your sign-off is missing.
+I also noticed that in patchwork.
+AFAIK, I didn't change my usual workflow.
 
->  DEVELOPERS | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ff0b58059..6c15a61f9 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -49,6 +49,11 @@ F:	package/sngrep/
->  N:	Adrian Perez de Castro <aperez@igalia.com>
->  F:	package/webkitgtk/
->  
-> +N:	Aleksander Morgado <aleksander@aleksander.es>
-> +F:	package/libmbim/
-> +F:	package/libqmi/
-> +F:	package/modem-manager/
-> +
->  N:	Alex Suykov <alex.suykov@gmail.com>
->  F:	package/vboot-utils/
+Fran?ois
 
-baruch
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170907/513645dd/attachment.html>
