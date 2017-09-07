@@ -1,61 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  7 Sep 2017 18:58:38 +0200
-Subject: [Buildroot] [PATCH] unrar: security bump to version 5.5.8
-Message-ID: <20170907165838.10399-1-peter@korsgaard.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 7 Sep 2017 19:02:03 +0200
+Subject: [Buildroot] [Patch v7 01/10] rustc: new virtual package
+In-Reply-To: <804837fe-f89d-175a-129f-6061d9f11b08@mind.be>
+References: <20170723081206.7774-1-eric.le.bihan.dev@free.fr>
+ <20170723081206.7774-2-eric.le.bihan.dev@free.fr>
+ <804837fe-f89d-175a-129f-6061d9f11b08@mind.be>
+Message-ID: <20170907170203.GA6001@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hi!
 
-CVE-2017-12938 - UnRAR before 5.5.7 allows remote attackers to bypass a
-directory-traversal protection mechanism via vectors involving a symlink to
-the . directory, a symlink to the .. directory, and a regular file.
+On 17-08-11 00:34:43, Arnout Vandecappelle wrote:
+>
+>
+> On 23-07-17 10:11, Eric Le Bihan wrote:
+> [snip]
+> > +RUST_TARGET_NAME := $(subst buildroot,unknown,$(GNU_TARGET_NAME))
+>
+>  GNU_TARGET_NAME is not exactly predictable - in particular, the buildroot bit
+> depends on (or may depend on) BR2_TOOLCHAIN_BUILDROOT_VENDOR. So instead, I'd
+> build up RUST_TARGET_NAME explicitly as
+> $(RUST_ARCH)-unknown-$(TARGET_OS)-$(LIBC)$(RUST_ABI)
+>
+>  As you can see, instead of redefining RUST_TARGET_NAME below, it's also better
+> to first define its components and then build it properly.
+>
+>  And finally, does rust work with TARGET_OS == uclinux, LIBC == uclibc/musl, ABI
+> == spe/gnueabi/eabihf ?
 
-CVE-2017-12940 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
-in the EncodeFileName::Decode call within the Archive::ReadHeader15
-function.
+This looks like a good solution. Rust supports musl, but not uclibc. I
+prefered to focus on glibc first. Then later, I'll add musl support.
+>
+>
+> > +
+> > +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+> > +RUST_TARGET_NAME := $(subst arm-,armv7-,$(RUST_TARGET_NAME))
+> > +endif
+> > +
+> > +ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+> > +RUST_TARGET_NAME := $(subst -gnu,-gnuabi64,$(RUST_TARGET_NAME))
+> > +endif
+> > +
+> > +ifeq ($(HOSTARCH),x86_64)
+> > +RUST_HOST_ARCH = x86_64
+> > +else ifeq ($(HOSTARCH),x86)
+> > +RUST_HOST_ARCH = i686
+>
+>  And in other cases? I guess Config.in somewhere should specify the constraints
+> on the host arch as well.
 
-CVE-2017-12941 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
-in the Unpack::Unpack20 function.
+Rust provides rustc binaries for aarch64, arm, armv7, i686/x86, mips,
+mipsel, mips64, mips64el powerpc, powerpc64, powerpc64le.
 
-CVE-2017-12942 - libunrar.a in UnRAR before 5.5.7 has a buffer overflow in
-the Unpack::LongLZ function.
+I only handled the x86/x86_64, without thinking about users running
+Buildroot on these other architectures. I'll check this.
 
-For more details, see
-http://www.openwall.com/lists/oss-security/2017/08/14/3
+Anyway, the rust-bin patch modifies package/rustc/Config.in.host to add
+$(BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS) which sets:
 
-While we're at it, add a hash for the license file.
+  depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/unrar/unrar.hash | 3 ++-
- package/unrar/unrar.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+>  Also, this is better expressed as
+>
+> ifeq ($(HOSTARCH),x86)
+> RUST_HOST_ARCH = i686
+> else
+> RUST_HOST_ARCH = $(HOSTARCH)
+> endif
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index 36450e05e3..81688d7b7d 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256	e470c584332422893fb52e049f2cbd99e24dc6c6da971008b4e2ae4284f8796c	unrarsrc-5.4.5.tar.gz
-+sha256	9b66e4353a9944bc140eb2a919ff99482dd548f858f5e296d809e8f7cdb2fcf4	unrarsrc-5.5.8.tar.gz
-+sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index f5a95eacc5..d6c97dff2c 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNRAR_VERSION = 5.4.5
-+UNRAR_VERSION = 5.5.8
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = http://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
--- 
-2.11.0
+OK.
+
+Thanks for the review!
