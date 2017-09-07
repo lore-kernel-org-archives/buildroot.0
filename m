@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Sep 2017 09:04:07 +0200
-Subject: [Buildroot] [PATCH] libmbim: add udev as optional feature
-In-Reply-To: <CAAP7ucKx_1yLVfsu-tN6exoYXh6ZJHpgS26_TJs4mUz41NL2JA@mail.gmail.com>
-References: <20170906212809.18889-1-aleksander@aleksander.es>
- <20170906234741.63deeb81@windsurf.lan>
- <CAAP7ucKx_1yLVfsu-tN6exoYXh6ZJHpgS26_TJs4mUz41NL2JA@mail.gmail.com>
-Message-ID: <20170907090407.3bd35ad5@windsurf.lan>
+Date: Thu, 7 Sep 2017 09:18:23 +0200
+Subject: [Buildroot] [PATCH 1/1] Update lcdproc version
+In-Reply-To: <20170907080912.71525e22@vomer.devel.greenbone.net>
+References: <20170906164855.65d6e474@vomer.devel.greenbone.net>
+ <20170906231408.58854606@windsurf.lan>
+ <20170907080912.71525e22@vomer.devel.greenbone.net>
+Message-ID: <20170907091823.4e1a6c26@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 7 Sep 2017 08:05:32 +0200, Aleksander Morgado wrote:
+On Thu, 7 Sep 2017 08:09:12 +0200, Sven Haardiek wrote:
 
-> Speaking of which, is there any way I can get CC-ed to changes done in
-> either libqmi, libmbim or modem-manager? I wouldn't mind to review
-> those.
+> > Also, since you are interested in lcdproc, would you accept to be
+> > listed in the DEVELOPERS file for this package? This would mean you
+> > would receive patches sent by others for this package, you would
+> > receive notifications when this package causes some build failures,
+> > and generally be a contact if we have questions/issues in terms of
+> > maintaining this package.  
+> 
+> Yes, I am happy if I can help.
 
-Add yourself to the DEVELOPERS file for those packages. This way:
+Great. Can you send a patch adding yourself to the DEVELOPERS file for
+this package ?
 
- * You will be Cc'ed when patches are sent,
-   because ./utils/get-developers on patches touching those packages
-   will return your e-mail address
+> But to be clear, I am not a developer of lcdproc upstream. Just a user.
 
- * You will be notified when http://autobuild.buildroot.org detects
-   build failures for those packages.
+That's fine: most of the packages in Buildroot are not maintained by
+the upstream developers, but simply by people interested by those
+software packages.
 
-If you're interested, just send a patch adding you to the DEVELOPERS
-file.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
