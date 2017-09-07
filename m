@@ -1,49 +1,22 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu,  7 Sep 2017 15:00:06 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/freescale-imx: add support for
-	i.MX6UL
-Message-ID: <1504789206-23147-1-git-send-email-julien.boibessot@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 07 Sep 2017 15:13:57 +0200
+Subject: [Buildroot] [PATCH] openjpeg: bump version to 2.2.0
+In-Reply-To: <20170828135435.31855-1-olivier.schonken@gmail.com> (Olivier
+ Schonken's message of "Mon, 28 Aug 2017 15:54:35 +0200")
+References: <20170828135435.31855-1-olivier.schonken@gmail.com>
+Message-ID: <87efrid52i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+>>>>> "Olivier" == Olivier Schonken <olivier.schonken@gmail.com> writes:
 
-Mostly to compile imx-lib (providing libpxp) on i.MX6UL (which have a PXP 
-hardware unit) and to prevent compilation of imx-lib's modules not supported
-on i.MX6UL.
+ > Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
----
-Changes v1 -> v2:
-  - add more commit comments (as suggested by Baruch)
+Committed to 2017.02.x after extending the commit message to list the
+security issues it fixes, thanks.
 
- package/freescale-imx/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 656b44b..fa3f9a0 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -31,6 +31,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 	bool "imx6q"
- 
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
-+	bool "imx6ul"
-+
- endchoice
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-@@ -42,6 +45,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
- 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
- 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-+	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 	bool
 -- 
-2.1.4
+Bye, Peter Korsgaard
