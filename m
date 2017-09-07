@@ -1,36 +1,49 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Thu,  7 Sep 2017 13:49:46 +0200
-Subject: [Buildroot] [PATCH v2] DEVELOPERS: add myself for modem-manager
-	related packages
-In-Reply-To: <20170907074814.ot7udjrtazfdibv5@tarshish>
-References: <20170907074814.ot7udjrtazfdibv5@tarshish>
-Message-ID: <20170907114946.17687-1-aleksander@aleksander.es>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Thu,  7 Sep 2017 15:00:06 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] package/freescale-imx: add support for
+	i.MX6UL
+Message-ID: <1504789206-23147-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+
+Mostly to compile imx-lib (providing libpxp) on i.MX6UL (which have a PXP 
+hardware unit) and to prevent compilation of imx-lib's modules not supported
+on i.MX6UL.
+
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
- DEVELOPERS | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes v1 -> v2:
+  - add more commit comments (as suggested by Baruch)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ff0b58059..6c15a61f9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -49,6 +49,11 @@ F:	package/sngrep/
- N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/webkitgtk/
+ package/freescale-imx/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-+N:	Aleksander Morgado <aleksander@aleksander.es>
-+F:	package/libmbim/
-+F:	package/libqmi/
-+F:	package/modem-manager/
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index 656b44b..fa3f9a0 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -31,6 +31,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ 	bool "imx6q"
+ 
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
++	bool "imx6ul"
 +
- N:	Alex Suykov <alex.suykov@gmail.com>
- F:	package/vboot-utils/
-
---
-2.13.1
+ endchoice
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+@@ -42,6 +45,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+ 	default "IMX51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+ 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	bool
+-- 
+2.1.4
