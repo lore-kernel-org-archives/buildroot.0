@@ -1,64 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 7 Sep 2017 18:25:20 +0200
-Subject: [Buildroot] [PATCH 4/4] package/tvheadend: add optional support
- for rpi-userland
-In-Reply-To: <20170906204908.30036-4-bernd.kuhls@t-online.de>
-References: <20170906204908.30036-1-bernd.kuhls@t-online.de>
- <20170906204908.30036-4-bernd.kuhls@t-online.de>
-Message-ID: <20170907162520.GD2973@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  7 Sep 2017 18:58:38 +0200
+Subject: [Buildroot] [PATCH] unrar: security bump to version 5.5.8
+Message-ID: <20170907165838.10399-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Fixes the following security issues:
 
-On 2017-09-06 22:49 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+CVE-2017-12938 - UnRAR before 5.5.7 allows remote attackers to bypass a
+directory-traversal protection mechanism via vectors involving a symlink to
+the . directory, a symlink to the .. directory, and a regular file.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+CVE-2017-12940 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
+in the EncodeFileName::Decode call within the Archive::ReadHeader15
+function.
 
-Regards,
-Yann E. MORIN.
+CVE-2017-12941 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
+in the Unpack::Unpack20 function.
 
-> ---
->  package/tvheadend/tvheadend.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index ee3607ae9..cf8bee9ce 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -41,6 +41,12 @@ TVHEADEND_DEPENDENCIES += opus
->  else
->  TVHEADEND_CONF_OPTS += --disable-libopus
->  endif
-> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> +TVHEADEND_CONF_OPTS += --enable-omx
-> +TVHEADEND_DEPENDENCIES += rpi-userland
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-omx
-> +endif
->  ifeq ($(BR2_PACKAGE_X265),y)
->  TVHEADEND_CONF_OPTS += --enable-libx265
->  TVHEADEND_DEPENDENCIES += x265
-> @@ -51,6 +57,7 @@ else
->  TVHEADEND_CONF_OPTS += \
->  	--disable-libav \
->  	--disable-libopus \
-> +	--disable-omx \
->  	--disable-vaapi \
->  	--disable-libx264 \
->  	--disable-libx265
-> -- 
-> 2.11.0
-> 
+CVE-2017-12942 - libunrar.a in UnRAR before 5.5.7 has a buffer overflow in
+the Unpack::LongLZ function.
 
+For more details, see
+http://www.openwall.com/lists/oss-security/2017/08/14/3
+
+While we're at it, add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/unrar/unrar.hash | 3 ++-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 36450e05e3..81688d7b7d 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256	e470c584332422893fb52e049f2cbd99e24dc6c6da971008b4e2ae4284f8796c	unrarsrc-5.4.5.tar.gz
++sha256	9b66e4353a9944bc140eb2a919ff99482dd548f858f5e296d809e8f7cdb2fcf4	unrarsrc-5.5.8.tar.gz
++sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index f5a95eacc5..d6c97dff2c 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNRAR_VERSION = 5.4.5
++UNRAR_VERSION = 5.5.8
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = http://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
