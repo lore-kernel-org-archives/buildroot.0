@@ -1,44 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Sep 2017 21:41:59 +0200
-Subject: [Buildroot] [git commit] package/php: bump version to 7.1.9
-Message-ID: <20170907193655.6225080FD2@busybox.osuosl.org>
+Date: Thu, 07 Sep 2017 21:54:13 +0200
+Subject: [Buildroot] Realtek-patched hostapd
+In-Reply-To: <CADmjQgurGWOAgJW9bH4-zugv4C_Gz-satoLMJo-BxYToDGhj5g@mail.gmail.com>
+ (Alexander Mukhin's message of "Mon, 4 Sep 2017 20:11:07 +0300")
+References: <CADmjQgurGWOAgJW9bH4-zugv4C_Gz-satoLMJo-BxYToDGhj5g@mail.gmail.com>
+Message-ID: <877exab7yy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cee153b838f81a67c36a12e6f892451db5ec72fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Dear colleagues,
+ > let me ask for your advice.
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c724f6d..2c53d84 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 0d42089729be7b2bb0308cbe189c2782f9cb4b07078c8a235495be5874fff729  php-7.1.7.tar.xz
-+sha256 ec9ca348dd51f19a84dc5d33acfff1fba1f977300604bdac08ed46ae2c281e8c  php-7.1.9.tar.xz
- 
- # License file
- sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index b1bd97c..a58b8a5 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.1.7
-+PHP_VERSION = 7.1.9
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ > I'll start with an overview.
+
+ > Linux drivers for Realtek wireless chips do not fully implement the
+ > netlink interface. Because of that, hostapd cannot control them with
+ > its default netlink driver. There's a patch to hostapd, written
+ > originally by Realtek, which adds support for their chips. To build a
+ > patched hostapd in Buildroot, one can add the Realtek patch to the
+ > custom patches, and build the package in the usual way. This works
+ > fine, but the resulting binary will still include support for the
+ > netlink driver and will depend on the netlink library, which is
+ > superfluous in our circumstances.
+
+What a mess :/ I take it that this is for non-mainlined drivers?
+
+ > To get rid of this dependency and build a specifically-targeted
+ > hostapd binary which supports Realtek chips only, I have to "clone"
+ > hostapd package and, by editing its Config.in and .mk files, drop
+ > netlink dependency.
+
+ > The question is, should I contribute this Realtek-only version of the
+ > hostapd package, or dropping the netlink dependency is not a good
+ > reason for creating one more package?
+
+I would not like to have two hostapd packages in Buildroot.
+
+What is the plan going forward? Is this only a temporary issue and these
+drivers are getting mainlined / extended or is it more of a permanent
+issue? Are realtek actively maintaining this hostapd patch or do we risk
+it getting bitrotten whenever we bump hostapd?
+
+-- 
+Bye, Peter Korsgaard
