@@ -1,21 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Sep 2017 21:10:11 +0200
-Subject: [Buildroot] [PATCH 1/4] toolchain: add 4.13.x choice for headers
-In-Reply-To: <1504479514-30816-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sun, 3 Sep 2017 19:58:31 -0300")
-References: <1504479514-30816-1-git-send-email-festevam@gmail.com>
-Message-ID: <87shfyba0c.fsf@dell.be.48ers.dk>
+Date: Thu, 07 Sep 2017 21:11:01 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.12.11
+In-Reply-To: <20170907182350.7117-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 7 Sep 2017 20:23:50 +0200")
+References: <20170907182350.7117-1-bernd.kuhls@t-online.de>
+ <20170907182350.7117-2-bernd.kuhls@t-online.de>
+Message-ID: <87o9qmb9yy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed all 4, thanks.
+I've instead applied Fabio's series to move to 4.13, so I've marked this
+as superseeded.
 
 -- 
 Bye, Peter Korsgaard
