@@ -1,75 +1,142 @@
-From: Bradford Barr <bradford@density.io>
-Date: Thu,  7 Sep 2017 11:51:08 -0400
-Subject: [Buildroot] [PATCH 1/1] msgpack: bump to version 2.1.5
-Message-ID: <20170907155108.3449-1-bradford@density.io>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 7 Sep 2017 18:15:39 +0200
+Subject: [Buildroot] [PATCH 2/4] package/tvheadend: bump version,
+ add optional dependencies to opus & x265
+In-Reply-To: <20170906204908.30036-2-bernd.kuhls@t-online.de>
+References: <20170906204908.30036-1-bernd.kuhls@t-online.de>
+ <20170906204908.30036-2-bernd.kuhls@t-online.de>
+Message-ID: <20170907161539.GA2973@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: bradford barr <bradford@density.io>
+Bernd, All,
 
-Signed-off-by: bradford barr <bradford@density.io>
----
- package/msgpack/Config.in    | 12 ++++++++++++
- package/msgpack/msgpack.hash |  2 +-
- package/msgpack/msgpack.mk   | 16 ++++++++++++----
- 3 files changed, 25 insertions(+), 5 deletions(-)
+On 2017-09-06 22:49 +0200, Bernd Kuhls spake thusly:
+> This bump
+> https://github.com/tvheadend/tvheadend/compare/54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732...303f418e1ac2bb3078f7a974b69f04ab6a56c636
+> updated the transcoding support already present:
+> https://github.com/tvheadend/tvheadend/commit/014bb9505e1d7eb6e37e10931dd89ab3b1a0dc01
+> 
+> To avoid these build errors
+> 
+> src/transcoding/codec/codecs/libs/libx26x.c:105:18: fatal error: x264.h: No such file or directory
+>  #include <x264.h>
+> 
+> src/transcoding/codec/codecs/libs/libx26x.c:213:18: fatal error: x265.h: No such file or directory
+>  #include <x265.h>
+> 
+> src/transcoding/codec/codecs/libs/libopus.c:23:31: fatal error: opus/opus_defines.h: No such file or directory
+>  #include <opus/opus_defines.h>
+> 
+> we need to add dependency handling already with this patch and keep the
+> hard dependency x264 as minimum codec for transcoding but we now need
+> to enable BR2_PACKAGE_FFMPEG_GPL to enable x264-support also in ffmpeg.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/tvheadend/Config.in      |  1 +
+>  package/tvheadend/tvheadend.hash |  2 +-
+>  package/tvheadend/tvheadend.mk   | 24 ++++++++++++++++++++----
+>  3 files changed, 22 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+> index 191593eab..56a3b385d 100644
+> --- a/package/tvheadend/Config.in
+> +++ b/package/tvheadend/Config.in
+> @@ -31,6 +31,7 @@ config BR2_PACKAGE_TVHEADEND_TRANSCODING
+>  	bool "transcoding support"
+>  	select BR2_PACKAGE_FFMPEG
+>  	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
+> +	select BR2_PACKAGE_FFMPEG_GPL # needed for x264 support
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index b8e8213..e0626b2 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -13,3 +13,15 @@ config BR2_PACKAGE_MSGPACK
- comment "msgpack needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+
-+if BR2_PACKAGE_MSGPACK
-+
-+config BR2_PACKAGE_MSGPACK_HEADER_ONLY
-+	bool "header only"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  MessagePack can be installed as a header only library.
-+
-+	  https://github.com/msgpack/msgpack-c#c-header-only-library
-+
-+endif
-diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-index 8cd8cb6..173717d 100644
---- a/package/msgpack/msgpack.hash
-+++ b/package/msgpack/msgpack.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  97a371ef950c89f48e8dba6abeccab07f1887e9ba6dab921de0f985c7d5075fe  msgpack-0.5.4.tar.gz
-+sha256  9c87f80fc651b900772deaef0ab154b63160c74d292529b5be6d06d6485d4640	msgpack-2.1.5.tar.gz
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 9e23948..0d6217d 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
-@@ -4,9 +4,17 @@
- #
- ################################################################################
- 
--MSGPACK_VERSION = 0.5.4
--MSGPACK_SITE = http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
--MSGPACK_LICENSE = Apache-2.0
-+MSGPACK_VERSION = 2.1.5
-+MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
-+MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING
- 
--$(eval $(autotools-package))
-+MSGPACK_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_MSGPACK_HEADER_ONLY),y)
-+MSGPACK_INSTALL_TARGET = NO
-+else
-+MSGPACK_INSTALL_TARGET = YES
-+endif
-+
-+$(eval $(cmake-package))
+NAK. If we have an option to enable/disable GPL-licensed codecs, it is
+to leave the option to the user to enable/disable them.
+
+We do not want to automatically force that option. Such an option must
+only be available as a user-selected option.
+
+However, we've started to remove similar options, like the recently
+dropped Qt license.
+
+Instead, I would try to simply remove that option altogether. Instead,
+add the GPL license to the license list in the .mk, when such-licensed
+codecs are enabled.
+
+After all, ffmpeg is not the only package whose licening terms change
+depending on the set of options enabled for that package.
+
+Regards,
+Yann E. MORIN.
+
+>  	select BR2_PACKAGE_FFMPEG_SWSCALE
+>  	select BR2_PACKAGE_LIBVPX if !BR2_bfin # libvpx
+>  	select BR2_PACKAGE_X264
+> diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+> index 3154b3276..a33b0a5e5 100644
+> --- a/package/tvheadend/tvheadend.hash
+> +++ b/package/tvheadend/tvheadend.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 1994e379c798b118243e70f7fa38064a9b288d6e38b9ced0e8ad465f5d2e8fd9  tvheadend-54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732.tar.gz
+> +sha256 00f67fbf9d8cfea7da90f469b36a8205fb9a38727c4cc5022f4ee5fd322459d3  tvheadend-303f418e1ac2bb3078f7a974b69f04ab6a56c636.tar.gz
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index b1c1fcaf7..4722cb006 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TVHEADEND_VERSION = 54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732
+> +TVHEADEND_VERSION = 303f418e1ac2bb3078f7a974b69f04ab6a56c636
+>  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+>  TVHEADEND_LICENSE = GPL-3.0+
+>  TVHEADEND_LICENSE_FILES = LICENSE.md
+> @@ -27,10 +27,26 @@ TVHEADEND_CONF_OPTS += --disable-dbus-1
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_TVHEADEND_TRANSCODING),y)
+> -TVHEADEND_DEPENDENCIES += ffmpeg
+> -TVHEADEND_CONF_OPTS += --enable-libav
+> +TVHEADEND_CONF_OPTS += --enable-libav --enable-libx264
+> +TVHEADEND_DEPENDENCIES += ffmpeg x264
+> +ifeq ($(BR2_PACKAGE_OPUS),y)
+> +TVHEADEND_CONF_OPTS += --enable-libopus
+> +TVHEADEND_DEPENDENCIES += opus
+>  else
+> -TVHEADEND_CONF_OPTS += --disable-libav
+> +TVHEADEND_CONF_OPTS += --disable-libopus
+> +endif
+> +ifeq ($(BR2_PACKAGE_X265),y)
+> +TVHEADEND_CONF_OPTS += --enable-libx265
+> +TVHEADEND_DEPENDENCIES += x265
+> +else
+> +TVHEADEND_CONF_OPTS += --disable-libx265
+> +endif
+> +else
+> +TVHEADEND_CONF_OPTS += \
+> +	--disable-libav \
+> +	--disable-libopus \
+> +	--disable-libx264 \
+> +	--disable-libx265
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
