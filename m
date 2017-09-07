@@ -1,126 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  7 Sep 2017 17:17:57 +0200
-Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix build against openjpeg
-	2.2
-Message-ID: <20170907151757.28606-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  7 Sep 2017 17:26:55 +0200
+Subject: [Buildroot] [PATCH] strongswan: add upstream security patch
+Message-ID: <20170907152655.23933-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch to fix build against openjpeg 2.2.
+Fixes CVE-2017-11185: The gmp plugin in strongSwan before 5.6.0 allows
+remote attackers to cause a denial of service (NULL pointer dereference and
+daemon crash) via a crafted RSA signature.
 
-Fixes [1]:
+For more details, see
+https://www.strongswan.org/blog/2017/08/14/strongswan-vulnerability-%28cve-2017-11185%29.html
 
-  gstopenjpeg.h:42:37: fatal error: openjpeg-2.1/openjpeg.h: No such file or directory
+While we're at it, add hashes for the license files.
 
-[1] http://autobuild.buildroot.net/results/90f1f7838f08e3a557be27470406d4d84dbcc828
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-openjpeg-Fix-build-against-openjpeg-2.2.patch | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
- create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
+ package/strongswan/strongswan.hash | 3 +++
+ package/strongswan/strongswan.mk   | 3 ++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
-new file mode 100644
-index 0000000000..d9268bc9b6
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
-@@ -0,0 +1,93 @@
-+From daaf649bda7231fd0d760802232a36ba62a4ea2d Mon Sep 17 00:00:00 2001
-+From: Clemens Lang <cal@macports.org>
-+Date: Sun, 13 Aug 2017 21:17:18 +0200
-+Subject: [PATCH] openjpeg: Fix build against openjpeg 2.2
-+
-+OpenJPEG 2.2 has some API changes and thus ships its headers in a new
-+include path. Add a configure check (to both meson and autoconf) to
-+detect the newer version of OpenJPEG and add conditional includes.
-+
-+Fix the autoconf test for OpenJPEG 2.1, which checked for HAVE_OPENJPEG,
-+which was always set even for 2.0.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=786250
-+
-+Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/patch/?id=15f24fef53a955c7c76fc966302cb0453732e657
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac               |  7 ++++++-
-+ ext/openjpeg/gstopenjpeg.h |  4 +++-
-+ ext/openjpeg/meson.build   | 21 +++++++++++++--------
-+ 3 files changed, 22 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 30e26b8..c4f08c7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2813,8 +2813,13 @@ AG_GST_CHECK_FEATURE(OPENJPEG, [openjpeg library], openjpeg, [
-+   if test x"$HAVE_OPENJPEG" = x"yes"; then
-+     dnl minor API changes in v2.1
-+     AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_1, libopenjp2 >= 2.1)
-+-    if test x"$HAVE_OPENJPEG" = x"yes"; then
-++    if test x"$HAVE_OPENJPEG_2_1" = x"yes"; then
-+       AC_DEFINE([HAVE_OPENJPEG_2_1], 1, [Define if OpenJPEG 2.1 is used])
-++        dnl include paths changed for v2.2
-++        AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_2, libopenjp2 >= 2.2)
-++        if test x"$HAVE_OPENJPEG_2_2" = x"yes"; then
-++          AC_DEFINE([HAVE_OPENJPEG_2_2], 1, [Define if OpenJPEG 2.2 is used])
-++        fi
-+     fi
-+   else
-+     # Fallback to v1.5
-+diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
-+index 03ce52e..52410a4 100644
-+--- a/ext/openjpeg/gstopenjpeg.h
-++++ b/ext/openjpeg/gstopenjpeg.h
-+@@ -38,7 +38,9 @@
-+ #define OPJ_CPRL CPRL
-+ #else
-+ #include <stdio.h>
-+-# ifdef HAVE_OPENJPEG_2_1
-++# if defined(HAVE_OPENJPEG_2_2)
-++#  include <openjpeg-2.2/openjpeg.h>
-++# elif defined(HAVE_OPENJPEG_2_1)
-+ #  include <openjpeg-2.1/openjpeg.h>
-+ # else
-+ #  include <openjpeg-2.0/openjpeg.h>
-+diff --git a/ext/openjpeg/meson.build b/ext/openjpeg/meson.build
-+index d60974c..e9c416c 100644
-+--- a/ext/openjpeg/meson.build
-++++ b/ext/openjpeg/meson.build
-+@@ -6,16 +6,21 @@ openjpeg_sources = [
-+ 
-+ openjpeg_cargs = []
-+ 
-+-# Check for 2.1, then 2.0
-+-openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
-++# Check for 2.2, 2.1, then 2.0
-++openjpeg_dep = dependency('libopenjp2', version : '>=2.2', required : false)
-+ if openjpeg_dep.found()
-+-  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
-++  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_2']
-+ else
-+-  openjpeg_dep = dependency('libopenjp2', required : false)
-+-  # Fallback to 1.5
-+-  if not openjpeg_dep.found()
-+-    openjpeg_dep = dependency('libopenjpeg1', required : false)
-+-    openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
-++  openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
-++  if openjpeg_dep.found()
-++    openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
-++  else
-++    openjpeg_dep = dependency('libopenjp2', required : false)
-++    # Fallback to 1.5
-++    if not openjpeg_dep.found()
-++      openjpeg_dep = dependency('libopenjpeg1', required : false)
-++      openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
-++    endif
-+   endif
-+ endif
-+ 
-+-- 
-+2.12.3
-+
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index cbc4e3857a..820c712843 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -5,3 +5,6 @@ sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongsw
+ # Locally calculated
+ sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
+ sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
++sha256	c80e02c9a5eeaf10f0a8bdde3be6375dd2833e515af03dad3a700e93c4fd041a  strongswan-4.4.0-5.5.3_gmp_mpz_export.patch
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 1070eeaf8b..30bbc6c852 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -9,7 +9,8 @@ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_PATCH = \
+ 	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
+-	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
++	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch \
++	$(STRONGSWAN_SITE)/patches/23_gmp_mpz_export_patch/strongswan-4.4.0-5.5.3_gmp_mpz_export.patch
+ STRONGSWAN_LICENSE = GPL-2.0+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
 -- 
-2.12.3
+2.11.0
