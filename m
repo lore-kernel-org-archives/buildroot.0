@@ -1,48 +1,148 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 8 Sep 2017 15:31:18 +0200
-Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: fix build against
- openjpeg 2.2
-In-Reply-To: <20170908085622.57eddaa9@windsurf.lan>
-References: <20170907211628.18644-1-ps.report@gmx.net>
- <20170908085622.57eddaa9@windsurf.lan>
-Message-ID: <20170908153118.19f46256@gmx.net>
+Date: Fri,  8 Sep 2017 15:31:56 +0200
+Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against openjpeg
+	2.2
+Message-ID: <20170908133156.10357-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Add upstream patch to fix build against openjpeg 2.2.
 
-On Fri, 8 Sep 2017 08:56:22 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Fixes [1]:
 
-> Hello,
-> 
-> On Thu,  7 Sep 2017 23:16:28 +0200, Peter Seiderer wrote:
-> > diff --git a/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
-> > new file mode 100644
-> > index 0000000000..ccac1f1073
-> > --- /dev/null
-> > +++ b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
-> > @@ -0,0 +1,46 @@
-> > +From 750da2a0dbaaefa4e702bf7ede16917b57b7efa8 Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Thu, 7 Sep 2017 23:01:44 +0200
-> > +Subject: [PATCH] Bump gettext version to 0.19
-> > +
-> > +Fixes autoreconf failure:
-> > +
-> > +  *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.17 but the autoconf macros are from gettext version 0.19
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> I think the normal fix for this is to add <pkg>_GETTEXTIZE = YES in the
-> package.
+  gstopenjpeg.h:42:37: fatal error: openjpeg-2.1/openjpeg.h: No such file or directory
 
-Thanks for the tip (did not know about it yet)...new patch version follows...
+[1] http://autobuild.buildroot.net/results/90f1f7838f08e3a557be27470406d4d84dbcc828
 
-Regards,
-Peter
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v2 -> v3:
+  - add _GETTEXTIZE (instead of Makefile.in.in patch, suggested by Thomas Petazzoni)
 
-> 
-> Thomas
+Changes v1 ->v2:
+ - add _AUTORECONF (suggested by Peter Korsgaard)
+---
+ ...1-openjpeg-Fix-build-against-openjpeg-2.2.patch | 93 ++++++++++++++++++++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |  4 +
+ 2 files changed, 97 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
+new file mode 100644
+index 0000000000..d9268bc9b6
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
+@@ -0,0 +1,93 @@
++From daaf649bda7231fd0d760802232a36ba62a4ea2d Mon Sep 17 00:00:00 2001
++From: Clemens Lang <cal@macports.org>
++Date: Sun, 13 Aug 2017 21:17:18 +0200
++Subject: [PATCH] openjpeg: Fix build against openjpeg 2.2
++
++OpenJPEG 2.2 has some API changes and thus ships its headers in a new
++include path. Add a configure check (to both meson and autoconf) to
++detect the newer version of OpenJPEG and add conditional includes.
++
++Fix the autoconf test for OpenJPEG 2.1, which checked for HAVE_OPENJPEG,
++which was always set even for 2.0.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=786250
++
++Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/patch/?id=15f24fef53a955c7c76fc966302cb0453732e657
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac               |  7 ++++++-
++ ext/openjpeg/gstopenjpeg.h |  4 +++-
++ ext/openjpeg/meson.build   | 21 +++++++++++++--------
++ 3 files changed, 22 insertions(+), 10 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 30e26b8..c4f08c7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2813,8 +2813,13 @@ AG_GST_CHECK_FEATURE(OPENJPEG, [openjpeg library], openjpeg, [
++   if test x"$HAVE_OPENJPEG" = x"yes"; then
++     dnl minor API changes in v2.1
++     AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_1, libopenjp2 >= 2.1)
++-    if test x"$HAVE_OPENJPEG" = x"yes"; then
+++    if test x"$HAVE_OPENJPEG_2_1" = x"yes"; then
++       AC_DEFINE([HAVE_OPENJPEG_2_1], 1, [Define if OpenJPEG 2.1 is used])
+++        dnl include paths changed for v2.2
+++        AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_2, libopenjp2 >= 2.2)
+++        if test x"$HAVE_OPENJPEG_2_2" = x"yes"; then
+++          AC_DEFINE([HAVE_OPENJPEG_2_2], 1, [Define if OpenJPEG 2.2 is used])
+++        fi
++     fi
++   else
++     # Fallback to v1.5
++diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
++index 03ce52e..52410a4 100644
++--- a/ext/openjpeg/gstopenjpeg.h
+++++ b/ext/openjpeg/gstopenjpeg.h
++@@ -38,7 +38,9 @@
++ #define OPJ_CPRL CPRL
++ #else
++ #include <stdio.h>
++-# ifdef HAVE_OPENJPEG_2_1
+++# if defined(HAVE_OPENJPEG_2_2)
+++#  include <openjpeg-2.2/openjpeg.h>
+++# elif defined(HAVE_OPENJPEG_2_1)
++ #  include <openjpeg-2.1/openjpeg.h>
++ # else
++ #  include <openjpeg-2.0/openjpeg.h>
++diff --git a/ext/openjpeg/meson.build b/ext/openjpeg/meson.build
++index d60974c..e9c416c 100644
++--- a/ext/openjpeg/meson.build
+++++ b/ext/openjpeg/meson.build
++@@ -6,16 +6,21 @@ openjpeg_sources = [
++ 
++ openjpeg_cargs = []
++ 
++-# Check for 2.1, then 2.0
++-openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
+++# Check for 2.2, 2.1, then 2.0
+++openjpeg_dep = dependency('libopenjp2', version : '>=2.2', required : false)
++ if openjpeg_dep.found()
++-  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
+++  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_2']
++ else
++-  openjpeg_dep = dependency('libopenjp2', required : false)
++-  # Fallback to 1.5
++-  if not openjpeg_dep.found()
++-    openjpeg_dep = dependency('libopenjpeg1', required : false)
++-    openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
+++  openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
+++  if openjpeg_dep.found()
+++    openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
+++  else
+++    openjpeg_dep = dependency('libopenjp2', required : false)
+++    # Fallback to 1.5
+++    if not openjpeg_dep.found()
+++      openjpeg_dep = dependency('libopenjpeg1', required : false)
+++      openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
+++    endif
++   endif
++ endif
++ 
++-- 
++2.12.3
++
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 7a32689b85..8b707d5eb9 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -13,6 +13,10 @@ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
+ # enabled.
+ GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+ 
++# patch 0001-openjpeg-Fix-build-against-openjpeg-2.2.patch touches configure.ac
++GST1_PLUGINS_BAD_AUTORECONF = YES
++GST1_PLUGINS_BAD_GETTEXTIZE = YES
++
+ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-valgrind \
+-- 
+2.12.3
