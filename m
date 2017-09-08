@@ -1,49 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Sep 2017 11:16:08 +0200
-Subject: [Buildroot] [git commit] package/openpowerlink: bump to v2.6.1
-Message-ID: <20170908091617.6D7027F9D1@busybox.osuosl.org>
+Date: Fri, 8 Sep 2017 11:15:08 +0200
+Subject: [Buildroot] [git commit] unrar: security bump to version 5.5.8
+Message-ID: <20170908091617.5F2057F9D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66390e07c0e032956dba452c37645f78608aef43
+commit: https://git.buildroot.net/buildroot/commit/?id=322599744ca76d6b69960dc37c3cf3baea5dab2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://openpowerlink.sourceforge.net/web/openPOWERLINK/Download/openPOWERLINK%202.6.html
+Fixes the following security issues:
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+CVE-2017-12938 - UnRAR before 5.5.7 allows remote attackers to bypass a
+directory-traversal protection mechanism via vectors involving a symlink to
+the . directory, a symlink to the .. directory, and a regular file.
+
+CVE-2017-12940 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
+in the EncodeFileName::Decode call within the Archive::ReadHeader15
+function.
+
+CVE-2017-12941 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
+in the Unpack::Unpack20 function.
+
+CVE-2017-12942 - libunrar.a in UnRAR before 5.5.7 has a buffer overflow in
+the Unpack::LongLZ function.
+
+For more details, see
+http://www.openwall.com/lists/oss-security/2017/08/14/3
+
+While we're at it, add a hash for the license file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openpowerlink/openpowerlink.hash | 8 ++++----
- package/openpowerlink/openpowerlink.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/unrar/unrar.hash | 3 ++-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
-index 2a3c1f0..5c95431 100644
---- a/package/openpowerlink/openpowerlink.hash
-+++ b/package/openpowerlink/openpowerlink.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.0/
--md5	afe5c1ed2d329d5b3784eb6999ab9d17	openPOWERLINK_V2.6.0.tar.gz
--sha1	c8b317f118f69e416bc812e93a97e073d62a29d9	openPOWERLINK_V2.6.0.tar.gz
-+# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.1/
-+md5	9f53ccc72356cf421ecd089f91421393	openPOWERLINK_V2.6.1.tar.gz
-+sha1	dfb97845937e8d1de3e554c17b951a115352faa6	openPOWERLINK_V2.6.1.tar.gz
- # sha256 locally computed
--sha256	a53dd279a5341fc350e4be94949d4642579c4c4eb27706f1b36d41136b400ff8	openPOWERLINK_V2.6.0.tar.gz
-+sha256	89a8b321938f965aa03610f40c38d2f17242aab1b0b5f24b93c4542f2f3fbd5c	openPOWERLINK_V2.6.1.tar.gz
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 660dd60..c9ca4cc 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 36450e0..81688d7 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256	e470c584332422893fb52e049f2cbd99e24dc6c6da971008b4e2ae4284f8796c	unrarsrc-5.4.5.tar.gz
++sha256	9b66e4353a9944bc140eb2a919ff99482dd548f858f5e296d809e8f7cdb2fcf4	unrarsrc-5.5.8.tar.gz
++sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index f5a95ea..d6c97df 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENPOWERLINK_VERSION = V2.6.0
-+OPENPOWERLINK_VERSION = V2.6.1
- OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
- OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
- OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
+-UNRAR_VERSION = 5.4.5
++UNRAR_VERSION = 5.5.8
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = http://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
