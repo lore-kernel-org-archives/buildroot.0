@@ -1,53 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Sep 2017 11:14:42 +0200
-Subject: [Buildroot] [git commit] strongswan: add upstream security patch
-Message-ID: <20170908091617.4DBA07F9D1@busybox.osuosl.org>
+Date: Fri, 8 Sep 2017 11:16:33 +0200
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.1.1
+Message-ID: <20170908091617.80F6D7F9D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a59db1bb079dfd7cb40ffff7ac1cd550ff6662e
+commit: https://git.buildroot.net/buildroot/commit/?id=0e19178c53f6f9fd886d02f4be19c73743ad30a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-11185: The gmp plugin in strongSwan before 5.6.0 allows
-remote attackers to cause a denial of service (NULL pointer dereference and
-daemon crash) via a crafted RSA signature.
-
-For more details, see
-https://www.strongswan.org/blog/2017/08/14/strongswan-vulnerability-%28cve-2017-11185%29.html
-
-While we're at it, add hashes for the license files.
-
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 3 +++
- package/strongswan/strongswan.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index cbc4e38..820c712 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -5,3 +5,6 @@ sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongsw
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 45dbbe8..899348a 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
- sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
-+sha256	c80e02c9a5eeaf10f0a8bdde3be6375dd2833e515af03dad3a700e93c4fd041a  strongswan-4.4.0-5.5.3_gmp_mpz_export.patch
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 1070eea..30bbc6c 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -9,7 +9,8 @@ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_PATCH = \
- 	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
--	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
-+	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch \
-+	$(STRONGSWAN_SITE)/patches/23_gmp_mpz_export_patch/strongswan-4.4.0-5.5.3_gmp_mpz_export.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+-sha256  b348b9b3cf3994d9222430bc514c94a22f2ed173956fdb097f3354cdba8fd198  shairport-sync-3.0.2.tar.gz
++sha256  731e23f12ca1d645989843a15259ea0bf4d18adea94cf55f6fcc63d7b55fb53b  shairport-sync-3.1.1.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 208a9b3..898db9d 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.0.2
++SHAIRPORT_SYNC_VERSION = 3.1.1
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
