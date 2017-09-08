@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Sep 2017 08:56:22 +0200
-Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: fix build against
- openjpeg 2.2
-In-Reply-To: <20170907211628.18644-1-ps.report@gmx.net>
-References: <20170907211628.18644-1-ps.report@gmx.net>
-Message-ID: <20170908085622.57eddaa9@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 08 Sep 2017 07:07:06 +0000
+Subject: [Buildroot] [Bug 9926] systemd-resolved.service: Failed at step
+ NAMESPACE (systemd 233)
+In-Reply-To: <bug-9926-163@https.bugs.busybox.net/>
+References: <bug-9926-163@https.bugs.busybox.net/>
+Message-ID: <bug-9926-163-PAsGaKsplT@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9926
 
-On Thu,  7 Sep 2017 23:16:28 +0200, Peter Seiderer wrote:
-> diff --git a/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
-> new file mode 100644
-> index 0000000000..ccac1f1073
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
-> @@ -0,0 +1,46 @@
-> +From 750da2a0dbaaefa4e702bf7ede16917b57b7efa8 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Thu, 7 Sep 2017 23:01:44 +0200
-> +Subject: [PATCH] Bump gettext version to 0.19
-> +
-> +Fixes autoreconf failure:
-> +
-> +  *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.17 but the autoconf macros are from gettext version 0.19
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Michael Heinemann <posted@heine.so> changed:
 
-I think the normal fix for this is to add <pkg>_GETTEXTIZE = YES in the
-package.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|WORKSFORME                  |FIXED
 
-Thomas
+--- Comment #6 from Michael Heinemann <posted@heine.so> ---
+Hi,
+
+thanks for the update!
+I tried with Release 2017.08 and the issue seems to be fixed.
+
+Best Regards,
+Michael
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
