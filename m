@@ -1,66 +1,82 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Fri, 8 Sep 2017 14:19:03 +0300
-Subject: [Buildroot] Realtek-patched hostapd
-In-Reply-To: <877exab7yy.fsf@dell.be.48ers.dk>
-References: <CADmjQgurGWOAgJW9bH4-zugv4C_Gz-satoLMJo-BxYToDGhj5g@mail.gmail.com>
- <877exab7yy.fsf@dell.be.48ers.dk>
-Message-ID: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  8 Sep 2017 14:31:14 +0300
+Subject: [Buildroot] [PATCH] lcdproc: fix build with musl libc
+Message-ID: <fd90703c9a740c0f5653e4d6e43386a5194516f6.1504870274.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Add a patch adding missing linux ioctl header.
 
-On 7 Sep 2017, at 22:54, Peter Korsgaard <peter@korsgaard.com> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/58a/58a9b98d08060c6ed9e8855ba9f59d03aa2f3e2c/
+http://autobuild.buildroot.net/results/5b2/5b2c1bc872cebc7aadf93995b71178bba29e0b25/
+http://autobuild.buildroot.net/results/125/12594e613f8fc106e477411f76093654a084c01c/
 
->>>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
-> 
->> Dear colleagues,
->> let me ask for your advice.
-> 
->> I'll start with an overview.
-> 
->> Linux drivers for Realtek wireless chips do not fully implement the
->> netlink interface. Because of that, hostapd cannot control them with
->> its default netlink driver. There's a patch to hostapd, written
->> originally by Realtek, which adds support for their chips. To build a
->> patched hostapd in Buildroot, one can add the Realtek patch to the
->> custom patches, and build the package in the usual way. This works
->> fine, but the resulting binary will still include support for the
->> netlink driver and will depend on the netlink library, which is
->> superfluous in our circumstances.
-> 
-> What a mess :/ I take it that this is for non-mainlined drivers?
+Cc: Sven Haardiek <sven.haardiek@greenbone.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../lcdproc/0001-Add-missing-ioctl-header.patch    | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/lcdproc/0001-Add-missing-ioctl-header.patch
 
-Not exactly, the drivers are in the staging tree of the mainline kernel.
-
-
->> To get rid of this dependency and build a specifically-targeted
->> hostapd binary which supports Realtek chips only, I have to "clone"
->> hostapd package and, by editing its Config.in and .mk files, drop
->> netlink dependency.
-> 
->> The question is, should I contribute this Realtek-only version of the
->> hostapd package, or dropping the netlink dependency is not a good
->> reason for creating one more package?
-> 
-> I would not like to have two hostapd packages in Buildroot.
-> 
-> What is the plan going forward? Is this only a temporary issue and these
-> drivers are getting mainlined / extended or is it more of a permanent
-> issue? Are realtek actively maintaining this hostapd patch or do we risk
-> it getting bitrotten whenever we bump hostapd?
-
-Realtek doesn't maintain neither the kernel drivers, nor the patch for hostapd. They occasionally release stand-alone drivers, but always stubbornly ignore the current Linux practice of using the netlink interface, relying instead on proprietary mechanisms. Also they once issued a patched hostapd, but didn't update it since. 
-
-Keeping hostapd patch in sync with the current hostapd is the work done by an enthusiast (see https://github.com/pritambaral/hostapd-rtl871xdrv). As for now, he updates his patch in due time. This patch will be required as long as the kernel drivers do not support the netlink interface. And, in my opinion, it is unlikely that someone will add netlink support to the drivers in the nearest future. 
-
-
-> -- 
-> Bye, Peter Korsgaard
-
+diff --git a/package/lcdproc/0001-Add-missing-ioctl-header.patch b/package/lcdproc/0001-Add-missing-ioctl-header.patch
+new file mode 100644
+index 000000000000..8c2123594f7e
+--- /dev/null
++++ b/package/lcdproc/0001-Add-missing-ioctl-header.patch
+@@ -0,0 +1,50 @@
++From 6267665454501512ac054202b38e4e6a72fa284b Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 8 Sep 2017 14:19:11 +0300
++Subject: [PATCH] Add missing ioctl header
++
++The spidev.h header uses macros from linux/ioctl.h. Add this header
++explicitly since some libc, like musl, do not include it implicitly.
++This fixes the following build failure:
++
++In file included from .../sysroot/usr/include/sys/ioctl.h:7:0,
++                 from hd44780-spi.c:31:
++hd44780-spi.c: In function ?spi_transfer?:
++hd44780-spi.c:89:24: error: ?_IOC_SIZEBITS? undeclared (first use in this function)
++  status = ioctl(p->fd, SPI_IOC_MESSAGE(1), &xfer);
++                        ^
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/lcdproc/lcdproc/pull/90
++
++ server/drivers/hd44780-pifacecad.c | 1 +
++ server/drivers/hd44780-spi.c       | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/server/drivers/hd44780-pifacecad.c b/server/drivers/hd44780-pifacecad.c
++index a73b9f9b1f82..55139124d852 100644
++--- a/server/drivers/hd44780-pifacecad.c
+++++ b/server/drivers/hd44780-pifacecad.c
++@@ -54,6 +54,7 @@
++ #include <unistd.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ #include <stdint.h>
++ #include <linux/spi/spidev.h>
++ 
++diff --git a/server/drivers/hd44780-spi.c b/server/drivers/hd44780-spi.c
++index 791156f87a26..74c85fb014aa 100644
++--- a/server/drivers/hd44780-spi.c
+++++ b/server/drivers/hd44780-spi.c
++@@ -29,6 +29,7 @@
++ #include <unistd.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ #include <stdint.h>
++ #include <linux/spi/spidev.h>
++ 
++-- 
++2.14.1
++
 -- 
-Best regards,
-Alexander. 
+2.14.1
