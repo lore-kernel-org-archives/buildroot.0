@@ -1,77 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Sep 2017 11:18:19 +0200
-Subject: [Buildroot] [git commit] qt: add patch fixing build failure on
-	ARMv8 in 32-bit mode
-Message-ID: <20170908091617.9D00A7F9D1@busybox.osuosl.org>
+Date: Fri, 8 Sep 2017 11:18:32 +0200
+Subject: [Buildroot] [git commit] python-paho-mqtt: bump to version 1.3.0
+Message-ID: <20170908091617.B027B80FC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95389fe98c882f70cbbd25dc1c7ea1480991acef
+commit: https://git.buildroot.net/buildroot/commit/?id=30f667b7047ec46911a48d3745d4ae9c7b361909
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Qt package currently fails to build on ARMv8 cores in 32-bit mode
-(for example, if you select ARM and then Cortex-A53), because the ARM
-atomic operation implementation in Qt checks if we're on ARMv7, then
-on ARMv6, and otherwise falls back to an ARMv5 implementation. The
-latter uses the swp instruction, which doesn't exist on ARMv8, causing
-a build failure.
+Change setup type to setuptools.
 
-To solve this, we simply add a patch that uses the ARMv7 atomic
-operations for ARMv8-A.
+Add a patch removing the pytest-runner dependency. The patch was sent
+upstream.
 
-There is no autobuilder reference because we don't have any ARMv8
-32-bit configuration in the autobuilders.
-
-Cc: <ivychend@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ ...e-pytest-runner-a-conditional-requirement.patch | 30 ++++++++++++++++++++++
+ package/python-paho-mqtt/python-paho-mqtt.hash     |  4 +--
+ package/python-paho-mqtt/python-paho-mqtt.mk       |  6 ++---
+ 3 files changed, 35 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt/0013-src-corelib-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch b/package/qt/0013-src-corelib-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch
+diff --git a/package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch b/package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch
 new file mode 100644
-index 0000000..645041a
+index 0000000..b2fbe24
 --- /dev/null
-+++ b/package/qt/0013-src-corelib-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch
-@@ -0,0 +1,37 @@
-+From 2281fa50f6e13278d3fd4f028377b8249b7b3cdb Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 8 Sep 2017 09:06:54 +0200
-+Subject: [PATCH] src/corelib/arch/qatomic_arm.h: fix build on ARMv8 32-bit
++++ b/package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch
+@@ -0,0 +1,30 @@
++From 38373d36094b5a708c595f8c560d14e8ab61aac6 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Fri, 8 Sep 2017 08:58:31 +0200
++Subject: [PATCH] Make pytest-runner a conditional requirement
 +
-+The Qt build fails on ARMv8 32-bit because it falls back to using the
-+ARMv5 code that uses the swp instruction, which no longer exists:
++Check for pytest-runner only if setup.py was invoked with 'test'
++argument.
 +
-+/tmp/ccSxVIzw.s: Assembler messages:
-+/tmp/ccSxVIzw.s:127: Error: swp{b} use is obsoleted for ARMv8 and later
-+/tmp/ccSxVIzw.s:190: Error: swp{b} use is obsoleted for ARMv8 and later
-+
-+So, this commit adjusts the ARM atomic code to assume ARMv8 is similar
-+to ARMv7.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 +---
-+ src/corelib/arch/qatomic_arm.h | 3 ++-
++ setup.py | 3 ++-
 + 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/corelib/arch/qatomic_arm.h b/src/corelib/arch/qatomic_arm.h
-+index 77cd66f272..e011929d3e 100644
-+--- a/src/corelib/arch/qatomic_arm.h
-++++ b/src/corelib/arch/qatomic_arm.h
-+@@ -47,7 +47,8 @@ QT_BEGIN_HEADER
-+ #if defined(__ARM_ARCH_7__) \
-+     || defined(__ARM_ARCH_7A__) \
-+     || defined(__ARM_ARCH_7R__) \
-+-    || defined(__ARM_ARCH_7M__)
-++    || defined(__ARM_ARCH_7M__) \
-++    || defined(__ARM_ARCH_8A__)
-+ # define QT_ARCH_ARMV7
-+ QT_BEGIN_INCLUDE_HEADER
-+ # include "QtCore/qatomic_armv7.h"
++diff --git a/setup.py b/setup.py
++index 85d9c5f..10fb6df 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -12,7 +12,8 @@ with open('README.rst', 'rb') as readme_file:
++ 
++ requirements = []
++ test_requirements = ['pytest', 'pylama']
++-setup_requirements = ['pytest-runner']
+++needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
+++setup_requirements = ['pytest-runner'] if needs_pytest else []
++ 
++ if sys.version_info < (3, 0):
++     test_requirements += ['mock']
 +-- 
-+2.13.5
++2.11.0
 +
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+index 6cb3cc2..9add16d 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.hash
++++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
+-md5	241150b3fcb920ddca4d33181f3238b1  paho-mqtt-1.2.tar.gz
+-sha256	9100a6aa706ab699d414ec02705a21eb66f436184691d0bf1f2a85a6213c6c1f  paho-mqtt-1.2.tar.gz
++md5	b9338236e2836e8579ef140956189cc4  paho-mqtt-1.3.0.tar.gz
++sha256	2c9ef5494cfc1e41a9fff6544c5a2cd59ea5d401d9119a06ecf7fad6a2ffeb93  paho-mqtt-1.3.0.tar.gz
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+index f0c2729..b87b37a 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.mk
++++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PAHO_MQTT_VERSION = 1.2
++PYTHON_PAHO_MQTT_VERSION = 1.3.0
+ PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+-PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/82/d9/7064d3a0a1d62756a1a809c85b99f864c641b66de84c15458f72193b7708
++PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/33/7f/3ce1ffebaa0343d509aac003800b305d821e89dac3c11666f92e12feca14
+ PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
+ PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+-PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
++PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
