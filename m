@@ -1,42 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Sep 2017 11:18:09 +0200
-Subject: [Buildroot] [PATCH] qt: add patch fixing build failure on ARMv8
-	in 32-bit mode
-In-Reply-To: <20170908073507.6009-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 8 Sep 2017 09:35:07 +0200")
-References: <20170908073507.6009-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <874lsda6r2.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Sep 2017 11:19:22 +0200
+Subject: [Buildroot] [PATCH] python-paho-mqtt: bump to version 1.3.0
+In-Reply-To: <20170908083816.24876-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 8 Sep 2017 10:38:16
+ +0200")
+References: <20170908083816.24876-1-yegorslists@googlemail.com>
+Message-ID: <87zia58s4l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > The Qt package currently fails to build on ARMv8 cores in 32-bit mode
- > (for example, if you select ARM and then Cortex-A53), because the ARM
- > atomic operation implementation in Qt checks if we're on ARMv7, then
- > on ARMv6, and otherwise falls back to an ARMv5 implementation. The
- > latter uses the swp instruction, which doesn't exist on ARMv8, causing
- > a build failure.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Change setup type to setuptools.
 
- > To solve this, we simply add a patch that uses the ARMv7 atomic
- > operations for ARMv8-A.
+ > Add a patch removing the pytest-runner dependency. The patch was sent
+ > upstream.
 
- > There is no autobuilder reference because we don't have any ARMv8
- > 32-bit configuration in the autobuilders.
-
- > Cc: <ivychend@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed, thanks.
-
- > ---
- > Peter: this should go to 2017.02.x, the problem was reported on IRC by
- > ivychend who is using 2017.02.5.
-
-I'll cherry pick it to 2017.02.x as well this weekend, thanks.
 
 -- 
 Bye, Peter Korsgaard
