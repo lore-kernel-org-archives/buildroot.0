@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Sep 2017 11:14:09 +0200
-Subject: [Buildroot] [git commit] libsoup: security bump to version 2.56.1
-Message-ID: <20170908091617.0ED9A7F9D1@busybox.osuosl.org>
+Date: Fri, 8 Sep 2017 11:16:08 +0200
+Subject: [Buildroot] [git commit] package/openpowerlink: bump to v2.6.1
+Message-ID: <20170908091617.6D7027F9D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f5398f0e61992bd836474b7350c16f00459d0a5
+commit: https://git.buildroot.net/buildroot/commit/?id=66390e07c0e032956dba452c37645f78608aef43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-2885: stack based buffer overflow with HTTP Chunked Encoding
+http://openpowerlink.sourceforge.net/web/openPOWERLINK/Download/openPOWERLINK%202.6.html
 
-For more details, see
-https://bugzilla.gnome.org/show_bug.cgi?id=785774
-
-While we're at it, add a hash for the license file.
-
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsoup/libsoup.hash | 6 ++++--
- package/libsoup/libsoup.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/openpowerlink/openpowerlink.hash | 8 ++++----
+ package/openpowerlink/openpowerlink.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index b42cf2f..6e1ff42 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
-@@ -1,2 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.0.sha256sum
--sha256	d8216b71de8247bc6f274ec054c08547b2e04369c1f8add713e9350c8ef81fe5	libsoup-2.56.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.1.sha256sum
-+sha256	c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3  libsoup-2.56.1.tar.xz
-+# Locally calculated
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 1c27138..a3ce686 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index 2a3c1f0..5c95431 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.0/
+-md5	afe5c1ed2d329d5b3784eb6999ab9d17	openPOWERLINK_V2.6.0.tar.gz
+-sha1	c8b317f118f69e416bc812e93a97e073d62a29d9	openPOWERLINK_V2.6.0.tar.gz
++# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.1/
++md5	9f53ccc72356cf421ecd089f91421393	openPOWERLINK_V2.6.1.tar.gz
++sha1	dfb97845937e8d1de3e554c17b951a115352faa6	openPOWERLINK_V2.6.1.tar.gz
+ # sha256 locally computed
+-sha256	a53dd279a5341fc350e4be94949d4642579c4c4eb27706f1b36d41136b400ff8	openPOWERLINK_V2.6.0.tar.gz
++sha256	89a8b321938f965aa03610f40c38d2f17242aab1b0b5f24b93c4542f2f3fbd5c	openPOWERLINK_V2.6.1.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 660dd60..c9ca4cc 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSOUP_VERSION_MAJOR = 2.56
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPL-2.0+
+-OPENPOWERLINK_VERSION = V2.6.0
++OPENPOWERLINK_VERSION = V2.6.1
+ OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
