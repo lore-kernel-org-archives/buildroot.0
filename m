@@ -1,41 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Sep 2017 11:16:33 +0200
-Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.1.1
-Message-ID: <20170908091617.80F6D7F9D1@busybox.osuosl.org>
+Date: Fri, 8 Sep 2017 11:18:19 +0200
+Subject: [Buildroot] [git commit] qt: add patch fixing build failure on
+	ARMv8 in 32-bit mode
+Message-ID: <20170908091617.9D00A7F9D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e19178c53f6f9fd886d02f4be19c73743ad30a5
+commit: https://git.buildroot.net/buildroot/commit/?id=95389fe98c882f70cbbd25dc1c7ea1480991acef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+The Qt package currently fails to build on ARMv8 cores in 32-bit mode
+(for example, if you select ARM and then Cortex-A53), because the ARM
+atomic operation implementation in Qt checks if we're on ARMv7, then
+on ARMv6, and otherwise falls back to an ARMv5 implementation. The
+latter uses the swp instruction, which doesn't exist on ARMv8, causing
+a build failure.
+
+To solve this, we simply add a patch that uses the ARMv7 atomic
+operations for ARMv8-A.
+
+There is no autobuilder reference because we don't have any ARMv8
+32-bit configuration in the autobuilders.
+
+Cc: <ivychend@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 45dbbe8..899348a 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b348b9b3cf3994d9222430bc514c94a22f2ed173956fdb097f3354cdba8fd198  shairport-sync-3.0.2.tar.gz
-+sha256  731e23f12ca1d645989843a15259ea0bf4d18adea94cf55f6fcc63d7b55fb53b  shairport-sync-3.1.1.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 208a9b3..898db9d 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 3.0.2
-+SHAIRPORT_SYNC_VERSION = 3.1.1
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+diff --git a/package/qt/0013-src-corelib-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch b/package/qt/0013-src-corelib-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch
+new file mode 100644
+index 0000000..645041a
+--- /dev/null
++++ b/package/qt/0013-src-corelib-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch
+@@ -0,0 +1,37 @@
++From 2281fa50f6e13278d3fd4f028377b8249b7b3cdb Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 8 Sep 2017 09:06:54 +0200
++Subject: [PATCH] src/corelib/arch/qatomic_arm.h: fix build on ARMv8 32-bit
++
++The Qt build fails on ARMv8 32-bit because it falls back to using the
++ARMv5 code that uses the swp instruction, which no longer exists:
++
++/tmp/ccSxVIzw.s: Assembler messages:
++/tmp/ccSxVIzw.s:127: Error: swp{b} use is obsoleted for ARMv8 and later
++/tmp/ccSxVIzw.s:190: Error: swp{b} use is obsoleted for ARMv8 and later
++
++So, this commit adjusts the ARM atomic code to assume ARMv8 is similar
++to ARMv7.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/corelib/arch/qatomic_arm.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/corelib/arch/qatomic_arm.h b/src/corelib/arch/qatomic_arm.h
++index 77cd66f272..e011929d3e 100644
++--- a/src/corelib/arch/qatomic_arm.h
+++++ b/src/corelib/arch/qatomic_arm.h
++@@ -47,7 +47,8 @@ QT_BEGIN_HEADER
++ #if defined(__ARM_ARCH_7__) \
++     || defined(__ARM_ARCH_7A__) \
++     || defined(__ARM_ARCH_7R__) \
++-    || defined(__ARM_ARCH_7M__)
+++    || defined(__ARM_ARCH_7M__) \
+++    || defined(__ARM_ARCH_8A__)
++ # define QT_ARCH_ARMV7
++ QT_BEGIN_INCLUDE_HEADER
++ # include "QtCore/qatomic_armv7.h"
++-- 
++2.13.5
++
