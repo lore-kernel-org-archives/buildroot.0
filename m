@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Sep 2017 08:55:24 +0200
-Subject: [Buildroot] [PATCH 1/1] Openjpeg: Fix malloc poison issue,
- add C++ and threads dependencies
-In-Reply-To: <20170908064510.4075-1-olivier.schonken@gmail.com>
-References: <20170908064510.4075-1-olivier.schonken@gmail.com>
-Message-ID: <20170908085524.2da019ee@windsurf.lan>
+Date: Fri, 8 Sep 2017 08:56:22 +0200
+Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: fix build against
+ openjpeg 2.2
+In-Reply-To: <20170907211628.18644-1-ps.report@gmx.net>
+References: <20170907211628.18644-1-ps.report@gmx.net>
+Message-ID: <20170908085622.57eddaa9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks a lot for looking into this build issue and finding a solution!
-
-"Openjpeg" should be lowercase in the commit title
-
-On Fri,  8 Sep 2017 08:45:10 +0200, Olivier Schonken wrote:
-> The malloc poison issue has been fixed upstream, this patch will thus only
-> be temporary.
-> 
-> Some of the autobuild issues related to missing g++ compilers
-> and missing threading libraries.  Thus the dependency should solve that.
-
-You should add a reference to the autobuilder failure being fixed.
-
-> +++ b/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch
-> @@ -0,0 +1,53 @@
-> +From 51a1dcaa6ed5713520dca36fc58cd9240c08b7ca Mon Sep 17 00:00:00 2001
-> +From: Even Rouault <even.rouault@spatialys.com>
-> +Date: Thu, 7 Sep 2017 17:52:59 +0200
-> +Subject: [PATCH] Avoid malloc poisoning issue when including <pthread.h> of
-> + uclibc (#1013)
+On Thu,  7 Sep 2017 23:16:28 +0200, Peter Seiderer wrote:
+> diff --git a/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
+> new file mode 100644
+> index 0000000000..ccac1f1073
+> --- /dev/null
+> +++ b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
+> @@ -0,0 +1,46 @@
+> +From 750da2a0dbaaefa4e702bf7ede16917b57b7efa8 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Thu, 7 Sep 2017 23:01:44 +0200
+> +Subject: [PATCH] Bump gettext version to 0.19
 > +
-
-We need you to add your Signed-off-by here.
-
-> diff --git a/package/openjpeg/Config.in b/package/openjpeg/Config.in
-> index 738999fed7..65a629f6e9 100644
-> --- a/package/openjpeg/Config.in
-> +++ b/package/openjpeg/Config.in
-> @@ -1,7 +1,12 @@
->  config BR2_PACKAGE_OPENJPEG
->  	bool "openjpeg"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-Did you make sure that those new dependencies are propagated to the
-packages that "select BR2_PACKAGE_OPENJPEG" ?
-
->  	help
->  	  The OpenJPEG library is an open-source JPEG 2000 codec
->  	  written in C.
->  
->  	  http://www.openjpeg.org
+> +Fixes autoreconf failure:
 > +
-> +comment "openjpeg needs a toolchain w/ C++, threads"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> +  *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.17 but the autoconf macros are from gettext version 0.19
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-We normally write this as:
-
-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-
-Thanks!
+I think the normal fix for this is to add <pkg>_GETTEXTIZE = YES in the
+package.
 
 Thomas
 -- 
