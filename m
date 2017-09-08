@@ -1,49 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 08 Sep 2017 09:42:36 +0000
-Subject: [Buildroot] [Bug 10301] New: systemd/getty unused options
-Message-ID: <bug-10301-163@https.bugs.busybox.net/>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Fri, 8 Sep 2017 14:19:03 +0300
+Subject: [Buildroot] Realtek-patched hostapd
+In-Reply-To: <877exab7yy.fsf@dell.be.48ers.dk>
+References: <CADmjQgurGWOAgJW9bH4-zugv4C_Gz-satoLMJo-BxYToDGhj5g@mail.gmail.com>
+ <877exab7yy.fsf@dell.be.48ers.dk>
+Message-ID: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10301
+Hi Peter,
 
-            Bug ID: 10301
-           Summary: systemd/getty unused options
-           Product: buildroot
-           Version: 2017.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: posted at heine.so
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On 7 Sep 2017, at 22:54, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Hi,
+>>>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
+> 
+>> Dear colleagues,
+>> let me ask for your advice.
+> 
+>> I'll start with an overview.
+> 
+>> Linux drivers for Realtek wireless chips do not fully implement the
+>> netlink interface. Because of that, hostapd cannot control them with
+>> its default netlink driver. There's a patch to hostapd, written
+>> originally by Realtek, which adds support for their chips. To build a
+>> patched hostapd in Buildroot, one can add the Realtek patch to the
+>> custom patches, and build the package in the usual way. This works
+>> fine, but the resulting binary will still include support for the
+>> netlink driver and will depend on the netlink library, which is
+>> superfluous in our circumstances.
+> 
+> What a mess :/ I take it that this is for non-mainlined drivers?
 
-I stumbled across a minor issue with the getty configuration when using
-systemd.
+Not exactly, the drivers are in the staging tree of the mainline kernel.
 
-In menuconfig I can set
 
-BR2_TARGET_GENERIC_GETTY_TERM
-BR2_TARGET_GENERIC_GETTY_OPTIONS
+>> To get rid of this dependency and build a specifically-targeted
+>> hostapd binary which supports Realtek chips only, I have to "clone"
+>> hostapd package and, by editing its Config.in and .mk files, drop
+>> netlink dependency.
+> 
+>> The question is, should I contribute this Realtek-only version of the
+>> hostapd package, or dropping the netlink dependency is not a good
+>> reason for creating one more package?
+> 
+> I would not like to have two hostapd packages in Buildroot.
+> 
+> What is the plan going forward? Is this only a temporary issue and these
+> drivers are getting mainlined / extended or is it more of a permanent
+> issue? Are realtek actively maintaining this hostapd patch or do we risk
+> it getting bitrotten whenever we bump hostapd?
 
-but it is only used for busybox and sysvinit.
-So I guess this should be implemented or disabled when systemd is used.
+Realtek doesn't maintain neither the kernel drivers, nor the patch for hostapd. They occasionally release stand-alone drivers, but always stubbornly ignore the current Linux practice of using the netlink interface, relying instead on proprietary mechanisms. Also they once issued a patched hostapd, but didn't update it since. 
 
-I would supply a patch, but first wanted to know: Is there any technical reason
-why this is not implemented? 
+Keeping hostapd patch in sync with the current hostapd is the work done by an enthusiast (see https://github.com/pritambaral/hostapd-rtl871xdrv). As for now, he updates his patch in due time. This patch will be required as long as the kernel drivers do not support the netlink interface. And, in my opinion, it is unlikely that someone will add netlink support to the drivers in the nearest future. 
 
-Regards,
-Michael
+
+> -- 
+> Bye, Peter Korsgaard
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Best regards,
+Alexander. 
