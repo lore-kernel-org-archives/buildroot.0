@@ -1,38 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Sep 2017 11:24:01 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as a maintainer
-	for lcdproc
-In-Reply-To: <20170908103633.0aeb25f2@vomer.devel.greenbone.net> (Sven
- Haardiek's message of "Fri, 8 Sep 2017 10:36:33 +0200")
-References: <20170908103633.0aeb25f2@vomer.devel.greenbone.net>
-Message-ID: <87r2vh8rwu.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  8 Sep 2017 12:23:49 +0300
+Subject: [Buildroot] [PATCH 2/2] strace: update homepage link
+In-Reply-To: <8423660704daf069a26cafd6fd43009796262e33.1504862629.git.baruch@tkos.co.il>
+References: <8423660704daf069a26cafd6fd43009796262e33.1504862629.git.baruch@tkos.co.il>
+Message-ID: <1fa4f0523a9b34911d8dfea8f688e8763408251a.1504862629.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Haardiek <sven.haardiek@greenbone.net> writes:
+strace moved to a new homepage as upstream commit 2bba131575878 (Update
+homepage URL) indicates.
 
- > Signed-off-by: Sven Haardiek <sven.haardiek@greenbone.net>
- > ---
- >  DEVELOPERS | 3 +++
- >  1 file changed, 3 insertions(+)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/strace/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > diff --git a/DEVELOPERS b/DEVELOPERS
- > index ff0b580599..79e7202a8f 100644
- > --- a/DEVELOPERS
- > +++ b/DEVELOPERS
- > @@ -1629,6 +1629,9 @@ N:        Steven Noonan <steven@uplinklabs.net>
- >  F:     package/hwloc/
- >  F:     package/powertop/
-
- > +N:     Sven Haardiek <sven.haardiek@greenbone.net>
- > +F:     package/lcdproc/
- > +
-
-FYI, your mailer had converted tabs to spaces, corrupting the
-patch. Consider using git send-email next time.
-
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 501c9646d6f0..b84b3fd179ea 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_STRACE
+ 	  Allows you to track what system calls a program makes
+ 	  while it is running.
+ 
+-	  http://sourceforge.net/projects/strace/
++	  https://strace.io
+ 
+ comment "strace needs a toolchain w/ headers >= 4.0 on nios2"
+ 	depends on BR2_nios2
 -- 
-Bye, Peter Korsgaard
+2.14.1
