@@ -1,47 +1,48 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  8 Sep 2017 15:23:49 +0200
-Subject: [Buildroot] [PATCH] libmodbus: bump to version 3.1.4
-Message-ID: <20170908132349.5474-1-yegorslists@googlemail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 8 Sep 2017 15:31:18 +0200
+Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: fix build against
+ openjpeg 2.2
+In-Reply-To: <20170908085622.57eddaa9@windsurf.lan>
+References: <20170907211628.18644-1-ps.report@gmx.net>
+ <20170908085622.57eddaa9@windsurf.lan>
+Message-ID: <20170908153118.19f46256@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello Thomas,
 
-Disable tests compilation and documentation generation.
+On Fri, 8 Sep 2017 08:56:22 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libmodbus/libmodbus.hash | 2 +-
- package/libmodbus/libmodbus.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+> Hello,
+> 
+> On Thu,  7 Sep 2017 23:16:28 +0200, Peter Seiderer wrote:
+> > diff --git a/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
+> > new file mode 100644
+> > index 0000000000..ccac1f1073
+> > --- /dev/null
+> > +++ b/package/gstreamer1/gst1-plugins-bad/0002-Bump-gettext-version-to-0.19.patch
+> > @@ -0,0 +1,46 @@
+> > +From 750da2a0dbaaefa4e702bf7ede16917b57b7efa8 Mon Sep 17 00:00:00 2001
+> > +From: Peter Seiderer <ps.report@gmx.net>
+> > +Date: Thu, 7 Sep 2017 23:01:44 +0200
+> > +Subject: [PATCH] Bump gettext version to 0.19
+> > +
+> > +Fixes autoreconf failure:
+> > +
+> > +  *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.17 but the autoconf macros are from gettext version 0.19
+> > +
+> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> 
+> I think the normal fix for this is to add <pkg>_GETTEXTIZE = YES in the
+> package.
 
-diff --git a/package/libmodbus/libmodbus.hash b/package/libmodbus/libmodbus.hash
-index 095164d613..b5c4450d6b 100644
---- a/package/libmodbus/libmodbus.hash
-+++ b/package/libmodbus/libmodbus.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	046d63f10f755e2160dc56ef681e5f5ad3862a57c1955fd82e0ce036b69471b6	libmodbus-3.0.6.tar.gz
-+sha256  c8c862b0e9a7ba699a49bc98f62bdffdfafd53a5716c0e162696b4bf108d3637  libmodbus-3.1.4.tar.gz
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index 6f0f342011..e5a6c6385a 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--LIBMODBUS_VERSION = 3.0.6
-+LIBMODBUS_VERSION = 3.1.4
- LIBMODBUS_SITE = http://libmodbus.org/releases
- LIBMODBUS_LICENSE = LGPL-2.1+
- LIBMODBUS_LICENSE_FILES = COPYING.LESSER
- LIBMODBUS_INSTALL_STAGING = YES
-+LIBMODBUS_CONF_OPTS = --without-documentation --disable-tests
- 
- $(eval $(autotools-package))
--- 
-2.11.0
+Thanks for the tip (did not know about it yet)...new patch version follows...
+
+Regards,
+Peter
+
+> 
+> Thomas
