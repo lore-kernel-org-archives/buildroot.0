@@ -1,65 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:42:07 +0200
-Subject: [Buildroot] [git commit] package/efl: fix build issue on big endian
-	system
-Message-ID: <20170909203455.D1E3280FB7@busybox.osuosl.org>
+Date: Sat, 9 Sep 2017 22:42:17 +0200
+Subject: [Buildroot] [git commit] package/terminology: bump to v1.1.1
+Message-ID: <20170909203456.00A7D7FB47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2ed9b21508fc1c48ac4634c9ff15b802a539887
+commit: https://git.buildroot.net/buildroot/commit/?id=a834b86ee0a9396ec2698aaf69547ff8db500b00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/0f1/0f12919f59dc92a8d91e23d3b0c1120bc06720db
-http://autobuild.buildroot.net/results/62e/62e96be61601347e92f9c115209af4962fe82492
+https://sourceforge.net/p/enlightenment/mailman/message/36026490
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...g-add-missing-header-for-big-endian-build.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/terminology/terminology.hash | 4 ++--
+ package/terminology/terminology.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
-new file mode 100644
-index 0000000..9f0653d
---- /dev/null
-+++ b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
-@@ -0,0 +1,35 @@
-+From 135f4233266443a4546bdf8217f145a0f7bbb90d Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 7 Sep 2017 22:25:48 +0200
-+Subject: [PATCH] eina_debug: add missing header for big endian build
-+
-+The build fail for big endian system due to missing eina_swap32
-+definition.
-+Add "eina_cpu.h" include where eina_swap32 prototype is defined.
-+
-+Patch provided by sharkcz in [1].
-+
-+Uptream status: pending
-+
-+[1] https://phab.enlightenment.org/D5158
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/lib/eina/eina_debug.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lib/eina/eina_debug.c b/src/lib/eina/eina_debug.c
-+index ca1bdad..468ca43 100644
-+--- a/src/lib/eina/eina_debug.c
-++++ b/src/lib/eina/eina_debug.c
-+@@ -60,6 +60,7 @@
-+ #endif
-+ 
-+ #include "eina_debug.h"
-++#include "eina_cpu.h"
-+ #include "eina_types.h"
-+ #include "eina_list.h"
-+ #include "eina_mempool.h"
-+-- 
-+2.9.5
-+
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index c203226..81ae5d8 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	eb9136e487ab9e6ff3c98173919b5ad105626434d096dafecd18392fc40c348f	terminology-1.1.0.tar.xz
++# From https://sourceforge.net/p/enlightenment/mailman/message/36026490/
++sha256	da12b8a24ca5248b2d292d9b1e19cabc61ae29b21f96d4b6f4f3e7b4feeecc16	terminology-1.1.1.tar.xz
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index 817521d..ed811b3 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TERMINOLOGY_VERSION = 1.1.0
++TERMINOLOGY_VERSION = 1.1.1
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
