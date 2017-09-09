@@ -1,131 +1,192 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Sep 2017 18:14:01 +0200
-Subject: [Buildroot] Issue adding subprocess32 python package to
-	buildroot
-In-Reply-To: <CAP3D3ge8ZXFXuB4_V5eSxnKAN=5hKWwYcxT2xRqM6HUOp39pUg@mail.gmail.com>
-References: <CAP3D3ge8ZXFXuB4_V5eSxnKAN=5hKWwYcxT2xRqM6HUOp39pUg@mail.gmail.com>
-Message-ID: <20170909161401.GC2850@scaer>
+Date: Sat, 9 Sep 2017 19:01:53 +0200
+Subject: [Buildroot] [PATCH] Add package Prosody
+In-Reply-To: <1504909108-18547-2-git-send-email-nidujay@gmail.com>
+References: <1504909108-18547-2-git-send-email-nidujay@gmail.com>
+Message-ID: <20170909170153.GD2850@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Dushara, All,
 
-On 2017-09-08 15:18 +0100, Paul Gildea spake thusly:
-> I am trying to install subprocess32 with my python 2.7 installation via
-> buildroot. It's an older version of buildroot and doesn't have
-> python-package,
+A few comments about this patch.
 
-python-package was introduced in December 2013, so appeared in Buildroot
-2014.02. This means you are using  version that is almost 4 years old
-now.
+On 2017-09-09 08:18 +1000, Dushara Jayasinghe spake thusly:
+> Description from website:
+> 
+>   Prosody is a modern XMPP communication server. It aims to be
+>   easy to set up and configure, and efficient with system
+>   resources.
+> 
+> This installs the base system with certificates for two domains:
+> localhost and example.com
 
-And below, we can see that you are using the GENTARGETS infrastructure.
-This was removed in July 2012, now more than 5 years ago...
+The commit log here mostly repeats what is in the help text. This is
+fine, but not very useful.
 
-We can't help on such an old version.
+Instead, a commit log should explain the technical details, like what
+problems were encountered and how they were solved, if it is not obvious
+from the code.
 
-I would suggest that you upgrade to at least our first LTS version,
-2017.02, or to the latest release, 2017.08.
+For example, you could have added in the commit log that prosody only
+works with lua-5.1 or luajit, and add a pointer to the relevant mailing
+list discussion (which you allude to in your second mail); *this* is a
+very interesting information to have in a commit log.
+
+Another information you could have added is the licensing issue. The
+COPYING file contains the text for the MIT license, but all the source
+files contain the sentence "This project is MIT/X11 licensed." Thus, the
+license is MIT/X11.
+
+Finally, you need to sign-off your patch. A signed-off-by line is a
+legally-binding statement that you are allowed to provide the patch:
+    https://developercertificate.org/
+
+So, what about a commit log that reads as:
+
+    package/prosody: new package
+
+    As stated by the upstram developpers, Prosody only supports lua-5.1
+    or luajit (which is a lua-5.1 interpreter):
+        [add URL here if publicly available]
+
+    The license terms are not very consistent: the source files all
+    state to be "MIT/X11 licensed" and defer to the COPYING file for
+    details, but that file only has the text for the MIT license.
+    Thus, we believe the license to be MIT/X11, as stated in the source
+    files.
+
+    Signed-off-by: Your Name <your@email>
+
+Also, see the manual:
+    https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+A few more nit-picks below...
+
+[--SNIP--]
+> diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+> new file mode 100644
+> index 0000000..21dc037
+> --- /dev/null
+> +++ b/package/prosody/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_PROSODY
+> +	bool "prosody"
+> +	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+> +	select BR2_PACKAGE_LUAEXPAT # runtime
+> +	select BR2_PACKAGE_LUASEC # runtime
+> +	select BR2_PACKAGE_LUASOCKET # runtime
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBIDN
+> +	select BR2_PACKAGE_LUAFILESYSTEM # runtime
+> +
+> +	help
+
+There is a useless empty line before the help entry.
+
+> +	  Prosody is a modern XMPP communication server. It aims to be
+> +	   easy to set up and configure, and efficient with system
+> +	   resources.
+
+Line 2 and 3 above have three elading space, only two needed.
+
+> +
+> +	  https://prosody.im
+> +
+> +comment "prosody needs the lua interpreter"
+> +	depends on !BR2_PACKAGE_LUA_5_1 && !BR2_PACKAGE_LUAJIT
+> diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+> new file mode 100644
+> index 0000000..38942ea
+> --- /dev/null
+> +++ b/package/prosody/prosody.hash
+> @@ -0,0 +1,5 @@
+> +# Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+> +md5    d743adea6cfbaacc3a24cc0c3928bb1b  prosody-0.9.12.tar.gz
+> +sha1   1ee224263a5b3d67960e12edbbe6b2f16b95d147  prosody-0.9.12.tar.gz
+> +sha256 1a59a322b71928a21985522aa00d0eab3552208d7bf9ecb318542a1b2fee3e8d  prosody-0.9.12.tar.gz
+> +sha512 e87b5f3b3e327722cec9d8d0470684e2ec2788a1c5ae623c4f505a00572ef21f65afe84cd5b7de47d6a65fe8872506fe34e5e8886e20979ff84710669857ca76  prosody-0.9.12.tar.gz
+> diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+> new file mode 100644
+> index 0000000..5eea40c
+> --- /dev/null
+> +++ b/package/prosody/prosody.mk
+> @@ -0,0 +1,51 @@
+> +################################################################################
+> +#
+> +# prosody
+> +#
+> +################################################################################
+> +
+> +PROSODY_VERSION = 0.9.12
+> +PROSODY_SOURCE = prosody-$(PROSODY_VERSION).tar.gz
+> +PROSODY_SITE = https://prosody.im/downloads/source
+> +PROSODY_LICENSE = MIT
+> +PROSODY_LICENSE_FILES = COPYING
+> +PROSODY_DEPENDENCIES = openssl libidn
+> +
+> +ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+> +	PROSODY_DEPENDENCIES += lua
+
+Don't indent the DEPENDENCIES line (yes, that is a weird rule, but that
+is for consistency with all the rest of Buildroot, which does not indent
+in such situations).
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> +	PROSODY_DEPENDENCIES += luajit
+
+Ditto.
+
+> +endif
+> +
+> +define PROSODY_CONFIGURE_CMDS
+> +	(cd $(@D) && \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		./configure --prefix=/usr \
+> +		--c-compiler=$(TARGET_CC) \
+> +		--cflags="$(TARGET_CFLAGS)" \
+> +		--linker=$(TARGET_CC) \
+> +		--ldflags="$(TARGET_LDFLAGS) -shared" \
+> +		--sysconfdir=/etc/prosody \
+> +		--with-lua=$(STAGING_DIR)/usr \
+> +	)
+
+No need for the parenthesis here.
 
 Regards,
 Yann E. MORIN.
 
-> subprocess32 appeared to install correctly but when I
-> import it on the embedded system I get an error:
+> +endef
+> +
+> +define PROSODY_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define PROSODY_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+> +endef
+> +
+> +# make install installs a Makefile and meta data to generate certs
+> +define PROSODY_REMOVE_CERT_GENERATOR
+> +	rm -f $(TARGET_DIR)/etc/prosody/certs/Makefile
+> +	rm -f $(TARGET_DIR)/etc/prosody/certs/*.cnf
+> +endef
+> +
+> +PROSODY_POST_INSTALL_TARGET_HOOKS += PROSODY_REMOVE_CERT_GENERATOR
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.1.4
 > 
-> >>> import subprocess32/usr/lib/python2.7/site-
-> packages/subprocess32.py:472: RuntimeWarning: The _posixsubprocess module is not being used. Child process reliability may suffer if your pro
-> gram uses threads.  "program uses threads.", RuntimeWarning)
-> Following this path I tried to import _posixsubprocess
-> 
-> 
-> 
-> >>>import _posixsubprocessTraceback (most recent call last):
->   File "<stdin>", line 1, in <module>
-> ImportError: dynamic module does not define init function (init_posixsubprocess)
-> 
-> ?_posixsubprocess does have init_posixsubprocess?
-> [1]https://github.com/google/python-
-> subprocess32/blob/master/_posixsubprocess.c#L879
-> 
-> I can use subprocess32 otherwise, I tested out it's basic functionality.It seems to me like something in my build system is not doing the right thing, any ideas?
-> 
-> 
-> 
-> Output from building:
-> 
-> ^[[7m>>> python-subprocess32 3.2.7 Extracting^[[27m
-> ^[[7m>>> python-subprocess32 3.2.7 Patching package/python-subprocess32^[[
-> 27m^[[7m>>> python-subprocess32 3.2.7 Configuring^[[27m
-> ^[[7m>>> python-subprocess32 3.2.7 Building^[[27m
-> (cd /media/vmpart/5.1.0_x86/buildroot/output/build/python-
-> subprocess32-3.2.7; /media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/bin/python setup.py build)
-> running buildrunning build_pycreating build
-> creating build/lib.linux-x86_64-2.7copying subprocess32.py -> build/lib.linux-x86_64-2.7
-> running build_extbuilding '_posixsubprocess' extension
-> creating build/temp.linux-x86_64-2.7copying subprocess32.py -> build/lib.linux-x86_64-2.7
-> running build_extbuilding '_posixsubprocess' extension
-> creating build/temp.linux-x86_64-2.7/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -fno-strict-aliasing -O2 -I/media/vmpart/5.1.0_x86/
-> buildroot/output/host/include -I/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/include -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -fPIC -I/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/include/python2.7 -c _posixsubprocess.c -o build/temp.linux-x86_64-2.7/_
-> posixsubprocess.o/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -shared -L/media/vmpart/5.1.0_x86/
-> buildroot/output/host/lib -L/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/lib -Wl,-rpath,/media/vmpart/5.1.
-> 0_x86/buildroot/output/host/usr/lib build/temp.linux-x86_64-2.7/_
-> posixsubprocess.o -L/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/lib -lpython2.7 -o build/lib.linux-x86_64-2.7/_
-> posixsubprocess.so^[[7m>>> python-subprocess32 3.2.7 Installing to target^[[27m
-> (cd /media/vmpart/5.1.0_x86/buildroot/output/build/python-
-> subprocess32-3.2.7; /media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/bin/python setup.py install --prefix=/media/vmpart/5.1.0_
-> x86/buildroot/output/target/usr)running install
-> running buildrunning build_pyrunning build_ext
-> running install_libcopying build/lib.linux-x86_64-2.7/_
-> posixsubprocess.so -> /media/vmpart/5.1.0_x86/
-> buildroot/output/target/usr/lib/python2.7/site-packages
-> running install_egg_infoRemoving /media/vmpart/5.1.0_x86/
-> buildroot/output/target/usr/lib/python2.7/site-packages/
-> subprocess32-3.2.7-py2.7.egg-infoWriting /media/vmpart/5.1.0_x86/
-> buildroot/output/target/usr/lib/python2.7/site-packages/
-> subprocess32-3.2.7-py2.7.egg-info
-> 
-> 
-> 
-> 
-> 
-> My makefile:
-> 
-> 
-> 
-> ############################################################
-> ### Subprocess32 module for python###############################
-> ###############################PYTHON_SUBPROCESS32_VERSION = 3.2.7
-> PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_
-> SUBPROCESS32_VERSION).tar.gzPYTHON_SUBPROCESS32_SITE =
-> [2]https://pypi.python.org/pypi/subprocess32
-> PYTHON_SUBPROCESS32_DEPENDENCIES = python
-> define PYTHON_SUBPROCESS32_BUILD_CMDS        (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-> endefdefine PYTHON_SUBPROCESS32_INSTALL_
-> TARGET_CMDS        (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-> endef$(eval $(call GENTARGETS,package,python-
-> subprocess32))
-> 
-> Links:
-> 1. https://github.com/google/python-subprocess32/blob/master/_posixsubprocess.c#L879
-> 2. https://pypi.python.org/pypi/subprocess32
-
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
