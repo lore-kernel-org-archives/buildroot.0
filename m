@@ -1,42 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:25:55 +0200
-Subject: [Buildroot] [PATCH] bind: fix compilation when lmdb.h is
- present on host
-In-Reply-To: <20170908140249.24338-1-julien.floret@6wind.com>
-References: <20170908140249.24338-1-julien.floret@6wind.com>
-Message-ID: <20170909222555.7e26727d@windsurf.lan>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Sat, 9 Sep 2017 22:26:19 +0200
+Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against
+ openjpeg 2.2
+In-Reply-To: <20170908133156.10357-1-ps.report@gmx.net>
+References: <20170908133156.10357-1-ps.report@gmx.net>
+Message-ID: <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hey Thomas and Peter,
 
-On Fri,  8 Sep 2017 16:02:49 +0200, Julien Floret wrote:
-> From: Robin Jarry <robin.jarry@6wind.com>
-> 
-> Bind autoconf scripts look for lmdb.h in /usr/include (even when
-> cross-compiling). When liblmdb-dev is installed, this causes the
-> following error:
-> 
->     ...
->     checking for lmdb library... yes
->     checking for library containing mdb_env_create... no
->     configure: error: found lmdb include but not library.
-> 
-> Fix this by disabling explicitly lmdb support.
-> 
-> Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/bind/bind.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Changes v2 -> v3:
+>   - add _GETTEXTIZE (instead of Makefile.in.in patch, suggested by Thomas Petazzoni)
+>
+> Changes v1 ->v2:
+>  - add _AUTORECONF (suggested by Peter Korsgaard)
 
-Applied to master, thanks.
+Re-running gettextize just to make autoreconf work is a bit overkill;
+gettextize is something that the package maintainer runs to get the
+i18n setup ready and among other things it may update gnulib imported
+files in unexpected ways. I'd bet that letting just autopoint work as
+expected (as a step part of autoreconf) would be way more than enough
+here (i.e. no _GETTEXTIZE needed), but that step is currently disabled
+in buildroot by default since some years ago.
 
-Thomas
+See for reference this patch I sent last month, that makes autopoint
+work again during autoreconf:
+http://lists.busybox.net/pipermail/buildroot/2017-August/200941.html
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Aleksander
+https://aleksander.es
