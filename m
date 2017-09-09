@@ -1,224 +1,185 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:26 +0200
-Subject: [Buildroot] [PATCH 20/49 v2] package/dahdi-linux: new package
+Date: Sat,  9 Sep 2017 23:39:27 +0200
+Subject: [Buildroot] [PATCH 21/49 v2] package/dahdi-tools: new package
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <052c290d530af24dbe14c7d4c627fb85384b28d1.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <ab83294531198c616860561c487c0f14a8b22303.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dahdi-linux provides kernel modules to drive a variety of telephony
-cards, ranging from low-end one-channel to higher-end multi-channel
-cards. It also provides headers for userland to talk to those cards.
-
-With a bit of love, dahdi-linux can use our kernel-module
-infrastructure. Wee! :-)
-
-Still, there are a few specificities about dahdi-linux.
-
-First, it needs to install a few binary firmware blobs, which it wants
-to download at install time. Since we do want to be able to do
-completely off-line builds, we need to downlaod them manually. So we
-have the full list of firmware blobs (even if some can only be used on
-an i386/x86_64 target, we still uconditionally download them), for which
-we have locally-computed sha256 (no hash provided by upstream for the
-blobs).
-
-Second, the install procedure for the firmware blobs needs to have
-access to the Linux kernel .config file, so it can decide whether to
-install the blobs or not. We can force not to install them, but we can't
-force to install them... :-/ And anyway, we'd have to do the same check
-as is already done by dahdi-linux, so no need to duplicate that.
-
-Finally, the licensing is relatively weird. Although it is obvious and
-straightforward for the most part of dahdi-linux, consisting of mostly
-GPLv2 and a few LGPLv2.1, there is one gotcha.
-
-Of the firmware blobs, one is provided as a .o file, with no licensing
-information whatsoever, without any source available from upstream, but
-is directly linked to a GPLv2 file.
-
-This is very concerning, but there is not much we can do about it,
-except delegate to the legal reviewer whether that is acceptable or not.
-
-AS an aside, dahdi-linux drivers do not build with a kernel 4.0 or
-later, as it uses internals that have been removed in linux-4.0. There
-has been no update upstream dahdi-linux to fix that. There's not much we
-can do, except warn the user in the help text.
+Also provides libraries, so install in staging as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                    |  1 +
- package/dahdi-linux/Config.in        | 19 ++++++++
- package/dahdi-linux/dahdi-linux.hash | 23 ++++++++++
- package/dahdi-linux/dahdi-linux.mk   | 88 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 131 insertions(+)
- create mode 100644 package/dahdi-linux/Config.in
- create mode 100644 package/dahdi-linux/dahdi-linux.hash
- create mode 100644 package/dahdi-linux/dahdi-linux.mk
+ package/Config.in                               |  1 +
+ package/dahdi-tools/0001-no-build-docs.patch    | 16 +++++++++++
+ package/dahdi-tools/0002-no-perl-manpages.patch | 37 +++++++++++++++++++++++++
+ package/dahdi-tools/Config.in                   | 23 +++++++++++++++
+ package/dahdi-tools/dahdi-tools.hash            |  4 +++
+ package/dahdi-tools/dahdi-tools.mk              | 32 +++++++++++++++++++++
+ 6 files changed, 113 insertions(+)
+ create mode 100644 package/dahdi-tools/0001-no-build-docs.patch
+ create mode 100644 package/dahdi-tools/0002-no-perl-manpages.patch
+ create mode 100644 package/dahdi-tools/Config.in
+ create mode 100644 package/dahdi-tools/dahdi-tools.hash
+ create mode 100644 package/dahdi-tools/dahdi-tools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9df758e796..b529bfecfd 100644
+index b529bfecfd..db34a37475 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -382,6 +382,7 @@ endmenu
- 	source "package/cdrkit/Config.in"
+@@ -383,6 +383,7 @@ endmenu
  	source "package/cryptsetup/Config.in"
  	source "package/cwiid/Config.in"
-+	source "package/dahdi-linux/Config.in"
+ 	source "package/dahdi-linux/Config.in"
++	source "package/dahdi-tools/Config.in"
  	source "package/dbus/Config.in"
  	source "package/dbus-cpp/Config.in"
  	source "package/dbus-glib/Config.in"
-diff --git a/package/dahdi-linux/Config.in b/package/dahdi-linux/Config.in
+diff --git a/package/dahdi-tools/0001-no-build-docs.patch b/package/dahdi-tools/0001-no-build-docs.patch
 new file mode 100644
-index 0000000000..f2a370917c
+index 0000000000..311a129efe
 --- /dev/null
-+++ b/package/dahdi-linux/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_DAHDI_LINUX
-+	bool "dhadi-linux"
-+	depends on BR2_LINUX_KERNEL
++++ b/package/dahdi-tools/0001-no-build-docs.patch
+@@ -0,0 +1,16 @@
++Do not build the documentation.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN dahdi-tools-2.11.0.orig/Makefile.am dahdi-tools-2.11.0/Makefile.am
++--- dahdi-tools-2.11.0.orig/Makefile.am	2015-12-22 21:19:12.000000000 +0100
+++++ dahdi-tools-2.11.0/Makefile.am	2016-01-04 23:23:34.201304133 +0100
++@@ -17,7 +17,7 @@
++ 	#-Wformat=2
++ endif
++ 
++-SUBDIRS	= xpp doc hotplug
+++SUBDIRS	= xpp hotplug
++ 
++ if PPPD
++ SUBDIRS	+= ppp
+diff --git a/package/dahdi-tools/0002-no-perl-manpages.patch b/package/dahdi-tools/0002-no-perl-manpages.patch
+new file mode 100644
+index 0000000000..dae1b6c3c0
+--- /dev/null
++++ b/package/dahdi-tools/0002-no-perl-manpages.patch
+@@ -0,0 +1,37 @@
++xpp: do not try to install the manpages for the perl tools
++
++The man pages are generated neither at build time nor at install time,
++so the install step fails.
++
++Just disable them.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN dahdi-tools-2.11.0.orig/xpp/Makefile.am dahdi-tools-2.11.0/xpp/Makefile.am
++--- dahdi-tools-2.11.0.orig/xpp/Makefile.am	2015-12-22 21:19:12.000000000 +0100
+++++ dahdi-tools-2.11.0/xpp/Makefile.am	2016-01-04 23:56:31.851820973 +0100
++@@ -3,7 +3,6 @@
++ 
++ SUBDIRS		=
++ 
++-man_MANS	=
++ 
++ 
++ # FIXME: try to improve code, so we can use $(PEDANTIC)
++@@ -59,7 +58,6 @@
++ udevrules_DATA	= xpp.rules
++ 
++ dist_sbin_SCRIPTS	= $(perl_scripts)
++-man_MANS		+= $(perl_mans)
++ CLEANFILES		= $(perl_checks) $(perl_mans)
++ 
++ if	PBX_USB
++@@ -147,8 +145,6 @@
++ 		astribank_allow.8 \
++ 		astribank_is_starting.8
++ 
++-man_MANS	+= $(man_pages)
++-
++ endif
++ 
++ EXTRA_DIST	= \
+diff --git a/package/dahdi-tools/Config.in b/package/dahdi-tools/Config.in
+new file mode 100644
+index 0000000000..39042df041
+--- /dev/null
++++ b/package/dahdi-tools/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_DAHDI_TOOLS
++	bool "dahdi-tools"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LINUX_KERNEL # dahdi-linux
++	depends on BR2_USE_MMU # perl
++	select BR2_PACKAGE_DAHDI_LINUX
++	select BR2_PACKAGE_PERL
 +	help
 +	  DAHDI (Digium/Asterisk Hardware Device Interface) is the open
 +	  source device interface technology used to control Digium and
 +	  other legacy telephony interface cards.
 +
-+	  DAHDI Linux is the open source device driver framework used to
-+	  interface Asterisk with telephony hardware.
++	  DAHDI Tools is a package of utilities for managing and
++	  monitoring DAHDI devices.
 +
 +	  http://www.asterisk.org/downloads/dahdi
 +
-+	  Note: DAHDI Linux drivers won't build on a kernel v4.0 or more
-+	  recent, because they use internals that have been removed in
-+	  v4.0.
++# Two comments, otherwise it may not fit in menuconfig for narrow terminals
++comment "dahdi-tools needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LINUX_KERNEL
 +
-+comment "dahdi-linux needs a Linux kernel to be built"
++comment "dahdi-tools needs a Linux kernel to be built"
 +	depends on !BR2_LINUX_KERNEL
-diff --git a/package/dahdi-linux/dahdi-linux.hash b/package/dahdi-linux/dahdi-linux.hash
+diff --git a/package/dahdi-tools/dahdi-tools.hash b/package/dahdi-tools/dahdi-tools.hash
 new file mode 100644
-index 0000000000..532c0a8256
+index 0000000000..10e122a234
 --- /dev/null
-+++ b/package/dahdi-linux/dahdi-linux.hash
-@@ -0,0 +1,23 @@
-+# sha1 from: http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
++++ b/package/dahdi-tools/dahdi-tools.hash
+@@ -0,0 +1,4 @@
++# sha1 from http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
 +# sha256 locally computed
-+sha1    8cbd55b8611c6ed80bcdf84d537566b4934f3def  dahdi-linux-2.11.1.tar.gz
-+sha256  f59f382365118205e77d2874f1c0e1546e936247bcc45f07a43bc21778bee9df  dahdi-linux-2.11.1.tar.gz
-+
-+# Firmware files have no upstream hash, so sha56 locally computed
-+sha256  3ff26cf80555fd7470b43a87c51d03c1db2a75abcd4561d79f69b6c48298e4a1  dahdi-fwload-vpmadt032-1.25.0.tar.gz
-+sha256  d5b6ab6851e431afcfec2ecc39d95fa88fe3939ffdb2e3d4f28a43cabf30e95b  dahdi-fw-a4a-a0017.tar.gz
-+sha256  e039af8bec36407b74e1dd9ebdd49ba077469eda79d4e6093721ed2836d4536f  dahdi-fw-a4b-d001e.tar.gz
-+sha256  5064f9877b8aec99b19fd57988216fe1a9c0b7c07853dd3b32b5a55ab7b418e6  dahdi-fw-a8a-1d0017.tar.gz
-+sha256  09a8992786309e025aa60b400a2c7d21226ac9bb6f1b66f562a5e7e9dc892b03  dahdi-fw-a8b-1f001e.tar.gz
-+sha256  449ab3fd03d55d808e999efb7677cd04de202b92c9fcb039539a7e48a39a80f5  dahdi-fw-hx8-2.06.tar.gz
-+sha256  7a006073202d67e45f1d5ff1e9c6e8663e6056cef9dc4c5abae86a1018db349c  dahdi-fw-oct6114-032-1.05.01.tar.gz
-+sha256  56bac1f2024c76ecf9b6f40992eeea29a1fbee676bb2a37a058179bacfbb1c91  dahdi-fw-oct6114-064-1.05.01.tar.gz
-+sha256  e1146749d205c41603b9b76852c3f8104dac233d0025d700db24504d10c99775  dahdi-fw-oct6114-128-1.05.01.tar.gz
-+sha256  5fe5036a2766cf0e8a968b0c58b700507d86e1cde9296ca437170cc626a9c79c  dahdi-fw-oct6114-256-1.05.01.tar.gz
-+sha256  11dd8d009809e41fc9a3a36766f59ff73d29075eede5b8724331d9a6e5259774  dahdi-fw-tc400m-MR6.12.tar.gz
-+sha256  511c1966295a20df673bb87af30245f0ad165efd6ccb92b4d8ed535ca7f5ac65  dahdi-fw-te133-7a001e.tar.gz
-+sha256  99f7c410bf47d2a5ae687d717e51448ce5b52aca902830bf39bffe683150fa2d  dahdi-fw-te134-780017.tar.gz
-+sha256  c8f55d57cc0bf332e8d96cdf9ff6dd0e322f33581e1efc24c2b9a0e0c5eb7ee4  dahdi-fw-te435-13001e.tar.gz
-+sha256  0980f4a8d191c6872aa27d971758046f0e7827ac161549f2cc1b0eeab0ae9333  dahdi-fw-te436-10017.tar.gz
-+sha256  5b823e25828e2c1c6548886ad408b2e31dbc8cd17170c52592792d9c754a199c  dahdi-fw-te820-1.76.tar.gz
-+sha256  6b199cf836f150f9cb35f763f0f502fb52cfa2724a449b500429c746973904ad  dahdi-fw-vpmoct032-1.12.0.tar.gz
-diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
++sha1    5da944e6d59a977f814230253f3ddf2847e7f31b                          dahdi-tools-2.11.1.tar.gz
++sha256  53ffeb333f3e44b0c88e5b17475cdbf87d3f652eb81a6422de76250c061e2909  dahdi-tools-2.11.1.tar.gz
+diff --git a/package/dahdi-tools/dahdi-tools.mk b/package/dahdi-tools/dahdi-tools.mk
 new file mode 100644
-index 0000000000..33db9fb408
+index 0000000000..e97d944c52
 --- /dev/null
-+++ b/package/dahdi-linux/dahdi-linux.mk
-@@ -0,0 +1,88 @@
++++ b/package/dahdi-tools/dahdi-tools.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# dahdi-linux
++# dahdi-tools
 +#
 +################################################################################
 +
-+DAHDI_LINUX_VERSION = 2.11.1
-+DAHDI_LINUX_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
++DAHDI_TOOLS_VERSION = 2.11.1
++DAHDI_TOOLS_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
 +
-+# We need to download all thoe firmware blobs ourselves, otherwise
-+# dahdi-linux will try to download them at install time.
-+DAHDI_LINUX_FW_SITE = http://downloads.digium.com/pub/telephony/firmware/releases
-+DAHDI_LINUX_FW_FILES = \
-+	dahdi-fwload-vpmadt032-1.25.0.tar.gz \
-+	dahdi-fw-oct6114-032-1.05.01.tar.gz \
-+	dahdi-fw-oct6114-064-1.05.01.tar.gz \
-+	dahdi-fw-oct6114-128-1.05.01.tar.gz \
-+	dahdi-fw-oct6114-256-1.05.01.tar.gz \
-+	dahdi-fw-tc400m-MR6.12.tar.gz \
-+	dahdi-fw-hx8-2.06.tar.gz \
-+	dahdi-fw-vpmoct032-1.12.0.tar.gz \
-+	dahdi-fw-te820-1.76.tar.gz \
-+	dahdi-fw-te133-7a001e.tar.gz \
-+	dahdi-fw-te134-780017.tar.gz \
-+	dahdi-fw-a8b-1f001e.tar.gz \
-+	dahdi-fw-a8a-1d0017.tar.gz \
-+	dahdi-fw-a4b-d001e.tar.gz \
-+	dahdi-fw-a4a-a0017.tar.gz \
-+	dahdi-fw-te435-13001e.tar.gz \
-+	dahdi-fw-te436-10017.tar.gz
++DAHDI_TOOLS_LICENSE = GPLv2, LGPLv2.1
++DAHDI_TOOLS_LICENSE_FILES = LICENSE LICENSE.LGPL
 +
-+DAHDI_LINUX_EXTRA_DOWNLOADS = \
-+	$(patsubst %,$(DAHDI_LINUX_FW_SITE)/%,$(DAHDI_LINUX_FW_FILES))
++DAHDI_TOOLS_DEPENDENCIES = dahdi-linux perl
 +
-+# dahdi-linux claims to be GPLv2 with parts LGPLv2.1 (not 'or later'),
-+# but there are the so-called firmware files (downloaded above) for
-+# which the license is unclear: the header claims to be GPLv2, the
-+# 'loader-wrapper' claims to be GPLv2, but there are two so-called
-+# 'firmware' binary-only .o blobs for which the license is not
-+# explicited, which look like they end up as part of a kernel module,
-+# and for which the source is nowhere to be found on the upstream site
-+# (they are only for x86/x86_64, but we still list them unconditionally).
-+DAHDI_LINUX_LICENSE = GPLv2, LGPLv2.1, unknown (firmware files)
-+DAHDI_LINUX_LICENSE_FILES = LICENSE LICENSE.LGPL
++DAHDI_TOOLS_INSTALL_STAGING = YES
++DAHDI_TOOLS_AUTORECONF = YES
 +
-+DAHDI_LINUX_INSTALL_STAGING = YES
++# Buildroot globally exports PERL with the value it has on the host, so we need
++# to override it with the location where it will be on the target.
++DAHDI_TOOLS_CONF_ENV = PERL=/usr/bin/perl
 +
-+DAHDI_LINUX_MODULE_SUBDIRS = drivers/dahdi
++DAHDI_TOOLS_CONF_OPTS = \
++	--without-newt \
++	--without-usb \
++	--without-pcap \
++	--without-libusbx \
++	--without-libusb \
++	--without-selinux \
++	--without-ppp \
++	--with-perllib=/usr/lib/perl5/$(PERL_VERSION)
 +
-+DAHDI_LINUX_MODULE_MAKE_OPTS = \
-+	KSRC=$(LINUX_DIR) \
-+	KVERS=$(LINUX_VERSION_PROBED) \
-+	DAHDI_BUILD_ALL=m \
-+	DAHDI_INCLUDE=$(@D)/include \
-+	INSTALL_MOD_DIR=dahdi
-+
-+define DAHDI_LINUX_EXTRACT_FW
-+	$(foreach f,$(DAHDI_LINUX_FW_FILES),\
-+		cp $(BR2_DL_DIR)/$(f) $(@D)/drivers/dahdi/firmware/$(f)$(sep))
-+endef
-+DAHDI_LINUX_POST_EXTRACT_HOOKS += DAHDI_LINUX_EXTRACT_FW
-+
-+# Need to pass the same options as for building the modules, because
-+# it wants to scan Linux' .config file to check whether some options
-+# are set or not (like CONFIG_FW_LOADER).
-+define DAHDI_LINUX_CONFIGURE_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(DAHDI_LINUX_MODULE_MAKE_OPTS) \
-+		prereq
-+endef
-+
-+define DAHDI_LINUX_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(DAHDI_LINUX_MODULE_MAKE_OPTS) \
-+		DESTDIR=$(STAGING_DIR) \
-+		install-include
-+endef
-+
-+define DAHDI_LINUX_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(DAHDI_LINUX_MODULE_MAKE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		install-firmware \
-+		install-xpp-firm
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 2.11.0
