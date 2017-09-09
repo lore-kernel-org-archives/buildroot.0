@@ -1,51 +1,48 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat,  9 Sep 2017 08:05:36 -0300
-Subject: [Buildroot] [PATCH] stella: fix build without threads support
-Message-ID: <1504955136-10831-1-git-send-email-sergio.prado@e-labworks.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  9 Sep 2017 13:45:57 +0200
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-video-amdgpu:
+	bump version to 1.4.0
+Message-ID: <20170909114558.6201-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build error when building using toolchain without threads support:
+Added sha512 hash provided by upstream.
 
-src/common/tv_filters/AtariNTSC.hxx:172:16: error: 'thread' is not a member of 'std'
-     unique_ptr<std::thread[]> myThreads;
-                     ^~~
-
-Since version 5.0.2, Stella needs a toolchain with threads support.
-
-Fixes:
-http://autobuild.buildroot.net/results/bd30388ee24294158d0a373764408c8c846853d4
-http://autobuild.buildroot.net/results/ad1571cecfc697650b436c147b5f3a1b4326091d
-http://autobuild.buildroot.net/results/10b73362358f3af45534a0cd096672dd1460a7d0
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/stella/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash     | 9 +++++----
+ .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/stella/Config.in b/package/stella/Config.in
-index 959169726f37..639b9e4ae787 100644
---- a/package/stella/Config.in
-+++ b/package/stella/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_STELLA
- 	bool "stella"
- 	depends on !BR2_STATIC_LIBS # sdl2
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_LIBPNG
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_STELLA
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index 13246b69d..b5910f3c0 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-March/002788.html
+-md5 e2ee9e16ffbd45ebda68a7ff638a04f2  xf86-video-amdgpu-1.3.0.tar.bz2
+-sha1 7b89fe6e22e6739257c0f03c9f034c9c579a8bce  xf86-video-amdgpu-1.3.0.tar.bz2
+-sha256 c1630f228938be949273f72b29ae70822dde064ad79c3ccb14d55f427e3f4e70  xf86-video-amdgpu-1.3.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-September/002805.html
++md5 15a54f0a7870a57e3f611c9114924137  xf86-video-amdgpu-1.4.0.tar.bz2
++sha1 d9971cc6177095219a6687328aef25a72df3dd9d  xf86-video-amdgpu-1.4.0.tar.bz2
++sha256 f8cac4bf3dd795b93cc337e5c0c62618026f597890a10d996f09c73eb88ba67c  xf86-video-amdgpu-1.4.0.tar.bz2
++sha512 cae6417a45f6b981e007e080486083f1c38eaca58c6e331b04bbf46c86f23394742a722ae0d798d8dcad66879e99d90e57f04ae9ccb198f3ed26ec745878ccc2  xf86-video-amdgpu-1.4.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index 9bd75369a..50e5310e4 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://stella-emu.github.io/
- 
--comment "stella needs a toolchain w/ dynamic library, C++, gcc >= 4.9"
-+comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 4.9"
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.3.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.4.0
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
 -- 
-1.9.1
+2.11.0
