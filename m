@@ -1,36 +1,65 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Sat, 9 Sep 2017 22:26:19 +0200
-Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against
- openjpeg 2.2
-In-Reply-To: <20170908133156.10357-1-ps.report@gmx.net>
-References: <20170908133156.10357-1-ps.report@gmx.net>
-Message-ID: <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Sep 2017 22:42:07 +0200
+Subject: [Buildroot] [git commit] package/efl: fix build issue on big endian
+	system
+Message-ID: <20170909203455.D1E3280FB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas and Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=f2ed9b21508fc1c48ac4634c9ff15b802a539887
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changes v2 -> v3:
->   - add _GETTEXTIZE (instead of Makefile.in.in patch, suggested by Thomas Petazzoni)
->
-> Changes v1 ->v2:
->  - add _AUTORECONF (suggested by Peter Korsgaard)
+Fixes:
+http://autobuild.buildroot.net/results/0f1/0f12919f59dc92a8d91e23d3b0c1120bc06720db
+http://autobuild.buildroot.net/results/62e/62e96be61601347e92f9c115209af4962fe82492
 
-Re-running gettextize just to make autoreconf work is a bit overkill;
-gettextize is something that the package maintainer runs to get the
-i18n setup ready and among other things it may update gnulib imported
-files in unexpected ways. I'd bet that letting just autopoint work as
-expected (as a step part of autoreconf) would be way more than enough
-here (i.e. no _GETTEXTIZE needed), but that step is currently disabled
-in buildroot by default since some years ago.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...g-add-missing-header-for-big-endian-build.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-See for reference this patch I sent last month, that makes autopoint
-work again during autoreconf:
-http://lists.busybox.net/pipermail/buildroot/2017-August/200941.html
-
--- 
-Aleksander
-https://aleksander.es
+diff --git a/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
+new file mode 100644
+index 0000000..9f0653d
+--- /dev/null
++++ b/package/efl/0001-eina_debug-add-missing-header-for-big-endian-build.patch
+@@ -0,0 +1,35 @@
++From 135f4233266443a4546bdf8217f145a0f7bbb90d Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 7 Sep 2017 22:25:48 +0200
++Subject: [PATCH] eina_debug: add missing header for big endian build
++
++The build fail for big endian system due to missing eina_swap32
++definition.
++Add "eina_cpu.h" include where eina_swap32 prototype is defined.
++
++Patch provided by sharkcz in [1].
++
++Uptream status: pending
++
++[1] https://phab.enlightenment.org/D5158
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/lib/eina/eina_debug.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/lib/eina/eina_debug.c b/src/lib/eina/eina_debug.c
++index ca1bdad..468ca43 100644
++--- a/src/lib/eina/eina_debug.c
+++++ b/src/lib/eina/eina_debug.c
++@@ -60,6 +60,7 @@
++ #endif
++ 
++ #include "eina_debug.h"
+++#include "eina_cpu.h"
++ #include "eina_types.h"
++ #include "eina_list.h"
++ #include "eina_mempool.h"
++-- 
++2.9.5
++
