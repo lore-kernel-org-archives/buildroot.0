@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:40 +0200
-Subject: [Buildroot] [PATCH 34/49 v2] package/asterisk: add optional
-	corosync dependency
+Date: Sat,  9 Sep 2017 23:39:42 +0200
+Subject: [Buildroot] [PATCH 36/49 v2] package/asterisk: add optional netsnmp
+	dependency
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <b1a4b1eecb9ce5d3224ab76947d614438924975a.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <bb8f9d4bbcd9fae6adcaf4b7a020b932ffe39ea5.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 1a56894f8f..452f61ba67 100644
+index 452f61ba67..284b338cb3 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -43,7 +43,6 @@ ASTERISK_CONF_OPTS = \
- 	--disable-rpath \
- 	--without-bfd \
- 	--without-cap \
--	--without-cpg \
- 	--without-curses \
- 	--without-gtk2 \
- 	--without-gmime \
-@@ -132,6 +131,13 @@ else
- ASTERISK_CONF_OPTS += --without-bluetooth
+@@ -65,7 +65,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-mysqlclient \
+ 	--without-nbs \
+ 	--without-neon29 \
+-	--without-netsnmp \
+ 	--without-newt \
+ 	--without-openr2 \
+ 	--without-osptk \
+@@ -175,6 +174,13 @@ else
+ ASTERISK_CONF_OPTS += --without-neon
  endif
  
-+ifeq ($(BR2_PACKAGE_COROSYNC),y)
-+ASTERISK_DEPENDENCIES += corosync
-+ASTERISK_CONF_OPTS += --with-cpg
++ifeq ($(BR2_PACKAGE_NETSNMP),y)
++ASTERISK_DEPENDENCIES += netsnmp
++ASTERISK_CONF_OPTS += --with-netsnmp=$(STAGING_DIR)/usr
 +else
-+ASTERISK_CONF_OPTS += --without-cpg
++ASTERISK_CONF_OPTS += --without-netsnmp
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBICAL),y)
- ASTERISK_DEPENDENCIES += libical
- ASTERISK_CONF_OPTS += --with-ical
+ ifeq ($(BR2_PACKAGE_LIBOGG),y)
+ ASTERISK_DEPENDENCIES += libogg
+ ASTERISK_CONF_OPTS += --with-ogg
 -- 
 2.11.0
