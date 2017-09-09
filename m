@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:10 +0200
-Subject: [Buildroot] [PATCH 04/49 v2] package/asterisk: add optional zlib
-	dependency
+Date: Sat,  9 Sep 2017 23:39:11 +0200
+Subject: [Buildroot] [PATCH 05/49 v2] package/asterisk: add optional support
+	for SSL
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <46609e78b9cd45ead4f708027a507c11be6f2f35.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <9b06b7d831686f80c90346bdbbb4cc66884cc6c4.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 3509783e66..3051a651c2 100644
+index 3051a651c2..f947362906 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -108,7 +108,6 @@ ASTERISK_CONF_OPTS = \
- 	--without-vorbis \
- 	--without-vpb \
- 	--without-x11 \
--	--without-z \
- 	--with-crypt \
- 	--with-jansson \
- 	--with-libcurl \
-@@ -139,6 +138,13 @@ else
+@@ -96,7 +96,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-speexdsp \
+ 	--without-sqlite \
+ 	--without-srtp \
+-	--without-ssl \
+ 	--without-suppserv \
+ 	--without-tds \
+ 	--without-termcap \
+@@ -138,6 +137,13 @@ else
  ASTERISK_CONF_OPTS += --without-gsm
  endif
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+ASTERISK_DEPENDENCIES += zlib
-+ASTERISK_CONF_OPTS += --with-z
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ASTERISK_DEPENDENCIES += openssl
++ASTERISK_CONF_OPTS += --with-ssl
 +else
-+ASTERISK_CONF_OPTS += --without-z
++ASTERISK_CONF_OPTS += --without-ssl
 +endif
 +
- ASTERISK_DIRS = \
- 	ASTVARLIBDIR="/usr/lib/asterisk" \
- 	ASTDATADIR="/usr/lib/asterisk" \
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ ASTERISK_DEPENDENCIES += zlib
+ ASTERISK_CONF_OPTS += --with-z
 -- 
 2.11.0
