@@ -1,143 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:11:18 +0200
-Subject: [Buildroot] [git commit] tcpdump: security bump to version 4.9.2
-Message-ID: <20170909200832.9964C80296@busybox.osuosl.org>
+Date: Sat, 9 Sep 2017 22:15:39 +0200
+Subject: [Buildroot] [git commit] strace: fix program_invocation_name uClibc
+	declaration mismatch
+Message-ID: <20170909200832.A58AC80296@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=478ee139b2c34d34ec64f1a975c1b18dfbbd36d4
+commit: https://git.buildroot.net/buildroot/commit/?id=c374641e31040e77355cf63de30b6984e91114f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues (descriptions not public yet):
+The local program_invocation_name declaration conflicts with the uClibc
+one. Add a patch making this declaration depend on
+!HAVE_PROGRAM_INVOCATION_NAME.
 
-    Fix buffer overflow vulnerabilities:
-      CVE-2017-11543 (SLIP)
-      CVE-2017-13011 (bittok2str_internal)
-    Fix infinite loop vulnerabilities:
-      CVE-2017-12989 (RESP)
-      CVE-2017-12990 (ISAKMP)
-      CVE-2017-12995 (DNS)
-      CVE-2017-12997 (LLDP)
-    Fix buffer over-read vulnerabilities:
-      CVE-2017-11541 (safeputs)
-      CVE-2017-11542 (PIMv1)
-      CVE-2017-12893 (SMB/CIFS)
-      CVE-2017-12894 (lookup_bytestring)
-      CVE-2017-12895 (ICMP)
-      CVE-2017-12896 (ISAKMP)
-      CVE-2017-12897 (ISO CLNS)
-      CVE-2017-12898 (NFS)
-      CVE-2017-12899 (DECnet)
-      CVE-2017-12900 (tok2strbuf)
-      CVE-2017-12901 (EIGRP)
-      CVE-2017-12902 (Zephyr)
-      CVE-2017-12985 (IPv6)
-      CVE-2017-12986 (IPv6 routing headers)
-      CVE-2017-12987 (IEEE 802.11)
-      CVE-2017-12988 (telnet)
-      CVE-2017-12991 (BGP)
-      CVE-2017-12992 (RIPng)
-      CVE-2017-12993 (Juniper)
-      CVE-2017-11542 (PIMv1)
-      CVE-2017-11541 (safeputs)
-      CVE-2017-12994 (BGP)
-      CVE-2017-12996 (PIMv2)
-      CVE-2017-12998 (ISO IS-IS)
-      CVE-2017-12999 (ISO IS-IS)
-      CVE-2017-13000 (IEEE 802.15.4)
-      CVE-2017-13001 (NFS)
-      CVE-2017-13002 (AODV)
-      CVE-2017-13003 (LMP)
-      CVE-2017-13004 (Juniper)
-      CVE-2017-13005 (NFS)
-      CVE-2017-13006 (L2TP)
-      CVE-2017-13007 (Apple PKTAP)
-      CVE-2017-13008 (IEEE 802.11)
-      CVE-2017-13009 (IPv6 mobility)
-      CVE-2017-13010 (BEEP)
-      CVE-2017-13012 (ICMP)
-      CVE-2017-13013 (ARP)
-      CVE-2017-13014 (White Board)
-      CVE-2017-13015 (EAP)
-      CVE-2017-11543 (SLIP)
-      CVE-2017-13016 (ISO ES-IS)
-      CVE-2017-13017 (DHCPv6)
-      CVE-2017-13018 (PGM)
-      CVE-2017-13019 (PGM)
-      CVE-2017-13020 (VTP)
-      CVE-2017-13021 (ICMPv6)
-      CVE-2017-13022 (IP)
-      CVE-2017-13023 (IPv6 mobility)
-      CVE-2017-13024 (IPv6 mobility)
-      CVE-2017-13025 (IPv6 mobility)
-      CVE-2017-13026 (ISO IS-IS)
-      CVE-2017-13027 (LLDP)
-      CVE-2017-13028 (BOOTP)
-      CVE-2017-13029 (PPP)
-      CVE-2017-13030 (PIM)
-      CVE-2017-13031 (IPv6 fragmentation header)
-      CVE-2017-13032 (RADIUS)
-      CVE-2017-13033 (VTP)
-      CVE-2017-13034 (PGM)
-      CVE-2017-13035 (ISO IS-IS)
-      CVE-2017-13036 (OSPFv3)
-      CVE-2017-13037 (IP)
-      CVE-2017-13038 (PPP)
-      CVE-2017-13039 (ISAKMP)
-      CVE-2017-13040 (MPTCP)
-      CVE-2017-13041 (ICMPv6)
-      CVE-2017-13042 (HNCP)
-      CVE-2017-13043 (BGP)
-      CVE-2017-13044 (HNCP)
-      CVE-2017-13045 (VQP)
-      CVE-2017-13046 (BGP)
-      CVE-2017-13047 (ISO ES-IS)
-      CVE-2017-13048 (RSVP)
-      CVE-2017-13049 (Rx)
-      CVE-2017-13050 (RPKI-Router)
-      CVE-2017-13051 (RSVP)
-      CVE-2017-13052 (CFM)
-      CVE-2017-13053 (BGP)
-      CVE-2017-13054 (LLDP)
-      CVE-2017-13055 (ISO IS-IS)
-      CVE-2017-13687 (Cisco HDLC)
-      CVE-2017-13688 (OLSR)
-      CVE-2017-13689 (IKEv1)
-      CVE-2017-13690 (IKEv2)
-      CVE-2017-13725 (IPv6 routing headers)
+Fixes:
+http://autobuild.buildroot.net/results/5f0/5f0852f3ffb46f8fb2b4c9318652c5ab3ab5e97d/
 
-While we're at it, add a hash for the license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Thomas: update patch status.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcpdump/tcpdump.hash | 5 +++--
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...s-fix-program_invocation_name-type-confli.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 4eedc1c..0eb56e6 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,2 +1,3 @@
--# Locally calculated after checking pgp signature at http://www.tcpdump.org/release/tcpdump-4.9.1.tar.gz.sig
--sha256 f9448cf4deb2049acf713655c736342662e652ef40dbe0a8f6f8d5b9ce5bd8f3  tcpdump-4.9.1.tar.gz
-+# Locally calculated after checking pgp signature at http://www.tcpdump.org/release/tcpdump-4.9.2.tar.gz.sig
-+sha256 798b3536a29832ce0cbb07fafb1ce5097c95e308a6f592d14052e1ef1505fe79  tcpdump-4.9.2.tar.gz
-+sha256 9b03d5d13e66d6de02a4bb2d0dd1cb9f41808d045962cdcc42350d5291b141a1  LICENSE
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 8349748..2a6d095 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPDUMP_VERSION = 4.9.1
-+TCPDUMP_VERSION = 4.9.2
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3-Clause
- TCPDUMP_LICENSE_FILES = LICENSE
+diff --git a/package/strace/0001-error_prints-fix-program_invocation_name-type-confli.patch b/package/strace/0001-error_prints-fix-program_invocation_name-type-confli.patch
+new file mode 100644
+index 0000000..9c982f3
+--- /dev/null
++++ b/package/strace/0001-error_prints-fix-program_invocation_name-type-confli.patch
+@@ -0,0 +1,45 @@
++From 96ad51b91c6ab7ff8bac58f90f199324baed07af Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 8 Sep 2017 12:08:13 +0300
++Subject: [PATCH] error_prints: fix program_invocation_name type conflict
++
++uClibc-ng declares program_invocation_name as const. This causes the
++build failure below:
++
++error_prints.c:40:14: error: conflicting types for ???program_invocation_name???
++ extern char *program_invocation_name;
++              ^~~~~~~~~~~~~~~~~~~~~~~
++In file included from error_prints.c:32:0:
++.../output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/errno.h:54:20: note: previous declaration of ???program_invocation_name??? was here
++ extern const char *program_invocation_name, *program_invocation_short_name;
++                    ^~~~~~~~~~~~~~~~~~~~~~~
++Makefile:3856: recipe for target 'strace-error_prints.o' failed
++
++Declare program_invocation_name only when the C library does not provide
++one.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: merged,
++https://github.com/strace/strace/commit/d45f27147f7d95eb209463dc03dc039ea3f15b59
++
++ error_prints.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/error_prints.c b/error_prints.c
++index 8519b9246698..710e99b04ab9 100644
++--- a/error_prints.c
+++++ b/error_prints.c
++@@ -37,7 +37,9 @@
++ 
++ #include "error_prints.h"
++ 
+++#ifndef HAVE_PROGRAM_INVOCATION_NAME
++ extern char *program_invocation_name;
+++#endif
++ 
++ static void
++ verror_msg(int err_no, const char *fmt, va_list p)
++-- 
++2.14.1
++
