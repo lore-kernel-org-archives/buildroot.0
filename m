@@ -1,33 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Sep 2017 17:38:34 +0200
-Subject: [Buildroot] [PATCH] aiccu: delete package
-In-Reply-To: <A478F1A5-E69B-48E1-8FA4-324A46C701BC@gmail.com>
-References: <20170909092510.4119-1-alexander.i.mukhin@gmail.com>
- <A478F1A5-E69B-48E1-8FA4-324A46C701BC@gmail.com>
-Message-ID: <20170909153834.GA2850@scaer>
+Date: Sat, 9 Sep 2017 18:08:31 +0200
+Subject: [Buildroot] [PATCH] stella: fix build without threads support
+In-Reply-To: <1504955136-10831-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1504955136-10831-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20170909160831.GB2850@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+Sergio, All,
 
-On 2017-09-09 13:09 +0300, Alexander Mukhin spake thusly:
-> As SixXS project has ceased its operation on 2017-06-06, consider removing aiccu package.
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-[--SNIP--]
-> index a2d610017..000000000
-> --- a/package/aiccu/Config.in
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -config BR2_PACKAGE_AICCU
-> -    bool "aiccu"
+On 2017-09-09 08:05 -0300, Sergio Prado spake thusly:
+> Fix build error when building using toolchain without threads support:
+> 
+> src/common/tv_filters/AtariNTSC.hxx:172:16: error: 'thread' is not a member of 'std'
+>      unique_ptr<std::thread[]> myThreads;
+>                      ^~~
+> 
+> Since version 5.0.2, Stella needs a toolchain with threads support.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/bd30388ee24294158d0a373764408c8c846853d4
+> http://autobuild.buildroot.net/results/ad1571cecfc697650b436c147b5f3a1b4326091d
+> http://autobuild.buildroot.net/results/10b73362358f3af45534a0cd096672dd1460a7d0
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-Please add an entry in Config.in.legacy.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/stella/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/stella/Config.in b/package/stella/Config.in
+> index 959169726f37..639b9e4ae787 100644
+> --- a/package/stella/Config.in
+> +++ b/package/stella/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_STELLA
+>  	bool "stella"
+>  	depends on !BR2_STATIC_LIBS # sdl2
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+>  	select BR2_PACKAGE_SDL2
+>  	select BR2_PACKAGE_LIBPNG
+> @@ -11,6 +12,7 @@ config BR2_PACKAGE_STELLA
+>  
+>  	  https://stella-emu.github.io/
+>  
+> -comment "stella needs a toolchain w/ dynamic library, C++, gcc >= 4.9"
+> +comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 4.9"
+>  	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
