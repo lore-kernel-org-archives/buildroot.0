@@ -1,131 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat,  9 Sep 2017 23:02:53 +0300
-Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.3.2
-Message-ID: <2f11135f109fc82711e0efbc13e3fd46c292f364.1504987373.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Sep 2017 22:01:43 +0200
+Subject: [Buildroot] [git commit] execline: bump version to 2.3.0.2
+Message-ID: <20170909195854.42ED4800A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2016-8687: Stack-based buffer overflow in the safe_fprintf function
-in tar/util.c in libarchive 3.2.1 allows remote attackers to cause a
-denial of service via a crafted non-printable multibyte character in a
-filename.
+commit: https://git.buildroot.net/buildroot/commit/?id=aee4dc8f01689b67b6015f8c484d6eebe223144f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2016-8688: The mtree bidder in libarchive 3.2.1 does not keep track
-of line sizes when extending the read-ahead, which allows remote
-attackers to cause a denial of service (crash) via a crafted file, which
-triggers an invalid read in the (1) detect_form or (2) bid_entry
-function in libarchive/archive_read_support_format_mtree.c.
-
-CVE-2016-8689: The read_Header function in
-archive_read_support_format_7zip.c in libarchive 3.2.1 allows remote
-attackers to cause a denial of service (out-of-bounds read) via multiple
-EmptyStream attributes in a header in a 7zip archive.
-
-CVE-2016-10209: The archive_wstring_append_from_mbs function in
-archive_string.c in libarchive 3.2.2 allows remote attackers to cause a
-denial of service (NULL pointer dereference and application crash) via a
-crafted archive file.
-
-CVE-2016-10349: The archive_le32dec function in archive_endian.h in
-libarchive 3.2.2 allows remote attackers to cause a denial of service
-(heap-based buffer over-read and application crash) via a crafted file.
-
-CVE-2016-10350: The archive_read_format_cab_read_header function in
-archive_read_support_format_cab.c in libarchive 3.2.2 allows remote
-attackers to cause a denial of service (heap-based buffer over-read and
-application crash) via a crafted file.
-
-CVE-2017-5601: An error in the lha_read_file_header_1() function
-(archive_read_support_format_lha.c) in libarchive 3.2.2 allows remote
-attackers to trigger an out-of-bounds read memory access and
-subsequently cause a crash via a specially crafted archive.
-
-Add upstream patch fixing the following issue:
-
-CVE-2017-14166: libarchive 3.3.2 allows remote attackers to cause a
-denial of service (xml_data heap-based buffer over-read and application
-crash) via a crafted xar archive, related to the mishandling of empty
-strings in the atol8 function in archive_read_support_format_xar.c.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...g-sensible-for-empty-strings-to-make-fuzz.patch | 42 ++++++++++++++++++++++
- package/libarchive/libarchive.hash                 |  2 +-
- package/libarchive/libarchive.mk                   |  2 +-
- 3 files changed, 44 insertions(+), 2 deletions(-)
- create mode 100644 package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
+ package/execline/execline.hash | 2 +-
+ package/execline/execline.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch b/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
-new file mode 100644
-index 000000000000..1d1d80d70838
---- /dev/null
-+++ b/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
-@@ -0,0 +1,42 @@
-+From fa7438a0ff4033e4741c807394a9af6207940d71 Mon Sep 17 00:00:00 2001
-+From: Joerg Sonnenberger <joerg@bec.de>
-+Date: Tue, 5 Sep 2017 18:12:19 +0200
-+Subject: [PATCH] Do something sensible for empty strings to make fuzzers
-+ happy.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit fa7438a0ff
-+
-+ libarchive/archive_read_support_format_xar.c | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/libarchive/archive_read_support_format_xar.c b/libarchive/archive_read_support_format_xar.c
-+index 7a22beb9d8e4..93eeacc5e6eb 100644
-+--- a/libarchive/archive_read_support_format_xar.c
-++++ b/libarchive/archive_read_support_format_xar.c
-+@@ -1040,6 +1040,9 @@ atol10(const char *p, size_t char_cnt)
-+ 	uint64_t l;
-+ 	int digit;
-+ 
-++	if (char_cnt == 0)
-++		return (0);
-++
-+ 	l = 0;
-+ 	digit = *p - '0';
-+ 	while (digit >= 0 && digit < 10  && char_cnt-- > 0) {
-+@@ -1054,7 +1057,10 @@ atol8(const char *p, size_t char_cnt)
-+ {
-+ 	int64_t l;
-+ 	int digit;
-+-        
-++
-++	if (char_cnt == 0)
-++		return (0);
-++
-+ 	l = 0;
-+ 	while (char_cnt-- > 0) {
-+ 		if (*p >= '0' && *p <= '7')
-+-- 
-+2.14.1
-+
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 2c39bd3e077d..98a34ad36cce 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index 54d9e28..f68ce1b 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  72ee1a4e3fd534525f13a0ba1aa7b05b203d186e0c6072a8a4738649d0b3cfd2  libarchive-3.2.1.tar.gz
-+sha256  ed2dbd6954792b2c054ccf8ec4b330a54b85904a80cef477a1c74643ddafa0ce  libarchive-3.3.2.tar.gz
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 9956b63d4358..1c8391bda9b9 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
+ # Locally generated
+-sha256 2bf65aaaf808718952e05c2221b4e9472271e53ebd915c8d1d49a3e992583bf4  execline-2.3.0.1.tar.gz
++sha256 c11650651a7230bd5687945a7698b2da3fe13c3c0eb15e296bb91769d4775f45  execline-2.3.0.2.tar.gz
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index 576f11c..7fed626 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.2.1
-+LIBARCHIVE_VERSION = 3.3.2
- LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause
--- 
-2.14.1
+-EXECLINE_VERSION = 2.3.0.1
++EXECLINE_VERSION = 2.3.0.2
+ EXECLINE_SITE = http://skarnet.org/software/execline
+ EXECLINE_LICENSE = ISC
+ EXECLINE_LICENSE_FILES = COPYING
