@@ -1,18 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:53 +0200
-Subject: [Buildroot] [PATCH 47/49 v2] package/asterisk: enable inotify when
-	possible
+Date: Sat,  9 Sep 2017 23:39:55 +0200
+Subject: [Buildroot] [PATCH 49/49 v2] package/asterisk: add optional jack2
+	dependency
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <222e0d158eca2a8dd6b0ae0e4e4d7cd8cb96c5b5.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <52f266829b294499545ad7b38d32e884fa20d86d.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-As for DBus, we disable support for inotify only for microblaze, because
-the toolchain does not provide a complete inotify.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
@@ -20,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index cd8bf9fab6..54007f46b3 100644
+index 3bf37da709..489fc49e30 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -49,7 +49,6 @@ ASTERISK_CONF_OPTS = \
- 	--without-hoard \
- 	--without-iksemel \
+@@ -51,7 +51,6 @@ ASTERISK_CONF_OPTS = \
  	--without-imap \
--	--without-inotify \
  	--without-iodbc \
  	--without-isdnnet \
- 	--without-jack \
-@@ -100,6 +99,13 @@ ASTERISK_CONF_OPTS += --without-avcodec
- ASTERISK_CONF_ENV = \
- 	ac_cv_path_CONFIG_LIBXML2=$(STAGING_DIR)/usr/bin/xml2-config
+-	--without-jack \
+ 	--without-uriparser \
+ 	--without-kqueue \
+ 	--without-libedit \
+@@ -139,6 +138,13 @@ else
+ ASTERISK_CONF_OPTS += --without-cpg
+ endif
  
-+ifeq ($(BR2_microblaze),y)
-+# microblaze toolchain doesn't provide inotify_rm_* but does have sys/inotify.h
-+ASTERISK_CONF_OPTS += --without-inotify
++ifeq ($(BR2_PACKAGE_JACK2),y)
++ASTERISK_DEPENDENCIES += jack2
++ASTERISK_CONF_OPTS += --with-jack
 +else
-+ASTERISK_CONF_OPTS += --with-inotify
++ASTERISK_CONF_OPTS += --without-jack
 +endif
 +
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- ASTERISK_CONF_OPTS += --with-execinfo
- else
+ ifeq ($(BR2_PACKAGE_LIBICAL),y)
+ ASTERISK_DEPENDENCIES += libical
+ ASTERISK_CONF_OPTS += --with-ical
 -- 
 2.11.0
