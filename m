@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:36 +0200
-Subject: [Buildroot] [PATCH 30/49 v2] package/libqb: new package
+Date: Sat,  9 Sep 2017 23:39:37 +0200
+Subject: [Buildroot] [PATCH 31/49 v2] package/corosync: new package
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <c5a9ad9b87390d6b6b0a16d1f647ce7c4f2fd92e.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <752e6d4352e6b6254704028375d0a356f337bacc.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,130 +12,112 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                                  |  1 +
- ...fix-CLOCK_MONOTONIC-check-for-cross-compi.patch | 33 ++++++++++++++++++++++
- package/libqb/Config.in                            | 12 ++++++++
- package/libqb/libqb.hash                           |  2 ++
- package/libqb/libqb.mk                             | 32 +++++++++++++++++++++
- 5 files changed, 80 insertions(+)
- create mode 100644 package/libqb/0001-bconfigure-fix-CLOCK_MONOTONIC-check-for-cross-compi.patch
- create mode 100644 package/libqb/Config.in
- create mode 100644 package/libqb/libqb.hash
- create mode 100644 package/libqb/libqb.mk
+ package/Config.in              |  1 +
+ package/corosync/Config.in     | 20 ++++++++++++++++++
+ package/corosync/corosync.hash |  2 ++
+ package/corosync/corosync.mk   | 47 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 70 insertions(+)
+ create mode 100644 package/corosync/Config.in
+ create mode 100644 package/corosync/corosync.hash
+ create mode 100644 package/corosync/corosync.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2243d6bdcd..a6c63a0ad9 100644
+index a6c63a0ad9..104acbb3ad 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1453,6 +1453,7 @@ menu "Other"
- 	source "package/libpthread-stubs/Config.in"
- 	source "package/libpthsem/Config.in"
- 	source "package/libpwquality/Config.in"
-+	source "package/libqb/Config.in"
- 	source "package/libseccomp/Config.in"
- 	source "package/libsigc/Config.in"
- 	source "package/libsigsegv/Config.in"
-diff --git a/package/libqb/0001-bconfigure-fix-CLOCK_MONOTONIC-check-for-cross-compi.patch b/package/libqb/0001-bconfigure-fix-CLOCK_MONOTONIC-check-for-cross-compi.patch
+@@ -1405,6 +1405,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
++	source "package/corosync/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+diff --git a/package/corosync/Config.in b/package/corosync/Config.in
 new file mode 100644
-index 0000000000..6d22649ce5
+index 0000000000..1dda488109
 --- /dev/null
-+++ b/package/libqb/0001-bconfigure-fix-CLOCK_MONOTONIC-check-for-cross-compi.patch
-@@ -0,0 +1,33 @@
-+From f9857721bfe5c47253bc2cf487d9dcc94cbce3c2 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 26 Dec 2016 19:38:45 +0100
-+Subject: [PATCH] bconfigure: fix CLOCK_MONOTONIC check for cross-compilation
-+
-+In cross-compilation, we can't run test programs, so configure just
-+bails out. Since there is no cache variable (e.g. ac_cv_blabla, we can't
-+even provide the correct result.
-+
-+But in thise case, we don't really need to run to start with; we just
-+need to check if the toolchain headers know about CLOCK_MONOTONIC.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 560b330..6972213 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -179,7 +179,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-+                  )
-+ 
-+ AC_MSG_CHECKING(for a working clock_getres(CLOCK_MONOTONIC, &ts))
-+-AC_RUN_IFELSE([AC_LANG_PROGRAM(
-++AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-+ [[#include <time.h>]],
-+ [[struct timespec ts; if(clock_getres(CLOCK_MONOTONIC, &ts)) return -1;]])],
-+                     [
-+-- 
-+2.7.4
-+
-diff --git a/package/libqb/Config.in b/package/libqb/Config.in
-new file mode 100644
-index 0000000000..1bfea8b210
---- /dev/null
-+++ b/package/libqb/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBQB
-+	bool "libqb"
++++ b/package/corosync/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_COROSYNC
++	bool "corosync"
++	depends on BR2_USE_MMU # fork()
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnsp
++	depends on !BR2_STATIC_LIBS # libnss
++	select BR2_PACKAGE_LIBNSS
++	select BR2_PACKAGE_LIBQB
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  libqb is a library with the primary purpose of providing high
-+	  performance client server reusable features. It provides high
-+	  performance logging, tracing, ipc, and poll.
++	  The Corosync Cluster Engine is a Group Communication System
++	  with additional features for implementing high availability
++	  within applications.
 +
-+	  https://github.com/clusterlabs/libqb/wiki
++	  https://corosync.github.io/corosync/
 +
-+comment "libqb needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
++comment "corosync needs a toolchain w/ threads, dunamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/corosync/corosync.hash b/package/corosync/corosync.hash
 new file mode 100644
-index 0000000000..b1a93201b9
+index 0000000000..5c009dee19
 --- /dev/null
-+++ b/package/libqb/libqb.hash
++++ b/package/corosync/corosync.hash
 @@ -0,0 +1,2 @@
 +# sha256 locally computed
-+sha256  98a6f8d7b83013747788ff7f1aace387ec532a8e7fbecc354ad9260f426dd518  libqb-v1.0.1.tar.gz
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
++sha256  0dd0ee718253c18c5090e0304eec72a7be8b18b6fe5e03de59ce095fa08c8b63  corosync-v2.4.2.tar.gz
+diff --git a/package/corosync/corosync.mk b/package/corosync/corosync.mk
 new file mode 100644
-index 0000000000..5ca2480b03
+index 0000000000..865f5e0f8d
 --- /dev/null
-+++ b/package/libqb/libqb.mk
-@@ -0,0 +1,32 @@
++++ b/package/corosync/corosync.mk
+@@ -0,0 +1,47 @@
 +################################################################################
 +#
-+# libqb
++# corosync
 +#
 +################################################################################
 +
-+LIBQB_VERSION = v1.0.1
-+LIBQB_SITE = $(call github,ClusterLabs,libqb,$(LIBQB_VERSION))
++COROSYNC_VERSION = v2.4.2
++COROSYNC_SITE = $(call github,corosync,corosync,$(COROSYNC_VERSION))
 +
-+LIBQB_LICENSE = LGPLv2.1+
-+LIBQB_LICENSE_FILES = COPYING
++COROSYNC_LICENSE = BSD-3c
++COROSYNC_LICENSE_FILES = LICENSE
 +
-+LIBQB_DEPENDENCIES = host-pkgconf
++COROSYNC_DEPENDENCIES = libnss libqb zlib
++COROSYNC_AUTORECONF = YES
++COROSYNC_INSTALL_STAGING = YES
 +
-+# Straight out of the repository, no configure present. Also, we do patch
-+# configure.ac.
-+LIBQB_AUTORECONF = YES
-+
-+LIBQB_INSTALL_STAGING = YES
-+
-+define LIBQB_M4
++define COROSYNC_M4
 +	$(INSTALL) -d -m 0755 $(@D)/m4
 +endef
-+LIBQB_POST_EXTRACT_HOOKS += LIBQB_M4
++COROSYNC_POST_EXTRACT_HOOKS += COROSYNC_M4
 +
-+# Don't build docs
-+LIBQB_CONF_ENV = ac_cv_prog_DOXYGEN=
++# Don't build HTML manpages
++COROSYNC_CONF_ENV = ac_cv_prog_GROFF=
 +
-+# Don't use -Werror
-+LIBQB_CONF_OPTS = --disable-fatal-warnings
++COROSYNC_CONF_OPTS = \
++	--disable-fatal-warnings \
++	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
++	--enable-secure-build \
++	--disable-user-flags \
++	--disable-coverage \
++	--disable-small-memory-footprint \
++	--disable-dbus \
++	--disable-testagents \
++	--disable-rdma \
++	--disable-monitoring \
++	--disable-watchdog \
++	--disable-augeas \
++	--disable-systemd \
++	--disable-upstart \
++	$(if $(BR2_INIT_SYSTEMD),--enable-systemd,--disable-systemd) \
++	--disable-upstart \
++	--disable-snmp \
++	--disable-xmlconf \
++	--disable-qdevices \
++	--disable-qnet
 +
 +$(eval $(autotools-package))
 -- 
