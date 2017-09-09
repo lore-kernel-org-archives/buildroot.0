@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:12 +0200
-Subject: [Buildroot] [PATCH 06/49 v2] package/asterisk: add optional
-	alsa-lib dependency
+Date: Sat,  9 Sep 2017 23:39:13 +0200
+Subject: [Buildroot] [PATCH 07/49 v2] package/asterisk: add optional curl
+	dependency
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <911c2719d8696ece400cdd7cb6e52dd4ce03dbce.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <0964a3811a3c7a9de4790966cdd90dc390ff1c8f.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/asterisk/asterisk.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/asterisk/asterisk.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index f947362906..6e68cd1912 100644
+index 6e68cd1912..29e52aef46 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -41,7 +41,6 @@ ASTERISK_CONF_OPTS = \
- 	--disable-internal-poll \
- 	--disable-asteriskssl \
- 	--disable-rpath \
--	--without-asound \
- 	--without-bfd \
- 	--without-bluetooth \
- 	--without-cap \
-@@ -137,6 +136,13 @@ else
- ASTERISK_CONF_OPTS += --without-gsm
+@@ -143,6 +143,13 @@ else
+ ASTERISK_CONF_OPTS += --without-asound
  endif
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+ASTERISK_DEPENDENCIES += alsa-lib
-+ASTERISK_CONF_OPTS += --with-asound
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++ASTERISK_DEPENDENCIES += libcurl
++ASTERISK_CONF_OPTS += --with-libcurl
 +else
-+ASTERISK_CONF_OPTS += --without-asound
++ASTERISK_CONF_OPTS += --without-libcurl
 +endif
 +
  ifeq ($(BR2_PACKAGE_OPENSSL),y)
