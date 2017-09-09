@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:17:15 +0200
-Subject: [Buildroot] [PATCH 2/2] strace: update homepage link
-In-Reply-To: <1fa4f0523a9b34911d8dfea8f688e8763408251a.1504862629.git.baruch@tkos.co.il>
-References: <8423660704daf069a26cafd6fd43009796262e33.1504862629.git.baruch@tkos.co.il>
- <1fa4f0523a9b34911d8dfea8f688e8763408251a.1504862629.git.baruch@tkos.co.il>
-Message-ID: <20170909221715.263b4a2c@windsurf.lan>
+Date: Sat, 9 Sep 2017 22:18:29 +0200
+Subject: [Buildroot] [PATCH 1/2]
+ package/x11r7/xdriver_xf86-video-amdgpu: bump version to 1.4.0
+In-Reply-To: <20170909114558.6201-1-bernd.kuhls@t-online.de>
+References: <20170909114558.6201-1-bernd.kuhls@t-online.de>
+Message-ID: <20170909221829.15c14584@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  8 Sep 2017 12:23:49 +0300, Baruch Siach wrote:
-> strace moved to a new homepage as upstream commit 2bba131575878 (Update
-> homepage URL) indicates.
+On Sat,  9 Sep 2017 13:45:57 +0200, Bernd Kuhls wrote:
+> Added sha512 hash provided by upstream.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/strace/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash     | 9 +++++----
+>  .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk | 2 +-
+>  2 files changed, 6 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
