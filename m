@@ -1,41 +1,51 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  9 Sep 2017 12:34:21 +0200
-Subject: [Buildroot] [PATCH 9/9] s6-linux-init: bump version to 0.3.1.0
-In-Reply-To: <20170909103421.30675-1-eric.le.bihan.dev@free.fr>
-References: <20170909103421.30675-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170909103421.30675-10-eric.le.bihan.dev@free.fr>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat,  9 Sep 2017 08:05:36 -0300
+Subject: [Buildroot] [PATCH] stella: fix build without threads support
+Message-ID: <1504955136-10831-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/s6-linux-init/s6-linux-init.hash | 2 +-
- package/s6-linux-init/s6-linux-init.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix build error when building using toolchain without threads support:
 
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-index babcb2a3a6..80068ba6ab 100644
---- a/package/s6-linux-init/s6-linux-init.hash
-+++ b/package/s6-linux-init/s6-linux-init.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 9376f76ae3ab24cb18a35a6956d0fa5fe88cc4c1dfd19bbafc47dcd4f91c2535  s6-linux-init-0.3.0.0.tar.gz
-+sha256 d8854a01f41db88250b73bdff3a636ed31810b1c309acb2d724380c8b69aedd6  s6-linux-init-0.3.1.0.tar.gz
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-index e2dc26e6fe..be968ba0ef 100644
---- a/package/s6-linux-init/s6-linux-init.mk
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+src/common/tv_filters/AtariNTSC.hxx:172:16: error: 'thread' is not a member of 'std'
+     unique_ptr<std::thread[]> myThreads;
+                     ^~~
+
+Since version 5.0.2, Stella needs a toolchain with threads support.
+
+Fixes:
+http://autobuild.buildroot.net/results/bd30388ee24294158d0a373764408c8c846853d4
+http://autobuild.buildroot.net/results/ad1571cecfc697650b436c147b5f3a1b4326091d
+http://autobuild.buildroot.net/results/10b73362358f3af45534a0cd096672dd1460a7d0
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/stella/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/stella/Config.in b/package/stella/Config.in
+index 959169726f37..639b9e4ae787 100644
+--- a/package/stella/Config.in
++++ b/package/stella/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_STELLA
+ 	bool "stella"
+ 	depends on !BR2_STATIC_LIBS # sdl2
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_LIBPNG
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_STELLA
  
--S6_LINUX_INIT_VERSION = 0.3.0.0
-+S6_LINUX_INIT_VERSION = 0.3.1.0
- S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
- S6_LINUX_INIT_LICENSE = ISC
- S6_LINUX_INIT_LICENSE_FILES = COPYING
+ 	  https://stella-emu.github.io/
+ 
+-comment "stella needs a toolchain w/ dynamic library, C++, gcc >= 4.9"
++comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 4.9"
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
-2.13.5
+1.9.1
