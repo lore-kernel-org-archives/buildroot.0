@@ -1,101 +1,130 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat,  9 Sep 2017 23:10:55 +0300
-Subject: [Buildroot] [PATCH] libcurl: bump to version 7.55.1
-Message-ID: <1d6c2c5121767c5cdd5d1f96be857d2f3a937c15.1504987855.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Sep 2017 22:12:29 +0200
+Subject: [Buildroot] [PATCH] tcpdump: security bump to version 4.9.2
+In-Reply-To: <20170908121903.11830-1-peter@korsgaard.com>
+References: <20170908121903.11830-1-peter@korsgaard.com>
+Message-ID: <20170909221229.57da435a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Hello,
 
-Add license hash.
+On Fri,  8 Sep 2017 14:19:03 +0200, Peter Korsgaard wrote:
+> Fixes the following security issues (descriptions not public yet):
+> 
+>     Fix buffer overflow vulnerabilities:
+>       CVE-2017-11543 (SLIP)
+>       CVE-2017-13011 (bittok2str_internal)
+>     Fix infinite loop vulnerabilities:
+>       CVE-2017-12989 (RESP)
+>       CVE-2017-12990 (ISAKMP)
+>       CVE-2017-12995 (DNS)
+>       CVE-2017-12997 (LLDP)
+>     Fix buffer over-read vulnerabilities:
+>       CVE-2017-11541 (safeputs)
+>       CVE-2017-11542 (PIMv1)
+>       CVE-2017-12893 (SMB/CIFS)
+>       CVE-2017-12894 (lookup_bytestring)
+>       CVE-2017-12895 (ICMP)
+>       CVE-2017-12896 (ISAKMP)
+>       CVE-2017-12897 (ISO CLNS)
+>       CVE-2017-12898 (NFS)
+>       CVE-2017-12899 (DECnet)
+>       CVE-2017-12900 (tok2strbuf)
+>       CVE-2017-12901 (EIGRP)
+>       CVE-2017-12902 (Zephyr)
+>       CVE-2017-12985 (IPv6)
+>       CVE-2017-12986 (IPv6 routing headers)
+>       CVE-2017-12987 (IEEE 802.11)
+>       CVE-2017-12988 (telnet)
+>       CVE-2017-12991 (BGP)
+>       CVE-2017-12992 (RIPng)
+>       CVE-2017-12993 (Juniper)
+>       CVE-2017-11542 (PIMv1)
+>       CVE-2017-11541 (safeputs)
+>       CVE-2017-12994 (BGP)
+>       CVE-2017-12996 (PIMv2)
+>       CVE-2017-12998 (ISO IS-IS)
+>       CVE-2017-12999 (ISO IS-IS)
+>       CVE-2017-13000 (IEEE 802.15.4)
+>       CVE-2017-13001 (NFS)
+>       CVE-2017-13002 (AODV)
+>       CVE-2017-13003 (LMP)
+>       CVE-2017-13004 (Juniper)
+>       CVE-2017-13005 (NFS)
+>       CVE-2017-13006 (L2TP)
+>       CVE-2017-13007 (Apple PKTAP)
+>       CVE-2017-13008 (IEEE 802.11)
+>       CVE-2017-13009 (IPv6 mobility)
+>       CVE-2017-13010 (BEEP)
+>       CVE-2017-13012 (ICMP)
+>       CVE-2017-13013 (ARP)
+>       CVE-2017-13014 (White Board)
+>       CVE-2017-13015 (EAP)
+>       CVE-2017-11543 (SLIP)
+>       CVE-2017-13016 (ISO ES-IS)
+>       CVE-2017-13017 (DHCPv6)
+>       CVE-2017-13018 (PGM)
+>       CVE-2017-13019 (PGM)
+>       CVE-2017-13020 (VTP)
+>       CVE-2017-13021 (ICMPv6)
+>       CVE-2017-13022 (IP)
+>       CVE-2017-13023 (IPv6 mobility)
+>       CVE-2017-13024 (IPv6 mobility)
+>       CVE-2017-13025 (IPv6 mobility)
+>       CVE-2017-13026 (ISO IS-IS)
+>       CVE-2017-13027 (LLDP)
+>       CVE-2017-13028 (BOOTP)
+>       CVE-2017-13029 (PPP)
+>       CVE-2017-13030 (PIM)
+>       CVE-2017-13031 (IPv6 fragmentation header)
+>       CVE-2017-13032 (RADIUS)
+>       CVE-2017-13033 (VTP)
+>       CVE-2017-13034 (PGM)
+>       CVE-2017-13035 (ISO IS-IS)
+>       CVE-2017-13036 (OSPFv3)
+>       CVE-2017-13037 (IP)
+>       CVE-2017-13038 (PPP)
+>       CVE-2017-13039 (ISAKMP)
+>       CVE-2017-13040 (MPTCP)
+>       CVE-2017-13041 (ICMPv6)
+>       CVE-2017-13042 (HNCP)
+>       CVE-2017-13043 (BGP)
+>       CVE-2017-13044 (HNCP)
+>       CVE-2017-13045 (VQP)
+>       CVE-2017-13046 (BGP)
+>       CVE-2017-13047 (ISO ES-IS)
+>       CVE-2017-13048 (RSVP)
+>       CVE-2017-13049 (Rx)
+>       CVE-2017-13050 (RPKI-Router)
+>       CVE-2017-13051 (RSVP)
+>       CVE-2017-13052 (CFM)
+>       CVE-2017-13053 (BGP)
+>       CVE-2017-13054 (LLDP)
+>       CVE-2017-13055 (ISO IS-IS)
+>       CVE-2017-13687 (Cisco HDLC)
+>       CVE-2017-13688 (OLSR)
+>       CVE-2017-13689 (IKEv1)
+>       CVE-2017-13690 (IKEv2)
+>       CVE-2017-13725 (IPv6 routing headers)
+> 
+> While we're at it, add a hash for the license file.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/tcpdump/tcpdump.hash | 5 +++--
+>  package/tcpdump/tcpdump.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...-curl-system.h-support-more-architectures.patch | 47 ----------------------
- package/libcurl/libcurl.hash                       |  5 ++-
- package/libcurl/libcurl.mk                         |  2 +-
- 3 files changed, 4 insertions(+), 50 deletions(-)
- delete mode 100644 package/libcurl/0001-curl-system.h-support-more-architectures.patch
+Applied to master, thanks. Interesting number of CVEs being fixed here.
+Are they trying to generate an integer overflow in the CVE
+database ? :-)
 
-diff --git a/package/libcurl/0001-curl-system.h-support-more-architectures.patch b/package/libcurl/0001-curl-system.h-support-more-architectures.patch
-deleted file mode 100644
-index 94d9a2a11fa5..000000000000
---- a/package/libcurl/0001-curl-system.h-support-more-architectures.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 7d84bd820ef412d251b643a4faced105668f4ebd Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 11 Aug 2017 18:52:37 +0200
--Subject: [PATCH] curl/system.h: support more architectures
--
--The long list of architectures in include/curl/system.h is annoying to
--maintain, and needs to be extended for each and every architecture to
--support.
--
--Instead, let's rely on the __SIZEOF_LONG__ define of the gcc compiler
--(we are in the GNUC condition anyway), which tells us if long is 4
--bytes or 8 bytes.
--
--This fixes the build of libcurl 7.55.0 on architectures such as
--OpenRISC or ARC.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/curl/system.h | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/include/curl/system.h b/include/curl/system.h
--index 79abf8f..0e13075 100644
----- a/include/curl/system.h
--+++ b/include/curl/system.h
--@@ -403,7 +403,7 @@
-- #  if !defined(__LP64__) && (defined(__ILP32__) || \
--       defined(__i386__) || defined(__ppc__) || defined(__arm__) || \
--       defined(__sparc__) || defined(__mips__) || defined(__sh__) || \
---      defined(__XTENSA__))
--+      defined(__XTENSA__) || (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 4))
-- #    define CURL_SIZEOF_LONG           4
-- #    define CURL_TYPEOF_CURL_OFF_T     long long
-- #    define CURL_FORMAT_CURL_OFF_T     "lld"
--@@ -412,7 +412,8 @@
-- #    define CURL_SUFFIX_CURL_OFF_T     LL
-- #    define CURL_SUFFIX_CURL_OFF_TU    ULL
-- #  elif defined(__LP64__) || \
---        defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__)
--+        defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__) || \
--+        (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 8)
-- #    define CURL_SIZEOF_LONG           8
-- #    define CURL_TYPEOF_CURL_OFF_T     long
-- #    define CURL_FORMAT_CURL_OFF_T     "ld"
---- 
--2.9.4
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 6d49b6742830..571526a9b70a 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.55.0.tar.xz.asc
--sha256 cdd58522f8607fd4e871df79d73acb3155075e2134641e5adab12a0962df059d  curl-7.55.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
-+sha256 3eafca6e84ecb4af5f35795dee84e643d5428287e88c041122bb8dac18676bb7  curl-7.55.1.tar.xz
-+sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index dd0ccbfa4621..64110cccf072 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.55.0
-+LIBCURL_VERSION = 7.55.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
