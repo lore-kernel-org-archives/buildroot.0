@@ -1,73 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:46 +0200
-Subject: [Buildroot] [PATCH 40/49 v2] package/libpjsip: add option to enable
-	G.7221 codec
+Date: Sat,  9 Sep 2017 23:39:41 +0200
+Subject: [Buildroot] [PATCH 35/49 v2] package/libpjsip: add option to enable
+	GSM codec
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <78959147dfef22a77faaf939537b7f1b97af3382.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <577822438ab319654ee5eaa73ec0b4f96b3a8434.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We do have a standalone libg7221 package, but pjsip can only use a
-bundled version.
-
-Patching pjsip so it can use the standalone version is not trivial, so
-we have to live with that... :-(
-
-Fortunately, the library that pjsip installs does not conflict with the
-one from the libg7221 package, as it is named differently.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-
 ---
-Changes v1 -> v2:
-  - fix variable name  (Adam)
----
- package/libpjsip/Config.in   | 3 +++
- package/libpjsip/libpjsip.mk | 6 +++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ package/libpjsip/Config.in   | 12 ++++++++++++
+ package/libpjsip/libpjsip.mk | 14 +++++++++++++-
+ 2 files changed, 25 insertions(+), 1 deletion(-)
 
 diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index 903dd1d693..2e0178c692 100644
+index 727d2ec3d0..ce15a20567 100644
 --- a/package/libpjsip/Config.in
 +++ b/package/libpjsip/Config.in
-@@ -18,6 +18,9 @@ config BR2_PACKAGE_LIBPJSIP_CODEC_G711
- config BR2_PACKAGE_LIBPJSIP_CODEC_G722
- 	bool "G.722 codec"
+@@ -10,5 +10,17 @@ config BR2_PACKAGE_LIBPJSIP
  
-+config BR2_PACKAGE_LIBPJSIP_CODEC_G7221
-+	bool "G.722.1 codec"
+ 	  http://www.pjsip.org
+ 
++if BR2_PACKAGE_LIBPJSIP
 +
- config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
-     bool "GSM codec"
-     depends on !BR2_STATIC_LIBS # libgsm
++config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
++    bool "GSM codec"
++    depends on !BR2_STATIC_LIBS # libgsm
++    select BR2_PACKAGE_LIBGSM
++
++comment "GSM codec needs a toolchain w/ shared libraries"
++    depends on BR2_STATIC_LIBS
++
++endif # BR2_PACKAGE_LIBPJSIP
++
+ comment "libpjsip needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 9992e14795..11e2287a1c 100644
+index 4e2da7d32d..9b25dad2f8 100644
 --- a/package/libpjsip/libpjsip.mk
 +++ b/package/libpjsip/libpjsip.mk
-@@ -29,7 +29,6 @@ LIBPJSIP_CONF_OPTS = \
+@@ -26,7 +26,6 @@ LIBPJSIP_CONF_ENV = \
+ 
+ LIBPJSIP_CONF_OPTS = \
+ 	--disable-sound \
+-	--disable-gsm-codec \
+ 	--disable-speex-codec \
+ 	--disable-speex-aec \
  	--disable-resample \
- 	--disable-video \
- 	--disable-opencore-amr \
--	--disable-g7221-codec \
- 	--disable-ilbc-codec \
- 	--disable-libwebrtc \
- 	--disable-opus \
-@@ -79,6 +78,11 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G722),y)
- LIBPJSIP_CONF_OPTS += --disable-g722-codec
+@@ -70,4 +69,17 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ LIBPJSIP_DEPENDENCIES += util-linux
  endif
  
-+# libpjsip can only use a bundled version of libg7221
-+ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G7221),y)
-+LIBPJSIP_CONF_OPTS += --disable-g7221-codec
++# Codecs can only be disabled. If explictly enabled, the check is
++# omitted (but successful), and there is no configure trace "Checking
++# if [codec] codec is disabled...no". So we only explicitly disable it
++# and we do not explictly enable it, so we get the configure log in
++# both cases.
++
++ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_GSM),y)
++LIBPJSIP_DEPENDENCIES += libgsm
++LIBPJSIP_CONF_OPTS += --with-external-gsm
++else
++LIBPJSIP_CONF_OPTS += --disable-gsm-codec
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_GSM),y)
- LIBPJSIP_DEPENDENCIES += libgsm
- LIBPJSIP_CONF_OPTS += --with-external-gsm
+ $(eval $(autotools-package))
 -- 
 2.11.0
