@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:55 +0200
-Subject: [Buildroot] [PATCH 49/49 v2] package/asterisk: add optional jack2
-	dependency
+Date: Sat,  9 Sep 2017 23:39:54 +0200
+Subject: [Buildroot] [PATCH 48/49 v2] package/asterisk: add optional
+	unixodbc dependency
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <52f266829b294499545ad7b38d32e884fa20d86d.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <de4e62d0de07797a5f2168c80a873cb04634e56c.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 3bf37da709..489fc49e30 100644
+index 54007f46b3..3bf37da709 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -51,7 +51,6 @@ ASTERISK_CONF_OPTS = \
- 	--without-imap \
- 	--without-iodbc \
- 	--without-isdnnet \
--	--without-jack \
- 	--without-uriparser \
- 	--without-kqueue \
- 	--without-libedit \
-@@ -139,6 +138,13 @@ else
- ASTERISK_CONF_OPTS += --without-cpg
+@@ -79,7 +79,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-timerfd \
+ 	--without-tinfo \
+ 	--without-unbound \
+-	--without-unixodbc \
+ 	--without-vpb \
+ 	--without-x11 \
+ 	--with-crypt \
+@@ -292,6 +291,13 @@ else
+ ASTERISK_CONF_OPTS += --without-vorbis
  endif
  
-+ifeq ($(BR2_PACKAGE_JACK2),y)
-+ASTERISK_DEPENDENCIES += jack2
-+ASTERISK_CONF_OPTS += --with-jack
++ifeq ($(BR2_PACKAGE_UNIXODBC),y)
++ASTERISK_DEPENDENCIES += unixodbc
++ASTERISK_CONF_OPTS += --with-unixodbc
 +else
-+ASTERISK_CONF_OPTS += --without-jack
++ASTERISK_CONF_OPTS += --without-unixodbc
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBICAL),y)
- ASTERISK_DEPENDENCIES += libical
- ASTERISK_CONF_OPTS += --with-ical
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ ASTERISK_DEPENDENCIES += zlib
+ ASTERISK_CONF_OPTS += --with-z
 -- 
 2.11.0
