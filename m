@@ -1,174 +1,54 @@
-From: Paul Gildea <gildeap@tcd.ie>
-Date: Sat, 9 Sep 2017 20:03:43 +0100
-Subject: [Buildroot] Issue adding subprocess32 python package to
-	buildroot
-In-Reply-To: <20170909161401.GC2850@scaer>
-References: <CAP3D3ge8ZXFXuB4_V5eSxnKAN=5hKWwYcxT2xRqM6HUOp39pUg@mail.gmail.com>
- <20170909161401.GC2850@scaer>
-Message-ID: <CAP3D3geXWNw1m+1v7DJ+GKmB6B_fVN_FSR6FiaceNxhkfCMpMQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Sep 2017 22:00:16 +0200
+Subject: [Buildroot] [git commit] stella: fix build without threads support
+Message-ID: <20170909195320.22EC080FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, unfortunately that is not an option or I would have upgraded.
-Nobody would want to work on old software. I understand that makes it so
-you can't help.
+commit: https://git.buildroot.net/buildroot/commit/?id=d47a0f4319844db3a5d0b1cd9677dbf2ffc6c54e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks
+Fix build error when building using toolchain without threads support:
 
---
-Paul
+src/common/tv_filters/AtariNTSC.hxx:172:16: error: 'thread' is not a member of 'std'
+     unique_ptr<std::thread[]> myThreads;
+                     ^~~
 
-On 9 Sep 2017 17:14, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Since version 5.0.2, Stella needs a toolchain with threads support.
 
-> Paul, All,
->
-> On 2017-09-08 15:18 +0100, Paul Gildea spake thusly:
-> > I am trying to install subprocess32 with my python 2.7 installation via
-> > buildroot. It's an older version of buildroot and doesn't have
-> > python-package,
->
-> python-package was introduced in December 2013, so appeared in Buildroot
-> 2014.02. This means you are using  version that is almost 4 years old
-> now.
->
-> And below, we can see that you are using the GENTARGETS infrastructure.
-> This was removed in July 2012, now more than 5 years ago...
->
-> We can't help on such an old version.
->
-> I would suggest that you upgrade to at least our first LTS version,
-> 2017.02, or to the latest release, 2017.08.
->
-> Regards,
-> Yann E. MORIN.
->
-> > subprocess32 appeared to install correctly but when I
-> > import it on the embedded system I get an error:
-> >
-> > >>> import subprocess32/usr/lib/python2.7/site-
-> > packages/subprocess32.py:472: RuntimeWarning: The _posixsubprocess
-> module is not being used. Child process reliability may suffer if your pro
-> > gram uses threads.  "program uses threads.", RuntimeWarning)
-> > Following this path I tried to import _posixsubprocess
-> >
-> >
-> >
-> > >>>import _posixsubprocessTraceback (most recent call last):
-> >   File "<stdin>", line 1, in <module>
-> > ImportError: dynamic module does not define init function
-> (init_posixsubprocess)
-> >
-> >  _posixsubprocess does have init_posixsubprocess
-> > [1]https://github.com/google/python-
-> > subprocess32/blob/master/_posixsubprocess.c#L879
-> >
-> > I can use subprocess32 otherwise, I tested out it's basic
-> functionality.It seems to me like something in my build system is not doing
-> the right thing, any ideas?
-> >
-> >
-> >
-> > Output from building:
-> >
-> > ^[[7m>>> python-subprocess32 3.2.7 Extracting^[[27m
-> > ^[[7m>>> python-subprocess32 3.2.7 Patching
-> package/python-subprocess32^[[
-> > 27m^[[7m>>> python-subprocess32 3.2.7 Configuring^[[27m
-> > ^[[7m>>> python-subprocess32 3.2.7 Building^[[27m
-> > (cd /media/vmpart/5.1.0_x86/buildroot/output/build/python-
-> > subprocess32-3.2.7; /media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/bin/python setup.py build)
-> > running buildrunning build_pycreating build
-> > creating build/lib.linux-x86_64-2.7copying subprocess32.py ->
-> build/lib.linux-x86_64-2.7
-> > running build_extbuilding '_posixsubprocess' extension
-> > creating build/temp.linux-x86_64-2.7copying subprocess32.py ->
-> build/lib.linux-x86_64-2.7
-> > running build_extbuilding '_posixsubprocess' extension
-> > creating build/temp.linux-x86_64-2.7/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread
-> -fno-strict-aliasing -O2 -I/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/include -I/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/include -DNDEBUG -g -O3 -Wall
-> -Wstrict-prototypes -fPIC -I/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/include/python2.7 -c _posixsubprocess.c -o
-> build/temp.linux-x86_64-2.7/_
-> > posixsubprocess.o/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -shared
-> -L/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/lib -L/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/lib -Wl,-rpath,/media/vmpart/5.1.
-> > 0_x86/buildroot/output/host/usr/lib build/temp.linux-x86_64-2.7/_
-> > posixsubprocess.o -L/media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/lib -lpython2.7 -o build/lib.linux-x86_64-2.7/_
-> > posixsubprocess.so^[[7m>>> python-subprocess32 3.2.7 Installing to
-> target^[[27m
-> > (cd /media/vmpart/5.1.0_x86/buildroot/output/build/python-
-> > subprocess32-3.2.7; /media/vmpart/5.1.0_x86/
-> > buildroot/output/host/usr/bin/python setup.py install
-> --prefix=/media/vmpart/5.1.0_
-> > x86/buildroot/output/target/usr)running install
-> > running buildrunning build_pyrunning build_ext
-> > running install_libcopying build/lib.linux-x86_64-2.7/_
-> > posixsubprocess.so -> /media/vmpart/5.1.0_x86/
-> > buildroot/output/target/usr/lib/python2.7/site-packages
-> > running install_egg_infoRemoving /media/vmpart/5.1.0_x86/
-> > buildroot/output/target/usr/lib/python2.7/site-packages/
-> > subprocess32-3.2.7-py2.7.egg-infoWriting /media/vmpart/5.1.0_x86/
-> > buildroot/output/target/usr/lib/python2.7/site-packages/
-> > subprocess32-3.2.7-py2.7.egg-info
-> >
-> >
-> >
-> >
-> >
-> > My makefile:
-> >
-> >
-> >
-> > ############################################################
-> > ### Subprocess32 module for python###############################
-> > ###############################PYTHON_SUBPROCESS32_VERSION = 3.2.7
-> > PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_
-> > SUBPROCESS32_VERSION).tar.gzPYTHON_SUBPROCESS32_SITE =
-> > [2]https://pypi.python.org/pypi/subprocess32
-> > PYTHON_SUBPROCESS32_DEPENDENCIES = python
-> > define PYTHON_SUBPROCESS32_BUILD_CMDS        (cd $(@D);
-> $(HOST_DIR)/usr/bin/python setup.py build)
-> > endefdefine PYTHON_SUBPROCESS32_INSTALL_
-> > TARGET_CMDS        (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py
-> install --prefix=$(TARGET_DIR)/usr)
-> > endef$(eval $(call GENTARGETS,package,python-
-> > subprocess32))
-> >
-> > Links:
-> > 1. https://github.com/google/python-subprocess32/blob/
-> master/_posixsubprocess.c#L879
-> > 2. https://pypi.python.org/pypi/subprocess32
->
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> --
-> .-----------------.--------------------.------------------.-
-> -------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> '------------------------------^-------^------------------^-
-> -------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170909/4b6fefd9/attachment.html>
+Fixes:
+http://autobuild.buildroot.net/results/bd30388ee24294158d0a373764408c8c846853d4
+http://autobuild.buildroot.net/results/ad1571cecfc697650b436c147b5f3a1b4326091d
+http://autobuild.buildroot.net/results/10b73362358f3af45534a0cd096672dd1460a7d0
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/stella/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/stella/Config.in b/package/stella/Config.in
+index 9591697..639b9e4 100644
+--- a/package/stella/Config.in
++++ b/package/stella/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_STELLA
+ 	bool "stella"
+ 	depends on !BR2_STATIC_LIBS # sdl2
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_LIBPNG
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_STELLA
+ 
+ 	  https://stella-emu.github.io/
+ 
+-comment "stella needs a toolchain w/ dynamic library, C++, gcc >= 4.9"
++comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 4.9"
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
