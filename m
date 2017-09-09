@@ -1,48 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Sep 2017 13:45:57 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-video-amdgpu:
-	bump version to 1.4.0
-Message-ID: <20170909114558.6201-1-bernd.kuhls@t-online.de>
+Date: Sat,  9 Sep 2017 13:45:58 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-video-ati: bump
+	version to 7.10.0
+In-Reply-To: <20170909114558.6201-1-bernd.kuhls@t-online.de>
+References: <20170909114558.6201-1-bernd.kuhls@t-online.de>
+Message-ID: <20170909114558.6201-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added sha512 hash provided by upstream.
+Added all hashes provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash     | 9 +++++----
- .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 7 +++++--
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index 13246b69d..b5910f3c0 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-March/002788.html
--md5 e2ee9e16ffbd45ebda68a7ff638a04f2  xf86-video-amdgpu-1.3.0.tar.bz2
--sha1 7b89fe6e22e6739257c0f03c9f034c9c579a8bce  xf86-video-amdgpu-1.3.0.tar.bz2
--sha256 c1630f228938be949273f72b29ae70822dde064ad79c3ccb14d55f427e3f4e70  xf86-video-amdgpu-1.3.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-September/002805.html
-+md5 15a54f0a7870a57e3f611c9114924137  xf86-video-amdgpu-1.4.0.tar.bz2
-+sha1 d9971cc6177095219a6687328aef25a72df3dd9d  xf86-video-amdgpu-1.4.0.tar.bz2
-+sha256 f8cac4bf3dd795b93cc337e5c0c62618026f597890a10d996f09c73eb88ba67c  xf86-video-amdgpu-1.4.0.tar.bz2
-+sha512 cae6417a45f6b981e007e080486083f1c38eaca58c6e331b04bbf46c86f23394742a722ae0d798d8dcad66879e99d90e57f04ae9ccb198f3ed26ec745878ccc2  xf86-video-amdgpu-1.4.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 9bd75369a..50e5310e4 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 2cb4037ee..117c5749f 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.freedesktop.org/archives/xorg/2017-March/058669.html
+-sha256 3cad872e6330afb1707da11e4e959e6887ebe5bcd81854b4d2e496c52c059875  xf86-video-ati-7.9.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-September/002806.html
++md5 0ff538f78ae82ccce384dadf7a705863  xf86-video-ati-7.10.0.tar.bz2
++sha1 38e535ecc8445c1b9464ac34db959337929887f7  xf86-video-ati-7.10.0.tar.bz2
++sha256 ee51d642e3105cb5424f02622dc2966b87b42d498bb34104a70fcf6d4a8f4e79  xf86-video-ati-7.10.0.tar.bz2
++sha512 1f2f4af1d299af62644693e6fbc47a5078c9bc5e7887a1ac217121ef2fd29d8c9f50a8d9be9ddb0887d0b49141bb33484f82c1313a472ad6867266b53b4a11ad  xf86-video-ati-7.10.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index bc9235855..f8b8f70cb 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.3.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.4.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 7.9.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 7.10.0
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
 -- 
 2.11.0
