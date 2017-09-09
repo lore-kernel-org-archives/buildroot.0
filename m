@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:01:43 +0200
-Subject: [Buildroot] [git commit] execline: bump version to 2.3.0.2
-Message-ID: <20170909195854.42ED4800A3@busybox.osuosl.org>
+Date: Sat, 9 Sep 2017 22:01:50 +0200
+Subject: [Buildroot] [git commit] s6-rc: bump version to 0.2.1.2
+Message-ID: <20170909195854.8077881035@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aee4dc8f01689b67b6015f8c484d6eebe223144f
+commit: https://git.buildroot.net/buildroot/commit/?id=d7df2399c7d86d94e3144c42ee243ab24c667202
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/execline/execline.hash | 2 +-
- package/execline/execline.mk   | 2 +-
+ package/s6-rc/s6-rc.hash | 2 +-
+ package/s6-rc/s6-rc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index 54d9e28..f68ce1b 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
+index c2def67..c39629b 100644
+--- a/package/s6-rc/s6-rc.hash
++++ b/package/s6-rc/s6-rc.hash
 @@ -1,2 +1,2 @@
  # Locally generated
--sha256 2bf65aaaf808718952e05c2221b4e9472271e53ebd915c8d1d49a3e992583bf4  execline-2.3.0.1.tar.gz
-+sha256 c11650651a7230bd5687945a7698b2da3fe13c3c0eb15e296bb91769d4775f45  execline-2.3.0.2.tar.gz
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 576f11c..7fed626 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
+-sha256 8b01d5b4c2380c6b30d320118b9a9b9ca174a25ed3c75afe8f59a4e840847a76  s6-rc-0.2.0.1.tar.gz
++sha256 4fa35cf8af41498c9fa0c21220dcdc7595a18ebc2975a254d719f7e1c864b1f0  s6-rc-0.2.1.2.tar.gz
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index 1a9a491..9330c03 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXECLINE_VERSION = 2.3.0.1
-+EXECLINE_VERSION = 2.3.0.2
- EXECLINE_SITE = http://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
+-S6_RC_VERSION = 0.2.0.1
++S6_RC_VERSION = 0.2.1.2
+ S6_RC_SITE = http://skarnet.org/software/s6-rc
+ S6_RC_LICENSE = ISC
+ S6_RC_LICENSE_FILES = COPYING
