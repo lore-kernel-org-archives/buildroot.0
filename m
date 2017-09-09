@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Sep 2017 23:39:51 +0200
-Subject: [Buildroot] [PATCH 45/49 v2] package/asterisk: add optional libcap
-	dependency
+Date: Sat,  9 Sep 2017 23:39:50 +0200
+Subject: [Buildroot] [PATCH 44/49 v2] package/asterisk: add optional pjsip
+	support
 In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <792b38a2bf1b8d9adad7de1ed0f570bb47ea6026.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <3d6f2d5bc9faedd731435a6302a658c1315029f1.1504993178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 9327451254..cd3325ce9e 100644
+index 284b338cb3..9327451254 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -42,7 +42,6 @@ ASTERISK_CONF_OPTS = \
- 	--disable-asteriskssl \
- 	--disable-rpath \
- 	--without-bfd \
--	--without-cap \
- 	--without-curses \
- 	--without-gtk2 \
- 	--without-gmime \
-@@ -157,6 +156,13 @@ else
- ASTERISK_CONF_OPTS += --without-ldap
+@@ -70,7 +70,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-osptk \
+ 	--without-oss \
+ 	--without-postgres \
+-	--without-pjproject \
+ 	--without-popt \
+ 	--without-pwlib \
+ 	--without-resample \
+@@ -240,6 +239,13 @@ else
+ ASTERISK_CONF_OPTS += --without-ssl
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+ASTERISK_DEPENDENCIES += libcap
-+ASTERISK_CONF_OPTS += --with-cap
++ifeq ($(BR2_PACKAGE_LIBPJSIP),y)
++ASTERISK_DEPENDENCIES += libpjsip
++ASTERISK_CONF_OPTS += --with-pjproject
 +else
-+ASTERISK_CONF_OPTS += --without-cap
++ASTERISK_CONF_OPTS += --without-pjproject
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- ASTERISK_DEPENDENCIES += libcurl
- ASTERISK_CONF_OPTS += --with-libcurl
+ ifeq ($(BR2_PACKAGE_SPANDSP),y)
+ ASTERISK_DEPENDENCIES += spandsp
+ ASTERISK_CONF_OPTS += --with-spandsp
 -- 
 2.11.0
