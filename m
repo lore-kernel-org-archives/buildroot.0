@@ -1,34 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:06:39 +0200
-Subject: [Buildroot] [PATCH 0/9] Bump skarnet.org packages to 2017.08
-In-Reply-To: <20170909103421.30675-1-eric.le.bihan.dev@free.fr>
-References: <20170909103421.30675-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170909220639.2e807c12@windsurf.lan>
+Date: Sat, 9 Sep 2017 22:07:04 +0200
+Subject: [Buildroot] [git commit] libarchive: security bump to version 3.3.2
+Message-ID: <20170909195942.B4FFF81006@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f871b21c89e41dfddd60bb25cf55610cd4081eba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  9 Sep 2017 12:34:12 +0200, Eric Le Bihan wrote:
+CVE-2016-8687: Stack-based buffer overflow in the safe_fprintf function
+in tar/util.c in libarchive 3.2.1 allows remote attackers to cause a
+denial of service via a crafted non-printable multibyte character in a
+filename.
 
-> Eric Le Bihan (9):
->   skalibs: bump version to 2.6.0.0
->   execline: bump version to 2.3.0.2
->   s6: bump version to 2.6.1.0
->   s6-dns: bump version to 2.2.0.1
->   s6-networking: bump version to 2.3.0.2
->   s6-rc: bump version to 0.2.1.2
->   s6-portable-utils: bump version to 2.2.1.1
->   s6-linux-utils: bump version to 2.4.0.1
->   s6-linux-init: bump version to 0.3.1.0
+CVE-2016-8688: The mtree bidder in libarchive 3.2.1 does not keep track
+of line sizes when extending the read-ahead, which allows remote
+attackers to cause a denial of service (crash) via a crafted file, which
+triggers an invalid read in the (1) detect_form or (2) bid_entry
+function in libarchive/archive_read_support_format_mtree.c.
 
-Series applied to master. Thanks!
+CVE-2016-8689: The read_Header function in
+archive_read_support_format_7zip.c in libarchive 3.2.1 allows remote
+attackers to cause a denial of service (out-of-bounds read) via multiple
+EmptyStream attributes in a header in a 7zip archive.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+CVE-2016-10209: The archive_wstring_append_from_mbs function in
+archive_string.c in libarchive 3.2.2 allows remote attackers to cause a
+denial of service (NULL pointer dereference and application crash) via a
+crafted archive file.
+
+CVE-2016-10349: The archive_le32dec function in archive_endian.h in
+libarchive 3.2.2 allows remote attackers to cause a denial of service
+(heap-based buffer over-read and application crash) via a crafted file.
+
+CVE-2016-10350: The archive_read_format_cab_read_header function in
+archive_read_support_format_cab.c in libarchive 3.2.2 allows remote
+attackers to cause a denial of service (heap-based buffer over-read and
+application crash) via a crafted file.
+
+CVE-2017-5601: An error in the lha_read_file_header_1() function
+(archive_read_support_format_lha.c) in libarchive 3.2.2 allows remote
+attackers to trigger an out-of-bounds read memory access and
+subsequently cause a crash via a specially crafted archive.
+
+Add upstream patch fixing the following issue:
+
+CVE-2017-14166: libarchive 3.3.2 allows remote attackers to cause a
+denial of service (xml_data heap-based buffer over-read and application
+crash) via a crafted xar archive, related to the mishandling of empty
+strings in the atol8 function in archive_read_support_format_xar.c.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...g-sensible-for-empty-strings-to-make-fuzz.patch | 42 ++++++++++++++++++++++
+ package/libarchive/libarchive.hash                 |  2 +-
+ package/libarchive/libarchive.mk                   |  2 +-
+ 3 files changed, 44 insertions(+), 2 deletions(-)
+
+diff --git a/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch b/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
+new file mode 100644
+index 0000000..1d1d80d
+--- /dev/null
++++ b/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
+@@ -0,0 +1,42 @@
++From fa7438a0ff4033e4741c807394a9af6207940d71 Mon Sep 17 00:00:00 2001
++From: Joerg Sonnenberger <joerg@bec.de>
++Date: Tue, 5 Sep 2017 18:12:19 +0200
++Subject: [PATCH] Do something sensible for empty strings to make fuzzers
++ happy.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit fa7438a0ff
++
++ libarchive/archive_read_support_format_xar.c | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/libarchive/archive_read_support_format_xar.c b/libarchive/archive_read_support_format_xar.c
++index 7a22beb9d8e4..93eeacc5e6eb 100644
++--- a/libarchive/archive_read_support_format_xar.c
+++++ b/libarchive/archive_read_support_format_xar.c
++@@ -1040,6 +1040,9 @@ atol10(const char *p, size_t char_cnt)
++ 	uint64_t l;
++ 	int digit;
++ 
+++	if (char_cnt == 0)
+++		return (0);
+++
++ 	l = 0;
++ 	digit = *p - '0';
++ 	while (digit >= 0 && digit < 10  && char_cnt-- > 0) {
++@@ -1054,7 +1057,10 @@ atol8(const char *p, size_t char_cnt)
++ {
++ 	int64_t l;
++ 	int digit;
++-        
+++
+++	if (char_cnt == 0)
+++		return (0);
+++
++ 	l = 0;
++ 	while (char_cnt-- > 0) {
++ 		if (*p >= '0' && *p <= '7')
++-- 
++2.14.1
++
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index 2c39bd3..98a34ad 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  72ee1a4e3fd534525f13a0ba1aa7b05b203d186e0c6072a8a4738649d0b3cfd2  libarchive-3.2.1.tar.gz
++sha256  ed2dbd6954792b2c054ccf8ec4b330a54b85904a80cef477a1c74643ddafa0ce  libarchive-3.3.2.tar.gz
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 9956b63..1c8391b 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBARCHIVE_VERSION = 3.2.1
++LIBARCHIVE_VERSION = 3.3.2
+ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause
