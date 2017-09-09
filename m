@@ -1,48 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Sep 2017 13:45:58 +0200
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-video-ati: bump
-	version to 7.10.0
-In-Reply-To: <20170909114558.6201-1-bernd.kuhls@t-online.de>
-References: <20170909114558.6201-1-bernd.kuhls@t-online.de>
-Message-ID: <20170909114558.6201-2-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Sep 2017 16:00:19 +0200
+Subject: [Buildroot] [PATCH] aiccu: delete package
+In-Reply-To: <A478F1A5-E69B-48E1-8FA4-324A46C701BC@gmail.com>
+References: <20170909092510.4119-1-alexander.i.mukhin@gmail.com>
+ <A478F1A5-E69B-48E1-8FA4-324A46C701BC@gmail.com>
+Message-ID: <20170909160019.38cfb852@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream.
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 7 +++++--
- package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Thanks for your patch, good to have someone noticing when packages no
+longer make sense.
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-index 2cb4037ee..117c5749f 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-@@ -1,2 +1,5 @@
--# From https://lists.freedesktop.org/archives/xorg/2017-March/058669.html
--sha256 3cad872e6330afb1707da11e4e959e6887ebe5bcd81854b4d2e496c52c059875  xf86-video-ati-7.9.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-September/002806.html
-+md5 0ff538f78ae82ccce384dadf7a705863  xf86-video-ati-7.10.0.tar.bz2
-+sha1 38e535ecc8445c1b9464ac34db959337929887f7  xf86-video-ati-7.10.0.tar.bz2
-+sha256 ee51d642e3105cb5424f02622dc2966b87b42d498bb34104a70fcf6d4a8f4e79  xf86-video-ati-7.10.0.tar.bz2
-+sha512 1f2f4af1d299af62644693e6fbc47a5078c9bc5e7887a1ac217121ef2fd29d8c9f50a8d9be9ddb0887d0b49141bb33484f82c1313a472ad6867266b53b4a11ad  xf86-video-ati-7.10.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index bc9235855..f8b8f70cb 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_ATI_VERSION = 7.9.0
-+XDRIVER_XF86_VIDEO_ATI_VERSION = 7.10.0
- XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+On Sat, 9 Sep 2017 13:09:26 +0300, Alexander Mukhin wrote:
+> (Forgot to sign the patch, sorry.)
+
+If you want to include such messages, it should be below the "---"
+below your Signed-off-by. Otherwise, it gets added permanently to the
+Git commit history of the project, which we don't want.
+
+> 
+> As SixXS project has ceased its operation on 2017-06-06, consider removing aiccu package.
+
+Please wrap the commit log to 72 characters.
+
+But above all, could you please with git send-email? Your patch sent by
+iPad Mail has been badly reformatted by your e-mail client, and cannot
+be applied.
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
