@@ -1,57 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:48:56 +0200
-Subject: [Buildroot] [PATCH] ruby: add upstream security patches bumping
- rubygems to 2.6.13
-In-Reply-To: <20170907091755.9491-1-peter@korsgaard.com>
-References: <20170907091755.9491-1-peter@korsgaard.com>
-Message-ID: <20170909224856.3226b95b@windsurf.lan>
+Date: Sat, 9 Sep 2017 22:49:12 +0200
+Subject: [Buildroot] [git commit] supervisor: security bump to version 3.1.4
+Message-ID: <20170909204150.8E53C80F9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=38a1c4821a163f932793a96e036f8fe451398506
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  7 Sep 2017 11:17:55 +0200, Peter Korsgaard wrote:
-> We unfortunately cannot use the upstream patches directly as they are not in
-> 'patch -p1' format, so convert them and include instead.
-> 
-> Fixes:
-> 
-> CVE-2017-0899 - RubyGems version 2.6.12 and earlier is vulnerable to
-> maliciously crafted gem specifications that include terminal escape
-> characters.  Printing the gem specification would execute terminal escape
-> sequences.
-> 
-> CVE-2017-0900 - RubyGems version 2.6.12 and earlier is vulnerable to
-> maliciously crafted gem specifications to cause a denial of service attack
-> against RubyGems clients who have issued a `query` command.
-> 
-> CVE-2017-0901 - RubyGems version 2.6.12 and earlier fails to validate
-> specification names, allowing a maliciously crafted gem to potentially
-> overwrite any file on the filesystem.
-> 
-> CVE-2017-0902 - RubyGems version 2.6.12 and earlier is vulnerable to a DNS
-> hijacking vulnerability that allows a MITM attacker to force the RubyGems
-> client to download and install gems from a server that the attacker
-> controls.
-> 
-> For more details, see
-> https://www.ruby-lang.org/en/news/2017/08/29/multiple-vulnerabilities-in-rubygems/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/ruby/0001-rubygems-2612-ruby24.patch | 445 +++++++++++++++++++++++++++
->  package/ruby/0002-rubygems-2613-ruby24.patch | 364 ++++++++++++++++++++++
->  2 files changed, 809 insertions(+)
->  create mode 100644 package/ruby/0001-rubygems-2612-ruby24.patch
->  create mode 100644 package/ruby/0002-rubygems-2613-ruby24.patch
+Fixes CVE-2017-11610 - The XML-RPC server in supervisor before 3.0.1, 3.1.x
+before 3.1.4, 3.2.x before 3.2.4, and 3.3.x before 3.3.3 allows remote
+authenticated users to execute arbitrary commands via a crafted XML-RPC
+request, related to nested supervisord namespace lookups.
 
-Applied to master, thanks.
+For more details, see
+https://github.com/Supervisor/supervisor/issues/964
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+While we're at it, add hashes for the license files.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/supervisor/supervisor.hash | 4 +++-
+ package/supervisor/supervisor.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
+index 03f337e..0ebc663 100644
+--- a/package/supervisor/supervisor.hash
++++ b/package/supervisor/supervisor.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 e32c546fe8d2a6e079ec4819c49fd24534d4075a58af39118d04367918b3c282  supervisor-3.1.3.tar.gz
++sha256 82f75089f719a7a3ca87f35c89a03c20fd3c0912552c96eb6fa40274ced6604e  supervisor-3.1.4.tar.gz
++sha256 a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491  COPYRIGHT.txt
++sha256 27ba0b2357ed6974d755ed53232c5ab8595622b3111bb91682708ea188cc3696  LICENSES.txt
+diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
+index 4c62b66..9b93b44 100644
+--- a/package/supervisor/supervisor.mk
++++ b/package/supervisor/supervisor.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SUPERVISOR_VERSION = 3.1.3
+-SUPERVISOR_SITE = http://pypi.python.org/packages/source/s/supervisor
++SUPERVISOR_VERSION = 3.1.4
++SUPERVISOR_SITE = https://pypi.python.org/packages/12/50/cd330d1a0daffbbe54803cb0c4c1ada892b5d66db08befac385122858eee
+ SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa), ZPL-2.1
+ SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
+ SUPERVISOR_SETUP_TYPE = setuptools
