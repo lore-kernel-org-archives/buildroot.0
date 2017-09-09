@@ -1,38 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 22:49:18 +0200
-Subject: [Buildroot] [PATCH] supervisor: security bump to version 3.1.4
-In-Reply-To: <20170907094459.10277-1-peter@korsgaard.com>
-References: <20170907094459.10277-1-peter@korsgaard.com>
-Message-ID: <20170909224918.18b7d1d4@windsurf.lan>
+Date: Sat, 9 Sep 2017 23:04:06 +0200
+Subject: [Buildroot] [git commit] smcroute: bump to version 2.3.1
+Message-ID: <20170909205720.4E03B80FC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5b5ef4bbeeaf8ec92eb9758d3a8106f30bbb3cbb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  7 Sep 2017 11:44:59 +0200, Peter Korsgaard wrote:
-> Fixes CVE-2017-11610 - The XML-RPC server in supervisor before 3.0.1, 3.1.x
-> before 3.1.4, 3.2.x before 3.2.4, and 3.3.x before 3.3.3 allows remote
-> authenticated users to execute arbitrary commands via a crafted XML-RPC
-> request, related to nested supervisord namespace lookups.
-> 
-> For more details, see
-> https://github.com/Supervisor/supervisor/issues/964
-> 
-> While we're at it, add hashes for the license files.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/supervisor/supervisor.hash | 4 +++-
->  package/supervisor/supervisor.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 3 deletions(-)
+Add optional dependency on libcap, which exists since this version
+bump.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Faivre <thomas.faivre@6wind.com>
+[Thomas: add explicit --with-libcap.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/smcroute/smcroute.hash | 6 +++---
+ package/smcroute/smcroute.mk   | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/smcroute/smcroute.hash b/package/smcroute/smcroute.hash
+index e1483ec..0487ef6 100644
+--- a/package/smcroute/smcroute.hash
++++ b/package/smcroute/smcroute.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  cf344922b4298b94e53fa2db8f2b064bece60f75926966f330437dfcbd76d425  smcroute-2.1.1.tar.xz
+-# From https://github.com/troglobit/smcroute/releases/download/2.1.1/smcroute-2.1.1.tar.xz.md5
+-md5     cd9256577fe06beaf8da2eba1a02f953  smcroute-2.1.1.tar.xz
++sha256  cd6c5cc2edfa1348acb07ed026180ebfc8dd0f87153f5382cb27cb5557724c56  smcroute-2.3.1.tar.xz
++# From https://github.com/troglobit/smcroute/releases/download/2.3.1/smcroute-2.3.1.tar.xz.md5
++md5     d8080828b7730bffb86969afd2bf94cb  smcroute-2.3.1.tar.xz
+diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
+index 0dd39ea..e7e6ef1 100644
+--- a/package/smcroute/smcroute.mk
++++ b/package/smcroute/smcroute.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SMCROUTE_VERSION = 2.1.1
++SMCROUTE_VERSION = 2.3.1
+ SMCROUTE_SOURCE = smcroute-$(SMCROUTE_VERSION).tar.xz
+ SMCROUTE_SITE = https://github.com/troglobit/smcroute/releases/download/$(SMCROUTE_VERSION)
+ SMCROUTE_LICENSE = GPL-2.0+
+@@ -14,4 +14,11 @@ SMCROUTE_CONF_OPTS = ac_cv_func_setpgrp_void=yes
+ #BUG:The package Makefile uses CC?= even though the package is autotools based
+ SMCROUTE_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++SMCROUTE_DEPENDENCIES = libcap
++SMCROUTE_CONF_OPTS += --with-libcap
++else
++SMCROUTE_CONF_OPTS += --without-libcap
++endif
++
+ $(eval $(autotools-package))
