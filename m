@@ -1,50 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Sep 2017 23:11:37 +0200
-Subject: [Buildroot] [git commit] python-cryptography: add missing
-	dependency on BR2_PACKAGE_PYTHON_HASHLIB
-Message-ID: <20170910072117.1C9D88101D@busybox.osuosl.org>
+Date: Sun, 10 Sep 2017 09:29:57 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{9, 12,
+ 13}.x series
+In-Reply-To: <20170910071333.4788-1-bernd.kuhls@t-online.de>
+References: <20170910071333.4788-1-bernd.kuhls@t-online.de>
+Message-ID: <20170910092957.514d2c95@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbcc673b3ae33d07b7f07e377d8d4664266f5242
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-HASHLIB is only needed for Python 2.
+On Sun, 10 Sep 2017 09:13:32 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-While at this sort dependencies alphabetically.
+Both applied to master. Thanks!
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-cryptography/Config.in | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-index 9827cf8..14f950d 100644
---- a/package/python-cryptography/Config.in
-+++ b/package/python-cryptography/Config.in
-@@ -3,16 +3,17 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
--	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	help
- 	  cryptography is a package designed to expose cryptographic
- 	  primitives and recipes to Python developers.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
