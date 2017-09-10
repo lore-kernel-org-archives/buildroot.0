@@ -1,56 +1,111 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 10 Sep 2017 21:52:58 +0300
-Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.10
-Message-ID: <d4461323ccf774ac8504cedb015dc3ecaf6a294b.1505069578.git.baruch@tkos.co.il>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Sun, 10 Sep 2017 21:25:06 +0200
+Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against
+ openjpeg 2.2
+In-Reply-To: <20170910095931.7ad07fe6@gmx.net>
+References: <20170908133156.10357-1-ps.report@gmx.net>
+ <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
+ <20170910095931.7ad07fe6@gmx.net>
+Message-ID: <CAAP7ucJwBX01nGdTWchRESw_5WqoA4TQSSTJk8ERSRPZT-hYDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop unused configure environment.
+Hey Peter,
 
-Add license hash.
+Do you have host-gettext explicitly enabled? Could you attach the output of
+the make command when rebuilding the package?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/iperf/iperf.hash | 5 +++--
- package/iperf/iperf.mk   | 5 +----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+On Sep 10, 2017 09:59, "Peter Seiderer" <ps.report@gmx.net> wrote:
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 3e961435b660..0752bfc3561b 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,4 +1,5 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
-+sha1	8b44a23385044bb454e7891966c37339d3bb3711	iperf-2.0.10.tar.gz
- # Locally computed:
--sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
-+sha256  7fe4348dcca313b74e0aa9c34a8ccd713b84a5615b8578f4aa94cedce9891ef2  iperf-2.0.10.tar.gz
-+sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index d2071bd274aa..644980754f52 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
-@@ -4,16 +4,13 @@
- #
- ################################################################################
- 
--IPERF_VERSION = 2.0.9
-+IPERF_VERSION = 2.0.10
- IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
- # patching configure.ac
- IPERF_AUTORECONF = YES
- 
--IPERF_CONF_ENV = \
--	ac_cv_func_malloc_0_nonnull=yes
--
- IPERF_CONF_OPTS = \
- 	--disable-web100
- 
--- 
-2.14.1
+> Hello Aleksander,
+>
+> On Sat, 9 Sep 2017 22:26:19 +0200, Aleksander Morgado <
+> aleksander at aleksander.es> wrote:
+>
+> > Hey Thomas and Peter,
+> >
+> > > Changes v2 -> v3:
+> > >   - add _GETTEXTIZE (instead of Makefile.in.in patch, suggested by
+> Thomas Petazzoni)
+> > >
+> > > Changes v1 ->v2:
+> > >  - add _AUTORECONF (suggested by Peter Korsgaard)
+> >
+> > Re-running gettextize just to make autoreconf work is a bit overkill;
+> > gettextize is something that the package maintainer runs to get the
+> > i18n setup ready and among other things it may update gnulib imported
+> > files in unexpected ways. I'd bet that letting just autopoint work as
+> > expected (as a step part of autoreconf) would be way more than enough
+> > here (i.e. no _GETTEXTIZE needed), but that step is currently disabled
+> > in buildroot by default since some years ago.
+> >
+> > See for reference this patch I sent last month, that makes autopoint
+> > work again during autoreconf:
+> > http://lists.busybox.net/pipermail/buildroot/2017-August/200941.html
+> >
+>
+> Sorry, did a quick test of your patch for the gst1-plugins-bad test
+> case, did not work, I still get the following error message:
+>
+>   *** error: gettext infrastructure mismatch: using a Makefile.in.in from
+> gettext version 0.17 but the autoconf macros are from gettext version 0.19
+>
+> Regards,
+> Peter
+>
+>
+> And the defconfig used:
+>
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_GSTREAMER1=y
+> # BR2_PACKAGE_GSTREAMER1_PARSE is not set
+> # BR2_PACKAGE_GSTREAMER1_GST_DEBUG is not set
+> # BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY is not set
+> # BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS is not set
+> # BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT is not set
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE=y
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING=y
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO=y
+> # BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK is not set
+> # BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE is not set
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE=y
+> # BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME is not set
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR=y
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OPUS=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ACCURIP=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMDEC=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOFXBAD=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BAYER=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CAMERABIN2=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBOVERLAY=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FACEOVERLAY=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTER=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IVFPARSE=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGPSMUX=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PCAPPARSE=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SPEED=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MUSEPACK=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENJPEG=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP=y
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265=y
+> BR2_PACKAGE_JPEG=y
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170910/8c29c311/attachment.html>
