@@ -1,86 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Sep 2017 18:54:43 +0200
-Subject: [Buildroot] [PATCH 1/3] package/fwup: bump version to 0.15.4
-Message-ID: <20170910165445.11424-1-bernd.kuhls@t-online.de>
+Date: Sun, 10 Sep 2017 18:54:45 +0200
+Subject: [Buildroot] [PATCH 3/3] package/libsodium: bump version to 1.0.13
+In-Reply-To: <20170910165445.11424-1-bernd.kuhls@t-online.de>
+References: <20170910165445.11424-1-bernd.kuhls@t-online.de>
+Message-ID: <20170910165445.11424-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://github.com/fhunleth/fwup/commit/0301cb4ffbf4705316ba017516745a535d66d552#diff-ce18c9a5ee5a2f36921fbc12b00cc0dd
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fwup/0001-Fix-uclibc-build.patch | 36 --------------------------------
- package/fwup/fwup.hash                   |  2 +-
- package/fwup/fwup.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/fwup/0001-Fix-uclibc-build.patch
+ package/libsodium/libsodium.hash | 2 +-
+ package/libsodium/libsodium.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
-deleted file mode 100644
-index f7bf24504..000000000
---- a/package/fwup/0001-Fix-uclibc-build.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 28 May 2017 16:56:39 +0200
--Subject: [PATCH 1/1] Fix uclibc build
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Without sys/types.h the build breaks with errors like this:
--
--parse_file.h:28:5: error: unknown type name ?off_t?
--     off_t *map;
--     ^
--
--Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/sparse_file.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/sparse_file.h b/src/sparse_file.h
--index 21bf5f9..579fbaa 100644
----- a/src/sparse_file.h
--+++ b/src/sparse_file.h
--@@ -18,6 +18,7 @@
-- #define SPARSE_FILE_H
-- 
-- #include <confuse.h>
--+#include <sys/types.h>
-- 
-- struct sparse_file_map
-- {
---- 
--2.11.0
--
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index 8679dcb26..32398bf4d 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+index 9fdbc1725..725281eb2 100644
+--- a/package/libsodium/libsodium.hash
++++ b/package/libsodium/libsodium.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
-+sha256 852e255bd65f9db473a06184abb3e94e3b6b86be7bf66169e8df8146d5966ae1  fwup-v0.15.4.tar.gz
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index e47ecbe6d..c6a18c291 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
+ # Locally calculated after checking pgp signature
+-sha256 b8648f1bb3a54b0251cf4ffa4f0d76ded13977d4fa7517d988f4c902dd8e2f95  libsodium-1.0.12.tar.gz
++sha256 9c13accb1a9e59ab3affde0e60ef9a2149ed4d6e8f99c93c7a5b97499ee323fd  libsodium-1.0.13.tar.gz
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index b951c532e..b1d8a2613 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FWUP_VERSION = v0.14.3
-+FWUP_VERSION = v0.15.4
- FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
+-LIBSODIUM_VERSION = 1.0.12
++LIBSODIUM_VERSION = 1.0.13
+ LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
+ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
 -- 
 2.11.0
