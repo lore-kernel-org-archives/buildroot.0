@@ -1,31 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Sep 2017 17:16:54 +0200
-Subject: [Buildroot] [git commit] bind: fix compilation when lmdb.h is
- present on host
-In-Reply-To: <20170910165353.19203dab@gmx.net>
-References: <20170909201815.9BA4F80298@busybox.osuosl.org>
- <20170910165353.19203dab@gmx.net>
-Message-ID: <20170910171654.36c4e5db@windsurf.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 10 Sep 2017 18:54:43 +0200
+Subject: [Buildroot] [PATCH 1/3] package/fwup: bump version to 0.15.4
+Message-ID: <20170910165445.11424-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Removed patch applied upstream:
+https://github.com/fhunleth/fwup/commit/0301cb4ffbf4705316ba017516745a535d66d552#diff-ce18c9a5ee5a2f36921fbc12b00cc0dd
 
-On Sun, 10 Sep 2017 16:53:53 +0200, Peter Seiderer wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/fwup/0001-Fix-uclibc-build.patch | 36 --------------------------------
+ package/fwup/fwup.hash                   |  2 +-
+ package/fwup/fwup.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
+ delete mode 100644 package/fwup/0001-Fix-uclibc-build.patch
 
-
-> Double fix of the same problem, earlier fix/commit bb95fef1e0bec4ebc0584001f337438b17c4744d
-> using '--without-lmdb', now the complete CONF_OPTS are:
-
-Gah, thanks for noticing. I've reverted this commit.
-
-Thanks!
-
-Thomas
+diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
+deleted file mode 100644
+index f7bf24504..000000000
+--- a/package/fwup/0001-Fix-uclibc-build.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 28 May 2017 16:56:39 +0200
+-Subject: [PATCH 1/1] Fix uclibc build
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Without sys/types.h the build breaks with errors like this:
+-
+-parse_file.h:28:5: error: unknown type name ?off_t?
+-     off_t *map;
+-     ^
+-
+-Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/sparse_file.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/sparse_file.h b/src/sparse_file.h
+-index 21bf5f9..579fbaa 100644
+---- a/src/sparse_file.h
+-+++ b/src/sparse_file.h
+-@@ -18,6 +18,7 @@
+- #define SPARSE_FILE_H
+- 
+- #include <confuse.h>
+-+#include <sys/types.h>
+- 
+- struct sparse_file_map
+- {
+--- 
+-2.11.0
+-
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index 8679dcb26..32398bf4d 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
++sha256 852e255bd65f9db473a06184abb3e94e3b6b86be7bf66169e8df8146d5966ae1  fwup-v0.15.4.tar.gz
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index e47ecbe6d..c6a18c291 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FWUP_VERSION = v0.14.3
++FWUP_VERSION = v0.15.4
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
