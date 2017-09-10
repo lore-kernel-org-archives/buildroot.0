@@ -1,96 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Sep 2017 09:59:31 +0200
-Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against
- openjpeg 2.2
-In-Reply-To: <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
-References: <20170908133156.10357-1-ps.report@gmx.net>
- <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
-Message-ID: <20170910095931.7ad07fe6@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Sep 2017 11:02:24 +0200
+Subject: [Buildroot] [PATCH 01/49 v2] package/asterisk: new package
+In-Reply-To: <99aa5c38-2b31-f313-19fa-c42e28e37c3c@cartelsol.com>
+References: <cover.1504993178.git.yann.morin.1998@free.fr>
+ <ee34d49f318e171beb6b4ba642d04c960aa9560e.1504993178.git.yann.morin.1998@free.fr>
+ <99aa5c38-2b31-f313-19fa-c42e28e37c3c@cartelsol.com>
+Message-ID: <20170910090224.GA3536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Aleksander,
+Markus, All,
 
-On Sat, 9 Sep 2017 22:26:19 +0200, Aleksander Morgado <aleksander@aleksander.es> wrote:
+On 2017-09-10 00:12 +0200, Marcus Hoffmann spake thusly:
+> I found a few typos :-).
 
-> Hey Thomas and Peter,
-> 
-> > Changes v2 -> v3:
-> >   - add _GETTEXTIZE (instead of Makefile.in.in patch, suggested by Thomas Petazzoni)
-> >
-> > Changes v1 ->v2:
-> >  - add _AUTORECONF (suggested by Peter Korsgaard)  
-> 
-> Re-running gettextize just to make autoreconf work is a bit overkill;
-> gettextize is something that the package maintainer runs to get the
-> i18n setup ready and among other things it may update gnulib imported
-> files in unexpected ways. I'd bet that letting just autopoint work as
-> expected (as a step part of autoreconf) would be way more than enough
-> here (i.e. no _GETTEXTIZE needed), but that step is currently disabled
-> in buildroot by default since some years ago.
-> 
-> See for reference this patch I sent last month, that makes autopoint
-> work again during autoreconf:
-> http://lists.busybox.net/pipermail/buildroot/2017-August/200941.html
-> 
+Given the size of the commit log, I would have been surprised of the
+opposite! ;-)
 
-Sorry, did a quick test of your patch for the gst1-plugins-bad test
-case, did not work, I still get the following error message:
+> On 09.09.2017 23:39, Yann E. MORIN wrote:
+> > For starters, it needs a host tool, menuselect, to prepare its build
+> > configuration. Unfortunately, the way it handles menuselect does not
+> > paly very well for cross-compilation: the main ./configure calls out to
+> "paly" --> apply?
 
-  *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.17 but the autoconf macros are from gettext version 0.19
+play
+
+> > [0] http://downloads.asterisk.org/pub/telephony/asterisk/releases/
+> > 
+> > The official archive contains the sound archives plus a full set of
+> > documentation. This makes it very big. Unfotunately, the hosting site is
+> 
+> "Unfotunately" - missing an r. What does 'very big' actually mean?
+
+The archive is not very big by today's standard: 39MiB. But the site is
+really slow, which makes it look like it is bigger than it really is...
+
+Grabbing from the github mirror gives a smaller archive, but more
+importantly, it downloads at very high speed.
+
+And since we then only download the strictly minimal set of sounds, we
+grab only about 17MiB from asterisk.org instead of 39MiB, which makes
+the download at least twice as fast.
+
+> > As a final stroke of genius, asterisk checks for the re-entrant variant
+> > of res_ninit(), and concludes that all such functions are available, 
+> > of which res_nsearch(). 
+> 
+> I think a word is probably missing here?
+
+Not that I can think of. The sentence is gramatically equivalent to:
+
+    [it] concludes that all such functions, of which res_nsearch(),
+    are available.
+
+except the the part 'of which res_nsearch()' has been relegated to the
+end of the sentence, as a mean for it to stand out.
+
+> > +Assume that noone building from now on for cross-compilation will be
+> 'noone' -> no one
+
+noone is internet slang from the good ol' days. Seems the young ones
+nowadays no longer recognise it! ;-) I'll fix.
+
+> > +# avcodec are from ffmpeg. There is virtually zero chance this could
+> > +# even work; 
+> 
+> "could have ever worked"?
+
+Probably, yes.
+
+Thanks for the review! :-)
 
 Regards,
-Peter
+Yann E. MORIN.
 
-
-And the defconfig used:
-
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GSTREAMER1=y
-# BR2_PACKAGE_GSTREAMER1_PARSE is not set
-# BR2_PACKAGE_GSTREAMER1_GST_DEBUG is not set
-# BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY is not set
-# BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS is not set
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT is not set
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE=y
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING=y
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO=y
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK is not set
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE is not set
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE=y
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME is not set
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR=y
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OPUS=y
-BR2_PACKAGE_GST1_PLUGINS_BAD=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ACCURIP=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMDEC=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOFXBAD=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BAYER=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CAMERABIN2=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBOVERLAY=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FACEOVERLAY=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTER=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IVFPARSE=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGPSMUX=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PCAPPARSE=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SPEED=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MUSEPACK=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENJPEG=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP=y
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265=y
-BR2_PACKAGE_JPEG=y
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
