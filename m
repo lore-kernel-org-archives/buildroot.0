@@ -1,36 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Sep 2017 09:29:45 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{9, 12, 13}.x series
-Message-ID: <20170910072254.92BED80780@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 10 Sep 2017 09:59:31 +0200
+Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against
+ openjpeg 2.2
+In-Reply-To: <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
+References: <20170908133156.10357-1-ps.report@gmx.net>
+ <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
+Message-ID: <20170910095931.7ad07fe6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aae8765fd8ce95a8a1f902f96293b610c5b8405
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Aleksander,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sat, 9 Sep 2017 22:26:19 +0200, Aleksander Morgado <aleksander@aleksander.es> wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index dda6624..d30dea0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -245,9 +245,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.87"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.48"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.49"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
--	default "4.12.11"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13"		if BR2_KERNEL_HEADERS_4_13
-+	default "4.12.12"	if BR2_KERNEL_HEADERS_4_12
-+	default "4.13.1"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> Hey Thomas and Peter,
+> 
+> > Changes v2 -> v3:
+> >   - add _GETTEXTIZE (instead of Makefile.in.in patch, suggested by Thomas Petazzoni)
+> >
+> > Changes v1 ->v2:
+> >  - add _AUTORECONF (suggested by Peter Korsgaard)  
+> 
+> Re-running gettextize just to make autoreconf work is a bit overkill;
+> gettextize is something that the package maintainer runs to get the
+> i18n setup ready and among other things it may update gnulib imported
+> files in unexpected ways. I'd bet that letting just autopoint work as
+> expected (as a step part of autoreconf) would be way more than enough
+> here (i.e. no _GETTEXTIZE needed), but that step is currently disabled
+> in buildroot by default since some years ago.
+> 
+> See for reference this patch I sent last month, that makes autopoint
+> work again during autoreconf:
+> http://lists.busybox.net/pipermail/buildroot/2017-August/200941.html
+> 
+
+Sorry, did a quick test of your patch for the gst1-plugins-bad test
+case, did not work, I still get the following error message:
+
+  *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.17 but the autoconf macros are from gettext version 0.19
+
+Regards,
+Peter
+
+
+And the defconfig used:
+
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_GSTREAMER1=y
+# BR2_PACKAGE_GSTREAMER1_PARSE is not set
+# BR2_PACKAGE_GSTREAMER1_GST_DEBUG is not set
+# BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY is not set
+# BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS is not set
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT is not set
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO=y
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK is not set
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE is not set
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE=y
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME is not set
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OPUS=y
+BR2_PACKAGE_GST1_PLUGINS_BAD=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ACCURIP=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMDEC=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOFXBAD=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BAYER=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CAMERABIN2=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBOVERLAY=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FACEOVERLAY=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTER=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IVFPARSE=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGPSMUX=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PCAPPARSE=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SPEED=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MUSEPACK=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENJPEG=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265=y
+BR2_PACKAGE_JPEG=y
