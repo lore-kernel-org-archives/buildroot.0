@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Sep 2017 09:29:57 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{9, 12,
- 13}.x series
-In-Reply-To: <20170910071333.4788-1-bernd.kuhls@t-online.de>
-References: <20170910071333.4788-1-bernd.kuhls@t-online.de>
-Message-ID: <20170910092957.514d2c95@windsurf.lan>
+Date: Sun, 10 Sep 2017 09:30:12 +0200
+Subject: [Buildroot] [PATCH] python-cryptography: add missing dependency
+ on BR2_PACKAGE_PYTHON_HASHLIB
+In-Reply-To: <1504780681-27563-1-git-send-email-yegorslists@googlemail.com>
+References: <1504780681-27563-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20170910093012.54b672f0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 10 Sep 2017 09:13:32 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu,  7 Sep 2017 12:38:01 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> HASHLIB is only needed for Python 2.
+> 
+> While at this sort dependencies alphabetically.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/python-cryptography/Config.in | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-Both applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
