@@ -1,79 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Sep 2017 23:56:23 +0200
-Subject: [Buildroot] [git commit] smack: bump version to 1.3.1
-Message-ID: <20170910215008.5F7A080478@busybox.osuosl.org>
+Date: Sun, 10 Sep 2017 23:55:38 +0200
+Subject: [Buildroot] [git commit] iperf: bump to version 2.0.10
+Message-ID: <20170910215008.561AF8101F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87530ef9e1a124d7b86d72e473439b85a688541d
+commit: https://git.buildroot.net/buildroot/commit/?id=e30bf17f70f0b172fe4207b8d1fdcbcd647c89f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Drop unused configure environment.
+
+Add license hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-common.c-Include-limits.h-for-PATH_MAX.patch | 29 ----------------------
- package/smack/smack.hash                           |  2 +-
- package/smack/smack.mk                             |  4 +--
- 3 files changed, 3 insertions(+), 32 deletions(-)
+ package/iperf/iperf.hash | 5 +++--
+ package/iperf/iperf.mk   | 5 +----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-deleted file mode 100644
-index 0e30ef5..0000000
---- a/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 316c911aa741b14513622a4206ed6d324e951fa0 Mon Sep 17 00:00:00 2001
--From: Felix Janda <felix.janda@posteo.de>
--Date: Wed, 20 May 2015 21:25:22 +0200
--Subject: [PATCH 1/1] libsmack/common.c: Include <limits.h> for PATH_MAX
--
--Signed-off-by: Felix Janda <felix.janda@posteo.de>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
--Downloaded from upstream commit
--https://github.com/smack-team/smack/commit/316c911aa741b14513622a4206ed6d324e951fa0
--
-- libsmack/common.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libsmack/common.c b/libsmack/common.c
--index 55fee1a..55b59e3 100644
----- a/libsmack/common.c
--+++ b/libsmack/common.c
--@@ -22,6 +22,7 @@
-- #include <dirent.h>
-- #include <errno.h>
-- #include <fcntl.h>
--+#include <limits.h>
-- #include <stdio.h>
-- #include <string.h>
-- #include <unistd.h>
---- 
--2.7.0
--
-diff --git a/package/smack/smack.hash b/package/smack/smack.hash
-index fd51249..2c1f446 100644
---- a/package/smack/smack.hash
-+++ b/package/smack/smack.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  94dc21b4a5e570af0eb44debf57491170cccdbf60e03b5a3210f2a14d6448390  smack-v1.1.0.tar.gz
-+sha256 1a607da3b1a661dc76b7a5b8571f4a2d56b4d61d78376088d19f2d8637dc6822  smack-1.3.1.tar.gz
-diff --git a/package/smack/smack.mk b/package/smack/smack.mk
-index 7a4c722..d2ac005 100644
---- a/package/smack/smack.mk
-+++ b/package/smack/smack.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index 3e96143..0752bfc 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -1,4 +1,5 @@
+ # From https://sourceforge.net/projects/iperf2/files/
+-sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
++sha1	8b44a23385044bb454e7891966c37339d3bb3711	iperf-2.0.10.tar.gz
+ # Locally computed:
+-sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
++sha256  7fe4348dcca313b74e0aa9c34a8ccd713b84a5615b8578f4aa94cedce9891ef2  iperf-2.0.10.tar.gz
++sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index d2071bd..6449807 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -4,16 +4,13 @@
  #
  ################################################################################
  
--SMACK_VERSION = v1.1.0
--SMACK_SITE = $(call github,smack-team,smack,$(SMACK_VERSION))
-+SMACK_VERSION = 1.3.1
-+SMACK_SITE = $(call github,smack-team,smack,v$(SMACK_VERSION))
- SMACK_LICENSE = LGPL-2.1
- SMACK_LICENSE_FILES = COPYING
- SMACK_INSTALL_STAGING = YES
+-IPERF_VERSION = 2.0.9
++IPERF_VERSION = 2.0.10
+ IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
+ IPERF_LICENSE = MIT-like
+ IPERF_LICENSE_FILES = COPYING
+ # patching configure.ac
+ IPERF_AUTORECONF = YES
+ 
+-IPERF_CONF_ENV = \
+-	ac_cv_func_malloc_0_nonnull=yes
+-
+ IPERF_CONF_OPTS = \
+ 	--disable-web100
+ 
