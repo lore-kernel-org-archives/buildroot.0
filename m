@@ -1,78 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Sep 2017 12:30:32 +0200
-Subject: [Buildroot] [PATCH v2 05/11] package/glibc: needs kernel
- headers >= 3.10 on powerpc64le
-In-Reply-To: <20170902205423.21288-6-romain.naour@gmail.com>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
- <20170902205423.21288-6-romain.naour@gmail.com>
-Message-ID: <20170910103032.GF3536@scaer>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Sun, 10 Sep 2017 12:31:28 +0200
+Subject: [Buildroot] [PATCH 1/1] linuxptp: bump to the latest version
+In-Reply-To: <20170910092450.GC3536@scaer>
+References: <1504977449-30925-1-git-send-email-brain@jikos.cz>
+ <20170909220851.56a41dc1@windsurf.lan>
+ <a9a2f132-bb2f-a79e-cd8e-4116ae096691@jikos.cz>
+ <20170910080432.0a6bc7b6@windsurf.lan> <20170910092450.GC3536@scaer>
+Message-ID: <cab76ac0-716f-1f50-b04d-bb9caf0d3e94@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-09-02 22:54 +0200, Romain Naour spake thusly:
-> Since glibc 2.26, kernel headers >= 3.10 are needed on powerpc64le [1].
-> In order to prepare the glibc bump to this version, we don't allow to
-> build a Buildroot toolchain with kernel headers older than 3.10.
-> 
-> [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=c2ff5ec13fca1bdd1cd646a0260808386d7bd7ff
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-buildroot/Config.in | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index f47001f..8ffad61 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -45,7 +45,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
->  		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
->  		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
-> -		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
-> +		   BR2_powerpc     || BR2_powerpc64  || \
-> +		   (BR2_powerpc64le && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10) || \
+Hi Yann, Thomas,
 
-I would leave this section about architectures totally intact, and add
-the dependency later, right after the 3.2 one:
+On 10/09/17 11:24, Yann E. MORIN wrote:
+> On 2017-09-10 08:04 +0200, Thomas Petazzoni spake thusly:
+>> On Sat, 9 Sep 2017 22:53:06 +0200, Petr Kulhavy wrote:
+>>> Is there a command to just clone and compress the repo via BR?
+>>> The <package>-extract make target fails if the hash doesn't exist and
+>>> consequently deletes the temporary files.
+>> Yeah, it's a bit annoying. If you put a none hash temporarily, then you
+>> can have the tarball downloaded, calculate its hash, and add it. We
+>> also had proposals like https://patchwork.ozlabs.org/patch/791357/ to
+>> help with this.
+> IIRC, I was opposed to that change, because we want the user to go and
+> get the hash as provided by upstream (e.g. in a release email).
+>
+> Having the infra pre-calculate the hash locally defeats the very purpose
+> of the hashes: check that what we got is what upstream provides.
+Doesn't the idea of a hash of a cloned and zipped GIT repo go a little 
+bit against this?
+I mean, I have never seen any upstream providing a hash for a specific 
+clone of a repo.
+In fact, that is what the GIT hash provides, in a slightly different form.
 
-    depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-    depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
+So I must say I'm bit missing the point of providing a hash for cloned 
+and zipped GIT repo.
+What is the hash trying to protect?
 
-Regards,
-Yann E. MORIN.
+On the contrary, I even think it is a wrong approach. The zip is created 
+locally after the clone. And the output, or the hash if you want, 
+depends on the zip tool used and its settings (compression level, etc.).
+So if someone uses a tool with a different default compression level or 
+for instance gzip gets optimized, or whatever, the hash will be 
+different. Even if the cloned repo was the same.
+(AFAIK there is no standard defining how well gzip should compress, nor 
+does gzip guarantee for a given input an equivalent output between 
+different future versions of gzip)
+So in fact the hash on a GIT repo in BR compares the zip tool I used to 
+create the hash file and the tool that the BR user has installed on his 
+machine.
+And that is surely not what you want to do, is it?
 
->  		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
->  		   BR2_microblaze || BR2_nios2
->  	depends on BR2_USE_MMU
-> @@ -65,6 +66,11 @@ comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 3.2"
->  	depends on BR2_USE_MMU
->  	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
->  
-> +# glibc >= 2.26 require kernel headers >= 3.10 on powerpc64le.
-> +comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
-> +	depends on BR2_powerpc64le
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-> +
->  config BR2_TOOLCHAIN_BUILDROOT_MUSL
->  	bool "musl"
->  	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
-> -- 
-> 2.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+For GIT the SHA1 value together with "git fsck" seem to do the job. See 
+the answer in this post:
+https://stackoverflow.com/questions/31550828/verify-git-integrity
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards
+Petr
