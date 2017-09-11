@@ -1,9 +1,9 @@
 From: Dushara Jayasinghe <nidujay@gmail.com>
-Date: Mon, 11 Sep 2017 22:18:22 +1000
+Date: Mon, 11 Sep 2017 21:49:02 +1000
 Subject: [Buildroot] [PATCH v2] package/prosody: new package
 In-Reply-To: <1504909108-18547-2-git-send-email-nidujay@gmail.com>
 References: <1504909108-18547-2-git-send-email-nidujay@gmail.com>
-Message-ID: <1505132302-20308-1-git-send-email-nidujay@gmail.com>
+Message-ID: <1505130542-19544-1-git-send-email-nidujay@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
