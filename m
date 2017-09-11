@@ -1,67 +1,49 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 11 Sep 2017 09:54:26 +0200
-Subject: [Buildroot] [PATCH] libmbim: fix build with musl libc
-Message-ID: <20170911075426.514-1-aleksander@aleksander.es>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Mon, 11 Sep 2017 09:58:21 +0200
+Subject: [Buildroot] [PATCH] pppd: Do not overwrite /etc/resolv.conf
+In-Reply-To: <140e8e93-df14-fea5-ada5-4e1aa4636f94@mind.be>
+References: <20170828155604.24229-1-jer@airfi.aero>
+ <140e8e93-df14-fea5-ada5-4e1aa4636f94@mind.be>
+Message-ID: <CANCHnQq=yjt4HwC8=vpQ17nv8xJMaWtU1CxxF=r9xMM4eq1uNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is now failing because the libgudev dependency is optional and
-the build will only use if it's found during the configure checks.
+On 28 August 2017 at 22:28, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Imported the same patch that has been applied in the upstream libmbim
-git repository:
-  https://cgit.freedesktop.org/libmbim/libmbim/commit/?id=417b0b80023dc30d61c111ec0a54da2884d3a541
+>> pppd will overwrite any existing entries when /etc/resolv.conf is used instead, which is
+>> bad.
+>
+>  I agree that this is bad.
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
----
- ...-prefer-realpath-to-canonicalize_file_nam.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
+Thanks.
 
-diff --git a/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch b/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
-new file mode 100644
-index 000000000..a13aee547
---- /dev/null
-+++ b/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
-@@ -0,0 +1,36 @@
-+From 48772b32f10523cca22b7d63c3523377279c7427 Mon Sep 17 00:00:00 2001
-+From: Aleksander Morgado <aleksander@aleksander.es>
-+Date: Mon, 11 Sep 2017 09:31:03 +0200
-+Subject: [PATCH] mbim-device: prefer realpath() to canonicalize_file_name()
-+
-+Usually the canonicalize_file_name() GNU extension is preferred to the
-+POSIX realpath(), as it covers some of the limitations the latter has.
-+But this extension isn't available in lots of platforms or in other
-+c library implementations (e.g. musl), so just default to the POSIX
-+method to improve portability.
-+
-+Note that the check for canonicalize_file_name() availability during
-+configure isn't as trivial as adding a new AC_CHECK_FUNCS(), and
-+importing a gnulib module seems overkill just for this one liner.
-+
-+(cherry picked from commit 417b0b80023dc30d61c111ec0a54da2884d3a541)
-+---
-+ src/libmbim-glib/mbim-device.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/libmbim-glib/mbim-device.c b/src/libmbim-glib/mbim-device.c
-+index e1f32a6..20e64af 100644
-+--- a/src/libmbim-glib/mbim-device.c
-++++ b/src/libmbim-glib/mbim-device.c
-+@@ -867,7 +867,7 @@ get_descriptors_filepath (MbimDevice *self)
-+          *    /sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5/2-1.5:2.0
-+          */
-+         tmp = g_strdup_printf ("/sys/class/%s/%s/device", subsystems[i], device_basename);
-+-        path = canonicalize_file_name (tmp);
-++        path = realpath (tmp, NULL);
-+         g_free (tmp);
-+ 
-+         if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-+-- 
-+2.13.1
-+
--- 
-2.13.1
+>  However, this is a regression.
+
+1. dnsmasq(8) mentions using /etc/dhcp/resolv.conf as well as
+/etc/ppp/resolv.conf.
+2. On the greater Internet you can easily find plenty of examples of
+people getting confused because /etc/resolv.conf does not reflect what
+usepeerdns has written to the wrong file in /etc/ppp/
+3. usepeerdns is not enable by default.
+
+> People who currently have ppp as their only
+> interface, or who never have ppp and ethernet running at the same time
+
+So it's a regression for what I can only assume must be a tiny
+minority of system builders who don't configure their own systems and
+are powerless but to rely on a second-guessed set of defaults that you
+would like to support.
+
+Additionally, the current pppd.mk suggests /etc/ppp/resolv.conf is not
+writeable (in some configurations) but you say adding an ip-up script
+would solve the issue, when that ip-up script is then supposed to
+write to /etc/resolv.conf, which supposedly *is* writeable.
+
+Please enlighten me.
+
+
+Kind regards,
+     jer
