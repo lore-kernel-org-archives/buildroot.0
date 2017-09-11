@@ -1,45 +1,24 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Mon, 11 Sep 2017 12:50:19 +0200
-Subject: [Buildroot] [PATCH v2 1/1] linuxptp: bump to the latest version
-Message-ID: <1505127019-16853-1-git-send-email-brain@jikos.cz>
+From: Dushara Jayasinghe <nidujay@gmail.com>
+Date: Mon, 11 Sep 2017 21:44:08 +1000
+Subject: [Buildroot] [PATCH v2] package/prosody: new package
+In-Reply-To: <1505129678-19283-1-git-send-email-nidujay@gmail.com>
+References: <1504909108-18547-2-git-send-email-nidujay@gmail.com>
+ <1505129678-19283-1-git-send-email-nidujay@gmail.com>
+Message-ID: <20170911114408.GA19421@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update Linuxptp to the latest version from 1. September 2017
-This update brings bugfixes and minor enhancements.
+I wanted to add a cover letter with the changes but the command
+didn't work out as expected so here it is:
 
-Signed-off-by: Petr Kulhavy <brain@jikos.cz>
----
-v2: re-add hash for the archive
+v1 -> v2
 
----
- package/linuxptp/linuxptp.hash | 2 +-
- package/linuxptp/linuxptp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+  * Changes as proposed by Yann
+  * Added init.d startup script
+  * Override distributed runtime config file with tweaks to
+    suit buildroot
 
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index ccda2d6..91144df 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	b8190ab71a99f1dc32847f33cb301d2464d3f9e5f4c51300d55589aff42e8b3f  linuxptp-97c351cafd7327fd28047580c9e2528a6f7e742b.tar.gz
-+sha256	40844a69df82853113732f15498f9bce2666d5052293a3d5d40a1983e7b7b6a6  linuxptp-17c9787b1d6891636b5be9e4e5a08278b44e9a7a.tar.gz
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index bf2176c..38d8e09 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUXPTP_VERSION = 97c351cafd7327fd28047580c9e2528a6f7e742b
-+LINUXPTP_VERSION = 17c9787b1d6891636b5be9e4e5a08278b44e9a7a
- LINUXPTP_SITE_METHOD = git
- LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
- LINUXPTP_LICENSE = GPL-2.0+
--- 
-2.7.4
+Dushara
