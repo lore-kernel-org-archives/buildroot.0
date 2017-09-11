@@ -1,25 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Sep 2017 11:28:43 +0200
-Subject: [Buildroot] [PATCH] x11r7: xdriver_xf86-input-tslib: update to
+Date: Mon, 11 Sep 2017 11:27:47 +0200
+Subject: [Buildroot] [git commit] x11r7: xdriver_xf86-input-tslib: update to
 	version 1.1.1
-In-Reply-To: <20170910093125.17948-1-martink@posteo.de> (Martin Kepplinger's
- message of "Sun, 10 Sep 2017 11:31:25 +0200")
-References: <20170910093125.17948-1-martink@posteo.de>
-Message-ID: <87tw097fec.fsf@dell.be.48ers.dk>
+Message-ID: <20170911092132.CA0908104E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=268c52865b3b1b286a9b48c03814afe4ea431c34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update to bugfix release 1.1.1, see
- >     https://github.com/merge/xf86-input-tslib/releases
+Update to bugfix release 1.1.1, see
 
- > Signed-off-by: Martin Kepplinger <martink@posteo.de>
+    https://github.com/merge/xf86-input-tslib/releases
 
-Committed, thanks.
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 4 ++--
+ package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+index 84b3857..faff5d4 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
++++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+@@ -1,2 +1,2 @@
+-# https://github.com/merge/xf86-input-tslib/releases/download/1.1.0/xf86-input-tslib-1.1.0.tar.bz2.sha256
+-sha256 5e5626c1127fe945270d819281ad15f2f924f4e35bad0903db9748635c2af432  xf86-input-tslib-1.1.0.tar.bz2
++# https://github.com/merge/xf86-input-tslib/releases/download/1.1.1/xf86-input-tslib-1.1.1.tar.bz2.sha256
++sha256 8b6a9f2ad73598a3619e66e252bd54b1792c4deba0213101fa4d272b5e9217ec  xf86-input-tslib-1.1.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
+index d9555b7..bf0ee48 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
++++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.1.0
++XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.1.1
+ XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releases/download/$(XDRIVER_XF86_INPUT_TSLIB_VERSION)
+ XDRIVER_XF86_INPUT_TSLIB_LICENSE = MIT
