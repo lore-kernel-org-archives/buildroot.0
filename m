@@ -1,38 +1,40 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon, 11 Sep 2017 15:32:32 -0400
-Subject: [Buildroot] [PATCH] support/download: fix check_one_hash description
-Message-ID: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 11 Sep 2017 16:35:54 -0300
+Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
+	versions
+Message-ID: <1505158554-20441-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Function check_one_hash takes three arguments:
- - algo hash
- - known hash
- - file to hash
+Bump U-Boot to 2017.09 and kernel to 4.12.12 version.
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- support/download/check-hash | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ configs/mx53loco_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index c1ff53c02b..fe9c10570e 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -42,8 +42,9 @@ if [ ! -f "${h_file}" ]; then
- fi
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 6c8949b..0f94aa7 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
- # Check one hash for a file
--# $1: known hash
--# $2: file (full path)
-+# $1: algo hash
-+# $2: known hash
-+# $3: file (full path)
- check_one_hash() {
-     _h="${1}"
-     _known="${2}"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
 -- 
-2.13.2
+2.7.4
