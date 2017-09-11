@@ -1,74 +1,64 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 11 Sep 2017 10:55:33 +0200
-Subject: [Buildroot] [PATCH v2] libmbim: fix build with musl libc
-In-Reply-To: <20170911075426.514-1-aleksander@aleksander.es>
-References: <20170911075426.514-1-aleksander@aleksander.es>
-Message-ID: <20170911085533.4340-1-aleksander@aleksander.es>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Sep 2017 11:27:17 +0200
+Subject: [Buildroot] [PATCH] aiccu: remove package
+In-Reply-To: <20170910102134.1448-1-alexander.i.mukhin@gmail.com> (Alexander
+ Mukhin's message of "Sun, 10 Sep 2017 13:21:34 +0300")
+References: <20170909153834.GA2850@scaer>
+ <20170910102134.1448-1-alexander.i.mukhin@gmail.com>
+Message-ID: <87y3pl7fgq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is now failing because the libgudev dependency is optional and
-the build will only use if it's found during the configure checks.
+>>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
 
-Imported the same patch that has been applied in the upstream libmbim
-git repository:
-  https://cgit.freedesktop.org/libmbim/libmbim/commit/?id=417b0b80023dc30d61c111ec0a54da2884d3a541
+ > As the SixXS project has ceased its operation on 2017-06-06,
+ > the aiccu utility has been removed.
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
----
 
-v2 with Signed-off-by in the patch itself.
+ > Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+ > ---
+ >  Config.in.legacy                                   | 10 +++
+ >  DEVELOPERS                                         |  1 -
+ >  package/Config.in                                  |  1 -
+ >  package/aiccu/0001-gnutls.patch                    | 73 ----------------------
+ >  .../0002-makefile-reorder-linked-libraries.patch   | 15 -----
+ >  package/aiccu/0003-if-ether-header.patch           | 23 -------
+ >  package/aiccu/0005-res-ninit.patch                 | 33 ----------
+ >  package/aiccu/Config.in                            | 25 --------
+ >  package/aiccu/aiccu.hash                           |  2 -
+ >  package/aiccu/aiccu.mk                             | 40 ------------
+ >  10 files changed, 10 insertions(+), 213 deletions(-)
+ >  delete mode 100644 package/aiccu/0001-gnutls.patch
+ >  delete mode 100644 package/aiccu/0002-makefile-reorder-linked-libraries.patch
+ >  delete mode 100644 package/aiccu/0003-if-ether-header.patch
+ >  delete mode 100644 package/aiccu/0005-res-ninit.patch
+ >  delete mode 100644 package/aiccu/Config.in
+ >  delete mode 100644 package/aiccu/aiccu.hash
+ >  delete mode 100644 package/aiccu/aiccu.mk
 
----
- ...-prefer-realpath-to-canonicalize_file_nam.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
+ > diff --git a/Config.in.legacy b/Config.in.legacy
+ > index 44303a42b..d4befa864 100644
+ > --- a/Config.in.legacy
+ > +++ b/Config.in.legacy
+ > @@ -145,6 +145,16 @@ endif
+ >  ###############################################################################
+ >  comment "Legacy options removed in 2017.11"
+ 
+ > +config BR2_PACKAGE_AICCU
+ > +	bool "aiccu utility removed"
+ > +	select BR2_LEGACY
+ > +	help
+ > +	  As the SixXS project has ceased its operation on 2017-06-06,
+ > +	  the AICCU utility has no use anymore and has been removed.
+ > +
+ > +	  https://www.sixxs.net/sunset/
+ > +
+ > +
 
-diff --git a/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch b/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
-new file mode 100644
-index 000000000..ff178dd61
---- /dev/null
-+++ b/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
-@@ -0,0 +1,37 @@
-+From 6b043b9b676e88a80e3d4013863c5e970fdde1df Mon Sep 17 00:00:00 2001
-+From: Aleksander Morgado <aleksander@aleksander.es>
-+Date: Mon, 11 Sep 2017 09:31:03 +0200
-+Subject: [PATCH] mbim-device: prefer realpath() to canonicalize_file_name()
-+
-+Usually the canonicalize_file_name() GNU extension is preferred to the
-+POSIX realpath(), as it covers some of the limitations the latter has.
-+But this extension isn't available in lots of platforms or in other
-+c library implementations (e.g. musl), so just default to the POSIX
-+method to improve portability.
-+
-+Note that the check for canonicalize_file_name() availability during
-+configure isn't as trivial as adding a new AC_CHECK_FUNCS(), and
-+importing a gnulib module seems overkill just for this one liner.
-+
-+(cherry picked from commit 417b0b80023dc30d61c111ec0a54da2884d3a541)
-+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-+---
-+ src/libmbim-glib/mbim-device.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/libmbim-glib/mbim-device.c b/src/libmbim-glib/mbim-device.c
-+index e1f32a6..20e64af 100644
-+--- a/src/libmbim-glib/mbim-device.c
-++++ b/src/libmbim-glib/mbim-device.c
-+@@ -867,7 +867,7 @@ get_descriptors_filepath (MbimDevice *self)
-+          *    /sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5/2-1.5:2.0
-+          */
-+         tmp = g_strdup_printf ("/sys/class/%s/%s/device", subsystems[i], device_basename);
-+-        path = canonicalize_file_name (tmp);
-++        path = realpath (tmp, NULL);
-+         g_free (tmp);
-+
-+         if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-+--
-+2.13.1
-+
---
-2.13.1
+Committed after dropping the extra empty line, thanks.
+
+-- 
+Bye, Peter Korsgaard
