@@ -1,61 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Sep 2017 22:05:03 +0200
-Subject: [Buildroot] [PATCH] support/download: fix check_one_hash
-	description
-In-Reply-To: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
-References: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20170911200503.GB3172@scaer>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Tue, 12 Sep 2017 00:13:40 +0200
+Subject: [Buildroot] [PATCH 1/1] download/git: force gzip compression level 6
+Message-ID: <1505168020-23634-1-git-send-email-brain@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ga?l, All,
+Force gzip compression level 6 when calculating hash of a downloaded GIT repo.
+To make sure the tar->gzip->checksum chain always provides consistent result.`
 
-On 2017-09-11 15:32 -0400, Ga?l PORTAY spake thusly:
-> Function check_one_hash takes three arguments:
->  - algo hash
->  - known hash
->  - file to hash
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+The script was relying on the default compression level, which must not be
+necessarily consistent among different gzip versions. The level 6 is gzip's
+current default compression level.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+---
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/download/check-hash | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index c1ff53c02b..fe9c10570e 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -42,8 +42,9 @@ if [ ! -f "${h_file}" ]; then
->  fi
->  
->  # Check one hash for a file
-> -# $1: known hash
-> -# $2: file (full path)
-> +# $1: algo hash
-> +# $2: known hash
-> +# $3: file (full path)
->  check_one_hash() {
->      _h="${1}"
->      _known="${2}"
-> -- 
-> 2.13.2
-> 
-
+diff --git a/support/download/git b/support/download/git
+index fc2957d..f590ff6 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -101,4 +101,4 @@ LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
+ # sources.buildroot.org and used in the *.hash files
+ tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${basename}.list.sorted" >"${output}.tar"
+-gzip -n <"${output}.tar" >"${output}"
++gzip -6 -n <"${output}.tar" >"${output}"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
