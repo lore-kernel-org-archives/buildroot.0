@@ -1,220 +1,81 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Mon, 11 Sep 2017 01:30:06 +0200
-Subject: [Buildroot] [PATCH 1/1] linuxptp: bump to the latest version
-In-Reply-To: <20170910181806.GA21464@scaer>
-References: <1504977449-30925-1-git-send-email-brain@jikos.cz>
- <20170909220851.56a41dc1@windsurf.lan>
- <a9a2f132-bb2f-a79e-cd8e-4116ae096691@jikos.cz>
- <20170910080432.0a6bc7b6@windsurf.lan> <20170910092450.GC3536@scaer>
- <cab76ac0-716f-1f50-b04d-bb9caf0d3e94@jikos.cz>
- <20170910181806.GA21464@scaer>
-Message-ID: <ddba8f8e-5c77-97ab-9e2c-2a5a00b8522d@jikos.cz>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Sep 2017 08:30:43 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-09-10
+Message-ID: <20170911063043.38501209D9@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-thank you for the exhaustive explanation. I can see now why the hash for 
-cloned GIT repos might be needed.
+Build statistics for 2017-09-10
+================================
 
-I'm however not sure that I expressed clearly enough my point regarding 
-the issues I see in the currect hash calculation.
-There is a fundamental difference between downloading a raw file (let's 
-say an archive from an FTP server) and calculating its hash, and cloning 
-a GIT repo and calculating the hash in the way BR does.
+      successes : 152
+       failures : 40 
+       timeouts : 0  
+          TOTAL : 192
 
-*In the first case* the integrity check is done on the downloaded file. 
-That is, the file is downloaded to local (during which it might be 
-corrupted, or a different file is downloaded in case of MITM), then the 
-checksum is calculated.
-The sha256sum tool guarantees that the same input sequence of bytes 
-always produces the same hash. Regardless the version, regardless the 
-implementation, regardless the host machine. The SHA256 algorithm 
-guarantees that.
-A difference in the hash automatically means a difference in the 
-downloaded file.
+Classification of failures by reason
+====================================
 
-*In the second case* the sum is not calculated directly on the 
-downloaded file(s). The files are downloaded to local (during which they 
-might get corrupted, or different files are downloaded due to MITM or 
-GIT repo changes).
-Then they are tared and gzipped. Then the sum is calculated.
-This method may produce false negatives.
-
-So we have the chain: download -> tar -> gzip -> sha256-sum
-Do tar and gzip guarantee reproducible output on identical input across 
-implementations? Or is the output version/implementation specific? Let's 
-look at them closely.
-
-*Tar:**
-*- guarantees to produce a POSIX interchangeable format from the input, 
-as defined in POSIX 1003.1-1990
-- you force the gnu header format, sort the files, use numeric owners, 
-UID=GID=0, force the date to the checkout date -> these are all good, 
-but still don't guarantee a reproducible output across implementations
-- because the standard does not specify what type of padding should be 
-used for strings (after the 0 character) and for files (the last block 
-of a file). These are*implementation specific*. GNU tar seems to 
-initialize them to 0.
-
-*Gzip:
-*- RFCs 1950-1952 guarantee compatibility on the file format and algorithm
-- the DEFLATE algorithm however has some free space for the 
-implementation to find the matching strings. This means *a compatible 
-implementation might **produce* *different output.
-*- in GNU gzip these tweaks are controlled by the compression level in 
-gzip, which should be explicitly specified as you already realised
-- GNU gzip can change its implementation in the future
-- other implementation than GNU gzip might produce different output. See 
-https://en.wikipedia.org/wiki/DEFLATE#Encoder.2Fcompressor
-For instance the pigz based on zlib does produce a different output 
-(pigz compresses slightly more even at the same level 6). Yet, you can 
-perfectly compress with pigz and decompress with GNU gunzip.
-See your 3D film here ;-)  https://zlib.net/pigz/
-
-So the current hash calculation for cloned GIT repos depends on the 
-tools used. Is that more clear now?
+                openjpeg-2.2.0 | 20
+         s6-linux-init-0.3.1.0 | 8 
+                   luvi-v2.7.6 | 3 
+                  stella-5.0.2 | 2 
+                       unknown | 2 
+       gst1-plugins-bad-1.12.2 | 1 
+                libmbim-1.14.2 | 1 
+             lttng-tools-2.9.5 | 1 
+                     mdadm-4.0 | 1 
+            xlib_libXpm-3.5.12 | 1 
 
 
-What to do then? I can see several options, with different reliability 
-and practicality:
-1) the 100% reliable solution is to calculate checksum of each 
-individual file (raw) plus compare the file names. E.g.
+Detail of failures
+===================
 
-|LC_ALL=C find . -type f -print0 | sort -z | xargs -r0 sha256sum | sha256sum|
+       nios2 |        gst1-plugins-bad-1.12.2 | NOK | http://autobuild.buildroot.net/results/761c684ef0cfa5e392aec04f7065d54d2c1860f9 |     
+        i586 |                 libmbim-1.14.2 | NOK | http://autobuild.buildroot.net/results/0b623916124638dec03cc2d6d7dd8eeddcdc325d |     
+      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/e09848ba091b6bdf105d9a2725a16c5748832c31 |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/7a1a4c29c3c4aeda5d0c76b996287e0357efc512 |     
+         arm |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/ed5634961866993e25628b221326ebde74fd2061 |     
+        i686 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/e3b4916d91e49e6bb8c405ffe932cbedc284d41e |     
+         arm |                      mdadm-4.0 | NOK | http://autobuild.buildroot.net/results/33dc1a27d780fc06e165ce731dfd8faade818f55 | ORPH
+     powerpc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/62ff44c7f9166228cb4fda5d1a45cfacabe14417 |     
+        or1k |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/53a3f54cbdb7b427b2e36d709a0faaae0115ee2c |     
+    mips64el |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/96f707ccb5aacf545b0cbb30dac2e418da7cbd13 |     
+      x86_64 |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/c5048f0def366b3bcbfe08b77469933a30be0953 |     
+        bfin |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/0fd619dd60a7505a54e37766a958afae9ad05823 |     
+microblazeel |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/31b21be017da873caf9f761f307d612389dff30b |     
+         arc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/8561fc22d023bc109c3c3960bbb3578084bc3a7e |     
+microblazeel |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/70c0172944dc7a8203bb726e0ac2be606be287b0 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/e2e47c2b5f490272a39e708faecbd98d0a2ac39c |     
+     powerpc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/bd2a965c25ac921228501ca1564e09389c22949f |     
+microblazeel |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/29621409f2ad7205e31dc1ddad948df2f67552f4 |     
+        or1k |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/c3636d3553f4a28301c774f2b594f8f8f76d25da |     
+         arc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/f8037259dd8eb96752910f5f4e14e9dd3a88dcb9 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/e6b95ff2fb23a30277696ca519f1a8a4d3cd7db0 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/9f97870afb4f20ad67b540a71ea5e332c802a57a |     
+microblazeel |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/07746d60a93c1a77079d292bdc25ee514601da77 |     
+        or1k |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/24382b4b4951dafc3cb2a9760bdbedf517ac1945 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/b418287d3ac12537d9182d36a0c641ac27e25108 |     
+        i686 |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/80ebe961669c9b1b1da234d020e77ecdda2718ca |     
+        or1k |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/5051fe07a137e6fdb5f6cbd4d11b21f5a1665a4c |     
+    mips64el |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/7208b2630832c3293db39affd7886691691770b4 |     
+      xtensa |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/c10548ffde2d83b6298759793ef99a5142309678 |     
+         arm |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/a0da44d547670bc46479980ac1b29e7e2421b378 |     
+         arm |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/df7ec3facb183b7caf1a6eaff4f89a65961681fb |     
+   powerpc64 |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/fe7a32fbec5d64c359ad0326a01764a631dcc6f6 |     
+    mips64el |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/79029d736910ca32567bc8a82ac6982c3ac1e1fb |     
+         arm |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/20091ae932385bd7ba4205626bce174e385da221 |     
+     powerpc |          s6-linux-init-0.3.1.0 | NOK | http://autobuild.buildroot.net/results/c1cd69444abb32e77928e7d7363f5cdfea79dcf5 |     
+         arm |                   stella-5.0.2 | NOK | http://autobuild.buildroot.net/results/b70bd0c696de752499b4be3bd4e3d6aa0712544f |     
+         arm |                   stella-5.0.2 | NOK | http://autobuild.buildroot.net/results/58614b04a42dcb79e7b98f683ee4cfa4e52b7903 |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/46ce4a21d00ce23e61d1c768997bebe84bdfd184 |     
+        i586 |                        unknown | NOK | http://autobuild.buildroot.net/results/a5fbcd2a887e14bb8bf429d1ca312c303b193d97 |     
+     aarch64 |             xlib_libXpm-3.5.12 | NOK | http://autobuild.buildroot.net/results/553e9b117f7cae5812571dbe125fe9ae874cb23b |     
 
-
-2) another 100% reliable solution: bundle BR with a specific version of 
-tar and gzip (or download and build them) and use the current method. 
-However the same tools should be then use to create the hash file.
-
-3) the almost 100% working solution is to remove the gzip step and 
-calculate checksum of the tar. This depends just on the padding 
-implementation in tar, and it is reasonable to assume zero-padding.
-Just for sure the Buildroot documentation should be updated that *GNU* 
-tar is required.
-
-4) the implementation dependent solution is to use tar.gz as now, force 
-the compression level, document that *GNU* gzip is required and cross 
-fingers that gzip doesn't change its implementation in the future.
-
-In any case, if specific versions of the tools are assumed (and the 
-current implementation does assume them), this should be very clearly 
-documented.
-
-Regards
-Petr
-
-On 10/09/17 20:18, Yann E. MORIN wrote:
-> Petr, all,
->
-> On 2017-09-10 12:31 +0200, Petr Kulhavy spake thusly:
->> On 10/09/17 11:24, Yann E. MORIN wrote:
->>> On 2017-09-10 08:04 +0200, Thomas Petazzoni spake thusly:
->>>> On Sat, 9 Sep 2017 22:53:06 +0200, Petr Kulhavy wrote:
->>>>> Is there a command to just clone and compress the repo via BR?
->>>>> The <package>-extract make target fails if the hash doesn't exist and
->>>>> consequently deletes the temporary files.
->>>> Yeah, it's a bit annoying. If you put a none hash temporarily, then you
->>>> can have the tarball downloaded, calculate its hash, and add it. We
->>>> also had proposals like https://patchwork.ozlabs.org/patch/791357/ to
->>>> help with this.
->>> IIRC, I was opposed to that change, because we want the user to go and
->>> get the hash as provided by upstream (e.g. in a release email).
->>>
->>> Having the infra pre-calculate the hash locally defeats the very purpose
->>> of the hashes: check that what we got is what upstream provides.
->> Doesn't the idea of a hash of a cloned and zipped GIT repo go a little bit
->> against this?
->> I mean, I have never seen any upstream providing a hash for a specific clone
->> of a repo.
-> Indeed no. This is one of the cases where a locally computed hash is needed.
->
->> In fact, that is what the GIT hash provides, in a slightly different form.
-> Except when one git-clones a tag; unlike a sha1, a tag can be changed;
-> see below.
->
->> So I must say I'm bit missing the point of providing a hash for cloned and
->> zipped GIT repo.
->> What is the hash trying to protect?
-> Globally, the hash is here for three reasons:
->
->   1- be sure that what we download is what we expect, to avoid
->      man-in-the-middle attacks, especially on security-sensitive
->      packages: ca-certificates, openssh, dropbear, etc...
->
->   2- be sure that what we download is what we expect, to avoid silent
->      corruption of the downloaded blob, or to avoid fscked-up by
->      intermediate CDNs (already seen!)
->
->   3- detect when upstream completely messes up, and redoes a release,
->      like regnerating a release tarball, or re-tagging another commit,
->      after the previous one went public.
->
-> The last one is problmatic, becasue then we can not longer ensure
-> reproducibility of a build. There's nothing we can do in this case, of
-> course, except pster upstream to nver do that again. But at least, we
-> caught it and we can act accordingly; it is not a silent change of
-> behaviour.
->
->> On the contrary, I even think it is a wrong approach. The zip is created
->> locally after the clone. And the output, or the hash if you want, depends on
->> the zip tool used and its settings (compression level, etc.).
-> No, it should not depend on it, because we really go at great lengths to
-> ensure it *is* reproduclibe; see the scripts in support/download/
->
->> So if someone uses a tool with a different default compression level or for
->> instance gzip gets optimized, or whatever, the hash will be different. Even
->> if the cloned repo was the same.
-> And if gzip no longer produces the same output, then a lot of other
-> things break loose, because nothing previously existing would be
-> reproducible anymnore. This would make quite a fuss, to say the least.
->
->> (AFAIK there is no standard defining how well gzip should compress, nor does
->> gzip guarantee for a given input an equivalent output between different
->> future versions of gzip)
-> Indeed there's no standard, except de-facto, for what the compression
-> level is: all versions have defaulted to level 6. At least all that are
-> applicable by today, that is that was already level 6 20 years ago, and
-> probably even before that (but my memory is not that trustworthy past
-> that mark, sorry).
->
-> Note that you still have a (very small) point: we do not enforce the
-> compression level when compressing the archive:
->      https://git.buildroot.org/buildroot/tree/support/download/git#n104
->
-> So, do you want to send a patch that forces level 6, please?
->
-> However, yes, there *is* a standard about the gzip compression
-> algorithm; gzip uses the DEFLATE algorithm, which is specified in
-> RFC1951: https://tools.ietf.org/html/rfc1951
->
-> If gzip would compress with another algorithm, then that would no longer
-> be gzip. I would love to see a movie about sysadmins and developpers who
-> battle in a world where gzip sudenly changes its output format. Sure
-> worth the pop-corn. I might even go see it in 3D! ;-)
->
->> So in fact the hash on a GIT repo in BR compares the zip tool I used to
->> create the hash file and the tool that the BR user has installed on his
->> machine.
->> And that is surely not what you want to do, is it?
-> Yes it is, because it is reproducible.
->
->> For GIT the SHA1 value together with "git fsck" seem to do the job. See the
->> answer in this post:
->> https://stackoverflow.com/questions/31550828/verify-git-integrity
-> However, we can also use a tag from a git repo, and a tag is not sufficient
-> to ensure the three integrity checks we need, as explained above.
->
-> So yes, we do want a hash of a tarball created by a git clone.
->
-> Regards,
-> Yann E. MORIN.
->
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170911/1c0f9b29/attachment.html>
+-- 
+http://autobuild.buildroot.net
