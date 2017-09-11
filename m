@@ -1,47 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Sep 2017 11:27:47 +0200
-Subject: [Buildroot] [git commit] x11r7: xdriver_xf86-input-tslib: update to
-	version 1.1.1
-Message-ID: <20170911092132.CA0908104E@busybox.osuosl.org>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Mon, 11 Sep 2017 12:00:25 +0200
+Subject: [Buildroot] [PATCH v3] gst1-plugins-bad: fix build against
+ openjpeg 2.2
+In-Reply-To: <20170910232432.69e3c57b@gmx.net>
+References: <20170908133156.10357-1-ps.report@gmx.net>
+ <CAAP7uc+zUqWR8w484d5uOtfCPgrkE7o=vaHHgBw7OSTvL1S5Rg@mail.gmail.com>
+ <20170910095931.7ad07fe6@gmx.net>
+ <CAAP7ucJwBX01nGdTWchRESw_5WqoA4TQSSTJk8ERSRPZT-hYDA@mail.gmail.com>
+ <20170910232432.69e3c57b@gmx.net>
+Message-ID: <CAAP7ucKGw23Ayd5QBD2ybPOyHnM58HG+we+rQDbcKVJikO08mQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=268c52865b3b1b286a9b48c03814afe4ea431c34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>> Do you have host-gettext explicitly enabled? Could you attach the output of
+>
+> Tested with your patch applied, my patch applied with the following changes:
+>
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -15,7 +15,7 @@ GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+>
+>  # patch 0001-openjpeg-Fix-build-against-openjpeg-2.2.patch touches configure.ac
+>  GST1_PLUGINS_BAD_AUTORECONF = YES
+> -GST1_PLUGINS_BAD_GETTEXTIZE = YES
+> +#GST1_PLUGINS_BAD_GETTEXTIZE = YES
+>
+>  GST1_PLUGINS_BAD_CONF_OPTS = \
+>         --disable-examples \
+> @@ -65,7 +65,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+>         --disable-gtk3 \
+>         --disable-qt
+>
+> -GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
+> +GST1_PLUGINS_BAD_DEPENDENCIES = host-gettext gst1-plugins-base gstreamer1
+>
+>  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>  # RPI has odd locations for several required headers.
+>
+>
+>> the make command when rebuilding the package?
+>
+> Yes, see attachment make-gst1_plugins-bad.log.gz.
+>
 
-Update to bugfix release 1.1.1, see
+I'll try to reproduce this issue myself once I find some free time,
+and will let you know what I find. In the meantime, just go on and
+merge the latest patch if it's ok, and sorry for hijacking the thread
+with the gettext vs autopoint issue :)
 
-    https://github.com/merge/xf86-input-tslib/releases
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-index 84b3857..faff5d4 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/merge/xf86-input-tslib/releases/download/1.1.0/xf86-input-tslib-1.1.0.tar.bz2.sha256
--sha256 5e5626c1127fe945270d819281ad15f2f924f4e35bad0903db9748635c2af432  xf86-input-tslib-1.1.0.tar.bz2
-+# https://github.com/merge/xf86-input-tslib/releases/download/1.1.1/xf86-input-tslib-1.1.1.tar.bz2.sha256
-+sha256 8b6a9f2ad73598a3619e66e252bd54b1792c4deba0213101fa4d272b5e9217ec  xf86-input-tslib-1.1.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-index d9555b7..bf0ee48 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.1.0
-+XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.1.1
- XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releases/download/$(XDRIVER_XF86_INPUT_TSLIB_VERSION)
- XDRIVER_XF86_INPUT_TSLIB_LICENSE = MIT
+-- 
+Aleksander
+https://aleksander.es
