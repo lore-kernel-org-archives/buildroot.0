@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Sep 2017 01:07:54 +0200
-Subject: [Buildroot] Issue adding subprocess32 python package to
-	buildroot
-In-Reply-To: <CAP3D3ge8ZXFXuB4_V5eSxnKAN=5hKWwYcxT2xRqM6HUOp39pUg@mail.gmail.com>
-References: <CAP3D3ge8ZXFXuB4_V5eSxnKAN=5hKWwYcxT2xRqM6HUOp39pUg@mail.gmail.com>
-Message-ID: <24023e40-1023-93df-8406-c2a46703a7ed@mind.be>
+Date: Tue, 12 Sep 2017 01:08:52 +0200
+Subject: [Buildroot] [PATCH 1/1] netsnmp: install all MIB files
+In-Reply-To: <20170908134548.23645-1-julien.floret@6wind.com>
+References: <20170908134548.23645-1-julien.floret@6wind.com>
+Message-ID: <8d8bb3d5-6ea9-94b4-1a53-a57909b8bbc6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +12,22 @@ To: buildroot@busybox.net
 
 
 
-On 08-09-17 16:18, Paul Gildea wrote:
-> /media/vmpart/5.1.0_x86/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -fno-strict-aliasing -O2 -I/media/vmpart/5.1.0_x86/buildroot/output/host/include -I/media/vmpart/5.1.0_x86/buildroot/output/host/usr/include -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -fPIC -I/media/vmpart/5.1.0_x86/buildroot/output/host/usr/include/python2.7 -c _posixsubprocess.c -o build/temp.linux-x86_64-2.7/_posixsubprocess.o
+On 08-09-17 15:45, Julien Floret wrote:
+> Since commit be8e32d585f3 ("netsnmp: configurable MIB modules"),
+> the list of MIB modules can be selected with a configuration option.
+> 
+> However, there was still an hardcoded list of MIB files to exclude from
+> the target filesystem.
+> Since it is complicated to know which MIB files are necessary according
+> to the configuration, let's install all of them.
+> 
+> Cc: przemyslaw <przemyslaw.wrzos@calyptech.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
 
- You're using the host compiler to build a target package. You need to pass
-CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" to setup.py in the build step.
+ Looks good to me, except: shouldn't the default of
+BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES so that all the previous BLOAT_MIBS are
+there?
 
  Regards,
  Arnout
