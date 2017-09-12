@@ -1,32 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 21:47:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsync: security bump to
-	version 2.0.0
-In-Reply-To: <20170912181430.9672-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 12 Sep 2017 20:14:30 +0200")
-References: <20170912181430.9672-1-bernd.kuhls@t-online.de>
-Message-ID: <87poav7l7i.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Sep 2017 22:01:35 +0200
+Subject: [Buildroot] [PATCH v2] lirc-tools: bump to version 0.10.1
+In-Reply-To: <dba44a833d6e2e6bfa081c069ca3019255724179.1505219518.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 12 Sep 2017 15:31:58 +0300")
+References: <dba44a833d6e2e6bfa081c069ca3019255724179.1505219518.git.baruch@tkos.co.il>
+Message-ID: <87lglj7kkg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Removed patch applied upstream, switched to cmake-package following
- > upstream removal of autoconf.
+ > Drop upstream patch.
+ > Add an upstream patch fixing build without python.
 
- > Short summary of changes:
+ > Add two more patches (one of them upstream) fixing cross compile of the
+ > python client library.
 
- > version 1.0.1
- > - switched from autoconf to cmake
+ > Enable devinput and uinput unconditionally to suppress non cross compile
+ > compatible host checks.
 
- > version 1.0.0:
- > - fixed CVE-2014-8242
- > - project moved to github
+ > Set DEVINPUT_HEADER to target header of input events to avoid use of
+ > host header.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Add python3 as optional dependency.
+
+ > Cc: Rhys Williams <github@wilberforce.co.nz>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2:
+ >   Bump version to 0.10.1
+ >   Update the python version detection patch to upstream version
+ >   Update upstream status of patches
 
 Committed, thanks.
 
