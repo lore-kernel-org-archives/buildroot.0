@@ -1,88 +1,102 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 12 Sep 2017 11:50:56 +0200
-Subject: [Buildroot] [PATCH 3/3] python-ibmiotf: new package
-In-Reply-To: <20170912095056.13692-1-yegorslists@googlemail.com>
-References: <20170912095056.13692-1-yegorslists@googlemail.com>
-Message-ID: <20170912095056.13692-3-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 Sep 2017 14:43:58 +0300
+Subject: [Buildroot] [PATCH] libcurl: fix build without threads
+Message-ID: <502def3c81c8bc65ada11c1bb87e65725b8b8900.1505216638.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+When c-ares is not enabled libcurl enables the threaded DNS resolver by
+default. Make sure the threaded resolvers is disabled when the toolchain
+does not support threads.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Add upstream patch that fixes the configure option for disabling the
+threaded resolver.
+
+Fixes:
+http://autobuild.buildroot.net/results/39f/39fa63fb2ecb75e4b2521d1ee3dfa357c4e5c594/
+http://autobuild.buildroot.net/results/dfd/dfd296086d0d6bed73b92fe2fa4ba5434dddf796/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/Config.in                          |  1 +
- package/python-ibmiotf/Config.in           | 15 +++++++++++++++
- package/python-ibmiotf/python-ibmiotf.hash |  3 +++
- package/python-ibmiotf/python-ibmiotf.mk   | 13 +++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/python-ibmiotf/Config.in
- create mode 100644 package/python-ibmiotf/python-ibmiotf.hash
- create mode 100644 package/python-ibmiotf/python-ibmiotf.mk
+ ...confopts.m4-fix-disable-threaded-resolver.patch | 40 ++++++++++++++++++++++
+ package/libcurl/libcurl.mk                         |  8 +++++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 2a47775269..4f7439ac38 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -756,6 +756,7 @@ menu "External python modules"
- 	source "package/python-humanize/Config.in"
- 	source "package/python-hyperframe/Config.in"
- 	source "package/python-hyperlink/Config.in"
-+	source "package/python-ibmiotf/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-incremental/Config.in"
-diff --git a/package/python-ibmiotf/Config.in b/package/python-ibmiotf/Config.in
+diff --git a/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch b/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
 new file mode 100644
-index 0000000000..66d58687c4
+index 000000000000..c7a563e8258f
 --- /dev/null
-+++ b/package/python-ibmiotf/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_IBMIOTF
-+	bool "python-ibmiotf"
-+	select BR2_PACKAGE_PYTHON_DICTTOXML # runtime
-+	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
-+	select BR2_PACKAGE_PYTHON_PAHO_MQTT # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_XMLTODICT # runtime
-+	help
-+	  Python Client for IBM Watson IoT Platform.
++++ b/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
+@@ -0,0 +1,40 @@
++From 3cb4bb6b5fb8a936cb69e2e9ea6a4e692122abb9 Mon Sep 17 00:00:00 2001
++From: Jakub Zakrzewski <slither.jz@gmail.com>
++Date: Tue, 15 Aug 2017 13:21:33 -0400
++Subject: [PATCH] curl-confopts.m4: fix --disable-threaded-resolver
 +
-+	  https://github.com/ibm-watson-iot/iot-python
-diff --git a/package/python-ibmiotf/python-ibmiotf.hash b/package/python-ibmiotf/python-ibmiotf.hash
-new file mode 100644
-index 0000000000..9649876f63
---- /dev/null
-+++ b/package/python-ibmiotf/python-ibmiotf.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  ab230bc4c90af4237abe790ebc6b171706a35971b886f1724d879c2f328a616b  python-ibmiotf-0.2.8.tar.gz
-+sha256  d8288e11fc42988629f7c0b649fa007332dd0187b010d025feaf7b1925376e8d  LICENSE
-diff --git a/package/python-ibmiotf/python-ibmiotf.mk b/package/python-ibmiotf/python-ibmiotf.mk
-new file mode 100644
-index 0000000000..9853389c38
---- /dev/null
-+++ b/package/python-ibmiotf/python-ibmiotf.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-ibmiotf
-+#
-+################################################################################
++Closes https://github.com/curl/curl/issues/1784
 +
-+PYTHON_IBMIOTF_VERSION = 0.2.8
-+PYTHON_IBMIOTF_SITE = $(call github,ibm-watson-iot,iot-python,$(PYTHON_IBMIOTF_VERSION))
-+PYTHON_IBMIOTF_SETUP_TYPE = setuptools
-+PYTHON_IBMIOTF_LICENSE = EPL-1.0
-+PYTHON_IBMIOTF_LICENSE_FILES = LICENSE
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 3cb4bb6b5fb
 +
-+$(eval $(python-package))
++ m4/curl-confopts.m4 | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/m4/curl-confopts.m4 b/m4/curl-confopts.m4
++index d77a884d58bd..6dcd0f1a6794 100644
++--- a/m4/curl-confopts.m4
+++++ b/m4/curl-confopts.m4
++@@ -37,14 +37,14 @@ AC_HELP_STRING([--enable-threaded-resolver],[Enable threaded resolver])
++ AC_HELP_STRING([--disable-threaded-resolver],[Disable threaded resolver]),
++   OPT_THRES=$enableval)
++   case "$OPT_THRES" in
++-    *)
++-      dnl configure option not specified
++-      want_thres="yes"
++-      ;;
++     no)
++       dnl --disable-threaded-resolver option used
++       want_thres="no"
++       ;;
+++    *)
+++      dnl configure option not specified
+++      want_thres="yes"
+++      ;;
++   esac
++   AC_MSG_RESULT([$want_thres])
++ ])
++-- 
++2.14.1
++
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 64110cccf072..d7f860eb1b2a 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -14,6 +14,8 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
+ LIBCURL_LICENSE = curl
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_INSTALL_STAGING = YES
++# Patching m4/curl-confopts.m4
++LIBCURL_AUTORECONF = YES
+ 
+ # We disable NTLM support because it uses fork(), which doesn't work
+ # on non-MMU platforms. Moreover, this authentication method is
+@@ -22,6 +24,12 @@ LIBCURL_INSTALL_STAGING = YES
+ LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+ 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBCURL_CONF_OPTS += --enable-threaded-resolver
++else
++LIBCURL_CONF_OPTS += --disable-threaded-resolver
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCURL_VERBOSE),y)
+ LIBCURL_CONF_OPTS += --enable-verbose
+ else
 -- 
-2.11.0
+2.14.1
