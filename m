@@ -1,91 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 19:00:56 +0200
-Subject: [Buildroot] [PATCH] fscryptctl: new package
-Message-ID: <20170912170056.23439-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 12 Sep 2017 20:14:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/librsync: security bump to version
+	2.0.0
+Message-ID: <20170912181430.9672-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fscryptctl is a low-level tool written in C that handles raw keys and
-manages policies for Linux filesystem encryption.
+Removed patch applied upstream, switched to cmake-package following
+upstream removal of autoconf.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Short summary of changes:
+
+version 1.0.1
+- switched from autoconf to cmake
+
+version 1.0.0:
+- fixed CVE-2014-8242
+- project moved to github
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                  |  1 +
- package/fscryptctl/Config.in       | 12 ++++++++++++
- package/fscryptctl/fscryptctl.hash |  3 +++
- package/fscryptctl/fscryptctl.mk   | 20 ++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/fscryptctl/Config.in
- create mode 100644 package/fscryptctl/fscryptctl.hash
- create mode 100644 package/fscryptctl/fscryptctl.mk
+ package/librsync/0001-fix-build-with-clang.patch | 37 ------------------------
+ package/librsync/Config.in                       |  2 +-
+ package/librsync/librsync.hash                   |  2 +-
+ package/librsync/librsync.mk                     |  6 ++--
+ 4 files changed, 5 insertions(+), 42 deletions(-)
+ delete mode 100644 package/librsync/0001-fix-build-with-clang.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 7a277d75ca..4d7d5a29cd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -180,6 +180,7 @@ menu "Filesystem and flash utilities"
- 	source "package/exfat-utils/Config.in"
- 	source "package/f2fs-tools/Config.in"
- 	source "package/flashbench/Config.in"
-+	source "package/fscryptctl/Config.in"
- 	source "package/fwup/Config.in"
- 	source "package/genext2fs/Config.in"
- 	source "package/genpart/Config.in"
-diff --git a/package/fscryptctl/Config.in b/package/fscryptctl/Config.in
-new file mode 100644
-index 0000000000..91b9ba8ebe
---- /dev/null
-+++ b/package/fscryptctl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FSCRYPTCTL
-+	bool "fscryptctl"
-+	help
-+	  fscryptctl is a low-level tool written in C that handles raw
-+	  keys and manages policies for Linux filesystem encryption.
-+
-+	  Notice: Fscrypt support on EXT4 requires a kernel with
-+	  CONFIG_EXT4_ENCRYPTION=y and a file system with the
-+	  encryption option and block size equal to CPU page size
-+	  (BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O encrypt -b 4096")
-+
-+	  https://github.com/google/fscryptctl
-diff --git a/package/fscryptctl/fscryptctl.hash b/package/fscryptctl/fscryptctl.hash
-new file mode 100644
-index 0000000000..ea3a47b057
---- /dev/null
-+++ b/package/fscryptctl/fscryptctl.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 ad5ca31fa2372d4d9c01439bf5b9717d4b9775630d7947b9c6b69377150e76a1  fscryptctl-18428569e4b23cf33b90046aaed3b5fbdab3b191.tar.gz
-+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/fscryptctl/fscryptctl.mk b/package/fscryptctl/fscryptctl.mk
-new file mode 100644
-index 0000000000..843cb7887b
---- /dev/null
-+++ b/package/fscryptctl/fscryptctl.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# fscryptctl
-+#
-+################################################################################
-+
-+FSCRYPTCTL_VERSION = 18428569e4b23cf33b90046aaed3b5fbdab3b191
-+FSCRYPTCTL_SITE = $(call github,google,fscryptctl,$(FSCRYPTCTL_VERSION))
-+FSCRYPTCTL_LICENSE = Apache-2.0
-+FSCRYPTCTL_LICENSE_FILES = LICENSE
-+
-+define FSCRYPTCTL_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) fscryptctl
-+endef
-+
-+define FSCRYPTCTL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/fscryptctl $(TARGET_DIR)/usr/bin/fscryptctl
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/librsync/0001-fix-build-with-clang.patch b/package/librsync/0001-fix-build-with-clang.patch
+deleted file mode 100644
+index ea513c04d9..0000000000
+--- a/package/librsync/0001-fix-build-with-clang.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 1175b1cd102ee15512185c7983868e5746959da0 Mon Sep 17 00:00:00 2001
+-From: Adam Schubert <feartohell@seznam.cz>
+-Date: Mon, 11 May 2015 04:25:45 +0200
+-Subject: [PATCH] Fix build under clang
+-
+-Downloaded from upstream commit:
+-https://github.com/librsync/librsync/commit/1175b1cd102ee15512185c7983868e5746959da0.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+----
+- delta.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/delta.c b/delta.c
+-index 19498f9..72afdf6 100644
+---- a/delta.c
+-+++ b/delta.c
+-@@ -126,12 +126,12 @@ static rs_result rs_delta_s_scan(rs_job_t *job);
+- static rs_result rs_delta_s_flush(rs_job_t *job);
+- static rs_result rs_delta_s_end(rs_job_t *job);
+- void rs_getinput(rs_job_t *job);
+--inline int rs_findmatch(rs_job_t *job, rs_long_t *match_pos, size_t *match_len);
+--inline rs_result rs_appendmatch(rs_job_t *job, rs_long_t match_pos, size_t match_len);
+--inline rs_result rs_appendmiss(rs_job_t *job, size_t miss_len);
+--inline rs_result rs_appendflush(rs_job_t *job);
+--inline rs_result rs_processmatch(rs_job_t *job);
+--inline rs_result rs_processmiss(rs_job_t *job);
+-+static inline int rs_findmatch(rs_job_t *job, rs_long_t *match_pos, size_t *match_len);
+-+static inline rs_result rs_appendmatch(rs_job_t *job, rs_long_t match_pos, size_t match_len);
+-+static inline rs_result rs_appendmiss(rs_job_t *job, size_t miss_len);
+-+static inline rs_result rs_appendflush(rs_job_t *job);
+-+static inline rs_result rs_processmatch(rs_job_t *job);
+-+static inline rs_result rs_processmiss(rs_job_t *job);
+- 
+- /**
+-  * \brief Get a block of data if possible, and see if it matches.
+diff --git a/package/librsync/Config.in b/package/librsync/Config.in
+index 5dcdfc8f2e..652f0cb276 100644
+--- a/package/librsync/Config.in
++++ b/package/librsync/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBRSYNC
+ 	  remote file synchronization that was popularized by the
+ 	  rsync utility and is used in rproxy.
+ 
+-	  http://sourceforge.net/projects/librsync/
++	  https://github.com/librsync/librsync
+diff --git a/package/librsync/librsync.hash b/package/librsync/librsync.hash
+index 55ace76394..2d5e2e0028 100644
+--- a/package/librsync/librsync.hash
++++ b/package/librsync/librsync.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  6633e4605662763a03bb6388529cbdfd3b11a9ec55b8845351c1bd9a92bc41d6  librsync-0.9.7.tar.gz
++sha256 b5c4dd114289832039397789e42d4ff0d1108ada89ce74f1999398593fae2169  librsync-v2.0.0.tar.gz
+diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
+index 517f8715cb..07b684a264 100644
+--- a/package/librsync/librsync.mk
++++ b/package/librsync/librsync.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBRSYNC_VERSION = 0.9.7
+-LIBRSYNC_SITE = http://downloads.sourceforge.net/project/librsync/librsync/$(LIBRSYNC_VERSION)
++LIBRSYNC_VERSION = v2.0.0
++LIBRSYNC_SITE = $(call github,librsync,librsync,$(LIBRSYNC_VERSION))
+ LIBRSYNC_LICENSE = LGPL-2.1+
+ LIBRSYNC_LICENSE_FILES = COPYING
+ LIBRSYNC_INSTALL_STAGING = YES
+ LIBRSYNC_DEPENDENCIES = zlib bzip2 popt
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
 2.11.0
