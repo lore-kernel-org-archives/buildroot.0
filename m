@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 23:33:30 +0200
-Subject: [Buildroot] [git commit] package/libsodium: bump version to 1.0.13
-Message-ID: <20170912212658.B199480F8E@busybox.osuosl.org>
+Date: Tue, 12 Sep 2017 23:28:55 +0200
+Subject: [Buildroot] [git commit] jemalloc: bump version to 5.0.1
+Message-ID: <20170912212658.7DD7480F8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac5cb4106fad69939bdb516544c4ee9946aa5cd0
+commit: https://git.buildroot.net/buildroot/commit/?id=2543544e8d7e319c2353957d710a2ec792777db1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsodium/libsodium.hash | 2 +-
- package/libsodium/libsodium.mk   | 2 +-
+ package/jemalloc/jemalloc.hash | 2 +-
+ package/jemalloc/jemalloc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-index 9fdbc17..725281e 100644
---- a/package/libsodium/libsodium.hash
-+++ b/package/libsodium/libsodium.hash
+diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
+index 65dbecc..50ac682 100644
+--- a/package/jemalloc/jemalloc.hash
++++ b/package/jemalloc/jemalloc.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 b8648f1bb3a54b0251cf4ffa4f0d76ded13977d4fa7517d988f4c902dd8e2f95  libsodium-1.0.12.tar.gz
-+sha256 9c13accb1a9e59ab3affde0e60ef9a2149ed4d6e8f99c93c7a5b97499ee323fd  libsodium-1.0.13.tar.gz
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index b951c53..b1d8a26 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
+ # Locally calculated
+-sha256 9409d85664b4f135b77518b0b118c549009dc10f6cba14557d170476611f6780  jemalloc-4.5.0.tar.bz2
++sha256 4814781d395b0ef093b21a08e8e6e0bd3dab8762f9935bbfb71679b0dea7c3e9  jemalloc-5.0.1.tar.bz2
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index 17a3c9a..2424eb5 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSODIUM_VERSION = 1.0.12
-+LIBSODIUM_VERSION = 1.0.13
- LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
- LIBSODIUM_LICENSE = ISC
- LIBSODIUM_LICENSE_FILES = LICENSE
+-JEMALLOC_VERSION = 4.5.0
++JEMALLOC_VERSION = 5.0.1
+ JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
+ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
+ JEMALLOC_LICENSE = BSD-2-Clause
