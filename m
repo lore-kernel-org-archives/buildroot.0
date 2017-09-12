@@ -1,44 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 23:31:30 +0200
-Subject: [Buildroot] [git commit] package/zeromq: bump version to 4.1.6
-Message-ID: <20170912212658.9AE3081032@busybox.osuosl.org>
+Date: Tue, 12 Sep 2017 23:30:01 +0200
+Subject: [Buildroot] [git commit] package/fwup: bump version to 0.15.4
+Message-ID: <20170912212658.8B84C8106C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa03d958b347e6b294a19a1709905045d9b9c20a
+commit: https://git.buildroot.net/buildroot/commit/?id=826daee611081a0a5ac81df9cf0dda659a0f1901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed patch applied upstream:
+https://github.com/fhunleth/fwup/commit/0301cb4ffbf4705316ba017516745a535d66d552#diff-ce18c9a5ee5a2f36921fbc12b00cc0dd
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zeromq/zeromq.hash | 4 ++--
- package/zeromq/zeromq.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fwup/0001-Fix-uclibc-build.patch | 36 --------------------------------
+ package/fwup/fwup.hash                   |  2 +-
+ package/fwup/fwup.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
-index 76067d9..486656e 100644
---- a/package/zeromq/zeromq.hash
-+++ b/package/zeromq/zeromq.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/zeromq/zeromq4-1/releases
--sha1	2b7490b77860be3060b1b1f92cd73184d309ca69	zeromq-4.1.5.tar.gz
-+sha1 b956df8c6f77c174683b51fbee67f99c94945651  zeromq-4.1.6.tar.gz
- # Calculated based on the hash above
--sha256	04aac57f081ffa3a2ee5ed04887be9e205df3a7ddade0027460b8042432bdbcf	zeromq-4.1.5.tar.gz
-+sha256 02ebf60a43011e770799336365bcbce2eb85569e9b5f52aa0d8cc04672438a0a  zeromq-4.1.6.tar.gz
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 1d3be4e..caf5643 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
+diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
+deleted file mode 100644
+index f7bf245..0000000
+--- a/package/fwup/0001-Fix-uclibc-build.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 28 May 2017 16:56:39 +0200
+-Subject: [PATCH 1/1] Fix uclibc build
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Without sys/types.h the build breaks with errors like this:
+-
+-parse_file.h:28:5: error: unknown type name ???off_t???
+-     off_t *map;
+-     ^
+-
+-Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/sparse_file.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/sparse_file.h b/src/sparse_file.h
+-index 21bf5f9..579fbaa 100644
+---- a/src/sparse_file.h
+-+++ b/src/sparse_file.h
+-@@ -18,6 +18,7 @@
+- #define SPARSE_FILE_H
+- 
+- #include <confuse.h>
+-+#include <sys/types.h>
+- 
+- struct sparse_file_map
+- {
+--- 
+-2.11.0
+-
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index 8679dcb..32398bf 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
++sha256 852e255bd65f9db473a06184abb3e94e3b6b86be7bf66169e8df8146d5966ae1  fwup-v0.15.4.tar.gz
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index e47ecbe..c6a18c2 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZEROMQ_VERSION = 4.1.5
-+ZEROMQ_VERSION = 4.1.6
- ZEROMQ_SITE = https://github.com/zeromq/zeromq4-1/releases/download/v$(ZEROMQ_VERSION)
- ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_DEPENDENCIES = util-linux
+-FWUP_VERSION = v0.14.3
++FWUP_VERSION = v0.15.4
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
