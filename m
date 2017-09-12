@@ -1,21 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 23:29:09 +0200
-Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
-	versions
-In-Reply-To: <1505158554-20441-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Mon, 11 Sep 2017 16:35:54 -0300")
-References: <1505158554-20441-1-git-send-email-festevam@gmail.com>
-Message-ID: <87ingn61y2.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Sep 2017 23:29:21 +0200
+Subject: [Buildroot] [PATCH] jemalloc: bump version to 5.0.1
+In-Reply-To: <20170910103730.17091-1-eric.le.bihan.dev@free.fr> (Eric Le
+ Bihan's message of "Sun, 10 Sep 2017 05:37:30 -0500")
+References: <20170910103730.17091-1-eric.le.bihan.dev@free.fr>
+Message-ID: <87efrb61xq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 
- > Bump U-Boot to 2017.09 and kernel to 4.12.12 version.
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
 Committed, thanks.
 
