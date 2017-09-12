@@ -1,76 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 23:38:47 +0200
-Subject: [Buildroot] [git commit] python-iso8601: new package
-Message-ID: <20170912213541.B59DE80FA2@busybox.osuosl.org>
+Date: Tue, 12 Sep 2017 23:38:13 +0200
+Subject: [Buildroot] [git commit] libmbim: add COPYING.LIB to LICENSE_FILES
+Message-ID: <20170912213541.A2ACB80FA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cce0cc2bbdafb0800840605f226ecb9f8bb33401
+commit: https://git.buildroot.net/buildroot/commit/?id=4906abf94341112eb9659ac20f27b9e76f02b149
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+mbimcli and mbim-network are GPLv2+ (COPYING file applies) and
+libmbim-glib is LGPLv2.1+ (COPYING.LIB file applies).
+
+Also, setup hashes of the license files, for a correct
+"make legal-info".
+
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                          |  1 +
- package/python-iso8601/Config.in           |  6 ++++++
- package/python-iso8601/python-iso8601.hash |  4 ++++
- package/python-iso8601/python-iso8601.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ package/libmbim/libmbim.hash | 2 ++
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4d7d5a2..9554b6f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -767,6 +767,7 @@ menu "External python modules"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
- 	source "package/python-ipython-genutils/Config.in"
-+	source "package/python-iso8601/Config.in"
- 	source "package/python-itsdangerous/Config.in"
- 	source "package/python-jinja2/Config.in"
- 	source "package/python-jsonschema/Config.in"
-diff --git a/package/python-iso8601/Config.in b/package/python-iso8601/Config.in
-new file mode 100644
-index 0000000..9e4610c
---- /dev/null
-+++ b/package/python-iso8601/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ISO8601
-+	bool "python-iso8601"
-+	help
-+	  Simple module to parse ISO 8601 dates.
-+
-+	  https://bitbucket.org/micktwomey/pyiso8601
-diff --git a/package/python-iso8601/python-iso8601.hash b/package/python-iso8601/python-iso8601.hash
-new file mode 100644
-index 0000000..57604cc
---- /dev/null
-+++ b/package/python-iso8601/python-iso8601.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/iso8601/json, sha256 locally computed
-+md5	4de940f691c5ea759fb254384c8ddcf6  iso8601-0.1.12.tar.gz
-+sha256	49c4b20e1f38aa5cf109ddcd39647ac419f928512c869dc01d5c7098eddede82  iso8601-0.1.12.tar.gz
-+sha256  116d368d14a8cf0061027c944c60ee20b476ce42814818a7d627396906761f16  LICENSE
-diff --git a/package/python-iso8601/python-iso8601.mk b/package/python-iso8601/python-iso8601.mk
-new file mode 100644
-index 0000000..7fc171d
---- /dev/null
-+++ b/package/python-iso8601/python-iso8601.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-iso8601
-+#
-+################################################################################
-+
-+PYTHON_ISO8601_VERSION = 0.1.12
-+PYTHON_ISO8601_SOURCE = iso8601-$(PYTHON_ISO8601_VERSION).tar.gz
-+PYTHON_ISO8601_SITE = https://pypi.python.org/packages/45/13/3db24895497345fb44c4248c08b16da34a9eb02643cea2754b21b5ed08b0
-+PYTHON_ISO8601_SETUP_TYPE = setuptools
-+PYTHON_ISO8601_LICENSE = MIT
-+PYTHON_ISO8601_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 02efc6c..664513e 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+ sha256  22cafe6b8432433aa58bedcf7db71111522ce6531bfe24e8e9b6058412cd31cf  libmbim-1.14.2.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index b8dfa83..b67905a 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -8,7 +8,7 @@ LIBMBIM_VERSION = 1.14.2
+ LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-LIBMBIM_LICENSE_FILES = COPYING
++LIBMBIM_LICENSE_FILES = COPYING COPYING.LIB
+ LIBMBIM_INSTALL_STAGING = YES
+ 
+ LIBMBIM_DEPENDENCIES = libglib2
