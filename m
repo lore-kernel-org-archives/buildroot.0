@@ -1,55 +1,115 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 22:02:02 +0200
-Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: bump versions
-Message-ID: <20170912200056.1E8FB7FA13@busybox.osuosl.org>
+Date: Tue, 12 Sep 2017 21:32:13 +0200
+Subject: [Buildroot] [git commit] package/librsync: security bump to version
+	2.0.0
+Message-ID: <20170912200056.052128043F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70dc012b24715f623c8e87bfa3782fc621d07abd
+commit: https://git.buildroot.net/buildroot/commit/?id=b860bd83b22429175542f885fdd1fc52d770eeb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Removed patch applied upstream, switched to cmake-package following
+upstream removal of autoconf.
+
+Short summary of changes:
+
+version 1.0.1
+- switched from autoconf to cmake
+
+version 1.0.0:
+- fixed CVE-2014-8242
+- project moved to github
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/olimex_a20_olinuxino_lime_defconfig      | 4 ++--
- configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/librsync/0001-fix-build-with-clang.patch | 37 ------------------------
+ package/librsync/Config.in                       |  2 +-
+ package/librsync/librsync.hash                   |  2 +-
+ package/librsync/librsync.mk                     |  6 ++--
+ 4 files changed, 5 insertions(+), 42 deletions(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 526ed37..8a939b5 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.49"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index dde1791..b8699c3 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -41,7 +41,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/librsync/0001-fix-build-with-clang.patch b/package/librsync/0001-fix-build-with-clang.patch
+deleted file mode 100644
+index ea513c0..0000000
+--- a/package/librsync/0001-fix-build-with-clang.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 1175b1cd102ee15512185c7983868e5746959da0 Mon Sep 17 00:00:00 2001
+-From: Adam Schubert <feartohell@seznam.cz>
+-Date: Mon, 11 May 2015 04:25:45 +0200
+-Subject: [PATCH] Fix build under clang
+-
+-Downloaded from upstream commit:
+-https://github.com/librsync/librsync/commit/1175b1cd102ee15512185c7983868e5746959da0.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+----
+- delta.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/delta.c b/delta.c
+-index 19498f9..72afdf6 100644
+---- a/delta.c
+-+++ b/delta.c
+-@@ -126,12 +126,12 @@ static rs_result rs_delta_s_scan(rs_job_t *job);
+- static rs_result rs_delta_s_flush(rs_job_t *job);
+- static rs_result rs_delta_s_end(rs_job_t *job);
+- void rs_getinput(rs_job_t *job);
+--inline int rs_findmatch(rs_job_t *job, rs_long_t *match_pos, size_t *match_len);
+--inline rs_result rs_appendmatch(rs_job_t *job, rs_long_t match_pos, size_t match_len);
+--inline rs_result rs_appendmiss(rs_job_t *job, size_t miss_len);
+--inline rs_result rs_appendflush(rs_job_t *job);
+--inline rs_result rs_processmatch(rs_job_t *job);
+--inline rs_result rs_processmiss(rs_job_t *job);
+-+static inline int rs_findmatch(rs_job_t *job, rs_long_t *match_pos, size_t *match_len);
+-+static inline rs_result rs_appendmatch(rs_job_t *job, rs_long_t match_pos, size_t match_len);
+-+static inline rs_result rs_appendmiss(rs_job_t *job, size_t miss_len);
+-+static inline rs_result rs_appendflush(rs_job_t *job);
+-+static inline rs_result rs_processmatch(rs_job_t *job);
+-+static inline rs_result rs_processmiss(rs_job_t *job);
+- 
+- /**
+-  * \brief Get a block of data if possible, and see if it matches.
+diff --git a/package/librsync/Config.in b/package/librsync/Config.in
+index 5dcdfc8..652f0cb 100644
+--- a/package/librsync/Config.in
++++ b/package/librsync/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBRSYNC
+ 	  remote file synchronization that was popularized by the
+ 	  rsync utility and is used in rproxy.
+ 
+-	  http://sourceforge.net/projects/librsync/
++	  https://github.com/librsync/librsync
+diff --git a/package/librsync/librsync.hash b/package/librsync/librsync.hash
+index 55ace76..2d5e2e0 100644
+--- a/package/librsync/librsync.hash
++++ b/package/librsync/librsync.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  6633e4605662763a03bb6388529cbdfd3b11a9ec55b8845351c1bd9a92bc41d6  librsync-0.9.7.tar.gz
++sha256 b5c4dd114289832039397789e42d4ff0d1108ada89ce74f1999398593fae2169  librsync-v2.0.0.tar.gz
+diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
+index 517f871..07b684a 100644
+--- a/package/librsync/librsync.mk
++++ b/package/librsync/librsync.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBRSYNC_VERSION = 0.9.7
+-LIBRSYNC_SITE = http://downloads.sourceforge.net/project/librsync/librsync/$(LIBRSYNC_VERSION)
++LIBRSYNC_VERSION = v2.0.0
++LIBRSYNC_SITE = $(call github,librsync,librsync,$(LIBRSYNC_VERSION))
+ LIBRSYNC_LICENSE = LGPL-2.1+
+ LIBRSYNC_LICENSE_FILES = COPYING
+ LIBRSYNC_INSTALL_STAGING = YES
+ LIBRSYNC_DEPENDENCIES = zlib bzip2 popt
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
