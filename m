@@ -1,180 +1,53 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 11 Sep 2017 20:37:43 -0700
-Subject: [Buildroot] [PATCH] package/gcc: fix ICE on xtensa, PR target/82181
-Message-ID: <1505187463-14375-1-git-send-email-jcmvbkbc@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 12 Sep 2017 05:41:41 +0200
+Subject: [Buildroot] [PATCH 1/2] olimex_a20_olinuxino_lime: bump versions
+Message-ID: <20170912034142.12942-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Memory references to DI mode objects could incorrectly be created at
-offsets that are not supported by instructions l32i/s32i, resulting in
-ICE at a stage when access to the object is split into access to its
-subwords:
-  drivers/staging/rtl8188eu/core/rtw_ap.c:445:1:
-     internal compiler error: in change_address_1, at emit-rtl.c:2126
-
-Fixes: https://lkml.org/lkml/2017/9/10/151
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../gcc/4.9.4/875-xtensa-fix-PR-target-82181.patch | 31 ++++++++++++++++++++++
- .../gcc/5.4.0/877-xtensa-fix-PR-target-82181.patch | 31 ++++++++++++++++++++++
- .../gcc/6.4.0/870-xtensa-fix-PR-target-82181.patch | 31 ++++++++++++++++++++++
- .../7.2.0/0870-xtensa-fix-PR-target-82181.patch    | 31 ++++++++++++++++++++++
- 4 files changed, 124 insertions(+)
- create mode 100644 package/gcc/4.9.4/875-xtensa-fix-PR-target-82181.patch
- create mode 100644 package/gcc/5.4.0/877-xtensa-fix-PR-target-82181.patch
- create mode 100644 package/gcc/6.4.0/870-xtensa-fix-PR-target-82181.patch
- create mode 100644 package/gcc/7.2.0/0870-xtensa-fix-PR-target-82181.patch
+ configs/olimex_a20_olinuxino_lime_defconfig      | 4 ++--
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/4.9.4/875-xtensa-fix-PR-target-82181.patch b/package/gcc/4.9.4/875-xtensa-fix-PR-target-82181.patch
-new file mode 100644
-index 000000000000..266e659c1764
---- /dev/null
-+++ b/package/gcc/4.9.4/875-xtensa-fix-PR-target-82181.patch
-@@ -0,0 +1,31 @@
-+From 8dd3af97bb6ccb3dfd6cbe20c5a28ce80fcd0de7 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Mon, 11 Sep 2017 21:53:38 +0000
-+Subject: [PATCH] xtensa: fix PR target/82181
-+
-+2017-09-11  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	Backport from mainline
-+	* config/xtensa/xtensa.c (xtensa_mem_offset): Check that both
-+	words of DImode object are reachable by xtensa_uimm8x4 access.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 3c0096113775..3eb4db85b971 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -612,6 +612,7 @@ xtensa_mem_offset (unsigned v, enum machine_mode mode)
-+     case HImode:
-+       return xtensa_uimm8x2 (v);
-+ 
-++    case DImode:
-+     case DFmode:
-+       return (xtensa_uimm8x4 (v) && xtensa_uimm8x4 (v + 4));
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/gcc/5.4.0/877-xtensa-fix-PR-target-82181.patch b/package/gcc/5.4.0/877-xtensa-fix-PR-target-82181.patch
-new file mode 100644
-index 000000000000..cbcca0037048
---- /dev/null
-+++ b/package/gcc/5.4.0/877-xtensa-fix-PR-target-82181.patch
-@@ -0,0 +1,31 @@
-+From 136e0f6b0c0acbe547894c6f8c855e3246c558b4 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Mon, 11 Sep 2017 21:53:38 +0000
-+Subject: [PATCH] xtensa: fix PR target/82181
-+
-+2017-09-11  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	Backport from mainline
-+	* config/xtensa/xtensa.c (xtensa_mem_offset): Check that both
-+	words of DImode object are reachable by xtensa_uimm8x4 access.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 8e62d631bce0..a30aa1bcfc33 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -637,6 +637,7 @@ xtensa_mem_offset (unsigned v, machine_mode mode)
-+     case HImode:
-+       return xtensa_uimm8x2 (v);
-+ 
-++    case DImode:
-+     case DFmode:
-+       return (xtensa_uimm8x4 (v) && xtensa_uimm8x4 (v + 4));
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/gcc/6.4.0/870-xtensa-fix-PR-target-82181.patch b/package/gcc/6.4.0/870-xtensa-fix-PR-target-82181.patch
-new file mode 100644
-index 000000000000..5fe384148b89
---- /dev/null
-+++ b/package/gcc/6.4.0/870-xtensa-fix-PR-target-82181.patch
-@@ -0,0 +1,31 @@
-+From 3bc2ee6886f1619bc6a2257a0775142526b1a57a Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Mon, 11 Sep 2017 21:53:38 +0000
-+Subject: [PATCH] xtensa: fix PR target/82181
-+
-+2017-09-11  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	Backport from mainline
-+	* config/xtensa/xtensa.c (xtensa_mem_offset): Check that both
-+	words of DImode object are reachable by xtensa_uimm8x4 access.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 2bdf5ccef979..92fdeb08046d 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -601,6 +601,7 @@ xtensa_mem_offset (unsigned v, machine_mode mode)
-+     case HImode:
-+       return xtensa_uimm8x2 (v);
-+ 
-++    case DImode:
-+     case DFmode:
-+       return (xtensa_uimm8x4 (v) && xtensa_uimm8x4 (v + 4));
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/gcc/7.2.0/0870-xtensa-fix-PR-target-82181.patch b/package/gcc/7.2.0/0870-xtensa-fix-PR-target-82181.patch
-new file mode 100644
-index 000000000000..7ac7cd95e37d
---- /dev/null
-+++ b/package/gcc/7.2.0/0870-xtensa-fix-PR-target-82181.patch
-@@ -0,0 +1,31 @@
-+From 3ed0c49a8d52e88648c7bb9f21a204b23595a6a9 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Mon, 11 Sep 2017 21:53:38 +0000
-+Subject: [PATCH] xtensa: fix PR target/82181
-+
-+2017-09-11  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	Backport from mainline
-+	* config/xtensa/xtensa.c (xtensa_mem_offset): Check that both
-+	words of DImode object are reachable by xtensa_uimm8x4 access.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 25e4a2894c3b..8c404187107b 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -605,6 +605,7 @@ xtensa_mem_offset (unsigned v, machine_mode mode)
-+     case HImode:
-+       return xtensa_uimm8x2 (v);
-+ 
-++    case DImode:
-+     case DFmode:
-+       return (xtensa_uimm8x4 (v) && xtensa_uimm8x4 (v + 4));
-+ 
-+-- 
-+2.1.4
-+
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 526ed375b..8a939b5cc 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.36"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.49"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index dde1791ec..b8699c3c2 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -41,7 +41,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.1.4
+2.11.0
