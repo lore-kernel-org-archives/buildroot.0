@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 23:41:28 +0200
-Subject: [Buildroot] [PATCH 2/3] python-xmltodict: new package
-In-Reply-To: <20170912095056.13692-2-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Tue, 12 Sep 2017 11:50:55
+Date: Tue, 12 Sep 2017 23:41:48 +0200
+Subject: [Buildroot] [PATCH 3/3] python-ibmiotf: new package
+In-Reply-To: <20170912095056.13692-3-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Tue, 12 Sep 2017 11:50:56
  +0200")
 References: <20170912095056.13692-1-yegorslists@googlemail.com>
- <20170912095056.13692-2-yegorslists@googlemail.com>
-Message-ID: <877ex34mt3.fsf@dell.be.48ers.dk>
+ <20170912095056.13692-3-yegorslists@googlemail.com>
+Message-ID: <87377r4msj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
