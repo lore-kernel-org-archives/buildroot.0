@@ -1,39 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 12 Sep 2017 09:38:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.3.4
-Message-ID: <20170912073815.21118-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Sep 2017 09:47:41 +0200
+Subject: [Buildroot] [PATCH v2 05/11] package/glibc: needs kernel
+ headers >= 3.10 on powerpc64le
+In-Reply-To: <20170912060419.GA3625@scaer>
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <20170902205423.21288-6-romain.naour@gmail.com> <20170910103032.GF3536@scaer>
+ <ef182f62-d373-945b-c212-e5483c6d97a1@mind.be>
+ <20170912013726.474d54e8@windsurf> <20170912060419.GA3625@scaer>
+Message-ID: <7a8b6931-13e1-7057-6024-88c05cb574f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 2397f72ae6..42cfeed68e 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 d2a9002cdc6b533b59728827186c044ad02ba64841f1b7cd6c21779875453a1e  ffmpeg-3.3.3.tar.xz
-+sha256 98b97e1b908dfeb6aeb6d407e5a5eacdfc253a40c2d195f5867ed2d1d46ea957  ffmpeg-3.3.4.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f50b410b0c..a27819be3c 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.3.3
-+FFMPEG_VERSION = 3.3.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+
+On 12-09-17 08:04, Yann E. MORIN wrote:
+> Thomas, Arnout, All,
+> 
+> On 2017-09-12 01:37 +0200, Thomas Petazzoni spake thusly:
+>> On Tue, 12 Sep 2017 01:05:18 +0200, Arnout Vandecappelle wrote:
+>>> 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 if BR2_powerpc64le
+>> "depends on ... if ..." is not a valid Kconfig construct if I remember
+>> correctly.
+> 
+> Indeed it is not.
+
+ D'oh, right, it's "select ... if ...".
+
+ Sorry for the noise.
+
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
