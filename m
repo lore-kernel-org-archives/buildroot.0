@@ -1,31 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 22:20:21 +0200
-Subject: [Buildroot] [PATCH 1/1] s6-linux-init: bump version to 0.3.1.1
-In-Reply-To: <20170911133151.17993-1-eric.le.bihan.dev@free.fr> (Eric Le
- Bihan's message of "Mon, 11 Sep 2017 15:31:51 +0200")
-References: <20170911133151.17993-1-eric.le.bihan.dev@free.fr>
-Message-ID: <87r2vb654q.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Sep 2017 22:10:56 +0200
+Subject: [Buildroot] [git commit] uboot: bump to version 2017.09
+Message-ID: <20170912201316.D6EF17FB28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=081f6826e8e2124dcc2bb4098dcd4bc07f3abcaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > - http://autobuild.buildroot.net/results/7208b2630832c3293db39affd7886691691770b4
- > - http://autobuild.buildroot.net/results/c10548ffde2d83b6298759793ef99a5142309678
- > - http://autobuild.buildroot.net/results/a0da44d547670bc46479980ac1b29e7e2421b378
- > - http://autobuild.buildroot.net/results/df7ec3facb183b7caf1a6eaff4f89a65961681fb
- > - http://autobuild.buildroot.net/results/fe7a32fbec5d64c359ad0326a01764a631dcc6f6
- > - http://autobuild.buildroot.net/results/79029d736910ca32567bc8a82ac6982c3ac1e1fb
- > - http://autobuild.buildroot.net/results/20091ae932385bd7ba4205626bce174e385da221
- > - http://autobuild.buildroot.net/results/c1cd69444abb32e77928e7d7363f5cdfea79dcf5
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 2ae38e9..84b7fb4 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2017.07"
++	bool "2017.09"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2017.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2017.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 3ba8e34..82efc79 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  5374bfdc8acb9a38c025371b1ff20f45e7533668e84e685d0df5d9e7c0e4feff  u-boot-2017.07.tar.bz2
++sha256  b2d15f2cf5f72e706025cde73d67247c6da8cd35f7e10891eefe7d9095089744  u-boot-2017.09.tar.bz2
