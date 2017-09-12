@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Sep 2017 23:37:58 +0200
-Subject: [Buildroot] [PATCH] libqmi: add COPYING.LIB to LICENSE_FILES
-In-Reply-To: <20170912083902.2225-1-aleksander@aleksander.es> (Aleksander
- Morgado's message of "Tue, 12 Sep 2017 10:39:02 +0200")
-References: <20170912083902.2225-1-aleksander@aleksander.es>
-Message-ID: <87k2134myx.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Sep 2017 23:38:24 +0200
+Subject: [Buildroot] [PATCH] libmbim: add COPYING.LIB to LICENSE_FILES
+In-Reply-To: <20170912084239.6017-1-aleksander@aleksander.es> (Aleksander
+ Morgado's message of "Tue, 12 Sep 2017 10:42:39 +0200")
+References: <20170912084239.6017-1-aleksander@aleksander.es>
+Message-ID: <87fubr4my7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,8 @@ To: buildroot@busybox.net
 
 >>>>> "Aleksander" == Aleksander Morgado <aleksander@aleksander.es> writes:
 
- > qmicli, qmi-network and qmi-firmware-update are GPLv2+ (COPYING file
- > applies) and libqmi-glib is LGPLv2.1+ (COPYING.LIB file applies).
+ > mbimcli and mbim-network are GPLv2+ (COPYING file applies) and
+ > libmbim-glib is LGPLv2.1+ (COPYING.LIB file applies).
 
  > Also, setup hashes of the license files, for a correct
  > "make legal-info".
