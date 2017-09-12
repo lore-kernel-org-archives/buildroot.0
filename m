@@ -1,102 +1,81 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Sep 2017 14:43:58 +0300
-Subject: [Buildroot] [PATCH] libcurl: fix build without threads
-Message-ID: <502def3c81c8bc65ada11c1bb87e65725b8b8900.1505216638.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Sep 2017 13:44:22 +0200
+Subject: [Buildroot] [PATCH 1/1] netsnmp: install all MIB files
+In-Reply-To: <CAHfJR7jjCn8FdGqhKOq=7_pAgwObLNSQUdzzdbzOi+ijyvJLCw@mail.gmail.com>
+References: <20170908134548.23645-1-julien.floret@6wind.com>
+ <8d8bb3d5-6ea9-94b4-1a53-a57909b8bbc6@mind.be>
+ <CAHfJR7jjCn8FdGqhKOq=7_pAgwObLNSQUdzzdbzOi+ijyvJLCw@mail.gmail.com>
+Message-ID: <d60e9f05-f4d2-3927-ee7f-148d6db4c22c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When c-ares is not enabled libcurl enables the threaded DNS resolver by
-default. Make sure the threaded resolvers is disabled when the toolchain
-does not support threads.
 
-Add upstream patch that fixes the configure option for disabling the
-threaded resolver.
 
-Fixes:
-http://autobuild.buildroot.net/results/39f/39fa63fb2ecb75e4b2521d1ee3dfa357c4e5c594/
-http://autobuild.buildroot.net/results/dfd/dfd296086d0d6bed73b92fe2fa4ba5434dddf796/
+On 12-09-17 10:48, Julien Floret wrote:
+> Hello Arnout,
+> 
+> 2017-09-12 1:08 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>
+>> On 08-09-17 15:45, Julien Floret wrote:
+>>> Since commit be8e32d585f3 ("netsnmp: configurable MIB modules"),
+>>> the list of MIB modules can be selected with a configuration option.
+>>>
+>>> However, there was still an hardcoded list of MIB files to exclude from
+>>> the target filesystem.
+>>> Since it is complicated to know which MIB files are necessary according
+>>> to the configuration, let's install all of them.
+>>>
+>>> Cc: przemyslaw <przemyslaw.wrzos@calyptech.com>
+>>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>>> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+>>
+>>  Looks good to me, except: shouldn't the default of
+>> BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES so that all the previous BLOAT_MIBS are
+>> there?
+> 
+> Hum, maybe we could parse
+> BR2_PACKAGE_NETSNMP_{WITH,WITHOUT}_MIB_MODULES to deduce BLOAT_MIBS,
+> but to me it does not seem trivial nor elegant...
+> What about adding a new config option BR2_NETSNMP_WITHOUT_MIB_FILES
+> whose default value is the content of BLOAT_MIBS?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...confopts.m4-fix-disable-threaded-resolver.patch | 40 ++++++++++++++++++++++
- package/libcurl/libcurl.mk                         |  8 +++++
- 2 files changed, 48 insertions(+)
- create mode 100644 package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
+ Let me rephrase my comment.
 
-diff --git a/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch b/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
-new file mode 100644
-index 000000000000..c7a563e8258f
---- /dev/null
-+++ b/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
-@@ -0,0 +1,40 @@
-+From 3cb4bb6b5fb8a936cb69e2e9ea6a4e692122abb9 Mon Sep 17 00:00:00 2001
-+From: Jakub Zakrzewski <slither.jz@gmail.com>
-+Date: Tue, 15 Aug 2017 13:21:33 -0400
-+Subject: [PATCH] curl-confopts.m4: fix --disable-threaded-resolver
-+
-+Closes https://github.com/curl/curl/issues/1784
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 3cb4bb6b5fb
-+
-+ m4/curl-confopts.m4 | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/m4/curl-confopts.m4 b/m4/curl-confopts.m4
-+index d77a884d58bd..6dcd0f1a6794 100644
-+--- a/m4/curl-confopts.m4
-++++ b/m4/curl-confopts.m4
-+@@ -37,14 +37,14 @@ AC_HELP_STRING([--enable-threaded-resolver],[Enable threaded resolver])
-+ AC_HELP_STRING([--disable-threaded-resolver],[Disable threaded resolver]),
-+   OPT_THRES=$enableval)
-+   case "$OPT_THRES" in
-+-    *)
-+-      dnl configure option not specified
-+-      want_thres="yes"
-+-      ;;
-+     no)
-+       dnl --disable-threaded-resolver option used
-+       want_thres="no"
-+       ;;
-++    *)
-++      dnl configure option not specified
-++      want_thres="yes"
-++      ;;
-+   esac
-+   AC_MSG_RESULT([$want_thres])
-+ ])
-+-- 
-+2.14.1
-+
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 64110cccf072..d7f860eb1b2a 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -14,6 +14,8 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
- LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_INSTALL_STAGING = YES
-+# Patching m4/curl-confopts.m4
-+LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM support because it uses fork(), which doesn't work
- # on non-MMU platforms. Moreover, this authentication method is
-@@ -22,6 +24,12 @@ LIBCURL_INSTALL_STAGING = YES
- LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
- 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIBCURL_CONF_OPTS += --enable-threaded-resolver
-+else
-+LIBCURL_CONF_OPTS += --disable-threaded-resolver
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCURL_VERBOSE),y)
- LIBCURL_CONF_OPTS += --enable-verbose
- else
+ What this patch does, basically, is to clean up the discrepancy between
+BR2_PACKAGE_NETSNMP_{WITH,WITHOUT}_MIB_MODULES and BLOAT_MIBS. That is
+absolutely a good thing.
+
+ It looks to me like the current BLOAT_MIBS option is removing stuff that is
+already disabled by the default value of
+BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES. So that part is fine - your patch is
+not actually changing anything in the default configuration.
+
+ However, it looks to me like the current BLOAT_MIBS is also removing things
+that are *not* included in the current default value of
+BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES. Therefore, after this change, we end up
+with a bigger rootfs (using defaults) than before.
+
+ My suggestion is: wouldn't it make sense to extend the default value of
+BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES? As far as I can see, the current
+default removes DISMAN-EVENT and DISMAN-SCHEDULE already. Are there additional
+modules we can disable, so that also BRIDGE DISMAN-SCRIPT EtherLike RFC-1215
+RFC1155-SMI RFC1213 SCTP and SMUX are gone? And can we do this without loosing
+functionality that we did have before?
+
+ Probably extending BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES should be a separate
+patch anyway.
+
+ Regards,
+ Arnout
+
 -- 
-2.14.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
