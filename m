@@ -1,42 +1,60 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Wed, 13 Sep 2017 13:05:26 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/galileo: update to kernel with
- gcc6 fix
-In-Reply-To: <20170904224839.8036-1-sielicki@yandex.com>
-References: <20170904224839.8036-1-sielicki@yandex.com>
-Message-ID: <56bf6f12-8220-8481-c7b3-08eb6f7a9d17@intel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Sep 2017 14:19:55 +0200
+Subject: [Buildroot] [PATCH] bluez5_utils: add upstream security fix for
+	CVE-2017-1000250
+Message-ID: <20170913121955.21236-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for doing this Nicholas!
+Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46 and
+earlier are vulnerable to an information disclosure vulnerability which
+allows remote attackers to obtain sensitive information from the bluetoothd
+process memory.  This vulnerability lies in the processing of SDP search
+attribute requests.
 
-Ray K
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-of-bounds-heap-read-in-service_search_at.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
 
-On 04/09/2017 23:48, Nicholas Sielicki wrote:
-> The kernel used for the galileo boards would not successfully build with
-> GCC versions greater than 5.
->
-> See: https://github.com/mdr78/Linux-x1000/pull/2
->
-> Signed-off-by: Nicholas Sielicki <sielicki@yandex.com>
-> ---
->  configs/galileo_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
-> index 43639a41a..7db3cfe8a 100644
-> --- a/configs/galileo_defconfig
-> +++ b/configs/galileo_defconfig
-> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/intel/galileo/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mdr78/Linux-x1000.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0feded4f96ddca9816c6c1b8a4780cb4065747b9"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8b3c9d8ce1656a26b1097d9091d53bfb39fef640"
->  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/intel/galileo/linux-3.14.config"
->  BR2_LINUX_KERNEL_INSTALL_TARGET=y
->
+diff --git a/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch b/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
+new file mode 100644
+index 0000000000..a73c372e68
+--- /dev/null
++++ b/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
+@@ -0,0 +1,29 @@
++From 9e009647b14e810e06626dde7f1bb9ea3c375d09 Mon Sep 17 00:00:00 2001
++From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
++Date: Wed, 13 Sep 2017 10:01:40 +0300
++Subject: [PATCH] sdp: Fix Out-of-bounds heap read in service_search_attr_req
++ function
++
++Check if there is enough data to continue otherwise return an error.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/sdpd-request.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/sdpd-request.c b/src/sdpd-request.c
++index 1eefdce1a..318d04467 100644
++--- a/src/sdpd-request.c
+++++ b/src/sdpd-request.c
++@@ -917,7 +917,7 @@ static int service_search_attr_req(sdp_req_t *req, sdp_buf_t *buf)
++ 	} else {
++ 		/* continuation State exists -> get from cache */
++ 		sdp_buf_t *pCache = sdp_get_cached_rsp(cstate);
++-		if (pCache) {
+++		if (pCache && cstate->cStateValue.maxBytesSent < pCache->data_size) {
++ 			uint16_t sent = MIN(max, pCache->data_size - cstate->cStateValue.maxBytesSent);
++ 			pResponse = pCache->data;
++ 			memcpy(buf->data, pResponse + cstate->cStateValue.maxBytesSent, sent);
++-- 
++2.11.0
++
+-- 
+2.11.0
