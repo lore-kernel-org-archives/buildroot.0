@@ -1,46 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Sep 2017 08:06:12 +0200
-Subject: [Buildroot] [git commit] powerpc-utils: Bump version to 1.3.4
-Message-ID: <20170913055953.C4F3A81092@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 13 Sep 2017 08:07:18 +0200
+Subject: [Buildroot] [PATCH v2] paho-mqtt-c: bump to version 1.2.0
+Message-ID: <1505282838-31558-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ce28934434b51680ecd87eb987f4d4915fa4040
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-This also moves the source tree to the new official upstream location at
-ibm-power-utilities GitHub organisation.
+Add a patch fixing compilation on the systems without C++ compiler.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Also add licence hashes.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/powerpc-utils/powerpc-utils.hash | 2 +-
- package/powerpc-utils/powerpc-utils.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...01-Declare-mqtt-tests-as-a-C-only-project.patch | 27 ++++++++++++++++++++++
+ package/paho-mqtt-c/paho-mqtt-c.hash               |  4 +++-
+ package/paho-mqtt-c/paho-mqtt-c.mk                 |  2 +-
+ 3 files changed, 31 insertions(+), 2 deletions(-)
+ create mode 100644 package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch
 
-diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-index fe5cc6a..437a586 100644
---- a/package/powerpc-utils/powerpc-utils.hash
-+++ b/package/powerpc-utils/powerpc-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2a3f4e7ef219d4de642c7da100d7d6511e93556778c0814b2ebc1170256fc844 powerpc-utils-v1.3.3.tar.gz
-+sha256 d36372efebc1f6f9409501f7ab68a812843925334dee6438e7b52a53c21574c5 powerpc-utils-v1.3.4.tar.gz
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index 0aa79dc..da7a3c9 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch b/package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch
+new file mode 100644
+index 0000000..9edb2c4
+--- /dev/null
++++ b/package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch
+@@ -0,0 +1,27 @@
++From 6556e62a07972eafccaefdcdf32bd0d386c64ca2 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 13 Sep 2017 07:59:50 +0200
++Subject: [PATCH] Declare mqtt-tests as a C-only project
++
++This way CMake doesn't break the build on the systems without
++C++ compiler.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++Reported-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
++---
++ test/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
++index 5c88c44..3aca80f 100644
++--- a/test/CMakeLists.txt
+++++ b/test/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-PROJECT(mqtt-tests)
+++PROJECT(mqtt-tests C)
++ 
++ IF (WIN32)
++   SET(MQTT_TEST_BROKER "tcp://mqtt.iotree.co.uk:1883" CACHE STRING "Hostname of a test MQTT broker to use")
++-- 
++2.1.4
++
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 8807d78..3bee891 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+-sha256  970b9621efc24251441d386274cd0a90cf6ad52b64031f3c8cb53fdd5526f5f3  paho-mqtt-c-v1.1.0.tar.gz
++sha256  0cb0396554ebe0e8ac6b0de1cbc16601ef169b6a63baf6f0f3ddeb405f5471a5  paho-mqtt-c-v1.2.0.tar.gz
++sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
++sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 22ef2ef..5df7a55 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POWERPC_UTILS_VERSION = v1.3.3
--POWERPC_UTILS_SITE = $(call github,nfont,powerpc-utils,$(POWERPC_UTILS_VERSION))
-+POWERPC_UTILS_VERSION = v1.3.4
-+POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,$(POWERPC_UTILS_VERSION))
- POWERPC_UTILS_DEPENDENCIES = zlib
- POWERPC_UTILS_AUTORECONF = YES
- POWERPC_UTILS_LICENSE = GPL-2.0+
+-PAHO_MQTT_C_VERSION = v1.1.0
++PAHO_MQTT_C_VERSION = v1.2.0
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
+-- 
+2.1.4
