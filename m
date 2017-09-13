@@ -1,97 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Sep 2017 11:02:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 2.8.7
-Message-ID: <20170913090223.9995-1-bernd.kuhls@t-online.de>
+Date: Wed, 13 Sep 2017 11:26:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ncdu: bump version to 1.12
+Message-ID: <20170913092616.1889-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added upstream patch to fix build error:
-
-move.o: In function `do_page_up':
-move.c:(.text+0x150): undefined reference to `leftedge_for'
-move.o: In function `do_page_down':
-move.c:(.text+0x20c): undefined reference to `leftedge_for'
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...pilation-when-configured-with-enable-tiny.patch | 43 ++++++++++++++++++++++
- package/nano/nano.hash                             |  2 +-
- package/nano/nano.mk                               |  2 +-
- 3 files changed, 45 insertions(+), 2 deletions(-)
- create mode 100644 package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
+ package/ncdu/ncdu.hash | 6 +++---
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
-new file mode 100644
-index 0000000000..db684f9832
---- /dev/null
-+++ b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
-@@ -0,0 +1,43 @@
-+From 28cfab7580c42a6d6c9c5d787ce736094fd51a0c Mon Sep 17 00:00:00 2001
-+From: Benno Schulenberg <bensberg@telfort.nl>
-+Date: Tue, 29 Aug 2017 19:28:44 +0200
-+Subject: tweaks: fix compilation when configured with --enable-tiny
-+
-+When moving the cursor to the top-left corner, it is not necessary
-+to compute leftedge because firstcolumn IS the relevant leftedge.
-+
-+Reported-by: Jordi Mallach <jordi@debian.org>
-+
-+Downloaded from upstream master branch:
-+http://git.savannah.gnu.org/cgit/nano.git/commit/?id=28cfab7580c42a6d6c9c5d787ce736094fd51a0c
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/move.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/move.c b/src/move.c
-+index d138356..ce276e4 100644
-+--- a/src/move.c
-++++ b/src/move.c
-+@@ -121,7 +121,7 @@ void do_page_up(void)
-+ 	openfile->current = openfile->edittop;
-+ 	openfile->current_y = 0;
-+ 
-+-	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
-++	leftedge = openfile->firstcolumn;
-+ 	target_column = 0;
-+     } else
-+ 	get_edge_and_target(&leftedge, &target_column);
-+@@ -152,7 +152,7 @@ void do_page_down(void)
-+ 	openfile->current = openfile->edittop;
-+ 	openfile->current_y = 0;
-+ 
-+-	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
-++	leftedge = openfile->firstcolumn;
-+ 	target_column = 0;
-+     } else
-+ 	get_edge_and_target(&leftedge, &target_column);
-+-- 
-+cgit v1.0-41-gc330
-+
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index dfc660336e..4e0abc4489 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 c7cf264f0f3e4af43ecdbc4ec72c3b1e831c69a1a5f6512d5b0c109e6bac7b11  nano-2.8.4.tar.xz
-+sha256 fbe31746958698d73c6726ee48ad8b0612697157961a2e9aaa83b4aa53d1165a  nano-2.8.7.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 966d43b53d..f1c172ffd5 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index 4bdda40219..8a0c1d16c5 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,3 +1,3 @@
+-# From http://dev.yorhel.nl/download/ncdu-1.11.tar.gz.{md5,sha1}
+-md5   9e44240a5356b029f05f0e70a63c4d12          ncdu-1.11.tar.gz
+-sha1  8f22d713e6d2b28e1f501eee2bd1e03b55550c8d  ncdu-1.11.tar.gz
++# From http://dev.yorhel.nl/download/ncdu-1.12.tar.gz.{md5,sha1}
++md5 7365ac46c420bc511621216b1747984f  ncdu-1.12.tar.gz
++sha1 b79b1c44784f334dca74d89a49f49274f14cfeef  ncdu-1.12.tar.gz
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index bccbb8d926..d45e62d95c 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 2.8
--NANO_VERSION = $(NANO_VERSION_MAJOR).4
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-NCDU_VERSION = 1.11
++NCDU_VERSION = 1.12
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
 -- 
 2.11.0
