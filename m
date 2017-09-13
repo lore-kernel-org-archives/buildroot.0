@@ -1,37 +1,38 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 13 Sep 2017 14:26:35 +0200
-Subject: [Buildroot] [PATCH] python-six: add host variant
-In-Reply-To: <20170912170731.2501c48b@windsurf>
-References: <20170908141414.24801-1-julien.floret@6wind.com>
- <20170908232127.475fbb7c@windsurf.lan>
- <CAHfJR7h7oaeStjJrRmxdgL_BHcuKK-uey4vEA=qVJX=PfgiUYw@mail.gmail.com>
- <20170912170731.2501c48b@windsurf>
-Message-ID: <CAHfJR7g4Stq7JjrQjCdG5fmwkLUHMcFD5kRrbUQ1xym_0meVbQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 13 Sep 2017 14:29:58 +0200
+Subject: [Buildroot] [PATCH 5/5] package/ngircd: add optional support for
+	linux-pam
+In-Reply-To: <20170913122958.11805-1-bernd.kuhls@t-online.de>
+References: <20170913122958.11805-1-bernd.kuhls@t-online.de>
+Message-ID: <20170913122958.11805-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-09-12 17:07 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Mon, 11 Sep 2017 10:39:04 +0200, Julien Floret wrote:
->
->> > Do you plan to submit a patch adding Open vSwitch ?
->>
->> Unfortunately I don't think so, our integration is too custom and far
->> from upstreamable...
->
-> OK.
->
->> Maybe we should introduce a Config.in.host option for explicitly
->> enabling python-six host variant for external packages, like it is
->> done e.g. in python-lxml?
->
-> Yes, perhaps we should to that.
->
-> Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ngircd/ngircd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-OK, I will send a v2 with the Config.in.host option. Thanks.
+diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
+index 9fa30da24c..37c4f87d43 100644
+--- a/package/ngircd/ngircd.mk
++++ b/package/ngircd/ngircd.mk
+@@ -10,6 +10,13 @@ NGIRCD_SITE = https://arthur.barton.de/pub/ngircd
+ NGIRCD_LICENSE = GPL-2.0+
+ NGIRCD_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++NGIRCD_CONF_OPTS += --with-pam=$(STAGING_DIR)/usr
++NGIRCD_DEPENDENCIES += linux-pam
++else
++NGIRCD_CONF_OPTS += --with-pam
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NGIRCD_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+ NGIRCD_DEPENDENCIES += openssl
+-- 
+2.11.0
