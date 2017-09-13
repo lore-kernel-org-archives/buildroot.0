@@ -1,44 +1,45 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 13 Sep 2017 14:48:44 +1000
-Subject: [Buildroot] [PATCH] powerpc-utils: Bump version to 1.3.4
-Message-ID: <20170913044844.24162-1-joel@jms.id.au>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Sep 2017 07:07:14 +0200
+Subject: [Buildroot] [PATCH 1/1] download/git: force gzip compression
+	level 6
+In-Reply-To: <87shfr4n14.fsf@dell.be.48ers.dk>
+References: <1505168020-23634-1-git-send-email-brain@jikos.cz>
+ <87shfr4n14.fsf@dell.be.48ers.dk>
+Message-ID: <20170913050714.GC3625@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This also moves the source tree to the new official upstream location at
-ibm-power-utilities GitHub organisation.
+Peter, All,
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- package/powerpc-utils/powerpc-utils.hash | 2 +-
- package/powerpc-utils/powerpc-utils.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2017-09-12 23:36 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
+> 
+>  > Force gzip compression level 6 when calculating hash of a downloaded GIT repo.
+>  > To make sure the tar->gzip->checksum chain always provides consistent result.`
+> 
+>  > The script was relying on the default compression level, which must not be
+>  > necessarily consistent among different gzip versions. The level 6 is gzip's
+>  > current default compression level.
+> 
+> Committed, thanks.
+> 
+> Is this just a theoretical issue, or something you have really run into?
 
-diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-index fe5cc6a24d90..437a5865c2bf 100644
---- a/package/powerpc-utils/powerpc-utils.hash
-+++ b/package/powerpc-utils/powerpc-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2a3f4e7ef219d4de642c7da100d7d6511e93556778c0814b2ebc1170256fc844 powerpc-utils-v1.3.3.tar.gz
-+sha256 d36372efebc1f6f9409501f7ab68a812843925334dee6438e7b52a53c21574c5 powerpc-utils-v1.3.4.tar.gz
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index 0aa79dc2a0ec..da7a3c9cd6e3 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--POWERPC_UTILS_VERSION = v1.3.3
--POWERPC_UTILS_SITE = $(call github,nfont,powerpc-utils,$(POWERPC_UTILS_VERSION))
-+POWERPC_UTILS_VERSION = v1.3.4
-+POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,$(POWERPC_UTILS_VERSION))
- POWERPC_UTILS_DEPENDENCIES = zlib
- POWERPC_UTILS_AUTORECONF = YES
- POWERPC_UTILS_LICENSE = GPL-2.0+
+Theoretical, see this mail and the ensuing discussion:
+    http://lists.busybox.net/pipermail/buildroot/2017-September/202162.html
+
+Yet, for consistency, it is good to force it.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
