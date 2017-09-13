@@ -1,69 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Sep 2017 22:43:39 +0200
-Subject: [Buildroot] [PATCH] package/lzo: Set CMAKE_INSTALL_LIBDIR for
- host variant explicitly
-In-Reply-To: <CAHXCMMKe5KiGHCP4H4vBMj+kzpFOTDgE5HBWDTJHLOGpFaR9Uw@mail.gmail.com>
-References: <20170913173724.6157-1-andrew.smirnov@gmail.com>
- <CAHXCMMKe5KiGHCP4H4vBMj+kzpFOTDgE5HBWDTJHLOGpFaR9Uw@mail.gmail.com>
-Message-ID: <acb86c77-9bcb-2fc2-82a9-0e79a267edfc@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 13 Sep 2017 22:52:36 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: bump to version 0.20.10
+Message-ID: <20170913205236.9630-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 13-09-17 20:55, Samuel Martin wrote:
-> Hi Andrey,
-> 
-> On Wed, Sep 13, 2017 at 7:37 PM, Andrey Smirnov
-> <andrew.smirnov@gmail.com> wrote:
->> Building host-lzo on 64-bit Fedora 26 ends up with library files
->> installed into $(HOST_DIR)/lib64 instead of $(HOST_DIR)/lib where
->> other packages (at least host-mtd) depending on it would look for it
->> (resulting in build failures). Fix that by specifying the directory to
->> be lib/ explicitly.
-
- It would be good to find out why this happens. I don't see anything in
-CMakeLists.txt that could explain this.
-
- Does this happen with the Buildroot-built host-cmake or only when you use the
-system-installed one?
-
- I expect this will happen with all host-cmake packages... Could you check?
-
- Obviously, we need a more fundamental solution than this.
-
->>
->> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> 
-> Acked-by: Samuel Martin <s.martin49@gmail.com>
-
- Nacked by me, we need a more fundamental fix.
-
-
-> 
->> ---
->>
->> I suspect this might not be the best solution for this problem, but it
->> is a good starting point to discuss what might be and that's why I
->> submitted this patch anyway.
-> 
-> Indeed the infra could certainly create the symlink $(HOST_DIR)/lib64
-> -> lib (or  $(HOST_DIR)/lib32 -> lib).
-
- That could be a solution, but I don't like it very much... OTOH we do this for
-staging/target already so why not for host.
-
- Regards,
- Arnout
-
-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 2531abee01..873286cda9 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  cd77a2869e32354b004cc6b34fcb0bee56114caa2d9ed862aaa8071441e34eb7  mpd-0.20.9.tar.xz
++sha256  52fbc1125cdba41ba999add2820d45f3ce7cf493006bb04d8f0b2937204d3121  mpd-0.20.10.tar.xz
+ sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6169e95762..692d402d35 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -6,7 +6,7 @@
+ 
+ MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
+ ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
+-MPD_VERSION = $(MPD_VERSION_MAJOR).9
++MPD_VERSION = $(MPD_VERSION_MAJOR).10
+ else
+ MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ endif
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.1
