@@ -1,84 +1,42 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Wed, 13 Sep 2017 11:58:50 +0200
-Subject: [Buildroot] [PATCH] python-zeep: new package
-Message-ID: <20170913095850.10710-1-jaap@jcz.nl>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 13 Sep 2017 12:18:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/librsync: not available in static
+	builds
+Message-ID: <20170913101823.12808-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                    |  1 +
- package/python-zeep/Config.in        | 15 +++++++++++++++
- package/python-zeep/python-zeep.hash |  3 +++
- package/python-zeep/python-zeep.mk   | 14 ++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-zeep/Config.in
- create mode 100644 package/python-zeep/python-zeep.hash
- create mode 100644 package/python-zeep/python-zeep.mk
+Upstream only support shared builds:
+https://github.com/librsync/librsync/blob/master/CMakeLists.txt#L319
 
-diff --git a/package/Config.in b/package/Config.in
-index 905894fe28..fc39e64c64 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -886,6 +886,7 @@ menu "External python modules"
- 	source "package/python-xlsxwriter/Config.in"
- 	source "package/python-xlutils/Config.in"
- 	source "package/python-xlwt/Config.in"
-+	source "package/python-zeep/Config.in"
- 	source "package/python-zope-interface/Config.in"
- endmenu
- endif
-diff --git a/package/python-zeep/Config.in b/package/python-zeep/Config.in
-new file mode 100644
-index 0000000000..cda5318b83
---- /dev/null
-+++ b/package/python-zeep/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_ZEEP
-+	bool "python-zeep"
-+	select BR2_PACKAGE_PYTHON_APPDIRS # runtime
-+	select BR2_PACKAGE_PYTHON_CACHED_PROPERTY # runtime
-+	select BR2_PACKAGE_PYTHON_DEFUSEDXML # runtime
-+	select BR2_PACKAGE_PYTHON_ISODATE # runtime
-+	select BR2_PACKAGE_PYTHON_LXML # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-+	help
-+	  A modern/fast Python SOAP client based on lxml / requests.
+Fixes
+http://autobuild.buildroot.net/results/4b8/4b8db2d520373d0c9127e0d7695b5aeda6925dc5/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/librsync/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/librsync/Config.in b/package/librsync/Config.in
+index 652f0cb276..6957ddcc0e 100644
+--- a/package/librsync/Config.in
++++ b/package/librsync/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBRSYNC
+ 	bool "librsync"
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_POPT
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_LIBRSYNC
+ 	  rsync utility and is used in rproxy.
+ 
+ 	  https://github.com/librsync/librsync
 +
-+	  http://docs.python-zeep.org
-diff --git a/package/python-zeep/python-zeep.hash b/package/python-zeep/python-zeep.hash
-new file mode 100644
-index 0000000000..130d45c715
---- /dev/null
-+++ b/package/python-zeep/python-zeep.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/zeep/json, sha256 locally computed
-+md5	126d8d94752a4cb369498056337c3e74  zeep-2.4.0.tar.gz
-+sha256	8631e2735c5f2219eb18ca4f0615ae482455628518508f69c3690dbfb8238aee  zeep-2.4.0.tar.gz
-diff --git a/package/python-zeep/python-zeep.mk b/package/python-zeep/python-zeep.mk
-new file mode 100644
-index 0000000000..52b32a236a
---- /dev/null
-+++ b/package/python-zeep/python-zeep.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-zeep
-+#
-+################################################################################
-+
-+PYTHON_ZEEP_VERSION = 2.4.0
-+PYTHON_ZEEP_SOURCE = zeep-$(PYTHON_ZEEP_VERSION).tar.gz
-+PYTHON_ZEEP_SITE = https://pypi.python.org/packages/1b/e4/8afa4ae8398aba769df7df0ad134100cb97780faa1c951afc69068c5804d
-+PYTHON_ZEEP_SETUP_TYPE = setuptools
-+PYTHON_ZEEP_LICENSE = MIT
-+PYTHON_ZEEP_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++comment "librsync needs a toolchain w/ dynamic library support"
++	depends on BR2_STATIC_LIBS
 -- 
-2.14.1
+2.11.0
