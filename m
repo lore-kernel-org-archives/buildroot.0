@@ -1,13 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Sep 2017 23:24:55 +0200
-Subject: [Buildroot] [PATCH 1/1] netsnmp: install all MIB files
-In-Reply-To: <CAHfJR7jTT1tGBQr-rgZ+JTZQW6rEhagyDJBQAfB0yUPJwh_evw@mail.gmail.com>
-References: <20170908134548.23645-1-julien.floret@6wind.com>
- <8d8bb3d5-6ea9-94b4-1a53-a57909b8bbc6@mind.be>
- <CAHfJR7jjCn8FdGqhKOq=7_pAgwObLNSQUdzzdbzOi+ijyvJLCw@mail.gmail.com>
- <d60e9f05-f4d2-3927-ee7f-148d6db4c22c@mind.be>
- <CAHfJR7jTT1tGBQr-rgZ+JTZQW6rEhagyDJBQAfB0yUPJwh_evw@mail.gmail.com>
-Message-ID: <f14a15ee-4bc9-ffc0-38f1-fd15ebe43790@mind.be>
+Date: Wed, 13 Sep 2017 23:28:55 +0200
+Subject: [Buildroot] gdb/binutils - two versions of libbfd installed
+In-Reply-To: <trinity-43ed5438-6812-4ad2-a78d-3b069e067897-1505302098589@3c-app-gmx-bs48>
+References: <trinity-43ed5438-6812-4ad2-a78d-3b069e067897-1505302098589@3c-app-gmx-bs48>
+Message-ID: <029c9703-1597-8c20-c427-78bc4eec9a7e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,68 +12,59 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-17 14:16, Julien Floret wrote:
-[snip]
-> Honestly, I could not tell... netsnmp is quite complicated. Ensuring
-> we don't lose any functionality after changing the default modules
-> would probably require a deeper investigation and knowledge of netsnmp
-> code that I'm not able to do right now. And it seems netsnmp "make
-> install" installs MIB description files, whether or not the module(s)
-> using them are enabled or not.
-> What's more, if I recall correctly, modules can still work without
-> their MIB description file - they just cannot translate object IDs
-> into human-readable names.
-
- OK. Well, the only thing this patch does, in the end, is make the target
-filesystem a bit bigger. By how much, do you know?
-
- Users can always remove unneeded MIBs in a post-build script.
-
-
-> But without this patch, netsnmp is unusable for us, because we need
-> the object names and this hardcoded BLOAT_MIBS list removes mandatory
-> MIB files whatever the configuration options.
-
- That's a good reason!
-
-> (By the way, some of the MIBS in BLOAT_MIBS (RFC-1215 and RFC1155-SMI)
-> don't seem to be suppressed, because the suffix added in
-> NETSNMP_REMOVE_BLOAT_MIBS ("-MIB.txt") doesn't apply for them...)
-
- Yeah, the option is from the very first time the package was added 7 years ago,
-and hasn't been updated through all the version bumps...
-
-
->>  Probably extending BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES should be a separate
->> patch anyway.
+On 13-09-17 13:28, Peter Seiderer wrote:
+> BR2_BINUTILS_VERSION_2_29_X=y
+> BR2_BINUTILS_VERSION="2.29"
+> BR2_BINUTILS_EXTRA_CONFIG_OPTIONS=""
+> BR2_PACKAGE_BINUTILS=y
 > 
-> Yes, probably. I'm not sure these default values are the most common
-> case, however.
-
- Never mind that, since it's anyway not really related, as you say.
-
-
-> Also, IMHO having two options {WITH,WITHOUT}_MIB_MODULES makes quite
-> difficult to know which modules are really enabled in the end.
-> I'm starting to think that maybe a better approach would be to have
-> one Config.in option per module... This would be clearer and would
-> perhaps also allow removing unused MIB files according to the modules
-> that are enabled or not.
-
- But that would make for a really long list of options, no? I think that that's
-a bit too much.
-
-
+> BR2_GDB_VERSION_8_0=y
+> BR2_GDB_VERSION="8.0"
+> BR2_PACKAGE_GDB_ARCH_SUPPORTS=y
+> BR2_PACKAGE_GDB=y
+> BR2_PACKAGE_GDB_SERVER=y
+> BR2_PACKAGE_GDB_DEBUGGER=y
 > 
-> So do you think this patch is acceptable for now?
+> two versions of libbfd are installed into the target directory:
+> 
+>  ./target/usr/lib/libbfd-2.28.51.so
+>  ./target/usr/lib/libbfd-2.29.so
+>  ./target/usr/lib/libbfd.so -> libbfd-2.28.51.so
+> 
+> one from gdb-8.0 (2.28.51) and one from the binutils-2.29 package (and
+> I believe the link from libbfd.so points to the wrong one).
+> 
+> With the following patch (inspired by [1] found by search for
+> 'gdb disable dynamic libbfd build'):
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 7e86ba0..8c4188b 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -111,7 +111,7 @@ GDB_CONF_OPTS = \
+>         --with-curses \
+>         --without-included-gettext \
+>         --disable-werror \
+> -       --enable-static
+> +       --enable-static --disable-shared
+>  
+>  # When gdb is built as C++ application for ARC it segfaults at runtime
+>  # So we pass --disable-build-with-cxx config option to force gdb not to
+> 
+> the installation of the gdb libbfd version is prevented...
 
- I've applied, thanks.
+ The usual approach would be something like
 
- Perhaps you could write up a CHANGES entry that explains that people should
-remove unneeded MIBs in a post-build script?
+ifeq ($(BR2_PACKAGE_BINUTILS),y)
+GDB_DEPENDENCIES += binutils
+GDB_CONF_OPTS += ... whatever is needed to make sure it uses binutils libbfd
+endif
+
+ Is that an option?
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
