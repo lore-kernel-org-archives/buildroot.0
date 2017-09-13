@@ -1,24 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Sep 2017 11:50:21 +0200
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v0.3.1
-In-Reply-To: <20170913063606.19020-1-brgl@bgdev.pl> (Bartosz Golaszewski's
- message of "Wed, 13 Sep 2017 08:36:06 +0200")
-References: <20170913063606.19020-1-brgl@bgdev.pl>
-Message-ID: <87a81z2ahu.fsf@dell.be.48ers.dk>
+Date: Wed, 13 Sep 2017 11:50:27 +0200
+Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.3
+In-Reply-To: <20170913082356.25669-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Wed, 13 Sep 2017 10:23:56 +0200")
+References: <20170913082356.25669-1-francois.perrad@gadz.org>
+Message-ID: <8760cn2aho.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > There aren't really any changes that matter for the buildroot image,
- > but the project has been moved over to kernel.org and is now available
- > in a release tarball, so simplify the .mk file by removing any
- > autoreconf stuff.
-
- > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
