@@ -1,39 +1,97 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 13 Sep 2017 10:23:56 +0200
-Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.3
-Message-ID: <20170913082356.25669-1-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 13 Sep 2017 11:02:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 2.8.7
+Message-ID: <20170913090223.9995-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Added upstream patch to fix build error:
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index fb01993f0..27845a46c 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
+move.o: In function `do_page_up':
+move.c:(.text+0x150): undefined reference to `leftedge_for'
+move.o: In function `do_page_down':
+move.c:(.text+0x20c): undefined reference to `leftedge_for'
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...pilation-when-configured-with-enable-tiny.patch | 43 ++++++++++++++++++++++
+ package/nano/nano.hash                             |  2 +-
+ package/nano/nano.mk                               |  2 +-
+ 3 files changed, 45 insertions(+), 2 deletions(-)
+ create mode 100644 package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
+
+diff --git a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
+new file mode 100644
+index 0000000000..db684f9832
+--- /dev/null
++++ b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
+@@ -0,0 +1,43 @@
++From 28cfab7580c42a6d6c9c5d787ce736094fd51a0c Mon Sep 17 00:00:00 2001
++From: Benno Schulenberg <bensberg@telfort.nl>
++Date: Tue, 29 Aug 2017 19:28:44 +0200
++Subject: tweaks: fix compilation when configured with --enable-tiny
++
++When moving the cursor to the top-left corner, it is not necessary
++to compute leftedge because firstcolumn IS the relevant leftedge.
++
++Reported-by: Jordi Mallach <jordi@debian.org>
++
++Downloaded from upstream master branch:
++http://git.savannah.gnu.org/cgit/nano.git/commit/?id=28cfab7580c42a6d6c9c5d787ce736094fd51a0c
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/move.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/move.c b/src/move.c
++index d138356..ce276e4 100644
++--- a/src/move.c
+++++ b/src/move.c
++@@ -121,7 +121,7 @@ void do_page_up(void)
++ 	openfile->current = openfile->edittop;
++ 	openfile->current_y = 0;
++ 
++-	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
+++	leftedge = openfile->firstcolumn;
++ 	target_column = 0;
++     } else
++ 	get_edge_and_target(&leftedge, &target_column);
++@@ -152,7 +152,7 @@ void do_page_down(void)
++ 	openfile->current = openfile->edittop;
++ 	openfile->current_y = 0;
++ 
++-	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
+++	leftedge = openfile->firstcolumn;
++ 	target_column = 0;
++     } else
++ 	get_edge_and_target(&leftedge, &target_column);
++-- 
++cgit v1.0-41-gc330
++
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index dfc660336e..4e0abc4489 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	0e1ec34583e1b265e0fbafb64c8bd348705ad403fe85967fd05d3a659f74d2e5  luarocks-2.4.2.tar.gz
-+sha256 4d414d32fed5bb121c72d3ff1280b7f2dc9027a9bc012e41dfbffd5b519b362e  luarocks-2.4.3.tar.gz
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index bc700a5f9..e050cb553 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256 c7cf264f0f3e4af43ecdbc4ec72c3b1e831c69a1a5f6512d5b0c109e6bac7b11  nano-2.8.4.tar.xz
++sha256 fbe31746958698d73c6726ee48ad8b0612697157961a2e9aaa83b4aa53d1165a  nano-2.8.7.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 966d43b53d..f1c172ffd5 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LUAROCKS_VERSION = 2.4.2
-+LUAROCKS_VERSION = 2.4.3
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+ NANO_VERSION_MAJOR = 2.8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).4
++NANO_VERSION = $(NANO_VERSION_MAJOR).7
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
 2.11.0
