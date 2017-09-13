@@ -1,7 +1,10 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed, 13 Sep 2017 17:12:05 +0530
-Subject: [Buildroot] [PATCH v3 0/6] engicam: Add new boards and qt5
-Message-ID: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+Date: Wed, 13 Sep 2017 17:12:06 +0530
+Subject: [Buildroot] [PATCH v3 1/6] engicam: imx6qdl_icore: Bump to latest
+	Linux and uboot releases
+In-Reply-To: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+References: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+Message-ID: <1505302931-17387-2-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +13,49 @@ To: buildroot@busybox.net
 
 From: Jagan Teki <jagan@amarulasolutions.com>
 
-This series add new boards from Engicam with qt5 support for each.
+- Linux: 4.13
+- Uboot: 2017.07
 
-Jagan Teki (6):
-  engicam: imx6qdl_icore: Bump to latest Linux and uboot releases
-  board: icorem6: Add Qt5 configs for 800x480 LVDS display
-  engicam: icorem6: Add OF C.TOUCH 10.1 Kit
-  board: icorem6: Add Qt5 configs for 1280x800 LVDS display
-  engicam: icorem6: Add OF C.TOUCH 12 Kit
-  board: icorem6: Add Qt5 configs for 1280x480 LVDS display
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+Changes for v3:
+- newly added
 
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  1 +
- board/engicam/icorem6/genimage.cfg                 |  4 +-
- board/engicam/icorem6/linux_qt5.fragment           |  4 ++
- board/engicam/icorem6/readme.txt                   | 24 +++++++
- .../rootfs_overlay/root/imx6qdl-icore-ofcap10.json | 11 +++
- .../rootfs_overlay/root/imx6qdl-icore-ofcap12.json | 11 +++
- .../icorem6/rootfs_overlay/root/imx6qdl-icore.json | 11 +++
- configs/engicam_imx6qdl_icore_defconfig            | 12 ++--
- configs/engicam_imx6qdl_icore_qt5_defconfig        | 81 ++++++++++++++++++++++
- 10 files changed, 153 insertions(+), 7 deletions(-)
- create mode 100644 board/engicam/icorem6/linux_qt5.fragment
- create mode 100644 board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
- create mode 100644 board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
- create mode 100644 board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
- create mode 100644 configs/engicam_imx6qdl_icore_qt5_defconfig
+ configs/engicam_imx6qdl_icore_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
+index 466d60c..03e65bd 100644
+--- a/configs/engicam_imx6qdl_icore_defconfig
++++ b/configs/engicam_imx6qdl_icore_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+@@ -14,7 +14,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
 -- 
 2.7.4
