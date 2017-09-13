@@ -1,167 +1,42 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 13 Sep 2017 17:35:24 +0300
-Subject: [Buildroot] [PATCH v2 1/1] flex: Fix segfault of stage1flex when
-	host has glibc 2.26 or newer
-Message-ID: <20170913143524.24293-1-aperez@igalia.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 13 Sep 2017 16:37:25 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi-inputstream-adaptive: bump
+	version to 2.0.18
+Message-ID: <20170913143728.22827-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the host uses glibc 2.26 or newer, Flex will try to use the
-newly-introduced reallocarray() function, but as it would not define
-_GNU_SOURCE a segmentation fault would occur later on due to the
-compiler assumming that the function is implicitly defined.
-
-This issue manifests itself due to a crash of "stage1flex" during the
-Flex bootstrap:
-
-  ./stage1flex   -o stage1scan.c ./scan.l
-  make[2]: *** [Makefile:1725: stage1scan.c] Segmentation fault (core dumped)
-
-This imports the patch from the upstream Git repository, and adds flags
-in the .mk file to rebuild the Autotools scripts and support files. Due
-to the latter, the patch to disable the documentation is changed so it
-modifies the .am file instead.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - Modify the patch to disable building the documentation so it changes
-    Makefile.am instead of Makefile.in. This is needed because autoreconf
-    is being used.
----
- ...-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch | 32 ++++++++++++++++++++
- package/flex/0001-flex-disable-documentation.patch | 23 --------------
- package/flex/0002-flex-disable-documentation.patch | 35 ++++++++++++++++++++++
- package/flex/flex.mk                               |  2 ++
- 4 files changed, 69 insertions(+), 23 deletions(-)
- create mode 100644 package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
- delete mode 100644 package/flex/0001-flex-disable-documentation.patch
- create mode 100644 package/flex/0002-flex-disable-documentation.patch
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch b/package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
-new file mode 100644
-index 0000000000..2151a15fc6
---- /dev/null
-+++ b/package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
-@@ -0,0 +1,32 @@
-+From ffa886a580929f26fd5e5a40c9c5334955c48553 Mon Sep 17 00:00:00 2001
-+From: Explorer09 <explorer09@gmail.com>
-+Date: Mon, 4 Sep 2017 10:47:33 +0800
-+Subject: [PATCH] build: AC_USE_SYSTEM_EXTENSIONS in configure.ac.
-+
-+This would, e.g. define _GNU_SOURCE in config.h, enabling the
-+reallocarray() prototype in glibc 2.26+ on Linux systems with that
-+version of glibc.
-+
-+Fixes #241.
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 55e774b..c879fe1 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -25,8 +25,10 @@
-+ # autoconf requirements and initialization
-+ 
-+ AC_INIT([the fast lexical analyser generator],[2.6.4],[flex-help at lists.sourceforge.net],[flex])
-++AC_PREREQ([2.60])
-+ AC_CONFIG_SRCDIR([src/scan.l])
-+ AC_CONFIG_AUX_DIR([build-aux])
-++AC_USE_SYSTEM_EXTENSIONS
-+ LT_INIT
-+ AM_INIT_AUTOMAKE([1.11.3 -Wno-portability foreign check-news std-options dist-lzip parallel-tests subdir-objects])
-+ AC_CONFIG_HEADER([src/config.h])
-+-- 
-+2.14.1
-+
-diff --git a/package/flex/0001-flex-disable-documentation.patch b/package/flex/0001-flex-disable-documentation.patch
-deleted file mode 100644
-index 68bec128ee..0000000000
---- a/package/flex/0001-flex-disable-documentation.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--flex: disable documentation
--
--Since we prevent the flex binary to be built, we also need to prevent
--the documentation to be built, otherwise it will fail like this:
--
--Making all in doc
--make[2]: Entering directory '/br/output/build/flex-2.6.4/doc'
--make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
--Stop.
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--diff -rup a/Makefile.in b/Makefile.in
----- a/Makefile.in	2017-05-06 15:49:09.000000000 +0100
--+++ b/Makefile.in	2017-05-10 14:35:20.152794902 +0100
--@@ -450,7 +450,6 @@ EXTRA_DIST = \
-- 
-- SUBDIRS = \
-- 	src \
---	doc \
-- 	examples \
-- 	po \
-- 	tests \
-diff --git a/package/flex/0002-flex-disable-documentation.patch b/package/flex/0002-flex-disable-documentation.patch
-new file mode 100644
-index 0000000000..a2e38d698a
---- /dev/null
-+++ b/package/flex/0002-flex-disable-documentation.patch
-@@ -0,0 +1,35 @@
-+From a98443c6a72d5821d4e0152311e5c3eb4cdff25c Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Wed, 13 Sep 2017 17:26:48 +0300
-+Subject: [PATCH] flex: disable documentation
-+
-+Since we prevent the flex binary to be built, we also need to prevent
-+the documentation to be built, otherwise it will fail like this:
-+
-+Making all in doc
-+make[2]: Entering directory '/br/output/build/flex-2.6.4/doc'
-+make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
-+Stop.
-+
-+Based on an patch by Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+---
-+ Makefile.am | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 638c549..9db3420 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -43,7 +43,6 @@ EXTRA_DIST = \
-+ 
-+ SUBDIRS = \
-+ 	src \
-+-	doc \
-+ 	examples \
-+ 	po \
-+ 	tests \
-+-- 
-+2.14.1
-+
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index b78269952e..b84732d383 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -11,6 +11,8 @@ FLEX_LICENSE = FLEX
- FLEX_LICENSE_FILES = COPYING
- FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
- FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
-+FLEX_AUTORECONF = YES
-+FLEX_GETTEXTIZE = YES
- HOST_FLEX_DEPENDENCIES = host-m4
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index c7de62a4f7..dac02d62da 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 4691ac8bde78b5abb2847cf6ad64d36141c0582f944ba435eafe7702cc2d1187  kodi-inputstream-adaptive-161f319bb2cd946f4659d841a54f19b1fb6143cc.tar.gz
++sha256 9c0a4eabcb795cc3c21337f2a06c3016ccf8749b8da56e3692ca032304700bab  kodi-inputstream-adaptive-f2904b547e940c724dce7412a26744c2698cab66.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 8d7daefc4f..cc0950346e 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,9 @@
+ #
+ ################################################################################
  
- define FLEX_DISABLE_PROGRAM
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 161f319bb2cd946f4659d841a54f19b1fb6143cc
++# This cset is on the branch 'Krypton'
++# When Kodi is updated, then this should be updated to the corresponding branch
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = f2904b547e940c724dce7412a26744c2698cab66
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
 -- 
-2.14.1
+2.11.0
