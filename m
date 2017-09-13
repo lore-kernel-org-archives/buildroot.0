@@ -1,48 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Sep 2017 15:57:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nmon: bump version to 16g
-Message-ID: <20170913135744.9848-1-bernd.kuhls@t-online.de>
+Date: Wed, 13 Sep 2017 16:17:33 +0200
+Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 8.5.0
+In-Reply-To: <20170913141733.11538-1-bernd.kuhls@t-online.de>
+References: <20170913141733.11538-1-bernd.kuhls@t-online.de>
+Message-ID: <20170913141733.11538-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched _SITE to https
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nmon/nmon.hash | 6 +++---
- package/nmon/nmon.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
-index f3a073ffd6..432f71d846 100644
---- a/package/nmon/nmon.hash
-+++ b/package/nmon/nmon.hash
-@@ -1,5 +1,5 @@
- # From https://sourceforge.net/projects/nmon/files/
--md5 a72e3eb737c230cd309329330a5545bd    lmon16f.c
--sha1    b69fdddf86ffe674e0133426fa09935ed678ab7d    lmon16f.c
-+md5 246ccfc74d5af55d992601fc4d3d4a72  lmon16g.c
-+sha1 926217a98f78dd398d4d5690d7b10b8b2b620168  lmon16g.c
- # Locally computed
--sha256  280a371e17488f8a2c5e0c64273155789be6fa5b937ab5c465488e591bdc5cd9    lmon16f.c
-+sha256 da82dd693b503b062854dfe7dbb5d36b347872ab44a4aa05b97e9d577747f688  lmon16g.c
-diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
-index 2c1ff0220d..f561d6dcc0 100644
---- a/package/nmon/nmon.mk
-+++ b/package/nmon/nmon.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index a0643b5958..c1d16529a1 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v8.4.0/SHASUMS256.txt
+-sha256  5d5aa2a101dcc617231a475812eb8ed87cac21491f1dcc7997b9dd463563f361  node-v8.4.0.tar.xz
++# From http://nodejs.org/dist/v8.5.0/SHASUMS256.txt
++sha256 e1cde5d8e5049e7e1b61aef128f26162059d885dc8cab5014bf5cbf693f75c3c  node-v8.5.0.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 3570a8fad9..fe503930d7 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NMON_VERSION = 16f
--NMON_SITE = http://sourceforge.net/projects/nmon/files
-+NMON_VERSION = 16g
-+NMON_SITE = https://sourceforge.net/projects/nmon/files
- NMON_SOURCE = lmon$(NMON_VERSION).c
- NMON_LICENSE = GPL-3.0+
- NMON_LICENSE_FILES = $(NMON_SOURCE)
+-NODEJS_VERSION = 8.4.0
++NODEJS_VERSION = 8.5.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
 2.11.0
