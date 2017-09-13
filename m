@@ -1,28 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Sep 2017 11:49:56 +0200
-Subject: [Buildroot] [PATCH] fscryptctl: bump version for AES-128-CBC /
-	AES-128-CTS support
-In-Reply-To: <20170913062151.17055-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 13 Sep 2017 08:21:51 +0200")
-References: <20170913062151.17055-1-peter@korsgaard.com>
-Message-ID: <87efrb2aij.fsf@dell.be.48ers.dk>
+Date: Wed, 13 Sep 2017 11:50:21 +0200
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v0.3.1
+In-Reply-To: <20170913063606.19020-1-brgl@bgdev.pl> (Bartosz Golaszewski's
+ message of "Wed, 13 Sep 2017 08:36:06 +0200")
+References: <20170913063606.19020-1-brgl@bgdev.pl>
+Message-ID: <87a81z2ahu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
 
- > Which are supported from linux-4.13 onwards.
- > While we're at it, add a DEVELOPERS entry.
+ > There aren't really any changes that matter for the buildroot image,
+ > but the project has been moved over to kernel.org and is now available
+ > in a release tarball, so simplify the .mk file by removing any
+ > autoreconf stuff.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  DEVELOPERS                         | 1 +
- >  package/fscryptctl/fscryptctl.hash | 2 +-
- >  package/fscryptctl/fscryptctl.mk   | 2 +-
- >  3 files changed, 3 insertions(+), 2 deletions(-)
+ > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 
 Committed, thanks.
 
