@@ -1,45 +1,24 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Sep 2017 07:07:14 +0200
-Subject: [Buildroot] [PATCH 1/1] download/git: force gzip compression
-	level 6
-In-Reply-To: <87shfr4n14.fsf@dell.be.48ers.dk>
-References: <1505168020-23634-1-git-send-email-brain@jikos.cz>
- <87shfr4n14.fsf@dell.be.48ers.dk>
-Message-ID: <20170913050714.GC3625@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Sep 2017 08:07:09 +0200
+Subject: [Buildroot] [PATCH] powerpc-utils: Bump version to 1.3.4
+In-Reply-To: <20170913044844.24162-1-joel@jms.id.au> (Joel Stanley's message
+ of "Wed, 13 Sep 2017 14:48:44 +1000")
+References: <20170913044844.24162-1-joel@jms.id.au>
+Message-ID: <87r2vb2ktu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-On 2017-09-12 23:36 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
-> 
->  > Force gzip compression level 6 when calculating hash of a downloaded GIT repo.
->  > To make sure the tar->gzip->checksum chain always provides consistent result.`
-> 
->  > The script was relying on the default compression level, which must not be
->  > necessarily consistent among different gzip versions. The level 6 is gzip's
->  > current default compression level.
-> 
-> Committed, thanks.
-> 
-> Is this just a theoretical issue, or something you have really run into?
+ > This also moves the source tree to the new official upstream location at
+ > ibm-power-utilities GitHub organisation.
 
-Theoretical, see this mail and the ensuing discussion:
-    http://lists.busybox.net/pipermail/buildroot/2017-September/202162.html
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
 
-Yet, for consistency, it is good to force it.
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
