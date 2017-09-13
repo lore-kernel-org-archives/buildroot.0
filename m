@@ -1,42 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Sep 2017 14:52:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ninja: bump version to 1.8.2
-Message-ID: <20170913125238.17879-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Sep 2017 15:01:14 +0200
+Subject: [Buildroot] [PATCH 1/2] bind: bump to version 9.11.2
+Message-ID: <20170913130115.25010-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://groups.google.com/forum/#!topic/ninja-build/Xt3NdAA0KQU/discussion
+Adds support for the new ICANN DNSSEC root key for the upcoming KSK rollover
+(Oct 11):
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://www.icann.org/resources/pages/ksk-rollover
+
+For more details, see the release notes:
+https://kb.isc.org/article/AA-01522
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ninja/ninja.hash | 2 +-
- package/ninja/ninja.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
-index 4c666e3065..6334c0420b 100644
---- a/package/ninja/ninja.hash
-+++ b/package/ninja/ninja.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256  2edda0a5421ace3cf428309211270772dd35a91af60c96f93f90df6bc41b16d9  ninja-v1.7.2.tar.gz
-+sha256 86b8700c3d0880c2b44c2ff67ce42774aaf8c28cbf57725cb881569288c1c6f4  ninja-v1.8.2.tar.gz
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-index b27f9cf341..259a87d216 100644
---- a/package/ninja/ninja.mk
-+++ b/package/ninja/ninja.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 3a631def65..95362309e1 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,3 +1,3 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P3/bind-9.11.1-P3.tar.gz.sha256.asc
+-sha256 52426e75432e46996dc90f24fca027805a341c38fbbb022b60dc9acd2677ccf4 bind-9.11.1-P3.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.2/bind-9.11.2.tar.gz.sha256.asc
++sha256 7f46ad8620f7c3b0ac375d7a5211b15677708fda84ce25d7aeb7222fe2e3c77a bind-9.11.2.tar.gz
+ sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index c65568e9e3..97d98d0b21 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NINJA_VERSION = v1.7.2
-+NINJA_VERSION = v1.8.2
- NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
- NINJA_LICENSE = Apache-2.0
- NINJA_LICENSE_FILES = COPYING
+-BIND_VERSION = 9.11.1-P3
++BIND_VERSION = 9.11.2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
 -- 
 2.11.0
