@@ -1,39 +1,94 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 13 Sep 2017 21:40:06 +0200
-Subject: [Buildroot] [PATCH 1/1] shairport-sync: bump to version 3.1.2
-Message-ID: <20170913194006.482-1-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 13 Sep 2017 21:54:31 +0200
+Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
+In-Reply-To: <1505328815.3138.1.camel@embedded.rocks>
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <20170902205423.21288-8-romain.naour@gmail.com>
+ <20170902231252.44d10e64@windsurf.lan>
+ <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
+ <20170903091432.659bd28f@windsurf.lan>
+ <8f568fb6-9ef3-39fc-ba2f-714f60dcd7be@gmail.com>
+ <1505328815.3138.1.camel@embedded.rocks>
+Message-ID: <26528000-6f59-01d7-72bf-c0d1ed2a530a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi J?rg,
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 899348a664..35391a84f5 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  731e23f12ca1d645989843a15259ea0bf4d18adea94cf55f6fcc63d7b55fb53b  shairport-sync-3.1.1.tar.gz
-+sha256  8c13f7ebbd417e8cab07ea9f74392ced0f54315d8697d4513580f472859a9c65  shairport-sync-3.1.2.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 898db9d02b..2dce4cdacb 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 3.1.1
-+SHAIRPORT_SYNC_VERSION = 3.1.2
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
--- 
-2.14.1
+Le 13/09/2017 ? 20:53, J?rg Krause a ?crit?:
+> Hi,
+> 
+> On Thu, 2017-09-07 at 23:32 +0200, Romain Naour wrote:
+>> Hi Thomas,
+>>
+>> Le 03/09/2017 ? 09:14, Thomas Petazzoni a ?crit :
+>>> Hello,
+>>>
+>>> On Sun, 3 Sep 2017 00:23:40 +0200, Romain Naour wrote:
+>>>
+>>>>> This commit log is a bit mysterious: if reallocarray() has been
+>>>>> introduced in glibc 2.26, why isn't flex able to use it ?  
+>>>>
+>>>> It's a nasty issue, when reallocarray() is available for the target, flex will
+>>>> build a small tool called stage1flex for the host (using _FOR_BUILD) but with
+>>>> the config.h generated for the target.
+>>>>
+>>>> My host doesn't have glibc 2.26, so reallocarray() is never defined while
+>>>> building stage1flex:
+>>>>
+>>>> misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
+>>>> [-Wimplicit-function-declaration]
+>>>>   mem = reallocarray(NULL, (size_t) size, element_size);
+>>>>         ^~~~~~~~~~~~
+>>>> misc.c:147:6: warning : assignment makes pointer from integer without a cast
+>>>> [-Wint-conversion]
+>>>>   mem = reallocarray(NULL, (size_t) size, element_size);
+>>>>       ^
+>>>>
+>>>> I don't know how to fix this, except by disabling reallocarray() for the target...
+>>>
+>>> This should all be explained in the commit log, and a short comment in
+>>> flex.mk should be added as well.
+>>
+>> Actually I looked further into this issue after sending the patch.
+>>
+>>>
+>>> Generally speaking, the commit logs in this series are too terse: they
+>>> just say "fix build with glibc 2.26" with no explanations, or they
+>>> backport some seemingly random glibc patches, without explaining why
+>>> they are needed. Could you improve this a bit ?
+>>
+>> Well, the glibc bump is more complicated than expected and I need to spent more
+>> time on it to understand what's going on...
+>>
+>> At least we have a link to the upstream reference as a starting point.
+>> Ok, this patch is really too terse, I added it just before sending the series :-/
+>>
+>> I'll try to continue this week-end.
+> 
+> Fixed upstream:
+> https://github.com/westes/flex/commit/24fd0551333e7eded87b64dd36062da3d
+> f2f6380
+> 
+> Meanwhile, another patch was provided:
+> http://patchwork.ozlabs.org/patch/813474/
+
+Tanks for the link but this is a different issue.
+
+The issue reported here is when the toolchain provide glibc 2.26 and the host
+use an older glibc version which doesn't provide reallocarray().
+
+The issue reported by Adrian is when glibc 2.26 is installed on the host.
+
+Sadly, the patch provided by Adrian doesn't fix this issue.
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> J?rg Krause
+> 
