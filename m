@@ -1,43 +1,167 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Sep 2017 16:27:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nss-pam-ldapd: bump version to 0.9.8
-Message-ID: <20170913142702.14558-1-bernd.kuhls@t-online.de>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 13 Sep 2017 17:35:24 +0300
+Subject: [Buildroot] [PATCH v2 1/1] flex: Fix segfault of stage1flex when
+	host has glibc 2.26 or newer
+Message-ID: <20170913143524.24293-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/nss-pam-ldapd/nss-pam-ldapd.hash | 6 +++---
- package/nss-pam-ldapd/nss-pam-ldapd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+When the host uses glibc 2.26 or newer, Flex will try to use the
+newly-introduced reallocarray() function, but as it would not define
+_GNU_SOURCE a segmentation fault would occur later on due to the
+compiler assumming that the function is implicitly defined.
 
-diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.hash b/package/nss-pam-ldapd/nss-pam-ldapd.hash
-index b931e6fc12..66cb794063 100644
---- a/package/nss-pam-ldapd/nss-pam-ldapd.hash
-+++ b/package/nss-pam-ldapd/nss-pam-ldapd.hash
-@@ -1,4 +1,4 @@
--# From http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.6.tar.gz.md5
--md5	fa5ec49cb54428d6c73e244a11021695	nss-pam-ldapd-0.9.6.tar.gz
-+# From https://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.8.tar.gz.md5
-+md5 8c99fdc54f4bf9aca8c5f53fdb1403ff  nss-pam-ldapd-0.9.8.tar.gz
- # Locally computed:
--sha256	101d5a7fa10549cc77be48d07f2b8141f59182f10f2cc0fea93efd13c3a5a6f2	nss-pam-ldapd-0.9.5.tar.gz
-+sha256 ef7362e7f2003da8c7beb7bcc03c30494acf712625aaac8badc6e7eb16f3453f  nss-pam-ldapd-0.9.8.tar.gz
-diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
-index 3eddb5e2a1..c094db96ac 100644
---- a/package/nss-pam-ldapd/nss-pam-ldapd.mk
-+++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+This issue manifests itself due to a crash of "stage1flex" during the
+Flex bootstrap:
+
+  ./stage1flex   -o stage1scan.c ./scan.l
+  make[2]: *** [Makefile:1725: stage1scan.c] Segmentation fault (core dumped)
+
+This imports the patch from the upstream Git repository, and adds flags
+in the .mk file to rebuild the Autotools scripts and support files. Due
+to the latter, the patch to disable the documentation is changed so it
+modifies the .am file instead.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+---
+Changes v1 -> v2:
+  - Modify the patch to disable building the documentation so it changes
+    Makefile.am instead of Makefile.in. This is needed because autoreconf
+    is being used.
+---
+ ...-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch | 32 ++++++++++++++++++++
+ package/flex/0001-flex-disable-documentation.patch | 23 --------------
+ package/flex/0002-flex-disable-documentation.patch | 35 ++++++++++++++++++++++
+ package/flex/flex.mk                               |  2 ++
+ 4 files changed, 69 insertions(+), 23 deletions(-)
+ create mode 100644 package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
+ delete mode 100644 package/flex/0001-flex-disable-documentation.patch
+ create mode 100644 package/flex/0002-flex-disable-documentation.patch
+
+diff --git a/package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch b/package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
+new file mode 100644
+index 0000000000..2151a15fc6
+--- /dev/null
++++ b/package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
+@@ -0,0 +1,32 @@
++From ffa886a580929f26fd5e5a40c9c5334955c48553 Mon Sep 17 00:00:00 2001
++From: Explorer09 <explorer09@gmail.com>
++Date: Mon, 4 Sep 2017 10:47:33 +0800
++Subject: [PATCH] build: AC_USE_SYSTEM_EXTENSIONS in configure.ac.
++
++This would, e.g. define _GNU_SOURCE in config.h, enabling the
++reallocarray() prototype in glibc 2.26+ on Linux systems with that
++version of glibc.
++
++Fixes #241.
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 55e774b..c879fe1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -25,8 +25,10 @@
++ # autoconf requirements and initialization
++ 
++ AC_INIT([the fast lexical analyser generator],[2.6.4],[flex-help at lists.sourceforge.net],[flex])
+++AC_PREREQ([2.60])
++ AC_CONFIG_SRCDIR([src/scan.l])
++ AC_CONFIG_AUX_DIR([build-aux])
+++AC_USE_SYSTEM_EXTENSIONS
++ LT_INIT
++ AM_INIT_AUTOMAKE([1.11.3 -Wno-portability foreign check-news std-options dist-lzip parallel-tests subdir-objects])
++ AC_CONFIG_HEADER([src/config.h])
++-- 
++2.14.1
++
+diff --git a/package/flex/0001-flex-disable-documentation.patch b/package/flex/0001-flex-disable-documentation.patch
+deleted file mode 100644
+index 68bec128ee..0000000000
+--- a/package/flex/0001-flex-disable-documentation.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-flex: disable documentation
+-
+-Since we prevent the flex binary to be built, we also need to prevent
+-the documentation to be built, otherwise it will fail like this:
+-
+-Making all in doc
+-make[2]: Entering directory '/br/output/build/flex-2.6.4/doc'
+-make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
+-Stop.
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-diff -rup a/Makefile.in b/Makefile.in
+---- a/Makefile.in	2017-05-06 15:49:09.000000000 +0100
+-+++ b/Makefile.in	2017-05-10 14:35:20.152794902 +0100
+-@@ -450,7 +450,6 @@ EXTRA_DIST = \
+- 
+- SUBDIRS = \
+- 	src \
+--	doc \
+- 	examples \
+- 	po \
+- 	tests \
+diff --git a/package/flex/0002-flex-disable-documentation.patch b/package/flex/0002-flex-disable-documentation.patch
+new file mode 100644
+index 0000000000..a2e38d698a
+--- /dev/null
++++ b/package/flex/0002-flex-disable-documentation.patch
+@@ -0,0 +1,35 @@
++From a98443c6a72d5821d4e0152311e5c3eb4cdff25c Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Wed, 13 Sep 2017 17:26:48 +0300
++Subject: [PATCH] flex: disable documentation
++
++Since we prevent the flex binary to be built, we also need to prevent
++the documentation to be built, otherwise it will fail like this:
++
++Making all in doc
++make[2]: Entering directory '/br/output/build/flex-2.6.4/doc'
++make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
++Stop.
++
++Based on an patch by Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++---
++ Makefile.am | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 638c549..9db3420 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -43,7 +43,6 @@ EXTRA_DIST = \
++ 
++ SUBDIRS = \
++ 	src \
++-	doc \
++ 	examples \
++ 	po \
++ 	tests \
++-- 
++2.14.1
++
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index b78269952e..b84732d383 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -11,6 +11,8 @@ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
+ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
++FLEX_AUTORECONF = YES
++FLEX_GETTEXTIZE = YES
+ HOST_FLEX_DEPENDENCIES = host-m4
  
--NSS_PAM_LDAPD_VERSION = 0.9.6
-+NSS_PAM_LDAPD_VERSION = 0.9.8
- NSS_PAM_LDAPD_SITE = http://arthurdejong.org/nss-pam-ldapd
- NSS_PAM_LDAPD_LICENSE = LGPL-2.1+
- NSS_PAM_LDAPD_LICENSE_FILES = COPYING
+ define FLEX_DISABLE_PROGRAM
 -- 
-2.11.0
+2.14.1
