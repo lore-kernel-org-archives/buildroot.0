@@ -1,58 +1,47 @@
-From: Paul Gildea <gildeap@tcd.ie>
-Date: Thu, 14 Sep 2017 16:22:18 +0100
-Subject: [Buildroot] Issue adding subprocess32 python package to
-	buildroot
-In-Reply-To: <24023e40-1023-93df-8406-c2a46703a7ed@mind.be>
-References: <CAP3D3ge8ZXFXuB4_V5eSxnKAN=5hKWwYcxT2xRqM6HUOp39pUg@mail.gmail.com>
- <24023e40-1023-93df-8406-c2a46703a7ed@mind.be>
-Message-ID: <CAP3D3gcpbp-wp+52pKDritwcU4Lds0YEJ7CCFpyqkGAwOKaxQA@mail.gmail.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Thu, 14 Sep 2017 17:35:02 +0200
+Subject: [Buildroot] [PATCH] CHANGES: update after netsnmp changes
+In-Reply-To: <20170914152151.qfxut4v3w4q7mwvt@tarshish>
+References: <20170914125316.1872-1-julien.floret@6wind.com>
+ <20170914152151.qfxut4v3w4q7mwvt@tarshish>
+Message-ID: <CAHfJR7giZzQq7xrngOqn-wcstOTgvbm1Fi6=_Lcwh87+maTZqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Arnout,
-
-That set me on the right path. Disutils was using the wrong compiler for
-building shared objects, while the right compiler was being used elsewhere.
-Setting the below LDSHARED variable solved the problem:
-
- LDSHARED="$(TARGET_CC) -pthread -shared"
-
-
-Regards,
-
---
-Paul
-
-
-On 12 September 2017 at 00:07, Arnout Vandecappelle <arnout@mind.be> wrote:
-
+2017-09-14 17:21 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+> Hi Julien,
 >
+> On Thu, Sep 14, 2017 at 02:53:16PM +0200, Julien Floret wrote:
+>> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+>> ---
+>>  CHANGES | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/CHANGES b/CHANGES
+>> index c042bf5e3e6e..89d9e2a5fa95 100644
+>> --- a/CHANGES
+>> +++ b/CHANGES
+>> @@ -1,3 +1,9 @@
+>> +2017.11-rc1, To be released
+>> +
+>> +     netsnmp: all MIB files are now installed, making the target filesystem a
+>> +     bit bigger than before. To remove unneeded MIBS, you should use a
+>> +     post-build script.
+>> +
+>>  2017.08, Released September 1st, 2017
+>>
+>>       Minor fixes.
 >
-> On 08-09-17 16:18, Paul Gildea wrote:
-> > /media/vmpart/5.1.0_x86/buildroot/output/host/usr/bin/ccache
-> /usr/bin/gcc -pthread -fno-strict-aliasing -O2 -I/media/vmpart/5.1.0_x86/buildroot/output/host/include
-> -I/media/vmpart/5.1.0_x86/buildroot/output/host/usr/include -DNDEBUG -g
-> -O3 -Wall -Wstrict-prototypes -fPIC -I/media/vmpart/5.1.0_x86/
-> buildroot/output/host/usr/include/python2.7 -c _posixsubprocess.c -o
-> build/temp.linux-x86_64-2.7/_posixsubprocess.o
+> This sort of documentation should go to the "Migrating from older Buildroot
+> versions" section in the manual at docs/manual/migrating.txt.
 >
->  You're using the host compiler to build a target package. You need to pass
-> CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" to setup.py in the build step.
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170914/11215ac5/attachment.html>
+> Usually only the maintainers update the CHANGES file.
+
+Ah, OK ;) I didn't know about this file. It only seems to contain
+serious backward incompatibilities, though; I'm not sure this change
+would be relevant in there.
+Thoughts?
