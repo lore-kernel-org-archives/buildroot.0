@@ -1,36 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 14 Sep 2017 09:53:19 -0300 (BRT)
-Subject: [Buildroot] [PATCH v2] python-six: add host variant
-In-Reply-To: <20170913132055.12371-1-julien.floret@6wind.com>
-References: <20170913132055.12371-1-julien.floret@6wind.com>
-Message-ID: <1928743391.9313714.1505393599814.JavaMail.zimbra@datacom.ind.br>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 14 Sep 2017 16:00:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ocrad: bump version to 0.26
+Message-ID: <20170914140001.20939-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Julien Floret" <julien.floret@6wind.com>
-> To: buildroot at buildroot.org
-> Sent: Wednesday, September 13, 2017 10:20:55 AM
-> Subject: [Buildroot] [PATCH v2] python-six: add host variant
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ocrad/ocrad.hash | 2 +-
+ package/ocrad/ocrad.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> While currently there is no in-tree Buildroot package which depends on
-> host-python-six, it can be needed to build external packages.
-
-It is required to build host-python-protobuf, which in its turn is
-necessary to build one of our (DATACOM) proprietary packages. So far
-we have been keeping host-python-{protobuf,six} as local patches, so
-your change is very helpful. Thanks! 
-
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-
-Tested-by: Carlos Santos <casantos@datacom.ind.br>
-
----8<---
-
+diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
+index d2a44ae77f..5f093d241e 100644
+--- a/package/ocrad/ocrad.hash
++++ b/package/ocrad/ocrad.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e710be9c030fbcbce2315077326c8268feb422c0bc39fa744644cbbd1f5d4dd4	ocrad-0.25.tar.lz
++sha256 c383d37869baa0990d38d38836d4d567e9e2862aa0cd704868b62dafeac18e3c  ocrad-0.26.tar.lz
+diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
+index 3a858ef05a..94020d2d25 100644
+--- a/package/ocrad/ocrad.mk
++++ b/package/ocrad/ocrad.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OCRAD_VERSION = 0.25
++OCRAD_VERSION = 0.26
+ OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
+ OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
+ OCRAD_LICENSE = GPL-3.0+
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.11.0
