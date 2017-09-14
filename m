@@ -1,39 +1,39 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Thu, 14 Sep 2017 17:47:42 +0300
-Subject: [Buildroot] [PATCH] docs: clarify <packagename>_PATCH behaviour
-Message-ID: <20170914144742.1844-1-alexander.i.mukhin@gmail.com>
+From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Date: Thu, 14 Sep 2017 16:00:27 +0100
+Subject: [Buildroot] [PATCH 1/1] rpi-userland: bump to latest version
+Message-ID: <20170914150027.30475-1-mahyar.koshkouei@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reiterate once more that <packagename>_PATCH variable can point
-to an arbitrary URL, not just to a path relative to <packagename>_SITE.
-
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 ---
- docs/manual/patch-policy.txt | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/rpi-userland/rpi-userland.hash | 2 +-
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index e1df8b003..5e2e5fc4b 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -19,9 +19,11 @@ global patch directory.
- ==== Downloaded
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+index 1728ae8712..f1bb5e678c 100644
+--- a/package/rpi-userland/rpi-userland.hash
++++ b/package/rpi-userland/rpi-userland.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 476cde13d0d4bbf44ffc4d1d545847464d5c270bb72e4d940e43e5972c4de9da rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
++sha256 8ed745ea28ef9d5e6d2e5534acabe1ea1a6c6be9bab7f683527ce5da5a3f77cb rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 90077a19f5..a798795bae 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- If it is necessary to apply a patch that is available for download, then add it
--to the +<packagename>_PATCH+ variable. It is downloaded from the same site
--as the package itself. It can be a single patch, or a tarball containing a
--patch series.
-+to the +<packagename>_PATCH+ variable. If an entry contains +://+,
-+then Buildroot will assume it is a full URL and download the patch
-+from this location. Otherwise, Buildroot will assume that the patch should be
-+downloaded from +<packagename>_SITE+. It can be a single patch,
-+or a tarball containing a patch series.
- 
- This method is typically used for packages from Debian.
- 
+-RPI_USERLAND_VERSION = 29835184aa70c13d77a11d721e934a7298bdf46a
++RPI_USERLAND_VERSION = a7976021a89451de0d008aa48f16c4e88872899b
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3-Clause
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
-2.11.0
+2.14.1
