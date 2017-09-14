@@ -1,120 +1,171 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 14 Sep 2017 11:31:39 +0200
-Subject: [Buildroot] gdb/binutils - two versions of libbfd installed
-In-Reply-To: <029c9703-1597-8c20-c427-78bc4eec9a7e@mind.be>
-References: <trinity-43ed5438-6812-4ad2-a78d-3b069e067897-1505302098589@3c-app-gmx-bs48>
- <029c9703-1597-8c20-c427-78bc4eec9a7e@mind.be>
-Message-ID: <trinity-5de660b3-a66f-41b1-b7c6-b025562eff42-1505381499618@3c-app-gmx-bs65>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 Sep 2017 12:32:09 +0300
+Subject: [Buildroot] [PATCH] hostapd: add support for Realtek driver
+In-Reply-To: <20170914090043.1240-1-alexander.i.mukhin@gmail.com>
+References: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
+ <20170914090043.1240-1-alexander.i.mukhin@gmail.com>
+Message-ID: <20170914093209.r5xwd4outafdxrmv@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hi Alexander,
 
-> Gesendet: Mittwoch, 13. September 2017 um 23:28 Uhr
-> Von: "Arnout Vandecappelle" <arnout@mind.be>
-> An: "Peter Seiderer" <ps.report@gmx.net>, buildroot at buildroot.org
-> Betreff: Re: [Buildroot] gdb/binutils - two versions of libbfd installed
->
+On Thu, Sep 14, 2017 at 12:00:43PM +0300, Alexander Mukhin wrote:
+> Since kernel drivers for Realtek wireless chips use non-standard
+> interfaces, upstream hostapd does not support them. One have to apply
+> an external patch for hostapd to work with these chips. See:
+> https://github.com/pritambaral/hostapd-rtl871xdrv
 > 
+> A configuration option is added to enable support for Realtek chips,
+> and it's turned off by default.
 > 
-> On 13-09-17 13:28, Peter Seiderer wrote:
-> > BR2_BINUTILS_VERSION_2_29_X=y
-> > BR2_BINUTILS_VERSION="2.29"
-> > BR2_BINUTILS_EXTRA_CONFIG_OPTIONS=""
-> > BR2_PACKAGE_BINUTILS=y
-> > 
-> > BR2_GDB_VERSION_8_0=y
-> > BR2_GDB_VERSION="8.0"
-> > BR2_PACKAGE_GDB_ARCH_SUPPORTS=y
-> > BR2_PACKAGE_GDB=y
-> > BR2_PACKAGE_GDB_SERVER=y
-> > BR2_PACKAGE_GDB_DEBUGGER=y
-> > 
-> > two versions of libbfd are installed into the target directory:
-> > 
-> >  ./target/usr/lib/libbfd-2.28.51.so
-> >  ./target/usr/lib/libbfd-2.29.so
-> >  ./target/usr/lib/libbfd.so -> libbfd-2.28.51.so
-> > 
-> > one from gdb-8.0 (2.28.51) and one from the binutils-2.29 package (and
-> > I believe the link from libbfd.so points to the wrong one).
-> > 
-> > With the following patch (inspired by [1] found by search for
-> > 'gdb disable dynamic libbfd build'):
-> > 
-> > diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> > index 7e86ba0..8c4188b 100644
-> > --- a/package/gdb/gdb.mk
-> > +++ b/package/gdb/gdb.mk
-> > @@ -111,7 +111,7 @@ GDB_CONF_OPTS = \
-> >         --with-curses \
-> >         --without-included-gettext \
-> >         --disable-werror \
-> > -       --enable-static
-> > +       --enable-static --disable-shared
-> >  
-> >  # When gdb is built as C++ application for ARC it segfaults at runtime
-> >  # So we pass --disable-build-with-cxx config option to force gdb not to
-> > 
-> > the installation of the gdb libbfd version is prevented...
-> 
->  The usual approach would be something like
-> 
-> ifeq ($(BR2_PACKAGE_BINUTILS),y)
-> GDB_DEPENDENCIES += binutils
-> GDB_CONF_OPTS += ... whatever is needed to make sure it uses binutils libbfd
-> endif
-> 
->  Is that an option?
-> 
+> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> ---
+>  DEVELOPERS                                         |  3 +++
+>  .../0001-add-realtek-driver-to-defconfig.patch     | 29 ++++++++++++++++++++++
+>  .../0002-add-rtl871xdrv-to-sample-config.patch     | 28 +++++++++++++++++++++
 
-No, I think gdb uses the bundled libbfd to avoid version problems (and I did
-not find a option for using the system version).
+I don't think these patches are needed. Just use HOSTAPD_CONFIG_SET instead of 
+HOSTAPD_CONFIG_ENABLE. Actually, I think we don't need HOSTAPD_CONFIG_ENABLE 
+at all, only HOSTAPD_CONFIG_SET. But that's for another patch.
 
-So to get the right libbfd.so link binutils should depend on gdb, not a very
-nice option...
+baruch
 
-Additional gdb/gdbserver link against the static libbfd.a, I believe the installation
-of the dynamic libbfd.so version is by mistake/unneeded and I would like to avoid it,
-see the ld output without my patch:
-
-$ LD_TRACE_LOADED_OBJECTS=1 gdb
-        linux-vdso.so.1 (0x7ed0f000)
-        libdl.so.2 => /lib/libdl.so.2 (0x76f65000)
-        libncurses.so.6 => /usr/lib/libncurses.so.6 (0x76f16000)
-        libexpat.so.1 => /usr/lib/libexpat.so.1 (0x76ede000)
-        libm.so.6 => /lib/libm.so.6 (0x76e5b000)
-        libc.so.6 => /lib/libc.so.6 (0x76d1e000)
-        /lib/ld-linux-armhf.so.3 (0x76f78000)
-        libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x76cf1000)
-$ LD_TRACE_LOADED_OBJECTS=1 gdbserver
-        linux-vdso.so.1 (0x7edec000)
-        libdl.so.2 => /lib/libdl.so.2 (0x76f8d000)
-        libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x76e35000)
-        libm.so.6 => /lib/libm.so.6 (0x76db2000)
-        libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x76d85000)
-        libc.so.6 => /lib/libc.so.6 (0x76c48000)
-        /lib/ld-linux-armhf.so.3 (0x76fa0000)
-
-Regards,
-Peter
-
->  Regards,
->  Arnout
+>  package/hostapd/Config.in                          |  5 ++++
+>  package/hostapd/hostapd.hash                       |  1 +
+>  package/hostapd/hostapd.mk                         |  5 ++++
+>  6 files changed, 71 insertions(+)
+>  create mode 100644 package/hostapd/0001-add-realtek-driver-to-defconfig.patch
+>  create mode 100644 package/hostapd/0002-add-rtl871xdrv-to-sample-config.patch
 > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 21eafc9d2..57fc74c25 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -68,6 +68,9 @@ F:	package/putty/
+>  N:	Alexander Lukichev <alexander.lukichev@espotel.com>
+>  F:	package/openpgm/
+>  
+> +N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> +F:	package/hostapd/
+> +
+>  N:	Alexander Varnin <fenixk19@mail.ru>
+>  F:	package/liblog4c-localtime/
+>  
+> diff --git a/package/hostapd/0001-add-realtek-driver-to-defconfig.patch b/package/hostapd/0001-add-realtek-driver-to-defconfig.patch
+> new file mode 100644
+> index 000000000..3cc5f624f
+> --- /dev/null
+> +++ b/package/hostapd/0001-add-realtek-driver-to-defconfig.patch
+> @@ -0,0 +1,29 @@
+> +From 8ae1094c52e462071cd98c994f463af9bdb6ac08 Mon Sep 17 00:00:00 2001
+> +From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> +Date: Wed, 13 Sep 2017 11:28:50 +0300
+> +Subject: [PATCH 1/2] add realtek driver to defconfig
+> +
+> +Add configuration variable for rtl871xdrv driver.
+> +
+> +Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> +---
+> + hostapd/defconfig | 3 +++
+> + 1 file changed, 3 insertions(+)
+> +
+> +diff --git a/hostapd/defconfig b/hostapd/defconfig
+> +index 4659dd1..7e4667b 100644
+> +--- a/hostapd/defconfig
+> ++++ b/hostapd/defconfig
+> +@@ -41,6 +41,9 @@ CONFIG_DRIVER_NL80211=y
+> + #LIBS_p += -L/usr/local/lib
+> + #LIBS_c += -L/usr/local/lib
+> + 
+> ++# Driver interface for Realtek chips (rtl871xdrv)
+> ++#CONFIG_DRIVER_RTW=y
+> ++
+> + # Driver interface for no driver (e.g., RADIUS server only)
+> + #CONFIG_DRIVER_NONE=y
+> + 
+> +-- 
+> +2.11.0
+> +
+> diff --git a/package/hostapd/0002-add-rtl871xdrv-to-sample-config.patch b/package/hostapd/0002-add-rtl871xdrv-to-sample-config.patch
+> new file mode 100644
+> index 000000000..c4907fdf0
+> --- /dev/null
+> +++ b/package/hostapd/0002-add-rtl871xdrv-to-sample-config.patch
+> @@ -0,0 +1,28 @@
+> +From 79de732e82439953e1de82208cf48ae9ae55a816 Mon Sep 17 00:00:00 2001
+> +From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> +Date: Wed, 13 Sep 2017 11:29:49 +0300
+> +Subject: [PATCH 2/2] add rtl871xdrv to sample config
+> +
+> +Add rtl871xdrv to the list of possible drivers.
+> +
+> +Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> +---
+> + hostapd/hostapd.conf | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/hostapd/hostapd.conf b/hostapd/hostapd.conf
+> +index fa9a855..ef4d7ee 100644
+> +--- a/hostapd/hostapd.conf
+> ++++ b/hostapd/hostapd.conf
+> +@@ -20,7 +20,7 @@ interface=wlan0
+> + # interface is also created.
+> + #bridge=br0
+> + 
+> +-# Driver interface type (hostap/wired/none/nl80211/bsd);
+> ++# Driver interface type (hostap/wired/none/nl80211/bsd/rtl871xdrv);
+> + # default: hostap). nl80211 is used with all Linux mac80211 drivers.
+> + # Use driver=none if building hostapd as a standalone RADIUS server that does
+> + # not control any wireless/wired driver.
+> +-- 
+> +2.11.0
+> +
+> diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+> index 62fbb66d6..18b9665ec 100644
+> --- a/package/hostapd/Config.in
+> +++ b/package/hostapd/Config.in
+> @@ -14,6 +14,11 @@ config BR2_PACKAGE_HOSTAPD
+>  
+>  if BR2_PACKAGE_HOSTAPD
+>  
+> +config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
+> +	bool "Enable rtl871x driver"
+> +	help
+> +	  Enable support for Realtek wireless chips.
+> +
+>  config BR2_PACKAGE_HOSTAPD_ACS
+>  	bool "Enable ACS"
+>  	default y
+> diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+> index fb891476b..83bfd0e7e 100644
+> --- a/package/hostapd/hostapd.hash
+> +++ b/package/hostapd/hostapd.hash
+> @@ -1,2 +1,3 @@
+>  # Locally calculated
+>  sha256  01526b90c1d23bec4b0f052039cc4456c2fd19347b4d830d1d58a0a6aea7117d  hostapd-2.6.tar.gz
+> +sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
+> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+> index dc28d1323..27240bbbb 100644
+> --- a/package/hostapd/hostapd.mk
+> +++ b/package/hostapd/hostapd.mk
+> @@ -44,6 +44,11 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
+>  HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
+> +HOSTAPD_PATCH = https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
+> +HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_RTW
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
+>  HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
+>  endif
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
