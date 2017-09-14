@@ -1,69 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Sep 2017 23:35:27 +0200
-Subject: [Buildroot] [PATCH] Added support for package flatbuffers.
-In-Reply-To: <HE1PR0402MB362873CDF66343E07F2D6FB6F96E0@HE1PR0402MB3628.eurprd04.prod.outlook.com>
-References: <AM4PR0401MB17783D2C2D35AEC6A8C46882F99F0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
- <AM4PR0401MB1778C651AD7C550B24B045A7F99F0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
- <AM4PR0401MB1778E54593D1C3C1D749F4D1F99D0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
- <HE1PR0402MB362873CDF66343E07F2D6FB6F96E0@HE1PR0402MB3628.eurprd04.prod.outlook.com>
-Message-ID: <3dab2146-fbad-eace-75f3-647a87096c20@mind.be>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Wed, 13 Sep 2017 18:39:51 -0700
+Subject: [Buildroot] [PATCH] package/lzo: Set CMAKE_INSTALL_LIBDIR for
+ host variant explicitly
+In-Reply-To: <acb86c77-9bcb-2fc2-82a9-0e79a267edfc@mind.be>
+References: <20170913173724.6157-1-andrew.smirnov@gmail.com>
+ <CAHXCMMKe5KiGHCP4H4vBMj+kzpFOTDgE5HBWDTJHLOGpFaR9Uw@mail.gmail.com>
+ <acb86c77-9bcb-2fc2-82a9-0e79a267edfc@mind.be>
+Message-ID: <CAHQ1cqHfTVrYiBm6hTu=FWvpDevrKzg6wOYkE9-nevSWp4ezpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Erik,
+On Wed, Sep 13, 2017 at 1:43 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 13-09-17 20:55, Samuel Martin wrote:
+>> Hi Andrey,
+>>
+>> On Wed, Sep 13, 2017 at 7:37 PM, Andrey Smirnov
+>> <andrew.smirnov@gmail.com> wrote:
+>>> Building host-lzo on 64-bit Fedora 26 ends up with library files
+>>> installed into $(HOST_DIR)/lib64 instead of $(HOST_DIR)/lib where
+>>> other packages (at least host-mtd) depending on it would look for it
+>>> (resulting in build failures). Fix that by specifying the directory to
+>>> be lib/ explicitly.
+>
+>  It would be good to find out why this happens. I don't see anything in
+> CMakeLists.txt that could explain this.
+>
+>  Does this happen with the Buildroot-built host-cmake or only when you use the
+> system-installed one?
+>
+>  I expect this will happen with all host-cmake packages... Could you check?
+>
+>  Obviously, we need a more fundamental solution than this.
+>
 
- Thanks a lot for your contribution! It's great to see new people using
-Buildroot and contributing to it.
+Just finished digging more into this and it doesn't matter which CMake
+is being used (I tried both). As far as I can tell the reason for this
+behavior is the following code in CMake itself:
 
- However, in order to ease the review process, we like to receive patches inline
-and not as attachments. Indeed, this allows us to simply hit "reply" and comment
-on each part of the patch. This is a very typical review process used in the
-open-source community. In order to send patches inline, we recommend you to use
-"git send-email" as e-mail clients very often rewrap text and therefore make
-patches unusable.
+https://github.com/Kitware/CMake/blob/master/Modules/GNUInstallDirs.cmake#L201
 
- From a quick look to your patch, here are a few comments:
+I agree that this probably affects all "host-cmake" packages. I don't
+have any data to back that up (meaning I didn't try to investigate
+it), but I have a hunch that situation with "host-mtd" is exacerbated
+by the fact that it uses AC_CHECK_LIB instead of relying on
+PKG_CHECK_MODULES to find "lzo".
 
-- The patch title should be "flatbuffers: new package".
+>>>
+>>> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+>>
+>> Acked-by: Samuel Martin <s.martin49@gmail.com>
+>
+>  Nacked by me, we need a more fundamental fix.
+>
+>
+>>
+>>> ---
+>>>
+>>> I suspect this might not be the best solution for this problem, but it
+>>> is a good starting point to discuss what might be and that's why I
+>>> submitted this patch anyway.
+>>
+>> Indeed the infra could certainly create the symlink $(HOST_DIR)/lib64
+>> -> lib (or  $(HOST_DIR)/lib32 -> lib).
+>
+>  That could be a solution, but I don't like it very much... OTOH we do this for
+> staging/target already so why not for host.
+>
 
-- Please add yourself to the DEVELOPERS file for this package, to indicate that
-you're willing to fix things when they break.
+I have no opinion on the matter, so I am happy to modify the patch to
+do whatever you think is best.
 
-- Please use utils/check-package to check the coding style. Indentation in
-Config.in is not OK.
-
-- Wrap FLATBUFFERS_CONF_OPTS, like:
-
-FLATBUFFERS_CONF_OPTS += \
-	-DCMAKE_CXX_FLAGS="-std=c++11" \
-	-DFLATBUFFERS_BUILD_SHAREDLIB=TRUE \
-	-DFLATBUFFERS_BUILD_TESTS=FALSE
-
-(indent with 1 tab).
-
-- You pass -DFLATBUFFERS_BUILD_SHAREDLIB=TRUE, so either it doesn't support
-BR2_STATIC_LIBS, or you should supply the proper option based on
-BR2_STATIC_LIBS. See e.g. rabbitmq-c.
-
-
- Could you look into those comments, and send an updated version of your
-contribution, using git send-email ?
-
- Thanks!
- Regards,
- Arnout
-
-
-[Thomas, thank you for this template text :-) ]
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thanks,
+Andrey Smirnov
