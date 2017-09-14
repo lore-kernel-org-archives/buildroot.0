@@ -1,80 +1,52 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 13 Sep 2017 16:18:59 +0200
-Subject: [Buildroot] [PATCH] python-aiocoap: new package
-Message-ID: <20170913141859.16616-1-yegorslists@googlemail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 14 Sep 2017 07:39:00 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] package/freescale-imx: add support
+ for i.MX6UL
+In-Reply-To: <1504789206-23147-1-git-send-email-julien.boibessot@free.fr>
+References: <1504789206-23147-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <1505367540.9315.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Thu, 2017-09-07 at 15:00 +0200, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> 
+> Mostly to compile imx-lib (providing libpxp) on i.MX6UL (which have a PXP 
+> hardware unit) and to prevent compilation of imx-lib's modules not supported
+> on i.MX6UL.
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+> Changes v1 -> v2:
+>   - add more commit comments (as suggested by Baruch)
+> 
+>  package/freescale-imx/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index 656b44b..fa3f9a0 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -31,6 +31,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+>  	bool "imx6q"
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+> +	bool "imx6ul"
+> +
+>  endchoice
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+> @@ -42,6 +45,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+>  	default "IMX51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+>  	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+>  	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+> +	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+>  	bool
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                          |  1 +
- package/python-aiocoap/Config.in           |  7 +++++++
- package/python-aiocoap/python-aiocoap.hash |  4 ++++
- package/python-aiocoap/python-aiocoap.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-aiocoap/Config.in
- create mode 100644 package/python-aiocoap/python-aiocoap.hash
- create mode 100644 package/python-aiocoap/python-aiocoap.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 48d1381921..5797018a52 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -691,6 +691,7 @@ endif
- 	source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
-+	source "package/python-aiocoap/Config.in"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
- 	source "package/python-arrow/Config.in"
-diff --git a/package/python-aiocoap/Config.in b/package/python-aiocoap/Config.in
-new file mode 100644
-index 0000000000..cf5ca4e844
---- /dev/null
-+++ b/package/python-aiocoap/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_AIOCOAP
-+	bool "python-aiocoap"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Python CoAP library.
-+
-+	  https://github.com/chrysn/aiocoap
-diff --git a/package/python-aiocoap/python-aiocoap.hash b/package/python-aiocoap/python-aiocoap.hash
-new file mode 100644
-index 0000000000..6df482aa68
---- /dev/null
-+++ b/package/python-aiocoap/python-aiocoap.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/aiocoap/json, sha256 locally computed
-+md5	f5fed00767b4197f2fbaa0ff95cbbf78  aiocoap-0.3.tar.gz
-+sha256	402d4151db6d8d0b1d66af5b6e10e0de1521decbf12140637e5b8d2aa9c5aef6  aiocoap-0.3.tar.gz
-+sha256  2bb211d412a6bfa4b2a9cf01123c7fe90e5e6185938896e23ab07b84f8494180  LICENSE
-diff --git a/package/python-aiocoap/python-aiocoap.mk b/package/python-aiocoap/python-aiocoap.mk
-new file mode 100644
-index 0000000000..a2db70b803
---- /dev/null
-+++ b/package/python-aiocoap/python-aiocoap.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aiocoap
-+#
-+################################################################################
-+
-+PYTHON_AIOCOAP_VERSION = 0.3
-+PYTHON_AIOCOAP_SOURCE = aiocoap-$(PYTHON_AIOCOAP_VERSION).tar.gz
-+PYTHON_AIOCOAP_SITE = https://pypi.python.org/packages/9c/f6/d839e4b14258d76e74a39810829c13f8dd31de2bfe0915579b2a609d1bbe
-+PYTHON_AIOCOAP_SETUP_TYPE = setuptools
-+PYTHON_AIOCOAP_LICENSE = MIT
-+PYTHON_AIOCOAP_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.11.0
+Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
