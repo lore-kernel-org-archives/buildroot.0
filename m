@@ -1,47 +1,47 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Thu, 14 Sep 2017 18:11:14 +0300
-Subject: [Buildroot] [PATCH] hostapd: fix upstream URL
-Message-ID: <20170914151114.2054-1-alexander.i.mukhin@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 Sep 2017 18:21:51 +0300
+Subject: [Buildroot] [PATCH] CHANGES: update after netsnmp changes
+In-Reply-To: <20170914125316.1872-1-julien.floret@6wind.com>
+References: <20170914125316.1872-1-julien.floret@6wind.com>
+Message-ID: <20170914152151.qfxut4v3w4q7mwvt@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hostapd project URL has been changed to w1.fi/hostapd.
-The old domain epitest.fi has expired.
+Hi Julien,
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
----
- package/hostapd/Config.in  | 2 +-
- package/hostapd/hostapd.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Sep 14, 2017 at 02:53:16PM +0200, Julien Floret wrote:
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+>  CHANGES | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/CHANGES b/CHANGES
+> index c042bf5e3e6e..89d9e2a5fa95 100644
+> --- a/CHANGES
+> +++ b/CHANGES
+> @@ -1,3 +1,9 @@
+> +2017.11-rc1, To be released
+> +
+> +	netsnmp: all MIB files are now installed, making the target filesystem a
+> +	bit bigger than before. To remove unneeded MIBS, you should use a
+> +	post-build script.
+> +
+>  2017.08, Released September 1st, 2017
+>  
+>  	Minor fixes.
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index cec2a123e..40c7015e7 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_HOSTAPD
- 	  IEEE 802.1X/WPA/WPA2/EAP authenticators, RADIUS client,
- 	  EAP server and RADIUS authentication server.
- 
--	  http://hostap.epitest.fi/
-+	  http://w1.fi/hostapd/
- 
- if BR2_PACKAGE_HOSTAPD
- 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 40e28ee67..7edcac89d 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HOSTAPD_VERSION = 2.6
--HOSTAPD_SITE = http://hostap.epitest.fi/releases
-+HOSTAPD_SITE = http://w1.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = host-pkgconf libnl
+This sort of documentation should go to the "Migrating from older Buildroot 
+versions" section in the manual at docs/manual/migrating.txt.
+
+Usually only the maintainers update the CHANGES file.
+
+baruch
+
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
