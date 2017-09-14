@@ -1,120 +1,53 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 14 Sep 2017 05:03:45 +0200
-Subject: [Buildroot] [PATCH v4] systemd: allow to build with uClibc
-	toolchains
-Message-ID: <20170914030345.GA23395@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 Sep 2017 06:29:58 +0300
+Subject: [Buildroot] [RFC v0] libvirt: new package
+In-Reply-To: <20170914022425.3009-1-casantos@datacom.ind.br>
+References: <20170914022425.3009-1-casantos@datacom.ind.br>
+Message-ID: <20170914032958.kvzbnq4t3knwfcc4@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to disable any systemd parts using either IDN or NSS.
-IDN is only disabled in C library function call to getnameinfo(),
-it does not effect libidn/libidn2 usage in systemd.
+Hi Carlos,
 
-Tested with qemu-system-arm.
+On Wed, Sep 13, 2017 at 11:24:25PM -0300, Carlos Santos wrote:
+> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+> new file mode 100644
+> index 0000000000..c8792eaa14
+> --- /dev/null
+> +++ b/package/libvirt/Config.in
+> @@ -0,0 +1,22 @@
+> +config BR2_PACKAGE_LIBVIRT
+> +	bool "libvirt"
+> +	depends on !BR2_STATIC_LIBS # libnl, lvm2
+> +	depends on BR2_USE_MMU # needs fork()
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, libtirpc
+> +	select BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_LIBTIRPC
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LVM2
+> +	select BR2_PACKAGE_YAJL
+> +	help
+> +	  Libvirt is collection of software that provides a convenient
+> +	  way to manage virtual machines and other virtualization
+> +	  functionality, such as storage and network interface
+> +	  management. These software pieces include an API library, a
+> +	  daemon (libvirtd), and a command line utility (virsh).
+> +
+> +	  http://libvirt.org/
+> +
+> +comment "libvirt needs a glibc or uClibc toolchain w/ threads, dynamic library"
+> +        depends on BR2_USE_MMU
+> +        depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----                                                                                                                                                                                                                 
-v1 -> v2:                                                                                                                                                                                                           
-  - added Upstream commit URL suggested by Thomas Petazzoni                                                                                                                                                         
-  - rework enable/disable options suggested by Thomas Petazzoni                                                                                                                                                     
-  - extend commit message a little bit                                                                                                                                                                              
-v2 -> v3:                                                                                                                                                                                                           
-  - sync to latest master changes                                                                                                                                                                                   
-  - remove patches included upstream                                                                                                                                                                                
-  - disable features not usable with uClibc-ng lacking nss.h
-v3 -> v4:
-  - add comment about missing nss suggested by Arnout
-  - add extra parenthesis suggested by Arnout
----
- package/systemd/Config.in  |  4 ++++
- package/systemd/systemd.mk | 11 +++++++++++
- system/Config.in           |  6 +++---
- 3 files changed, 18 insertions(+), 3 deletions(-)
+The musl incompatibility is because of lvm2, right? This part is missing from 
+the dependencies listed above.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 7dfd7ca..6aeade2 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -180,6 +180,7 @@ config BR2_PACKAGE_SYSTEMD_LOGIND
- 
- config BR2_PACKAGE_SYSTEMD_MACHINED
- 	bool "enable machine daemon"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss
- 	help
- 	  systemd-machined is a system service that keeps track of
- 	  virtual machines and containers, and processes belonging to
-@@ -189,6 +190,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- 
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss
- 	default y
- 	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
-@@ -244,6 +246,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- 
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss
- 	default y
- 	help
- 	  systemd-resolved is a system service that provides network
-@@ -277,6 +280,7 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 
- config BR2_PACKAGE_SYSTEMD_SYSUSERS
- 	bool "enable sysusers support"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss
- 	help
- 	  systemd-sysusers creates system users and groups, based on
- 	  the file format and location specified in sysusers.d(5).
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 9f286fd..55b8f23 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -40,6 +40,17 @@ SYSTEMD_CONF_OPTS += \
- 	--with-default-dnssec=no \
- 	--without-python
- 
-+# disable unsupported features for non-glibc toolchains
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+SYSTEMD_CONF_OPTS += \
-+	--enable-idn \
-+	--enable-nss-systemd
-+else
-+SYSTEMD_CONF_OPTS += \
-+	--disable-idn \
-+	--disable-nss-systemd
-+endif
-+
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
- 
- # Override paths to a few utilities needed at runtime, to
-diff --git a/system/Config.in b/system/Config.in
-index b971492..d68d5ce 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -127,7 +127,7 @@ config BR2_INIT_SYSV
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SSP
-@@ -137,8 +137,8 @@ config BR2_INIT_SYSTEMD
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment "systemd needs a glibc toolchain, headers >= 3.10"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-+comment "systemd needs a glibc or uclibc toolchain, headers >= 3.10"
-+	depends on !((BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) \
- 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
