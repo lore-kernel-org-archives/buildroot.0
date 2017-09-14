@@ -1,122 +1,84 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 14 Sep 2017 12:51:04 +0200
-Subject: [Buildroot] [PATCH v2 07/11] package/flex: disable reallocarray
-In-Reply-To: <20170914112527.GC18779@momiji>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
- <20170902205423.21288-8-romain.naour@gmail.com>
- <20170902231252.44d10e64@windsurf.lan>
- <0425231e-af49-5b27-f5c1-bc6c91308839@gmail.com>
- <20170903091432.659bd28f@windsurf.lan>
- <8f568fb6-9ef3-39fc-ba2f-714f60dcd7be@gmail.com>
- <1505328815.3138.1.camel@embedded.rocks>
- <26528000-6f59-01d7-72bf-c0d1ed2a530a@gmail.com>
- <20170914112527.GC18779@momiji>
-Message-ID: <1505386264.12802.8.camel@embedded.rocks>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Thu, 14 Sep 2017 14:08:11 +0300
+Subject: [Buildroot] [PATCH] hostapd: add support for Realtek driver
+In-Reply-To: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
+References: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
+Message-ID: <20170914110811.1670-1-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2017-09-14 at 11:25 +0300, Adrian Perez de Castro wrote:
-> Hi everybody,
-> 
-> On Wed, 13 Sep 2017 21:54:31 +0200, Romain Naour <romain.naour@gmail.com> wrote:
-> > Hi J?rg,
-> > 
-> > Le 13/09/2017 ? 20:53, J?rg Krause a ?crit :
-> > > Hi,
-> > > 
-> > > On Thu, 2017-09-07 at 23:32 +0200, Romain Naour wrote:
-> > > > Hi Thomas,
-> > > > 
-> > > > Le 03/09/2017 ? 09:14, Thomas Petazzoni a ?crit :
-> > > > > Hello,
-> > > > > 
-> > > > > On Sun, 3 Sep 2017 00:23:40 +0200, Romain Naour wrote:
-> > > > > 
-> > > > > > > This commit log is a bit mysterious: if reallocarray() has been
-> > > > > > > introduced in glibc 2.26, why isn't flex able to use it ?  
-> > > > > > 
-> > > > > > It's a nasty issue, when reallocarray() is available for the target, flex will
-> > > > > > build a small tool called stage1flex for the host (using _FOR_BUILD) but with
-> > > > > > the config.h generated for the target.
-> > > > > > 
-> > > > > > My host doesn't have glibc 2.26, so reallocarray() is never defined while
-> > > > > > building stage1flex:
-> > > > > > 
-> > > > > > misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
-> > > > > > [-Wimplicit-function-declaration]
-> > > > > >   mem = reallocarray(NULL, (size_t) size, element_size);
-> > > > > >         ^~~~~~~~~~~~
-> > > > > > misc.c:147:6: warning : assignment makes pointer from integer without a cast
-> > > > > > [-Wint-conversion]
-> > > > > >   mem = reallocarray(NULL, (size_t) size, element_size);
-> > > > > >       ^
-> > > > > > 
-> > > > > > I don't know how to fix this, except by disabling reallocarray() for the target...
-> > > > > 
-> > > > > This should all be explained in the commit log, and a short comment in
-> > > > > flex.mk should be added as well.
-> > > > 
-> > > > Actually I looked further into this issue after sending the patch.
-> > > > 
-> > > > > 
-> > > > > Generally speaking, the commit logs in this series are too terse: they
-> > > > > just say "fix build with glibc 2.26" with no explanations, or they
-> > > > > backport some seemingly random glibc patches, without explaining why
-> > > > > they are needed. Could you improve this a bit ?
-> > > > 
-> > > > Well, the glibc bump is more complicated than expected and I need to spent more
-> > > > time on it to understand what's going on...
-> > > > 
-> > > > At least we have a link to the upstream reference as a starting point.
-> > > > Ok, this patch is really too terse, I added it just before sending the series :-/
-> > > > 
-> > > > I'll try to continue this week-end.
-> > > 
-> > > Fixed upstream:
-> > > https://github.com/westes/flex/commit/24fd0551333e7eded87b64dd36062da3d
-> > > f2f6380
-> > > 
-> > > Meanwhile, another patch was provided:
-> > > http://patchwork.ozlabs.org/patch/813474/
-> > 
-> > Tanks for the link but this is a different issue.
-> > 
-> > The issue reported here is when the toolchain provide glibc 2.26 and the host
-> > use an older glibc version which doesn't provide reallocarray().
-> > 
-> > The issue reported by Adrian is when glibc 2.26 is installed on the host.
-> 
-> This is correct, I've hit the host-has-2.26 issue.
-> 
-> > Sadly, the patch provided by Adrian doesn't fix this issue.
-> 
-> That's right as well. I remembered seeing Romain's patch flying by the mailing
-> list, so I took a look at it and it seemed to me like it would not fix my
-> build issue for ?host-flex?.
-> 
-> I think we need *both* patches:
-> 
->  - Romain's fixes building ?flex? when Buildroot has glibc 2.26 and the host
->    has any libc which does not have reallocarray().
-> 
->  - Mine fixes building ?host-flex? when the host has glibc 2.26, regardless
->    if the libc being built by Buildroot.
-> 
-> Is there anything preventing both from being merged? Would it be useful if
-> we tried to merge both patches?
+Since kernel drivers for Realtek wireless chips use non-standard
+interfaces, upstream hostapd does not support them. One have to apply
+an external patch for hostapd to work with these chips. See:
+https://github.com/pritambaral/hostapd-rtl871xdrv
 
-The configure check for reallocarray includes the Buildroot
-output/host/include directory, so it finds reallocarray if a Buildroot
-toolchain with glibc 2.26 is used, despite of the host toolchains glibc
-version:
+A configuration option is added to enable support for Realtek chips,
+and it's turned off by default.
 
-"""
-configure:20837: checking for reallocarray
-configure:20837: /usr/bin/gcc -o conftest -O2 -I$BUILDROOT/output/host/include -I$BUILDROOT/output/host/include -L$BUILDROOT/output/host/lib -Wl,-rpath,$BUILDROOT/output/host/lib conftest.c -lm  >&5
-"""
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ DEVELOPERS                   | 3 +++
+ package/hostapd/Config.in    | 5 +++++
+ package/hostapd/hostapd.hash | 1 +
+ package/hostapd/hostapd.mk   | 5 +++++
+ 4 files changed, 14 insertions(+)
 
-Best regards,
-J?rg Krause
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 21eafc9d2..57fc74c25 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -68,6 +68,9 @@ F:	package/putty/
+ N:	Alexander Lukichev <alexander.lukichev@espotel.com>
+ F:	package/openpgm/
+ 
++N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
++F:	package/hostapd/
++
+ N:	Alexander Varnin <fenixk19@mail.ru>
+ F:	package/liblog4c-localtime/
+ 
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 62fbb66d6..cec2a123e 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -14,6 +14,11 @@ config BR2_PACKAGE_HOSTAPD
+ 
+ if BR2_PACKAGE_HOSTAPD
+ 
++config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
++	bool "Enable rtl871xdrv driver"
++	help
++	  Enable support for Realtek wireless chips.
++
+ config BR2_PACKAGE_HOSTAPD_ACS
+ 	bool "Enable ACS"
+ 	default y
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index fb891476b..83bfd0e7e 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  01526b90c1d23bec4b0f052039cc4456c2fd19347b4d830d1d58a0a6aea7117d  hostapd-2.6.tar.gz
++sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index dc28d1323..40e28ee67 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -44,6 +44,11 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
++HOSTAPD_PATCH = https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
++HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
++endif
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
+ HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
+ endif
+-- 
+2.11.0
