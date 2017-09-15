@@ -1,56 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 15 Sep 2017 15:39:59 +0300
-Subject: [Buildroot] [PATCH v3] zstd: bump to version 1.3.1
-Message-ID: <7c859af274e2f31bbcc7db64b9096d2d7e0e7733.1505479199.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 Sep 2017 16:24:37 +0200
+Subject: [Buildroot] [PATCH] chrony: add optional seccomp support
+Message-ID: <20170915142437.10131-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In this release zstd added the GPLv2 license and removed the PATENTS
-clause (upstream commit 4f73b3b55d83b).
+seccomp support has been available since chrony-2.2
 
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v3: Remove PATENTS from LICENSE_FILES as well
-v2: Remove the PATENTS hash, update commit log
----
- package/zstd/zstd.hash | 4 ++--
- package/zstd/zstd.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/chrony/chrony.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 60641aa8ab6c..7fa5f7bf6ada 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,6 +1,6 @@
- # Locally computed
--sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
-+sha256 312fb9dc75668addbc9c8f33c7fa198b0fc965c576386b8451397e06256eadc6 zstd-v1.3.1.tar.gz
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 3b10c8cbff..e78d4b4857 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -13,7 +13,6 @@ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
+-	--without-seccomp \
+ 	--without-tomcrypt
  
- # License files (locally computed as well)
- sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
--sha256 3a508245dd3c486bb9d78a8269091322359443ea54612c3648327a0b3512f23f PATENTS
-+sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505 COPYING
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index cad80684f307..475079dbfe2b 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+@@ -28,6 +27,13 @@ else
+ CHRONY_CONF_OPTS += --without-nss
+ endif
  
--ZSTD_VERSION = v1.3.0
-+ZSTD_VERSION = v1.3.1
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
--ZSTD_LICENSE = BSD-3-Clause
--ZSTD_LICENSE_FILES = LICENSE PATENTS
-+ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
-+ZSTD_LICENSE_FILES = LICENSE COPYING
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- ZSTD_OPTS += HAVE_THREAD=1
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++CHRONY_CONF_OPTS += --enable-scfilter
++CHRONY_DEPENDENCIES += libseccomp
++else
++CHRONY_CONF_OPTS += --without-seccomp
++endif
++
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ CHRONY_DEPENDENCIES += readline
+ else
 -- 
-2.14.1
+2.11.0
