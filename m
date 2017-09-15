@@ -1,46 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Sep 2017 16:27:49 +0200
-Subject: [Buildroot] [PATCH] chrony: bump version to 3.2
-Message-ID: <20170915142749.11591-1-peter@korsgaard.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 15 Sep 2017 18:32:27 +0200
+Subject: [Buildroot] [PATCH] lttng-tools: needs glibc
+In-Reply-To: <80f0f99699bcdacbed2aa551ef3051ab5dd45280.1505468019.git.baruch@tkos.co.il>
+References: <80f0f99699bcdacbed2aa551ef3051ab5dd45280.1505468019.git.baruch@tkos.co.il>
+Message-ID: <3D6C8D45-596D-409C-94EB-9800F9C3DD9A@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add a hash for the license file while we're at it.
+Hi,
+why we can't disable the dlmopen call in the test? Didn't I suggested a patch or was it just a discussion on irc?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/chrony/chrony.hash | 8 +++++---
- package/chrony/chrony.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+best regards
+ Waldemar 
 
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 8501808837..41590356b0 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,3 +1,5 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2017/01/msg00003.html
--md5 f8d2ee78c55548bfbe95582c6a855cee  chrony-3.1.tar.gz
--sha1 564dd010a10fbdcc7c177337115ccffa43fe0f95  chrony-3.1.tar.gz
-+# From https://www.mail-archive.com/chrony-dev at chrony.tuxfamily.org/msg01675.html
-+md5 f4c4eb0dc92f35ee4bb7d3dcd8029ecb  chrony-3.2.tar.gz
-+sha1 64db6c31e013222cc0a2b66322192b4cedf6e048  chrony-3.2.tar.gz
-+# Locally calculated
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 3b10c8cbff..3aed8226f6 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHRONY_VERSION = 3.1
-+CHRONY_VERSION = 3.2
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
--- 
-2.11.0
+> Am 15.09.2017 um 11:33 schrieb Baruch Siach <baruch@tkos.co.il>:
+> 
+> This commit partially reverts commit a6bb295642919 (lttng-tools: update
+> to 2.9.5) that enabled lttng-tools for uClibc and musl. Upstream code
+> does not detect dlmopen() specifically. configure only checks which
+> library defines dlopen(), and fails the configuration when none is
+> found. The code of the prog.c test still relies on dlmopen() GNU
+> extension that uClibc and musl do not implement currently.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/add/add97b4b3f45841249f239367452205c38d4e4df/
+> http://autobuild.buildroot.net/results/382/3825c88bb8a23708e4c2fed99f2417555078c65a/
+> http://autobuild.buildroot.net/results/4ae/4aef36977f039a1533b409a7c172f0ceaa2c6088/
+> 
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> package/lttng-tools/Config.in | 7 +++++--
+> 1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+> index 9c86cc264643..b84f201c2a22 100644
+> --- a/package/lttng-tools/Config.in
+> +++ b/package/lttng-tools/Config.in
+> @@ -4,6 +4,8 @@ config BR2_PACKAGE_LTTNG_TOOLS
+>    depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>    depends on BR2_TOOLCHAIN_HAS_THREADS
+>    depends on !BR2_STATIC_LIBS # uses dlfcn
+> +    # uclibc/musl don't implement dlmopen()/LM_ID_BASE
+> +    depends on BR2_TOOLCHAIN_USES_GLIBC
+>    select BR2_PACKAGE_LIBURCU
+>    select BR2_PACKAGE_LIBXML2
+>    select BR2_PACKAGE_POPT
+> @@ -27,6 +29,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+> 
+>      http://lttng.org
+> 
+> -comment "lttng-tools needs a toolchain w/ threads, dynamic library"
+> +comment "lttng-tools needs a glibc toolchain w/ threads, dynamic library"
+>    depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+> -    depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +    depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> +        !BR2_TOOLCHAIN_USES_GLIBC
+> -- 
+> 2.14.1
+> 
