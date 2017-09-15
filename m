@@ -1,40 +1,86 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 15 Sep 2017 07:15:58 +0300
-Subject: [Buildroot] [PATCH] iproute2: bump to version 4.13.0
-Message-ID: <e5beb4c096495ed937f68a64872bc1e59ed9a7e7.1505448958.git.baruch@tkos.co.il>
+Date: Fri, 15 Sep 2017 07:40:20 +0300
+Subject: [Buildroot] [PATCH] libidn: add fix for CVE-2017-14062
+Message-ID: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add upstream patch fixing CVE-2017-14062:
+
+Integer overflow in the decode_digit function in puny_decode.c in
+Libidn2 before 2.0.4 allows remote attackers to cause a denial of
+service or possibly have unspecified other impact.
+
+This issue also affects libidn.
+
+Unfortunately, the patch also triggers reconf of the documentation
+subdirectory, since lib/punycode.c is listed in GDOC_SRC that is defined
+in doc/Makefile.am. Add autoreconf to handle that.
+
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ycode.c-decode_digit-Fix-integer-overflow.patch | 36 ++++++++++++++++++++++
+ package/libidn/libidn.mk                           |  2 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index ace94b1d7521..795403991691 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	2e0a4c4262d9f6c169885a6e16c4c5c5f1ef6fd57b6a0e7b41f42be5bb6ebd7d	iproute2-4.12.0.tar.xz
-+sha256	9cfb81edf8c8509e03daa77cf62aead01c4a827132f6c506578f94cc19415c50	iproute2-4.13.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 1dc7abe3d64a..d002d4df7afb 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch b/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
+new file mode 100644
+index 000000000000..8a8ca47a66bb
+--- /dev/null
++++ b/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
+@@ -0,0 +1,36 @@
++From e9e81b8063b095b02cf104bb992fa9bf9515b9d8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
++Date: Fri, 1 Sep 2017 10:04:48 +0200
++Subject: [PATCH] lib/punycode.c (decode_digit): Fix integer overflow
++
++This fix is a backport from libidn2 and addresses
++CVE-2017-14062.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit e9e81b8063b095
++
++ lib/punycode.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/lib/punycode.c b/lib/punycode.c
++index 86819a7deb85..49250a13e2cc 100644
++--- a/lib/punycode.c
+++++ b/lib/punycode.c
++@@ -88,10 +88,10 @@ enum
++ /* point (for use in representing integers) in the range 0 to */
++ /* base-1, or base if cp does not represent a value.          */
++ 
++-static punycode_uint
++-decode_digit (punycode_uint cp)
+++static unsigned
+++decode_digit (int cp)
++ {
++-  return cp - 48 < 10 ? cp - 22 : cp - 65 < 26 ? cp - 65 :
+++  return (unsigned) cp - 48 < 10 ? cp - 22 : cp - 65 < 26 ? cp - 65 :
++     cp - 97 < 26 ? cp - 97 : base;
++ }
++ 
++-- 
++2.14.1
++
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index b96e74262133..420b8dfb911a 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -12,6 +12,8 @@ LIBIDN_CONF_OPTS = --disable-java --enable-csharp=no
+ LIBIDN_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBIDN_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
+ LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
++# lib/punycode.c patch triggers reconf in doc/
++LIBIDN_AUTORECONF = YES
  
--IPROUTE2_VERSION = 4.12.0
-+IPROUTE2_VERSION = 4.13.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ define LIBIDN_REMOVE_BINARY
+ 	rm -f $(TARGET_DIR)/usr/bin/idn
 -- 
 2.14.1
