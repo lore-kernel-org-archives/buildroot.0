@@ -1,43 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 15 Sep 2017 07:49:20 +0300
-Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.21p2
-Message-ID: <8fcce9df65ba8406cddd37212379aee8923790ea.1505450960.git.baruch@tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Sep 2017 05:45:17 +0000
+Subject: [Buildroot] [Bug 10316] Building grub fails on debian stretch
+In-Reply-To: <bug-10316-163@https.bugs.busybox.net/>
+References: <bug-10316-163@https.bugs.busybox.net/>
+Message-ID: <bug-10316-163-Dg0UXI1HgH@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch SITE to https.
+https://bugs.busybox.net/show_bug.cgi?id=10316
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/sudo/sudo.hash | 2 +-
- package/sudo/sudo.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+--- Comment #2 from dde at innovaphone.com ---
+I never played with grub2.
+We build a buildroot ova image with qemu from a binary image where I use an
+automated process which builds the partition table along with stage1/1.5 of
+grub.
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index ea0764c15716..80448ff7928b 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,2 +1,2 @@
- # From: http://www.sudo.ws/download.html
--sha256 bd42ae1059e935f795c69ea97b3de09fe9410a58a74b5d5e6836eb5067a445d9  sudo-1.8.20p2.tar.gz
-+sha256 74c5746cd33a814e2431c39faf0d76f7f8a697379bd073862e3b156cf0d76368  sudo-1.8.21p2.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 9cca544b1b30..77a95bd65e8c 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SUDO_VERSION = 1.8.20p2
--SUDO_SITE = http://www.sudo.ws/sudo/dist
-+SUDO_VERSION = 1.8.21p2
-+SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
- SUDO_LICENSE_FILES = doc/LICENSE
- # This is to avoid sudo's make install from chown()ing files which fails
+In the end, if you're going to remove grub, I can still either use already
+built grub files and copy them manually or I need to figure out how to move to
+grub2.
+
+Greetings,
+Daniel
+
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
