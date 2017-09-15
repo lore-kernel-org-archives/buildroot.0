@@ -1,47 +1,52 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 15 Sep 2017 12:17:11 +0000
-Subject: [Buildroot] [PATCH] python-numpy: Bump to the most recent
-	release 1.13.1
-In-Reply-To: <7a15e121-6f8e-9614-15cb-e02b6835154b@mind.be>
-References: <20170915104606.25218-1-abrodkin@synopsys.com>
- <7a15e121-6f8e-9614-15cb-e02b6835154b@mind.be>
-Message-ID: <1505477830.7059.6.camel@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 15 Sep 2017 15:30:32 +0300
+Subject: [Buildroot] [PATCH] zstd: bump to version 1.3.1
+Message-ID: <c9055d8f8dcee6894bceccf0350be1b2c1f4461c.1505478632.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+In this release zstd added the GPLv2 license.
 
-On Fri, 2017-09-15 at 14:03 +0200, Arnout Vandecappelle wrote:
-> 
-> On 15-09-17 12:46, Alexey Brodkin wrote:
-> > 
-> > Note previously used location for releases on SourceForge is no longer
-> > supported (latest tarball v1.11.2 available there is dated 2016-10-04)
-> > so as other distros
-> > (see, Fedora https://urldefense.proofpoint.com/v2/url?u=http-3A__pkgs.fedoraproject.org_cgit_rpms_numpy.git_tree_numpy.spec-3Fid-3D7013948f8ba073c
-> > 69a91a545f0a0898cb62652fa-
-> > 23n22&d=DwICaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=5agzHjEUI_DiafwDPRl75hnHUqo6NOJNFQ0H45brjh8&s=f4SWAhOq4UUR
-> > J1E3lO0BHkEIYXVne9hbwe4qN7zO3G0&e= )
-> > we get release tarball directly from GitHub.
-> > 
-> > Also note 0001-no-fenv-on-uclibc.patch was rebased on v1.13.1 and
-> > 0002-Don-t-blindly-enable-frexpl-and-ldexpl-for-uClibc.patch was
-> > removed completely as corresponding code got nuked with
-> > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_numpy_numpy_pull_4852&d=DwICaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO
-> > 7breS55ytWkhpk5R81I&m=5agzHjEUI_DiafwDPRl75hnHUqo6NOJNFQ0H45brjh8&s=sTHA0phn8s5wX_g3lQFidSkNN_7W9BuK6gmDncE0_y0&e= . I'm not really sure
-> > if something similar to Arnout's patch is still required so it would be good
-> > if somebody more knowledgeable checks that.
-> 
-> ?It indeed looks like that pull request now always does the right thing for
-> frexpl and ldexpl.
-> 
-> ?Have you tested a build with uClibc on ARM and/or MIPS? According to my commit
-> message, it would fail there if the problem still exists.
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/zstd/zstd.hash | 3 ++-
+ package/zstd/zstd.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Indeed I build-tested it with uclibc toolchain for ARM!
-So then we should be OK.
-
--Alexey
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 60641aa8ab6c..820355416577 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,6 +1,7 @@
+ # Locally computed
+-sha256 0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348 zstd-v1.3.0.tar.gz
++sha256 312fb9dc75668addbc9c8f33c7fa198b0fc965c576386b8451397e06256eadc6 zstd-v1.3.1.tar.gz
+ 
+ # License files (locally computed as well)
+ sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+ sha256 3a508245dd3c486bb9d78a8269091322359443ea54612c3648327a0b3512f23f PATENTS
++sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505 COPYING
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index cad80684f307..8ef6774ed8c0 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-ZSTD_VERSION = v1.3.0
++ZSTD_VERSION = v1.3.1
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+-ZSTD_LICENSE = BSD-3-Clause
+-ZSTD_LICENSE_FILES = LICENSE PATENTS
++ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
++ZSTD_LICENSE_FILES = LICENSE COPYING PATENTS
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ZSTD_OPTS += HAVE_THREAD=1
+-- 
+2.14.1
