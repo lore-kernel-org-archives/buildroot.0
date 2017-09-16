@@ -1,39 +1,46 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Sep 2017 10:33:25 +0200
-Subject: [Buildroot] [PATCH] luafilesystem: bump to version 1.7.0
-Message-ID: <20170916083325.30360-1-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 16 Sep 2017 10:41:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: security bump version
+	to 5.47
+Message-ID: <20170916084117.11155-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46 and
+earlier are vulnerable to an information disclosure vulnerability which
+allows remote attackers to obtain sensitive information from the bluetoothd
+process memory.  This vulnerability lies in the processing of SDP search
+attribute requests.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/luafilesystem/luafilesystem.hash | 2 +-
- package/luafilesystem/luafilesystem.mk   | 2 +-
+ package/bluez5_utils/bluez5_utils.hash | 2 +-
+ package/bluez5_utils/bluez5_utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luafilesystem/luafilesystem.hash b/package/luafilesystem/luafilesystem.hash
-index e91f9d668..bd4a446cf 100644
---- a/package/luafilesystem/luafilesystem.hash
-+++ b/package/luafilesystem/luafilesystem.hash
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index bc20d220b8..36791c9e6f 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a  luafilesystem-1.6.3-1.src.rock
-+sha256 65e6d437e577a1d6cd509b6cd224d2cb9501d58d32a72cafbd4fd3f911681576  luafilesystem-1.7.0-2.src.rock
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index a54ae236d..bde04267c 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256 ddab3d3837c1afb8ae228a94ba17709a4650bd4db24211b6771ab735c8908e28  bluez-5.46.tar.xz
++sha256 cf75bf7cd5d564f21cc4a2bd01d5c39ce425397335fd47d9bbe43af0a58342c8  bluez-5.47.tar.xz
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 13658cd050..1bc69691e4 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAFILESYSTEM_VERSION = 1.6.3-1
-+LUAFILESYSTEM_VERSION = 1.7.0-2
- LUAFILESYSTEM_LICENSE = MIT
- LUAFILESYSTEM_LICENSE_FILES = luafilesystem/LICENSE
- LUAFILESYSTEM_SUBDIR = luafilesystem
+-BLUEZ5_UTILS_VERSION = 5.46
++BLUEZ5_UTILS_VERSION = 5.47
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
 2.11.0
