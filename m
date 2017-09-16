@@ -1,32 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Sep 2017 10:11:13 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.13.2
-In-Reply-To: <20170916081113.25471-1-bernd.kuhls@t-online.de>
-References: <20170916081113.25471-1-bernd.kuhls@t-online.de>
-Message-ID: <20170916081113.25471-2-bernd.kuhls@t-online.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 16 Sep 2017 10:33:25 +0200
+Subject: [Buildroot] [PATCH] luafilesystem: bump to version 1.7.0
+Message-ID: <20170916083325.30360-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luafilesystem/luafilesystem.hash | 2 +-
+ package/luafilesystem/luafilesystem.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 62a4f1e31a..b2b6a96350 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
+diff --git a/package/luafilesystem/luafilesystem.hash b/package/luafilesystem/luafilesystem.hash
+index e91f9d668..bd4a446cf 100644
+--- a/package/luafilesystem/luafilesystem.hash
++++ b/package/luafilesystem/luafilesystem.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a  luafilesystem-1.6.3-1.src.rock
++sha256 65e6d437e577a1d6cd509b6cd224d2cb9501d58d32a72cafbd4fd3f911681576  luafilesystem-1.7.0-2.src.rock
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index a54ae236d..bde04267c 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.13.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.13.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-LUAFILESYSTEM_VERSION = 1.6.3-1
++LUAFILESYSTEM_VERSION = 1.7.0-2
+ LUAFILESYSTEM_LICENSE = MIT
+ LUAFILESYSTEM_LICENSE_FILES = luafilesystem/LICENSE
+ LUAFILESYSTEM_SUBDIR = luafilesystem
 -- 
 2.11.0
