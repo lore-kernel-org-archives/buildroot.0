@@ -1,26 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Sep 2017 10:44:30 +0200
-Subject: [Buildroot] [PATCH] bluez5_utils: add upstream security fix
-	for	CVE-2017-1000250
-References: <20170913121955.21236-1-peter@korsgaard.com>
-Message-ID: <es4v8exukd.ln2@ID-313208.user.individual.net>
+Date: Sat, 16 Sep 2017 15:11:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openal: bump version to 1.18.1
+Message-ID: <20170916131137.26227-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 13 Sep 2017 14:19:55 +0200 schrieb Peter Korsgaard:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46
-> and earlier are vulnerable to an information disclosure vulnerability
-> which allows remote attackers to obtain sensitive information from the
-> bluetoothd process memory.  This vulnerability lies in the processing of
-> SDP search attribute requests.
-
-Hi,
-
-this patch was is included in upstream release 5.47 and can be marked as 
-superseded by this patch: http://patchwork.ozlabs.org/patch/814482/
-
-Regards, Bernd
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index cb2586aec5..aead6e15b8 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	4433b1391c61a7ca36d82c946c8f0ffe410569d6437e4ce72b3547aaf966ecde	openal-soft-1.18.0.tar.bz2
++sha256 2d51a6529526ef22484f51567e31a5c346a599767991a3dc9d4dcd9d9cec71dd  openal-soft-1.18.1.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index 207526a1ce..439f5f109d 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENAL_VERSION = 1.18.0
++OPENAL_VERSION = 1.18.1
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPL-2.0+
+-- 
+2.11.0
