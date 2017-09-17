@@ -1,104 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 11:36:48 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libyaml: bump version to 0.1.7
-Message-ID: <20170917093649.21801-1-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 11:40:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/phytool: bump version to 2
+Message-ID: <20170917094002.14379-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched _SITE to github.com because pyyaml.org is down, added
-_AUTORECONF = YES because the upstream tarball does not contain a
-configure script.
-
-Removed patch after upstream committed a similar patch:
-https://github.com/yaml/libyaml/commit/946596172d140497b560e016e581accb0a92cca4#diff-35a172a9ca8faa1683fc747ca94681b3
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libyaml/0001-fix-CVE-2014-9130.patch | 33 ----------------------------
- package/libyaml/Config.in                    |  2 +-
- package/libyaml/libyaml.hash                 |  2 +-
- package/libyaml/libyaml.mk                   |  6 ++---
- 4 files changed, 5 insertions(+), 38 deletions(-)
- delete mode 100644 package/libyaml/0001-fix-CVE-2014-9130.patch
+ package/phytool/phytool.hash | 6 +++---
+ package/phytool/phytool.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libyaml/0001-fix-CVE-2014-9130.patch b/package/libyaml/0001-fix-CVE-2014-9130.patch
-deleted file mode 100644
-index a267e4084c..0000000000
---- a/package/libyaml/0001-fix-CVE-2014-9130.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From e6aa721cc0e5a48f408c52355559fd36780ba32a Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Ingy=20d=C3=B6t=20Net?= <ingy@ingy.net>
--Date: Fri, 28 Nov 2014 09:21:49 -0800
--Subject: [PATCH] Fix for https://bitbucket.org/xi/libyaml/issue/10/
--
--https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
--
--Commenting out the assert makes the scanner do the right thing and
--results in just a simple parse failure.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- src/scanner.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/scanner.c b/src/scanner.c
--index 88d4fa5..c5f3d2f 100644
----- a/src/scanner.c
--+++ b/src/scanner.c
--@@ -1110,7 +1110,9 @@ yaml_parser_save_simple_key(yaml_parser_t *parser)
--      * line.  Therefore it is always allowed.  But we add a check anyway.
--      */
-- 
---    assert(parser->simple_key_allowed || !required);    /* Impossible. */
--+    /* XXX This caused:
--+     * https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
--+    assert(parser->simple_key_allowed || !required); */    /* Impossible. */
-- 
--     /*
--      * If the current position may start a simple key, save it.
---- 
--2.0.4
--
-diff --git a/package/libyaml/Config.in b/package/libyaml/Config.in
-index 00a48b2016..b1165b5f85 100644
---- a/package/libyaml/Config.in
-+++ b/package/libyaml/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBYAML
- 	help
- 	  LibYAML is a YAML 1.1 parser and emitter written in C.
- 
--	  http://pyyaml.org/wiki/LibYAML
-+	  https://github.com/yaml/libyaml
-diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
-index fd039fa6e4..4b998dae54 100644
---- a/package/libyaml/libyaml.hash
-+++ b/package/libyaml/libyaml.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	7da6971b4bd08a986dd2a61353bc422362bd0edcc67d7ebaac68c95f74182749	yaml-0.1.6.tar.gz
-+sha256 e1884d0fa1eec8cf869ac6bebbf25391e81956aa2970267f974a9fa5e0b968e2  libyaml-0.1.7.tar.gz
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index 52d475066e..001d7a761b 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/phytool/phytool.hash b/package/phytool/phytool.hash
+index 37d8f6675f..ce04936417 100644
+--- a/package/phytool/phytool.hash
++++ b/package/phytool/phytool.hash
+@@ -1,4 +1,4 @@
+-# md5 from https://github.com/wkz/phytool/releases/download/v1.0.1/phytool-1.0.1.tar.xz.md5
++# md5 from https://github.com/wkz/phytool/releases/download/v2/phytool-2.tar.xz.md5
+ # sha256 locally computed:
+-md5  08997ad8f01faf84f3da0638f3ad8b16  phytool-1.0.1.tar.xz
+-sha256  b08c538dc8024e542d54742b93cc7748c7062477f060d6e9331a67009aeadd88  phytool-1.0.1.tar.xz
++md5  972982f8e5f7237cbccfc6d275da7348  phytool-2.tar.xz
++sha256  9901a14e8c6af02b7333c60b21ff81f50620e8326d54827185e5617ff9b11d21  phytool-2.tar.xz
+diff --git a/package/phytool/phytool.mk b/package/phytool/phytool.mk
+index 2a47dfa570..3de6666110 100644
+--- a/package/phytool/phytool.mk
++++ b/package/phytool/phytool.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBYAML_VERSION = 0.1.6
--LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
--LIBYAML_SITE = http://pyyaml.org/download/libyaml
-+LIBYAML_VERSION = 0.1.7
-+LIBYAML_SITE = $(call github,yaml,libyaml,$(LIBYAML_VERSION))
- LIBYAML_INSTALL_STAGING = YES
- LIBYAML_LICENSE = MIT
- LIBYAML_LICENSE_FILES = LICENSE
-+LIBYAML_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+-PHYTOOL_VERSION = 1.0.1
++PHYTOOL_VERSION = 2
+ PHYTOOL_SOURCE = phytool-$(PHYTOOL_VERSION).tar.xz
+ PHYTOOL_SITE = https://github.com/wkz/phytool/releases/download/v$(PHYTOOL_VERSION)
+ PHYTOOL_LICENSE = GPL-2.0+
 -- 
 2.11.0
