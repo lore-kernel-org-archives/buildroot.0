@@ -1,33 +1,32 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 19:58:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/poco: Update check for uclibc
-	toolchain
-In-Reply-To: <20170917175818.10621-1-bernd.kuhls@t-online.de>
-References: <20170917175818.10621-1-bernd.kuhls@t-online.de>
-Message-ID: <20170917175818.10621-2-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 20:28:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/poppler: fix libcurl support
+Message-ID: <20170917182818.18868-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+BR2_PACKAGE_POPPLER_LIBCURL is not defined in poppler/Config.in.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/poco/poco.mk | 2 +-
+ package/poppler/poppler.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 673b93a4f9..29752e24c9 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -28,7 +28,7 @@ POCO_OMIT = Data/ODBC PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite)
- 
--ifeq ($(LIBC),uclibc)
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- POCO_CONF_OPTS += --no-fpenvironment --no-wstring
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 6796437776..1beb75a6a3 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -66,7 +66,7 @@ else
+ POPPLER_CONF_OPTS += --disable-zlib
  endif
  
+-ifeq ($(BR2_PACKAGE_POPPLER_LIBCURL),y)
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ POPPLER_CONF_OPTS += --enable-libcurl
+ POPPLER_DEPENDENCIES += libcurl
+ else
 -- 
 2.11.0
