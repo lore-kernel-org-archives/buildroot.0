@@ -1,79 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Sep 2017 18:43:40 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/pinentry: added optional
- support for qt5
-In-Reply-To: <20170917151836.3661-2-bernd.kuhls@t-online.de>
-References: <20170917151836.3661-1-bernd.kuhls@t-online.de>
- <20170917151836.3661-2-bernd.kuhls@t-online.de>
-Message-ID: <20170917184340.3ea4ad2b@windsurf>
+Date: Sun, 17 Sep 2017 18:49:40 +0200
+Subject: [Buildroot] [git commit] stella: fix error when building with
+	uClibc-ng
+Message-ID: <20170917164337.D308580F92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5323a83e73bdc93cc9132bbf041a455f7ec1a388
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Sep 2017 17:18:36 +0200, Bernd Kuhls wrote:
-> Upstream added support for qt5:
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commit;h=abb59f50abf698ff1e56490fb39bcc98c26ab44b
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: Moved rename of configure option -pinentry-qt4 to -pinentry-qt to
->     the patch bumping the package version.
-> 
->  package/pinentry/Config.in   | 18 ++++++++++++++++++
->  package/pinentry/pinentry.mk |  4 +++-
->  2 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
-> index a92cd82a22..7184a10c7b 100644
-> --- a/package/pinentry/Config.in
-> +++ b/package/pinentry/Config.in
-> @@ -53,4 +53,22 @@ comment "pinentry-qt4 needs a toolchain w/ C++, threads"
->  	depends on BR2_USE_MMU
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->  
-> +config BR2_PACKAGE_PINENTRY_QT5
-> +	bool "pinentry-qt5"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on !BR2_PACKAGE_PINENTRY_QT4
-> +	select BR2_PACKAGE_QT5
-> +	select BR2_PACKAGE_QT5BASE_GUI
-> +	select BR2_PACKAGE_QT5BASE_WIDGETS
-> +	help
-> +	  The pinentry-qt5 tool
+The uClibc-ng C library defines a type called R0 that conflits with a
+global variable called R0 from PaddleReader.cxx.
 
-You forgot to adjust:
+src/emucore/tia/PaddleReader.cxx:25:3: error: ???constexpr const double R0??? redeclared as different kind of symbol
+   R0 = 1.5e3,
+   ^
 
-        # At least one backend is needed to avoid build breakage
-        select BR2_PACKAGE_PINENTRY_NCURSES if !BR2_PACKAGE_PINENTRY_GTK2 && !BR2_PACKAGE_PINENTRY_QT4
+/home/sprado/workspace/build/buildroot/build/stella_uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/ucontext.h:42:3:note: previous declaration ???<anonymous enum> R0???
+   R0 = 0,
+   ^~
 
-And therefore, you cannot select just the qt5 backend.
+So let's redefine R0 as a private member of the PaddleReader class.
 
->  # pinentry-qt4 backend
+This patch has already been accepted upstream [1] and should be removed in
+the next version bump.
 
-This commit looks no longer correct ?
+[1] https://github.com/stella-emu/stella/commit/391601d2386e41372d6fa198fbe40287d2e87542
 
-> +ifeq ($(BR2_PACKAGE_PINENTRY_QT4)$(BR2_PACKAGE_PINENTRY_QT5),y)
->  ifeq ($(BR2_PACKAGE_PINENTRY_QT4),y)
->  # -pthread needs to be passed for certain toolchains
->  # http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
->  PINENTRY_CONF_OPTS += LIBS=-pthread MOC=$(HOST_DIR)/bin/moc
-> +endif
->  PINENTRY_CONF_OPTS += --enable-pinentry-qt
-> -PINENTRY_DEPENDENCIES += qt
-> +PINENTRY_DEPENDENCIES += $(if $(BR2_PACKAGE_PINENTRY_QT4),qt,qt5base)
->  else
->  PINENTRY_CONF_OPTS += --disable-pinentry-qt
->  endif
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+http://autobuild.buildroot.net/results/9ab5772f01236eaa7def66a2f443f13efca8c34c
+http://autobuild.buildroot.net/results/5a4a194fe85e04ab31b146367c5a45e4f7688fca
+http://autobuild.buildroot.net/results/31f6bb3f5879d056fe152ca19b6b0367cc636212
+...
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...03-Fix-error-when-building-with-uClibc-ng.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/package/stella/0003-Fix-error-when-building-with-uClibc-ng.patch b/package/stella/0003-Fix-error-when-building-with-uClibc-ng.patch
+new file mode 100644
+index 0000000..ffbc831
+--- /dev/null
++++ b/package/stella/0003-Fix-error-when-building-with-uClibc-ng.patch
+@@ -0,0 +1,54 @@
++From 36d5c8bc3592b4dffbec222a179c3956787a0694 Mon Sep 17 00:00:00 2001
++From: Sergio Prado <sergio.prado@e-labworks.com>
++Date: Sat, 9 Sep 2017 15:04:58 -0300
++Subject: [PATCH] Fix error when building with uClibc-ng
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The uClibc-ng C library defines a type called R0 that conflits with a
++global variable called R0 from PaddleReader.cxx.
++
++src/emucore/tia/PaddleReader.cxx:25:3: error: ???constexpr const double R0??? redeclared as different kind of symbol
++   R0 = 1.5e3,
++   ^
++/home/sprado/workspace/build/buildroot/build/stella_uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/ucontext.h:42:3: note: previous declaration ???<anonymous enum> R0???
++   R0 = 0,
++   ^~
++
++So let's redefine R0 as a private member of the PaddleReader class.
++
++Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++---
++ src/emucore/tia/PaddleReader.cxx | 1 -
++ src/emucore/tia/PaddleReader.hxx | 2 ++
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/emucore/tia/PaddleReader.cxx b/src/emucore/tia/PaddleReader.cxx
++index 69c828ea6c5c..27ff828200ee 100644
++--- a/src/emucore/tia/PaddleReader.cxx
+++++ b/src/emucore/tia/PaddleReader.cxx
++@@ -22,7 +22,6 @@
++ static constexpr double
++   C = 68e-9,
++   RPOT = 1e6,
++-  R0 = 1.5e3,
++   USUPP = 5;
++ 
++ static constexpr double TRIPPOINT_LINES = 379;
++diff --git a/src/emucore/tia/PaddleReader.hxx b/src/emucore/tia/PaddleReader.hxx
++index 00238a4fe5b5..0032e6efd015 100644
++--- a/src/emucore/tia/PaddleReader.hxx
+++++ b/src/emucore/tia/PaddleReader.hxx
++@@ -65,6 +65,8 @@ class PaddleReader : public Serializable
++ 
++     bool myIsDumped;
++ 
+++    static constexpr double R0 = 1.5e3;
+++
++   private:
++     PaddleReader(const PaddleReader&) = delete;
++     PaddleReader(PaddleReader&&) = delete;
++-- 
++1.9.1
++
