@@ -1,41 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 20:47:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/protobuf-c: bump version to 1.3.0
-In-Reply-To: <20170917184709.22532-1-bernd.kuhls@t-online.de>
-References: <20170917184709.22532-1-bernd.kuhls@t-online.de>
-Message-ID: <20170917184709.22532-2-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 20:52:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/proxychains-ng: security bump to
+	version 4.11
+Message-ID: <20170917185216.25953-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Version 4.9 fixes CVE-2015-3887:
+https://github.com/rofl0r/proxychains-ng/issues/60
+
+Added md5 & sha1 hashes provided by upstream.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/protobuf-c/protobuf-c.hash | 2 +-
- package/protobuf-c/protobuf-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/proxychains-ng/proxychains-ng.hash | 5 ++++-
+ package/proxychains-ng/proxychains-ng.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index 7584058e95..49644574fe 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 49340784ca0f8657f38547088731fff3bfe8084adb89bf5e8dbc19ac43339aa6 protobuf-c-v1.1.1.tar.gz
-+sha256 fd8f6f5d6927330cf2b8b4ec8332de8b1ee2b8f2480b52ee3f221aad6de2082c protobuf-c-v1.3.0.tar.gz
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 391b3103f8..4306610533 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/proxychains-ng/proxychains-ng.hash b/package/proxychains-ng/proxychains-ng.hash
+index e2e8c01af0..7ca4d5e27a 100644
+--- a/package/proxychains-ng/proxychains-ng.hash
++++ b/package/proxychains-ng/proxychains-ng.hash
+@@ -1,2 +1,5 @@
++# From https://sourceforge.net/projects/proxychains-ng/files/
++md5 34d840eb184e96bff418201c28a935c5  proxychains-ng-4.11.tar.bz2
++sha1 00bc3dc18f2b638c79112c99f082a7a2878beaad  proxychains-ng-4.11.tar.bz2
+ # Locally computed:
+-sha256  859a717e18ed88c9291078a6ed8748dfe95c61220993203890fef8a04d28dda5  proxychains-4.6.tar.bz2
++sha256  dcc4149808cd1fb5d9663cc09791f478805816b1f017381f424414c47f6376b6  proxychains-ng-4.11.tar.bz2
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index 0d31bcedba..a9f3fc9561 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PROTOBUF_C_VERSION = v1.1.1
-+PROTOBUF_C_VERSION = v1.3.0
- PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+-PROXYCHAINS_NG_VERSION = 4.6
+-PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
++PROXYCHAINS_NG_VERSION = 4.11
++PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.bz2
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ PROXYCHAINS_NG_LICENSE = GPL-2.0+
+ PROXYCHAINS_NG_LICENSE_FILES = COPYING
 -- 
 2.11.0
