@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Sep 2017 18:27:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php-ssh2: bump version to 1.1.2
-In-Reply-To: <20170917092318.15019-1-bernd.kuhls@t-online.de>
-References: <20170917092318.15019-1-bernd.kuhls@t-online.de>
-Message-ID: <20170917182751.2390e398@windsurf>
+Date: Sun, 17 Sep 2017 18:29:22 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libyaml: bump version to 0.1.7
+In-Reply-To: <20170917093649.21801-1-bernd.kuhls@t-online.de>
+References: <20170917093649.21801-1-bernd.kuhls@t-online.de>
+Message-ID: <20170917182922.139664f3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Sep 2017 11:23:18 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/php-ssh2/php-ssh2.hash | 2 +-
->  package/php-ssh2/php-ssh2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 17 Sep 2017 11:36:48 +0200, Bernd Kuhls wrote:
+> Switched _SITE to github.com because pyyaml.org is down, added
+> _AUTORECONF = YES because the upstream tarball does not contain a
+> configure script.
 
-Applied to master, thanks.
+pyyaml.org is not down (anymore). Could you use it instead ?
+
+I'll mark both this patch and PATCH 2/2 as Changes Requested.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
