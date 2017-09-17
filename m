@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Sep 2017 18:53:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openal: bump version to 1.18.1
-In-Reply-To: <20170916131137.26227-1-bernd.kuhls@t-online.de>
-References: <20170916131137.26227-1-bernd.kuhls@t-online.de>
-Message-ID: <20170917185308.3a020068@windsurf>
+Date: Sun, 17 Sep 2017 18:53:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencore-amr: bump version to
+ 0.1.5
+In-Reply-To: <20170916132203.3724-1-bernd.kuhls@t-online.de>
+References: <20170916132203.3724-1-bernd.kuhls@t-online.de>
+Message-ID: <20170917185340.636a052a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 16 Sep 2017 15:11:37 +0200, Bernd Kuhls wrote:
+On Sat, 16 Sep 2017 15:22:03 +0200, Bernd Kuhls wrote:
+> Added md5 & sha1 hashes provided by upstream.
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/openal/openal.hash | 2 +-
->  package/openal/openal.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/opencore-amr/opencore-amr.hash | 5 ++++-
+>  package/opencore-amr/opencore-amr.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
