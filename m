@@ -1,56 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Sep 2017 11:20:28 +0200
-Subject: [Buildroot] [PATCH] support/run-tests: export download dir
-Message-ID: <20170917092028.5236-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 11:23:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php-ssh2: bump version to 1.1.2
+Message-ID: <20170917092318.15019-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the download directory, when specified with the -d option, is
-only used to store the files downloaded by the testing infra, not those
-downloaded by Buildroot.
-
-So, we end up with this situation:
-
-    BR2_DL_DIR  | -d DIR   | test downloads   | BR downloads
-    ------------+----------+------------------+--------------
-    unset       | unset    | [error]          | [error]
-    unset       | set      | in $(DIR)        | in $(TOP_DIR)/dl
-    set         | unset    | in $(BR2_DL_DIR) | in $(BR2_DL_DIR)
-    set         | set      | in $(DIR)        | in $(BR2_DL_DIR)
-
-This is not very consistent.
-
-We change the behaviour so that the value of -d always takes precedence,
-and is used by Buildroot as well, giving this new behaviour:
-
-    BR2_DL_DIR  | -d DIR   | test downloads   | BR downloads
-    ------------+----------+------------------+--------------
-    unset       | unset    | [error]          | [error]
-    unset       | set      | in $(DIR)        | in $(DIR)
-    set         | unset    | in $(BR2_DL_DIR) | in $(BR2_DL_DIR)
-    set         | set      | in $(DIR)        | in $(DIR)
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/testing/run-tests | 1 +
- 1 file changed, 1 insertion(+)
+ package/php-ssh2/php-ssh2.hash | 2 +-
+ package/php-ssh2/php-ssh2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index ae0bd336b5..5c9897e0f5 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -57,6 +57,7 @@ def main():
-             return 1
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
+index 2529f9aef9..f110e77866 100644
+--- a/package/php-ssh2/php-ssh2.hash
++++ b/package/php-ssh2/php-ssh2.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 6a93891878b23904a773eb814fec7aea4ea00b4a412ee779c8535ed9c5e46ced  ssh2-1.0.tgz
++sha256 87618d6a0981afe8c24b36d6b38c21a0aa0237b62e60347d0170bd86b51f79fb  ssh2-1.1.2.tgz
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+index d7ac2b480a..c9c13010dd 100644
+--- a/package/php-ssh2/php-ssh2.mk
++++ b/package/php-ssh2/php-ssh2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     BRTest.downloaddir = os.path.abspath(args.download)
-+    os.putenv("BR2_DL_DIR", BRTest.downloaddir)
- 
-     if args.output is None:
-         print "Missing output directory, please use -o/--output"
+-PHP_SSH2_VERSION = 1.0
++PHP_SSH2_VERSION = 1.1.2
+ PHP_SSH2_SOURCE = ssh2-$(PHP_SSH2_VERSION).tgz
+ PHP_SSH2_SITE = https://pecl.php.net/get
+ PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 -- 
 2.11.0
