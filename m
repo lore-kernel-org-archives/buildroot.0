@@ -1,88 +1,60 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 20:28:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/poppler: bump version to 0.59.0
-In-Reply-To: <20170917182818.18868-1-bernd.kuhls@t-online.de>
-References: <20170917182818.18868-1-bernd.kuhls@t-online.de>
-Message-ID: <20170917182818.18868-2-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 20:37:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pptp-linux: bump version to 1.9.0
+Message-ID: <20170917183701.20859-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://cgit.freedesktop.org/poppler/poppler/commit/poppler/Form.h?id=a9581e624fa62b3905b790ac10d1349b1f96048a
+Updated patch status of patch 0003.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Form-add-missing-std-vector-include.patch | 36 ----------------------
- package/poppler/poppler.hash                       |  2 +-
- package/poppler/poppler.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/poppler/0001-Form-add-missing-std-vector-include.patch
+ package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch | 4 ++--
+ package/pptp-linux/pptp-linux.hash                         | 6 +++---
+ package/pptp-linux/pptp-linux.mk                           | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/poppler/0001-Form-add-missing-std-vector-include.patch b/package/poppler/0001-Form-add-missing-std-vector-include.patch
-deleted file mode 100644
-index 5bca757234..0000000000
---- a/package/poppler/0001-Form-add-missing-std-vector-include.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 156507c6e85ad05256ccba06a710d47d34cd8153 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Fri, 5 May 2017 22:21:19 +0200
--Subject: [PATCH] Form: add missing std::vector include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes:
--
--  ../../poppler/Form.h:544:14: error: ?vector? in namespace ?std? does not name a template type
--     const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
--
--  ../../poppler/Form.h:556:8: error: ?vector? in namespace ?std? does not name a template type
--     std::vector<Ref> calculateOrder;
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- poppler/Form.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/poppler/Form.h b/poppler/Form.h
--index 8ddb6fe..e0a3a28 100644
----- a/poppler/Form.h
--+++ b/poppler/Form.h
--@@ -27,6 +27,7 @@
-- #include "Annot.h"
-- 
-- #include <set>
--+#include <vector>
-- 
-- class GooString;
-- class Array;
---- 
--2.11.0
--
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index ffcc71e170..7aa14c681c 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 0ea37de71b7db78212ebc79df59f99b66409a29c2eac4d882dae9f2397fe44d8  poppler-0.57.0.tar.xz
-+sha256 a3d626b24cd14efa9864e12584b22c9c32f51c46417d7c10ca17651f297c9641  poppler-0.59.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 1beb75a6a3..5946cbec24 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
+diff --git a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+index d6b5445fa9..1036b3c895 100644
+--- a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
++++ b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+@@ -7,8 +7,8 @@ We're using u_int32_t here, this breaks on musl libc builds otherwise.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ ---
+-Patch status: sent upstream to the devel mailing list
+-(moderated, no archive link yet)
++Patch status: applied upstream:
++https://sourceforge.net/p/pptpclient/git/ci/ee8ef349d9543cb48045a27d1cdd801fc6e910e8/
+ 
+  pqueue.h | 1 +
+  1 file changed, 1 insertion(+)
+diff --git a/package/pptp-linux/pptp-linux.hash b/package/pptp-linux/pptp-linux.hash
+index 839d0bf84f..6200ef151f 100644
+--- a/package/pptp-linux/pptp-linux.hash
++++ b/package/pptp-linux/pptp-linux.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.8.0/
+-md5	4efce9f263e2c3f38d79d9df222476de	pptp-1.8.0.tar.gz
+-sha1	6289953812ac986c7234e83aefb10b5e279dc613	pptp-1.8.0.tar.gz
++# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.9.0/
++md5 b2117b377f65294a9786f80f0235d308  pptp-1.9.0.tar.gz
++sha1 047bb9812be477b44c94ffb1dc95c34658eedc24  pptp-1.9.0.tar.gz
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 17433b03ad..25f3037f88 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POPPLER_VERSION = 0.57.0
-+POPPLER_VERSION = 0.59.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+-PPTP_LINUX_VERSION = 1.8.0
++PPTP_LINUX_VERSION = 1.9.0
+ PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
+ PPTP_LINUX_MAKE = $(MAKE1)
 -- 
 2.11.0
