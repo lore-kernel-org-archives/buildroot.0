@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 20:47:08 +0200
-Subject: [Buildroot] [PATCH 1/2] protobuf, python-protobuf: bump to v3.4.1
-Message-ID: <20170917184709.22532-1-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 20:47:09 +0200
+Subject: [Buildroot] [PATCH 2/2] package/protobuf-c: bump version to 1.3.0
+In-Reply-To: <20170917184709.22532-1-bernd.kuhls@t-online.de>
+References: <20170917184709.22532-1-bernd.kuhls@t-online.de>
+Message-ID: <20170917184709.22532-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/protobuf-c/protobuf-c.hash | 2 +-
+ package/protobuf-c/protobuf-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 1c7bd43b01..7829c6f312 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index 7584058e95..49644574fe 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 5e2587dea2f9287885e3b04d3a94ed4e8b9b2d2c5dd1f0032ceef3ea1d153bd7 protobuf-cpp-3.3.0.tar.gz
-+sha256 2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78 protobuf-cpp-3.4.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 51c791a810..d2782ddcfd 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.3.0
-+PROTOBUF_VERSION = 3.4.1
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 7da2fed03f..e32f143166 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 3fd180eee78c7ee2e7a1b2f02657ef61ccbc2537a6767cd2493077d3b38c9d2d protobuf-python-3.3.0.tar.gz
-+sha256 1faa722cf475c8e4c43ddb393d6f1477f1a56c93be38a1c8e367c358db476b5f protobuf-python-3.4.1.tar.gz
+-sha256 49340784ca0f8657f38547088731fff3bfe8084adb89bf5e8dbc19ac43339aa6 protobuf-c-v1.1.1.tar.gz
++sha256 fd8f6f5d6927330cf2b8b4ec8332de8b1ee2b8f2480b52ee3f221aad6de2082c protobuf-c-v1.3.0.tar.gz
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 391b3103f8..4306610533 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = v1.1.1
++PROTOBUF_C_VERSION = v1.3.0
+ PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
 -- 
 2.11.0
