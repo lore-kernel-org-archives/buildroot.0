@@ -1,41 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 10:27:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libfm: bump version to 1.2.5
-Message-ID: <20170917082727.28462-1-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 11:16:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: security bump to
+	version 7.0.7-1
+Message-ID: <20170917091652.18140-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Quoting CVE-related issues from
+https://github.com/ImageMagick/ImageMagick/blob/master/ChangeLog
+
+2017-07-29 7.0.6-5 Glenn Randers-Pehrson <glennrp@image...>
+  * Fix improper use of NULL in the JNG decoder (CVE-2017-11750, Reference
+    https://github.com/ImageMagick/ImageMagick/issues/632).
+
+2017-07-24 7.0.6-4 Cristy <quetzlzacatenango@image...>
+  * Fixed numerous memory leaks (reference
+    https://github.com/ImageMagick/ImageMagick/issues) including
+    https://github.com/ImageMagick/ImageMagick/issues/618 (CVE-2017-12676).
+
+2017-07-23  7.0.6-3 Glenn Randers-Pehrson <glennrp@image...>
+  * Fix memory leaks when reading a malformed JNG image:
+    https://github.com/ImageMagick/ImageMagick/issues/600 (CVE-2017-13141),
+    https://github.com/ImageMagick/ImageMagick/issues/602 (CVE-2017-12565).
+
+2017-07-19 7.0.6-2 Cristy <quetzlzacatenango@image...>
+  * coders/png.c: fixed memory leak of quantum_info (CVE-2017-11539, reference
+    https://github.com/ImageMagick/ImageMagick/issues/582
+  * coders/png.c: fixed NULL dereference when trying to write an empty MNG
+    (CVE-2017-11522, reference
+    https://github.com/ImageMagick/ImageMagick/issues/586).
+
+2017-06-22  7.0.6-1 Glenn Randers-Pehrson <glennrp@image...>
+  * Stop a memory leak in read_user_chunk_callback() (reference
+    https://github.com/ImageMagick/ImageMagick/issues/517,
+    CVE 2017-11310).
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libfm/libfm.hash | 4 ++--
- package/libfm/libfm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfm/libfm.hash b/package/libfm/libfm.hash
-index 8a78adebb4..69c4c31f6d 100644
---- a/package/libfm/libfm.hash
-+++ b/package/libfm/libfm.hash
-@@ -1,3 +1,3 @@
- # From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/
--md5	74997d75e7e87dc73398746fd373bf52	libfm-1.2.4.tar.xz
--sha1	2f8183389c8e74edb15c6c8ab260df5dd39f3b2d	libfm-1.2.4.tar.xz
-+md5 a1ba9ae5e920f38b647dd511edd6c807  libfm-1.2.5.tar.xz
-+sha1 5887aa4e85ee0964e7da67368136849957afd5d6  libfm-1.2.5.tar.xz
-diff --git a/package/libfm/libfm.mk b/package/libfm/libfm.mk
-index 36d8b574e0..c49cd3e633 100644
---- a/package/libfm/libfm.mk
-+++ b/package/libfm/libfm.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index d3097f5224..92880a9aec 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 3a6b21352ed0eb984bdbd0943471df8605b978b527125921e97e5b404f2bee3a  7.0.6-0.tar.gz
++sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 22c29d36a0..9043ce8e5e 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFM_VERSION = 1.2.4
-+LIBFM_VERSION = 1.2.5
- LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
- LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
- LIBFM_DEPENDENCIES = menu-cache libglib2 cairo
+-IMAGEMAGICK_VERSION = 7.0.6-0
++IMAGEMAGICK_VERSION = 7.0.7-1
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
 2.11.0
