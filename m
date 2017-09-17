@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Sep 2017 18:41:50 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/pinentry: bump version to
- 1.0.0
-In-Reply-To: <20170917151836.3661-1-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 18:43:40 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/pinentry: added optional
+ support for qt5
+In-Reply-To: <20170917151836.3661-2-bernd.kuhls@t-online.de>
 References: <20170917151836.3661-1-bernd.kuhls@t-online.de>
-Message-ID: <20170917184150.417cee54@windsurf>
+ <20170917151836.3661-2-bernd.kuhls@t-online.de>
+Message-ID: <20170917184340.3ea4ad2b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +14,66 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Sep 2017 17:18:35 +0200, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commitdiff;h=f0db3192463cccf4541820de36d985629c4df6ee
-> 
-> Added sha256 hash.
-> 
-> Added dependencies to libassuan & libgpg-error needed after
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commit;h=302903f76b8d62b1e07219a203f7219cb3aff7d8
-> 
-> Removed CXXFLAGS added for gcc >= 5.x as noted by Thomas:
-> https://git.buildroot.net/buildroot/commit/package/pinentry?id=9694305ae0b2a7dbdcc74e2c646d392ceed9876f
-> 
-> Renamed configure option -pinentry-qt4 to -pinentry-qt after
+On Sun, 17 Sep 2017 17:18:36 +0200, Bernd Kuhls wrote:
+> Upstream added support for qt5:
 > https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commit;h=abb59f50abf698ff1e56490fb39bcc98c26ab44b
-> Qt5 support, also added by this upstream commit, will be added to this
-> package with a subsequent commit.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> v2: Added rename of configure option -pinentry-qt4 to -pinentry-qt
+> v2: Moved rename of configure option -pinentry-qt4 to -pinentry-qt to
+>     the patch bumping the package version.
+> 
+>  package/pinentry/Config.in   | 18 ++++++++++++++++++
+>  package/pinentry/pinentry.mk |  4 +++-
+>  2 files changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+> index a92cd82a22..7184a10c7b 100644
+> --- a/package/pinentry/Config.in
+> +++ b/package/pinentry/Config.in
+> @@ -53,4 +53,22 @@ comment "pinentry-qt4 needs a toolchain w/ C++, threads"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+>  
+> +config BR2_PACKAGE_PINENTRY_QT5
+> +	bool "pinentry-qt5"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_PACKAGE_PINENTRY_QT4
+> +	select BR2_PACKAGE_QT5
+> +	select BR2_PACKAGE_QT5BASE_GUI
+> +	select BR2_PACKAGE_QT5BASE_WIDGETS
+> +	help
+> +	  The pinentry-qt5 tool
 
-Applied to master, thanks.
+You forgot to adjust:
+
+        # At least one backend is needed to avoid build breakage
+        select BR2_PACKAGE_PINENTRY_NCURSES if !BR2_PACKAGE_PINENTRY_GTK2 && !BR2_PACKAGE_PINENTRY_QT4
+
+And therefore, you cannot select just the qt5 backend.
+
+>  # pinentry-qt4 backend
+
+This commit looks no longer correct ?
+
+> +ifeq ($(BR2_PACKAGE_PINENTRY_QT4)$(BR2_PACKAGE_PINENTRY_QT5),y)
+>  ifeq ($(BR2_PACKAGE_PINENTRY_QT4),y)
+>  # -pthread needs to be passed for certain toolchains
+>  # http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
+>  PINENTRY_CONF_OPTS += LIBS=-pthread MOC=$(HOST_DIR)/bin/moc
+> +endif
+>  PINENTRY_CONF_OPTS += --enable-pinentry-qt
+> -PINENTRY_DEPENDENCIES += qt
+> +PINENTRY_DEPENDENCIES += $(if $(BR2_PACKAGE_PINENTRY_QT4),qt,qt5base)
+>  else
+>  PINENTRY_CONF_OPTS += --disable-pinentry-qt
+>  endif
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
