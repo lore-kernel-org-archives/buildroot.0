@@ -1,60 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Sep 2017 20:37:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pptp-linux: bump version to 1.9.0
-Message-ID: <20170917183701.20859-1-bernd.kuhls@t-online.de>
+Date: Sun, 17 Sep 2017 20:47:08 +0200
+Subject: [Buildroot] [PATCH 1/2] protobuf, python-protobuf: bump to v3.4.1
+Message-ID: <20170917184709.22532-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated patch status of patch 0003.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch | 4 ++--
- package/pptp-linux/pptp-linux.hash                         | 6 +++---
- package/pptp-linux/pptp-linux.mk                           | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
-index d6b5445fa9..1036b3c895 100644
---- a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
-+++ b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
-@@ -7,8 +7,8 @@ We're using u_int32_t here, this breaks on musl libc builds otherwise.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- ---
--Patch status: sent upstream to the devel mailing list
--(moderated, no archive link yet)
-+Patch status: applied upstream:
-+https://sourceforge.net/p/pptpclient/git/ci/ee8ef349d9543cb48045a27d1cdd801fc6e910e8/
- 
-  pqueue.h | 1 +
-  1 file changed, 1 insertion(+)
-diff --git a/package/pptp-linux/pptp-linux.hash b/package/pptp-linux/pptp-linux.hash
-index 839d0bf84f..6200ef151f 100644
---- a/package/pptp-linux/pptp-linux.hash
-+++ b/package/pptp-linux/pptp-linux.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.8.0/
--md5	4efce9f263e2c3f38d79d9df222476de	pptp-1.8.0.tar.gz
--sha1	6289953812ac986c7234e83aefb10b5e279dc613	pptp-1.8.0.tar.gz
-+# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.9.0/
-+md5 b2117b377f65294a9786f80f0235d308  pptp-1.9.0.tar.gz
-+sha1 047bb9812be477b44c94ffb1dc95c34658eedc24  pptp-1.9.0.tar.gz
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index 17433b03ad..25f3037f88 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PPTP_LINUX_VERSION = 1.8.0
-+PPTP_LINUX_VERSION = 1.9.0
- PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
- PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
- PPTP_LINUX_MAKE = $(MAKE1)
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 1c7bd43b01..7829c6f312 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5e2587dea2f9287885e3b04d3a94ed4e8b9b2d2c5dd1f0032ceef3ea1d153bd7 protobuf-cpp-3.3.0.tar.gz
++sha256 2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78 protobuf-cpp-3.4.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 51c791a810..d2782ddcfd 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.3.0
++PROTOBUF_VERSION = 3.4.1
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 7da2fed03f..e32f143166 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 3fd180eee78c7ee2e7a1b2f02657ef61ccbc2537a6767cd2493077d3b38c9d2d protobuf-python-3.3.0.tar.gz
++sha256 1faa722cf475c8e4c43ddb393d6f1477f1a56c93be38a1c8e367c358db476b5f protobuf-python-3.4.1.tar.gz
 -- 
 2.11.0
