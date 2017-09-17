@@ -1,287 +1,155 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 17 Sep 2017 04:15:46 -0300
-Subject: [Buildroot] [PATCH] nc: new virtual package providing "netcat"
-	functionality
-Message-ID: <20170917071546.5111-1-casantos@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Sep 2017 09:18:44 +0200
+Subject: [Buildroot] [PATCH 1/2] support/run-tests: move packages tests
+ to packages directories
+In-Reply-To: <59be0604174a3_76dff67c8c964d2@ultri3.mail>
+References: <bead9472ebddf2faaa023fd64dfe511e48827b0f.1505594291.git.yann.morin.1998@free.fr>
+ <59be0604174a3_76dff67c8c964d2@ultri3.mail>
+Message-ID: <20170917071844.GA2930@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the "nc" virtual package and modify netcat, netcat-openbsd and nmap
-to become providers.
+Ricardo, All,
 
-Make the nmap recipe install "ncat" (with a symbolic link to nc) if the
-BR2_PACKAGE_NMAP_NCAT option is set. Other programs (ncat, ndiff, etc.)
-are still chosen via BR2_PACKAGE_NMAP, in the "Networking applications"
-menu.
+On 2017-09-17 02:20 -0300, Ricardo Martincoski spake thusly:
+> On Sat, Sep 16, 2017 at 05:38 PM, Yann E. MORIN wrote:
+> > ---
+> >  .gitignore                                         |  1 +
+> >  .../dropbear/dropbear.py                           |  0
+> >  .../python-ipython/python-ipython.py               |  0
+> >  .../test_python.py => package/python/python.py     |  0
+> >  support/testing/run-tests                          | 22 ++++++++++++++++++++++
+> >  support/testing/tests/package/__init__.py          |  0
+> >  6 files changed, 23 insertions(+)
+> >  rename support/testing/tests/package/test_dropbear.py => package/dropbear/dropbear.py (100%)
+> >  rename support/testing/tests/package/test_ipython.py => package/python-ipython/python-ipython.py (100%)
+> As I mentioned in another thread, having Python files with '-' in their name
+> AFAIK is not a problem as long we don't want to import them.
+> We currently import only test_python.py and it seems unlikely to have runtime
+> tests importing each other.
 
-So far the "nc" options available to build with uClibc were the ancient
-GNU netcat and its Busybox double. Both lack features available in more
-modern netcats like IPv6, proxies, and Unix sockets.
+Yet we don't know what the future will be made of, so we should squash
+the dasj into an underscore, so as to allow this kind of situation.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/Config.in                        |  3 +-
- package/nc/Config.in                     | 83 ++++++++++++++++++++++++++++++++
- package/nc/nc.mk                         |  7 +++
- package/netcat-openbsd/Config.in         | 25 ----------
- package/netcat-openbsd/netcat-openbsd.mk |  2 +
- package/netcat/Config.in                 | 13 -----
- package/netcat/netcat.mk                 |  1 +
- package/nmap/nmap.mk                     | 30 +++++++++++-
- 8 files changed, 122 insertions(+), 42 deletions(-)
- create mode 100644 package/nc/Config.in
- create mode 100644 package/nc/nc.mk
+> And this series is really changing the filename convention for runtime tests of
+> packages, making the pre-existing convention of package files beat the
+> convention inside the test infra. I am OK with this change, but I think it worth
+> mentioning. Perhaps it fits in the commit log?
 
-diff --git a/package/Config.in b/package/Config.in
-index d4e40a6326..275461321f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1676,11 +1676,10 @@ menu "Networking applications"
- 	source "package/mrouted/Config.in"
- 	source "package/mtr/Config.in"
- 	source "package/nbd/Config.in"
-+	source "package/nc/Config.in"
- 	source "package/ncftp/Config.in"
- 	source "package/ndisc6/Config.in"
- 	source "package/netatalk/Config.in"
--	source "package/netcat/Config.in"
--	source "package/netcat-openbsd/Config.in"
- 	source "package/netplug/Config.in"
- 	source "package/netsnmp/Config.in"
- 	source "package/netstat-nat/Config.in"
-diff --git a/package/nc/Config.in b/package/nc/Config.in
-new file mode 100644
-index 0000000000..c75e856c58
---- /dev/null
-+++ b/package/nc/Config.in
-@@ -0,0 +1,83 @@
-+config BR2_PACKAGE_NC
-+	bool "nc (netcat)"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	help
-+	  Select the desired "nc" command provider.
-+
-+if BR2_PACKAGE_NC
-+
-+choice
-+	prompt "nc variant"
-+	default BR2_PACKAGE_NETCAT
-+	help
-+	  Select either the venerable netcat (default), netcat-openbsd
-+	  or nmap-ncat.
-+
-+config BR2_PACKAGE_NETCAT
-+	bool "netcat"
-+	select BR2_PACKAGE_HAS_NC
-+	help
-+	  Netcat is a featured networking utility which reads and writes
-+	  data across network connections, using the TCP/IP protocol.
-+	  It is designed to be a reliable "back-end" tool that can be
-+	  used directly or easily driven by other programs and scripts.
-+	  At the same time, it is a feature-rich network debugging and
-+	  exploration tool, since it can create almost any kind of
-+	  connection you would need and has several interesting built-in
-+	  capabilities.
-+
-+	  http://netcat.sourceforge.net/download.php
-+
-+config BR2_PACKAGE_NETCAT_OPENBSD
-+	bool "netcat-openbsd"
-+	select BR2_PACKAGE_HAS_NC
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_LIBBSD
-+	help
-+	  This OpenBSD rewrite of netcat, including support for IPv6,
-+	  proxies, and Unix sockets. Reads and writes data using TCP or
-+	  UDP protocol. It is designed to be a reliable "back-end" tool
-+	  that can be used directly or easily driven by other programs
-+	  and scripts. At the same time it is a feature-rich network
-+	  debugging and exploration tool, since it can create almost any
-+	  kind of connection you would need and has several interesting
-+	  built-in capabilities.
-+
-+	  https://packages.debian.org/sid/netcat-openbsd
-+
-+comment "netcat-openbsd needs a toolchain w/ glibc, threads"
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+
-+config BR2_PACKAGE_NMAP_NCAT
-+	bool "nmap-ncat"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  Ncat is a feature-packed networking utility which reads and
-+	  writes data across networks from the command line. Ncat was
-+	  written for the Nmap Project as a much-improved
-+	  reimplementation of the venerable Netcat.
-+
-+comment "nmap-nmap needs a toolchain w/ C++, threads"
-+	depends on BR2_USE_MMU
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-+
-+endchoice
-+
-+config BR2_PACKAGE_HAS_NC
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_NC
-+	string
-+	default "netcat"         if BR2_PACKAGE_NETCAT
-+	default "netcat-openbsd" if BR2_PACKAGE_NETCAT_OPENBSD
-+	default "nmap"           if BR2_PACKAGE_NMAP_NCAT
-+
-+endif
-diff --git a/package/nc/nc.mk b/package/nc/nc.mk
-new file mode 100644
-index 0000000000..e04b2bd017
---- /dev/null
-+++ b/package/nc/nc.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# nc
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
-diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-index 6df87ec688..e69de29bb2 100644
---- a/package/netcat-openbsd/Config.in
-+++ b/package/netcat-openbsd/Config.in
-@@ -1,25 +0,0 @@
--config BR2_PACKAGE_NETCAT_OPENBSD
--	bool "netcat-openbsd"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--	select BR2_PACKAGE_LIBBSD
--	help
--	  A simple Unix utility which reads and writes data across network
--	  connections using TCP or UDP protocol. It is designed to be a
--	  reliable "back-end" tool that can be used directly or easily driven
--	  by other programs and scripts. At the same time it is a feature-rich
--	  network debugging and exploration tool, since it can create almost
--	  any kind of connection you would need and has several interesting
--	  built-in capabilities.
--
--	  This package contains the OpenBSD rewrite of netcat, including
--	  support for IPv6, proxies, and Unix sockets.
--
--	  https://packages.debian.org/sid/netcat-openbsd
--
--comment "netcat-openbsd needs a glibc toolchain w/ threads"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index e1a6fee574..5395f85e92 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -8,6 +8,8 @@ NETCAT_OPENBSD_VERSION = debian/1.105-7
- NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
- NETCAT_OPENBSD_LICENSE = BSD-3-Clause
- NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
-+NETCAT_OPENBSD_PROVIDES = nc
-+
- NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
- 
- # Ensure Busybox gets built/installed before, so that this package
-diff --git a/package/netcat/Config.in b/package/netcat/Config.in
-index 924069ee1f..e69de29bb2 100644
---- a/package/netcat/Config.in
-+++ b/package/netcat/Config.in
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_NETCAT
--	bool "netcat"
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--	help
--	  Netcat is a featured networking utility which reads and writes data
--	  across network connections, using the TCP/IP protocol.
--	  It is designed to be a reliable "back-end" tool that can be used
--	  directly or easily driven by other programs and scripts. At the
--	  same time, it is a feature-rich network debugging and exploration
--	  tool, since it can create almost any kind of connection you would
--	  need and has several interesting built-in capabilities.
--
--	  http://netcat.sourceforge.net/download.php
-diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
-index eb7ddcac27..94786fc124 100644
---- a/package/netcat/netcat.mk
-+++ b/package/netcat/netcat.mk
-@@ -8,5 +8,6 @@ NETCAT_VERSION = 0.7.1
- NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VERSION)
- NETCAT_LICENSE = GPL-2.0+
- NETCAT_LICENSE_FILES = COPYING
-+NETCAT_PROVIDES = nc
- 
- $(eval $(autotools-package))
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 37720e2cad..ad92cfd6f8 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -7,12 +7,14 @@
- NMAP_VERSION = 7.40
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
--NMAP_DEPENDENCIES = libpcap pcre
-+NMAP_DEPENDENCIES = libpcap
- NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included --with-liblinear=included \
--	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
-+	--with-libpcre="$(STAGING_DIR)/usr"
- NMAP_LICENSE = GPL-2.0
- NMAP_LICENSE_FILES = COPYING
-+NMAP_PROVIDES = nc
-+
- 
- # needed by libpcap
- NMAP_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
-@@ -35,6 +37,9 @@ else
- NMAP_CONF_OPTS += --without-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_NMAP),y)
-+
-+NMAP_DEPENDENCIES += pcre
- # ndiff only works with python2.x
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- NMAP_DEPENDENCIES += python
-@@ -42,4 +47,25 @@ else
- NMAP_CONF_OPTS += --without-ndiff
- endif
- 
-+else # only ncat
-+
-+NMAP_CONF_OPTS += --without-ndiff --without-zenmap --without-nping --without-nmap-update
-+define NMAP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) build-ncat
-+endef
-+define NMAP_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-ncat
-+endef
-+
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NMAP_NCAT),y)
-+define NMAP_INSTALL_NCAT_SYMLINK
-+        ln -fs ncat $(TARGET_DIR)/usr/bin/nc
-+endef
-+NMAP_POST_INSTALL_TARGET_HOOKS += NMAP_INSTALL_NCAT_SYMLINK
-+else
-+NMAP_CONF_OPTS += --without-ncat
-+endif
-+
- $(eval $(autotools-package))
+Yes, it does change the naming convention. I was about to add it to our
+manual, in the section about adding new packages, to document the .py
+file in addition to Config.in and the .mk and .hash files. But then I
+noticed we had nothing about the runtime tests in the manual, so I could
+not refer to that section to explain the .py file.
+
+So I deferred updating the manual for later.
+
+> [snip]
+> > @@ -36,6 +39,9 @@ def main():
+> >      script_path = os.path.realpath(__file__)
+> >      test_dir = os.path.dirname(script_path)
+> >  
+> > +    gatheradditionaltests(os.path.abspath("."),
+> 
+> Below you run all files in this path (base dir of buildroot) to match against
+> the regex. It's bad because one can have output/, test-output/, test-dl/,
+> outgoing/, ...
+
+Arg, I initially wanted to only scan package/ in fact.
+
+> Also os.getcwd() should give the same result and it is already used in 
+> support/testing/infra/__init__.py
+> 
+> So for now I suggest to change to:
+> gather_additional_tests(os.path.join(os.getcwd(), "package"),
+
+Except that both your solution and mine break when the script is not
+called from the Buildroot top directory. We must derive the top
+directory from the script path.
+
+> And if fs tests gets moved, just add another call to the same method.
+> We don't have that many subdirectories in the root directory.
+> 
+> Other way around is to pass an array of relative subdirectories
+> gather_additional_tests(["package", "fs"],
+> and compose the absolute path inside the method while iterating over the
+> entries.
+
+I think the origin directory should be passed as argument to the
+function, for the above reason.
+
+And yes, we could pass a list of directories.
+
+> > +                          os.path.join(test_dir,"tests","package"))
+> 
+> Here and all over the file there are missing whitespace after ','
+> Can you use flake8 to find them and fix it?
+
+Yup, will do.
+
+> If you use vim you can do
+> :set makeprg=flake8\ %
+> :make
+> and it will jump the cursor to the right place
+> 
+> > +
+> >      if args.stdout:
+> >          BRTest.logtofile = False
+> >  
+> > @@ -116,5 +122,21 @@ def main():
+> >  
+> >      nose2.discover(argv=nose2_args)
+> >  
+> > +def gatheradditionaltests(search_dir, symlink_dir):
+> 
+> You could call it gather_additional_tests.
+
+I never know whatThe_prefered_Solutionis. ;-)
+
+> > +    try:
+> > +        shutil.rmtree(symlink_dir)
+> > +    except OSError as err:
+> > +        if not err.errno == errno.ENOENT:
+> > +            raise err
+> > +        pass
+> 
+> Could we do just this? (like is done in builder.py)
+>     if os.path.exists(symlink_dir):
+>         shutil.rmtree(symlink_dir)
+> If you change this, errno doesn't need to be imported.
+
+So I am no Python expert, and this shows. Thanks for the hints! :-)
+
+> > +    os.mkdir(symlink_dir)
+> > +    open(os.path.join(symlink_dir,"__init__.py"), "w").close()
+> > +    for dir, _, files in os.walk(os.path.abspath(search_dir)):
+> 
+> I first thought, why not glob.glob? But in Python 2 it is not recursive.
+> So indeed os.walk is the way to go.
+> 
+> > +        package = os.path.basename(dir)
+> > +        for file in files:
+> 
+> You can import fnmatch to drastically reduce the number of regex compilations:
+>         for file in fnmatch.filter(files, '*.py'):
+
+Wee! :-)
+
+> > +            if re.match("^{}.py$".format(package),file):
+> > +                os.symlink(os.path.join(dir,file),
+> > +                           os.path.join(symlink_dir,"test_{}.py".format(package)))
+> 
+> Regards,
+> Ricardo
+
+
 -- 
-2.13.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
