@@ -1,57 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Sep 2017 08:30:59 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-09-17
-Message-ID: <20170918063059.0F54F20968@mail.free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Sep 2017 09:44:58 +0200
+Subject: [Buildroot] [PATCH] gd: security bump to version 2.2.5
+In-Reply-To: <20170907144551.23275-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 7 Sep 2017 16:45:51 +0200")
+References: <20170907144551.23275-1-peter@korsgaard.com>
+Message-ID: <87zi9s30xx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Build statistics for 2017-09-17
-================================
+ > Fixes the following security issues:
+ > CVE-2017-6362: Double-free in gdImagePngPtr()
+ > CVE-2017-7890: Buffer over-read into uninitialized memory
 
-      successes : 171
-       failures : 18 
-       timeouts : 0  
-          TOTAL : 189
+ > Drop patches no more needed:
 
-Classification of failures by reason
-====================================
+ > 0001-gdlib-config.patch: @LIBICONV@ is nowadays correct AC_SUBST'ed by
+ > configure
 
-                 lcdproc-0.5.9 | 5 
-               librsync-v2.0.0 | 4 
-                openjpeg-2.2.0 | 4 
-       gst1-plugins-bad-1.12.2 | 1 
-                libmbim-1.14.2 | 1 
-                   luvi-v2.7.6 | 1 
-                 mplayer-1.3.0 | 1 
-                   zmqpp-4.1.2 | 1 
+ > 0002-gd_bmp-fix-build-with-uClibc.patch: upstream uses ceil() since
+ > https://github.com/libgd/libgd/commit/6913dd3cd2a7c2914ad9622419f9343bfe956135
 
+ > While we're at it, add a hash for the license file.
 
-Detail of failures
-===================
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-        mips |        gst1-plugins-bad-1.12.2 | NOK | http://autobuild.buildroot.net/results/2915d6d4927479e08ac91087ba754a09ccf0dea0 |     
-         arm |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/a471349143bad1895a5e4e29d977a672dc5187b6 |     
-      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/e29467525874462cb879192884965856462ac35d |     
-      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/ed7567d4ccf2c47dadd021bc9902ef7d66fb495a |     
-        i586 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/0ee94de8950afd4c77bafc76a3d56eac238d2269 |     
-      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/c6cc415a2f40eaea5c7f8596bc2545cd4e66f471 |     
-         arm |                 libmbim-1.14.2 | NOK | http://autobuild.buildroot.net/results/e1ccfefa2f1d54c85ebd955c2c80b797679b5496 |     
-         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/61606287acecdd836e9c18fbfaa16452f24a1106 | ORPH
-         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/2da6fd2beebe6ccbdb23cec933712ad342ee9c13 | ORPH
-         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/eef00aba3f26a75adf13a12c7b1144c4d99c9748 | ORPH
-         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/e5dbe35288646b8bf86e6a9292609aeb578da02a | ORPH
-        i686 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/b5c3e74d524223754610b9839b85d57cc38e5d3e |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/97dab3ff00f21276f25d588f15a3ffc8115cb64c |     
-       sparc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/dfe8c5c219d877cf17a2f5b8180ffdc364daf4f7 |     
-         arc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/4013eb536ebd21bae3144073fb8227dca1977c4f |     
-       sparc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/c8c9308329d88377aa83646c96c0161bc2ba7caa |     
-     powerpc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/a9a67dffa23c6497cf604ea465c4dec2ec9df9f9 |     
-        or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/094a55a81541bb27e72c19444a772e9fef2e0d87 |     
+Committed to 2017.02.x, thanks.
 
 -- 
-http://autobuild.buildroot.net
+Bye, Peter Korsgaard
