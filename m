@@ -1,41 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Sep 2017 09:48:53 +0200
-Subject: [Buildroot] [PATCH] unrar: security bump to version 5.5.8
-In-Reply-To: <20170907165838.10399-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 7 Sep 2017 18:58:38 +0200")
-References: <20170907165838.10399-1-peter@korsgaard.com>
-Message-ID: <87mv5s30re.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Sep 2017 09:44:31 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libsoup: security bump to
+	version 2.56.1
+Message-ID: <20170918074221.B692D8103E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3284e172f40b9c82e4b19fa4513793a4728ab9cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Fixes the following security issues:
- > CVE-2017-12938 - UnRAR before 5.5.7 allows remote attackers to bypass a
- > directory-traversal protection mechanism via vectors involving a symlink to
- > the . directory, a symlink to the .. directory, and a regular file.
+Fixes CVE-2017-2885: stack based buffer overflow with HTTP Chunked Encoding
 
- > CVE-2017-12940 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
- > in the EncodeFileName::Decode call within the Archive::ReadHeader15
- > function.
+For more details, see
+https://bugzilla.gnome.org/show_bug.cgi?id=785774
 
- > CVE-2017-12941 - libunrar.a in UnRAR before 5.5.7 has an out-of-bounds read
- > in the Unpack::Unpack20 function.
+While we're at it, add a hash for the license file.
 
- > CVE-2017-12942 - libunrar.a in UnRAR before 5.5.7 has a buffer overflow in
- > the Unpack::LongLZ function.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0f5398f0e61992bd836474b7350c16f00459d0a5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsoup/libsoup.hash | 6 ++++--
+ package/libsoup/libsoup.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
- > For more details, see
- > http://www.openwall.com/lists/oss-security/2017/08/14/3
-
- > While we're at it, add a hash for the license file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index b42cf2f..6e1ff42 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,2 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.0.sha256sum
+-sha256	d8216b71de8247bc6f274ec054c08547b2e04369c1f8add713e9350c8ef81fe5	libsoup-2.56.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.1.sha256sum
++sha256	c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3  libsoup-2.56.1.tar.xz
++# Locally calculated
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index f6e92f8..6eed005 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSOUP_VERSION_MAJOR = 2.56
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPLv2+
