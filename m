@@ -1,54 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 18 Sep 2017 21:30:27 +0300
-Subject: [Buildroot] [PATCH] bash: fix static build
-Message-ID: <e61b7469d3048416c7e3c681a75f773843fe48a6.1505759427.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Sep 2017 20:35:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libinput: bump version to 1.8.2
+Message-ID: <20170918183537.30917-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building bash statically, configure does not initialize the
-SHOBJ_STATUS variable. The SHOBJ_STATUS make variable in
-examples/loadables/Makefile.in must resolve to either 'supported' or
-'unsupported'. Otherwise, the install-$(SHOBJ_STATUS) target does not
-exist.
+Added all hashes applied upstream.
 
-This leads to the following build failure:
+Renamed configure option -event-gui to -debug-gui after upstream commit
+https://cgit.freedesktop.org/wayland/libinput/commit/configure.ac?h=1.8-branch&id=a69294251df92e818f695cd2456c8eb860e02522
 
-make[2]: Entering directory '.../output/build/bash-4.4/examples/loadables'
-make[2]: *** No rule to make target 'install-', needed by 'install'.  Stop.
-make[2]: Leaving directory '.../output/build/bash-4.4/examples/loadables'
-Makefile:793: recipe for target 'install' failed
-
-with the following defconfig:
-
-BR2_arm=y
-BR2_STATIC_LIBS=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_BASH=y
-
-Set SHOBJ_STATUS in the configure environment as a workaround.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-For some reason the autobuilders never caught this issue since the 4.4
-version bump last November (commit cde22e1fd340).
----
- package/bash/bash.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libinput/libinput.hash | 7 +++++--
+ package/libinput/libinput.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 32c87a659e16..dd7c26fc1258 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -25,6 +25,7 @@ BASH_CONF_ENV += \
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
- BASH_CONF_OPTS += --enable-static-link
-+BASH_CONF_ENV += SHOBJ_STATUS=unsupported
- # bash wants to redefine the getenv() function. To check whether this is
- # possible, AC_TRY_RUN is used which is not possible in
- # cross-compilation.
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 490131c3aa..4e64568ca3 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-May/034037.html
+-sha256 0b1e5a6c106ccc609ccececd9e33e6b27c8b01fc7457ddb4c1dd266e780d6bc2  libinput-1.7.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-September/034949.html
++md5  e94e9aa765da9533c23b80b440638de9  libinput-1.8.2.tar.xz
++sha1 1c55462eb598b91c9c360f31170a408fb8d38d22  libinput-1.8.2.tar.xz
++sha256 013518ee0adb2287e6e1f08412efba2137320738cadb5399b783738f04cbab38  libinput-1.8.2.tar.xz
++sha512 555a7680cc8aaf62c5370a865f3aff0a933d42d94a3d8861c072666b02c9e1be45ea39de9a749a9575cdfb613b6150e412e18559d94d4919f21ca4680a3c76a7  libinput-1.8.2.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 4ecc2d14ac..f904b796b7 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.7.2
++LIBINPUT_VERSION = 1.8.2
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+@@ -15,10 +15,10 @@ LIBINPUT_LICENSE_FILES = COPYING
+ LIBINPUT_CONF_OPTS = --disable-tests --disable-libwacom
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+-LIBINPUT_CONF_OPTS += --enable-event-gui
++LIBINPUT_CONF_OPTS += --enable-debug-gui
+ LIBINPUT_DEPENDENCIES += libgtk3
+ else
+-LIBINPUT_CONF_OPTS += --disable-event-gui
++LIBINPUT_CONF_OPTS += --disable-debug-gui
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.14.1
+2.11.0
