@@ -1,89 +1,38 @@
-From: Erik Tideman <erik.tideman@faltcom.se>
-Date: Mon, 18 Sep 2017 09:28:23 +0000
-Subject: [Buildroot] [PATCH] Added support for package flatbuffers.
-In-Reply-To: <3dab2146-fbad-eace-75f3-647a87096c20@mind.be>
-References: <AM4PR0401MB17783D2C2D35AEC6A8C46882F99F0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
- <AM4PR0401MB1778C651AD7C550B24B045A7F99F0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
- <AM4PR0401MB1778E54593D1C3C1D749F4D1F99D0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
- <HE1PR0402MB362873CDF66343E07F2D6FB6F96E0@HE1PR0402MB3628.eurprd04.prod.outlook.com>,
- <3dab2146-fbad-eace-75f3-647a87096c20@mind.be>
-Message-ID: <HE1PR0402MB3628AA481AC3FFCA4C222E23F9630@HE1PR0402MB3628.eurprd04.prod.outlook.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 18 Sep 2017 11:34:18 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix typo
+Message-ID: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ docs/manual/using-buildroot-development.txt | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-
-Thanks for the feedback, I will look into it.
-
-
-
-
-Best regards Erik.
-
-________________________________
-Fr?n: Arnout Vandecappelle <arnout@mind.be>
-Skickat: den 13 september 2017 23:35:27
-Till: Erik Tideman; buildroot at uclibc.org
-?mne: Re: [Buildroot] [PATCH] Added support for package flatbuffers.
-
-Hi Erik,
-
- Thanks a lot for your contribution! It's great to see new people using
-Buildroot and contributing to it.
-
- However, in order to ease the review process, we like to receive patches inline
-and not as attachments. Indeed, this allows us to simply hit "reply" and comment
-on each part of the patch. This is a very typical review process used in the
-open-source community. In order to send patches inline, we recommend you to use
-"git send-email" as e-mail clients very often rewrap text and therefore make
-patches unusable.
-
- From a quick look to your patch, here are a few comments:
-
-- The patch title should be "flatbuffers: new package".
-
-- Please add yourself to the DEVELOPERS file for this package, to indicate that
-you're willing to fix things when they break.
-
-- Please use utils/check-package to check the coding style. Indentation in
-Config.in is not OK.
-
-- Wrap FLATBUFFERS_CONF_OPTS, like:
-
-FLATBUFFERS_CONF_OPTS += \
-        -DCMAKE_CXX_FLAGS="-std=c++11" \
-        -DFLATBUFFERS_BUILD_SHAREDLIB=TRUE \
-        -DFLATBUFFERS_BUILD_TESTS=FALSE
-
-(indent with 1 tab).
-
-- You pass -DFLATBUFFERS_BUILD_SHAREDLIB=TRUE, so either it doesn't support
-BR2_STATIC_LIBS, or you should supply the proper option based on
-BR2_STATIC_LIBS. See e.g. rabbitmq-c.
-
-
- Could you look into those comments, and send an updated version of your
-contribution, using git send-email ?
-
- Thanks!
- Regards,
- Arnout
-
-
-[Thomas, thank you for this template text :-) ]
-
-
---
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170918/488b840a/attachment.html>
+diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+index e167849cdc36..1071de513278 100644
+--- a/docs/manual/using-buildroot-development.txt
++++ b/docs/manual/using-buildroot-development.txt
+@@ -50,11 +50,11 @@ BUSYBOX_OVERRIDE_SRCDIR = /home/bob/busybox/
+ When Buildroot finds that for a given package, an
+ +<pkg>_OVERRIDE_SRCDIR+ has been defined, it will no longer attempt to
+ download, extract and patch the package. Instead, it will directly use
+-the source code available in in the specified directory and +make
+-clean+ will not touch this directory. This allows to point Buildroot
+-to your own directories, that can be managed by Git, Subversion, or
+-any other version control system. To achieve this, Buildroot will use
+-_rsync_ to copy the source code of the component from the specified
++the source code available in the specified directory and +make clean+
++will not touch this directory. This allows to point Buildroot to your
++own directories, that can be managed by Git, Subversion, or any other
++version control system. To achieve this, Buildroot will use _rsync_ to
++copy the source code of the component from the specified
+ +<pkg>_OVERRIDE_SRCDIR+ to +output/build/<package>-custom/+.
+ 
+ This mechanism is best used in conjunction with the +make
+-- 
+2.7.4
