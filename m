@@ -1,314 +1,57 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 17 Sep 2017 18:45:58 -0300
-Subject: [Buildroot] [PATCH v2] nc: new virtual package providing "netcat"
-	functionality
-In-Reply-To: <20170917071546.5111-1-casantos@datacom.ind.br>
-References: <20170917071546.5111-1-casantos@datacom.ind.br>
-Message-ID: <20170917214558.11061-1-casantos@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Sep 2017 08:30:59 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-09-17
+Message-ID: <20170918063059.0F54F20968@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the "nc" virtual package and modify netcat, netcat-openbsd and nmap
-to become providers.
+Hello,
 
-Make the nmap recipe install "ncat" (with a symbolic link to nc) if the
-BR2_PACKAGE_NMAP_NCAT option is set. Other programs (ncat, ndiff, etc.)
-are still chosen via BR2_PACKAGE_NMAP, in the "Networking applications"
-menu.
+Build statistics for 2017-09-17
+================================
 
-So far the "nc" options available to build with uClibc were the ancient
-GNU netcat and its Busybox double. Both lack features available in more
-modern netcats like IPv6, proxies, and Unix sockets.
+      successes : 171
+       failures : 18 
+       timeouts : 0  
+          TOTAL : 189
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1->v2:
-  - Prevent build error
-    Makefile:537: *** nmap is in the dependency chain of nc that has \
-    added it to its _DEPENDENCIES variable without selecting it or \
-    depending on it from Config.in.  Stop.
----
- package/Config.in                        |  3 +-
- package/nc/Config.in                     | 84 ++++++++++++++++++++++++++++++++
- package/nc/nc.mk                         |  7 +++
- package/netcat-openbsd/Config.in         | 25 ----------
- package/netcat-openbsd/netcat-openbsd.mk |  2 +
- package/netcat/Config.in                 | 13 -----
- package/netcat/netcat.mk                 |  1 +
- package/nmap/Config.in                   |  4 ++
- package/nmap/nmap.mk                     | 30 +++++++++++-
- 9 files changed, 127 insertions(+), 42 deletions(-)
- create mode 100644 package/nc/Config.in
- create mode 100644 package/nc/nc.mk
+Classification of failures by reason
+====================================
 
-diff --git a/package/Config.in b/package/Config.in
-index d4e40a6326..275461321f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1676,11 +1676,10 @@ menu "Networking applications"
- 	source "package/mrouted/Config.in"
- 	source "package/mtr/Config.in"
- 	source "package/nbd/Config.in"
-+	source "package/nc/Config.in"
- 	source "package/ncftp/Config.in"
- 	source "package/ndisc6/Config.in"
- 	source "package/netatalk/Config.in"
--	source "package/netcat/Config.in"
--	source "package/netcat-openbsd/Config.in"
- 	source "package/netplug/Config.in"
- 	source "package/netsnmp/Config.in"
- 	source "package/netstat-nat/Config.in"
-diff --git a/package/nc/Config.in b/package/nc/Config.in
-new file mode 100644
-index 0000000000..c599f0d8bc
---- /dev/null
-+++ b/package/nc/Config.in
-@@ -0,0 +1,84 @@
-+config BR2_PACKAGE_NC
-+	bool "nc (netcat)"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	help
-+	  Select the desired "nc" command provider.
-+
-+if BR2_PACKAGE_NC
-+
-+choice
-+	prompt "nc variant"
-+	default BR2_PACKAGE_NETCAT
-+	help
-+	  Select either the venerable netcat (default), netcat-openbsd
-+	  or nmap-ncat.
-+
-+config BR2_PACKAGE_NETCAT
-+	bool "netcat"
-+	select BR2_PACKAGE_HAS_NC
-+	help
-+	  Netcat is a featured networking utility which reads and writes
-+	  data across network connections, using the TCP/IP protocol.
-+	  It is designed to be a reliable "back-end" tool that can be
-+	  used directly or easily driven by other programs and scripts.
-+	  At the same time, it is a feature-rich network debugging and
-+	  exploration tool, since it can create almost any kind of
-+	  connection you would need and has several interesting built-in
-+	  capabilities.
-+
-+	  http://netcat.sourceforge.net/download.php
-+
-+config BR2_PACKAGE_NETCAT_OPENBSD
-+	bool "netcat-openbsd"
-+	select BR2_PACKAGE_HAS_NC
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_LIBBSD
-+	help
-+	  This OpenBSD rewrite of netcat, including support for IPv6,
-+	  proxies, and Unix sockets. Reads and writes data using TCP or
-+	  UDP protocol. It is designed to be a reliable "back-end" tool
-+	  that can be used directly or easily driven by other programs
-+	  and scripts. At the same time it is a feature-rich network
-+	  debugging and exploration tool, since it can create almost any
-+	  kind of connection you would need and has several interesting
-+	  built-in capabilities.
-+
-+	  https://packages.debian.org/sid/netcat-openbsd
-+
-+comment "netcat-openbsd needs a toolchain w/ glibc, threads"
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+
-+config BR2_PACKAGE_NMAP_NCAT
-+	bool "nmap-ncat"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_NMAP
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  Ncat is a feature-packed networking utility which reads and
-+	  writes data across networks from the command line. Ncat was
-+	  written for the Nmap Project as a much-improved
-+	  reimplementation of the venerable Netcat.
-+
-+comment "nmap-nmap needs a toolchain w/ C++, threads"
-+	depends on BR2_USE_MMU
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-+
-+endchoice
-+
-+config BR2_PACKAGE_HAS_NC
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_NC
-+	string
-+	default "netcat"         if BR2_PACKAGE_NETCAT
-+	default "netcat-openbsd" if BR2_PACKAGE_NETCAT_OPENBSD
-+	default "nmap"           if BR2_PACKAGE_NMAP_NCAT
-+
-+endif
-diff --git a/package/nc/nc.mk b/package/nc/nc.mk
-new file mode 100644
-index 0000000000..e04b2bd017
---- /dev/null
-+++ b/package/nc/nc.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# nc
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
-diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-index 6df87ec688..e69de29bb2 100644
---- a/package/netcat-openbsd/Config.in
-+++ b/package/netcat-openbsd/Config.in
-@@ -1,25 +0,0 @@
--config BR2_PACKAGE_NETCAT_OPENBSD
--	bool "netcat-openbsd"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--	select BR2_PACKAGE_LIBBSD
--	help
--	  A simple Unix utility which reads and writes data across network
--	  connections using TCP or UDP protocol. It is designed to be a
--	  reliable "back-end" tool that can be used directly or easily driven
--	  by other programs and scripts. At the same time it is a feature-rich
--	  network debugging and exploration tool, since it can create almost
--	  any kind of connection you would need and has several interesting
--	  built-in capabilities.
--
--	  This package contains the OpenBSD rewrite of netcat, including
--	  support for IPv6, proxies, and Unix sockets.
--
--	  https://packages.debian.org/sid/netcat-openbsd
--
--comment "netcat-openbsd needs a glibc toolchain w/ threads"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index e1a6fee574..5395f85e92 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -8,6 +8,8 @@ NETCAT_OPENBSD_VERSION = debian/1.105-7
- NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
- NETCAT_OPENBSD_LICENSE = BSD-3-Clause
- NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
-+NETCAT_OPENBSD_PROVIDES = nc
-+
- NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
- 
- # Ensure Busybox gets built/installed before, so that this package
-diff --git a/package/netcat/Config.in b/package/netcat/Config.in
-index 924069ee1f..e69de29bb2 100644
---- a/package/netcat/Config.in
-+++ b/package/netcat/Config.in
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_NETCAT
--	bool "netcat"
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--	help
--	  Netcat is a featured networking utility which reads and writes data
--	  across network connections, using the TCP/IP protocol.
--	  It is designed to be a reliable "back-end" tool that can be used
--	  directly or easily driven by other programs and scripts. At the
--	  same time, it is a feature-rich network debugging and exploration
--	  tool, since it can create almost any kind of connection you would
--	  need and has several interesting built-in capabilities.
--
--	  http://netcat.sourceforge.net/download.php
-diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
-index eb7ddcac27..94786fc124 100644
---- a/package/netcat/netcat.mk
-+++ b/package/netcat/netcat.mk
-@@ -8,5 +8,6 @@ NETCAT_VERSION = 0.7.1
- NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VERSION)
- NETCAT_LICENSE = GPL-2.0+
- NETCAT_LICENSE_FILES = COPYING
-+NETCAT_PROVIDES = nc
- 
- $(eval $(autotools-package))
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-index 79f587afd1..3203c3e24b 100644
---- a/package/nmap/Config.in
-+++ b/package/nmap/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_NMAP
-+	bool
-+
-+config BR2_PACKAGE_NMAP_NMAP
- 	bool "nmap"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_NMAP
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_PCRE
- 	help
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 37720e2cad..705687d9d0 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -7,12 +7,14 @@
- NMAP_VERSION = 7.40
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
--NMAP_DEPENDENCIES = libpcap pcre
-+NMAP_DEPENDENCIES = libpcap
- NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included --with-liblinear=included \
--	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
-+	--with-libpcre="$(STAGING_DIR)/usr"
- NMAP_LICENSE = GPL-2.0
- NMAP_LICENSE_FILES = COPYING
-+NMAP_PROVIDES = nc
-+
- 
- # needed by libpcap
- NMAP_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
-@@ -35,6 +37,9 @@ else
- NMAP_CONF_OPTS += --without-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_NMAP_NMAP),y)
-+
-+NMAP_DEPENDENCIES += pcre
- # ndiff only works with python2.x
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- NMAP_DEPENDENCIES += python
-@@ -42,4 +47,25 @@ else
- NMAP_CONF_OPTS += --without-ndiff
- endif
- 
-+else # only ncat
-+
-+NMAP_CONF_OPTS += --without-ndiff --without-zenmap --without-nping --without-nmap-update
-+define NMAP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) build-ncat
-+endef
-+define NMAP_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-ncat
-+endef
-+
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NMAP_NCAT),y)
-+define NMAP_INSTALL_NCAT_SYMLINK
-+        ln -fs ncat $(TARGET_DIR)/usr/bin/nc
-+endef
-+NMAP_POST_INSTALL_TARGET_HOOKS += NMAP_INSTALL_NCAT_SYMLINK
-+else
-+NMAP_CONF_OPTS += --without-ncat
-+endif
-+
- $(eval $(autotools-package))
+                 lcdproc-0.5.9 | 5 
+               librsync-v2.0.0 | 4 
+                openjpeg-2.2.0 | 4 
+       gst1-plugins-bad-1.12.2 | 1 
+                libmbim-1.14.2 | 1 
+                   luvi-v2.7.6 | 1 
+                 mplayer-1.3.0 | 1 
+                   zmqpp-4.1.2 | 1 
+
+
+Detail of failures
+===================
+
+        mips |        gst1-plugins-bad-1.12.2 | NOK | http://autobuild.buildroot.net/results/2915d6d4927479e08ac91087ba754a09ccf0dea0 |     
+         arm |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/a471349143bad1895a5e4e29d977a672dc5187b6 |     
+      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/e29467525874462cb879192884965856462ac35d |     
+      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/ed7567d4ccf2c47dadd021bc9902ef7d66fb495a |     
+        i586 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/0ee94de8950afd4c77bafc76a3d56eac238d2269 |     
+      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/c6cc415a2f40eaea5c7f8596bc2545cd4e66f471 |     
+         arm |                 libmbim-1.14.2 | NOK | http://autobuild.buildroot.net/results/e1ccfefa2f1d54c85ebd955c2c80b797679b5496 |     
+         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/61606287acecdd836e9c18fbfaa16452f24a1106 | ORPH
+         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/2da6fd2beebe6ccbdb23cec933712ad342ee9c13 | ORPH
+         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/eef00aba3f26a75adf13a12c7b1144c4d99c9748 | ORPH
+         arm |                librsync-v2.0.0 | NOK | http://autobuild.buildroot.net/results/e5dbe35288646b8bf86e6a9292609aeb578da02a | ORPH
+        i686 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/b5c3e74d524223754610b9839b85d57cc38e5d3e |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/97dab3ff00f21276f25d588f15a3ffc8115cb64c |     
+       sparc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/dfe8c5c219d877cf17a2f5b8180ffdc364daf4f7 |     
+         arc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/4013eb536ebd21bae3144073fb8227dca1977c4f |     
+       sparc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/c8c9308329d88377aa83646c96c0161bc2ba7caa |     
+     powerpc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/a9a67dffa23c6497cf604ea465c4dec2ec9df9f9 |     
+        or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/094a55a81541bb27e72c19444a772e9fef2e0d87 |     
+
 -- 
-2.13.5
+http://autobuild.buildroot.net
