@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 18 Sep 2017 19:53:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libebur128: bump version to 1.2.2,
-	add hash
-Message-ID: <20170918175333.11235-1-bernd.kuhls@t-online.de>
+Date: Mon, 18 Sep 2017 20:24:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-input-libinput:
+	bump version to 0.26.0
+Message-ID: <20170918182459.12094-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +11,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libebur128/libebur128.hash | 3 +++
- package/libebur128/libebur128.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/libebur128/libebur128.hash
+ .../xdriver_xf86-input-libinput.hash                           | 10 +++++-----
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libebur128/libebur128.hash b/package/libebur128/libebur128.hash
-new file mode 100644
-index 0000000000..2b0d3e34c2
---- /dev/null
-+++ b/package/libebur128/libebur128.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 1d0d7e855da04010a2432e11fbc596502caf11b61c3b571ccbcb10095fe44b43  libebur128-v1.2.2.tar.gz
-+sha256 d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
-diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
-index f5ada311f7..0302b5bd89 100644
---- a/package/libebur128/libebur128.mk
-+++ b/package/libebur128/libebur128.mk
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 48283082d3..43b8f78f96 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-May/002798.html
+-md5 14003139614b25cc76c9a4cad059df89  xf86-input-libinput-0.25.1.tar.bz2
+-sha1 00494b7566c0c5cbcb8d81655b967f42f7a40ef0  xf86-input-libinput-0.25.1.tar.bz2
+-sha256 489f7d591c9ef08463d4966e61f7c6ea433f5fcbb9f5370fb621da639a84c7e0  xf86-input-libinput-0.25.1.tar.bz2
+-sha512 9a8d16bdffb73a5318d22e352826c410ccb6f8c7ade31c23823bd6c17202bb67e917dfe8d4cab6e54fdf15f201d14d80b6306cedc5f93f66989edfcab5082ece  xf86-input-libinput-0.25.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-September/002807.html
++md5 da47ef62eab1d0e922a8fa929ff81758  xf86-input-libinput-0.26.0.tar.bz2
++sha1 3f55b8a5d4ff51d4f0cfe3fe9ace66227193abd4  xf86-input-libinput-0.26.0.tar.bz2
++sha256 abca558fc2226f295691f1cf3412d4c0edeaa439f677ca25b5c9fab310d2387b  xf86-input-libinput-0.26.0.tar.bz2
++sha512 b52a27e916f7e86576500ef2bc3ce640676f5a710543755865a723628c0e01a575989460853bac184ed696961e3f8fca72ecba8ad4625be8cd9e31f9a55f5e97  xf86-input-libinput-0.26.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 4e3976135d..dab24b1235 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEBUR128_VERSION = v1.1.0
-+LIBEBUR128_VERSION = v1.2.2
- LIBEBUR128_SITE = $(call github,jiixyj,libebur128,$(LIBEBUR128_VERSION))
- LIBEBUR128_LICENSE = MIT
- LIBEBUR128_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.25.1
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.26.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 2.11.0
