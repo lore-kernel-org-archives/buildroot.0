@@ -1,123 +1,77 @@
-From: Mike Harmony <mike.harmony@snapav.com>
-Date: Mon, 18 Sep 2017 11:44:20 -0400
-Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPI M2 Plus
-	board.
-Message-ID: <1505749460-14500-1-git-send-email-mike.harmony@snapav.com>
+From: Bradford Barr <bradford@density.io>
+Date: Mon, 18 Sep 2017 12:18:34 -0400
+Subject: [Buildroot] [PATCH 1/1] python-msgpack: bump to version 0.4.8
+Message-ID: <20170918161834.26882-1-bradford@density.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
----
- DEVELOPERS                         |  4 ++++
- board/lemaker/m2-plus/boot.cmd     |  7 +++++++
- board/lemaker/m2-plus/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
- configs/bananapi_m2_plus_defconfig | 26 ++++++++++++++++++++++++++
- 4 files changed, 70 insertions(+)
- create mode 100644 board/lemaker/m2-plus/boot.cmd
- create mode 100644 board/lemaker/m2-plus/genimage.cfg
- create mode 100644 configs/bananapi_m2_plus_defconfig
+From: bradford barr <bradford@density.io>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 21eafc9..c3ff15f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1252,6 +1252,10 @@ N:	Micha? ?yszczek <michal.lyszczek@bofc.pl>
- F:	board/altera/socrates_cyclone5/
- F:	configs/socrates_cyclone5_defconfig
+This package doesn't actually rely on the msgpack runtime libraries, it's a
+pure python implementation. I've updated the package accordingly.
+
+Signed-off-by: bradford barr <bradford@density.io>
+---
+ package/python-msgpack/Config.in           | 11 ++---------
+ package/python-msgpack/python-msgpack.hash |  6 +++---
+ package/python-msgpack/python-msgpack.mk   |  5 ++---
+ 3 files changed, 7 insertions(+), 15 deletions(-)
+
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index 9aa2b5f..2050d4f 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -1,16 +1,9 @@
+ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	bool "python-msgpack"
+-	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
+-	select BR2_PACKAGE_MSGPACK
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+-	  This package provides CPython bindings for reading and
+-	  writing MessagePack data.
++	  This package provides a pure python library for reading
++	  and writing MessagePack data.
  
-+N:	Mike Harmony <mike.harmony@snapav.com>
-+F:	board/lemaker/m2-plus/
-+F:	configs/bananapi_m2_plus_defconfig
-+
- N:	Mikhail Boiko <mikhailboiko85@gmail.com>
- F:	package/libfribidi/
+ 	  https://pypi.python.org/pypi/msgpack-python/
+-
+-comment "python-msgpack needs a toolchain w/ C++"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 636aa90..48313ff 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=eb2aad1081534ef3a9f32a0ecd350b9b, sha356 locally computed.
+-md5	eb2aad1081534ef3a9f32a0ecd350b9b  msgpack-python-0.4.7.tar.gz
+-sha256	5e001229a54180a02dcdd59db23c9978351af55b1290c27bc549e381f43acd6b  msgpack-python-0.4.7.tar.gz
++# md5 from https://pypi.python.org/pypi/msgpack-python/json, sha256 locally computed.
++md5	dcd854fb41ee7584ebbf35e049e6be98  msgpack-python-0.4.8.tar.gz
++sha256	1a2b19df0f03519ec7f19f826afb935b202d8979b0856c6fb3dc28955799f886  msgpack-python-0.4.8.tar.gz
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 344b7bf..5be2b14 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
-diff --git a/board/lemaker/m2-plus/boot.cmd b/board/lemaker/m2-plus/boot.cmd
-new file mode 100644
-index 0000000..d22464a
---- /dev/null
-+++ b/board/lemaker/m2-plus/boot.cmd
-@@ -0,0 +1,7 @@
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+
-+mmc dev 0
-+fatload mmc 0 $kernel_addr_r zImage
-+fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
-+
-+bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/lemaker/m2-plus/genimage.cfg b/board/lemaker/m2-plus/genimage.cfg
-new file mode 100644
-index 0000000..cde0669
---- /dev/null
-+++ b/board/lemaker/m2-plus/genimage.cfg
-@@ -0,0 +1,33 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"sun8i-h3-bananapi-m2-plus.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 64M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+		size = 1040384 # 1MB - 8192
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
-new file mode 100644
-index 0000000..59dae1b
---- /dev/null
-+++ b/configs/bananapi_m2_plus_defconfig
-@@ -0,0 +1,26 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_KERNEL_HEADERS_4_13=y
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/lemaker/m2-plus/boot.cmd"
-+BR2_PACKAGE_HOST_GENEXT2FS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-PYTHON_MSGPACK_VERSION = 0.4.7
++PYTHON_MSGPACK_VERSION = 0.4.8
+ PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python
++PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/21/27/8a1d82041c7a2a51fcc73675875a5f9ea06c2663e02fcfeb708be1d081a0
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-PYTHON_MSGPACK_DEPENDENCIES = msgpack
+ 
+ $(eval $(python-package))
 -- 
-2.7.4
+2.9.3
