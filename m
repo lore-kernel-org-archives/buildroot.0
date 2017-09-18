@@ -1,60 +1,89 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 18 Sep 2017 10:13:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 17.2.1
-Message-ID: <20170918081342.24481-1-bernd.kuhls@t-online.de>
+From: Erik Tideman <erik.tideman@faltcom.se>
+Date: Mon, 18 Sep 2017 09:28:23 +0000
+Subject: [Buildroot] [PATCH] Added support for package flatbuffers.
+In-Reply-To: <3dab2146-fbad-eace-75f3-647a87096c20@mind.be>
+References: <AM4PR0401MB17783D2C2D35AEC6A8C46882F99F0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
+ <AM4PR0401MB1778C651AD7C550B24B045A7F99F0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
+ <AM4PR0401MB1778E54593D1C3C1D749F4D1F99D0@AM4PR0401MB1778.eurprd04.prod.outlook.com>
+ <HE1PR0402MB362873CDF66343E07F2D6FB6F96E0@HE1PR0402MB3628.eurprd04.prod.outlook.com>,
+ <3dab2146-fbad-eace-75f3-647a87096c20@mind.be>
+Message-ID: <HE1PR0402MB3628AA481AC3FFCA4C222E23F9630@HE1PR0402MB3628.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream.
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 7 +++++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index cbea791725..eeb4ba7037 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.2.0
-+MESA3D_HEADERS_VERSION = 17.2.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index cca595b231..2e3f54a95a 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,5 @@
--# From https://www.mesa3d.org/relnotes/17.2.0.html
--sha256 3123448f770eae58bc73e15480e78909defb892f10ab777e9116c9b218094943  mesa-17.2.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2017-September/000359.html
-+md5 f53ed38110237d9df5f9198c09ef0ab0  mesa-17.2.1.tar.xz
-+sha1 7429e74a0ef12ea9d60b41b2b852898b3da0b238  mesa-17.2.1.tar.xz
-+sha256 77385d17827cff24a3bae134342234f2efe7f7f990e778109682571dbbc9ba1e  mesa-17.2.1.tar.xz
-+sha512 19a7d6c2e2d439b1c73199bffd4154b42017bccc138be954a893c3b70e885f07988de84dc8aa2aff36e06295e91f0181d5b95372152f6f0f80b7afe4b3846b6a  mesa-17.2.1.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 84ec70efb4..83c83f14f9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.2.0
-+MESA3D_VERSION = 17.2.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.11.0
+Thanks for the feedback, I will look into it.
+
+
+
+
+Best regards Erik.
+
+________________________________
+Fr?n: Arnout Vandecappelle <arnout@mind.be>
+Skickat: den 13 september 2017 23:35:27
+Till: Erik Tideman; buildroot at uclibc.org
+?mne: Re: [Buildroot] [PATCH] Added support for package flatbuffers.
+
+Hi Erik,
+
+ Thanks a lot for your contribution! It's great to see new people using
+Buildroot and contributing to it.
+
+ However, in order to ease the review process, we like to receive patches inline
+and not as attachments. Indeed, this allows us to simply hit "reply" and comment
+on each part of the patch. This is a very typical review process used in the
+open-source community. In order to send patches inline, we recommend you to use
+"git send-email" as e-mail clients very often rewrap text and therefore make
+patches unusable.
+
+ From a quick look to your patch, here are a few comments:
+
+- The patch title should be "flatbuffers: new package".
+
+- Please add yourself to the DEVELOPERS file for this package, to indicate that
+you're willing to fix things when they break.
+
+- Please use utils/check-package to check the coding style. Indentation in
+Config.in is not OK.
+
+- Wrap FLATBUFFERS_CONF_OPTS, like:
+
+FLATBUFFERS_CONF_OPTS += \
+        -DCMAKE_CXX_FLAGS="-std=c++11" \
+        -DFLATBUFFERS_BUILD_SHAREDLIB=TRUE \
+        -DFLATBUFFERS_BUILD_TESTS=FALSE
+
+(indent with 1 tab).
+
+- You pass -DFLATBUFFERS_BUILD_SHAREDLIB=TRUE, so either it doesn't support
+BR2_STATIC_LIBS, or you should supply the proper option based on
+BR2_STATIC_LIBS. See e.g. rabbitmq-c.
+
+
+ Could you look into those comments, and send an updated version of your
+contribution, using git send-email ?
+
+ Thanks!
+ Regards,
+ Arnout
+
+
+[Thomas, thank you for this template text :-) ]
+
+
+--
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170918/488b840a/attachment.html>
