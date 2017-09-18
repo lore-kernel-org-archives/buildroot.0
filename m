@@ -1,155 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Sep 2017 09:43:36 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gd: security bump to
-	version 2.2.5
-Message-ID: <20170918074221.9C639810A3@busybox.osuosl.org>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Mon, 18 Sep 2017 09:55:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/poppler: fix libcurl support
+In-Reply-To: <20170917182818.18868-1-bernd.kuhls@t-online.de>
+References: <20170917182818.18868-1-bernd.kuhls@t-online.de>
+Message-ID: <CALdGskJxtfFkQ9XEeWKkKpTq4CD1r0iY9TWx1qvaB16QUJJg8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c128009659da38733c1c4f0ae93818c8bef06cc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
 
-Fixes the following security issues:
+On 17 September 2017 at 20:28, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-CVE-2017-6362: Double-free in gdImagePngPtr()
-CVE-2017-7890: Buffer over-read into uninitialized memory
-
-Drop patches no more needed:
-
-0001-gdlib-config.patch: @LIBICONV@ is nowadays correct AC_SUBST'ed by
-configure
-
-0002-gd_bmp-fix-build-with-uClibc.patch: upstream uses ceil() since
-https://github.com/libgd/libgd/commit/6913dd3cd2a7c2914ad9622419f9343bfe956135
-
-While we're at it, add a hash for the license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3b85d24c1d927590ed3a336794562e9a512fc216)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gd/0001-gdlib-config.patch                 | 32 --------------
- package/gd/0002-gd_bmp-fix-build-with-uClibc.patch | 50 ----------------------
- package/gd/gd.hash                                 |  3 +-
- package/gd/gd.mk                                   |  2 +-
- 4 files changed, 3 insertions(+), 84 deletions(-)
-
-diff --git a/package/gd/0001-gdlib-config.patch b/package/gd/0001-gdlib-config.patch
-deleted file mode 100644
-index 7756bf1..0000000
---- a/package/gd/0001-gdlib-config.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Fix gdlib-config
--
--Since the @LIBICONV@ macro doesn't get replaced at compile time, we
--end up installing an invalid gdlib-config: the gdlib-config --libs
--says that one should link against @LIBICONV@ which obviously doesn't
--work.
--
--Use the OpenWRT patch from
--https://dev.openwrt.org/browser/packages/libs/gd/patches/101-gdlib-config.patch
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
----- a/config/gdlib-config.in
--+++ b/config/gdlib-config.in
--@@ -71,7 +71,7 @@ while test $# -gt 0; do
-- 	echo @LDFLAGS@
-- 	;;
--     --libs)
---	echo -lgd @LIBS@ @LIBICONV@
--+	echo -lgd @LIBS@
-- 	;;
--     --cflags|--includes)
-- 	echo -I at includedir@
--@@ -84,7 +84,7 @@ while test $# -gt 0; do
-- 	echo "includedir: $includedir"
-- 	echo "cflags:     -I at includedir@"
-- 	echo "ldflags:    @LDFLAGS@"
---	echo "libs:       @LIBS@ @LIBICONV@"
--+	echo "libs:       @LIBS@"
-- 	echo "libdir:     $libdir"
-- 	echo "features:   @FEATURES@"
-- 	;;
-diff --git a/package/gd/0002-gd_bmp-fix-build-with-uClibc.patch b/package/gd/0002-gd_bmp-fix-build-with-uClibc.patch
-deleted file mode 100644
-index 89bc391..0000000
---- a/package/gd/0002-gd_bmp-fix-build-with-uClibc.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From ea2a03e983acf34a1320b460dcad43b7e0b0b14f Mon Sep 17 00:00:00 2001
--Message-Id: <ea2a03e983acf34a1320b460dcad43b7e0b0b14f.1397134306.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 10 Apr 2014 15:49:13 +0300
--Subject: [PATCH] gd_bmp: fix build with uClibc
--
--Some architectures (like ARM) don't have the long double variants of math
--functions under uClibc. Add a local ceill definition in this case.
--
--Patch status: reported upstream, 
--https://bitbucket.org/libgd/gd-libgd/issue/123/build-failure-agains-uclibc-arm
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
-- src/gd_bmp.c | 12 ++++++++++++
-- 1 file changed, 12 insertions(+)
--
--diff --git a/src/gd_bmp.c b/src/gd_bmp.c
--index 0fc021909f1b..11b3ec1baa01 100644
----- a/src/gd_bmp.c
--+++ b/src/gd_bmp.c
--@@ -25,6 +25,11 @@
-- #include "gdhelpers.h"
-- #include "bmp.h"
-- 
--+#include <features.h>
--+#if defined (__UCLIBC__) && !defined(__UCLIBC_HAS_LONG_DOUBLE_MATH__)
--+#define NO_LONG_DOUBLE
--+#endif
--+
-- static int compress_row(unsigned char *uncompressed_row, int length);
-- static int build_rle_packet(unsigned char *row, int packet_type, int length, unsigned char *data);
-- 
--@@ -42,6 +47,13 @@ static int bmp_read_rle(gdImagePtr im, gdIOCtxPtr infile, bmp_info_t *info);
-- 
-- #define BMP_DEBUG(s)
-- 
--+#ifdef NO_LONG_DOUBLE
--+long double ceill(long double x)
--+{
--+	return (long double) ceil((double) x);
--+}
--+#endif
--+
-- static int gdBMPPutWord(gdIOCtx *out, int w)
-- {
-- 	/* Byte order is little-endian */
---- 
--1.9.1
--
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index a1991b1..1cd9e56 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	137f13a7eb93ce72e32ccd7cebdab6874f8cf7ddf31d3a455a68e016ecd9e4e6	libgd-2.2.4.tar.xz
-+sha256	8c302ccbf467faec732f0741a859eef4ecae22fea2d2ab87467be940842bde51	libgd-2.2.5.tar.xz
-+sha256  d02dae2141d49b8a6b09b2b73e68a8f17d7bbeaaf02b3b841ee11fea2d9e328d	COPYING
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 63d16eb..e2a46dc 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GD_VERSION = 2.2.4
-+GD_VERSION = 2.2.5
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
+> BR2_PACKAGE_POPPLER_LIBCURL is not defined in poppler/Config.in.
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/poppler/poppler.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> index 6796437776..1beb75a6a3 100644
+> --- a/package/poppler/poppler.mk
+> +++ b/package/poppler/poppler.mk
+> @@ -66,7 +66,7 @@ else
+>  POPPLER_CONF_OPTS += --disable-zlib
+>  endif
+>
+> -ifeq ($(BR2_PACKAGE_POPPLER_LIBCURL),y)
+> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  POPPLER_CONF_OPTS += --enable-libcurl
+>  POPPLER_DEPENDENCIES += libcurl
+>  else
+> --
+> 2.11.0
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170918/b5343319/attachment.html>
