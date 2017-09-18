@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Sep 2017 09:45:05 +0200
-Subject: [Buildroot] [PATCH] libsoup: security bump to version 2.56.1
-In-Reply-To: <20170907150754.8147-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 7 Sep 2017 17:07:54 +0200")
-References: <20170907150754.8147-1-peter@korsgaard.com>
-Message-ID: <87vakg30xq.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Sep 2017 09:47:31 +0200
+Subject: [Buildroot] [PATCH] strongswan: add upstream security patch
+In-Reply-To: <20170907152655.23933-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 7 Sep 2017 17:26:55 +0200")
+References: <20170907152655.23933-1-peter@korsgaard.com>
+Message-ID: <87r2v430to.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2017-2885: stack based buffer overflow with HTTP Chunked Encoding
- > For more details, see
- > https://bugzilla.gnome.org/show_bug.cgi?id=785774
+ > Fixes CVE-2017-11185: The gmp plugin in strongSwan before 5.6.0 allows
+ > remote attackers to cause a denial of service (NULL pointer dereference and
+ > daemon crash) via a crafted RSA signature.
 
- > While we're at it, add a hash for the license file.
+ > For more details, see
+ > https://www.strongswan.org/blog/2017/08/14/strongswan-vulnerability-%28cve-2017-11185%29.html
+
+ > While we're at it, add hashes for the license files.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
