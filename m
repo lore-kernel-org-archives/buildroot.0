@@ -1,108 +1,60 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Mon, 18 Sep 2017 09:55:45 +0200
-Subject: [Buildroot] [PATCH 2/2] package/poppler: bump version to 0.59.0
-In-Reply-To: <20170917182818.18868-2-bernd.kuhls@t-online.de>
-References: <20170917182818.18868-1-bernd.kuhls@t-online.de>
- <20170917182818.18868-2-bernd.kuhls@t-online.de>
-Message-ID: <CALdGskK46jR6jD5yzsXu8kcpqKx-xHHZ2oAk4QWEMP5VqUg-og@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Sep 2017 10:13:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.2.1
+Message-ID: <20170918081342.24481-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
+Added all hashes provided by upstream.
 
-On 17 September 2017 at 20:28, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 7 +++++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-> Removed patch applied upstream:
-> https://cgit.freedesktop.org/poppler/poppler/commit/poppler/Form.h?id=
-> a9581e624fa62b3905b790ac10d1349b1f96048a
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-Form-add-missing-std-vector-include.patch | 36
-> ----------------------
->  package/poppler/poppler.hash                       |  2 +-
->  package/poppler/poppler.mk                         |  2 +-
->  3 files changed, 2 insertions(+), 38 deletions(-)
->  delete mode 100644 package/poppler/0001-Form-add-
-> missing-std-vector-include.patch
->
-> diff --git a/package/poppler/0001-Form-add-missing-std-vector-include.patch
-> b/package/poppler/0001-Form-add-missing-std-vector-include.patch
-> deleted file mode 100644
-> index 5bca757234..0000000000
-> --- a/package/poppler/0001-Form-add-missing-std-vector-include.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -From 156507c6e85ad05256ccba06a710d47d34cd8153 Mon Sep 17 00:00:00 2001
-> -From: Peter Seiderer <ps.report@gmx.net>
-> -Date: Fri, 5 May 2017 22:21:19 +0200
-> -Subject: [PATCH] Form: add missing std::vector include
-> -MIME-Version: 1.0
-> -Content-Type: text/plain; charset=UTF-8
-> -Content-Transfer-Encoding: 8bit
-> -
-> -Fixes:
-> -
-> -  ../../poppler/Form.h:544:14: error: ?vector? in namespace ?std? does
-> not name a template type
-> -     const std::vector<Ref> &getCalculateOrder() const { return
-> calculateOrder; }
-> -
-> -  ../../poppler/Form.h:556:8: error: ?vector? in namespace ?std? does not
-> name a template type
-> -     std::vector<Ref> calculateOrder;
-> -
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - poppler/Form.h | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/poppler/Form.h b/poppler/Form.h
-> -index 8ddb6fe..e0a3a28 100644
-> ---- a/poppler/Form.h
-> -+++ b/poppler/Form.h
-> -@@ -27,6 +27,7 @@
-> - #include "Annot.h"
-> -
-> - #include <set>
-> -+#include <vector>
-> -
-> - class GooString;
-> - class Array;
-> ---
-> -2.11.0
-> -
-> diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-> index ffcc71e170..7aa14c681c 100644
-> --- a/package/poppler/poppler.hash
-> +++ b/package/poppler/poppler.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256 0ea37de71b7db78212ebc79df59f99b66409a29c2eac4d882dae9f2397fe44d8
-> poppler-0.57.0.tar.xz
-> +sha256 a3d626b24cd14efa9864e12584b22c9c32f51c46417d7c10ca17651f297c9641
-> poppler-0.59.0.tar.xz
-> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-> index 1beb75a6a3..5946cbec24 100644
-> --- a/package/poppler/poppler.mk
-> +++ b/package/poppler/poppler.mk
-> @@ -4,7 +4,7 @@
->  #
->  ############################################################
-> ####################
->
-> -POPPLER_VERSION = 0.57.0
-> +POPPLER_VERSION = 0.59.0
->  POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
->  POPPLER_SITE = http://poppler.freedesktop.org
->  POPPLER_DEPENDENCIES = fontconfig host-pkgconf
-> --
-> 2.11.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170918/1ebee2a6/attachment.html>
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index cbea791725..eeb4ba7037 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.2.0
++MESA3D_HEADERS_VERSION = 17.2.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index cca595b231..2e3f54a95a 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,5 @@
+-# From https://www.mesa3d.org/relnotes/17.2.0.html
+-sha256 3123448f770eae58bc73e15480e78909defb892f10ab777e9116c9b218094943  mesa-17.2.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-September/000359.html
++md5 f53ed38110237d9df5f9198c09ef0ab0  mesa-17.2.1.tar.xz
++sha1 7429e74a0ef12ea9d60b41b2b852898b3da0b238  mesa-17.2.1.tar.xz
++sha256 77385d17827cff24a3bae134342234f2efe7f7f990e778109682571dbbc9ba1e  mesa-17.2.1.tar.xz
++sha512 19a7d6c2e2d439b1c73199bffd4154b42017bccc138be954a893c3b70e885f07988de84dc8aa2aff36e06295e91f0181d5b95372152f6f0f80b7afe4b3846b6a  mesa-17.2.1.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 84ec70efb4..83c83f14f9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.2.0
++MESA3D_VERSION = 17.2.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.11.0
