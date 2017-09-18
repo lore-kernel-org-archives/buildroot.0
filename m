@@ -1,166 +1,53 @@
 From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Mon, 18 Sep 2017 11:53:38 -0700
-Subject: [Buildroot] [PATCH] qt5: remove Qt Quick dependency on opengl
-Message-ID: <1505760818-16159-1-git-send-email-joshua.henderson@microchip.com>
+Date: Mon, 18 Sep 2017 12:21:25 -0700
+Subject: [Buildroot] [PATCH v2] qt5base: Qt KMS support does not depend on
+	opengl
+Message-ID: <1505762485-15768-1-git-send-email-joshua.henderson@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt Quick should no longer depend on opengl, and instead fallback to the limited
-functionality software renderer as a replacement [1] when not available. This
-also pulls a qt5declarative patch into 5.9.1 to fix examples compiling without
-opengl.
+Qt KMS support should not explicitly depend on the availability of opengl.
+Don't explicitly disable KMS if opengl is not available and fallback to
+detecting if libdrm is available before disabling kms.
 
-[1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
+The scenario where this is necessary involves using the Qt linuxfb backend
+"dumb buffer" support via the DRM API.  This is new in Qt 5.9 [1] and only
+requires KMS, but not opengl.
+
+[1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
 
 Cc: Peter Seiderer <ps.report@gmx.net>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
----
- ...uickviewcomparison-and-quickwidget-needs-.patch | 58 ++++++++++++++++++++++
- package/qt5/qt5declarative/Config.in               |  6 +--
- package/qt5/qt5multimedia/qt5multimedia.mk         |  3 +-
- package/qt5/qt5quickcontrols/Config.in             |  4 +-
- package/qt5/qt5quickcontrols2/Config.in            |  4 +-
- 5 files changed, 67 insertions(+), 8 deletions(-)
- create mode 100644 package/qt5/qt5declarative/5.9.1/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
 
-diff --git a/package/qt5/qt5declarative/5.9.1/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch b/package/qt5/qt5declarative/5.9.1/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-new file mode 100644
-index 0000000..875634f
---- /dev/null
-+++ b/package/qt5/qt5declarative/5.9.1/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-@@ -0,0 +1,58 @@
-+From b4db5c6cef877b33b5e7cd5a07fe4a7e6797dcfc Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 16 May 2017 19:47:19 +0200
-+Subject: [PATCH] examples: qquickviewcomparison and quickwidget needs OpenGL
-+ support
-+
-+Fixes:
-+
-+  main.cpp:(.text._ZN11QQmlPrivate10createIntoI6FbItemEEvPv[_ZN11QQmlPrivate10createIntoI6FbItemEEvPv]+0x18): undefined reference to `QQuickFramebufferObject::QQuickFramebufferObject(QQuickItem*)'
-+  .obj/main.o: In function `QQmlPrivate::QQmlElement<FbItem>::~QQmlElement()':
-+  main.cpp:(.text._ZN11QQmlPrivate11QQmlElementI6FbItemED2Ev[_ZN11QQmlPrivate11QQmlElementI6FbItemED5Ev]+0x5c): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/main.o: In function `QQmlPrivate::QQmlElement<FbItem>::~QQmlElement()':
-+  main.cpp:(.text._ZN11QQmlPrivate11QQmlElementI6FbItemED0Ev[_ZN11QQmlPrivate11QQmlElementI6FbItemED0Ev]+0x64): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0x48): undefined reference to `QQuickFramebufferObject::isTextureProvider() const'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0x4c): undefined reference to `QQuickFramebufferObject::textureProvider() const'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xb4): undefined reference to `QQuickFramebufferObject::geometryChanged(QRectF const&, QRectF const&)'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xb8): undefined reference to `QQuickFramebufferObject::updatePaintNode(QSGNode*, QQuickItem::UpdatePaintNodeData*)'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xbc): undefined reference to `QQuickFramebufferObject::releaseResources()'
-+  .obj/moc_fbitem.o: In function `FbItem::qt_metacast(char const*)':
-+  moc_fbitem.cpp:(.text+0x70): undefined reference to `QQuickFramebufferObject::qt_metacast(char const*)'
-+  .obj/moc_fbitem.o: In function `FbItem::qt_metacall(QMetaObject::Call, int, void**)':
-+  moc_fbitem.cpp:(.text+0x80): undefined reference to `QQuickFramebufferObject::qt_metacall(QMetaObject::Call, int, void**)'
-+  .obj/moc_fbitem.o: In function `FbItem::~FbItem()':
-+  moc_fbitem.cpp:(.text._ZN6FbItemD2Ev[_ZN6FbItemD5Ev]+0x38): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/moc_fbitem.o: In function `FbItem::~FbItem()':
-+  moc_fbitem.cpp:(.text._ZN6FbItemD0Ev[_ZN6FbItemD0Ev]+0x40): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0x8): undefined reference to `typeinfo for QQuickFramebufferObject'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0x58): undefined reference to `QQuickFramebufferObject::isTextureProvider() const'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0x5c): undefined reference to `QQuickFramebufferObject::textureProvider() const'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xc4): undefined reference to `QQuickFramebufferObject::geometryChanged(QRectF const&, QRectF const&)'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xc8): undefined reference to `QQuickFramebufferObject::updatePaintNode(QSGNode*, QQuickItem::UpdatePaintNodeData*)'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xcc): undefined reference to `QQuickFramebufferObject::releaseResources()'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xf0): undefined reference to `QQuickFramebufferObject::staticMetaObject'
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/quick/quick.pro | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/examples/quick/quick.pro b/examples/quick/quick.pro
-+index 445dfb0fa..26ca0138e 100644
-+--- a/examples/quick/quick.pro
-++++ b/examples/quick/quick.pro
-+@@ -36,7 +36,10 @@ qtConfig(opengl(es1|es2)?) {
-+ # Widget dependent examples
-+ qtHaveModule(widgets) {
-+     SUBDIRS += embeddedinwidgets
-+-    qtHaveModule(quickwidgets): SUBDIRS += quickwidgets
-++    # OpenGL Support Required
-++    qtConfig(opengl(es1|es2)?) {
-++        qtHaveModule(quickwidgets): SUBDIRS += quickwidgets
-++    }
-+ }
-+ 
-+ EXAMPLE_FILES = \
-+-- 
-+2.11.0
-+
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 5384b5f..3a353a8 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -17,11 +17,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
- if BR2_PACKAGE_QT5DECLARATIVE
- 
- comment "quick module needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 
- config BR2_PACKAGE_QT5DECLARATIVE_QUICK
- 	bool "quick module"
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
--	select BR2_PACKAGE_QT5BASE_OPENGL
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
-+	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
- 
+---
+
+v2:
+- If libdrm is configured, make it an explicit dependency.
+---
+ package/qt5/qt5base/qt5base.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 0ca11a5..7234948 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -40,8 +40,13 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ QT5BASE_CONFIGURE_OPTS += -kms -gbm
+ QT5BASE_DEPENDENCIES += mesa3d
+ else
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++QT5BASE_CONFIGURE_OPTS += -kms
++QT5BASE_DEPENDENCIES += libdrm
++else
+ QT5BASE_CONFIGURE_OPTS += -no-kms
  endif
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 835142e..6df96bc 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -61,7 +61,8 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
- endef
- endif
++endif
  
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+# this is only built with quick/opengl support enabled
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5_GL_AVAILABLE),yy)
- define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
- endef
-diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
-index 3cc5821..59f6ca4 100644
---- a/package/qt5/qt5quickcontrols/Config.in
-+++ b/package/qt5/qt5quickcontrols/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QT5QUICKCONTROLS
- 	bool "qt5quickcontrols"
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-@@ -14,5 +14,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
- 	  http://doc.qt.io/qt-5/qtquickcontrols-index.html
- 
- comment "qt5quickcontrols needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
-index 1066b17..d036f74 100644
---- a/package/qt5/qt5quickcontrols2/Config.in
-+++ b/package/qt5/qt5quickcontrols2/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QT5QUICKCONTROLS2
- 	bool "qt5quickcontrols2"
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-@@ -16,5 +16,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
- 	  https://doc.qt.io/qt-5/qtquickcontrols2-index.html
- 
- comment "qt5quickcontrols2 needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ QT5BASE_CONFIGURE_OPTS += -debug
 -- 
 2.7.4
