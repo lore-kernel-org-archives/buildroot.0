@@ -1,105 +1,125 @@
-From: Erik Tideman <erik.tideman@faltcom.se>
-Date: Mon, 18 Sep 2017 12:35:18 +0200
-Subject: [Buildroot] [PATCH] flatbuffers: new package
-Message-ID: <1505730918-17857-1-git-send-email-erik.tideman@faltcom.se>
+From: Mike Harmony <mike.harmony@snapav.com>
+Date: Mon, 18 Sep 2017 09:58:27 -0400
+Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPi M2 Plus
+	board.
+Message-ID: <1505743107-53140-1-git-send-email-mike.harmony@snapav.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
 ---
- DEVELOPERS                           |  3 +++
- package/Config.in                    |  1 +
- package/flatbuffers/Config.in        | 13 +++++++++++++
- package/flatbuffers/flatbuffers.hash |  2 ++
- package/flatbuffers/flatbuffers.mk   | 23 +++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
- create mode 100644 package/flatbuffers/Config.in
- create mode 100644 package/flatbuffers/flatbuffers.hash
- create mode 100644 package/flatbuffers/flatbuffers.mk
+ DEVELOPERS                         |  4 ++++
+ board/lemaker/m2-plus/boot.cmd     |  7 +++++++
+ board/lemaker/m2-plus/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
+ configs/bananapi_m2_plus_defconfig | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 72 insertions(+)
+ create mode 100644 board/lemaker/m2-plus/boot.cmd
+ create mode 100644 board/lemaker/m2-plus/genimage.cfg
+ create mode 100644 configs/bananapi_m2_plus_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 21eafc9..bfac488 100644
+index 21eafc9..c3ff15f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -533,6 +533,9 @@ F:	package/xdotool/
- N:	Erik Stromdahl <erik.stromdahl@gmail.com>
- F:	package/mxsldr/
+@@ -1252,6 +1252,10 @@ N:	Micha? ?yszczek <michal.lyszczek@bofc.pl>
+ F:	board/altera/socrates_cyclone5/
+ F:	configs/socrates_cyclone5_defconfig
  
-+N:	Erik Tideman <erik.tideman@faltcom.se>
-+F:	package/flatbuffers/
++N:	Mike Harmony <mike.harmony@snapav.com>
++F:	board/lemaker/m2-plus/
++F:	configs/bananapi_m2_plus_defconfig
 +
- N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
- F:	package/szip/
+ N:	Mikhail Boiko <mikhailboiko85@gmail.com>
+ F:	package/libfribidi/
  
-diff --git a/package/Config.in b/package/Config.in
-index 48d1381..991a565 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1412,6 +1412,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
-+	source "package/flatbuffers/Config.in"
- 	source "package/gflags/Config.in"
- 	source "package/glibmm/Config.in"
- 	source "package/glm/Config.in"
-diff --git a/package/flatbuffers/Config.in b/package/flatbuffers/Config.in
+diff --git a/board/lemaker/m2-plus/boot.cmd b/board/lemaker/m2-plus/boot.cmd
 new file mode 100644
-index 0000000..b3a9941
+index 0000000..d22464a
 --- /dev/null
-+++ b/package/flatbuffers/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_FLATBUFFERS
-+	bool "flatbuffers"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  FlatBuffers is an efficient cross platform serialization
-+	  library for C++, C#, C, Go, Java, JavaScript, PHP, and
-+	  Python. It was originally created at Google for game
-+	  development and other performance-critical applications.
-+	  It is available as Open Source on GitHub under the Apache
-+	  license, v2 (see LICENSE.txt).
++++ b/board/lemaker/m2-plus/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
-+	  https://google.github.io/flatbuffers/index.html
-diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/lemaker/m2-plus/genimage.cfg b/board/lemaker/m2-plus/genimage.cfg
 new file mode 100644
-index 0000000..15deeb7
+index 0000000..cde0669
 --- /dev/null
-+++ b/package/flatbuffers/flatbuffers.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 0f8dcdcfbbaba034756f97e4f9946a3784399b578f1b60c8deee3c85fafa3089  flatbuffers-v1.7.1.tar.gz
-diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
++++ b/board/lemaker/m2-plus/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h3-bananapi-m2-plus.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
 new file mode 100644
-index 0000000..7e3eb36
+index 0000000..53e1880
 --- /dev/null
-+++ b/package/flatbuffers/flatbuffers.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# flatbuffers
-+#
-+################################################################################
-+
-+FLATBUFFERS_VERSION = v1.7.1
-+FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
-+FLATBUFFERS_LICENSE = Apache-2.0
-+FLATBUFFERS_LICENSE_FILES = COPYING
-+FLATBUFFERS_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+FLATBUFFERS_CONF_OPTS += -DFLATBUFFERS_BUILD_SHAREDLIB=OFF
-+else
-+FLATBUFFERS_CONF_OPTS += -DFLATBUFFERS_BUILD_SHAREDLIB=TRUE
-+endif
-+
-+FLATBUFFERS_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="-std=c++11" \
-+	-DFLATBUFFERS_BUILD_TESTS=FALSE
-+
-+$(eval $(cmake-package))
++++ b/configs/bananapi_m2_plus_defconfig
+@@ -0,0 +1,28 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_KERNEL_HEADERS_4_12=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://git.kernel.org/torvalds/t/linux-4.13-rc5.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/lemaker/m2-plus/boot.cmd"
++BR2_PACKAGE_HOST_GENEXT2FS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 2.7.4
