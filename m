@@ -1,52 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Sep 2017 16:01:37 +0200
-Subject: [Buildroot] [git commit] package/proxychains-ng: security bump to
-	version 4.11
-Message-ID: <20170919135519.1812E80525@busybox.osuosl.org>
+Date: Tue, 19 Sep 2017 16:01:53 +0200
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.8.2
+Message-ID: <20170919135519.6B1077FB69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d71b8978aa24dd80c51af239633b17437140c2b
+commit: https://git.buildroot.net/buildroot/commit/?id=dab996309e6f3147be343f8ee6a228a8130394f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 4.9 fixes CVE-2015-3887:
-https://github.com/rofl0r/proxychains-ng/issues/60
+Added all hashes applied upstream.
 
-Added md5 & sha1 hashes provided by upstream.
+Renamed configure option -event-gui to -debug-gui after upstream commit
+https://cgit.freedesktop.org/wayland/libinput/commit/configure.ac?h=1.8-branch&id=a69294251df92e818f695cd2456c8eb860e02522
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proxychains-ng/proxychains-ng.hash | 5 ++++-
- package/proxychains-ng/proxychains-ng.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libinput/libinput.hash | 7 +++++--
+ package/libinput/libinput.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/proxychains-ng/proxychains-ng.hash b/package/proxychains-ng/proxychains-ng.hash
-index e2e8c01..7ca4d5e 100644
---- a/package/proxychains-ng/proxychains-ng.hash
-+++ b/package/proxychains-ng/proxychains-ng.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 490131c..4e64568 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,5 @@
-+# From https://sourceforge.net/projects/proxychains-ng/files/
-+md5 34d840eb184e96bff418201c28a935c5  proxychains-ng-4.11.tar.bz2
-+sha1 00bc3dc18f2b638c79112c99f082a7a2878beaad  proxychains-ng-4.11.tar.bz2
- # Locally computed:
--sha256  859a717e18ed88c9291078a6ed8748dfe95c61220993203890fef8a04d28dda5  proxychains-4.6.tar.bz2
-+sha256  dcc4149808cd1fb5d9663cc09791f478805816b1f017381f424414c47f6376b6  proxychains-ng-4.11.tar.bz2
-diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
-index 0d31bce..a9f3fc9 100644
---- a/package/proxychains-ng/proxychains-ng.mk
-+++ b/package/proxychains-ng/proxychains-ng.mk
-@@ -4,8 +4,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-May/034037.html
+-sha256 0b1e5a6c106ccc609ccececd9e33e6b27c8b01fc7457ddb4c1dd266e780d6bc2  libinput-1.7.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-September/034949.html
++md5  e94e9aa765da9533c23b80b440638de9  libinput-1.8.2.tar.xz
++sha1 1c55462eb598b91c9c360f31170a408fb8d38d22  libinput-1.8.2.tar.xz
++sha256 013518ee0adb2287e6e1f08412efba2137320738cadb5399b783738f04cbab38  libinput-1.8.2.tar.xz
++sha512 555a7680cc8aaf62c5370a865f3aff0a933d42d94a3d8861c072666b02c9e1be45ea39de9a749a9575cdfb613b6150e412e18559d94d4919f21ca4680a3c76a7  libinput-1.8.2.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 4ecc2d1..f904b79 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROXYCHAINS_NG_VERSION = 4.6
--PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
-+PROXYCHAINS_NG_VERSION = 4.11
-+PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.bz2
- PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
- PROXYCHAINS_NG_LICENSE = GPL-2.0+
- PROXYCHAINS_NG_LICENSE_FILES = COPYING
+-LIBINPUT_VERSION = 1.7.2
++LIBINPUT_VERSION = 1.8.2
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+@@ -15,10 +15,10 @@ LIBINPUT_LICENSE_FILES = COPYING
+ LIBINPUT_CONF_OPTS = --disable-tests --disable-libwacom
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+-LIBINPUT_CONF_OPTS += --enable-event-gui
++LIBINPUT_CONF_OPTS += --enable-debug-gui
+ LIBINPUT_DEPENDENCIES += libgtk3
+ else
+-LIBINPUT_CONF_OPTS += --disable-event-gui
++LIBINPUT_CONF_OPTS += --disable-debug-gui
+ endif
+ 
+ $(eval $(autotools-package))
