@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 23:00:03 +0200
-Subject: [Buildroot] [PATCH v2 1/1] toolchain: detect external glibc in
- merged /usr
-In-Reply-To: <20170903210043.19105-1-camh@xdna.net>
-References: <20170903210043.19105-1-camh@xdna.net>
-Message-ID: <e88ba4e2-8ab0-eb4e-ccc5-7b0de801ae43@mind.be>
+Date: Tue, 19 Sep 2017 23:01:56 +0200
+Subject: [Buildroot] [PATCH v2] support/scripts/apply-patches.sh: do not
+ apply patches with renames
+In-Reply-To: <20170624195936.31528-1-thomas.petazzoni@free-electrons.com>
+References: <20170624195936.31528-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <186d2d2e-a3e0-792f-63b7-24a3ac1d4d41@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,18 @@ To: buildroot@busybox.net
 
 
 
-On 03-09-17 23:00, Cam Hutchison wrote:
-> When using an external toolchain that was built with Buildroot and a
-> merged /usr, the dynamic linker is actually in /usr/lib.
+On 24-06-17 21:59, Thomas Petazzoni wrote:
+> Patches with renames apply properly with patch >= 2.7, but not with
+> older patch versions. Since "git format-patch" by default generates
+> patches with renames, Buildroot developers often don't realize that
+> their patches will not apply properly on build machines that have
+> patch < 2.7. In order to prevent such a situation from happening
+> again, this commit adds some logic in apply-patches.sh to refuse
+> applying patches that contain renames.
 > 
-> But the check_glibc macro limits the depth it is looking for the dynamic
-> linker, and misses it when it is in /usr/lib because it is too deep.
-> 
-> We could fix that in two ways: increase the depth in which we look
-> for it, or follow symlinks. We choose the second solution.
-> 
-> Signed-off-by: Cam Hutchison <camh@xdna.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Applied to master, thanks.
+ Applied to master after incorporating Yann's and my suggestions, thanks.
 
  Regards,
  Arnout
