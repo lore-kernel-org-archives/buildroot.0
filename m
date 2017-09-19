@@ -1,46 +1,36 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 19 Sep 2017 22:20:09 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: add optional support
-	for rpi-userland
-Message-ID: <20170919201318.C61EB81076@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Sep 2017 22:25:07 +0200
+Subject: [Buildroot] [PATCH] support/download: fix check_one_hash
+ description
+In-Reply-To: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
+References: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
+Message-ID: <8dcac1bc-e360-f191-cd4d-d9b46d44c7da@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4226d094440d237e71f6c9f8d7ea7e1d9245552c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/tvheadend/tvheadend.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index ee3607a..cf8bee9 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -41,6 +41,12 @@ TVHEADEND_DEPENDENCIES += opus
- else
- TVHEADEND_CONF_OPTS += --disable-libopus
- endif
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+TVHEADEND_CONF_OPTS += --enable-omx
-+TVHEADEND_DEPENDENCIES += rpi-userland
-+else
-+TVHEADEND_CONF_OPTS += --disable-omx
-+endif
- ifeq ($(BR2_PACKAGE_X265),y)
- TVHEADEND_CONF_OPTS += --enable-libx265
- TVHEADEND_DEPENDENCIES += x265
-@@ -51,6 +57,7 @@ else
- TVHEADEND_CONF_OPTS += \
- 	--disable-libav \
- 	--disable-libopus \
-+	--disable-omx \
- 	--disable-vaapi \
- 	--disable-libx264 \
- 	--disable-libx265
+On 11-09-17 21:32, Ga?l PORTAY wrote:
+> Function check_one_hash takes three arguments:
+>  - algo hash
+>  - known hash
+>  - file to hash
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
