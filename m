@@ -1,55 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 19 Sep 2017 20:54:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: add patch to fix
-	CVE-2017-9798
-Message-ID: <20170919185434.25976-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Sep 2017 21:25:01 +0200
+Subject: [Buildroot] [PATCH 2/2] configs: Add qemu_ppc64le_pseries
+In-Reply-To: <20170919005538.1482-3-joel@jms.id.au>
+References: <20170919005538.1482-1-joel@jms.id.au>
+ <20170919005538.1482-3-joel@jms.id.au>
+Message-ID: <f483d6c3-67cd-69a8-f54b-e8fc59528660@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/apache/0003-CVS-2017-9798.patch | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/apache/0003-CVS-2017-9798.patch
+ Hi Joel,
 
-diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
-new file mode 100644
-index 0000000000..dc0a67a1b7
---- /dev/null
-+++ b/package/apache/0003-CVS-2017-9798.patch
-@@ -0,0 +1,30 @@
-+core: Disallow Methods' registration at run time (.htaccess), they may
-+be used only if registered at init time (httpd.conf).
-+
-+Calling ap_method_register() in children processes is not the right scope
-+since it won't be shared for all requests.
-+
-+git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
-+
-+Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
-+
-+Downloaded from upstream repo:
-+https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/server/core.c	2017/08/16 16:50:29	1805223
-++++ b/server/core.c	2017/09/08 13:13:11	1807754
-+@@ -2266,6 +2266,12 @@
-+             /* method has not been registered yet, but resource restriction
-+              * is always checked before method handling, so register it.
-+              */
-++            if (cmd->pool == cmd->temp_pool) {
-++                /* In .htaccess, we can't globally register new methods. */
-++                return apr_psprintf(cmd->pool, "Could not register method '%s' "
-++                                   "for %s from .htaccess configuration",
-++                                    method, cmd->cmd->name);
-++            }
-+             methnum = ap_method_register(cmd->pool,
-+                                          apr_pstrdup(cmd->pool, method));
-+         }
+On 19-09-17 02:55, Joel Stanley wrote:
+> This is similar to the ppc64_pseries config, except we build for little
+> endian instead of big endian.
+> 
+> The default architecture is set to Power8 as this was the first fully
+> enabled LE machine.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+
+ Three things are missing:
+
+- a readme file in board/qemu/ppc64le-pseries/readme.txt;
+- an update of .gitlab-ci.yml (just run 'make .gitlab-ci.yml');
+- adding yourself to the DEVELOPERS file.
+
+ Care to send an updated patch with all this?
+
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
