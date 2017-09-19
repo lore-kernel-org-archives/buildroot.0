@@ -1,32 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 22:03:26 +0200
-Subject: [Buildroot] [PATCH] cmake: expose the host variant in menuconfig
-In-Reply-To: <20170919104349.18781-1-peter@korsgaard.com>
-References: <20170919104349.18781-1-peter@korsgaard.com>
-Message-ID: <24dce23d-afd8-e236-6942-0db1eb97bf89@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 19 Sep 2017 22:06:15 +0200
+Subject: [Buildroot] [git commit] package/poppler: fix libcurl support
+Message-ID: <20170919195901.AC5407FB28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ec574bb3e99d3d6eb82c8224402b8ad72c0d4fe2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+BR2_PACKAGE_POPPLER_LIBCURL is not defined in poppler/Config.in.
 
-On 19-09-17 12:43, Peter Korsgaard wrote:
-> With the addition of the sdk support it may be interesting to build
-> host-cmake even though no packages need it, so expose it in menuconfig.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Bernd Kuhls &lt;<a href="mailto:bernd.kuhls@t-online.de">bernd.kuhls at t-online.de</a>&gt;<br>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/poppler/poppler.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 6796437..1beb75a 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -66,7 +66,7 @@ else
+ POPPLER_CONF_OPTS += --disable-zlib
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_POPPLER_LIBCURL),y)
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ POPPLER_CONF_OPTS += --enable-libcurl
+ POPPLER_DEPENDENCIES += libcurl
+ else
