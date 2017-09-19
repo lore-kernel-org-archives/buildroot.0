@@ -1,21 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 19 Sep 2017 20:36:43 +0200
-Subject: [Buildroot] [PATCH] package/zstd: Install tools into /usr/bin,
- not /usr/local/bin
-References: <20170916002712.19851-1-andrew.smirnov@gmail.com>
-Message-ID: <rm489ex2tm.ln2@ID-313208.user.individual.net>
+Date: Tue, 19 Sep 2017 20:45:38 +0200
+Subject: [Buildroot] [PATCH 2/4] package/tor: add optional support for lzma
+In-Reply-To: <20170919184540.23337-1-bernd.kuhls@t-online.de>
+References: <20170919184540.23337-1-bernd.kuhls@t-online.de>
+Message-ID: <20170919184540.23337-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 15 Sep 2017 17:27:12 -0700 schrieb Andrey Smirnov:
+According to https://blog.torproject.org/tor-0317-now-released
+we also need host-pkgconf for lzma support.
 
-> Install tools into /usr/bin, not /usr/local/bin, since /usr/local/bin is
-> not in PATH by deafault.
-> 
-> Signed-off-by: Andrey Smirnov
-> <andrew.smirnov@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index a68f29cac6..6052e09cf1 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -30,6 +30,13 @@ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ TOR_DEPENDENCIES += libcap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++TOR_CONF_OPTS += --enable-lzma
++TOR_DEPENDENCIES += host-pkgconf xz
++else
++TOR_CONF_OPTS += --disable-lzma
++endif
++
+ ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_i386)$(BR2_x86_64)$(BR2_PACKAGE_LIBSECCOMP),yy)
+ TOR_CONF_OPTS += --enable-seccomp
+ TOR_DEPENDENCIES += libseccomp
+-- 
+2.11.0
