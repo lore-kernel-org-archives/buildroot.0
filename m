@@ -1,123 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 19 Sep 2017 20:47:24 +0200
-Subject: [Buildroot] [PATCH] package/python3: bump to 3.6.2
-References: <20170918223441.2129-1-andrew.smirnov@gmail.com>
-Message-ID: <sa589ex2tm.ln2@ID-313208.user.individual.net>
+Date: Tue, 19 Sep 2017 20:54:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: add patch to fix
+	CVE-2017-9798
+Message-ID: <20170919185434.25976-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 18 Sep 2017 15:34:41 -0700 schrieb Andrey Smirnov:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/apache/0003-CVS-2017-9798.patch | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/apache/0003-CVS-2017-9798.patch
 
-> Bump Python3 version to 3.6.2.
-
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[build-tested using this defconfig:
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_PYC=y
-BR2_PACKAGE_PYTHON3_BZIP2=y
-BR2_PACKAGE_PYTHON3_DECIMAL=y
-BR2_PACKAGE_PYTHON3_OSSAUDIODEV=y
-BR2_PACKAGE_PYTHON3_XZ=y
-BR2_PACKAGE_PYTHON_ALSAAUDIO=y
-BR2_PACKAGE_PYTHON_ARROW=y
-BR2_PACKAGE_PYTHON_ASN1CRYPTO=y
-BR2_PACKAGE_PYTHON_AUTOBAHN=y
-BR2_PACKAGE_PYTHON_BCRYPT=y
-BR2_PACKAGE_PYTHON_BITSTRING=y
-BR2_PACKAGE_PYTHON_BOTTLE=y
-BR2_PACKAGE_PYTHON_CAN=y
-BR2_PACKAGE_PYTHON_CBOR=y
-BR2_PACKAGE_PYTHON_CHARACTERISTIC=y
-BR2_PACKAGE_PYTHON_CHERRYPY=y
-BR2_PACKAGE_PYTHON_CONFIGSHELL_FB=y
-BR2_PACKAGE_PYTHON_COUCHDB=y
-BR2_PACKAGE_PYTHON_CRCMOD=y
-BR2_PACKAGE_PYTHON_CSSSELECT=y
-BR2_PACKAGE_PYTHON_CSSUTILS=y
-BR2_PACKAGE_PYTHON_DAEMON=y
-BR2_PACKAGE_PYTHON_DIALOG3=y
-BR2_PACKAGE_PYTHON_DJANGO=y
-BR2_PACKAGE_PYTHON_DOCOPT=y
-BR2_PACKAGE_PYTHON_ECDSA=y
-BR2_PACKAGE_PYTHON_FLASK_BABEL=y
-BR2_PACKAGE_PYTHON_FLASK_JSONRPC=y
-BR2_PACKAGE_PYTHON_FLASK_LOGIN=y
-BR2_PACKAGE_PYTHON_GOBJECT=y
-BR2_PACKAGE_PYTHON_GUNICORN=y
-BR2_PACKAGE_PYTHON_H2=y
-BR2_PACKAGE_PYTHON_HTML5LIB=y
-BR2_PACKAGE_PYTHON_HTTPLIB2=y
-BR2_PACKAGE_PYTHON_HUMANIZE=y
-BR2_PACKAGE_PYTHON_IBMIOTF=y
-BR2_PACKAGE_PYTHON_IOWAIT=y
-BR2_PACKAGE_PYTHON_IPYTHON=y
-BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR=y
-BR2_PACKAGE_PYTHON_LMDB=y
-BR2_PACKAGE_PYTHON_LXML=y
-BR2_PACKAGE_PYTHON_M2R=y
-BR2_PACKAGE_PYTHON_MARKDOWN=y
-BR2_PACKAGE_PYTHON_MELD3=y
-BR2_PACKAGE_PYTHON_MUTAGEN=y
-BR2_PACKAGE_PYTHON_MWCLIENT=y
-BR2_PACKAGE_PYTHON_NETADDR=y
-BR2_PACKAGE_PYTHON_NETIFACES=y
-BR2_PACKAGE_PYTHON_NUMPY=y
-BR2_PACKAGE_PYTHON_PILLOW=y
-BR2_PACKAGE_PYTHON_PRIORITY=y
-BR2_PACKAGE_PYTHON_PSUTIL=y
-BR2_PACKAGE_PYTHON_PUDB=y
-BR2_PACKAGE_PYTHON_PYCLI=y
-BR2_PACKAGE_PYTHON_PYCPARSER=y
-BR2_PACKAGE_PYTHON_PYCRYPTO=y
-BR2_PACKAGE_PYTHON_PYELFTOOLS=y
-BR2_PACKAGE_PYTHON_PYFTPDLIB=y
-BR2_PACKAGE_PYTHON_PYGAME=y
-BR2_PACKAGE_PYTHON_PYGAME_IMAGE=y
-BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES=y
-BR2_PACKAGE_PYTHON_PYGAME_FONT=y
-BR2_PACKAGE_PYTHON_PYGAME_MIXER=y
-BR2_PACKAGE_PYTHON_PYGAME_MIXER_MUSIC=y
-BR2_PACKAGE_PYTHON_PYINOTIFY=y
-BR2_PACKAGE_PYTHON_PYLIBFTDI=y
-BR2_PACKAGE_PYTHON_PYLRU=y
-BR2_PACKAGE_PYTHON_PYMYSQL=y
-BR2_PACKAGE_PYTHON_PYNACL=y
-BR2_PACKAGE_PYTHON_PYPARTED=y
-BR2_PACKAGE_PYTHON_PYQRCODE=y
-BR2_PACKAGE_PYTHON_PYRATEMP=y
-BR2_PACKAGE_PYTHON_PYROUTE2=y
-BR2_PACKAGE_PYTHON_PYSENDFILE=y
-BR2_PACKAGE_PYTHON_PYSOCKS=y
-BR2_PACKAGE_PYTHON_PYTABLEWRITER=y
-BR2_PACKAGE_PYTHON_PYTRIE=y
-BR2_PACKAGE_PYTHON_PYUSB=y
-BR2_PACKAGE_PYTHON_PYXB=y
-BR2_PACKAGE_PYTHON_RTSLIB_FB=y
-BR2_PACKAGE_PYTHON_SCANDIR=y
-BR2_PACKAGE_PYTHON_SCAPY3K=y
-BR2_PACKAGE_PYTHON_SDNOTIFY=y
-BR2_PACKAGE_PYTHON_SERIAL=y
-BR2_PACKAGE_PYTHON_SETPROCTITLE=y
-BR2_PACKAGE_PYTHON_SH=y
-BR2_PACKAGE_PYTHON_SIMPLEAUDIO=y
-BR2_PACKAGE_PYTHON_SIMPLEJSON=y
-BR2_PACKAGE_PYTHON_SMBUS_CFFI=y
-BR2_PACKAGE_PYTHON_SOCKETIO=y
-BR2_PACKAGE_PYTHON_SORTEDCONTAINERS=y
-BR2_PACKAGE_PYTHON_SPIDEV=y
-BR2_PACKAGE_PYTHON_TOMAKO=y
-BR2_PACKAGE_PYTHON_TWISTED=y
-BR2_PACKAGE_PYTHON_U_MSGPACK=y
-BR2_PACKAGE_PYTHON_UBJSON=y
-BR2_PACKAGE_PYTHON_UJSON=y
-BR2_PACKAGE_PYTHON_VERSIONTOOLS=y
-BR2_PACKAGE_PYTHON_WATCHDOG=y
-BR2_PACKAGE_PYTHON_WEB2PY=y
-BR2_PACKAGE_PYTHON_WHOOSH=y
-BR2_PACKAGE_PYTHON_WS4PY=y
-BR2_PACKAGE_PYTHON_WSACCEL=y
-BR2_PACKAGE_PYTHON_XLUTILS=y]
+diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
+new file mode 100644
+index 0000000000..dc0a67a1b7
+--- /dev/null
++++ b/package/apache/0003-CVS-2017-9798.patch
+@@ -0,0 +1,30 @@
++core: Disallow Methods' registration at run time (.htaccess), they may
++be used only if registered at init time (httpd.conf).
++
++Calling ap_method_register() in children processes is not the right scope
++since it won't be shared for all requests.
++
++git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
++
++Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
++
++Downloaded from upstream repo:
++https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/server/core.c	2017/08/16 16:50:29	1805223
+++++ b/server/core.c	2017/09/08 13:13:11	1807754
++@@ -2266,6 +2266,12 @@
++             /* method has not been registered yet, but resource restriction
++              * is always checked before method handling, so register it.
++              */
+++            if (cmd->pool == cmd->temp_pool) {
+++                /* In .htaccess, we can't globally register new methods. */
+++                return apr_psprintf(cmd->pool, "Could not register method '%s' "
+++                                   "for %s from .htaccess configuration",
+++                                    method, cmd->cmd->name);
+++            }
++             methnum = ap_method_register(cmd->pool,
++                                          apr_pstrdup(cmd->pool, method));
++         }
+-- 
+2.11.0
