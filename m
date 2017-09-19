@@ -1,36 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Sep 2017 14:49:43 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: Remove email at pcre2
-Message-ID: <20170919124246.3424380835@busybox.osuosl.org>
+Date: Tue, 19 Sep 2017 16:02:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/proxychains-ng: security bump
+	to version 4.11
+In-Reply-To: <20170917185216.25953-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 17 Sep 2017 20:52:16 +0200")
+References: <20170917185216.25953-1-bernd.kuhls@t-online.de>
+Message-ID: <87bmm623dk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e07224ee92c5e0ead357dbfb62dcb871e836f80
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-I'm going to leave current company and
-this mail address is going to become invalid.
+ > Version 4.9 fixes CVE-2015-3887:
+ > https://github.com/rofl0r/proxychains-ng/issues/60
 
-Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ > Added md5 & sha1 hashes provided by upstream.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 21eafc9..ed5fa3d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1262,9 +1262,6 @@ N:	Murat Demirten <mdemirten@yh.com.tr>
- F:	package/jpeg-turbo/
- F:	package/libgeotiff/
- 
--N:	Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
--F:	package/pcre2/
--
- N:	Nathan Lynch <ntl@pobox.com>
- F:	package/chrony/
- 
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
