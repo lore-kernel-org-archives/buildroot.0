@@ -1,62 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 19 Sep 2017 11:12:15 +0300
-Subject: [Buildroot] [PATCH] package/tslib: update to 1.13
-In-Reply-To: <499c25f9-2865-8282-9ce5-015c5c9d0662@ginzinger.com>
-References: <20170914072033.24536-1-martink@posteo.de>
- <499c25f9-2865-8282-9ce5-015c5c9d0662@ginzinger.com>
-Message-ID: <20170919081215.w7gvi6mzbevlof3o@tarshish>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Tue, 19 Sep 2017 12:14:44 +0300
+Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
+Message-ID: <20170919091444.34950-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Martin,
+Building Qt with QtWebKit on configuration step there is
+a check which disables QtWebKit build with GCC 6+.
+Back in the day nobody thought about building Qt with GCC
+version greater than 5.x. And now with modern GCCs like
+6.x and 7.x this assumption gets in the way.
 
-On Tue, Sep 19, 2017 at 09:47:55AM +0200, Martin Kepplinger wrote:
-> On 2017-09-14 09:20, Martin Kepplinger wrote:
-> > see https://github.com/kergoth/tslib/releases
-> > 
-> > Signed-off-by: Martin Kepplinger <martink@posteo.de>
-> > ---
-> >  package/tslib/tslib.hash | 4 ++--
-> >  package/tslib/tslib.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-> > index f053c6cabd..3ed49008fb 100644
-> > --- a/package/tslib/tslib.hash
-> > +++ b/package/tslib/tslib.hash
-> > @@ -1,2 +1,2 @@
-> > -# https://github.com/kergoth/tslib/releases/download/1.12/tslib-1.12.tar.xz.sha256
-> > -sha256  237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83  tslib-1.12.tar.xz
-> > +# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
-> > +sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
-> > diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> > index 2b4320dca3..06f887a151 100644
-> > --- a/package/tslib/tslib.mk
-> > +++ b/package/tslib/tslib.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -TSLIB_VERSION = 1.12
-> > +TSLIB_VERSION = 1.13
-> >  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
-> >  TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
-> >  TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-> 
-> any objections?
+Given in Buildroot today we don't have GCC older than 4.9 
+it should be safe to remove now meaningless check completely.
 
-Silence doesn't mean objection. Patches accumulate in the Buildroot 
-patchwork[1] in a faster rate than the patches apply rate recently. This patch 
-is far from the oldest. So it might take some time.
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 
 
-[1] http://patchwork.ozlabs.org/project/buildroot/list/
+---
+ configure | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-baruch
-
+diff --git a/configure b/configure
+index 10ad7ca0b0..8771144a65 100755
+--- a/configure
++++ b/configure
+@@ -7731,20 +7731,6 @@ case "$XPLATFORM" in
+ 	canBuildWebKit="no"
+ 	canBuildQtXmlPatterns="no"
+ 	;;
+-    *-g++*)
+-	# Check gcc's version
+-	case "$(${QMAKE_CONF_COMPILER} -dumpversion)" in
+-	    5*|4*|3.4*)
+-		;;
+-            3.3*)
+-                canBuildWebKit="no"
+-                ;;
+-	    *)
+-		canBuildWebKit="no"
+-		canBuildQtXmlPatterns="no"
+-		;;
+-	esac
+-	;;
+     solaris-cc*)
+         # Check the compiler version
+         case `${QMAKE_CONF_COMPILER} -V 2>&1 | awk '{print $4}'` in
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
