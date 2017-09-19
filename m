@@ -1,229 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 19 Sep 2017 20:45:37 +0200
-Subject: [Buildroot] [PATCH 1/4] package/tor: bump version to 0.3.1.7
+Date: Tue, 19 Sep 2017 20:45:39 +0200
+Subject: [Buildroot] [PATCH 3/4] package/zstd: enable library build and
+	staging install
 In-Reply-To: <20170919184540.23337-1-bernd.kuhls@t-online.de>
 References: <20170919184540.23337-1-bernd.kuhls@t-online.de>
-Message-ID: <20170919184540.23337-2-bernd.kuhls@t-online.de>
+Message-ID: <20170919184540.23337-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoted from release notes:
-https://blog.torproject.org/tor-0317-now-released
-"Tor 0.3.1.7 is the first stable release in the 0.3.1 series."
+Needed for upcoming tor 0.3.1.7 which adds libzstd as optional
+dependency: https://blog.torproject.org/tor-0317-now-released
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tor/0001-openssl-libz.patch | 124 +++++++++++++++++++-----------------
- package/tor/tor.hash                |   2 +-
- package/tor/tor.mk                  |   2 +-
- 3 files changed, 68 insertions(+), 60 deletions(-)
+ package/zstd/zstd.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/0001-openssl-libz.patch b/package/tor/0001-openssl-libz.patch
-index 93fb942a40..c70894eba1 100644
---- a/package/tor/0001-openssl-libz.patch
-+++ b/package/tor/0001-openssl-libz.patch
-@@ -3,20 +3,15 @@ and remove host paths when looking for openssl.
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 9a6e286954..b4e21bf87c 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -8,6 +8,7 @@ ZSTD_VERSION = v1.3.1
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+ ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
+ ZSTD_LICENSE_FILES = LICENSE COPYING
++ZSTD_INSTALL_STAGING = YES
  
- [Vincent:
-  - Adapt the patch to make it apply on the new version.]
--[Bernd: rebased for tor-0.2.7.6, 0.2.8.10 & 0.2.9.9]
-+[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9 & 0.3.1.7]
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ZSTD_OPTS += HAVE_THREAD=1
+@@ -38,12 +39,17 @@ endif
  
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ define ZSTD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		-C $(@D) zstd
++		-C $(@D)
++endef
++
++define ZSTD_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
++		DESTDIR=$(STAGING_DIR) PREFIX= -C $(@D) install
+ endef
  
--diff -uNr tor-0.2.7.6.org/configure.ac tor-0.2.7.6/configure.ac
----- tor-0.2.7.6.org/configure.ac	2015-12-10 16:15:25.000000000 +0100
--+++ tor-0.2.7.6/configure.ac	2016-01-31 20:21:34.850408145 +0100
--@@ -612,11 +612,11 @@
--       fi
--   ])
-- 
---TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto $TOR_LIB_GDI],
--+TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto -lz $TOR_LIB_GDI],
-+diff -uNr tor-0.3.1.7.org/configure.ac tor-0.3.1.7/configure.ac
-+--- tor-0.3.1.7.org/configure.ac	2017-09-15 15:34:06.000000000 +0200
-++++ tor-0.3.1.7/configure.ac	2017-09-19 19:40:17.090538467 +0200
-+@@ -713,7 +713,7 @@
-      [#include <openssl/rand.h>],
-      [void RAND_add(const void *buf, int num, double entropy);],
-      [RAND_add((void*)0,0,0);], [],
-@@ -25,78 +20,100 @@ diff -uNr tor-0.2.7.6.org/configure.ac tor-0.2.7.6/configure.ac
-  
-  dnl XXXX check for OPENSSL_VERSION_NUMBER == SSLeay()
-  
--diff -uNr tor-0.2.7.6.org/src/or/include.am tor-0.2.7.6/src/or/include.am
----- tor-0.2.7.6.org/src/or/include.am	2015-12-08 18:35:17.000000000 +0100
--+++ tor-0.2.7.6/src/or/include.am	2016-01-31 20:22:09.322777527 +0100
--@@ -108,7 +108,7 @@
-- src_or_tor_LDADD = src/or/libtor.a src/common/libor.a src/common/libor-ctime.a \
-+diff -uNr tor-0.3.1.7.org/src/or/include.am tor-0.3.1.7/src/or/include.am
-+--- tor-0.3.1.7.org/src/or/include.am	2017-06-19 17:56:51.000000000 +0200
-++++ tor-0.3.1.7/src/or/include.am	2017-09-19 19:41:02.015861546 +0200
-+@@ -122,7 +122,7 @@
-  	src/common/libor-crypto.a $(LIBKECCAK_TINY) $(LIBDONNA) \
-  	src/common/libor-event.a src/trunnel/libor-trunnel.a \
-+ 	src/trace/libor-trace.a \
- -	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ @TOR_OPENSSL_LIBS@ \
- +	@TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ @TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ \
-- 	@TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ @TOR_SYSTEMD_LIBS@
-- 
-- if COVERAGE_ENABLED
--diff -uNr tor-0.2.7.6.org/src/test/include.am tor-0.2.7.6/src/test/include.am
----- tor-0.2.7.6.org/src/test/include.am	2015-12-08 18:35:17.000000000 +0100
--+++ tor-0.2.7.6/src/test/include.am	2016-01-31 20:25:59.673127854 +0100
--@@ -177,8 +177,8 @@
-- 	src/common/libor-ctime-testing.a \
-+ 	@TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ @TOR_SYSTEMD_LIBS@ \
-+ 	@TOR_LZMA_LIBS@ @TOR_ZSTD_LIBS@ \
-+ 	$(rust_ldadd)
-+diff -uNr tor-0.3.1.7.org/src/test/include.am tor-0.3.1.7/src/test/include.am
-+--- tor-0.3.1.7.org/src/test/include.am	2017-08-29 17:01:19.000000000 +0200
-++++ tor-0.3.1.7/src/test/include.am	2017-09-19 19:42:39.103903406 +0200
-+@@ -206,8 +206,8 @@
-  	src/common/libor-event-testing.a \
-  	src/trunnel/libor-trunnel-testing.a \
-+ 	src/trace/libor-trace.a \
- -	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
- -	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
- +	@TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
- +	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-- 	@TOR_SYSTEMD_LIBS@
-+ 	@TOR_SYSTEMD_LIBS@ @TOR_LZMA_LIBS@ @TOR_ZSTD_LIBS@ \
-+ 	$(rust_ldadd)
-  
-- src_test_test_slow_CPPFLAGS = $(src_test_test_CPPFLAGS)
--@@ -200,8 +200,8 @@
-- 	src/common/libor-ctime.a \
-+@@ -231,8 +231,8 @@
-  	src/common/libor-crypto.a $(LIBKECCAK_TINY) $(LIBDONNA) \
-  	src/common/libor-event.a src/trunnel/libor-trunnel.a \
-+ 	src/trace/libor-trace.a \
- -	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
- -	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
- +	@TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
- +	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-- 	@TOR_SYSTEMD_LIBS@
-+ 	@TOR_SYSTEMD_LIBS@ @TOR_LZMA_LIBS@ @TOR_ZSTD_LIBS@ \
-+ 	$(rust_ldadd)
-  
-- src_test_test_workqueue_LDFLAGS = @TOR_LDFLAGS_zlib@ @TOR_LDFLAGS_openssl@ \
--@@ -211,8 +211,8 @@
-- 	src/common/libor-ctime-testing.a \
-+@@ -244,8 +244,8 @@
-  	src/common/libor-crypto-testing.a $(LIBKECCAK_TINY) $(LIBDONNA) \
-  	src/common/libor-event-testing.a \
-+ 	src/trace/libor-trace.a \
- -	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
---	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
-+-	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
- +	@TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
--+	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
-++	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-+ 	@TOR_LZMA_LIBS@ @TOR_ZSTD_LIBS@ \
-+ 	$(rust_ldadd)
-  
-- src_test_test_timers_CPPFLAGS = $(src_test_test_CPPFLAGS)
-- src_test_test_timers_CFLAGS = $(src_test_test_CFLAGS)
--@@ -245,8 +245,8 @@
-- src_test_test_ntor_cl_LDADD = src/or/libtor.a src/common/libor.a \
-+@@ -256,8 +256,8 @@
-+ 	src/common/libor-ctime-testing.a \
-+ 	src/common/libor-event-testing.a \
-+ 	src/common/libor-crypto-testing.a $(LIBKECCAK_TINY) $(LIBDONNA) \
-+-	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
-+-	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-++	@TOR_LIB_MATH@ @TOR_LIBEVENT_LIBS@ \
-++	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-+ 	@TOR_LZMA_LIBS@ \
-+ 	$(rust_ldadd)
-+ src_test_test_timers_LDFLAGS = $(src_test_test_LDFLAGS)
-+@@ -286,8 +286,8 @@
-+ 	src/common/libor-ctime.a \
-+ 	src/common/libor-crypto.a $(LIBKECCAK_TINY) $(LIBDONNA) \
-+ 	src/trace/libor-trace.a \
-+-	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ \
-+-	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-++	@TOR_LIB_MATH@ \
-++	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-+ 	@TOR_LZMA_LIBS@ \
-+ 	$(rust_ldadd)
-+ src_test_test_ntor_cl_AM_CPPFLAGS =	       \
-+@@ -298,8 +298,8 @@
-+ src_test_test_hs_ntor_cl_LDADD = src/or/libtor.a src/common/libor.a \
-  	src/common/libor-ctime.a \
-  	src/common/libor-crypto.a $(LIBKECCAK_TINY) $(LIBDONNA) \
- -	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ \
- -	@TOR_OPENSSL_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
- +	@TOR_LIB_MATH@ \
- +	@TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
-- src_test_test_ntor_cl_AM_CPPFLAGS =	       \
-+ src_test_test_hs_ntor_cl_AM_CPPFLAGS =	       \
-  	-I"$(top_srcdir)/src/or"
-  
--diff -uNr tor-0.2.7.6.org/src/tools/include.am tor-0.2.7.6/src/tools/include.am
----- tor-0.2.7.6.org/src/tools/include.am	2015-11-13 14:33:26.000000000 +0100
--+++ tor-0.2.7.6/src/tools/include.am	2016-01-31 20:27:29.954004495 +0100
-+diff -uNr tor-0.3.1.7.org/src/tools/include.am tor-0.3.1.7/src/tools/include.am
-+--- tor-0.3.1.7.org/src/tools/include.am	2017-06-19 17:56:51.000000000 +0200
-++++ tor-0.3.1.7/src/tools/include.am	2017-09-19 19:43:08.880223260 +0200
- @@ -26,7 +26,7 @@
--     src/common/libor-ctime.a \
--     $(LIBKECCAK_TINY) \
--     $(LIBDONNA) \
---    @TOR_LIB_MATH@ @TOR_ZLIB_LIBS@ @TOR_OPENSSL_LIBS@ \
--+    @TOR_LIB_MATH@ @TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ \
--     @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
-+ 	src/common/libor-ctime.a \
-+ 	$(LIBKECCAK_TINY) \
-+ 	$(LIBDONNA) \
-+-	@TOR_LIB_MATH@ @TOR_ZLIB_LIBS@ @TOR_OPENSSL_LIBS@ \
-++	@TOR_LIB_MATH@ @TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ \
-+ 	@TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@ \
-+ 	$(rust_ldadd)
-  
-- if COVERAGE_ENABLED
--@@ -39,7 +39,7 @@
-+@@ -40,7 +40,7 @@
-      src/common/libor-ctime-testing.a \
-      $(LIBKECCAK_TINY) \
-      $(LIBDONNA) \
-@@ -105,12 +122,3 @@ diff -uNr tor-0.2.7.6.org/src/tools/include.am tor-0.2.7.6/src/tools/include.am
-      @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
-  endif
-  
--@@ -50,7 +50,7 @@
--     src/common/libor-crypto.a \
--     $(LIBKECCAK_TINY) \
--     $(LIBDONNA) \
---    @TOR_LIB_MATH@ @TOR_ZLIB_LIBS@ @TOR_OPENSSL_LIBS@ \
--+    @TOR_LIB_MATH@ @TOR_OPENSSL_LIBS@ @TOR_ZLIB_LIBS@ \
--     @TOR_LIB_WS32@ @TOR_LIB_GDI@ @CURVE25519_LIBS@
-- 
-- EXTRA_DIST += src/tools/tor-fw-helper/README
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 3252306c32..fb8ddd0c0a 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 9a8e6e49a1688dae64dca10f84a414ec9a4f393fb2256ae28e0c2e3239185ab1  tor-0.3.0.10.tar.gz
-+sha256 1df5dd4894bb2f5e0dc96c466955146353cf33ac50cd997cfc1b28ea3ed9c08f  tor-0.3.1.7.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 3a4c52ecf5..a68f29cac6 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ define ZSTD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(TARGET_DIR) PREFIX= -C $(@D)/programs install
++		DESTDIR=$(TARGET_DIR) PREFIX= -C $(@D) install
+ endef
  
--TOR_VERSION = 0.3.0.10
-+TOR_VERSION = 0.3.1.7
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ $(eval $(generic-package))
 -- 
 2.11.0
