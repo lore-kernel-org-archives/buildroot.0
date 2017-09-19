@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 22:25:07 +0200
-Subject: [Buildroot] [PATCH] support/download: fix check_one_hash
- description
-In-Reply-To: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
-References: <20170911193232.3072-1-gael.portay@savoirfairelinux.com>
-Message-ID: <8dcac1bc-e360-f191-cd4d-d9b46d44c7da@mind.be>
+Date: Tue, 19 Sep 2017 22:25:27 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] package/freescale-imx: add support
+ for i.MX6UL
+In-Reply-To: <1504789206-23147-1-git-send-email-julien.boibessot@free.fr>
+References: <1504789206-23147-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <68debda2-08d8-fefa-c266-c891952ea631@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,14 @@ To: buildroot@busybox.net
 
 
 
-On 11-09-17 21:32, Ga?l PORTAY wrote:
-> Function check_one_hash takes three arguments:
->  - algo hash
->  - known hash
->  - file to hash
+On 07-09-17 15:00, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 > 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> Mostly to compile imx-lib (providing libpxp) on i.MX6UL (which have a PXP 
+> hardware unit) and to prevent compilation of imx-lib's modules not supported
+> on i.MX6UL.
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
  Applied to master, thanks.
 
