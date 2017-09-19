@@ -1,38 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 21:37:57 +0200
-Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
-In-Reply-To: <20170919091444.34950-1-didin@synopsys.com>
-References: <20170919091444.34950-1-didin@synopsys.com>
-Message-ID: <09d9ea71-4349-8fcb-7612-4c5075f7c8c5@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 19 Sep 2017 21:44:28 +0200
+Subject: [Buildroot] [git commit] pkgconf: expose the host variant in
+	menuconfig
+Message-ID: <20170919193719.90C207FC4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Evgeniy,
+commit: https://git.buildroot.net/buildroot/commit/?id=7eb21b66cf53872d19e3dea097bef64793173b1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- In addition to Thomas's comment:
+With the addition of the sdk support it may be interesting to build
+host-pkgconf even though no packages need it, so expose it in menuconfig.
 
-On 19-09-17 11:14, Evgeniy Didin wrote:
-> Building Qt with QtWebKit on configuration step there is
-> a check which disables QtWebKit build with GCC 6+.
-> Back in the day nobody thought about building Qt with GCC
-> version greater than 5.x. And now with modern GCCs like
-> 6.x and 7.x this assumption gets in the way.
-> 
-> Given in Buildroot today we don't have GCC older than 4.9 
-> it should be safe to remove now meaningless check completely.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Config.in.host         | 1 +
+ package/pkgconf/Config.in.host | 9 +++++++++
+ 2 files changed, 10 insertions(+)
 
- We actually support GCC down to 4.3 in external toolchains. But the check is
-only for 3.3 or older, so still OK.
-
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c5a852b..df3893a 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -33,6 +33,7 @@ menu "Host utilities"
+ 	source "package/opkg-utils/Config.in.host"
+ 	source "package/parted/Config.in.host"
+ 	source "package/patchelf/Config.in.host"
++	source "package/pkgconf/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
+diff --git a/package/pkgconf/Config.in.host b/package/pkgconf/Config.in.host
+new file mode 100644
+index 0000000..437a7bf
+--- /dev/null
++++ b/package/pkgconf/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_PKGCONF
++	bool "host pkgconf"
++	help
++	  pkgconf is a program which helps to configure compiler and linker
++	  flags for development frameworks. It is similar to pkg-config,
++	  but was written from scratch in the summer of 2011 to replace
++	  pkg-config, which now needs itself to build itself
++
++	  https://github.com/pkgconf/pkgconf
