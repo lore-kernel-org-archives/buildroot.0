@@ -1,21 +1,37 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 19 Sep 2017 09:47:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openipmi: bump version to 2.0.24
-References: <20170916141023.11840-1-bernd.kuhls@t-online.de>
- <CACPK8Xe=p9GL+0OFbfBPW43LtWRsBD9jPfzaaQ53xHv_cpqm4g@mail.gmail.com>
-Message-ID: <uku69ex7qp.ln2@ID-313208.user.individual.net>
+Date: Tue, 19 Sep 2017 09:54:30 +0200
+Subject: [Buildroot] [PATCH v2 03/11] package/mesa3d: fix build issue
+ with	glibc >= 2.26
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <20170902205423.21288-4-romain.naour@gmail.com>
+Message-ID: <m2v69ex7qp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 19 Sep 2017 15:19:43 +0930 schrieb Joel Stanley:
+Hi Romain.
 
-> If you're happy with those changes could you add your ack?
+Am Sat, 02 Sep 2017 22:54:15 +0200 schrieb Romain Naour:
 
-Hello Joel,
+> Issue found while testing glibc 2.26 bump.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-done, and I marked my patch as rejected.
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[build-tested using this defconfig:
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y]
+
+Please send the patch upstream.
 
 Regards, Bernd
