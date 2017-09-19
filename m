@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 22:59:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luvi: needs git submodules
-In-Reply-To: <1504779004.21841.17.camel@embedded.rocks>
-References: <20170904053114.16477-1-bernd.kuhls@t-online.de>
- <20170906231657.382c5f79@windsurf.lan>
- <1504779004.21841.17.camel@embedded.rocks>
-Message-ID: <86c02204-dc3b-22c2-ac6b-8ba957312f2b@mind.be>
+Date: Tue, 19 Sep 2017 23:00:03 +0200
+Subject: [Buildroot] [PATCH v2 1/1] toolchain: detect external glibc in
+ merged /usr
+In-Reply-To: <20170903210043.19105-1-camh@xdna.net>
+References: <20170903210043.19105-1-camh@xdna.net>
+Message-ID: <e88ba4e2-8ab0-eb4e-ccc5-7b0de801ae43@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,53 +13,25 @@ To: buildroot@busybox.net
 
 
 
-On 07-09-17 12:10, J?rg Krause wrote:
-> Hello,
+On 03-09-17 23:00, Cam Hutchison wrote:
+> When using an external toolchain that was built with Buildroot and a
+> merged /usr, the dynamic linker is actually in /usr/lib.
 > 
-> On Wed, 2017-09-06 at 23:16 +0200, Thomas Petazzoni wrote:
->> Hello J?rg,
->>
->> Since you are listed in the DEVELOPERS file for this package, could you
->> comment/review/ack the below patch from Bernd touching luvi ?
->>
->> Of course, git submodules and bundled libraries are not really nice,
->> which is why I'm seeking your opinion.
->>
->> Thanks!
->>
->> Thomas
->>
->> On Mon,  4 Sep 2017 07:31:14 +0200, Bernd Kuhls wrote:
->>> Luvi bundles several libraries previously provided by the upstream
->>> tarball. Since the tarball is not available anymore we need to fetch
->>> the git submodules.
+> But the check_glibc macro limits the depth it is looking for the dynamic
+> linker, and misses it when it is in /usr/lib because it is too deep.
 > 
-> I am quite sure that the maintainer simply forgot to add the release
-> tarball (he already did before), that's why I opened an issue [1]
-> asking for a tarball of the sources.
+> We could fix that in two ways: increase the depth in which we look
+> for it, or follow symlinks. We choose the second solution.
+> 
+> Signed-off-by: Cam Hutchison <camh@xdna.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Apparently there is still no tarball, so I applied to master, thanks.
+ Applied to master, thanks.
 
  Regards,
  Arnout
-
-> 
->>> Fixes
->>> http://autobuild.buildroot.net/results/26d/26d04350a761d362f40e7bd1ac09b639d61de91a/
-> 
-> Until then, we need to fetch the git submodules to fix the build issue.
-
-[snip]
-
-> [1] https://github.com/luvit/luvi/issues/161
-> 
-> Acked-by: "J?rg Krause <joerg.krause@embedded.rocks>"
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
