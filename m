@@ -1,66 +1,51 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 19 Sep 2017 12:43:05 +0200
-Subject: [Buildroot] [PATCH v2 10/11] package/glibc: bump to 2.26
-In-Reply-To: <0ru69ex7qp.ln2@ID-313208.user.individual.net>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
- <20170902205423.21288-11-romain.naour@gmail.com>
- <0ru69ex7qp.ln2@ID-313208.user.individual.net>
-Message-ID: <ED1EC6B2-A2CC-4F3B-84C3-9403224AE52B@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Sep 2017 12:43:49 +0200
+Subject: [Buildroot] [PATCH] cmake: expose the host variant in menuconfig
+Message-ID: <20170919104349.18781-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+With the addition of the sdk support it may be interesting to build
+host-cmake even though no packages need it, so expose it in menuconfig.
 
-Le 19 septembre 2017 09:50:24 GMT+02:00, Bernd Kuhls <bernd.kuhls@t-online.de> a ?crit :
->Am Sat, 02 Sep 2017 22:54:22 +0200 schrieb Romain Naour:
->
->> --- a/package/glibc/glibc.mk
->> +++ b/package/glibc/glibc.mk
->> @@ -4,7 +4,7 @@
->>  #
->>  
->################################################################################
->>  
->> -GLIBC_VERSION = 2.25
->> +GLIBC_VERSION = 2.26
->>  GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
->>  GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
->>  GLIBC_SRC_SUBDIR = .
->
->Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in.host       |  1 +
+ package/cmake/Config.in.host | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 package/cmake/Config.in.host
 
-Thanks for testing!
-
-I've reported a bug to glibc about C++ build issue. It seems a regression on x86_64.
-
-See https://sourceware.org/bugzilla/show_bug.cgi?id=22146
-
-I continue to work on it when time allow.
-
-For now, this series must be delayed until the bug is fixed. This should allow to remove kodi, mesa and jsoncpp patches.
-
-Best regards,
-Romain
-
->[build-tested using this defconfig:
->BR2_x86_64=y
->BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->BR2_TOOLCHAIN_BUILDROOT_CXX=y
->BR2_PACKAGE_KODI=y
->BR2_PACKAGE_MESA3D=y
->BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
->BR2_PACKAGE_MESA3D_OPENGL_EGL=y
->BR2_PACKAGE_XORG7=y
->BR2_PACKAGE_PYTHON=y
->BR2_PACKAGE_PYTHON_PY_ONLY=y]
->
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c5a852b858..9ae19ec4b3 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -4,6 +4,7 @@ menu "Host utilities"
+ 	source "package/android-tools/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
++	source "package/cmake/Config.in.host"
+ 	source "package/cramfs/Config.in.host"
+ 	source "package/dfu-util/Config.in.host"
+ 	source "package/dos2unix/Config.in.host"
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+new file mode 100644
+index 0000000000..b2e210ee2c
+--- /dev/null
++++ b/package/cmake/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_CMAKE
++	bool "host cmake"
++	help
++	  CMake is an open-source, cross-platform family of tools
++	  designed to build, test and package software. CMake is used
++	  to control the software compilation process using simple
++	  platform and compiler independent configuration files, and
++	  generate native makefiles and workspaces that can be used in
++	  the compiler environment of your choice.
++
++	  http://www.cmake.org/
 -- 
-Envoy? de mon appareil Android avec K-9 Mail. Veuillez excuser ma bri?vet?.
+2.11.0
