@@ -1,51 +1,56 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Tue, 19 Sep 2017 21:44:28 +0200
-Subject: [Buildroot] [git commit] pkgconf: expose the host variant in
-	menuconfig
-Message-ID: <20170919193719.90C207FC4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apache: add patch to fix
+	CVE-2017-9798
+Message-ID: <20170919193719.611038055A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7eb21b66cf53872d19e3dea097bef64793173b1e
+commit: https://git.buildroot.net/buildroot/commit/?id=6d24caf0cd97de39aa1d6f52b58db8c0d63a89ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the addition of the sdk support it may be interesting to build
-host-pkgconf even though no packages need it, so expose it in menuconfig.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in.host         | 1 +
- package/pkgconf/Config.in.host | 9 +++++++++
- 2 files changed, 10 insertions(+)
+ package/apache/0003-CVS-2017-9798.patch | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c5a852b..df3893a 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -33,6 +33,7 @@ menu "Host utilities"
- 	source "package/opkg-utils/Config.in.host"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
-+	source "package/pkgconf/Config.in.host"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-diff --git a/package/pkgconf/Config.in.host b/package/pkgconf/Config.in.host
+diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
 new file mode 100644
-index 0000000..437a7bf
+index 0000000..dc0a67a
 --- /dev/null
-+++ b/package/pkgconf/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_PKGCONF
-+	bool "host pkgconf"
-+	help
-+	  pkgconf is a program which helps to configure compiler and linker
-+	  flags for development frameworks. It is similar to pkg-config,
-+	  but was written from scratch in the summer of 2011 to replace
-+	  pkg-config, which now needs itself to build itself
++++ b/package/apache/0003-CVS-2017-9798.patch
+@@ -0,0 +1,30 @@
++core: Disallow Methods' registration at run time (.htaccess), they may
++be used only if registered at init time (httpd.conf).
 +
-+	  https://github.com/pkgconf/pkgconf
++Calling ap_method_register() in children processes is not the right scope
++since it won't be shared for all requests.
++
++git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
++
++Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
++
++Downloaded from upstream repo:
++https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/server/core.c	2017/08/16 16:50:29	1805223
+++++ b/server/core.c	2017/09/08 13:13:11	1807754
++@@ -2266,6 +2266,12 @@
++             /* method has not been registered yet, but resource restriction
++              * is always checked before method handling, so register it.
++              */
+++            if (cmd->pool == cmd->temp_pool) {
+++                /* In .htaccess, we can't globally register new methods. */
+++                return apr_psprintf(cmd->pool, "Could not register method '%s' "
+++                                   "for %s from .htaccess configuration",
+++                                    method, cmd->cmd->name);
+++            }
++             methnum = ap_method_register(cmd->pool,
++                                          apr_pstrdup(cmd->pool, method));
++         }
