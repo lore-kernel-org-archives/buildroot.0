@@ -1,41 +1,44 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 19 Sep 2017 13:03:50 +0200
-Subject: [Buildroot] [PATCH 0/4] Add custom linux logo
-Message-ID: <1505819034-29610-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Tue, 19 Sep 2017 13:03:51 +0200
+Subject: [Buildroot] [PATCH 1/4] package/imagemagick: add host package
+In-Reply-To: <1505819034-29610-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1505819034-29610-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1505819034-29610-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to various requests I had, I decided to revamp this patch
-I sent a while ago.
+This patch add the host package for imagemagick.
+It comes with a minimal selection of configure options to
+compile fast cause it is used only to convert
+the image files for the custom linux logo.
 
-The rationale behind is:
-* Having a simple way to overwrite the linux logo
-* Keeping it simple supporting only modern hardware (no b/w or 16 colours)
-* The host package for imagemagick was purposely kept simple to compile
-  fast and give only the support needed to convert thw most widespread
-  imagefile formats to kernel ppm.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/imagemagick/imagemagick.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-The series adds also a default bootup logo to watermark our defconfigs.
-
-I modified only a defconfig as a sample and included in the series.
-
-
-Angelo Compagnucci (4):
-  package/imagemagick: add host package
-  linux: add custom linux logo
-  docs/images: adding default buildroot linux logo
-  configs: add linux boot logo to raspberrypi3 defconfig
-
- configs/raspberrypi3_defconfig             |  2 +
- docs/website/images/logo_linux_clut224.ppm | 84 ++++++++++++++++++++++++++++++
- linux/Config.in                            | 27 ++++++++++
- linux/linux.mk                             | 19 +++++++
- package/imagemagick/imagemagick.mk         | 11 ++++
- 5 files changed, 143 insertions(+)
- create mode 100644 docs/website/images/logo_linux_clut224.ppm
-
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9043ce8..0ac750c 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -143,4 +143,15 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-bzlib
+ endif
+ 
++HOST_IMAGEMAGICK_CONF_OPTS = \
++	--with-jpeg \
++	--with-png \
++	--with-zlib
++
++HOST_IMAGEMAGICK_DEPENDENCIES = \
++	host-libjpeg \
++	host-libpng \
++	host-zlib
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.7.4
