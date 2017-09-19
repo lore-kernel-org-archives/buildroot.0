@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 22:08:00 +0200
-Subject: [Buildroot] [PATCH] python-numpy: Bump to the most recent
-	release 1.13.1
-In-Reply-To: <20170915104606.25218-1-abrodkin@synopsys.com>
-References: <20170915104606.25218-1-abrodkin@synopsys.com>
-Message-ID: <7a478b5d-e6b9-9652-34fa-c7e52c805cc4@mind.be>
+Date: Tue, 19 Sep 2017 22:08:42 +0200
+Subject: [Buildroot] [PATCH] openipmi: bump to version 2.0.24
+In-Reply-To: <20170914041748.30905-1-joel@jms.id.au>
+References: <20170914041748.30905-1-joel@jms.id.au>
+Message-ID: <e2b40786-f87d-97b5-1a60-ed864c36ce52@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +12,18 @@ To: buildroot@busybox.net
 
 
 
-On 15-09-17 12:46, Alexey Brodkin wrote:
-> Note previously used location for releases on SourceForge is no longer
-> supported (latest tarball v1.11.2 available there is dated 2016-10-04)
-> so as other distros
-> (see, Fedora http://pkgs.fedoraproject.org/cgit/rpms/numpy.git/tree/numpy.spec?id=7013948f8ba073c69a91a545f0a0898cb62652fa#n22)
-> we get release tarball directly from GitHub.
+On 14-09-17 06:17, Joel Stanley wrote:
+> Some changes in addition to the version bump:
 > 
-> Also note 0001-no-fenv-on-uclibc.patch was rebased on v1.13.1 and
-> 0002-Don-t-blindly-enable-frexpl-and-ldexpl-for-uClibc.patch was
-> removed completely as corresponding code got nuked with
-> https://github.com/numpy/numpy/pull/4852. I'm not really sure
-> if something similar to Arnout's patch is still required so it would be good
-> if somebody more knowledgeable checks that.
+>  - The uint32_t patch is now upstream
+>  - Drop --no-glib12 flag as support was removed in 2.0.23
+>  - The host library path patch was refreshed
 > 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
 
  Applied to master, thanks.
+
+ Thanks, Bernd, for reviewing.
 
  Regards,
  Arnout
