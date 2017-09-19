@@ -1,56 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Sep 2017 21:45:08 +0200
-Subject: [Buildroot] [PATCH] bash: fix static build
-In-Reply-To: <20170919181932.o4ih6ppwwbdqwetb@tarshish> (Baruch Siach's
- message of "Tue, 19 Sep 2017 21:19:32 +0300")
-References: <e61b7469d3048416c7e3c681a75f773843fe48a6.1505759427.git.baruch@tkos.co.il>
- <87k20u27at.fsf@dell.be.48ers.dk>
- <20170919181932.o4ih6ppwwbdqwetb@tarshish>
-Message-ID: <877ewu1ni3.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Sep 2017 21:59:58 +0200
+Subject: [Buildroot] [PATCH] xen: add upstream post-4.9.0 security fixes
+In-Reply-To: <20170919150314.31745-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 19 Sep 2017 17:03:14 +0200")
+References: <20170919150314.31745-1-peter@korsgaard.com>
+Message-ID: <87377i1mtd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Hi,
+ > Fixes the following security issues:
+ > XSA-226: multiple problems with transitive grants (CVE-2017-12135)
+ > XSA-227: x86: PV privilege escalation via map_grant_ref (CVE-2017-12137)
+ > XSA-228: grant_table: Race conditions with maptrack free list handling
+ >          (CVE-2017-12136)
+ > XSA-230: grant_table: possibly premature clearing of GTF_writing /
+ >          GTF_reading (CVE-2017-12855)
+ > XSA-231: Missing NUMA node parameter verification (CVE-2017-14316)
+ > XSA-232: Missing check for grant table (CVE-2017-14318)
+ > XSA-233: cxenstored: Race in domain cleanup (CVE-2017-14317)
+ > XSA-234: insufficient grant unmapping checks for x86 PV guests
+ >          (CVE-2017-14319)
+ > XSA-235: add-to-physmap error paths fail to release lock on ARM
 
- >> So that probably explains why it doesn't fail in the autobuilders.
- >> 
- >> Does it really fail the build for you?
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > It doesn't. I should have checked that. This patch is not really needed then.
-
-Ok, good.
-
- >> Have you looked into why SHOBJ_STATUS doesn't get expanded correctly,
- >> and if this can fixed more nicely upstream / is already fixed?
-
- > SHOBJ_STATUS is not set when the "$ac_cv_func_dlopen" = "yes" condition 
- > evaluates to false. This is the case when building statically. Current bash 
- > code is not fixes, as far as I can see.
-
- > Something like this should fix the issue:
-
- > diff -Nuar bash-4.4-orig/configure.ac bash-4.4/configure.ac
- > --- bash-4.4-orig/configure.ac	2016-09-07 23:56:28.000000000 +0300
- > +++ bash-4.4/configure.ac	2017-09-19 21:15:00.376316006 +0300
- > @@ -1151,6 +1151,9 @@
- >  	AC_SUBST(SHOBJ_LIBS)
- >  	AC_SUBST(SHOBJ_STATUS)
- >  	AC_MSG_RESULT($SHOBJ_STATUS)
- > +else
- > +	SHOBJ_STATUS=unsupported
- > +	AC_SUBST(SHOBJ_STATUS)
- >  fi
- 
- >  # try to create a directory tree if the source is elsewhere
-
- > But bash does not autoreconf nicely, so I didn't test that approach.
-
-Ok, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
