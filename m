@@ -1,63 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Sep 2017 16:01:53 +0200
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.8.2
-Message-ID: <20170919135519.6B1077FB69@busybox.osuosl.org>
+Date: Tue, 19 Sep 2017 17:03:14 +0200
+Subject: [Buildroot] [PATCH] xen: add upstream post-4.9.0 security fixes
+Message-ID: <20170919150314.31745-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dab996309e6f3147be343f8ee6a228a8130394f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following security issues:
 
-Added all hashes applied upstream.
+XSA-226: multiple problems with transitive grants (CVE-2017-12135)
+XSA-227: x86: PV privilege escalation via map_grant_ref (CVE-2017-12137)
+XSA-228: grant_table: Race conditions with maptrack free list handling
+         (CVE-2017-12136)
+XSA-230: grant_table: possibly premature clearing of GTF_writing /
+         GTF_reading (CVE-2017-12855)
+XSA-231: Missing NUMA node parameter verification (CVE-2017-14316)
+XSA-232: Missing check for grant table (CVE-2017-14318)
+XSA-233: cxenstored: Race in domain cleanup (CVE-2017-14317)
+XSA-234: insufficient grant unmapping checks for x86 PV guests
+         (CVE-2017-14319)
+XSA-235: add-to-physmap error paths fail to release lock on ARM
 
-Renamed configure option -event-gui to -debug-gui after upstream commit
-https://cgit.freedesktop.org/wayland/libinput/commit/configure.ac?h=1.8-branch&id=a69294251df92e818f695cd2456c8eb860e02522
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 7 +++++--
- package/libinput/libinput.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/xen/xen.hash |  9 +++++++++
+ package/xen/xen.mk   | 10 ++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 490131c..4e64568 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-May/034037.html
--sha256 0b1e5a6c106ccc609ccececd9e33e6b27c8b01fc7457ddb4c1dd266e780d6bc2  libinput-1.7.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-September/034949.html
-+md5  e94e9aa765da9533c23b80b440638de9  libinput-1.8.2.tar.xz
-+sha1 1c55462eb598b91c9c360f31170a408fb8d38d22  libinput-1.8.2.tar.xz
-+sha256 013518ee0adb2287e6e1f08412efba2137320738cadb5399b783738f04cbab38  libinput-1.8.2.tar.xz
-+sha512 555a7680cc8aaf62c5370a865f3aff0a933d42d94a3d8861c072666b02c9e1be45ea39de9a749a9575cdfb613b6150e412e18559d94d4919f21ca4680a3c76a7  libinput-1.8.2.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 4ecc2d1..f904b79 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index bcce39bd8b..3c5981a247 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,2 +1,11 @@
+ # Locally computed
+ sha256 cade643fe3310d4d6f97d0c215c6fa323bc1130d7e64d7e2043ffaa73a96f33b xen-4.9.0.tar.gz
++sha256 b09e07aaf422ae04a4ece5e2c5b5e54036cfae5b5c632bfc6953a0cacd6f60ff xsa226.patch
++sha256 9923a47e5f86949800887596f098954a08ef73a01d74b1dbe16cab2e6b1fabb2 xsa227.patch
++sha256 1979e111442517891b483e316a15a760a4c992ac4440f95e361ff12f4bebff62 xsa228.patch
++sha256 77a73f1c32d083e315ef0b1bbb119cb8840ceb5ada790cad76cbfb9116f725cc xsa230.patch
++sha256 71a53a5133c8d4e381dd0e3e54205d31dea545ab62b261084dd3aea140f88cad xsa231-4.9.patch
++sha256 5068a78293daa58557c30c95141b775becfb650de6a5eda0d82a4a321ced551c xsa232.patch
++sha256 f721cc49ba692b2f36299b631451f51d7340b8b4732f74c98f01cb7a80d8662b xsa233.patch
++sha256 213f9d81a4ab785db67b9f579c9e88c9c8586c46b93f466a309060750df2df32 xsa234-4.9.patch
++sha256 d8f012734fbf6019c1ff864744e308c41dfb9c7804ca3be2771c2c972cdf4bd5 xsa235-4.9.patch
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 90e73853de..5bb18e6e34 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -6,6 +6,16 @@
  
--LIBINPUT_VERSION = 1.7.2
-+LIBINPUT_VERSION = 1.8.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-@@ -15,10 +15,10 @@ LIBINPUT_LICENSE_FILES = COPYING
- LIBINPUT_CONF_OPTS = --disable-tests --disable-libwacom
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
--LIBINPUT_CONF_OPTS += --enable-event-gui
-+LIBINPUT_CONF_OPTS += --enable-debug-gui
- LIBINPUT_DEPENDENCIES += libgtk3
- else
--LIBINPUT_CONF_OPTS += --disable-event-gui
-+LIBINPUT_CONF_OPTS += --disable-debug-gui
- endif
- 
- $(eval $(autotools-package))
+ XEN_VERSION = 4.9.0
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
++XEN_PATCH = \
++	https://xenbits.xenproject.org/xsa/xsa226.patch \
++	https://xenbits.xenproject.org/xsa/xsa227.patch \
++	https://xenbits.xenproject.org/xsa/xsa228.patch \
++	https://xenbits.xenproject.org/xsa/xsa230.patch \
++	https://xenbits.xenproject.org/xsa/xsa231-4.9.patch \
++	https://xenbits.xenproject.org/xsa/xsa232.patch \
++	https://xenbits.xenproject.org/xsa/xsa233.patch \
++	https://xenbits.xenproject.org/xsa/xsa234-4.9.patch \
++	https://xenbits.xenproject.org/xsa/xsa235-4.9.patch
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+ XEN_DEPENDENCIES = host-acpica host-python
+-- 
+2.11.0
