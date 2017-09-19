@@ -1,38 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Sep 2017 21:25:01 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: Add qemu_ppc64le_pseries
-In-Reply-To: <20170919005538.1482-3-joel@jms.id.au>
-References: <20170919005538.1482-1-joel@jms.id.au>
- <20170919005538.1482-3-joel@jms.id.au>
-Message-ID: <f483d6c3-67cd-69a8-f54b-e8fc59528660@mind.be>
+Date: Tue, 19 Sep 2017 21:37:57 +0200
+Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
+In-Reply-To: <20170919091444.34950-1-didin@synopsys.com>
+References: <20170919091444.34950-1-didin@synopsys.com>
+Message-ID: <09d9ea71-4349-8fcb-7612-4c5075f7c8c5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Joel,
+ Hi Evgeniy,
 
-On 19-09-17 02:55, Joel Stanley wrote:
-> This is similar to the ppc64_pseries config, except we build for little
-> endian instead of big endian.
+ In addition to Thomas's comment:
+
+On 19-09-17 11:14, Evgeniy Didin wrote:
+> Building Qt with QtWebKit on configuration step there is
+> a check which disables QtWebKit build with GCC 6+.
+> Back in the day nobody thought about building Qt with GCC
+> version greater than 5.x. And now with modern GCCs like
+> 6.x and 7.x this assumption gets in the way.
 > 
-> The default architecture is set to Power8 as this was the first fully
-> enabled LE machine.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Given in Buildroot today we don't have GCC older than 4.9 
+> it should be safe to remove now meaningless check completely.
 
- Three things are missing:
-
-- a readme file in board/qemu/ppc64le-pseries/readme.txt;
-- an update of .gitlab-ci.yml (just run 'make .gitlab-ci.yml');
-- adding yourself to the DEVELOPERS file.
-
- Care to send an updated patch with all this?
+ We actually support GCC down to 4.3 in external toolchains. But the check is
+only for 3.3 or older, so still OK.
 
  Regards,
  Arnout
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
