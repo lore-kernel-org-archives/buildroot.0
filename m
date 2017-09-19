@@ -1,40 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 19 Sep 2017 08:17:52 +0300
-Subject: [Buildroot] [PATCH] util-linux: add missing dynamic library
-	dependency
-Message-ID: <c446f43f2cc6b98efd08a0e499bb192337e26271.1505798272.git.baruch@tkos.co.il>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 19 Sep 2017 15:19:43 +0930
+Subject: [Buildroot] [PATCH 1/1] package/openipmi: bump version to 2.0.24
+In-Reply-To: <20170916141023.11840-1-bernd.kuhls@t-online.de>
+References: <20170916141023.11840-1-bernd.kuhls@t-online.de>
+Message-ID: <CACPK8Xe=p9GL+0OFbfBPW43LtWRsBD9jPfzaaQ53xHv_cpqm4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit f52af619185 (util-linux: add menu items for login utilities)
-forgot to propagate the !BR2_STATIC_LIBS dependency of linux-pam to
-BR2_PACKAGE_UTIL_LINUX_LOGIN. Fix this.
+Hello Bernd,
 
-Fixes:
-http://autobuild.buildroot.net/results/e47/e472891a656e40f33081d9a5db1b1b6d71c1389f/
-http://autobuild.buildroot.net/results/9e4/9e443720ca247292ea612851962c611a9bcd3450/
-http://autobuild.buildroot.net/results/88f/88f4cecd7e2844701b0e75279c112e37283fc7f9/
+On Sat, Sep 16, 2017 at 11:40 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Added md5 hash provided by upstream.
+>
+> Removed 0001-ui-use-standard-uint32_t.patch, applied upstream:
+> https://sourceforge.net/p/openipmi/code/ci/104594630755d6fe187984ce9763d52c8a3481d8/
 
-Cc: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/util-linux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I made some similar changes in addition to removing an unused configure flag:
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 80aab881a0da..5a600c333db3 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -173,6 +173,7 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN
- 	bool "login"
- 	depends on BR2_ENABLE_LOCALE # linux-pam
- 	depends on BR2_USE_WCHAR # linux-pam
-+	depends on !BR2_STATIC_LIBS # linux-pam
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # fork(), linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
--- 
-2.14.1
+http://lists.busybox.net/pipermail/buildroot/2017-September/202409.html
+
+If you're happy with those changes could you add your ack?
+
+Cheers,
+
+Joel
