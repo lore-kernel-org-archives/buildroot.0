@@ -1,50 +1,21 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 19 Sep 2017 09:47:55 +0200
-Subject: [Buildroot] [PATCH] package/tslib: update to 1.13
-In-Reply-To: <20170914072033.24536-1-martink@posteo.de>
-References: <20170914072033.24536-1-martink@posteo.de>
-Message-ID: <499c25f9-2865-8282-9ce5-015c5c9d0662@ginzinger.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 19 Sep 2017 09:47:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openipmi: bump version to 2.0.24
+References: <20170916141023.11840-1-bernd.kuhls@t-online.de>
+ <CACPK8Xe=p9GL+0OFbfBPW43LtWRsBD9jPfzaaQ53xHv_cpqm4g@mail.gmail.com>
+Message-ID: <uku69ex7qp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-09-14 09:20, Martin Kepplinger wrote:
-> see https://github.com/kergoth/tslib/releases
-> 
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
-> ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-> index f053c6cabd..3ed49008fb 100644
-> --- a/package/tslib/tslib.hash
-> +++ b/package/tslib/tslib.hash
-> @@ -1,2 +1,2 @@
-> -# https://github.com/kergoth/tslib/releases/download/1.12/tslib-1.12.tar.xz.sha256
-> -sha256  237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83  tslib-1.12.tar.xz
-> +# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
-> +sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
-> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index 2b4320dca3..06f887a151 100644
-> --- a/package/tslib/tslib.mk
-> +++ b/package/tslib/tslib.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TSLIB_VERSION = 1.12
-> +TSLIB_VERSION = 1.13
->  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
->  TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
->  TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-> 
+Am Tue, 19 Sep 2017 15:19:43 +0930 schrieb Joel Stanley:
 
-any objections?
+> If you're happy with those changes could you add your ack?
 
-thanks
+Hello Joel,
 
-                         martin
+done, and I marked my patch as rejected.
+
+Regards, Bernd
