@@ -1,46 +1,51 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 19 Sep 2017 22:43:10 +0200
-Subject: [Buildroot] [git commit] toolchain: detect external glibc in merged
-	/usr
-Message-ID: <20170919204918.93B2380030@busybox.osuosl.org>
+Date: Tue, 19 Sep 2017 22:42:34 +0200
+Subject: [Buildroot] [git commit] package/luvi: needs git submodules
+Message-ID: <20170919204918.88F1C80332@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b55ff5a7cdaa8a45101d11a3c095d9aeab1f0ce4
+commit: https://git.buildroot.net/buildroot/commit/?id=23eae11e0b0e8563ccd742545cb2d2ca1a99f9a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When using an external toolchain that was built with Buildroot and a
-merged /usr, the dynamic linker is actually in /usr/lib.
+Luvi bundles several libraries previously provided by the upstream
+tarball. Since the tarball is not available anymore we need to fetch
+the git submodules. Unbundling is very hard, and we anyway don't have
+the bundled libraries in Buildroot.
 
-But the check_glibc macro limits the depth it is looking for the dynamic
-linker, and misses it when it is in /usr/lib because it is too deep.
+Fixes
+http://autobuild.buildroot.net/results/26d/26d04350a761d362f40e7bd1ac09b639d61de91a/
 
-We could fix that in two ways: increase the depth in which we look
-for it, or follow symlinks. We choose the second solution.
-
-Signed-off-by: Cam Hutchison <camh@xdna.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "J??rg Krause <joerg.krause@embedded.rocks>"
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luvi/luvi.hash | 2 +-
+ package/luvi/luvi.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index e9e36d2..63ef6fb 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -227,7 +227,7 @@ check_glibc_rpc_feature = \
- #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
-+	if test `find -L $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index 7f7abdb..ce3785e 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 65d3ded5007d5bb58fc3b76013913596fd42ed7326310d67c668ddf9a017a179  luvi-v2.7.6.tar.gz
++sha256 6d2297751b4d4023c1fa8b723b6f04e09584c67694958edbfa0d284f384759d5  luvi-v2.7.6.tar.gz
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index 7dd5e5a..fc89d4d 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ LUVI_VERSION = v2.7.6
+-LUVI_SITE = $(call github,luvit,luvi,$(LUVI_VERSION))
++LUVI_SITE = git://github.com/luvit/luvi.git
++LUVI_GIT_SUBMODULES = YES
+ LUVI_LICENSE = Apache-2.0
+ LUVI_LICENSE_FILES = LICENSE.txt
+ LUVI_DEPENDENCIES = libuv luajit luv host-luajit
