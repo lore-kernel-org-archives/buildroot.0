@@ -1,52 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Sep 2017 13:05:27 +0200
-Subject: [Buildroot] [PATCH 2/2] pkgconf: expose the host variant in
-	menuconfig
-In-Reply-To: <20170919110527.23975-1-peter@korsgaard.com>
-References: <20170919110527.23975-1-peter@korsgaard.com>
-Message-ID: <20170919110527.23975-2-peter@korsgaard.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 19 Sep 2017 13:03:50 +0200
+Subject: [Buildroot] [PATCH 0/4] Add custom linux logo
+Message-ID: <1505819034-29610-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the addition of the sdk support it may be interesting to build
-host-pkgconf even though no packages need it, so expose it in menuconfig.
+Due to various requests I had, I decided to revamp this patch
+I sent a while ago.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in.host         | 1 +
- package/pkgconf/Config.in.host | 9 +++++++++
- 2 files changed, 10 insertions(+)
- create mode 100644 package/pkgconf/Config.in.host
+The rationale behind is:
+* Having a simple way to overwrite the linux logo
+* Keeping it simple supporting only modern hardware (no b/w or 16 colours)
+* The host package for imagemagick was purposely kept simple to compile
+  fast and give only the support needed to convert thw most widespread
+  imagefile formats to kernel ppm.
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c5a852b858..df3893aa9c 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -33,6 +33,7 @@ menu "Host utilities"
- 	source "package/opkg-utils/Config.in.host"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
-+	source "package/pkgconf/Config.in.host"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-diff --git a/package/pkgconf/Config.in.host b/package/pkgconf/Config.in.host
-new file mode 100644
-index 0000000000..437a7bf6f9
---- /dev/null
-+++ b/package/pkgconf/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_PKGCONF
-+	bool "host pkgconf"
-+	help
-+	  pkgconf is a program which helps to configure compiler and linker
-+	  flags for development frameworks. It is similar to pkg-config,
-+	  but was written from scratch in the summer of 2011 to replace
-+	  pkg-config, which now needs itself to build itself
-+
-+	  https://github.com/pkgconf/pkgconf
+The series adds also a default bootup logo to watermark our defconfigs.
+
+I modified only a defconfig as a sample and included in the series.
+
+
+Angelo Compagnucci (4):
+  package/imagemagick: add host package
+  linux: add custom linux logo
+  docs/images: adding default buildroot linux logo
+  configs: add linux boot logo to raspberrypi3 defconfig
+
+ configs/raspberrypi3_defconfig             |  2 +
+ docs/website/images/logo_linux_clut224.ppm | 84 ++++++++++++++++++++++++++++++
+ linux/Config.in                            | 27 ++++++++++
+ linux/linux.mk                             | 19 +++++++
+ package/imagemagick/imagemagick.mk         | 11 ++++
+ 5 files changed, 143 insertions(+)
+ create mode 100644 docs/website/images/logo_linux_clut224.ppm
+
 -- 
-2.11.0
+2.7.4
