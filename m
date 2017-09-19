@@ -1,56 +1,32 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Tue, 19 Sep 2017 21:44:28 +0200
-Subject: [Buildroot] [git commit] package/apache: add patch to fix
-	CVE-2017-9798
-Message-ID: <20170919193719.611038055A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] pkgconf: update upstream URL in Config.in
+Message-ID: <20170919193719.7A5C2801E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d24caf0cd97de39aa1d6f52b58db8c0d63a89ee
+commit: https://git.buildroot.net/buildroot/commit/?id=13cb944aab01daf1683c466233a997afd749aa9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The download location got changed two years ago when the version was bumped
+to 0.9.12, but the upstream URL in Config.in wasn't updated.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/apache/0003-CVS-2017-9798.patch | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/pkgconf/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
-new file mode 100644
-index 0000000..dc0a67a
---- /dev/null
-+++ b/package/apache/0003-CVS-2017-9798.patch
-@@ -0,0 +1,30 @@
-+core: Disallow Methods' registration at run time (.htaccess), they may
-+be used only if registered at init time (httpd.conf).
-+
-+Calling ap_method_register() in children processes is not the right scope
-+since it won't be shared for all requests.
-+
-+git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
-+
-+Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
-+
-+Downloaded from upstream repo:
-+https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/server/core.c	2017/08/16 16:50:29	1805223
-++++ b/server/core.c	2017/09/08 13:13:11	1807754
-+@@ -2266,6 +2266,12 @@
-+             /* method has not been registered yet, but resource restriction
-+              * is always checked before method handling, so register it.
-+              */
-++            if (cmd->pool == cmd->temp_pool) {
-++                /* In .htaccess, we can't globally register new methods. */
-++                return apr_psprintf(cmd->pool, "Could not register method '%s' "
-++                                   "for %s from .htaccess configuration",
-++                                    method, cmd->cmd->name);
-++            }
-+             methnum = ap_method_register(cmd->pool,
-+                                          apr_pstrdup(cmd->pool, method));
-+         }
+diff --git a/package/pkgconf/Config.in b/package/pkgconf/Config.in
+index f95847f..9d5d9ab 100644
+--- a/package/pkgconf/Config.in
++++ b/package/pkgconf/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PKGCONF
+ 	  but was written from scratch in the summer of 2011 to replace
+ 	  pkg-config, which now needs itself to build itself
+ 
+-	  https://github.com/nenolod/pkgconf
++	  https://github.com/pkgconf/pkgconf
