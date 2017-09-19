@@ -1,73 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Tue, 19 Sep 2017 21:44:28 +0200
-Subject: [Buildroot] [git commit] xen: add upstream post-4.9.0 security fixes
-Message-ID: <20170919193719.A18F07FC4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cmake: expose the host variant in
+	menuconfig
+Message-ID: <20170919193719.B21E6801E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=304c93cdfbb588bf339e6a7402f3e882a4d088d3
+commit: https://git.buildroot.net/buildroot/commit/?id=d759d70accb375c8044354bdae38087776c887ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
-
-XSA-226: multiple problems with transitive grants (CVE-2017-12135)
-XSA-227: x86: PV privilege escalation via map_grant_ref (CVE-2017-12137)
-XSA-228: grant_table: Race conditions with maptrack free list handling
-         (CVE-2017-12136)
-XSA-230: grant_table: possibly premature clearing of GTF_writing /
-         GTF_reading (CVE-2017-12855)
-XSA-231: Missing NUMA node parameter verification (CVE-2017-14316)
-XSA-232: Missing check for grant table (CVE-2017-14318)
-XSA-233: cxenstored: Race in domain cleanup (CVE-2017-14317)
-XSA-234: insufficient grant unmapping checks for x86 PV guests
-         (CVE-2017-14319)
-XSA-235: add-to-physmap error paths fail to release lock on ARM
+With the addition of the sdk support it may be interesting to build
+host-cmake even though no packages need it, so expose it in menuconfig.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Alistair Francis <alistair.francis@xilinx.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/xen/xen.hash |  9 +++++++++
- package/xen/xen.mk   | 10 ++++++++++
- 2 files changed, 19 insertions(+)
+ package/Config.in.host       |  1 +
+ package/cmake/Config.in.host | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index bcce39b..3c5981a 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,2 +1,11 @@
- # Locally computed
- sha256 cade643fe3310d4d6f97d0c215c6fa323bc1130d7e64d7e2043ffaa73a96f33b xen-4.9.0.tar.gz
-+sha256 b09e07aaf422ae04a4ece5e2c5b5e54036cfae5b5c632bfc6953a0cacd6f60ff xsa226.patch
-+sha256 9923a47e5f86949800887596f098954a08ef73a01d74b1dbe16cab2e6b1fabb2 xsa227.patch
-+sha256 1979e111442517891b483e316a15a760a4c992ac4440f95e361ff12f4bebff62 xsa228.patch
-+sha256 77a73f1c32d083e315ef0b1bbb119cb8840ceb5ada790cad76cbfb9116f725cc xsa230.patch
-+sha256 71a53a5133c8d4e381dd0e3e54205d31dea545ab62b261084dd3aea140f88cad xsa231-4.9.patch
-+sha256 5068a78293daa58557c30c95141b775becfb650de6a5eda0d82a4a321ced551c xsa232.patch
-+sha256 f721cc49ba692b2f36299b631451f51d7340b8b4732f74c98f01cb7a80d8662b xsa233.patch
-+sha256 213f9d81a4ab785db67b9f579c9e88c9c8586c46b93f466a309060750df2df32 xsa234-4.9.patch
-+sha256 d8f012734fbf6019c1ff864744e308c41dfb9c7804ca3be2771c2c972cdf4bd5 xsa235-4.9.patch
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 90e7385..5bb18e6 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -6,6 +6,16 @@
- 
- XEN_VERSION = 4.9.0
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-+XEN_PATCH = \
-+	https://xenbits.xenproject.org/xsa/xsa226.patch \
-+	https://xenbits.xenproject.org/xsa/xsa227.patch \
-+	https://xenbits.xenproject.org/xsa/xsa228.patch \
-+	https://xenbits.xenproject.org/xsa/xsa230.patch \
-+	https://xenbits.xenproject.org/xsa/xsa231-4.9.patch \
-+	https://xenbits.xenproject.org/xsa/xsa232.patch \
-+	https://xenbits.xenproject.org/xsa/xsa233.patch \
-+	https://xenbits.xenproject.org/xsa/xsa234-4.9.patch \
-+	https://xenbits.xenproject.org/xsa/xsa235-4.9.patch
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_DEPENDENCIES = host-acpica host-python
+diff --git a/package/Config.in.host b/package/Config.in.host
+index df3893a..9e05ec6 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -4,6 +4,7 @@ menu "Host utilities"
+ 	source "package/android-tools/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
++	source "package/cmake/Config.in.host"
+ 	source "package/cramfs/Config.in.host"
+ 	source "package/dfu-util/Config.in.host"
+ 	source "package/dos2unix/Config.in.host"
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+new file mode 100644
+index 0000000..b2e210e
+--- /dev/null
++++ b/package/cmake/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_CMAKE
++	bool "host cmake"
++	help
++	  CMake is an open-source, cross-platform family of tools
++	  designed to build, test and package software. CMake is used
++	  to control the software compilation process using simple
++	  platform and compiler independent configuration files, and
++	  generate native makefiles and workspaces that can be used in
++	  the compiler environment of your choice.
++
++	  http://www.cmake.org/
