@@ -1,104 +1,167 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 Sep 2017 13:28:25 +0200
-Subject: [Buildroot] [PATCH 1/1] Update github hashes
-Message-ID: <20170920112825.3971-1-bernd.kuhls@t-online.de>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 20 Sep 2017 12:44:21 +0100
+Subject: [Buildroot] OpenSSH build error against master
+In-Reply-To: <20170920112749.lvri5o7tjbwztkqk@tarshish>
+References: <CA+h8R2qCu0MTSeX6AATVhHJOOC3O1T7_DvX=87xXY1da_U6XRQ@mail.gmail.com>
+ <20170920112749.lvri5o7tjbwztkqk@tarshish>
+Message-ID: <CA+h8R2qmCpQMuBhg5Via05yaCjQnc5vWv6J2JyV_CVQv2rQPaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It seems github now sometimes provides slightly changed tarballs which
-produce a different sha256 hash than before. Fix the hashes of the
-affected packages to avoid downloading from sources.buildroot.net.
+Hi Baruch,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freerdp/freerdp.hash                                            | 2 +-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
- .../kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash    | 2 +-
- package/kodi/kodi.hash                                                  | 2 +-
- package/libasplib/libasplib.hash                                        | 2 +-
- package/mongoose/mongoose.hash                                          | 2 +-
- package/python-mwscrape2slob/python-mwscrape2slob.hash                  | 2 +-
- package/rpi-userland/rpi-userland.hash                                  | 2 +-
- package/sunxi-cedarx/sunxi-cedarx.hash                                  | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+On Wed, Sep 20, 2017 at 12:27 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> What is your .config?
 
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 2ced373b38..a713f77bb8 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 1db496cca391f76382ef284db2d0306d5c15bf515ee2c964319c22272d969a32  freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.tar.gz
-+sha256 a0e3b203bcc0f38fa8b20318f6e5df3661419b119079bd95d737b66dd1ac4205  freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.tar.gz
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index f9d400459e..15d3e347f1 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256	0d45472a967d747bc1948b0332f77c8cd9f6ec1620b0922e82ca5ddd053b40ea  kernel-module-imx-gpu-viv-a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7.tar.gz
-+sha256 f18b826fd25328adf6b4405f48fdf0eaaddc77bb79c0dee76cd8c28aa8ffc078  kernel-module-imx-gpu-viv-a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7.tar.gz
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-index ff9d6d0244..1d0ef080a6 100644
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-+++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 a8400c8d8be0fe0ba616ad1d0ef5fd798980a9dd4e38ef88bee9bf74a06975d5  kodi-screensaver-crystalmorph-1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e.tar.gz
-+sha256 b99aa6295c8dc6afd0dd22991e611ecc8e9b97aff3a44b905911515609e903ea  kodi-screensaver-crystalmorph-1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e.tar.gz
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 6c7cf8f615..0dc46133ee 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 b05e11b2d108222bfc3ff0c9a466d798c0feedf1228166239948e6ed37c3cb4f  kodi-17.4-Krypton.tar.gz
-+sha256 6b0886e7449fc201e0ec0584b37f9f654c429797a41e6d0b6a4b5a7fd5ec34dc  kodi-17.4-Krypton.tar.gz
- # Locally computed - libdvdcss
- sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236.tar.gz
- # Locally computed - libdvdnav
-diff --git a/package/libasplib/libasplib.hash b/package/libasplib/libasplib.hash
-index 76534e528d..df8161489b 100644
---- a/package/libasplib/libasplib.hash
-+++ b/package/libasplib/libasplib.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 68e117348fa17592dde7672477e927119a0e477103ced1d3a57d92e30880a147  libasplib-be7fac89218a84b75f7598e3d76625ece99296f2.tar.gz
-+sha256 c97aa3591a2f4c91a8a3d008e1874cf6a4d3fdcdb71e08cf24b391f328b59254  libasplib-be7fac89218a84b75f7598e3d76625ece99296f2.tar.gz
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index d5252eb687..92bbf80bb9 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	ccc971298db70963d3f13766c3246a3c36ae7e388acfab7ba2180149d9c8c64f  mongoose-6.7.tar.gz
-+sha256 7033c4c9ad0aac2aaa53864ff0bee5468a327a78a3218fb753d55a426a791189  mongoose-6.7.tar.gz
-diff --git a/package/python-mwscrape2slob/python-mwscrape2slob.hash b/package/python-mwscrape2slob/python-mwscrape2slob.hash
-index f1f5e4f166..89b32fe679 100644
---- a/package/python-mwscrape2slob/python-mwscrape2slob.hash
-+++ b/package/python-mwscrape2slob/python-mwscrape2slob.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 367ffc3203f7eb2cc26211f58c0693526652d9a238af48c88f936920e804faf7  python-mwscrape2slob-0f9124ed62009dff6a230947d80340f5a61a6f49.tar.gz
-+sha256 2b111d6faba4e439fdd383da952f3e8fb5760fc6794a9d1ef5dc6f0e080afe7f  python-mwscrape2slob-0f9124ed62009dff6a230947d80340f5a61a6f49.tar.gz
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 1728ae8712..e8a78b95fa 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 476cde13d0d4bbf44ffc4d1d545847464d5c270bb72e4d940e43e5972c4de9da rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
-+sha256 46a37eaf0de598ce5804e48a5efc2120e07d753a57ed83463ebfa551562eefe6 rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
-diff --git a/package/sunxi-cedarx/sunxi-cedarx.hash b/package/sunxi-cedarx/sunxi-cedarx.hash
-index 048b868982..f40a6449fc 100644
---- a/package/sunxi-cedarx/sunxi-cedarx.hash
-+++ b/package/sunxi-cedarx/sunxi-cedarx.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256  ea7426f83325d247ba0d4734eaf1cb53bab178a81f935e2535ddb3069f70ba84  sunxi-cedarx-b8f52d913f73720e50d8f1b2f8610467b575dc45.tar.gz
-+sha256  e674a3b88b12cabc0aaa97c9fdcd898b712daedb549eb49bbf6d1c851c0791f0  sunxi-cedarx-b8f52d913f73720e50d8f1b2f8610467b575dc45.tar.gz
--- 
-2.11.0
+Defconfig:
+
+```
+BR2_arm=y
+BR2_cortex_a15_a7=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_CCACHE=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TARGET_GENERIC_HOSTNAME="skiff-fd09a5a"
+BR2_TARGET_GENERIC_ISSUE="Welcome to SkiffOS fd09a5a!"
+BR2_TARGET_GENERIC_PASSWD_SHA256=y
+BR2_INIT_SYSTEMD=y
+BR2_TARGET_GENERIC_ROOT_PASSWD="linaro"
+BR2_SYSTEM_BIN_SH_BASH=y
+# BR2_TARGET_GENERIC_GETTY is not set
+BR2_ENABLE_LOCALE_WHITELIST="C en_US en_US.UTF-8"
+BR2_GENERATE_LOCALE="en_US.UTF-8"
+BR2_ROOTFS_USERS_TABLES="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//users"
+BR2_ROOTFS_OVERLAY="/home/paralin/Documents/synrobo/skiff/configs/skiff/moduleimg/root_overlay
+/home/paralin/Documents/synrobo/skiff/configs/skiff/standard/root_overlay
+/home/paralin/Documents/synrobo/skiff/configs/skiff/core/root_overlay
+/home/paralin/Documents/jpl_skiff/configs/jpl/wifi/root_overlay
+/home/paralin/Documents/jpl_skiff/configs/jpl/environment/root_overlay
+/home/paralin/Documents/jpl_skiff/configs/jpl/mast/root_overlay"
+BR2_ROOTFS_POST_BUILD_SCRIPT="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//pre_build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//post_build.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/hardkernel/linux/archive/ec8448dd6e243e2e860dda8d514034b34875db97/linux-xu4-4.9.47.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="odroidxu4"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//kernel/config"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+BR2_PACKAGE_BUSYBOX_SELINUX=y
+BR2_PACKAGE_BZIP2=y
+BR2_PACKAGE_GZIP=y
+BR2_PACKAGE_LZ4=y
+BR2_PACKAGE_UNZIP=y
+BR2_PACKAGE_XZ=y
+BR2_PACKAGE_ZIP=y
+BR2_PACKAGE_LSOF=y
+BR2_PACKAGE_BINUTILS=y
+BR2_PACKAGE_GREP=y
+BR2_PACKAGE_E2FSPROGS=y
+BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+BR2_PACKAGE_MMC_UTILS=y
+BR2_PACKAGE_LINUX_FIRMWARE=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6002=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6003=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6004=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61=y
+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
+BR2_PACKAGE_RFKILL=y
+BR2_PACKAGE_RTL8192CU=y
+BR2_PACKAGE_RTL8821AU=y
+BR2_PACKAGE_USBUTILS=y
+BR2_PACKAGE_LIBZIP=y
+BR2_PACKAGE_LZO=y
+BR2_PACKAGE_CA_CERTIFICATES=y
+BR2_PACKAGE_LIBSSH=y
+BR2_PACKAGE_LIBSSH2=y
+BR2_PACKAGE_OPENSSL_BIN=y
+BR2_PACKAGE_OPENSSL_ENGINES=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_CURL=y
+BR2_PACKAGE_ETHTOOL=y
+BR2_PACKAGE_IPUTILS=y
+BR2_PACKAGE_IW=y
+BR2_PACKAGE_MOSH=y
+BR2_PACKAGE_NETWORK_MANAGER=y
+BR2_PACKAGE_RSYNC=y
+BR2_PACKAGE_WGET=y
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
+BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
+BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW=y
+BR2_PACKAGE_FILE=y
+BR2_PACKAGE_COREUTILS=y
+BR2_PACKAGE_DOCKER_ENGINE=y
+BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT=y
+# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
+# BR2_PACKAGE_SYSTEMD_RESOLVED is not set
+# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
+# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
+BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH=y
+BR2_PACKAGE_UTIL_LINUX_FALLOCATE=y
+BR2_PACKAGE_UTIL_LINUX_HWCLOCK=y
+BR2_PACKAGE_UTIL_LINUX_KILL=y
+BR2_PACKAGE_UTIL_LINUX_LINE=y
+BR2_PACKAGE_UTIL_LINUX_LOGIN=y
+BR2_PACKAGE_UTIL_LINUX_LOSETUP=y
+BR2_PACKAGE_UTIL_LINUX_MORE=y
+BR2_PACKAGE_UTIL_LINUX_NEWGRP=y
+BR2_PACKAGE_UTIL_LINUX_NSENTER=y
+BR2_PACKAGE_UTIL_LINUX_RESET=y
+BR2_PACKAGE_UTIL_LINUX_SETPRIV=y
+BR2_PACKAGE_UTIL_LINUX_SU=y
+BR2_PACKAGE_NANO=y
+BR2_PACKAGE_VIM=y
+# BR2_PACKAGE_VIM_RUNTIME is not set
+BR2_TARGET_ROOTFS_CPIO=y
+BR2_TARGET_ROOTFS_CPIO_GZIP=y
+BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/hardkernel/u-boot/archive/odroidxu4-v2017.05/uboot-xu4-2017.05.tar.gz"
+BR2_TARGET_UBOOT_PATCH="/home/paralin/Documents/synrobo/skiff/configs/odroid/xu4/uboot_patches"
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="odroid-xu4"
+BR2_TARGET_UBOOT_NEEDS_DTC=y
+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-dtb.bin"
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_E2FSPROGS=y
+BR2_PACKAGE_HOST_GENEXT2FS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_PARTED=y
+BR2_PACKAGE_HOST_SQUASHFS=y
+```
+
+To reproduce this defconfig (as it has some generated paths):
+
+```
+git clone https://github.com/paralin/skiffos.git
+cd ./skiffos.git
+git checkout skiff-next
+SKIFF_CONFIG=odroid/xu4 make compile
+```
+
+However, the generated paths are relative to pre and post build
+targets, and Buildroot is otherwise unmodified.
+
+Best,
+Christian
