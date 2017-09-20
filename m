@@ -1,51 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 20 Sep 2017 13:03:32 -0500
-Subject: [Buildroot] [PATCH 1/1] Update github hashes
-In-Reply-To: <87fubhxnnx.fsf@dell.be.48ers.dk>
-References: <20170920112825.3971-1-bernd.kuhls@t-online.de>
- <87fubhxnnx.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpa9S7chHUTg1GBNz9Qi=r-tMeQnQO2sYpNdZ7oQ+9MP9w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Sep 2017 20:03:55 +0200
+Subject: [Buildroot] [PATCH] package/zstd: Install tools into /usr/bin,
+	not /usr/local/bin
+In-Reply-To: <20170916002712.19851-1-andrew.smirnov@gmail.com> (Andrey
+ Smirnov's message of "Fri, 15 Sep 2017 17:27:12 -0700")
+References: <20170916002712.19851-1-andrew.smirnov@gmail.com>
+Message-ID: <877ewtxn5g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
 
-On Wed, Sep 20, 2017 at 12:52 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
->
->  > It seems github now sometimes provides slightly changed tarballs which
->  > produce a different sha256 hash than before. Fix the hashes of the
->  > affected packages to avoid downloading from sources.buildroot.net.
->
->  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> :/
->
-> I'm not sure updating the hashes is the correct thing to do. Sources.b.o
-> runs 'make source' from the 2017.02.x and master branches to keep it
-> uptodate, and E.G. freerdp hasn't been updated since 2017.02, so it will
-> break hard for 2017.02.x users if we change it.
->
-> Falling back to s.b.o is not such a bad thing, so I think we can wait
-> with fixing up the hashes until the packages get bumped.
->
-> In the mean time I will try to figure out who to contact at github to
-> ask about the change.
->
+ > Install tools into /usr/bin, not /usr/local/bin, since /usr/local/bin
+ > is not in PATH by deafault.
 
-I'd second it would be better to wait.  The iperf hash issue earlier
-this summer created a mess until that was bumped.
+ > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ > ---
 
+ >  package/zstd/zstd.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+ > index 475079dbfe..9a6e286954 100644
+ > --- a/package/zstd/zstd.mk
+ > +++ b/package/zstd/zstd.mk
+ > @@ -43,7 +43,7 @@ endef
+ 
+ >  define ZSTD_INSTALL_TARGET_CMDS
+ >  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+ > -		DESTDIR=$(TARGET_DIR) -C $(@D)/programs install
+ > +		DESTDIR=$(TARGET_DIR) PREFIX= -C $(@D)/programs install
+
+PREFIX='' would install into /bin, so I've changed this to PREFIX=/usr
+and committed, thanks.
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Bye, Peter Korsgaard
