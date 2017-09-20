@@ -1,123 +1,211 @@
-From: Mike Harmony <mike.harmony@snapav.com>
-Date: Wed, 20 Sep 2017 09:31:04 -0400
-Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPi M2 Plus
-	board.
-Message-ID: <1505914264-4200-1-git-send-email-mike.harmony@snapav.com>
+From: Chu, Zhuliang (NSB - CN/Shanghai) <zhuliang.chu@nokia-sbell.com>
+Date: Wed, 20 Sep 2017 14:31:32 +0000
+Subject: [Buildroot] [PATCH 1/1] Refine the dependencies so that packages
+ can be compiled in parallel.
+Message-ID: <5DBA847110A28B46BBA17BE675F0C9B21818F2B0@cnshjmbx01>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
----
- DEVELOPERS                         |  4 ++++
- board/lemaker/m2-plus/boot.cmd     |  7 +++++++
- board/lemaker/m2-plus/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
- configs/bananapi_m2_plus_defconfig | 26 ++++++++++++++++++++++++++
- 4 files changed, 70 insertions(+)
- create mode 100644 board/lemaker/m2-plus/boot.cmd
- create mode 100644 board/lemaker/m2-plus/genimage.cfg
- create mode 100644 configs/bananapi_m2_plus_defconfig
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ed5fa3d..0551b88 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1262,6 +1262,10 @@ N:	Murat Demirten <mdemirten@yh.com.tr>
- F:	package/jpeg-turbo/
- F:	package/libgeotiff/
+support/scripts/parallel-build: Try to provide support for parallel compilation
+
+Now we know that buildroot does not support parallel compilation.
+My colleagues and I in the process of working will be a lot of repetitive compilation of buildroot.
+A lot of time spent in the buildroot compiler, so I try to provide parallel compiler support.
+I added a target 'parallel-build' to the Makefile that will call the python script.
+
+in script parallel-build:
+the dependencies of all packages are parsed first and then stored in a dictionary, and then the packages that are not dependent are extracted from the dictionary, After successfully compiling, it will release the other packages that depend on these packages, this will run until the dictionary is empty.
+
+In this script I also wrote a detailed note.
+
+Signed-off-by: Zhuliang Chu <zhuliang.chu@nokia-sbell.com>
+---
+ Makefile                       |   4 ++
+ support/scripts/parallel-build | 150 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 154 insertions(+)
+ create mode 100755 support/scripts/parallel-build
+
+diff --git a/Makefile b/Makefile
+index 9b09589..a854760 100644
+--- a/Makefile
++++ b/Makefile
+@@ -785,6 +785,10 @@ show-targets:
+ .PHONY: show-build-order
+ show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
  
-+N:	Mike Harmony <mike.harmony@snapav.com>
-+F:	board/lemaker/m2-plus/
-+F:	configs/bananapi_m2_plus_defconfig
++.PHONY:parallel-build
++parallel-build:dependencies
++	$(TOPDIR)/support/scripts/parallel-build --jobs $(PARALLEL_JOBS) 
++--packages $(PACKAGES)
 +
- N:	Nathan Lynch <ntl@pobox.com>
- F:	package/chrony/
- 
-diff --git a/board/lemaker/m2-plus/boot.cmd b/board/lemaker/m2-plus/boot.cmd
-new file mode 100644
-index 0000000..d22464a
+ .PHONY: graph-build
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(GRAPHS_DIR)
+diff --git a/support/scripts/parallel-build b/support/scripts/parallel-build new file mode 100755 index 0000000..562d114
 --- /dev/null
-+++ b/board/lemaker/m2-plus/boot.cmd
-@@ -0,0 +1,7 @@
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++++ b/support/scripts/parallel-build
+@@ -0,0 +1,150 @@
++#!/usr/bin/python
++import sys
++import subprocess
++import argparse
++from copy import deepcopy
++import multiprocessing
++import brpkgutil
 +
-+mmc dev 0
-+fatload mmc 0 $kernel_addr_r zImage
-+fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
++done_queue=multiprocessing.Queue()
++extras=""
++get_depends_func = brpkgutil.get_depends get_rdepends_func = 
++brpkgutil.get_rdepends
 +
-+bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/lemaker/m2-plus/genimage.cfg b/board/lemaker/m2-plus/genimage.cfg
-new file mode 100644
-index 0000000..cde0669
---- /dev/null
-+++ b/board/lemaker/m2-plus/genimage.cfg
-@@ -0,0 +1,33 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"sun8i-h3-bananapi-m2-plus.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 64M
-+}
++# get all dependencies of packages
++def get_all_depends(pkgs):
++  filtered_pkgs = []
++  for pkg in pkgs:
++    if pkg in filtered_pkgs:
++      continue
++    filtered_pkgs.append(pkg)
++  if len(filtered_pkgs) == 0:
++    return []
++  return get_depends_func(filtered_pkgs)
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++# select someone which is in dictionary`s values but isn`t in keys.
++def pickup_nokey_pkg(depends):
++  nokey_deps = []
++  alldeps=[]
++  for deps in depends.values():
++    alldeps.extend(deps)
++  alldeps=list(set(alldeps))
++  for dep in alldeps:
++    if not depends.has_key(dep):
++      nokey_deps.append(dep)
++  return nokey_deps
 +
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+		size = 1040384 # 1MB - 8192
-+	}
++# select some packages that have no dependencies def 
++pickup_nodepends_pkgs(depends):
++  no_deps_pkgs = []
++  for pkg,deps in depends.items():
++    if deps == []:
++      no_deps_pkgs.append(pkg)
++  return no_deps_pkgs
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
++# when a package has been compiled successfully, then remove it from dictionary 'dependencies'
++def remove_pkg_from_depends(package,depends):
++  for pkg,deps in depends.items():
++    if package == pkg:
++      del depends[package]
++    if package in deps:
++      depends[pkg].remove(package)
++  return depends
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
-new file mode 100644
-index 0000000..59dae1b
---- /dev/null
-+++ b/configs/bananapi_m2_plus_defconfig
-@@ -0,0 +1,26 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_KERNEL_HEADERS_4_13=y
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/lemaker/m2-plus/boot.cmd"
-+BR2_PACKAGE_HOST_GENEXT2FS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.7.4
++# real build process
++def make_build_pkg(package):
++  cmd = "make %s %s"%(extras,package)
++  p = 
++subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subproces
++s.STDOUT)
++  (stdoutput,erroutput) = p.communicate()
++  if stdoutput:
++    sys.stdout.write(stdoutput)
++  if erroutput:
++    sys.stderr.write(erroutput)
++  if p.returncode == 0:
++    return package
++  else:
++    sys.stderr.write("make %s have a error,so the parallel build must exit %d\n"%(package,p.returncode))
++    return '__error__'
++
++def callback(x):
++  done_queue.put(x)
++
++if __name__ == '__main__':
++
++  # Running Scenario
++  #
++  #  step1:             step2:                  step3:                  step4:
++  # 'packages'      'dependencies'             'processPool'           'Distribute'
++  #                                              ____                 1) 'pkg0' has no dependencies in dictionary 'dependencies'
++  #  pkg0                 pkg0                  |    |                2) Distribute 'pkg0' to child process from Pool
++  #    |                 /    \                 |____|                3) 'pkg0' is successfully completed 
++  #  pkg1              pkg1   pkg2              |    |                4) the function callback resume main process
++  #    |              / |  \   |  \    ---------------------->        5) the main process remove 'pkg0' from dictionary 'dependencies'  
++  #  pkg2            /  |   \  |   \            |    |                   and now the 'pkg1' and 'pkg2' have no dependencies 
++  #    |          pkg3 pkg4  pkg5  pkg6         |____|                6) query the dictionary 'dependencies' and select 'pkg1' and 'pkg2'. goto 1)
++  #  pkg3          /|\  /\     |    / \         |    | 
++  #  .....       ...  ...  ... ... ... ....    ...  ...
++  #
++  
++  # step1: Get all packages that will been compiled  parser = 
++ argparse.ArgumentParser(description="Parallel build")  
++ parser.add_argument("--packages", '-p', dest="packages",nargs='+',metavar="PACKAGE",
++      help="all the packages to parallel compiled")  
++ parser.add_argument("--jobs", '-j', dest="jobs",metavar="JOB",
++      help="all the packages to parallel compiled")  args = 
++ parser.parse_args()  packages=args.packages
++  cur_jobs=int(args.jobs)
++  max_jobs = len(packages)/2
++  if not packages:
++    sys.stderr.write("parallel build must have targets\n")
++    sys.exit(1)
++  
++  # step2: Create the frame of all packages and dependencies which will 
++ be built  dependencies = get_all_depends(packages)  while packages:
++    packages = pickup_nokey_pkg(dependencies)
++    if packages:
++      depends = get_all_depends(packages)
++      dependencies.update(depends)
++  
++  # step3: Create a process pool for parallel compilation
++  jobs=min(cur_jobs,max_jobs)
++  pool = multiprocessing.Pool(processes=jobs)
++  
++  # step4: 
++  #   1) Pick up some packages that have no dependencies from the dictionary 'dependencies'
++  #   2) Distribute the packages that have been selected to the child process to compile
++  #   3) When a child process is successfully completed , the function callback will be invoked. otherwise the main process will exit.
++  #   4) The callback will triger main process to resume.
++  #   5) The main process will remove the package that has been compiled by child process from the dictionary 'dependencies' 
++  #      and then some other packages that depend on this package will be released.
++  #   6) Continue to query the dictionary, and then get the package that has no dependencies util the dictionary dependencies is empty.
++  allpending=[]
++  while dependencies:
++    # 1) pick up some packages  
++    no_deps_pkgs = pickup_nodepends_pkgs(dependencies)
++
++    if not no_deps_pkgs:
++      sys.stderr.write("parallel build must have targets\n")
++      sys.exit(1)
++    for pkg in no_deps_pkgs:
++      if pkg in allpending:
++        continue
++      # 2) if one package have no dependencies or its dependencies have been built successfully before, then we can build it here 
++      pool.apply_async(make_build_pkg, (pkg, ),callback=callback)
++      allpending.append(pkg)
++    while True:
++      # 3,4) Wait for child process execution to end , if the child process has some errors, the main process will exit 
++      pkg = done_queue.get()
++      if pkg == '__error__':
++        sys.stderr.write("An error occurred during compilation, so must exit\n")
++        sys.exit(1)
++      # 5) remove the package that has been compiled successfully and released some other packages
++      dependencies=remove_pkg_from_depends(pkg,dependencies)
++      if done_queue.empty():
++        break
++    # 6) Continue
++
++make_build_pkg("")
++print "all builds is done"
+--
+1.8.3.1
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Refine-the-dependencies-so-that-packages-can-be-comp.patch
+Type: application/octet-stream
+Size: 8066 bytes
+Desc: 0001-Refine-the-dependencies-so-that-packages-can-be-comp.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170920/8a2c8b0c/attachment.obj>
