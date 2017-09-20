@@ -1,32 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Sep 2017 19:19:17 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.13.3
-Message-ID: <20170920171430.CA7777FC8C@busybox.osuosl.org>
+Date: Wed, 20 Sep 2017 19:28:02 +0200
+Subject: [Buildroot] [PATCH] lcdproc: fix build with musl libc
+In-Reply-To: <fd90703c9a740c0f5653e4d6e43386a5194516f6.1504870274.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 8 Sep 2017 14:31:14 +0300")
+References: <fd90703c9a740c0f5653e4d6e43386a5194516f6.1504870274.git.baruch@tkos.co.il>
+Message-ID: <874lrxz3dp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1e499b778c0d114e9c88276d6ab5ea80c1384a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Add a patch adding missing linux ioctl header.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/58a/58a9b98d08060c6ed9e8855ba9f59d03aa2f3e2c/
+ > http://autobuild.buildroot.net/results/5b2/5b2c1bc872cebc7aadf93995b71178bba29e0b25/
+ > http://autobuild.buildroot.net/results/125/12594e613f8fc106e477411f76093654a084c01c/
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 62a4f1e..ae4ae3c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.13.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.13.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ > Cc: Sven Haardiek <sven.haardiek@greenbone.net>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
