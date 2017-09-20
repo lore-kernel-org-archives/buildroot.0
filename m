@@ -1,23 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 Sep 2017 19:54:32 +0200
-Subject: [Buildroot] [PATCH 155/155] package/opencv3: version bump
-	from	3.2.0 to 3.3.0
-References: <1505926667-22593-1-git-send-email-russell.kirmayer@jibo.com>
-Message-ID: <ojma9exfa8.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Sep 2017 19:55:58 +0200
+Subject: [Buildroot] [PATCH] package/python3: bump to 3.6.2
+In-Reply-To: <20170918223441.2129-1-andrew.smirnov@gmail.com> (Andrey
+ Smirnov's message of "Mon, 18 Sep 2017 15:34:41 -0700")
+References: <20170918223441.2129-1-andrew.smirnov@gmail.com>
+Message-ID: <87bmm5xnip.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 20 Sep 2017 12:57:47 -0400 schrieb Russell kirmayer:
+>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
 
-> From: Russell Kirmayer <russell.kirmayer@jibo.com>
-> 
-> https://github.com/opencv/opencv/releases/tag/3.3.0
+ > Bump Python3 version to 3.6.2.
+ > Patches dropped:
 
-Hi,
+ > "Support PGEN_FOR_BUILD and FREEZE_IMPORTLIB_FOR_BUILD"
 
-http://patchwork.ozlabs.org/patch/814507/ does the same thing ;)
+ > Rationale: With commit 9d02f562961efd12d3c8317a10916db7f77330cc, code
+ > generation step of building CPython now became explicit (instead of
+ > always performed as a part of 'make' invocation) and more granular. We
+ > no longer need to use Parser/pgen at all and tricking the build system
+ > into using different Programs/_freeze_importlib can be done as a part
+ > of recipe.
 
-Regards, Bernd
+ > Additional info about the build change can be found at
+ > https://bugs.python.org/issue23404
+
+ > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+
+Committed, thanks. Thanks for the detailed commit message and comments
+in the .mk
+
+-- 
+Bye, Peter Korsgaard
