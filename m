@@ -1,83 +1,41 @@
-From: Bradford Barr <bradford@density.io>
-Date: Tue, 19 Sep 2017 21:13:31 -0400
-Subject: [Buildroot] [PATCH v2 1/1] msgpack: bump version to 2.1.5
-In-Reply-To: <d47c2464-2e30-0ec9-ccef-2848af01f507@mind.be>
-References: <20170918155824.26180-1-bradford@density.io>
- <d47c2464-2e30-0ec9-ccef-2848af01f507@mind.be>
-Message-ID: <CAPpUvYgiu5yFpi=aCgE86+3UCsApo2vGS_Mi9Q12OOdtRvUsOw@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed, 20 Sep 2017 12:18:43 +0930
+Subject: [Buildroot] [PATCH 0/2] ppc64 little endian defconfig
+Message-ID: <20170920024845.26157-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 19, 2017 at 5:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  I was about to apply, however:
->
-> On 18-09-17 17:58, Bradford Barr wrote:
->> From: bradford barr <bradford@density.io>
->>
->> Modern versions of msgpack are hosted on Github. Msgpack switched their build
->> systems from autotools to cmake a while back. The licence was also updated from
->> Apache to Boost.
->>
->> Signed-off-by: bradford barr <bradford@density.io>
->> ---
->>  package/msgpack/msgpack.hash |  2 +-
->>  package/msgpack/msgpack.mk   | 13 +++++++++----
->>  2 files changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
->> index 8cd8cb6..f1033ad 100644
->> --- a/package/msgpack/msgpack.hash
->> +++ b/package/msgpack/msgpack.hash
->> @@ -1,2 +1,2 @@
->>  # Locally computed:
->> -sha256  97a371ef950c89f48e8dba6abeccab07f1887e9ba6dab921de0f985c7d5075fe  msgpack-0.5.4.tar.gz
->> +sha256  9c87f80fc651b900772deaef0ab154b63160c74d292529b5be6d06d6485d4640  msgpack-2.1.5.tar.gz
->> diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
->> index 9e23948..66dbc8d 100644
->> --- a/package/msgpack/msgpack.mk
->> +++ b/package/msgpack/msgpack.mk
->> @@ -4,9 +4,14 @@
->>  #
->>  ################################################################################
->>
->> -MSGPACK_VERSION = 0.5.4
->> -MSGPACK_SITE = http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
->> -MSGPACK_LICENSE = Apache-2.0
->> +MSGPACK_VERSION = 2.1.5
->> +MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
->> +MSGPACK_LICENSE = BSL-1.0
->>  MSGPACK_LICENSE_FILES = COPYING
->> +MSGPACK_INSTALL_STAGING = YES
->>
->> -$(eval $(autotools-package))
->> +define MSGPACK_INSTALL_TARGET_CMDS
->> +     cp -a $(@D)/libmsgpackc.so* $(TARGET_DIR)/usr/lib
->> +endef
->
->  Why does the default "make install" not work?
+Hello,
 
-The default "make install" installs all of the header files, cmake
-modules, pkg-config files, and the static library along side the
-dynamic libraries. I figured it'd be best if the package just
-installed the dynamic libraries on the target. Let me know if you'd
-prefer the default "make install".
+This adds bumps the existing ppc64 defconfig to the latest kernel, and adds a
+ppc64le defconfig so we have coverage of the le toolchain in buildroot.
 
->
->
->> +
->> +$(eval $(cmake-package))
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+I did a build test and booted it in Qemu.
 
-Thanks,
-B
+v2 addresses review from Arnout:
+ - adds a readme
+ - puts myself in DEVELOPERS
+ - adds the defconfig to gitlab-ci.yml
+
+Cheers,
+
+Joel
+
+Joel Stanley (2):
+  configs: qemu_ppc64_pseries: Update to kernel 4.13.1
+  configs: Add qemu_ppc64le_pseries
+
+ .gitlab-ci.yml                         |  1 +
+ DEVELOPERS                             |  2 ++
+ board/qemu/ppc64le-pseries/readme.txt  |  9 +++++++++
+ configs/qemu_ppc64_pseries_defconfig   |  6 +++---
+ configs/qemu_ppc64le_pseries_defconfig | 21 +++++++++++++++++++++
+ 5 files changed, 36 insertions(+), 3 deletions(-)
+ create mode 100644 board/qemu/ppc64le-pseries/readme.txt
+ create mode 100644 configs/qemu_ppc64le_pseries_defconfig
+
+-- 
+2.14.1
