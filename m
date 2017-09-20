@@ -1,45 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 Sep 2017 09:53:40 +0200
-Subject: [Buildroot] [PATCH v2 1/2] linux-headers: bump 3.2.x and 4.{4, 9, 12,
-	13}.x series
-Message-ID: <20170920075341.4610-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 20 Sep 2017 11:17:18 +0300
+Subject: [Buildroot] [PATCH] flashrom: fix static build with uClibc
+Message-ID: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Define HAVE_STRNLEN to avoid local strnlen() definition.
+
+Fixes:
+http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
+http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
+http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v2: bump to 4.9.51, 4.12.14, 4.13.3
+It seems like only uClibc is affected. Build with musl succeeds even
+though the resulting binary contains a global strnlen symbol.
+---
+ package/flashrom/flashrom.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d30dea0457..8bd3c07007 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,15 +239,15 @@ endchoice
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 4ecdce8f4136..f9ab6294a524 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -12,7 +12,8 @@ FLASHROM_LICENSE = GPL-2.0+
+ FLASHROM_LICENSE_FILES = COPYING
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.92"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.93"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.87"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.49"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.88"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.51"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
--	default "4.12.12"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.1"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
-+	default "4.13.3"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ define FLASHROM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
+ endef
+ 
+ define FLASHROM_INSTALL_TARGET_CMDS
 -- 
-2.11.0
+2.14.1
