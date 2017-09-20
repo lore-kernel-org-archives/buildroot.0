@@ -1,41 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 20 Sep 2017 11:17:18 +0300
-Subject: [Buildroot] [PATCH] flashrom: fix static build with uClibc
-Message-ID: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Wed, 20 Sep 2017 12:10:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix wrong symlink for
+	systemd service
+Message-ID: <1505902234-4876-1-git-send-email-brain@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Define HAVE_STRNLEN to avoid local strnlen() definition.
+The symlink to /etc/systemd/system/syslog.service was pointing 4 levels up
+to /usr/lib instead of 3 levels up.
 
-Fixes:
-http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
-http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
-http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+This wasn't an issue on the actual system (/../ equals to / ) but was causing a
+deadlink in the TARGET directory.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 ---
-It seems like only uClibc is affected. Build with musl succeeds even
-though the resulting binary contains a global strnlen symbol.
----
- package/flashrom/flashrom.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/rsyslog/rsyslog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 4ecdce8f4136..f9ab6294a524 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -12,7 +12,8 @@ FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
- 
- define FLASHROM_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index bbf7d95..e32505b 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -91,7 +91,7 @@ define RSYSLOG_INSTALL_INIT_SYSTEMD
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/rsyslog.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rsyslog.service
+-	ln -sf ../../../../usr/lib/systemd/system/rsyslog.service \
++	ln -sf ../../../usr/lib/systemd/system/rsyslog.service \
+ 		$(TARGET_DIR)/etc/systemd/system/syslog.service
  endef
  
- define FLASHROM_INSTALL_TARGET_CMDS
 -- 
-2.14.1
+2.7.4
