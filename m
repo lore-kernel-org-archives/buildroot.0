@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 20 Sep 2017 12:44:21 +0100
+Date: Wed, 20 Sep 2017 12:52:58 +0100
 Subject: [Buildroot] OpenSSH build error against master
 In-Reply-To: <20170920112749.lvri5o7tjbwztkqk@tarshish>
 References: <CA+h8R2qCu0MTSeX6AATVhHJOOC3O1T7_DvX=87xXY1da_U6XRQ@mail.gmail.com>
  <20170920112749.lvri5o7tjbwztkqk@tarshish>
-Message-ID: <CA+h8R2qmCpQMuBhg5Via05yaCjQnc5vWv6J2JyV_CVQv2rQPaA@mail.gmail.com>
+Message-ID: <CA+h8R2rs1iXEZxdCjprBS-q0SE1FXm5Et0Q94yHivvSAc=pi2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,40 +16,41 @@ Hi Baruch,
 On Wed, Sep 20, 2017 at 12:27 PM, Baruch Siach <baruch@tkos.co.il> wrote:
 > What is your .config?
 
-Defconfig:
+Here's a simpler reproduction:
 
 ```
 BR2_arm=y
-BR2_cortex_a15_a7=y
+BR2_cortex_a7=y
 BR2_ARM_FPU_NEON_VFPV4=y
 BR2_CCACHE=y
 BR2_OPTIMIZE_2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TARGET_GENERIC_HOSTNAME="skiff-fd09a5a"
-BR2_TARGET_GENERIC_ISSUE="Welcome to SkiffOS fd09a5a!"
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+BR2_BINUTILS_VERSION_2_27_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_LTO=y
+BR2_TARGET_GENERIC_HOSTNAME="skiff-f9ca72f"
+BR2_TARGET_GENERIC_ISSUE="Welcome to SkiffOS f9ca72f!"
 BR2_TARGET_GENERIC_PASSWD_SHA256=y
 BR2_INIT_SYSTEMD=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="linaro"
 BR2_SYSTEM_BIN_SH_BASH=y
-# BR2_TARGET_GENERIC_GETTY is not set
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
 BR2_ENABLE_LOCALE_WHITELIST="C en_US en_US.UTF-8"
 BR2_GENERATE_LOCALE="en_US.UTF-8"
-BR2_ROOTFS_USERS_TABLES="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//users"
-BR2_ROOTFS_OVERLAY="/home/paralin/Documents/synrobo/skiff/configs/skiff/moduleimg/root_overlay
-/home/paralin/Documents/synrobo/skiff/configs/skiff/standard/root_overlay
-/home/paralin/Documents/synrobo/skiff/configs/skiff/core/root_overlay
-/home/paralin/Documents/jpl_skiff/configs/jpl/wifi/root_overlay
-/home/paralin/Documents/jpl_skiff/configs/jpl/environment/root_overlay
-/home/paralin/Documents/jpl_skiff/configs/jpl/mast/root_overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//pre_build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//post_build.sh"
+BR2_ROOTFS_USERS_TABLES="/home/paralin/Documents/synrobo/skiff/workspaces/.config_pi3//users"
+BR2_ROOTFS_OVERLAY="/home/paralin/Documents/synrobo/skiff/configs/skiff/standard/root_overlay
+/home/paralin/Documents/synrobo/skiff/configs/skiff/moduleimg/root_overlay
+/home/paralin/Documents/synrobo/skiff/configs/pi/3/root_overlay"
+BR2_ROOTFS_POST_BUILD_SCRIPT="/home/paralin/Documents/synrobo/skiff/workspaces/.config_pi3//pre_build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="/home/paralin/Documents/synrobo/skiff/workspaces/.config_pi3//post_build.sh"
 BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/hardkernel/linux/archive/ec8448dd6e243e2e860dda8d514034b34875db97/linux-xu4-4.9.47.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="odroidxu4"
-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="/home/paralin/Documents/synrobo/skiff/workspaces/.config_xu4//kernel/config"
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/raspberrypi/linux/archive/ba742b52e5099b3ed964e78f227dc96460b5cdc0/linux-rpi-4.9.50-ba742b.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="/home/paralin/Documents/synrobo/skiff/workspaces/.config_pi3//kernel/config"
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
 BR2_PACKAGE_BUSYBOX_SELINUX=y
 BR2_PACKAGE_BZIP2=y
 BR2_PACKAGE_GZIP=y
@@ -70,15 +71,17 @@ BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6004=y
 BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010=y
 BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
 BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
 BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61=y
 BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
 BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
 BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
 BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
 BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
+BR2_PACKAGE_RPI_FIRMWARE=y
 BR2_PACKAGE_RFKILL=y
 BR2_PACKAGE_RTL8192CU=y
-BR2_PACKAGE_RTL8821AU=y
 BR2_PACKAGE_USBUTILS=y
 BR2_PACKAGE_LIBZIP=y
 BR2_PACKAGE_LZO=y
@@ -94,6 +97,10 @@ BR2_PACKAGE_IPUTILS=y
 BR2_PACKAGE_IW=y
 BR2_PACKAGE_MOSH=y
 BR2_PACKAGE_NETWORK_MANAGER=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_NTP_NTPDATE=y
+BR2_PACKAGE_NTP_NTPDC=y
+BR2_PACKAGE_NTP_NTPQ=y
 BR2_PACKAGE_RSYNC=y
 BR2_PACKAGE_WGET=y
 BR2_PACKAGE_WPA_SUPPLICANT=y
@@ -133,35 +140,23 @@ BR2_TARGET_ROOTFS_CPIO=y
 BR2_TARGET_ROOTFS_CPIO_GZIP=y
 BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
 # BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/hardkernel/u-boot/archive/odroidxu4-v2017.05/uboot-xu4-2017.05.tar.gz"
-BR2_TARGET_UBOOT_PATCH="/home/paralin/Documents/synrobo/skiff/configs/odroid/xu4/uboot_patches"
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="odroid-xu4"
-BR2_TARGET_UBOOT_NEEDS_DTC=y
-# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-dtb.bin"
 BR2_PACKAGE_HOST_DOSFSTOOLS=y
 BR2_PACKAGE_HOST_E2FSPROGS=y
 BR2_PACKAGE_HOST_GENEXT2FS=y
 BR2_PACKAGE_HOST_GENIMAGE=y
 BR2_PACKAGE_HOST_PARTED=y
 BR2_PACKAGE_HOST_SQUASHFS=y
+
 ```
 
-To reproduce this defconfig (as it has some generated paths):
+To reproduce:
 
 ```
 git clone https://github.com/paralin/skiffos.git
 cd ./skiffos.git
 git checkout skiff-next
-SKIFF_CONFIG=odroid/xu4 make compile
+SKIFF_CONFIG=pi/3 make configure compile
 ```
-
-However, the generated paths are relative to pre and post build
-targets, and Buildroot is otherwise unmodified.
 
 Best,
 Christian
