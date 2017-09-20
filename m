@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Sep 2017 19:33:35 +0200
-Subject: [Buildroot] [PATCH] chrony: add optional seccomp support
-In-Reply-To: <20170915142437.10131-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 15 Sep 2017 16:24:37 +0200")
-References: <20170915142437.10131-1-peter@korsgaard.com>
-Message-ID: <87zi9pxok0.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Sep 2017 19:34:03 +0200
+Subject: [Buildroot] [PATCH] chrony: bump version to 3.2
+In-Reply-To: <20170915142749.11591-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 15 Sep 2017 16:27:49 +0200")
+References: <20170915142749.11591-1-peter@korsgaard.com>
+Message-ID: <87vakdxoj8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > seccomp support has been available since chrony-2.2
+ > Also add a hash for the license file while we're at it.
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed, thanks.
+Committed after changing the announcement URL to tuxfamily.org now that
+the archive has been updated, thanks.
 
 -- 
 Bye, Peter Korsgaard
