@@ -1,99 +1,132 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 20 Sep 2017 04:02:04 +0100
-Subject: [Buildroot] [PATCH 3/9] docker-engine: add support for init
-	processes
+Date: Wed, 20 Sep 2017 04:02:06 +0100
+Subject: [Buildroot] [PATCH 5/9] docker-proxy: new package
 In-Reply-To: <20170920030210.19446-1-christian@paral.in>
 References: <20170920030210.19446-1-christian@paral.in>
-Message-ID: <20170920030210.19446-4-christian@paral.in>
+Message-ID: <20170920030210.19446-6-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+Add docker-proxy package to Buildroot. Needed by docker-engine at
+runtime, and previously not included. This leads to the following error
+when attempting to port-map ports to a container:
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
+  $ docker run -p 8080:8080 nginx
+  docker: Error response from daemon: driver failed programming external
+  connectivity on endpoint:
+  exec: "docker-proxy": executable file not found in $PATH.
 
-Furthermore, this patch fixes the following Docker error:
-
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+Docker expects the docker-proxy binary to exist in the PATH.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk | 11 +++++++++++
- 2 files changed, 37 insertions(+)
+ package/Config.in                      |  1 +
+ package/docker-proxy/Config.in         | 18 +++++++++++++
+ package/docker-proxy/docker-proxy.hash |  2 ++
+ package/docker-proxy/docker-proxy.mk   | 46 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 67 insertions(+)
+ create mode 100644 package/docker-proxy/Config.in
+ create mode 100644 package/docker-proxy/docker-proxy.hash
+ create mode 100644 package/docker-proxy/docker-proxy.mk
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 05670a716e..7d9a87f7bb 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
- 
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
+diff --git a/package/Config.in b/package/Config.in
+index b3fb8fa222..872bd95829 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1876,6 +1876,7 @@ menu "System tools"
+ 	source "package/debianutils/Config.in"
+ 	source "package/docker-containerd/Config.in"
+ 	source "package/docker-engine/Config.in"
++	source "package/docker-proxy/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
+new file mode 100644
+index 0000000000..4f414b24b1
+--- /dev/null
++++ b/package/docker-proxy/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_DOCKER_PROXY
++	bool "docker-proxy"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
++	  Libnetwork is a Container Network Model that provides a
++	  consistent programming interface and the required network
++	  abstractions for applications.
 +
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
++	  This package provides docker-proxy, a run-time dependency of Docker.
 +
-+	  https://github.com/krallin/tini
++	  https://github.com/docker/libnetwork
 +
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-+	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
-+	help
-+	  Use dumb-init as the container init process.
++comment "docker-proxy needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
+new file mode 100644
+index 0000000000..3ec184f54f
+--- /dev/null
++++ b/package/docker-proxy/docker-proxy.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	2eee331b6ded567a36e7db708405b34032b93938682cf049025f48b96d755bf6	docker-proxy-7b2b1feb1de4817d522cc372af149ff48d25028e.tar.gz
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+new file mode 100644
+index 0000000000..3bf6546d26
+--- /dev/null
++++ b/package/docker-proxy/docker-proxy.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# docker-proxy
++#
++################################################################################
 +
-+	  https://github.com/Yelp/dumb-init
++DOCKER_PROXY_VERSION = 7b2b1feb1de4817d522cc372af149ff48d25028e
++DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
 +
-+endchoice
++DOCKER_PROXY_LICENSE = Apache-2.0
++DOCKER_PROXY_LICENSE_FILES = LICENSE
 +
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 8928f072e7..a2776ed78c 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -50,6 +50,13 @@ endif
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- DOCKER_ENGINE_BUILD_TAGS += daemon
- DOCKER_ENGINE_BUILD_TARGETS += dockerd
++DOCKER_PROXY_DEPENDENCIES = host-go host-pkgconf
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INIT = dumb-init
-+else
-+DOCKER_ENGINE_INIT = tini
++DOCKER_PROXY_GOPATH = "$(@D)/gopath"
++DOCKER_PROXY_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
++	CGO_ENABLED=1 \
++	CGO_NO_EMULATION=1 \
++	GOBIN="$(@D)/bin" \
++	GOPATH="$(DOCKER_PROXY_GOPATH)" \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	$(TARGET_MAKE_ENV)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++DOCKER_PROXY_GLDFLAGS += -extldflags '-static'
 +endif
 +
- endif
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-@@ -119,6 +126,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
- 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
- 	)
++define DOCKER_PROXY_CONFIGURE_CMDS
++	mkdir -p $(DOCKER_PROXY_GOPATH)/src/github.com/docker
++	ln -fs $(@D) $(DOCKER_PROXY_GOPATH)/src/github.com/docker/libnetwork
++endef
 +
-+	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
-+		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-+	)
- endef
- 
- $(eval $(generic-package))
++define DOCKER_PROXY_BUILD_CMDS
++	cd $(@D)/gopath/src/github.com/docker/libnetwork; \
++	$(DOCKER_PROXY_MAKE_ENV) \
++	$(HOST_DIR)/usr/bin/go build -v \
++		-o $(@D)/bin/docker-proxy \
++		-ldflags "$(DOCKER_PROXY_GLDFLAGS)" \
++		github.com/docker/libnetwork/cmd/proxy
++endef
++
++define DOCKER_PROXY_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
++endef
++
++$(eval $(generic-package))
 -- 
 2.13.5
