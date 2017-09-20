@@ -1,97 +1,110 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 20 Sep 2017 12:18:45 +0930
-Subject: [Buildroot] [PATCH 2/2] configs: Add qemu_ppc64le_pseries
-In-Reply-To: <20170920024845.26157-1-joel@jms.id.au>
-References: <20170920024845.26157-1-joel@jms.id.au>
-Message-ID: <20170920024845.26157-3-joel@jms.id.au>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 20 Sep 2017 04:02:02 +0100
+Subject: [Buildroot] [PATCH 1/9] dumb-init: new package
+In-Reply-To: <20170920030210.19446-1-christian@paral.in>
+References: <20170920030210.19446-1-christian@paral.in>
+Message-ID: <20170920030210.19446-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is similar to the ppc64_pseries config, except we build for little
-endian instead of big endian.
+dumb-init is a minimal init process to act as PID 1 for containers.
 
-The default architecture is set to Power8 as this was the first fully
-enabled LE machine.
+dumb-init can be used to satisfy docker-engine's docker-init binary
+requirement.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+In many cases docker-init backing processes like dumb-init must be static, as
+they are executed inside a container in an unknown environment. This
+patch includes an option to specifically compile dumb-init statically, even if
+the system is compiled dynamically.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- .gitlab-ci.yml                         |  1 +
- DEVELOPERS                             |  2 ++
- board/qemu/ppc64le-pseries/readme.txt  |  9 +++++++++
- configs/qemu_ppc64le_pseries_defconfig | 21 +++++++++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 board/qemu/ppc64le-pseries/readme.txt
- create mode 100644 configs/qemu_ppc64le_pseries_defconfig
+ package/Config.in                |  1 +
+ package/dumb-init/Config.in      | 16 ++++++++++++++++
+ package/dumb-init/dumb-init.hash |  2 ++
+ package/dumb-init/dumb-init.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 package/dumb-init/Config.in
+ create mode 100644 package/dumb-init/dumb-init.hash
+ create mode 100644 package/dumb-init/dumb-init.mk
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index b44c935f2a93..ff3541a9e3c9 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -174,6 +174,7 @@ qemu_mips64r6el_malta_defconfig: *defconfig
- qemu_nios2_10m50_defconfig: *defconfig
- qemu_or1k_defconfig: *defconfig
- qemu_ppc64_pseries_defconfig: *defconfig
-+qemu_ppc64le_pseries_defconfig: *defconfig
- qemu_ppc_g3beige_defconfig: *defconfig
- qemu_ppc_mpc8544ds_defconfig: *defconfig
- qemu_ppc_virtex_ml507_defconfig: *defconfig
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ed5fa3d7604a..805898d6be97 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -913,6 +913,8 @@ F:	package/fxload/
- 
- N:	Joel Stanley <joel@jms.id.au>
- F:	package/pdbg/
-+F:	board/qemu/ppc64le-pseries/
-+F:	configs/qemu_ppc64le_pseries_defconfig
- 
- N:	Johan Derycke <johanderycke@gmail.com>
- F:	package/python-libconfig/
-diff --git a/board/qemu/ppc64le-pseries/readme.txt b/board/qemu/ppc64le-pseries/readme.txt
+diff --git a/package/Config.in b/package/Config.in
+index 48d1381921..96f04dec7a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1835,6 +1835,7 @@ comment "Utilities"
+ 	source "package/crudini/Config.in"
+ 	source "package/dialog/Config.in"
+ 	source "package/dtach/Config.in"
++	source "package/dumb-init/Config.in"
+ 	source "package/file/Config.in"
+ 	source "package/easy-rsa/Config.in"
+ 	source "package/gnupg/Config.in"
+diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
 new file mode 100644
-index 000000000000..dd188c505f4e
+index 0000000000..aaad119a15
 --- /dev/null
-+++ b/board/qemu/ppc64le-pseries/readme.txt
-@@ -0,0 +1,9 @@
-+Run the emulation with:
++++ b/package/dumb-init/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_DUMB_INIT
++	bool "dumb-init"
++	help
++	  dumb-init is a simple but valid init binary to
++	  act as PID 1 for containers.
 +
-+qemu-system-ppc64le -M pseries -nographic \
-+		-kernel output/images/vmlinux \
-+		-initrd output/images/rootfs.ext2
++	  https://github.com/Yelp/dumb-init
 +
-+The login prompt will appear in the terminal window.
++if BR2_PACKAGE_DUMB_INIT
 +
-+Tested with QEMU 2.10.0
-diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
++config BR2_PACKAGE_DUMB_INIT_STATIC
++	bool "build static"
++	help
++	  Enables static compilation for dumb-init.
++
++endif
+diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
 new file mode 100644
-index 000000000000..62e729d30260
+index 0000000000..4705ce4368
 --- /dev/null
-+++ b/configs/qemu_ppc64le_pseries_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_powerpc64le=y
-+BR2_powerpc_power8=y
++++ b/package/dumb-init/dumb-init.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	74486997321bd939cad2ee6af030f481d39751bc9aa0ece84ed55f864e309a3f	v1.2.0.tar.gz
+diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
+new file mode 100644
+index 0000000000..cc24ffafa1
+--- /dev/null
++++ b/package/dumb-init/dumb-init.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# dumb-init
++#
++################################################################################
 +
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-+BR2_SYSTEM_DHCP="eth0"
++DUMB_INIT_VERSION = v1.2.0
++DUMB_INIT_SITE = https://github.com/Yelp/dumb-init/archive
++DUMB_INIT_SOURCE = $(DUMB_INIT_VERSION).tar.gz
++DUMB_INIT_LICENSE = MIT
++DUMB_INIT_LICENSE_FILES = LICENSE
 +
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
++ifeq ($(BR2_PACKAGE_DUMB_INIT_STATIC),y)
++DUMB_INIT_CFLAGS += -static
++endif
 +
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++define DUMB_INIT_BUILD_CMDS
++	$(TARGET_CC) \
++		$(DUMB_INIT_CFLAGS) \
++		-o $(@D)/dumb-init $(@D)/dumb-init.c
++endef
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
-+BR2_LINUX_KERNEL_VMLINUX=y
++define DUMB_INIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
++endef
++
++$(eval $(generic-package))
 -- 
-2.14.1
+2.13.5
