@@ -1,45 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Sep 2017 19:19:02 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x and 4.{4, 9, 12,
-	13}.x series
-Message-ID: <20170920171430.BF0F780506@busybox.osuosl.org>
+Date: Wed, 20 Sep 2017 19:20:48 +0200
+Subject: [Buildroot] [git commit] augeas: security bump to version 1.8.1
+Message-ID: <20170920171430.DB4657FC8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4afe7a8cf54c1e989829b30ad304f23a394f770
+commit: https://git.buildroot.net/buildroot/commit/?id=74ac045c80893177fc7a8b3672245bb9ab132773
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes CVE-2017-7555 - Augeas versions up to and including 1.8.0 are
+vulnerable to heap-based buffer overflow due to improper handling of escaped
+strings.  Attacker could send crafted strings that would cause the
+application using augeas to copy past the end of a buffer, leading to a
+crash or possible code execution.
+
+[Peter: extend description]
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/augeas/augeas.hash | 2 +-
+ package/augeas/augeas.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d30dea0..8bd3c07 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,15 +239,15 @@ endchoice
+diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
+index 797bddb..e044ff4 100644
+--- a/package/augeas/augeas.hash
++++ b/package/augeas/augeas.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  515ce904138d99ff51d45ba7ed0d809bdee6c42d3bc538c8c820e010392d4cc5  augeas-1.8.0.tar.gz
++sha256  65cf75b5a573fee2a5c6c6e3c95cad05f0101e70d3f9db10d53f6cc5b11bc9f9  augeas-1.8.1.tar.gz
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index 1c1461e..20d09eb 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.92"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.93"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.87"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.49"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.88"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.51"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
--	default "4.12.12"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.1"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
-+	default "4.13.3"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-AUGEAS_VERSION = 1.8.0
++AUGEAS_VERSION = 1.8.1
+ AUGEAS_SITE = http://download.augeas.net
+ AUGEAS_INSTALL_STAGING = YES
+ AUGEAS_LICENSE = LGPL-2.1+
