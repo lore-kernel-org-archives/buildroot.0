@@ -1,83 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Sep 2017 19:22:55 +0200
-Subject: [Buildroot] [git commit] lcdproc: fix build with musl libc
-Message-ID: <20170920172852.3326681066@busybox.osuosl.org>
+Date: Wed, 20 Sep 2017 19:33:01 +0200
+Subject: [Buildroot] [git commit] chrony: bump version to 3.2
+Message-ID: <20170920172852.514697F8B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd70d0b4348d20b3965da2c4b02debc4a8e987da
+commit: https://git.buildroot.net/buildroot/commit/?id=8fca8c15513198dcd2bf05e656475f0f8204215f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch adding missing linux ioctl header.
+Also add a hash for the license file while we're at it.
 
-Fixes:
-http://autobuild.buildroot.net/results/58a/58a9b98d08060c6ed9e8855ba9f59d03aa2f3e2c/
-http://autobuild.buildroot.net/results/5b2/5b2c1bc872cebc7aadf93995b71178bba29e0b25/
-http://autobuild.buildroot.net/results/125/12594e613f8fc106e477411f76093654a084c01c/
-
-Cc: Sven Haardiek <sven.haardiek@greenbone.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: use tuxfamily.org URL for annoucement]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../lcdproc/0001-Add-missing-ioctl-header.patch    | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ package/chrony/chrony.hash | 8 +++++---
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/lcdproc/0001-Add-missing-ioctl-header.patch b/package/lcdproc/0001-Add-missing-ioctl-header.patch
-new file mode 100644
-index 0000000..8c21235
---- /dev/null
-+++ b/package/lcdproc/0001-Add-missing-ioctl-header.patch
-@@ -0,0 +1,50 @@
-+From 6267665454501512ac054202b38e4e6a72fa284b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 8 Sep 2017 14:19:11 +0300
-+Subject: [PATCH] Add missing ioctl header
-+
-+The spidev.h header uses macros from linux/ioctl.h. Add this header
-+explicitly since some libc, like musl, do not include it implicitly.
-+This fixes the following build failure:
-+
-+In file included from .../sysroot/usr/include/sys/ioctl.h:7:0,
-+                 from hd44780-spi.c:31:
-+hd44780-spi.c: In function ???spi_transfer???:
-+hd44780-spi.c:89:24: error: ???_IOC_SIZEBITS??? undeclared (first use in this function)
-+  status = ioctl(p->fd, SPI_IOC_MESSAGE(1), &xfer);
-+                        ^
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/lcdproc/lcdproc/pull/90
-+
-+ server/drivers/hd44780-pifacecad.c | 1 +
-+ server/drivers/hd44780-spi.c       | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/server/drivers/hd44780-pifacecad.c b/server/drivers/hd44780-pifacecad.c
-+index a73b9f9b1f82..55139124d852 100644
-+--- a/server/drivers/hd44780-pifacecad.c
-++++ b/server/drivers/hd44780-pifacecad.c
-+@@ -54,6 +54,7 @@
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ #include <stdint.h>
-+ #include <linux/spi/spidev.h>
-+ 
-+diff --git a/server/drivers/hd44780-spi.c b/server/drivers/hd44780-spi.c
-+index 791156f87a26..74c85fb014aa 100644
-+--- a/server/drivers/hd44780-spi.c
-++++ b/server/drivers/hd44780-spi.c
-+@@ -29,6 +29,7 @@
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ #include <stdint.h>
-+ #include <linux/spi/spidev.h>
-+ 
-+-- 
-+2.14.1
-+
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 8501808..38f1534 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,3 +1,5 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2017/01/msg00003.html
+-md5 f8d2ee78c55548bfbe95582c6a855cee  chrony-3.1.tar.gz
+-sha1 564dd010a10fbdcc7c177337115ccffa43fe0f95  chrony-3.1.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2017/09/msg00000.html
++md5 f4c4eb0dc92f35ee4bb7d3dcd8029ecb  chrony-3.2.tar.gz
++sha1 64db6c31e013222cc0a2b66322192b4cedf6e048  chrony-3.2.tar.gz
++# Locally calculated
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index e78d4b4..8868e84 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 3.1
++CHRONY_VERSION = 3.2
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
