@@ -1,37 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Sep 2017 23:09:57 +0200
-Subject: [Buildroot] [PATCH] package/dfu-util: allow to build it for the
- target as well
-In-Reply-To: <cb5803af-b598-5a40-b0ae-25b560f91dc7@grandegger.com>
-References: <cb5803af-b598-5a40-b0ae-25b560f91dc7@grandegger.com>
-Message-ID: <f95704df-2a65-18d5-d241-a3cc2e3d1173@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 Sep 2017 23:21:36 +0200
+Subject: [Buildroot] [PATCH 1/4] mongoose: drop unused MONGOOSE_NO_DL define
+Message-ID: <20170921212139.2901-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This define is not used anywhere in the mongoose sources since v6.0 (commit
+8927c9d22b3f), so drop it.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mongoose/mongoose.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 20-09-17 17:31, Wolfgang Grandegger wrote:
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-
- Have you tested this at all?
-
-Makefile:537: *** libusb is in the dependency chain of dfu-util that has added
-it to its _DEPENDENCIES variable without selecting it or depending on it from
-Config.in.  Stop.
-
- And therefore you also need to propagate the threads dependency and add a comment.
-
- Regards,
- Arnout
-
-
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 36fd8f899a..702342b3b1 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -10,7 +10,7 @@ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
+ MONGOOSE_INSTALL_STAGING = YES
+ 
+-MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -DMONGOOSE_NO_DL
++MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MONGOOSE_DEPENDENCIES += openssl
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
