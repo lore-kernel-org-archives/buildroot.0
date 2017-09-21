@@ -1,76 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 09:04:16 +0200
-Subject: [Buildroot] [PATCH] gdk-pixbuf: security bump to version 2.36.10
-Message-ID: <20170921070416.17829-1-peter@korsgaard.com>
+Date: Thu, 21 Sep 2017 09:23:46 +0200
+Subject: [Buildroot] [PATCH 1/1] Update github hashes
+In-Reply-To: <1loa9exfa8.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Wed, 20 Sep 2017 20:29:21 +0200")
+References: <20170920112825.3971-1-bernd.kuhls@t-online.de>
+ <87fubhxnnx.fsf@dell.be.48ers.dk>
+ <CANQCQpa9S7chHUTg1GBNz9Qi=r-tMeQnQO2sYpNdZ7oQ+9MP9w@mail.gmail.com>
+ <1loa9exfa8.ln2@ID-313208.user.individual.net>
+Message-ID: <87377gy0ot.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
-gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
-specially crafted jpeg file can cause a heap overflow resulting in remote
-code execution.  An attacker can send a file or url to trigger this
-vulnerability.
+Hi,
 
-CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
-tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
-Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
-remote code execution.  An attacker can send a file or a URL to trigger this
-vulnerability.
+ > I do not see a perfect solution for this problem, the fallback to s.b.o. 
+ > will not circumvent download failures because it does not provide source 
+ > tarballs for all packages:
 
-CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
-context-dependent attackers to cause a denial of service (NULL pointer
-dereference and application crash) via vectors related to printing an error
-message.
+ > $ LC_ALL=C wget sources.buildroot.org/kodi-17.4-Krypton.tar.gz
+ > --2017-09-20 20:23:27--  http://sources.buildroot.org/kodi-17.4-
+ > Krypton.tar.gz
+ > Resolving sources.buildroot.org (sources.buildroot.org)... 176.9.16.109
+ > Connecting to sources.buildroot.org (sources.buildroot.org)|
+ > 176.9.16.109|:80... connected.
+ > HTTP request sent, awaiting response... 404 Not Found
+ > 2017-09-20 20:23:27 ERROR 404: Not Found.
 
-The host version now needs the same workaround as we do for the target to
-not pull in shared-mime-info.
+ > Not committing this patch means that downloading the kodi package will 
+ > always fail. Otoh I recognize the mess for the lts versions...
 
-Also add a hash for the license file while we're at it.
+Odd that hasn't been downloaded yet, but kodi was only very recently
+bumped (post-2017.08), so there's no problem fixing the hash there.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdk-pixbuf/gdk-pixbuf.hash | 6 ++++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 5 ++++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+Can you send a patch only fixing the kodi hash?
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index ebb03a8684..9cb947f195 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,2 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.6.sha256sum
--sha256 455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c  gdk-pixbuf-2.36.6.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.10.sha256sum
-+sha256 f8f6fa896b89475c73b6e9e8d2a2b062fc359c4b4ccb8e96470d6ab5da949ace  gdk-pixbuf-2.36.10.tar.xz
-+# Locally calculated
-+sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index ac92e23c18..e36761cb8d 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GDK_PIXBUF_VERSION_MAJOR = 2.36
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).6
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.0+
-@@ -20,6 +20,9 @@ GDK_PIXBUF_CONF_ENV = \
- 	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
- 	gio_can_sniff=no
- 
-+HOST_GDK_PIXBUF_CONF_ENV = \
-+	gio_can_sniff=no
-+
- GDK_PIXBUF_CONF_OPTS = --disable-glibtest
- 
- ifneq ($(BR2_PACKAGE_LIBPNG),y)
+
+ > Additionally not all users are using
+ > BR2_BACKUP_SITE="http://sources.buildroot.net"
+ > in their setup, I normally deactivate this option to save bandwidth and 
+ > to be informed when upstream did changes to its website.
+
+Save bandwidth? I can understand disabling the option for development
+reasons, but this is exactly the reason why we are running the mirror in
+the first place and I wouldn't recommend disabling the option for
+"normal" users.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
