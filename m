@@ -1,53 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:21:29 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/imagemagick:
-	change download url to github
-Message-ID: <20170921145320.005DC810E2@busybox.osuosl.org>
+Date: Thu, 21 Sep 2017 16:23:37 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] bluez5_utils: add
+	upstream security fix for CVE-2017-1000250
+Message-ID: <20170921145320.42CCE7FAF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaeae2707270245b284edc8587114d41430cb3bd
+commit: https://git.buildroot.net/buildroot/commit/?id=f0b6a90eae8c17687a72eb0da7019eddd365a43b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Upstream quickly removes old versions from
-http://www.imagemagick.org/download/releases
+Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46 and
+earlier are vulnerable to an information disclosure vulnerability which
+allows remote attackers to obtain sensitive information from the bluetoothd
+process memory.  This vulnerability lies in the processing of SDP search
+attribute requests.
 
-For our LTS versions we should switch to a stable upstream repo which
-provides all released versions.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 02edd7cd806bf9cac0633611084e3d980f1c701e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-of-bounds-heap-read-in-service_search_at.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 173dd41..3e2749d 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
--# From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 0058fcde533986334458a5c99600b1b9633182dd9562cbad4ba618c5ccf2a28f  ImageMagick-7.0.5-10.tar.xz
-+# Locally computed
-+sha256 bd965d36a65cbcd420ec79a509a5ce0ecdfef036770cdc87fcd5374b9ed15ea7  7.0.5-10.tar.gz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 7aade62..23552d7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- IMAGEMAGICK_VERSION = 7.0.5-10
--IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
--IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
-+IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
-+IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
- 
+diff --git a/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch b/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
+new file mode 100644
+index 0000000..a73c372
+--- /dev/null
++++ b/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
+@@ -0,0 +1,29 @@
++From 9e009647b14e810e06626dde7f1bb9ea3c375d09 Mon Sep 17 00:00:00 2001
++From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
++Date: Wed, 13 Sep 2017 10:01:40 +0300
++Subject: [PATCH] sdp: Fix Out-of-bounds heap read in service_search_attr_req
++ function
++
++Check if there is enough data to continue otherwise return an error.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/sdpd-request.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/sdpd-request.c b/src/sdpd-request.c
++index 1eefdce1a..318d04467 100644
++--- a/src/sdpd-request.c
+++++ b/src/sdpd-request.c
++@@ -917,7 +917,7 @@ static int service_search_attr_req(sdp_req_t *req, sdp_buf_t *buf)
++ 	} else {
++ 		/* continuation State exists -> get from cache */
++ 		sdp_buf_t *pCache = sdp_get_cached_rsp(cstate);
++-		if (pCache) {
+++		if (pCache && cstate->cStateValue.maxBytesSent < pCache->data_size) {
++ 			uint16_t sent = MIN(max, pCache->data_size - cstate->cStateValue.maxBytesSent);
++ 			pResponse = pCache->data;
++ 			memcpy(buf->data, pResponse + cstate->cStateValue.maxBytesSent, sent);
++-- 
++2.11.0
++
