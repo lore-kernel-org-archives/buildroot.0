@@ -1,53 +1,35 @@
 From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Thu, 21 Sep 2017 10:59:39 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/wandboard: Bump U-Boot and kernel
-	versions
-In-Reply-To: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
-References: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <1506002379-23490-2-git-send-email-fabio.estevam@nxp.com>
+Date: Thu, 21 Sep 2017 10:59:38 -0300
+Subject: [Buildroot] [PATCH 1/2] wandboard: genimage: Pass an offset for the
+	rootfs
+Message-ID: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2017.09 version and kernel to 4.13.3.
+Pass an offset of 1MB for the start of the rootfs.
+
+Otherwise we get rootfs corruption when the bootloader is manually
+written to the SD card.
 
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- configs/wandboard_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ board/wandboard/genimage.cfg | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index caa4c51..e6ba1d4 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -3,8 +3,8 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/wandboard/post-image.sh"
-@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="wandboard"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1"
+diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
+index b23a91b..ad4a6a5 100644
+--- a/board/wandboard/genimage.cfg
++++ b/board/wandboard/genimage.cfg
+@@ -26,6 +26,7 @@ image sdcard.img {
+   partition rootfs {
+     partition-type = 0x83
+     image = "rootfs.ext4"
++    offset = 1M
+     size = 512M
+   }
+ }
 -- 
 2.7.4
