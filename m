@@ -1,23 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 21:35:04 +0200
-Subject: [Buildroot] [PATCH] configs/mx6cubox: Bump U-Boot and kernel
-	versions
-In-Reply-To: <1506006073-17022-1-git-send-email-fabio.estevam@nxp.com> (Fabio
- Estevam's message of "Thu, 21 Sep 2017 12:01:13 -0300")
-References: <1506006073-17022-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <874lrvu9p3.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Sep 2017 21:33:57 +0200
+Subject: [Buildroot] [git commit] util-linux: bump to v2.30.2
+Message-ID: <20170921194917.251657F943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6cbdaba3e156817657789d2055669e024e234f4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bump U-Boot to 2017.09 version and kernel to 4.13.3.
- > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Release notes:
+https://www.kernel.org/pub/linux/utils/util-linux/v2.30/v2.30.2-ReleaseNotes
 
-Committed, thanks.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux.hash | 2 +-
+ package/util-linux/util-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 6f0bafe..2711f51 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/util-linux/v2.30/sha256sums.asc
+-sha256 1be4363a91ac428c9e43fc04dc6d2c66a19ec1e36f1105bd4b481540be13b841  util-linux-2.30.1.tar.xz
++sha256 7b5be5489e9b5b7177832836467aba1c87bf0e9bcbcb5a6f35d76cd4782589dc  util-linux-2.30.2.tar.xz
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 5ebb5e6..83bb217 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ UTIL_LINUX_VERSION_MAJOR = 2.30
+-UTIL_LINUX_VERSION_MINOR = 1
++UTIL_LINUX_VERSION_MINOR = 2
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).$(UTIL_LINUX_VERSION_MINOR)
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
