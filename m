@@ -1,49 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 21 Sep 2017 22:54:30 +0200
-Subject: [Buildroot] [PATCH v2 00/11] glibc: bump to 2.26
-In-Reply-To: <a4a755be-a98a-e811-fca3-ac711612a829@mind.be>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
- <a4a755be-a98a-e811-fca3-ac711612a829@mind.be>
-Message-ID: <3ed22af9-f9a0-1f6c-b8e8-10d2160927e9@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Sep 2017 23:05:38 +0200
+Subject: [Buildroot] Change CFLAGS for a certain package
+In-Reply-To: <1505974939125-0.post@n4.nabble.com>
+References: <1505974939125-0.post@n4.nabble.com>
+Message-ID: <933ab6ef-1b10-b089-744f-c73f925cba1c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-Le 21/09/2017 ? 12:45, Arnout Vandecappelle a ?crit?:
->  Hi Romain,
+
+On 21-09-17 08:22, mikmik wrote:
+> I have a generic-package 'hello' contains hello.c and Makefile.
+> In the mk file I want to build HELLO_CONFIGURE_OPTS just as
+> TARGET_CONFIGURE_OPTS but change only CFLAGS to my desired CFLAGS for hello
+> (say just '-g').
 > 
-> On 02-09-17 22:54, Romain Naour wrote:
->> This series bump glibc to the latest release and allow to remove all
->> local patches! Sadly this new release come with some C++ regressions
->> or changes needed in packages.
-> 
->  Either this evening or in the weekend I'd like to start applying part of this
-> series. Could you mark the patches that should NOT be applied yet as Changes
-> Requested in patchwork?
+> Right now, I used sed on TARGET_CONFIGURE_OPTS and replaced CFLAGS. It
+> works.
+> But there isn't a more easy or intuitive way to replace some variables on
+> TARGET_CONFIGURE_OPTS?
 
-I'll mark this series as "awaiting upstream" since a patch should be available
-in the next days fixing glibc bug 22146 [1].
+ For almost all options, you can just override them by specifying the additional
+option later. For example, if CFLAGS contains "-g -g0" then you don't get
+debugging info. So, you can always just append to cflags:
 
-Since a lot patches are required to be able to use a toolchain build with glibc
-2.26 on some architectures (powerpc64le, x86, x86_64), it's safer to stay with
-glibc 2.25 for now.
+HELLO_CONFIGURE_OPTS += CFLAGS="$(TARGET_CFLAGS) -g"
 
-I'll ask upstream if they can release glibc 2.26.1 if all reported issues are fixed.
 
-Also, as reported by Yann, I'll update gcc patches (patch 1 and 2) with the
-upstream one.
+ Regards,
+ Arnout
 
-Best regards,
-Romain
-
-[1] https://sourceware.org/bugzilla/show_bug.cgi?id=22146
-
-> 
->  Thanks,
->  Regards,
->  Arnout
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
