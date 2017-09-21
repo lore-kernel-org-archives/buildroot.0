@@ -1,43 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:51:28 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] cmake: explicitly disable
-	openssl support for host-cmake
-Message-ID: <20170921145320.4A377810E3@busybox.osuosl.org>
+Date: Thu, 21 Sep 2017 16:21:40 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/imagemagick: bump
+	version to 7.0.6-0
+Message-ID: <20170921145320.3513A810D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a86d28d850583091bd1a9d137be12794b1102eae
+commit: https://git.buildroot.net/buildroot/commit/?id=fc6dda414cd12196c09b0eb6ba43041bc515f837
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-host-cmake will optionally link with openssl for the embedded copy of
-libarchive if available, leaking host dependencies and possibly causing
-build issues in case of compatibility issues - E.G. the host-cmake version
-we have in 2017.02.x doesn't build against openssl-1.1.0+:
-
-https://github.com/libarchive/libarchive/issues/810
-
-The openssl support in libarchive is unlikely to be needed, so explicitly
-disable it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f87138339b17bc2b1d84c59ea176abb941413550)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit dfde97dce57cee38febb1b5687876c34df1f9bbc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index bc55509..69ddbb9 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -46,6 +46,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
- 			-DCMAKE_C_FLAGS="$(HOST_CMAKE_CFLAGS)" \
- 			-DCMAKE_CXX_FLAGS="$(HOST_CMAKE_CXXFLAGS)" \
- 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+			-DCMAKE_USE_OPENSSL:BOOL=OFF \
- 			-DBUILD_CursesDialog=OFF \
- 	)
- endef
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 3e2749d..d3097f5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 bd965d36a65cbcd420ec79a509a5ce0ecdfef036770cdc87fcd5374b9ed15ea7  7.0.5-10.tar.gz
++sha256 3a6b21352ed0eb984bdbd0943471df8605b978b527125921e97e5b404f2bee3a  7.0.6-0.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 23552d7..22c29d3 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.5-10
++IMAGEMAGICK_VERSION = 7.0.6-0
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
