@@ -1,37 +1,51 @@
-From: Bradford Barr <bradford@density.io>
-Date: Thu, 21 Sep 2017 10:53:48 -0400
-Subject: [Buildroot] Separate board config from the rest
-In-Reply-To: <HE1PR03MB3049EA7D60AC0E819A4B992FE7660@HE1PR03MB3049.eurprd03.prod.outlook.com>
-References: <HE1PR03MB3049EA7D60AC0E819A4B992FE7660@HE1PR03MB3049.eurprd03.prod.outlook.com>
-Message-ID: <CAPpUvYgPkYYqqJDHiC3gMihwtwj-Qy41kDPDjanBBejTV9NGFg@mail.gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Thu, 21 Sep 2017 12:01:13 -0300
+Subject: [Buildroot] [PATCH] configs/mx6cubox: Bump U-Boot and kernel
+	versions
+Message-ID: <1506006073-17022-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey luke,
+Bump U-Boot to 2017.09 version and kernel to 4.13.3.
 
-Page 44 of this document[1] talks about assembling different defconfig
-snippets. You could divide your defconfigs into platform specific
-options, and target packages and use the
-./support/kconfig/merge_config.sh[2] script to combine them. I haven't
-tried this myself, but I've been meaning to do something similar for
-my projects. Let me know if it works out.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ configs/mx6cubox_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-B
-
-[1]: http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
-[2]: https://git.busybox.net/buildroot/tree/support/kconfig/merge_config.sh
-
-On Thu, Sep 21, 2017 at 10:46 AM, luke <skywal_l@hotmail.com> wrote:
-> Hello,
->
->   My problem is I have different images which differs only by the board on which I install them (rpi0w, rpi2 or pi3) but the configuration of the toolchain, of the image, the installed packages, the overlays, etc, are the same. Each time I add a package, I need to add it to all the boards config I want to support.
->   Is there a way to separate the board specific part of a config with the configuration of the toolchain and the package selection?
->
-> Thanks
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 9ce496d..5a4e934 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
+@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
+-- 
+2.7.4
