@@ -1,40 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 21:30:27 +0200
-Subject: [Buildroot] [git commit] flashrom: fix static build with uClibc
-Message-ID: <20170921194916.F1DA5810B2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Sep 2017 22:35:28 +0200
+Subject: [Buildroot] [PATCH 1/1] Update github hashes
+In-Reply-To: <87fubhxnnx.fsf@dell.be.48ers.dk>
+References: <20170920112825.3971-1-bernd.kuhls@t-online.de>
+ <87fubhxnnx.fsf@dell.be.48ers.dk>
+Message-ID: <08b34ae7-9f32-5850-50de-8b6dba321a49@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57f4efed7965e573a444544363d0cf74cec13be1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Define HAVE_STRNLEN to avoid local strnlen() definition.
 
-Fixes:
-http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
-http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
-http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+On 20-09-17 19:52, Peter Korsgaard wrote:
+> I'm not sure updating the hashes is the correct thing to do. Sources.b.o
+> runs 'make source' from the 2017.02.x and master branches to keep it
+> uptodate, and E.G. freerdp hasn't been updated since 2017.02, so it will
+> break hard for 2017.02.x users if we change it.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flashrom/flashrom.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ So perhaps a workaround would be to change the hashes to none instead? That way
+sources.b.o will retain the original tarballs (since they still have the
+"correct" hash).
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 4ecdce8..f9ab629 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -12,7 +12,8 @@ FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
- 
- define FLASHROM_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
- endef
- 
- define FLASHROM_INSTALL_TARGET_CMDS
+ Not changing the hash gives the problem that the packages are downloaded twice:
+once from github, failing hash, and then again from sources.b.o. For 2017.02.x
+users that's unavoidable, but for master users we can fix it by changing the
+hash to none.
+
+ Of course, the hash file should then have a comment explaining that the hash
+should be updated again when the package is bumped.
+
+ Regards,
+ Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
