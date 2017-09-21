@@ -1,34 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Sep 2017 12:45:01 +0200
-Subject: [Buildroot] [PATCH v2 00/11] glibc: bump to 2.26
-In-Reply-To: <20170902205423.21288-1-romain.naour@gmail.com>
-References: <20170902205423.21288-1-romain.naour@gmail.com>
-Message-ID: <a4a755be-a98a-e811-fca3-ac711612a829@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 Sep 2017 13:17:57 +0200
+Subject: [Buildroot] [PATCH] ruby: add upstream security patches bumping
+	rubygems to 2.6.13
+In-Reply-To: <20170907091755.9491-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 7 Sep 2017 11:17:55 +0200")
+References: <20170907091755.9491-1-peter@korsgaard.com>
+Message-ID: <878th8wba2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Romain,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 02-09-17 22:54, Romain Naour wrote:
-> This series bump glibc to the latest release and allow to remove all
-> local patches! Sadly this new release come with some C++ regressions
-> or changes needed in packages.
+ > We unfortunately cannot use the upstream patches directly as they are not in
+ > 'patch -p1' format, so convert them and include instead.
 
- Either this evening or in the weekend I'd like to start applying part of this
-series. Could you mark the patches that should NOT be applied yet as Changes
-Requested in patchwork?
+ > Fixes:
 
- Thanks,
- Regards,
- Arnout
+ > CVE-2017-0899 - RubyGems version 2.6.12 and earlier is vulnerable to
+ > maliciously crafted gem specifications that include terminal escape
+ > characters.  Printing the gem specification would execute terminal escape
+ > sequences.
+
+ > CVE-2017-0900 - RubyGems version 2.6.12 and earlier is vulnerable to
+ > maliciously crafted gem specifications to cause a denial of service attack
+ > against RubyGems clients who have issued a `query` command.
+
+ > CVE-2017-0901 - RubyGems version 2.6.12 and earlier fails to validate
+ > specification names, allowing a maliciously crafted gem to potentially
+ > overwrite any file on the filesystem.
+
+ > CVE-2017-0902 - RubyGems version 2.6.12 and earlier is vulnerable to a DNS
+ > hijacking vulnerability that allows a MITM attacker to force the RubyGems
+ > client to download and install gems from a server that the attacker
+ > controls.
+
+ > For more details, see
+ > https://www.ruby-lang.org/en/news/2017/08/29/multiple-vulnerabilities-in-rubygems/
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
