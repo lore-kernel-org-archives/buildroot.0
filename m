@@ -1,42 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:52:08 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] docs/manual: fix typo
-Message-ID: <20170921145320.5D591810E4@busybox.osuosl.org>
+Date: Thu, 21 Sep 2017 16:21:29 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/imagemagick:
+	change download url to github
+Message-ID: <20170921145320.005DC810E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=557039368d2509288eb892c01912466d9a6b9f55
+commit: https://git.buildroot.net/buildroot/commit/?id=aaeae2707270245b284edc8587114d41430cb3bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e10e4d19e3c02a9d251499172a65c77c59e15a67)
+Upstream quickly removes old versions from
+http://www.imagemagick.org/download/releases
+
+For our LTS versions we should switch to a stable upstream repo which
+provides all released versions.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 02edd7cd806bf9cac0633611084e3d980f1c701e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/using-buildroot-development.txt | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/imagemagick/imagemagick.hash | 4 ++--
+ package/imagemagick/imagemagick.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
-index e167849..1071de5 100644
---- a/docs/manual/using-buildroot-development.txt
-+++ b/docs/manual/using-buildroot-development.txt
-@@ -50,11 +50,11 @@ BUSYBOX_OVERRIDE_SRCDIR = /home/bob/busybox/
- When Buildroot finds that for a given package, an
- +<pkg>_OVERRIDE_SRCDIR+ has been defined, it will no longer attempt to
- download, extract and patch the package. Instead, it will directly use
--the source code available in in the specified directory and +make
--clean+ will not touch this directory. This allows to point Buildroot
--to your own directories, that can be managed by Git, Subversion, or
--any other version control system. To achieve this, Buildroot will use
--_rsync_ to copy the source code of the component from the specified
-+the source code available in the specified directory and +make clean+
-+will not touch this directory. This allows to point Buildroot to your
-+own directories, that can be managed by Git, Subversion, or any other
-+version control system. To achieve this, Buildroot will use _rsync_ to
-+copy the source code of the component from the specified
- +<pkg>_OVERRIDE_SRCDIR+ to +output/build/<package>-custom/+.
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 173dd41..3e2749d 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+-# From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 0058fcde533986334458a5c99600b1b9633182dd9562cbad4ba618c5ccf2a28f  ImageMagick-7.0.5-10.tar.xz
++# Locally computed
++sha256 bd965d36a65cbcd420ec79a509a5ce0ecdfef036770cdc87fcd5374b9ed15ea7  7.0.5-10.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 7aade62..23552d7 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- This mechanism is best used in conjunction with the +make
+ IMAGEMAGICK_VERSION = 7.0.5-10
+-IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+-IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
++IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
++IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
+ 
