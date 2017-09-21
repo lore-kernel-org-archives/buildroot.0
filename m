@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Sep 2017 22:35:28 +0200
-Subject: [Buildroot] [PATCH 1/1] Update github hashes
-In-Reply-To: <87fubhxnnx.fsf@dell.be.48ers.dk>
-References: <20170920112825.3971-1-bernd.kuhls@t-online.de>
- <87fubhxnnx.fsf@dell.be.48ers.dk>
-Message-ID: <08b34ae7-9f32-5850-50de-8b6dba321a49@mind.be>
+Date: Thu, 21 Sep 2017 22:53:07 +0200
+Subject: [Buildroot] [PATCH] flashrom: fix static build with uClibc
+In-Reply-To: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
+References: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
+Message-ID: <a38af34c-79d3-33d5-01a2-066ce9165c6d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,31 @@ To: buildroot@busybox.net
 
 
 
-On 20-09-17 19:52, Peter Korsgaard wrote:
-> I'm not sure updating the hashes is the correct thing to do. Sources.b.o
-> runs 'make source' from the 2017.02.x and master branches to keep it
-> uptodate, and E.G. freerdp hasn't been updated since 2017.02, so it will
-> break hard for 2017.02.x users if we change it.
+On 20-09-17 10:17, Baruch Siach wrote:
+> Define HAVE_STRNLEN to avoid local strnlen() definition.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
+> http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
+> http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> It seems like only uClibc is affected. Build with musl succeeds even
+> though the resulting binary contains a global strnlen symbol.
 
- So perhaps a workaround would be to change the hashes to none instead? That way
-sources.b.o will retain the original tarballs (since they still have the
-"correct" hash).
+ musl puts strnlen in a separate strnlen.o file. Since linking is done per
+object file, and there is no undefined symbol that pulls in strnlen.o (since
+strnlen is already defined), it will just use the flashrom version of the function.
 
- Not changing the hash gives the problem that the packages are downloaded twice:
-once from github, failing hash, and then again from sources.b.o. For 2017.02.x
-users that's unavoidable, but for master users we can fix it by changing the
-hash to none.
-
- Of course, the hash file should then have a comment explaining that the hash
-should be updated again when the package is bumped.
+ uClibc also puts strnlen in a separate object file. However, that object file
+also contain the hidden symbol __GI_strnlen which is referred to from other
+object files in the archive (e.g. vfprintf). Therefore, strnlen.o will be linked
+in and you get a double definition.
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
