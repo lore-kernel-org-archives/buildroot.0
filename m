@@ -1,30 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:52:36 +0200
-Subject: [Buildroot] [PATCH] cmake: explicitly disable openssl support
-	for host-cmake
-In-Reply-To: <20170918173848.13742-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 18 Sep 2017 19:38:48 +0200")
-References: <20170918173848.13742-1-peter@korsgaard.com>
-Message-ID: <87efr0umrv.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Sep 2017 16:52:47 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix typo
+In-Reply-To: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Mon, 18 Sep 2017 11:34:18 +0200")
+References: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87a81oumrk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > host-cmake will optionally link with openssl for the embedded copy of
- > libarchive if available, leaking host dependencies and possibly causing
- > build issues in case of compatibility issues - E.G. the host-cmake version
- > we have in 2017.02.x doesn't build against openssl-1.1.0+:
-
- > https://github.com/libarchive/libarchive/issues/810
-
- > The openssl support in libarchive is unlikely to be needed, so explicitly
- > disable it.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 Committed to 2017.02.x, thanks.
 
