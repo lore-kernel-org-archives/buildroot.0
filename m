@@ -1,40 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 15:41:26 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] download/git: force gzip
-	compression level 6
-Message-ID: <20170921133630.4CA1D80FA2@busybox.osuosl.org>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Thu, 21 Sep 2017 10:59:39 -0300
+Subject: [Buildroot] [PATCH 2/2] configs/wandboard: Bump U-Boot and kernel
+	versions
+In-Reply-To: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
+References: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1506002379-23490-2-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce4be9c5e6abdf0c2616003485b2cef10b94ce7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Bump U-Boot to 2017.09 version and kernel to 4.13.3.
 
-Force gzip compression level 6 when calculating hash of a downloaded GIT repo.
-To make sure the tar->gzip->checksum chain always provides consistent result.`
-
-The script was relying on the default compression level, which must not be
-necessarily consistent among different gzip versions. The level 6 is gzip's
-current default compression level.
-
-Signed-off-by: Petr Kulhavy <brain@jikos.cz>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 04a22cf1b521acb5634ed083e0381d42979d1698)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/wandboard_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/download/git b/support/download/git
-index 056057c..033a984 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -98,4 +98,4 @@ LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
- # sources.buildroot.org and used in the *.hash files
- tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${basename}.list.sorted" >"${output}.tar"
--gzip -n <"${output}.tar" >"${output}"
-+gzip -6 -n <"${output}.tar" >"${output}"
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index caa4c51..e6ba1d4 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/wandboard/post-image.sh"
+@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1"
+-- 
+2.7.4
