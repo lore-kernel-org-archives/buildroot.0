@@ -1,16 +1,32 @@
-From: luke <skywal_l@hotmail.com>
-Date: Thu, 21 Sep 2017 14:46:37 +0000
-Subject: [Buildroot] Separate board config from the rest
-Message-ID: <HE1PR03MB3049EA7D60AC0E819A4B992FE7660@HE1PR03MB3049.eurprd03.prod.outlook.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 Sep 2017 16:52:36 +0200
+Subject: [Buildroot] [PATCH] cmake: explicitly disable openssl support
+	for host-cmake
+In-Reply-To: <20170918173848.13742-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 18 Sep 2017 19:38:48 +0200")
+References: <20170918173848.13742-1-peter@korsgaard.com>
+Message-ID: <87efr0umrv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-  My problem is I have different images which differs only by the board on which I install them (rpi0w, rpi2 or pi3) but the configuration of the toolchain, of the image, the installed packages, the overlays, etc, are the same. Each time I add a package, I need to add it to all the boards config I want to support.
-  Is there a way to separate the board specific part of a config with the configuration of the toolchain and the package selection?
+ > host-cmake will optionally link with openssl for the embedded copy of
+ > libarchive if available, leaking host dependencies and possibly causing
+ > build issues in case of compatibility issues - E.G. the host-cmake version
+ > we have in 2017.02.x doesn't build against openssl-1.1.0+:
 
-Thanks
+ > https://github.com/libarchive/libarchive/issues/810
+
+ > The openssl support in libarchive is unlikely to be needed, so explicitly
+ > disable it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
