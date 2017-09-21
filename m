@@ -1,73 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:21:56 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/imagemagick:
-	security bump to version 7.0.7-1
-Message-ID: <20170921145320.246FF80455@busybox.osuosl.org>
+Date: Thu, 21 Sep 2017 16:51:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] cmake: explicitly disable
+	openssl support for host-cmake
+Message-ID: <20170921145320.4A377810E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8577d2ce433533ed7c3c2e111fc07d9b32c0e9
+commit: https://git.buildroot.net/buildroot/commit/?id=a86d28d850583091bd1a9d137be12794b1102eae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Quoting CVE-related issues from
-https://github.com/ImageMagick/ImageMagick/blob/master/ChangeLog
+host-cmake will optionally link with openssl for the embedded copy of
+libarchive if available, leaking host dependencies and possibly causing
+build issues in case of compatibility issues - E.G. the host-cmake version
+we have in 2017.02.x doesn't build against openssl-1.1.0+:
 
-2017-07-29 7.0.6-5 Glenn Randers-Pehrson <glennrp@image...>
-  * Fix improper use of NULL in the JNG decoder (CVE-2017-11750, Reference
-    https://github.com/ImageMagick/ImageMagick/issues/632).
+https://github.com/libarchive/libarchive/issues/810
 
-2017-07-24 7.0.6-4 Cristy <quetzlzacatenango@image...>
-  * Fixed numerous memory leaks (reference
-    https://github.com/ImageMagick/ImageMagick/issues) including
-    https://github.com/ImageMagick/ImageMagick/issues/618 (CVE-2017-12676).
+The openssl support in libarchive is unlikely to be needed, so explicitly
+disable it.
 
-2017-07-23  7.0.6-3 Glenn Randers-Pehrson <glennrp@image...>
-  * Fix memory leaks when reading a malformed JNG image:
-    https://github.com/ImageMagick/ImageMagick/issues/600 (CVE-2017-13141),
-    https://github.com/ImageMagick/ImageMagick/issues/602 (CVE-2017-12565).
-
-2017-07-19 7.0.6-2 Cristy <quetzlzacatenango@image...>
-  * coders/png.c: fixed memory leak of quantum_info (CVE-2017-11539, reference
-    https://github.com/ImageMagick/ImageMagick/issues/582
-  * coders/png.c: fixed NULL dereference when trying to write an empty MNG
-    (CVE-2017-11522, reference
-    https://github.com/ImageMagick/ImageMagick/issues/586).
-
-2017-06-22  7.0.6-1 Glenn Randers-Pehrson <glennrp@image...>
-  * Stop a memory leak in read_user_chunk_callback() (reference
-    https://github.com/ImageMagick/ImageMagick/issues/517,
-    CVE 2017-11310).
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 1cf1b98de6c81fd21076e6330837bd05e563b040)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f87138339b17bc2b1d84c59ea176abb941413550)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cmake/cmake.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index d3097f5..92880a9 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 3a6b21352ed0eb984bdbd0943471df8605b978b527125921e97e5b404f2bee3a  7.0.6-0.tar.gz
-+sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 22c29d3..9043ce8 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.6-0
-+IMAGEMAGICK_VERSION = 7.0.7-1
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index bc55509..69ddbb9 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -46,6 +46,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 			-DCMAKE_C_FLAGS="$(HOST_CMAKE_CFLAGS)" \
+ 			-DCMAKE_CXX_FLAGS="$(HOST_CMAKE_CXXFLAGS)" \
+ 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
++			-DCMAKE_USE_OPENSSL:BOOL=OFF \
+ 			-DBUILD_CursesDialog=OFF \
+ 	)
+ endef
