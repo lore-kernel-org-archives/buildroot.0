@@ -1,78 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 21:32:23 +0200
-Subject: [Buildroot] [git commit] gdk-pixbuf: security bump to version
-	2.36.10
-Message-ID: <20170921194917.15ECF7F943@busybox.osuosl.org>
+Date: Thu, 21 Sep 2017 21:30:27 +0200
+Subject: [Buildroot] [git commit] flashrom: fix static build with uClibc
+Message-ID: <20170921194916.F1DA5810B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3853675ae03df209253c34d292eb3b9535e3f68c
+commit: https://git.buildroot.net/buildroot/commit/?id=57f4efed7965e573a444544363d0cf74cec13be1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Define HAVE_STRNLEN to avoid local strnlen() definition.
 
-CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
-gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
-specially crafted jpeg file can cause a heap overflow resulting in remote
-code execution.  An attacker can send a file or url to trigger this
-vulnerability.
+Fixes:
+http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
+http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
+http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
 
-CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
-tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
-Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
-remote code execution.  An attacker can send a file or a URL to trigger this
-vulnerability.
-
-CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
-context-dependent attackers to cause a denial of service (NULL pointer
-dereference and application crash) via vectors related to printing an error
-message.
-
-The host version now needs the same workaround as we do for the target to
-not pull in shared-mime-info.
-
-Also add a hash for the license file while we're at it.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash | 6 ++++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 5 ++++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/flashrom/flashrom.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index ebb03a8..9cb947f 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,2 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.6.sha256sum
--sha256 455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c  gdk-pixbuf-2.36.6.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.10.sha256sum
-+sha256 f8f6fa896b89475c73b6e9e8d2a2b062fc359c4b4ccb8e96470d6ab5da949ace  gdk-pixbuf-2.36.10.tar.xz
-+# Locally calculated
-+sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index ac92e23..e36761c 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 4ecdce8..f9ab629 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -12,7 +12,8 @@ FLASHROM_LICENSE = GPL-2.0+
+ FLASHROM_LICENSE_FILES = COPYING
  
- GDK_PIXBUF_VERSION_MAJOR = 2.36
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).6
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.0+
-@@ -20,6 +20,9 @@ GDK_PIXBUF_CONF_ENV = \
- 	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
- 	gio_can_sniff=no
+ define FLASHROM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
+ endef
  
-+HOST_GDK_PIXBUF_CONF_ENV = \
-+	gio_can_sniff=no
-+
- GDK_PIXBUF_CONF_OPTS = --disable-glibtest
- 
- ifneq ($(BR2_PACKAGE_LIBPNG),y)
+ define FLASHROM_INSTALL_TARGET_CMDS
