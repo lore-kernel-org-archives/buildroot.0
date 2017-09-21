@@ -1,46 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Sep 2017 22:53:07 +0200
-Subject: [Buildroot] [PATCH] flashrom: fix static build with uClibc
-In-Reply-To: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
-References: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
-Message-ID: <a38af34c-79d3-33d5-01a2-066ce9165c6d@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 21 Sep 2017 22:54:30 +0200
+Subject: [Buildroot] [PATCH v2 00/11] glibc: bump to 2.26
+In-Reply-To: <a4a755be-a98a-e811-fca3-ac711612a829@mind.be>
+References: <20170902205423.21288-1-romain.naour@gmail.com>
+ <a4a755be-a98a-e811-fca3-ac711612a829@mind.be>
+Message-ID: <3ed22af9-f9a0-1f6c-b8e8-10d2160927e9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
-
-On 20-09-17 10:17, Baruch Siach wrote:
-> Define HAVE_STRNLEN to avoid local strnlen() definition.
+Le 21/09/2017 ? 12:45, Arnout Vandecappelle a ?crit?:
+>  Hi Romain,
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
-> http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
-> http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+> On 02-09-17 22:54, Romain Naour wrote:
+>> This series bump glibc to the latest release and allow to remove all
+>> local patches! Sadly this new release come with some C++ regressions
+>> or changes needed in packages.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> It seems like only uClibc is affected. Build with musl succeeds even
-> though the resulting binary contains a global strnlen symbol.
+>  Either this evening or in the weekend I'd like to start applying part of this
+> series. Could you mark the patches that should NOT be applied yet as Changes
+> Requested in patchwork?
 
- musl puts strnlen in a separate strnlen.o file. Since linking is done per
-object file, and there is no undefined symbol that pulls in strnlen.o (since
-strnlen is already defined), it will just use the flashrom version of the function.
+I'll mark this series as "awaiting upstream" since a patch should be available
+in the next days fixing glibc bug 22146 [1].
 
- uClibc also puts strnlen in a separate object file. However, that object file
-also contain the hidden symbol __GI_strnlen which is referred to from other
-object files in the archive (e.g. vfprintf). Therefore, strnlen.o will be linked
-in and you get a double definition.
+Since a lot patches are required to be able to use a toolchain build with glibc
+2.26 on some architectures (powerpc64le, x86, x86_64), it's safer to stay with
+glibc 2.25 for now.
 
- Regards,
- Arnout
+I'll ask upstream if they can release glibc 2.26.1 if all reported issues are fixed.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Also, as reported by Yann, I'll update gcc patches (patch 1 and 2) with the
+upstream one.
+
+Best regards,
+Romain
+
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=22146
+
+> 
+>  Thanks,
+>  Regards,
+>  Arnout
+> 
