@@ -1,22 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 14:31:27 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{9, 12,
-	13}.x series
-In-Reply-To: <20170910071333.4788-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 10 Sep 2017 09:13:32 +0200")
-References: <20170910071333.4788-1-bernd.kuhls@t-online.de>
-Message-ID: <87zi9outb4.fsf@dell.be.48ers.dk>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Thu, 21 Sep 2017 18:05:39 +0530
+Subject: [Buildroot] [PATCH v3 0/6] engicam: Add new boards and qt5
+In-Reply-To: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+References: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+Message-ID: <CAD6G_RTdxRj=7G0xoqvGWLsjO5aSCrLe1qZrPn6YU6uoevZj4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+On Wed, Sep 13, 2017 at 5:12 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> From: Jagan Teki <jagan@amarulasolutions.com>
+>
+> This series add new boards from Engicam with qt5 support for each.
+>
+> Jagan Teki (6):
+>   engicam: imx6qdl_icore: Bump to latest Linux and uboot releases
+>   board: icorem6: Add Qt5 configs for 800x480 LVDS display
+>   engicam: icorem6: Add OF C.TOUCH 10.1 Kit
+>   board: icorem6: Add Qt5 configs for 1280x800 LVDS display
+>   engicam: icorem6: Add OF C.TOUCH 12 Kit
+>   board: icorem6: Add Qt5 configs for 1280x480 LVDS display
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Any comments on this?
 
-Committed to 2017.02.x, thanks (except for 4.12.x / 4.13.x).
-
+thanks!
 -- 
-Bye, Peter Korsgaard
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
