@@ -1,21 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:52:47 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix typo
-In-Reply-To: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Mon, 18 Sep 2017 11:34:18 +0200")
-References: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87a81oumrk.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Sep 2017 16:59:51 +0200
+Subject: [Buildroot] [PATCH] bluez5_utils: add upstream security fix for
+	CVE-2017-1000250
+In-Reply-To: <20170913121955.21236-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 13 Sep 2017 14:19:55 +0200")
+References: <20170913121955.21236-1-peter@korsgaard.com>
+Message-ID: <8760ccumfs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46 and
+ > earlier are vulnerable to an information disclosure vulnerability which
+ > allows remote attackers to obtain sensitive information from the bluetoothd
+ > process memory.  This vulnerability lies in the processing of SDP search
+ > attribute requests.
 
-Committed to 2017.02.x, thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks (seems safer than bumping to 5.47).
 
 -- 
 Bye, Peter Korsgaard
