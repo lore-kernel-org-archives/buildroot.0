@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Sep 2017 23:05:38 +0200
-Subject: [Buildroot] Change CFLAGS for a certain package
-In-Reply-To: <1505974939125-0.post@n4.nabble.com>
-References: <1505974939125-0.post@n4.nabble.com>
-Message-ID: <933ab6ef-1b10-b089-744f-c73f925cba1c@mind.be>
+Date: Thu, 21 Sep 2017 23:09:57 +0200
+Subject: [Buildroot] [PATCH] package/dfu-util: allow to build it for the
+ target as well
+In-Reply-To: <cb5803af-b598-5a40-b0ae-25b560f91dc7@grandegger.com>
+References: <cb5803af-b598-5a40-b0ae-25b560f91dc7@grandegger.com>
+Message-ID: <f95704df-2a65-18d5-d241-a3cc2e3d1173@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,20 @@ To: buildroot@busybox.net
 
 
 
-On 21-09-17 08:22, mikmik wrote:
-> I have a generic-package 'hello' contains hello.c and Makefile.
-> In the mk file I want to build HELLO_CONFIGURE_OPTS just as
-> TARGET_CONFIGURE_OPTS but change only CFLAGS to my desired CFLAGS for hello
-> (say just '-g').
-> 
-> Right now, I used sed on TARGET_CONFIGURE_OPTS and replaced CFLAGS. It
-> works.
-> But there isn't a more easy or intuitive way to replace some variables on
-> TARGET_CONFIGURE_OPTS?
+On 20-09-17 17:31, Wolfgang Grandegger wrote:
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 
- For almost all options, you can just override them by specifying the additional
-option later. For example, if CFLAGS contains "-g -g0" then you don't get
-debugging info. So, you can always just append to cflags:
+ Have you tested this at all?
 
-HELLO_CONFIGURE_OPTS += CFLAGS="$(TARGET_CFLAGS) -g"
+Makefile:537: *** libusb is in the dependency chain of dfu-util that has added
+it to its _DEPENDENCIES variable without selecting it or depending on it from
+Config.in.  Stop.
 
+ And therefore you also need to propagate the threads dependency and add a comment.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
