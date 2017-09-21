@@ -1,60 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 16:23:37 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] bluez5_utils: add
-	upstream security fix for CVE-2017-1000250
-Message-ID: <20170921145320.42CCE7FAF0@busybox.osuosl.org>
+From: Bradford Barr <bradford@density.io>
+Date: Thu, 21 Sep 2017 10:53:48 -0400
+Subject: [Buildroot] Separate board config from the rest
+In-Reply-To: <HE1PR03MB3049EA7D60AC0E819A4B992FE7660@HE1PR03MB3049.eurprd03.prod.outlook.com>
+References: <HE1PR03MB3049EA7D60AC0E819A4B992FE7660@HE1PR03MB3049.eurprd03.prod.outlook.com>
+Message-ID: <CAPpUvYgPkYYqqJDHiC3gMihwtwj-Qy41kDPDjanBBejTV9NGFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0b6a90eae8c17687a72eb0da7019eddd365a43b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Hey luke,
 
-Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46 and
-earlier are vulnerable to an information disclosure vulnerability which
-allows remote attackers to obtain sensitive information from the bluetoothd
-process memory.  This vulnerability lies in the processing of SDP search
-attribute requests.
+Page 44 of this document[1] talks about assembling different defconfig
+snippets. You could divide your defconfigs into platform specific
+options, and target packages and use the
+./support/kconfig/merge_config.sh[2] script to combine them. I haven't
+tried this myself, but I've been meaning to do something similar for
+my projects. Let me know if it works out.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-of-bounds-heap-read-in-service_search_at.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+B
 
-diff --git a/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch b/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
-new file mode 100644
-index 0000000..a73c372
---- /dev/null
-+++ b/package/bluez5_utils/0002-sdp-Fix-Out-of-bounds-heap-read-in-service_search_at.patch
-@@ -0,0 +1,29 @@
-+From 9e009647b14e810e06626dde7f1bb9ea3c375d09 Mon Sep 17 00:00:00 2001
-+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-+Date: Wed, 13 Sep 2017 10:01:40 +0300
-+Subject: [PATCH] sdp: Fix Out-of-bounds heap read in service_search_attr_req
-+ function
-+
-+Check if there is enough data to continue otherwise return an error.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/sdpd-request.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/sdpd-request.c b/src/sdpd-request.c
-+index 1eefdce1a..318d04467 100644
-+--- a/src/sdpd-request.c
-++++ b/src/sdpd-request.c
-+@@ -917,7 +917,7 @@ static int service_search_attr_req(sdp_req_t *req, sdp_buf_t *buf)
-+ 	} else {
-+ 		/* continuation State exists -> get from cache */
-+ 		sdp_buf_t *pCache = sdp_get_cached_rsp(cstate);
-+-		if (pCache) {
-++		if (pCache && cstate->cStateValue.maxBytesSent < pCache->data_size) {
-+ 			uint16_t sent = MIN(max, pCache->data_size - cstate->cStateValue.maxBytesSent);
-+ 			pResponse = pCache->data;
-+ 			memcpy(buf->data, pResponse + cstate->cStateValue.maxBytesSent, sent);
-+-- 
-+2.11.0
-+
+[1]: http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
+[2]: https://git.busybox.net/buildroot/tree/support/kconfig/merge_config.sh
+
+On Thu, Sep 21, 2017 at 10:46 AM, luke <skywal_l@hotmail.com> wrote:
+> Hello,
+>
+>   My problem is I have different images which differs only by the board on which I install them (rpi0w, rpi2 or pi3) but the configuration of the toolchain, of the image, the installed packages, the overlays, etc, are the same. Each time I add a package, I need to add it to all the boards config I want to support.
+>   Is there a way to separate the board specific part of a config with the configuration of the toolchain and the package selection?
+>
+> Thanks
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
