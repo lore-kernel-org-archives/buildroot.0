@@ -1,32 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 23:25:21 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] package/samba4: security bump to
-	version 4.5.14
-In-Reply-To: <20170921154208.19079-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 21 Sep 2017 17:42:08 +0200")
-References: <20170921154208.19079-1-peter@korsgaard.com>
-Message-ID: <87r2uzsq0u.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Sep 2017 23:24:51 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/ffmpeg: security
+	bump to version 3.2.8
+Message-ID: <20170921211807.C751080E33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ca10c68c6d8701cbbfdd84d052a858ad69cabf95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Release notes:
- > https://www.samba.org/samba/history/samba-4.5.14.html
+Fixes a number of integer overflows and DoS issues.
 
- > Fixes
- > - CVE-2017-12150 (SMB1/2/3 connections may not require signing where
- >   they should)
- > - CVE-2017-12151 (SMB3 connections don't keep encryption across DFS
- >   redirects)
- > - CVE-2017-12163 (Server memory information leak over SMB1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index f4470f9..dcfc8aa 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 28e75fc32485a88035a7ebf0a956a1e5c7e93b440dd4bbd6bc30c7268cf34fe9  ffmpeg-3.2.7.tar.xz
++sha256 42e7362692318afc666f14378dd445effa9a1b09787504a6ab5811fe442674cd  ffmpeg-3.2.8.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 00db404..9b287c7 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.2.7
++FFMPEG_VERSION = 3.2.8
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
