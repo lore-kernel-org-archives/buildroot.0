@@ -1,53 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 21:35:42 +0200
-Subject: [Buildroot] [git commit] configs/mx6cubox: Bump U-Boot and kernel
-	versions
-Message-ID: <20170921194917.419E0810B2@busybox.osuosl.org>
+Date: Thu, 21 Sep 2017 21:32:23 +0200
+Subject: [Buildroot] [git commit] gdk-pixbuf: security bump to version
+	2.36.10
+Message-ID: <20170921194917.15ECF7F943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37d5f035fdbfba5b67accc3321cfd6649f655bcd
+commit: https://git.buildroot.net/buildroot/commit/?id=3853675ae03df209253c34d292eb3b9535e3f68c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2017.09 version and kernel to 4.13.3.
+Fixes the following security issues:
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
+gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
+specially crafted jpeg file can cause a heap overflow resulting in remote
+code execution.  An attacker can send a file or url to trigger this
+vulnerability.
+
+CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
+tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
+Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
+remote code execution.  An attacker can send a file or a URL to trigger this
+vulnerability.
+
+CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
+context-dependent attackers to cause a denial of service (NULL pointer
+dereference and application crash) via vectors related to printing an error
+message.
+
+The host version now needs the same workaround as we do for the target to
+not pull in shared-mime-info.
+
+Also add a hash for the license file while we're at it.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/mx6cubox_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.hash | 6 ++++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 5 ++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index 9ce496d..5a4e934 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -3,8 +3,8 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
-@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index ebb03a8..9cb947f 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,2 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.6.sha256sum
+-sha256 455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c  gdk-pixbuf-2.36.6.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.10.sha256sum
++sha256 f8f6fa896b89475c73b6e9e8d2a2b062fc359c4b4ccb8e96470d6ab5da949ace  gdk-pixbuf-2.36.10.tar.xz
++# Locally calculated
++sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index ac92e23..e36761c 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).6
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.0+
+@@ -20,6 +20,9 @@ GDK_PIXBUF_CONF_ENV = \
+ 	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
+ 	gio_can_sniff=no
+ 
++HOST_GDK_PIXBUF_CONF_ENV = \
++	gio_can_sniff=no
++
+ GDK_PIXBUF_CONF_OPTS = --disable-glibtest
+ 
+ ifneq ($(BR2_PACKAGE_LIBPNG),y)
