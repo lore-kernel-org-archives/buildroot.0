@@ -1,37 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 12:02:38 +0200
-Subject: [Buildroot] [PATCH] qt: add patch fixing build failure on ARMv8
-	in 32-bit mode
-In-Reply-To: <20170908073507.6009-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 8 Sep 2017 09:35:07 +0200")
-References: <20170908073507.6009-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <87lgl8werl.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Sep 2017 12:04:23 +0200
+Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.3.2
+In-Reply-To: <2f11135f109fc82711e0efbc13e3fd46c292f364.1504987373.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 9 Sep 2017 23:02:53 +0300")
+References: <2f11135f109fc82711e0efbc13e3fd46c292f364.1504987373.git.baruch@tkos.co.il>
+Message-ID: <87h8vwweoo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The Qt package currently fails to build on ARMv8 cores in 32-bit mode
- > (for example, if you select ARM and then Cortex-A53), because the ARM
- > atomic operation implementation in Qt checks if we're on ARMv7, then
- > on ARMv6, and otherwise falls back to an ARMv5 implementation. The
- > latter uses the swp instruction, which doesn't exist on ARMv8, causing
- > a build failure.
+ > CVE-2016-8687: Stack-based buffer overflow in the safe_fprintf function
+ > in tar/util.c in libarchive 3.2.1 allows remote attackers to cause a
+ > denial of service via a crafted non-printable multibyte character in a
+ > filename.
 
- > To solve this, we simply add a patch that uses the ARMv7 atomic
- > operations for ARMv8-A.
+ > CVE-2016-8688: The mtree bidder in libarchive 3.2.1 does not keep track
+ > of line sizes when extending the read-ahead, which allows remote
+ > attackers to cause a denial of service (crash) via a crafted file, which
+ > triggers an invalid read in the (1) detect_form or (2) bid_entry
+ > function in libarchive/archive_read_support_format_mtree.c.
 
- > There is no autobuilder reference because we don't have any ARMv8
- > 32-bit configuration in the autobuilders.
+ > CVE-2016-8689: The read_Header function in
+ > archive_read_support_format_7zip.c in libarchive 3.2.1 allows remote
+ > attackers to cause a denial of service (out-of-bounds read) via multiple
+ > EmptyStream attributes in a header in a 7zip archive.
 
- > Cc: <ivychend@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- > Peter: this should go to 2017.02.x, the problem was reported on IRC by
- > ivychend who is using 2017.02.5.
+ > CVE-2016-10209: The archive_wstring_append_from_mbs function in
+ > archive_string.c in libarchive 3.2.2 allows remote attackers to cause a
+ > denial of service (NULL pointer dereference and application crash) via a
+ > crafted archive file.
+
+ > CVE-2016-10349: The archive_le32dec function in archive_endian.h in
+ > libarchive 3.2.2 allows remote attackers to cause a denial of service
+ > (heap-based buffer over-read and application crash) via a crafted file.
+
+ > CVE-2016-10350: The archive_read_format_cab_read_header function in
+ > archive_read_support_format_cab.c in libarchive 3.2.2 allows remote
+ > attackers to cause a denial of service (heap-based buffer over-read and
+ > application crash) via a crafted file.
+
+ > CVE-2017-5601: An error in the lha_read_file_header_1() function
+ > (archive_read_support_format_lha.c) in libarchive 3.2.2 allows remote
+ > attackers to trigger an out-of-bounds read memory access and
+ > subsequently cause a crash via a specially crafted archive.
+
+ > Add upstream patch fixing the following issue:
+
+ > CVE-2017-14166: libarchive 3.3.2 allows remote attackers to cause a
+ > denial of service (xml_data heap-based buffer over-read and application
+ > crash) via a crafted xar archive, related to the mishandling of empty
+ > strings in the atol8 function in archive_read_support_format_xar.c.
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
 
