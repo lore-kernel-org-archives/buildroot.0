@@ -1,61 +1,116 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Sep 2017 12:04:23 +0200
-Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.3.2
-In-Reply-To: <2f11135f109fc82711e0efbc13e3fd46c292f364.1504987373.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sat, 9 Sep 2017 23:02:53 +0300")
-References: <2f11135f109fc82711e0efbc13e3fd46c292f364.1504987373.git.baruch@tkos.co.il>
-Message-ID: <87h8vwweoo.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Sep 2017 12:05:38 +0200
+Subject: [Buildroot] [PATCH] tcpdump: security bump to version 4.9.2
+In-Reply-To: <20170908121903.11830-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 8 Sep 2017 14:19:03 +0200")
+References: <20170908121903.11830-1-peter@korsgaard.com>
+Message-ID: <87d16kweml.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > CVE-2016-8687: Stack-based buffer overflow in the safe_fprintf function
- > in tar/util.c in libarchive 3.2.1 allows remote attackers to cause a
- > denial of service via a crafted non-printable multibyte character in a
- > filename.
+ > Fixes the following security issues (descriptions not public yet):
+ >     Fix buffer overflow vulnerabilities:
+ >       CVE-2017-11543 (SLIP)
+ >       CVE-2017-13011 (bittok2str_internal)
+ >     Fix infinite loop vulnerabilities:
+ >       CVE-2017-12989 (RESP)
+ >       CVE-2017-12990 (ISAKMP)
+ >       CVE-2017-12995 (DNS)
+ >       CVE-2017-12997 (LLDP)
+ >     Fix buffer over-read vulnerabilities:
+ >       CVE-2017-11541 (safeputs)
+ >       CVE-2017-11542 (PIMv1)
+ >       CVE-2017-12893 (SMB/CIFS)
+ >       CVE-2017-12894 (lookup_bytestring)
+ >       CVE-2017-12895 (ICMP)
+ >       CVE-2017-12896 (ISAKMP)
+ >       CVE-2017-12897 (ISO CLNS)
+ >       CVE-2017-12898 (NFS)
+ >       CVE-2017-12899 (DECnet)
+ >       CVE-2017-12900 (tok2strbuf)
+ >       CVE-2017-12901 (EIGRP)
+ >       CVE-2017-12902 (Zephyr)
+ >       CVE-2017-12985 (IPv6)
+ >       CVE-2017-12986 (IPv6 routing headers)
+ >       CVE-2017-12987 (IEEE 802.11)
+ >       CVE-2017-12988 (telnet)
+ >       CVE-2017-12991 (BGP)
+ >       CVE-2017-12992 (RIPng)
+ >       CVE-2017-12993 (Juniper)
+ >       CVE-2017-11542 (PIMv1)
+ >       CVE-2017-11541 (safeputs)
+ >       CVE-2017-12994 (BGP)
+ >       CVE-2017-12996 (PIMv2)
+ >       CVE-2017-12998 (ISO IS-IS)
+ >       CVE-2017-12999 (ISO IS-IS)
+ >       CVE-2017-13000 (IEEE 802.15.4)
+ >       CVE-2017-13001 (NFS)
+ >       CVE-2017-13002 (AODV)
+ >       CVE-2017-13003 (LMP)
+ >       CVE-2017-13004 (Juniper)
+ >       CVE-2017-13005 (NFS)
+ >       CVE-2017-13006 (L2TP)
+ >       CVE-2017-13007 (Apple PKTAP)
+ >       CVE-2017-13008 (IEEE 802.11)
+ >       CVE-2017-13009 (IPv6 mobility)
+ >       CVE-2017-13010 (BEEP)
+ >       CVE-2017-13012 (ICMP)
+ >       CVE-2017-13013 (ARP)
+ >       CVE-2017-13014 (White Board)
+ >       CVE-2017-13015 (EAP)
+ >       CVE-2017-11543 (SLIP)
+ >       CVE-2017-13016 (ISO ES-IS)
+ >       CVE-2017-13017 (DHCPv6)
+ >       CVE-2017-13018 (PGM)
+ >       CVE-2017-13019 (PGM)
+ >       CVE-2017-13020 (VTP)
+ >       CVE-2017-13021 (ICMPv6)
+ >       CVE-2017-13022 (IP)
+ >       CVE-2017-13023 (IPv6 mobility)
+ >       CVE-2017-13024 (IPv6 mobility)
+ >       CVE-2017-13025 (IPv6 mobility)
+ >       CVE-2017-13026 (ISO IS-IS)
+ >       CVE-2017-13027 (LLDP)
+ >       CVE-2017-13028 (BOOTP)
+ >       CVE-2017-13029 (PPP)
+ >       CVE-2017-13030 (PIM)
+ >       CVE-2017-13031 (IPv6 fragmentation header)
+ >       CVE-2017-13032 (RADIUS)
+ >       CVE-2017-13033 (VTP)
+ >       CVE-2017-13034 (PGM)
+ >       CVE-2017-13035 (ISO IS-IS)
+ >       CVE-2017-13036 (OSPFv3)
+ >       CVE-2017-13037 (IP)
+ >       CVE-2017-13038 (PPP)
+ >       CVE-2017-13039 (ISAKMP)
+ >       CVE-2017-13040 (MPTCP)
+ >       CVE-2017-13041 (ICMPv6)
+ >       CVE-2017-13042 (HNCP)
+ >       CVE-2017-13043 (BGP)
+ >       CVE-2017-13044 (HNCP)
+ >       CVE-2017-13045 (VQP)
+ >       CVE-2017-13046 (BGP)
+ >       CVE-2017-13047 (ISO ES-IS)
+ >       CVE-2017-13048 (RSVP)
+ >       CVE-2017-13049 (Rx)
+ >       CVE-2017-13050 (RPKI-Router)
+ >       CVE-2017-13051 (RSVP)
+ >       CVE-2017-13052 (CFM)
+ >       CVE-2017-13053 (BGP)
+ >       CVE-2017-13054 (LLDP)
+ >       CVE-2017-13055 (ISO IS-IS)
+ >       CVE-2017-13687 (Cisco HDLC)
+ >       CVE-2017-13688 (OLSR)
+ >       CVE-2017-13689 (IKEv1)
+ >       CVE-2017-13690 (IKEv2)
+ >       CVE-2017-13725 (IPv6 routing headers)
 
- > CVE-2016-8688: The mtree bidder in libarchive 3.2.1 does not keep track
- > of line sizes when extending the read-ahead, which allows remote
- > attackers to cause a denial of service (crash) via a crafted file, which
- > triggers an invalid read in the (1) detect_form or (2) bid_entry
- > function in libarchive/archive_read_support_format_mtree.c.
-
- > CVE-2016-8689: The read_Header function in
- > archive_read_support_format_7zip.c in libarchive 3.2.1 allows remote
- > attackers to cause a denial of service (out-of-bounds read) via multiple
- > EmptyStream attributes in a header in a 7zip archive.
-
- > CVE-2016-10209: The archive_wstring_append_from_mbs function in
- > archive_string.c in libarchive 3.2.2 allows remote attackers to cause a
- > denial of service (NULL pointer dereference and application crash) via a
- > crafted archive file.
-
- > CVE-2016-10349: The archive_le32dec function in archive_endian.h in
- > libarchive 3.2.2 allows remote attackers to cause a denial of service
- > (heap-based buffer over-read and application crash) via a crafted file.
-
- > CVE-2016-10350: The archive_read_format_cab_read_header function in
- > archive_read_support_format_cab.c in libarchive 3.2.2 allows remote
- > attackers to cause a denial of service (heap-based buffer over-read and
- > application crash) via a crafted file.
-
- > CVE-2017-5601: An error in the lha_read_file_header_1() function
- > (archive_read_support_format_lha.c) in libarchive 3.2.2 allows remote
- > attackers to trigger an out-of-bounds read memory access and
- > subsequently cause a crash via a specially crafted archive.
-
- > Add upstream patch fixing the following issue:
-
- > CVE-2017-14166: libarchive 3.3.2 allows remote attackers to cause a
- > denial of service (xml_data heap-based buffer over-read and application
- > crash) via a crafted xar archive, related to the mishandling of empty
- > strings in the atol8 function in archive_read_support_format_xar.c.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > While we're at it, add a hash for the license file.
 
 Committed to 2017.02.x, thanks.
 
