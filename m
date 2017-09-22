@@ -1,151 +1,123 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 18:15:09 +0200
-Subject: [Buildroot] [git commit] package/owfs: bump version to 3.2p1
-Message-ID: <20170922161618.629EB807C8@busybox.osuosl.org>
+From: Mike Harmony <mike.harmony@snapav.com>
+Date: Fri, 22 Sep 2017 10:59:46 -0400
+Subject: [Buildroot] [PATCH 1/1] Added support for LeMaker BananaPi M2 Plus
+	board.
+Message-ID: <1506092386-15175-1-git-send-email-mike.harmony@snapav.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08ac3e134f88ebf7560299566c7d35ec1a88c593
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Removed patch applied upstream:
-https://sourceforge.net/p/owfs/code/ci/6ff4da75c2f507e3d94fa9e01a253ccebd00b916/
-
-Added md5 hash provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
 ---
- .../0001-configure.ac-check-for-localtime_r.patch  | 12 +++--
- ...t.h-only-include-compat_netdb.h-if-needed.patch | 58 ----------------------
- package/owfs/owfs.hash                             |  7 +--
- package/owfs/owfs.mk                               |  2 +-
- 4 files changed, 12 insertions(+), 67 deletions(-)
+ DEVELOPERS                         |  4 ++++
+ board/lemaker/m2-plus/boot.cmd     |  7 +++++++
+ board/lemaker/m2-plus/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
+ configs/bananapi_m2_plus_defconfig | 26 ++++++++++++++++++++++++++
+ 4 files changed, 70 insertions(+)
+ create mode 100644 board/lemaker/m2-plus/boot.cmd
+ create mode 100644 board/lemaker/m2-plus/genimage.cfg
+ create mode 100644 configs/bananapi_m2_plus_defconfig
 
-diff --git a/package/owfs/0001-configure.ac-check-for-localtime_r.patch b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-index c4c3844..b25aa59 100644
---- a/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-+++ b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-@@ -11,6 +11,8 @@ Upstream-Status: Submitted
- https://sourceforge.net/p/owfs/mailman/message/34873667/
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed5fa3d..0551b88 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1262,6 +1262,10 @@ N:	Murat Demirten <mdemirten@yh.com.tr>
+ F:	package/jpeg-turbo/
+ F:	package/libgeotiff/
  
- Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+[Bernd: rebased against version 3.2p1]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  configure.ac | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -19,15 +21,15 @@ diff --git a/configure.ac b/configure.ac
- index c22dde9..12fdd18 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1529,7 +1529,7 @@ AC_FUNC_SELECT_ARGTYPES
-+@@ -1646,7 +1646,7 @@
-  AC_FUNC_STRFTIME
-  AC_FUNC_STRTOD
-  AC_TYPE_SIGNAL
---AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gettimeofday inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline])
--+AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gettimeofday inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline localtime_r])
-+-AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gmtime_r gettimeofday localtime_r inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline])
-++AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gmtime_r gettimeofday localtime_r inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline localtime_r])
-  
-- if test "${ENABLE_ZERO}" = "true" ; then
-- 	AC_SEARCH_LIBS(dlopen, dl, AC_DEFINE(HAVE_DLOPEN, 1, [Define if you have dlopen]))
-+ save_LIBS="$LIBS"
-+ LIBS=""
- -- 
- 2.7.0
++N:	Mike Harmony <mike.harmony@snapav.com>
++F:	board/lemaker/m2-plus/
++F:	configs/bananapi_m2_plus_defconfig
++
+ N:	Nathan Lynch <ntl@pobox.com>
+ F:	package/chrony/
  
-diff --git a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
-deleted file mode 100644
-index 7ae7932..0000000
---- a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From d24e63eea4f4d234f313145e40668a5e2f64e49c Mon Sep 17 00:00:00 2001
--From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
--Date: Wed, 9 Mar 2016 23:20:11 +0100
--Subject: [PATCH] compat.h: only include compat_netdb.h if needed
--
--compat_netdb.h is added for only one reason: to provide the definitions
--for getaddrinfo, in case it is not provided by the system.
--compat_netdb.h is just a copy from an old glibc version, but that makes
--it incompatible with other standard C libraries. For example, uClibc
--without RPC support doesn't have the rpc/netdb.h header. This leads to
--build errors.
--
--To work around this, only include compat_netdb.h when needed, i.e.
--when getaddrinfo isn't provided natively.
--
--Note that this getaddrinfo compat was introduced in commit bc54c431 to
--support Solaris 7. Starting from Solaris 8, however, getaddrinfo is
--available natively, and it's available on MacOS, Windows and any other
--POSIX-2001 compliant system as well. So it may be worhtwhile to remove
--it altogether.
--
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- module/owlib/src/include/compat.h   | 2 ++
-- module/ownet/c/src/include/compat.h | 2 ++
-- 2 files changed, 4 insertions(+)
--
--diff --git a/module/owlib/src/include/compat.h b/module/owlib/src/include/compat.h
--index c55bc96..e95e16f 100644
----- a/module/owlib/src/include/compat.h
--+++ b/module/owlib/src/include/compat.h
--@@ -57,7 +57,9 @@
-- #include <features.h>
-- #endif
-- 
--+#ifndef HAVE_GETADDRINFO
-- #include "compat_netdb.h"
--+#endif
-- #include "compat_getopt.h"
-- 
-- #ifndef HAVE_STRSEP
--diff --git a/module/ownet/c/src/include/compat.h b/module/ownet/c/src/include/compat.h
--index c45d852..f8ae759 100644
----- a/module/ownet/c/src/include/compat.h
--+++ b/module/ownet/c/src/include/compat.h
--@@ -58,7 +58,9 @@ $Id$
-- #include <features.h>
-- #endif
-- 
--+#ifndef HAVE_GETADDRINFO
-- #include "compat_netdb.h"
--+#endif
-- #include "compat_getopt.h"
-- 
-- #ifndef HAVE_STRSEP
---- 
--2.7.0
--
-diff --git a/package/owfs/owfs.hash b/package/owfs/owfs.hash
-index 3991eec..1e57e29 100644
---- a/package/owfs/owfs.hash
-+++ b/package/owfs/owfs.hash
-@@ -1,4 +1,5 @@
--# From https://sourceforge.net/projects/owfs/files/owfs/3.1p1/
--sha1  80892ca3e72fef2979b8f0a04db15fd24a2cbda6  owfs-3.1p1.tar.gz
-+# From https://sourceforge.net/projects/owfs/files/owfs/3.2p1/
-+md5 fb42ce3b8a49f0b62711d8e3f5f04880  owfs-3.2p1.tar.gz
-+sha1 4ee76e686bec769acde5bfbda148a8693df244c6  owfs-3.2p1.tar.gz
- # Locally calculated
--sha256  e69421ae534565c1f8530a2447f583401f4d0d4b1cf3cb8cf399a57133ed7f81  owfs-3.1p1.tar.gz
-+sha256 33220b25db36969a717cd27e750d73dee376795e13a5f3677f05111b745832ea  owfs-3.2p1.tar.gz
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index dceb6b6..47626ce 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OWFS_VERSION = 3.1p1
-+OWFS_VERSION = 3.2p1
- OWFS_SITE = http://downloads.sourceforge.net/project/owfs/owfs/$(OWFS_VERSION)
- OWFS_DEPENDENCIES = host-pkgconf
- OWFS_CONF_OPTS = --disable-owperl --without-perl5 --disable-owtcl --without-tcl
+diff --git a/board/lemaker/m2-plus/boot.cmd b/board/lemaker/m2-plus/boot.cmd
+new file mode 100644
+index 0000000..d22464a
+--- /dev/null
++++ b/board/lemaker/m2-plus/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/lemaker/m2-plus/genimage.cfg b/board/lemaker/m2-plus/genimage.cfg
+new file mode 100644
+index 0000000..cde0669
+--- /dev/null
++++ b/board/lemaker/m2-plus/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h3-bananapi-m2-plus.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
+new file mode 100644
+index 0000000..59dae1b
+--- /dev/null
++++ b/configs/bananapi_m2_plus_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_KERNEL_HEADERS_4_13=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lemaker/m2-plus/genimage.cfg board/bananapi/m2-plus/boot.cmd"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/lemaker/m2-plus/boot.cmd"
++BR2_PACKAGE_HOST_GENEXT2FS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-- 
+2.7.4
