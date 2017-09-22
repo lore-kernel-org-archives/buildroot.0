@@ -1,65 +1,44 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Fri, 22 Sep 2017 09:11:44 +0200
-Subject: [Buildroot] [PATCH v2] package/dfu-util: allow to build it for the
-	target as well
-Message-ID: <339edb91-644e-2456-b627-262d81c1afaa@grandegger.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Sep 2017 09:48:25 +0200
+Subject: [Buildroot] [PATCH] gdk-pixbuf: security bump to version 2.36.10
+In-Reply-To: <20170921070416.17829-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 21 Sep 2017 09:04:16 +0200")
+References: <20170921070416.17829-1-peter@korsgaard.com>
+Message-ID: <87efqzrx6e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
----
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Changes since v1:
-- add missing "select BR2_PACKAGE_LIBUSB" in Config.in
+ > Fixes the following security issues:
+ > CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
+ > gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
+ > specially crafted jpeg file can cause a heap overflow resulting in remote
+ > code execution.  An attacker can send a file or url to trigger this
+ > vulnerability.
 
- package/Config.in            | 1 +
- package/dfu-util/Config.in   | 9 +++++++++
- package/dfu-util/dfu-util.mk | 2 ++
- 3 files changed, 12 insertions(+)
- create mode 100644 package/dfu-util/Config.in
+ > CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
+ > tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
+ > Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
+ > remote code execution.  An attacker can send a file or a URL to trigger this
+ > vulnerability.
 
-diff --git a/package/Config.in b/package/Config.in
-index 48d1381..b493201 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -389,6 +389,7 @@ endmenu
- 	source "package/dbus-python/Config.in"
- 	source "package/dbus-triggerd/Config.in"
- 	source "package/devmem2/Config.in"
-+	source "package/dfu-util/Config.in"
- 	source "package/dmidecode/Config.in"
- 	source "package/dmraid/Config.in"
- 	source "package/dt-utils/Config.in"
-diff --git a/package/dfu-util/Config.in b/package/dfu-util/Config.in
-new file mode 100644
-index 0000000..ef1fd59
---- /dev/null
-+++ b/package/dfu-util/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DFU_UTIL
-+	bool "dfu-util"
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  Dfu-util is the host side implementation of the DFU 1.0
-+	  specification of the USB forum. DFU is intended to download
-+	  and upload firmware to devices connected over USB.
-+
-+	  http://dfu-util.sourceforge.net/
-diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
-index c494485..5e8ba5a 100644
---- a/package/dfu-util/dfu-util.mk
-+++ b/package/dfu-util/dfu-util.mk
-@@ -9,6 +9,8 @@ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
- DFU_UTIL_LICENSE = GPL-2.0+
- DFU_UTIL_LICENSE_FILES = COPYING
- 
-+DFU_UTIL_DEPENDENCIES = libusb
- HOST_DFU_UTIL_DEPENDENCIES = host-libusb
- 
-+$(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ > CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
+ > context-dependent attackers to cause a denial of service (NULL pointer
+ > dereference and application crash) via vectors related to printing an error
+ > message.
+
+ > The host version now needs the same workaround as we do for the target to
+ > not pull in shared-mime-info.
+
+ > Also add a hash for the license file while we're at it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
