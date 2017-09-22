@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 18:22:18 +0200
-Subject: [Buildroot] [git commit] mongoose: don't install to target
-Message-ID: <20170922161618.EC1D180FDA@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 18:22:15 +0200
+Subject: [Buildroot] [git commit] mongoose: correct openssl define
+Message-ID: <20170922161618.DAFD2800E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a418e6eeaaa6e1a0d173dbc538fac5f18470b024
+commit: https://git.buildroot.net/buildroot/commit/?id=c96ac022f3f622147c17a3080f6f7b78bd3f2337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only a static library is built (and no _INSTALL_TARGET_CMDS are defined), so
-there is no need to run the target-install step.
+NS_ENABLE_SSL was renamed to MG_ENABLE_SSL in v6.0, commit e1dd3f06fe33
+(Rename Mongoose constants: NS_ -> MG_, NSF_ -> MG_F_), so use the new name
+instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongoose/mongoose.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mongoose/mongoose.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 39d5b85..e2149e0 100644
+index 2705bdd..39d5b85 100644
 --- a/package/mongoose/mongoose.mk
 +++ b/package/mongoose/mongoose.mk
-@@ -9,6 +9,8 @@ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
- MONGOOSE_INSTALL_STAGING = YES
-+# static library
-+MONGOOSE_INSTALL_TARGET = NO
+@@ -14,7 +14,7 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
  
- MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MONGOOSE_DEPENDENCIES += openssl
+-MONGOOSE_CFLAGS += -DNS_ENABLE_SSL
++MONGOOSE_CFLAGS += -DMG_ENABLE_SSL
+ endif
  
+ define MONGOOSE_BUILD_CMDS
