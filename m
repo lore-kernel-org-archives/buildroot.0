@@ -1,40 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 22 Sep 2017 13:32:13 +0200
-Subject: [Buildroot] [PATCH v2] package/dfu-util: allow to build it for
- the target as well
-In-Reply-To: <339edb91-644e-2456-b627-262d81c1afaa@grandegger.com>
-References: <339edb91-644e-2456-b627-262d81c1afaa@grandegger.com>
-Message-ID: <b70e4712-d1c5-08b1-415a-00b9d86f1061@mind.be>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Fri, 22 Sep 2017 15:50:03 +0300
+Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
+Message-ID: <20170922125003.32618-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Building Qt with QtWebKit on configuration step there is
+a check which disables QtWebKit build with GCC 6+.
+Back in the day nobody thought about building Qt with GCC
+version greater than 5.x. And now with modern GCCs like
+6.x and 7.x this assumption gets in the way.
 
+Given in Buildroot today we don't have GCC older than 4.9
+it should be safe to remove now meaningless check completely
+by adding patch to qt.
 
-On 22-09-17 09:11, Wolfgang Grandegger wrote:
-> +config BR2_PACKAGE_DFU_UTIL
-> +	bool "dfu-util"
-> +	select BR2_PACKAGE_LIBUSB
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../qt/0014-Enable-QtWebKit-with-newer-GCC.patch   | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/qt/0014-Enable-QtWebKit-with-newer-GCC.patch
 
- As I mentioned in my first reply, you also need to propagate libusb's
-dependency on threads and the corresponding comment.
-
- Regards,
- Arnout
-
-> +	help
-> +	  Dfu-util is the host side implementation of the DFU 1.0
-> +	  specification of the USB forum. DFU is intended to download
-> +	  and upload firmware to devices connected over USB.
-> +
-> +	  http://dfu-util.sourceforge.net/
-
+diff --git a/package/qt/0014-Enable-QtWebKit-with-newer-GCC.patch b/package/qt/0014-Enable-QtWebKit-with-newer-GCC.patch
+new file mode 100644
+index 000000000..88d3761a1
+--- /dev/null
++++ b/package/qt/0014-Enable-QtWebKit-with-newer-GCC.patch
+@@ -0,0 +1,50 @@
++From f566411fb314b7e4ab01f28e25e942cfaf8c59b7 Mon Sep 17 00:00:00 2001
++From: Evgeniy Didin <didin@synopsys.com>
++Date: Fri, 15 Sep 2017 19:43:48 +0300
++Subject: [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
++
++Building Qt with QtWebKit on configuration step there is
++a check which disables QtWebKit build with GCC 6+.
++Back in the day nobody thought about building Qt with GCC
++version greater than 5.x. And now with modern GCCs like
++6.x and 7.x this assumption gets in the way.
++
++Given in Buildroot today we don't have GCC older than 4.9 
++it should be safe to remove now meaningless check completely.
++
++Signed-off-by: Evgeniy Didin <didin@synopsys.com>
++Cc: Alexey Brodkin <abrodkin@synopsys.com>
++Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++---
++ configure | 14 --------------
++ 1 file changed, 14 deletions(-)
++
++diff --git a/configure b/configure
++index 10ad7ca0b0..8771144a65 100755
++--- a/configure
+++++ b/configure
++@@ -7731,20 +7731,6 @@ case "$XPLATFORM" in
++ 	canBuildWebKit="no"
++ 	canBuildQtXmlPatterns="no"
++ 	;;
++-    *-g++*)
++-	# Check gcc's version
++-	case "$(${QMAKE_CONF_COMPILER} -dumpversion)" in
++-	    5*|4*|3.4*)
++-		;;
++-            3.3*)
++-                canBuildWebKit="no"
++-                ;;
++-	    *)
++-		canBuildWebKit="no"
++-		canBuildQtXmlPatterns="no"
++-		;;
++-	esac
++-	;;
++     solaris-cc*)
++         # Check the compiler version
++         case `${QMAKE_CONF_COMPILER} -V 2>&1 | awk '{print $4}'` in
++-- 
++2.11.0
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
