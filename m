@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 18:22:12 +0200
-Subject: [Buildroot] [git commit] mongoose: drop unused openssl linker flags
-Message-ID: <20170922161618.CB08A800E0@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 18:22:18 +0200
+Subject: [Buildroot] [git commit] mongoose: don't install to target
+Message-ID: <20170922161618.EC1D180FDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a76d5a7276a4ae26b9da35a59cf4136c31d6497d
+commit: https://git.buildroot.net/buildroot/commit/?id=a418e6eeaaa6e1a0d173dbc538fac5f18470b024
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No linking is done since the package was reworked for v6.x in commit
-9860746ff (mongoose: bump to version 6.1), so drop LDFLAGS and the list of
-libraries to link against.
+Only a static library is built (and no _INSTALL_TARGET_CMDS are defined), so
+there is no need to run the target-install step.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongoose/mongoose.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/mongoose/mongoose.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 702342b..2705bdd 100644
+index 39d5b85..e2149e0 100644
 --- a/package/mongoose/mongoose.mk
 +++ b/package/mongoose/mongoose.mk
-@@ -10,12 +10,11 @@ MONGOOSE_LICENSE = GPL-2.0
+@@ -9,6 +9,8 @@ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
  MONGOOSE_LICENSE_FILES = LICENSE
  MONGOOSE_INSTALL_STAGING = YES
++# static library
++MONGOOSE_INSTALL_TARGET = NO
  
--MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
-+MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
--# directly linked
--MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
-+MONGOOSE_CFLAGS += -DNS_ENABLE_SSL
- endif
- 
- define MONGOOSE_BUILD_CMDS
