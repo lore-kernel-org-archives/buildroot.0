@@ -1,30 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 09:01:42 +0200
-Subject: [Buildroot] [PATCH] flashrom: fix static build with uClibc
-In-Reply-To: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 20 Sep 2017 11:17:18 +0300")
-References: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
-Message-ID: <87ingbrzc9.fsf@dell.be.48ers.dk>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Fri, 22 Sep 2017 09:11:44 +0200
+Subject: [Buildroot] [PATCH v2] package/dfu-util: allow to build it for the
+	target as well
+Message-ID: <339edb91-644e-2456-b627-262d81c1afaa@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+---
 
- > Define HAVE_STRNLEN to avoid local strnlen() definition.
- > Fixes:
- > http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
- > http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
- > http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+Changes since v1:
+- add missing "select BR2_PACKAGE_LIBUSB" in Config.in
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > It seems like only uClibc is affected. Build with musl succeeds even
- > though the resulting binary contains a global strnlen symbol.
+ package/Config.in            | 1 +
+ package/dfu-util/Config.in   | 9 +++++++++
+ package/dfu-util/dfu-util.mk | 2 ++
+ 3 files changed, 12 insertions(+)
+ create mode 100644 package/dfu-util/Config.in
 
-Committed to 2017.02.x, thanks.
-
+diff --git a/package/Config.in b/package/Config.in
+index 48d1381..b493201 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -389,6 +389,7 @@ endmenu
+ 	source "package/dbus-python/Config.in"
+ 	source "package/dbus-triggerd/Config.in"
+ 	source "package/devmem2/Config.in"
++	source "package/dfu-util/Config.in"
+ 	source "package/dmidecode/Config.in"
+ 	source "package/dmraid/Config.in"
+ 	source "package/dt-utils/Config.in"
+diff --git a/package/dfu-util/Config.in b/package/dfu-util/Config.in
+new file mode 100644
+index 0000000..ef1fd59
+--- /dev/null
++++ b/package/dfu-util/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DFU_UTIL
++	bool "dfu-util"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Dfu-util is the host side implementation of the DFU 1.0
++	  specification of the USB forum. DFU is intended to download
++	  and upload firmware to devices connected over USB.
++
++	  http://dfu-util.sourceforge.net/
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index c494485..5e8ba5a 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -9,6 +9,8 @@ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
+ DFU_UTIL_LICENSE = GPL-2.0+
+ DFU_UTIL_LICENSE_FILES = COPYING
+ 
++DFU_UTIL_DEPENDENCIES = libusb
+ HOST_DFU_UTIL_DEPENDENCIES = host-libusb
+ 
++$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.9.1
