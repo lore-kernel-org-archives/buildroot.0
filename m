@@ -1,84 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 18:16:13 +0200
-Subject: [Buildroot] [git commit] package/libyaml: bump version to 0.1.7
-Message-ID: <20170922161618.737A3807C8@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 18:20:15 +0200
+Subject: [Buildroot] [git commit] package/pptp-linux: bump version to 1.9.0
+Message-ID: <20170922161618.AB46E800E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1501e2d1f619cb9424863a8fcba9b1194b15b94
+commit: https://git.buildroot.net/buildroot/commit/?id=82befadb3f49f686f26e8fe067902d5b2613aefb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch after upstream committed a similar patch:
-https://github.com/yaml/libyaml/commit/946596172d140497b560e016e581accb0a92cca4#diff-35a172a9ca8faa1683fc747ca94681b3
+Updated patch status of patch 0003.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libyaml/0001-fix-CVE-2014-9130.patch | 33 ----------------------------
- package/libyaml/libyaml.hash                 |  2 +-
- package/libyaml/libyaml.mk                   |  2 +-
- 3 files changed, 2 insertions(+), 35 deletions(-)
+ package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch | 4 ++--
+ package/pptp-linux/pptp-linux.hash                         | 6 +++---
+ package/pptp-linux/pptp-linux.mk                           | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libyaml/0001-fix-CVE-2014-9130.patch b/package/libyaml/0001-fix-CVE-2014-9130.patch
-deleted file mode 100644
-index a267e40..0000000
---- a/package/libyaml/0001-fix-CVE-2014-9130.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From e6aa721cc0e5a48f408c52355559fd36780ba32a Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Ingy=20d=C3=B6t=20Net?= <ingy@ingy.net>
--Date: Fri, 28 Nov 2014 09:21:49 -0800
--Subject: [PATCH] Fix for https://bitbucket.org/xi/libyaml/issue/10/
--
--https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
--
--Commenting out the assert makes the scanner do the right thing and
--results in just a simple parse failure.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- src/scanner.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/scanner.c b/src/scanner.c
--index 88d4fa5..c5f3d2f 100644
----- a/src/scanner.c
--+++ b/src/scanner.c
--@@ -1110,7 +1110,9 @@ yaml_parser_save_simple_key(yaml_parser_t *parser)
--      * line.  Therefore it is always allowed.  But we add a check anyway.
--      */
-- 
---    assert(parser->simple_key_allowed || !required);    /* Impossible. */
--+    /* XXX This caused:
--+     * https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
--+    assert(parser->simple_key_allowed || !required); */    /* Impossible. */
-- 
--     /*
--      * If the current position may start a simple key, save it.
---- 
--2.0.4
--
-diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
-index fd039fa..44b04a3 100644
---- a/package/libyaml/libyaml.hash
-+++ b/package/libyaml/libyaml.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	7da6971b4bd08a986dd2a61353bc422362bd0edcc67d7ebaac68c95f74182749	yaml-0.1.6.tar.gz
-+sha256 8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729  yaml-0.1.7.tar.gz
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index 52d4750..bc8d695 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
+diff --git a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+index d6b5445..1036b3c 100644
+--- a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
++++ b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+@@ -7,8 +7,8 @@ We're using u_int32_t here, this breaks on musl libc builds otherwise.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ ---
+-Patch status: sent upstream to the devel mailing list
+-(moderated, no archive link yet)
++Patch status: applied upstream:
++https://sourceforge.net/p/pptpclient/git/ci/ee8ef349d9543cb48045a27d1cdd801fc6e910e8/
+ 
+  pqueue.h | 1 +
+  1 file changed, 1 insertion(+)
+diff --git a/package/pptp-linux/pptp-linux.hash b/package/pptp-linux/pptp-linux.hash
+index 839d0bf..6200ef1 100644
+--- a/package/pptp-linux/pptp-linux.hash
++++ b/package/pptp-linux/pptp-linux.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.8.0/
+-md5	4efce9f263e2c3f38d79d9df222476de	pptp-1.8.0.tar.gz
+-sha1	6289953812ac986c7234e83aefb10b5e279dc613	pptp-1.8.0.tar.gz
++# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.9.0/
++md5 b2117b377f65294a9786f80f0235d308  pptp-1.9.0.tar.gz
++sha1 047bb9812be477b44c94ffb1dc95c34658eedc24  pptp-1.9.0.tar.gz
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 17433b0..25f3037 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBYAML_VERSION = 0.1.6
-+LIBYAML_VERSION = 0.1.7
- LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
- LIBYAML_SITE = http://pyyaml.org/download/libyaml
- LIBYAML_INSTALL_STAGING = YES
+-PPTP_LINUX_VERSION = 1.8.0
++PPTP_LINUX_VERSION = 1.9.0
+ PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
+ PPTP_LINUX_MAKE = $(MAKE1)
