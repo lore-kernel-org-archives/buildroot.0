@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 23:29:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodm: bump version to 0.13
-In-Reply-To: <20170913142153.3732-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 13 Sep 2017 16:21:53 +0200")
-References: <20170913142153.3732-1-bernd.kuhls@t-online.de>
-Message-ID: <87r2uyo21l.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Sep 2017 23:29:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nss-pam-ldapd: bump version to
+	0.9.8
+In-Reply-To: <20170913142702.14558-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 13 Sep 2017 16:27:02 +0200")
+References: <20170913142702.14558-1-bernd.kuhls@t-online.de>
+Message-ID: <87mv5mo20w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
