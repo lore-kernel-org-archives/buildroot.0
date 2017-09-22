@@ -1,43 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 08:53:14 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] flashrom: fix static
-	build with uClibc
-Message-ID: <20170922074750.78B348100D@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 08:59:57 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gdk-pixbuf: bump to
+	version 2.36.5
+Message-ID: <20170922074750.869347FA45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6c24f879f073ec43c969c8fe62b95a73d0fc031
+commit: https://git.buildroot.net/buildroot/commit/?id=0995804d44e90c2d25804a9f1e905226683f4ac5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Define HAVE_STRNLEN to avoid local strnlen() definition.
+This release needs a new tweak regarding loaders.cache - it's now used
+to build the thumbnailer.
+Since we already generate it using the host variant for the target we
+can re-use this for the build step.
+It's not necessary to used the tweaked version since the build one is
+only used to account for mime types, not the plugins/loaders themselves.
 
-Fixes:
-http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
-http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
-http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 57f4efed7965e573a444544363d0cf74cec13be1)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 487b419cc647da18f04a98ee69c160705f0c44e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flashrom/flashrom.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 7ebda33..c155d40 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -12,7 +12,8 @@ FLASHROM_LICENSE = GPLv2+
- FLASHROM_LICENSE_FILES = COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 827b386..e92f498 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.4.sha256sum
+-sha256	0b19901c3eb0596141d2d48ddb9dac79ad1524bdf59366af58ab38fcb9ee7463	gdk-pixbuf-2.36.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.5.sha256sum
++sha256	7ace06170291a1f21771552768bace072ecdea9bd4a02f7658939b9a314c40fc	gdk-pixbuf-2.36.5.tar.xz
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 4fe6bd7..e4d3658 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- define FLASHROM_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
+ GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).5
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPLv2+
+@@ -73,5 +73,14 @@ define GDK_PIXBUF_DISABLE_TESTS
  endef
+ GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_DISABLE_TESTS
  
- define FLASHROM_INSTALL_TARGET_CMDS
++# Target gdk-pixbuf needs loaders.cache populated to build for the
++# thumbnailer. Use the host-built since it matches the target options
++# regarding mime types (which is the used information).
++define GDK_PIXBUF_COPY_LOADERS_CACHE
++	cp -f $(HOST_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
++		$(@D)/gdk-pixbuf
++endef
++GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_COPY_LOADERS_CACHE
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
