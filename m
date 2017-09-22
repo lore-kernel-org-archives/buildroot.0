@@ -1,133 +1,151 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 18:19:35 +0200
-Subject: [Buildroot] [git commit] package/opencv: bump version to 2.4.13.3
-Message-ID: <20170922161618.99182807C8@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 18:15:09 +0200
+Subject: [Buildroot] [git commit] package/owfs: bump version to 3.2p1
+Message-ID: <20170922161618.629EB807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9015b17ff3c9325d64d1558556241ed39088392c
+commit: https://git.buildroot.net/buildroot/commit/?id=08ac3e134f88ebf7560299566c7d35ec1a88c593
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed 0002-avoid-sysctl_h.patch, applied upstream:
-https://github.com/opencv/opencv/commit/61936eb1a43e732e4bc1c75b63e6cab85c6f9e94#diff-f3b4393df86251f502cee9ba1da034a5
+Removed patch applied upstream:
+https://sourceforge.net/p/owfs/code/ci/6ff4da75c2f507e3d94fa9e01a253ccebd00b916/
 
-This bump includes
-https://github.com/opencv/opencv/commit/70489b1e2232ead1701519e35d151670b74c3f70#diff-9076fba682f6d51a018b6de8648e1cdb
-which fixes ffmpeg static linking
-http://autobuild.buildroot.net/results/544/5444b0c5556a42923e3fcdae782811a805e51b1f/
-http://autobuild.buildroot.net/results/44d/44d53e4c5d4570507c7e8856fb9dd0a477dcdf63/
-
-In-source-builds are not allowed anymore:
-https://github.com/opencv/opencv/commit/777a0080cbdb98761853519b3f45136727a855c2
-
-Re-numbered remaining patches.
+Added md5 hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...xt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch} |  0
- package/opencv/0002-avoid-sysctl_h.patch           | 61 ----------------------
- package/opencv/opencv.hash                         |  2 +-
- package/opencv/opencv.mk                           |  3 +-
- 4 files changed, 3 insertions(+), 63 deletions(-)
+ .../0001-configure.ac-check-for-localtime_r.patch  | 12 +++--
+ ...t.h-only-include-compat_netdb.h-if-needed.patch | 58 ----------------------
+ package/owfs/owfs.hash                             |  7 +--
+ package/owfs/owfs.mk                               |  2 +-
+ 4 files changed, 12 insertions(+), 67 deletions(-)
 
-diff --git a/package/opencv/0003-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch b/package/opencv/0002-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
-similarity index 100%
-rename from package/opencv/0003-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
-rename to package/opencv/0002-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
-diff --git a/package/opencv/0002-avoid-sysctl_h.patch b/package/opencv/0002-avoid-sysctl_h.patch
+diff --git a/package/owfs/0001-configure.ac-check-for-localtime_r.patch b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
+index c4c3844..b25aa59 100644
+--- a/package/owfs/0001-configure.ac-check-for-localtime_r.patch
++++ b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
+@@ -11,6 +11,8 @@ Upstream-Status: Submitted
+ https://sourceforge.net/p/owfs/mailman/message/34873667/
+ 
+ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++[Bernd: rebased against version 3.2p1]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -19,15 +21,15 @@ diff --git a/configure.ac b/configure.ac
+ index c22dde9..12fdd18 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1529,7 +1529,7 @@ AC_FUNC_SELECT_ARGTYPES
++@@ -1646,7 +1646,7 @@
+  AC_FUNC_STRFTIME
+  AC_FUNC_STRTOD
+  AC_TYPE_SIGNAL
+--AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gettimeofday inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline])
+-+AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gettimeofday inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline localtime_r])
++-AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gmtime_r gettimeofday localtime_r inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline])
+++AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gmtime_r gettimeofday localtime_r inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline localtime_r])
+  
+- if test "${ENABLE_ZERO}" = "true" ; then
+- 	AC_SEARCH_LIBS(dlopen, dl, AC_DEFINE(HAVE_DLOPEN, 1, [Define if you have dlopen]))
++ save_LIBS="$LIBS"
++ LIBS=""
+ -- 
+ 2.7.0
+ 
+diff --git a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
 deleted file mode 100644
-index b63ba55..0000000
---- a/package/opencv/0002-avoid-sysctl_h.patch
+index 7ae7932..0000000
+--- a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
 +++ /dev/null
-@@ -1,61 +0,0 @@
--From e5e71c31d54562f9c67a8226f0bfc08ad24b81cf Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Tue, 1 Nov 2016 09:30:23 +0100
--Subject: [PATCH 2/4] From upstream master branch:
-- https://github.com/Itseez/opencv/blob/master/modules/core/src/
+@@ -1,58 +0,0 @@
+-From d24e63eea4f4d234f313145e40668a5e2f64e49c Mon Sep 17 00:00:00 2001
+-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+-Date: Wed, 9 Mar 2016 23:20:11 +0100
+-Subject: [PATCH] compat.h: only include compat_netdb.h if needed
 -
--Do not include sysctl.h targeting Linux systems.
+-compat_netdb.h is added for only one reason: to provide the definitions
+-for getaddrinfo, in case it is not provided by the system.
+-compat_netdb.h is just a copy from an old glibc version, but that makes
+-it incompatible with other standard C libraries. For example, uClibc
+-without RPC support doesn't have the rpc/netdb.h header. This leads to
+-build errors.
 -
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--[Samuel Martin: convert patch to git diff, add cap_ffmpeg_impl.hpp fix]
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-To work around this, only include compat_netdb.h when needed, i.e.
+-when getaddrinfo isn't provided natively.
+-
+-Note that this getaddrinfo compat was introduced in commit bc54c431 to
+-support Solaris 7. Starting from Solaris 8, however, getaddrinfo is
+-available natively, and it's available on MacOS, Windows and any other
+-POSIX-2001 compliant system as well. So it may be worhtwhile to remove
+-it altogether.
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ----
-- modules/core/src/parallel.cpp           | 2 +-
-- modules/core/src/system.cpp             | 2 +-
-- modules/highgui/src/cap_ffmpeg_impl.hpp | 2 +-
-- 3 files changed, 3 insertions(+), 3 deletions(-)
+- module/owlib/src/include/compat.h   | 2 ++
+- module/ownet/c/src/include/compat.h | 2 ++
+- 2 files changed, 4 insertions(+)
 -
--diff --git a/modules/core/src/parallel.cpp b/modules/core/src/parallel.cpp
--index 4459a24..0374876 100644
----- a/modules/core/src/parallel.cpp
--+++ b/modules/core/src/parallel.cpp
--@@ -56,7 +56,7 @@
--     #include <sys/types.h>
--     #if defined ANDROID
--         #include <sys/sysconf.h>
---    #else
--+    #elif defined __APPLE__
--         #include <sys/sysctl.h>
--     #endif
+-diff --git a/module/owlib/src/include/compat.h b/module/owlib/src/include/compat.h
+-index c55bc96..e95e16f 100644
+---- a/module/owlib/src/include/compat.h
+-+++ b/module/owlib/src/include/compat.h
+-@@ -57,7 +57,9 @@
+- #include <features.h>
 - #endif
--diff --git a/modules/core/src/system.cpp b/modules/core/src/system.cpp
--index 9a7b262..731f090 100644
----- a/modules/core/src/system.cpp
--+++ b/modules/core/src/system.cpp
--@@ -163,7 +163,7 @@ std::wstring GetTempFileNameWinRT(std::wstring prefix)
-- #include <sys/types.h>
-- #if defined ANDROID
-- #include <sys/sysconf.h>
---#else
--+#elif defined __APPLE__
-- #include <sys/sysctl.h>
+- 
+-+#ifndef HAVE_GETADDRINFO
+- #include "compat_netdb.h"
+-+#endif
+- #include "compat_getopt.h"
+- 
+- #ifndef HAVE_STRSEP
+-diff --git a/module/ownet/c/src/include/compat.h b/module/ownet/c/src/include/compat.h
+-index c45d852..f8ae759 100644
+---- a/module/ownet/c/src/include/compat.h
+-+++ b/module/ownet/c/src/include/compat.h
+-@@ -58,7 +58,9 @@ $Id$
+- #include <features.h>
 - #endif
-- #endif
--diff --git a/modules/highgui/src/cap_ffmpeg_impl.hpp b/modules/highgui/src/cap_ffmpeg_impl.hpp
--index dc3e10d..23674ff 100644
----- a/modules/highgui/src/cap_ffmpeg_impl.hpp
--+++ b/modules/highgui/src/cap_ffmpeg_impl.hpp
--@@ -126,9 +126,9 @@ extern "C" {
--     #include <unistd.h>
--     #include <stdio.h>
--     #include <sys/types.h>
---    #include <sys/sysctl.h>
--     #include <sys/time.h>
-- #if defined __APPLE__
--+    #include <sys/sysctl.h>
--     #include <mach/clock.h>
--     #include <mach/mach.h>
-- #endif
+- 
+-+#ifndef HAVE_GETADDRINFO
+- #include "compat_netdb.h"
+-+#endif
+- #include "compat_getopt.h"
+- 
+- #ifndef HAVE_STRSEP
 --- 
--2.10.2
+-2.7.0
 -
-diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
-index 2c1842b..85a3e0b 100644
---- a/package/opencv/opencv.hash
-+++ b/package/opencv/opencv.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/owfs/owfs.hash b/package/owfs/owfs.hash
+index 3991eec..1e57e29 100644
+--- a/package/owfs/owfs.hash
++++ b/package/owfs/owfs.hash
+@@ -1,4 +1,5 @@
+-# From https://sourceforge.net/projects/owfs/files/owfs/3.1p1/
+-sha1  80892ca3e72fef2979b8f0a04db15fd24a2cbda6  owfs-3.1p1.tar.gz
++# From https://sourceforge.net/projects/owfs/files/owfs/3.2p1/
++md5 fb42ce3b8a49f0b62711d8e3f5f04880  owfs-3.2p1.tar.gz
++sha1 4ee76e686bec769acde5bfbda148a8693df244c6  owfs-3.2p1.tar.gz
  # Locally calculated
--sha256 4b00c110e6c54943cbbb7cf0d35c5bc148133ab2095ee4aaa0ac0a4f67c58080  opencv-2.4.13.2.tar.gz
-+sha256 fb4769d0119c35426c3754b7fb079b407911e863958db53bdec83c7794582e41  opencv-2.4.13.3.tar.gz
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index b5b1253..d170aec 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -4,11 +4,12 @@
+-sha256  e69421ae534565c1f8530a2447f583401f4d0d4b1cf3cb8cf399a57133ed7f81  owfs-3.1p1.tar.gz
++sha256 33220b25db36969a717cd27e750d73dee376795e13a5f3677f05111b745832ea  owfs-3.2p1.tar.gz
+diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+index dceb6b6..47626ce 100644
+--- a/package/owfs/owfs.mk
++++ b/package/owfs/owfs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENCV_VERSION = 2.4.13.2
-+OPENCV_VERSION = 2.4.13.3
- OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
- OPENCV_INSTALL_STAGING = YES
- OPENCV_LICENSE = BSD-3-Clause
- OPENCV_LICENSE_FILES = LICENSE
-+OPENCV_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- # OpenCV component options
- OPENCV_CONF_OPTS += \
+-OWFS_VERSION = 3.1p1
++OWFS_VERSION = 3.2p1
+ OWFS_SITE = http://downloads.sourceforge.net/project/owfs/owfs/$(OWFS_VERSION)
+ OWFS_DEPENDENCIES = host-pkgconf
+ OWFS_CONF_OPTS = --disable-owperl --without-perl5 --disable-owtcl --without-tcl
