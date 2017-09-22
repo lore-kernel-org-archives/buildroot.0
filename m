@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 09:48:25 +0200
-Subject: [Buildroot] [PATCH] gdk-pixbuf: security bump to version 2.36.10
-In-Reply-To: <20170921070416.17829-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 21 Sep 2017 09:04:16 +0200")
-References: <20170921070416.17829-1-peter@korsgaard.com>
-Message-ID: <87efqzrx6e.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Sep 2017 08:53:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] flashrom: fix static
+	build with uClibc
+Message-ID: <20170922074750.78B348100D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d6c24f879f073ec43c969c8fe62b95a73d0fc031
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Fixes the following security issues:
- > CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
- > gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
- > specially crafted jpeg file can cause a heap overflow resulting in remote
- > code execution.  An attacker can send a file or url to trigger this
- > vulnerability.
+Define HAVE_STRNLEN to avoid local strnlen() definition.
 
- > CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
- > tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
- > Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
- > remote code execution.  An attacker can send a file or a URL to trigger this
- > vulnerability.
+Fixes:
+http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
+http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
+http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
 
- > CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
- > context-dependent attackers to cause a denial of service (NULL pointer
- > dereference and application crash) via vectors related to printing an error
- > message.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 57f4efed7965e573a444544363d0cf74cec13be1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/flashrom/flashrom.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- > The host version now needs the same workaround as we do for the target to
- > not pull in shared-mime-info.
-
- > Also add a hash for the license file while we're at it.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 7ebda33..c155d40 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -12,7 +12,8 @@ FLASHROM_LICENSE = GPLv2+
+ FLASHROM_LICENSE_FILES = COPYING
+ 
+ define FLASHROM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
+ endef
+ 
+ define FLASHROM_INSTALL_TARGET_CMDS
