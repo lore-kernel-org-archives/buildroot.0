@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 23:36:36 +0200
-Subject: [Buildroot] [git commit] package/ofono: bump version to 1.20
-Message-ID: <20170922213002.6767A7FDA5@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 23:37:01 +0200
+Subject: [Buildroot] [git commit] package/olsr: bump version to 0.9.6.1
+Message-ID: <20170922213002.74DB77FFC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31f33cd073e851e9e4ceb46af0c8ea5696fdf4f0
+commit: https://git.buildroot.net/buildroot/commit/?id=bf9cae05fde11077bd04234b301bb62e73a0608c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ofono/ofono.hash | 2 +-
- package/ofono/ofono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/olsr/olsr.hash | 4 ++--
+ package/olsr/olsr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index d611736..ef955a9 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
+diff --git a/package/olsr/olsr.hash b/package/olsr/olsr.hash
+index c6b1415..6de0290 100644
+--- a/package/olsr/olsr.hash
++++ b/package/olsr/olsr.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256	53cdbf342913f46bce4827241c60e24255a3d43a94945edf77482ae5b312d51f  ofono-1.18.tar.xz
-+sha256 5d7ba8f481a7715d013a79f8d6477eb89d8aaae399395d5d008a1317c34a31d5  ofono-1.20.tar.xz
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 88749aa..1aea2d4 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://www.olsr.org/releases/0.9/SHA256SUM-0.9.0.3
+-sha256	1f038ed3ea72e4f73dfc9701de83de7313f5049161c8df17b9aaeba8e9711e92 olsrd-0.9.0.3.tar.bz2
++# From http://www.olsr.org/releases/0.9/SHA256SUM-0.9.6.1
++sha256 9cac290e9bff5fc7422110b9ccd972853f10962c962d2f31a63de9c6d1520612  olsrd-0.9.6.1.tar.bz2
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 4ad5fc5..faff253 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OFONO_VERSION = 1.18
-+OFONO_VERSION = 1.20
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
+ OLSR_VERSION_MAJOR = 0.9
+-OLSR_VERSION = $(OLSR_VERSION_MAJOR).0.3
++OLSR_VERSION = $(OLSR_VERSION_MAJOR).6.1
+ OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
+ OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+ OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
