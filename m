@@ -1,22 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 23:26:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ninja: bump version to 1.8.2
-In-Reply-To: <20170913125238.17879-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 13 Sep 2017 14:52:38 +0200")
-References: <20170913125238.17879-1-bernd.kuhls@t-online.de>
-Message-ID: <874lrupgpz.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Sep 2017 23:26:58 +0200
+Subject: [Buildroot] [PATCH 1/2] bind: bump to version 9.11.2
+In-Reply-To: <20170913130115.25010-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 13 Sep 2017 15:01:14 +0200")
+References: <20170913130115.25010-1-peter@korsgaard.com>
+Message-ID: <87zi9mo259.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Changelog:
- > https://groups.google.com/forum/#!topic/ninja-build/Xt3NdAA0KQU/discussion
+ > Adds support for the new ICANN DNSSEC root key for the upcoming KSK rollover
+ > (Oct 11):
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > https://www.icann.org/resources/pages/ksk-rollover
+
+ > For more details, see the release notes:
+ > https://kb.isc.org/article/AA-01522
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
