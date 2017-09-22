@@ -1,45 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Sep 2017 17:35:33 +0200
-Subject: [Buildroot] [git commit] sudo: bump to version 1.8.21p2
-Message-ID: <20170922153708.1C8BD81050@busybox.osuosl.org>
+Date: Fri, 22 Sep 2017 17:36:42 +0200
+Subject: [Buildroot] [git commit] libidn: add fix for CVE-2017-14062
+Message-ID: <20170922153708.3862F803CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a41d44a8c93b63e8ba2da32b1680333f77ec1452
+commit: https://git.buildroot.net/buildroot/commit/?id=49cb795f7965328ce7a57cbc3736b0fc03919fe7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch SITE to https.
+Add upstream patch fixing CVE-2017-14062:
+
+Integer overflow in the decode_digit function in puny_decode.c in
+Libidn2 before 2.0.4 allows remote attackers to cause a denial of
+service or possibly have unspecified other impact.
+
+This issue also affects libidn.
+
+Unfortunately, the patch also triggers reconf of the documentation
+subdirectory, since lib/punycode.c is listed in GDOC_SRC that is defined
+in doc/Makefile.am. Add autoreconf to handle that.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sudo/sudo.hash | 2 +-
- package/sudo/sudo.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ycode.c-decode_digit-Fix-integer-overflow.patch | 36 ++++++++++++++++++++++
+ package/libidn/libidn.mk                           |  2 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index ea0764c..80448ff 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,2 +1,2 @@
- # From: http://www.sudo.ws/download.html
--sha256 bd42ae1059e935f795c69ea97b3de09fe9410a58a74b5d5e6836eb5067a445d9  sudo-1.8.20p2.tar.gz
-+sha256 74c5746cd33a814e2431c39faf0d76f7f8a697379bd073862e3b156cf0d76368  sudo-1.8.21p2.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 9cca544..77a95bd 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch b/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
+new file mode 100644
+index 0000000..8a8ca47
+--- /dev/null
++++ b/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
+@@ -0,0 +1,36 @@
++From e9e81b8063b095b02cf104bb992fa9bf9515b9d8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
++Date: Fri, 1 Sep 2017 10:04:48 +0200
++Subject: [PATCH] lib/punycode.c (decode_digit): Fix integer overflow
++
++This fix is a backport from libidn2 and addresses
++CVE-2017-14062.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit e9e81b8063b095
++
++ lib/punycode.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/lib/punycode.c b/lib/punycode.c
++index 86819a7deb85..49250a13e2cc 100644
++--- a/lib/punycode.c
+++++ b/lib/punycode.c
++@@ -88,10 +88,10 @@ enum
++ /* point (for use in representing integers) in the range 0 to */
++ /* base-1, or base if cp does not represent a value.          */
++ 
++-static punycode_uint
++-decode_digit (punycode_uint cp)
+++static unsigned
+++decode_digit (int cp)
++ {
++-  return cp - 48 < 10 ? cp - 22 : cp - 65 < 26 ? cp - 65 :
+++  return (unsigned) cp - 48 < 10 ? cp - 22 : cp - 65 < 26 ? cp - 65 :
++     cp - 97 < 26 ? cp - 97 : base;
++ }
++ 
++-- 
++2.14.1
++
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index b96e742..420b8df 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -12,6 +12,8 @@ LIBIDN_CONF_OPTS = --disable-java --enable-csharp=no
+ LIBIDN_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBIDN_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
+ LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
++# lib/punycode.c patch triggers reconf in doc/
++LIBIDN_AUTORECONF = YES
  
--SUDO_VERSION = 1.8.20p2
--SUDO_SITE = http://www.sudo.ws/sudo/dist
-+SUDO_VERSION = 1.8.21p2
-+SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
- SUDO_LICENSE_FILES = doc/LICENSE
- # This is to avoid sudo's make install from chown()ing files which fails
+ define LIBIDN_REMOVE_BINARY
+ 	rm -f $(TARGET_DIR)/usr/bin/idn
