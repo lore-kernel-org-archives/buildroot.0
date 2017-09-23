@@ -1,188 +1,158 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 20:49:36 +0200
-Subject: [Buildroot] [PATCH 2/2] gst1-mm: new package
-In-Reply-To: <20170831155352.4644-1-aduskett@gmail.com>
-References: <20170831155352.4644-1-aduskett@gmail.com>
-Message-ID: <b7c64db0-eeb9-8e2f-5b33-c68d1192d336@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 23 Sep 2017 20:23:12 +0200
+Subject: [Buildroot] [git commit] fs/iso9660: remove support for grub
+Message-ID: <20170923184645.0E70B8104E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=54a76f08fc2101e97dd66529afccef6b2c7a71ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I have a lot of nitpicky comments :-)
+grub will be removed soon.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ fs/iso9660/Config.in  | 16 ++++------------
+ fs/iso9660/iso9660.mk | 32 +-------------------------------
+ fs/iso9660/menu.lst   | 20 --------------------
+ 3 files changed, 5 insertions(+), 63 deletions(-)
 
-On 31-08-17 17:53, Adam Duskett wrote:
-> Gstreamermm provides C++ bindings for gstreamer.
-
- Since upstream calls it gstreamermm, we should have a name that closely
-resembles it. I think we could even use gstreamermm itself, but it could also be
-gstreamer1-mm to be more similar to the existing gst1 packages. Note that the
-upstream of gst1-plugins-bad is called gst-plugins-bad, not gstreamer-plugins-bad.
-
- But since we already have a gst-omx (this is a plugin that didn't exist in
-gstreamer-0.10), I think we could choose gstreamermm.
-
-
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[snip]
-> diff --git a/package/gstreamer1/gst1-mm/0001-gst-audioclock-auto-generate-some-audioclock-methods.patch b/package/gstreamer1/gst1-mm/0001-gst-audioclock-auto-generate-some-audioclock-methods.patch
-> new file mode 100644
-> index 000000000..c2db2657a
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-mm/0001-gst-audioclock-auto-generate-some-audioclock-methods.patch
-> @@ -0,0 +1,68 @@
-> +From 631414d89ba50bb207ce1fb7e0324c0e91cdcf43 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <aduskett@gmail.com>
-
- You should really keep the upstream author information...
-
-git clone https://git.gnome.org/browse/gstreamermm
-cd gstreamermm
-git checkout 1.8.0
-git cherry-pick -s 167eeba7757027e5faf8cdb59030ca094af04763
-git commit --amend
-
-> +Date: Thu, 31 Aug 2017 11:40:37 -0400
-> +Subject: [PATCH] Gst::AudioClock: auto generate some audioclock methods
-> +
-> +Those methods used to have object of GstClock type  as a
-> +first argument, so had to be wrapped manually. It has been
-> +fixed in GStreamer (https://bugzilla.gnome.org/show_bug.cgi?id=756628)
-> +in version 1.12.0
-> +https://bugzilla.gnome.org/show_bug.cgi?id=783628
-> +
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +[Upstream commit: https://github.com/GNOME/gstreamermm/commit/167eeba7757027e5faf8cdb59030ca094af04763]
-
- The upstream repo is (AFAIK) https://git.gnome.org/browse/gstreamermm, github
-is just a mirror.
-
-[snip]
-> diff --git a/package/gstreamer1/gst1-mm/0003-remove-gstreamer-check-dependency.patch b/package/gstreamer1/gst1-mm/0003-remove-gstreamer-check-dependency.patch
-> new file mode 100644
-> index 000000000..70a05a6cd
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-mm/0003-remove-gstreamer-check-dependency.patch
-> @@ -0,0 +1,29 @@
-> +From f65960a21c76bcd1371a9d0d3b008731d02a0e5d Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <aduskett@gmail.com>
-> +Date: Thu, 31 Aug 2017 11:42:40 -0400
-> +Subject: [PATCH] remove gstreamer-check dependency
-> +
-> +gstreamer-check is disabled by default in buildroot and itsn't required to
-                                                           it isn't
-
-> +build gstreamermm. Remove the requirement from configure.
-
- Do you think this patch could be sent upstream?
-
-> +
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +---
-> + configure | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/configure b/configure
-> +index de43442..c30bc4c 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -16685,7 +16685,7 @@ fi
-> + # The format below is used so that the requirements appear nicely in the .pc
-> + # file.
-> + 
-> +-GSTREAMERMM_MODULES='giomm-2.4 >= 2.47.6 gstreamer-1.0 >= 1.8.0 gstreamer-base-1.0 >= 1.8.0 gstreamer-check-1.0 >= 1.8.0 gstreamer-controller-1.0 >= 1.8.0 gstreamer-net-1.0 >= 1.8.0 gstreamer-allocators-1.0 >= 1.8.0 gstreamer-app-1.0 >= 1.8.0 gstreamer-audio-1.0 >= 1.8.0 gstreamer-fft-1.0 >= 1.8.0 gstreamer-pbutils-1.0 >= 1.8.0 gstreamer-plugins-base-1.0 >= 1.8.0 gstreamer-riff-1.0 >= 1.8.0 gstreamer-rtp-1.0 >= 1.8.0 gstreamer-rtsp-1.0 >= 1.8.0 gstreamer-sdp-1.0 >= 1.8.0 gstreamer-tag-1.0 >= 1.8.0 gstreamer-video-1.0 >= 1.8.0'
-> ++GSTREAMERMM_MODULES='giomm-2.4 >= 2.47.6 gstreamer-1.0 >= 1.8.0 gstreamer-base-1.0 >= 1.8.0 gstreamer-controller-1.0 >= 1.8.0 gstreamer-net-1.0 >= 1.8.0 gstreamer-allocators-1.0 >= 1.8.0 gstreamer-app-1.0 >= 1.8.0 gstreamer-audio-1.0 >= 1.8.0 gstreamer-fft-1.0 >= 1.8.0 gstreamer-pbutils-1.0 >= 1.8.0 gstreamer-plugins-base-1.0 >= 1.8.0 gstreamer-riff-1.0 >= 1.8.0 gstreamer-rtp-1.0 >= 1.8.0 gstreamer-rtsp-1.0 >= 1.8.0 gstreamer-sdp-1.0 >= 1.8.0 gstreamer-tag-1.0 >= 1.8.0 gstreamer-video-1.0 >= 1.8.0'
-> + 
-> + 
-> + 
-> +-- 
-> +2.13.5
-> +
-> diff --git a/package/gstreamer1/gst1-mm/Config.in b/package/gstreamer1/gst1-mm/Config.in
-> new file mode 100644
-> index 000000000..bbddbbd0c
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-mm/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_GST1_MM
-> +	bool "Gstreamer C++ bindings"
-> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
-
- Based on the modules listed above, I'd guess that you actually need to select a
-bunch of modules from plugins-base, e.g.
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP. And isn't e.g.
-BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP needed as well?
-
-
-> +	select BR2_PACKAGE_GLIBMM
-> +	help
-> +	  gstreamermm provides C++ bindings for the GStreamer streaming
-> +	  multimedia library (http://gstreamer.freedesktop.org). With
-> +	  gstreamermm it is possible to	develop applications that work
-> +	  with multimedia in C++.
-> +
-> +	  gstreamermm is developed over glibmm, libsigc++ and libxml++
-> +	  and the functionalities they provide. This means that, among
-> +	  other things, referencing and unreferencing of GObjects is
-> +	  handled automatically via glibmm's automatic pointer class,
-> +	  Glib::RefPtr, and libsigc++'s slots are used for callbacks and
-> +	  signals.
-> +
-> +	  https://gstreamer.freedesktop.org/bindings/cplusplus.html
-
- Good choice of upstream URL!
-
-
- Regards,
- Arnout
-
-> diff --git a/package/gstreamer1/gst1-mm/gst1-mm.hash b/package/gstreamer1/gst1-mm/gst1-mm.hash
-> new file mode 100644
-> index 000000000..d10e00215
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-mm/gst1-mm.hash
-> @@ -0,0 +1,2 @@
-> +#From http://ftp.gnome.org/pub/gnome/sources/gstreamermm/1.8/gstreamermm-1.8.0.sha256sum
-> +sha256 3ee3c1457ea2c32c1e17b784faa828f414ba27a9731532bf26d137a2ad999a44 gstreamermm-1.8.0.tar.xz
-> diff --git a/package/gstreamer1/gst1-mm/gst1-mm.mk b/package/gstreamer1/gst1-mm/gst1-mm.mk
-> new file mode 100644
-> index 000000000..d54a4d6b3
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-mm/gst1-mm.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# gst1-mm
-> +#
-> +################################################################################
-> +
-> +GST1_MM_VERSION_MAJOR = 1.8
-> +GST1_MM_VERSION = $(GST1_MM_VERSION_MAJOR).0
-> +GST1_MM_SITE = http://ftp.gnome.org/pub/gnome/sources/gstreamermm/$(GST1_MM_VERSION_MAJOR)
-> +GST1_MM_SOURCE = gstreamermm-$(GST1_MM_VERSION).tar.xz
-> +GST1_MM_LICENSE = LGPL-2.1+
-> +GST1_MM_LICENSE_FILES = COPYING.LIB
-> +GST1_MM_INSTALL_STAGING = YES
-> +GST1_MM_DEPENDENCIES += \
-> +	glibmm \
-> +	gstreamer1 \
-> +	gst1-plugins-base
-> +
-> +GST1_MM_CONF_OPTS += \
-> +	--disable-gl \
-> +	--disable-plugins-bad
-> +
-> +$(eval $(autotools-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index d162586..842c987 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -2,8 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	bool "iso image"
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_LINUX_KERNEL
+-	depends on BR2_TARGET_GRUB || \
+-		BR2_TARGET_GRUB2_I386_PC || \
++	depends on BR2_TARGET_GRUB2_I386_PC || \
+ 		BR2_TARGET_SYSLINUX_ISOLINUX
+ 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
+ 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
+@@ -26,11 +25,6 @@ if BR2_TARGET_ROOTFS_ISO9660
+ choice
+ 	prompt "Bootloader"
+ 
+-config BR2_TARGET_ROOTFS_ISO9660_GRUB
+-	bool "grub"
+-	depends on BR2_TARGET_GRUB
+-	select BR2_TARGET_GRUB_FS_ISO9660
+-
+ config BR2_TARGET_ROOTFS_ISO9660_GRUB2
+ 	bool "grub2"
+ 	depends on BR2_TARGET_GRUB2_I386_PC
+@@ -48,13 +42,11 @@ endchoice
+ 
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	string "Boot menu config file"
+-	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
+ 	default "fs/iso9660/grub.cfg" if BR2_TARGET_ROOTFS_ISO9660_GRUB2
+ 	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+ 	help
+ 	  Use this option to provide a custom bootloader configuration
+-	  file (menu.lst for Grub, grub.cfg for Grub 2, isolinux.cfg for
+-	  isolinux).
++	  file (grub.cfg for Grub 2, isolinux.cfg for isolinux).
+ 
+ 	  Note that the strings __KERNEL_PATH__ and __INITRD_PATH__
+ 	  will automatically be replaced by the path to the kernel and
+@@ -82,7 +74,7 @@ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+ 
+ endif
+ 
+-comment "iso image needs a Linux kernel and one of grub, grub2 i386-pc or isolinux to be built"
++comment "iso image needs a Linux kernel and either grub2 i386-pc or isolinux to be built"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_LINUX_KERNEL || \
+-		!(BR2_TARGET_GRUB || BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_SYSLINUX_ISOLINUX)
++		!(BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_SYSLINUX_ISOLINUX)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 478cb02..d49d593 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -45,16 +45,7 @@ else
+ ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
+ endif
+ 
+-ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
+-ROOTFS_ISO9660_DEPENDENCIES += grub
+-ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+-	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
+-ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/stage2_eltorito
+-define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+-	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
+-endef
+-else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
+ ROOTFS_ISO9660_DEPENDENCIES += grub2
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ 	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
+@@ -86,33 +77,12 @@ endef
+ 
+ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
+ 
+-# Grub splash screen disabling
+-ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
+-ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+-define ROOTFS_ISO9660_DISABLE_SPLASHSCREEN
+-	$(SED) '/^splashimage/d' $(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
+-endef
+-ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_SPLASHSCREEN
+-endif
+-endif
+-
+ define ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
+ 	$(SED) '/__INITRD_PATH__/d'  $(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
+ endef
+ 
+ ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
+ 
+-# Copy Grub splashscreen to temporary filesystem
+-ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
+-ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+-define ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
+-	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
+-endef
+-ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
+-endif
+-endif
+-
+ # Copy the kernel to temporary filesystem
+ define ROOTFS_ISO9660_COPY_KERNEL
+ 	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) \
+diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
+deleted file mode 100644
+index eb1ecef..0000000
+--- a/fs/iso9660/menu.lst
++++ /dev/null
+@@ -1,20 +0,0 @@
+-default		0
+-timeout		10
+-
+-# Used when no splashimage is used
+-color 		cyan/blue white/blue
+-
+-# Gets enabled/disabled depending on Grub support for splashimage
+-splashimage	/boot/grub/splash.xpm.gz
+-
+-# Used when a splashimage is enabled
+-foreground 	000000
+-background 	cccccc
+-
+-title		Buildroot ISO9660 image
+-kernel		__KERNEL_PATH__ root=/dev/sr0
+-initrd		__INITRD_PATH__
+-
+-title		Hard Drive (first partition)
+-rootnoverify	(hd0)
+-chainloader	+1
