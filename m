@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 19:07:29 +0200
-Subject: [Buildroot] [PATCH 44/49 v2] package/asterisk: add optional
- pjsip support
-In-Reply-To: <3d6f2d5bc9faedd731435a6302a658c1315029f1.1504993178.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Sep 2017 19:13:42 +0200
+Subject: [Buildroot] [PATCH 01/49 v2] package/asterisk: new package
+In-Reply-To: <ee34d49f318e171beb6b4ba642d04c960aa9560e.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <3d6f2d5bc9faedd731435a6302a658c1315029f1.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <22a9fa8b-5085-d903-a3a2-ebf59c4c19be@mind.be>
+ <ee34d49f318e171beb6b4ba642d04c960aa9560e.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <b90d6648-d11e-b01f-bc9b-da782bb15269@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +14,29 @@ To: buildroot@busybox.net
 
 
 On 09-09-17 23:39, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/asterisk/asterisk.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-> index 284b338cb3..9327451254 100644
-> --- a/package/asterisk/asterisk.mk
-> +++ b/package/asterisk/asterisk.mk
-> @@ -70,7 +70,6 @@ ASTERISK_CONF_OPTS = \
->  	--without-osptk \
->  	--without-oss \
->  	--without-postgres \
-> -	--without-pjproject \
->  	--without-popt \
->  	--without-pwlib \
->  	--without-resample \
-> @@ -240,6 +239,13 @@ else
->  ASTERISK_CONF_OPTS += --without-ssl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBPJSIP),y)
-> +ASTERISK_DEPENDENCIES += libpjsip
-> +ASTERISK_CONF_OPTS += --with-pjproject
+> Asterisk: the flagship of telephony on Linux. These are the lines of
+> code whose continuous mission is to power small and large enterprises
+> telephony systems, to boldly provide IP PBX where no one has done so
+> before.
+[snip]
 
- I believe Asterisk maintains a fork of pjsip with some specific patches. Does
-it work well with upstream pjsip?
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ I have applied to master with the following changes:
+
+     - make libilbc a mandatory dependency instead of using the bundled one;
+     - add license, license files, and license file hashes;
+     - minor spelling corrections;
+     - remove redundant trailing backslash reported by check-package;
+     - rewrap help text to 72 columns instead of 68
+
+ Note the first change: when --without-ilbc is specified, it will actually build
+its internal fork.
 
  Regards,
  Arnout
-
-> +else
-> +ASTERISK_CONF_OPTS += --without-pjproject
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_SPANDSP),y)
->  ASTERISK_DEPENDENCIES += spandsp
->  ASTERISK_CONF_OPTS += --with-spandsp
-> 
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
