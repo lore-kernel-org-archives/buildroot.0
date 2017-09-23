@@ -1,138 +1,185 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 23 Sep 2017 19:20:18 +0200
-Subject: [Buildroot] [git commit] package/libss7: new package
-Message-ID: <20170923171328.182308103C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dahdi-tools: new package
+Message-ID: <20170923171327.ED1088103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c3b714f3548cf42aeaaf9c022ad5f5c63d2069b
+commit: https://git.buildroot.net/buildroot/commit/?id=164df08b75537f9ea62cfdc54dfd245dadf02fd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Makefile in the package is not very versatile, so we need to go our
-way to only build and install what we can.
-
-Fixing the Makefile is not worth it, considering that we can quite
-easily do all of that in our .mk.
+Also provides libraries, so install in staging as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Arnout: Add license file hash, use SPDX license name]
+[Arnout: add hashes for license files]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in          |  1 +
- package/libss7/Config.in   | 18 +++++++++++++++
- package/libss7/libss7.hash |  6 +++++
- package/libss7/libss7.mk   | 55 ++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 80 insertions(+)
+ package/Config.in                               |  1 +
+ package/dahdi-tools/0001-no-build-docs.patch    | 16 +++++++++++
+ package/dahdi-tools/0002-no-perl-manpages.patch | 37 +++++++++++++++++++++++++
+ package/dahdi-tools/Config.in                   | 23 +++++++++++++++
+ package/dahdi-tools/dahdi-tools.hash            |  8 ++++++
+ package/dahdi-tools/dahdi-tools.mk              | 32 +++++++++++++++++++++
+ 6 files changed, 117 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 0dbe188..3b2f04a 100644
+index ac7d25c..0dbe188 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1170,6 +1170,7 @@ menu "Hardware handling"
- 	source "package/libsigrok/Config.in"
- 	source "package/libsigrokdecode/Config.in"
- 	source "package/libsoc/Config.in"
-+	source "package/libss7/Config.in"
- 	source "package/libusb/Config.in"
- 	source "package/libusb-compat/Config.in"
- 	source "package/libusbgx/Config.in"
-diff --git a/package/libss7/Config.in b/package/libss7/Config.in
+@@ -384,6 +384,7 @@ endmenu
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+ 	source "package/dahdi-linux/Config.in"
++	source "package/dahdi-tools/Config.in"
+ 	source "package/dbus/Config.in"
+ 	source "package/dbus-cpp/Config.in"
+ 	source "package/dbus-glib/Config.in"
+diff --git a/package/dahdi-tools/0001-no-build-docs.patch b/package/dahdi-tools/0001-no-build-docs.patch
 new file mode 100644
-index 0000000..b99c578
+index 0000000..311a129
 --- /dev/null
-+++ b/package/libss7/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBSS7
-+	bool "libss7"
-+	depends on BR2_LINUX_KERNEL
++++ b/package/dahdi-tools/0001-no-build-docs.patch
+@@ -0,0 +1,16 @@
++Do not build the documentation.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN dahdi-tools-2.11.0.orig/Makefile.am dahdi-tools-2.11.0/Makefile.am
++--- dahdi-tools-2.11.0.orig/Makefile.am	2015-12-22 21:19:12.000000000 +0100
+++++ dahdi-tools-2.11.0/Makefile.am	2016-01-04 23:23:34.201304133 +0100
++@@ -17,7 +17,7 @@
++ 	#-Wformat=2
++ endif
++ 
++-SUBDIRS	= xpp doc hotplug
+++SUBDIRS	= xpp hotplug
++ 
++ if PPPD
++ SUBDIRS	+= ppp
+diff --git a/package/dahdi-tools/0002-no-perl-manpages.patch b/package/dahdi-tools/0002-no-perl-manpages.patch
+new file mode 100644
+index 0000000..dae1b6c
+--- /dev/null
++++ b/package/dahdi-tools/0002-no-perl-manpages.patch
+@@ -0,0 +1,37 @@
++xpp: do not try to install the manpages for the perl tools
++
++The man pages are generated neither at build time nor at install time,
++so the install step fails.
++
++Just disable them.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN dahdi-tools-2.11.0.orig/xpp/Makefile.am dahdi-tools-2.11.0/xpp/Makefile.am
++--- dahdi-tools-2.11.0.orig/xpp/Makefile.am	2015-12-22 21:19:12.000000000 +0100
+++++ dahdi-tools-2.11.0/xpp/Makefile.am	2016-01-04 23:56:31.851820973 +0100
++@@ -3,7 +3,6 @@
++ 
++ SUBDIRS		=
++ 
++-man_MANS	=
++ 
++ 
++ # FIXME: try to improve code, so we can use $(PEDANTIC)
++@@ -59,7 +58,6 @@
++ udevrules_DATA	= xpp.rules
++ 
++ dist_sbin_SCRIPTS	= $(perl_scripts)
++-man_MANS		+= $(perl_mans)
++ CLEANFILES		= $(perl_checks) $(perl_mans)
++ 
++ if	PBX_USB
++@@ -147,8 +145,6 @@
++ 		astribank_allow.8 \
++ 		astribank_is_starting.8
++ 
++-man_MANS	+= $(man_pages)
++-
++ endif
++ 
++ EXTRA_DIST	= \
+diff --git a/package/dahdi-tools/Config.in b/package/dahdi-tools/Config.in
+new file mode 100644
+index 0000000..39042df
+--- /dev/null
++++ b/package/dahdi-tools/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_DAHDI_TOOLS
++	bool "dahdi-tools"
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LINUX_KERNEL # dahdi-linux
++	depends on BR2_USE_MMU # perl
 +	select BR2_PACKAGE_DAHDI_LINUX
-+	select BR2_PACKAGE_DAHDI_TOOLS
++	select BR2_PACKAGE_PERL
 +	help
-+	  libss7 is an open source library that encapsulates the
-+	  protocols used to communicate using Signaling System 7
-+	  over ISDN (T1, E1).
++	  DAHDI (Digium/Asterisk Hardware Device Interface) is the open
++	  source device interface technology used to control Digium and
++	  other legacy telephony interface cards.
 +
-+	  http://www.asterisk.org/downloads/libss7
++	  DAHDI Tools is a package of utilities for managing and
++	  monitoring DAHDI devices.
 +
-+comment "libss7 needs a kernel to be built"
++	  http://www.asterisk.org/downloads/dahdi
++
++# Two comments, otherwise it may not fit in menuconfig for narrow terminals
++comment "dahdi-tools needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LINUX_KERNEL
++
++comment "dahdi-tools needs a Linux kernel to be built"
 +	depends on !BR2_LINUX_KERNEL
-+
-+comment "libss7 needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libss7/libss7.hash b/package/libss7/libss7.hash
+diff --git a/package/dahdi-tools/dahdi-tools.hash b/package/dahdi-tools/dahdi-tools.hash
 new file mode 100644
-index 0000000..8e1d663
+index 0000000..7b668c6
 --- /dev/null
-+++ b/package/libss7/libss7.hash
-@@ -0,0 +1,6 @@
-+# Hashes from http://downloads.asterisk.org/pub/telephony/libss7/releases/
-+sha1    7112a0717293fc273d5d488e1387ad28abe4e9b3  libss7-2.0.0.tar.gz
-+sha256  5af00853cfb2bc6bcf050947804db132ae6872db0cd2ab24b5378828f78eda52  libss7-2.0.0.tar.gz
++++ b/package/dahdi-tools/dahdi-tools.hash
+@@ -0,0 +1,8 @@
++# sha1 from http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
++# sha256 locally computed
++sha1    5da944e6d59a977f814230253f3ddf2847e7f31b                          dahdi-tools-2.11.1.tar.gz
++sha256  53ffeb333f3e44b0c88e5b17475cdbf87d3f652eb81a6422de76250c061e2909  dahdi-tools-2.11.1.tar.gz
 +
-+# License file, locally calculated
++# License files, locally computed
 +sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
-diff --git a/package/libss7/libss7.mk b/package/libss7/libss7.mk
++sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  LICENSE.LGPL
+diff --git a/package/dahdi-tools/dahdi-tools.mk b/package/dahdi-tools/dahdi-tools.mk
 new file mode 100644
-index 0000000..541505b
+index 0000000..e97d944
 --- /dev/null
-+++ b/package/libss7/libss7.mk
-@@ -0,0 +1,55 @@
++++ b/package/dahdi-tools/dahdi-tools.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# libss7
++# dahdi-tools
 +#
 +################################################################################
 +
-+LIBSS7_VERSION = 2.0.0
-+LIBSS7_SITE = http://downloads.asterisk.org/pub/telephony/libss7/releases
++DAHDI_TOOLS_VERSION = 2.11.1
++DAHDI_TOOLS_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
 +
-+LIBSS7_LICENSE = GPL-2.0
-+LIBSS7_LICENSE_FILES = LICENSE
++DAHDI_TOOLS_LICENSE = GPLv2, LGPLv2.1
++DAHDI_TOOLS_LICENSE_FILES = LICENSE LICENSE.LGPL
 +
-+LIBSS7_DEPENDENCIES = dahdi-linux dahdi-tools
-+LIBSS7_INSTALL_STAGING = YES
++DAHDI_TOOLS_DEPENDENCIES = dahdi-linux perl
 +
-+# The Makefile default rule will always try to generate both libraries.
-+# So we need to explicitly build only what we can.
-+ifneq ($(BR2_SHARED_LIBS),y)
-+LIBSS7_LIBS = libss7.a
-+define LIBSS7_INSTALL_A
-+	$(INSTALL) -D -m 0644 $(@D)/libss7.a $(1)/usr/lib/libss7.a
-+endef
-+endif
++DAHDI_TOOLS_INSTALL_STAGING = YES
++DAHDI_TOOLS_AUTORECONF = YES
 +
-+ifneq ($(BR2_STATIC_LIBS),y)
-+LIBSS7_LIBS += libss7.so.2.0
-+define LIBSS7_INSTALL_SO
-+	$(INSTALL) -D -m 0644 $(@D)/libss7.so.2.0 $(1)/usr/lib/libss7.so.2.0
-+	ln -sf libss7.so.2.0 $(1)/usr/lib/libss7.so
-+endef
-+endif
++# Buildroot globally exports PERL with the value it has on the host, so we need
++# to override it with the location where it will be on the target.
++DAHDI_TOOLS_CONF_ENV = PERL=/usr/bin/perl
 +
-+# The Makefile erroneously looks for host headers to decide what utilities
-+# to build, and thus misses the test utilities. So we explicitly build them
-+# as they can be useful to validate that the hardware does work.
-+LIBSS7_UTILS = parser_debug ss7test ss7linktest
++DAHDI_TOOLS_CONF_OPTS = \
++	--without-newt \
++	--without-usb \
++	--without-pcap \
++	--without-libusbx \
++	--without-libusb \
++	--without-selinux \
++	--without-ppp \
++	--with-perllib=/usr/lib/perl5/$(PERL_VERSION)
 +
-+define LIBSS7_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		$(LIBSS7_LIBS) $(LIBSS7_UTILS)
-+endef
-+
-+define LIBSS7_INSTALL_STAGING_CMDS
-+	$(call LIBSS7_INSTALL_A,$(STAGING_DIR))
-+	$(call LIBSS7_INSTALL_SO,$(STAGING_DIR))
-+	$(INSTALL) -D -m 0644 $(@D)/libss7.h $(STAGING_DIR)/usr/include/libss7.h
-+endef
-+
-+define LIBSS7_INSTALL_TARGET_CMDS
-+	$(foreach u,$(LIBSS7_UTILS),\
-+		$(INSTALL) -D -m 0755 $(@D)/$(u) $(TARGET_DIR)/usr/sbin/$(u)$(sep))
-+	$(call LIBSS7_INSTALL_SO,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
