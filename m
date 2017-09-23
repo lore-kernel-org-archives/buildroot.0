@@ -1,69 +1,167 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Sep 2017 19:18:12 +0200
-Subject: [Buildroot] [PATCH] openjpeg: fix build without C++ support
-Message-ID: <20170923171812.9111-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 23 Sep 2017 19:18:33 +0200
+Subject: [Buildroot] [PATCH 00/49 v2] package/asterisk: add a complete
+ asterisk stack
+In-Reply-To: <cover.1504993178.git.yann.morin.1998@free.fr>
+References: <cover.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <b98cd7e0-6499-ea43-6ea3-b7d963a4f459@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/e2f/e2ff0a7fa2b911157edf6c43a8eed797b22edd46/
-http://autobuild.buildroot.net/results/670/6706339e7df2f2e7d0d7a15663bed185ca55c2a1/
 
-Openjpeg is written in C, but with the move to CMake the build system now
-errors out if a C++ compiler isn't available.  Fix it by patching the
-CMakeLists.txt to not require C++ support.
 
-Patch submitted upstream:
-https://github.com/uclouvain/openjpeg/pull/1027
+On 09-09-17 23:39, Yann E. MORIN wrote:
+[snip]
+> ----------------------------------------------------------------
+> Yann E. MORIN (49):
+>       package/asterisk: new package
+>       package/asterisk: enable backtrace when available
+>       package/asterisk: add optional libgsm dependency
+>       package/asterisk: add optional zlib dependency
+>       package/asterisk: add optional support for SSL
+>       package/asterisk: add optional alsa-lib dependency
+>       package/asterisk: add optional curl dependency
+>       package/asterisk: add optional neon dependency
+>       package/asterisk: add optional libogg dependency
+>       package/asterisk: add optional bluez_utils dependency
+>       package/asterisk: add optional opus dependency
+>       package/asterisk: add optional speex dependency
+>       package/asterisk: add optional libvorbis dependency
+>       package/asterisk: add optional libilbc dependency
+>       package/asterisk: add optional portaudio dependency
+>       package/asterisk: add optional libical dependency
+>       package/asterisk: add optional openldap dependency
+>       package/asterisk: add optional freeradius-client dependency
+>       package/asterisk: add optional libsrtp dependency
+>       package/dahdi-linux: new package
+>       package/dahdi-tools: new package
+>       package/dahdi-tools: add USB support
+>       package/asterisk: add support for dahdi
+>       package/libss7: new package
+>       package/asterisk: add support for SS7
+>       package/libpri: new package
+>       package/asterisk: add support for PRI signalling
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...CMakeLists.txt-Don-t-require-a-C-compiler.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+ All of the above is applied except the two I rejected.
 
-diff --git a/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch b/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch
-new file mode 100644
-index 0000000000..13cceef195
---- /dev/null
-+++ b/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch
-@@ -0,0 +1,34 @@
-+From 786ddcd1475adc6193c59d53e0d8ed2c502f2b00 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 23 Sep 2017 18:49:31 +0200
-+Subject: [PATCH] CMakeLists.txt: Don't require a C++ compiler
-+
-+By default, CMake assumes that the project is using both C and C++.  By
-+explicitly passing 'C' as argument of the project() macro, we tell CMake
-+that only C is used, which prevents CMake from erroring out if a C++
-+compiler doesn't exist.
-+
-+Submitted upstream:
-+https://github.com/uclouvain/openjpeg/pull/1027
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index ec42bc99..d80eb48b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -24,7 +24,7 @@ endif()
-+ #string(TOLOWER ${OPENJPEG_NAMESPACE} OPENJPEG_LIBRARY_NAME)
-+ set(OPENJPEG_LIBRARY_NAME openjp2)
-+ 
-+-project(${OPENJPEG_NAMESPACE})
-++project(${OPENJPEG_NAMESPACE} C)
-+ 
-+ # Do full dependency headers.
-+ include_regular_expression("^.*$")
-+-- 
-+2.11.0
-+
+>       package/spandsp: new package
+>       package/asterisk: add optional spandsp support
+>       package/libqb: new package
+>       package/corosync: new package
+>       package/corosync: add optional dbus support
+>       package/corosync: add optional snmp support
+>       package/asterisk: add optional corosync dependency
+
+ I had comments on the above so marked as changes requested.
+
+>       package/libpjsip: add option to enable GSM codec
+
+ Maybe you have a good reason to make this an explicit option, so I have kept it
+as New.
+
+>       package/asterisk: add optional netsnmp dependency
+
+ This one I applied.
+
+>       package/libpjsip: add option to enable SPEEX codec
+>       package/libpjsip: add option to enable G.711 codec
+>       package/libpjsip: add option to enable G.722 codec
+>       package/libpjsip: add option to enable G.7221 codec
+>       package/libpjsip: add option to enable iLBC codec
+>       package/libpjsip: add option to enable L16 codec
+>       package/libpjsip: add optional portaudio support
+>       package/asterisk: add optional pjsip support
+>       package/asterisk: add optional libcap dependency
+
+ I could have applied this one and the following ones, but it gives conflicts
+because the rest is not yet applied, so I didn't bother.
+
+
+ Regards,
+ Arnout
+
+>       package/asterisk: add optional iconv support
+>       package/asterisk: enable inotify when possible
+>       package/asterisk: add optional unixodbc dependency
+>       package/asterisk: add optional jack2 dependency
+> 
+>  package/Config.in                                  |   8 +
+>  ...-configure-do-not-configure-in-menuselect.patch |  58 ++++
+>  ...02-sounds-do-not-download-and-check-sha1s.patch |  52 +++
+>  .../0003-configure-fix-detection-of-libcrypt.patch |  43 +++
+>  ...n-cross-complation-assimne-eventfd-are-av.patch |  37 +++
+>  package/asterisk/Config.in                         |  25 ++
+>  package/asterisk/asterisk.hash                     |   9 +
+>  package/asterisk/asterisk.mk                       | 356 +++++++++++++++++++++
+>  package/corosync/Config.in                         |  20 ++
+>  package/corosync/corosync.hash                     |   2 +
+>  package/corosync/corosync.mk                       |  60 ++++
+>  package/dahdi-linux/Config.in                      |  19 ++
+>  package/dahdi-linux/dahdi-linux.hash               |  23 ++
+>  package/dahdi-linux/dahdi-linux.mk                 |  88 +++++
+>  package/dahdi-tools/0001-no-build-docs.patch       |  16 +
+>  package/dahdi-tools/0002-no-perl-manpages.patch    |  37 +++
+>  package/dahdi-tools/Config.in                      |  23 ++
+>  package/dahdi-tools/dahdi-tools.hash               |   4 +
+>  package/dahdi-tools/dahdi-tools.mk                 |  57 ++++
+>  package/libpjsip/Config.in                         |  31 ++
+>  package/libpjsip/libpjsip.mk                       |  55 +++-
+>  package/libpri/Config.in                           |  21 ++
+>  package/libpri/libpri.hash                         |   3 +
+>  package/libpri/libpri.mk                           |  52 +++
+>  ...fix-CLOCK_MONOTONIC-check-for-cross-compi.patch |  33 ++
+>  package/libqb/Config.in                            |  12 +
+>  package/libqb/libqb.hash                           |   2 +
+>  package/libqb/libqb.mk                             |  32 ++
+>  package/libss7/Config.in                           |  18 ++
+>  package/libss7/libss7.hash                         |   3 +
+>  package/libss7/libss7.mk                           |  55 ++++
+>  package/spandsp/0001-fix-msse4.x.patch             |  29 ++
+>  package/spandsp/Config.in                          |   9 +
+>  package/spandsp/spandsp.hash                       |   2 +
+>  package/spandsp/spandsp.mk                         |  28 ++
+>  35 files changed, 1314 insertions(+), 8 deletions(-)
+>  create mode 100644 package/asterisk/0001-configure-do-not-configure-in-menuselect.patch
+>  create mode 100644 package/asterisk/0002-sounds-do-not-download-and-check-sha1s.patch
+>  create mode 100644 package/asterisk/0003-configure-fix-detection-of-libcrypt.patch
+>  create mode 100644 package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch
+>  create mode 100644 package/asterisk/Config.in
+>  create mode 100644 package/asterisk/asterisk.hash
+>  create mode 100644 package/asterisk/asterisk.mk
+>  create mode 100644 package/corosync/Config.in
+>  create mode 100644 package/corosync/corosync.hash
+>  create mode 100644 package/corosync/corosync.mk
+>  create mode 100644 package/dahdi-linux/Config.in
+>  create mode 100644 package/dahdi-linux/dahdi-linux.hash
+>  create mode 100644 package/dahdi-linux/dahdi-linux.mk
+>  create mode 100644 package/dahdi-tools/0001-no-build-docs.patch
+>  create mode 100644 package/dahdi-tools/0002-no-perl-manpages.patch
+>  create mode 100644 package/dahdi-tools/Config.in
+>  create mode 100644 package/dahdi-tools/dahdi-tools.hash
+>  create mode 100644 package/dahdi-tools/dahdi-tools.mk
+>  create mode 100644 package/libpri/Config.in
+>  create mode 100644 package/libpri/libpri.hash
+>  create mode 100644 package/libpri/libpri.mk
+>  create mode 100644 package/libqb/0001-bconfigure-fix-CLOCK_MONOTONIC-check-for-cross-compi.patch
+>  create mode 100644 package/libqb/Config.in
+>  create mode 100644 package/libqb/libqb.hash
+>  create mode 100644 package/libqb/libqb.mk
+>  create mode 100644 package/libss7/Config.in
+>  create mode 100644 package/libss7/libss7.hash
+>  create mode 100644 package/libss7/libss7.mk
+>  create mode 100644 package/spandsp/0001-fix-msse4.x.patch
+>  create mode 100644 package/spandsp/Config.in
+>  create mode 100644 package/spandsp/spandsp.hash
+>  create mode 100644 package/spandsp/spandsp.mk
+> 
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
