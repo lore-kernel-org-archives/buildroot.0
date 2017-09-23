@@ -1,58 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 18:28:28 +0200
-Subject: [Buildroot] [PATCH 22/49 v2] package/dahdi-tools: add USB
-	support
-In-Reply-To: <4fc439b83d4974f15558cf6963b500862d0a85bc.1504993178.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Sep 2017 18:40:49 +0200
+Subject: [Buildroot] [PATCH 28/49 v2] package/spandsp: new package
+In-Reply-To: <d89d72386ef004f0fdb39074ac4f8814411fe7c8.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <4fc439b83d4974f15558cf6963b500862d0a85bc.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <00872d3f-c545-9ee9-6781-06c782fb7a22@mind.be>
+ <d89d72386ef004f0fdb39074ac4f8814411fe7c8.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <7d952133-13ac-56bf-c85c-2aaf37901367@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
 
- I'm in the process of applying this series. Small problem here.
 
 On 09-09-17 23:39, Yann E. MORIN wrote:
-> dahdi-tools can use either libusb-1.0.x or libusb-0.1.x, and Buildroot
-> packages both, respectively as libusb and as libusb-compat.
+[snip]
+> diff --git a/package/spandsp/0001-fix-msse4.x.patch b/package/spandsp/0001-fix-msse4.x.patch
+> new file mode 100644
+> index 0000000000..ba3a3e55e3
+> --- /dev/null
+> +++ b/package/spandsp/0001-fix-msse4.x.patch
+> @@ -0,0 +1,29 @@
+> +diff -durN spandsp-20170713.orig/configure.ac spandsp-20170713/configure.ac
+> +--- spandsp-20170713.orig/configure.ac	2014-08-09 10:19:27.000000000 +0200
+> ++++ spandsp-20170713/configure.ac	2017-09-07 21:38:36.990854021 +0200
+> +@@ -354,10 +354,10 @@
+
+ Missing message + SoB. I'd add it myself but I'm not sure what to add :-)
+
+> +         COMP_VENDOR_CFLAGS="-msse4a $COMP_VENDOR_CFLAGS"
+> +     fi
+> +     if test "$enable_sse4_2" = "yes" ; then
+> +-        COMP_VENDOR_CFLAGS="-msse42 $COMP_VENDOR_CFLAGS"
+> ++        COMP_VENDOR_CFLAGS="-msse4.2 $COMP_VENDOR_CFLAGS"
+
+ Are we sure that e.g. GCC 4.3 didn't have the -msse42 flag? So I checked, and
+the flag was added in 4.3, so exactly right :-)
+
 
 [snip]
-> +# Note: libsubx was a fork of libusb, which was merged back into
-> +# libusb for the 1.0.18 release in early 2014, but it looks like
-> +# dahdi-tools uses the libusbx vs. libusb to differentiate whether
-> +# to use the 1.0.x vs. 0.9.x libusb. Since in Buildroot, libusb-compat
-> +# anyway depends on libusb, presence of libusb-compat means that
-> +# libusb is enabled, so we only support libusb for dahdi-tools.
-> +#
-> +# Yet, we must ensure build-ordering in case libusb-compat id enabled.
+> +
+> +SPANDSP_LICENSE = LGPLv2.1 (library), GPLv2 (test suite)
 
- That bit doesn't make sense to me. Since we always pass --without-libusb, why
-would this be needed?
+ Please use SPDX license codes.
 
-> +#
-> +# Yes, this is very confusing.
-> +#
-> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
-> +DAHDI_TOOLS_DEPENDENCIES += libusb
-> +DAHDI_TOOLS_CONF_OPTS += --with-usb --with-libusbx
-> +ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
-> +DAHDI_TOOLS_DEPENDENCIES += libusb-comapt
+> +SPANDSP_LICENSE_FILES = COPYING
 
- This will surely give a build error :-)
+ And add license hashes.
+
+ I'm doing that for the other packages while I'm committing, but since you're
+going to respin this one...
 
  Regards,
  Arnout
 
-> +endif
-> +else
-> +DAHDI_TOOLS_CONF_OPTS += --without-usb --without-libusbx
-> +endif
 > +
->  $(eval $(autotools-package))
+> +SPANDSP_AUTORECONF = YES
+> +SPANDSP_DEPENDENCIES = tiff
+> +SPANDSP_INSTALL_STAGING = YES
+> +
+> +SPANDSP_CONF_OPTS = \
+> +	--disable-doc \
+> +	--disable-builtin-tiff \
+> +	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx) \
+> +	$(if $(BR2_X86_CPU_HAS_SSE),--enable-sse,--disable-sse) \
+> +	$(if $(BR2_X86_CPU_HAS_SSE2),--enable-sse2,--disable-sse2) \
+> +	$(if $(BR2_X86_CPU_HAS_SSE3),--enable-sse3,--disable-sse3) \
+> +	$(if $(BR2_X86_CPU_HAS_SSSE3),--enable-ssse3,--disable-ssse3) \
+> +	$(if $(BR2_X86_CPU_HAS_SSE4),--enable-sse4-1,--disable-sse4-1) \
+> +	$(if $(BR2_X86_CPU_HAS_SSE42),--enable-sse4-2,--disable-sse4-2)
+> +
+> +$(eval $(autotools-package))
 > 
 
 -- 
