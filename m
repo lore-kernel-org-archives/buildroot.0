@@ -1,50 +1,35 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 23 Sep 2017 20:29:37 +0200
-Subject: [Buildroot] [git commit] boot/grub: remove
-Message-ID: <20170923184645.9613E80FE6@busybox.osuosl.org>
+Date: Sat, 23 Sep 2017 20:51:46 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: update after adding
+	bananapi_m2_plus_defconfig
+Message-ID: <20170923184645.A363B80FE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=144dc9ca8007cb4390bd9ba3e8b018d7fd92be2c
+commit: https://git.buildroot.net/buildroot/commit/?id=c0455add508dc4f45f2c82401b4a0f3bb48d88a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-grub is no longer maintained: it is stuck at version 0.97 with huge
-patches that have no opportunity to be applied upstream, as upstream
-has even renamed it grub-legacy.
+Commit cef57c964284f9b545a2347dd6eb1654e03dfd6e added
+bananapi_m2_plus_defconfig but forgot to update .gitlab-ci.yml. Do it
+now.
 
-Besides, it no longer builds correctly with recent binutils versions,
-and even the huge patches we could grab from Debian do not help the
-slightest.
-
-Since upstream really considers it dead, and there are at least two
-alternatives (grub2 and syslinux), just remove grub.
-
-Add a legacy entry.
-
-Remove the test cases as well.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .gitlab-ci.yml                                |     2 -
- Config.in.legacy                              |     9 +
- boot/Config.in                                |     1 -
- boot/grub/Config.in                           |   200 -
- boot/grub/grub.100-autoreconf.patch           |  1407 -
- boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
- boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
- boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
- boot/grub/grub.hash                           |     3 -
- boot/grub/grub.mk                             |   109 -
- boot/grub/menu.lst                            |    16 -
- boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
- support/testing/conf/grub-menu.lst            |    20 -
- support/testing/tests/fs/test_iso9660.py      |    37 -
- 14 files changed, 9 insertions(+), 48908 deletions(-)
+ .gitlab-ci.yml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Patch is too large, so refusing to show it
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index e140f60..1d1e7bd 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -87,6 +87,7 @@ atmel_sama5d4_xplained_defconfig: *defconfig
+ atmel_sama5d4_xplained_dev_defconfig: *defconfig
+ atmel_sama5d4_xplained_mmc_defconfig: *defconfig
+ atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
++bananapi_m2_plus_defconfig: *defconfig
+ bananapro_defconfig: *defconfig
+ beagleboardx15_defconfig: *defconfig
+ beaglebone_defconfig: *defconfig
