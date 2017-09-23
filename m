@@ -1,65 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Sep 2017 11:44:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/poppler: include ctype.h to fix
-	build error
-Message-ID: <20170923094407.16121-1-bernd.kuhls@t-online.de>
+Date: Sat, 23 Sep 2017 13:30:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: glamor
+	support needs egl
+Message-ID: <20170923113018.20562-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Glamor support in xserver_xorg-server depends on gbm:
+https://cgit.freedesktop.org/xorg/xserver/tree/configure.ac#n2100
+
+Gbm is provided by mesa3d only if egl is enabled:
+https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n167
+
+This patch adds libegl as additional prerequisite for enabling glamor
+support in xserver_xorg-server.
+
 Fixes
-http://autobuild.buildroot.net/results/a6a/a6a336f8b6a0136b204a34091e33dc4598178125/
+http://autobuild.buildroot.net/results/04d/04d93745d63fcfbea070c0126862b49f1b6f473e/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...orm.cc-include-ctype.h-to-fix-build-error.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch b/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
-new file mode 100644
-index 0000000000..8d210dab99
---- /dev/null
-+++ b/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
-@@ -0,0 +1,37 @@
-+From f40143f7acca81b7d39d774ed4c349aec8d9310b Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 23 Sep 2017 11:37:23 +0200
-+Subject: [PATCH] Form.cc: include ctype.h to fix build error
-+
-+Fixes
-+Form.cc:546:28: error: 'isdigit' was not declared in this scope
-+Form.cc:548:34: error: 'isxdigit' was not declared in this scope
-+Form.cc:575:40: error: 'isxdigit' was not declared in this scope
-+
-+detected by buildroot autobuilders:
-+http://autobuild.buildroot.net/results/a6a/a6a336f8b6a0136b204a34091e33dc4598178125/
-+when cross-compiling with
-+gcc version 4.7.3 (crosstool-NG hg+-c65fcf8a34b7)
-+
-+Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=102951
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ poppler/Form.cc | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/poppler/Form.cc b/poppler/Form.cc
-+index 83bceb20..e7efae95 100644
-+--- a/poppler/Form.cc
-++++ b/poppler/Form.cc
-+@@ -32,6 +32,7 @@
-+ #include <stddef.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-++#include <ctype.h>
-+ #include "goo/gmem.h"
-+ #include "goo/GooString.h"
-+ #include "Error.h"
-+-- 
-+2.11.0
-+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 12c3ed06c1..45a2c81f2b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -223,7 +223,7 @@ endif
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+-ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
+ else
 -- 
 2.11.0
