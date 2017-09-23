@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 18:40:49 +0200
-Subject: [Buildroot] [PATCH 28/49 v2] package/spandsp: new package
-In-Reply-To: <d89d72386ef004f0fdb39074ac4f8814411fe7c8.1504993178.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Sep 2017 18:51:28 +0200
+Subject: [Buildroot] [PATCH 30/49 v2] package/libqb: new package
+In-Reply-To: <c5a9ad9b87390d6b6b0a16d1f647ce7c4f2fd92e.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <d89d72386ef004f0fdb39074ac4f8814411fe7c8.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <7d952133-13ac-56bf-c85c-2aaf37901367@mind.be>
+ <c5a9ad9b87390d6b6b0a16d1f647ce7c4f2fd92e.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <627dd05c-f4e7-990a-50d0-a167bf81bdfa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,60 +15,122 @@ To: buildroot@busybox.net
 
 On 09-09-17 23:39, Yann E. MORIN wrote:
 [snip]
-> diff --git a/package/spandsp/0001-fix-msse4.x.patch b/package/spandsp/0001-fix-msse4.x.patch
-> new file mode 100644
-> index 0000000000..ba3a3e55e3
-> --- /dev/null
-> +++ b/package/spandsp/0001-fix-msse4.x.patch
-> @@ -0,0 +1,29 @@
-> +diff -durN spandsp-20170713.orig/configure.ac spandsp-20170713/configure.ac
-> +--- spandsp-20170713.orig/configure.ac	2014-08-09 10:19:27.000000000 +0200
-> ++++ spandsp-20170713/configure.ac	2017-09-07 21:38:36.990854021 +0200
-> +@@ -354,10 +354,10 @@
+> +From f9857721bfe5c47253bc2cf487d9dcc94cbce3c2 Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Mon, 26 Dec 2016 19:38:45 +0100
+> +Subject: [PATCH] bconfigure: fix CLOCK_MONOTONIC check for cross-compilation
 
- Missing message + SoB. I'd add it myself but I'm not sure what to add :-)
+ Upstream status?
 
-> +         COMP_VENDOR_CFLAGS="-msse4a $COMP_VENDOR_CFLAGS"
-> +     fi
-> +     if test "$enable_sse4_2" = "yes" ; then
-> +-        COMP_VENDOR_CFLAGS="-msse42 $COMP_VENDOR_CFLAGS"
-> ++        COMP_VENDOR_CFLAGS="-msse4.2 $COMP_VENDOR_CFLAGS"
-
- Are we sure that e.g. GCC 4.3 didn't have the -msse42 flag? So I checked, and
-the flag was added in 4.3, so exactly right :-)
-
-
-[snip]
 > +
-> +SPANDSP_LICENSE = LGPLv2.1 (library), GPLv2 (test suite)
+> +In cross-compilation, we can't run test programs, so configure just
+> +bails out. Since there is no cache variable (e.g. ac_cv_blabla, we can't
+> +even provide the correct result.
+> +
+> +But in thise case, we don't really need to run to start with; we just
+> +need to check if the toolchain headers know about CLOCK_MONOTONIC.
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 560b330..6972213 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -179,7 +179,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+> +                  )
+> + 
+> + AC_MSG_CHECKING(for a working clock_getres(CLOCK_MONOTONIC, &ts))
+> +-AC_RUN_IFELSE([AC_LANG_PROGRAM(
+> ++AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+> + [[#include <time.h>]],
+> + [[struct timespec ts; if(clock_getres(CLOCK_MONOTONIC, &ts)) return -1;]])> +                     [
+> +-- 
+> +2.7.4
+> +
+> diff --git a/package/libqb/Config.in b/package/libqb/Config.in
+> new file mode 100644
+> index 0000000000..1bfea8b210
+> --- /dev/null
+> +++ b/package/libqb/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_LIBQB
+> +	bool "libqb"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	help
+> +	  libqb is a library with the primary purpose of providing high
+> +	  performance client server reusable features. It provides high
+> +	  performance logging, tracing, ipc, and poll.
+> +
+> +	  https://github.com/clusterlabs/libqb/wiki
+> +
+> +comment "libqb needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
+> new file mode 100644
+> index 0000000000..b1a93201b9
+> --- /dev/null
+> +++ b/package/libqb/libqb.hash
+> @@ -0,0 +1,2 @@
+> +# sha256 locally computed
+> +sha256  98a6f8d7b83013747788ff7f1aace387ec532a8e7fbecc354ad9260f426dd518  libqb-v1.0.1.tar.gz
+> diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
+> new file mode 100644
+> index 0000000000..5ca2480b03
+> --- /dev/null
+> +++ b/package/libqb/libqb.mk
+> @@ -0,0 +1,32 @@
+> +################################################################################
+> +#
+> +# libqb
+> +#
+> +################################################################################
+> +
+> +LIBQB_VERSION = v1.0.1
+> +LIBQB_SITE = $(call github,ClusterLabs,libqb,$(LIBQB_VERSION))
 
- Please use SPDX license codes.
+ There is an uploaded tarball (which probably contains a configure script).
 
-> +SPANDSP_LICENSE_FILES = COPYING
+ There's also a 1.0.2 now.
 
- And add license hashes.
+> +
+> +LIBQB_LICENSE = LGPLv2.1+
+> +LIBQB_LICENSE_FILES = COPYING
 
- I'm doing that for the other packages while I'm committing, but since you're
-going to respin this one...
+ SPDX + license hash.
+
+
+> +
+> +LIBQB_DEPENDENCIES = host-pkgconf
+> +
+> +# Straight out of the repository, no configure present. Also, we do patch
+> +# configure.ac.
+> +LIBQB_AUTORECONF = YES
+> +
+> +LIBQB_INSTALL_STAGING = YES
+> +
+> +define LIBQB_M4
+> +	$(INSTALL) -d -m 0755 $(@D)/m4
+
+ We use mkdir -p everywhere else.
+
+> +endef
+> +LIBQB_POST_EXTRACT_HOOKS += LIBQB_M4
+> +
+> +# Don't build docs
+
+ We don't usually have these comments, do we?
+
 
  Regards,
  Arnout
 
+> +LIBQB_CONF_ENV = ac_cv_prog_DOXYGEN=
 > +
-> +SPANDSP_AUTORECONF = YES
-> +SPANDSP_DEPENDENCIES = tiff
-> +SPANDSP_INSTALL_STAGING = YES
-> +
-> +SPANDSP_CONF_OPTS = \
-> +	--disable-doc \
-> +	--disable-builtin-tiff \
-> +	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx) \
-> +	$(if $(BR2_X86_CPU_HAS_SSE),--enable-sse,--disable-sse) \
-> +	$(if $(BR2_X86_CPU_HAS_SSE2),--enable-sse2,--disable-sse2) \
-> +	$(if $(BR2_X86_CPU_HAS_SSE3),--enable-sse3,--disable-sse3) \
-> +	$(if $(BR2_X86_CPU_HAS_SSSE3),--enable-ssse3,--disable-ssse3) \
-> +	$(if $(BR2_X86_CPU_HAS_SSE4),--enable-sse4-1,--disable-sse4-1) \
-> +	$(if $(BR2_X86_CPU_HAS_SSE42),--enable-sse4-2,--disable-sse4-2)
+> +# Don't use -Werror
+> +LIBQB_CONF_OPTS = --disable-fatal-warnings
 > +
 > +$(eval $(autotools-package))
 > 
