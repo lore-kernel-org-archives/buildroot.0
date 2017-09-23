@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 18:58:06 +0200
-Subject: [Buildroot] [PATCH 31/49 v2] package/corosync: new package
-In-Reply-To: <752e6d4352e6b6254704028375d0a356f337bacc.1504993178.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Sep 2017 19:05:38 +0200
+Subject: [Buildroot] [PATCH 35/49 v2] package/libpjsip: add option to
+ enable GSM codec
+In-Reply-To: <577822438ab319654ee5eaa73ec0b4f96b3a8434.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <752e6d4352e6b6254704028375d0a356f337bacc.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <8f21b4d7-1666-b31b-83b2-92dc4ceb2177@mind.be>
+ <577822438ab319654ee5eaa73ec0b4f96b3a8434.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <cec794ed-8219-4289-7d28-22649734f7bc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,134 +17,74 @@ To: buildroot@busybox.net
 On 09-09-17 23:39, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/Config.in              |  1 +
->  package/corosync/Config.in     | 20 ++++++++++++++++++
->  package/corosync/corosync.hash |  2 ++
->  package/corosync/corosync.mk   | 47 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 70 insertions(+)
->  create mode 100644 package/corosync/Config.in
->  create mode 100644 package/corosync/corosync.hash
->  create mode 100644 package/corosync/corosync.mk
+>  package/libpjsip/Config.in   | 12 ++++++++++++
+>  package/libpjsip/libpjsip.mk | 14 +++++++++++++-
+>  2 files changed, 25 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index a6c63a0ad9..104acbb3ad 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1405,6 +1405,7 @@ menu "Other"
->  	source "package/boost/Config.in"
->  	source "package/clapack/Config.in"
->  	source "package/classpath/Config.in"
-> +	source "package/corosync/Config.in"
->  	source "package/cppcms/Config.in"
->  	source "package/cracklib/Config.in"
->  	source "package/dawgdic/Config.in"
-> diff --git a/package/corosync/Config.in b/package/corosync/Config.in
-> new file mode 100644
-> index 0000000000..1dda488109
-> --- /dev/null
-> +++ b/package/corosync/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_COROSYNC
-> +	bool "corosync"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnsp
-
- Put arch deps in the beginning.
-
-> +	depends on !BR2_STATIC_LIBS # libnss
-> +	select BR2_PACKAGE_LIBNSS
-> +	select BR2_PACKAGE_LIBQB
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  The Corosync Cluster Engine is a Group Communication System
-> +	  with additional features for implementing high availability
-> +	  within applications.
+> diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
+> index 727d2ec3d0..ce15a20567 100644
+> --- a/package/libpjsip/Config.in
+> +++ b/package/libpjsip/Config.in
+> @@ -10,5 +10,17 @@ config BR2_PACKAGE_LIBPJSIP
+>  
+>  	  http://www.pjsip.org
+>  
+> +if BR2_PACKAGE_LIBPJSIP
 > +
-> +	  https://corosync.github.io/corosync/
-> +
-> +comment "corosync needs a toolchain w/ threads, dunamic library"
+> +config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
+> +    bool "GSM codec"
+> +    depends on !BR2_STATIC_LIBS # libgsm
+> +    select BR2_PACKAGE_LIBGSM
 
- dynamic
+ Is there a good reason to make this an explicit suboption rather than an
+automatic one like we usually do?
 
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> diff --git a/package/corosync/corosync.hash b/package/corosync/corosync.hash
-> new file mode 100644
-> index 0000000000..5c009dee19
-> --- /dev/null
-> +++ b/package/corosync/corosync.hash
-> @@ -0,0 +1,2 @@
-> +# sha256 locally computed
-> +sha256  0dd0ee718253c18c5090e0304eec72a7be8b18b6fe5e03de59ce095fa08c8b63  corosync-v2.4.2.tar.gz
-> diff --git a/package/corosync/corosync.mk b/package/corosync/corosync.mk
-> new file mode 100644
-> index 0000000000..865f5e0f8d
-> --- /dev/null
-> +++ b/package/corosync/corosync.mk
-> @@ -0,0 +1,47 @@
-> +################################################################################
-> +#
-> +# corosync
-> +#
-> +################################################################################
-> +
-> +COROSYNC_VERSION = v2.4.2
-> +COROSYNC_SITE = $(call github,corosync,corosync,$(COROSYNC_VERSION))
+ I would be more inclined to add something like this to the pjsip help text:
 
- Anything wrong with the official
-http://build.clusterlabs.org/corosync/releases/corosync-2.4.2.tar.gz download
-location?
-
-> +
-> +COROSYNC_LICENSE = BSD-3c
-> +COROSYNC_LICENSE_FILES = LICENSE
-> +
-> +COROSYNC_DEPENDENCIES = libnss libqb zlib
-> +COROSYNC_AUTORECONF = YES
-> +COROSYNC_INSTALL_STAGING = YES
-> +
-> +define COROSYNC_M4
-> +	$(INSTALL) -d -m 0755 $(@D)/m4
-> +endef
-> +COROSYNC_POST_EXTRACT_HOOKS += COROSYNC_M4
-> +
-> +# Don't build HTML manpages
-> +COROSYNC_CONF_ENV = ac_cv_prog_GROFF=
-> +
-> +COROSYNC_CONF_OPTS = \
-> +	--disable-fatal-warnings \
-> +	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
-> +	--enable-secure-build \
-> +	--disable-user-flags \
-> +	--disable-coverage \
-> +	--disable-small-memory-footprint \
-> +	--disable-dbus \
-> +	--disable-testagents \
-> +	--disable-rdma \
-> +	--disable-monitoring \
-> +	--disable-watchdog \
-> +	--disable-augeas \
-> +	--disable-systemd \
-
- Hm, below you add a --enable-systemd...
-
-> +	--disable-upstart \
-> +	$(if $(BR2_INIT_SYSTEMD),--enable-systemd,--disable-systemd) \
-
- No dependency on systemd needed? It just installs units?
+pjsip will include the following codecs if the corresponding package is enabled
+in Buildroot: GSM, Speex, iLBC.
 
  Regards,
  Arnout
 
-> +	--disable-upstart \
-> +	--disable-snmp \
-> +	--disable-xmlconf \
-> +	--disable-qdevices \
-> +	--disable-qnet
 > +
-> +$(eval $(autotools-package))
+> +comment "GSM codec needs a toolchain w/ shared libraries"
+> +    depends on BR2_STATIC_LIBS
+> +
+> +endif # BR2_PACKAGE_LIBPJSIP
+> +
+>  comment "libpjsip needs a toolchain w/ C++, threads"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+> index 4e2da7d32d..9b25dad2f8 100644
+> --- a/package/libpjsip/libpjsip.mk
+> +++ b/package/libpjsip/libpjsip.mk
+> @@ -26,7 +26,6 @@ LIBPJSIP_CONF_ENV = \
+>  
+>  LIBPJSIP_CONF_OPTS = \
+>  	--disable-sound \
+> -	--disable-gsm-codec \
+>  	--disable-speex-codec \
+>  	--disable-speex-aec \
+>  	--disable-resample \
+> @@ -70,4 +69,17 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+>  LIBPJSIP_DEPENDENCIES += util-linux
+>  endif
+>  
+> +# Codecs can only be disabled. If explictly enabled, the check is
+> +# omitted (but successful), and there is no configure trace "Checking
+> +# if [codec] codec is disabled...no". So we only explicitly disable it
+> +# and we do not explictly enable it, so we get the configure log in
+> +# both cases.
+> +
+> +ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_GSM),y)
+> +LIBPJSIP_DEPENDENCIES += libgsm
+> +LIBPJSIP_CONF_OPTS += --with-external-gsm
+> +else
+> +LIBPJSIP_CONF_OPTS += --disable-gsm-codec
+> +endif
+> +
+>  $(eval $(autotools-package))
 > 
 
 -- 
