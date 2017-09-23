@@ -1,44 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 23 Sep 2017 19:20:18 +0200
-Subject: [Buildroot] [git commit] package/asterisk: add optional alsa-lib
+Subject: [Buildroot] [git commit] package/asterisk: add optional neon
 	dependency
-Message-ID: <20170923171327.07FDF8103C@busybox.osuosl.org>
+Message-ID: <20170923171327.2B3B08103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb50a1ffd512785ab31cd3147ed2aea83e8bdc93
+commit: https://git.buildroot.net/buildroot/commit/?id=1cf7b3c78b26c52ed8b4b51966c6f1c3ed0742ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/asterisk/asterisk.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/asterisk/asterisk.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 8d21601..7ef449f 100644
+index 7ef449f..859129b 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -48,7 +48,6 @@ ASTERISK_CONF_OPTS = \
- 	--disable-internal-poll \
- 	--disable-asteriskssl \
- 	--disable-rpath \
--	--without-asound \
- 	--without-bfd \
- 	--without-bluetooth \
- 	--without-cap \
-@@ -144,6 +143,13 @@ else
- ASTERISK_CONF_OPTS += --without-gsm
+@@ -76,7 +76,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-misdn \
+ 	--without-mysqlclient \
+ 	--without-nbs \
+-	--without-neon \
+ 	--without-neon29 \
+ 	--without-netsnmp \
+ 	--without-newt \
+@@ -150,6 +149,15 @@ else
+ ASTERISK_CONF_OPTS += --without-asound
  endif
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+ASTERISK_DEPENDENCIES += alsa-lib
-+ASTERISK_CONF_OPTS += --with-asound
++ifeq ($(BR2_PACKAGE_NEON),y)
++ASTERISK_DEPENDENCIES += neon
++ASTERISK_CONF_OPTS += --with-neon
++ASTERISK_CONF_ENV += \
++	ac_cv_path_CONFIG_NEON=$(STAGING_DIR)/usr/bin/neon-config
 +else
-+ASTERISK_CONF_OPTS += --without-asound
++ASTERISK_CONF_OPTS += --without-neon
 +endif
 +
  ifeq ($(BR2_PACKAGE_OPENSSL),y)
