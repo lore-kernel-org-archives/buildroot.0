@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Sep 2017 23:24:14 +0200
+Date: Sat, 23 Sep 2017 23:24:06 +0200
 Subject: [Buildroot] [PATCH v3 7/7] package/glibc: bump to 2.26
 In-Reply-To: <20170923212414.16744-1-romain.naour@gmail.com>
 References: <20170923212414.16744-1-romain.naour@gmail.com>
-Message-ID: <20170923212414.16744-16-romain.naour@gmail.com>
+Message-ID: <20170923212414.16744-8-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
