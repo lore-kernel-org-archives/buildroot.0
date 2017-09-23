@@ -1,46 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Sep 2017 14:02:43 +0200
-Subject: [Buildroot] [PATCH v2 4/4] package/kodi-skin-confluence: bump
-	version to 3.1.4
-In-Reply-To: <20170923120243.24993-1-bernd.kuhls@t-online.de>
-References: <20170923120243.24993-1-bernd.kuhls@t-online.de>
-Message-ID: <20170923120243.24993-4-bernd.kuhls@t-online.de>
+Date: Sat, 23 Sep 2017 14:02:40 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/kodi-inputstream-adaptive: bump
+	version to 2.0.18
+Message-ID: <20170923120243.24993-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes https://bugs.busybox.net/show_bug.cgi?id=10256
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: no changes
+v2: fixed hash
 
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 4 +++-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 +++-
  2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index 9aa2ea4a8c..276b000fd7 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index df717ef056..0d8f39f6cc 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 47970d61b2f617921dfbc36188ed11de9af366cd97d9105e19cbe96598fe7b62  kodi-skin-confluence-7044dabb3a818d7ff47b7a34bfb3480f2a9441d9.tar.gz
-+sha256 49ae60f397e3cac08dc0e9c027bc39a3936ccd27b956d7a43bf2424a07f162ec  kodi-skin-confluence-96bed03570a90d4fdfb96ab71de9a51ceedd03fb.tar.gz
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index e7ed11c197..a5ebcf553f 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+-sha256 764941d87aa99408c48d91b5ddf237cd0251fb4cbafba3da188bb4a965220309  kodi-inputstream-adaptive-161f319bb2cd946f4659d841a54f19b1fb6143cc.tar.gz
++sha256 a214b6f47d4fcd0ceb78819447eb9ff3c5b4519233a46a245c9b558ecda0725f  kodi-inputstream-adaptive-f2904b547e940c724dce7412a26744c2698cab66.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 8d7daefc4f..cc0950346e 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -4,7 +4,9 @@
  #
  ################################################################################
  
--KODI_SKIN_CONFLUENCE_VERSION = 7044dabb3a818d7ff47b7a34bfb3480f2a9441d9
-+# This cset is on the branch 'krypton'
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 161f319bb2cd946f4659d841a54f19b1fb6143cc
++# This cset is on the branch 'Krypton'
 +# When Kodi is updated, then this should be updated to the corresponding branch
-+KODI_SKIN_CONFLUENCE_VERSION = 96bed03570a90d4fdfb96ab71de9a51ceedd03fb
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = f2904b547e940c724dce7412a26744c2698cab66
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
 -- 
 2.11.0
