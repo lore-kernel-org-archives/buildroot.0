@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 22:24:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mdadm: not available in static
- builds
-In-Reply-To: <20170904044954.31001-1-bernd.kuhls@t-online.de>
-References: <20170904044954.31001-1-bernd.kuhls@t-online.de>
-Message-ID: <30cc0536-8d24-a218-a45e-f1632c015a74@mind.be>
+Date: Sat, 23 Sep 2017 22:25:31 +0200
+Subject: [Buildroot] [PATCH v2] libmbim: fix build with musl libc
+In-Reply-To: <20170911085533.4340-1-aleksander@aleksander.es>
+References: <20170911075426.514-1-aleksander@aleksander.es>
+ <20170911085533.4340-1-aleksander@aleksander.es>
+Message-ID: <46dc9b65-d73c-383e-1bb5-b118d12c1020@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,21 @@ To: buildroot@busybox.net
 
 
 
-On 04-09-17 06:49, Bernd Kuhls wrote:
-> http://git.neil.brown.name/?p=mdadm.git;a=commitdiff;h=7716570e6d906e7326f83d466f6ba73009649d03#patch9
-> added code to include dlfcn.h.
+On 11-09-17 10:55, Aleksander Morgado wrote:
+> This is now failing because the libgudev dependency is optional and
+> the build will only use if it's found during the configure checks.
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/163/163ad5a9f976662be8ca8664f91254f90fca8439/
+> Imported the same patch that has been applied in the upstream libmbim
+> git repository:
+>   https://cgit.freedesktop.org/libmbim/libmbim/commit/?id=417b0b80023dc30d61c111ec0a54da2884d3a541
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 
  Applied to master, thanks.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
