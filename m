@@ -1,77 +1,69 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 23 Sep 2017 22:07:56 +0200
-Subject: [Buildroot] [git commit] configs: new raspberrypi3 qt5we config
-Message-ID: <20170923201331.CC98581036@busybox.osuosl.org>
+Date: Sat, 23 Sep 2017 22:19:36 +0200
+Subject: [Buildroot] [git commit] libmbim: fix build with musl libc
+Message-ID: <20170923201331.EE5FF81036@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21234ce8666bfcce191de1d00c27bfcf5edaa86a
+commit: https://git.buildroot.net/buildroot/commit/?id=6e271944f937faa1a31756638d50a904bde21d1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This config sets Qt5 WebEngine for raspberrypi 3.
+Patch applied upstream:
+  https://cgit.freedesktop.org/libmbim/libmbim/commit/?id=417b0b80023dc30d61c111ec0a54da2884d3a541
 
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Fixes:
+http://autobuild.buildroot.net/results/dc1/dc11a3dfd18bb7f5078de00412de82de3cce3c48
+
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+[Arnout: rework commit message]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- configs/raspberrypi3_qt5we_defconfig | 50 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ ...-prefer-realpath-to-canonicalize_file_nam.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+diff --git a/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch b/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
 new file mode 100644
-index 0000000..9df14c5
+index 0000000..1a72b61
 --- /dev/null
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -0,0 +1,50 @@
-+BR2_arm=y
-+BR2_cortex_a53=y
-+BR2_ARM_FPU_NEON_VFPV4=y
++++ b/package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
+@@ -0,0 +1,37 @@
++From 6b043b9b676e88a80e3d4013863c5e970fdde1df Mon Sep 17 00:00:00 2001
++From: Aleksander Morgado <aleksander@aleksander.es>
++Date: Mon, 11 Sep 2017 09:31:03 +0200
++Subject: [PATCH] mbim-device: prefer realpath() to canonicalize_file_name()
 +
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
++Usually the canonicalize_file_name() GNU extension is preferred to the
++POSIX realpath(), as it covers some of the limitations the latter has.
++But this extension isn't available in lots of platforms or in other
++c library implementations (e.g. musl), so just default to the POSIX
++method to improve portability.
 +
-+BR2_SYSTEM_DHCP="eth0"
++Note that the check for canonicalize_file_name() availability during
++configure isn't as trivial as adding a new AC_CHECK_FUNCS(), and
++importing a gnulib module seems overkill just for this one liner.
 +
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++(cherry picked from commit 417b0b80023dc30d61c111ec0a54da2884d3a541)
++Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
++---
++ src/libmbim-glib/mbim-device.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9126e25b0934bd7bd843763310ea4b34c6e139d0"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
++diff --git a/src/libmbim-glib/mbim-device.c b/src/libmbim-glib/mbim-device.c
++index e1f32a6..20e64af 100644
++--- a/src/libmbim-glib/mbim-device.c
+++++ b/src/libmbim-glib/mbim-device.c
++@@ -867,7 +867,7 @@ get_descriptors_filepath (MbimDevice *self)
++          *    /sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5/2-1.5:2.0
++          */
++         tmp = g_strdup_printf ("/sys/class/%s/%s/device", subsystems[i], device_basename);
++-        path = canonicalize_file_name (tmp);
+++        path = realpath (tmp, NULL);
++         g_free (tmp);
 +
-+# Build the DTB from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-cm3"
++         if (g_file_test (path, G_FILE_TEST_EXISTS)) {
++--
++2.13.1
 +
-+# Build Qt5 WebEngine
-+BR2_PACKAGE_LIBERATION=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_EXAMPLES=y
-+BR2_PACKAGE_QT5BASE_GIF=y
-+BR2_PACKAGE_QT5BASE_JPEG=y
-+BR2_PACKAGE_QT5BASE_PNG=y
-+BR2_PACKAGE_QT5WEBENGINE=y
-+BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS=y
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_USERLAND=y
-+BR2_PACKAGE_CA_CERTIFICATES=y
-+BR2_PACKAGE_NTP=y
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="360M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
