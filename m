@@ -1,45 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Sep 2017 11:23:36 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] tor: security bump to version 0.2.9.12
-Message-ID: <20170923092336.13960-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Sep 2017 11:44:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/poppler: include ctype.h to fix
+	build error
+Message-ID: <20170923094407.16121-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-0380: Stack disclosure in hidden services logs when
-SafeLogging disabled
+Fixes
+http://autobuild.buildroot.net/results/a6a/a6a336f8b6a0136b204a34091e33dc4598178125/
 
-For more details, see:
-https://trac.torproject.org/projects/tor/ticket/23490
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...orm.cc-include-ctype.h-to-fix-build-error.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index d42c534985..ba0b47af15 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 c1959bebff9a546a54cbedb58c8289a42441991af417d2d16f7b336be8903221  tor-0.2.9.11.tar.gz
-+sha256 6e7466625d53812f23c2ad60a873c5855f63f756fde0fc5cbeda8d32cee1086b  tor-0.2.9.12.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 7bbd2f3430..4cc5c48351 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.2.9.11
-+TOR_VERSION = 0.2.9.12
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3c
- TOR_LICENSE_FILES = LICENSE
+diff --git a/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch b/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
+new file mode 100644
+index 0000000000..8d210dab99
+--- /dev/null
++++ b/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
+@@ -0,0 +1,37 @@
++From f40143f7acca81b7d39d774ed4c349aec8d9310b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 23 Sep 2017 11:37:23 +0200
++Subject: [PATCH] Form.cc: include ctype.h to fix build error
++
++Fixes
++Form.cc:546:28: error: 'isdigit' was not declared in this scope
++Form.cc:548:34: error: 'isxdigit' was not declared in this scope
++Form.cc:575:40: error: 'isxdigit' was not declared in this scope
++
++detected by buildroot autobuilders:
++http://autobuild.buildroot.net/results/a6a/a6a336f8b6a0136b204a34091e33dc4598178125/
++when cross-compiling with
++gcc version 4.7.3 (crosstool-NG hg+-c65fcf8a34b7)
++
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=102951
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ poppler/Form.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/poppler/Form.cc b/poppler/Form.cc
++index 83bceb20..e7efae95 100644
++--- a/poppler/Form.cc
+++++ b/poppler/Form.cc
++@@ -32,6 +32,7 @@
++ #include <stddef.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#include <ctype.h>
++ #include "goo/gmem.h"
++ #include "goo/GooString.h"
++ #include "Error.h"
++-- 
++2.11.0
++
 -- 
 2.11.0
