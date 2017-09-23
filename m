@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 19:14:17 +0200
-Subject: [Buildroot] [PATCH 07/49 v2] package/asterisk: add optional
- curl dependency
-In-Reply-To: <0964a3811a3c7a9de4790966cdd90dc390ff1c8f.1504993178.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Sep 2017 19:14:47 +0200
+Subject: [Buildroot] [PATCH 14/49 v2] package/asterisk: add optional
+ libilbc dependency
+In-Reply-To: <e8a80370d0d41b49efcd7f57a9fe933ddb6601cb.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <0964a3811a3c7a9de4790966cdd90dc390ff1c8f.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <96f0b730-f80a-0153-0808-2990d9c96f3a@mind.be>
+ <e8a80370d0d41b49efcd7f57a9fe933ddb6601cb.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <7d8abafb-a857-4c35-056e-72ee68f4defd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,33 +17,41 @@ To: buildroot@busybox.net
 On 09-09-17 23:39, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Curl was already a mandatory dependency so I rejected this.
+ Since I turned libilbc into a mandatory dependency, I rejected this patch.
 
  Regards,
  Arnout
 
 > ---
->  package/asterisk/asterisk.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/asterisk/asterisk.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
 > diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-> index 6e68cd1912..29e52aef46 100644
+> index 342c642feb..bd5b794117 100644
 > --- a/package/asterisk/asterisk.mk
 > +++ b/package/asterisk/asterisk.mk
-> @@ -143,6 +143,13 @@ else
->  ASTERISK_CONF_OPTS += --without-asound
+> @@ -46,7 +46,6 @@ ASTERISK_CONF_OPTS = \
+>  	--without-cpg \
+>  	--without-curses \
+>  	--without-dahdi \
+> -	--without-ilbc \
+>  	--without-gtk2 \
+>  	--without-gmime \
+>  	--without-h323 \
+> @@ -143,6 +142,13 @@ else
+>  ASTERISK_CONF_OPTS += --without-bluetooth
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> +ASTERISK_DEPENDENCIES += libcurl
-> +ASTERISK_CONF_OPTS += --with-libcurl
+> +ifeq ($(BR2_PACKAGE_LIBILBC),y)
+> +ASTERISK_DEPENDENCIES += libilbc
+> +ASTERISK_CONF_OPTS += --with-ilbc
 > +else
-> +ASTERISK_CONF_OPTS += --without-libcurl
+> +ASTERISK_CONF_OPTS += --without-ilbc
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  ASTERISK_DEPENDENCIES += openssl
->  ASTERISK_CONF_OPTS += --with-ssl
+>  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  ASTERISK_DEPENDENCIES += libcurl
+>  ASTERISK_CONF_OPTS += --with-libcurl
 > 
 
 -- 
