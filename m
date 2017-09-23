@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 19:06:20 +0200
-Subject: [Buildroot] [PATCH 38/49 v2] package/libpjsip: add option to
- enable G.711 codec
-In-Reply-To: <528297671d94a208c1c5a18e1bb34895347da626.1504993178.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Sep 2017 19:07:29 +0200
+Subject: [Buildroot] [PATCH 44/49 v2] package/asterisk: add optional
+ pjsip support
+In-Reply-To: <3d6f2d5bc9faedd731435a6302a658c1315029f1.1504993178.git.yann.morin.1998@free.fr>
 References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <528297671d94a208c1c5a18e1bb34895347da626.1504993178.git.yann.morin.1998@free.fr>
-Message-ID: <5b53a258-aab7-a965-7c37-13af59943fbf@mind.be>
+ <3d6f2d5bc9faedd731435a6302a658c1315029f1.1504993178.git.yann.morin.1998@free.fr>
+Message-ID: <22a9fa8b-5085-d903-a3a2-ebf59c4c19be@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,54 +17,42 @@ To: buildroot@busybox.net
 On 09-09-17 23:39, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/libpjsip/Config.in   | 3 +++
->  package/libpjsip/libpjsip.mk | 5 ++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
+>  package/asterisk/asterisk.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-> index 0bb446e9d9..1c9d2ce900 100644
-> --- a/package/libpjsip/Config.in
-> +++ b/package/libpjsip/Config.in
-> @@ -12,6 +12,9 @@ config BR2_PACKAGE_LIBPJSIP
+> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+> index 284b338cb3..9327451254 100644
+> --- a/package/asterisk/asterisk.mk
+> +++ b/package/asterisk/asterisk.mk
+> @@ -70,7 +70,6 @@ ASTERISK_CONF_OPTS = \
+>  	--without-osptk \
+>  	--without-oss \
+>  	--without-postgres \
+> -	--without-pjproject \
+>  	--without-popt \
+>  	--without-pwlib \
+>  	--without-resample \
+> @@ -240,6 +239,13 @@ else
+>  ASTERISK_CONF_OPTS += --without-ssl
+>  endif
 >  
->  if BR2_PACKAGE_LIBPJSIP
->  
-> +config BR2_PACKAGE_LIBPJSIP_CODEC_G711
-> +	bool "G.711 codec"
+> +ifeq ($(BR2_PACKAGE_LIBPJSIP),y)
+> +ASTERISK_DEPENDENCIES += libpjsip
+> +ASTERISK_CONF_OPTS += --with-pjproject
 
- I believe this codec (and the other ones as well) is rather small. Is there any
-reason to make it optional?
+ I believe Asterisk maintains a fork of pjsip with some specific patches. Does
+it work well with upstream pjsip?
 
  Regards,
  Arnout
 
-> +
->  config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
->      bool "GSM codec"
->      depends on !BR2_STATIC_LIBS # libgsm
-> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index 1259a292e4..10016fa732 100644
-> --- a/package/libpjsip/libpjsip.mk
-> +++ b/package/libpjsip/libpjsip.mk
-> @@ -37,7 +37,6 @@ LIBPJSIP_CONF_OPTS = \
->  	--disable-ext-sound \
->  	--disable-small-filter \
->  	--disable-large-filter \
-> -	--disable-g711-codec \
->  	--disable-l16-codec \
->  	--disable-g722-codec \
->  	--disable-libsamplerate \
-> @@ -73,6 +72,10 @@ endif
->  # and we do not explictly enable it, so we get the configure log in
->  # both cases.
->  
-> +ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G711),y)
-> +LIBPJSIP_CONF_OPTS += --disable-g711-codec
+> +else
+> +ASTERISK_CONF_OPTS += --without-pjproject
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_GSM),y)
->  LIBPJSIP_DEPENDENCIES += libgsm
->  LIBPJSIP_CONF_OPTS += --with-external-gsm
+>  ifeq ($(BR2_PACKAGE_SPANDSP),y)
+>  ASTERISK_DEPENDENCIES += spandsp
+>  ASTERISK_CONF_OPTS += --with-spandsp
 > 
 
 -- 
