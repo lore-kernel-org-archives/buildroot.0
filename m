@@ -1,26 +1,29 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Sep 2017 23:24:00 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/gcc: fix build issue with glibc
+Date: Sat, 23 Sep 2017 23:24:01 +0200
+Subject: [Buildroot] [PATCH v3 2/7] package/gcc: fix build issue with glibc
 	2.26
 In-Reply-To: <20170923212414.16744-1-romain.naour@gmail.com>
 References: <20170923212414.16744-1-romain.naour@gmail.com>
-Message-ID: <20170923212414.16744-2-romain.naour@gmail.com>
+Message-ID: <20170923212414.16744-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In file included from ../../../libgcc/unwind-dw2.c:403:0:
-./md-unwind-support.h: In function ??aarch64_fallback_frame_state??:
-./md-unwind-support.h:58:21: error: field ??uc??  has incomplete type
-     struct ucontext uc;
-                     ^~
+../../../../libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc: In function ?int __sanitizer::TracerThread(void*)?:
+../../../../libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc:241:22: error: aggregate ?sigaltstack handler_stack? has incomplete type and cannot be defined
+   struct sigaltstack handler_stack;
+
+../../../../libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc: In function ?int __sanitizer::TracerThread(void*)?:
+../../../../libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc:276:22: error: aggregate ?sigaltstack handler_stack? has incomplete type and cannot be defined
+   struct sigaltstack handler_stack;
+                      ^~~~~~~~~~~~~
 
 The fix is already included in gcc 7.2 release [1]. We have to backport it to
 all older gcc release since it's not included in any stable release yet.
 
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=14c2f22a1877f6b60a2f7c2f83ffb032759456a6
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=72edc2c02f8b4768ad660f46a1c7e2400c0a8e06
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -28,603 +31,299 @@ Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v3: use upstream commit for gcc 5 and 6. (Yann)
 ---
- ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 190 ++++++++++++++++++++
- ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 192 +++++++++++++++++++++
- ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 192 +++++++++++++++++++++
- 3 files changed, 574 insertions(+)
- create mode 100644 package/gcc/4.9.4/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
- create mode 100644 package/gcc/5.4.0/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
- create mode 100644 package/gcc/6.4.0/942-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+ package/gcc/4.9.4/944-sanitizer-linux.patch | 88 ++++++++++++++++++++++++++++
+ package/gcc/5.4.0/944-sanitizer-linux.patch | 91 +++++++++++++++++++++++++++++
+ package/gcc/6.4.0/943-sanitizer-linux.patch | 91 +++++++++++++++++++++++++++++
+ 3 files changed, 270 insertions(+)
+ create mode 100644 package/gcc/4.9.4/944-sanitizer-linux.patch
+ create mode 100644 package/gcc/5.4.0/944-sanitizer-linux.patch
+ create mode 100644 package/gcc/6.4.0/943-sanitizer-linux.patch
 
-diff --git a/package/gcc/4.9.4/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch b/package/gcc/4.9.4/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+diff --git a/package/gcc/4.9.4/944-sanitizer-linux.patch b/package/gcc/4.9.4/944-sanitizer-linux.patch
 new file mode 100644
-index 0000000..526346c
+index 0000000..caadf2d
 --- /dev/null
-+++ b/package/gcc/4.9.4/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
-@@ -0,0 +1,190 @@
-+From b7e85069238c40eae54d0ca03ab6d5470d1815f9 Mon Sep 17 00:00:00 2001
-+From: jsm28 <jsm28@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 4 Jul 2017 10:25:10 +0000
-+Subject: [PATCH] Use ucontext_t not struct ucontext in linux-unwind.h files.
++++ b/package/gcc/4.9.4/944-sanitizer-linux.patch
+@@ -0,0 +1,88 @@
++From f9a35ba5c150da2e381c4cab01f8f12bcd6af5d2 Mon Sep 17 00:00:00 2001
++From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Mon, 17 Jul 2017 19:41:08 +0000
++Subject: [PATCH] 	Backported from mainline 	2017-07-14  Jakub
++ Jelinek  <jakub@redhat.com>
 +
-+Current glibc no longer gives the ucontext_t type the tag struct
-+ucontext, to conform with POSIX namespace rules.  This requires
-+various linux-unwind.h files in libgcc, that were previously using
-+struct ucontext, to be fixed to use ucontext_t instead.  This is
-+similar to the removal of the struct siginfo tag from siginfo_t some
-+years ago.
++	PR sanitizer/81066
++	* sanitizer_common/sanitizer_linux.h: Cherry-pick upstream r307969.
++	* sanitizer_common/sanitizer_linux.cc: Likewise.
++	* sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc: Likewise.
++	* tsan/tsan_platform_linux.cc: Likewise.
 +
-+This patch changes those files to use ucontext_t instead.  As the
-+standard name that should be unconditionally safe, so this is not
-+restricted to architectures supported by glibc, or conditioned on the
-+glibc version.
-+
-+Tested compilation together with current glibc with glibc's
-+build-many-glibcs.py.
-+
-+	* config/aarch64/linux-unwind.h (aarch64_fallback_frame_state),
-+	config/alpha/linux-unwind.h (alpha_fallback_frame_state),
-+	config/bfin/linux-unwind.h (bfin_fallback_frame_state),
-+	config/i386/linux-unwind.h (x86_64_fallback_frame_state,
-+	x86_fallback_frame_state), config/m68k/linux-unwind.h (struct
-+	uw_ucontext), config/nios2/linux-unwind.h (struct nios2_ucontext),
-+	config/pa/linux-unwind.h (pa32_fallback_frame_state),
-+	config/sh/linux-unwind.h (sh_fallback_frame_state),
-+	config/tilepro/linux-unwind.h (tile_fallback_frame_state),
-+	config/xtensa/linux-unwind.h (xtensa_fallback_frame_state): Use
-+	ucontext_t instead of struct ucontext.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 249958 138bc75d-0d04-0410-961f-82ee72b054a4
-+[Romain backport from gcc-5-branch]
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 250287 138bc75d-0d04-0410-961f-82ee72b054a4
++(cherry picked from commit 72edc2c02f8b4768ad660f46a1c7e2400c0a8e06)
++[Romain backport to 4.9.4]
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ libgcc/config/aarch64/linux-unwind.h | 2 +-
-+ libgcc/config/alpha/linux-unwind.h   | 2 +-
-+ libgcc/config/bfin/linux-unwind.h    | 2 +-
-+ libgcc/config/i386/linux-unwind.h    | 4 ++--
-+ libgcc/config/m68k/linux-unwind.h    | 2 +-
-+ libgcc/config/nios2/linux-unwind.h   | 2 +-
-+ libgcc/config/pa/linux-unwind.h      | 2 +-
-+ libgcc/config/sh/linux-unwind.h      | 2 +-
-+ libgcc/config/tilepro/linux-unwind.h | 2 +-
-+ libgcc/config/xtensa/linux-unwind.h  | 2 +-
-+ 10 files changed, 11 insertions(+), 11 deletions(-)
++ libsanitizer/sanitizer_common/sanitizer_linux.cc                      | 3 +--
++ libsanitizer/sanitizer_common/sanitizer_linux.h                       | 4 +---
++ libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc | 2 +-
++ libsanitizer/tsan/tsan_platform_linux.cc                              | 2 +-
++ 4 files changed, 4 insertions(+), 7 deletions(-)
 +
-+diff --git a/libgcc/config/aarch64/linux-unwind.h b/libgcc/config/aarch64/linux-unwind.h
-+index 6b5b3cd..d13dc34 100644
-+--- a/libgcc/config/aarch64/linux-unwind.h
-++++ b/libgcc/config/aarch64/linux-unwind.h
-+@@ -52,7 +52,7 @@ aarch64_fallback_frame_state (struct _Unwind_Context *context,
-+   struct rt_sigframe
-+   {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   };
++diff --git a/libsanitizer/sanitizer_common/sanitizer_linux.cc b/libsanitizer/sanitizer_common/sanitizer_linux.cc
++index 69c9c10..8e53673 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_linux.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_linux.cc
++@@ -599,8 +599,7 @@ uptr internal_prctl(int option, uptr arg2, uptr arg3, uptr arg4, uptr arg5) {
++   return internal_syscall(__NR_prctl, option, arg2, arg3, arg4, arg5);
++ }
 + 
-+   struct rt_sigframe *rt_;
-+diff --git a/libgcc/config/alpha/linux-unwind.h b/libgcc/config/alpha/linux-unwind.h
-+index b5bfd1c..166d3d2 100644
-+--- a/libgcc/config/alpha/linux-unwind.h
-++++ b/libgcc/config/alpha/linux-unwind.h
-+@@ -51,7 +51,7 @@ alpha_fallback_frame_state (struct _Unwind_Context *context,
-+     {
-+       struct rt_sigframe {
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       sc = &rt_->uc.uc_mcontext;
-+     }
-+diff --git a/libgcc/config/bfin/linux-unwind.h b/libgcc/config/bfin/linux-unwind.h
-+index dc58f0a..8b94568 100644
-+--- a/libgcc/config/bfin/linux-unwind.h
-++++ b/libgcc/config/bfin/linux-unwind.h
-+@@ -52,7 +52,7 @@ bfin_fallback_frame_state (struct _Unwind_Context *context,
-+ 	void *puc;
-+ 	char retcode[8];
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
++-uptr internal_sigaltstack(const struct sigaltstack *ss,
++-                         struct sigaltstack *oss) {
+++uptr internal_sigaltstack(const void *ss, void *oss) {
++   return internal_syscall(__NR_sigaltstack, (uptr)ss, (uptr)oss);
++ }
 + 
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+diff --git a/libgcc/config/i386/linux-unwind.h b/libgcc/config/i386/linux-unwind.h
-+index 7986928..a9d621c 100644
-+--- a/libgcc/config/i386/linux-unwind.h
-++++ b/libgcc/config/i386/linux-unwind.h
-+@@ -58,7 +58,7 @@ x86_64_fallback_frame_state (struct _Unwind_Context *context,
-+   if (*(unsigned char *)(pc+0) == 0x48
-+       && *(unsigned long long *)(pc+1) == RT_SIGRETURN_SYSCALL)
-+     {
-+-      struct ucontext *uc_ = context->cfa;
-++      ucontext_t *uc_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+          because it does not alias anything.  */
-+@@ -138,7 +138,7 @@ x86_fallback_frame_state (struct _Unwind_Context *context,
-+ 	siginfo_t *pinfo;
-+ 	void *puc;
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+diff --git a/libgcc/config/m68k/linux-unwind.h b/libgcc/config/m68k/linux-unwind.h
-+index 1ba2a0c4..d67767e 100644
-+--- a/libgcc/config/m68k/linux-unwind.h
-++++ b/libgcc/config/m68k/linux-unwind.h
-+@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ /* <sys/ucontext.h> is unfortunately broken right now.  */
-+ struct uw_ucontext {
-+ 	unsigned long	  uc_flags;
-+-	struct ucontext  *uc_link;
-++	ucontext_t	 *uc_link;
-+ 	stack_t		  uc_stack;
-+ 	mcontext_t	  uc_mcontext;
-+ 	unsigned long	  uc_filler[80];
-+diff --git a/libgcc/config/nios2/linux-unwind.h b/libgcc/config/nios2/linux-unwind.h
-+index ba4bd80..8978868 100644
-+--- a/libgcc/config/nios2/linux-unwind.h
-++++ b/libgcc/config/nios2/linux-unwind.h
-+@@ -38,7 +38,7 @@ struct nios2_mcontext {
++diff --git a/libsanitizer/sanitizer_common/sanitizer_linux.h b/libsanitizer/sanitizer_common/sanitizer_linux.h
++index 6422df1..8e111d1 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_linux.h
+++++ b/libsanitizer/sanitizer_common/sanitizer_linux.h
++@@ -18,7 +18,6 @@
++ #include "sanitizer_platform_limits_posix.h"
 + 
-+ struct nios2_ucontext {
-+   unsigned long uc_flags;
-+-  struct ucontext *uc_link;
-++  ucontext_t *uc_link;
-+   stack_t uc_stack;
-+   struct nios2_mcontext uc_mcontext;
-+   sigset_t uc_sigmask;	/* mask last for extensibility */
-+diff --git a/libgcc/config/pa/linux-unwind.h b/libgcc/config/pa/linux-unwind.h
-+index 4a3cfff..d2ac437 100644
-+--- a/libgcc/config/pa/linux-unwind.h
-++++ b/libgcc/config/pa/linux-unwind.h
-+@@ -80,7 +80,7 @@ pa32_fallback_frame_state (struct _Unwind_Context *context,
-+   struct sigcontext *sc;
-+   struct rt_sigframe {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *frame;
++ struct link_map;  // Opaque type returned by dlopen().
++-struct sigaltstack;
 + 
-+   /* rt_sigreturn trampoline:
-+diff --git a/libgcc/config/sh/linux-unwind.h b/libgcc/config/sh/linux-unwind.h
-+index 4875706..671bde7 100644
-+--- a/libgcc/config/sh/linux-unwind.h
-++++ b/libgcc/config/sh/linux-unwind.h
-+@@ -180,7 +180,7 @@ sh_fallback_frame_state (struct _Unwind_Context *context,
-+     {
-+       struct rt_sigframe {
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+diff --git a/libgcc/config/tilepro/linux-unwind.h b/libgcc/config/tilepro/linux-unwind.h
-+index 27481cf..c24d58c 100644
-+--- a/libgcc/config/tilepro/linux-unwind.h
-++++ b/libgcc/config/tilepro/linux-unwind.h
-+@@ -61,7 +61,7 @@ tile_fallback_frame_state (struct _Unwind_Context *context,
-+   struct rt_sigframe {
-+     unsigned char save_area[C_ABI_SAVE_AREA_SIZE];
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *rt_;
++ namespace __sanitizer {
++ // Dirent structure for getdents(). Note that this structure is different from
++@@ -28,8 +27,7 @@ struct linux_dirent;
++ // Syscall wrappers.
++ uptr internal_getdents(fd_t fd, struct linux_dirent *dirp, unsigned int count);
++ uptr internal_prctl(int option, uptr arg2, uptr arg3, uptr arg4, uptr arg5);
++-uptr internal_sigaltstack(const struct sigaltstack* ss,
++-                          struct sigaltstack* oss);
+++uptr internal_sigaltstack(const void* ss, void* oss);
++ uptr internal_sigaction(int signum, const __sanitizer_kernel_sigaction_t *act,
++     __sanitizer_kernel_sigaction_t *oldact);
++ uptr internal_sigprocmask(int how, __sanitizer_kernel_sigset_t *set,
++diff --git a/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc b/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
++index 6ee63ec..50c21a3 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
++@@ -238,7 +238,7 @@ static int TracerThread(void* argument) {
 + 
-+   /* Return if this is not a signal handler.  */
-+diff --git a/libgcc/config/xtensa/linux-unwind.h b/libgcc/config/xtensa/linux-unwind.h
-+index 6832d0b..cb15b4c 100644
-+--- a/libgcc/config/xtensa/linux-unwind.h
-++++ b/libgcc/config/xtensa/linux-unwind.h
-+@@ -63,7 +63,7 @@ xtensa_fallback_frame_state (struct _Unwind_Context *context,
-+ 
-+   struct rt_sigframe {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *rt_;
-+ 
-+   /* movi a2, __NR_rt_sigreturn; syscall */
++   // Alternate stack for signal handling.
++   InternalScopedBuffer<char> handler_stack_memory(kHandlerStackSize);
++-  struct sigaltstack handler_stack;
+++  stack_t handler_stack;
++   internal_memset(&handler_stack, 0, sizeof(handler_stack));
++   handler_stack.ss_sp = handler_stack_memory.data();
++   handler_stack.ss_size = kHandlerStackSize;
++diff --git a/libsanitizer/tsan/tsan_platform_linux.cc b/libsanitizer/tsan/tsan_platform_linux.cc
++index fe69430..49f5270 100644
++--- a/libsanitizer/tsan/tsan_platform_linux.cc
+++++ b/libsanitizer/tsan/tsan_platform_linux.cc
++@@ -351,7 +351,7 @@ bool IsGlobalVar(uptr addr) {
++ // closes within glibc. The code is a pure hack.
++ int ExtractResolvFDs(void *state, int *fds, int nfd) {
++   int cnt = 0;
++-  __res_state *statp = (__res_state*)state;
+++  struct __res_state *statp = (struct __res_state*)state;
++   for (int i = 0; i < MAXNS && cnt < nfd; i++) {
++     if (statp->_u._ext.nsaddrs[i] && statp->_u._ext.nssocks[i] != -1)
++       fds[cnt++] = statp->_u._ext.nssocks[i];
 +-- 
 +2.9.5
 +
-diff --git a/package/gcc/5.4.0/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch b/package/gcc/5.4.0/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+diff --git a/package/gcc/5.4.0/944-sanitizer-linux.patch b/package/gcc/5.4.0/944-sanitizer-linux.patch
 new file mode 100644
-index 0000000..4c3385d
+index 0000000..a2602b7
 --- /dev/null
-+++ b/package/gcc/5.4.0/943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
-@@ -0,0 +1,192 @@
-+From c287e88cc3743bfa7e5719bc4dee327aa3950051 Mon Sep 17 00:00:00 2001
-+From: jsm28 <jsm28@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 4 Jul 2017 10:25:10 +0000
-+Subject: [PATCH] Use ucontext_t not struct ucontext in linux-unwind.h files.
++++ b/package/gcc/5.4.0/944-sanitizer-linux.patch
+@@ -0,0 +1,91 @@
++From cf796eadff0f2ff0f6e4565373d54d10dff276e1 Mon Sep 17 00:00:00 2001
++From: doko <doko@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 7 Sep 2017 07:17:17 +0000
++Subject: [PATCH] 2017-09-07  Matthias Klose  <doko@ubuntu.com>
 +
-+Current glibc no longer gives the ucontext_t type the tag struct
-+ucontext, to conform with POSIX namespace rules.  This requires
-+various linux-unwind.h files in libgcc, that were previously using
-+struct ucontext, to be fixed to use ucontext_t instead.  This is
-+similar to the removal of the struct siginfo tag from siginfo_t some
-+years ago.
++        Backported from mainline
++        2017-07-14  Jakub Jelinek  <jakub@redhat.com>
 +
-+This patch changes those files to use ucontext_t instead.  As the
-+standard name that should be unconditionally safe, so this is not
-+restricted to architectures supported by glibc, or conditioned on the
-+glibc version.
++        PR sanitizer/81066
++        * sanitizer_common/sanitizer_linux.h: Cherry-pick upstream r307969.
++        * sanitizer_common/sanitizer_linux.cc: Likewise.
++        * sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc: Likewise.
++        * tsan/tsan_platform_linux.cc: Likewise.
 +
-+Tested compilation together with current glibc with glibc's
-+build-many-glibcs.py.
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 251829 138bc75d-0d04-0410-961f-82ee72b054a4
 +
-+	* config/aarch64/linux-unwind.h (aarch64_fallback_frame_state),
-+	config/alpha/linux-unwind.h (alpha_fallback_frame_state),
-+	config/bfin/linux-unwind.h (bfin_fallback_frame_state),
-+	config/i386/linux-unwind.h (x86_64_fallback_frame_state,
-+	x86_fallback_frame_state), config/m68k/linux-unwind.h (struct
-+	uw_ucontext), config/nios2/linux-unwind.h (struct nios2_ucontext),
-+	config/pa/linux-unwind.h (pa32_fallback_frame_state),
-+	config/sh/linux-unwind.h (sh_fallback_frame_state),
-+	config/tilepro/linux-unwind.h (tile_fallback_frame_state),
-+	config/xtensa/linux-unwind.h (xtensa_fallback_frame_state): Use
-+	ucontext_t instead of struct ucontext.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 249958 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+(cherry picked from commit ecf0d1a107133c715763940c2b197aa814710e1b)
-+[Romain rebase on 5.4]
++(cherry picked from commit 833e00c01e96f61e24cd7ec97b93fad212dc914b)
++[Romain rebase on gcc 5.4]
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ libgcc/config/aarch64/linux-unwind.h | 2 +-
-+ libgcc/config/alpha/linux-unwind.h   | 2 +-
-+ libgcc/config/bfin/linux-unwind.h    | 2 +-
-+ libgcc/config/i386/linux-unwind.h    | 4 ++--
-+ libgcc/config/m68k/linux-unwind.h    | 2 +-
-+ libgcc/config/nios2/linux-unwind.h   | 2 +-
-+ libgcc/config/pa/linux-unwind.h      | 2 +-
-+ libgcc/config/sh/linux-unwind.h      | 2 +-
-+ libgcc/config/tilepro/linux-unwind.h | 2 +-
-+ libgcc/config/xtensa/linux-unwind.h  | 2 +-
-+ 10 files changed, 11 insertions(+), 11 deletions(-)
++ libsanitizer/sanitizer_common/sanitizer_linux.cc                      | 3 +--
++ libsanitizer/sanitizer_common/sanitizer_linux.h                       | 4 +---
++ libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc | 2 +-
++ libsanitizer/tsan/tsan_platform_linux.cc                              | 2 +-
++ 4 files changed, 4 insertions(+), 7 deletions(-)
 +
-+diff --git a/libgcc/config/aarch64/linux-unwind.h b/libgcc/config/aarch64/linux-unwind.h
-+index 86d17b1..909f68f 100644
-+--- a/libgcc/config/aarch64/linux-unwind.h
-++++ b/libgcc/config/aarch64/linux-unwind.h
-+@@ -52,7 +52,7 @@ aarch64_fallback_frame_state (struct _Unwind_Context *context,
-+   struct rt_sigframe
-+   {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   };
++diff --git a/libsanitizer/sanitizer_common/sanitizer_linux.cc b/libsanitizer/sanitizer_common/sanitizer_linux.cc
++index 9feb307..821b26d 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_linux.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_linux.cc
++@@ -514,8 +514,7 @@ uptr internal_prctl(int option, uptr arg2, uptr arg3, uptr arg4, uptr arg5) {
++ }
++ #endif
 + 
-+   struct rt_sigframe *rt_;
-+diff --git a/libgcc/config/alpha/linux-unwind.h b/libgcc/config/alpha/linux-unwind.h
-+index d65474f..9a226b1 100644
-+--- a/libgcc/config/alpha/linux-unwind.h
-++++ b/libgcc/config/alpha/linux-unwind.h
-+@@ -51,7 +51,7 @@ alpha_fallback_frame_state (struct _Unwind_Context *context,
-+     {
-+       struct rt_sigframe {
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       sc = &rt_->uc.uc_mcontext;
-+     }
-+diff --git a/libgcc/config/bfin/linux-unwind.h b/libgcc/config/bfin/linux-unwind.h
-+index 0c270e4..7fa95d2 100644
-+--- a/libgcc/config/bfin/linux-unwind.h
-++++ b/libgcc/config/bfin/linux-unwind.h
-+@@ -52,7 +52,7 @@ bfin_fallback_frame_state (struct _Unwind_Context *context,
-+ 	void *puc;
-+ 	char retcode[8];
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
++-uptr internal_sigaltstack(const struct sigaltstack *ss,
++-                         struct sigaltstack *oss) {
+++uptr internal_sigaltstack(const void *ss, void *oss) {
++   return internal_syscall(SYSCALL(sigaltstack), (uptr)ss, (uptr)oss);
++ }
 + 
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+diff --git a/libgcc/config/i386/linux-unwind.h b/libgcc/config/i386/linux-unwind.h
-+index e54bf73..d35fc45 100644
-+--- a/libgcc/config/i386/linux-unwind.h
-++++ b/libgcc/config/i386/linux-unwind.h
-+@@ -58,7 +58,7 @@ x86_64_fallback_frame_state (struct _Unwind_Context *context,
-+   if (*(unsigned char *)(pc+0) == 0x48
-+       && *(unsigned long long *)(pc+1) == RT_SIGRETURN_SYSCALL)
-+     {
-+-      struct ucontext *uc_ = context->cfa;
-++      ucontext_t *uc_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+          because it does not alias anything.  */
-+@@ -138,7 +138,7 @@ x86_fallback_frame_state (struct _Unwind_Context *context,
-+ 	siginfo_t *pinfo;
-+ 	void *puc;
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+diff --git a/libgcc/config/m68k/linux-unwind.h b/libgcc/config/m68k/linux-unwind.h
-+index fb79a4d..b2f5ea4 100644
-+--- a/libgcc/config/m68k/linux-unwind.h
-++++ b/libgcc/config/m68k/linux-unwind.h
-+@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ /* <sys/ucontext.h> is unfortunately broken right now.  */
-+ struct uw_ucontext {
-+ 	unsigned long	  uc_flags;
-+-	struct ucontext  *uc_link;
-++	ucontext_t	 *uc_link;
-+ 	stack_t		  uc_stack;
-+ 	mcontext_t	  uc_mcontext;
-+ 	unsigned long	  uc_filler[80];
-+diff --git a/libgcc/config/nios2/linux-unwind.h b/libgcc/config/nios2/linux-unwind.h
-+index dff1c20..1d88afe 100644
-+--- a/libgcc/config/nios2/linux-unwind.h
-++++ b/libgcc/config/nios2/linux-unwind.h
-+@@ -38,7 +38,7 @@ struct nios2_mcontext {
++diff --git a/libsanitizer/sanitizer_common/sanitizer_linux.h b/libsanitizer/sanitizer_common/sanitizer_linux.h
++index 086834c..3a6f4cd 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_linux.h
+++++ b/libsanitizer/sanitizer_common/sanitizer_linux.h
++@@ -18,7 +18,6 @@
++ #include "sanitizer_platform_limits_posix.h"
 + 
-+ struct nios2_ucontext {
-+   unsigned long uc_flags;
-+-  struct ucontext *uc_link;
-++  ucontext_t *uc_link;
-+   stack_t uc_stack;
-+   struct nios2_mcontext uc_mcontext;
-+   sigset_t uc_sigmask;	/* mask last for extensibility */
-+diff --git a/libgcc/config/pa/linux-unwind.h b/libgcc/config/pa/linux-unwind.h
-+index 0149468..9157535 100644
-+--- a/libgcc/config/pa/linux-unwind.h
-++++ b/libgcc/config/pa/linux-unwind.h
-+@@ -80,7 +80,7 @@ pa32_fallback_frame_state (struct _Unwind_Context *context,
-+   struct sigcontext *sc;
-+   struct rt_sigframe {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *frame;
++ struct link_map;  // Opaque type returned by dlopen().
++-struct sigaltstack;
 + 
-+   /* rt_sigreturn trampoline:
-+diff --git a/libgcc/config/sh/linux-unwind.h b/libgcc/config/sh/linux-unwind.h
-+index e63091f..67033f0 100644
-+--- a/libgcc/config/sh/linux-unwind.h
-++++ b/libgcc/config/sh/linux-unwind.h
-+@@ -180,7 +180,7 @@ sh_fallback_frame_state (struct _Unwind_Context *context,
-+     {
-+       struct rt_sigframe {
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+diff --git a/libgcc/config/tilepro/linux-unwind.h b/libgcc/config/tilepro/linux-unwind.h
-+index fd83ba7..e3c9ef0 100644
-+--- a/libgcc/config/tilepro/linux-unwind.h
-++++ b/libgcc/config/tilepro/linux-unwind.h
-+@@ -61,7 +61,7 @@ tile_fallback_frame_state (struct _Unwind_Context *context,
-+   struct rt_sigframe {
-+     unsigned char save_area[C_ABI_SAVE_AREA_SIZE];
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *rt_;
++ namespace __sanitizer {
++ // Dirent structure for getdents(). Note that this structure is different from
++@@ -27,8 +26,7 @@ struct linux_dirent;
 + 
-+   /* Return if this is not a signal handler.  */
-+diff --git a/libgcc/config/xtensa/linux-unwind.h b/libgcc/config/xtensa/linux-unwind.h
-+index 9daf738..ff6b663 100644
-+--- a/libgcc/config/xtensa/linux-unwind.h
-++++ b/libgcc/config/xtensa/linux-unwind.h
-+@@ -64,7 +64,7 @@ xtensa_fallback_frame_state (struct _Unwind_Context *context,
++ // Syscall wrappers.
++ uptr internal_getdents(fd_t fd, struct linux_dirent *dirp, unsigned int count);
++-uptr internal_sigaltstack(const struct sigaltstack* ss,
++-                          struct sigaltstack* oss);
+++uptr internal_sigaltstack(const void* ss, void* oss);
++ uptr internal_sigprocmask(int how, __sanitizer_sigset_t *set,
++     __sanitizer_sigset_t *oldset);
++ void internal_sigfillset(__sanitizer_sigset_t *set);
++diff --git a/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc b/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
++index 5881202..c54894d 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
++@@ -234,7 +234,7 @@ static int TracerThread(void* argument) {
 + 
-+   struct rt_sigframe {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *rt_;
-+ 
-+   /* movi a2, __NR_rt_sigreturn; syscall */
++   // Alternate stack for signal handling.
++   InternalScopedBuffer<char> handler_stack_memory(kHandlerStackSize);
++-  struct sigaltstack handler_stack;
+++  stack_t handler_stack;
++   internal_memset(&handler_stack, 0, sizeof(handler_stack));
++   handler_stack.ss_sp = handler_stack_memory.data();
++   handler_stack.ss_size = kHandlerStackSize;
++diff --git a/libsanitizer/tsan/tsan_platform_linux.cc b/libsanitizer/tsan/tsan_platform_linux.cc
++index 3259131..b8e9078 100644
++--- a/libsanitizer/tsan/tsan_platform_linux.cc
+++++ b/libsanitizer/tsan/tsan_platform_linux.cc
++@@ -377,7 +377,7 @@ bool IsGlobalVar(uptr addr) {
++ int ExtractResolvFDs(void *state, int *fds, int nfd) {
++ #if SANITIZER_LINUX
++   int cnt = 0;
++-  __res_state *statp = (__res_state*)state;
+++  struct __res_state *statp = (struct __res_state*)state;
++   for (int i = 0; i < MAXNS && cnt < nfd; i++) {
++     if (statp->_u._ext.nsaddrs[i] && statp->_u._ext.nssocks[i] != -1)
++       fds[cnt++] = statp->_u._ext.nssocks[i];
 +-- 
 +2.9.5
 +
-diff --git a/package/gcc/6.4.0/942-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch b/package/gcc/6.4.0/942-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+diff --git a/package/gcc/6.4.0/943-sanitizer-linux.patch b/package/gcc/6.4.0/943-sanitizer-linux.patch
 new file mode 100644
-index 0000000..a2a2ea0
+index 0000000..640d68c
 --- /dev/null
-+++ b/package/gcc/6.4.0/942-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
-@@ -0,0 +1,192 @@
-+From 35d8ca22047f101a700abb29cffbf03b81278a2b Mon Sep 17 00:00:00 2001
-+From: jsm28 <jsm28@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 4 Jul 2017 10:23:57 +0000
-+Subject: [PATCH] Use ucontext_t not struct ucontext in linux-unwind.h files.
++++ b/package/gcc/6.4.0/943-sanitizer-linux.patch
+@@ -0,0 +1,91 @@
++From a3e3d1b5f73380a99126c4937a95225ba3bd214b Mon Sep 17 00:00:00 2001
++From: doko <doko@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 7 Sep 2017 07:15:24 +0000
++Subject: [PATCH] 2017-09-07  Matthias Klose  <doko@ubuntu.com>
 +
-+Current glibc no longer gives the ucontext_t type the tag struct
-+ucontext, to conform with POSIX namespace rules.  This requires
-+various linux-unwind.h files in libgcc, that were previously using
-+struct ucontext, to be fixed to use ucontext_t instead.  This is
-+similar to the removal of the struct siginfo tag from siginfo_t some
-+years ago.
++        Backported from mainline
++        2017-07-14  Jakub Jelinek  <jakub@redhat.com>
 +
-+This patch changes those files to use ucontext_t instead.  As the
-+standard name that should be unconditionally safe, so this is not
-+restricted to architectures supported by glibc, or conditioned on the
-+glibc version.
++        PR sanitizer/81066
++        * sanitizer_common/sanitizer_linux.h: Cherry-pick upstream r307969.
++        * sanitizer_common/sanitizer_linux.cc: Likewise.
++        * sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc: Likewise.
++        * tsan/tsan_platform_linux.cc: Likewise.
 +
-+Tested compilation together with current glibc with glibc's
-+build-many-glibcs.py.
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 251828 138bc75d-0d04-0410-961f-82ee72b054a4
 +
-+	* config/aarch64/linux-unwind.h (aarch64_fallback_frame_state),
-+	config/alpha/linux-unwind.h (alpha_fallback_frame_state),
-+	config/bfin/linux-unwind.h (bfin_fallback_frame_state),
-+	config/i386/linux-unwind.h (x86_64_fallback_frame_state,
-+	x86_fallback_frame_state), config/m68k/linux-unwind.h (struct
-+	uw_ucontext), config/nios2/linux-unwind.h (struct nios2_ucontext),
-+	config/pa/linux-unwind.h (pa32_fallback_frame_state),
-+	config/sh/linux-unwind.h (sh_fallback_frame_state),
-+	config/tilepro/linux-unwind.h (tile_fallback_frame_state),
-+	config/xtensa/linux-unwind.h (xtensa_fallback_frame_state): Use
-+	ucontext_t instead of struct ucontext.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 249957 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+(cherry picked from commit b685411208e0aaa79190d54faf945763514706b8)
++(cherry picked from commit 8937b94d1a643fd9760714642296d034a45254a8)
 +[Romain rebase on gcc 6.4]
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ libgcc/config/aarch64/linux-unwind.h | 2 +-
-+ libgcc/config/alpha/linux-unwind.h   | 2 +-
-+ libgcc/config/bfin/linux-unwind.h    | 2 +-
-+ libgcc/config/i386/linux-unwind.h    | 4 ++--
-+ libgcc/config/m68k/linux-unwind.h    | 2 +-
-+ libgcc/config/nios2/linux-unwind.h   | 2 +-
-+ libgcc/config/pa/linux-unwind.h      | 2 +-
-+ libgcc/config/sh/linux-unwind.h      | 2 +-
-+ libgcc/config/tilepro/linux-unwind.h | 2 +-
-+ libgcc/config/xtensa/linux-unwind.h  | 2 +-
-+ 10 files changed, 11 insertions(+), 11 deletions(-)
++ libsanitizer/sanitizer_common/sanitizer_linux.cc                      | 3 +--
++ libsanitizer/sanitizer_common/sanitizer_linux.h                       | 4 +---
++ libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc | 2 +-
++ libsanitizer/tsan/tsan_platform_linux.cc                              | 2 +-
++ 4 files changed, 4 insertions(+), 7 deletions(-)
 +
-+diff --git a/libgcc/config/aarch64/linux-unwind.h b/libgcc/config/aarch64/linux-unwind.h
-+index 4512efb..06de45a 100644
-+--- a/libgcc/config/aarch64/linux-unwind.h
-++++ b/libgcc/config/aarch64/linux-unwind.h
-+@@ -52,7 +52,7 @@ aarch64_fallback_frame_state (struct _Unwind_Context *context,
-+   struct rt_sigframe
-+   {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   };
++diff --git a/libsanitizer/sanitizer_common/sanitizer_linux.cc b/libsanitizer/sanitizer_common/sanitizer_linux.cc
++index 2cefa20..223d9c6 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_linux.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_linux.cc
++@@ -546,8 +546,7 @@ uptr internal_prctl(int option, uptr arg2, uptr arg3, uptr arg4, uptr arg5) {
++ }
++ #endif
 + 
-+   struct rt_sigframe *rt_;
-+diff --git a/libgcc/config/alpha/linux-unwind.h b/libgcc/config/alpha/linux-unwind.h
-+index bdbba4a..e84812e 100644
-+--- a/libgcc/config/alpha/linux-unwind.h
-++++ b/libgcc/config/alpha/linux-unwind.h
-+@@ -51,7 +51,7 @@ alpha_fallback_frame_state (struct _Unwind_Context *context,
-+     {
-+       struct rt_sigframe {
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       sc = &rt_->uc.uc_mcontext;
-+     }
-+diff --git a/libgcc/config/bfin/linux-unwind.h b/libgcc/config/bfin/linux-unwind.h
-+index 77b7c23..8bf5e82 100644
-+--- a/libgcc/config/bfin/linux-unwind.h
-++++ b/libgcc/config/bfin/linux-unwind.h
-+@@ -52,7 +52,7 @@ bfin_fallback_frame_state (struct _Unwind_Context *context,
-+ 	void *puc;
-+ 	char retcode[8];
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
++-uptr internal_sigaltstack(const struct sigaltstack *ss,
++-                         struct sigaltstack *oss) {
+++uptr internal_sigaltstack(const void *ss, void *oss) {
++   return internal_syscall(SYSCALL(sigaltstack), (uptr)ss, (uptr)oss);
++ }
 + 
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+diff --git a/libgcc/config/i386/linux-unwind.h b/libgcc/config/i386/linux-unwind.h
-+index 540a0a2..29efbe3 100644
-+--- a/libgcc/config/i386/linux-unwind.h
-++++ b/libgcc/config/i386/linux-unwind.h
-+@@ -58,7 +58,7 @@ x86_64_fallback_frame_state (struct _Unwind_Context *context,
-+   if (*(unsigned char *)(pc+0) == 0x48
-+       && *(unsigned long long *)(pc+1) == RT_SIGRETURN_SYSCALL)
-+     {
-+-      struct ucontext *uc_ = context->cfa;
-++      ucontext_t *uc_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+          because it does not alias anything.  */
-+@@ -138,7 +138,7 @@ x86_fallback_frame_state (struct _Unwind_Context *context,
-+ 	siginfo_t *pinfo;
-+ 	void *puc;
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+diff --git a/libgcc/config/m68k/linux-unwind.h b/libgcc/config/m68k/linux-unwind.h
-+index 75b7cf7..f964e24 100644
-+--- a/libgcc/config/m68k/linux-unwind.h
-++++ b/libgcc/config/m68k/linux-unwind.h
-+@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ /* <sys/ucontext.h> is unfortunately broken right now.  */
-+ struct uw_ucontext {
-+ 	unsigned long	  uc_flags;
-+-	struct ucontext  *uc_link;
-++	ucontext_t	 *uc_link;
-+ 	stack_t		  uc_stack;
-+ 	mcontext_t	  uc_mcontext;
-+ 	unsigned long	  uc_filler[80];
-+diff --git a/libgcc/config/nios2/linux-unwind.h b/libgcc/config/nios2/linux-unwind.h
-+index 2304142..30f25ea 100644
-+--- a/libgcc/config/nios2/linux-unwind.h
-++++ b/libgcc/config/nios2/linux-unwind.h
-+@@ -38,7 +38,7 @@ struct nios2_mcontext {
++diff --git a/libsanitizer/sanitizer_common/sanitizer_linux.h b/libsanitizer/sanitizer_common/sanitizer_linux.h
++index 4497702..1594058 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_linux.h
+++++ b/libsanitizer/sanitizer_common/sanitizer_linux.h
++@@ -19,7 +19,6 @@
++ #include "sanitizer_platform_limits_posix.h"
 + 
-+ struct nios2_ucontext {
-+   unsigned long uc_flags;
-+-  struct ucontext *uc_link;
-++  ucontext_t *uc_link;
-+   stack_t uc_stack;
-+   struct nios2_mcontext uc_mcontext;
-+   sigset_t uc_sigmask;	/* mask last for extensibility */
-+diff --git a/libgcc/config/pa/linux-unwind.h b/libgcc/config/pa/linux-unwind.h
-+index 9a2657f..e47493d 100644
-+--- a/libgcc/config/pa/linux-unwind.h
-++++ b/libgcc/config/pa/linux-unwind.h
-+@@ -80,7 +80,7 @@ pa32_fallback_frame_state (struct _Unwind_Context *context,
-+   struct sigcontext *sc;
-+   struct rt_sigframe {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *frame;
++ struct link_map;  // Opaque type returned by dlopen().
++-struct sigaltstack;
 + 
-+   /* rt_sigreturn trampoline:
-+diff --git a/libgcc/config/sh/linux-unwind.h b/libgcc/config/sh/linux-unwind.h
-+index e389cac..0bf43ba 100644
-+--- a/libgcc/config/sh/linux-unwind.h
-++++ b/libgcc/config/sh/linux-unwind.h
-+@@ -180,7 +180,7 @@ sh_fallback_frame_state (struct _Unwind_Context *context,
-+     {
-+       struct rt_sigframe {
-+ 	siginfo_t info;
-+-	struct ucontext uc;
-++	ucontext_t uc;
-+       } *rt_ = context->cfa;
-+       /* The void * cast is necessary to avoid an aliasing warning.
-+          The aliasing warning is correct, but should not be a problem
-+diff --git a/libgcc/config/tilepro/linux-unwind.h b/libgcc/config/tilepro/linux-unwind.h
-+index 796e976..75f8890 100644
-+--- a/libgcc/config/tilepro/linux-unwind.h
-++++ b/libgcc/config/tilepro/linux-unwind.h
-+@@ -61,7 +61,7 @@ tile_fallback_frame_state (struct _Unwind_Context *context,
-+   struct rt_sigframe {
-+     unsigned char save_area[C_ABI_SAVE_AREA_SIZE];
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *rt_;
++ namespace __sanitizer {
++ // Dirent structure for getdents(). Note that this structure is different from
++@@ -28,8 +27,7 @@ struct linux_dirent;
 + 
-+   /* Return if this is not a signal handler.  */
-+diff --git a/libgcc/config/xtensa/linux-unwind.h b/libgcc/config/xtensa/linux-unwind.h
-+index 9872492..586a9d4 100644
-+--- a/libgcc/config/xtensa/linux-unwind.h
-++++ b/libgcc/config/xtensa/linux-unwind.h
-+@@ -67,7 +67,7 @@ xtensa_fallback_frame_state (struct _Unwind_Context *context,
++ // Syscall wrappers.
++ uptr internal_getdents(fd_t fd, struct linux_dirent *dirp, unsigned int count);
++-uptr internal_sigaltstack(const struct sigaltstack* ss,
++-                          struct sigaltstack* oss);
+++uptr internal_sigaltstack(const void* ss, void* oss);
++ uptr internal_sigprocmask(int how, __sanitizer_sigset_t *set,
++     __sanitizer_sigset_t *oldset);
++ void internal_sigfillset(__sanitizer_sigset_t *set);
++diff --git a/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc b/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
++index c919e4f..014162af 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc
++@@ -267,7 +267,7 @@ static int TracerThread(void* argument) {
 + 
-+   struct rt_sigframe {
-+     siginfo_t info;
-+-    struct ucontext uc;
-++    ucontext_t uc;
-+   } *rt_;
-+ 
-+   /* movi a2, __NR_rt_sigreturn; syscall */
++   // Alternate stack for signal handling.
++   InternalScopedBuffer<char> handler_stack_memory(kHandlerStackSize);
++-  struct sigaltstack handler_stack;
+++  stack_t handler_stack;
++   internal_memset(&handler_stack, 0, sizeof(handler_stack));
++   handler_stack.ss_sp = handler_stack_memory.data();
++   handler_stack.ss_size = kHandlerStackSize;
++diff --git a/libsanitizer/tsan/tsan_platform_linux.cc b/libsanitizer/tsan/tsan_platform_linux.cc
++index 09cec5f..908f4fe 100644
++--- a/libsanitizer/tsan/tsan_platform_linux.cc
+++++ b/libsanitizer/tsan/tsan_platform_linux.cc
++@@ -291,7 +291,7 @@ bool IsGlobalVar(uptr addr) {
++ int ExtractResolvFDs(void *state, int *fds, int nfd) {
++ #if SANITIZER_LINUX
++   int cnt = 0;
++-  __res_state *statp = (__res_state*)state;
+++  struct __res_state *statp = (struct __res_state*)state;
++   for (int i = 0; i < MAXNS && cnt < nfd; i++) {
++     if (statp->_u._ext.nsaddrs[i] && statp->_u._ext.nssocks[i] != -1)
++       fds[cnt++] = statp->_u._ext.nssocks[i];
 +-- 
 +2.9.5
 +
