@@ -1,39 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Sep 2017 11:19:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libshout: enable optional
-	dependency for libressl
-Message-ID: <20170923091949.2269-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Sep 2017 11:23:36 +0200
+Subject: [Buildroot] [PATCH-2017.02.x] tor: security bump to version 0.2.9.12
+Message-ID: <20170923092336.13960-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libshout uses pkgconfig currently only to check for openssl paths, to
-fix the build error we pass our STAGING_DIR as parameter to
---with-openssl
+Fixes CVE-2017-0380: Stack disclosure in hidden services logs when
+SafeLogging disabled
 
-Fixes
-http://autobuild.buildroot.net/results/72a/72aa07d48d6b1d7dea046b88ee4aa943534ffad4/
+For more details, see:
+https://trac.torproject.org/projects/tor/ticket/23490
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libshout/libshout.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
-index 8fd850fb13..4f209081a4 100644
---- a/package/libshout/libshout.mk
-+++ b/package/libshout/libshout.mk
-@@ -31,6 +31,9 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBSHOUT_CONF_OPTS += --with-openssl
- LIBSHOUT_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+LIBSHOUT_CONF_OPTS += --with-openssl=$(STAGING_DIR)/lib
-+LIBSHOUT_DEPENDENCIES += libressl
- else
- LIBSHOUT_CONF_OPTS += --without-openssl
- endif
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index d42c534985..ba0b47af15 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 c1959bebff9a546a54cbedb58c8289a42441991af417d2d16f7b336be8903221  tor-0.2.9.11.tar.gz
++sha256 6e7466625d53812f23c2ad60a873c5855f63f756fde0fc5cbeda8d32cee1086b  tor-0.2.9.12.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 7bbd2f3430..4cc5c48351 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.2.9.11
++TOR_VERSION = 0.2.9.12
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3c
+ TOR_LICENSE_FILES = LICENSE
 -- 
 2.11.0
