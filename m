@@ -1,47 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 23 Sep 2017 19:20:18 +0200
-Subject: [Buildroot] [git commit] package/asterisk: add optional speex
+Subject: [Buildroot] [git commit] package/asterisk: add optional libgsm
 	dependency
-Message-ID: <20170923171327.6219F81077@busybox.osuosl.org>
+Message-ID: <20170923171326.D2E4D7FBD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f1c340311768fa3a94605086e5c99cb1733ce93
+commit: https://git.buildroot.net/buildroot/commit/?id=d068ccfd08b573190c97a6949a27760201a5817b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/asterisk/asterisk.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 2278d04..1ac1f49 100644
+index 65f8062..573315c 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -93,8 +93,6 @@ ASTERISK_CONF_OPTS = \
- 	--without-SDL_image \
- 	--without-spandsp \
- 	--without-ss7 \
--	--without-speex \
--	--without-speexdsp \
- 	--without-sqlite \
- 	--without-srtp \
- 	--without-suppserv \
-@@ -183,6 +181,13 @@ else
- ASTERISK_CONF_OPTS += --without-ssl
+@@ -55,7 +55,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-cpg \
+ 	--without-curses \
+ 	--without-dahdi \
+-	--without-gsm \
+ 	--without-gtk2 \
+ 	--without-gmime \
+ 	--without-h323 \
+@@ -140,6 +139,13 @@ else
+ ASTERISK_CONF_OPTS += --without-execinfo
  endif
  
-+ifeq ($(BR2_PACKAGE_SPEEX),y)
-+ASTERISK_DEPENDENCIES += speex
-+ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
++ifeq ($(BR2_PACKAGE_LIBGSM),y)
++ASTERISK_DEPENDENCIES += libgsm
++ASTERISK_CONF_OPTS += --with-gsm
 +else
-+ASTERISK_CONF_OPTS += --without-speex  --without-speexdsp
++ASTERISK_CONF_OPTS += --without-gsm
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- ASTERISK_DEPENDENCIES += zlib
- ASTERISK_CONF_OPTS += --with-z
+ ASTERISK_DIRS = \
+ 	ASTVARLIBDIR="/usr/lib/asterisk" \
+ 	ASTDATADIR="/usr/lib/asterisk" \
