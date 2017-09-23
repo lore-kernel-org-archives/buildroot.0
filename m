@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 22:22:38 +0200
-Subject: [Buildroot] [PATCH] mtd-utils: add mtd test tools
-In-Reply-To: <20170814202150.24413-1-miquel.raynal@free-electrons.com>
-References: <20170814202150.24413-1-miquel.raynal@free-electrons.com>
-Message-ID: <463d2a1e-7a1e-789f-8644-4fbee9a6ce35@mind.be>
+Date: Sat, 23 Sep 2017 22:24:14 +0200
+Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
+In-Reply-To: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
+References: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
+Message-ID: <6310d947-979a-2e84-a43f-d45446fe40f5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,32 @@ To: buildroot@busybox.net
 
 
 
-On 14-08-17 22:21, Miquel Raynal wrote:
-> Add the possibility to choose more test tools than only integck
-> from the MTD utils test-suite.
+On 15-08-17 22:38, Ga?l PORTAY wrote:
+> Hi all,
 > 
-> Move the hidden BR2_PACKAGE_MTD_TESTS configuration to the bottom
-> of the page and make it visible. When checked, a new list of available
-> binaries is displayed and may be selected and compiled into the image
-> with the --enable-install-tests configure script option:
-> - flash_torture
-> - flash_stress
-> - flash_speed
-> - nandbiterrs
-> - flash_readtest
-> - nandpagetest
-> - nandsubpagetest
+> The purpose of this patch series is to continue the integration of Qt5 WebEngine
+> in buildroot; started long time ago by Akihiko Odaki [1] and Julien Corjon [2].
 > 
-> Most of these tests may be performed by inserting kernel modules
-> which are almost legacy so having the userspace tools available
-> might become useful.
+> The first patch provides the Qt WebEngine package.
 > 
-> Signed-off-by: Miquel Raynal <miquel.raynal@free-electrons.com>
-
- Applied to master, after a few changes:
-
-     - fix threads and MMU dependency (due to a change introduced after you
-submitted this patch);
-     - order Config.in options and mtd.mk lines alphabetically;
-     - add note on legacy handling to commit message.
-
+> The second patch is a special defconfig that provides a Qt WebEngine setup on
+> raspberrypi3 to provide a demo.
+> 
+> I have tested it with a rpi 3; and I will be glad if someone else has another
+> EGL platform to test it. You will find instructions to try qtwebengine on rpi3
+> in the commit message of the first patch.
+> 
+> Enjoy ;)
+> 
+> Note: Tested against:
+>         - GCC 6.x and binutils 2.27 on rpi 3.
+>         - GCC 7.x and binutils 2.28 on rpi 3.
+> 
+> [1] https://patchwork.ozlabs.org/patch/640633/
+> [2] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+ I finally applied your patches, with just a few more changes in the structure
+of the Config.in dependencies. That was a long time coming, thanks for your
+persistence!
 
  Regards,
  Arnout
