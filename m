@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Sep 2017 22:24:14 +0200
-Subject: [Buildroot] [PATCH v8 0/3] Qt WebEngine support
-In-Reply-To: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
-References: <20170815203854.14456-1-gael.portay@savoirfairelinux.com>
-Message-ID: <6310d947-979a-2e84-a43f-d45446fe40f5@mind.be>
+Date: Sat, 23 Sep 2017 22:24:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mdadm: not available in static
+ builds
+In-Reply-To: <20170904044954.31001-1-bernd.kuhls@t-online.de>
+References: <20170904044954.31001-1-bernd.kuhls@t-online.de>
+Message-ID: <30cc0536-8d24-a218-a45e-f1632c015a74@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +13,17 @@ To: buildroot@busybox.net
 
 
 
-On 15-08-17 22:38, Ga?l PORTAY wrote:
-> Hi all,
+On 04-09-17 06:49, Bernd Kuhls wrote:
+> http://git.neil.brown.name/?p=mdadm.git;a=commitdiff;h=7716570e6d906e7326f83d466f6ba73009649d03#patch9
+> added code to include dlfcn.h.
 > 
-> The purpose of this patch series is to continue the integration of Qt5 WebEngine
-> in buildroot; started long time ago by Akihiko Odaki [1] and Julien Corjon [2].
+> Fixes
+> http://autobuild.buildroot.net/results/163/163ad5a9f976662be8ca8664f91254f90fca8439/
 > 
-> The first patch provides the Qt WebEngine package.
-> 
-> The second patch is a special defconfig that provides a Qt WebEngine setup on
-> raspberrypi3 to provide a demo.
-> 
-> I have tested it with a rpi 3; and I will be glad if someone else has another
-> EGL platform to test it. You will find instructions to try qtwebengine on rpi3
-> in the commit message of the first patch.
-> 
-> Enjoy ;)
-> 
-> Note: Tested against:
->         - GCC 6.x and binutils 2.27 on rpi 3.
->         - GCC 7.x and binutils 2.28 on rpi 3.
-> 
-> [1] https://patchwork.ozlabs.org/patch/640633/
-> [2] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
- I finally applied your patches, with just a few more changes in the structure
-of the Config.in dependencies. That was a long time coming, thanks for your
-persistence!
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+
+ Applied to master, thanks.
 
  Regards,
  Arnout
