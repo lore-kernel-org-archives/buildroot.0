@@ -1,101 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Sep 2017 15:53:23 +0200
-Subject: [Buildroot] [pull request v2] package/grub: drop grub-legacy
-In-Reply-To: <cover.1506174552.git.yann.morin.1998@free.fr>
-References: <cover.1506174552.git.yann.morin.1998@free.fr>
-Message-ID: <20170923135323.GA3779@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Sep 2017 16:45:19 +0200
+Subject: [Buildroot] [PATCHv2 1/1] openjpeg: Fix malloc poison issue
+In-Reply-To: <20170908075217.4900-1-olivier.schonken@gmail.com> (Olivier
+ Schonken's message of "Fri, 8 Sep 2017 09:52:17 +0200")
+References: <20170908075217.4900-1-olivier.schonken@gmail.com>
+Message-ID: <878th5mq2o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+>>>>> "Olivier" == Olivier Schonken <olivier.schonken@gmail.com> writes:
 
-On 2017-09-23 15:49 +0200, Yann E. MORIN spake thusly:
-> This two-patch series removes grub, aka grub-legacy.
-> 
-> The reasioning is explained in the first patch, which actually gets rid
-> of grub.
-> 
-> The second patch then removes grub support in the iso9660 filesystem, as
-> grub is no longer available then.
+ > The malloc poison issue has been fixed upstream, this patch will thus only
+ > be temporary.
 
-I forgot to state: git refuses to send patches when a line is longer
-than 998 chars, but the first patch does remove such lines. So this is a
-plain pull-request; the patches can't go to the list...
+ > Fixes the following autobuild issues
 
-For those wanting to see the changes, you can browse them:
-    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/no-grub-legacy
+ >        sparc | http://autobuild.buildroot.net/results/c1b7a316ca2a4db49023f304dbc7fd5fed05bd9d
+ >         bfin | http://autobuild.buildroot.net/results/031ece7a72e76a9155938cb283de859bd12a8171
+ >          sh4 | http://autobuild.buildroot.net/results/88664451f71c12ccd94e874d408fbb680bea1695
+ >       xtensa | http://autobuild.buildroot.net/results/fbede64a5a86d4868b6da0ab1275e75803235af0
+ >      powerpc | http://autobuild.buildroot.net/results/6c641650509048039b18fbeb010dbca0f0fc5292
+ > microblazeel | http://autobuild.buildroot.net/results/fa2d5272b2db73cbfa441ead9250157c5626ab15
+ >     mips64el | http://autobuild.buildroot.net/results/fc96f6628f71e05d9a74e0e13e50178d29a2c495
+ >          sh4 | http://autobuild.buildroot.net/results/a6d6a6dcb9b4fa250edaaf5935762c5820457b23
+ >       x86_64 | http://autobuild.buildroot.net/results/47b4ca2cc661582d86830b9353a6c8af86e4ba35
+ >          arc | http://autobuild.buildroot.net/results/08e2e4eca6c3dbde8116a649dbf46e52ded45d10
+ >          arc | http://autobuild.buildroot.net/results/899fa044aab7ee28acfa71544f2105da4a5c97d5
+ >          arm | http://autobuild.buildroot.net/results/6016f6885b21d6e8c6199a6833c7acce6210ecc6
+ >          arm | http://autobuild.buildroot.net/results/adbb3c76497e89161535c711de98809a0fa168a7
+ >         or1k | http://autobuild.buildroot.net/results/de3ef69a72d2c2082e202fbed702c53a51274fef
+ >     mips64el | http://autobuild.buildroot.net/results/39b186b13001a810e0992b52321f1015b445d2fd
+ >       x86_64 | http://autobuild.buildroot.net/results/22c6a29a1ded6aedf01adfdfcf26302248dba80c
+ >          arm | http://autobuild.buildroot.net/results/b62c54b727eb5f576c4a517a69c495b537c3b69a
+ >         m68k | http://autobuild.buildroot.net/results/a826561c5786be5f0088b50b633210593e23ffff
+ >          arm | http://autobuild.buildroot.net/results/d32ec927a5e4d5644cb3641014bcf6ebe5c14490
 
-Regards,
-Yann E. MORIN.
+ > Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+ > ---
+ > Fix malloc poison issue to remove all uclibc related error from autobuild.
+ > Will investigate threads and C++ issue further with less autobuild failures
 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> The following changes since commit bf9cae05fde11077bd04234b301bb62e73a0608c
-> 
->   package/olsr: bump version to 0.9.6.1 (2017-09-22 23:37:01 +0200)
-> 
-> 
-> are available in the git repository at:
-> 
->   git://git.buildroot.org/~ymorin/git/buildroot.git
-> 
-> for you to fetch changes up to 28ae3fd3246849f4d10419790856d15bd6b0d8d7
-> 
->   fs/iso9660: remove support for grub (2017-09-23 15:44:34 +0200)
-> 
-> 
-> ----------------------------------------------------------------
-> Yann E. MORIN (2):
->       boot/grub: remove
->       fs/iso9660: remove support for grub
-> 
->  .gitlab-ci.yml                                |     2 -
->  Config.in.legacy                              |     9 +
->  boot/Config.in                                |     1 -
->  boot/grub/Config.in                           |   200 -
->  boot/grub/grub.100-autoreconf.patch           |  1407 -
->  boot/grub/grub.200-fix_mbr_handling.patch     |    13 -
->  boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |    36 -
->  boot/grub/grub.400-nic_update2.patch          | 47064 ------------------------
->  boot/grub/grub.hash                           |     3 -
->  boot/grub/grub.mk                             |   109 -
->  boot/grub/menu.lst                            |    16 -
->  boot/grub/splash.xpm.gz                       |   Bin 16466 -> 0 bytes
->  fs/iso9660/Config.in                          |    16 +-
->  fs/iso9660/iso9660.mk                         |    32 +-
->  fs/iso9660/menu.lst                           |    20 -
->  support/testing/conf/grub-menu.lst            |    20 -
->  support/testing/tests/fs/test_iso9660.py      |    37 -
->  17 files changed, 14 insertions(+), 48971 deletions(-)
->  delete mode 100644 boot/grub/Config.in
->  delete mode 100644 boot/grub/grub.100-autoreconf.patch
->  delete mode 100644 boot/grub/grub.200-fix_mbr_handling.patch
->  delete mode 100644 boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
->  delete mode 100644 boot/grub/grub.400-nic_update2.patch
->  delete mode 100644 boot/grub/grub.hash
->  delete mode 100644 boot/grub/grub.mk
->  delete mode 100644 boot/grub/menu.lst
->  delete mode 100644 boot/grub/splash.xpm.gz
->  delete mode 100644 fs/iso9660/menu.lst
->  delete mode 100644 support/testing/conf/grub-menu.lst
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
