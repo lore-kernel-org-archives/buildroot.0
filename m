@@ -1,35 +1,38 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 23 Sep 2017 20:51:46 +0200
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: update after adding
-	bananapi_m2_plus_defconfig
-Message-ID: <20170923184645.A363B80FE6@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 23 Sep 2017 20:54:02 +0200
+Subject: [Buildroot] [pull request v2] package/grub: drop grub-legacy
+In-Reply-To: <cover.1506174552.git.yann.morin.1998@free.fr>
+References: <cover.1506174552.git.yann.morin.1998@free.fr>
+Message-ID: <1b806c34-b508-7f1c-3662-cb77151394ee@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0455add508dc4f45f2c82401b4a0f3bb48d88a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit cef57c964284f9b545a2347dd6eb1654e03dfd6e added
-bananapi_m2_plus_defconfig but forgot to update .gitlab-ci.yml. Do it
-now.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .gitlab-ci.yml | 1 +
- 1 file changed, 1 insertion(+)
+On 23-09-17 15:49, Yann E. MORIN wrote:
+> Hello All!
+> 
+> This two-patch series removes grub, aka grub-legacy.
+> 
+> The reasioning is explained in the first patch, which actually gets rid
+> of grub.
+> 
+> The second patch then removes grub support in the iso9660 filesystem, as
+> grub is no longer available then.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index e140f60..1d1e7bd 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -87,6 +87,7 @@ atmel_sama5d4_xplained_defconfig: *defconfig
- atmel_sama5d4_xplained_dev_defconfig: *defconfig
- atmel_sama5d4_xplained_mmc_defconfig: *defconfig
- atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
-+bananapi_m2_plus_defconfig: *defconfig
- bananapro_defconfig: *defconfig
- beagleboardx15_defconfig: *defconfig
- beaglebone_defconfig: *defconfig
+ It seems more logical to do that first, so I swapped the two patches and
+applied to master, thanks.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
