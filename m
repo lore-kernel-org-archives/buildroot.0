@@ -1,55 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Sep 2017 11:04:39 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] CHANGES: update with
-	recent changes
-Message-ID: <20170923085731.2BA9680E0D@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Sep 2017 11:19:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libshout: enable optional
+	dependency for libressl
+Message-ID: <20170923091949.2269-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fbd4de7c24ffb762e028afccc87253bf2b9affc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+libshout uses pkgconfig currently only to check for openssl paths, to
+fix the build error we pass our STAGING_DIR as parameter to
+--with-openssl
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes
+http://autobuild.buildroot.net/results/72a/72aa07d48d6b1d7dea046b88ee4aa943534ffad4/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- CHANGES | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/libshout/libshout.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 7393642..99ee902 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,31 @@
-+2017.02.6, Not yet released
-+
-+	Important / security related fixes.
-+
-+	Cmake: Ensure correct pkg-config is used when building host
-+	packages
-+
-+	fs/iso9660: Ensure files from earlier builds are not included.
-+
-+	Updated/fixed packages: apache, bcusdk, bind, binutils,
-+	bluez5_utils, botan, cmake, connman, dbus, dialog, e2fsprogs,
-+	faad2, fakeroot, ffmpeg, file, flashrom, gcc, gd, gdb,
-+	gdk-pixbuf, git, gnupg, gpsd, grub2, imagemagick, iostat,
-+	iucode-tool, jack2, libarchive, libcurl, libgcrypt,
-+	libphidget, librsync, librsvg, libsoup, libxml2, linux-tools,
-+	lua, mariadb, mbedtls, mediastreamer, minidlna, netplug,
-+	nss-pam-ldapd, nvidia-driver, openjpeg, postgresql,
-+	proxychains-ng, python-libconfig, python-service-identity, qt,
-+	rpcbind, ruby, samba4, squashfs, squid, strongswan,
-+	subversion, supervisor, sysvinit, tcpdump, transmission,
-+	unrar, valgrind, vim, webkitgtk, whois, xen, zmqpp
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#10141: Squashfs extended attribute failures
-+	#10261: Grub2 fails to build for x86_64
-+	#10276: BR2_PACKAGE_LINUX_TOOLS_GPIO fails for MIPS with...
-+
- 2017.02.5, Released July 27th, 2017
- 
- 	Important / security related fixes.
+diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+index 8fd850fb13..4f209081a4 100644
+--- a/package/libshout/libshout.mk
++++ b/package/libshout/libshout.mk
+@@ -31,6 +31,9 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBSHOUT_CONF_OPTS += --with-openssl
+ LIBSHOUT_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++LIBSHOUT_CONF_OPTS += --with-openssl=$(STAGING_DIR)/lib
++LIBSHOUT_DEPENDENCIES += libressl
+ else
+ LIBSHOUT_CONF_OPTS += --without-openssl
+ endif
+-- 
+2.11.0
