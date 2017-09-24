@@ -1,67 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 12:15:09 +0200
-Subject: [Buildroot] [PATCH 2/3] raspberrypi: post-image.sh add new
-	gpu_mem option
-In-Reply-To: <20170923233007.13772-3-gael.portay@savoirfairelinux.com>
-References: <20170923233007.13772-1-gael.portay@savoirfairelinux.com>
- <20170923233007.13772-3-gael.portay@savoirfairelinux.com>
-Message-ID: <8c1d85a4-4390-047f-1d21-af37842a0040@mind.be>
+Date: Sun, 24 Sep 2017 12:23:43 +0200
+Subject: [Buildroot] [PATCH 1/9] luaposix: bump to version 34.0.1
+In-Reply-To: <20170924075932.5990-1-francois.perrad@gadz.org>
+References: <20170924075932.5990-1-francois.perrad@gadz.org>
+Message-ID: <332fbe7b-3daf-16ad-cd78-9efb049f34ba@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Francois,
 
-
-On 24-09-17 01:30, Ga?l PORTAY wrote:
-> The amount of GPU memory can be set using the new option --gpu_mem_XXX
-> (where XXX is the total amount of memory available on the board).
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+On 24-09-17 09:59, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  board/raspberrypi/post-image.sh | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  package/luaposix/luaposix.hash |  2 +-
+>  package/luaposix/luaposix.mk   | 24 ++++++++++++++++++++----
+>  2 files changed, 21 insertions(+), 5 deletions(-)
 > 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-> index 1b49f0ea30..9091476ced 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -1,4 +1,4 @@
-> -#!/bin/sh
-> +#!/bin/bash
+> diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
+> index e2216be73..b3984c1d1 100644
+> --- a/package/luaposix/luaposix.hash
+> +++ b/package/luaposix/luaposix.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 e66262f5b7fe1c32c65f17a5ef5ffb31c4d1877019b4870a5d373e2ab6526a21 luaposix-33.4.0.tar.gz
+> +sha256 ba0bc343783fc33958cd02a68cdbfd65430152d9f297f7ed92678b1a305bd5d7  luaposix-34.0.1.tar.gz
+> diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+> index ea3af16fb..779e707ce 100644
+> --- a/package/luaposix/luaposix.mk
+> +++ b/package/luaposix/luaposix.mk
+> @@ -4,11 +4,27 @@
+>  #
+>  ################################################################################
 >  
->  BOARD_DIR="$(dirname $0)"
->  BOARD_NAME="$(basename ${BOARD_DIR})"
-> @@ -38,6 +38,11 @@ enable_uart=1
->  __EOF__
->  		fi
->  		;;
-> +		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
-> +		# Set GPU memory
-> +		gpu_mem="${1:2}"
-> +		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+> -LUAPOSIX_VERSION = 33.4.0
+> +LUAPOSIX_VERSION = 34.0.1
+>  LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
+>  LUAPOSIX_LICENSE = MIT
+> -LUAPOSIX_LICENSE_FILES = COPYING
+> +LUAPOSIX_LICENSE_FILES = LICENSE
+>  LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
+> -LUAPOSIX_CONF_OPTS = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+>  
+> -$(eval $(autotools-package))
+> +define LUAPOSIX_BUILD_CMDS
+> +	(cd $(@D); \
+> +		$(LUA_RUN) build-aux/luke \
+> +		CC="$(TARGET_CC)" \
+> +		CFLAGS="$(TARGET_CFLAGS)" \
+> +		LUA_INCDIR=$(STAGING_DIR)/usr/include \
+> +	)
 
- In the end, the config.txt is just for one board, right? So can't we just have
-a single --gpu_mem=XXX option and do
-
-		sed -i -e "/^gpu_mem_[0-9]*=/s/=.*/${1##*=}/" \
-			"${BINARIES_DIR}/rpi-firmware/config.txt"
-
- Note that you no longer need to strip off the -- and that you no longer need bash.
-
- As you can see in the example, I also prefer if the options (-i) come in the
-beginning, and to use / as the delimiter unless there actually are /-es in any
-of the strings. But that's just personal preference.
-
+ Since you're anyway switching the build system, why not convert it to a
+luarocks package?
 
  Regards,
  Arnout
 
-> +		;;
->  	esac
->  	shift
->  done
+> +endef
+> +
+> +define LUAPOSIX_INSTALL_TARGET_CMDS
+> +	(cd $(@D); \
+> +		$(LUA_RUN) build-aux/luke install \
+> +		INST_LIBDIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+> +		INST_LUADIR="$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)" \
+> +	)
+> +endef
+> +
+> +$(eval $(generic-package))
 > 
 
 -- 
