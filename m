@@ -1,100 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 22:47:01 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.6
-Message-ID: <20170924204715.976E481074@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 23:15:21 +0200
+Subject: [Buildroot] [git commit] package/ngircd: fix pam support
+Message-ID: <20170924210810.DC9C080257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbd3e01baf83c164fe2d72df39b29d0e1c2d5fab
+commit: https://git.buildroot.net/buildroot/commit/?id=3f61400d2fc37ab54d266bde48c3b69261827f5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix type introduced by
+https://git.buildroot.net/buildroot/commit/?id=13755ca3056e4793e483c2ec634c06ac017088d2
+
+Fixes
+http://autobuild.buildroot.net/results/461/461fa08ef11dc4ae8074a2d634138e4fcfaa8d16/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/ngircd/ngircd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 74c6e9d..81b0c95 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
+index 37c4f87..9b330fa 100644
+--- a/package/ngircd/ngircd.mk
++++ b/package/ngircd/ngircd.mk
+@@ -14,7 +14,7 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ NGIRCD_CONF_OPTS += --with-pam=$(STAGING_DIR)/usr
+ NGIRCD_DEPENDENCIES += linux-pam
+ else
+-NGIRCD_CONF_OPTS += --with-pam
++NGIRCD_CONF_OPTS += --without-pam
+ endif
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.5</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.6</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.02.5.tar.gz">buildroot-2017.02.5.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.5.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.6.tar.gz">buildroot-2017.02.6.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.6.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.02.5.tar.bz2">buildroot-2017.02.5.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.5.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.6.tar.bz2">buildroot-2017.02.6.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.6.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index ad02b76..41a7577 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.6 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>24 September 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.6 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.5 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.6">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-September/203197.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.6.tar.bz2">2017.02.6 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
