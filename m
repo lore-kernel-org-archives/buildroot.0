@@ -1,61 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 22:54:12 +0200
-Subject: [Buildroot] [git commit] Update for 2017.02.6
-Message-ID: <20170924204715.A688880330@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 22:47:01 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2017.02.6
+Message-ID: <20170924204715.976E481074@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40f8a0134a70074db598d864a322c568f49d2e96
+commit: https://git.buildroot.net/buildroot/commit/?id=fbd3e01baf83c164fe2d72df39b29d0e1c2d5fab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8ee6c1d60ebe1285e7f07afa0f8f9107ce0b3506)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index c042bf5..c942fbf 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -493,6 +493,35 @@
- 	#9846: musl libc not installed correctly in target folder
- 	#9856: build libubox failed on ubuntu 17.04 64bit
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 74c6e9d..81b0c95 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2017.02.6, Released September 24th, 2017
-+
-+	Important / security related fixes.
-+
-+	Cmake: Ensure correct pkg-config is used when building host
-+	packages
-+
-+	fs/iso9660: Ensure files from earlier builds are not included.
-+
-+	Updated/fixed packages: apache, bcusdk, bind, binutils,
-+	bluez5_utils, botan, cmake, connman, dbus, dialog, e2fsprogs,
-+	faad2, fakeroot, ffmpeg, file, flashrom, gcc, gd, gdb,
-+	gdk-pixbuf, git, gnupg, gpsd, grub2, gst1-plugins-bad,
-+	imagemagick, iostat, iucode-tool, jack2, libarchive, libcurl,
-+	libgcrypt, libidn, libphidget, librsync, librsvg, libsoup,
-+	libxml2, linux-tools, lua, mariadb, mbedtls, mediastreamer,
-+	minidlna, netplug, nss-pam-ldapd, nvidia-driver, openjpeg,
-+	postgresql, proxychains-ng, python-libconfig,
-+	python-service-identity, qt, rpcbind, ruby, samba4, squashfs,
-+	squid, strongswan, subversion, supervisor, sysvinit, tcpdump,
-+	tor, transmission, unrar, valgrind, vim, webkitgtk, whois,
-+	xen, zmqpp
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#10141: Squashfs extended attribute failures
-+	#10261: Grub2 fails to build for x86_64
-+	#10276: BR2_PACKAGE_LINUX_TOOLS_GPIO fails for MIPS with...
-+
- 2017.02.5, Released July 27th, 2017
+-      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.5</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.6</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2017.02.5.tar.gz">buildroot-2017.02.5.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.02.5.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.02.6.tar.gz">buildroot-2017.02.6.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2017.02.6.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.02.5.tar.bz2">buildroot-2017.02.5.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.02.5.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.02.6.tar.bz2">buildroot-2017.02.6.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2017.02.6.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index ad02b76..41a7577 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2017.02.6 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>24 September 2017</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2017.02.6 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2017.02.5 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.6">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-September/203197.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2017.02.6.tar.bz2">2017.02.6 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
