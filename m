@@ -1,81 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 13:59:08 +0200
-Subject: [Buildroot] [PATCH v2] python-six: add host variant
-In-Reply-To: <20170913132055.12371-1-julien.floret@6wind.com>
-References: <20170913132055.12371-1-julien.floret@6wind.com>
-Message-ID: <0b2ec939-489e-b746-e47c-d79be0a9e9bc@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 24 Sep 2017 14:36:11 +0200
+Subject: [Buildroot] [git commit] package/libglu: needs host-pkgconf
+Message-ID: <20170924124819.D2FAD8004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe55978e62eff9897482ad47298a575aaf54381
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix build error
 
-On 13-09-17 15:20, Julien Floret wrote:
-> While currently there is no in-tree Buildroot package which depends on
-> host-python-six, it can be needed to build external packages.
-> 
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+>>> libglu 9.0.0 Autoreconfiguring
+configure.ac:50: error: Could not locate the pkg-config autoconf macros.
+  These are usually located in /usr/share/aclocal/pkg.m4. If your macros
+  are in a different location, try setting the environment variable
+  ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.
+configure.ac:50: the top level
+autom4te: /home/buildroot/br4/output/host/bin/m4 failed with exit status: 1
 
- I'm very cautious adding host packages, but I guess python-six is something
-extremely useful for custom python scripts that you want to run with the same
-Python version as on the target.
+using this defconfig
 
- Therefore, applied to master, thanks.
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_NVIDIA_DRIVER=y
+BR2_PACKAGE_LIBGLU=y
 
- Regards,
- Arnout
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libglu/libglu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  package/Config.in.host            | 1 +
->  package/python-six/Config.in.host | 9 +++++++++
->  package/python-six/python-six.mk  | 1 +
->  3 files changed, 11 insertions(+)
->  create mode 100644 package/python-six/Config.in.host
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index c5a852b858a4..e2717ae3b541 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -36,6 +36,7 @@ menu "Host utilities"
->  	source "package/pru-software-support/Config.in.host"
->  	source "package/pwgen/Config.in.host"
->  	source "package/python-lxml/Config.in.host"
-> +	source "package/python-six/Config.in.host"
->  	source "package/qemu/Config.in.host"
->  	source "package/raspberrypi-usbboot/Config.in.host"
->  	source "package/rauc/Config.in.host"
-> diff --git a/package/python-six/Config.in.host b/package/python-six/Config.in.host
-> new file mode 100644
-> index 000000000000..1d37e768ae29
-> --- /dev/null
-> +++ b/package/python-six/Config.in.host
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_HOST_PYTHON_SIX
-> +	bool "host python-six"
-> +	help
-> +	  Six is a Python 2 and 3 compatibility library. It provides
-> +	  utility functions for smoothing over the differences between
-> +	  the Python versions with the goal of writing Python code that
-> +	  is compatible on both Python versions.
-> +
-> +	  http://pythonhosted.org/six
-> diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
-> index 0edefe346fdb..850f9340d322 100644
-> --- a/package/python-six/python-six.mk
-> +++ b/package/python-six/python-six.mk
-> @@ -12,3 +12,4 @@ PYTHON_SIX_LICENSE = MIT
->  PYTHON_SIX_LICENSE_FILES = LICENSE
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
+index 038d281..0e5242f 100644
+--- a/package/libglu/libglu.mk
++++ b/package/libglu/libglu.mk
+@@ -12,6 +12,6 @@ LIBGLU_LICENSE_FILES = include/GL/glu.h
+ LIBGLU_INSTALL_STAGING = YES
+ # upstream does not distribute a autoconf??ed configure script
+ LIBGLU_AUTORECONF = YES
+-LIBGLU_DEPENDENCIES = libgl
++LIBGLU_DEPENDENCIES = libgl host-pkgconf
+ 
+ $(eval $(autotools-package))
