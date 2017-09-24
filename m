@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 24 Sep 2017 18:18:54 +0200
-Subject: [Buildroot] [PATCH 1/6] lpeg-patterns: new package
-Message-ID: <20170924161859.10994-1-francois.perrad@gadz.org>
+Date: Sun, 24 Sep 2017 18:18:55 +0200
+Subject: [Buildroot] [PATCH 2/6] lua-fifo: new package
+In-Reply-To: <20170924161859.10994-1-francois.perrad@gadz.org>
+References: <20170924161859.10994-1-francois.perrad@gadz.org>
+Message-ID: <20170924161859.10994-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,67 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                        |  1 +
- package/lpeg-patterns/Config.in          |  8 ++++++++
- package/lpeg-patterns/lpeg-patterns.hash |  2 ++
- package/lpeg-patterns/lpeg-patterns.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/lpeg-patterns/Config.in
- create mode 100644 package/lpeg-patterns/lpeg-patterns.hash
- create mode 100644 package/lpeg-patterns/lpeg-patterns.mk
+ package/Config.in              |  1 +
+ package/lua-fifo/Config.in     |  6 ++++++
+ package/lua-fifo/lua-fifo.hash |  2 ++
+ package/lua-fifo/lua-fifo.mk   | 14 ++++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/lua-fifo/Config.in
+ create mode 100644 package/lua-fifo/lua-fifo.hash
+ create mode 100644 package/lua-fifo/lua-fifo.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c8392eb69..217209bed 100644
+index 217209bed..e4133d365 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -566,6 +566,7 @@ menu "Lua libraries/modules"
- 	source "package/ljlinenoise/Config.in"
- 	source "package/ljsyscall/Config.in"
- 	source "package/lpeg/Config.in"
-+	source "package/lpeg-patterns/Config.in"
- 	source "package/lpty/Config.in"
- 	source "package/lrandom/Config.in"
- 	source "package/lsqlite3/Config.in"
-diff --git a/package/lpeg-patterns/Config.in b/package/lpeg-patterns/Config.in
+@@ -578,6 +578,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-curl/Config.in"
+ 	source "package/lua-datafile/Config.in"
+ 	source "package/lua-ev/Config.in"
++	source "package/lua-fifo/Config.in"
+ 	source "package/lua-flu/Config.in"
+ 	source "package/lua-iconv/Config.in"
+ 	source "package/lua-markdown/Config.in"
+diff --git a/package/lua-fifo/Config.in b/package/lua-fifo/Config.in
 new file mode 100644
-index 000000000..3309e4a69
+index 000000000..5715b6bd2
 --- /dev/null
-+++ b/package/lpeg-patterns/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LPEG_PATTERNS
-+	bool "lpeg-patterns"
-+	# These are runtime dependencies
-+	select BR2_PACKAGE_LPEG
++++ b/package/lua-fifo/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LUA_FIFO
++	bool "lua-fifo"
 +	help
-+	  a collection of LPEG patterns.
++	  A lua library/'class' that implements a FIFO.
 +
-+	  https://github.com/daurnimator/lpeg_patterns
-diff --git a/package/lpeg-patterns/lpeg-patterns.hash b/package/lpeg-patterns/lpeg-patterns.hash
++	  https://github.com/daurnimator/fifo.lua
+diff --git a/package/lua-fifo/lua-fifo.hash b/package/lua-fifo/lua-fifo.hash
 new file mode 100644
-index 000000000..f779466df
+index 000000000..bab372804
 --- /dev/null
-+++ b/package/lpeg-patterns/lpeg-patterns.hash
++++ b/package/lua-fifo/lua-fifo.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 82c8eddee52069e5ae821b68cb9e295ab5767a47d07545a4ca36ac1e81066086  lpeg_patterns-0.4-0.src.rock
-diff --git a/package/lpeg-patterns/lpeg-patterns.mk b/package/lpeg-patterns/lpeg-patterns.mk
++sha256 53dea24ad658614a0254dcb10296a1a0fc5357315ada5724d6362f54c32b4c20  fifo-0.2-0.src.rock
+diff --git a/package/lua-fifo/lua-fifo.mk b/package/lua-fifo/lua-fifo.mk
 new file mode 100644
-index 000000000..68bfe7361
+index 000000000..875b89577
 --- /dev/null
-+++ b/package/lpeg-patterns/lpeg-patterns.mk
++++ b/package/lua-fifo/lua-fifo.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# lpeg-patterns
++# lua-fifo
 +#
 +################################################################################
 +
-+LPEG_PATTERNS_VERSION = 0.4-0
-+LPEG_PATTERNS_NAME_UPSTREAM = lpeg_patterns
-+LPEG_PATTERNS_ROCKSPEC = $(LPEG_PATTERNS_NAME_UPSTREAM)-$(LPEG_PATTERNS_VERSION).rockspec
-+LPEG_PATTERNS_SOURCE = $(LPEG_PATTERNS_NAME_UPSTREAM)-$(LPEG_PATTERNS_VERSION).src.rock
-+LPEG_PATTERNS_LICENSE = MIT
-+LPEG_PATTERNS_LICENSE_FILES = $(LPEG_PATTERNS_SUBDIR)/LICENSE.md
++LUA_FIFO_VERSION_UPSTREAM =0.2
++LUA_FIFO_VERSION =$(LUA_FIFO_VERSION_UPSTREAM)-0
++LUA_FIFO_NAME_UPSTREAM = fifo
++LUA_FIFO_SUBDIR = fifo.lua-$(LUA_FIFO_VERSION_UPSTREAM)
++LUA_FIFO_LICENSE = MIT
++LUA_FIFO_LICENSE_FILES = $(LUA_FIFO_SUBDIR)/LICENSE
 +
 +$(eval $(luarocks-package))
 -- 
