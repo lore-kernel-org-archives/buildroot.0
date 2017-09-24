@@ -1,67 +1,111 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 24 Sep 2017 12:51:08 +0200
-Subject: [Buildroot] [git commit] wsapi: fix Lua 5.3 compatibility
-Message-ID: <20170924104359.4787780FE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lbase64: build as generic-package instead
+	of luarocks
+Message-ID: <20170924104359.27F8980FE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=551449bfc91cd69366db2840f19c8b403fce50f8
+commit: https://git.buildroot.net/buildroot/commit/?id=258d3cda3b13f7c775a4ff06555915946efa6dcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The author of lbase64 maintains 3 separate versions of the package for
+the 3 Lua versions. Only the 5.1 version is uploaded to luarocks, so
+that is the one we currently support in Buildroot.
+
+However, the three versions are nearly identical. With a small patch,
+this allows us to support all Lua versions from a single tarball.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Arnout: use git-formatted patch]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/wsapi/0001-Lua-5.3-compatibility.patch | 41 ++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../lbase64/0001-retro-compatible-with-Lua-5.1.patch | 20 ++++++++++++++++++++
+ package/lbase64/Config.in                            |  7 +------
+ package/lbase64/lbase64.hash                         |  2 +-
+ package/lbase64/lbase64.mk                           | 19 +++++++++++++++----
+ 4 files changed, 37 insertions(+), 11 deletions(-)
 
-diff --git a/package/wsapi/0001-Lua-5.3-compatibility.patch b/package/wsapi/0001-Lua-5.3-compatibility.patch
+diff --git a/package/lbase64/0001-retro-compatible-with-Lua-5.1.patch b/package/lbase64/0001-retro-compatible-with-Lua-5.1.patch
 new file mode 100644
-index 0000000..d55c818
+index 0000000..12acf44
 --- /dev/null
-+++ b/package/wsapi/0001-Lua-5.3-compatibility.patch
-@@ -0,0 +1,41 @@
-+From 2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611 Mon Sep 17 00:00:00 2001
-+From: mpeterv <mpeterval@gmail.com>
-+Date: Thu, 3 Dec 2015 13:10:14 +0300
-+Subject: [PATCH] Lua 5.3 compatibility
-+
-+Fetched from: https://github.com/keplerproject/wsapi/commit/2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611
++++ b/package/lbase64/0001-retro-compatible-with-Lua-5.1.patch
+@@ -0,0 +1,20 @@
++retro compatible with Lua 5.1 C/API
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ src/wsapi/ringer.lua | 1 +
-+ src/wsapi/util.lua   | 2 +-
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/wsapi/ringer.lua b/src/wsapi/ringer.lua
-+index 58309f2..db7b68f 100644
-+--- a/src/wsapi/ringer.lua
-++++ b/src/wsapi/ringer.lua
-+@@ -5,6 +5,7 @@ local rings = require "rings"
-+ local _M = {}
++Index: b/lbase64.c
++===================================================================
++--- a/lbase64.c
+++++ b/lbase64.c
++@@ -111,7 +111,11 @@
 + 
-+ local init = [==[
-++  local loadstring = loadstring or load
-+   local app_name, bootstrap_code, is_file = ...
-+   if bootstrap_code then
-+     local bootstrap, err
-+diff --git a/src/wsapi/util.lua b/src/wsapi/util.lua
-+index 24d3cfe..34e5816 100644
-+--- a/src/wsapi/util.lua
-++++ b/src/wsapi/util.lua
-+@@ -174,7 +174,7 @@ function _M.make_env_post(pd, type, qs)
-+ end
-+ 
-+ function _M.loadfile(filename, env)
-+-  if _VERSION == "Lua 5.2" then
-++  if _VERSION ~= "Lua 5.1" then
-+     return loadfile(filename, "bt", env)
-+   else
-+     local f, err = loadfile(filename)
-+-- 
-+2.14.1
++ LUALIB_API int luaopen_base64(lua_State *L)
++ {
+++#if LUA_VERSION_NUM >= 502
++  luaL_newlib(L,R);
+++#else
+++ luaL_register(L,MYNAME,R);
+++#endif
++  lua_pushliteral(L,"version");			/** version */
++  lua_pushliteral(L,MYVERSION);
++  lua_settable(L,-3);
+diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
+index 5ef91bf..34ef943 100644
+--- a/package/lbase64/Config.in
++++ b/package/lbase64/Config.in
+@@ -1,12 +1,7 @@
+ config BR2_PACKAGE_LBASE64
+ 	bool "lbase64"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+ 	help
+ 	  A base64 library for Lua
+ 
+-	  http://luaforge.net/projects/lbase64/
+-
+-comment "lbase64 needs a Lua 5.1 interpreter"
+-	depends on !BR2_PACKAGE_LUA_5_1
+-	depends on !BR2_PACKAGE_LUAJIT
++	  http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/#lbase64
+diff --git a/package/lbase64/lbase64.hash b/package/lbase64/lbase64.hash
+index 0806090..d835d40 100644
+--- a/package/lbase64/lbase64.hash
++++ b/package/lbase64/lbase64.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	7326658d48a70382b496eb88220b0c398c19ed712e39863939330fec0533362a  lbase64-20120820-1.src.rock
++sha256 b83dbc87330a322e5222cd891a6e258b533f5b6c46e8f3c18fc0265e4c991aaa  lbase64.tar.gz
+diff --git a/package/lbase64/lbase64.mk b/package/lbase64/lbase64.mk
+index 80e8800..fd78a6c 100644
+--- a/package/lbase64/lbase64.mk
++++ b/package/lbase64/lbase64.mk
+@@ -4,9 +4,20 @@
+ #
+ ################################################################################
+ 
+-LBASE64_VERSION = 20120820-1
+-LBASE64_SUBDIR = base64
++LBASE64_VERSION = 20120820
++LBASE64_SITE = http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3
++LBASE64_SOURCE = lbase64.tar.gz
+ LBASE64_LICENSE = Public domain
+-LBASE64_LICENSE_FILES = $(LBASE64_SUBDIR)/README
++LBASE64_LICENSE_FILES = README
++LBASE64_DEPENDENCIES = luainterpreter
+ 
+-$(eval $(luarocks-package))
++define LBASE64_BUILD_CMDS
++	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) so
++endef
 +
++define LBASE64_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/base64.so \
++		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/base64.so
++endef
++
++$(eval $(generic-package))
