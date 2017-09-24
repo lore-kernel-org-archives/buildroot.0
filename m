@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 22:12:48 +0200
-Subject: [Buildroot] [PATCH] libidn: add fix for CVE-2017-14062
-In-Reply-To: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 15 Sep 2017 07:40:20 +0300")
-References: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
-Message-ID: <87efqvlutb.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Sep 2017 22:12:57 +0200
+Subject: [Buildroot] [PATCH] libidn: fix build without makeinfo
+In-Reply-To: <583676ae200bd379b846d5ccdcc5a2aafa4aad18.1506196074.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 23 Sep 2017 22:47:54 +0300")
+References: <583676ae200bd379b846d5ccdcc5a2aafa4aad18.1506196074.git.baruch@tkos.co.il>
+Message-ID: <87a81jlut2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Add upstream patch fixing CVE-2017-14062:
- > Integer overflow in the decode_digit function in puny_decode.c in
- > Libidn2 before 2.0.4 allows remote attackers to cause a denial of
- > service or possibly have unspecified other impact.
-
- > This issue also affects libidn.
-
- > Unfortunately, the patch also triggers reconf of the documentation
- > subdirectory, since lib/punycode.c is listed in GDOC_SRC that is defined
- > in doc/Makefile.am. Add autoreconf to handle that.
+ > Build fails when the makeinfo utility is not installed on the host.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/dfd/dfdfb34ed81ba3a4b7a7271be482e75eca849dbf/
+ > http://autobuild.buildroot.net/results/b33/b33c0b0e6b1033ab1d1294a91b869ee6adcd391a/
+ > http://autobuild.buildroot.net/results/940/9401cc10f6da6a2e3453ebc65ce573c370733fb5/
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
