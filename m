@@ -1,81 +1,67 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 12:23:43 +0200
-Subject: [Buildroot] [PATCH 1/9] luaposix: bump to version 34.0.1
-In-Reply-To: <20170924075932.5990-1-francois.perrad@gadz.org>
-References: <20170924075932.5990-1-francois.perrad@gadz.org>
-Message-ID: <332fbe7b-3daf-16ad-cd78-9efb049f34ba@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 24 Sep 2017 12:51:08 +0200
+Subject: [Buildroot] [git commit] wsapi: fix Lua 5.3 compatibility
+Message-ID: <20170924104359.4787780FE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Francois,
+commit: https://git.buildroot.net/buildroot/commit/?id=551449bfc91cd69366db2840f19c8b403fce50f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 24-09-17 09:59, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luaposix/luaposix.hash |  2 +-
->  package/luaposix/luaposix.mk   | 24 ++++++++++++++++++++----
->  2 files changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-> index e2216be73..b3984c1d1 100644
-> --- a/package/luaposix/luaposix.hash
-> +++ b/package/luaposix/luaposix.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256 e66262f5b7fe1c32c65f17a5ef5ffb31c4d1877019b4870a5d373e2ab6526a21 luaposix-33.4.0.tar.gz
-> +sha256 ba0bc343783fc33958cd02a68cdbfd65430152d9f297f7ed92678b1a305bd5d7  luaposix-34.0.1.tar.gz
-> diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-> index ea3af16fb..779e707ce 100644
-> --- a/package/luaposix/luaposix.mk
-> +++ b/package/luaposix/luaposix.mk
-> @@ -4,11 +4,27 @@
->  #
->  ################################################################################
->  
-> -LUAPOSIX_VERSION = 33.4.0
-> +LUAPOSIX_VERSION = 34.0.1
->  LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
->  LUAPOSIX_LICENSE = MIT
-> -LUAPOSIX_LICENSE_FILES = COPYING
-> +LUAPOSIX_LICENSE_FILES = LICENSE
->  LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
-> -LUAPOSIX_CONF_OPTS = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
->  
-> -$(eval $(autotools-package))
-> +define LUAPOSIX_BUILD_CMDS
-> +	(cd $(@D); \
-> +		$(LUA_RUN) build-aux/luke \
-> +		CC="$(TARGET_CC)" \
-> +		CFLAGS="$(TARGET_CFLAGS)" \
-> +		LUA_INCDIR=$(STAGING_DIR)/usr/include \
-> +	)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Arnout: use git-formatted patch]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/wsapi/0001-Lua-5.3-compatibility.patch | 41 ++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
- Since you're anyway switching the build system, why not convert it to a
-luarocks package?
-
- Regards,
- Arnout
-
-> +endef
-> +
-> +define LUAPOSIX_INSTALL_TARGET_CMDS
-> +	(cd $(@D); \
-> +		$(LUA_RUN) build-aux/luke install \
-> +		INST_LIBDIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-> +		INST_LUADIR="$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)" \
-> +	)
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/wsapi/0001-Lua-5.3-compatibility.patch b/package/wsapi/0001-Lua-5.3-compatibility.patch
+new file mode 100644
+index 0000000..d55c818
+--- /dev/null
++++ b/package/wsapi/0001-Lua-5.3-compatibility.patch
+@@ -0,0 +1,41 @@
++From 2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611 Mon Sep 17 00:00:00 2001
++From: mpeterv <mpeterval@gmail.com>
++Date: Thu, 3 Dec 2015 13:10:14 +0300
++Subject: [PATCH] Lua 5.3 compatibility
++
++Fetched from: https://github.com/keplerproject/wsapi/commit/2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ src/wsapi/ringer.lua | 1 +
++ src/wsapi/util.lua   | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/wsapi/ringer.lua b/src/wsapi/ringer.lua
++index 58309f2..db7b68f 100644
++--- a/src/wsapi/ringer.lua
+++++ b/src/wsapi/ringer.lua
++@@ -5,6 +5,7 @@ local rings = require "rings"
++ local _M = {}
++ 
++ local init = [==[
+++  local loadstring = loadstring or load
++   local app_name, bootstrap_code, is_file = ...
++   if bootstrap_code then
++     local bootstrap, err
++diff --git a/src/wsapi/util.lua b/src/wsapi/util.lua
++index 24d3cfe..34e5816 100644
++--- a/src/wsapi/util.lua
+++++ b/src/wsapi/util.lua
++@@ -174,7 +174,7 @@ function _M.make_env_post(pd, type, qs)
++ end
++ 
++ function _M.loadfile(filename, env)
++-  if _VERSION == "Lua 5.2" then
+++  if _VERSION ~= "Lua 5.1" then
++     return loadfile(filename, "bt", env)
++   else
++     local f, err = loadfile(filename)
++-- 
++2.14.1
++
