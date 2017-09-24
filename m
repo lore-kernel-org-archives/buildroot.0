@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:59:23 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libglu: needs host-pkgconf
-In-Reply-To: <20170913184544.5670-1-bernd.kuhls@t-online.de>
-References: <20170913184544.5670-1-bernd.kuhls@t-online.de>
-Message-ID: <f0a5b78d-58f8-21f0-5749-21b20bf78ea7@mind.be>
+Date: Sun, 24 Sep 2017 15:01:24 +0200
+Subject: [Buildroot] [PATCH] package/lmv2: add missing host-pkgconf
+ dependency
+In-Reply-To: <5428adbe-2619-d942-e239-0597cc4f1a69@mind.be>
+References: <20170913201755.9871-1-romain.naour@gmail.com>
+ <5428adbe-2619-d942-e239-0597cc4f1a69@mind.be>
+Message-ID: <e15c1f03-3cc0-2475-c141-f2361c72cde5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +14,45 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-17 20:45, Bernd Kuhls wrote:
-> Fix build error
+On 13-09-17 22:30, Arnout Vandecappelle wrote:
 > 
->>>> libglu 9.0.0 Autoreconfiguring
-> configure.ac:50: error: Could not locate the pkg-config autoconf macros.
->   These are usually located in /usr/share/aclocal/pkg.m4. If your macros
->   are in a different location, try setting the environment variable
->   ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.
-> configure.ac:50: the top level
-> autom4te: /home/buildroot/br4/output/host/bin/m4 failed with exit status: 1
 > 
-> using this defconfig
+> On 13-09-17 22:17, Romain Naour wrote:
+>> configure.ac use PKG_CHECK_MODULES macro to find some libraries dependencies.
+>> So add host-pkgconf in LVM2_DEPENDENCIES.
+>>
+>> Fixes:
+>> checking pkg-config is at least version 0.9.0... ./configure: line 9875: [...]/host/bin/pkg-config: No such file or directory
 > 
-> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XSERVER_XORG_SERVER=y
-> BR2_PACKAGE_NVIDIA_DRIVER=y
-> BR2_PACKAGE_LIBGLU=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  Any idea why the autobuilders didn't hit this failure?
 
- All three applied to master, thanks.
+ Even though you didn't answer :-) I applied to master after all, since
+configure clearly really wants pkg-config. Thanks!
 
  Regards,
  Arnout
+
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  package/lvm2/lvm2.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+>> index 63ac109..f7f7069 100644
+>> --- a/package/lvm2/lvm2.mk
+>> +++ b/package/lvm2/lvm2.mk
+>> @@ -21,6 +21,8 @@ LVM2_CONF_OPTS += \
+>>  	--enable-dmeventd \
+>>  	--disable-nls
+>>  
+>> +LVM2_DEPENDENCIES += host-pkgconf
+>> +
+>>  # LVM2 uses autoconf, but not automake, and the build system does not
+>>  # take into account the toolchain passed at configure time.
+>>  LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+>>
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
