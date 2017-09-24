@@ -1,27 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 23:15:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ngircd: fix pam support
-In-Reply-To: <20170924154641.14759-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 24 Sep 2017 17:46:41 +0200")
-References: <20170924154641.14759-1-bernd.kuhls@t-online.de>
-Message-ID: <87vak7kdc3.fsf@dell.be.48ers.dk>
+From: Maxime Chevallier <chevalliersebmax@gmail.com>
+Date: Mon, 25 Sep 2017 00:05:32 +0200
+Subject: [Buildroot]  [PATCH 0/1] [RFC] Add support for espressobin
+Message-ID: <1506290733-6042-1-git-send-email-chevalliersebmax@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hi everyone,
 
- > Fix type introduced by
- > https://git.buildroot.net/buildroot/commit/?id=13755ca3056e4793e483c2ec634c06ac017088d2
+The following patch adds basic support for the Globalscale
+Espressobin board, based on Marvell Armada 3720.
 
- > Fixes
- > http://autobuild.buildroot.net/results/461/461fa08ef11dc4ae8074a2d634138e4fcfaa8d16/
+This is all based on mainline linux and toolchains, and does
+not includes bootloader generation for the moment.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Lots of things can be added to generate more complete images,
+with full hardware support. That would require either using a
+custom device-tree, or a more featured in-tree one when it is
+available on linux mainline.
 
-Committed, thanks.
+Please do not hesitate to comment on this patch, especially on
+the naming of the different files.
+
+I added myself in the DEVELOPERS file, I'm not quite sure this
+if this is a correct thing to do.
+
+Maxime
+
+Maxime Chevallier (1):
+  mvebu_espressobin-88f3720 : Add support for espressobin
+
+ DEVELOPERS                                  |  4 ++
+ board/globalscale/espressobin/genimage.cfg  | 11 +++++
+ board/globalscale/espressobin/readme.txt    | 76 +++++++++++++++++++++++++++++
+ configs/mvebu_espressobin-88f3720_defconfig | 29 +++++++++++
+ 4 files changed, 120 insertions(+)
+ create mode 100644 board/globalscale/espressobin/genimage.cfg
+ create mode 100644 board/globalscale/espressobin/readme.txt
+ create mode 100644 configs/mvebu_espressobin-88f3720_defconfig
 
 -- 
-Bye, Peter Korsgaard
+2.7.4
