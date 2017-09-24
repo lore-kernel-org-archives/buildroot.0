@@ -1,48 +1,44 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:43:37 +0200
-Subject: [Buildroot] [git commit] docs: clarify <packagename>_PATCH behaviour
-Message-ID: <20170924124820.3F733806B5@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 14:38:59 +0200
+Subject: [Buildroot] [git commit] package/tslib: update to 1.13
+Message-ID: <20170924124820.3070F806B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48934ed0a97b7baee7ad8fbfb19e449024cdda9d
+commit: https://git.buildroot.net/buildroot/commit/?id=d51c1e0861d65d131ea70691f2ff9de5b7c07955
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reiterate once more that <packagename>_PATCH variable can point
-to an arbitrary URL, not just to a path relative to <packagename>_SITE.
+see https://github.com/kergoth/tslib/releases
 
-While we're at it, also explain that the patch should be added to the
-.hash file.
-
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-[Arnout: add sentence about .hash file.]
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/patch-policy.txt | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index e1df8b0..e704a0d 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -19,9 +19,14 @@ global patch directory.
- ==== Downloaded
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index f053c6c..3ed4900 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# https://github.com/kergoth/tslib/releases/download/1.12/tslib-1.12.tar.xz.sha256
+-sha256  237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83  tslib-1.12.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
++sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 2b4320d..06f887a 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- If it is necessary to apply a patch that is available for download, then add it
--to the +<packagename>_PATCH+ variable. It is downloaded from the same site
--as the package itself. It can be a single patch, or a tarball containing a
--patch series.
-+to the +<packagename>_PATCH+ variable. If an entry contains +://+,
-+then Buildroot will assume it is a full URL and download the patch
-+from this location. Otherwise, Buildroot will assume that the patch should be
-+downloaded from +<packagename>_SITE+. It can be a single patch,
-+or a tarball containing a patch series.
-+
-+Like for all downloads, a hash should be added to the +<packagename>.hash+
-+file.
- 
- This method is typically used for packages from Debian.
- 
+-TSLIB_VERSION = 1.12
++TSLIB_VERSION = 1.13
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
