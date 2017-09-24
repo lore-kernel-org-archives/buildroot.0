@@ -1,41 +1,44 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:45:37 +0200
-Subject: [Buildroot] [git commit] rpi-userland: bump to latest version
-Message-ID: <20170924124820.5208E806B5@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 14:38:05 +0200
+Subject: [Buildroot] [git commit] package/nvidia-driver: bump version to
+	384.69
+Message-ID: <20170924124820.03D548004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79260e7b7a8cc16d1337e6e1c4ae18b4863d51b7
+commit: https://git.buildroot.net/buildroot/commit/?id=985fe64026c2b0ab72877f92636328cfb4433418
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nvidia-driver/nvidia-driver.hash | 4 ++--
+ package/nvidia-driver/nvidia-driver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index e8a78b9..f1bb5e6 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+index 7fa729e..e05b8f0 100644
+--- a/package/nvidia-driver/nvidia-driver.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256 46a37eaf0de598ce5804e48a5efc2120e07d753a57ed83463ebfa551562eefe6 rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
-+sha256 8ed745ea28ef9d5e6d2e5534acabe1ea1a6c6be9bab7f683527ce5da5a3f77cb rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 90077a1..a798795 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+-sha256 c39805e6610f710d16acf57c9d09cb5504d33c557e634e632079d46f18da4268  NVIDIA-Linux-x86-381.09.run
+-sha256 04ec99f6d621adc464314adc82a92009e071a301a773487df7f460333e04e98c  NVIDIA-Linux-x86_64-381.09.run
++sha256 3b70587582220ab1102bcb8386f206f89e6b146856af41f16eaa5910e54ef8fd  NVIDIA-Linux-x86-384.69.run
++sha256 a7b7984fc532be17c262bc4353e279824ae63625d8ae9f1016cb66d199b97650  NVIDIA-Linux-x86_64-384.69.run
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 1795434..e566610 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 29835184aa70c13d77a11d721e934a7298bdf46a
-+RPI_USERLAND_VERSION = a7976021a89451de0d008aa48f16c4e88872899b
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+-NVIDIA_DRIVER_VERSION = 381.09
++NVIDIA_DRIVER_VERSION = 384.69
+ NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+ NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+ NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
