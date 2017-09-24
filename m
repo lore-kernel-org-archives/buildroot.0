@@ -1,108 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 09:01:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] openjpeg: Fix malloc
-	poison issue
-Message-ID: <20170924065727.9C37E80F76@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 09:01:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openjpeg: fix build
+	without C++ support
+Message-ID: <20170924065727.B32BE806B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a22a5fcb3811144fe2d227829a62f6b1b3250f4
+commit: https://git.buildroot.net/buildroot/commit/?id=5f9d99944ae41564e735fc5789f95644e9bdcc79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The malloc poison issue has been fixed upstream, this patch will thus only
-be temporary.
+Fixes:
+http://autobuild.buildroot.net/results/e2f/e2ff0a7fa2b911157edf6c43a8eed797b22edd46/
+http://autobuild.buildroot.net/results/670/6706339e7df2f2e7d0d7a15663bed185ca55c2a1/
 
-Fixes the following autobuild issues
+Openjpeg is written in C, but with the move to CMake the build system now
+errors out if a C++ compiler isn't available.  Fix it by patching the
+CMakeLists.txt to not require C++ support.
 
-       sparc | http://autobuild.buildroot.net/results/c1b7a316ca2a4db49023f304dbc7fd5fed05bd9d
-        bfin | http://autobuild.buildroot.net/results/031ece7a72e76a9155938cb283de859bd12a8171
-         sh4 | http://autobuild.buildroot.net/results/88664451f71c12ccd94e874d408fbb680bea1695
-      xtensa | http://autobuild.buildroot.net/results/fbede64a5a86d4868b6da0ab1275e75803235af0
-     powerpc | http://autobuild.buildroot.net/results/6c641650509048039b18fbeb010dbca0f0fc5292
-microblazeel | http://autobuild.buildroot.net/results/fa2d5272b2db73cbfa441ead9250157c5626ab15
-    mips64el | http://autobuild.buildroot.net/results/fc96f6628f71e05d9a74e0e13e50178d29a2c495
-         sh4 | http://autobuild.buildroot.net/results/a6d6a6dcb9b4fa250edaaf5935762c5820457b23
-      x86_64 | http://autobuild.buildroot.net/results/47b4ca2cc661582d86830b9353a6c8af86e4ba35
-         arc | http://autobuild.buildroot.net/results/08e2e4eca6c3dbde8116a649dbf46e52ded45d10
-         arc | http://autobuild.buildroot.net/results/899fa044aab7ee28acfa71544f2105da4a5c97d5
-         arm | http://autobuild.buildroot.net/results/6016f6885b21d6e8c6199a6833c7acce6210ecc6
-         arm | http://autobuild.buildroot.net/results/adbb3c76497e89161535c711de98809a0fa168a7
-        or1k | http://autobuild.buildroot.net/results/de3ef69a72d2c2082e202fbed702c53a51274fef
-    mips64el | http://autobuild.buildroot.net/results/39b186b13001a810e0992b52321f1015b445d2fd
-      x86_64 | http://autobuild.buildroot.net/results/22c6a29a1ded6aedf01adfdfcf26302248dba80c
-         arm | http://autobuild.buildroot.net/results/b62c54b727eb5f576c4a517a69c495b537c3b69a
-        m68k | http://autobuild.buildroot.net/results/a826561c5786be5f0088b50b633210593e23ffff
-         arm | http://autobuild.buildroot.net/results/d32ec927a5e4d5644cb3641014bcf6ebe5c14490
+Patch submitted upstream:
+https://github.com/uclouvain/openjpeg/pull/1027
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 19d80818654977948f32496cde2537719b150850)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit d2911fec6a02cfd9324c96a4dada9c493929c26b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-avoid-malloc-poisoning-issue.patch        | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ ...CMakeLists.txt-Don-t-require-a-C-compiler.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch b/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch
+diff --git a/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch b/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch
 new file mode 100644
-index 0000000..8463e20
+index 0000000..13cceef
 --- /dev/null
-+++ b/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch
-@@ -0,0 +1,54 @@
-+From 51a1dcaa6ed5713520dca36fc58cd9240c08b7ca Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Thu, 7 Sep 2017 17:52:59 +0200
-+Subject: [PATCH] Avoid malloc poisoning issue when including <pthread.h> of
-+ uclibc (#1013)
++++ b/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+@@ -0,0 +1,34 @@
++From 786ddcd1475adc6193c59d53e0d8ed2c502f2b00 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 23 Sep 2017 18:49:31 +0200
++Subject: [PATCH] CMakeLists.txt: Don't require a C++ compiler
 +
-+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
++By default, CMake assumes that the project is using both C and C++.  By
++explicitly passing 'C' as argument of the project() macro, we tell CMake
++that only C is used, which prevents CMake from erroring out if a C++
++compiler doesn't exist.
++
++Submitted upstream:
++https://github.com/uclouvain/openjpeg/pull/1027
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ src/lib/openjp2/thread.c | 11 ++++++++---
-+ 1 file changed, 8 insertions(+), 3 deletions(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/lib/openjp2/thread.c b/src/lib/openjp2/thread.c
-+index 8b56aa4d5..af33c2c80 100644
-+--- a/src/lib/openjp2/thread.c
-++++ b/src/lib/openjp2/thread.c
-+@@ -29,9 +29,6 @@
-+  * POSSIBILITY OF SUCH DAMAGE.
-+  */
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index ec42bc99..d80eb48b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -24,7 +24,7 @@ endif()
++ #string(TOLOWER ${OPENJPEG_NAMESPACE} OPENJPEG_LIBRARY_NAME)
++ set(OPENJPEG_LIBRARY_NAME openjp2)
 + 
-+-#include "opj_includes.h"
-+-
-+-#include "thread.h"
-+ #include <assert.h>
++-project(${OPENJPEG_NAMESPACE})
+++project(${OPENJPEG_NAMESPACE} C)
 + 
-+ #ifdef MUTEX_win32
-+@@ -46,6 +43,8 @@
-+ #include <windows.h>
-+ #include <process.h>
-+ 
-++#include "opj_includes.h"
-++
-+ OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
-+ {
-+     return OPJ_TRUE;
-+@@ -289,6 +288,10 @@ void opj_thread_join(opj_thread_t* thread)
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ 
-++/* Moved after all system includes, and in particular pthread.h, so as to */
-++/* avoid poisoning issuing with malloc() use in pthread.h with ulibc (#1013) */
-++#include "opj_includes.h"
-++
-+ OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
-+ {
-+     return OPJ_TRUE;
-+@@ -425,6 +428,8 @@ void opj_thread_join(opj_thread_t* thread)
-+ #else
-+ /* Stub implementation */
-+ 
-++#include "opj_includes.h"
-++
-+ OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
-+ {
-+     return OPJ_FALSE;
++ # Do full dependency headers.
++ include_regular_expression("^.*$")
++-- 
++2.11.0
++
