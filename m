@@ -1,104 +1,51 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 17:04:24 +0200
-Subject: [Buildroot] [git commit] imx: Introduce an SPL genimage template
-Message-ID: <20170924145821.B52F781039@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 17:04:33 +0200
+Subject: [Buildroot] [git commit] configs/imx6q-sabresd_defconfig: Switch to
+	SPL boot
+Message-ID: <20170924145821.C2DF3810DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e2b8e1b42deac0261c96d8a867515d51ef33b5f
+commit: https://git.buildroot.net/buildroot/commit/?id=fc8213041e8afc5adb18ed4584121e50004873ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introduce a genimage template for booting SPL + u-boot.img U-Boot
-binaries.
+U-Boot 2017.07 has switched to SPL boot, which allows the same binary to
+boot on imx6dl, imx6q and imx6qp sabresd boards.
+
+Switch to the SPL mechanism.
 
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../freescale/common/imx/genimage.cfg.template_spl | 46 ++++++++++++++++++++++
- board/freescale/common/imx/post-image.sh           | 11 +++++-
- 2 files changed, 56 insertions(+), 1 deletion(-)
+ configs/imx6q-sabresd_defconfig | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_spl b/board/freescale/common/imx/genimage.cfg.template_spl
-new file mode 100644
-index 0000000..0b6e228
---- /dev/null
-+++ b/board/freescale/common/imx/genimage.cfg.template_spl
-@@ -0,0 +1,46 @@
-+# Minimal SD card image for the Freescale boards Template for SPL Boot
-+#
-+# We mimic the .sdcard Freescale's image format:
-+# * the SD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 8MB is containing zImage/uImage and DTB files
-+# * a single root filesystem partition is required (ext2, ext3 or ext4)
-+#
-+
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      %FILES%
-+    }
-+  }
-+  size = 16M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition spl {
-+    in-partition-table = "no"
-+    image = "SPL"
-+    offset = 1024
-+  }
-+
-+  partition u-boot-img {
-+    in-partition-table = "no"
-+    image = "u-boot.img"
-+    offset = 69K
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 8M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 9e4da82..b239743 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -28,6 +28,15 @@ linux_image()
- 	fi
- }
+diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
+index 2259d16..18d809c 100644
+--- a/configs/imx6q-sabresd_defconfig
++++ b/configs/imx6q-sabresd_defconfig
+@@ -22,10 +22,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  
-+genimage_type()
-+{
-+	if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_spl"
-+	else
-+		echo "genimage.cfg.template"
-+	fi
-+}
-+
- main()
- {
- 	local FILES="$(dtb_list) $(linux_image)"
-@@ -35,7 +44,7 @@ main()
- 	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
++BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
  
- 	sed -e "s/%FILES%/${FILES}/" \
--		board/freescale/common/imx/genimage.cfg.template > ${GENIMAGE_CFG}
-+		board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
- 
- 	rm -rf "${GENIMAGE_TMP}"
- 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+@@ -33,4 +35,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
