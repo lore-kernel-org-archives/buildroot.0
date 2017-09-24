@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 24 Sep 2017 09:59:25 +0200
-Subject: [Buildroot] [PATCH 2/9] lua-curl: new package
+Date: Sun, 24 Sep 2017 09:59:26 +0200
+Subject: [Buildroot] [PATCH 3/9] lua-datafile: new package
 In-Reply-To: <20170924075932.5990-1-francois.perrad@gadz.org>
 References: <20170924075932.5990-1-francois.perrad@gadz.org>
-Message-ID: <20170924075932.5990-2-francois.perrad@gadz.org>
+Message-ID: <20170924075932.5990-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in              |  1 +
- package/lua-curl/Config.in     |  7 +++++++
- package/lua-curl/lua-curl.hash |  2 ++
- package/lua-curl/lua-curl.mk   | 14 ++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/lua-curl/Config.in
- create mode 100644 package/lua-curl/lua-curl.hash
- create mode 100644 package/lua-curl/lua-curl.mk
+ package/Config.in                      |  1 +
+ package/lua-datafile/Config.in         |  7 +++++++
+ package/lua-datafile/lua-datafile.hash |  2 ++
+ package/lua-datafile/lua-datafile.mk   | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/lua-datafile/Config.in
+ create mode 100644 package/lua-datafile/lua-datafile.hash
+ create mode 100644 package/lua-datafile/lua-datafile.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b826bdbc3..119beabab 100644
+index 119beabab..767614c7d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -574,6 +574,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-coat/Config.in"
+@@ -575,6 +575,7 @@ menu "Lua libraries/modules"
  	source "package/lua-coatpersistent/Config.in"
  	source "package/lua-csnappy/Config.in"
-+	source "package/lua-curl/Config.in"
+ 	source "package/lua-curl/Config.in"
++	source "package/lua-datafile/Config.in"
  	source "package/lua-ev/Config.in"
  	source "package/lua-flu/Config.in"
  	source "package/lua-iconv/Config.in"
-diff --git a/package/lua-curl/Config.in b/package/lua-curl/Config.in
+diff --git a/package/lua-datafile/Config.in b/package/lua-datafile/Config.in
 new file mode 100644
-index 000000000..88cdaf10c
+index 000000000..e65406ed8
 --- /dev/null
-+++ b/package/lua-curl/Config.in
++++ b/package/lua-datafile/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LUA_CURL
-+	bool "lua-curl"
-+	select BR2_PACKAGE_LIBCURL
++config BR2_PACKAGE_LUA_DATAFILE
++	bool "lua-datafile"
 +	help
-+	  Lua binding to libcurl.
++	  datafile is a library for avoiding hardcoded paths
++	  when loading resource files in Lua modules.
 +
-+	  https://lua-curl.github.io/
-diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
++	  https://github.com/hishamhm/datafile
+diff --git a/package/lua-datafile/lua-datafile.hash b/package/lua-datafile/lua-datafile.hash
 new file mode 100644
-index 000000000..e73810ced
+index 000000000..83c346eae
 --- /dev/null
-+++ b/package/lua-curl/lua-curl.hash
++++ b/package/lua-datafile/lua-datafile.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 4cc6389bf5d4a868cc1e6017733b9b6306f2fc8b5083aa928d66399195697f34  lua-curl-0.3.7-1.src.rock
-diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
++sha256 37a33079c3476477f19de14bebd664635a39a57dd05a2709c3a402cbc1e79a6b  datafile-0.4-1.src.rock
+diff --git a/package/lua-datafile/lua-datafile.mk b/package/lua-datafile/lua-datafile.mk
 new file mode 100644
-index 000000000..9a35d3756
+index 000000000..75aef5290
 --- /dev/null
-+++ b/package/lua-curl/lua-curl.mk
-@@ -0,0 +1,14 @@
++++ b/package/lua-datafile/lua-datafile.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# lua-curl
++# lua-datafile
 +#
 +################################################################################
 +
-+LUA_CURL_VERSION_UPSTREAM =0.3.7
-+LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
-+LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
-+LUA_CURL_LICENSE = MIT
-+LUA_CURL_LICENSE_FILES = $(LUA_CURL_SUBDIR)/LICENSE
-+LUA_CURL_DEPENDENCIES = libcurl
++LUA_DATAFILE_VERSION = 0.4-1
++LUA_DATAFILE_NAME_UPSTREAM = datafile
++LUA_DATAFILE_SUBDIR = datafile
++LUA_DATAFILE_LICENSE = MIT
++LUA_DATAFILE_LICENSE_FILES = $(LUA_DATAFILE_SUBDIR)/LICENSE
 +
 +$(eval $(luarocks-package))
 -- 
