@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:04:26 +0200
-Subject: [Buildroot] [PATCH 1/3] ffmpeg: Add HWAccel support to
- Raspberry Pi
-In-Reply-To: <20170914150156.31075-1-mahyar.koshkouei@gmail.com>
-References: <20170914150156.31075-1-mahyar.koshkouei@gmail.com>
-Message-ID: <2444e727-69a0-a2ec-af32-de7031d466fe@mind.be>
+Date: Sun, 24 Sep 2017 15:05:02 +0200
+Subject: [Buildroot] [PATCH 2/3] mpv: bump version to 0.27.0
+In-Reply-To: <20170914150238.31289-1-mahyar.koshkouei@gmail.com>
+References: <20170914150238.31289-1-mahyar.koshkouei@gmail.com>
+Message-ID: <25c1a16e-b76c-ceb5-99ef-d4d282ea0ee2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,42 @@ To: buildroot@busybox.net
 
 
 
-On 14-09-17 17:01, Mahyar Koshkouei wrote:
+On 14-09-17 17:02, Mahyar Koshkouei wrote:
+> Includes some fixes for the Raspberry Pi, amongst many others.
+> 
 > Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 
- Applied to master, thanks. I wrapped the long line and reworded the commit
-message a little.
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
 > ---
->  package/ffmpeg/ffmpeg.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/mpv/mpv.hash | 2 +-
+>  package/mpv/mpv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index a27819be3c..19089ddb07 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -254,6 +254,13 @@ else
->  FFMPEG_CONF_OPTS += --disable-vdpau
->  endif
+> diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+> index 10a91cfb2c..60fb84335e 100644
+> --- a/package/mpv/mpv.hash
+> +++ b/package/mpv/mpv.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 07423ffad6921ec4da32f703cd7fbfb27012301dcb736ac8542ac8e6083b0bce  v0.25.0.tar.gz
+> +sha256 341d8bf18b75c1f78d5b681480b5b7f5c8b87d97a0d4f53a5648ede9c219a49c v0.27.0.tar.gz
+> diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+> index 37548c9074..730ced6c64 100644
+> --- a/package/mpv/mpv.mk
+> +++ b/package/mpv/mpv.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE)$(BR2_PACKAGE_RPI_USERLAND),yy)
-> +FFMPEG_CONF_OPTS += --enable-mmal --enable-omx --enable-omx-rpi --extra-cflags=-I$(STAGING_DIR)/usr/include/IL
-> +FFMPEG_DEPENDENCIES += rpi-firmware rpi-userland
-> +else
-> +FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
-> +endif
-> +
->  # To avoid a circular dependency only use opencv if opencv itself does
->  # not depend on ffmpeg.
->  ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
+> -MPV_VERSION = 0.25.0
+> +MPV_VERSION = 0.27.0
+>  MPV_SITE = https://github.com/mpv-player/mpv/archive
+>  MPV_SOURCE = v$(MPV_VERSION).tar.gz
+>  MPV_DEPENDENCIES = \
 > 
 
 -- 
