@@ -1,113 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 16:46:53 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gst1-plugins-bad: fix
-	build against openjpeg 2.2
-Message-ID: <20170924144030.CFB8780AEB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Sep 2017 16:57:09 +0200
+Subject: [Buildroot] [PATCH 22/49 v2] package/dahdi-tools: add USB
+	support
+In-Reply-To: <00872d3f-c545-9ee9-6781-06c782fb7a22@mind.be>
+References: <cover.1504993178.git.yann.morin.1998@free.fr>
+ <4fc439b83d4974f15558cf6963b500862d0a85bc.1504993178.git.yann.morin.1998@free.fr>
+ <00872d3f-c545-9ee9-6781-06c782fb7a22@mind.be>
+Message-ID: <20170924145709.GA2660@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bde9621d0f0c5d88f316ea0df9e125f73c88f2bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+On 2017-09-23 18:28 +0200, Arnout Vandecappelle spake thusly:
+>  Hi Yann,
+> 
+>  I'm in the process of applying this series. Small problem here.
+> 
+> On 09-09-17 23:39, Yann E. MORIN wrote:
+> > dahdi-tools can use either libusb-1.0.x or libusb-0.1.x, and Buildroot
+> > packages both, respectively as libusb and as libusb-compat.
+> 
+> [snip]
+> > +# Note: libsubx was a fork of libusb, which was merged back into
+> > +# libusb for the 1.0.18 release in early 2014, but it looks like
+> > +# dahdi-tools uses the libusbx vs. libusb to differentiate whether
+> > +# to use the 1.0.x vs. 0.9.x libusb. Since in Buildroot, libusb-compat
+> > +# anyway depends on libusb, presence of libusb-compat means that
+> > +# libusb is enabled, so we only support libusb for dahdi-tools.
+> > +#
+> > +# Yet, we must ensure build-ordering in case libusb-compat id enabled.
+> 
+>  That bit doesn't make sense to me. Since we always pass --without-libusb, why
+> would this be needed?
 
-Add upstream patch to fix build against openjpeg 2.2.
+Hmm.. Lemme get my mind back together...
 
-Fixes [1]:
+Well, even since we do not enforce ordering at all in fact, this is
+probasbly a leftover from a previous tentative...
 
-  gstopenjpeg.h:42:37: fatal error: openjpeg-2.1/openjpeg.h: No such file or directory
+> > +#
+> > +# Yes, this is very confusing.
+> > +#
+> > +ifeq ($(BR2_PACKAGE_LIBUSB),y)
+> > +DAHDI_TOOLS_DEPENDENCIES += libusb
+> > +DAHDI_TOOLS_CONF_OPTS += --with-usb --with-libusbx
+> > +ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
+> > +DAHDI_TOOLS_DEPENDENCIES += libusb-comapt
+> 
+>  This will surely give a build error :-)
 
-[1] http://autobuild.buildroot.net/results/90f1f7838f08e3a557be27470406d4d84dbcc828
+Meh... It means I did not try-build with libusb enabled... :-/
 
-[Peter: drop meson changes for 2017.02.x]
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3a5d4db9549f6a777b06819bc00146a30d687d22)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...1-openjpeg-Fix-build-against-openjpeg-2.2.patch | 60 ++++++++++++++++++++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  4 ++
- 2 files changed, 64 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
-new file mode 100644
-index 0000000..6d4419c
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
-@@ -0,0 +1,60 @@
-+From daaf649bda7231fd0d760802232a36ba62a4ea2d Mon Sep 17 00:00:00 2001
-+From: Clemens Lang <cal@macports.org>
-+Date: Sun, 13 Aug 2017 21:17:18 +0200
-+Subject: [PATCH] openjpeg: Fix build against openjpeg 2.2
-+
-+OpenJPEG 2.2 has some API changes and thus ships its headers in a new
-+include path. Add a configure check (to both meson and autoconf) to
-+detect the newer version of OpenJPEG and add conditional includes.
-+
-+Fix the autoconf test for OpenJPEG 2.1, which checked for HAVE_OPENJPEG,
-+which was always set even for 2.0.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=786250
-+
-+[Peter: drop meson changes for 2017.02.x]
-+Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/patch/?id=15f24fef53a955c7c76fc966302cb0453732e657
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac               |  7 ++++++-
-+ ext/openjpeg/gstopenjpeg.h |  4 +++-
-+ 2 files changed, 22 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 30e26b8..c4f08c7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2813,8 +2813,13 @@ AG_GST_CHECK_FEATURE(OPENJPEG, [openjpeg library], openjpeg, [
-+   if test x"$HAVE_OPENJPEG" = x"yes"; then
-+     dnl minor API changes in v2.1
-+     AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_1, libopenjp2 >= 2.1)
-+-    if test x"$HAVE_OPENJPEG" = x"yes"; then
-++    if test x"$HAVE_OPENJPEG_2_1" = x"yes"; then
-+       AC_DEFINE([HAVE_OPENJPEG_2_1], 1, [Define if OpenJPEG 2.1 is used])
-++        dnl include paths changed for v2.2
-++        AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_2, libopenjp2 >= 2.2)
-++        if test x"$HAVE_OPENJPEG_2_2" = x"yes"; then
-++          AC_DEFINE([HAVE_OPENJPEG_2_2], 1, [Define if OpenJPEG 2.2 is used])
-++        fi
-+     fi
-+   else
-+     # Fallback to v1.5
-+diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
-+index 03ce52e..52410a4 100644
-+--- a/ext/openjpeg/gstopenjpeg.h
-++++ b/ext/openjpeg/gstopenjpeg.h
-+@@ -38,7 +38,9 @@
-+ #define OPJ_CPRL CPRL
-+ #else
-+ #include <stdio.h>
-+-# ifdef HAVE_OPENJPEG_2_1
-++# if defined(HAVE_OPENJPEG_2_2)
-++#  include <openjpeg-2.2/openjpeg.h>
-++# elif defined(HAVE_OPENJPEG_2_1)
-+ #  include <openjpeg-2.1/openjpeg.h>
-+ # else
-+ #  include <openjpeg-2.0/openjpeg.h>
-+ 
-+-- 
-+2.12.3
-+
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 9f39bbf..8e3010b 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -13,6 +13,10 @@ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
- # enabled.
- GST1_PLUGINS_BAD_LICENSE = LGPLv2+, LGPLv2.1+
- 
-+# patch 0001-openjpeg-Fix-build-against-openjpeg-2.2.patch touches configure.ac
-+GST1_PLUGINS_BAD_AUTORECONF = YES
-+GST1_PLUGINS_BAD_GETTEXTIZE = YES
-+
- GST1_PLUGINS_BAD_CONF_OPTS = \
- 	--disable-examples \
- 	--disable-valgrind \
+>  Regards,
+>  Arnout
+> 
+> > +endif
+> > +else
+> > +DAHDI_TOOLS_CONF_OPTS += --without-usb --without-libusbx
+> > +endif
+> > +
+> >  $(eval $(autotools-package))
+> > 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
