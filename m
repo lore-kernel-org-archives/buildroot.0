@@ -1,127 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 16:09:13 +0200
-Subject: [Buildroot] [PATCH] axel: bump to version 2.14.1
-In-Reply-To: <20170922044545.18813-1-ismael@iodev.co.uk>
-References: <20170922044545.18813-1-ismael@iodev.co.uk>
-Message-ID: <cf484d3b-ef26-1829-3a09-e98a4253cc16@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 24 Sep 2017 15:45:52 +0200
+Subject: [Buildroot] [git commit] package/protobuf-c: bump version to 1.3.0
+Message-ID: <20170924140311.A28C27FD0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ismael,
+commit: https://git.buildroot.net/buildroot/commit/?id=f079c1953c21daa37518d4170ad619b723076e93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 22-09-17 06:45, Ismael Luceno wrote:
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/protobuf-c/protobuf-c.hash | 2 +-
+ package/protobuf-c/protobuf-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Please make a longer commit message that explains a bit what changes you make:
-- change upstream URL;
-- add optional support for OpenSSL/LibreSSL;
-...
-
-> ---
->  package/axel/Config.in | 14 +++++++++++++-
->  package/axel/axel.hash |  3 +--
->  package/axel/axel.mk   | 17 ++++++++---------
->  3 files changed, 22 insertions(+), 12 deletions(-)
-> 
-> diff --git a/package/axel/Config.in b/package/axel/Config.in
-> index 6e709cfb1351..c7dcbe71c179 100644
-> --- a/package/axel/Config.in
-> +++ b/package/axel/Config.in
-> @@ -4,7 +4,19 @@ config BR2_PACKAGE_AXEL
->  	help
->  	  HTTP/FTP download accelerator.
->  
-> -	  http://axel.alioth.debian.org/
-> +	  https://github.com/axel-download-accelerator/
-
- Better refer to axel itself, that has a nice README.md:
-
-https://github.com/axel-download-accelerator/axel
-
-> +
-> +if BR2_PACKAGE_AXEL
-> +
-> +config BR2_PACKAGE_AXEL_SSL
-> +	bool "SSL/TLS support"
-> +	default y
-> +	depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_LIBRESSL
-> +
-> +comment "SSL/TLS support requires openssl or libressl"
-> +	depends on !(BR2_PACKAGE_OPENSSL || BR2_PACKAGE_LIBRESSL)
-
- Unless if there is a very good reason for it, we make this kind of dependency
-automatic, i.e. don't add a Config.in option. Instead, add conditions to the .mk
-file.
-
-[snip]
->  
-> -AXEL_VERSION = 2.4
-> -AXEL_SITE = http://sources.buildroot.net
-> +AXEL_VERSION = 2.14.1
-> +AXEL_SITE = $(call github,axel-download-accelerator,axel,v$(AXEL_VERSION))
-
- If upstream has a v in their version, you should also have it. So
-
-AXEL_VERSION = v2.14.1
-
- Note that as of today, the github helper no longer requires the third argument.
-
->  AXEL_LICENSE = GPL-2.0+
->  AXEL_LICENSE_FILES = COPYING
-> -AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-> +AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) \
-> +	$(if $(BR2_PACKAGE_AXEL_SSL),\
-> +		$(if $(BR2_PACKAGE_LIBRESSL),libressl,openssl))
-
- Remove this part. Instead, add something like this:
-
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-AXEL_CONF_OPTS += --with-ssl
-AXEL_DEPENDENCIES += openssl
-else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-AXEL_CONF_OPTS += --with-ssl
-AXEL_DEPENDENCIES += libressl
-else
-AXEL_CONF_OPTS += --without-ssl
-endif
-
- It's more lines, but it is easier to understand and therefore easier to maintain.
-
->  AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
->  
-> -ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> -AXEL_DISABLE_I18N = --i18n=0
-> -endif
-> -
->  define AXEL_CONFIGURE_CMDS
->  	(cd $(@D); \
-> +		./autogen.sh; \
->  		./configure \
->  			--prefix=/usr \
-> -			--debug=1 \
-> -			$(AXEL_DISABLE_I18N) \
-> +			$(if $(BR2_PACKAGE_AXEL_SSL),,--without-ssl) \
-> +			$(if $(BR2_SYSTEM_ENABLE_NLS),,--disable-nls) \
-
- While you're at it, perhaps you can switch to the autotools infrastructure.
-You'll have to set AXEL_AUTORECONF = YES because there is no configure script
-included. But then the configure, build and install commands can just be removed.
-
- Regards,
- Arnout
-
->  	)
->  endef
->  
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index 7584058..e22a9f1 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 49340784ca0f8657f38547088731fff3bfe8084adb89bf5e8dbc19ac43339aa6 protobuf-c-v1.1.1.tar.gz
++sha256 fd8f6f5d6927330cf2b8b4ec8332de8b1ee2b8f2480b52ee3f221aad6de2082c protobuf-c-v1.3.0.tar.gz
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 391b310..4306610 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = v1.1.1
++PROTOBUF_C_VERSION = v1.3.0
+ PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
