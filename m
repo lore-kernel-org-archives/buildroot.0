@@ -1,81 +1,57 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:36:48 +0200
-Subject: [Buildroot] [git commit] package/nvidia-driver: depends on
-	xlib_libX11 & xlib_libXext
-Message-ID: <20170924124819.E33EE8004A@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 14:35:31 +0200
+Subject: [Buildroot] [git commit] webkitgtk: Allow toggling WebDriver support
+Message-ID: <20170924124819.C5AE78004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3dab26f2ea77675f888c0c778c31db01c284ef5
+commit: https://git.buildroot.net/buildroot/commit/?id=b5df60d2197f08ec2dfc30e0a5f0cd04d39bb180
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix libglu build error
+Version 2.18.x includes support for remotely controlling WebKitGTK+
+based browsers using the standard WebDriver API. Typically this is used
+by Web developers, and in most cases it will be desirable to disable it
+from builds.
 
-  CXXLD    libGLU.la
-/home/buildroot/br4/output/host/lib/gcc/i586-buildroot-linux-gnu/6.4.0/../../../../i586-buildroot-linux-gnu/bin/ld: cannot find -lXext
-/home/buildroot/br4/output/host/lib/gcc/i586-buildroot-linux-gnu/6.4.0/../../../../i586-buildroot-linux-gnu/bin/ld: cannot find -lX11
-collect2: error: ld returned 1 exit status
-
-using this defconfig
-
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_NVIDIA_DRIVER=y
-BR2_PACKAGE_LIBGLU=y
-
-The nvidia binary blob is linked to libX11.so & libEext.so
-
-$ output/host/bin/i586-buildroot-linux-gnu-readelf -a output/target/usr/lib/libGL.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libnvidia-tls.so.381.09]
- 0x00000001 (NEEDED)                     Shared library: [libnvidia-glcore.so.381.09]
- 0x00000001 (NEEDED)                     Shared library: [libX11.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libXext.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.2]
-
-which is also reflected by Libs-section of package/nvidia-driver/gl.pc.
-
-To allow other packages linking to libGL.so provided by this package we
-need to reflect the fact that xlib_libX11 & xlib_libXext are not
-runtime-only dependencies.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/nvidia-driver/Config.in        | 4 ++--
- package/nvidia-driver/nvidia-driver.mk | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/Config.in    | 6 ++++++
+ package/webkitgtk/webkitgtk.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index 1105ec6..732d925 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -22,8 +22,8 @@ config BR2_PACKAGE_NVIDIA_DRIVER_XORG
- 	default y
- 	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
- 	select BR2_PACKAGE_MESA3D_HEADERS
--	select BR2_PACKAGE_XLIB_LIBX11 # runtime
--	select BR2_PACKAGE_XLIB_LIBXEXT # runtime
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 6746134..1795434 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_XORG),y)
- # are build dependencies of packages that depend on nvidia-driver, so
- # they should be built prior to those packages, and the only simple
- # way to do so is to make nvidia-driver depend on them.
--NVIDIA_DRIVER_DEPENDENCIES = mesa3d-headers
-+NVIDIA_DRIVER_DEPENDENCIES = mesa3d-headers xlib_libX11 xlib_libXext
- NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index e0b5947..65154db 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -82,4 +82,10 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+ 	  This option pulls in all of the required dependencies
+ 	  to enable multimedia (video/audio) support.
  
- # libGL.so.$(NVIDIA_DRIVER_VERSION) is the legacy libGL.so library; it
++config BR2_PACKAGE_WEBKITGTK_WEBDRIVER
++	bool "WebDriver support"
++	help
++	  Enable support for WebDriver. This will build and install the
++	  WebKitWebDriver program in the target.
++
+ endif
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index bac1e71..7cdf28c 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -49,6 +49,12 @@ WEBKITGTK_CONF_OPTS += \
+ 	-DENABLE_MEDIA_STREAM=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WEBKITGTK_WEBDRIVER),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_WEBDRIVER=ON
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
++endif
++
+ # Only one target platform can be built, assume X11 > Wayland
+ 
+ # GTK3-X11 target gives OpenGL from newer libgtk3 versions
