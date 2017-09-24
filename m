@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:31:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openobex: bump version to 1.7.2
-In-Reply-To: <20170916151535.2948-1-bernd.kuhls@t-online.de>
-References: <20170916151535.2948-1-bernd.kuhls@t-online.de>
-Message-ID: <6136aaf6-6e56-95ab-0967-d90287f47864@mind.be>
+Date: Sun, 24 Sep 2017 15:34:07 +0200
+Subject: [Buildroot] [PATCH] bash: fix static build
+In-Reply-To: <e61b7469d3048416c7e3c681a75f773843fe48a6.1505759427.git.baruch@tkos.co.il>
+References: <e61b7469d3048416c7e3c681a75f773843fe48a6.1505759427.git.baruch@tkos.co.il>
+Message-ID: <84c95fdc-b9cf-4008-2e8e-5c158f74c983@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,37 @@ To: buildroot@busybox.net
 
 
 
-On 16-09-17 17:15, Bernd Kuhls wrote:
-> Package switched to cmake without providing most of the autoconf
-> options previously available. Therefore we move all suboptions to
-> Config.in.legacy.
+On 18-09-17 20:30, Baruch Siach wrote:
+> When building bash statically, configure does not initialize the
+> SHOBJ_STATUS variable. The SHOBJ_STATUS make variable in
+> examples/loadables/Makefile.in must resolve to either 'supported' or
+> 'unsupported'. Otherwise, the install-$(SHOBJ_STATUS) target does not
+> exist.
 > 
-> All patches are removed, the files to be patched do not exist anymore.
+> This leads to the following build failure:
 > 
-> OPENOBEX_EXTRACT_CMDS is not needed anymore, upstream provides the
-> source as .tar.gz now.
+> make[2]: Entering directory '.../output/build/bash-4.4/examples/loadables'
+> make[2]: *** No rule to make target 'install-', needed by 'install'.  Stop.
+> make[2]: Leaving directory '.../output/build/bash-4.4/examples/loadables'
+> Makefile:793: recipe for target 'install' failed
 > 
-> Version 1.6 added support for libusb-1.x and udev. The current version
-> also supports bluez5_utils, not only bluez_utils.
+> with the following defconfig:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> BR2_arm=y
+> BR2_STATIC_LIBS=y
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> BR2_PACKAGE_BASH=y
+> 
+> Set SHOBJ_STATUS in the configure environment as a workaround.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- Applied to master, thanks. I also added some help text to the legacy options.
+ Even though this doesn't fail the build (because the error is ignored), it's
+pretty fragile. And SHOBJ_STATUS=unsupported is certainly correct for static
+builds. So I applied after all.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
