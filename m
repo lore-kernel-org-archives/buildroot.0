@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:34:07 +0200
-Subject: [Buildroot] [PATCH] bash: fix static build
-In-Reply-To: <e61b7469d3048416c7e3c681a75f773843fe48a6.1505759427.git.baruch@tkos.co.il>
-References: <e61b7469d3048416c7e3c681a75f773843fe48a6.1505759427.git.baruch@tkos.co.il>
-Message-ID: <84c95fdc-b9cf-4008-2e8e-5c158f74c983@mind.be>
+Date: Sun, 24 Sep 2017 15:40:07 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/pinentry: added optional
+ support for qt5
+In-Reply-To: <20170917170958.5725-1-bernd.kuhls@t-online.de>
+References: <20170917170958.5725-1-bernd.kuhls@t-online.de>
+Message-ID: <a86a9d60-e2a3-39d4-8b08-6578fcd119ff@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,27 @@ To: buildroot@busybox.net
 
 
 
-On 18-09-17 20:30, Baruch Siach wrote:
-> When building bash statically, configure does not initialize the
-> SHOBJ_STATUS variable. The SHOBJ_STATUS make variable in
-> examples/loadables/Makefile.in must resolve to either 'supported' or
-> 'unsupported'. Otherwise, the install-$(SHOBJ_STATUS) target does not
-> exist.
+On 17-09-17 19:09, Bernd Kuhls wrote:
+> Upstream added support for qt5:
+> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commit;h=abb59f50abf698ff1e56490fb39bcc98c26ab44b
 > 
-> This leads to the following build failure:
-> 
-> make[2]: Entering directory '.../output/build/bash-4.4/examples/loadables'
-> make[2]: *** No rule to make target 'install-', needed by 'install'.  Stop.
-> make[2]: Leaving directory '.../output/build/bash-4.4/examples/loadables'
-> Makefile:793: recipe for target 'install' failed
-> 
-> with the following defconfig:
-> 
-> BR2_arm=y
-> BR2_STATIC_LIBS=y
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> BR2_PACKAGE_BASH=y
-> 
-> Set SHOBJ_STATUS in the configure environment as a workaround.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Even though this doesn't fail the build (because the error is ignored), it's
-pretty fragile. And SHOBJ_STATUS=unsupported is certainly correct for static
-builds. So I applied after all.
+
+ Applied to master, thanks.
+
+ Unfortunately, I messed up the commit message a bit. I though that the way you
+handled the qt4/qt5 difference in the .mk file could be simplified and had
+already said so in the commit message, but in the end my idea didn't work so I
+reverted it, but I forgot to also revert the commit message. So, even though the
+commit message says "completely separate qt4 and qt5 in the .mk file instead of
+   making a complicated mix", I didn't actually do that.
 
  Regards,
  Arnout
+
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
