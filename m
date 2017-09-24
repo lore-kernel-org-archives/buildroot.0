@@ -1,40 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:06:03 +0200
-Subject: [Buildroot] [PATCH 3/3] mpv: add support for Raspberry Pi "rpi"
- output
-In-Reply-To: <20170914150238.31289-2-mahyar.koshkouei@gmail.com>
-References: <20170914150238.31289-1-mahyar.koshkouei@gmail.com>
- <20170914150238.31289-2-mahyar.koshkouei@gmail.com>
-Message-ID: <656fbb70-d75e-6495-34aa-c845c9323099@mind.be>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sun, 24 Sep 2017 09:25:51 -0400
+Subject: [Buildroot] [PATCH 1/3] raspberrypi: post-image.sh handles many
+	arguments
+In-Reply-To: <f843fcf3-4bc0-53ec-8b75-34694270bab1@mind.be>
+References: <20170923233007.13772-1-gael.portay@savoirfairelinux.com>
+ <20170923233007.13772-2-gael.portay@savoirfairelinux.com>
+ <f843fcf3-4bc0-53ec-8b75-34694270bab1@mind.be>
+Message-ID: <20170924132551.uvxo7nhtxbvbggo5@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout,
 
-
-On 14-09-17 17:02, Mahyar Koshkouei wrote:
-> mpv now compiles with the "rpi" video driver that provides hardware
-> acceleration on the Raspberry Pi.
+On Sun, Sep 24, 2017 at 12:04:19PM +0200, Arnout Vandecappelle wrote:
 > 
-> Tested working on a Raspberry Pi 1 Model B+.
+> On 24-09-17 01:30, Ga?l PORTAY wrote:
+> > This post-image script now handles many optional arguments given
+> > through the command-line.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 > 
-> Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+>  Can you evaluate how this patch interacts with [1] ? Note that I haven't looked
+> at either of them in detail.
+> 
+> [1] http://patchwork.ozlabs.org/patch/788904/
+>
 
- I didn't apply this patch since there was still some discussion upstream [1] of
-what the proper approach is.
+Both patches does the same thing.
 
-[1] https://github.com/mpv-player/mpv/pull/4883
+The only difference is that my patch parses arguments using a while loop
+(and shifts the first argument), while the patch from Erik parses
+argument using a for loop.
 
+Here is a diff of both patches.
 
- Regards,
- Arnout
+	-+: mine
+	++: Erik
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+	@@ -27,9 +11,9 @@
+	 -	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+	 -		echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+	 -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+	-+shift
+	-+while [ $# -ne 0 ]; do
+	-+	case "${1}" in
+My patch is using a while --^ (+ shift)
+	++for arg in "$@"
+	++do
+	++	case "${arg}" in
+Erik's solution uses a for -^
+	 +		--add-pi3-miniuart-bt-overlay)
+	 +		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+	 +			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+
+Erik's forgot to indent the esac.
+
+Otherwise, only the `-+ shift' would have been present is that chunk [*]. 
+
+	@@ -71,15 +55,12 @@
+	  __EOF__
+	 -	fi
+	 -	;;
+	--esac
+	 +		fi
+	 +		;;
+	-+	esac
+	-+	shift
+[*]: ---^-----------^
+	-+done
+	+ esac
+	
+	++done
+	++
+	  rm -rf "${GENIMAGE_TMP}"
+
+Regards,
+Gael
