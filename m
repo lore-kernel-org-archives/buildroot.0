@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 13:57:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nmap: bump version to 7.60
-In-Reply-To: <20170913131315.12129-1-bernd.kuhls@t-online.de>
-References: <20170913131315.12129-1-bernd.kuhls@t-online.de>
-Message-ID: <ae9b9621-c5ca-b0bf-93ca-8e3f57274528@mind.be>
+Date: Sun, 24 Sep 2017 13:59:08 +0200
+Subject: [Buildroot] [PATCH v2] python-six: add host variant
+In-Reply-To: <20170913132055.12371-1-julien.floret@6wind.com>
+References: <20170913132055.12371-1-julien.floret@6wind.com>
+Message-ID: <0b2ec939-489e-b746-e47c-d79be0a9e9bc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,64 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-17 15:13, Bernd Kuhls wrote:
-> Version 7.60 added optional support for libssh2:
-> http://seclists.org/nmap-announce/2017/4
+On 13-09-17 15:20, Julien Floret wrote:
+> While currently there is no in-tree Buildroot package which depends on
+> host-python-six, it can be needed to build external packages.
 > 
-> Switched _SITE to https
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
 
- Applied to master, thanks.
+ I'm very cautious adding host packages, but I guess python-six is something
+extremely useful for custom python scripts that you want to run with the same
+Python version as on the target.
+
+ Therefore, applied to master, thanks.
 
  Regards,
  Arnout
 
 > ---
->  package/nmap/nmap.hash |  4 ++--
->  package/nmap/nmap.mk   | 12 ++++++++++--
->  2 files changed, 12 insertions(+), 4 deletions(-)
+>  package/Config.in.host            | 1 +
+>  package/python-six/Config.in.host | 9 +++++++++
+>  package/python-six/python-six.mk  | 1 +
+>  3 files changed, 11 insertions(+)
+>  create mode 100644 package/python-six/Config.in.host
 > 
-> diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-> index 239ca13816..740ec7a001 100644
-> --- a/package/nmap/nmap.hash
-> +++ b/package/nmap/nmap.hash
-> @@ -1,2 +1,2 @@
-> -# From https://nmap.org/dist/sigs/nmap-7.40.tar.bz2.digest.txt
-> -sha256 9e14665fffd054554d129d62c13ad95a7b5c7a046daa2290501909e65f4d3188  nmap-7.40.tar.bz2
-> +# From https://nmap.org/dist/sigs/nmap-7.60.tar.bz2.digest.txt
-> +sha256 a8796ecc4fa6c38aad6139d9515dc8113023a82e9d787e5a5fb5fa1b05516f21  nmap-7.60.tar.bz2
-> diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-> index 37720e2cad..9db06d1455 100644
-> --- a/package/nmap/nmap.mk
-> +++ b/package/nmap/nmap.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -NMAP_VERSION = 7.40
-> -NMAP_SITE = http://nmap.org/dist
-> +NMAP_VERSION = 7.60
-> +NMAP_SITE = https://nmap.org/dist
->  NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
->  NMAP_DEPENDENCIES = libpcap pcre
->  NMAP_CONF_OPTS = --without-liblua --without-zenmap \
-> @@ -27,6 +27,14 @@ define NMAP_WRAPPER_EXEC
->  endef
->  NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
->  
-> +ifeq ($(BR2_PACKAGE_LIBSSH2),y)
-> +NMAP_CONF_OPTS += --with-libssh2="$(STAGING_DIR)/usr"
-> +NMAP_DEPENDENCIES += libssh2
-> +NMAP_LIBS_FOR_STATIC_LINK += `$(PKG_CONFIG_HOST_BINARY) --libs libssh2`
-> +else
-> +NMAP_CONF_OPTS += --without-libssh2
-> +endif
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index c5a852b858a4..e2717ae3b541 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -36,6 +36,7 @@ menu "Host utilities"
+>  	source "package/pru-software-support/Config.in.host"
+>  	source "package/pwgen/Config.in.host"
+>  	source "package/python-lxml/Config.in.host"
+> +	source "package/python-six/Config.in.host"
+>  	source "package/qemu/Config.in.host"
+>  	source "package/raspberrypi-usbboot/Config.in.host"
+>  	source "package/rauc/Config.in.host"
+> diff --git a/package/python-six/Config.in.host b/package/python-six/Config.in.host
+> new file mode 100644
+> index 000000000000..1d37e768ae29
+> --- /dev/null
+> +++ b/package/python-six/Config.in.host
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_HOST_PYTHON_SIX
+> +	bool "host python-six"
+> +	help
+> +	  Six is a Python 2 and 3 compatibility library. It provides
+> +	  utility functions for smoothing over the differences between
+> +	  the Python versions with the goal of writing Python code that
+> +	  is compatible on both Python versions.
 > +
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
->  NMAP_DEPENDENCIES += host-pkgconf openssl
+> +	  http://pythonhosted.org/six
+> diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+> index 0edefe346fdb..850f9340d322 100644
+> --- a/package/python-six/python-six.mk
+> +++ b/package/python-six/python-six.mk
+> @@ -12,3 +12,4 @@ PYTHON_SIX_LICENSE = MIT
+>  PYTHON_SIX_LICENSE_FILES = LICENSE
+>  
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
 > 
 
 -- 
