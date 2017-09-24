@@ -1,78 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 17:10:56 +0200
-Subject: [Buildroot] [PATCH RESEND 2/2] configs/imx6q-sabresd_defconfig:
- Switch to SPL boot
-In-Reply-To: <1505567532-11583-2-git-send-email-festevam@gmail.com>
-References: <1505567532-11583-1-git-send-email-festevam@gmail.com>
- <1505567532-11583-2-git-send-email-festevam@gmail.com>
-Message-ID: <e6553555-07ef-3d2c-7302-8bdcb264b0cb@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 24 Sep 2017 17:23:11 +0200
+Subject: [Buildroot] [PATCH] package/lmv2: add missing host-pkgconf
+ dependency
+In-Reply-To: <e15c1f03-3cc0-2475-c141-f2361c72cde5@mind.be>
+References: <20170913201755.9871-1-romain.naour@gmail.com>
+ <5428adbe-2619-d942-e239-0597cc4f1a69@mind.be>
+ <e15c1f03-3cc0-2475-c141-f2361c72cde5@mind.be>
+Message-ID: <bfe5b9bb-1086-551c-a8db-d01806c2eefe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
-
-On 16-09-17 15:12, Fabio Estevam wrote:
-> From: Fabio Estevam <fabio.estevam@nxp.com>
+Le 24/09/2017 ? 15:01, Arnout Vandecappelle a ?crit?:
 > 
-> U-Boot 2017.07 has switched to SPL boot, which allows the same binary to
-> boot on imx6dl, imx6q and imx6qp sabresd boards.
 > 
-> Switch to the SPL mechanism.
+> On 13-09-17 22:30, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 13-09-17 22:17, Romain Naour wrote:
+>>> configure.ac use PKG_CHECK_MODULES macro to find some libraries dependencies.
+>>> So add host-pkgconf in LVM2_DEPENDENCIES.
+>>>
+>>> Fixes:
+>>> checking pkg-config is at least version 0.9.0... ./configure: line 9875: [...]/host/bin/pkg-config: No such file or directory
+>>
+>>  Any idea why the autobuilders didn't hit this failure?
 > 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+>  Even though you didn't answer :-) I applied to master after all, since
+> configure clearly really wants pkg-config. Thanks!
 
- Applied both to master, thanks. However, as a follow-up patch, could you:
+Sorry, I missed your reply :(
 
-- rename this to imx6-sabresd_defconfig (since it now also supports DL and Q+);
-- also swith the _qt5 config to SPL;
-- maybe also merge board/freescale/imx6q-sabresd into board/freescale/imx6sabre,
-i.e. a single readme for all imx6sabre board that explains the difference
-between the Freescale and the upstream configs.
+The autobuilders didn't hit this issue because when pkg-config is missing the
+build doesn't stop.
+I noticed it by chance while looking at a build log file.
 
- Also, could a Solo not be supported with the same defconfig?
+Best regards,
+Romain
 
- Regards,
- Arnout
-
-> ---
->  configs/imx6q-sabresd_defconfig | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
-> index b26dc2a..e010315 100644
-> --- a/configs/imx6q-sabresd_defconfig
-> +++ b/configs/imx6q-sabresd_defconfig
-> @@ -22,10 +22,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  
->  # Bootloader
->  BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
-> +BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
-> -BR2_TARGET_UBOOT_FORMAT_IMX=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-> +BR2_TARGET_UBOOT_FORMAT_IMG=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
->  
->  # Kernel
->  BR2_LINUX_KERNEL=y
-> @@ -33,4 +35,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.1"
->  BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+>  Regards,
+>  Arnout
 > 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>>>
+>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>> ---
+>>>  package/lvm2/lvm2.mk | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+>>> index 63ac109..f7f7069 100644
+>>> --- a/package/lvm2/lvm2.mk
+>>> +++ b/package/lvm2/lvm2.mk
+>>> @@ -21,6 +21,8 @@ LVM2_CONF_OPTS += \
+>>>  	--enable-dmeventd \
+>>>  	--disable-nls
+>>>  
+>>> +LVM2_DEPENDENCIES += host-pkgconf
+>>> +
+>>>  # LVM2 uses autoconf, but not automake, and the build system does not
+>>>  # take into account the toolchain passed at configure time.
+>>>  LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+>>>
+>>
+> 
