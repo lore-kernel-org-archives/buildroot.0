@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:56:28 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libuv: bump version to 1.14.1
-In-Reply-To: <20170913141733.11538-1-bernd.kuhls@t-online.de>
-References: <20170913141733.11538-1-bernd.kuhls@t-online.de>
-Message-ID: <bfb186a4-7738-7f18-8bb0-ee50b1323b00@mind.be>
+Date: Sun, 24 Sep 2017 14:58:25 +0200
+Subject: [Buildroot] [PATCH 1/2] webkitgtk: update to version 2.18.0
+In-Reply-To: <20170913165121.12406-1-aperez@igalia.com>
+References: <20170913165121.12406-1-aperez@igalia.com>
+Message-ID: <7445a29a-4ac3-d866-638d-932a6f4f551b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,29 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-17 16:17, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 13-09-17 18:51, Adrian Perez de Castro wrote:
+> Update WebKitGTK+ to the latest stable release 2.18.0, see:
+> 
+>     https://webkitgtk.org/2017/09/11/webkitgtk2.18.0-released.html
+> 
+> The corresponding WebKit Security Advisory (WSA) has not yet been
+> published.
+> 
+> This also bumps the required target GCC version to, due to the WebKit
+> code now using more modern C++ features which were introduced in version
+> 5.x of the compiler.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
- Both applied to master, thanks!
+ Both applied to master, thanks.
+
+ I did make a few changes to this patch, though:
+
+- propagate dependency to midori;
+- mention in commit message why patches were removed.
 
  Regards,
  Arnout
-
-
-> ---
->  package/libuv/libuv.hash | 2 +-
->  package/libuv/libuv.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-> index 169a7be851..ff10f70f4f 100644
-> --- a/package/libuv/libuv.hash
-> +++ b/package/libuv/libuv.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  96088804334a70f84d64f45e4db926fc1dfa42d4a9d22b1812cf47bc0d9b6947  libuv-v1.14.0.tar.gz
-> +sha256 82fbbb0eaab4adcf8ed513d3b777c8e02ed2e77aae265baf6bd2d68cb84bc9e3  libuv-v1.14.1.tar.gz
-> diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-> index 0b62c5800e..563d010799 100644
-> --- a/package/libuv/libuv.mk
-> +++ b/package/libuv/libuv.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBUV_VERSION = v1.14.0
-> +LIBUV_VERSION = v1.14.1
->  LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
->  LIBUV_DEPENDENCIES = host-pkgconf
->  LIBUV_INSTALL_STAGING = YES
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
