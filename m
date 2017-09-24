@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 12:04:19 +0200
-Subject: [Buildroot] [PATCH 1/3] raspberrypi: post-image.sh handles many
-	arguments
-In-Reply-To: <20170923233007.13772-2-gael.portay@savoirfairelinux.com>
+Date: Sun, 24 Sep 2017 12:15:09 +0200
+Subject: [Buildroot] [PATCH 2/3] raspberrypi: post-image.sh add new
+	gpu_mem option
+In-Reply-To: <20170923233007.13772-3-gael.portay@savoirfairelinux.com>
 References: <20170923233007.13772-1-gael.portay@savoirfairelinux.com>
- <20170923233007.13772-2-gael.portay@savoirfairelinux.com>
-Message-ID: <f843fcf3-4bc0-53ec-8b75-34694270bab1@mind.be>
+ <20170923233007.13772-3-gael.portay@savoirfairelinux.com>
+Message-ID: <8c1d85a4-4390-047f-1d21-af37842a0040@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,90 +15,53 @@ To: buildroot@busybox.net
 
 
 On 24-09-17 01:30, Ga?l PORTAY wrote:
-> This post-image script now handles many optional arguments given
-> through the command-line.
+> The amount of GPU memory can be set using the new option --gpu_mem_XXX
+> (where XXX is the total amount of memory available on the board).
 > 
 > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+>  board/raspberrypi/post-image.sh | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+> index 1b49f0ea30..9091476ced 100755
+> --- a/board/raspberrypi/post-image.sh
+> +++ b/board/raspberrypi/post-image.sh
+> @@ -1,4 +1,4 @@
+> -#!/bin/sh
+> +#!/bin/bash
+>  
+>  BOARD_DIR="$(dirname $0)"
+>  BOARD_NAME="$(basename ${BOARD_DIR})"
+> @@ -38,6 +38,11 @@ enable_uart=1
+>  __EOF__
+>  		fi
+>  		;;
+> +		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
+> +		# Set GPU memory
+> +		gpu_mem="${1:2}"
+> +		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
 
- Can you evaluate how this patch interacts with [1] ? Note that I haven't looked
-at either of them in detail.
+ In the end, the config.txt is just for one board, right? So can't we just have
+a single --gpu_mem=XXX option and do
 
-[1] http://patchwork.ozlabs.org/patch/788904/
+		sed -i -e "/^gpu_mem_[0-9]*=/s/=.*/${1##*=}/" \
+			"${BINARIES_DIR}/rpi-firmware/config.txt"
+
+ Note that you no longer need to strip off the -- and that you no longer need bash.
+
+ As you can see in the example, I also prefer if the options (-i) come in the
+beginning, and to use / as the delimiter unless there actually are /-es in any
+of the strings. But that's just personal preference.
 
 
  Regards,
  Arnout
 
-> ---
->  board/raspberrypi/post-image.sh | 42 ++++++++++++++++++++++-------------------
->  1 file changed, 23 insertions(+), 19 deletions(-)
-> 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-> index de972998b0..1b49f0ea30 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -5,38 +5,42 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
->  GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
->  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->  
-> -case "${2}" in
-> -	--add-pi3-miniuart-bt-overlay)
-> -	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> -		echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
-> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +shift
-> +while [ $# -ne 0 ]; do
-> +	case "${1}" in
-> +		--add-pi3-miniuart-bt-overlay)
-> +		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
->  
->  # fixes rpi3 ttyAMA0 serial console
->  dtoverlay=pi3-miniuart-bt
->  __EOF__
-> -	fi
-> -	;;
-> -	--aarch64)
-> -	# Run a 64bits kernel (armv8)
-> -	sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
-> -	if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +		fi
 > +		;;
-> +		--aarch64)
-> +		# Run a 64bits kernel (armv8)
-> +		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +		if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
->  
->  # enable 64bits support
->  arm_control=0x200
->  __EOF__
-> -	fi
-> +		fi
->  
-> -	# Enable uart console
-> -	if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> -		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +		# Enable uart console
-> +		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
->  
->  # enable rpi3 ttyS0 serial console
->  enable_uart=1
->  __EOF__
-> -	fi
-> -	;;
-> -esac
-> +		fi
-> +		;;
-> +	esac
-> +	shift
-> +done
->  
->  rm -rf "${GENIMAGE_TMP}"
->  
+>  	esac
+>  	shift
+>  done
 > 
 
 -- 
