@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 16:14:02 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/pulseaudio: bump version to
- 11.1
-In-Reply-To: <20170919173542.27800-1-bernd.kuhls@t-online.de>
-References: <20170919173542.27800-1-bernd.kuhls@t-online.de>
-Message-ID: <05621d99-c33a-6ef7-b9c4-9f1c33ba999a@mind.be>
+Date: Sun, 24 Sep 2017 16:14:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix wrong symlink for
+ systemd service
+In-Reply-To: <1505902234-4876-1-git-send-email-brain@jikos.cz>
+References: <1505902234-4876-1-git-send-email-brain@jikos.cz>
+Message-ID: <ee432188-a035-f7c2-91f6-e195dae13098@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,38 @@ To: buildroot@busybox.net
 
 
 
-On 19-09-17 19:35, Bernd Kuhls wrote:
-> Dependency to json-c was dropped, updated reverse dependencies as well
-> and added optional dependency to libatomic_ops
-> https://cgit.freedesktop.org/pulseaudio/pulseaudio/tree/configure.ac#n250
-> when __sync_bool_compare_and_swap is not available.
+On 20-09-17 12:10, Petr Kulhavy wrote:
+> The symlink to /etc/systemd/system/syslog.service was pointing 4 levels up
+> to /usr/lib instead of 3 levels up.
 > 
-> Removed patch applied upstream:
-> 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
+> This wasn't an issue on the actual system (/../ equals to / ) but was causing a
+> deadlink in the TARGET directory.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 
- Applied to master, thanks. I don't think it was really needed to introduce
-BR2_PACKAGE_PULSEAUDIO_ENABLE_ATOMIC but I didn't feel like messing with it.
+ Applied to master, thanks.
 
  Regards,
  Arnout
+
+> ---
+>  package/rsyslog/rsyslog.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index bbf7d95..e32505b 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -91,7 +91,7 @@ define RSYSLOG_INSTALL_INIT_SYSTEMD
+>  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>  	ln -sf ../../../../usr/lib/systemd/system/rsyslog.service \
+>  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rsyslog.service
+> -	ln -sf ../../../../usr/lib/systemd/system/rsyslog.service \
+> +	ln -sf ../../../usr/lib/systemd/system/rsyslog.service \
+>  		$(TARGET_DIR)/etc/systemd/system/syslog.service
+>  endef
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
