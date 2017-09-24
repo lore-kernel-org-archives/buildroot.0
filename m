@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:30:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: bump version to 3.3.0
-In-Reply-To: <20170916135606.316-1-bernd.kuhls@t-online.de>
-References: <20170916135606.316-1-bernd.kuhls@t-online.de>
-Message-ID: <f195bd8e-66c4-5dd8-a26b-2e78649592e0@mind.be>
+Date: Sun, 24 Sep 2017 15:31:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openobex: bump version to 1.7.2
+In-Reply-To: <20170916151535.2948-1-bernd.kuhls@t-online.de>
+References: <20170916151535.2948-1-bernd.kuhls@t-online.de>
+Message-ID: <6136aaf6-6e56-95ab-0967-d90287f47864@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,26 @@ To: buildroot@busybox.net
 
 
 
-On 16-09-17 15:56, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://github.com/opencv/opencv/commit/e16227b53cabab1caa4b7aba8ff59a630528348f
+On 16-09-17 17:15, Bernd Kuhls wrote:
+> Package switched to cmake without providing most of the autoconf
+> options previously available. Therefore we move all suboptions to
+> Config.in.legacy.
 > 
-> In-source-builds are not allowed anymore:
-> https://github.com/opencv/opencv/commit/a07d8a89b6b38b1a1f35ac808955dab97985becb
+> All patches are removed, the files to be patched do not exist anymore.
+> 
+> OPENOBEX_EXTRACT_CMDS is not needed anymore, upstream provides the
+> source as .tar.gz now.
+> 
+> Version 1.6 added support for libusb-1.x and udev. The current version
+> also supports bluez5_utils, not only bluez_utils.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Applied to master, thanks.
+ Applied to master, thanks. I also added some help text to the legacy options.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
