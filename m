@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:03:23 +0200
-Subject: [Buildroot] [PATCH 1/1] rpi-userland: bump to latest version
-In-Reply-To: <20170914150027.30475-1-mahyar.koshkouei@gmail.com>
-References: <20170914150027.30475-1-mahyar.koshkouei@gmail.com>
-Message-ID: <d05bea9d-a846-0f32-3bdd-b15ce411ed9c@mind.be>
+Date: Sun, 24 Sep 2017 15:04:26 +0200
+Subject: [Buildroot] [PATCH 1/3] ffmpeg: Add HWAccel support to
+ Raspberry Pi
+In-Reply-To: <20170914150156.31075-1-mahyar.koshkouei@gmail.com>
+References: <20170914150156.31075-1-mahyar.koshkouei@gmail.com>
+Message-ID: <2444e727-69a0-a2ec-af32-de7031d466fe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +13,37 @@ To: buildroot@busybox.net
 
 
 
-On 14-09-17 17:00, Mahyar Koshkouei wrote:
+On 14-09-17 17:01, Mahyar Koshkouei wrote:
 > Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 
- Applied to master, thanks.
+ Applied to master, thanks. I wrapped the long line and reworded the commit
+message a little.
 
  Regards,
  Arnout
 
-
 > ---
->  package/rpi-userland/rpi-userland.hash | 2 +-
->  package/rpi-userland/rpi-userland.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/ffmpeg/ffmpeg.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-> index 1728ae8712..f1bb5e678c 100644
-> --- a/package/rpi-userland/rpi-userland.hash
-> +++ b/package/rpi-userland/rpi-userland.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 476cde13d0d4bbf44ffc4d1d545847464d5c270bb72e4d940e43e5972c4de9da rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
-> +sha256 8ed745ea28ef9d5e6d2e5534acabe1ea1a6c6be9bab7f683527ce5da5a3f77cb rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-> index 90077a19f5..a798795bae 100644
-> --- a/package/rpi-userland/rpi-userland.mk
-> +++ b/package/rpi-userland/rpi-userland.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index a27819be3c..19089ddb07 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -254,6 +254,13 @@ else
+>  FFMPEG_CONF_OPTS += --disable-vdpau
+>  endif
 >  
-> -RPI_USERLAND_VERSION = 29835184aa70c13d77a11d721e934a7298bdf46a
-> +RPI_USERLAND_VERSION = a7976021a89451de0d008aa48f16c4e88872899b
->  RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
->  RPI_USERLAND_LICENSE = BSD-3-Clause
->  RPI_USERLAND_LICENSE_FILES = LICENCE
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE)$(BR2_PACKAGE_RPI_USERLAND),yy)
+> +FFMPEG_CONF_OPTS += --enable-mmal --enable-omx --enable-omx-rpi --extra-cflags=-I$(STAGING_DIR)/usr/include/IL
+> +FFMPEG_DEPENDENCIES += rpi-firmware rpi-userland
+> +else
+> +FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
+> +endif
+> +
+>  # To avoid a circular dependency only use opencv if opencv itself does
+>  # not depend on ffmpeg.
+>  ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
 > 
 
 -- 
