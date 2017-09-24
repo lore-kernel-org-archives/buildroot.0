@@ -1,44 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:38:05 +0200
-Subject: [Buildroot] [git commit] package/nvidia-driver: bump version to
-	384.69
-Message-ID: <20170924124820.03D548004A@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 14:27:08 +0200
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.5.0
+Message-ID: <20170924124819.986CB8004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=985fe64026c2b0ab72877f92636328cfb4433418
+commit: https://git.buildroot.net/buildroot/commit/?id=83aae6deda9961765cbd1fa07bdd66c503a2d407
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/nvidia-driver/nvidia-driver.hash | 4 ++--
- package/nvidia-driver/nvidia-driver.mk   | 2 +-
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
-index 7fa729e..e05b8f0 100644
---- a/package/nvidia-driver/nvidia-driver.hash
-+++ b/package/nvidia-driver/nvidia-driver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 c39805e6610f710d16acf57c9d09cb5504d33c557e634e632079d46f18da4268  NVIDIA-Linux-x86-381.09.run
--sha256 04ec99f6d621adc464314adc82a92009e071a301a773487df7f460333e04e98c  NVIDIA-Linux-x86_64-381.09.run
-+sha256 3b70587582220ab1102bcb8386f206f89e6b146856af41f16eaa5910e54ef8fd  NVIDIA-Linux-x86-384.69.run
-+sha256 a7b7984fc532be17c262bc4353e279824ae63625d8ae9f1016cb66d199b97650  NVIDIA-Linux-x86_64-384.69.run
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 1795434..e566610 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index a0643b5..c1d1652 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v8.4.0/SHASUMS256.txt
+-sha256  5d5aa2a101dcc617231a475812eb8ed87cac21491f1dcc7997b9dd463563f361  node-v8.4.0.tar.xz
++# From http://nodejs.org/dist/v8.5.0/SHASUMS256.txt
++sha256 e1cde5d8e5049e7e1b61aef128f26162059d885dc8cab5014bf5cbf693f75c3c  node-v8.5.0.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 3570a8f..fe50393 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NVIDIA_DRIVER_VERSION = 381.09
-+NVIDIA_DRIVER_VERSION = 384.69
- NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
- NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
- NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
+-NODEJS_VERSION = 8.4.0
++NODEJS_VERSION = 8.5.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
