@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:01:24 +0200
-Subject: [Buildroot] [PATCH] package/lmv2: add missing host-pkgconf
- dependency
-In-Reply-To: <5428adbe-2619-d942-e239-0597cc4f1a69@mind.be>
-References: <20170913201755.9871-1-romain.naour@gmail.com>
- <5428adbe-2619-d942-e239-0597cc4f1a69@mind.be>
-Message-ID: <e15c1f03-3cc0-2475-c141-f2361c72cde5@mind.be>
+Date: Sun, 24 Sep 2017 15:02:05 +0200
+Subject: [Buildroot] [PATCH] package/tslib: update to 1.13
+In-Reply-To: <20170914072033.24536-1-martink@posteo.de>
+References: <20170914072033.24536-1-martink@posteo.de>
+Message-ID: <f4fdbb73-4b6c-e7ee-a142-5d7d6151df65@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +12,43 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-17 22:30, Arnout Vandecappelle wrote:
+On 14-09-17 09:20, Martin Kepplinger wrote:
+> see https://github.com/kergoth/tslib/releases
 > 
-> 
-> On 13-09-17 22:17, Romain Naour wrote:
->> configure.ac use PKG_CHECK_MODULES macro to find some libraries dependencies.
->> So add host-pkgconf in LVM2_DEPENDENCIES.
->>
->> Fixes:
->> checking pkg-config is at least version 0.9.0... ./configure: line 9875: [...]/host/bin/pkg-config: No such file or directory
-> 
->  Any idea why the autobuilders didn't hit this failure?
+> Signed-off-by: Martin Kepplinger <martink@posteo.de>
 
- Even though you didn't answer :-) I applied to master after all, since
-configure clearly really wants pkg-config. Thanks!
+ Applied to master, thanks. Thank you for you patience :-)
 
  Regards,
  Arnout
 
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/lvm2/lvm2.mk | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
->> index 63ac109..f7f7069 100644
->> --- a/package/lvm2/lvm2.mk
->> +++ b/package/lvm2/lvm2.mk
->> @@ -21,6 +21,8 @@ LVM2_CONF_OPTS += \
->>  	--enable-dmeventd \
->>  	--disable-nls
->>  
->> +LVM2_DEPENDENCIES += host-pkgconf
->> +
->>  # LVM2 uses autoconf, but not automake, and the build system does not
->>  # take into account the toolchain passed at configure time.
->>  LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
->>
+> ---
+>  package/tslib/tslib.hash | 4 ++--
+>  package/tslib/tslib.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+> index f053c6cabd..3ed49008fb 100644
+> --- a/package/tslib/tslib.hash
+> +++ b/package/tslib/tslib.hash
+> @@ -1,2 +1,2 @@
+> -# https://github.com/kergoth/tslib/releases/download/1.12/tslib-1.12.tar.xz.sha256
+> -sha256  237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83  tslib-1.12.tar.xz
+> +# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
+> +sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
+> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+> index 2b4320dca3..06f887a151 100644
+> --- a/package/tslib/tslib.mk
+> +++ b/package/tslib/tslib.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TSLIB_VERSION = 1.12
+> +TSLIB_VERSION = 1.13
+>  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+>  TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+>  TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
 > 
 
 -- 
