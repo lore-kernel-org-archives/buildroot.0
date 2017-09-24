@@ -1,25 +1,23 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:36:11 +0200
-Subject: [Buildroot] [git commit] package/libglu: needs host-pkgconf
-Message-ID: <20170924124819.D2FAD8004A@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 14:36:48 +0200
+Subject: [Buildroot] [git commit] package/nvidia-driver: depends on
+	xlib_libX11 & xlib_libXext
+Message-ID: <20170924124819.E33EE8004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fe55978e62eff9897482ad47298a575aaf54381
+commit: https://git.buildroot.net/buildroot/commit/?id=e3dab26f2ea77675f888c0c778c31db01c284ef5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build error
+Fix libglu build error
 
->>> libglu 9.0.0 Autoreconfiguring
-configure.ac:50: error: Could not locate the pkg-config autoconf macros.
-  These are usually located in /usr/share/aclocal/pkg.m4. If your macros
-  are in a different location, try setting the environment variable
-  ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.
-configure.ac:50: the top level
-autom4te: /home/buildroot/br4/output/host/bin/m4 failed with exit status: 1
+  CXXLD    libGLU.la
+/home/buildroot/br4/output/host/lib/gcc/i586-buildroot-linux-gnu/6.4.0/../../../../i586-buildroot-linux-gnu/bin/ld: cannot find -lXext
+/home/buildroot/br4/output/host/lib/gcc/i586-buildroot-linux-gnu/6.4.0/../../../../i586-buildroot-linux-gnu/bin/ld: cannot find -lX11
+collect2: error: ld returned 1 exit status
 
 using this defconfig
 
@@ -30,21 +28,54 @@ BR2_PACKAGE_XSERVER_XORG_SERVER=y
 BR2_PACKAGE_NVIDIA_DRIVER=y
 BR2_PACKAGE_LIBGLU=y
 
+The nvidia binary blob is linked to libX11.so & libEext.so
+
+$ output/host/bin/i586-buildroot-linux-gnu-readelf -a output/target/usr/lib/libGL.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libnvidia-tls.so.381.09]
+ 0x00000001 (NEEDED)                     Shared library: [libnvidia-glcore.so.381.09]
+ 0x00000001 (NEEDED)                     Shared library: [libX11.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libXext.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.2]
+
+which is also reflected by Libs-section of package/nvidia-driver/gl.pc.
+
+To allow other packages linking to libGL.so provided by this package we
+need to reflect the fact that xlib_libX11 & xlib_libXext are not
+runtime-only dependencies.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libglu/libglu.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nvidia-driver/Config.in        | 4 ++--
+ package/nvidia-driver/nvidia-driver.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
-index 038d281..0e5242f 100644
---- a/package/libglu/libglu.mk
-+++ b/package/libglu/libglu.mk
-@@ -12,6 +12,6 @@ LIBGLU_LICENSE_FILES = include/GL/glu.h
- LIBGLU_INSTALL_STAGING = YES
- # upstream does not distribute a autoconf??ed configure script
- LIBGLU_AUTORECONF = YES
--LIBGLU_DEPENDENCIES = libgl
-+LIBGLU_DEPENDENCIES = libgl host-pkgconf
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
+index 1105ec6..732d925 100644
+--- a/package/nvidia-driver/Config.in
++++ b/package/nvidia-driver/Config.in
+@@ -22,8 +22,8 @@ config BR2_PACKAGE_NVIDIA_DRIVER_XORG
+ 	default y
+ 	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	select BR2_PACKAGE_MESA3D_HEADERS
+-	select BR2_PACKAGE_XLIB_LIBX11 # runtime
+-	select BR2_PACKAGE_XLIB_LIBXEXT # runtime
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 6746134..1795434 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_XORG),y)
+ # are build dependencies of packages that depend on nvidia-driver, so
+ # they should be built prior to those packages, and the only simple
+ # way to do so is to make nvidia-driver depend on them.
+-NVIDIA_DRIVER_DEPENDENCIES = mesa3d-headers
++NVIDIA_DRIVER_DEPENDENCIES = mesa3d-headers xlib_libX11 xlib_libXext
+ NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
  
- $(eval $(autotools-package))
+ # libGL.so.$(NVIDIA_DRIVER_VERSION) is the legacy libGL.so library; it
