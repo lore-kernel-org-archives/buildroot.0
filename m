@@ -1,56 +1,64 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:22:13 +0200
-Subject: [Buildroot] [git commit] bash: fix static build
-Message-ID: <20170924132001.7A34D80F8D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 24 Sep 2017 15:31:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openmpi: bump version to 1.10.7
+In-Reply-To: <20170916142022.18837-1-bernd.kuhls@t-online.de>
+References: <20170916142022.18837-1-bernd.kuhls@t-online.de>
+Message-ID: <e076fac6-b83b-2175-4ee9-98f0c201221a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a2af11cba83ef176672609dd7321712fa7f6a28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building bash statically, configure does not initialize the
-SHOBJ_STATUS variable. The SHOBJ_STATUS make variable in
-examples/loadables/Makefile.in must resolve to either 'supported' or
-'unsupported'. Otherwise, the install-$(SHOBJ_STATUS) target does not
-exist.
 
-This leads to the following build failure:
+On 16-09-17 16:20, Bernd Kuhls wrote:
+> Added sha256 hash.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-make[2]: Entering directory '.../output/build/bash-4.4/examples/loadables'
-make[2]: *** No rule to make target 'install-', needed by 'install'.  Stop.
-make[2]: Leaving directory '.../output/build/bash-4.4/examples/loadables'
-Makefile:793: recipe for target 'install' failed
+ Applied to master, thanks.
 
-with the following defconfig:
+ Regards,
+ Arnout
 
-BR2_arm=y
-BR2_STATIC_LIBS=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_BASH=y
 
-Note that this doesn't terminate the build so it's not detected as an
-error by the autobuilders.
+> ---
+>  package/openmpi/openmpi.hash | 6 ++++--
+>  package/openmpi/openmpi.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
+> index 92152a2431..4e967e6589 100644
+> --- a/package/openmpi/openmpi.hash
+> +++ b/package/openmpi/openmpi.hash
+> @@ -1,3 +1,5 @@
+>  # From: https://www.open-mpi.org/software/ompi/v1.10/
+> -md5 b2f43d9635d2d52826e5ef9feb97fd4c  openmpi-1.10.2.tar.bz2
+> -sha1 03934fc0a2dd0d0d2d0459d714a976eabca938fb  openmpi-1.10.2.tar.bz2
+> +md5 c87c613f9acb1a4eee21fa1ac8042579  openmpi-1.10.7.tar.bz2
+> +sha1 fe359d8caa4888625308cf03343d913dd5ac6198  openmpi-1.10.7.tar.bz2
+> +# Locally computed
+> +sha256 a089ece151fec974905caa35b0a59039b227bdea4e7933069e94bee4ed0e5a90  openmpi-1.10.7.tar.bz2
+> diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
+> index 3ffde89aed..df3270f50a 100644
+> --- a/package/openmpi/openmpi.mk
+> +++ b/package/openmpi/openmpi.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  OPENMPI_VERSION_MAJOR = 1.10
+> -OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).2
+> +OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).7
+>  OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
+>  OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
+>  OPENMPI_LICENSE = BSD-3-Clause
+> 
 
-Set SHOBJ_STATUS in the configure environment as a workaround.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/bash/bash.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 32c87a6..dd7c26f 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -25,6 +25,7 @@ BASH_CONF_ENV += \
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
- BASH_CONF_OPTS += --enable-static-link
-+BASH_CONF_ENV += SHOBJ_STATUS=unsupported
- # bash wants to redefine the getenv() function. To check whether this is
- # possible, AC_TRY_RUN is used which is not possible in
- # cross-compilation.
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
