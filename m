@@ -1,38 +1,33 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 12:51:08 +0200
-Subject: [Buildroot] [git commit] orbit: mark as only with Lua 5.1
-Message-ID: <20170924104359.32EEB80F7C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 24 Sep 2017 12:51:55 +0200
+Subject: [Buildroot] [PATCH 6/9] lbase64: restore generic-package
+In-Reply-To: <20170924075932.5990-6-francois.perrad@gadz.org>
+References: <20170924075932.5990-1-francois.perrad@gadz.org>
+ <20170924075932.5990-6-francois.perrad@gadz.org>
+Message-ID: <31cd492d-4c6e-287b-c8cc-58a3c9a94759@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c9c1240480a6cca361a47ee3baf07882be1b49a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/orbit/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/package/orbit/Config.in b/package/orbit/Config.in
-index 2953499..c35c475 100644
---- a/package/orbit/Config.in
-+++ b/package/orbit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ORBIT
- 	bool "orbit"
-+	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
- 	# These are runtime dependencies
- 	select BR2_PACKAGE_LPEG
- 	select BR2_PACKAGE_LUAFILESYSTEM
-@@ -9,3 +10,7 @@ config BR2_PACKAGE_ORBIT
- 	  Ruby frameworks such as Camping
- 
- 	  http://keplerproject.github.com/orbit
-+
-+comment "orbit needs a Lua 5.1 interpreter"
-+	depends on !BR2_PACKAGE_LUA_5_1
-+	depends on !BR2_PACKAGE_LUAJIT
+On 24-09-17 09:59, Francois Perrad wrote:
+> with a small patch, this allows to support all Lua versions.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+
+ Applied to master with a more extended commit log, thanks.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
