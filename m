@@ -1,71 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Sep 2017 22:17:59 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] Update for 2017.02.6
-Message-ID: <20170924203032.9772F80007@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 21:36:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libidn: add fix for
+	CVE-2017-14062
+Message-ID: <20170924203032.70B5F81078@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ee6c1d60ebe1285e7f07afa0f8f9107ce0b3506
+commit: https://git.buildroot.net/buildroot/commit/?id=46b07c8a87f354527d4173d873b6674d99e4fbab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
+Add upstream patch fixing CVE-2017-14062:
+
+Integer overflow in the decode_digit function in puny_decode.c in
+Libidn2 before 2.0.4 allows remote attackers to cause a denial of
+service or possibly have unspecified other impact.
+
+This issue also affects libidn.
+
+Unfortunately, the patch also triggers reconf of the documentation
+subdirectory, since lib/punycode.c is listed in GDOC_SRC that is defined
+in doc/Makefile.am. Add autoreconf to handle that.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 49cb795f7965328ce7a57cbc3736b0fc03919fe7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES  | 21 +++++++++++----------
- Makefile |  4 ++--
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ ...ycode.c-decode_digit-Fix-integer-overflow.patch | 36 ++++++++++++++++++++++
+ package/libidn/libidn.mk                           |  2 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 99ee902..56f1c32 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2017.02.6, Not yet released
-+2017.02.6, Released September 24th, 2017
+diff --git a/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch b/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
+new file mode 100644
+index 0000000..8a8ca47
+--- /dev/null
++++ b/package/libidn/0001-lib-punycode.c-decode_digit-Fix-integer-overflow.patch
+@@ -0,0 +1,36 @@
++From e9e81b8063b095b02cf104bb992fa9bf9515b9d8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
++Date: Fri, 1 Sep 2017 10:04:48 +0200
++Subject: [PATCH] lib/punycode.c (decode_digit): Fix integer overflow
++
++This fix is a backport from libidn2 and addresses
++CVE-2017-14062.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit e9e81b8063b095
++
++ lib/punycode.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/lib/punycode.c b/lib/punycode.c
++index 86819a7deb85..49250a13e2cc 100644
++--- a/lib/punycode.c
+++++ b/lib/punycode.c
++@@ -88,10 +88,10 @@ enum
++ /* point (for use in representing integers) in the range 0 to */
++ /* base-1, or base if cp does not represent a value.          */
++ 
++-static punycode_uint
++-decode_digit (punycode_uint cp)
+++static unsigned
+++decode_digit (int cp)
++ {
++-  return cp - 48 < 10 ? cp - 22 : cp - 65 < 26 ? cp - 65 :
+++  return (unsigned) cp - 48 < 10 ? cp - 22 : cp - 65 < 26 ? cp - 65 :
++     cp - 97 < 26 ? cp - 97 : base;
++ }
++ 
++-- 
++2.14.1
++
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 99c9e2c..80fc827 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -12,6 +12,8 @@ LIBIDN_CONF_OPTS = --disable-java --enable-csharp=no
+ LIBIDN_DEPENDENCIES = host-pkgconf $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBIDN_LICENSE = GPLv2+, GPLv3+, LGPLv3+
+ LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
++# lib/punycode.c patch triggers reconf in doc/
++LIBIDN_AUTORECONF = YES
  
- 	Important / security related fixes.
- 
-@@ -10,15 +10,16 @@
- 	Updated/fixed packages: apache, bcusdk, bind, binutils,
- 	bluez5_utils, botan, cmake, connman, dbus, dialog, e2fsprogs,
- 	faad2, fakeroot, ffmpeg, file, flashrom, gcc, gd, gdb,
--	gdk-pixbuf, git, gnupg, gpsd, grub2, imagemagick, iostat,
--	iucode-tool, jack2, libarchive, libcurl, libgcrypt,
--	libphidget, librsync, librsvg, libsoup, libxml2, linux-tools,
--	lua, mariadb, mbedtls, mediastreamer, minidlna, netplug,
--	nss-pam-ldapd, nvidia-driver, openjpeg, postgresql,
--	proxychains-ng, python-libconfig, python-service-identity, qt,
--	rpcbind, ruby, samba4, squashfs, squid, strongswan,
--	subversion, supervisor, sysvinit, tcpdump, transmission,
--	unrar, valgrind, vim, webkitgtk, whois, xen, zmqpp
-+	gdk-pixbuf, git, gnupg, gpsd, grub2, gst1-plugins-bad,
-+	imagemagick, iostat, iucode-tool, jack2, libarchive, libcurl,
-+	libgcrypt, libidn, libphidget, librsync, librsvg, libsoup,
-+	libxml2, linux-tools, lua, mariadb, mbedtls, mediastreamer,
-+	minidlna, netplug, nss-pam-ldapd, nvidia-driver, openjpeg,
-+	postgresql, proxychains-ng, python-libconfig,
-+	python-service-identity, qt, rpcbind, ruby, samba4, squashfs,
-+	squid, strongswan, subversion, supervisor, sysvinit, tcpdump,
-+	tor, transmission, unrar, valgrind, vim, webkitgtk, whois,
-+	xen, zmqpp
- 
- 	Issues resolved (http://bugs.buildroot.org):
- 
-diff --git a/Makefile b/Makefile
-index 9b51790..3514d93 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2017.02.5
-+export BR2_VERSION := 2017.02.6
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1501100000
-+BR2_VERSION_EPOCH = 1506285000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+ define LIBIDN_REMOVE_BINARY
+ 	rm -f $(TARGET_DIR)/usr/bin/idn
