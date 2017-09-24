@@ -1,74 +1,44 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 13:13:36 +0200
-Subject: [Buildroot] [git commit] package/neard: bump version to 0.16
-Message-ID: <20170924111225.C16DB7FB0A@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 13:13:05 +0200
+Subject: [Buildroot] [git commit] package/librsync: not available in static
+	builds
+Message-ID: <20170924111225.9B31D7FEE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab65f51ab80b9f5ebab25937fe25ef70e566e8a0
+commit: https://git.buildroot.net/buildroot/commit/?id=f4573ea5d8f566d9d6de8013fc72f3d844702724
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added systemd support needed after upstream commit
-https://git.kernel.org/pub/scm/network/nfc/neard.git/commit/?id=ffc849bc1c83f0c9f31cbdf9bf843cf245496183
+Upstream only supports shared builds:
+https://github.com/librsync/librsync/blob/master/CMakeLists.txt#L319
 
-Fixed broken link in Config.in help section.
+Fixes
+http://autobuild.buildroot.net/results/4b8/4b8db2d520373d0c9127e0d7695b5aeda6925dc5/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/neard/Config.in  | 2 +-
- package/neard/neard.hash | 2 +-
- package/neard/neard.mk   | 9 ++++++++-
- 3 files changed, 10 insertions(+), 3 deletions(-)
+ package/librsync/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index 8571e7c..d32d636 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_NEARD
+diff --git a/package/librsync/Config.in b/package/librsync/Config.in
+index 652f0cb..6957ddc 100644
+--- a/package/librsync/Config.in
++++ b/package/librsync/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBRSYNC
+ 	bool "librsync"
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_POPT
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_LIBRSYNC
+ 	  rsync utility and is used in rproxy.
  
- 	  http://git.kernel.org/?p=network/nfc/neard.git;a=summary
- 
--	  https://01.org/linux-nfc/documentation/how-start-linux-nfc-code...
-+	  https://01.org/linux-nfc/
- 
- if BR2_PACKAGE_NEARD
- 
-diff --git a/package/neard/neard.hash b/package/neard/neard.hash
-index 7517093..d1e74b3 100644
---- a/package/neard/neard.hash
-+++ b/package/neard/neard.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/nfc/sha256sums.asc
--sha256	6ea724b443d39d679168fc7776a965d1f64727c3735391df2c01469ee7cd8cca	neard-0.14.tar.xz
-+sha256 eae3b11c541a988ec11ca94b7deab01080cd5b58cfef3ced6ceac9b6e6e65b36  neard-0.16.tar.xz
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index c46f46c..a351469 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NEARD_VERSION = 0.14
-+NEARD_VERSION = 0.16
- NEARD_SOURCE = neard-$(NEARD_VERSION).tar.xz
- NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
- NEARD_LICENSE = GPL-2.0
-@@ -17,6 +17,13 @@ ifeq ($(BR2_PACKAGE_NEARD_TOOLS),y)
- NEARD_CONF_OPTS += --enable-tools
- endif
- 
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+NEARD_CONF_OPTS += --enable-systemd
-+NEARD_DEPENDENCIES += systemd
-+else
-+NEARD_CONF_OPTS += --disable-systemd
-+endif
+ 	  https://github.com/librsync/librsync
 +
- define NEARD_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/neard/S53neard \
- 		$(TARGET_DIR)/etc/init.d/S53neard
++comment "librsync needs a toolchain w/ dynamic library support"
++	depends on BR2_STATIC_LIBS
