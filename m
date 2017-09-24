@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 24 Sep 2017 09:59:24 +0200
-Subject: [Buildroot] [PATCH 1/9] luaposix: bump to version 34.0.1
-Message-ID: <20170924075932.5990-1-francois.perrad@gadz.org>
+Date: Sun, 24 Sep 2017 09:59:25 +0200
+Subject: [Buildroot] [PATCH 2/9] lua-curl: new package
+In-Reply-To: <20170924075932.5990-1-francois.perrad@gadz.org>
+References: <20170924075932.5990-1-francois.perrad@gadz.org>
+Message-ID: <20170924075932.5990-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luaposix/luaposix.hash |  2 +-
- package/luaposix/luaposix.mk   | 24 ++++++++++++++++++++----
- 2 files changed, 21 insertions(+), 5 deletions(-)
+ package/Config.in              |  1 +
+ package/lua-curl/Config.in     |  7 +++++++
+ package/lua-curl/lua-curl.hash |  2 ++
+ package/lua-curl/lua-curl.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/lua-curl/Config.in
+ create mode 100644 package/lua-curl/lua-curl.hash
+ create mode 100644 package/lua-curl/lua-curl.mk
 
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index e2216be73..b3984c1d1 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 e66262f5b7fe1c32c65f17a5ef5ffb31c4d1877019b4870a5d373e2ab6526a21 luaposix-33.4.0.tar.gz
-+sha256 ba0bc343783fc33958cd02a68cdbfd65430152d9f297f7ed92678b1a305bd5d7  luaposix-34.0.1.tar.gz
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index ea3af16fb..779e707ce 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,11 +4,27 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 33.4.0
-+LUAPOSIX_VERSION = 34.0.1
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
--LUAPOSIX_LICENSE_FILES = COPYING
-+LUAPOSIX_LICENSE_FILES = LICENSE
- LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
--LUAPOSIX_CONF_OPTS = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
- 
--$(eval $(autotools-package))
-+define LUAPOSIX_BUILD_CMDS
-+	(cd $(@D); \
-+		$(LUA_RUN) build-aux/luke \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LUA_INCDIR=$(STAGING_DIR)/usr/include \
-+	)
-+endef
+diff --git a/package/Config.in b/package/Config.in
+index b826bdbc3..119beabab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -574,6 +574,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-coat/Config.in"
+ 	source "package/lua-coatpersistent/Config.in"
+ 	source "package/lua-csnappy/Config.in"
++	source "package/lua-curl/Config.in"
+ 	source "package/lua-ev/Config.in"
+ 	source "package/lua-flu/Config.in"
+ 	source "package/lua-iconv/Config.in"
+diff --git a/package/lua-curl/Config.in b/package/lua-curl/Config.in
+new file mode 100644
+index 000000000..88cdaf10c
+--- /dev/null
++++ b/package/lua-curl/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_CURL
++	bool "lua-curl"
++	select BR2_PACKAGE_LIBCURL
++	help
++	  Lua binding to libcurl.
 +
-+define LUAPOSIX_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		$(LUA_RUN) build-aux/luke install \
-+		INST_LIBDIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-+		INST_LUADIR="$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)" \
-+	)
-+endef
++	  https://lua-curl.github.io/
+diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
+new file mode 100644
+index 000000000..e73810ced
+--- /dev/null
++++ b/package/lua-curl/lua-curl.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 4cc6389bf5d4a868cc1e6017733b9b6306f2fc8b5083aa928d66399195697f34  lua-curl-0.3.7-1.src.rock
+diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
+new file mode 100644
+index 000000000..9a35d3756
+--- /dev/null
++++ b/package/lua-curl/lua-curl.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# lua-curl
++#
++################################################################################
 +
-+$(eval $(generic-package))
++LUA_CURL_VERSION_UPSTREAM =0.3.7
++LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
++LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
++LUA_CURL_LICENSE = MIT
++LUA_CURL_LICENSE_FILES = $(LUA_CURL_SUBDIR)/LICENSE
++LUA_CURL_DEPENDENCIES = libcurl
++
++$(eval $(luarocks-package))
 -- 
 2.11.0
