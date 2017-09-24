@@ -1,44 +1,41 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 13:13:05 +0200
-Subject: [Buildroot] [git commit] package/librsync: not available in static
-	builds
-Message-ID: <20170924111225.9B31D7FEE1@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 13:13:18 +0200
+Subject: [Buildroot] [git commit] rpi-firmware: bump to latest version
+Message-ID: <20170924111225.AE6377FEE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4573ea5d8f566d9d6de8013fc72f3d844702724
+commit: https://git.buildroot.net/buildroot/commit/?id=1734800be3bc9ae5eb500326845642f43b929c93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream only supports shared builds:
-https://github.com/librsync/librsync/blob/master/CMakeLists.txt#L319
-
-Fixes
-http://autobuild.buildroot.net/results/4b8/4b8db2d520373d0c9127e0d7695b5aeda6925dc5/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/librsync/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/librsync/Config.in b/package/librsync/Config.in
-index 652f0cb..6957ddc 100644
---- a/package/librsync/Config.in
-+++ b/package/librsync/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBRSYNC
- 	bool "librsync"
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_POPT
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_LIBRSYNC
- 	  rsync utility and is used in rproxy.
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index db26c1e..833a7fb 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 42edea8317869f5a5ed87dfe009ceffce6a784ff40cb5da3e9e8a4fc61d79610 rpi-firmware-685b3ceb0a6d6d6da7b028ee409850e83fb7ede7.tar.gz
++sha256 0451e1a843bf02df81126a1625d9a15dfdf19dcb2f9e95b0613a63e59fd31ca8 rpi-firmware-2067241bc7cdf238fdeab7f5a3c22faa57dd5617.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 10da04b..22eaaa2 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/librsync/librsync
-+
-+comment "librsync needs a toolchain w/ dynamic library support"
-+	depends on BR2_STATIC_LIBS
+-RPI_FIRMWARE_VERSION = 685b3ceb0a6d6d6da7b028ee409850e83fb7ede7
++RPI_FIRMWARE_VERSION = 2067241bc7cdf238fdeab7f5a3c22faa57dd5617
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
