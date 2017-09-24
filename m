@@ -1,41 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 15:54:30 +0200
-Subject: [Buildroot] [git commit] python-lxml: bump to version 4.0.0
-Message-ID: <20170924140311.D5A8380DE2@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 15:54:42 +0200
+Subject: [Buildroot] [git commit] package/mpfr: bump to version 3.1.6
+Message-ID: <20170924140311.E03C180DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a02dedf67710b03e18fbef0e0569582fa7a76eaa
+commit: https://git.buildroot.net/buildroot/commit/?id=6d9bf93bc81e052a70fcc18c574d2cc6e3669cb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpfr/mpfr.hash | 4 ++--
+ package/mpfr/mpfr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index a1dc093..38607e1 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
+diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
+index d2c32f2..1c825e1 100644
+--- a/package/mpfr/mpfr.hash
++++ b/package/mpfr/mpfr.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256  59d9176360dbc3919e9d4bfca85c1ca64ab4f4ee00e6f119d7150ba887e3410a  lxml-3.7.2.tgz
-+sha256  f7bc9f702500e205b1560d620f14015fec76dcd6f9e889a946a2ddcc3c344fd0  lxml-4.0.0.tgz
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index db6591f..7f1692d 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
+-# Locally calculated after checking pgp signature
+-sha256	015fde82b3979fbe5f83501986d328331ba8ddf008c1ff3da3c238f49ca062bc	mpfr-3.1.5.tar.xz
++# From http://lists.gnu.org/archive/html/info-gnu/2017-09/msg00004.html
++sha256 7a62ac1a04408614fccdc506e4844b10cf0ad2c2b1677097f8f35d3a1344a950  mpfr-3.1.6.tar.xz
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index 48dd487..1b67cf2 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 3.7.2
-+PYTHON_LXML_VERSION = 4.0.0
- PYTHON_LXML_SITE = http://lxml.de/files
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
- 
+-MPFR_VERSION = 3.1.5
++MPFR_VERSION = 3.1.6
+ MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+ MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
+ MPFR_LICENSE = LGPL-3.0+
