@@ -1,40 +1,39 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 24 Sep 2017 14:50:14 +0200
-Subject: [Buildroot] [git commit] ffmpeg: Add support for hardware
-	accelaration on RPi
-Message-ID: <20170924124820.6008B8004A@busybox.osuosl.org>
+Date: Sun, 24 Sep 2017 14:38:36 +0200
+Subject: [Buildroot] [git commit] package/lvm2: add missing host-pkgconf
+	dependency
+Message-ID: <20170924124820.19C228004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e66936e4f3c9569b7f90dec0f871d777baf597cc
+commit: https://git.buildroot.net/buildroot/commit/?id=d9aec4d7ee98bab97d36aba76b73811f6e194762
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-[Arnout: wrap the long line]
+configure.ac use PKG_CHECK_MODULES macro to find some libraries dependencies.
+So add host-pkgconf in LVM2_DEPENDENCIES.
+
+Fixes:
+checking pkg-config is at least version 0.9.0... ./configure: line 9875: [...]/host/bin/pkg-config: No such file or directory
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ffmpeg/ffmpeg.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/lvm2/lvm2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index a27819b..801615c 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -254,6 +254,14 @@ else
- FFMPEG_CONF_OPTS += --disable-vdpau
- endif
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 63ac109..f7f7069 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -21,6 +21,8 @@ LVM2_CONF_OPTS += \
+ 	--enable-dmeventd \
+ 	--disable-nls
  
-+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE)$(BR2_PACKAGE_RPI_USERLAND),yy)
-+FFMPEG_CONF_OPTS += --enable-mmal --enable-omx --enable-omx-rpi \
-+	--extra-cflags=-I$(STAGING_DIR)/usr/include/IL
-+FFMPEG_DEPENDENCIES += rpi-firmware rpi-userland
-+else
-+FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
-+endif
++LVM2_DEPENDENCIES += host-pkgconf
 +
- # To avoid a circular dependency only use opencv if opencv itself does
- # not depend on ffmpeg.
- ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
+ # LVM2 uses autoconf, but not automake, and the build system does not
+ # take into account the toolchain passed at configure time.
+ LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
