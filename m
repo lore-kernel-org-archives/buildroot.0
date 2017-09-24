@@ -1,97 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 24 Sep 2017 13:46:20 +0200
-Subject: [Buildroot] [git commit] package/ngircd: bump version to 24
-Message-ID: <20170924114002.0B4618104D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-six: add host variant
+Message-ID: <20170924114002.84EC57FC94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e4f43e439a71c3905a640fe282dc167a341b0e2
+commit: https://git.buildroot.net/buildroot/commit/?id=b135e9595bcd0918dcb68e9f8d380042ca6a8c5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched _SITE to https, added patch to fix compile error.
+While currently there is no in-tree Buildroot package which depends on
+host-python-six, it can be needed to build external packages.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Tested-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ngircd/0001-Fix-Get_error-usage.patch | 44 +++++++++++++++++++++++++++
- package/ngircd/ngircd.hash                    |  2 +-
- package/ngircd/ngircd.mk                      |  4 +--
- 3 files changed, 47 insertions(+), 3 deletions(-)
+ package/Config.in.host            | 1 +
+ package/python-six/Config.in.host | 9 +++++++++
+ package/python-six/python-six.mk  | 1 +
+ 3 files changed, 11 insertions(+)
 
-diff --git a/package/ngircd/0001-Fix-Get_error-usage.patch b/package/ngircd/0001-Fix-Get_error-usage.patch
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 9e05ec6..679fe22 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -38,6 +38,7 @@ menu "Host utilities"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
++	source "package/python-six/Config.in.host"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
+diff --git a/package/python-six/Config.in.host b/package/python-six/Config.in.host
 new file mode 100644
-index 0000000..3724e46
+index 0000000..1d37e76
 --- /dev/null
-+++ b/package/ngircd/0001-Fix-Get_error-usage.patch
-@@ -0,0 +1,44 @@
-+From 543f44bff8d56785dc13a74a14d4eaa96465bf05 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Wed, 13 Sep 2017 14:07:11 +0200
-+Subject: [PATCH] Fix Get_error usage
++++ b/package/python-six/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_PYTHON_SIX
++	bool "host python-six"
++	help
++	  Six is a Python 2 and 3 compatibility library. It provides
++	  utility functions for smoothing over the differences between
++	  the Python versions with the goal of writing Python code that
++	  is compatible on both Python versions.
 +
-+The usage of Get_Error is guarded by "ifdef h_errno" in this file, the
-+definition of this function should follow the same rules.
-+
-+Fixes a build error when cross-compiling:
-+https://github.com/ngircd/ngircd/issues/223
-+
-+Patch sent upstream: https://github.com/ngircd/ngircd/pull/240
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/ngircd/resolve.c | 5 +----
-+ 1 file changed, 1 insertion(+), 4 deletions(-)
-+
-+diff --git a/src/ngircd/resolve.c b/src/ngircd/resolve.c
-+index 32791901..e1903254 100644
-+--- a/src/ngircd/resolve.c
-++++ b/src/ngircd/resolve.c
-+@@ -108,9 +108,7 @@ Resolve_Name( PROC_STAT *s, const char *Host, void (*cbfunc)(int, short))
-+ 	return false;
-+ } /* Resolve_Name */
-+ 
-+-
-+-#if !defined(HAVE_GETADDRINFO) || !defined(HAVE_GETNAMEINFO)
-+-#if !defined(WANT_IPV6) && defined(h_errno)
-++#ifdef h_errno
-+ static char *
-+ Get_Error( int H_Error )
-+ {
-+@@ -128,7 +126,6 @@ Get_Error( int H_Error )
-+ 	return "unknown error";
-+ }
-+ #endif
-+-#endif
-+ 
-+ 
-+ /* Do "IDENT" (aka "AUTH") lookup and append result to resolved_addr array */
-+-- 
-+2.11.0
-+
-diff --git a/package/ngircd/ngircd.hash b/package/ngircd/ngircd.hash
-index 45e2d9e..128867b 100644
---- a/package/ngircd/ngircd.hash
-+++ b/package/ngircd/ngircd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	93f953b2785ff0e6e29b8b3794ba5a64754b86251ce71bf39fc27f4f5074eada	ngircd-20.3.tar.xz
-+sha256 173fa0ea10788a8ba08ef2f7e64ea8951d7c88862e744128c8b87bae424b1008  ngircd-24.tar.xz
-diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
-index f7857e8..5f03b66 100644
---- a/package/ngircd/ngircd.mk
-+++ b/package/ngircd/ngircd.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
++	  http://pythonhosted.org/six
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+index 0edefe3..850f934 100644
+--- a/package/python-six/python-six.mk
++++ b/package/python-six/python-six.mk
+@@ -12,3 +12,4 @@ PYTHON_SIX_LICENSE = MIT
+ PYTHON_SIX_LICENSE_FILES = LICENSE
  
--NGIRCD_VERSION = 20.3
-+NGIRCD_VERSION = 24
- NGIRCD_SOURCE = ngircd-$(NGIRCD_VERSION).tar.xz
--NGIRCD_SITE = http://arthur.barton.de/pub/ngircd
-+NGIRCD_SITE = https://arthur.barton.de/pub/ngircd
- NGIRCD_DEPENDENCIES = zlib
- NGIRCD_LICENSE = GPL-2.0+
- NGIRCD_LICENSE_FILES = COPYING
+ $(eval $(python-package))
++$(eval $(host-python-package))
