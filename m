@@ -1,83 +1,210 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 25 Sep 2017 22:41:39 +0200
-Subject: [Buildroot] [PATCH 35/49 v2] package/libpjsip: add option to
- enable GSM codec
-In-Reply-To: <20170925161955.GA2985@scaer>
-References: <cover.1504993178.git.yann.morin.1998@free.fr>
- <577822438ab319654ee5eaa73ec0b4f96b3a8434.1504993178.git.yann.morin.1998@free.fr>
- <cec794ed-8219-4289-7d28-22649734f7bc@mind.be> <20170925161955.GA2985@scaer>
-Message-ID: <dddc4a7c-a44d-cf9e-7b2b-379d5d28902b@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 25 Sep 2017 23:02:21 +0200
+Subject: [Buildroot] [PATCH 1/1] [RFC] mvebu_espressobin-88f3720 : Add
+ support for espressobin
+In-Reply-To: <1506290733-6042-2-git-send-email-chevalliersebmax@gmail.com>
+References: <1506290733-6042-1-git-send-email-chevalliersebmax@gmail.com>
+ <1506290733-6042-2-git-send-email-chevalliersebmax@gmail.com>
+Message-ID: <8132918e-ebf8-dbf6-72e9-c10ed675d962@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Maxime,
 
-
-On 25-09-17 18:19, Yann E. MORIN wrote:
-> Arnout, All,
+Le 25/09/2017 ? 00:05, Maxime Chevallier a ?crit?:
+> Add support for the Globalscale 'Espressobin' board based
+> on Marvell Armada 3720.
 > 
-> On 2017-09-23 19:05 +0200, Arnout Vandecappelle spake thusly:
->> On 09-09-17 23:39, Yann E. MORIN wrote:
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> ---
->>>  package/libpjsip/Config.in   | 12 ++++++++++++
->>>  package/libpjsip/libpjsip.mk | 14 +++++++++++++-
->>>  2 files changed, 25 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
->>> index 727d2ec3d0..ce15a20567 100644
->>> --- a/package/libpjsip/Config.in
->>> +++ b/package/libpjsip/Config.in
->>> @@ -10,5 +10,17 @@ config BR2_PACKAGE_LIBPJSIP
->>>  
->>>  	  http://www.pjsip.org
->>>  
->>> +if BR2_PACKAGE_LIBPJSIP
->>> +
->>> +config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
->>> +    bool "GSM codec"
->>> +    depends on !BR2_STATIC_LIBS # libgsm
->>> +    select BR2_PACKAGE_LIBGSM
->>  Is there a good reason to make this an explicit suboption rather than an
->> automatic one like we usually do?
-> The issue I see is that the handling of codecs is not orthogonal
-> (accounting for your reply to the G711 codec):
+> This board has a dual Cortex-A53, 1GB DDR3, USBs, ethernets,
+> and some GPIO ports. More informations on the vendor site :
+> http://espressobin.net/tech-spec/
 > 
->   - codecs without external dependency will always be built, 
+> This config uses the mainline linux support for the board and
+> the buildroot toolchain using glibc, since uclibc does not
+> support aarch64.
 > 
->   - codecs with external dependencies need those dependencies to be
->     manually selected.
+> Mainline device-tree does not include SDCard support yet, so USB
+> is the preferred way to boot the image, using the default pre-flashed
+> u-boot on SPI NOR.
+
+Usually we use configs or board in the commit title.
+
+"board: Add support for espressobin 88f3720" should be enough.
+
+Otherwise, looks good for me as is.
+
+Linux 4.14-rc2 is out, do you know if the SDCard support has been added in this
+release?
+
+Maybe you can also add a new entry in .gitlab-ci.yml file for CI testing in gitlab.
+(see .gitlab-ci.yml.in to regenerate this file). But this can be done in a
+follow up patch.
+
+Best regards,
+Romain
+
 > 
-> By adding a config for each codec, the behaviour is then the same for
-> all codecs, so the user experiences a _consistent_ behaviour.
-
- So how does this differ with e.g. freeswitch, where e.g. speex is enabled if it
-is enabled, while zrtp (with no external dependencies) is always enabled? I'm
-taking this example because it is one I could fine where we explicitly pass
---enable-zrtp from Buildroot, but there are many others where we don't pass
-anything explicitly.
-
- The general guideline is: enable everything if it doesn't increase the size
-much, automatically enable things with external dependencies if it doesn't
-increase the size much, and only add explicit options if there is a good reason,
-like it would increase the size too much, or the external dependency is not
-obvious, or something exceptional.
-
- Clearly, we have (many) exceptions to these principles. I just want to make
-sure that we spend conscious thought on such exceptions and don't do it randomly.
-
- Note that personally I have nothing against adding config options all over the
-place. I just want to make sure we follow consistent principles.
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Signed-off-by: Maxime Chevallier <chevalliersebmax@gmail.com>
+> ---
+>  DEVELOPERS                                  |  4 ++
+>  board/globalscale/espressobin/genimage.cfg  | 11 +++++
+>  board/globalscale/espressobin/readme.txt    | 76 +++++++++++++++++++++++++++++
+>  configs/mvebu_espressobin-88f3720_defconfig | 29 +++++++++++
+>  4 files changed, 120 insertions(+)
+>  create mode 100644 board/globalscale/espressobin/genimage.cfg
+>  create mode 100644 board/globalscale/espressobin/readme.txt
+>  create mode 100644 configs/mvebu_espressobin-88f3720_defconfig
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e34802f..5036ac2 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1208,6 +1208,10 @@ F:	package/python-wsaccel/
+>  N:	Max Filippov <jcmvbkbc@gmail.com>
+>  F:	arch/Config.in.xtensa
+>  
+> +N:	Maxime Chevallier <chevalliersebmax@gmail.com>
+> +F:	configs/mvebu_espressobin-88f3720_defconfig
+> +F:	board/globalscale/espressobin/
+> +
+>  N:	Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>  F:	package/babeld/
+>  F:	package/dante/
+> diff --git a/board/globalscale/espressobin/genimage.cfg b/board/globalscale/espressobin/genimage.cfg
+> new file mode 100644
+> index 0000000..664f81b
+> --- /dev/null
+> +++ b/board/globalscale/espressobin/genimage.cfg
+> @@ -0,0 +1,11 @@
+> +# Minimal image
+> +
+> +image sdcard.img {
+> +  hdimage {
+> +  }
+> +
+> +  partition rootfs {
+> +    partition-type = 0x83
+> +    image = "rootfs.ext4"
+> +  }
+> +}
+> diff --git a/board/globalscale/espressobin/readme.txt b/board/globalscale/espressobin/readme.txt
+> new file mode 100644
+> index 0000000..fc9140e
+> --- /dev/null
+> +++ b/board/globalscale/espressobin/readme.txt
+> @@ -0,0 +1,76 @@
+> +Espressobin
+> +===========
+> +
+> +This is the basic support for the Espressobin by globalscale technologies,
+> +based on the Marvell Armada 3720.
+> +
+> +This support is based on the mainline linux kernel.
+> +
+> +
+> +How to build
+> +============
+> +
+> +1 - Use default configuration for espressobin :
+> +
+> +make mvebu_espressobin-88f3720_defconfig
+> +
+> +2 - Build the system
+> +
+> +make
+> +
+> +This generates the kernel image, the devicetree binary, the rootfs as a
+> +tar.gz, and a filesystem image containing everything : sdcard.img (this name
+> +is misleading though, see Limitations).
+> +
+> +Build artifacts are located in output/images.
+> +
+> +How to boot
+> +===========
+> +
+> +To boot, you need an UART connection, using the on-board micro-usb port
+> +at 115200 bauds.
+> +
+> +NOTE : As of today, booting from SDCard is not fully supported (rootfs cannot
+> +be located on SCard).
+> +
+> +## From USB Stick ############################################################
+> +
+> +As of right now, this is the easiest way to boot the system, since the SDCard
+> +support is not fully mainlined. It uses the pre-flashed u-boot on the SPI NOR
+> +to load the kernel, device-tree and rootfs from a USB stick.
+> +
+> +The on-board jumpers must be configured to select the SPI NOR as a boot source.
+> +
+> +1 - Flash rootfs image on usb drive (Be careful to select the correct drive)
+> +
+> +sudo dd if=sdcard.img of=/dev/sdX bs=1M
+> +sync
+> +
+> +2 - Boot from SPI NOR, interrupt boot by pressing Enter
+> +
+> +3 - Setup the bootusb u-boot script :
+> +
+> +setenv fdt_addr 0x1800000
+> +setenv fdt_name boot/armada-3720-espressobin.dtb
+> +setenv bootusb 'usb start; ext4load usb 0:1 $kernel_addr $image_name; ext4load usb 0:1 $fdt_addr $fdt_name; setenv bootargs $console root=/dev/sda1 rw rootwait; booti $kernel_addr - $fdt_addr'
+> +run bootusb
+> +
+> +Limitations
+> +===========
+> +
+> +Since the buildroot support for the espressobin is based on mainline
+> +linux, especially regarding device-tree, the current functionnalities
+> +for espressobin are limited.
+> +
+> +Namely, the mainline device-tree does not include support for sdcards yet, which
+> +means the kernel is not able to load a rootfs located on a SDCard.
+> +
+> +Todo
+> +====
+> +
+> +- Add bootloader generation
+> +
+> +- Use a custom devicetree to have SDcard support (or wait for support in mainline linux tree)
+> +
+> +- When SDcard support is working, add generation of sdcard image including bootloader, and
+> +  document the on-board jumper configuration needed for sdcard boot.
+> diff --git a/configs/mvebu_espressobin-88f3720_defconfig b/configs/mvebu_espressobin-88f3720_defconfig
+> new file mode 100644
+> index 0000000..394c881
+> --- /dev/null
+> +++ b/configs/mvebu_espressobin-88f3720_defconfig
+> @@ -0,0 +1,29 @@
+> +# Architecture
+> +BR2_aarch64=y
+> +BR2_cortex_a53=y
+> +
+> +# Linux headers same as kernel, a 4.13 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_GEN=4
+> +BR2_TARGET_ROOTFS_TAR_GZIP=y
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +
+> +# uClibc does not support aarch64 yet.
+> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> +
+> +# Image generation
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/globalscale/espressobin/genimage.cfg"
+> 
