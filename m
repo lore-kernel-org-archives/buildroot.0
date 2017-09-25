@@ -1,72 +1,78 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Mon, 25 Sep 2017 15:20:29 +0200
-Subject: [Buildroot] [PATCH 1/1] nginx (S50nginx): Fix stop, reload,
-	restart.  Add force-reload.
-Message-ID: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Sep 2017 13:57:50 +0000
+Subject: [Buildroot] [Bug 10331] New: kmsxx,
+ host installation fails with BR2_SHARED_STATIC_LIBS=y
+Message-ID: <bug-10331-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix package/nginx/S50nginx:
+https://bugs.busybox.net/show_bug.cgi?id=10331
 
-* On stop, use start-stop-daemon -R 1 to wait for the nginx processes
-  to actually stop.  This fixes a race condition with restart, where
-  nginx fails to restart because start is called too early
-  w.r.t. stop.  (This only works with Debian's start-stop-daemon,
-  however BusyBox's start-stop-daemon does not fail when given -R; it
-  just ignores the argument silently).
+            Bug ID: 10331
+           Summary: kmsxx, host installation fails with
+                    BR2_SHARED_STATIC_LIBS=y
+           Product: buildroot
+           Version: 2017.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: frederic.mathieu at dualis.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-* Implement reload with an actual reload instead of a restart.
+Hi
 
-* Add force-reload.
+kmsxx makefile try to install host static library, but no exists.
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/nginx/S50nginx | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+>>> kmsxx cb0786049f960f2bd383617151b01318e02e9ff9 Installing to staging directory
+/usr/bin/install -D -m 0755
+/home/dev01/data/projects/buildroot-2017.08_X86_64/output/build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/lib/libkms++.so
+/home/dev01/data/toolchain/2017.08_X86_64/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libkms++.so
+/usr/bin/install -D -m 0755
+/home/dev01/data/projects/buildroot-2017.08_X86_64/output/build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/lib/libkms++.a
+/home/dev01/data/toolchain/2017.08_X86_64/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libkms++.a
+/usr/bin/install: cannot stat
+'/home/dev01/data/projects/buildroot-2017.08_X86_64/output/build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/lib/libkms++.a':
+No such file or directory
+package/pkg-generic.mk:266: recipe for target
+'/home/dev01/data/projects/buildroot-2017.08_X86_64/output/build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/.stamp_staging_installed'
+failed
+make[1]: ***
+[/home/dev01/data/projects/buildroot-2017.08_X86_64/output/build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/.stamp_staging_installed]
+Error 1
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
-index b2f8b80855..a854c651d1 100755
---- a/package/nginx/S50nginx
-+++ b/package/nginx/S50nginx
-@@ -3,23 +3,31 @@
- # Start/stop nginx
- #
- 
-+NGINX=/usr/sbin/nginx
- PIDFILE=/var/run/nginx.pid
- 
- case "$1" in
-   start)
- 	echo "Starting nginx..."
- 	mkdir -p /var/log/nginx /var/tmp/nginx
--	start-stop-daemon -S -x /usr/sbin/nginx -p $PIDFILE
-+	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
- 	;;
-   stop)
--	printf "Stopping nginx..."
--	start-stop-daemon -K -o -p $PIDFILE
-+	echo "Stopping nginx..."
-+	# Use -R 1 to wait for nginx to actually stop.  Useful so
-+	# restart has no race condition.  Note that BusyBox knows
-+	# about -R but ignores it silently.
-+	start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -R 1 -o
- 	;;
--  restart|reload)
-+  reload|force-reload)
-+	echo "Reloading nginx configuration..."
-+	"$NGINX" -s reload
-+	;;
-+  restart)
- 	"$0" stop
- 	"$0" start
- 	;;
-   *)
--	echo "Usage: $0 {start|stop|restart}"
-+	echo "Usage: $0 {start|stop|restart|reload|force-reload}"
- 	exit 1
- esac
+
+
+Installation works if i comment these lines in makefile kmsxx.mk :
+
+define KMSXX_INSTALL_STAGING_CMDS
+        $(foreach l,$(KMSXX_LIBS),\
+                $(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),
+                        $(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
+                                $(STAGING_DIR)/usr/lib/lib$(l).so)
+#               $(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),
+#                       $(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).a \
+#                               $(STAGING_DIR)/usr/lib/lib$(l).a)
+                mkdir -p $(STAGING_DIR)/usr/include/$(l)
+                cp -dpfr $(@D)/$(l)/inc/$(l)/* $(STAGING_DIR)/usr/include/$(l)/
+        )
+endef
+
+
+founds on version 2017.08, 2017.05.x
+
+regards
+Frederic MATHIEU
+
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
