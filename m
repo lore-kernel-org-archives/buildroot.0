@@ -1,51 +1,72 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Sep 2017 12:49:26 +0000
-Subject: [Buildroot] [Bug 10326] New: mesa3d package fails to build when
- BR2_SHARED_STATIC_LIBS=y
-Message-ID: <bug-10326-163@https.bugs.busybox.net/>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 25 Sep 2017 15:20:29 +0200
+Subject: [Buildroot] [PATCH 1/1] nginx (S50nginx): Fix stop, reload,
+	restart.  Add force-reload.
+Message-ID: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10326
+Fix package/nginx/S50nginx:
 
-            Bug ID: 10326
-           Summary: mesa3d package fails to build when
-                    BR2_SHARED_STATIC_LIBS=y
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: frederic.mathieu at dualis.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+* On stop, use start-stop-daemon -R 1 to wait for the nginx processes
+  to actually stop.  This fixes a race condition with restart, where
+  nginx fails to restart because start is called too early
+  w.r.t. stop.  (This only works with Debian's start-stop-daemon,
+  however BusyBox's start-stop-daemon does not fail when given -R; it
+  just ignores the argument silently).
 
-Created attachment 7236
-  --> https://bugs.busybox.net/attachment.cgi?id=7236&action=edit
-compilation log
+* Implement reload with an actual reload instead of a restart.
 
-Hi
+* Add force-reload.
 
-with BR2_SHARED_STATIC_LIBS=y, mesa3d package compilation exits with error 2.
-the compilation is successfully completed if I add the following lines to
-makefile (package/mesa3d/mesa3d.mk) : 
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/nginx/S50nginx | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-MESA3D_CONF_OPTS += --disable-static
-endif
-
-bug found on versions 2017.08, 2017.05.x
-
-regards
-Fredric MATHIEU
-
+diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
+index b2f8b80855..a854c651d1 100755
+--- a/package/nginx/S50nginx
++++ b/package/nginx/S50nginx
+@@ -3,23 +3,31 @@
+ # Start/stop nginx
+ #
+ 
++NGINX=/usr/sbin/nginx
+ PIDFILE=/var/run/nginx.pid
+ 
+ case "$1" in
+   start)
+ 	echo "Starting nginx..."
+ 	mkdir -p /var/log/nginx /var/tmp/nginx
+-	start-stop-daemon -S -x /usr/sbin/nginx -p $PIDFILE
++	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
+ 	;;
+   stop)
+-	printf "Stopping nginx..."
+-	start-stop-daemon -K -o -p $PIDFILE
++	echo "Stopping nginx..."
++	# Use -R 1 to wait for nginx to actually stop.  Useful so
++	# restart has no race condition.  Note that BusyBox knows
++	# about -R but ignores it silently.
++	start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -R 1 -o
+ 	;;
+-  restart|reload)
++  reload|force-reload)
++	echo "Reloading nginx configuration..."
++	"$NGINX" -s reload
++	;;
++  restart)
+ 	"$0" stop
+ 	"$0" start
+ 	;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart|reload|force-reload}"
+ 	exit 1
+ esac
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
