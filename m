@@ -1,31 +1,51 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 25 Sep 2017 09:36:18 -0300
-Subject: [Buildroot] [PATCH RESEND 2/2] configs/imx6q-sabresd_defconfig:
-	Switch to SPL boot
-In-Reply-To: <e6553555-07ef-3d2c-7302-8bdcb264b0cb@mind.be>
-References: <1505567532-11583-1-git-send-email-festevam@gmail.com>
- <1505567532-11583-2-git-send-email-festevam@gmail.com>
- <e6553555-07ef-3d2c-7302-8bdcb264b0cb@mind.be>
-Message-ID: <CAOMZO5CFOMBvLyYQceMH1FrrKCNgCcGxayRaFRr17e4gGCH3mQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Sep 2017 12:49:26 +0000
+Subject: [Buildroot] [Bug 10326] New: mesa3d package fails to build when
+ BR2_SHARED_STATIC_LIBS=y
+Message-ID: <bug-10326-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+https://bugs.busybox.net/show_bug.cgi?id=10326
 
-On Sun, Sep 24, 2017 at 12:10 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+            Bug ID: 10326
+           Summary: mesa3d package fails to build when
+                    BR2_SHARED_STATIC_LIBS=y
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: frederic.mathieu at dualis.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
->  Applied both to master, thanks. However, as a follow-up patch, could you:
->
-> - rename this to imx6-sabresd_defconfig (since it now also supports DL and Q+);
-> - also swith the _qt5 config to SPL;
+Created attachment 7236
+  --> https://bugs.busybox.net/attachment.cgi?id=7236&action=edit
+compilation log
 
-Just sent a series that addresses this topics.
+Hi
 
-> - maybe also merge board/freescale/imx6q-sabresd into board/freescale/imx6sabre,
-> i.e. a single readme for all imx6sabre board that explains the difference
-> between the Freescale and the upstream configs.
+with BR2_SHARED_STATIC_LIBS=y, mesa3d package compilation exits with error 2.
+the compilation is successfully completed if I add the following lines to
+makefile (package/mesa3d/mesa3d.mk) : 
 
-This one is currently missing on my series, but I plan to do it on a next step.
+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+MESA3D_CONF_OPTS += --disable-static
+endif
+
+bug found on versions 2017.08, 2017.05.x
+
+regards
+Fredric MATHIEU
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
