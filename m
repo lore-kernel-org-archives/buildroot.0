@@ -1,97 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 25 Sep 2017 23:18:55 +0200
-Subject: [Buildroot] [PATCH 1/1] Allow musl to build with new binutils
-In-Reply-To: <20170924222003.22513-1-timothy.ty.lee@gmail.com>
-References: <20170924222003.22513-1-timothy.ty.lee@gmail.com>
-Message-ID: <fc351f04-83e7-3b7e-31eb-76a5baebcd06@mind.be>
+Date: Mon, 25 Sep 2017 23:41:26 +0200
+Subject: [Buildroot] [PATCH 1/1] [RFC] mvebu_espressobin-88f3720 : Add
+ support for espressobin
+In-Reply-To: <8132918e-ebf8-dbf6-72e9-c10ed675d962@gmail.com>
+References: <1506290733-6042-1-git-send-email-chevalliersebmax@gmail.com>
+ <1506290733-6042-2-git-send-email-chevalliersebmax@gmail.com>
+ <8132918e-ebf8-dbf6-72e9-c10ed675d962@gmail.com>
+Message-ID: <5c6b0144-03fd-93e1-bea8-e10c0de4f196@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Timothy,
 
- Looks good, but one major problem below that will require a respin: you need to
-add your Signed-off-by to the patch.
 
-On 25-09-17 00:20, Timothy Lee wrote:
-> New binutils cannot build musl-1.1.16 due to breakage in arm atomics asm.  This
-
- Can you specify which binutils version that is? Based on the log message below
-it would be 2.28.
-
-> patch from upstream musl repository is needed until musl-1.1.17 is released:
-> https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5
+On 25-09-17 23:02, Romain Naour wrote:
+> Hi Maxime,
 > 
-> Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
-> ---
->  .../0002-arm-atomics-asm-with-new-binutils.patch   | 40 ++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/musl/0002-arm-atomics-asm-with-new-binutils.patch
+> Le 25/09/2017 ? 00:05, Maxime Chevallier a ?crit?:
+>> Add support for the Globalscale 'Espressobin' board based
+>> on Marvell Armada 3720.
+>>
+>> This board has a dual Cortex-A53, 1GB DDR3, USBs, ethernets,
+>> and some GPIO ports. More informations on the vendor site :
+>> http://espressobin.net/tech-spec/
+>>
+>> This config uses the mainline linux support for the board and
+>> the buildroot toolchain using glibc, since uclibc does not
+>> support aarch64.
+>>
+>> Mainline device-tree does not include SDCard support yet, so USB
+>> is the preferred way to boot the image, using the default pre-flashed
+>> u-boot on SPI NOR.
+> Usually we use configs or board in the commit title.
 > 
-> diff --git a/package/musl/0002-arm-atomics-asm-with-new-binutils.patch b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
-> new file mode 100644
-> index 0000000000..f0ad408687
-> --- /dev/null
-> +++ b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
-> @@ -0,0 +1,40 @@
-> +From b261a24256792177a5f0531dbb25cc6267220ca5 Mon Sep 17 00:00:00 2001
-> +From: Rich Felker <dalias@aerifal.cx>
-> +Date: Wed, 15 Feb 2017 17:05:50 -0500
-> +Subject: fix build regression in arm atomics asm with new binutils
-> +
-> +binutils commit bada43421274615d0d5f629a61a60b7daa71bc15 tightened
-> +immediate fixup handling in gas in such a way that the final .arch of
-> +an object file must be compatible with the fixups used when the
-> +instruction was assembled; this in turn broke assembling of atomics.s,
-> +at least in thumb mode.
-> +
-> +it's not clear whether this should be considered a bug in gas, but
-> +.object_arch is preferable anyway for our purpose here of controlling
-> +the ISA level tag on the object file being produced, and it's the
-> +intended directive for use in object files with runtime code
-> +selection. research by Szabolcs Nagy confirmed that .object_arch is
-> +supported in all relevant versions of binutils and clang's integrated
-> +assembler.
-> +
-> +patch by Reiner Herrmann.
+> "board: Add support for espressobin 88f3720" should be enough.
+> 
+> Otherwise, looks good for me as is.
 
- Just like in the patch itself, you need to add your Signed-off-by here.  This
-is a short way for you to assert that you are entitled to contribute the patch
-under the package license.
+ Indeed, looks good to me as well.
 
-> +---
-> + src/thread/arm/atomics.s | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/thread/arm/atomics.s b/src/thread/arm/atomics.s
-> +index 202faa4..101ad39 100644
-> +--- a/src/thread/arm/atomics.s
-> ++++ b/src/thread/arm/atomics.s
-> +@@ -84,7 +84,7 @@ __a_gettp_cp15:
-> + 	bx lr
-> + 
-> + /* Tag this file with minimum ISA level so as not to affect linking. */
-> +-.arch armv4t
-> ++.object_arch armv4t
+ I don't like the name much, though. Isn't globalscale_espressobin_defconfig
+more appropriate?
 
- I was surprised that this problem was not discovered in
-http://toolchains.free-electrons.com/ but I guess that's because the problem
-only applies to ARMv4 and no ARMv4 toolchains are built. Maybe add to the commit
-log that this is only for ARMv4.
+> 
+> Linux 4.14-rc2 is out, do you know if the SDCard support has been added in this
+> release?
+> 
+> Maybe you can also add a new entry in .gitlab-ci.yml file for CI testing in gitlab.
+> (see .gitlab-ci.yml.in to regenerate this file). But this can be done in a
+> follow up patch.
+
+ No, this is not optional, it *must* be added otherwise we get errors from CI
+(well, except that the gitlab sync is currently broken). Just run
+'make .gitlab-ci.yml'.
+
 
  Regards,
  Arnout
 
-> + .eabi_attribute 6,2
-> + 
-> + .data
-> +-- 
-> +cgit v0.11.2
-> +
-> 
-
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
