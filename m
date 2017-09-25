@@ -1,65 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 25 Sep 2017 21:50:13 +0200
-Subject: [Buildroot] [PATCH] axel: bump to version 2.14.1
-In-Reply-To: <20170925174107.GC25135@pirotess.bf.iodev.co.uk>
-References: <20170922044545.18813-1-ismael@iodev.co.uk>
- <cf484d3b-ef26-1829-3a09-e98a4253cc16@mind.be>
- <20170925142720.GA25135@pirotess.bf.iodev.co.uk>
- <b676e492-44f5-2498-639e-ee68909d7fee@mind.be>
- <20170925174107.GC25135@pirotess.bf.iodev.co.uk>
-Message-ID: <deebfc62-f291-0a31-43ff-a6a174e60169@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 25 Sep 2017 22:08:10 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: bump version of Linaro
+	ARM toolchain to 2017.08
+Message-ID: <20170925200812.4917-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+GDB has been updated to 8.0 version in the release.
 
+https://releases.linaro.org/components/toolchain/binaries/6.4-2017.08
 
-On 25-09-17 19:41, Ismael Luceno wrote:
-> On 25/Sep/2017 18:44, Arnout Vandecappelle wrote:
->>
->>
->> On 25-09-17 16:27, Ismael Luceno wrote:
->>> Thanks for the feedback.
->>>
->>> On 24/Sep/2017 16:09, Arnout Vandecappelle wrote:
->>> <...>
->>>> If upstream has a v in their version, you should also have it. So
->>>>
->>>> AXEL_VERSION = v2.14.1
->>>>
->>>> Note that as of today, the github helper no longer requires the third
->>>> argument.
->>>
->>> The "v" is not part of the version number, so I would prefer to leave it
->>> out of AXEL_VERSION...
->>
->>  No, the v *is* part of the version number. If you use the github helper, the
->> _VERSION variable must be identical to the upstream tag.
-> 
-> Well, that's a matter of interpretation, the project considers it a
-> prefix, and Github agrees with common practice and removes the "v"
-> prefix when building the archive...
-> 
-> So if using the github macro, AXEL_VERSION must be a tag or commit id?
+Tested with qemu_arm_vexpress_defconfig.
 
- Quoting [1]:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ .../toolchain-external/toolchain-external-linaro-arm/Config.in    | 6 +++---
+ .../toolchain-external-linaro-arm.hash                            | 4 ++--
+ .../toolchain-external-linaro-arm.mk                              | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-"The FOO_VERSION can either be a tag or a commit ID."
-
-
- Regards,
- Arnout
-
-
-[1] https://buildroot.org/downloads/manual/manual.html#github-download-url
-
-
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+index f538eb7..fd4e03b 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -4,7 +4,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+-	bool "Linaro ARM 2017.02"
++	bool "Linaro ARM 2017.08"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -19,8 +19,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2017.02 (based on gcc 6.3.1), Linaro GDB 2017.02 (based on
+-	  GDB 7.12), glibc 2.23, Binutils 2017.02 (based on 2.27). It
++	  GCC 2017.08 (based on gcc 6.4.1), Linaro GDB 2017.08 (based on
++	  GDB 8.0), glibc 2.23, Binutils 2017.08 (based on 2.27). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+index ec861ec..664663d 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 2505348d30fd3f67544b8915ad7a557e643fbf987f3113e092463b37577c9b95  gcc-linaro-6.3.1-2017.02-i686_arm-linux-gnueabihf.tar.xz
+-sha256 fe1cae02e0734665487b9b642171a5685a6e91416cea869bb22590f6dc7260c3  gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
++sha256 a99029dff3d17d28c89831f2cd2aa37752c2f85fe89fe38fdd17971c36a9f1dc  gcc-linaro-6.4.1-2017.08-i686_arm-linux-gnueabihf.tar.xz
++sha256 1c975a1936cc966099b3fcaff8f387d748caff27f43593214ae6d4601241ae40  gcc-linaro-6.4.1-2017.08-x86_64_arm-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+index b8ba43c..a165184 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.02
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.08
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.4-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
+ 
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
+ else
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
+ endif
+ 
+ $(eval $(toolchain-external-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.5
