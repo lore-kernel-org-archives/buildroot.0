@@ -1,65 +1,40 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 26 Sep 2017 15:59:09 +0200
-Subject: [Buildroot] [PATCH] package/mono: bump to version 5.2.0.224
-Message-ID: <1506434349-4636-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Tue, 26 Sep 2017 16:47:21 +0200
+Subject: [Buildroot] [PATCH 1/3] sdl2: Bump version to 2.0.6
+Message-ID: <20170926144723.17619-1-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps mono to version 5.2.0.224 and the required monolite
-dependency to 1050200001.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/mono/mono.hash         | 2 +-
- package/mono/mono.mk           | 2 +-
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 5d14a52..9af7ce3 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index d69d43811d..c0a8bfc77c 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
 @@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 48d6ae71d593cd01bf0f499de569359d45856cda325575e1bacb5fabaa7e9718  mono-5.0.1.1.tar.bz2
-+sha256 03b8e463032bc425673dec844b35b4c669f5b99b0e45521195efb3741a9f5e94  mono-5.2.0.224.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index ec2f38f..838963d 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.5.tar.gz.sig
+-sha256 442038cf55965969f2ff06d976031813de643af9c9edc9e331bd761c242e8785  SDL2-2.0.5.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.6.tar.gz.sig
++sha256 03658b5660d16d7b31263a691e058ed37acdab155d68dabbad79998fb552c5df  SDL2-2.0.6.tar.gz
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index a0a4489677..e64628d0cd 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONO_VERSION = 5.0.1.1
-+MONO_VERSION = 5.2.0.224
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 7638ce2..0d4fff8 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
-+sha256 56f313da5f7137fae86db6af1476df0cf6515cedea46369347c4159ed7ce3300  monolite-1050200001-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index a2815ef..78e698a 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONOLITE_VERSION = 1050001000
-+MONOLITE_VERSION = 1050200001
- MONOLITE_SITE = http://download.mono-project.com/monolite/
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
+-SDL2_VERSION = 2.0.5
++SDL2_VERSION = 2.0.6
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
 -- 
-2.7.4
+2.11.0
