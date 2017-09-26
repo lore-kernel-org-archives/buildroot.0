@@ -1,35 +1,90 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:33:15 +0200
-Subject: [Buildroot] [git commit] imx6-sabresd/readme: Add an entry for
-	glmark benchmark
-Message-ID: <20170926222615.DEE637FBC1@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 27 Sep 2017 00:39:15 +0200
+Subject: [Buildroot] [PATCH 1/1] nginx (S50nginx): Fix stop, reload,
+ restart. Add force-reload.
+In-Reply-To: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
+References: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
+Message-ID: <184ddd66-7105-7616-04ee-572c41848288@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fceb81781eb56f000db3432a4f6f2397ab9363d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an entry to explain how to run the glmark benchmark.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- board/freescale/imx6-sabresd/readme.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+On 25-09-17 15:20, Thomas Claveirole wrote:
+> Fix package/nginx/S50nginx:
+> 
+> * On stop, use start-stop-daemon -R 1 to wait for the nginx processes
+>   to actually stop.  This fixes a race condition with restart, where
+>   nginx fails to restart because start is called too early
+>   w.r.t. stop.  (This only works with Debian's start-stop-daemon,
+>   however BusyBox's start-stop-daemon does not fail when given -R; it
+>   just ignores the argument silently).
+> 
+> * Implement reload with an actual reload instead of a restart.
+> 
+> * Add force-reload.
+> 
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 
-diff --git a/board/freescale/imx6-sabresd/readme.txt b/board/freescale/imx6-sabresd/readme.txt
-index a4ecfae..2943f8b 100644
---- a/board/freescale/imx6-sabresd/readme.txt
-+++ b/board/freescale/imx6-sabresd/readme.txt
-@@ -82,4 +82,8 @@ Running Qt5 Cinematic Demo:
- # export QT_QPA_EGLFS_KMS_CONFIG=/root/sabresd.json
- # /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
- 
-+Running gl2mark benchmark:
-+
-+# glmark2-es2-drm
-+
- Enjoy!
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
+
+> ---
+>  package/nginx/S50nginx | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
+> index b2f8b80855..a854c651d1 100755
+> --- a/package/nginx/S50nginx
+> +++ b/package/nginx/S50nginx
+> @@ -3,23 +3,31 @@
+>  # Start/stop nginx
+>  #
+>  
+> +NGINX=/usr/sbin/nginx
+>  PIDFILE=/var/run/nginx.pid
+>  
+>  case "$1" in
+>    start)
+>  	echo "Starting nginx..."
+>  	mkdir -p /var/log/nginx /var/tmp/nginx
+> -	start-stop-daemon -S -x /usr/sbin/nginx -p $PIDFILE
+> +	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
+>  	;;
+>    stop)
+> -	printf "Stopping nginx..."
+> -	start-stop-daemon -K -o -p $PIDFILE
+> +	echo "Stopping nginx..."
+> +	# Use -R 1 to wait for nginx to actually stop.  Useful so
+> +	# restart has no race condition.  Note that BusyBox knows
+> +	# about -R but ignores it silently.
+> +	start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -R 1 -o
+>  	;;
+> -  restart|reload)
+> +  reload|force-reload)
+> +	echo "Reloading nginx configuration..."
+> +	"$NGINX" -s reload
+> +	;;
+> +  restart)
+>  	"$0" stop
+>  	"$0" start
+>  	;;
+>    *)
+> -	echo "Usage: $0 {start|stop|restart}"
+> +	echo "Usage: $0 {start|stop|restart|reload|force-reload}"
+>  	exit 1
+>  esac
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
