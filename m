@@ -1,40 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Tue, 26 Sep 2017 23:50:14 +0200
-Subject: [Buildroot] [git commit] configs: qemu_ppc64_pseries: Update to
-	kernel 4.13.1
-Message-ID: <20170926215334.43BE6807DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-rtmp: bump
+	version to 1.0.6
+Message-ID: <20170926215334.11D07807DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ce769a1f49a2b3da38a32f4371c46e03a79a53a
+commit: https://git.buildroot.net/buildroot/commit/?id=eec04a7b7dc32749f9c1f5e0ac1087230c542f28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+This version was not tagged upstream so use a git hash which has that
+version.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- configs/qemu_ppc64_pseries_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 2 +-
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index 7af20e9..8407631 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+index f5a82d2..4fc2b0e 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
++sha256 34bdb372ff1e2a26894b76adf0d1e7c68193488992508cc3d0948d60f682d5b3  kodi-inputstream-rtmp-d93d32d45dfa61ad4b27f166f08736bd416bc329.tar.gz
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index 80c4bcc..c4617b9 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.11 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.1"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
+-KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
++KODI_INPUTSTREAM_RTMP_VERSION = d93d32d45dfa61ad4b27f166f08736bd416bc329
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
