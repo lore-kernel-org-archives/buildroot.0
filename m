@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:04:42 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: Add qemu_ppc64le_pseries
-In-Reply-To: <20170920024845.26157-3-joel@jms.id.au>
-References: <20170920024845.26157-1-joel@jms.id.au>
- <20170920024845.26157-3-joel@jms.id.au>
-Message-ID: <93dd5473-a4f7-c809-d256-3267868bf77c@mind.be>
+Date: Wed, 27 Sep 2017 00:05:06 +0200
+Subject: [Buildroot] [PATCH 1/2] wandboard: genimage: Pass an offset for
+ the rootfs
+In-Reply-To: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
+References: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <3a6b5cbf-081a-ce92-ed01-43e66e29453f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,37 @@ To: buildroot@busybox.net
 
 
 
-On 20-09-17 04:48, Joel Stanley wrote:
-> This is similar to the ppc64_pseries config, except we build for little
-> endian instead of big endian.
+On 21-09-17 15:59, Fabio Estevam wrote:
+> Pass an offset of 1MB for the start of the rootfs.
 > 
-> The default architecture is set to Power8 as this was the first fully
-> enabled LE machine.
+> Otherwise we get rootfs corruption when the bootloader is manually
+> written to the SD card.
 > 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
- Applied to master, thanks.
+ Applied both to master, thanks.
 
  Regards,
  Arnout
 
+
+> ---
+>  board/wandboard/genimage.cfg | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
+> index b23a91b..ad4a6a5 100644
+> --- a/board/wandboard/genimage.cfg
+> +++ b/board/wandboard/genimage.cfg
+> @@ -26,6 +26,7 @@ image sdcard.img {
+>    partition rootfs {
+>      partition-type = 0x83
+>      image = "rootfs.ext4"
+> +    offset = 1M
+>      size = 512M
+>    }
+>  }
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
