@@ -1,190 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Sep 2017 23:31:11 +0200
-Subject: [Buildroot] [PATCH 1/2] tbb: new package
-In-Reply-To: <20170926203504.22326-2-bradford@density.io>
-References: <20170926203504.22326-1-bradford@density.io>
- <20170926203504.22326-2-bradford@density.io>
-Message-ID: <46645181-5119-65dd-e023-afc2a39e0f6c@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 26 Sep 2017 23:50:14 +0200
+Subject: [Buildroot] [git commit] package/kodi-skin-confluence: bump version
+	to 3.1.4
+Message-ID: <20170926215334.2BD34807DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Bradford,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e8ce1eccc2477f2046e2aeaf93bf4f4986c5ad2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 26-09-17 22:35, Bradford Barr wrote:
-> From: bradford barr <bradford@density.io>
-> 
-> Intel Threading Building Blocks (TBB), is a C++ library to help developers
-> write highly parallelized applications. OpenCV uses it to accelerate some of
-> it's more heavy weight procedures.
-> 
-> Signed-off-by: bradford barr <bradford@density.io>
-[snip]
-> diff --git a/package/tbb/0001-prevent-thumb.patch b/package/tbb/0001-prevent-thumb.patch
+This version was not tagged upstream so use a git hash which has that
+version.
 
- Package patches need a description (basically a commit message) and another
-signed-off-by. The latter is needed because both the license and the submission
-path may be different for a package patch.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- Ideally, you generate patches from the upstream git repository, with git
-format-patch. Don't forget to add -N to format-patch to avoid getting [1/2] in
-the Subject line.
-
-> new file mode 100644
-> index 0000000..942f7f4
-> --- /dev/null
-> +++ b/package/tbb/0001-prevent-thumb.patch
-> @@ -0,0 +1,15 @@
-> +diff -Naur tbb-2017_U8/build/linux.gcc.inc b/build/linux.gcc.inc
-> +--- tbb-2017_U8/build/linux.gcc.inc	2017-09-22 15:57:33.000000000 -0400
-> ++++ b/build/linux.gcc.inc	2017-09-25 14:46:39.584066690 -0400
-> +@@ -115,11 +115,6 @@
-> +     LIB_LINK_FLAGS += -mcpu=v9 -m64
-> + endif
-> + 
-> +-# automatically generate "IT" instructions when compiling for Thumb ISA
-> +-ifeq (armv7,$(arch))
-> +-    CPLUS_FLAGS    += -Wa,-mimplicit-it=thumb
-> +-endif
-> +-
-> + #------------------------------------------------------------------------------
-> + # Setting assembler data.
-> + #------------------------------------------------------------------------------
-> diff --git a/package/tbb/0002-cross-compiler.patch b/package/tbb/0002-cross-compiler.patch
-> new file mode 100644
-> index 0000000..60a4eb3
-> --- /dev/null
-> +++ b/package/tbb/0002-cross-compiler.patch
-> @@ -0,0 +1,14 @@
-> +diff -Naur tbb-2017_U8/build/linux.gcc.inc b/build/linux.gcc.inc
-> +--- tbb-2017_U8/build/linux.gcc.inc	2017-09-25 14:58:24.593148831 -0400
-> ++++ b/build/linux.gcc.inc	2017-09-25 15:08:17.032422555 -0400
-> +@@ -32,8 +32,8 @@
-> + EXPORT_KEY = -Wl,--version-script,
-> + LIBDL = -ldl
-> + 
-> +-CPLUS = g++
-> +-CONLY = gcc
-> ++CPLUS = arm-linux-gnueabihf-g++
-> ++CONLY = arm-linux-gnueabihf-gcc
-
- That can't be right, it would only support ARM builds.
-
- However, this patch shouldn't be needed, since you pass CPLUS and CONLY on the
-command line explicitly.
-
-> + LIB_LINK_FLAGS = $(DYLIB_KEY) -Wl,-soname=$(BUILDING_LIBRARY)
-> + LIBS += -lpthread -lrt
-> + LINK_FLAGS = -Wl,-rpath-link=. -rdynamic
-> diff --git a/package/tbb/Config.in b/package/tbb/Config.in
-> new file mode 100644
-> index 0000000..d2c8c04
-> --- /dev/null
-> +++ b/package/tbb/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_TBB
-> +	bool "tbb"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  Intel(R) Threading Building Blocks (Intel(R) TBB) lets you easily
-> +	  write parallel C++ programs that take full advantage of multicore
-> +	  performance, that are portable, composable and have future-proof
-> +	  scalability.
-> +
-> +	  https://www.threadingbuildingblocks.org/
-> +
-> +comment "tbb needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
-> new file mode 100644
-> index 0000000..7e73cb4
-> --- /dev/null
-> +++ b/package/tbb/tbb.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  c6462217d4ecef2b44fce63cfdf31f9db4f6ff493869899d497a5aef68b05fc5  tbb-2018_U1.tar.gz
-
- Only include the hash for the version we have.
-
- Also, please add a hash for the LICENSE file. That allows us to detect when the
-license changes (it sometimes happens...).
-
-
-
-> +sha256  1b1357f280e750d42506212adad02f85ac07c9d3e3c0813104f9122ef350497f  tbb-2017_U8.tar.gz
-> diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
-> new file mode 100644
-> index 0000000..d9ac4c8
-> --- /dev/null
-> +++ b/package/tbb/tbb.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# tbb
-> +#
-> +################################################################################
-> +
-> +TBB_VERSION = 2017_U8
-> +TBB_SITE = $(call github,01org,tbb,$(TBB_VERSION))
-> +TBB_INSTALL_STAGING = YES
-> +TBB_LICENSE = Apache-2.0
-> +TBB_LICENSE_FILES = LICENSE
-> +
-> +define TBB_BUILD_CMDS
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) CPLUS=$(HOSTCXX) CONLY=$(HOSTCC) arch=$(BR2_ARCH) -C $(@D) tbb
-
- Usually when the build system requires the target architecture to be specified,
-there are limitations on which architectures are supported, or you may have to
-translate BR2_ARCH to something that the build system understands. Have you used
-test-pkg to explore all the different configurations we support?
-
-> +endef
-> +
-> +define TBB_INSTALL_STAGING_CMDS
-> +	mkdir -p $(STAGING_DIR)/usr/include/tbb
-> +	cp -a $(@D)/include/* $(STAGING_DIR)/usr/include/tbb
-> +	for f in $$(find $(@D)/build/linux_*_release -type f -iname "libtbb.so*"); do \
-
- Ideally, you would use _debug instead of _release if BR2_ENABLE_DEBUG=y, but
-that's not so important.
-
-> +		if grep -q -v INPUT $$f; then \
-
- That grep requires some explanation...
-
-> +			$(INSTALL) -D -m 0755 $$f $(STAGING_DIR)/usr/lib ; \
-
- Aren't there symlinks to be installed?
-
-> +		fi \
-> +	done
-
- You only install dynamic libraries. So either the package must depend on
-!BR2_STATIC_LIBS, or you have to install static and/or dynamic libs depending on
-the configuration chosen.
-
- Regards,
- Arnout
-
-> +endef
-> +
-> +define TBB_INSTALL_TARGET_CMDS
-> +	for f in $$(find $(@D)/build/linux_*_release -type f -iname "libtbb.so*"); do \
-> +		if grep -q -v INPUT $$f; then \
-> +			$(INSTALL) -D -m 0755 $$f $(TARGET_DIR)/usr/lib ; \
-> +		fi \
-> +	done
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index 9aa2ea4..276b000 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 47970d61b2f617921dfbc36188ed11de9af366cd97d9105e19cbe96598fe7b62  kodi-skin-confluence-7044dabb3a818d7ff47b7a34bfb3480f2a9441d9.tar.gz
++sha256 49ae60f397e3cac08dc0e9c027bc39a3936ccd27b956d7a43bf2424a07f162ec  kodi-skin-confluence-96bed03570a90d4fdfb96ab71de9a51ceedd03fb.tar.gz
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index e7ed11c..a5ebcf5 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+@@ -4,7 +4,9 @@
+ #
+ ################################################################################
+ 
+-KODI_SKIN_CONFLUENCE_VERSION = 7044dabb3a818d7ff47b7a34bfb3480f2a9441d9
++# This cset is on the branch 'krypton'
++# When Kodi is updated, then this should be updated to the corresponding branch
++KODI_SKIN_CONFLUENCE_VERSION = 96bed03570a90d4fdfb96ab71de9a51ceedd03fb
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
