@@ -1,66 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:15:49 +0200
-Subject: [Buildroot] [git commit] package/dfu-util: allow to build it for
-	the target as well
-Message-ID: <20170926222615.492E980F59@busybox.osuosl.org>
+Date: Wed, 27 Sep 2017 00:21:14 +0200
+Subject: [Buildroot] [git commit] package/poco: needs NPTL
+Message-ID: <20170926222615.5F8D18045D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24407cb4dcb63e1836b0545ede8dbb8b68ccd812
+commit: https://git.buildroot.net/buildroot/commit/?id=1ef5e6f2a55459983ea118a549c47359b0d38df2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Fixes
+http://autobuild.buildroot.net/results/609/6090f5a0f4bf96b9dc2b3e48eb2e33c83d2ba7d2/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in            |  1 +
- package/dfu-util/Config.in   | 13 +++++++++++++
- package/dfu-util/dfu-util.mk |  2 ++
- 3 files changed, 16 insertions(+)
+ package/poco/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6acd0c4..1580a9e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -391,6 +391,7 @@ endmenu
- 	source "package/dbus-python/Config.in"
- 	source "package/dbus-triggerd/Config.in"
- 	source "package/devmem2/Config.in"
-+	source "package/dfu-util/Config.in"
- 	source "package/dmidecode/Config.in"
- 	source "package/dmraid/Config.in"
- 	source "package/dt-utils/Config.in"
-diff --git a/package/dfu-util/Config.in b/package/dfu-util/Config.in
-new file mode 100644
-index 0000000..2f45fcd
---- /dev/null
-+++ b/package/dfu-util/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_DFU_UTIL
-+	bool "dfu-util"
-+	select BR2_PACKAGE_LIBUSB
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Dfu-util is the host side implementation of the DFU 1.0
-+	  specification of the USB forum. DFU is intended to download
-+	  and upload firmware to devices connected over USB.
-+
-+	  http://dfu-util.sourceforge.net/
-+
-+comment "dfu-util needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
-index c494485..5e8ba5a 100644
---- a/package/dfu-util/dfu-util.mk
-+++ b/package/dfu-util/dfu-util.mk
-@@ -9,6 +9,8 @@ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
- DFU_UTIL_LICENSE = GPL-2.0+
- DFU_UTIL_LICENSE_FILES = COPYING
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index b3b247f..9199b54 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# pthread_condattr_setclock
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+ 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
+ 		|| BR2_or1k || BR2_xtensa)
+@@ -61,8 +62,8 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
  
-+DFU_UTIL_DEPENDENCIES = libusb
- HOST_DFU_UTIL_DEPENDENCIES = host-libusb
+ endif # BR2_PACKAGE_POCO
  
-+$(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-comment "poco needs a toolchain w/ wchar, threads, C++, dynamic library"
++comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
+ 		|| BR2_or1k || BR2_xtensa)
