@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:05:06 +0200
-Subject: [Buildroot] [PATCH 1/2] wandboard: genimage: Pass an offset for
- the rootfs
-In-Reply-To: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
-References: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <3a6b5cbf-081a-ce92-ed01-43e66e29453f@mind.be>
+Date: Wed, 27 Sep 2017 00:26:20 +0200
+Subject: [Buildroot] [PATCH] radvd: improve startup script
+In-Reply-To: <1506333475-4759-1-git-send-email-casantos@datacom.ind.br>
+References: <1506333475-4759-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,81 @@ To: buildroot@busybox.net
 
 
 
-On 21-09-17 15:59, Fabio Estevam wrote:
-> Pass an offset of 1MB for the start of the rootfs.
-> 
-> Otherwise we get rootfs corruption when the bootloader is manually
-> written to the SD card.
-> 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+On 25-09-17 11:57, Carlos Santos wrote:
+> The previous script caused a failure if /etc/radvd.conf did not exist.
 
- Applied both to master, thanks.
+ That's a good thing, no? If you select radvd but forget to install a
+configuration file, you'll want to have some kind of warning rather than
+silently not starting it.
+
+> 
+> This is a simple copy/paste/edit of package/dnsmasq/S80dnsmasq.
+
+ Perhaps not the best example...
+
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/radvd/S50radvd | 36 ++++++++++++++++++++++--------------
+>  1 file changed, 22 insertions(+), 14 deletions(-)
+> 
+> diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
+> index 9f1407c..dcc2af6 100755
+> --- a/package/radvd/S50radvd
+> +++ b/package/radvd/S50radvd
+> @@ -1,18 +1,26 @@
+>  #!/bin/sh
+>  
+> -RADVD=/usr/sbin/radvd
+> +[ -x /usr/sbin/radvd ] || exit 0
+
+ This we certainly don't want. If the executable is missing, we want to shout
+loudly, not silently skip it.
+
+> +[ -f /etc/radvd.conf ] || exit 0
+>  
+> -echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
+
+ Why remove this? It should of course move to the start stanza.
+
+> +case "$1" in
+> +	start)
+> +		printf "Starting radvd: "
+> +		start-stop-daemon -S -x /usr/sbin/radvd
+> +		[ $? = 0 ] && echo "OK" || echo "FAI> +		;;
+> +	stop)
+> +		printf "Stopping radvd: "
+> +		start-stop-daemon -K -q -x /usr/sbin/radvd
+> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +		;;
+> +	restart|reload)
+> +		$0 stop
+> +		$0 start
+> +		;;
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart}"
+> +		exit 1
+> +esac
+
+ This part looks good.
 
  Regards,
  Arnout
 
-
-> ---
->  board/wandboard/genimage.cfg | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
-> index b23a91b..ad4a6a5 100644
-> --- a/board/wandboard/genimage.cfg
-> +++ b/board/wandboard/genimage.cfg
-> @@ -26,6 +26,7 @@ image sdcard.img {
->    partition rootfs {
->      partition-type = 0x83
->      image = "rootfs.ext4"
-> +    offset = 1M
->      size = 512M
->    }
->  }
+>  
+> -printf "Starting radvd: "
+> -if [ ! -x "${RADVD}" ]; then
+> -	echo "missing"
+> -	exit 1
+> -fi
+> -
+> -if ${RADVD} ; then
+> -	echo "done"
+> -else
+> -	echo "failed"
+> -	exit 1
+> -fi
+> +exit 0
 > 
 
 -- 
