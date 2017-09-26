@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Sep 2017 22:58:49 +0200
-Subject: [Buildroot] [PATCH] python-numpy: Ensure `_npy_scaled_cexp{, f,
- l}` is defined when needed
-In-Reply-To: <20170922223053.25433-1-abrodkin@synopsys.com>
-References: <20170922223053.25433-1-abrodkin@synopsys.com>
-Message-ID: <141011cc-4937-c27b-4763-30cb79df475d@mind.be>
+Date: Tue, 26 Sep 2017 23:00:00 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/tor: security bump to
+ version 0.3.1.7
+In-Reply-To: <20170923084630.3841-1-bernd.kuhls@t-online.de>
+References: <20170923084630.3841-1-bernd.kuhls@t-online.de>
+Message-ID: <1b4e7444-b353-d164-38fe-a0133f9e5edd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,22 @@ To: buildroot@busybox.net
 
 
 
-On 23-09-17 00:30, Alexey Brodkin wrote:
-> With update of Numpy to the latest version we've got one change which
-> breaks Numpy compilcation in some cases.
+On 23-09-17 10:46, Bernd Kuhls wrote:
+> Quoted from release notes:
+> https://blog.torproject.org/tor-0317-now-released
+> "Tor 0.3.1.7 is the first stable release in the 0.3.1 series."
 > 
-> This change back-ports upstream fix from:
-> https://github.com/numpy/numpy/pull/9740
+> Fixes CVE-2017-0380:
+> https://trac.torproject.org/projects/tor/ticket/23490
 > 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Applied to master, thanks. It has apparently also been merged upstream, great!
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
-[snip]
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
