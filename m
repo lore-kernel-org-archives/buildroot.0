@@ -1,15 +1,15 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Tue, 26 Sep 2017 23:50:14 +0200
-Subject: [Buildroot] [git commit] package/kodi-inputstream-rtmp: bump
-	version to 1.0.6
-Message-ID: <20170926215334.11D07807DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-hts: bump version to
+	3.4.28
+Message-ID: <20170926215334.1EA79807DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eec04a7b7dc32749f9c1f5e0ac1087230c542f28
+commit: https://git.buildroot.net/buildroot/commit/?id=078df053415a5562c4a7ad7e099eed727d2c14f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This version was not tagged upstream so use a git hash which has that
@@ -18,28 +18,28 @@ version.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 2 +-
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-index f5a82d2..4fc2b0e 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index bf0a736..87eafac 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
-+sha256 34bdb372ff1e2a26894b76adf0d1e7c68193488992508cc3d0948d60f682d5b3  kodi-inputstream-rtmp-d93d32d45dfa61ad4b27f166f08736bd416bc329.tar.gz
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index 80c4bcc..c4617b9 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256 4fb24496622762ea8c894368bdababd2104c5f70978b901b983974ef389b83e1  kodi-pvr-hts-3.4.27.tar.gz
++sha256 96e949526ebf4af542da572e704c0c052ec807408dc0ea65603a15614b889dd1  kodi-pvr-hts-3211941dade740ad92581f488402146794798e74.tar.gz
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index 182fd4b..7f43b04 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -6,7 +6,7 @@
  
--KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
-+KODI_INPUTSTREAM_RTMP_VERSION = d93d32d45dfa61ad4b27f166f08736bd416bc329
- KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
- KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_HTS_VERSION = 3.4.27
++KODI_PVR_HTS_VERSION = 3211941dade740ad92581f488402146794798e74
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = src/client.h
