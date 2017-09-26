@@ -1,81 +1,65 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Tue, 26 Sep 2017 15:38:57 +0200
-Subject: [Buildroot] [PATCH] package/turbolua: Fix build with gcc7
-In-Reply-To: <20170926111421.jxcoydmadkqqp56i@tarshish>
-References: <20170926103939.31965-1-m.niestroj@grinn-global.com>
- <20170926111421.jxcoydmadkqqp56i@tarshish>
-Message-ID: <cd79b98c-0de2-cdd4-a342-42d2a918f4fa@grinn-global.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 26 Sep 2017 15:59:09 +0200
+Subject: [Buildroot] [PATCH] package/mono: bump to version 5.2.0.224
+Message-ID: <1506434349-4636-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+This patch bumps mono to version 5.2.0.224 and the required monolite
+dependency to 1050200001.
 
-Thanks for review. I've already sent v2 version with requested changes.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/mono/mono.hash         | 2 +-
+ package/mono/mono.mk           | 2 +-
+ package/monolite/monolite.hash | 2 +-
+ package/monolite/monolite.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-On 26.09.2017 13:14, Baruch Siach wrote:
-> Hi Marcin,
-> 
-> On Tue, Sep 26, 2017 at 12:39:39PM +0200, Marcin Niestroj wrote:
->> gcc7 has -Wimplicit-fallthrough enabled by default. Together with
->> -Werror in turbolua makefile it gives -Werror=implicit-fallthrough=
->> build error.
->>
->> Add upstreamable patch [1], which fixes typo in FALLTHROUGH comment,
->> so it makes the fallthrough explicit for gcc.
->>
->> [1] https://github.com/kernelsauce/turbo/pull/323
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/6f107b62f105508044185576b071323e5d73dd83
->> http://autobuild.buildroot.net/results/d303929960c667a21181d0bbdab64ba8a8d56a4f
->>
->> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->> ---
->>   ...er-Fix-typo-in-switch-FALLTHROUGH-comment.patch | 27 ++++++++++++++++++++++
->>   1 file changed, 27 insertions(+)
->>   create mode 100644 package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
->>
->> diff --git a/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch b/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
->> new file mode 100644
->> index 0000000000..a76f9cd5db
->> --- /dev/null
->> +++ b/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
->> @@ -0,0 +1,27 @@
->> +From 201fbfbb034b01353de4de3813bdb9c6ec501bf7 Mon Sep 17 00:00:00 2001
->> +From: Marcin Niestroj <m.niestroj@grinn-global.com>
->> +Date: Tue, 26 Sep 2017 12:10:53 +0200
->> +Subject: [PATCH] http-parser: Fix typo in switch FALLTHROUGH comment
->> +
->> +This also suppresses -Wimplicit-fallthrough warning, which is enabled
->> +in gcc7 by default.
-> 
-> Please add your sign-off here.
-> 
-> Adding here the link to the upstream pull request would also be nice.
-> 
->> +---
->> + deps/http-parser/http_parser.c | 2 +-
->> + 1 file changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/deps/http-parser/http_parser.c b/deps/http-parser/http_parser.c
->> +index 8cf6fb0..2ff1073 100644
->> +--- a/deps/http-parser/http_parser.c
->> ++++ b/deps/http-parser/http_parser.c
->> +@@ -2095,7 +2095,7 @@ http_parser_parse_url(
->> +       case s_req_server_with_at:
->> +         found_at = 1;
->> +
->> +-      /* FALLTROUGH */
->> ++      /* FALLTHROUGH */
->> +       case s_req_server:
->> +         uf = UF_HOST;
->> +         break;
-> 
-> baruch
-> 
-
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 5d14a52..9af7ce3 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 48d6ae71d593cd01bf0f499de569359d45856cda325575e1bacb5fabaa7e9718  mono-5.0.1.1.tar.bz2
++sha256 03b8e463032bc425673dec844b35b4c669f5b99b0e45521195efb3741a9f5e94  mono-5.2.0.224.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index ec2f38f..838963d 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONO_VERSION = 5.0.1.1
++MONO_VERSION = 5.2.0.224
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 7638ce2..0d4fff8 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
++sha256 56f313da5f7137fae86db6af1476df0cf6515cedea46369347c4159ed7ce3300  monolite-1050200001-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index a2815ef..78e698a 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = 1050001000
++MONOLITE_VERSION = 1050200001
+ MONOLITE_SITE = http://download.mono-project.com/monolite/
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPL-2.0 or commercial
 -- 
-Marcin Niestroj
+2.7.4
