@@ -1,61 +1,44 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Tue, 26 Sep 2017 15:39:24 +0300
-Subject: [Buildroot] [PATCH] flex: fix segfaults on glibc-2.26
-Message-ID: <20170926123924.GA9085@latitude.localdomain>
+Date: Tue, 26 Sep 2017 16:11:50 +0300
+Subject: [Buildroot] libatomic indirect symbols in musl systems
+Message-ID: <20170926131150.GA8192@latitude.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.26 of glibc no longer exports prototype for reallocarray
-unless _GNU_SOURCE is defined. With no prototype, gcc assumes int
-return type and truncates the pointer to 32bit on 64bit systems.
+Current configuration allows gcc to build libatomic with indirect symbols,
+regardless of whether the chosen libc supports them:
 
-This shows up as segfault in stage1flex while building host-flex
-on glibc-2.26 based 64-bit host systems.
+    .../rootfs/lib/libatomic.so.1.2.0: ELF 64-bit LSB shared object,
+    x86-64, version 1 (GNU/Linux), dynamically linked, stripped
+    0000000000000000 A LIBATOMIC_1.0
+    (...)
+    0000000000002a9a T __atomic_exchange_1
+    0000000000002f0d i __atomic_exchange_16
+    0000000000002b98 T __atomic_exchange_2
 
-The patch is taken as is from LEDE-project:
-https://github.com/lede-project/source/commit/0fb14a2b1ab2f82ce63f4437b062229d73d90516
+Apparently musl ld cannot handle this kind of symbols:
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
----
- .../flex/0002-build-ac-use-system-extensions.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/flex/0002-build-ac-use-system-extensions.patch
+    [12:19:46.700] Loading module '/usr/lib/weston/desktop-shell.so'
+    [12:19:46.705] launching '/usr/libexec/weston-keyboard'
+    [12:19:46.727] launching '/usr/libexec/weston-desktop-shell'
+    Error relocating /lib/libatomic.so.1: __atomic_exchange_16: symbol not found
+    Error relocating /lib/libatomic.so.1: __atomic_load_16: symbol not found
+    (...)
 
-diff --git a/package/flex/0002-build-ac-use-system-extensions.patch b/package/flex/0002-build-ac-use-system-extensions.patch
-new file mode 100644
-index 0000000000..7c3645c474
---- /dev/null
-+++ b/package/flex/0002-build-ac-use-system-extensions.patch
-@@ -0,0 +1,27 @@
-+From 24fd0551333e7eded87b64dd36062da3df2f6380 Mon Sep 17 00:00:00 2001
-+From: Explorer09 <explorer09@gmail.com>
-+Date: Mon, 4 Sep 2017 10:47:33 +0800
-+Subject: [PATCH] build: AC_USE_SYSTEM_EXTENSIONS in configure.ac.
-+
-+This would, e.g. define _GNU_SOURCE in config.h, enabling the
-+reallocarray() prototype in glibc 2.26+ on Linux systems with that
-+version of glibc.
-+
-+Fixes #241.
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -25,8 +25,10 @@
-+ # autoconf requirements and initialization
-+ 
-+ AC_INIT([the fast lexical analyser generator],[2.6.4],[flex-help at lists.sourceforge.net],[flex])
-++AC_PREREQ([2.60])
-+ AC_CONFIG_SRCDIR([src/scan.l])
-+ AC_CONFIG_AUX_DIR([build-aux])
-++AC_USE_SYSTEM_EXTENSIONS
-+ LT_INIT
-+ AM_INIT_AUTOMAKE([1.11.3 -Wno-portability foreign check-news std-options dist-lzip parallel-tests subdir-objects])
-+ AC_CONFIG_HEADER([src/config.h])
--- 
-2.14.1
+The problem can be fixed with
+
+    BR2_EXTRA_GCC_CONFIG_OPTIONS="--disable-gnu-indirect-function"
+
+I have no idea how to handle it properly yet (force that option on all builds
+with BR2_TOOLCHAIN_BUILDROOT_MUSL=y maybe?) so just reporting it in case anyone
+stumbles upon the same issue.
+
+weston is the only package affected in my build. Everything else (busybox etc)
+works well. And there are no build-time warnings, it only shows up at runtime.
+
+
+http://www.openwall.com/lists/musl/2015/11/17/9
+Doesn't look like anything has changes since then.
