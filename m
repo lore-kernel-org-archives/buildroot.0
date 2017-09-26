@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:02:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
- glamor support needs egl
-In-Reply-To: <20170923113018.20562-1-bernd.kuhls@t-online.de>
-References: <20170923113018.20562-1-bernd.kuhls@t-online.de>
-Message-ID: <09ed1866-1277-03ee-f891-4b54465e10da@mind.be>
+Date: Wed, 27 Sep 2017 00:03:18 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/kodi-inputstream-adaptive:
+ bump version to 2.0.18
+In-Reply-To: <20170923120243.24993-1-bernd.kuhls@t-online.de>
+References: <20170923120243.24993-1-bernd.kuhls@t-online.de>
+Message-ID: <2f2c31c2-950f-fbe7-b6ea-6e24eaf80bd7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,46 @@ To: buildroot@busybox.net
 
 
 
-On 23-09-17 13:30, Bernd Kuhls wrote:
-> Glamor support in xserver_xorg-server depends on gbm:
-> https://cgit.freedesktop.org/xorg/xserver/tree/configure.ac#n2100
-> 
-> Gbm is provided by mesa3d only if egl is enabled:
-> https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n167
-> 
-> This patch adds libegl as additional prerequisite for enabling glamor
-> support in xserver_xorg-server.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/04d/04d93745d63fcfbea070c0126862b49f1b6f473e/
+On 23-09-17 14:02, Bernd Kuhls wrote:
+> Fixes https://bugs.busybox.net/show_bug.cgi?id=10256
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Applied to master, thanks.
+ Applied series to master, thanks.
 
  Regards,
  Arnout
 
 > ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: fixed hash
 > 
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 12c3ed06c1..45a2c81f2b 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -223,7 +223,7 @@ endif
->  ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
->  XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
-> -ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
-> +ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
->  XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
->  else
+>  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+>  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> index df717ef056..0d8f39f6cc 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 764941d87aa99408c48d91b5ddf237cd0251fb4cbafba3da188bb4a965220309  kodi-inputstream-adaptive-161f319bb2cd946f4659d841a54f19b1fb6143cc.tar.gz
+> +sha256 a214b6f47d4fcd0ceb78819447eb9ff3c5b4519233a46a245c9b558ecda0725f  kodi-inputstream-adaptive-f2904b547e940c724dce7412a26744c2698cab66.tar.gz
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> index 8d7daefc4f..cc0950346e 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> @@ -4,7 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -KODI_INPUTSTREAM_ADAPTIVE_VERSION = 161f319bb2cd946f4659d841a54f19b1fb6143cc
+> +# This cset is on the branch 'Krypton'
+> +# When Kodi is updated, then this should be updated to the corresponding branch
+> +KODI_INPUTSTREAM_ADAPTIVE_VERSION = f2904b547e940c724dce7412a26744c2698cab66
+>  KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
 > 
 
 -- 
