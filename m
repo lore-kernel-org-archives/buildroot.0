@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Sep 2017 17:06:45 +0200
-Subject: [Buildroot] [PATCH 2/3] sdl2: Remove patches that were merged
- upstream
-In-Reply-To: <20170926144723.17619-2-olivier.schonken@gmail.com>
+Date: Tue, 26 Sep 2017 17:07:27 +0200
+Subject: [Buildroot] [PATCH 3/3] sdl2: Add KMS/DRM(experimental) video
+ driver support
+In-Reply-To: <20170926144723.17619-3-olivier.schonken@gmail.com>
 References: <20170926144723.17619-1-olivier.schonken@gmail.com>
- <20170926144723.17619-2-olivier.schonken@gmail.com>
-Message-ID: <20170926170645.28a21da0@windsurf.lan>
+ <20170926144723.17619-3-olivier.schonken@gmail.com>
+Message-ID: <20170926170727.3fdcd9c9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 26 Sep 2017 16:47:22 +0200, Olivier Schonken wrote:
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+On Tue, 26 Sep 2017 16:47:23 +0200, Olivier Schonken wrote:
 
-If those patches were merged in 2.0.6, then this patch should be
-squashed into the one doing the 2.0.6 bump.
+> +config BR2_PACKAGE_SDL2_KMSDRM
+> +	bool "KMS/DRM video driver"
+> +	depends on BR2_PACKAGE_LIBDRM
+
+Please use a "select" here for libdrm. Don't forget to replicate the
+dependencies.
+
+Best regards,
 
 Thomas
 -- 
