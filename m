@@ -1,98 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:26:20 +0200
-Subject: [Buildroot] [PATCH] radvd: improve startup script
-In-Reply-To: <1506333475-4759-1-git-send-email-casantos@datacom.ind.br>
-References: <1506333475-4759-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 27 Sep 2017 00:14:49 +0200
+Subject: [Buildroot] [git commit] package/asterisk: fix host build
+Message-ID: <20170926222614.DEF1081127@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=52dfe8bf2a25aebfe11445f3b67d12b36c96416b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The host menuselect tool is linked to our host libxml2 library, but it
+is missing an RPATH to the host directory.
 
-On 25-09-17 11:57, Carlos Santos wrote:
-> The previous script caused a failure if /etc/radvd.conf did not exist.
+This is because menuselect does not use automake, so does not inherit
+the LDFLAGS from the configure run.
 
- That's a good thing, no? If you select radvd but forget to install a
-configuration file, you'll want to have some kind of warning rather than
-silently not starting it.
+We fix that by simply passing $(HOST_CONFIGURE_OPTS) in the make
+environment.
 
-> 
-> This is a simple copy/paste/edit of package/dnsmasq/S80dnsmasq.
+At the same time, we also install the tool in the host directory, even
+if not used from there, so that the sanity checks we run are properly
+passed.
 
- Perhaps not the best example...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/asterisk/asterisk.mk | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/radvd/S50radvd | 36 ++++++++++++++++++++++--------------
->  1 file changed, 22 insertions(+), 14 deletions(-)
-> 
-> diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
-> index 9f1407c..dcc2af6 100755
-> --- a/package/radvd/S50radvd
-> +++ b/package/radvd/S50radvd
-> @@ -1,18 +1,26 @@
->  #!/bin/sh
->  
-> -RADVD=/usr/sbin/radvd
-> +[ -x /usr/sbin/radvd ] || exit 0
-
- This we certainly don't want. If the executable is missing, we want to shout
-loudly, not silently skip it.
-
-> +[ -f /etc/radvd.conf ] || exit 0
->  
-> -echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-
- Why remove this? It should of course move to the start stanza.
-
-> +case "$1" in
-> +	start)
-> +		printf "Starting radvd: "
-> +		start-stop-daemon -S -x /usr/sbin/radvd
-> +		[ $? = 0 ] && echo "OK" || echo "FAI> +		;;
-> +	stop)
-> +		printf "Stopping radvd: "
-> +		start-stop-daemon -K -q -x /usr/sbin/radvd
-> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +		;;
-> +	restart|reload)
-> +		$0 stop
-> +		$0 start
-> +		;;
-> +	*)
-> +		echo "Usage: $0 {start|stop|restart}"
-> +		exit 1
-> +esac
-
- This part looks good.
-
- Regards,
- Arnout
-
->  
-> -printf "Starting radvd: "
-> -if [ ! -x "${RADVD}" ]; then
-> -	echo "missing"
-> -	exit 1
-> -fi
-> -
-> -if ${RADVD} ; then
-> -	echo "done"
-> -else
-> -	echo "failed"
-> -	exit 1
-> -fi
-> +exit 0
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index a6801a0..50512c0 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -294,12 +294,23 @@ HOST_ASTERISK_CONF_OPTS = \
+ 	--without-curses \
+ 	--with-ncurses=$(HOST_DIR)/usr
+ 
+-# Even though menuselect is an autotools package, it is *not* installed,
+-# as asterisk does expect it to be in a sub-directory of its source tree,
+-# which do by copying the full menuselect build tree as a pre-configure
+-# hook in the target variant.
++# Not an automake package, so does not inherit LDFLAGS et al. from
++# the configure run.
++HOST_ASTERISK_MAKE_ENV = $(HOST_CONFIGURE_OPTS)
++
++# Even though menuselect is an autotools package, it is not an automake
++# package and does not have an 'install' rule, as asterisk does expect
++# it to be in a sub-directory of its source tree. We do so by copying
++# the full menuselect build tree as a pre-configure hook in the target
++# variant.
++# However, the sanity checks on host packages are not run on menuselect.
++# But we still want to catch that menuselect has the proper rpath set,
++# for example, as it uses host libraries that we do build, like
++# host-libxml2.
++# So we do manually install the menuselect tool.
+ define HOST_ASTERISK_INSTALL_CMDS
+-	@:
++	$(INSTALL) -D -m 0755 $(@D)/menuselect/menuselect \
++		$(HOST_DIR)/bin/asterisk-menuselect
+ endef
+ 
+ $(eval $(host-autotools-package))
