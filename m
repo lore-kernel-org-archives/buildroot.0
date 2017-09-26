@@ -1,85 +1,83 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 26 Sep 2017 12:00:37 +0200
-Subject: [Buildroot] [PATCH 1/1] nginx (S50nginx): Fix stop, reload,
- restart. Add force-reload.
-In-Reply-To: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
-References: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
-Message-ID: <CAJtjsKaAp3kekLZiPCOUF9gp3nARRWdRLBwUhFvQGGvny1hxuw@mail.gmail.com>
+From: Maxime Chevallier <chevalliersebmax@gmail.com>
+Date: Tue, 26 Sep 2017 12:05:13 +0200
+Subject: [Buildroot] [PATCH 1/1] [RFC] mvebu_espressobin-88f3720 : Add
+ support for espressobin
+In-Reply-To: <5c6b0144-03fd-93e1-bea8-e10c0de4f196@mind.be>
+References: <1506290733-6042-1-git-send-email-chevalliersebmax@gmail.com>
+ <1506290733-6042-2-git-send-email-chevalliersebmax@gmail.com>
+ <8132918e-ebf8-dbf6-72e9-c10ed675d962@gmail.com>
+ <5c6b0144-03fd-93e1-bea8-e10c0de4f196@mind.be>
+Message-ID: <CALAR473HPhh_Sh=oOmOwNZr-i=mGg9x8LHexT0v5jGn-b9s1-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, Sep 25, 2017 at 3:20 PM, Thomas Claveirole
-<thomas.claveirole@green-communications.fr> wrote:
-> Fix package/nginx/S50nginx:
+2017-09-25 23:41 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
 >
-> * On stop, use start-stop-daemon -R 1 to wait for the nginx processes
->   to actually stop.  This fixes a race condition with restart, where
->   nginx fails to restart because start is called too early
->   w.r.t. stop.  (This only works with Debian's start-stop-daemon,
->   however BusyBox's start-stop-daemon does not fail when given -R; it
->   just ignores the argument silently).
 >
-> * Implement reload with an actual reload instead of a restart.
->
-> * Add force-reload.
->
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/nginx/S50nginx | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
->
-> diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
-> index b2f8b80855..a854c651d1 100755
-> --- a/package/nginx/S50nginx
-> +++ b/package/nginx/S50nginx
-> @@ -3,23 +3,31 @@
->  # Start/stop nginx
->  #
->
-> +NGINX=/usr/sbin/nginx
->  PIDFILE=/var/run/nginx.pid
->
->  case "$1" in
->    start)
->         echo "Starting nginx..."
->         mkdir -p /var/log/nginx /var/tmp/nginx
-> -       start-stop-daemon -S -x /usr/sbin/nginx -p $PIDFILE
-> +       start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
->         ;;
->    stop)
-> -       printf "Stopping nginx..."
-> -       start-stop-daemon -K -o -p $PIDFILE
-> +       echo "Stopping nginx..."
-> +       # Use -R 1 to wait for nginx to actually stop.  Useful so
-> +       # restart has no race condition.  Note that BusyBox knows
-> +       # about -R but ignores it silently.
-> +       start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -R 1 -o
->         ;;
-> -  restart|reload)
-> +  reload|force-reload)
-> +       echo "Reloading nginx configuration..."
-> +       "$NGINX" -s reload
-> +       ;;
-> +  restart)
->         "$0" stop
->         "$0" start
->         ;;
->    *)
-> -       echo "Usage: $0 {start|stop|restart}"
-> +       echo "Usage: $0 {start|stop|restart|reload|force-reload}"
->         exit 1
->  esac
-> --
-> 2.14.1
+> On 25-09-17 23:02, Romain Naour wrote:
+>> Hi Maxime,
+>>
+>> Le 25/09/2017 ? 00:05, Maxime Chevallier a ?crit :
+>>> Add support for the Globalscale 'Espressobin' board based
+>>> on Marvell Armada 3720.
+>>>
+>>> This board has a dual Cortex-A53, 1GB DDR3, USBs, ethernets,
+>>> and some GPIO ports. More informations on the vendor site :
+>>> http://espressobin.net/tech-spec/
+>>>
+>>> This config uses the mainline linux support for the board and
+>>> the buildroot toolchain using glibc, since uclibc does not
+>>> support aarch64.
+>>>
+>>> Mainline device-tree does not include SDCard support yet, so USB
+>>> is the preferred way to boot the image, using the default pre-flashed
+>>> u-boot on SPI NOR.
+>> Usually we use configs or board in the commit title.
+>>
+>> "board: Add support for espressobin 88f3720" should be enough.
 
-I've added the maintainer of nginx (Samuel Martin) in CC, as reported
-by get-developers.
-Otherwise, this patch looks good to me.
-Best,
--- 
-Johan
+Ok
+
+>>
+>> Otherwise, looks good for me as is.
+>
+>  Indeed, looks good to me as well.
+>
+>  I don't like the name much, though. Isn't globalscale_espressobin_defconfig
+> more appropriate?
+
+Yes it makes more sense to me, but all support for this board in
+u-boot and linux
+include 'mvebu' somewhere in the name, so I thought I would do that to.
+
+globalscale_espressobin_defconfig seems less confusing, I will update it in V2.
+
+>>
+>> Linux 4.14-rc2 is out, do you know if the SDCard support has been added in this
+>> release?
+
+Yes SDCard support has been added in linux 4.14-rc1. When 4.14 comes
+out, we will be
+able to generate bootable sdcards including the bootloader using
+in-tree device-tree.
+
+>> Maybe you can also add a new entry in .gitlab-ci.yml file for CI testing in gitlab.
+>> (see .gitlab-ci.yml.in to regenerate this file). But this can be done in a
+>> follow up patch.
+>
+>  No, this is not optional, it *must* be added otherwise we get errors from CI
+> (well, except that the gitlab sync is currently broken). Just run
+> 'make .gitlab-ci.yml'.
+
+Ok I'll add that in V2.
+
+Thanks for the feedback,
+
+Regards,
+
+Maxime
