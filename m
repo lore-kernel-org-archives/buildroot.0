@@ -1,28 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 26 Sep 2017 07:06:34 +0000
-Subject: [Buildroot] [Bug 10326] mesa3d package fails to build when
- BR2_SHARED_STATIC_LIBS=y
-In-Reply-To: <bug-10326-163@https.bugs.busybox.net/>
-References: <bug-10326-163@https.bugs.busybox.net/>
-Message-ID: <bug-10326-163-NMMFZHVwoJ@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Sep 2017 11:42:13 +0200
+Subject: [Buildroot] [PATCH] package/linux-tools: add host dependency
+ for pkg-config
+In-Reply-To: <CANEuBv77Z5p5FJ=wczzy-R4kXz-FORGxJ-+uye1kHqZ_Vq6ctQ@mail.gmail.com>
+References: <20170922194144.52761-1-mmayer@broadcom.com>
+ <0f81dbb9-ed0a-73b8-ff01-1490f12e2c0d@mind.be>
+ <CANEuBv77Z5p5FJ=wczzy-R4kXz-FORGxJ-+uye1kHqZ_Vq6ctQ@mail.gmail.com>
+Message-ID: <b12d7ff7-36fa-4711-19e3-1500e21411d5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10326
 
---- Comment #2 from Frederic MATHIEU <frederic.mathieu@dualis.com> ---
-This patch no longer allows you to compile the package if the configuration
-uses BR2_SHARED_STATIC_LIBS (static and shared). Some static libraries are
-wished for others packages.
 
-this is not the solution to use.
+On 26-09-17 00:00, Markus Mayer wrote:
+> So, after some hacking, I am now proposing to fix the issue thus:
+> 
+> TARGET_CONFIGURE_OPTS += PKG_CONFIG="$(HOST_DIR)/bin/pkg-config
+ TARGET_CONFIGURE_OPTS already contains exactly that (cfr. package/Makefile.in,
+line 295):
+TARGET_CONFIGURE_OPTS = \
+...
+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
 
-Regards
-Frederic MATHIEU
+> And replace TARGET_MAKE_ENV with TARGET_CONFIGURE_OPTS in the build rules.
+
+ So that's the only thing you need to do.
+
+ This could actually be useful for Buildroot in general I think.
+
+ Regards,
+ Arnout
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
