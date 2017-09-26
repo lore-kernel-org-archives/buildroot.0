@@ -1,37 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 26 Sep 2017 23:52:15 +0200
-Subject: [Buildroot] [git commit] wandboard: genimage: Pass an offset for
-	the rootfs
-Message-ID: <20170926215334.5EEA3807DB@busybox.osuosl.org>
+Date: Tue, 26 Sep 2017 23:50:14 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: glamor
+	support needs egl
+Message-ID: <20170926215333.EE4A481099@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82c1445fc473cf422a1283283acfa46f0df6cd84
+commit: https://git.buildroot.net/buildroot/commit/?id=5b4bcbdafbe8e7b42d4e085a0524d70665cdbaf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pass an offset of 1MB for the start of the rootfs.
+Glamor support in xserver_xorg-server depends on gbm:
+https://cgit.freedesktop.org/xorg/xserver/tree/configure.ac#n2100
 
-Otherwise we get rootfs corruption when the bootloader is manually
-written to the SD card.
+Gbm is provided by mesa3d only if egl is enabled:
+https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n167
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+This patch adds libegl as additional prerequisite for enabling glamor
+support in xserver_xorg-server.
+
+Fixes
+http://autobuild.buildroot.net/results/04d/04d93745d63fcfbea070c0126862b49f1b6f473e/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/wandboard/genimage.cfg | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
-index b23a91b..ad4a6a5 100644
---- a/board/wandboard/genimage.cfg
-+++ b/board/wandboard/genimage.cfg
-@@ -26,6 +26,7 @@ image sdcard.img {
-   partition rootfs {
-     partition-type = 0x83
-     image = "rootfs.ext4"
-+    offset = 1M
-     size = 512M
-   }
- }
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 12c3ed0..45a2c81 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -223,7 +223,7 @@ endif
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+-ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
+ else
