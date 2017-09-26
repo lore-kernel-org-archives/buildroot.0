@@ -1,66 +1,75 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:14:49 +0200
-Subject: [Buildroot] [git commit] package/asterisk: fix host build
-Message-ID: <20170926222614.DEF1081127@busybox.osuosl.org>
+Date: Wed, 27 Sep 2017 00:12:55 +0200
+Subject: [Buildroot] [git commit] nginx (S50nginx): Fix stop, reload,
+	restart. Add force-reload.
+Message-ID: <20170926222614.BF2F081127@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52dfe8bf2a25aebfe11445f3b67d12b36c96416b
+commit: https://git.buildroot.net/buildroot/commit/?id=23094a0df9fc287f1c83fe2561a076d80c213015
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The host menuselect tool is linked to our host libxml2 library, but it
-is missing an RPATH to the host directory.
+Fix package/nginx/S50nginx:
 
-This is because menuselect does not use automake, so does not inherit
-the LDFLAGS from the configure run.
+* On stop, use start-stop-daemon -R 1 to wait for the nginx processes
+  to actually stop.  This fixes a race condition with restart, where
+  nginx fails to restart because start is called too early
+  w.r.t. stop.  (This only works with Debian's start-stop-daemon,
+  however BusyBox's start-stop-daemon does not fail when given -R; it
+  just ignores the argument silently).
 
-We fix that by simply passing $(HOST_CONFIGURE_OPTS) in the make
-environment.
+* Implement reload with an actual reload instead of a restart.
 
-At the same time, we also install the tool in the host directory, even
-if not used from there, so that the sanity checks we run are properly
-passed.
+* Add force-reload.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/asterisk/asterisk.mk | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ package/nginx/S50nginx | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index a6801a0..50512c0 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -294,12 +294,23 @@ HOST_ASTERISK_CONF_OPTS = \
- 	--without-curses \
- 	--with-ncurses=$(HOST_DIR)/usr
+diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
+index b2f8b80..a854c65 100755
+--- a/package/nginx/S50nginx
++++ b/package/nginx/S50nginx
+@@ -3,23 +3,31 @@
+ # Start/stop nginx
+ #
  
--# Even though menuselect is an autotools package, it is *not* installed,
--# as asterisk does expect it to be in a sub-directory of its source tree,
--# which do by copying the full menuselect build tree as a pre-configure
--# hook in the target variant.
-+# Not an automake package, so does not inherit LDFLAGS et al. from
-+# the configure run.
-+HOST_ASTERISK_MAKE_ENV = $(HOST_CONFIGURE_OPTS)
-+
-+# Even though menuselect is an autotools package, it is not an automake
-+# package and does not have an 'install' rule, as asterisk does expect
-+# it to be in a sub-directory of its source tree. We do so by copying
-+# the full menuselect build tree as a pre-configure hook in the target
-+# variant.
-+# However, the sanity checks on host packages are not run on menuselect.
-+# But we still want to catch that menuselect has the proper rpath set,
-+# for example, as it uses host libraries that we do build, like
-+# host-libxml2.
-+# So we do manually install the menuselect tool.
- define HOST_ASTERISK_INSTALL_CMDS
--	@:
-+	$(INSTALL) -D -m 0755 $(@D)/menuselect/menuselect \
-+		$(HOST_DIR)/bin/asterisk-menuselect
- endef
++NGINX=/usr/sbin/nginx
+ PIDFILE=/var/run/nginx.pid
  
- $(eval $(host-autotools-package))
+ case "$1" in
+   start)
+ 	echo "Starting nginx..."
+ 	mkdir -p /var/log/nginx /var/tmp/nginx
+-	start-stop-daemon -S -x /usr/sbin/nginx -p $PIDFILE
++	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
+ 	;;
+   stop)
+-	printf "Stopping nginx..."
+-	start-stop-daemon -K -o -p $PIDFILE
++	echo "Stopping nginx..."
++	# Use -R 1 to wait for nginx to actually stop.  Useful so
++	# restart has no race condition.  Note that BusyBox knows
++	# about -R but ignores it silently.
++	start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -R 1 -o
+ 	;;
+-  restart|reload)
++  reload|force-reload)
++	echo "Reloading nginx configuration..."
++	"$NGINX" -s reload
++	;;
++  restart)
+ 	"$0" stop
+ 	"$0" start
+ 	;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart|reload|force-reload}"
+ 	exit 1
+ esac
