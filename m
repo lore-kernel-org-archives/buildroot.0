@@ -1,44 +1,66 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 27 Sep 2017 00:28:24 +0200
-Subject: [Buildroot] [git commit] configs/imx6-sabresd: Bump kernel and
-	U-Boot versions
-Message-ID: <20170926222615.98A6F7FB91@busybox.osuosl.org>
+Date: Wed, 27 Sep 2017 00:15:49 +0200
+Subject: [Buildroot] [git commit] package/dfu-util: allow to build it for
+	the target as well
+Message-ID: <20170926222615.492E980F59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=976d139ff267a6b3fd3ec96b2c5cdb530e50560a
+commit: https://git.buildroot.net/buildroot/commit/?id=24407cb4dcb63e1836b0545ede8dbb8b68ccd812
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2017.09 and kernel to 4.13.3 versions.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- configs/imx6-sabresd_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in            |  1 +
+ package/dfu-util/Config.in   | 13 +++++++++++++
+ package/dfu-util/dfu-util.mk |  2 ++
+ 3 files changed, 16 insertions(+)
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 18d809c..18dfe27 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/package/Config.in b/package/Config.in
+index 6acd0c4..1580a9e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -391,6 +391,7 @@ endmenu
+ 	source "package/dbus-python/Config.in"
+ 	source "package/dbus-triggerd/Config.in"
+ 	source "package/devmem2/Config.in"
++	source "package/dfu-util/Config.in"
+ 	source "package/dmidecode/Config.in"
+ 	source "package/dmraid/Config.in"
+ 	source "package/dt-utils/Config.in"
+diff --git a/package/dfu-util/Config.in b/package/dfu-util/Config.in
+new file mode 100644
+index 0000000..2f45fcd
+--- /dev/null
++++ b/package/dfu-util/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_DFU_UTIL
++	bool "dfu-util"
++	select BR2_PACKAGE_LIBUSB
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Dfu-util is the host side implementation of the DFU 1.0
++	  specification of the USB forum. DFU is intended to download
++	  and upload firmware to devices connected over USB.
++
++	  http://dfu-util.sourceforge.net/
++
++comment "dfu-util needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index c494485..5e8ba5a 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -9,6 +9,8 @@ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
+ DFU_UTIL_LICENSE = GPL-2.0+
+ DFU_UTIL_LICENSE_FILES = COPYING
+ 
++DFU_UTIL_DEPENDENCIES = libusb
+ HOST_DFU_UTIL_DEPENDENCIES = host-libusb
+ 
++$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
