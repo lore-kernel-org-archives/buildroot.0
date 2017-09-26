@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Sep 2017 22:58:07 +0200
-Subject: [Buildroot] [PATCH 2/2] libkcapi: bump version to 0.14.0
-In-Reply-To: <1506061220-30790-2-git-send-email-marcin.nowakowski@imgtec.com>
-References: <1506061220-30790-1-git-send-email-marcin.nowakowski@imgtec.com>
- <1506061220-30790-2-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <88839c2d-2e62-ea81-2c33-26f93e15e4a9@mind.be>
+Date: Tue, 26 Sep 2017 23:01:38 +0200
+Subject: [Buildroot] [PATCH v2 2/4] package/tor: add optional support
+ for lzma
+In-Reply-To: <20170923084630.3841-2-bernd.kuhls@t-online.de>
+References: <20170923084630.3841-1-bernd.kuhls@t-online.de>
+ <20170923084630.3841-2-bernd.kuhls@t-online.de>
+Message-ID: <72c507a8-696c-2fc7-7245-b35d71088073@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +14,13 @@ To: buildroot@busybox.net
 
 
 
-On 22-09-17 08:20, Marcin Nowakowski wrote:
-> Switch from github hash to an official release
-> Several upstream patches are required to build the code correctly
-> on all platforms supported by buildroot.
+On 23-09-17 10:46, Bernd Kuhls wrote:
+> According to https://blog.torproject.org/tor-0317-now-released
+> we also need host-pkgconf for lzma support.
 > 
-> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Applied both to master, thanks. However, I squashed them in a single commit
-because the fork() was only introduced with the version bump.
+ Applied to master, thanks.
 
  Regards,
  Arnout
