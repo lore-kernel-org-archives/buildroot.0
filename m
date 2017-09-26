@@ -1,136 +1,285 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Sep 2017 14:25:41 +0300
-Subject: [Buildroot] [PATCH] iproute2: fix static build with uClibc
-Message-ID: <926dfffe1683d9ec42526e825f1297e994b8542a.1506425141.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Sep 2017 14:18:56 +0200
+Subject: [Buildroot] [PATCH 1/1] Refine the dependencies so that
+ packages can be compiled in parallel.
+In-Reply-To: <5DBA847110A28B46BBA17BE675F0C9B21818F2B0@cnshjmbx01>
+References: <5DBA847110A28B46BBA17BE675F0C9B21818F2B0@cnshjmbx01>
+Message-ID: <20170926121856.GA2903@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 4.13 added a local definition of strlcpy(). This clashes with
-the uClibc provided one when linking statically. Add a patch that
-detects libc provided strlcpy(), and avoids the multiple definition.
+Zhuliang Chu, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/f34/f34684dcdb47938a3da8b00c8b29000cc23b4e3d/
-http://autobuild.buildroot.net/results/a01/a01c5775945f5ffe75451722b676fc93333a0f14/
-http://autobuild.buildroot.net/results/0ee/0eeab1a0ca943f9a035a0d458ddf9cc210bc87f4/
+On 2017-09-20 14:31 +0000, Chu, Zhuliang (NSB - CN/Shanghai) spake thusly:
+> support/scripts/parallel-build: Try to provide support for parallel
+> compilation
+> 
+> Now we know that buildroot does not support parallel compilation.
+> My colleagues and I in the process of working will be a lot of repetitive
+> compilation of buildroot.
+> A lot of time spent in the buildroot compiler, so I try to provide
+> parallel compiler support.
+> I added a target 'parallel-build' to the Makefile that will call the
+> python script.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0003-lib-fix-multiple-strlcpy-definition.patch | 103 +++++++++++++++++++++
- 1 file changed, 103 insertions(+)
- create mode 100644 package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch
+Although I see the reason you decided to go with an external python
+script, I would prefer that we go with a solution that is entirely
+implemented in the existing infrastructures.
 
-diff --git a/package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch b/package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch
-new file mode 100644
-index 000000000000..997dd8803c2a
---- /dev/null
-+++ b/package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch
-@@ -0,0 +1,103 @@
-+From 14a6f7764f2097f767852767bcab7a48ace360fc Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 26 Sep 2017 13:45:21 +0300
-+Subject: [PATCH] lib: fix multiple strlcpy definition
-+
-+Some C libraries, like uClibc and musl, provide BSD compatible
-+strlcpy(). Add check_strlcpy() to configure, and avoid defining strlcpy
-+and strlcat when the C library provides them.
-+
-+This fixes the following static link error:
-+
-+.../sysroot/usr/lib/libc.a(strlcpy.os): In function `strlcpy':
-+strlcpy.c:(.text+0x0): multiple definition of `strlcpy'
-+../lib/libutil.a(utils.o):utils.c:(.text+0x1ddc): first defined here
-+collect2: error: ld returned 1 exit status
-+
-+[baruch: backported from upstream submission to 4.13]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://patchwork.ozlabs.org/patch/818538/
-+
-+ configure    | 24 ++++++++++++++++++++++++
-+ lib/Makefile |  4 ++++
-+ lib/utils.c  |  2 ++
-+ 3 files changed, 30 insertions(+)
-+
-+diff --git a/configure b/configure
-+index 88cbdb825689..506701c00073 100755
-+--- a/configure
-++++ b/configure
-+@@ -325,6 +325,27 @@ EOF
-+     rm -f $TMPDIR/dbtest.c $TMPDIR/dbtest
-+ }
-+ 
-++check_strlcpy()
-++{
-++    cat >$TMPDIR/strtest.c <<EOF
-++#include <string.h>
-++int main(int argc, char **argv) {
-++	char dst[10];
-++	strlcpy("test", dst, sizeof(dst));
-++	return 0;
-++}
-++EOF
-++    $CC -I$INCLUDE -o $TMPDIR/strtest $TMPDIR/strtest.c >/dev/null 2>&1
-++    if [ $? -eq 0 ]
-++    then
-++	echo "no"
-++    else
-++	echo "NEED_STRLCPY:=y" >>Config
-++	echo "yes"
-++    fi
-++    rm -f $TMPDIR/strtest.c $TMPDIR/strtest
-++}
-++
-+ quiet_config()
-+ {
-+ 	cat <<EOF
-+@@ -396,6 +417,9 @@ check_mnl
-+ echo -n "Berkeley DB: "
-+ check_berkeley_db
-+ 
-++echo -n "need for strlcpy: "
-++check_strlcpy
-++
-+ echo
-+ echo -n "docs:"
-+ check_docs
-+diff --git a/lib/Makefile b/lib/Makefile
-+index b7b1d5685b94..227c8211786b 100644
-+--- a/lib/Makefile
-++++ b/lib/Makefile
-+@@ -12,6 +12,10 @@ ifeq ($(HAVE_MNL),y)
-+ 	CFLAGS += -DHAVE_LIBMNL $(shell $(PKG_CONFIG) libmnl --cflags)
-+ endif
-+ 
-++ifeq ($(NEED_STRLCPY),y)
-++	CFLAGS += -DNEED_STRLCPY
-++endif
-++
-+ CFLAGS += -fPIC
-+ 
-+ UTILOBJ = utils.o rt_names.o ll_types.o ll_proto.o ll_addr.o \
-+diff --git a/lib/utils.c b/lib/utils.c
-+index 330ab073c206..f53dacae2e1f 100644
-+--- a/lib/utils.c
-++++ b/lib/utils.c
-+@@ -1231,6 +1231,7 @@ int get_real_family(int rtm_type, int rtm_family)
-+ 	return rtm_family;
-+ }
-+ 
-++#ifdef NEED_STRLCPY
-+ size_t strlcpy(char *dst, const char *src, size_t size)
-+ {
-+ 	if (size) {
-+@@ -1249,3 +1250,4 @@ size_t strlcat(char *dst, const char *src, size_t size)
-+ 
-+ 	return dlen + strlcpy(dst + dlen, src, size - dlen);
-+ }
-++#endif
-+-- 
-+2.14.1
-+
+Some people have started such an endeavour in the past (and you can find
+their work on the mailing list; search for "top-level parallel build"),
+simply building two or more packages at the same time is not so trivial.
+
+First and foremost, we strive for reproducibility. Given a configuration
+and the same build machine, two builds will give the same result (or so
+we strive for it).
+
+Second, the most dreaded cause for non repropducibility are optional,
+hidden dependencies. In an ideal world, all dependencies should be
+expresed in the .mk files. But in practice, this is not true. Currently,
+this issue is side-stepped thanks to the build ordering: two packages
+will always be built in the same order, so the optional dependency is
+always met, or it never is. Top-level parallel build, by its very
+nature, no longer guarantees the build ordering, and thus breaks
+reproducibility.
+
+Those kind of hidden dependencies are either headers, libraries, or
+host tools alike.
+
+The way to solve this is to guarantee that a package will only ever
+"see" the staging and host directories for its explicitly specified
+dependencies. This is what we call "per-package staging" (where staging
+implies host as well).
+
+Unless we can do that, we killed reproducibility.
+
+Third, we want to maximise the CPU usage, while still keeping the total
+job-level to an acceptable amount. It has to be noted that not all
+packages support building in parallel. Those are using $(MAKE1) instead
+of $(MAKE) in Buildroot.
+
+So, if you want to maximise the CPU usage on (say) an 8-core system, you
+will want to use up to 9 jobs; you don't want to use more, or you'd kill
+useability of the system.
+
+So if you decorelate (like your script does) the top-level and
+per-package number of jobs, then either you do not make full use of your
+system, or you overwhelm it with build jobs. You want to use a high
+top-level number of jobs, to cover the case where only MAKE1 packages
+get built (worst case), but you also want a high per-package number of
+jobs, in case a single package gets built (worst case).
+
+But in doing so, you will happen to build 9 packages in parallel, with
+each package bulding up to 9 files in parallel, which is 91 jobs in
+parallel (worst case). This is definitely no good.
+
+So you want to have a single number of jobs, that is spread evenly
+across all ready-to-build packages.
+
+So, the only solution is to push for top-level parallel build to be
+natively supported in Buildroot.
+
+Yes, talk is cheap, show-me-the-code and what-not. Don't hold your
+breath...
+
+Regards,
+Yann E. MORIN.
+
+> in script parallel-build:
+> the dependencies of all packages are parsed first and then stored in a dictionary, and then the packages that are not dependent are extracted from the dictionary, After successfully compiling, it will release the other packages that depend on these packages, this will run until the dictionary is empty.
+> 
+> In this script I also wrote a detailed note.
+> 
+> Signed-off-by: Zhuliang Chu <zhuliang.chu@nokia-sbell.com>
+> ---
+>  Makefile                       |   4 ++
+>  support/scripts/parallel-build | 150 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 154 insertions(+)
+>  create mode 100755 support/scripts/parallel-build
+> 
+> diff --git a/Makefile b/Makefile
+> index 9b09589..a854760 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -785,6 +785,10 @@ show-targets:
+>  .PHONY: show-build-order
+>  show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
+>  
+> +.PHONY:parallel-build
+> +parallel-build:dependencies
+> +	$(TOPDIR)/support/scripts/parallel-build --jobs $(PARALLEL_JOBS) 
+> +--packages $(PACKAGES)
+> +
+>  .PHONY: graph-build
+>  graph-build: $(O)/build/build-time.log
+>  	@install -d $(GRAPHS_DIR)
+> diff --git a/support/scripts/parallel-build b/support/scripts/parallel-build new file mode 100755 index 0000000..562d114
+> --- /dev/null
+> +++ b/support/scripts/parallel-build
+> @@ -0,0 +1,150 @@
+> +#!/usr/bin/python
+> +import sys
+> +import subprocess
+> +import argparse
+> +from copy import deepcopy
+> +import multiprocessing
+> +import brpkgutil
+> +
+> +done_queue=multiprocessing.Queue()
+> +extras=""
+> +get_depends_func = brpkgutil.get_depends get_rdepends_func = 
+> +brpkgutil.get_rdepends
+> +
+> +# get all dependencies of packages
+> +def get_all_depends(pkgs):
+> +  filtered_pkgs = []
+> +  for pkg in pkgs:
+> +    if pkg in filtered_pkgs:
+> +      continue
+> +    filtered_pkgs.append(pkg)
+> +  if len(filtered_pkgs) == 0:
+> +    return []
+> +  return get_depends_func(filtered_pkgs)
+> +
+> +# select someone which is in dictionary`s values but isn`t in keys.
+> +def pickup_nokey_pkg(depends):
+> +  nokey_deps = []
+> +  alldeps=[]
+> +  for deps in depends.values():
+> +    alldeps.extend(deps)
+> +  alldeps=list(set(alldeps))
+> +  for dep in alldeps:
+> +    if not depends.has_key(dep):
+> +      nokey_deps.append(dep)
+> +  return nokey_deps
+> +
+> +# select some packages that have no dependencies def 
+> +pickup_nodepends_pkgs(depends):
+> +  no_deps_pkgs = []
+> +  for pkg,deps in depends.items():
+> +    if deps == []:
+> +      no_deps_pkgs.append(pkg)
+> +  return no_deps_pkgs
+> +
+> +# when a package has been compiled successfully, then remove it from dictionary 'dependencies'
+> +def remove_pkg_from_depends(package,depends):
+> +  for pkg,deps in depends.items():
+> +    if package == pkg:
+> +      del depends[package]
+> +    if package in deps:
+> +      depends[pkg].remove(package)
+> +  return depends
+> +
+> +# real build process
+> +def make_build_pkg(package):
+> +  cmd = "make %s %s"%(extras,package)
+> +  p = 
+> +subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subproces
+> +s.STDOUT)
+> +  (stdoutput,erroutput) = p.communicate()
+> +  if stdoutput:
+> +    sys.stdout.write(stdoutput)
+> +  if erroutput:
+> +    sys.stderr.write(erroutput)
+> +  if p.returncode == 0:
+> +    return package
+> +  else:
+> +    sys.stderr.write("make %s have a error,so the parallel build must exit %d\n"%(package,p.returncode))
+> +    return '__error__'
+> +
+> +def callback(x):
+> +  done_queue.put(x)
+> +
+> +if __name__ == '__main__':
+> +
+> +  # Running Scenario
+> +  #
+> +  #  step1:             step2:                  step3:                  step4:
+> +  # 'packages'      'dependencies'             'processPool'           'Distribute'
+> +  #                                              ____                 1) 'pkg0' has no dependencies in dictionary 'dependencies'
+> +  #  pkg0                 pkg0                  |    |                2) Distribute 'pkg0' to child process from Pool
+> +  #    |                 /    \                 |____|                3) 'pkg0' is successfully completed 
+> +  #  pkg1              pkg1   pkg2              |    |                4) the function callback resume main process
+> +  #    |              / |  \   |  \    ---------------------->        5) the main process remove 'pkg0' from dictionary 'dependencies'  
+> +  #  pkg2            /  |   \  |   \            |    |                   and now the 'pkg1' and 'pkg2' have no dependencies 
+> +  #    |          pkg3 pkg4  pkg5  pkg6         |____|                6) query the dictionary 'dependencies' and select 'pkg1' and 'pkg2'. goto 1)
+> +  #  pkg3          /|\  /\     |    / \         |    | 
+> +  #  .....       ...  ...  ... ... ... ....    ...  ...
+> +  #
+> +  
+> +  # step1: Get all packages that will been compiled  parser = 
+> + argparse.ArgumentParser(description="Parallel build")  
+> + parser.add_argument("--packages", '-p', dest="packages",nargs='+',metavar="PACKAGE",
+> +      help="all the packages to parallel compiled")  
+> + parser.add_argument("--jobs", '-j', dest="jobs",metavar="JOB",
+> +      help="all the packages to parallel compiled")  args = 
+> + parser.parse_args()  packages=args.packages
+> +  cur_jobs=int(args.jobs)
+> +  max_jobs = len(packages)/2
+> +  if not packages:
+> +    sys.stderr.write("parallel build must have targets\n")
+> +    sys.exit(1)
+> +  
+> +  # step2: Create the frame of all packages and dependencies which will 
+> + be built  dependencies = get_all_depends(packages)  while packages:
+> +    packages = pickup_nokey_pkg(dependencies)
+> +    if packages:
+> +      depends = get_all_depends(packages)
+> +      dependencies.update(depends)
+> +  
+> +  # step3: Create a process pool for parallel compilation
+> +  jobs=min(cur_jobs,max_jobs)
+> +  pool = multiprocessing.Pool(processes=jobs)
+> +  
+> +  # step4: 
+> +  #   1) Pick up some packages that have no dependencies from the dictionary 'dependencies'
+> +  #   2) Distribute the packages that have been selected to the child process to compile
+> +  #   3) When a child process is successfully completed , the function callback will be invoked. otherwise the main process will exit.
+> +  #   4) The callback will triger main process to resume.
+> +  #   5) The main process will remove the package that has been compiled by child process from the dictionary 'dependencies' 
+> +  #      and then some other packages that depend on this package will be released.
+> +  #   6) Continue to query the dictionary, and then get the package that has no dependencies util the dictionary dependencies is empty.
+> +  allpending=[]
+> +  while dependencies:
+> +    # 1) pick up some packages  
+> +    no_deps_pkgs = pickup_nodepends_pkgs(dependencies)
+> +
+> +    if not no_deps_pkgs:
+> +      sys.stderr.write("parallel build must have targets\n")
+> +      sys.exit(1)
+> +    for pkg in no_deps_pkgs:
+> +      if pkg in allpending:
+> +        continue
+> +      # 2) if one package have no dependencies or its dependencies have been built successfully before, then we can build it here 
+> +      pool.apply_async(make_build_pkg, (pkg, ),callback=callback)
+> +      allpending.append(pkg)
+> +    while True:
+> +      # 3,4) Wait for child process execution to end , if the child process has some errors, the main process will exit 
+> +      pkg = done_queue.get()
+> +      if pkg == '__error__':
+> +        sys.stderr.write("An error occurred during compilation, so must exit\n")
+> +        sys.exit(1)
+> +      # 5) remove the package that has been compiled successfully and released some other packages
+> +      dependencies=remove_pkg_from_depends(pkg,dependencies)
+> +      if done_queue.empty():
+> +        break
+> +    # 6) Continue
+> +
+> +make_build_pkg("")
+> +print "all builds is done"
+> --
+> 1.8.3.1
+> 
+
+
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
