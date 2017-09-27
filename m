@@ -1,58 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 21:10:43 +0200
-Subject: [Buildroot] [PATCH] wsapi: fix broken patch
-In-Reply-To: <20170927105852.05c6368d@windsurf.home>
-References: <20170927083224.12098-1-francois.perrad@gadz.org>
- <20170927105852.05c6368d@windsurf.home>
-Message-ID: <e776bc66-3b98-2e69-b9cd-4172219dd129@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Sep 2017 21:12:10 +0200
+Subject: [Buildroot] [PATCH v2] coreutils: use single binary in symlink
+ method, with merged usr
+In-Reply-To: <1506536724-10603-1-git-send-email-casantos@datacom.ind.br>
+References: <1506529411-26172-1-git-send-email-casantos@datacom.ind.br>
+ <1506536724-10603-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170927211210.11b92316@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Wed, 27 Sep 2017 15:25:24 -0300, Carlos Santos wrote:
+> The symlink method is faster, since there is no shell fork/exec, and
+> provides extra space savings. Keep using the shebang method without
+> merged usr, because it makes easier to move binaries into other
+> directories.
 
-On 27-09-17 10:58, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 27 Sep 2017 10:32:24 +0200, Francois Perrad wrote:
->> see http://autobuild.buildroot.net/results/f03/f03c9a33289ab3104f30c3da98673ad6321db46b/
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/wsapi/0001-Lua-5.3-compatibility.patch | 32 +++++++++-----------------
->>  1 file changed, 11 insertions(+), 21 deletions(-)
->>
->> diff --git a/package/wsapi/0001-Lua-5.3-compatibility.patch b/package/wsapi/0001-Lua-5.3-compatibility.patch
->> index d55c81880..7cc65e116 100644
->> --- a/package/wsapi/0001-Lua-5.3-compatibility.patch
->> +++ b/package/wsapi/0001-Lua-5.3-compatibility.patch
->> @@ -1,21 +1,14 @@
->> -From 2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611 Mon Sep 17 00:00:00 2001
->> -From: mpeterv <mpeterval@gmail.com>
->> -Date: Thu, 3 Dec 2015 13:10:14 +0300
->> -Subject: [PATCH] Lua 5.3 compatibility
->> +Lua 5.3 compatibility
-> 
-> Please keep a Git-formatted patch. Thanks.
+I'm not sure why we would want to make a difference between merged /usr
+and non-merged /usr. Is the shebang method really useful/interesting?
+Busybox is using symlinks, and that is just fine. Why not do the same
+for coreutils?
 
- Which you can do with:
+In addition, having too many differences between merged /usr and
+non-merged /usr is a test/maintenance burden.
 
-git format-patch -N --src-prefix=a/wsapi-1.6.1 --dst-prefix=b/wsapi-1.6.1
-
-
- Regards,
- Arnout
-
-> 
-> Thomas
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
