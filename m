@@ -1,88 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 27 Sep 2017 23:11:54 +0200
-Subject: [Buildroot] [PATCH v3 6/7] package/flex: disable reallocarray
-In-Reply-To: <20170927210545.GG2903@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 27 Sep 2017 23:12:42 +0200
+Subject: [Buildroot] [PATCH v3 0/7] glibc: bump to 2.26
+In-Reply-To: <20170923212414.16744-1-romain.naour@gmail.com>
 References: <20170923212414.16744-1-romain.naour@gmail.com>
- <20170923212414.16744-7-romain.naour@gmail.com> <20170927210545.GG2903@scaer>
-Message-ID: <f997a6e9-ba13-68f9-9cda-202f52577393@gmail.com>
+Message-ID: <e2bc3587-ca5e-9aef-752e-3902abe1624d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 27/09/2017 ? 23:05, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2017-09-23 23:24 +0200, Romain Naour spake thusly:
->> This doesn't compile with glibc 2.26 where reallocarray() as been introduced.
->>
->> It's a nasty issue, when reallocarray() is available for the target, flex will
->> build a small tool called stage1flex for the host (using _FOR_BUILD) but with
->> the config.h generated for the target.
->>
->> When the host doesn't have a glibc >= 2.26, reallocarray() is never defined
->> while building stage1flex:
->>
->> misc.c:147:8: warning : implicit declaration of function ? reallocarray ?
->> [-Wimplicit-function-declaration]
->>   mem = reallocarray(NULL, (size_t) size, element_size);
->>         ^~~~~~~~~~~~
->> misc.c:147:6: warning : assignment makes pointer from integer without a cast
->> [-Wint-conversion]
->>   mem = reallocarray(NULL, (size_t) size, element_size);
->>       ^
->>
->> Disable reallocarray for now, reallocarray() support may be
->> enabled in a followup patch.
-> 
-> What about https://patchwork.ozlabs.org/patch/813474/ which just
-> backports a fix from upstream (or I'm mislead)?
 
-No, this patch is fixing host-flex (segfault). not flex (link issue).
 
-I haven't had the time to investigate further but stage1flex seems using the
-config result for the target while building a host tool. So the reallocarray()
-code is used on a host machine where it is not in the host glibc.
+On 23-09-17 23:23, Romain Naour wrote:
+> This series bump glibc to the latest release and allow to remove all
+> patches required for the previous version! But glibc come with some
+> new issue that are hopefully already fixed in the 2.26.x stable branch.
 
-Best regards,
-Romain
+ Applied the series to master, thanks.
 
+
+> While testing this new version, some build issues has been dicovered.
+> Two gcc patch are needed to build a toolchain with older compiler
+> (gcc 4.9 to 6.4), gcc 7.2 contain already the fix.
 > 
-> Regards,
-> Yann E. MORIN.
+> Backport a series related to bug 21930 and 22146.
+> Without them the float128 support break the C++ build for some
+> packages.
 > 
->> Fixes:
->> stage1flex-misc.o: In function `allocate_array':
->> misc.c:(.text+0x38f): undefined reference to `reallocarray'
->> stage1flex-misc.o: In function `reallocate_array':
->> misc.c:(.text+0xc8a): undefined reference to `reallocarray'
->> collect2: error: ld returned 1 exit status
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/flex/flex.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/flex/flex.mk b/package/flex/flex.mk
->> index b782699..0196624 100644
->> --- a/package/flex/flex.mk
->> +++ b/package/flex/flex.mk
->> @@ -10,7 +10,8 @@ FLEX_INSTALL_STAGING = YES
->>  FLEX_LICENSE = FLEX
->>  FLEX_LICENSE_FILES = COPYING
->>  FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
->> -FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
->> +FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4 \
->> +	ac_cv_func_reallocarray=no
->>  HOST_FLEX_DEPENDENCIES = host-m4
->>  
->>  define FLEX_DISABLE_PROGRAM
->> -- 
->> 2.9.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+> https://sourceware.org/bugzilla/show_bug.cgi?id=21930
+> https://sourceware.org/bugzilla/show_bug.cgi?id=22146
 > 
+> This third series is for testing and review.
+> Let's hope that glibc 2.26.1 will be released soon :)
+
+ As discussed on IRC:
+
+ Apparently there won't be a glibc 2.26.1. It's up to distros to pick a git
+commit to release. So we have the choice to either keep a lot of patches in
+Buildroot, or use a git download instead of a tarball. The latter has the
+disadvantage of having a silly version "number" (the sha1), and that git
+downloads are generally much slower.
+
+ For now, we have those 6 patches in Buildroot. This may change in the future.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
