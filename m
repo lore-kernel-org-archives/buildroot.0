@@ -1,69 +1,37 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 27 Sep 2017 14:47:19 -0300 (BRT)
-Subject: [Buildroot] [PATCH] coreutils: use single binary in symlink
- method, with merged usr
-In-Reply-To: <1506529411-26172-1-git-send-email-casantos@datacom.ind.br>
-References: <1506529411-26172-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <2087474128.11244451.1506534439321.JavaMail.zimbra@datacom.ind.br>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Wed, 27 Sep 2017 23:27:09 +0530
+Subject: [Buildroot] [PATCH v3 0/6] engicam: Add new boards and qt5
+In-Reply-To: <CAD6G_RTdxRj=7G0xoqvGWLsjO5aSCrLe1qZrPn6YU6uoevZj4Q@mail.gmail.com>
+References: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+ <CAD6G_RTdxRj=7G0xoqvGWLsjO5aSCrLe1qZrPn6YU6uoevZj4Q@mail.gmail.com>
+Message-ID: <CAD6G_RQovcgik+Kkz_s7jwN_0ztkbmqWF3Kax4w-i67BEn6fTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: buildroot at buildroot.org
-> Sent: Wednesday, September 27, 2017 1:23:31 PM
-> Subject: [Buildroot] [PATCH] coreutils: use single binary in symlink method,	with merged usr
+On 21-Sep-2017 6:05 PM, "Jagan Teki" <jagannadh.teki@gmail.com> wrote:
 
-> The symlink method is faster, since there is no shell fork/exec, and
-> provides extra space savings. Keep using the shebang method without
-> merged usr, because it makes easier to move binaries into other
-> directories.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-> package/coreutils/coreutils.mk | 10 ++++++++--
-> 1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-> index 6a8a31b..721c711 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -14,7 +14,7 @@ COREUTILS_LICENSE_FILES = COPYING
-> COREUTILS_AUTORECONF = YES
-> COREUTILS_GETTEXTIZE = YES
-> 
-> -COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs \
-> +COREUTILS_CONF_OPTS = --disable-rpath \
-> 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
-> COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
-> 	ac_cv_func_chown_works=yes \
-> @@ -101,9 +101,15 @@ COREUTILS_CONF_OPTS += --with-openssl=yes
-> COREUTILS_DEPENDENCIES += openssl
-> endif
-> 
-> +# Build as a single binary for some neat space savings. Use the symlink method
-> +# with merged usr. Otherwise use the shebang method since it allows us to move
-> +# binaries into other directories whereas for symlink that wouldn't be so easy.
-> ifeq ($(BR2_ROOTFS_MERGED_USR),)
+On Wed, Sep 13, 2017 at 5:12 PM, Jagan Teki <jagannadh.teki@gmail.com>
+wrote:
+> From: Jagan Teki <jagan@amarulasolutions.com>
+>
+> This series add new boards from Engicam with qt5 support for each.
+>
+> Jagan Teki (6):
+>   engicam: imx6qdl_icore: Bump to latest Linux and uboot releases
+>   board: icorem6: Add Qt5 configs for 800x480 LVDS display
+>   engicam: icorem6: Add OF C.TOUCH 10.1 Kit
+>   board: icorem6: Add Qt5 configs for 1280x800 LVDS display
+>   engicam: icorem6: Add OF C.TOUCH 12 Kit
+>   board: icorem6: Add Qt5 configs for 1280x480 LVDS display
 
-Sorry, I sent the wrong patch. This should be "ifeq ($(BR2_ROOTFS_MERGED_USR),y)"
+Any comments on this?
 
-> +COREUTILS_CONF_OPTS += --enable-single-binary=symlinks
-> +else
-> +COREUTILS_CONF_OPTS += --enable-single-binary=shebangs
-> define COREUTILS_CLEANUP_BIN
-> -	# some things go in root rather than usr
-> +	# some things go in /bin rather than /usr/bin
-> 	for f in $(COREUTILS_BIN_PROGS); do \
-> 		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
-> 	done
-> --
-> 2.7.5
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+We're planning to send GST patches on top of this series, would you please
+comment.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170927/13021ff4/attachment.html>
