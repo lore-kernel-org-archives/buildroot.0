@@ -1,29 +1,75 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 Sep 2017 08:13:57 +0000
-Subject: [Buildroot] [Bug 10326] mesa3d package fails to build when
- BR2_SHARED_STATIC_LIBS=y
-In-Reply-To: <bug-10326-163@https.bugs.busybox.net/>
-References: <bug-10326-163@https.bugs.busybox.net/>
-Message-ID: <bug-10326-163-Iwm54YP3aZ@https.bugs.busybox.net/>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 27 Sep 2017 10:32:24 +0200
+Subject: [Buildroot] [PATCH] wsapi: fix broken patch
+Message-ID: <20170927083224.12098-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10326
+see http://autobuild.buildroot.net/results/f03/f03c9a33289ab3104f30c3da98673ad6321db46b/
 
---- Comment #4 from Frederic MATHIEU <frederic.mathieu@dualis.com> ---
-I do understand that the package mesa3d does not support static libraries, but
-others packages do. BR2_SHARED_STATIC_LIBS is global to all buildroot packages.
-So if the Mesa package does support this feature, it must be deactivated only
-for it. This is why the following code works very well:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/wsapi/0001-Lua-5.3-compatibility.patch | 32 +++++++++-----------------
+ 1 file changed, 11 insertions(+), 21 deletions(-)
 
-
-ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-MESA3D_CONF_OPTS += --disable-static
-endif
-
+diff --git a/package/wsapi/0001-Lua-5.3-compatibility.patch b/package/wsapi/0001-Lua-5.3-compatibility.patch
+index d55c81880..7cc65e116 100644
+--- a/package/wsapi/0001-Lua-5.3-compatibility.patch
++++ b/package/wsapi/0001-Lua-5.3-compatibility.patch
+@@ -1,21 +1,14 @@
+-From 2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611 Mon Sep 17 00:00:00 2001
+-From: mpeterv <mpeterval@gmail.com>
+-Date: Thu, 3 Dec 2015 13:10:14 +0300
+-Subject: [PATCH] Lua 5.3 compatibility
++Lua 5.3 compatibility
+ 
+ Fetched from: https://github.com/keplerproject/wsapi/commit/2d824d2fce31b6a9cc60b2c3f215fbbf1d99c611
+ 
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+----
+- src/wsapi/ringer.lua | 1 +
+- src/wsapi/util.lua   | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+ 
+-diff --git a/src/wsapi/ringer.lua b/src/wsapi/ringer.lua
+-index 58309f2..db7b68f 100644
+---- a/src/wsapi/ringer.lua
+-+++ b/src/wsapi/ringer.lua
+-@@ -5,6 +5,7 @@ local rings = require "rings"
++Index: b/wsapi-1.6.1/src/wsapi/ringer.lua
++===================================================================
++--- a/wsapi-1.6.1/src/wsapi/ringer.lua
+++++ b/wsapi-1.6.1/src/wsapi/ringer.lua
++@@ -5,6 +5,7 @@
+  local _M = {}
+  
+  local init = [==[
+@@ -23,11 +16,11 @@ index 58309f2..db7b68f 100644
+    local app_name, bootstrap_code, is_file = ...
+    if bootstrap_code then
+      local bootstrap, err
+-diff --git a/src/wsapi/util.lua b/src/wsapi/util.lua
+-index 24d3cfe..34e5816 100644
+---- a/src/wsapi/util.lua
+-+++ b/src/wsapi/util.lua
+-@@ -174,7 +174,7 @@ function _M.make_env_post(pd, type, qs)
++Index: b/wsapi-1.6.1/src/wsapi/util.lua
++===================================================================
++--- a/wsapi-1.6.1/src/wsapi/util.lua
+++++ b/wsapi-1.6.1/src/wsapi/util.lua
++@@ -174,7 +174,7 @@
+  end
+  
+  function _M.loadfile(filename, env)
+@@ -36,6 +29,3 @@ index 24d3cfe..34e5816 100644
+      return loadfile(filename, "bt", env)
+    else
+      local f, err = loadfile(filename)
+--- 
+-2.14.1
+-
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
