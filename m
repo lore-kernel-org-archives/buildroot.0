@@ -1,59 +1,93 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 27 Sep 2017 11:45:47 +0930
-Subject: [Buildroot] [PATCH] pdbg: bump version to latest
-Message-ID: <20170927021547.19421-1-joel@jms.id.au>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 26 Sep 2017 23:16:09 -0300
+Subject: [Buildroot] [PATCH v2]] radvd: improve startup script
+In-Reply-To: <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
+References: <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
+Message-ID: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I got this error when attempting to build:
+Print an error message if /usr/sbin/radvd is missing.
 
- aclocal: error: couldn't open directory 'm4': No such file or directory
+Print an error message if the kernel does not support IPv6 forwarding,
+which is required by radvd.
 
-So we now have the post patch hook to ensure the m4 directory is
-present.
+Ignore any start/stop/restart option if /etc/radvd.conf does not exist.
+The previous script printed an error message in this case but is valid
+to install radvd without a configuration file. The daemon may be started
+later by another service with a configuration created at run-time.
 
-In addition, the package now sets a variable with the Git SHA1 so that
-the binary contians the expected output for --version.
+This is a copy/paste/edit/fix of package/dnsmasq/S80dnsmasq.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/pdbg/pdbg.hash | 2 +-
- package/pdbg/pdbg.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+Changes v1->v2
+- Print error message is /usr/sbin/radvd is missing
+- Print error message if /proc/sys/net/ipv6/conf/all/forwarding is
+  missing (kernel does not support IPv6 forwarding)
+- Echo "1" to /proc/sys/net/ipv6/conf/all/forwarding upon start
+---
+ package/radvd/S50radvd | 46 +++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 33 insertions(+), 13 deletions(-)
 
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-index 16bf58024c61..2aec71817770 100644
---- a/package/pdbg/pdbg.hash
-+++ b/package/pdbg/pdbg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
-+sha256 e0b81fc65eb83692c5c07d7ae109882cefebf663444b7ea804d0544451c1a72f pdbg-77158819158d1d7053a737ac090d04fdfbfe9265.tar.gz
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-index 184de8650d37..0864a6de9cd8 100644
---- a/package/pdbg/pdbg.mk
-+++ b/package/pdbg/pdbg.mk
-@@ -4,10 +4,17 @@
- #
- ################################################################################
+diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
+index 9f1407c..cc73f29 100755
+--- a/package/radvd/S50radvd
++++ b/package/radvd/S50radvd
+@@ -1,18 +1,38 @@
+ #!/bin/sh
  
--PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
-+PDBG_VERSION = 77158819158d1d7053a737ac090d04fdfbfe9265
- PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
- PDBG_LICENSE = Apache-2.0
- PDBG_LICENSE_FILES = COPYING
- PDBG_AUTORECONF = YES
+-RADVD=/usr/sbin/radvd
+-
+-echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
+-
+-printf "Starting radvd: "
+-if [ ! -x "${RADVD}" ]; then
+-	echo "missing"
++[ -x /usr/sbin/radvd ] || {
++	echo "Error: /usr/sbin/radvd is missing."
+ 	exit 1
+-fi
++}
  
-+PDBG_MAKE_OPTS = "GIT_SHA1=\"${PDBG_VERSION}\""
+-if ${RADVD} ; then
+-	echo "done"
+-else
+-	echo "failed"
++[ -f /proc/sys/net/ipv6/conf/all/forwarding ] || {
++	echo "Error: radvd requires IPv6 forwarding support."
+ 	exit 1
+-fi
++}
 +
-+define PDBG_PATCH_M4
-+	mkdir -p $(@D)/m4
-+endef
-+PDBG_POST_PATCH_HOOKS += PDBG_PATCH_M4
++[ -f /etc/radvd.conf ] || {
++	exit 0
++}
 +
- $(eval $(autotools-package))
++case "$1" in
++	start)
++		printf "Starting radvd: "
++		echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
++		start-stop-daemon -S -x /usr/sbin/radvd
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		printf "Stopping radvd: "
++		start-stop-daemon -K -q -x /usr/sbin/radvd
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart|reload)
++		$0 stop
++		$0 start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit 0
 -- 
-2.14.1
+2.7.5
