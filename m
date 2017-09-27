@@ -1,92 +1,59 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Tue, 26 Sep 2017 22:15:35 -0300 (BRT)
-Subject: [Buildroot] [PATCH] radvd: improve startup script
-In-Reply-To: <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
-References: <1506333475-4759-1-git-send-email-casantos@datacom.ind.br>
- <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
-Message-ID: <1633566626.11077703.1506474935557.JavaMail.zimbra@datacom.ind.br>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed, 27 Sep 2017 11:45:47 +0930
+Subject: [Buildroot] [PATCH] pdbg: bump version to latest
+Message-ID: <20170927021547.19421-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message -----
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
-> Sent: Tuesday, September 26, 2017 7:26:20 PM
-> Subject: Re: [Buildroot] [PATCH] radvd: improve startup script
+I got this error when attempting to build:
 
-> On 25-09-17 11:57, Carlos Santos wrote:
->> The previous script caused a failure if /etc/radvd.conf did not exist.
-> 
-> That's a good thing, no? If you select radvd but forget to install a
-> configuration file, you'll want to have some kind of warning rather than
-> silently not starting it.
+ aclocal: error: couldn't open directory 'm4': No such file or directory
 
-Not exactly. There is no default configuration and the daemon may be
-started later by other services using a configuration created at run-time.
-In this particular I'm targeting libvirt, which uses both radvd and dnsmasq
-this way.
+So we now have the post patch hook to ensure the m4 directory is
+present.
 
->> 
->> This is a simple copy/paste/edit of package/dnsmasq/S80dnsmasq.
-> 
-> Perhaps not the best example...
-> 
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
->> ---
->>  package/radvd/S50radvd | 36 ++++++++++++++++++++++--------------
->>  1 file changed, 22 insertions(+), 14 deletions(-)
->> 
->> diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
->> index 9f1407c..dcc2af6 100755
->> --- a/package/radvd/S50radvd
->> +++ b/package/radvd/S50radvd
->> @@ -1,18 +1,26 @@
->>  #!/bin/sh
->>  
->> -RADVD=/usr/sbin/radvd
->> +[ -x /usr/sbin/radvd ] || exit 0
-> 
-> This we certainly don't want. If the executable is missing, we want to shout
-> loudly, not silently skip it.
-> 
->> +[ -f /etc/radvd.conf ] || exit 0
->>  
->> -echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-> 
-> Why remove this? It should of course move to the start stanza.
+In addition, the package now sets a variable with the Git SHA1 so that
+the binary contians the expected output for --version.
 
-Correct.
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ package/pdbg/pdbg.hash | 2 +-
+ package/pdbg/pdbg.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
->> +case "$1" in
->> +	start)
->> +		printf "Starting radvd: "
->> +		start-stop-daemon -S -x /usr/sbin/radvd
->> +		[ $? = 0 ] && echo "OK" || echo "FAI> +		;;
->> +	stop)
->> +		printf "Stopping radvd: "
->> +		start-stop-daemon -K -q -x /usr/sbin/radvd
->> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
->> +		;;
->> +	restart|reload)
->> +		$0 stop
->> +		$0 start
->> +		;;
->> +	*)
->> +		echo "Usage: $0 {start|stop|restart}"
->> +		exit 1
->> +esac
-> 
-> This part looks good.
-> 
-> Regards,
-> Arnout
-
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index 16bf58024c61..2aec71817770 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
++sha256 e0b81fc65eb83692c5c07d7ae109882cefebf663444b7ea804d0544451c1a72f pdbg-77158819158d1d7053a737ac090d04fdfbfe9265.tar.gz
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 184de8650d37..0864a6de9cd8 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,10 +4,17 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
++PDBG_VERSION = 77158819158d1d7053a737ac090d04fdfbfe9265
+ PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
+ PDBG_AUTORECONF = YES
+ 
++PDBG_MAKE_OPTS = "GIT_SHA1=\"${PDBG_VERSION}\""
++
++define PDBG_PATCH_M4
++	mkdir -p $(@D)/m4
++endef
++PDBG_POST_PATCH_HOOKS += PDBG_PATCH_M4
++
+ $(eval $(autotools-package))
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.14.1
