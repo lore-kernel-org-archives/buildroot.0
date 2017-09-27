@@ -1,32 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Sep 2017 22:03:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsync: fix build without C++
- support
-In-Reply-To: <20170926171050.16750-1-bernd.kuhls@t-online.de>
-References: <20170926171050.16750-1-bernd.kuhls@t-online.de>
-Message-ID: <20170927220324.19182a15@windsurf.lan>
+Date: Wed, 27 Sep 2017 22:03:43 +0200
+Subject: [Buildroot] [git commit] package/openvpn: security bump to version
+	2.4.4
+Message-ID: <20170927195629.6E3408111D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aa070c802ef2556a732ff33e55f17fc0d3444436
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Sep 2017 19:10:50 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/3ca/3cacb87e39a0ebb9d227fff4be71bea8132bf0ed/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...CMakeLists.txt-Don-t-require-a-C-compiler.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/librsync/0001-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+Fixes CVE-2017-12166:
+https://community.openvpn.net/openvpn/wiki/CVE-2017-12166
 
-Applied to master, thanks.
+Changelog:
+https://community.openvpn.net/openvpn/wiki/ChangesInOpenvpn24
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 1db3a31..318f9ed 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking signature
+-sha256 15e15fc97f189b52aee7c90ec8355aa77469c773125110b4c2f089abecde36fb  openvpn-2.4.3.tar.xz
++sha256 96cd1b8fe1e8cb2920f07c3fd3985faea756e16fdeebd11d3e146d5bd2b04a80  openvpn-2.4.4.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 7cc572e..086f99b 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.4.3
++OPENVPN_VERSION = 2.4.4
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
