@@ -1,36 +1,51 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 27 Sep 2017 07:28:08 -0300
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Update imx6-sabresd config entry
-In-Reply-To: <1506508088-14552-1-git-send-email-festevam@gmail.com>
-References: <1506508088-14552-1-git-send-email-festevam@gmail.com>
-Message-ID: <1506508088-14552-2-git-send-email-festevam@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 27 Sep 2017 14:54:44 +0200
+Subject: [Buildroot] [V2] wsapi: fix broken patch
+Message-ID: <20170927125444.14382-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the conversion to SPL the imx6sabresd defconfig targets have
-been renamed,so update the entry accordingly.
+see http://autobuild.buildroot.net/results/f03/f03c9a33289ab3104f30c3da98673ad6321db46b/
 
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wsapi/0001-Lua-5.3-compatibility.patch | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 72aa338..cedf5a6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -553,7 +553,7 @@ F:	package/supertuxkart/
- N:	Fabio Estevam <festevam@gmail.com>
- F:	board/warp7/
- F:	configs/freescale_imx*
--F:	configs/imx6q-sabresd*
-+F:	configs/imx6-sabresd*
- F:	configs/imx6ulpico_defconfig
- F:	configs/mx6cubox_defconfig
- F:	configs/mx6sx_udoo_neo_defconfig
+diff --git a/package/wsapi/0001-Lua-5.3-compatibility.patch b/package/wsapi/0001-Lua-5.3-compatibility.patch
+index d55c81880..9165ef2b9 100644
+--- a/package/wsapi/0001-Lua-5.3-compatibility.patch
++++ b/package/wsapi/0001-Lua-5.3-compatibility.patch
+@@ -11,10 +11,10 @@ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+  src/wsapi/util.lua   | 2 +-
+  2 files changed, 2 insertions(+), 1 deletion(-)
+ 
+-diff --git a/src/wsapi/ringer.lua b/src/wsapi/ringer.lua
++diff --git a/wsapi-1.6.1/src/wsapi/ringer.lua b/wsapi-1.6.1/src/wsapi/ringer.lua
+ index 58309f2..db7b68f 100644
+---- a/src/wsapi/ringer.lua
+-+++ b/src/wsapi/ringer.lua
++--- a/wsapi-1.6.1/src/wsapi/ringer.lua
+++++ b/wsapi-1.6.1/src/wsapi/ringer.lua
+ @@ -5,6 +5,7 @@ local rings = require "rings"
+  local _M = {}
+  
+@@ -23,10 +23,10 @@ index 58309f2..db7b68f 100644
+    local app_name, bootstrap_code, is_file = ...
+    if bootstrap_code then
+      local bootstrap, err
+-diff --git a/src/wsapi/util.lua b/src/wsapi/util.lua
++diff --git a/wsapi-1.6.1/src/wsapi/util.lua b/wsapi-1.6.1/src/wsapi/util.lua
+ index 24d3cfe..34e5816 100644
+---- a/src/wsapi/util.lua
+-+++ b/src/wsapi/util.lua
++--- a/wsapi-1.6.1/src/wsapi/util.lua
+++++ b/wsapi-1.6.1/src/wsapi/util.lua
+ @@ -174,7 +174,7 @@ function _M.make_env_post(pd, type, qs)
+  end
+  
 -- 
-2.7.4
+2.11.0
