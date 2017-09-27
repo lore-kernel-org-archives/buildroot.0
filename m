@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 23:12:42 +0200
-Subject: [Buildroot] [PATCH v3 0/7] glibc: bump to 2.26
-In-Reply-To: <20170923212414.16744-1-romain.naour@gmail.com>
+Date: Wed, 27 Sep 2017 23:14:23 +0200
+Subject: [Buildroot] [PATCH v3 4/7] package/gcc: enable float128 on
+ powerpc64le with glibc >= 2.26 toolchains
+In-Reply-To: <20170927204006.GE2903@scaer>
 References: <20170923212414.16744-1-romain.naour@gmail.com>
-Message-ID: <e2bc3587-ca5e-9aef-752e-3902abe1624d@mind.be>
+ <20170923212414.16744-5-romain.naour@gmail.com> <20170927204006.GE2903@scaer>
+Message-ID: <28b68e39-9fcb-93c8-340e-0368cd9dd826@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +14,33 @@ To: buildroot@busybox.net
 
 
 
-On 23-09-17 23:23, Romain Naour wrote:
-> This series bump glibc to the latest release and allow to remove all
-> patches required for the previous version! But glibc come with some
-> new issue that are hopefully already fixed in the 2.26.x stable branch.
-
- Applied the series to master, thanks.
-
-
-> While testing this new version, some build issues has been dicovered.
-> Two gcc patch are needed to build a toolchain with older compiler
-> (gcc 4.9 to 6.4), gcc 7.2 contain already the fix.
+On 27-09-17 22:40, Yann E. MORIN wrote:
+> Romain, All,
 > 
-> Backport a series related to bug 21930 and 22146.
-> Without them the float128 support break the C++ build for some
-> packages.
+> On 2017-09-23 23:24 +0200, Romain Naour spake thusly:
+
+[snip]
+>> @@ -254,6 +254,14 @@ HOST_GCC_COMMON_CONF_OPTS += \
+>>  	--without-long-double-128
+>>  endif
+>>  
+>> +# Since glibc >= 2.26, poerpc64le requires double/long double which
+>> +# requires at least gcc 6.2.
+>> +# See sysdeps/powerpc/powerpc64le/configure.ac
+>> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC)$(BR2_TOOLCHAIN_GCC_AT_LEAST_6)$(BR2_powerpc64le),yyy)
+>> +HOST_GCC_COMMON_CONF_OPTS += \
+>> +	--with-long-double-128
 > 
-> https://sourceware.org/bugzilla/show_bug.cgi?id=21930
-> https://sourceware.org/bugzilla/show_bug.cgi?id=22146
-> 
-> This third series is for testing and review.
-> Let's hope that glibc 2.26.1 will be released soon :)
+> Could very well have been on a single line.
 
- As discussed on IRC:
-
- Apparently there won't be a glibc 2.26.1. It's up to distros to pick a git
-commit to release. So we have the choice to either keep a lot of patches in
-Buildroot, or use a git download instead of a tarball. The latter has the
-disadvantage of having a silly version "number" (the sha1), and that git
-downloads are generally much slower.
-
- For now, we have those 6 patches in Buildroot. This may change in the future.
+ I didn't change this, because the way it is now it's similar to the other 3
+instances of --with-long-double-128 which makes it easier to spot the repetition.
 
  Regards,
  Arnout
+
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
