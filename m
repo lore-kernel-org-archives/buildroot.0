@@ -1,51 +1,145 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 23:14:23 +0200
-Subject: [Buildroot] [PATCH v3 4/7] package/gcc: enable float128 on
- powerpc64le with glibc >= 2.26 toolchains
-In-Reply-To: <20170927204006.GE2903@scaer>
-References: <20170923212414.16744-1-romain.naour@gmail.com>
- <20170923212414.16744-5-romain.naour@gmail.com> <20170927204006.GE2903@scaer>
-Message-ID: <28b68e39-9fcb-93c8-340e-0368cd9dd826@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 27 Sep 2017 23:28:35 +0200
+Subject: [Buildroot] [git commit] flex: Fix segfault of stage1flex when host
+	has glibc 2.26 or newer
+Message-ID: <20170927212241.4881D81101@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c128c5f3c79b31d89256ffbc5c650ba613d3d52b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+When the host uses glibc 2.26 or newer, Flex will try to use the
+newly-introduced reallocarray() function, but as it would not define
+_GNU_SOURCE a segmentation fault would occur later on due to the
+compiler assumming that the function is implicitly defined.
 
-On 27-09-17 22:40, Yann E. MORIN wrote:
-> Romain, All,
-> 
-> On 2017-09-23 23:24 +0200, Romain Naour spake thusly:
+This issue manifests itself due to a crash of "stage1flex" during the
+Flex bootstrap:
 
-[snip]
->> @@ -254,6 +254,14 @@ HOST_GCC_COMMON_CONF_OPTS += \
->>  	--without-long-double-128
->>  endif
->>  
->> +# Since glibc >= 2.26, poerpc64le requires double/long double which
->> +# requires at least gcc 6.2.
->> +# See sysdeps/powerpc/powerpc64le/configure.ac
->> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC)$(BR2_TOOLCHAIN_GCC_AT_LEAST_6)$(BR2_powerpc64le),yyy)
->> +HOST_GCC_COMMON_CONF_OPTS += \
->> +	--with-long-double-128
-> 
-> Could very well have been on a single line.
+  ./stage1flex   -o stage1scan.c ./scan.l
+  make[2]: *** [Makefile:1725: stage1scan.c] Segmentation fault (core dumped)
 
- I didn't change this, because the way it is now it's similar to the other 3
-instances of --with-long-double-128 which makes it easier to spot the repetition.
+This imports the patch from the upstream Git repository, and adds flags
+in the .mk file to rebuild the Autotools scripts and support files. Due
+to the latter, the patch to disable the documentation is changed so it
+modifies the .am file instead.
 
- Regards,
- Arnout
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[Arnout:
+ - Add Adrian's Sob and upstream ref to new patch;
+ - Keep patch 1 as patch 1;
+ - Keep Vicente as author of path 1;
+ - Add reason for autoreconf in a comment.]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/flex/0001-flex-disable-documentation.patch | 22 ++++++++++----
+ ...-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch | 35 ++++++++++++++++++++++
+ package/flex/flex.mk                               |  6 ++++
+ 3 files changed, 58 insertions(+), 5 deletions(-)
 
-
-[snip]
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/flex/0001-flex-disable-documentation.patch b/package/flex/0001-flex-disable-documentation.patch
+index 68bec12..b017b41 100644
+--- a/package/flex/0001-flex-disable-documentation.patch
++++ b/package/flex/0001-flex-disable-documentation.patch
+@@ -1,4 +1,7 @@
+-flex: disable documentation
++From a98443c6a72d5821d4e0152311e5c3eb4cdff25c Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Wed, 13 Sep 2017 17:26:48 +0300
++Subject: [PATCH] flex: disable documentation
+ 
+ Since we prevent the flex binary to be built, we also need to prevent
+ the documentation to be built, otherwise it will fail like this:
+@@ -9,11 +12,17 @@ make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
+ Stop.
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Adrian: patch Makefile.am instead of Makefile.in]
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++---
++ Makefile.am | 1 -
++ 1 file changed, 1 deletion(-)
+ 
+-diff -rup a/Makefile.in b/Makefile.in
+---- a/Makefile.in	2017-05-06 15:49:09.000000000 +0100
+-+++ b/Makefile.in	2017-05-10 14:35:20.152794902 +0100
+-@@ -450,7 +450,6 @@ EXTRA_DIST = \
++diff --git a/Makefile.am b/Makefile.am
++index 638c549..9db3420 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -43,7 +43,6 @@ EXTRA_DIST = \
+  
+  SUBDIRS = \
+  	src \
+@@ -21,3 +30,6 @@ diff -rup a/Makefile.in b/Makefile.in
+  	examples \
+  	po \
+  	tests \
++-- 
++2.14.1
++
+diff --git a/package/flex/0002-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch b/package/flex/0002-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
+new file mode 100644
+index 0000000..06747a3
+--- /dev/null
++++ b/package/flex/0002-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
+@@ -0,0 +1,35 @@
++From ffa886a580929f26fd5e5a40c9c5334955c48553 Mon Sep 17 00:00:00 2001
++From: Explorer09 <explorer09@gmail.com>
++Date: Mon, 4 Sep 2017 10:47:33 +0800
++Subject: [PATCH] build: AC_USE_SYSTEM_EXTENSIONS in configure.ac.
++
++This would, e.g. define _GNU_SOURCE in config.h, enabling the
++reallocarray() prototype in glibc 2.26+ on Linux systems with that
++version of glibc.
++
++Fixes #241.
++
++Backported from: 24fd0551333e7eded87b64dd36062da3df2f6380
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 55e774b..c879fe1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -25,8 +25,10 @@
++ # autoconf requirements and initialization
++ 
++ AC_INIT([the fast lexical analyser generator],[2.6.4],[flex-help at lists.sourceforge.net],[flex])
+++AC_PREREQ([2.60])
++ AC_CONFIG_SRCDIR([src/scan.l])
++ AC_CONFIG_AUX_DIR([build-aux])
+++AC_USE_SYSTEM_EXTENSIONS
++ LT_INIT
++ AM_INIT_AUTOMAKE([1.11.3 -Wno-portability foreign check-news std-options dist-lzip parallel-tests subdir-objects])
++ AC_CONFIG_HEADER([src/config.h])
++-- 
++2.14.1
++
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 0196624..aeac4ad 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -10,8 +10,14 @@ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
++
++# 0001-flex-disable-documentation.patch
++# 0002-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
++FLEX_AUTORECONF = YES
++FLEX_GETTEXTIZE = YES
+ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4 \
+ 	ac_cv_func_reallocarray=no
++
+ HOST_FLEX_DEPENDENCIES = host-m4
+ 
+ define FLEX_DISABLE_PROGRAM
