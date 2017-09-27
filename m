@@ -1,30 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 Sep 2017 19:07:20 +0000
-Subject: [Buildroot] [Bug 10326] mesa3d package fails to build when
- BR2_SHARED_STATIC_LIBS=y
-In-Reply-To: <bug-10326-163@https.bugs.busybox.net/>
-References: <bug-10326-163@https.bugs.busybox.net/>
-Message-ID: <bug-10326-163-De5fKxubAy@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Sep 2017 21:09:21 +0200
+Subject: [Buildroot] [V2] wsapi: fix broken patch
+In-Reply-To: <20170927125444.14382-1-francois.perrad@gadz.org>
+References: <20170927125444.14382-1-francois.perrad@gadz.org>
+Message-ID: <20170927210921.2acbb33a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10326
+Hello,
 
---- Comment #5 from Arnout Vandecappelle <arnout@mind.be> ---
-I agree with Frederic, there is no reason to exclude mesa3d, since it builds
-fine under SHARED_STATIC with the additional --disable-static option.
-SHARED_STATIC is meant for building a shared-library based rootfs and still
-allowing some (custom?) packages to link statically. So if some package is
-shared-only (or static-only, for that matter), it should still be possible to
-build it.
+On Wed, 27 Sep 2017 14:54:44 +0200, Francois Perrad wrote:
+> see http://autobuild.buildroot.net/results/f03/f03c9a33289ab3104f30c3da98673ad6321db46b/
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/wsapi/0001-Lua-5.3-compatibility.patch | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 
-Frederic, would you send your proposal as a properly formatted patch to the
-mailing list?
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
+Applied to master, thanks.
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
