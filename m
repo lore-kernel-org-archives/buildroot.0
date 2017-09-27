@@ -1,44 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 27 Sep 2017 19:14:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/git: security bump to version 2.13.6
-Message-ID: <20170927171431.10409-1-bernd.kuhls@t-online.de>
+From: Bradford Barr <bradford@density.io>
+Date: Wed, 27 Sep 2017 13:15:25 -0400
+Subject: [Buildroot] [PATCH 1/2] tbb: new package
+In-Reply-To: <sj0t9exl3e.ln2@ID-313208.user.individual.net>
+References: <20170926203504.22326-1-bradford@density.io>
+ <20170926203504.22326-2-bradford@density.io>
+ <CAHXCMM+zCdA0wEd+taFp_JOC5bx1k0OR4MOwOTJ5_trEHUsUMA@mail.gmail.com>
+ <CAPpUvYjbnmbjUo1Wb-1CR1sHM8YDxS-RW5oCGAcMRdDbYBZ1xg@mail.gmail.com>
+ <sj0t9exl3e.ln2@ID-313208.user.individual.net>
+Message-ID: <CAPpUvYjU8rW29akmJq724LpnMZRf8E0yzCCofn_zGzYFZOfgyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://public-inbox.org/git/xmqqy3p29ekj.fsf at gitster.mtv.corp.google.com/
+Oh awesome! I wasn't aware of that, but I see it's here[1] in the
+Buildroot manual. I'll use that before I submit a v2.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+[1]:https://buildroot.org/downloads/manual/manual.html#_tips_and_tricks
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 8aa0503db1..d65296f17a 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,4 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 21c9e29caac86d244ac7af78bc3422746dabb903cb3952a1ceefd801020ad1a1  git-2.13.5.tar.xz
-+sha256 bce97e403bea34f50378e90ade10c12666b2382cc247551b63dc5604e03b2523  git-2.13.6.tar.xz
- sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index fe4d553760..9f13f0f6aa 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.13.5
-+GIT_VERSION = 2.13.6
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
--- 
-2.11.0
+Thanks!
+B
+
+On Wed, Sep 27, 2017 at 12:35 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Am Wed, 27 Sep 2017 11:49:46 -0400 schrieb Bradford Barr:
+>
+>> I guess I could try to compile TBB for every platform supported by
+>> buildroot? Is there an easy way to do that?
+>
+> Hi,
+>
+> yes:
+>
+> $ echo "BR2_PACKAGE_TBB=y" > test-tbb
+> $ utils/test-pkg -c test-tbb -d $HOME/buildroot/test-tbb
+>
+> Doing so you will see that your package also
+>
+>         depends on BR2_INSTALL_LIBSTDCPP
+>
+> because it contains c++ code.
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
