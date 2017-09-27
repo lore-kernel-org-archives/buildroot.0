@@ -1,49 +1,40 @@
-From: Bradford Barr <bradford@density.io>
-Date: Wed, 27 Sep 2017 13:15:25 -0400
-Subject: [Buildroot] [PATCH 1/2] tbb: new package
-In-Reply-To: <sj0t9exl3e.ln2@ID-313208.user.individual.net>
-References: <20170926203504.22326-1-bradford@density.io>
- <20170926203504.22326-2-bradford@density.io>
- <CAHXCMM+zCdA0wEd+taFp_JOC5bx1k0OR4MOwOTJ5_trEHUsUMA@mail.gmail.com>
- <CAPpUvYjbnmbjUo1Wb-1CR1sHM8YDxS-RW5oCGAcMRdDbYBZ1xg@mail.gmail.com>
- <sj0t9exl3e.ln2@ID-313208.user.individual.net>
-Message-ID: <CAPpUvYjU8rW29akmJq724LpnMZRf8E0yzCCofn_zGzYFZOfgyA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 27 Sep 2017 19:16:02 +0200
+Subject: [Buildroot] [PATCH] perl: bump to version 5.26.1
+References: <20170927083250.12150-1-francois.perrad@gadz.org>
+Message-ID: <iv2t9exl3e.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oh awesome! I wasn't aware of that, but I see it's here[1] in the
-Buildroot manual. I'll use that before I submit a v2.
+Am Wed, 27 Sep 2017 10:32:50 +0200 schrieb Francois Perrad:
 
-[1]:https://buildroot.org/downloads/manual/manual.html#_tips_and_tricks
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl/perl.hash | 12 ++++++------
+>  package/perl/perl.mk   |  8 ++++----
+>  utils/scancpan         | 18 +++++++++---------
+>  3 files changed, 19 insertions(+), 19 deletions(-)
 
-Thanks!
-B
+Hi,
 
-On Wed, Sep 27, 2017 at 12:35 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Am Wed, 27 Sep 2017 11:49:46 -0400 schrieb Bradford Barr:
->
->> I guess I could try to compile TBB for every platform supported by
->> buildroot? Is there an easy way to do that?
->
-> Hi,
->
-> yes:
->
-> $ echo "BR2_PACKAGE_TBB=y" > test-tbb
-> $ utils/test-pkg -c test-tbb -d $HOME/buildroot/test-tbb
->
-> Doing so you will see that your package also
->
->         depends on BR2_INSTALL_LIBSTDCPP
->
-> because it contains c++ code.
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[build-tested using this defconfig:
+BR2_aarch64=y
+BR2_PACKAGE_PERL=y
+BR2_PACKAGE_PERL_DATETIME_TINY=y
+BR2_PACKAGE_PERL_DIGEST_SHA1=y
+BR2_PACKAGE_PERL_FILE_UTIL=y
+BR2_PACKAGE_PERL_GDGRAPH=y
+BR2_PACKAGE_PERL_IO_SOCKET_SSL=y
+BR2_PACKAGE_PERL_JSON_TINY=y
+BR2_PACKAGE_PERL_LIBWWW_PERL=y
+BR2_PACKAGE_PERL_MAIL_DKIM=y
+BR2_PACKAGE_PERL_MIME_BASE64=y
+BR2_PACKAGE_PERL_MOJOLICIOUS=y
+BR2_PACKAGE_PERL_NETADDR_IP=y
+BR2_PACKAGE_PERL_PATH_TINY=y
+BR2_PACKAGE_PERL_TIME_HIRES=y
+BR2_PACKAGE_PERL_XML_LIBXML=y ]
