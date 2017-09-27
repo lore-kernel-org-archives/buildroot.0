@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Sep 2017 21:18:05 +0200
-Subject: [Buildroot] [PATCH 2/2] dash: enable line editting if libedit
- is selected.
-In-Reply-To: <1506530514-27185-2-git-send-email-casantos@datacom.ind.br>
-References: <1506530514-27185-1-git-send-email-casantos@datacom.ind.br>
- <1506530514-27185-2-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170927211805.62bb4cfb@windsurf.lan>
+Date: Wed, 27 Sep 2017 21:19:28 +0200
+Subject: [Buildroot] [PATCH] edid-decode: bump to latest version
+In-Reply-To: <7652b730442a316fbd026f455599839526ccb9f1.1506440773.git.baruch@tkos.co.il>
+References: <7652b730442a316fbd026f455599839526ccb9f1.1506440773.git.baruch@tkos.co.il>
+Message-ID: <20170927211928.52c75bf9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 27 Sep 2017 13:41:54 -0300, Carlos Santos wrote:
+On Tue, 26 Sep 2017 18:46:13 +0300, Baruch Siach wrote:
+> This version brings bug fixes and improvements.
+> 
+> http://www.spinics.net/lists/linux-media/msg122284.html
+> 
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/edid-decode/edid-decode.hash | 2 +-
+>  package/edid-decode/edid-decode.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +# Enable line editing, Emacs style
-> +define DASH_INSTALL_PROFILE
-> +	echo 'set -E' > $(TARGET_DIR)/etc/profile.d/dash.sh
-> +endef
-
-This really looks like a "personal preference" configuration, that is
-more relevant in a custom rootfs overlay, no?
-
-> +ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> +DASH_DEPENDENCIES += libedit
-> +DASH_CONF_OPTS += --with-libedit
-> +DASH_POST_INSTALL_TARGET_HOOKS += DASH_INSTALL_PROFILE
-
-What about --without-libedit in an else case ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
