@@ -1,46 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Sep 2017 21:19:14 +0200
-Subject: [Buildroot] [git commit] edid-decode: bump to latest version
-Message-ID: <20170927191218.CDF8681114@busybox.osuosl.org>
+Date: Wed, 27 Sep 2017 21:19:20 +0200
+Subject: [Buildroot] [git commit] package/mono: bump to version 5.2.0.224
+Message-ID: <20170927191218.E6576805BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fd09ff0c60198805b7fad1d5678f26f2a74ae95
+commit: https://git.buildroot.net/buildroot/commit/?id=072b735a6c869a454a6b2fceb63f525ebd41db0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version brings bug fixes and improvements.
+This patch bumps mono to version 5.2.0.224 and the required monolite
+dependency to 1050200001.
 
-http://www.spinics.net/lists/linux-media/msg122284.html
-
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/edid-decode/edid-decode.hash | 2 +-
- package/edid-decode/edid-decode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mono/mono.hash         | 2 +-
+ package/mono/mono.mk           | 2 +-
+ package/monolite/monolite.hash | 2 +-
+ package/monolite/monolite.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
-index 0c2c6a2..437dcf4 100644
---- a/package/edid-decode/edid-decode.hash
-+++ b/package/edid-decode/edid-decode.hash
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 5d14a52..9af7ce3 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 ec85b62e863a1ad4636e1a216c122e459d7847c71ff6d57e4bf44406d9cbeb40  edid-decode-681153145d5e05ee15032ea792e967cda06e7622.tar.gz
-+sha256 94f43f93285eb5cf8133061295bcdf72b6897bf5372879c2e4032a08d359af12  edid-decode-f56f329ed23a25d002352dedba1e8f092a47286f.tar.gz
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index 243ccfb..a4141b8 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
+ # sha256 locally computed
+-sha256 48d6ae71d593cd01bf0f499de569359d45856cda325575e1bacb5fabaa7e9718  mono-5.0.1.1.tar.bz2
++sha256 03b8e463032bc425673dec844b35b4c669f5b99b0e45521195efb3741a9f5e94  mono-5.2.0.224.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index ec2f38f..838963d 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EDID_DECODE_VERSION = 681153145d5e05ee15032ea792e967cda06e7622
-+EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
- EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
+-MONO_VERSION = 5.0.1.1
++MONO_VERSION = 5.2.0.224
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 7638ce2..0d4fff8 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 365dc589e6d336530ef8efaa491e932c15163f449632daef6c41bed770d9fe53  monolite-1050001000-latest.tar.gz
++sha256 56f313da5f7137fae86db6af1476df0cf6515cedea46369347c4159ed7ce3300  monolite-1050200001-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index a2815ef..78e698a 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = 1050001000
++MONOLITE_VERSION = 1050200001
+ MONOLITE_SITE = http://download.mono-project.com/monolite/
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPL-2.0 or commercial
