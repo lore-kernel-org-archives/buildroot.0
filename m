@@ -1,77 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 Sep 2017 22:32:02 +0200
-Subject: [Buildroot] [PATCH v3 3/7] package/glibc: needs kernel headers
- >= 3.10 on powerpc64le
-In-Reply-To: <20170923212414.16744-4-romain.naour@gmail.com>
-References: <20170923212414.16744-1-romain.naour@gmail.com>
- <20170923212414.16744-4-romain.naour@gmail.com>
-Message-ID: <20170927203202.GD2903@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 27 Sep 2017 22:35:27 +0200
+Subject: [Buildroot] [PATCH] evemu: bump version to 2.7.0
+Message-ID: <20170927203527.28465-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+See [1] for details.
 
-On 2017-09-23 23:24 +0200, Romain Naour spake thusly:
-> Since glibc 2.26, kernel headers >= 3.10 are needed on powerpc64le [1].
-> In order to prepare the glibc bump to this version, we don't allow to
-> build a Buildroot toolchain with kernel headers older than 3.10.
-> 
-> [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=c2ff5ec13fca1bdd1cd646a0260808386d7bd7ff
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[1] https://lists.freedesktop.org/archives/input-tools/2017-September/001416.html
 
-Ideally, this should have been part of the patch that does the bump to
-2.26, but it is OK to have it just before to have smaller-to-review
-patches.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/evemu/evemu.hash | 4 ++--
+ package/evemu/evemu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v3: move the dependency outside of architectures section. (Yann)
-> ---
->  toolchain/toolchain-buildroot/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index f47001f..ac6017f 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -51,6 +51,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  	depends on BR2_USE_MMU
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
->  	depends on !BR2_powerpc_SPE
->  	select BR2_TOOLCHAIN_USES_GLIBC
->  	# our glibc.mk enables RPC support
-> @@ -65,6 +66,11 @@ comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 3.2"
->  	depends on BR2_USE_MMU
->  	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
->  
-> +# glibc >= 2.26 require kernel headers >= 3.10 on powerpc64le.
-> +comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
-> +	depends on BR2_powerpc64le
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-> +
->  config BR2_TOOLCHAIN_BUILDROOT_MUSL
->  	bool "musl"
->  	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
-> -- 
-> 2.9.5
-> 
-
+diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
+index b5f0bf5d55..7d45eb3e5b 100644
+--- a/package/evemu/evemu.hash
++++ b/package/evemu/evemu.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 ed81dd4552ffeb92c346b47e56b249c67f1cb37d5b31fc073ea0ad4858ae3dcc  evemu-2.6.0.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2017-September/001416.html
++sha256 78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379 evemu-2.7.0.tar.xz
+diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+index fba45216ce..02e5abdb8f 100644
+--- a/package/evemu/evemu.mk
++++ b/package/evemu/evemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EVEMU_VERSION = 2.6.0
++EVEMU_VERSION = 2.7.0
+ EVEMU_SITE = http://www.freedesktop.org/software/evemu
+ EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
+ EVEMU_LICENSE = LGPL-3.0 (library), GPL-3.0 (tools)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
