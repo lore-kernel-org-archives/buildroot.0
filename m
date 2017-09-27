@@ -1,64 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 22:49:35 +0200
-Subject: [Buildroot] [PATCH v2] kconfig: add script to manipulate
- .config files on the command line
-In-Reply-To: <20170926211502.5248-1-marcus.folkesson@gmail.com>
-References: <20170926211502.5248-1-marcus.folkesson@gmail.com>
-Message-ID: <5a06ab74-25b6-df38-b58a-8c1316ded74f@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 27 Sep 2017 23:01:12 +0200
+Subject: [Buildroot] [PATCH v3 5/7] package/diffutils: disable
+ getopt_long replacement with glibc
+In-Reply-To: <20170923212414.16744-6-romain.naour@gmail.com>
+References: <20170923212414.16744-1-romain.naour@gmail.com>
+ <20170923212414.16744-6-romain.naour@gmail.com>
+Message-ID: <20170927210112.GF2903@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Romain, All,
 
+On 2017-09-23 23:24 +0200, Romain Naour spake thusly:
+> Since glibc >= 2.26, don't try to use getopt_long replacement bundled
+> with diffutils. It will conflict with the one from glibc.
+> The getopt copy bundled in glibc has been updated with the one from gnulib.
 
-On 26-09-17 23:15, Marcus Folkesson wrote:
-> Default prefix is set to `BR2_` but may be overidden by setting
-> BR2_PREFIX.
+Yeah, because gnulib was such a bright idea... ;-)
+
+> After a lot of warnings...
+> Fixes:
+> xstrtol-error.c: In function 'xstrtol_error':
+> xstrtol-error.c:84:26: error: invalid use of undefined type 'struct rpl_option'
+>      option = long_options[opt_idx].name;
+>                           ^
+> xstrtol-error.c:84:26: error: dereferencing pointer to incomplete type 'const struct rpl_option'
 > 
-> Example usage:
+> [...]
 > 
-> Enable `BR2_PACKAGE_GNUPG`:
-> ./support/scripts/config --package --enable GNUPG
+> xstrtol-error.c:92:1: error: conflicting types for 'xstrtol_fatal'
+>  xstrtol_fatal (enum strtol_error err,
+>  ^~~~~~~~~~~~~
+> In file included from xstrtol-error.c:20:0:
+> xstrtol.h:69:16: note: previous declaration of 'xstrtol_fatal' was here
+>  _Noreturn void xstrtol_fatal (enum strtol_error,
+>                 ^~~~~~~~~~~~~
 > 
-> Check state of config option `BR2_PACKAGE_GNUPG`:
-> ./support/scripts/config --package --state GNUPG
-> y
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/diffutils/diffutils.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Enable `BR2_PACKAGE_GNUPG`:
-> ./support/scripts/config --package --disable GNUPG
+> diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+> index 6e5b9b6..79785d6 100644
+> --- a/package/diffutils/diffutils.mk
+> +++ b/package/diffutils/diffutils.mk
+> @@ -11,6 +11,12 @@ DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+>  DIFFUTILS_LICENSE = GPL-3.0+
+>  DIFFUTILS_LICENSE_FILES = COPYING
+>  
+> +# Since glibc >= 2.26, don't try to use getopt_long replacement bundled
+> +# with diffutils. It will conflict with the one from glibc.
+> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+> +DIFFUTILS_CONF_ENV += gl_cv_func_getopt_gnu=yes
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  DIFFUTILS_DEPENDENCIES += busybox
+>  endif
+> -- 
+> 2.9.5
 > 
-> Set `BR2_TARGET_GENERIC_ISSUE` to "Welcome":
-> ./support/scripts/config --set-str  TARGET_GENERIC_ISSUE "Welcome"
-> 
-> Copied from the Linux kernel (4.13-rc6) source code and adapted to
-> Buildroot.
-> Thanks to Andi Kleen who is the original author of this script.
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-
-
- Applied to master, thanks, with one small change...
-
-
-> +	if [ "$MUNGE_CASE" = "yes" ] ; then
-> +		ARG="`echo $ARG | tr a-z A-Z | tr - _`"
-
- I merged these into a single tr invocation:
-
-		ARG="`echo $ARG | tr a-z- A-Z_`"
-
-
- Regards,
- Arnout
-
-[snip]
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
