@@ -1,40 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 27 Sep 2017 19:16:02 +0200
-Subject: [Buildroot] [PATCH] perl: bump to version 5.26.1
-References: <20170927083250.12150-1-francois.perrad@gadz.org>
-Message-ID: <iv2t9exl3e.ln2@ID-313208.user.individual.net>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 27 Sep 2017 14:47:19 -0300 (BRT)
+Subject: [Buildroot] [PATCH] coreutils: use single binary in symlink
+ method, with merged usr
+In-Reply-To: <1506529411-26172-1-git-send-email-casantos@datacom.ind.br>
+References: <1506529411-26172-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <2087474128.11244451.1506534439321.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 27 Sep 2017 10:32:50 +0200 schrieb Francois Perrad:
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: buildroot at buildroot.org
+> Sent: Wednesday, September 27, 2017 1:23:31 PM
+> Subject: [Buildroot] [PATCH] coreutils: use single binary in symlink method,	with merged usr
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> The symlink method is faster, since there is no shell fork/exec, and
+> provides extra space savings. Keep using the shebang method without
+> merged usr, because it makes easier to move binaries into other
+> directories.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
->  package/perl/perl.hash | 12 ++++++------
->  package/perl/perl.mk   |  8 ++++----
->  utils/scancpan         | 18 +++++++++---------
->  3 files changed, 19 insertions(+), 19 deletions(-)
+> package/coreutils/coreutils.mk | 10 ++++++++--
+> 1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+> index 6a8a31b..721c711 100644
+> --- a/package/coreutils/coreutils.mk
+> +++ b/package/coreutils/coreutils.mk
+> @@ -14,7 +14,7 @@ COREUTILS_LICENSE_FILES = COPYING
+> COREUTILS_AUTORECONF = YES
+> COREUTILS_GETTEXTIZE = YES
+> 
+> -COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs \
+> +COREUTILS_CONF_OPTS = --disable-rpath \
+> 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
+> COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+> 	ac_cv_func_chown_works=yes \
+> @@ -101,9 +101,15 @@ COREUTILS_CONF_OPTS += --with-openssl=yes
+> COREUTILS_DEPENDENCIES += openssl
+> endif
+> 
+> +# Build as a single binary for some neat space savings. Use the symlink method
+> +# with merged usr. Otherwise use the shebang method since it allows us to move
+> +# binaries into other directories whereas for symlink that wouldn't be so easy.
+> ifeq ($(BR2_ROOTFS_MERGED_USR),)
 
-Hi,
+Sorry, I sent the wrong patch. This should be "ifeq ($(BR2_ROOTFS_MERGED_USR),y)"
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[build-tested using this defconfig:
-BR2_aarch64=y
-BR2_PACKAGE_PERL=y
-BR2_PACKAGE_PERL_DATETIME_TINY=y
-BR2_PACKAGE_PERL_DIGEST_SHA1=y
-BR2_PACKAGE_PERL_FILE_UTIL=y
-BR2_PACKAGE_PERL_GDGRAPH=y
-BR2_PACKAGE_PERL_IO_SOCKET_SSL=y
-BR2_PACKAGE_PERL_JSON_TINY=y
-BR2_PACKAGE_PERL_LIBWWW_PERL=y
-BR2_PACKAGE_PERL_MAIL_DKIM=y
-BR2_PACKAGE_PERL_MIME_BASE64=y
-BR2_PACKAGE_PERL_MOJOLICIOUS=y
-BR2_PACKAGE_PERL_NETADDR_IP=y
-BR2_PACKAGE_PERL_PATH_TINY=y
-BR2_PACKAGE_PERL_TIME_HIRES=y
-BR2_PACKAGE_PERL_XML_LIBXML=y ]
+> +COREUTILS_CONF_OPTS += --enable-single-binary=symlinks
+> +else
+> +COREUTILS_CONF_OPTS += --enable-single-binary=shebangs
+> define COREUTILS_CLEANUP_BIN
+> -	# some things go in root rather than usr
+> +	# some things go in /bin rather than /usr/bin
+> 	for f in $(COREUTILS_BIN_PROGS); do \
+> 		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+> 	done
+> --
+> 2.7.5
+
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
