@@ -1,84 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 Sep 2017 23:01:12 +0200
-Subject: [Buildroot] [PATCH v3 5/7] package/diffutils: disable
- getopt_long replacement with glibc
-In-Reply-To: <20170923212414.16744-6-romain.naour@gmail.com>
-References: <20170923212414.16744-1-romain.naour@gmail.com>
- <20170923212414.16744-6-romain.naour@gmail.com>
-Message-ID: <20170927210112.GF2903@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 27 Sep 2017 22:56:11 +0200
+Subject: [Buildroot] [git commit] package/glibc: needs kernel headers >=
+	3.10 on powerpc64le
+Message-ID: <20170927205502.D60D07FEBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e6c82f48dc8df4223d353126f2ebed391ad1433
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-09-23 23:24 +0200, Romain Naour spake thusly:
-> Since glibc >= 2.26, don't try to use getopt_long replacement bundled
-> with diffutils. It will conflict with the one from glibc.
-> The getopt copy bundled in glibc has been updated with the one from gnulib.
+Since glibc 2.26, kernel headers >= 3.10 are needed on powerpc64le [1].
+In order to prepare the glibc bump to this version, we don't allow to
+build a Buildroot toolchain with kernel headers older than 3.10.
 
-Yeah, because gnulib was such a bright idea... ;-)
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=c2ff5ec13fca1bdd1cd646a0260808386d7bd7ff
 
-> After a lot of warnings...
-> Fixes:
-> xstrtol-error.c: In function 'xstrtol_error':
-> xstrtol-error.c:84:26: error: invalid use of undefined type 'struct rpl_option'
->      option = long_options[opt_idx].name;
->                           ^
-> xstrtol-error.c:84:26: error: dereferencing pointer to incomplete type 'const struct rpl_option'
-> 
-> [...]
-> 
-> xstrtol-error.c:92:1: error: conflicting types for 'xstrtol_fatal'
->  xstrtol_fatal (enum strtol_error err,
->  ^~~~~~~~~~~~~
-> In file included from xstrtol-error.c:20:0:
-> xstrtol.h:69:16: note: previous declaration of 'xstrtol_fatal' was here
->  _Noreturn void xstrtol_fatal (enum strtol_error,
->                 ^~~~~~~~~~~~~
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ toolchain/toolchain-buildroot/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/diffutils/diffutils.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-> index 6e5b9b6..79785d6 100644
-> --- a/package/diffutils/diffutils.mk
-> +++ b/package/diffutils/diffutils.mk
-> @@ -11,6 +11,12 @@ DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  DIFFUTILS_LICENSE = GPL-3.0+
->  DIFFUTILS_LICENSE_FILES = COPYING
->  
-> +# Since glibc >= 2.26, don't try to use getopt_long replacement bundled
-> +# with diffutils. It will conflict with the one from glibc.
-> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> +DIFFUTILS_CONF_ENV += gl_cv_func_getopt_gnu=yes
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
->  DIFFUTILS_DEPENDENCIES += busybox
->  endif
-> -- 
-> 2.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index f47001f..ac6017f 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -51,6 +51,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
+ 	depends on !BR2_powerpc_SPE
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	# our glibc.mk enables RPC support
+@@ -65,6 +66,11 @@ comment "glibc needs a toolchain w/ dynamic library, kernel headers >= 3.2"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
++# glibc >= 2.26 require kernel headers >= 3.10 on powerpc64le.
++comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
++	depends on BR2_powerpc64le
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+ 	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
