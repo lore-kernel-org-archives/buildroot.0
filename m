@@ -1,60 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 27 Sep 2017 22:57:00 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-09-26
-In-Reply-To: <20170927063058.D8F91208CD@mail.free-electrons.com>
-References: <20170927063058.D8F91208CD@mail.free-electrons.com>
-Message-ID: <20170927195700.7jy5ifjzzjpuslem@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Sep 2017 22:00:43 +0200
+Subject: [Buildroot] [PATCH v3 0/6] engicam: Add new boards and qt5
+In-Reply-To: <8e135a7e-57ad-9e40-f482-45bf97900240@mind.be>
+References: <1505302931-17387-1-git-send-email-jteki@openedev.com>
+ <CAD6G_RTdxRj=7G0xoqvGWLsjO5aSCrLe1qZrPn6YU6uoevZj4Q@mail.gmail.com>
+ <CAD6G_RQovcgik+Kkz_s7jwN_0ztkbmqWF3Kax4w-i67BEn6fTQ@mail.gmail.com>
+ <8e135a7e-57ad-9e40-f482-45bf97900240@mind.be>
+Message-ID: <20170927220043.44c0ce36@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Hello,
 
-On Wed, Sep 27, 2017 at 08:30:58AM +0200, Thomas Petazzoni wrote:
->     mips64el |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/bb42c6ac8d3783bb8203d7771640492cdd063148 |     
->         m68k |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/8e1f398a8ebd2f4ab403bc64e64624398cfe241a |     
->     mips64el |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/678cbb13c6644328ff0f9032f4900ae8bf9ab2db |     
+On Wed, 27 Sep 2017 21:43:41 +0200, Arnout Vandecappelle wrote:
 
-It looks like the nmap patch below would fix libssh2 detection:
+>  I've been wary about applying this patch series because we don't really want
+> qt5 defconfigs for every board. Especially since we already have a mx6/Etnaviv
+> defconfig (imx6-sabresd_qt5_defconfig). Initially I even thought you were adding
+> three different qt5 defconfigs... But fortunately it's just one.
+> 
+>  That said, since you're clearly actively working with this, it's worth
+> including it.
+> 
+>  Peter, Thomas, opinions?
 
-diff --git a/configure.ac b/configure.ac
-index 3d00e164e90f..474769aff7ea 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -674,7 +674,7 @@ AC_HELP_STRING([--without-libssh2], [Compile without libssh2]),
-       AC_CHECK_LIB(ssh2, libssh2_version,
-         [have_libssh2=yes
-         LIBSSH2_INC=$with_libssh2/include
--        LIBSSH2_LIB=$with_libssh2/lib])],,[-lm])
-+        LIBSSH2_LIB=$with_libssh2/lib], [-lm])],,)
- 
-     LDFLAGS=$_ldflags
-     CPPFLAGS=$_cppflags
+I'm also worried about the growing number of defconfig files,
+targeting specific use cases. But we don't really have a better way to
+support such example configurations other by merging more defconfig
+files, so probably we should do it.
 
-But autoreconf fails:
+As long as we remain aggressive in dropping defconfig files that are
+not maintained, I believe we can accept more defconfig files.
 
-autoheader: warning: missing template: BSDI
-autoheader: Use AC_DEFINE([BSDI], [], [Description])
-autoheader: warning: missing template: DEC
-autoheader: warning: missing template: FREEBSD
-autoheader: warning: missing template: HAVE_IP_IP_SUM
-autoheader: warning: missing template: HAVE_LIBPCAP
-autoheader: warning: missing template: HAVE_OPENSSL
-[...]
-.../output/host/bin/autoheader failed with exit status: 1
+Best regards,
 
-This is caused by missing AC_DEFINE description parameter in some places 
-throughout configure.ac. Not sure how upstream generated the bundled configure 
-script using the same autoconf version, 2.69.
-
-Anyone got an idea?
-
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
