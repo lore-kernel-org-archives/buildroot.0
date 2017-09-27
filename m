@@ -1,51 +1,51 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 27 Sep 2017 14:54:44 +0200
-Subject: [Buildroot] [V2] wsapi: fix broken patch
-Message-ID: <20170927125444.14382-1-francois.perrad@gadz.org>
+From: Breno Lima <breno.lima@nxp.com>
+Date: Wed, 27 Sep 2017 09:57:12 -0300
+Subject: [Buildroot] [PATCH] configs/mx6sx_udoo_neo: Bump Kernel and U-Boot
+	versions
+Message-ID: <1506517032-4032-1-git-send-email-breno.lima@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-see http://autobuild.buildroot.net/results/f03/f03c9a33289ab3104f30c3da98673ad6321db46b/
+Bump U-Boot to 2017.09 and kernel to 4.13.3 versions.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Breno Lima <breno.lima@nxp.com>
 ---
- package/wsapi/0001-Lua-5.3-compatibility.patch | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ configs/mx6sx_udoo_neo_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wsapi/0001-Lua-5.3-compatibility.patch b/package/wsapi/0001-Lua-5.3-compatibility.patch
-index d55c81880..9165ef2b9 100644
---- a/package/wsapi/0001-Lua-5.3-compatibility.patch
-+++ b/package/wsapi/0001-Lua-5.3-compatibility.patch
-@@ -11,10 +11,10 @@ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-  src/wsapi/util.lua   | 2 +-
-  2 files changed, 2 insertions(+), 1 deletion(-)
- 
--diff --git a/src/wsapi/ringer.lua b/src/wsapi/ringer.lua
-+diff --git a/wsapi-1.6.1/src/wsapi/ringer.lua b/wsapi-1.6.1/src/wsapi/ringer.lua
- index 58309f2..db7b68f 100644
----- a/src/wsapi/ringer.lua
--+++ b/src/wsapi/ringer.lua
-+--- a/wsapi-1.6.1/src/wsapi/ringer.lua
-++++ b/wsapi-1.6.1/src/wsapi/ringer.lua
- @@ -5,6 +5,7 @@ local rings = require "rings"
-  local _M = {}
-  
-@@ -23,10 +23,10 @@ index 58309f2..db7b68f 100644
-    local app_name, bootstrap_code, is_file = ...
-    if bootstrap_code then
-      local bootstrap, err
--diff --git a/src/wsapi/util.lua b/src/wsapi/util.lua
-+diff --git a/wsapi-1.6.1/src/wsapi/util.lua b/wsapi-1.6.1/src/wsapi/util.lua
- index 24d3cfe..34e5816 100644
----- a/src/wsapi/util.lua
--+++ b/src/wsapi/util.lua
-+--- a/wsapi-1.6.1/src/wsapi/util.lua
-++++ b/wsapi-1.6.1/src/wsapi/util.lua
- @@ -174,7 +174,7 @@ function _M.make_env_post(pd, type, qs)
-  end
-  
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index b7475d7..e2e36b9 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/neo/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -12,13 +12,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="udoo_neo"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
 -- 
-2.11.0
+2.7.4
