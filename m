@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Sep 2017 22:12:20 +0200
-Subject: [Buildroot] [PATCH 0/3] Fix Qt WE run-time issue on RPI3
-In-Reply-To: <20170923233007.13772-1-gael.portay@savoirfairelinux.com>
-References: <20170923233007.13772-1-gael.portay@savoirfairelinux.com>
-Message-ID: <dd38f245-12ce-e073-2739-836c1194c2fe@mind.be>
+Date: Wed, 27 Sep 2017 22:13:47 +0200
+Subject: [Buildroot] [PATCH v2 1/4] board/raspberrypi/post-image.sh: add
+ multi arg support
+In-Reply-To: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
+References: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
+Message-ID: <8b056f3f-7ff1-191c-e0e7-bce66e7af9ef@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,34 @@ To: buildroot@busybox.net
 
 
 
-On 24-09-17 01:30, Ga?l PORTAY wrote:
-> This patch serie fixes a run-time issue with Qt WebEngine on a RPI3.
+On 15-07-17 14:50, Erik Stromdahl wrote:
+> Add possibility to supply multiple arguments to
+> post-image.sh
+> 
+> Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
 
- Series applied, except for the first patch I took Erik's version, thanks.
+ Applied to master, thanks, with one little change...
 
- If you consider my suggested simplification of --gpu_mem, that can be done in a
-follow-up patch.
+[snip]
+> -	fi
+> -	;;
+> +		fi
+> +		;;
+>  esac
+
+ I indented the esac.
 
  Regards,
  Arnout
+
+>  
+> +done
+> +
+>  rm -rf "${GENIMAGE_TMP}"
+>  
+>  genimage                           \
+> 
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
