@@ -1,42 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Sep 2017 09:14:36 +0200
-Subject: [Buildroot] [git commit] configs/imx6q-sabresd: Drop the 'quad'
- notation
-In-Reply-To: <20170926222615.730DA8045D@busybox.osuosl.org>
-References: <20170926222615.730DA8045D@busybox.osuosl.org>
-Message-ID: <20170927091436.62fd5130@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 27 Sep 2017 08:13:57 +0000
+Subject: [Buildroot] [Bug 10326] mesa3d package fails to build when
+ BR2_SHARED_STATIC_LIBS=y
+In-Reply-To: <bug-10326-163@https.bugs.busybox.net/>
+References: <bug-10326-163@https.bugs.busybox.net/>
+Message-ID: <bug-10326-163-Iwm54YP3aZ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10326
 
-On Wed, 27 Sep 2017 00:26:50 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=d5935bf70dc89c639bd7e2a7eed0578a7673edca
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Now that SPL is supported a single image can run on the different
-> variants of imx6 sabresd boards: imx6q, imx6dl and imx6qp.
-> 
-> So drop the 'quad' prefix from defconfig, directory and readme file
-> to make it generic.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  .../linux_qt5.fragment                             |  0
->  .../{imx6q-sabresd => imx6-sabresd}/readme.txt     | 23 +++++++++++++---------
->  .../rootfs_overlay/root/sabresd.json               |  0
->  ...6q-sabresd_defconfig => imx6-sabresd_defconfig} |  0
->  configs/imx6q-sabresd_qt5_defconfig                |  4 ++--
+--- Comment #4 from Frederic MATHIEU <frederic.mathieu@dualis.com> ---
+I do understand that the package mesa3d does not support static libraries, but
+others packages do. BR2_SHARED_STATIC_LIBS is global to all buildroot packages.
+So if the Mesa package does support this feature, it must be deactivated only
+for it. This is why the following code works very well:
 
-Isn't this missing an update to .gitlab-ci.yml ?
 
-Thomas
+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+MESA3D_CONF_OPTS += --disable-static
+endif
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
