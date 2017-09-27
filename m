@@ -1,59 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 27 Sep 2017 22:56:11 +0200
-Subject: [Buildroot] [git commit] package/diffutils: disable getopt_long
-	replacement with glibc
-Message-ID: <20170927205504.7D58F80330@busybox.osuosl.org>
+Date: Wed, 27 Sep 2017 22:56:32 +0200
+Subject: [Buildroot] [git commit] package/flex: disable reallocarray
+Message-ID: <20170927205504.8012280E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=498477a32168218ce311be0ec519271f16683061
+commit: https://git.buildroot.net/buildroot/commit/?id=ffbd8dfb8a1fcbc0cb209f8ede4841c543524525
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since glibc >= 2.26, don't try to use getopt_long replacement bundled
-with diffutils. It will conflict with the one from glibc.
-The getopt copy bundled in glibc has been updated with the one from gnulib.
+This doesn't compile with glibc 2.26 where reallocarray() as been introduced.
 
-After a lot of warnings...
+It's a nasty issue, when reallocarray() is available for the target, flex will
+build a small tool called stage1flex for the host (using _FOR_BUILD) but with
+the config.h generated for the target.
+
+When the host doesn't have a glibc >= 2.26, reallocarray() is never defined
+while building stage1flex:
+
+misc.c:147:8: warning : implicit declaration of function ?? reallocarray ??
+[-Wimplicit-function-declaration]
+  mem = reallocarray(NULL, (size_t) size, element_size);
+        ^~~~~~~~~~~~
+misc.c:147:6: warning : assignment makes pointer from integer without a cast
+[-Wint-conversion]
+  mem = reallocarray(NULL, (size_t) size, element_size);
+      ^
+
+Disable reallocarray for now, reallocarray() support may be
+enabled in a followup patch.
+
 Fixes:
-xstrtol-error.c: In function 'xstrtol_error':
-xstrtol-error.c:84:26: error: invalid use of undefined type 'struct rpl_option'
-     option = long_options[opt_idx].name;
-                          ^
-xstrtol-error.c:84:26: error: dereferencing pointer to incomplete type 'const struct rpl_option'
-
-[...]
-
-xstrtol-error.c:92:1: error: conflicting types for 'xstrtol_fatal'
- xstrtol_fatal (enum strtol_error err,
- ^~~~~~~~~~~~~
-In file included from xstrtol-error.c:20:0:
-xstrtol.h:69:16: note: previous declaration of 'xstrtol_fatal' was here
- _Noreturn void xstrtol_fatal (enum strtol_error,
-                ^~~~~~~~~~~~~
+stage1flex-misc.o: In function `allocate_array':
+misc.c:(.text+0x38f): undefined reference to `reallocarray'
+stage1flex-misc.o: In function `reallocate_array':
+misc.c:(.text+0xc8a): undefined reference to `reallocarray'
+collect2: error: ld returned 1 exit status
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/diffutils/diffutils.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/flex/flex.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 6e5b9b6..79785d6 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -11,6 +11,12 @@ DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- DIFFUTILS_LICENSE = GPL-3.0+
- DIFFUTILS_LICENSE_FILES = COPYING
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index b782699..0196624 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -10,7 +10,8 @@ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
+-FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
++FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4 \
++	ac_cv_func_reallocarray=no
+ HOST_FLEX_DEPENDENCIES = host-m4
  
-+# Since glibc >= 2.26, don't try to use getopt_long replacement bundled
-+# with diffutils. It will conflict with the one from glibc.
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+DIFFUTILS_CONF_ENV += gl_cv_func_getopt_gnu=yes
-+endif
-+
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- DIFFUTILS_DEPENDENCIES += busybox
- endif
+ define FLEX_DISABLE_PROGRAM
