@@ -1,53 +1,35 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 27 Sep 2017 13:23:31 -0300
-Subject: [Buildroot] [PATCH] coreutils: use single binary in symlink method,
-	with merged usr
-Message-ID: <1506529411-26172-1-git-send-email-casantos@datacom.ind.br>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 27 Sep 2017 18:27:35 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 13}.x series
+Message-ID: <20170927162736.16514-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The symlink method is faster, since there is no shell fork/exec, and
-provides extra space savings. Keep using the shebang method without
-merged usr, because it makes easier to move binaries into other
-directories.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/coreutils/coreutils.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 6a8a31b..721c711 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -14,7 +14,7 @@ COREUTILS_LICENSE_FILES = COPYING
- COREUTILS_AUTORECONF = YES
- COREUTILS_GETTEXTIZE = YES
- 
--COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs \
-+COREUTILS_CONF_OPTS = --disable-rpath \
- 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	ac_cv_func_chown_works=yes \
-@@ -101,9 +101,15 @@ COREUTILS_CONF_OPTS += --with-openssl=yes
- COREUTILS_DEPENDENCIES += openssl
- endif
- 
-+# Build as a single binary for some neat space savings. Use the symlink method
-+# with merged usr. Otherwise use the shebang method since it allows us to move
-+# binaries into other directories whereas for symlink that wouldn't be so easy.
- ifeq ($(BR2_ROOTFS_MERGED_USR),)
-+COREUTILS_CONF_OPTS += --enable-single-binary=symlinks
-+else
-+COREUTILS_CONF_OPTS += --enable-single-binary=shebangs
- define COREUTILS_CLEANUP_BIN
--	# some things go in root rather than usr
-+	# some things go in /bin rather than /usr/bin
- 	for f in $(COREUTILS_BIN_PROGS); do \
- 		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
- 	done
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8bd3c07007..ff9c0d2a24 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.88"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.51"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.89"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.52"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+-	default "4.13.3"	if BR2_KERNEL_HEADERS_4_13
++	default "4.13.4"	if BR2_KERNEL_HEADERS_4_13
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.7.5
+2.11.0
