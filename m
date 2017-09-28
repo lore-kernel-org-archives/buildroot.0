@@ -1,53 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 22:04:26 +0200
-Subject: [Buildroot] [git commit] configs/mx25pdk: Bump U-Boot and kernel
-	versions
-Message-ID: <20170928200648.A1434802E3@busybox.osuosl.org>
+Date: Thu, 28 Sep 2017 22:06:40 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: Update imx6-sabresd config
+	entry
+Message-ID: <20170928200648.D6D7881143@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8f61843ac262dc94a594f58d72d31784ae98c98
+commit: https://git.buildroot.net/buildroot/commit/?id=e8e2f1e5e51e015c3f3bc7ce16f139e1a4c3b4cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to U-Boot 2017.09 and kernel to 4.13.3.
+After the conversion to SPL the imx6sabresd defconfig targets have
+been renamed,so update the entry accordingly.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/mx25pdk_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
-index c97ba76..271be44 100644
---- a/configs/mx25pdk_defconfig
-+++ b/configs/mx25pdk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 72aa338..cedf5a6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -553,7 +553,7 @@ F:	package/supertuxkart/
+ N:	Fabio Estevam <festevam@gmail.com>
+ F:	board/warp7/
+ F:	configs/freescale_imx*
+-F:	configs/imx6q-sabresd*
++F:	configs/imx6-sabresd*
+ F:	configs/imx6ulpico_defconfig
+ F:	configs/mx6cubox_defconfig
+ F:	configs/mx6sx_udoo_neo_defconfig
