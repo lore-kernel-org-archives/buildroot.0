@@ -1,80 +1,49 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 28 Sep 2017 11:18:51 -0700
-Subject: [Buildroot] [PATCH] pdbg: bump version to latest
-In-Reply-To: <20170927021547.19421-1-joel@jms.id.au>
-References: <20170927021547.19421-1-joel@jms.id.au>
-Message-ID: <CAKmqyKODhJeyrG3kTXcLjx_NvHKNdmJnzM6k=HkDL1MfrMWO1g@mail.gmail.com>
+From: Erik Stromdahl <erik.stromdahl@gmail.com>
+Date: Thu, 28 Sep 2017 20:21:32 +0200
+Subject: [Buildroot] [PATCH v2 1/4] board/raspberrypi/post-image.sh: add
+ multi arg support
+In-Reply-To: <8b056f3f-7ff1-191c-e0e7-bce66e7af9ef@mind.be>
+References: <1500123032-9198-1-git-send-email-erik.stromdahl@gmail.com>
+ <8b056f3f-7ff1-191c-e0e7-bce66e7af9ef@mind.be>
+Message-ID: <e2ee10c1-2daf-2405-d8f2-a19bff923ca9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 26, 2017 at 7:15 PM, Joel Stanley <joel@jms.id.au> wrote:
-> I got this error when attempting to build:
->
->  aclocal: error: couldn't open directory 'm4': No such file or directory
 
-When do you get this error?
 
->
-> So we now have the post patch hook to ensure the m4 directory is
-> present.
+On 2017-09-27 22:13, Arnout Vandecappelle wrote:
+> 
+> 
+> On 15-07-17 14:50, Erik Stromdahl wrote:
+>> Add possibility to supply multiple arguments to
+>> post-image.sh
+>>
+>> Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
+> 
+>   Applied to master, thanks, with one little change...
+> 
+> [snip]
+>> -	fi
+>> -	;;
+>> +		fi
+>> +		;;
+>>   esac
+> 
+>   I indented the esac.
+> 
+Ah, perfect!
 
-Why is this up to the builder to create this directory? Shouldn't it
-be created by the packages make system?
-
->
-> In addition, the package now sets a variable with the Git SHA1 so that
-> the binary contians the expected output for --version.
-
-Maybe that should be a separate patch?
-
-Thanks,
-Alistair
-
->
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  package/pdbg/pdbg.hash | 2 +-
->  package/pdbg/pdbg.mk   | 9 ++++++++-
->  2 files changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-> index 16bf58024c61..2aec71817770 100644
-> --- a/package/pdbg/pdbg.hash
-> +++ b/package/pdbg/pdbg.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
-> +sha256 e0b81fc65eb83692c5c07d7ae109882cefebf663444b7ea804d0544451c1a72f pdbg-77158819158d1d7053a737ac090d04fdfbfe9265.tar.gz
-> diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-> index 184de8650d37..0864a6de9cd8 100644
-> --- a/package/pdbg/pdbg.mk
-> +++ b/package/pdbg/pdbg.mk
-> @@ -4,10 +4,17 @@
->  #
->  ################################################################################
->
-> -PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
-> +PDBG_VERSION = 77158819158d1d7053a737ac090d04fdfbfe9265
->  PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
->  PDBG_LICENSE = Apache-2.0
->  PDBG_LICENSE_FILES = COPYING
->  PDBG_AUTORECONF = YES
->
-> +PDBG_MAKE_OPTS = "GIT_SHA1=\"${PDBG_VERSION}\""
-> +
-> +define PDBG_PATCH_M4
-> +       mkdir -p $(@D)/m4
-> +endef
-> +PDBG_POST_PATCH_HOOKS += PDBG_PATCH_M4
-> +
->  $(eval $(autotools-package))
-> --
-> 2.14.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>   Regards,
+>   Arnout
+> 
+>>   
+>> +done
+>> +
+>>   rm -rf "${GENIMAGE_TMP}"
+>>   
+>>   genimage                           \
+>>
+> 
