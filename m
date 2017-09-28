@@ -1,24 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 22:13:40 +0200
-Subject: [Buildroot] [PATCH] evemu: bump version to 2.7.0
-In-Reply-To: <20170927203527.28465-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Wed, 27 Sep 2017 22:35:27 +0200")
-References: <20170927203527.28465-1-ps.report@gmx.net>
-Message-ID: <87h8vmint7.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Sep 2017 22:04:26 +0200
+Subject: [Buildroot] [git commit] configs/mx25pdk: Bump U-Boot and kernel
+	versions
+Message-ID: <20170928200648.A1434802E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e8f61843ac262dc94a594f58d72d31784ae98c98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > See [1] for details.
- > [1] https://lists.freedesktop.org/archives/input-tools/2017-September/001416.html
+Bump to U-Boot 2017.09 and kernel to 4.13.3.
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/mx25pdk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index c97ba76..271be44 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
