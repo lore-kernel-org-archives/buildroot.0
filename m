@@ -1,41 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Sep 2017 20:06:21 +0200
-Subject: [Buildroot] [PATCH] package/libmad: don't install .pc in target
-Message-ID: <20170928180621.24797-1-yann.morin.1998@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 28 Sep 2017 15:07:56 -0300
+Subject: [Buildroot] [PATCH v2] dash: enable line editting if libedit is
+	selected.
+In-Reply-To: <20170928085957.04978e60@windsurf.lan>
+References: <20170928085957.04978e60@windsurf.lan>
+Message-ID: <1506622076-21776-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We explicitly remove pkg-config files from target in the target-finalize
-step, and our pkg-config looks for .pc files from staging, not target.
+Otherwise, explicitly disable it, so that the configure script does not
+misdetect a system-installed libedit for example.
 
-So, explicitly installing the .pc in target is useless.
+Also, add a profile snippet enabling line editing, Emacs style.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Change-Id: I68c6dbbafa95e266860329cb9c7ff5519fda5bf8
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/libmad/libmad.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/dash/dash.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index 0729b1e6d4..7175eaa30e 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -23,14 +23,8 @@ define LIBMAD_INSTALL_STAGING_PC
- 		$(STAGING_DIR)/usr/lib/pkgconfig/mad.pc
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 72ef722..0098fad 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -10,6 +10,19 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
+ 
++# Enable line editing, Emacs style
++define DASH_INSTALL_PROFILE
++	echo 'set -E' > $(TARGET_DIR)/etc/profile.d/dash.sh
++endef
++
++ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++DASH_DEPENDENCIES += libedit
++DASH_CONF_OPTS += --with-libedit
++DASH_POST_INSTALL_TARGET_HOOKS += DASH_INSTALL_PROFILE
++else
++DASH_CONF_OPTS += --without-libedit
++endif
++
+ define DASH_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/src/dash $(TARGET_DIR)/bin/dash
  endef
- 
--define LIBMAD_INSTALL_TARGET_PC
--	$(INSTALL) -D package/libmad/mad.pc \
--		$(TARGET_DIR)/usr/lib/pkgconfig/mad.pc
--endef
--
- LIBMAD_POST_PATCH_HOOKS += LIBMAD_PREVENT_AUTOMAKE
- LIBMAD_POST_INSTALL_STAGING_HOOKS += LIBMAD_INSTALL_STAGING_PC
--LIBMAD_POST_INSTALL_TARGET_HOOKS += LIBMAD_INSTALL_TARGET_PC
- 
- LIBMAD_CONF_OPTS = \
- 	--disable-debugging \
 -- 
-2.11.0
+2.7.5
