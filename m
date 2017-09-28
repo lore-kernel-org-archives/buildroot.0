@@ -1,97 +1,48 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Sep 2017 22:43:33 +0300
-Subject: [Buildroot] [PATCH 1/2] gnupg2: don't preserve the old gpg2
-	executable name
-Message-ID: <1c0d8419ba2320d55a8522f022ec76db9d813529.1506627814.git.baruch@tkos.co.il>
+Date: Thu, 28 Sep 2017 22:43:34 +0300
+Subject: [Buildroot] [PATCH 2/2] gnupg2: bump to version 2.2.1
+In-Reply-To: <1c0d8419ba2320d55a8522f022ec76db9d813529.1506627814.git.baruch@tkos.co.il>
+References: <1c0d8419ba2320d55a8522f022ec76db9d813529.1506627814.git.baruch@tkos.co.il>
+Message-ID: <a5d237b1157ab6136eeccb0d143ee2f60dc0fd33.1506627814.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e82fadab236a (gnupg2: bump to version 2.2.0) added a configure
-option to keep the old 'gpg2' executable name to avoid conflict with the
-gnupg package. It turns out that gnupg depends on !BR2_PACKAGE_GNUPG2
-since commit 2cadb26e6d4 (gnupg: make gnupg and gnupg2 mutually
-exclusive). Drop this configure option.
-
-Rename the config option that controls the removal of gpgv2, now gpgv,
-to match the new name. Add legacy config symbol handling.
-
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- Config.in.legacy         |  8 ++++++++
- package/gnupg2/Config.in |  6 +++---
- package/gnupg2/gnupg2.mk | 10 ++++------
- 3 files changed, 15 insertions(+), 9 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 748876880c36..69cbd04ad53a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,14 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.11"
- 
-+config BR2_PACKAGE_GNUPG2_GPGV2
-+	bool "gnupg2 gpgv2 option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GNUPG2_GPGV
-+	help
-+	  The gpgv2 executable is now named gpgv. The config option
-+	  has been renamed accordingly.
-+
- config BR2_PACKAGE_OPENOBEX_BLUEZ
- 	bool "openobex bluez option removed"
- 	select BR2_LEGACY
-diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
-index c28708965780..ef1817ef02dc 100644
---- a/package/gnupg2/Config.in
-+++ b/package/gnupg2/Config.in
-@@ -28,10 +28,10 @@ config BR2_PACKAGE_GNUPG2
- 
- if BR2_PACKAGE_GNUPG2
- 
--config BR2_PACKAGE_GNUPG2_GPGV2
--	bool "gpgv2"
-+config BR2_PACKAGE_GNUPG2_GPGV
-+	bool "gpgv"
- 	help
--	  gpgv2 is an OpenPGP signature verification tool.
-+	  gpgv is an OpenPGP signature verification tool.
- 
- 	  This program is actually a stripped-down version of gpg
- 	  which is only able to check signatures. It is somewhat
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 84152ee4f2c6..77058f63ed14 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q3/000413.html
+-sha1 36ee693d0b2ec529ecf53dd6d397cc38ba71c0a7  gnupg-2.2.0.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q3/000415.html
++sha1 5455373fd7208b787f319027de2464721cdd4413  gnupg-2.2.1.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.0.tar.bz2.sig
+-sha256 d4514a0be0f7a1ff263193330019eb4b53c82f0f5e230af3c14df371271a45e6  gnupg-2.2.0.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.1.tar.bz2.sig
++sha256 34d70cd65b9c95f3f2f90a9f5c1e0b6a0fe039a8d685e2d66d69c33d1cbf62fb  gnupg-2.2.1.tar.bz2
 diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 0466ed633f25..f5fcb15e369b 100644
+index f5fcb15e369b..39bdee035e90 100644
 --- a/package/gnupg2/gnupg2.mk
 +++ b/package/gnupg2/gnupg2.mk
-@@ -12,9 +12,7 @@ GNUPG2_LICENSE_FILES = COPYING
- GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Keep the gpg2 binary name to avoid conflict with gnupg
- GNUPG2_CONF_OPTS = \
--	--enable-gpg-is-gpg2 \
- 	--disable-rpath --disable-regex --disable-doc \
- 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
- 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
-@@ -22,11 +20,11 @@ GNUPG2_CONF_OPTS = \
- 	--with-ksba-prefix=$(STAGING_DIR)/usr \
- 	--with-npth-prefix=$(STAGING_DIR)/usr
- 
--ifneq ($(BR2_PACKAGE_GNUPG2_GPGV2),y)
--define GNUPG2_REMOVE_GPGV2
--	rm -f $(TARGET_DIR)/usr/bin/gpgv2
-+ifneq ($(BR2_PACKAGE_GNUPG2_GPGV),y)
-+define GNUPG2_REMOVE_GPGV
-+	rm -f $(TARGET_DIR)/usr/bin/gpgv
- endef
--GNUPG2_POST_INSTALL_TARGET_HOOKS += GNUPG2_REMOVE_GPGV2
-+GNUPG2_POST_INSTALL_TARGET_HOOKS += GNUPG2_REMOVE_GPGV
- endif
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
+-GNUPG2_VERSION = 2.2.0
++GNUPG2_VERSION = 2.2.1
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
 2.14.2
