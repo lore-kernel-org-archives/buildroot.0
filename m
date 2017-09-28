@@ -1,27 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 23:27:23 +0200
-Subject: [Buildroot] [PATCH 1/1] ejabberd: Replace $(HOST_DIR) to /usr
-	in ERL path
-In-Reply-To: <20170925163431.24409-1-johan.oudinet@gmail.com> (Johan Oudinet's
- message of "Mon, 25 Sep 2017 18:34:31 +0200")
-References: <20170925163431.24409-1-johan.oudinet@gmail.com>
-Message-ID: <874lrmikec.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Sep 2017 23:26:33 +0200
+Subject: [Buildroot] [git commit] ejabberd: Replace $(HOST_DIR) to /usr in
+	ERL path
+Message-ID: <20170928212012.A52DF81143@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Johan" == Johan Oudinet <johan.oudinet@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e6156615ecfb59d71aa5875fc206e4f1da80aec5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Previously, it was working by luck. Buildroot has fixed its definition
- > of HOST_DIR and pkg-autotools.mk uses the classical /usr prefix. So,
- > fix this sed expression to correctly replace $(HOST_DIR) by /usr in ERL
- > path.
+Previously, it was working by luck. Buildroot has fixed its definition
+of HOST_DIR and pkg-autotools.mk uses the classical /usr prefix. So,
+fix this sed expression to correctly replace $(HOST_DIR) by /usr in ERL
+path.
 
- > Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ejabberd/ejabberd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index 9baa112..35a1027 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -36,9 +36,9 @@ define EJABBERD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) install -C $(@D)
+ endef
+ 
+-# Delete HOST_DIR prefix from ERL path in ejabberctl script.
++# Replace HOST_DIR prefix to /usr in ERL path of ejabberctl script.
+ define EJABBERD_FIX_EJABBERDCTL
+-	$(SED) 's,ERL=$(HOST_DIR),ERL=,' '$(TARGET_DIR)/usr/sbin/ejabberdctl'
++	$(SED) 's,ERL=$(HOST_DIR),ERL=/usr,' '$(TARGET_DIR)/usr/sbin/ejabberdctl'
+ endef
+ 
+ EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
