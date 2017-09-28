@@ -1,51 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Sep 2017 23:43:53 +0300
-Subject: [Buildroot] [PATCH 2/2] zsh: bump to version 5.4.2
-In-Reply-To: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
-References: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
-Message-ID: <9493704a4250d204236f37eebc1b07162ed0f80a.1506631433.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Sep 2017 22:54:01 +0200
+Subject: [Buildroot] [PATCH v2] iproute2: fix static build with uClibc
+In-Reply-To: <bfb13bad98d6d1680e521228b337ea0fae7d500e.1506622600.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 28 Sep 2017 21:16:40 +0300")
+References: <bfb13bad98d6d1680e521228b337ea0fae7d500e.1506622600.git.baruch@tkos.co.il>
+Message-ID: <878tgyilxy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream does not provide a .tar.xz archive for this release. Revert to
-.tar.gz.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/zsh/zsh.hash | 5 +++--
- package/zsh/zsh.mk   | 3 +--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Version 4.13 added a local definition of strlcpy(). This clashes with
+ > the uClibc provided one when linking statically. Add a patch that
+ > detects libc provided strlcpy(), and avoids the multiple definition.
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 9c6acf336ff3..3155a5f74d40 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,4 +1,5 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	67d3e5ed99de68340c16aef613b0ecf7	zsh-5.3.1.tar.xz
-+md5	dfe156fd69b0d8d1745ecf6d6e02e047	zsh-5.4.2.tar.gz
- # Calculated based on the hash above and after checking signature
--sha256	fc886cb2ade032d006da8322c09a7e92b2309177811428b121192d44832920da	zsh-5.3.1.tar.xz
-+# http://www.zsh.org/pub/zsh-5.4.2.tar.gz.asc
-+sha256	957bcdb2c57f64c02f673693ea5a7518ef24b6557aeb3a4ce222cefa6d74acc9	zsh-5.4.2.tar.gz
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 72de2c6b3ad9..bfd0a1a30ff2 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--ZSH_VERSION = 5.3.1
-+ZSH_VERSION = 5.4.2
- ZSH_SITE = http://www.zsh.org/pub
--ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
- ZSH_CONF_OPTS = --bindir=/bin
- ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
+ > Fixes:
+ > http://autobuild.buildroot.net/results/f34/f34684dcdb47938a3da8b00c8b29000cc23b4e3d/
+ > http://autobuild.buildroot.net/results/a01/a01c5775945f5ffe75451722b676fc93333a0f14/
+ > http://autobuild.buildroot.net/results/0ee/0eeab1a0ca943f9a035a0d458ddf9cc210bc87f4/
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: Fix order of strlcpy parameters in the patch as noted in upstream
+ >     review
+
+Committed, thanks.
+
 -- 
-2.14.2
+Bye, Peter Korsgaard
