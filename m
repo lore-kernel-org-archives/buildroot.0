@@ -1,9 +1,9 @@
 From: Bradford Barr <bradford@density.io>
-Date: Thu, 28 Sep 2017 19:50:42 -0400
-Subject: [Buildroot] [PATCH v2 1/2] tbb: new package
+Date: Thu, 28 Sep 2017 19:50:43 -0400
+Subject: [Buildroot] [PATCH v2 2/2] opencv3: add support for tbb
 In-Reply-To: <20170928235043.31891-1-bradford@density.io>
 References: <20170928235043.31891-1-bradford@density.io>
-Message-ID: <20170928235043.31891-2-bradford@density.io>
+Message-ID: <20170928235043.31891-3-bradford@density.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,167 +12,95 @@ To: buildroot@busybox.net
 
 From: bradford barr <bradford@density.io>
 
-Intel Threading Building Blocks (TBB), is a C++ library to help developers
-write highly parallelized applications. OpenCV uses it to accelerate some of
-it's more heavy weight procedures.
+This patchset adds support for tbb optimizations in opencv3.
 
 Signed-off-by: bradford barr <bradford@density.io>
 ---
- package/Config.in                    |  1 +
- package/tbb/0001-cross-compile.patch | 41 +++++++++++++++++++++++++++++
- package/tbb/Config.in                | 16 ++++++++++++
- package/tbb/tbb.hash                 |  2 ++
- package/tbb/tbb.mk                   | 50 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 110 insertions(+)
- create mode 100644 package/tbb/0001-cross-compile.patch
- create mode 100644 package/tbb/Config.in
- create mode 100644 package/tbb/tbb.hash
- create mode 100644 package/tbb/tbb.mk
+ package/opencv3/0001-tbb-debug.patch | 27 +++++++++++++++++++++++++++
+ package/opencv3/Config.in            |  6 ++++++
+ package/opencv3/opencv3.mk           | 12 ++++++++++--
+ 3 files changed, 43 insertions(+), 2 deletions(-)
+ create mode 100644 package/opencv3/0001-tbb-debug.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 1580a9e..7ea362e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1504,6 +1504,7 @@ endif
- 	source "package/skalibs/Config.in"
- 	source "package/sphinxbase/Config.in"
- 	source "package/startup-notification/Config.in"
-+	source "package/tbb/Config.in"
- 	source "package/tinycbor/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-diff --git a/package/tbb/0001-cross-compile.patch b/package/tbb/0001-cross-compile.patch
+diff --git a/package/opencv3/0001-tbb-debug.patch b/package/opencv3/0001-tbb-debug.patch
 new file mode 100644
-index 0000000..7c57603
+index 0000000..808483d
 --- /dev/null
-+++ b/package/tbb/0001-cross-compile.patch
-@@ -0,0 +1,41 @@
-+Author: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
++++ b/package/opencv3/0001-tbb-debug.patch
+@@ -0,0 +1,27 @@
++From a56d7592f0f2f63a84e2159171a784026cc99986 Mon Sep 17 00:00:00 2001
++From: bradford barr <bradford@density.io>
++Date: Thu, 28 Sep 2017 17:31:41 -0400
++Subject: [PATCH] TBB Debug Release
 +
-+Upstream-Status: unsuitable
++OpenCV fails to detect tbb on a debug build if the platform has only installed
++debug libraries.  This PR adds an additional check to the tbb detect logic for
++systems that only install tbb debug and not both tbb debug and release.
 +
 +Signed-off-by: bradford barr <bradford@density.io>
 +---
-+ build/linux.gcc.inc |    5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
++ cmake/OpenCVDetectTBB.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+Index: tbb2017_20170118oss/build/linux.gcc.inc
-+===================================================================
-+--- tbb2017_20170118oss.orig/build/linux.gcc.inc
-++++ tbb2017_20170118oss/build/linux.gcc.inc
-+@@ -32,8 +32,9 @@ DYLIB_KEY = -shared
-+ EXPORT_KEY = -Wl,--version-script,
-+ LIBDL = -ldl
-+ 
-+-CPLUS = g++
-+-CONLY = gcc
-++CPLUS = $(CXX)
-++CONLY = $(CC)
-++CPLUS_FLAGS = $(CXXFLAGS)
-+ LIB_LINK_FLAGS = $(DYLIB_KEY) -Wl,-soname=$(BUILDING_LIBRARY)
-+ LIBS += -lpthread -lrt
-+ LINK_FLAGS = -Wl,-rpath-link=. -rdynamic
-+Index: tbb2017_20170118oss/build/linux.clang.inc
-+===================================================================
-+--- tbb2017_20170118oss.orig/build/linux.clang.inc
-++++ tbb2017_20170118oss/build/linux.clang.inc
-+@@ -31,8 +31,9 @@ DYLIB_KEY = -shared
-+ EXPORT_KEY = -Wl,--version-script,
-+ LIBDL = -ldl
-+ 
-+-CPLUS = clang++
-+-CONLY = clang
-++CPLUS = $(CXX)
-++CONLY = $(CC)
-++CPLUS_FLAGS = $(CXXFLAGS)
-+ LIB_LINK_FLAGS = $(DYLIB_KEY) -Wl,-soname=$(BUILDING_LIBRARY)
-+ LIBS += -lpthread -lrt
-+ LINK_FLAGS = -Wl,-rpath-link=. -rdynamic
-diff --git a/package/tbb/Config.in b/package/tbb/Config.in
-new file mode 100644
-index 0000000..eda1f09
---- /dev/null
-+++ b/package/tbb/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TBB
-+	bool "tbb"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
++diff --git a/cmake/OpenCVDetectTBB.cmake b/cmake/OpenCVDetectTBB.cmake
++index 426487a88cc..9417a53dd98 100644
++--- a/cmake/OpenCVDetectTBB.cmake
+++++ b/cmake/OpenCVDetectTBB.cmake
++@@ -45,7 +45,7 @@ function(ocv_tbb_env_guess _found)
++   find_library(TBB_ENV_LIB NAMES "tbb")
++   find_library(TBB_ENV_LIB_DEBUG NAMES "tbb_debug" PATHS ENV LIBRARY_PATH ENV LD_LIBRARY_PATH NO_DEFAULT_PATH)
++   find_library(TBB_ENV_LIB_DEBUG NAMES "tbb_debug")
++-  if (TBB_ENV_INCLUDE AND TBB_ENV_LIB)
+++  if (TBB_ENV_INCLUDE AND (TBB_ENV_LIB OR TBB_ENV_LIB_DEBUG))
++     ocv_tbb_verify()
++     ocv_tbb_read_version("${TBB_ENV_INCLUDE}")
++     add_library(tbb UNKNOWN IMPORTED)
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 2214ee8..07613e8 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -307,6 +307,12 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
+ 	help
+ 	  Use shared libpng from the target system.
+ 
++config BR2_PACKAGE_OPENCV3_WITH_TBB
++	bool "tbb support"
++	select BR2_PACKAGE_TBB
 +	help
-+	  Intel(R) Threading Building Blocks (Intel(R) TBB) lets you
-+	  easily write parallel C++ programs that take full advantage
-+	  of multicore performance, that are portable, composable and
-+	  have future-proof scalability.
++	  Use build libtbb from OpenCV3.
 +
-+	  https://www.threadingbuildingblocks.org/
-+
-+comment "tbb needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
-new file mode 100644
-index 0000000..2a3cd6e
---- /dev/null
-+++ b/package/tbb/tbb.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c6462217d4ecef2b44fce63cfdf31f9db4f6ff493869899d497a5aef68b05fc5  tbb-2018_U1.tar.gz
-diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
-new file mode 100644
-index 0000000..ad94a27
---- /dev/null
-+++ b/package/tbb/tbb.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# tbb
-+#
-+################################################################################
-+
-+TBB_VERSION = 2018_U1
-+TBB_SITE = $(call github,01org,tbb,$(TBB_VERSION))
-+TBB_INSTALL_STAGING = YES
-+TBB_LICENSE = Apache-2.0
-+TBB_LICENSE_FILES = LICENSE
-+
-+TBB_SO_VERSION = 2
-+TBB_LIBS = libtbb libtbbmalloc libtbbmalloc_proxy
-+
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+TBB_BIN_PATH = $(@D)/build/linux_*_debug
+ config BR2_PACKAGE_OPENCV3_WITH_TIFF
+ 	bool "tiff support"
+ 	select BR2_PACKAGE_TIFF
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3a7c3f4..1b3de46 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -133,8 +133,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_WITH_DYNAMIC_IPP=OFF \
+ 	-DWITH_INTELPERC=OFF \
+ 	-DWITH_IPP=OFF \
+-	-DWITH_IPP_A=OFF \
+-	-DWITH_TBB=OFF
++	-DWITH_IPP_A=OFF
+ 
+ # Smartek stuff
+ OPENCV3_CONF_OPTS += -DWITH_GIGEAPI=OFF
+@@ -288,6 +287,15 @@ OPENCV3_CONF_OPTS += -DWITH_QT=5
+ OPENCV3_DEPENDENCIES += qt5base
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV3_WITH_TBB),y)
++OPENCV3_CONF_OPTS += \
++	-DWITH_TBB=ON \
++	-DTBB_ENV_INCLUDE=$(STAGING_DIR)/usr/include/tbb
++OPENCV3_DEPENDENCIES += tbb
 +else
-+TBB_BIN_PATH = $(@D)/build/linux_*_release
++OPENCV3_CONF_OPTS += -DWITH_TBB=OFF
 +endif
 +
-+define TBB_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) arch=$(BR2_ARCH) -C $(@D)
-+endef
-+
-+define TBB_INSTALL_LIBS
-+	$(foreach lib,$(TBB_LIBS),
-+		$(if $(BR2_ENABLE_DEBUG),
-+			$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib)_debug.so.$(TBB_SO_VERSION) \
-+				$(1)/usr/lib/$(lib)_debug.so.$(TBB_SO_VERSION) ;
-+			ln -sf $(lib)_debug.so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib)_debug.so
-+		,
-+			$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib).so.$(TBB_SO_VERSION) \
-+				$(1)/usr/lib/$(lib).so.$(TBB_SO_VERSION) ;
-+			ln -sf $(lib).so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib).so
-+		)
-+	)
-+endef
-+
-+define TBB_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/tbb
-+	cp -a $(@D)/include/* $(STAGING_DIR)/usr/include/tbb
-+	$(call TBB_INSTALL_LIBS,$(STAGING_DIR))
-+endef
-+
-+define TBB_INSTALL_TARGET_CMDS
-+	$(call TBB_INSTALL_LIBS,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_TIFF),y)
+ OPENCV3_CONF_OPTS += -DWITH_TIFF=ON
+ OPENCV3_DEPENDENCIES += tiff
 -- 
 2.9.3
