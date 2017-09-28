@@ -1,48 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Sep 2017 08:59:57 +0200
-Subject: [Buildroot] [PATCH 2/2] dash: enable line editting if libedit
- is selected.
-In-Reply-To: <816883822.11304783.1506543568981.JavaMail.zimbra@datacom.ind.br>
-References: <1506530514-27185-1-git-send-email-casantos@datacom.ind.br>
- <1506530514-27185-2-git-send-email-casantos@datacom.ind.br>
- <20170927211805.62bb4cfb@windsurf.lan>
- <816883822.11304783.1506543568981.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20170928085957.04978e60@windsurf.lan>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 28 Sep 2017 12:14:44 +0200
+Subject: [Buildroot] Package infrastructure for Go programs
+Message-ID: <CA+TH9VmgHZ5xxYXeO7dzqKObsz+X=v38XhcK34tY3Fp=DjDyig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello guys,
 
-On Wed, 27 Sep 2017 17:19:28 -0300 (BRT), Carlos Santos wrote:
+I was reading a thread [1] about a packaging infrastructure for Go
+software and I'm interested to revive it.
 
-> > This really looks like a "personal preference" configuration, that is
-> > more relevant in a custom rootfs overlay, no?  
-> 
-> This is the default behavior of BusyBox's shell, which is used in 98.73%
-> of the Buldroot installations, according to my statistics factory, so I
-> think we should use it by default.
+The most difficult objection to overcome is the fact that we should
+decompose software dependencies in the correspondent packages to be
+downloadable separately, but unfortunately with go software (or in
+general with any other software with fluid dependencies and package
+management) this is really not possible.
 
-Hum, OK.
+Go permits to define dependencies on the form of a git repository
+somewhere and this could change from a release to another. Moreover
+the git repository linked by a software could have nested dependencies
+that will be downloaded automatically by the go build system
+recursively.
+Dependencies are btw private to the software, downloaded in a nested
+folder (usually called "vendor") and cannot be shared easily with
+other software.
 
-> >> +ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> >> +DASH_DEPENDENCIES += libedit
-> >> +DASH_CONF_OPTS += --with-libedit
-> >> +DASH_POST_INSTALL_TARGET_HOOKS += DASH_INSTALL_PROFILE  
-> > 
-> > What about --without-libedit in an else case ?  
-> 
-> In the case else there is no libedit to which not to link. :-)
+This is generally true with each software that uses a package
+management infrastructure. I can't think of packaging any modern php
+software in buildroot cause the intricacies of dependency management
+added by composer. Using composer in php offers no easy way to share a
+dependency with another php project btw.
 
-We always try to explicitly disable features, so that configure scripts
-don't misdetect a system-installed libedit for example.
+Indeed, some buildroot software written in Go (like flannel) already
+escapes [2] this rule.
 
-Best regards,
+So in the end, it's feasible for software with an internal package
+management and download mechanism to be in buildroot or should we
+leave them out and so the package infrastructure?
 
-Thomas
+Thanks for your insights!
+
+
+Sincerely, Angelo
+
+
+[1] http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-8-RFC-Adding-a-Go-package-infrastructure-td124596.html
+
+[2] From the build log for flannel:
+github.com/coreos/flannel/Godeps/_workspace/src/golang.org/x/net/context
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/coreos/go-iptables/iptables
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awserr
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/vaughan0/go-ini
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/endpoints
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awsutil
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/protocol/query/queryutil
+github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/protocol/xml/xmlutil
+[...]
+In this case flannel doesn't download anything only because the
+dependencies are pre-downloaded and included in the release archive,
+but this still conflict with the buildroot policies.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Profile: http://it.linkedin.com/in/compagnucciangelo
