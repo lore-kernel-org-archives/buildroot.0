@@ -1,46 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 22:13:36 +0200
-Subject: [Buildroot] [git commit] evemu: bump version to 2.7.0
-Message-ID: <20170928200649.3134E807B6@busybox.osuosl.org>
+Date: Thu, 28 Sep 2017 22:09:38 +0200
+Subject: [Buildroot] [git commit] orangepi_zero: bump u-boot to 2017.09
+Message-ID: <20170928200648.E96D980ABD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e935f3e80597e78f5189bd702c371190a8e11c0
+commit: https://git.buildroot.net/buildroot/commit/?id=10ee8c88f31ff94f6de32239740aab880736446c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See [1] for details.
-
-[1] https://lists.freedesktop.org/archives/input-tools/2017-September/001416.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/evemu/evemu.hash | 4 ++--
- package/evemu/evemu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/orangepi_zero_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
-index b5f0bf5..7d45eb3 100644
---- a/package/evemu/evemu.hash
-+++ b/package/evemu/evemu.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256 ed81dd4552ffeb92c346b47e56b249c67f1cb37d5b31fc073ea0ad4858ae3dcc  evemu-2.6.0.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2017-September/001416.html
-+sha256 78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379 evemu-2.7.0.tar.xz
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index fba4521..02e5abd 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EVEMU_VERSION = 2.6.0
-+EVEMU_VERSION = 2.7.0
- EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPL-3.0 (library), GPL-3.0 (tools)
+diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
+index c21ea50..c96d972 100644
+--- a/configs/orangepi_zero_defconfig
++++ b/configs/orangepi_zero_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
