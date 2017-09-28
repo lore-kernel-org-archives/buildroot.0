@@ -1,38 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 22:23:22 +0200
-Subject: [Buildroot] [git commit] package/openobex: disable doc build
-Message-ID: <20170928201606.6A347810DE@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 28 Sep 2017 23:43:52 +0300
+Subject: [Buildroot] [PATCH 1/2] zsh: disable NIS support
+Message-ID: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=647490012a64c7b497e129bc8db48d25e19a630e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The configure test for NIS and NIS+ looks for the ypcat and nisls host
+utilities, respectively. This is not compatible with cross compile.
+Disable both unconditionally.
 
-Openobex would need the host variant of xmlint (provided by host-
-libxml2) to build the documentation.
-To avoid this dependency we disable the build of the documentation.
+Fixes:
+http://autobuild.buildroot.net/results/54c/54c9c5dff3df0a43573b03896cb0629fcae08478/
+http://autobuild.buildroot.net/results/c8e/c8e30a1eb6e77ae76292b6a01bede5abb2b1b7b7/
 
-Fixes
-http://autobuild.buildroot.net/results/668/668ffb15f8c4faf0f4c462488dbb70b61386d465/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Phil Eichinger <phil.eichinger@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/openobex/openobex.mk | 1 +
+ package/zsh/zsh.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
-index d9d4db5..ea41f65 100644
---- a/package/openobex/openobex.mk
-+++ b/package/openobex/openobex.mk
-@@ -13,6 +13,7 @@ OPENOBEX_LICENSE = GPL-2.0+/LGPL-2.1+
- OPENOBEX_LICENSE_FILES = COPYING COPYING.LIB
- OPENOBEX_DEPENDENCIES = host-pkgconf
- OPENOBEX_INSTALL_STAGING = YES
-+OPENOBEX_CONF_OPTS = -DBUILD_DOCUMENTATION=OFF
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 779114e5ea38..72de2c6b3ad9 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -9,6 +9,7 @@ ZSH_SITE = http://www.zsh.org/pub
+ ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
+ ZSH_CONF_OPTS = --bindir=/bin
++ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
  
- ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
- OPENOBEX_DEPENDENCIES += bluez_utils
+-- 
+2.14.2
