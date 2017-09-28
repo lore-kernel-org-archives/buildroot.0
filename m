@@ -1,139 +1,80 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Sep 2017 21:16:40 +0300
-Subject: [Buildroot] [PATCH v2] iproute2: fix static build with uClibc
-Message-ID: <bfb13bad98d6d1680e521228b337ea0fae7d500e.1506622600.git.baruch@tkos.co.il>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 28 Sep 2017 11:18:51 -0700
+Subject: [Buildroot] [PATCH] pdbg: bump version to latest
+In-Reply-To: <20170927021547.19421-1-joel@jms.id.au>
+References: <20170927021547.19421-1-joel@jms.id.au>
+Message-ID: <CAKmqyKODhJeyrG3kTXcLjx_NvHKNdmJnzM6k=HkDL1MfrMWO1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 4.13 added a local definition of strlcpy(). This clashes with
-the uClibc provided one when linking statically. Add a patch that
-detects libc provided strlcpy(), and avoids the multiple definition.
+On Tue, Sep 26, 2017 at 7:15 PM, Joel Stanley <joel@jms.id.au> wrote:
+> I got this error when attempting to build:
+>
+>  aclocal: error: couldn't open directory 'm4': No such file or directory
 
-Fixes:
-http://autobuild.buildroot.net/results/f34/f34684dcdb47938a3da8b00c8b29000cc23b4e3d/
-http://autobuild.buildroot.net/results/a01/a01c5775945f5ffe75451722b676fc93333a0f14/
-http://autobuild.buildroot.net/results/0ee/0eeab1a0ca943f9a035a0d458ddf9cc210bc87f4/
+When do you get this error?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Fix order of strlcpy parameters in the patch as noted in upstream
-    review
----
- .../0003-lib-fix-multiple-strlcpy-definition.patch | 103 +++++++++++++++++++++
- 1 file changed, 103 insertions(+)
- create mode 100644 package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch
+>
+> So we now have the post patch hook to ensure the m4 directory is
+> present.
 
-diff --git a/package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch b/package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch
-new file mode 100644
-index 000000000000..05e9c38084ac
---- /dev/null
-+++ b/package/iproute2/0003-lib-fix-multiple-strlcpy-definition.patch
-@@ -0,0 +1,103 @@
-+From 5b55bbe48a29cf6a72cef9f424835f6244e66351 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 26 Sep 2017 13:45:21 +0300
-+Subject: [PATCH] lib: fix multiple strlcpy definition
-+
-+Some C libraries, like uClibc and musl, provide BSD compatible
-+strlcpy(). Add check_strlcpy() to configure, and avoid defining strlcpy
-+and strlcat when the C library provides them.
-+
-+This fixes the following static link error:
-+
-+.../sysroot/usr/lib/libc.a(strlcpy.os): In function `strlcpy':
-+strlcpy.c:(.text+0x0): multiple definition of `strlcpy'
-+../lib/libutil.a(utils.o):utils.c:(.text+0x1ddc): first defined here
-+collect2: error: ld returned 1 exit status
-+
-+[baruch: backported from upstream submission to 4.13]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://patchwork.ozlabs.org/patch/819705/
-+---
-+ configure    | 24 ++++++++++++++++++++++++
-+ lib/Makefile |  4 ++++
-+ lib/utils.c  |  2 ++
-+ 3 files changed, 30 insertions(+)
-+
-+diff --git a/configure b/configure
-+index 88cbdb825689..4964b998059e 100755
-+--- a/configure
-++++ b/configure
-+@@ -325,6 +325,27 @@ EOF
-+     rm -f $TMPDIR/dbtest.c $TMPDIR/dbtest
-+ }
-+ 
-++check_strlcpy()
-++{
-++    cat >$TMPDIR/strtest.c <<EOF
-++#include <string.h>
-++int main(int argc, char **argv) {
-++	char dst[10];
-++	strlcpy(dst, "test", sizeof(dst));
-++	return 0;
-++}
-++EOF
-++    $CC -I$INCLUDE -o $TMPDIR/strtest $TMPDIR/strtest.c >/dev/null 2>&1
-++    if [ $? -eq 0 ]
-++    then
-++	echo "no"
-++    else
-++	echo "NEED_STRLCPY:=y" >>Config
-++	echo "yes"
-++    fi
-++    rm -f $TMPDIR/strtest.c $TMPDIR/strtest
-++}
-++
-+ quiet_config()
-+ {
-+ 	cat <<EOF
-+@@ -396,6 +417,9 @@ check_mnl
-+ echo -n "Berkeley DB: "
-+ check_berkeley_db
-+ 
-++echo -n "need for strlcpy: "
-++check_strlcpy
-++
-+ echo
-+ echo -n "docs:"
-+ check_docs
-+diff --git a/lib/Makefile b/lib/Makefile
-+index b7b1d5685b94..227c8211786b 100644
-+--- a/lib/Makefile
-++++ b/lib/Makefile
-+@@ -12,6 +12,10 @@ ifeq ($(HAVE_MNL),y)
-+ 	CFLAGS += -DHAVE_LIBMNL $(shell $(PKG_CONFIG) libmnl --cflags)
-+ endif
-+ 
-++ifeq ($(NEED_STRLCPY),y)
-++	CFLAGS += -DNEED_STRLCPY
-++endif
-++
-+ CFLAGS += -fPIC
-+ 
-+ UTILOBJ = utils.o rt_names.o ll_types.o ll_proto.o ll_addr.o \
-+diff --git a/lib/utils.c b/lib/utils.c
-+index 330ab073c206..f53dacae2e1f 100644
-+--- a/lib/utils.c
-++++ b/lib/utils.c
-+@@ -1231,6 +1231,7 @@ int get_real_family(int rtm_type, int rtm_family)
-+ 	return rtm_family;
-+ }
-+ 
-++#ifdef NEED_STRLCPY
-+ size_t strlcpy(char *dst, const char *src, size_t size)
-+ {
-+ 	if (size) {
-+@@ -1249,3 +1250,4 @@ size_t strlcat(char *dst, const char *src, size_t size)
-+ 
-+ 	return dlen + strlcpy(dst + dlen, src, size - dlen);
-+ }
-++#endif
-+-- 
-+2.14.2
-+
--- 
-2.14.2
+Why is this up to the builder to create this directory? Shouldn't it
+be created by the packages make system?
+
+>
+> In addition, the package now sets a variable with the Git SHA1 so that
+> the binary contians the expected output for --version.
+
+Maybe that should be a separate patch?
+
+Thanks,
+Alistair
+
+>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+>  package/pdbg/pdbg.hash | 2 +-
+>  package/pdbg/pdbg.mk   | 9 ++++++++-
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+> index 16bf58024c61..2aec71817770 100644
+> --- a/package/pdbg/pdbg.hash
+> +++ b/package/pdbg/pdbg.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
+> +sha256 e0b81fc65eb83692c5c07d7ae109882cefebf663444b7ea804d0544451c1a72f pdbg-77158819158d1d7053a737ac090d04fdfbfe9265.tar.gz
+> diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+> index 184de8650d37..0864a6de9cd8 100644
+> --- a/package/pdbg/pdbg.mk
+> +++ b/package/pdbg/pdbg.mk
+> @@ -4,10 +4,17 @@
+>  #
+>  ################################################################################
+>
+> -PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
+> +PDBG_VERSION = 77158819158d1d7053a737ac090d04fdfbfe9265
+>  PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
+>  PDBG_LICENSE = Apache-2.0
+>  PDBG_LICENSE_FILES = COPYING
+>  PDBG_AUTORECONF = YES
+>
+> +PDBG_MAKE_OPTS = "GIT_SHA1=\"${PDBG_VERSION}\""
+> +
+> +define PDBG_PATCH_M4
+> +       mkdir -p $(@D)/m4
+> +endef
+> +PDBG_POST_PATCH_HOOKS += PDBG_PATCH_M4
+> +
+>  $(eval $(autotools-package))
+> --
+> 2.14.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
