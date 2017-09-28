@@ -1,9 +1,10 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 28 Sep 2017 18:47:31 +0000
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.09-rc1
-In-Reply-To: <20170921182828.26985-1-didin@synopsys.com>
-References: <20170921182828.26985-1-didin@synopsys.com>
-Message-ID: <1506624449.3713.17.camel@synopsys.com>
+Date: Thu, 28 Sep 2017 18:50:40 +0000
+Subject: [Buildroot] [PATCH 2/2] toolchain: Add glibc support for ARCv2
+In-Reply-To: <20170914221446.13647-3-abrodkin@synopsys.com>
+References: <20170914221446.13647-1-abrodkin@synopsys.com>
+ <20170914221446.13647-3-abrodkin@synopsys.com>
+Message-ID: <1506624636.3713.20.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,33 @@ To: buildroot@busybox.net
 
 Hi Thomas, Arnout,
 
-On Thu, 2017-09-21 at 21:28 +0300, Evgeniy Didin wrote:
-> This commit bumps ARC toolchain to arc-2017.09-rc1.
+On Fri, 2017-09-15 at 01:14 +0300, Alexey Brodkin wrote:
+> Finally there's working ARC port of glibc thanks to Vineet and Cuper!
+> This port is based on pretty recent glibc's master branch and ARC
+> changes are being reviewed now in glibc's mailing list.
 > 
-> Now speaking about arc-2017.09 series it is built on top
-> of upstream GCC 7.1.1 and Binutils 2.29 so please expect
-> all kinds of breakages related to GCC 7.x as we saw earlier
-> with move from 4.8 to 6.x :)
+> Thus we again have to use sources from our GitHub but as soon as there's
+> a glibc release with our patches applied we'll switch to unpstream releases
+> and will drop our glibc GitHub repo alltogether.
 > 
-> Note patches for both GCC and Binutils were updated with
-> copies from corresponding mainline versions, i.e.
-> "package/gcc/7.2.0" and "package/binutils/2.29".
+> Note now we cut tags in glibc repo simultaneously with tags
+> in Binutils and GCC repos and so to make sure everything works in the best
+> way we plan to update glibc tag together with Binutils and GCC.
 > 
-> Please note that it is a release candidate and it might contain
-> some breakages, please don't use it for production builds.
+> Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
+> but we plan to fix it soonish so for now we make glibc intentionally
+> dependent on archs38.
 > 
-> !!This super commit rewrites older commit which bumped
-> !!arc toolchain to 2017.09-eng008 vesrion
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Cupertino Miranda <cmiranda@synopsys.com>
+> Cc: Vineet Gupta <vgupta@synopsys.com>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
 
-Is there a chance to get this one applied sometime soon?
-It would be good to have it run through autobuilder before
-we cut a final release. That way we'll be able to catch
-problems on RC stage.
+This patch was sitting in patchwork for 2 weeks now.
+If there're any complaints an suggestions why don't we merge it?
+
+I'd like to see how we ramp-up with glibc toolchain for ARC.
+That said once the patch is applied would be good to add
+a corresponding config for autobuilder.
 
 -Alexey
