@@ -1,41 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 23:26:33 +0200
-Subject: [Buildroot] [git commit] ejabberd: Replace $(HOST_DIR) to /usr in
-	ERL path
-Message-ID: <20170928212012.A52DF81143@busybox.osuosl.org>
+From: Bradford Barr <bradford@density.io>
+Date: Thu, 28 Sep 2017 19:50:41 -0400
+Subject: [Buildroot] [PATCH v2 0/2] TBB and OpenCV3
+Message-ID: <20170928235043.31891-1-bradford@density.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6156615ecfb59d71aa5875fc206e4f1da80aec5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: bradford barr <bradford@density.io>
 
-Previously, it was working by luck. Buildroot has fixed its definition
-of HOST_DIR and pkg-autotools.mk uses the classical /usr prefix. So,
-fix this sed expression to correctly replace $(HOST_DIR) by /usr in ERL
-path.
+Updated patches for tbb and tbb support in opencv3. The tbb build system isn't
+very friendly to cross compiling. The `arch=$(BR2_ARCH)' is mostly used by the
+build system to generate a build directory.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ejabberd/ejabberd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I pulled in the 0001-cross-compile.patch from yocto and added a signed-off by.
+I hope that's right. 
 
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-index 9baa112..35a1027 100644
---- a/package/ejabberd/ejabberd.mk
-+++ b/package/ejabberd/ejabberd.mk
-@@ -36,9 +36,9 @@ define EJABBERD_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) install -C $(@D)
- endef
- 
--# Delete HOST_DIR prefix from ERL path in ejabberctl script.
-+# Replace HOST_DIR prefix to /usr in ERL path of ejabberctl script.
- define EJABBERD_FIX_EJABBERDCTL
--	$(SED) 's,ERL=$(HOST_DIR),ERL=,' '$(TARGET_DIR)/usr/sbin/ejabberdctl'
-+	$(SED) 's,ERL=$(HOST_DIR),ERL=/usr,' '$(TARGET_DIR)/usr/sbin/ejabberdctl'
- endef
- 
- EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
+Running test-pkg against tbb helped me figure out that pretty much everything
+that uses glibc will compile cleanly.
+
+The tbb package only supplies dynamic libraries, no static libraries. It also
+does not create symlinks for the its libraries, those had to be generated
+manually.
+
+The `0001-tbb-debug.patch' for opencv3 has been submitted upstream. and can be
+found here[1].
+
+I hope I didn't miss anything this time around.
+
+[1]: https://github.com/opencv/opencv/pull/9743
+
+bradford barr (2):
+  tbb: new package
+  opencv3: add support for tbb
+
+ package/Config.in                    |  1 +
+ package/opencv3/0001-tbb-debug.patch | 27 +++++++++++++++++++
+ package/opencv3/Config.in            |  6 +++++
+ package/opencv3/opencv3.mk           | 12 +++++++--
+ package/tbb/0001-cross-compile.patch | 41 +++++++++++++++++++++++++++++
+ package/tbb/Config.in                | 16 ++++++++++++
+ package/tbb/tbb.hash                 |  2 ++
+ package/tbb/tbb.mk                   | 50 ++++++++++++++++++++++++++++++++++++
+ 8 files changed, 153 insertions(+), 2 deletions(-)
+ create mode 100644 package/opencv3/0001-tbb-debug.patch
+ create mode 100644 package/tbb/0001-cross-compile.patch
+ create mode 100644 package/tbb/Config.in
+ create mode 100644 package/tbb/tbb.hash
+ create mode 100644 package/tbb/tbb.mk
+
+-- 
+2.9.3
