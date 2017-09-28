@@ -1,95 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Sep 2017 21:31:41 +0200
-Subject: [Buildroot] [PATCH 1/1] nginx (S50nginx): Fix stop, reload,
-	restart.  Add force-reload.
-In-Reply-To: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
- (Thomas Claveirole's message of "Mon, 25 Sep 2017 15:20:29 +0200")
-References: <20170925132029.17356-1-thomas.claveirole@green-communications.fr>
-Message-ID: <87bmluk4bm.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 28 Sep 2017 22:43:33 +0300
+Subject: [Buildroot] [PATCH 1/2] gnupg2: don't preserve the old gpg2
+	executable name
+Message-ID: <1c0d8419ba2320d55a8522f022ec76db9d813529.1506627814.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Claveirole <thomas.claveirole@green-communications.fr> writes:
+Commit e82fadab236a (gnupg2: bump to version 2.2.0) added a configure
+option to keep the old 'gpg2' executable name to avoid conflict with the
+gnupg package. It turns out that gnupg depends on !BR2_PACKAGE_GNUPG2
+since commit 2cadb26e6d4 (gnupg: make gnupg and gnupg2 mutually
+exclusive). Drop this configure option.
 
- > Fix package/nginx/S50nginx:
- > * On stop, use start-stop-daemon -R 1 to wait for the nginx processes
- >   to actually stop.  This fixes a race condition with restart, where
- >   nginx fails to restart because start is called too early
- >   w.r.t. stop.  (This only works with Debian's start-stop-daemon,
- >   however BusyBox's start-stop-daemon does not fail when given -R; it
- >   just ignores the argument silently).
+Rename the config option that controls the removal of gpgv2, now gpgv,
+to match the new name. Add legacy config symbol handling.
 
- > * Implement reload with an actual reload instead of a restart.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ Config.in.legacy         |  8 ++++++++
+ package/gnupg2/Config.in |  6 +++---
+ package/gnupg2/gnupg2.mk | 10 ++++------
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
- > * Add force-reload.
-
- > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
- > ---
- >  package/nginx/S50nginx | 18 +++++++++++++-----
- >  1 file changed, 13 insertions(+), 5 deletions(-)
-
- > diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
- > index b2f8b80855..a854c651d1 100755
- > --- a/package/nginx/S50nginx
- > +++ b/package/nginx/S50nginx
- > @@ -3,23 +3,31 @@
- >  # Start/stop nginx
- >  #
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 748876880c36..69cbd04ad53a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.11"
  
- > +NGINX=/usr/sbin/nginx
- >  PIDFILE=/var/run/nginx.pid
++config BR2_PACKAGE_GNUPG2_GPGV2
++	bool "gnupg2 gpgv2 option removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_GNUPG2_GPGV
++	help
++	  The gpgv2 executable is now named gpgv. The config option
++	  has been renamed accordingly.
++
+ config BR2_PACKAGE_OPENOBEX_BLUEZ
+ 	bool "openobex bluez option removed"
+ 	select BR2_LEGACY
+diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
+index c28708965780..ef1817ef02dc 100644
+--- a/package/gnupg2/Config.in
++++ b/package/gnupg2/Config.in
+@@ -28,10 +28,10 @@ config BR2_PACKAGE_GNUPG2
  
- >  case "$1" in
- >    start)
- >  	echo "Starting nginx..."
- >  	mkdir -p /var/log/nginx /var/tmp/nginx
- > -	start-stop-daemon -S -x /usr/sbin/nginx -p $PIDFILE
- > +	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
- >  	;;
- >    stop)
- > -	printf "Stopping nginx..."
- > -	start-stop-daemon -K -o -p $PIDFILE
- > +	echo "Stopping nginx..."
- > +	# Use -R 1 to wait for nginx to actually stop.  Useful so
- > +	# restart has no race condition.  Note that BusyBox knows
- > +	# about -R but ignores it silently.
- > +	start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -R 1 -o
-
-So it only fixes something if the "big" start-stop-daemon is used. Even
-worse, if breaks it for busybox users that don't have
-CONFIG_FEATURE_START_STOP_DAEMON_FANCY enabled:
-
-start-stop-daemon: invalid option -- 'R'
-
-Perhaps a more pragmatic solution would be to simply add a sleep 1
-between stop and start in the restart case?
-
-
->  	;;
- > -  restart|reload)
- > +  reload|force-reload)
- > +	echo "Reloading nginx configuration..."
- > +	"$NGINX" -s reload
- > +	;;
- > +  restart)
- >  	"$0" stop
- >  	"$0" start
- >  	;;
- >    *)
- > -	echo "Usage: $0 {start|stop|restart}"
- > +	echo "Usage: $0 {start|stop|restart|reload|force-reload}"
- >  	exit 1
- >  esac
- > -- 
- > 2.14.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
+ if BR2_PACKAGE_GNUPG2
+ 
+-config BR2_PACKAGE_GNUPG2_GPGV2
+-	bool "gpgv2"
++config BR2_PACKAGE_GNUPG2_GPGV
++	bool "gpgv"
+ 	help
+-	  gpgv2 is an OpenPGP signature verification tool.
++	  gpgv is an OpenPGP signature verification tool.
+ 
+ 	  This program is actually a stripped-down version of gpg
+ 	  which is only able to check signatures. It is somewhat
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 0466ed633f25..f5fcb15e369b 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -12,9 +12,7 @@ GNUPG2_LICENSE_FILES = COPYING
+ GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
+ 
+-# Keep the gpg2 binary name to avoid conflict with gnupg
+ GNUPG2_CONF_OPTS = \
+-	--enable-gpg-is-gpg2 \
+ 	--disable-rpath --disable-regex --disable-doc \
+ 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
+ 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
+@@ -22,11 +20,11 @@ GNUPG2_CONF_OPTS = \
+ 	--with-ksba-prefix=$(STAGING_DIR)/usr \
+ 	--with-npth-prefix=$(STAGING_DIR)/usr
+ 
+-ifneq ($(BR2_PACKAGE_GNUPG2_GPGV2),y)
+-define GNUPG2_REMOVE_GPGV2
+-	rm -f $(TARGET_DIR)/usr/bin/gpgv2
++ifneq ($(BR2_PACKAGE_GNUPG2_GPGV),y)
++define GNUPG2_REMOVE_GPGV
++	rm -f $(TARGET_DIR)/usr/bin/gpgv
+ endef
+-GNUPG2_POST_INSTALL_TARGET_HOOKS += GNUPG2_REMOVE_GPGV2
++GNUPG2_POST_INSTALL_TARGET_HOOKS += GNUPG2_REMOVE_GPGV
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
 -- 
-Bye, Peter Korsgaard
+2.14.2
