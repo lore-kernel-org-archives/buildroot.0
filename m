@@ -1,31 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Sep 2017 22:01:54 +0200
-Subject: [Buildroot] [PATCH] board: icorem6: Add qt5 and gst1 support
-In-Reply-To: <1506712311-10613-1-git-send-email-chakra.divi@openedev.com>
-References: <1506712311-10613-1-git-send-email-chakra.divi@openedev.com>
-Message-ID: <20170929220154.21a7295f@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Sep 2017 22:34:29 +0200
+Subject: [Buildroot] [PATCH] configs: nexbox_a95x_defconfig: bump to kernel
+	4.13.4
+Message-ID: <20170929203429.17341-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/nexbox_a95x_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat, 30 Sep 2017 00:41:51 +0530, Chakra Divi wrote:
-
->  engicam_imx6qdl_icore_defconfig: *defconfig
->  engicam_imx6qdl_icore_qt5_defconfig: *defconfig
-> +engicam_imx6qdl_icore_qt5_gst1_defconfig: *defconfig
-
-I clearly don't think we want gazillions of defconfigs for the same
-board. So please merge this into the qt5 defconfig, instead of adding a
-new one.
-
-Best regards,
-
-Thomas
+diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+index 40805662ff..5fc009940f 100644
+--- a/configs/nexbox_a95x_defconfig
++++ b/configs/nexbox_a95x_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-s905x-nexbox-a95x"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
