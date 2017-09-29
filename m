@@ -1,106 +1,96 @@
-From: Bradford Barr <bradford@density.io>
-Date: Thu, 28 Sep 2017 19:50:43 -0400
-Subject: [Buildroot] [PATCH v2 2/2] opencv3: add support for tbb
-In-Reply-To: <20170928235043.31891-1-bradford@density.io>
-References: <20170928235043.31891-1-bradford@density.io>
-Message-ID: <20170928235043.31891-3-bradford@density.io>
+From: Joel Stanley <joel@jms.id.au>
+Date: Fri, 29 Sep 2017 11:04:48 +1000
+Subject: [Buildroot] [PATCH] pdbg: bump version to latest
+In-Reply-To: <4755311.maSrUhusWP@new-mexico>
+References: <20170927021547.19421-1-joel@jms.id.au>
+ <CAKmqyKODhJeyrG3kTXcLjx_NvHKNdmJnzM6k=HkDL1MfrMWO1g@mail.gmail.com>
+ <4755311.maSrUhusWP@new-mexico>
+Message-ID: <CACPK8XeA296LonSxF8WebncZwdfdZp1_yCT4xDO0hVd-WDiuVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: bradford barr <bradford@density.io>
+On Fri, Sep 29, 2017 at 9:51 AM, Alistair Popple <alistair@popple.id.au> wrote:
+> On Thu, 28 Sep 2017 11:18:51 AM Alistair Francis wrote:
+>> On Tue, Sep 26, 2017 at 7:15 PM, Joel Stanley <joel@jms.id.au> wrote:
+>> > I got this error when attempting to build:
+>> >
+>> >  aclocal: error: couldn't open directory 'm4': No such file or directory
+>>
+>> When do you get this error?
+>>
+>> >
+>> > So we now have the post patch hook to ensure the m4 directory is
+>> > present.
+>>
+>> Why is this up to the builder to create this directory? Shouldn't it
+>> be created by the packages make system?
+>
+> I haven't hit this issue myself (although I haven't built the package with
+> buildroot and it's a while since I bootstrapped), but it seems reasonable
+> to me if it's a problem with the pdbg build process we should just fix it
+> there (if there's a patch I've missed let me know).
+>
+> Any ideas why we only seem to hit this during a buildroot build? Is it just
+> something broken on the pdbg side or is it a bit more subtle?
 
-This patchset adds support for tbb optimizations in opencv3.
+When I do an autoreconf on my Ubuntu system it has a warning, but the
+build continues:
 
-Signed-off-by: bradford barr <bradford@density.io>
----
- package/opencv3/0001-tbb-debug.patch | 27 +++++++++++++++++++++++++++
- package/opencv3/Config.in            |  6 ++++++
- package/opencv3/opencv3.mk           | 12 ++++++++++--
- 3 files changed, 43 insertions(+), 2 deletions(-)
- create mode 100644 package/opencv3/0001-tbb-debug.patch
+$ autoreconf  -i
+aclocal: warning: couldn't open directory 'm4': No such file or directory
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+configure.ac:5: installing './compile'
+configure.ac:6: installing './config.guess'
+configure.ac:6: installing './config.sub'
+configure.ac:2: installing './install-sh'
+configure.ac:2: installing './missing'
+Makefile.am: installing './depcomp'
+$ autoreconf  --version
+autoreconf (GNU Autoconf) 2.69
 
-diff --git a/package/opencv3/0001-tbb-debug.patch b/package/opencv3/0001-tbb-debug.patch
-new file mode 100644
-index 0000000..808483d
---- /dev/null
-+++ b/package/opencv3/0001-tbb-debug.patch
-@@ -0,0 +1,27 @@
-+From a56d7592f0f2f63a84e2159171a784026cc99986 Mon Sep 17 00:00:00 2001
-+From: bradford barr <bradford@density.io>
-+Date: Thu, 28 Sep 2017 17:31:41 -0400
-+Subject: [PATCH] TBB Debug Release
-+
-+OpenCV fails to detect tbb on a debug build if the platform has only installed
-+debug libraries.  This PR adds an additional check to the tbb detect logic for
-+systems that only install tbb debug and not both tbb debug and release.
-+
-+Signed-off-by: bradford barr <bradford@density.io>
-+---
-+ cmake/OpenCVDetectTBB.cmake | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/cmake/OpenCVDetectTBB.cmake b/cmake/OpenCVDetectTBB.cmake
-+index 426487a88cc..9417a53dd98 100644
-+--- a/cmake/OpenCVDetectTBB.cmake
-++++ b/cmake/OpenCVDetectTBB.cmake
-+@@ -45,7 +45,7 @@ function(ocv_tbb_env_guess _found)
-+   find_library(TBB_ENV_LIB NAMES "tbb")
-+   find_library(TBB_ENV_LIB_DEBUG NAMES "tbb_debug" PATHS ENV LIBRARY_PATH ENV LD_LIBRARY_PATH NO_DEFAULT_PATH)
-+   find_library(TBB_ENV_LIB_DEBUG NAMES "tbb_debug")
-+-  if (TBB_ENV_INCLUDE AND TBB_ENV_LIB)
-++  if (TBB_ENV_INCLUDE AND (TBB_ENV_LIB OR TBB_ENV_LIB_DEBUG))
-+     ocv_tbb_verify()
-+     ocv_tbb_read_version("${TBB_ENV_INCLUDE}")
-+     add_library(tbb UNKNOWN IMPORTED)
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 2214ee8..07613e8 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -307,6 +307,12 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
- 	help
- 	  Use shared libpng from the target system.
- 
-+config BR2_PACKAGE_OPENCV3_WITH_TBB
-+	bool "tbb support"
-+	select BR2_PACKAGE_TBB
-+	help
-+	  Use build libtbb from OpenCV3.
-+
- config BR2_PACKAGE_OPENCV3_WITH_TIFF
- 	bool "tiff support"
- 	select BR2_PACKAGE_TIFF
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 3a7c3f4..1b3de46 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -133,8 +133,7 @@ OPENCV3_CONF_OPTS += \
- 	-DBUILD_WITH_DYNAMIC_IPP=OFF \
- 	-DWITH_INTELPERC=OFF \
- 	-DWITH_IPP=OFF \
--	-DWITH_IPP_A=OFF \
--	-DWITH_TBB=OFF
-+	-DWITH_IPP_A=OFF
- 
- # Smartek stuff
- OPENCV3_CONF_OPTS += -DWITH_GIGEAPI=OFF
-@@ -288,6 +287,15 @@ OPENCV3_CONF_OPTS += -DWITH_QT=5
- OPENCV3_DEPENDENCIES += qt5base
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV3_WITH_TBB),y)
-+OPENCV3_CONF_OPTS += \
-+	-DWITH_TBB=ON \
-+	-DTBB_ENV_INCLUDE=$(STAGING_DIR)/usr/include/tbb
-+OPENCV3_DEPENDENCIES += tbb
-+else
-+OPENCV3_CONF_OPTS += -DWITH_TBB=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV3_WITH_TIFF),y)
- OPENCV3_CONF_OPTS += -DWITH_TIFF=ON
- OPENCV3_DEPENDENCIES += tiff
--- 
-2.9.3
+I spent some time searching for a solution, and it wasn't clear who's
+fault it was. There are a bunch of packages in buildroot that do a
+similar thing:
+
+$ git grep 'mkdir\(.*\)m4' package/
+package/atest/atest.mk: mkdir -p $(@D)/m4
+package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk:   mkdir -p $(@D)/m4
+package/gutenprint/gutenprint.mk:       mkdir -p $(@D)/m4local
+package/irqbalance/irqbalance.mk:       mkdir -p $(@D)/m4
+package/jamvm/jamvm.mk: mkdir -p $(@D)/m4
+package/janus-gateway/janus-gateway.mk: mkdir -p $(@D)/m4
+package/lcdapi/lcdapi.mk:       mkdir -p $(@D)/m4
+package/libedit/libedit.mk:     mkdir $(@D)/m4
+package/libiscsi/libiscsi.mk:   mkdir -p $(@D)/m4
+package/libseccomp/libseccomp.mk:       mkdir $(@D)/m4
+package/libsoundtouch/libsoundtouch.mk: mkdir -p $(@D)/config/m4
+package/ltrace/ltrace.mk:       mkdir -p $(@D)/config/m4
+package/openpgm/openpgm.mk:     mkdir -p $(@D)/$(OPENPGM_SUBDIR)/m4
+package/sysprof/sysprof.mk:     mkdir -p $(@D)/m4
+package/tesseract-ocr/tesseract-ocr.mk: mkdir -p $(@D)/m4
+
+So I copied this method for pdbg.
+
+>> >
+>> > In addition, the package now sets a variable with the Git SHA1 so that
+>> > the binary contians the expected output for --version.
+>>
+>> Maybe that should be a separate patch?
+
+I doubt that is useful. If we do it before bumping, it would do
+nothing. If we do it afterwards, there will be a commit where the
+version is not set.
+
+Cheers,
+
+Joel
