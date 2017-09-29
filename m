@@ -1,25 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Sep 2017 09:55:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/git: security bump to version
-	2.13.6
-In-Reply-To: <20170927171431.10409-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 27 Sep 2017 19:14:31 +0200")
-References: <20170927171431.10409-1-bernd.kuhls@t-online.de>
-Message-ID: <87ing2gcql.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Sep 2017 09:44:41 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] wandboard: genimage: Pass
+	an offset for the rootfs
+Message-ID: <20170929075623.80A1281153@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=183c367ddcca626dbbae5a5f6cd0e856d47184ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Release notes:
- > https://public-inbox.org/git/xmqqy3p29ekj.fsf at gitster.mtv.corp.google.com/
+Pass an offset of 1MB for the start of the rootfs.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Otherwise we get rootfs corruption when the bootloader is manually
+written to the SD card.
 
-FYI, I've bumped 2017.02.x to 2.12.5 to get the same fixes.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 82c1445fc473cf422a1283283acfa46f0df6cd84)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/wandboard/genimage.cfg | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
+index b23a91b..ad4a6a5 100644
+--- a/board/wandboard/genimage.cfg
++++ b/board/wandboard/genimage.cfg
+@@ -26,6 +26,7 @@ image sdcard.img {
+   partition rootfs {
+     partition-type = 0x83
+     image = "rootfs.ext4"
++    offset = 1M
+     size = 512M
+   }
+ }
