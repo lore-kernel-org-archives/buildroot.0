@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Sep 2017 21:52:24 +0200
-Subject: [Buildroot] [PATCH] lbase64: fix build
-In-Reply-To: <20170929165906.18974-1-francois.perrad@gadz.org>
-References: <20170929165906.18974-1-francois.perrad@gadz.org>
-Message-ID: <20170929215224.7798aa13@windsurf>
+Date: Fri, 29 Sep 2017 22:01:54 +0200
+Subject: [Buildroot] [PATCH] board: icorem6: Add qt5 and gst1 support
+In-Reply-To: <1506712311-10613-1-git-send-email-chakra.divi@openedev.com>
+References: <1506712311-10613-1-git-send-email-chakra.divi@openedev.com>
+Message-ID: <20170929220154.21a7295f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 29 Sep 2017 18:59:06 +0200, Francois Perrad wrote:
-> see http://autobuild.buildroot.net/results/b56/b567096cbfdb89b1895924051265c56204ffb512/
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Sat, 30 Sep 2017 00:41:51 +0530, Chakra Divi wrote:
 
-Come on, "fix build" is really, really too short of a commit log.
-Please extend this commit log with a decent explanation.
+>  engicam_imx6qdl_icore_defconfig: *defconfig
+>  engicam_imx6qdl_icore_qt5_defconfig: *defconfig
+> +engicam_imx6qdl_icore_qt5_gst1_defconfig: *defconfig
 
-Thanks!
+I clearly don't think we want gazillions of defconfigs for the same
+board. So please merge this into the qt5 defconfig, instead of adding a
+new one.
+
+Best regards,
 
 Thomas
 -- 
