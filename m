@@ -1,19 +1,26 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 29 Sep 2017 12:34:42 +0200
-Subject: [Buildroot] swig: javascript support broken for Node.js 8.5
-Message-ID: <CAGm1_ktfFJLqtA1MgOQ-U+Xt8QHHvf_AJxK_3U+drWO+2qEw3A@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 29 Sep 2017 11:27:52 +0000
+Subject: [Buildroot] [Bug 10351] glibc missing in rootfs
+In-Reply-To: <bug-10351-163@https.bugs.busybox.net/>
+References: <bug-10351-163@https.bugs.busybox.net/>
+Message-ID: <bug-10351-163-UuQWCaiHqO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The binding files created for JavaScript won't  work with the Node.js
->= 7.x (we have Node.js 8.5.0). On swig's GitHub page there is a
-related PR [1] fixing this issue. It is still unknown whether this fix
-will applied, so what do you think about integrating those two
-patches?
+https://bugs.busybox.net/show_bug.cgi?id=10351
 
-[1] https://github.com/swig/swig/pull/968
+--- Comment #3 from alex.theissen at me.com ---
+I was building it in a fresh docker container every time.
 
-Yegor
+But you are right. When I did a clean build the problem is gone. 
+
+I just replaced "make" with "make clean all"
+
+Thanks for your effords!
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
