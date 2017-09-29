@@ -1,32 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Sep 2017 10:03:27 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump
-	3.18.x version to 3.18.72
-Message-ID: <20170929075623.C39B681153@busybox.osuosl.org>
+Date: Fri, 29 Sep 2017 09:54:16 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] git: security bump to
+	version 2.12.5
+Message-ID: <20170929075623.ACA0C80FC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c0b7006bdc7ecdf1b8b1792346df7e48f2ab1c6
+commit: https://git.buildroot.net/buildroot/commit/?id=de4be78ba178211d0cc39e5b998da9e426b81cf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+
+Release notes:
+https://public-inbox.org/git/xmqqy3p29ekj.fsf at gitster.mtv.corp.google.com/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3a9d6e0..0d4f85a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "3.18.71"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.44"	if BR2_KERNEL_HEADERS_4_1
+diff --git a/package/git/git.hash b/package/git/git.hash
+index b657422..bc81f23 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 f8b8ac499034e9f6e44e67dd54351bc5654e228e4cd3b55f6f1c8e736c977ce6  git-2.12.4.tar.xz
++sha256 a8c3b3c7dd9202d0e80f824ceb74b4340b60aa8f1ec4ffdde3e982fa5ae16eab  git-2.12.5.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 94cf7a7..8ce29fc 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.12.4
++GIT_VERSION = 2.12.5
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
