@@ -1,31 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Sep 2017 22:34:29 +0200
-Subject: [Buildroot] [PATCH] configs: nexbox_a95x_defconfig: bump to kernel
-	4.13.4
-Message-ID: <20170929203429.17341-1-peter@korsgaard.com>
+From: Bradford Barr <bradford@density.io>
+Date: Fri, 29 Sep 2017 16:47:24 -0400
+Subject: [Buildroot] [PATCH 1/1] opencv3: enable pthreads parallel for loops
+Message-ID: <20170929204724.25507-1-bradford@density.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/nexbox_a95x_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From: bradford barr <bradford@density.io>
 
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-index 40805662ff..5fc009940f 100644
---- a/configs/nexbox_a95x_defconfig
-+++ b/configs/nexbox_a95x_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-s905x-nexbox-a95x"
+The WITH_PTHREADS_PF option was errantly categorized as a Windows only option.
+WITH_PTHREADS_PF actually enables a parallelization framework that utilizes
+pthreads to optimize some inner for loops of different OpenCV operations. This
+optimization is available on any platform that has pthreads.
+
+Signed-off-by: bradford barr <bradford@density.io>
+---
+ package/opencv3/opencv3.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3a7c3f4..cffe66b 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -166,7 +166,6 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_CSTRIPES=OFF \
+ 	-DWITH_DSHOW=OFF \
+ 	-DWITH_MSMF=OFF \
+-	-DWITH_PTHREADS_PF=OFF \
+ 	-DWITH_VFW=OFF \
+ 	-DWITH_VIDEOINPUT=OFF \
+ 	-DWITH_WIN32UI=OFF
 -- 
-2.11.0
+2.9.3
