@@ -1,46 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Sep 2017 16:04:05 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Sep 2017 16:15:21 +0200
 Subject: [Buildroot] [PATCH] package/flex: really disable flex program
-In-Reply-To: <20170929154902.058b9a48@windsurf.lan>
+In-Reply-To: <20170929140405.GH2899@scaer>
 References: <20170929134709.24221-1-yann.morin.1998@free.fr>
  <20170929154902.058b9a48@windsurf.lan>
-Message-ID: <20170929140405.GH2899@scaer>
+ <20170929140405.GH2899@scaer>
+Message-ID: <20170929161521.28827084@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-09-29 15:49 +0200, Thomas Petazzoni spake thusly:
-> Hello,
+Hello,
+
+On Fri, 29 Sep 2017 16:04:05 +0200, Yann E. MORIN wrote:
+
+> > This will also disable the build of flex the program in host-flex,
+> > which is not good: we want host-flex to install the flex program.  
 > 
-> On Fri, 29 Sep 2017 15:47:09 +0200, Yann E. MORIN wrote:
+> Right, I missed that in turn.
 > 
-> > diff --git a/package/flex/0003-build-never-build-the-flex-program.patch b/package/flex/0003-build-never-build-the-flex-program.patch
-> > new file mode 100644
-> > index 0000000000..550df179c9
-> > --- /dev/null
-> > +++ b/package/flex/0003-build-never-build-the-flex-program.patch
-> > @@ -0,0 +1,42 @@
-> > +From 097a4408b83a0bf8c584bbe4fe0239581b183732 Mon Sep 17 00:00:00 2001
-> > +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +Date: Fri, 29 Sep 2017 15:41:14 +0200
-> > +Subject: [PATCH] build: never build the flex program
-> 
-> This will also disable the build of flex the program in host-flex,
-> which is not good: we want host-flex to install the flex program.
+> I guess I'll have to early-port your flex patch instead... Sigh...
 
-Right, I missed that in turn.
+There's a reason why I added a --disable-something option in the first
+place :)
 
-I guess I'll have to early-port your flex patch instead... Sigh...
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
