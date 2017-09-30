@@ -1,40 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Sep 2017 08:52:59 +0200
-Subject: [Buildroot] [git commit] zsh: disable NIS support
-Message-ID: <20170930065311.453B380192@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 30 Sep 2017 10:06:01 +0200
+Subject: [Buildroot] Build failure in icu-59.1
+In-Reply-To: <15ed0ad5eee-c06-3fc9e@webjas-vab009.srv.aolmail.net>
+References: <15ed0ad5eee-c06-3fc9e@webjas-vab009.srv.aolmail.net>
+Message-ID: <9e80ea0d-e905-7d59-2f71-c6012be2d57a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a4f99a428f3c49aa80440325db33485777e8f69
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Ross,
 
-The configure test for NIS and NIS+ looks for the ypcat and nisls host
-utilities, respectively. This is not compatible with cross compilation.
-Disable both unconditionally.
+Le 30/09/2017 ? 04:46, grunpferd at netscape.net a ?crit?:
+> There seems to be some problem building?icu-59.1?that has crept in here.
+> 
+> This used to work nicely.
+> 
+> The following errors get reported during compiling?icu-59.1
+> 
+> 
+> make[2]: Entering directory
+> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/common'
+> make[2]: Nothing to be done for 'all'.
+> make[2]: Leaving directory
+> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/common'
+> /usr/bin/make[1]: Making `all' in `i18n'
+> make[2]: Entering directory
+> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/i18n'
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?fmtable_cnv.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?digitlst.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?choicfmt.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?datefmt.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?smpdtfmt.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?dtfmtsym.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?reldtfmt.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?udat.cpp
+> ??arm-buildroot-linux-gnueabihf-g++ ????... ?dtptngen.cpp
+> digitlst.cpp:67:24: fatal error: xlocale.h: No such file or directory
+> # ??include <xlocale.h>
+> ???????????????????????^
+> compilation terminated.
+> *** Failed compilation command follows:
+> ----------------------------------------------------------
+> /home/rfg/w/buildroot_p_gcc6_4.13/output/host/bin/arm-buildroot-linux-gnueabihf-g++
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FIL
+> E_OFFSET_BITS=64 -D_REENTRANT -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1
+> -DU_HAVE_STRTOD_L=1 -I. -I../common -DU_ATTRIBUTE_DEPRECATED= -DU_I
+> 18N_IMPLEMENTATION -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -O3 -pedantic -Wpointer-arith -Wwrite-strings -W
+> no-long-long -std=c++11 -c -DPIC -fPIC -o digitlst.o digitlst.cpp
+> --- ( rebuild with "/usr/bin/make VERBOSE=1 all" to show all parameters ) --------
+> ../config/mh-linux:53: recipe for target 'digitlst.o' failed
+> make[2]: *** [digitlst.o] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> make[2]: Leaving directory
+> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/i18n'
+> Makefile:147: recipe for target 'all-recursive' failed
+> make[1]: *** [all-recursive] Error 2
+> make[1]: Leaving directory
+> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source'
+> package/pkg-generic.mk:234: recipe for target
+> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/.stamp_built' failed
+> make: *** [/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/.stamp_built]
+> Error 2
+> 
+> 
+> So it looks like it can't locate xlocale.h.
+> 
+> 
+> I have attached the .config for this build.
 
-Fixes:
-http://autobuild.buildroot.net/results/54c/54c9c5dff3df0a43573b03896cb0629fcae08478/
-http://autobuild.buildroot.net/results/c8e/c8e30a1eb6e77ae76292b6a01bede5abb2b1b7b7/
+Thanks for the report!
 
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zsh/zsh.mk | 1 +
- 1 file changed, 1 insertion(+)
+glibc has been updated to 2.26 recently and the xlocale.h header file has been
+removed.
+See https://sourceware.org/glibc/wiki/Release/2.26#Packaging_Changes
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 779114e..72de2c6 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -9,6 +9,7 @@ ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
- ZSH_CONF_OPTS = --bindir=/bin
-+ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
- 
+I tested several packages with this new version but it's difficult to test every
+single packages.
+
+Can you report to the upstream project or if it's already fixed upstream, send
+the patch to the ml?
+
+Note: For now, toolchains used in autobuilders still use glibc 2.25. That's why
+we didn't noticed this issue before.
+
+Best regards,
+Romain
+
+> 
+> 
+> Regards,
+> 
+> Ross
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
