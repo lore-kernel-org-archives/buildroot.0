@@ -1,220 +1,70 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 30 Sep 2017 18:56:02 +0200
-Subject: [Buildroot] [PATCH 1/2] package/binutils: bump to 2.29.1
-Message-ID: <20170930165603.31828-1-romain.naour@gmail.com>
+Date: Sat, 30 Sep 2017 18:56:03 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gdb: bump to version 8.0.1
+In-Reply-To: <20170930165603.31828-1-romain.naour@gmail.com>
+References: <20170930165603.31828-1-romain.naour@gmail.com>
+Message-ID: <20170930165603.31828-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a problem between the git tag and the archive release content,
-they are not in sync [1].
-
-The version used to generate the archive allow us to remove the xtensa
-patches.
-
-Otherwise, see the announce [2].
-
-[1] https://sourceware.org/ml/binutils/2017-09/msg00337.html
-[2] https://sourceware.org/ml/binutils/2017-09/msg00311.html
+https://sourceware.org/ml/gdb-announce/2017/msg00004.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../binutils/{2.29 => 2.29.1}/0001-sh-conf.patch   |  0
- .../{2.29 => 2.29.1}/0002-ld-makefile.patch        |  0
- .../0003-check-ldrunpath-length.patch              |  0
- .../0004-add-sysroot-fix-from-bug-3049.patch       |  0
- .../0005-poison-system-directories.patch           |  0
- ...LINKER-BUG-.rofixup-section-size-mismatch.patch |  0
- ...a-ld-restore-old-section-sorting-behavior.patch | 48 ----------------------
- ...a-fix-memory-corruption-by-broken-sysregs.patch | 42 -------------------
- package/binutils/Config.in.host                    |  4 +-
- package/binutils/binutils.hash                     |  2 +-
- package/binutils/binutils.mk                       |  2 +-
- 11 files changed, 4 insertions(+), 94 deletions(-)
- rename package/binutils/{2.29 => 2.29.1}/0001-sh-conf.patch (100%)
- rename package/binutils/{2.29 => 2.29.1}/0002-ld-makefile.patch (100%)
- rename package/binutils/{2.29 => 2.29.1}/0003-check-ldrunpath-length.patch (100%)
- rename package/binutils/{2.29 => 2.29.1}/0004-add-sysroot-fix-from-bug-3049.patch (100%)
- rename package/binutils/{2.29 => 2.29.1}/0005-poison-system-directories.patch (100%)
- rename package/binutils/{2.29 => 2.29.1}/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch (100%)
- delete mode 100644 package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
- delete mode 100644 package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
+ .../0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch     | 0
+ .../0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch     | 0
+ package/gdb/{8.0 => 8.0.1}/0003-use-asm-sgidefs.h.patch                 | 0
+ .../0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch             | 0
+ package/gdb/Config.in.host                                              | 2 +-
+ package/gdb/gdb.hash                                                    | 2 +-
+ 6 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/gdb/{8.0 => 8.0.1}/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch (100%)
+ rename package/gdb/{8.0 => 8.0.1}/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch (100%)
+ rename package/gdb/{8.0 => 8.0.1}/0003-use-asm-sgidefs.h.patch (100%)
+ rename package/gdb/{8.0 => 8.0.1}/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch (100%)
 
-diff --git a/package/binutils/2.29/0001-sh-conf.patch b/package/binutils/2.29.1/0001-sh-conf.patch
+diff --git a/package/gdb/8.0/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/8.0.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
 similarity index 100%
-rename from package/binutils/2.29/0001-sh-conf.patch
-rename to package/binutils/2.29.1/0001-sh-conf.patch
-diff --git a/package/binutils/2.29/0002-ld-makefile.patch b/package/binutils/2.29.1/0002-ld-makefile.patch
+rename from package/gdb/8.0/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+rename to package/gdb/8.0.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+diff --git a/package/gdb/8.0/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/8.0.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
 similarity index 100%
-rename from package/binutils/2.29/0002-ld-makefile.patch
-rename to package/binutils/2.29.1/0002-ld-makefile.patch
-diff --git a/package/binutils/2.29/0003-check-ldrunpath-length.patch b/package/binutils/2.29.1/0003-check-ldrunpath-length.patch
+rename from package/gdb/8.0/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+rename to package/gdb/8.0.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+diff --git a/package/gdb/8.0/0003-use-asm-sgidefs.h.patch b/package/gdb/8.0.1/0003-use-asm-sgidefs.h.patch
 similarity index 100%
-rename from package/binutils/2.29/0003-check-ldrunpath-length.patch
-rename to package/binutils/2.29.1/0003-check-ldrunpath-length.patch
-diff --git a/package/binutils/2.29/0004-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.29.1/0004-add-sysroot-fix-from-bug-3049.patch
+rename from package/gdb/8.0/0003-use-asm-sgidefs.h.patch
+rename to package/gdb/8.0.1/0003-use-asm-sgidefs.h.patch
+diff --git a/package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch b/package/gdb/8.0.1/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
 similarity index 100%
-rename from package/binutils/2.29/0004-add-sysroot-fix-from-bug-3049.patch
-rename to package/binutils/2.29.1/0004-add-sysroot-fix-from-bug-3049.patch
-diff --git a/package/binutils/2.29/0005-poison-system-directories.patch b/package/binutils/2.29.1/0005-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/2.29/0005-poison-system-directories.patch
-rename to package/binutils/2.29.1/0005-poison-system-directories.patch
-diff --git a/package/binutils/2.29/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch b/package/binutils/2.29.1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-similarity index 100%
-rename from package/binutils/2.29/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-rename to package/binutils/2.29.1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-diff --git a/package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch b/package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
-deleted file mode 100644
-index b411837..0000000
---- a/package/binutils/2.29/0007-xtensa-ld-restore-old-section-sorting-behavior.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 3a399127ead1ba3c8b8d0b9e7206fce39311ee72 Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Wed, 2 Aug 2017 02:49:56 -0700
--Subject: [PATCH] xtensa: ld: restore old section sorting behavior
--
--With the recent change 535b785fb0c9 ("Don't compare boolean values
--against TRUE or FALSE") the following assertion is observed when
--linking with --sort-section,alignment option:
--
--  BFD (GNU Binutils) 2.29 assertion fail elf32-xtensa.c:3965
--
--It appears that xtensa linker only supported sorting sections by name,
--and the code that checks for the section sorting type in
--ld/emultempl/xtensaelf.em was not updated in the change bcaa7b3eb957
--("ld/"), that replaced boolean wildcard_spec::sorted with enumeration.
--
--Restore the original behavior of the section sorting code.
--
--ld/
--2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
--
--	* emultempl/xtensaelf.em
--	(xtensa_wild_group_interleave_callback): Only check for by_name
--	sorting.
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-----
--Backported from: 73d5923e480944e2d66bde8c59f4dff298ec57e3
--
-- ld/emultempl/xtensaelf.em | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/ld/emultempl/xtensaelf.em b/ld/emultempl/xtensaelf.em
--index 1447d526a25b..3827d91b6291 100644
----- a/ld/emultempl/xtensaelf.em
--+++ b/ld/emultempl/xtensaelf.em
--@@ -1432,7 +1432,7 @@ xtensa_wild_group_interleave_callback (lang_statement_union_type *statement)
-- 	  struct wildcard_list *l;
-- 	  for (l = w->section_list; l != NULL; l = l->next)
-- 	    {
---	      if (l->spec.sorted != none)
--+	      if (l->spec.sorted == by_name)
-- 		{
-- 		  no_reorder = TRUE;
-- 		  break;
---- 
--2.1.4
--
-diff --git a/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-deleted file mode 100644
-index 30103ee..0000000
---- a/package/binutils/2.29/0008-xtensa-fix-memory-corruption-by-broken-sysregs.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Wed, 2 Aug 2017 00:36:05 -0700
--Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
--
--In some xtensa configurations there may be system/user registers in
--xtensa-modules with negative index. ISA initialization for such config
--may clobber heap and result in program termination.
--Don't update lookup table entries for register with negative indices.
--They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
--change should not affect processing of valid assembly/binary code.
--
--bfd/
--2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
--
--	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
--	entries for sysregs with negative indices.
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-----
--Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
--
-- bfd/xtensa-isa.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
--index 8da75bea8109..8c6ee88fdeae 100644
----- a/bfd/xtensa-isa.c
--+++ b/bfd/xtensa-isa.c
--@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
--       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
--       is_user = sreg->is_user;
-- 
---      isa->sysreg_table[is_user][sreg->number] = n;
--+      if (sreg->number >= 0)
--+	isa->sysreg_table[is_user][sreg->number] = n;
--     }
-- 
--   /* Set up the interface lookup table.  */
---- 
--2.1.4
--
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 48d3ea1..bce1e91 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -16,7 +16,7 @@ config BR2_BINUTILS_VERSION_2_28_X
- 	bool "binutils 2.28.1"
- 
- config BR2_BINUTILS_VERSION_2_29_X
--	bool "binutils 2.29"
-+	bool "binutils 2.29.1"
- 
- endchoice
- 
-@@ -25,7 +25,7 @@ config BR2_BINUTILS_VERSION
- 	default "arc-2017.03"	if BR2_arc
- 	default "2.27"		if BR2_BINUTILS_VERSION_2_27_X
- 	default "2.28.1"	if BR2_BINUTILS_VERSION_2_28_X
--	default "2.29"		if BR2_BINUTILS_VERSION_2_29_X
-+	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
- 
- config BR2_BINUTILS_ENABLE_LTO
- 	bool
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 4630a26..6e35c5c 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -1,7 +1,7 @@
- # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
- sha512	cf276f84935312361a2ca077e04d0b469d23a3aed979d8ba5d92ea590904ffb2c2e7ed12cc842822bfc402836be86f479660cef3791aa62f3753d8a1a6f564cb  binutils-2.27.tar.bz2
- sha512	dc5b6872ae01c07c12d38f3bb7ead06effc6da3265ac872e2d9c6104304f89f85f2645b029a43f308a7938a7299b1928d385205d0a2245674a621649032a138d  binutils-2.28.1.tar.xz
--sha512  bb227c7af65133a61bbde8be4104a543f4185fce8c8e7be22c36d92d121d28b5413d42f18c7e987d035d6312c542d0e2aaca8930386a4ce26d7c9d7248145398  binutils-2.29.tar.xz
-+sha512  d748d22306477d60d921078804d21943248c23fca0707aac9b016a352c01c75ca69e82624ae37fb0bbd03af3b17088a94f60dfe1a86a7ff82e18ece3c24f0fd0  binutils-2.29.1.tar.xz
+rename from package/gdb/8.0/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+rename to package/gdb/8.0.1/0004-nat-linux-ptrace.c-add-missing-gdb_byte-cast.patch
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 93dfa67..3e59187 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -68,5 +68,5 @@ config BR2_GDB_VERSION
+ 	default "7.10.1"   if BR2_GDB_VERSION_7_10
+ 	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.12.1"   if BR2_GDB_VERSION_7_12
+-	default "8.0"      if BR2_GDB_VERSION_8_0
++	default "8.0.1"    if BR2_GDB_VERSION_8_0
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index a4fd8bc..d82aa1c 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -2,7 +2,7 @@
+ sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
+ sha512  f80ec6c8a0f0b54c8b945666e875809174402b7e121efb378ebac931a91f9a1cc0048568f8e2f42ae8ae2392ff8d144c2e51d41c7398935017450aaf29838360	gdb-7.11.1.tar.xz
+ sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7704251289cababbfaaf9e075550cdf741a54d6cd9ca3433d910efcd8	gdb-7.12.1.tar.xz
+-sha512  e4044bdd162cbf95044ec1eaa44d2fa62a33e051bdbbacbc97afd4dfb07bae1bea514381fc1966aede89d6796ef2377a15748a93d95e2ad494c8497db489e886	gdb-8.0.tar.xz
++sha512  5eb328910033f0918058be2f92caebf1e8dfc6caa3c730d99d621627e53de3c1b43761c2f683d53555893253c2f06768cbf56cdea051a3d291ffb6cfae87b5e1	gdb-8.0.1.tar.xz
  
  # Locally calculated (fetched from Github)
- sha512  07d5639e74eafe8fced259870c1a7dedee67c534573dda53fb78ee1ffeec9e17479fdde41dccd03b1cf0248023acbef7f66013398b2f722e4a8891ac680d1d16  binutils-arc-2017.03.tar.gz
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 768f084..34739d7 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -23,7 +23,7 @@ endif
- BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- ifeq ($(BINUTILS_VERSION),2.28.1)
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
--else ifeq ($(BINUTILS_VERSION),2.29)
-+else ifeq ($(BINUTILS_VERSION),2.29.1)
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
- else
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
+ sha512  8ec849a5ea1c16f104c51c4813c35ab229e460eef0025967673b87316f62b5171f05448cda018464914d43d2da50b2902eb7f9f060d0af1368a9db111f959668	gdb-arc-2017.03-gdb.tar.gz
 -- 
 2.9.5
