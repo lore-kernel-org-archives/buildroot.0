@@ -1,69 +1,50 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 30 Sep 2017 10:11:38 +0200
-Subject: [Buildroot] build failure netsniff-ng-0.6.3
-In-Reply-To: <15ed0b6bdb0-c09-38edf@webjas-vad019.srv.aolmail.net>
-References: <15ed0b6bdb0-c09-38edf@webjas-vad019.srv.aolmail.net>
-Message-ID: <f46ffca2-da09-7e70-5387-7aa220d65a69@smile.fr>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 30 Sep 2017 10:12:54 +0200
+Subject: [Buildroot] [PATCH] lbase64: fix build
+In-Reply-To: <20170929215224.7798aa13@windsurf>
+References: <20170929165906.18974-1-francois.perrad@gadz.org>
+ <20170929215224.7798aa13@windsurf>
+Message-ID: <CAB0FRsvSY3xZEWmaY1np9046L0t-x4KWQPTvjBBXJBa02aDS9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ross,
+2017-09-29 21:52 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Le 30/09/2017 ? 04:56, grunpferd at netscape.net a ?crit?:
-> The following compile errors occurred during building?netsniff-ng-0.6.3.
-> 
-> This used to work successfully previously. Using an internal toolchain ggc6 / glibc.
-> 
-> Changed to latest linux-4.13.4 kernel.?
-> 
-> The following compile errors get reported:
-> 
-> Building mausezahn:
-> ?CC ???str.c
-> ?CC ???die.c
-> ?CC ???dev.c
-> ?CC ???sock.c
-> ?CC ???link.c
-> ?CC ???sysctl.c
-> ?CC ???xmalloc.c
-> ?CC ???staging/layer1.c
-> ?CC ???staging/layer2.c
-> ?CC ???staging/layer3.c
-> ?CC ???staging/layer4.c
-> ?CC ???staging/hextools.c
-> ?CC ???staging/tools.c
-> staging/tools.c: In function ?get_ip6_range_count?:
-> staging/tools.c:485:10: error: ?UINT64_MAX? undeclared (first use in this function)
-> ??return UINT64_MAX;
-> ?????????^~~~~~~~~~
-> staging/tools.c:485:10: note: each undeclared identifier is reported only once
-> for each function it appears in
-> Makefile:184: recipe for target 'mausezahn/staging/tools.o' failed
-> make[1]: *** [mausezahn/staging/tools.o] Error 1
-> 
-> 
-> It looks that UINT64_MAX is not declared.
-> 
-> This was working fine recently. Using latest buildroot git master along with
-> latest linux-4.13.4.
+> Hello,
+>
+> On Fri, 29 Sep 2017 18:59:06 +0200, Francois Perrad wrote:
+> > see http://autobuild.buildroot.net/results/b56/
+> b567096cbfdb89b1895924051265c56204ffb512/
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Come on, "fix build" is really, really too short of a commit log.
+> Please extend this commit log with a decent explanation.
+>
+>
+There are 3 useful words in
+http://autobuild.buildroot.net/results/b56/b567096cbfdb89b1895924051265c56204ffb512/build-end.log
+:
+    "recompile with -fPIC"
 
-Missing stdint.h header in staging/tools.c ?
-Adding it fixes the issue.
+Fran?ois
 
-Best regards,
-Romain
-
-> 
-> Regards,
-> 
-> Ross
-> 
-> 
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170930/c262e0b0/attachment.html>
