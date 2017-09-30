@@ -1,8 +1,10 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat, 30 Sep 2017 20:13:09 -0300
-Subject: [Buildroot] [PATCH] syslinux: Use the host compiler to build
+Date: Sat, 30 Sep 2017 20:35:20 -0300
+Subject: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build
 	extlinux
-Message-ID: <20170930231309.17677-1-casantos@datacom.ind.br>
+In-Reply-To: <20170930231309.17677-1-casantos@datacom.ind.br>
+References: <20170930231309.17677-1-casantos@datacom.ind.br>
+Message-ID: <20170930233520.20143-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +15,10 @@ Like the utilities, it is meant to run on the host machine, hence must
 be built using the host toolchain.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+Changes v1->v2
+  - Patch for syslinux version 6.03 (the previous one was for the master
+    branch (syslinux-6.04-pre1).
 ---
 Tested with the following defconfig:
 
@@ -43,17 +49,17 @@ BR2_TARGET_SYSLINUX_EFI=y
 Notice that I did not actualy use a ts5x00 board, just used its
 defconfig as a base to create my configuration.
 ---
- ...-extlinux-Use-the-host-toolchain-to-build.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ ...-extlinux-Use-the-host-toolchain-to-build.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
  create mode 100644 boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch
 
 diff --git a/boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch b/boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch
 new file mode 100644
-index 0000000000..1ce484bd93
+index 0000000000..62675cf6cc
 --- /dev/null
 +++ b/boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch
-@@ -0,0 +1,60 @@
-+From 9497112ff28f87ca3c12ca2191e64cdacc5bf8d6 Mon Sep 17 00:00:00 2001
+@@ -0,0 +1,53 @@
++From 4df2e7c0ae84bfbdba0ed285c0664aa089b38b7e Mon Sep 17 00:00:00 2001
 +From: Carlos Santos <casantos@datacom.ind.br>
 +Date: Sat, 30 Sep 2017 19:49:55 -0300
 +Subject: [PATCH] extlinux: Use the host toolchain to build.
@@ -63,14 +69,14 @@ index 0000000000..1ce484bd93
 +
 +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 +---
-+ extlinux/Makefile | 13 ++++++-------
-+ 1 file changed, 6 insertions(+), 7 deletions(-)
++ extlinux/Makefile | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
 +
 +diff --git a/extlinux/Makefile b/extlinux/Makefile
-+index 1721ee54..5c4baa5a 100644
++index 02d1db51..5c4baa5a 100644
 +--- a/extlinux/Makefile
 ++++ b/extlinux/Makefile
-+@@ -18,16 +18,15 @@ include $(MAKEDIR)/syslinux.mk
++@@ -18,9 +18,9 @@ include $(MAKEDIR)/syslinux.mk
 + 
 + OPTFLAGS = -g -Os
 + INCLUDES = -I$(SRC) -I$(objdir) -I$(SRC)/../libinstaller
@@ -82,14 +88,7 @@ index 0000000000..1ce484bd93
 + 
 + SRCS     = main.c \
 + 	   mountinfo.c \
-+ 	   ../libinstaller/syslxmod.c \
-+ 	   ../libinstaller/syslxopt.c \
-+ 	   ../libinstaller/syslxcom.c \
-+-	   ../libinstaller/syslxrw.c \
-+ 	   ../libinstaller/setadv.c \
-+ 	   ../libinstaller/advio.c \
-+ 	   ../libinstaller/bootsect_bin.c \
-+@@ -53,16 +52,16 @@ spotless: clean
++@@ -52,16 +52,16 @@ spotless: clean
 + installer: extlinux
 + 
 + extlinux: $(OBJS)
