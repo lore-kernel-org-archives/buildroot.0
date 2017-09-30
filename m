@@ -1,42 +1,94 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 30 Sep 2017 13:45:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.6.0
-Message-ID: <1506775509-11865-1-git-send-email-martin@barkynet.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 30 Sep 2017 15:25:37 +0200
+Subject: [Buildroot] Build failure in icu-59.1
+In-Reply-To: <15ed2c71f0d-c04-477e6@webjas-vac064.srv.aolmail.net>
+References: <15ed2c71f0d-c04-477e6@webjas-vac064.srv.aolmail.net>
+Message-ID: <c79814ba-9f28-4468-60df-5c41dc4a4ccf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v8.6.0/
+Hi Ross,
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Please, keep the list in Cc.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index c1d1652..3cc77b2 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.5.0/SHASUMS256.txt
--sha256 e1cde5d8e5049e7e1b61aef128f26162059d885dc8cab5014bf5cbf693f75c3c  node-v8.5.0.tar.xz
-+# From http://nodejs.org/dist/v8.6.0/SHASUMS256.txt
-+sha256 b17071109238295b9f363b768afdff97a9f386203d4f080c91847ce76d4f7e93  node-v8.6.0.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index fe50393..c1bac35 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.5.0
-+NODEJS_VERSION = 8.6.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
--- 
-2.7.4
+Le 30/09/2017 ? 14:33, grunpferd at netscape.net a ?crit?:
+> 
+> G'day Romain,
+> 
+> ?
+>>>> glibc has been updated to 2.26 recently and the xlocale.h header file has been
+>>>> removed.
+>>>> See https://sourceware.org/glibc/wiki/Release/2.26#Packaging_Changes
+>>>>?
+>>>> I tested several packages with this new version but it's difficult to test every
+>>>> single packages.
+>>>?
+>>>> Can you report to the upstream project or if it's already fixed upstream, send
+>>>> the patch to the ml?
+>>>?
+>>> I have have lodged bug report with ICU project. As far as I can tell it has not
+>>> been fixed or reported.
+>>
+>>?http://bugs.icu-project.org/trac/ticket/13385
+> 
+>>>?
+>>> I think your analysis is correct, the advance to glibc 2.26 has flushed out this
+>>> problem.
+>>> How this gets fixed may depend on the ICU project that has icu 59.1 as their
+>>> latest release.
+>>> In the mean time buildroot might have to handle this by itself.
+> 
+>> glibc suggest to replace xlocale.h by locale.h.
+>> Can you send a patch doing so ?
+>>
+>> See http://nightly.buildroot.org/manual.html#submitting-patches
+> 
+> I have checked that using locale.h instead of xlocale.h does indeed fix the issue.
+> 
+> Not quite sure how to tackle the patch however!
+> 
+> Currently digitlst.cpp
+> 
+> uses:
+> #if U_USE_STRTOD_L
+> # if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN
+> # ??include <locale.h>
+> # else
+> # ??include <xlocale.h>
+> # endif
+> #endif
+> 
+> 
+> so I presume something like:
+> 
+> #if U_USE_STRTOD_L
+> # if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN?
+> ||??__GLIBC_PREREQ(2, 26)
+> # ??include <locale.h>
+> # else
+> # ??include <xlocale.h>
+> # endif
+> #endif
+> 
+> I am just not sure how to handle that GLIBC_2.26 part.
+> Can we use?__GLIBC_PREREQ(?maj, min)?
+> 
+> Keeping in mind that glibc <= 2.25 will work while using xlocale.h
+
+xlocale.h shouldn't be used by icu in the first place.
+
+Maybe you can try this patch:
+https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-support/icu/icu/0001-i18n-Drop-include-xlocale.h.patch
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> 
+> Ross
+> 
+> 
