@@ -1,63 +1,105 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Sep 2017 19:16:17 +0200
-Subject: [Buildroot] [PATCH v2] pkg-download: remove explicit
- PKG_VERSION from github helper
-In-Reply-To: <87o9psfgq6.fsf@dell.be.48ers.dk>
-References: <1504765866-7138-1-git-send-email-marcin.nowakowski@imgtec.com>
- <4596376b-607d-46f5-1c57-d8e8791cf57b@mind.be>
- <87o9psfgq6.fsf@dell.be.48ers.dk>
-Message-ID: <01885726-bcc2-5930-5076-6882bf199c8a@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Sep 2017 20:38:42 +0200
+Subject: [Buildroot] [PATCH] dump1090: new package
+Message-ID: <20170930183842.17954-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/dump1090/Config.in     | 11 +++++++++++
+ package/dump1090/dump1090.hash |  3 +++
+ package/dump1090/dump1090.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/dump1090/Config.in
+ create mode 100644 package/dump1090/dump1090.hash
+ create mode 100644 package/dump1090/dump1090.mk
 
-
-On 30-09-17 15:39, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 07-09-17 08:31, Marcin Nowakowski wrote:
->  >> Currently it is always required to add package version as an argument to
->  >> the github helper. Since the version is always defined as PKG_VERSION,
->  >> drop this argument and generate it automatically inside the helper
->  >> routine.
->  >> 
->  >> The github helper function is extended to support both 2 and 3 argument
->  >> variants (ie. either use the provided package version argument or
->  >> automatically substitute with PKG_VERSION if not available), which can
->  >> make the transition of the package files easier as well allows using the
->  >> 3-argument variant outside of package definitions.
->  >> 
->  >> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> 
-> 
->  >  Applied to master, thanks. I extended the text in the manual a little bit to
->  > cover the case where you do have to use the third argument.
-> 
->  >  Next step is a mass update removing the third argument.
-> 
-> Have you tested this? It doesn't seem to work for me UNLESS I use
-> 
-> FOO_SITE := $(call github,user,product)
-> 
-> Instead of the normal FOO_SITE = to get it expanded right away. I guess
-> pkgname gets expanded too late.
-
- Gah, my fault. I had written to use $(PKG) instead of $(pkgname) in v1 of the
-patch, but didn't double-check in v2. Hm, reading back my comment, I wasn't very
-explicit about it apparently.
-
- Regards,
- Arnout
-
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cedf5a6f84..43ad9e5f8a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1332,6 +1332,7 @@ F:	package/libunistring/
+ N:	Peter Korsgaard <peter@korsgaard.com>
+ F:	board/orangepi/
+ F:	configs/orangepi_pc_defconfig
++F:	package/dump1090/
+ F:	package/flickcurl/
+ F:	package/fscryptctl/
+ F:	package/jo/
+diff --git a/package/Config.in b/package/Config.in
+index 1580a9e3d6..0dfe086ead 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -396,6 +396,7 @@ endmenu
+ 	source "package/dmraid/Config.in"
+ 	source "package/dt-utils/Config.in"
+ 	source "package/dtv-scan-tables/Config.in"
++	source "package/dump1090/Config.in"
+ 	source "package/dvb-apps/Config.in"
+ 	source "package/dvbsnoop/Config.in"
+ 	source "package/edid-decode/Config.in"
+diff --git a/package/dump1090/Config.in b/package/dump1090/Config.in
+new file mode 100644
+index 0000000000..81fd3f2545
+--- /dev/null
++++ b/package/dump1090/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_DUMP1090
++	bool "dump1090"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # librtlsdr
++	select BR2_PACKAGE_LIBSRTLSDR
++	help
++	  Dump1090 is a simple Mode S decoder for RTLSDR devices
++
++	  https://github.com/MalcolmRobb/dump1090
++
++comment "dump1090 needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dump1090/dump1090.hash b/package/dump1090/dump1090.hash
+new file mode 100644
+index 0000000000..fbbf21a015
+--- /dev/null
++++ b/package/dump1090/dump1090.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 72c1a94f3e6788af1e72b8cac13bb53e0989fe02cd13e191133f5519d2a2fefb  dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe.tar.gz
++sha256 29046ef7ee0b7b127bcc64faf135035820906dea2b379b2efcfc119131a39f7a  anet.h
+diff --git a/package/dump1090/dump1090.mk b/package/dump1090/dump1090.mk
+new file mode 100644
+index 0000000000..28a7568a8c
+--- /dev/null
++++ b/package/dump1090/dump1090.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# dump1090
++#
++################################################################################
++
++DUMP1090_VERSION = bff92c4ad772a0a8d433f788d39dae97e00e4dbe
++DUMP1090_SITE = $(call github,MalcolmRobb,dump1090,$(DUMP1090_VERSION))
++DUMP1090_LICENSE = BSD-3-Clause
++# no real license file
++DUMP1090_LICENSE_FILES = anet.h
++DUMP1090_DEPENDENCIES = host-pkgconf librtlsdr
++
++define DUMP1090_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr -C $(@D)
++endef
++
++define DUMP1090_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/dump1090 $(TARGET_DIR)/usr/bin/dump1090
++	$(INSTALL) -m 0755 -D $(@D)/dump1090 $(TARGET_DIR)/usr/bin/view1090
++	$(INSTALL) -d $(TARGET_DIR)/usr/share/dump1090
++	cp -r $(@D)/public_html/* $(TARGET_DIR)/usr/share/dump1090
++endef
++
++$(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
