@@ -1,24 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Sep 2017 08:52:18 +0200
-Subject: [Buildroot] [PATCH 1/1] Revert "package/kodi-inputstream-rtmp:
-	bump version to 1.0.6"
-In-Reply-To: <20170929144749.10152-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 29 Sep 2017 16:47:49 +0200")
-References: <20170929144749.10152-1-bernd.kuhls@t-online.de>
-Message-ID: <871smohe59.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Sep 2017 08:53:32 +0200
+Subject: [Buildroot] [PATCH 1/2] zsh: disable NIS support
+In-Reply-To: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 28 Sep 2017 23:43:52 +0300")
+References: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
+Message-ID: <87wp4gfzir.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This reverts commit eec04a7b7dc32749f9c1f5e0ac1087230c542f28.
- > The original commit bumped the package to a version which is at runtime
- > incompatible with Kodi.
+ > The configure test for NIS and NIS+ looks for the ypcat and nisls host
+ > utilities, respectively. This is not compatible with cross compile.
+ > Disable both unconditionally.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/54c/54c9c5dff3df0a43573b03896cb0629fcae08478/
+ > http://autobuild.buildroot.net/results/c8e/c8e30a1eb6e77ae76292b6a01bede5abb2b1b7b7/
+
+ > Cc: Phil Eichinger <phil.eichinger@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
