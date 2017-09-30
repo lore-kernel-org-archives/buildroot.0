@@ -1,79 +1,82 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 29 Sep 2017 23:49:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/supertuxkart: needs freetype
-In-Reply-To: <CAAEAJfDr035OC8VSk0Gb2=G1NG1XmimWhr4QsSF+Qf0a847p0Q@mail.gmail.com>
-References: <20170929190140.32645-1-bernd.kuhls@t-online.de>
- <CAAEAJfDr035OC8VSk0Gb2=G1NG1XmimWhr4QsSF+Qf0a847p0Q@mail.gmail.com>
-Message-ID: <d2931ba4-ac61-0329-1fce-ecf9411e4093@gmail.com>
+From: grunpferd at netscape.net <grunpferd@netscape.net>
+Date: Fri, 29 Sep 2017 22:46:18 -0400
+Subject: [Buildroot] Build failure in icu-59.1
+Message-ID: <15ed0ad5eee-c06-3fc9e@webjas-vab009.srv.aolmail.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+There seems to be some problem building icu-59.1 that has crept in here.
 
-Le 29/09/2017 ? 21:04, Ezequiel Garcia a ?crit?:
-> On 29 September 2017 at 16:01, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->> https://github.com/supertuxkart/stk-code/blob/master/CMakeLists.txt#L231
->>
->> Build would fail without this patch using this defconfig:
->>
->> BR2_x86_64=y
->> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
->> BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> BR2_PACKAGE_SUPERTUXKART=y
->> BR2_PACKAGE_MESA3D=y
->> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
->> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
->> BR2_PACKAGE_XORG7=y
->>
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>  package/supertuxkart/Config.in       | 1 +
->>  package/supertuxkart/supertuxkart.mk | 1 +
->>  2 files changed, 2 insertions(+)
->>
->> diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
->> index 4919b50a2b..51759160eb 100644
->> --- a/package/supertuxkart/Config.in
->> +++ b/package/supertuxkart/Config.in
->> @@ -9,6 +9,7 @@ config BR2_PACKAGE_SUPERTUXKART
->>         depends on BR2_PACKAGE_HAS_LIBGL
->>         depends on BR2_PACKAGE_XORG7
->>         depends on !BR2_TOOLCHAIN_USES_MUSL
->> +       select BR2_PACKAGE_FREETYPE
->>         select BR2_PACKAGE_JPEG
->>         select BR2_PACKAGE_LIBCURL
->>         select BR2_PACKAGE_LIBGLU
->> diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
->> index 7636687780..dc4b23227d 100644
->> --- a/package/supertuxkart/supertuxkart.mk
->> +++ b/package/supertuxkart/supertuxkart.mk
->> @@ -15,6 +15,7 @@ SUPERTUXKART_LICENSE = GPL-3.0+
->>  SUPERTUXKART_LICENSE_FILES = COPYING
->>
->>  SUPERTUXKART_DEPENDENCIES = \
->> +       freetype \
->>         jpeg \
->>         libcurl \
->>         libgl \
->> --
->> 2.11.0
->>
-> 
-> Looks good.
-> 
-> Acked-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Reproduced here.
 
-Acked-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
+This used to work nicely.
 
-Best regards,
-Romain
 
-> 
-> Thanks,
-> 
+The following errors get reported during compiling icu-59.1
+
+
+
+
+make[2]: Entering directory '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/common'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/common'
+/usr/bin/make[1]: Making `all' in `i18n'
+make[2]: Entering directory '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/i18n'
+   arm-buildroot-linux-gnueabihf-g++     ...  fmtable_cnv.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  digitlst.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  choicfmt.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  datefmt.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  smpdtfmt.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  dtfmtsym.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  reldtfmt.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  udat.cpp
+   arm-buildroot-linux-gnueabihf-g++     ...  dtptngen.cpp
+digitlst.cpp:67:24: fatal error: xlocale.h: No such file or directory
+ #   include <xlocale.h>
+                        ^
+compilation terminated.
+*** Failed compilation command follows: ----------------------------------------------------------
+/home/rfg/w/buildroot_p_gcc6_4.13/output/host/bin/arm-buildroot-linux-gnueabihf-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FIL
+E_OFFSET_BITS=64 -D_REENTRANT -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1 -DU_HAVE_STRTOD_L=1 -I. -I../common -DU_ATTRIBUTE_DEPRECATED= -DU_I
+18N_IMPLEMENTATION -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pedantic -Wpointer-arith -Wwrite-strings -W
+no-long-long -std=c++11 -c -DPIC -fPIC -o digitlst.o digitlst.cpp
+--- ( rebuild with "/usr/bin/make VERBOSE=1 all" to show all parameters ) --------
+../config/mh-linux:53: recipe for target 'digitlst.o' failed
+make[2]: *** [digitlst.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/i18n'
+Makefile:147: recipe for target 'all-recursive' failed
+make[1]: *** [all-recursive] Error 2
+make[1]: Leaving directory '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source'
+package/pkg-generic.mk:234: recipe for target '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/.stamp_built' failed
+make: *** [/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/.stamp_built] Error 2
+
+
+
+So it looks like it can't locate xlocale.h.
+
+
+
+
+I have attached the .config for this build.
+
+
+
+
+Regards,
+
+
+Ross
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170929/eacae2ff/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 118400 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170929/eacae2ff/attachment.obj>
