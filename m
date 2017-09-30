@@ -1,9 +1,9 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 30 Sep 2017 10:06:01 +0200
-Subject: [Buildroot] Build failure in icu-59.1
-In-Reply-To: <15ed0ad5eee-c06-3fc9e@webjas-vab009.srv.aolmail.net>
-References: <15ed0ad5eee-c06-3fc9e@webjas-vab009.srv.aolmail.net>
-Message-ID: <9e80ea0d-e905-7d59-2f71-c6012be2d57a@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 30 Sep 2017 10:11:38 +0200
+Subject: [Buildroot] build failure netsniff-ng-0.6.3
+In-Reply-To: <15ed0b6bdb0-c09-38edf@webjas-vad019.srv.aolmail.net>
+References: <15ed0b6bdb0-c09-38edf@webjas-vad019.srv.aolmail.net>
+Message-ID: <f46ffca2-da09-7e70-5387-7aa220d65a69@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,84 +12,50 @@ To: buildroot@busybox.net
 
 Hi Ross,
 
-Le 30/09/2017 ? 04:46, grunpferd at netscape.net a ?crit?:
-> There seems to be some problem building?icu-59.1?that has crept in here.
+Le 30/09/2017 ? 04:56, grunpferd at netscape.net a ?crit?:
+> The following compile errors occurred during building?netsniff-ng-0.6.3.
 > 
-> This used to work nicely.
+> This used to work successfully previously. Using an internal toolchain ggc6 / glibc.
 > 
-> The following errors get reported during compiling?icu-59.1
+> Changed to latest linux-4.13.4 kernel.?
 > 
+> The following compile errors get reported:
 > 
-> make[2]: Entering directory
-> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/common'
-> make[2]: Nothing to be done for 'all'.
-> make[2]: Leaving directory
-> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/common'
-> /usr/bin/make[1]: Making `all' in `i18n'
-> make[2]: Entering directory
-> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/i18n'
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?fmtable_cnv.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?digitlst.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?choicfmt.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?datefmt.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?smpdtfmt.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?dtfmtsym.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?reldtfmt.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?udat.cpp
-> ??arm-buildroot-linux-gnueabihf-g++ ????... ?dtptngen.cpp
-> digitlst.cpp:67:24: fatal error: xlocale.h: No such file or directory
-> # ??include <xlocale.h>
-> ???????????????????????^
-> compilation terminated.
-> *** Failed compilation command follows:
-> ----------------------------------------------------------
-> /home/rfg/w/buildroot_p_gcc6_4.13/output/host/bin/arm-buildroot-linux-gnueabihf-g++
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FIL
-> E_OFFSET_BITS=64 -D_REENTRANT -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1
-> -DU_HAVE_STRTOD_L=1 -I. -I../common -DU_ATTRIBUTE_DEPRECATED= -DU_I
-> 18N_IMPLEMENTATION -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 -O3 -pedantic -Wpointer-arith -Wwrite-strings -W
-> no-long-long -std=c++11 -c -DPIC -fPIC -o digitlst.o digitlst.cpp
-> --- ( rebuild with "/usr/bin/make VERBOSE=1 all" to show all parameters ) --------
-> ../config/mh-linux:53: recipe for target 'digitlst.o' failed
-> make[2]: *** [digitlst.o] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[2]: Leaving directory
-> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source/i18n'
-> Makefile:147: recipe for target 'all-recursive' failed
-> make[1]: *** [all-recursive] Error 2
-> make[1]: Leaving directory
-> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/source'
-> package/pkg-generic.mk:234: recipe for target
-> '/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/.stamp_built' failed
-> make: *** [/home/rfg/w/buildroot_p_gcc6_4.13/output/build/icu-59.1/.stamp_built]
-> Error 2
+> Building mausezahn:
+> ?CC ???str.c
+> ?CC ???die.c
+> ?CC ???dev.c
+> ?CC ???sock.c
+> ?CC ???link.c
+> ?CC ???sysctl.c
+> ?CC ???xmalloc.c
+> ?CC ???staging/layer1.c
+> ?CC ???staging/layer2.c
+> ?CC ???staging/layer3.c
+> ?CC ???staging/layer4.c
+> ?CC ???staging/hextools.c
+> ?CC ???staging/tools.c
+> staging/tools.c: In function ?get_ip6_range_count?:
+> staging/tools.c:485:10: error: ?UINT64_MAX? undeclared (first use in this function)
+> ??return UINT64_MAX;
+> ?????????^~~~~~~~~~
+> staging/tools.c:485:10: note: each undeclared identifier is reported only once
+> for each function it appears in
+> Makefile:184: recipe for target 'mausezahn/staging/tools.o' failed
+> make[1]: *** [mausezahn/staging/tools.o] Error 1
 > 
 > 
-> So it looks like it can't locate xlocale.h.
+> It looks that UINT64_MAX is not declared.
 > 
-> 
-> I have attached the .config for this build.
+> This was working fine recently. Using latest buildroot git master along with
+> latest linux-4.13.4.
 
-Thanks for the report!
-
-glibc has been updated to 2.26 recently and the xlocale.h header file has been
-removed.
-See https://sourceware.org/glibc/wiki/Release/2.26#Packaging_Changes
-
-I tested several packages with this new version but it's difficult to test every
-single packages.
-
-Can you report to the upstream project or if it's already fixed upstream, send
-the patch to the ml?
-
-Note: For now, toolchains used in autobuilders still use glibc 2.25. That's why
-we didn't noticed this issue before.
+Missing stdint.h header in staging/tools.c ?
+Adding it fixes the issue.
 
 Best regards,
 Romain
 
-> 
 > 
 > Regards,
 > 
