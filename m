@@ -1,40 +1,63 @@
 From: grunpferd at netscape.net <grunpferd@netscape.net>
-Date: Sat, 30 Sep 2017 06:10:31 -0400
-Subject: [Buildroot] Build failure in icu-59.1
-In-Reply-To: <9e80ea0d-e905-7d59-2f71-c6012be2d57a@gmail.com>
-Message-ID: <15ed2440e84-c0c-47182@webjas-vaa141.srv.aolmail.net>
+Date: Sat, 30 Sep 2017 06:24:38 -0400
+Subject: [Buildroot] build failure netsniff-ng-0.6.3
+In-Reply-To: <f46ffca2-da09-7e70-5387-7aa220d65a69@smile.fr>
+Message-ID: <15ed250fe80-c0a-be1e@webjas-vaa234.srv.aolmail.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+G'day Romain,
 
 
+Le 30/09/2017 ? 04:56, grunpferd at netscape.net a ?crit :
+>> The following compile errors occurred during building netsniff-ng-0.6.3.
+>> 
+>> This used to work successfully previously. Using an internal toolchain ggc6 / glibc.
+>> 
+>> Changed to latest linux-4.13.4 kernel. 
+>> 
+>> The following compile errors get reported:
+>> 
+>> Building mausezahn:
+>>  CC    str.c
+>>  CC    die.c
+>>  CC    dev.c
+>>  CC    sock.c
+>>  CC    link.c
+>>  CC    sysctl.c
+>>  CC    xmalloc.c
+>>  CC    staging/layer1.c
+>>  CC    staging/layer2.c
+>>  CC    staging/layer3.c
+>>  CC    staging/layer4.c
+>>  CC    staging/hextools.c
+>>  CC    staging/tools.c
+>> staging/tools.c: In function ?get_ip6_range_count?:
+>> staging/tools.c:485:10: error: ?UINT64_MAX? undeclared (first use in this function)
+>>   return UINT64_MAX;
+>>          ^~~~~~~~~~
+>> staging/tools.c:485:10: note: each undeclared identifier is reported only once
+>> for each function it appears in
+>> Makefile:184: recipe for target 'mausezahn/staging/tools.o' failed
+>> make[1]: *** [mausezahn/staging/tools.o] Error 1
+>> 
+>> 
+>> It looks that UINT64_MAX is not declared.
+>> 
+>> This was working fine recently. Using latest buildroot git master along with
+>> latest linux-4.13.4.
+
+> Missing stdint.h header in staging/tools.c ?
+> Adding it fixes the issue.
+
+This is correct. It again seems to be flushed out by the upgrade to glibc 2.26.
+I suspect that there might have been a nested include that previously brought stdint.h into play.
 
 
-Thanks Romain,
-
-
-> glibc has been updated to 2.26 recently and the xlocale.h header file has been
-> removed.
-> See https://sourceware.org/glibc/wiki/Release/2.26#Packaging_Changes
-> 
-> I tested several packages with this new version but it's difficult to test every
-> single packages.
-
-> Can you report to the upstream project or if it's already fixed upstream, send
-> the patch to the ml?
-
-
-I have have lodged bug report with ICU project. As far as I can tell it has not been fixed or reported.
-
-
-I think your analysis is correct, the advance to glibc 2.26 has flushed out this problem.
-How this gets fixed may depend on the ICU project that has icu 59.1 as their latest release.
-In the mean time buildroot might have to handle this by itself.
-
-
+I guess buildroot needs to cover this for now.
 
 
 Regards,
@@ -43,6 +66,7 @@ Regards,
 Ross
 
 
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170930/d98236af/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170930/002a1eb8/attachment.html>
