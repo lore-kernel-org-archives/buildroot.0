@@ -1,42 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Oct 2017 17:21:30 +0200
-Subject: [Buildroot] [PATCH] package/urg: fix extraction commands
-Message-ID: <20171001152130.2454-1-yann.morin.1998@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  1 Oct 2017 20:04:14 +0200
+Subject: [Buildroot] [PATCH v1] evemu: fix PATH_MAX related compile failure
+Message-ID: <20171001180414.12072-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the extraction commands entirely remove the urg directory,
-which means the downloaded stamp will get removed, and thus a subsequent
-build would try to re-download it.
+Fixes [1]:
 
-It turns out that the directory extrqated by urg is already correctly
-named, so we just need to extract out of the build directory. This
-highly simplifies the command.
+  find_event_devices.c: In function 'find_event_devices':
+find_event_devices.c:60:14: error: 'PATH_MAX' undeclared (first use in this function)
+   char fname[PATH_MAX];
+              ^~~~~~~~
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
+[1] http://autobuild.buildroot.net/results/607/607bb29231f80a138e1b5423bc01c89e36efe78c/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/urg/urg.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ ...0001-Fix-PATH_MAX-related-compile-failure.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
 
-diff --git a/package/urg/urg.mk b/package/urg/urg.mk
-index 4a41779709..966627fe36 100644
---- a/package/urg/urg.mk
-+++ b/package/urg/urg.mk
-@@ -25,10 +25,7 @@ endif
- URG_CONFIG_SCRIPTS = c_urg-config urg-config
- 
- define URG_EXTRACT_CMDS
--	$(RM) -rf $(URG_DIR)
--	$(UNZIP) -d $(BUILD_DIR)/ $(DL_DIR)/$(URG_SOURCE)
--	test -d $(URG_DIR) || \
--		mv $(BUILD_DIR)/$(subst .zip,,$(URG_SOURCE)) $(URG_DIR)
-+	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(URG_SOURCE)
- endef
- 
- $(eval $(autotools-package))
+diff --git a/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch b/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
+new file mode 100644
+index 0000000000..4f4f795e07
+--- /dev/null
++++ b/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
+@@ -0,0 +1,35 @@
++From 8164f4e7707012fcfce0cd178cc326e8af8ce8bc Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 1 Oct 2017 19:54:53 +0200
++Subject: [PATCH] Fix PATH_MAX related compile failure.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  find_event_devices.c: In function ?find_event_devices?:
++  find_event_devices.c:60:14: error: ?PATH_MAX? undeclared (first use in this function)
++     char fname[PATH_MAX];
++                ^~~~~~~~
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ tools/find_event_devices.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tools/find_event_devices.c b/tools/find_event_devices.c
++index 2a43d54..e5dbcd2 100644
++--- a/tools/find_event_devices.c
+++++ b/tools/find_event_devices.c
++@@ -24,6 +24,7 @@
++ 
++ #define _GNU_SOURCE
++ #include <linux/input.h>
+++#include <linux/limits.h>
++ #include <dirent.h>
++ #include <string.h>
++ #include <stdio.h>
++-- 
++2.14.1
++
 -- 
-2.11.0
+2.14.1
