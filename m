@@ -1,32 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Oct 2017 23:17:23 +0200
-Subject: [Buildroot] [git commit] bananapro: bump U-Boot to version 2017.09
-Message-ID: <20171001211816.A78468110F@busybox.osuosl.org>
+Date: Sun, 1 Oct 2017 23:10:16 +0200
+Subject: [Buildroot] [git commit] package/supertuxkart: needs freetype
+Message-ID: <20171001211816.0E4478110F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c148ff1df3b2f1c0067041744c0b0ee82672c49c
+commit: https://git.buildroot.net/buildroot/commit/?id=ffcaf9158c1619d83091e3c3f3bf58181c8d70dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+https://github.com/supertuxkart/stk-code/blob/master/CMakeLists.txt#L231
+
+Build would fail without this patch using this defconfig:
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_SUPERTUXKART=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_XORG7=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Acked-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/bananapro_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/supertuxkart/Config.in       | 1 +
+ package/supertuxkart/supertuxkart.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index 538e3e2..c0a2b07 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index 4919b50..5175916 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBGLU
+diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
+index 7636687..dc4b232 100644
+--- a/package/supertuxkart/supertuxkart.mk
++++ b/package/supertuxkart/supertuxkart.mk
+@@ -15,6 +15,7 @@ SUPERTUXKART_LICENSE = GPL-3.0+
+ SUPERTUXKART_LICENSE_FILES = COPYING
+ 
+ SUPERTUXKART_DEPENDENCIES = \
++	freetype \
+ 	jpeg \
+ 	libcurl \
+ 	libgl \
