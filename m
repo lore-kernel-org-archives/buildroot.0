@@ -1,61 +1,33 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sun,  1 Oct 2017 20:46:01 +0200
-Subject: [Buildroot] [PATCH v2 2/2] sdl2: Add KMS/DRM(experimental) video
-	driver support
-In-Reply-To: <20171001184601.30620-1-olivier.schonken@gmail.com>
-References: <20171001184601.30620-1-olivier.schonken@gmail.com>
-Message-ID: <20171001184601.30620-2-olivier.schonken@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  1 Oct 2017 21:04:30 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: rename xbmc -> kodi
+Message-ID: <20171001190430.2895-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+This is a left-over of the xbmc->kodi rename patch
+https://git.buildroot.net/buildroot/commit/package/kodi?id=3578459748d80cd469729319543b199380a4370f
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-	-Implementation stays same as other video drivers for now. If a cleanup
-	 is required, that can be part of a larger effort touching other video
-	 drivers as well.
+ Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-20170926144723.17619-1-olivier.schonken at gmail.com
- package/sdl2/Config.in | 7 +++++++
- package/sdl2/sdl2.mk   | 7 +++++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-index a2971edc89..f29b3c7c38 100644
---- a/package/sdl2/Config.in
-+++ b/package/sdl2/Config.in
-@@ -29,6 +29,13 @@ comment "X11 video driver needs X.org"
- 	depends on !BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU
+diff --git a/Config.in b/Config.in
+index e395995ec9..814dc025b9 100644
+--- a/Config.in
++++ b/Config.in
+@@ -63,7 +63,7 @@ config BR2_HOST_GCC_AT_LEAST_7
+ 	select BR2_HOST_GCC_AT_LEAST_6
  
-+config BR2_PACKAGE_SDL2_KMSDRM
-+	bool "KMS/DRM video driver"
-+	depends on BR2_PACKAGE_LIBDRM
-+
-+comment "KMS/DRM video driver needs libdrm"
-+	depends on !BR2_PACKAGE_LIBDRM
-+
- config BR2_PACKAGE_SDL2_OPENGL
- 	bool "OpenGL (GLX)"
- 	depends on BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index e64628d0cd..facb41e527 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -125,4 +125,11 @@ else
- SDL2_CONF_OPTS += --disable-alsa
- endif
+ # Hidden boolean selected by packages in need of Java in order to build
+-# (example: xbmc)
++# (example: kodi)
+ config BR2_NEEDS_HOST_JAVA
+ 	bool
  
-+ifeq ($(BR2_PACKAGE_SDL2_KMSDRM),y)
-+SDL2_DEPENDENCIES += libdrm
-+SDL2_CONF_OPTS += --enable-video-kmsdrm
-+else
-+SDL2_CONF_OPTS += --disable-video-kmsdrm
-+endif
-+
- $(eval $(autotools-package))
 -- 
 2.11.0
