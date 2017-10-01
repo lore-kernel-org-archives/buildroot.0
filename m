@@ -1,7 +1,9 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun,  1 Oct 2017 15:42:41 +0200
-Subject: [Buildroot] [PATCH 1/2] bananapro: bump U-Boot to version 2017.09
-Message-ID: <20171001134242.8053-1-joerg.krause@embedded.rocks>
+Date: Sun,  1 Oct 2017 15:42:42 +0200
+Subject: [Buildroot] [PATCH 2/2] bananapro: bump Linux to version 4.13.4
+In-Reply-To: <20171001134242.8053-1-joerg.krause@embedded.rocks>
+References: <20171001134242.8053-1-joerg.krause@embedded.rocks>
+Message-ID: <20171001134242.8053-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- configs/bananapro_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/bananapro_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index 538e3e2ac6..c0a2b07dd9 100644
+index c0a2b07dd9..e5ac820bfa 100644
 --- a/configs/bananapro_defconfig
 +++ b/configs/bananapro_defconfig
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ 
+ # Toolchain
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
 -- 
 2.14.2
