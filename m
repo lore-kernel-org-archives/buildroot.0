@@ -1,21 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Oct 2017 23:15:56 +0200
-Subject: [Buildroot] [PATCHv2] dump1090: new package
-In-Reply-To: <20170930200743.16602-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 30 Sep 2017 22:07:43 +0200")
-References: <20170930200743.16602-1-peter@korsgaard.com>
-Message-ID: <87r2umefhv.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Oct 2017 23:16:55 +0200
+Subject: [Buildroot] [PATCH] package/weston: fix build on musl
+In-Reply-To: <20171001123216.31025-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 1 Oct 2017 14:32:16 +0200")
+References: <20171001123216.31025-1-yann.morin.1998@free.fr>
+Message-ID: <87mv5aefg8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- > v2: Install correct binary as view1090, thanks To Baruch
+ > As usual, musl is more conservative than the alternatives, wrt to
+ > headers that are internally included.
+
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/a7a/a7a6b17dff09a45a35185a0e02704523b815dd57/
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
