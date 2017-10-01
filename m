@@ -1,64 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Oct 2017 11:58:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/matchbox-lib: correctly fix the .pc
-	file
-In-Reply-To: <cover.1506851870.git.yann.morin.1998@free.fr>
-References: <cover.1506851870.git.yann.morin.1998@free.fr>
-Message-ID: <73a014e628bcbf58c220a91a54d8637b792186f6.1506851870.git.yann.morin.1998@free.fr>
+Date: Sun,  1 Oct 2017 14:32:16 +0200
+Subject: [Buildroot] [PATCH] package/weston: fix build on musl
+Message-ID: <20171001123216.31025-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First, the .pc file was so far fixed as a post-configure hook of the
-matchbox-fakekey package, by directly tweaking the installed .pc file in
-staging. That's uterly wrong and bad.
+As usual, musl is more conservative than the alternatives, wrt to
+headers that are internally included.
 
-Second, it was incorreclty tweaking the .pc file when xlib_libXft was
-not enabled, because then only a path to staging was present.
-
-Third, even when xlib_libXft was enabled, the tweaking was still wrong,
-because unnecessary.
-
-Fix all that.
+Fixes:
+    http://autobuild.buildroot.org/results/a7a/a7a6b17dff09a45a35185a0e02704523b815dd57/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-fakekey/matchbox-fakekey.mk | 4 ++--
- package/matchbox-lib/matchbox-lib.mk         | 7 +++++++
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ .../0002-shared-struct-timespec-is-in-time.h.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/weston/0002-shared-struct-timespec-is-in-time.h.patch
 
-diff --git a/package/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
-index 996206e266..e607c48c15 100644
---- a/package/matchbox-fakekey/matchbox-fakekey.mk
-+++ b/package/matchbox-fakekey/matchbox-fakekey.mk
-@@ -14,8 +14,8 @@ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
- MATCHBOX_FAKEKEY_CONF_OPTS = --enable-expat
- 
- define MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
--	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' $(MATCHBOX_FAKEKEY_DIR)/Makefile
-+	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' \
-+		$(@D)/Makefile
- endef
- 
- MATCHBOX_FAKEKEY_POST_CONFIGURE_HOOKS += MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index ee206b6d82..627e1c7417 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -55,4 +55,11 @@ else
- MATCHBOX_LIB_CONF_OPTS += --disable-xft
- endif
- 
-+define MATCHBOX_LIB_FIX_PC
-+	$(SED) 's:-I$(STAGING_DIR)/:-I/:g' \
-+		-e 's:-I/usr/include\( \|$$\)::g' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-+endef
-+MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_FIX_PC
+diff --git a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
+new file mode 100644
+index 0000000000..28476d3225
+--- /dev/null
++++ b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
+@@ -0,0 +1,44 @@
++From 47535b50c4178d62b848b3e9d3524e4f6282c815 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 1 Oct 2017 14:17:21 +0200
++Subject: [PATCH] shared: struct timespec is in time.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- $(eval $(autotools-package))
++On the musl C library, tests/timespec-text.c does not build, with the
++following error:
++
++    In file included from tests/timespec-test.c:36:0:
++    ./shared/timespec-util.h:41:21: warning: ?struct timespec? declared
++    inside parameter list will not be visible outside of this definition
++    or declaration
++     timespec_sub(struct timespec *r,
++                         ^~~~~~~~
++   [...]
++
++Indeed, struct timespec is defined in time.h, so we must include it.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status: submitted
++    https://lists.freedesktop.org/archives/wayland-devel/2017-October/035306.html
++---
++ shared/timespec-util.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/shared/timespec-util.h b/shared/timespec-util.h
++index 576b3e8f..34a120ae 100644
++--- a/shared/timespec-util.h
+++++ b/shared/timespec-util.h
++@@ -28,6 +28,7 @@
++ 
++ #include <stdint.h>
++ #include <assert.h>
+++#include <time.h>
++ 
++ #define NSEC_PER_SEC 1000000000
++ 
++-- 
++2.11.0
++
 -- 
 2.11.0
