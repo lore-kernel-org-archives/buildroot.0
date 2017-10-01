@@ -1,103 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Oct 2017 23:15:52 +0200
-Subject: [Buildroot] [git commit] dump1090: new package
-Message-ID: <20171001211816.8323C8041A@busybox.osuosl.org>
+Date: Sun, 1 Oct 2017 23:23:43 +0200
+Subject: [Buildroot] [git commit] Config.in: rename xbmc -> kodi
+Message-ID: <20171001211817.312B28041A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a3c97ee73f9ed35cc22a67100f1a2477e241ee9
+commit: https://git.buildroot.net/buildroot/commit/?id=4f3fdf1544d7aacfd36fdb13ddece4b82753147e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This is a left-over of the xbmc->kodi rename patch
+https://git.buildroot.net/buildroot/commit/package/kodi?id=3578459748d80cd469729319543b199380a4370f
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/dump1090/Config.in     | 11 +++++++++++
- package/dump1090/dump1090.hash |  3 +++
- package/dump1090/dump1090.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 41 insertions(+)
+ Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cedf5a6..43ad9e5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1332,6 +1332,7 @@ F:	package/libunistring/
- N:	Peter Korsgaard <peter@korsgaard.com>
- F:	board/orangepi/
- F:	configs/orangepi_pc_defconfig
-+F:	package/dump1090/
- F:	package/flickcurl/
- F:	package/fscryptctl/
- F:	package/jo/
-diff --git a/package/Config.in b/package/Config.in
-index 1580a9e..0dfe086 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -396,6 +396,7 @@ endmenu
- 	source "package/dmraid/Config.in"
- 	source "package/dt-utils/Config.in"
- 	source "package/dtv-scan-tables/Config.in"
-+	source "package/dump1090/Config.in"
- 	source "package/dvb-apps/Config.in"
- 	source "package/dvbsnoop/Config.in"
- 	source "package/edid-decode/Config.in"
-diff --git a/package/dump1090/Config.in b/package/dump1090/Config.in
-new file mode 100644
-index 0000000..81fd3f2
---- /dev/null
-+++ b/package/dump1090/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_DUMP1090
-+	bool "dump1090"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # librtlsdr
-+	select BR2_PACKAGE_LIBSRTLSDR
-+	help
-+	  Dump1090 is a simple Mode S decoder for RTLSDR devices
-+
-+	  https://github.com/MalcolmRobb/dump1090
-+
-+comment "dump1090 needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dump1090/dump1090.hash b/package/dump1090/dump1090.hash
-new file mode 100644
-index 0000000..fbbf21a
---- /dev/null
-+++ b/package/dump1090/dump1090.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 72c1a94f3e6788af1e72b8cac13bb53e0989fe02cd13e191133f5519d2a2fefb  dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe.tar.gz
-+sha256 29046ef7ee0b7b127bcc64faf135035820906dea2b379b2efcfc119131a39f7a  anet.h
-diff --git a/package/dump1090/dump1090.mk b/package/dump1090/dump1090.mk
-new file mode 100644
-index 0000000..69fd679
---- /dev/null
-+++ b/package/dump1090/dump1090.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# dump1090
-+#
-+################################################################################
-+
-+DUMP1090_VERSION = bff92c4ad772a0a8d433f788d39dae97e00e4dbe
-+DUMP1090_SITE = $(call github,MalcolmRobb,dump1090,$(DUMP1090_VERSION))
-+DUMP1090_LICENSE = BSD-3-Clause
-+# no real license file
-+DUMP1090_LICENSE_FILES = anet.h
-+DUMP1090_DEPENDENCIES = host-pkgconf librtlsdr
-+
-+define DUMP1090_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr -C $(@D)
-+endef
-+
-+define DUMP1090_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/dump1090 $(TARGET_DIR)/usr/bin/dump1090
-+	$(INSTALL) -m 0755 -D $(@D)/view1090 $(TARGET_DIR)/usr/bin/view1090
-+	$(INSTALL) -d $(TARGET_DIR)/usr/share/dump1090
-+	cp -r $(@D)/public_html/* $(TARGET_DIR)/usr/share/dump1090
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/Config.in b/Config.in
+index e395995..814dc02 100644
+--- a/Config.in
++++ b/Config.in
+@@ -63,7 +63,7 @@ config BR2_HOST_GCC_AT_LEAST_7
+ 	select BR2_HOST_GCC_AT_LEAST_6
+ 
+ # Hidden boolean selected by packages in need of Java in order to build
+-# (example: xbmc)
++# (example: kodi)
+ config BR2_NEEDS_HOST_JAVA
+ 	bool
+ 
