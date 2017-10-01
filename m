@@ -1,33 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Oct 2017 21:04:30 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: rename xbmc -> kodi
-Message-ID: <20171001190430.2895-1-bernd.kuhls@t-online.de>
+Date: Sun,  1 Oct 2017 22:53:19 +0200
+Subject: [Buildroot] [PATCH 2/2] package/kodi: use package
+	host-openjdk-bootstrap to provide JDK
+In-Reply-To: <20171001205319.11803-1-bernd.kuhls@t-online.de>
+References: <20171001205319.11803-1-bernd.kuhls@t-online.de>
+Message-ID: <20171001205319.11803-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a left-over of the xbmc->kodi rename patch
-https://git.buildroot.net/buildroot/commit/package/kodi?id=3578459748d80cd469729319543b199380a4370f
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi/Config.in | 10 +++++++++-
+ package/kodi/kodi.mk   |  7 +++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index e395995ec9..814dc025b9 100644
---- a/Config.in
-+++ b/Config.in
-@@ -63,7 +63,7 @@ config BR2_HOST_GCC_AT_LEAST_7
- 	select BR2_HOST_GCC_AT_LEAST_6
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index fc7eafa41a..79c53380f9 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -46,7 +46,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
+-	select BR2_NEEDS_HOST_JAVA
++	select BR2_NEEDS_HOST_JAVA if !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_FFMPEG
+@@ -65,6 +65,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_KODI_OPENJDK if (BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_PCRE_UCP
+@@ -191,6 +192,13 @@ config BR2_PACKAGE_KODI_NONFREE
+ 	  Enable components with non-free licenses. This option
+ 	  currently only controls support for RAR archives.
  
- # Hidden boolean selected by packages in need of Java in order to build
--# (example: xbmc)
-+# (example: kodi)
- config BR2_NEEDS_HOST_JAVA
- 	bool
++config BR2_PACKAGE_KODI_OPENJDK
++	bool
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # openjdk-botstrap
++	select BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP
++	help
++	  Use the buildroot-provided host-openjdk-bootstrap package.
++
+ config BR2_PACKAGE_KODI_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	# Pulseaudio support in kodi needs glib support in Pulseaudio,
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 28fe256b65..bd9d1ae6dd 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -156,6 +156,13 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ KODI_CXX_FLAGS += -latomic
+ endif
  
++ifeq ($(BR2_PACKAGE_KODI_OPENJDK),y)
++KODI_CONF_ENV = \
++	JAVA_HOME=$(HOST_OPENJDK_BOOTSTRAP_DIR) \
++	PATH=$(HOST_OPENJDK_BOOTSTRAP_DIR)/bin:$(BR_PATH)
++KODI_DEPENDENCIES += host-openjdk-bootstrap
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+ KODI_DEPENDENCIES += mysql
 -- 
 2.11.0
