@@ -1,43 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Oct 2017 23:17:28 +0200
-Subject: [Buildroot] [git commit] bananapro: bump Linux to version 4.13.4
-Message-ID: <20171001211816.BBFE38110F@busybox.osuosl.org>
+Date: Sun, 1 Oct 2017 23:21:00 +0200
+Subject: [Buildroot] [git commit] package/urg: fix extraction commands
+Message-ID: <20171001211816.D20ED8011C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a23d1428d68f2cc0e67365a250aa012be40aa0d
+commit: https://git.buildroot.net/buildroot/commit/?id=9e943e852286d1f3f14b7f55e96c1e550affe571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Currently, the extraction commands entirely remove the urg directory,
+which means the downloaded stamp will get removed, and thus a subsequent
+build would try to re-download it.
+
+It turns out that the directory extracted by urg is already correctly
+named, so we just need to extract out of the build directory. This
+highly simplifies the command.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/bananapro_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/urg/urg.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index c0a2b07..e5ac820 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -4,8 +4,8 @@ BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/urg/urg.mk b/package/urg/urg.mk
+index 4a41779..966627f 100644
+--- a/package/urg/urg.mk
++++ b/package/urg/urg.mk
+@@ -25,10 +25,7 @@ endif
+ URG_CONFIG_SCRIPTS = c_urg-config urg-config
  
--# Linux headers same as kernel, a 4.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ define URG_EXTRACT_CMDS
+-	$(RM) -rf $(URG_DIR)
+-	$(UNZIP) -d $(BUILD_DIR)/ $(DL_DIR)/$(URG_SOURCE)
+-	test -d $(URG_DIR) || \
+-		mv $(BUILD_DIR)/$(subst .zip,,$(URG_SOURCE)) $(URG_DIR)
++	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(URG_SOURCE)
+ endef
  
- # Toolchain
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
+ $(eval $(autotools-package))
