@@ -1,53 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Oct 2017 11:58:04 +0200
-Subject: [Buildroot] [PATCH 0/2] package/matchbox: fixes
-Message-ID: <cover.1506851870.git.yann.morin.1998@free.fr>
+Date: Sun,  1 Oct 2017 11:58:08 +0200
+Subject: [Buildroot] [PATCH 1/2] matchbox-lib: select dependency
+In-Reply-To: <cover.1506851870.git.yann.morin.1998@free.fr>
+References: <cover.1506851870.git.yann.morin.1998@free.fr>
+Message-ID: <fc7e8fd1cfa1d2ffee7e0ec0ac91f787e9caef45.1506851870.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Select the library we build-depend on.
 
-This small series brings in two fixes to the matchbox packages:
-  - ensure correct dependency selection
-  - fix the libmb.pc file
+Add myself to developpers for matchbos packages.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                     | 1 +
+ package/matchbox-lib/Config.in | 1 +
+ 2 files changed, 2 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit f04df2d65dcdbff18cdc4a173aeef574de97f2ed
-
-  package/opencore-amr: fix license, add license hash (2017-09-29 09:05:18 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 73a014e628bcbf58c220a91a54d8637b792186f6
-
-  package/matchbox-lib: correctly fix the .pc file (2017-10-01 11:53:07 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      matchbox-lib: select dependency
-      package/matchbox-lib: correctly fix the .pc file
-
- DEVELOPERS                                   | 1 +
- package/matchbox-fakekey/matchbox-fakekey.mk | 4 ++--
- package/matchbox-lib/Config.in               | 1 +
- package/matchbox-lib/matchbox-lib.mk         | 7 +++++++
- 4 files changed, 11 insertions(+), 2 deletions(-)
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cedf5a6f84..5a1ca877de 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1819,6 +1819,7 @@ F:	package/libinput/
+ F:	package/libiscsi/
+ F:	package/libseccomp/
+ F:	package/linux-tools/
++F:	package/matchbox*
+ F:	package/mesa3d-headers/
+ F:	package/nbd/
+ F:	package/nut/
+diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
+index e50a5436c1..d758ab35a8 100644
+--- a/package/matchbox-lib/Config.in
++++ b/package/matchbox-lib/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_MATCHBOX_LIB
+ 	bool "matchbox-lib"
++	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	help
+ 	  Matchbox common functionality library.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
