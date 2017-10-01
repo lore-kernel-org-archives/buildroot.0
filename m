@@ -1,28 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Oct 2017 23:21:46 +0200
-Subject: [Buildroot] [PATCH] package/urg: fix extraction commands
-In-Reply-To: <20171001152130.2454-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 1 Oct 2017 17:21:30 +0200")
-References: <20171001152130.2454-1-yann.morin.1998@free.fr>
-Message-ID: <87a81aef85.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Oct 2017 23:22:17 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi*: bump kernel version
+In-Reply-To: <20170930085546.25332-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 30 Sep 2017 10:55:46 +0200")
+References: <20170930085546.25332-1-peter@korsgaard.com>
+Message-ID: <8760byef7a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Currently, the extraction commands entirely remove the urg directory,
- > which means the downloaded stamp will get removed, and thus a subsequent
- > build would try to re-download it.
-
- > It turns out that the directory extrqated by urg is already correctly
- > named, so we just need to extract out of the build directory. This
- > highly simplifies the command.
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Samuel Martin <s.martin49@gmail.com>
+ > Now based on 4.9.52 (from 4.9.36).
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
