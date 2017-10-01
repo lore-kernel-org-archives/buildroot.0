@@ -1,75 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Oct 2017 14:32:16 +0200
-Subject: [Buildroot] [PATCH] package/weston: fix build on musl
-Message-ID: <20171001123216.31025-1-yann.morin.1998@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun,  1 Oct 2017 15:42:41 +0200
+Subject: [Buildroot] [PATCH 1/2] bananapro: bump U-Boot to version 2017.09
+Message-ID: <20171001134242.8053-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As usual, musl is more conservative than the alternatives, wrt to
-headers that are internally included.
-
-Fixes:
-    http://autobuild.buildroot.org/results/a7a/a7a6b17dff09a45a35185a0e02704523b815dd57/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- .../0002-shared-struct-timespec-is-in-time.h.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/weston/0002-shared-struct-timespec-is-in-time.h.patch
+ configs/bananapro_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-new file mode 100644
-index 0000000000..28476d3225
---- /dev/null
-+++ b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-@@ -0,0 +1,44 @@
-+From 47535b50c4178d62b848b3e9d3524e4f6282c815 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 1 Oct 2017 14:17:21 +0200
-+Subject: [PATCH] shared: struct timespec is in time.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+On the musl C library, tests/timespec-text.c does not build, with the
-+following error:
-+
-+    In file included from tests/timespec-test.c:36:0:
-+    ./shared/timespec-util.h:41:21: warning: ?struct timespec? declared
-+    inside parameter list will not be visible outside of this definition
-+    or declaration
-+     timespec_sub(struct timespec *r,
-+                         ^~~~~~~~
-+   [...]
-+
-+Indeed, struct timespec is defined in time.h, so we must include it.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Upstream status: submitted
-+    https://lists.freedesktop.org/archives/wayland-devel/2017-October/035306.html
-+---
-+ shared/timespec-util.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/shared/timespec-util.h b/shared/timespec-util.h
-+index 576b3e8f..34a120ae 100644
-+--- a/shared/timespec-util.h
-++++ b/shared/timespec-util.h
-+@@ -28,6 +28,7 @@
-+ 
-+ #include <stdint.h>
-+ #include <assert.h>
-++#include <time.h>
-+ 
-+ #define NSEC_PER_SEC 1000000000
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index 538e3e2ac6..c0a2b07dd9 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.11.0
+2.14.2
