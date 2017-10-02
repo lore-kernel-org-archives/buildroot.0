@@ -1,64 +1,59 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  2 Oct 2017 22:52:58 +0200
-Subject: [Buildroot] [PATCH] package/icu: remove xlocale.h header
-Message-ID: <20171002205259.15434-1-romain.naour@gmail.com>
+Date: Mon,  2 Oct 2017 22:52:59 +0200
+Subject: [Buildroot] [PATCH] package/netsniff-ng: add missing header
+In-Reply-To: <20171002205259.15434-1-romain.naour@gmail.com>
+References: <20171002205259.15434-1-romain.naour@gmail.com>
+Message-ID: <20171002205259.15434-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove xlocale.h header since it's removed from glibc 2.26.
+Like for nfs-utils and strongswan, add stdint.h header for
+UINT16_MAX definition
 
 Reported-by: Ross <grunpferd@netscape.net>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/icu/0006-i18n-Drop-include-xlocale.h.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/icu/0006-i18n-Drop-include-xlocale.h.patch
+ ...0004-staging-compilation-fix-with-new-gcc.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch
 
-diff --git a/package/icu/0006-i18n-Drop-include-xlocale.h.patch b/package/icu/0006-i18n-Drop-include-xlocale.h.patch
+diff --git a/package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch b/package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch
 new file mode 100644
-index 0000000..a5eb9cb
+index 0000000..fce604e
 --- /dev/null
-+++ b/package/icu/0006-i18n-Drop-include-xlocale.h.patch
-@@ -0,0 +1,39 @@
-+From 5f38e4f8c4be351db96a3be23ce25c97597cc508 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Mon, 2 Oct 2017 22:41:02 +0200
-+Subject: [PATCH] i18n: Drop include <xlocale.h>
++++ b/package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch
+@@ -0,0 +1,31 @@
++From 551aa0ee996132e443b5d12cbb6f114ac9aabcd3 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Jaroslav=20=C5=A0karvada?= <jskarvad@redhat.com>
++Date: Mon, 3 Jul 2017 18:24:32 +0200
++Subject: [PATCH] staging: compilation fix with new gcc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+glibc 2.26 drops this header
++Signed-off-by: Jaroslav ?karvada <jskarvad@redhat.com>
 +
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+Reported Upstream: http://bugs.icu-project.org/trac/ticket/13385
-+From: https://git.yoctoproject.org/cgit.cgi/poky/commit/meta/recipes-support/icu/icu/0001-i18n-Drop-include-xlocale.h.patch?id=931430f94c018bc3f58d70e11ca4a4ae7cb2e19c
-+
++Upstream patch 551aa0ee996132e443b5d12cbb6f114ac9aabcd3
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+Upstream-Status: Pending
-+---
-+ source/i18n/digitlst.cpp | 6 +-----
-+ 1 file changed, 1 insertion(+), 5 deletions(-)
++ staging/mz.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/source/i18n/digitlst.cpp b/source/i18n/digitlst.cpp
-+index 4d7c3f4..f111cf3 100644
-+--- a/source/i18n/digitlst.cpp
-++++ b/source/i18n/digitlst.cpp
-+@@ -61,11 +61,7 @@
-+ #endif
++diff --git a/staging/mz.h b/staging/mz.h
++index 5ed05a7..aa2c36f 100644
++--- a/staging/mz.h
+++++ b/staging/mz.h
++@@ -40,6 +40,7 @@
++ #include <netinet/in.h>
++ #include <stdarg.h>
++ #include <math.h>
+++#include <stdint.h>
 + 
-+ #if U_USE_STRTOD_L
-+-# if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN
-+-#   include <locale.h>
-+-# else
-+-#   include <xlocale.h>
-+-# endif
-++# include <locale.h>
-+ #endif
++ extern int verbose_level;
 + 
-+ // ***************************************************************************
 +-- 
 +2.9.5
 +
