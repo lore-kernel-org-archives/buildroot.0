@@ -1,83 +1,94 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Oct 2017 22:17:57 -0300
-Subject: [Buildroot] [RFC PATCH 1/1] testing/infra: add test for code style
-Message-ID: <20171002011757.8245-1-ricardo.martincoski@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 2 Oct 2017 06:50:11 +0300
+Subject: [Buildroot] [PATCH 2/2] package/kodi: use package
+ host-openjdk-bootstrap to provide JDK
+In-Reply-To: <20171001205319.11803-2-bernd.kuhls@t-online.de>
+References: <20171001205319.11803-1-bernd.kuhls@t-online.de>
+ <20171001205319.11803-2-bernd.kuhls@t-online.de>
+Message-ID: <20171002035011.icssutqx4njasdl3@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-NOTICE: this would require to install flake8 to the docker image
-buildroot/base.
+Hi Bernd,
 
-The configs could be fine-tuned by either adding options to the call,
-such as:
- "--max-line-length=132",
-or pointing to the config file:
- "--config={}".format(infra.filepath("conf/unittest.cfg")),
-and adding to support/testing/conf/unittest.cfg something like this:
- [flake8]
- max-line-length=132
-as pointed out by Yann E. MORIN in the review of
-http://patchwork.ozlabs.org/patch/819800/
+On Sun, Oct 01, 2017 at 10:53:19PM +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi/Config.in | 10 +++++++++-
+>  package/kodi/kodi.mk   |  7 +++++++
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index fc7eafa41a..79c53380f9 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -46,7 +46,7 @@ menuconfig BR2_PACKAGE_KODI
+>  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_PYTHON
+>  	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
+> -	select BR2_NEEDS_HOST_JAVA
+> +	select BR2_NEEDS_HOST_JAVA if !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
+>  	select BR2_PACKAGE_BZIP2
+>  	select BR2_PACKAGE_EXPAT
+>  	select BR2_PACKAGE_FFMPEG
+> @@ -65,6 +65,7 @@ menuconfig BR2_PACKAGE_KODI
+>  	select BR2_PACKAGE_LIBSAMPLERATE
+>  	select BR2_PACKAGE_LZO
+>  	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_KODI_OPENJDK if (BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
 
-Flake8 will also test files pointed by symlinks.
----
- .gitlab-ci.yml                           |  1 +
- support/testing/infra/test_code_style.py | 27 +++++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 support/testing/infra/test_code_style.py
+What is the advantage of the BR2_PACKAGE_KODI_OPENJDK -> 
+BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP indirection? Why not select 
+BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP directly here, ...
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0e0773fc74..9e33217bd8 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -218,6 +218,7 @@ zynq_microzed_defconfig: *defconfig
- zynq_zc706_defconfig: *defconfig
- zynq_zed_defconfig: *defconfig
- zynq_zybo_defconfig: *defconfig
-+infra.test_code_style.TestInfraCodeStyle: *runtime_test
- tests.core.test_post_scripts.TestPostScripts: *runtime_test
- tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
- tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
-diff --git a/support/testing/infra/test_code_style.py b/support/testing/infra/test_code_style.py
-new file mode 100644
-index 0000000000..6f06ebd145
---- /dev/null
-+++ b/support/testing/infra/test_code_style.py
-@@ -0,0 +1,27 @@
-+import subprocess
-+
-+import infra
-+import infra.basetest
-+
-+
-+class TestInfraCodeStyle(infra.basetest.BRTest):
-+    config = ""
-+    logfile = None
-+
-+    def setUp(self):
-+        self.show_msg("Starting")
-+        self.logfile = infra.open_log_file(self.builddir, "style",
-+                                           self.logtofile)
-+
-+    def tearDown(self):
-+        self.show_msg("Cleaning up")
-+
-+    def test_run(self):
-+        cmd = ["flake8",
-+               infra.filepath("run-tests"),
-+               infra.filepath("")]
-+        self.logfile.write("> starting '%s'\n" % " ".join(cmd))
-+        self.logfile.flush()
-+        ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile)
-+        if ret != 0:
-+            raise SystemError("There are code style warnings")
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_PCRE
+>  	select BR2_PACKAGE_PCRE_UCP
+> @@ -191,6 +192,13 @@ config BR2_PACKAGE_KODI_NONFREE
+>  	  Enable components with non-free licenses. This option
+>  	  currently only controls support for RAR archives.
+>  
+> +config BR2_PACKAGE_KODI_OPENJDK
+> +	bool
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # openjdk-botstrap
+> +	select BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP
+> +	help
+> +	  Use the buildroot-provided host-openjdk-bootstrap package.
+> +
+
+... get rid of BR2_PACKAGE_KODI_OPENJDK here, ...
+
+>  config BR2_PACKAGE_KODI_PULSEAUDIO
+>  	bool "pulseaudio"
+>  	# Pulseaudio support in kodi needs glib support in Pulseaudio,
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 28fe256b65..bd9d1ae6dd 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -156,6 +156,13 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>  KODI_CXX_FLAGS += -latomic
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_KODI_OPENJDK),y)
+
+... and use BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP here?
+
+> +KODI_CONF_ENV = \
+> +	JAVA_HOME=$(HOST_OPENJDK_BOOTSTRAP_DIR) \
+> +	PATH=$(HOST_OPENJDK_BOOTSTRAP_DIR)/bin:$(BR_PATH)
+> +KODI_DEPENDENCIES += host-openjdk-bootstrap
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+>  KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+>  KODI_DEPENDENCIES += mysql
+
+baruch
+
 -- 
-2.13.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
