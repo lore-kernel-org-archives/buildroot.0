@@ -1,76 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Oct 2017 23:16:31 +0200
-Subject: [Buildroot] [git commit] package/weston: fix build on musl
-Message-ID: <20171001211816.953078041A@busybox.osuosl.org>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 01 Oct 2017 21:54:51 -0300
+Subject: [Buildroot] [PATCH 1/2] support/run-tests: move packages tests
+ to packages directories
+References: <20170917075223.GC2930@scaer>
+Message-ID: <59d18e5bc90a4_6a703fce129871805518f@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ca2a9ce4b3167cbc223a50665ef7f95ce862130
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-As usual, musl is more conservative than the alternatives, wrt to
-headers that are internally included.
+On Sun, Sep 17, 2017 at 04:52 AM, Yann E. MORIN wrote:
 
-Fixes:
-    http://autobuild.buildroot.org/results/a7a/a7a6b17dff09a45a35185a0e02704523b815dd57/
+> On 2017-09-17 09:18 +0200, Yann E. MORIN spake thusly:
+>> On 2017-09-17 02:20 -0300, Ricardo Martincoski spake thusly:
+>> > On Sat, Sep 16, 2017 at 05:38 PM, Yann E. MORIN wrote:
+> [--SNIP--]
+>> > > +        package = os.path.basename(dir)
+>> > > +        for file in files:
+>> > 
+>> > You can import fnmatch to drastically reduce the number of regex compilations:
+>> >         for file in fnmatch.filter(files, '*.py'):
+>> Wee! :-)
+> 
+> In fact, no. At least, not in this state, because we do not want to
+> match _any_ .py file; instead, we want to match only .py files that are
+> named after the package.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-shared-struct-timespec-is-in-time.h.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+We could use 2 filters. Instead of 8k+ regex compilations (one for each file
+inside a package directory) we would run 2k+ fnmatch.filter (that probably
+compile one regex, one per directory) and one regex compilation for each test
+file in the package tree.
 
-diff --git a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-new file mode 100644
-index 0000000..28476d3
---- /dev/null
-+++ b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-@@ -0,0 +1,44 @@
-+From 47535b50c4178d62b848b3e9d3524e4f6282c815 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 1 Oct 2017 14:17:21 +0200
-+Subject: [PATCH] shared: struct timespec is in time.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+On the musl C library, tests/timespec-text.c does not build, with the
-+following error:
-+
-+    In file included from tests/timespec-test.c:36:0:
-+    ./shared/timespec-util.h:41:21: warning: ???struct timespec??? declared
-+    inside parameter list will not be visible outside of this definition
-+    or declaration
-+     timespec_sub(struct timespec *r,
-+                         ^~~~~~~~
-+   [...]
-+
-+Indeed, struct timespec is defined in time.h, so we must include it.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Upstream status: submitted
-+    https://lists.freedesktop.org/archives/wayland-devel/2017-October/035306.html
-+---
-+ shared/timespec-util.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/shared/timespec-util.h b/shared/timespec-util.h
-+index 576b3e8f..34a120ae 100644
-+--- a/shared/timespec-util.h
-++++ b/shared/timespec-util.h
-+@@ -28,6 +28,7 @@
-+ 
-+ #include <stdint.h>
-+ #include <assert.h>
-++#include <time.h>
-+ 
-+ #define NSEC_PER_SEC 1000000000
-+ 
-+-- 
-+2.11.0
-+
+         for file in fnmatch.filter(files, '*.py'):
+             if re.match("^{}.py$".format(package),file):
+
+But well... the default python interpreter has a cache for regex (I don't know
+its internals, just that it exists) and perhaps the change I suggested won't
+make any difference in performance.
+
+> 
+> But I guess I can make it to work with fnmatch nonetheless. ;-)
+
+BTW, could you change the DEVELOPERS file in the same patch?
++F:     package/*/*.py
+ F:     support/testing/
+
+I know it won't work for all possible files. 99% is enough for me.
+
+Regards,
+Ricardo
