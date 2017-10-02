@@ -1,60 +1,69 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  2 Oct 2017 10:31:07 -0500
-Subject: [Buildroot] [PATCH] strongswan: add missing include of stdint.h
-Message-ID: <1506958267-31934-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Mon,  2 Oct 2017 10:38:09 -0500
+Subject: [Buildroot] [PATCH] nfs-utils: add missing include of stdint
+Message-ID: <1506958689-1289-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent releases of glibc don't include the full stdint.h
-header in some network headers included by utils.h.
-Upstream is targetting a 5.6.1 release of the fix.
+Glibc bump to 2.26 exposed this missing header when building
+with the following combination using an i386 internal toolchain.
+gcc5.4.0
+bin2.28.1
+linux4.1.43
 
-Ustream: https://wiki.strongswan.org/issues/2425
+Logfile snippet:
+
+2017-10-02T00:08:11 ^
+2017-10-02T00:08:12 rpc.c: In function ?nsm_recv_getport?:
+2017-10-02T00:08:12 rpc.c:469:13: error: ?UINT16_MAX? undeclared (first use in this function)
+
+Upstream: https://bugzilla.linux-nfs.org/show_bug.cgi?id=312
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- ...trongswan-add-missing-include-of-stdint.h.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
+ ...nfs-utils-add-missing-include-of-stdint.h.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
 
-diff --git a/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
+diff --git a/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch b/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
 new file mode 100644
-index 0000000..d5ca690
+index 0000000..e34c3c9
 --- /dev/null
-+++ b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
-@@ -0,0 +1,32 @@
-+From a8fd708ce89d5ffb64a5e8873d49a55094dde898 Mon Sep 17 00:00:00 2001
++++ b/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
+@@ -0,0 +1,33 @@
++From b3ff26fa182b34b6faa1317f18a9dac4c7963334 Mon Sep 17 00:00:00 2001
 +From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 2 Oct 2017 10:16:36 -0500
-+Subject: [PATCH] strongswan: add missing include of stdint.h
++Date: Mon, 2 Oct 2017 09:57:15 -0500
++Subject: [PATCH] nfs-utils: add missing include of stdint.h
 +
-+Recent releases of glibc don't include the full stdint.h
-+header in some network headers included by utils.h.
-+Upstream is targetting a 5.6.1 release of the fix.
++Glibc bump to 2.26 exposed this missing header when building
++with the following combination using an i386 internal toolchain.
++gcc5.4.0
++bin2.28.1
++linux4.1.43
 +
-+Ustream: https://wiki.strongswan.org/issues/2425
++Upstream: https://bugzilla.linux-nfs.org/show_bug.cgi?id=312
 +
 +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 +---
-+ src/libstrongswan/utils/utils/memory.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ support/nsm/rpc.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/libstrongswan/utils/utils/memory.h b/src/libstrongswan/utils/utils/memory.h
-+index aef318f..c11624d 100644
-+--- a/src/libstrongswan/utils/utils/memory.h
-++++ b/src/libstrongswan/utils/utils/memory.h
-+@@ -14,6 +14,8 @@
-+  * for more details.
-+  */
++diff --git a/support/nsm/rpc.c b/support/nsm/rpc.c
++index 4e5f40e..d91c6ea 100644
++--- a/support/nsm/rpc.c
+++++ b/support/nsm/rpc.c
++@@ -40,6 +40,7 @@
 + 
-++#include <stdint.h> /* for uintptr_t */
-++
-+ /**
-+  * @defgroup memory_i memory
-+  * @{ @ingroup utils_i
++ #include <time.h>
++ #include <stdbool.h>
+++#include <stdint.h>
++ #include <string.h>
++ #include <unistd.h>
++ #include <fcntl.h>
 +-- 
 +1.9.1
 +
