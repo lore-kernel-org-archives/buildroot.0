@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Oct 2017 21:36:05 +0200
-Subject: [Buildroot] [PATCH] x11r7: xdriver_xf86-input-tslib: add the
- hash for the COPYING license file
-In-Reply-To: <20171002131245.6056-1-martink@posteo.de>
-References: <20171002131245.6056-1-martink@posteo.de>
-Message-ID: <20171002213605.26ca308a@windsurf.home>
+Date: Mon, 2 Oct 2017 21:36:15 +0200
+Subject: [Buildroot] [git commit] tslib: add the hash for the COPYING
+	license file
+Message-ID: <20171002193310.37C6E7FFDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c224ac2e22d442a3d53ee3bed010d7260fb9a24d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  2 Oct 2017 15:12:45 +0200, Martin Kepplinger wrote:
+Since tslib's COPYING file in part of the source tree, we can easily
+include it's hash for the given version here.
 
-> +# Locally computed
-> +sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tslib/tslib.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-It doesn't work here:
-
->>> xdriver_xf86-input-tslib 1.1.1 Collecting legal info
-ERROR: COPYING has wrong sha256 hash:
-ERROR: expected: 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9
-ERROR: got     : edfc46c9b91499699fc54d39e986756a2dcce8a919c6066be177123441532856
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 3ed4900..cca74fc 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,5 @@
+ # https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
+ sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
++
++# Locally computed
++sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
