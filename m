@@ -1,40 +1,30 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon,  2 Oct 2017 11:36:43 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Bump to version 20170929
-Message-ID: <20171002093643.25433-1-petr.vorel@gmail.com>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Mon,  2 Oct 2017 15:12:16 +0200
+Subject: [Buildroot] [PATCH] tslib: add the hash for the COPYING license file
+Message-ID: <20171002131216.5508-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
- package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Since tslib's COPYING file in part of the source tree, we can easily
+include it's hash for the given version here.
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index 68b95234dd..42feaade27 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20170516/ltp-full-20170516.tar.xz.sha1
--sha1 bd5210b73b14708c88449089a3a3c64ace3cd22a  ltp-full-20170516.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20170929/ltp-full-20170929.tar.xz.sha1
-+sha1 a170db3bc7203c9a998a277a369e7020dc61a382  ltp-full-20170929.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index eb9453af6f..bbeee5b23d 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20170516
-+LTP_TESTSUITE_VERSION = 20170929
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 3ed49008fb..cca74fc827 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,5 @@
+ # https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
+ sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
++
++# Locally computed
++sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
 -- 
-2.14.1
+2.11.0
