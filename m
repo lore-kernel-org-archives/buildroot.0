@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Oct 2017 07:49:06 +0200
-Subject: [Buildroot] [PATCH 2/5] support/testing: indent ccache
-	defconfig fragment
-In-Reply-To: <59d190611082_6a703fce1402c66055394@ultri3.mail>
-References: <20170929081758.GD2899@scaer>
- <59d190611082_6a703fce1402c66055394@ultri3.mail>
-Message-ID: <20171002054906.GB4753@scaer>
+Date: Mon, 2 Oct 2017 08:06:49 +0200
+Subject: [Buildroot] [PATCH 4/5] support/testing: fix remaining code
+	style
+In-Reply-To: <59d191cdafd96_6a703fce1469bdfc55573@ultri3.mail>
+References: <20170929080419.GA2899@scaer>
+ <59d191cdafd96_6a703fce1469bdfc55573@ultri3.mail>
+Message-ID: <20171002060649.GC4753@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +14,58 @@ To: buildroot@busybox.net
 
 Ricardo, All,
 
-On 2017-10-01 22:03 -0300, Ricardo Martincoski spake thusly:
-> On Fri, Sep 29, 2017 at 05:17 AM, Yann E. MORIN wrote:
+On 2017-10-01 22:09 -0300, Ricardo Martincoski spake thusly:
+> On Fri, Sep 29, 2017 at 05:04 AM, Yann E. MORIN wrote:
 > > On 2017-09-28 23:27 -0300, Ricardo Martincoski spake thusly:
-> >> Postpone the strip out of leading spaces in defconfig fragments from the
-> >> __init__  to the setUp method. It allows test cases to post-process the
-> >> defconfig in their own __init__ before calling the __init__ method from
-> >> the base class.
+[--SNIP--]
+> > But I would like to allow for a bit longer lines, because we already
+> > have quite some deeply indented code, and 79 chars wide lines are all
+> > the shorter.
 > > 
-> > Ideally, this should have been the very first patch in the series.
+> > So I would suggest we add this file:
+> > 
+> >     $ cat support/testing/setup.cfg:
+> >     [flake8]
+> >     max-line-length=132
 > 
-> Good idea. I will do, but...
+> I didn't know about this option. Nice!
 > 
 > > 
-> >> Indent the only fragment in the tree that currently need this (in the
-> >> ccache test case), taking advantage of
-> >> "cf3cd4388a support/tests: allow properly indented config fragment".
-> > 
-> > And then that wcould have gone in the other patch without any issue.
+> > Thoughts?
 > 
-> It should. But the reordering shows the jlevel handling is fragile.
+> My personal preference is to use the default. We can add "  # noqa" to the
+> exceptions.
+> The beauty of using default values is that anyone can call the tool without
+> thinking about config files or command line options.
+
+Yes, but flake8 will automatically find and use that file, so users do
+not need to pass any option when calling flake8. That's the beauty of
+it:
+
+http://flake8.pycqa.org/en/latest/user/configuration.html#project-configuration
+
+> But well... we can add a command line to the manual (as we have for
+> git format-patch), or either add such config file for the test infra and also
+> for all directories that have Python files.
 > 
-> Both the rootfs overlay and yaffs2 tests currently have defconfig fragments that
-> don't end in a newline, so the new patch 1 ends up silently disabling jlevel:
-> ...s/core/rootfs-overlay2"BR2_JLEVEL=1
-> BR2_TARGET_ROOTFS_YAFFS2=yBR2_JLEVEL=1
-
-Weird, because on line 46, we explicitly add a trainling '\n' :
-    https://git.buildroot.org/buildroot/tree/support/testing/infra/basetest.py#n45
-
-   45:  self.config = '\n'.join([line.lstrip() for line in
-                                self.config.splitlines()]) + '\n'
-   46:  self.config += "BR2_JLEVEL={}\n".format(self.jlevel)
-
-> So I plan to add another patch before the series, to make jlevel handling more
-> robust (to other changes in the infra) and at same time use the same style.
->           self.config += \
->               """
->               BR2_JLEVEL={}
->               """.format(self.jlevel)
-
-Well, I doubt this is useful. Just prepend a \n, if it really is useful :
-
-    self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
-
-> It also made me realize that this patch implies that I need to resend another
-> one (tests for the git downloader) since there I override the setUp method.
-> http://patchwork.ozlabs.org/patch/806161/
-> I would need to duplicate there the logic to remove the indentation of defconfig
-> fragments.
+> If we follow this path of adopting command line arguments or a config file,
+> don't worry about the test files in the package directories
+> (http://patchwork.ozlabs.org/patch/814544/), I will send a RFC patch that also
+> checks files pointed by symlinks.
 > 
-> Perhaps instead of moving the logic to the setUp of BRTest I could move it to
-> the builder init. This way any new test class that reimplements setUp and uses
-> builder will "inherit" it. Those that reimplement setUp but don't use builder
-> don't need that code.
->  class Builder(object):
->      def __init__(self, config, builddir, logtofile):
->          self.config = '\n'.join([line.lstrip() for line in
->                                   config.splitlines()]) + '\n'
-> What do you think?
+> The bikeshedding challenge is to define the magic number: 100? 132? 150?
 
-Yes, that would probably be better.
+I did not choose 132 randomly; I choose it for a reason.
+
+https://en.wikipedia.org/wiki/132_(number)
+
+The number of columns of a Line printer printing in landscape mode on
+14-inch paper.  /(while in portrait it was 80)/
+
+Also, 132 was the alternative line width on a VT (vt200? my memory of
+it is a bit fuzzy... ;-] )
+
+So, 132 is a good fit. ;-)
 
 Regards,
 Yann E. MORIN.
