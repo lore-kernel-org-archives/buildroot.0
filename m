@@ -1,40 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Oct 2017 16:20:11 +0200
-Subject: [Buildroot] [PATCH 4/5] support/testing: fix remaining code
-	style
-In-Reply-To: <4fe624ec-385e-9f16-88c5-2cf6ca773dd6@mind.be> (Arnout
- Vandecappelle's message of "Mon, 2 Oct 2017 15:48:51 +0200")
-References: <20170929080419.GA2899@scaer>
- <59d191cdafd96_6a703fce1469bdfc55573@ultri3.mail>
- <20171002060649.GC4753@scaer>
- <4fe624ec-385e-9f16-88c5-2cf6ca773dd6@mind.be>
-Message-ID: <87shf1d42s.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Oct 2017 15:06:10 +0000
+Subject: [Buildroot] [Bug 10356] New: nfs-utils missing header
+Message-ID: <bug-10356-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=10356
 
-Hi,
+            Bug ID: 10356
+           Summary: nfs-utils missing header
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: matthew.weber at rockwellcollins.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
- >  For me, the ideal is to wrap at 80 columns most of the time, but allow
- > exceptions up to something like 105 columns. 105 is still reasonable for
- > side-by-side on a wide display with some room for scrollbars. I know, Yann, that
- > you can easily fit 132 characters on side-by-side, but you've got an eagle-eyed
- > font size :-) That said, I can live with 132 as the absolute maximum. However, I
- > do think we should _normally_ wrap at 80 columns.
+Created attachment 7251
+  --> https://bugs.busybox.net/attachment.cgi?id=7251&action=edit
+proposed fix.  this has not been sent upstream yet.
 
- >  Standardizing on 80 columns is good because it's what we do in the rest of
- > Buildroot. Allowing exceptions is good because there are some lines you really
- > don't want to split (strings, mostly).
+Glibc bump to 2.26 exposed this missing header when building
+with the following combination using a internal toolchain.
+Arch: i686
+gcc5.4.0
+glibc2.26
+bin2.28.1
+linux4.1.43
 
- >  So ideally, I'd like to have a warning for anything about 80 columns, and an
- > error for anything over 105 (or 132). Unfortunately, I don't think flake8 allows
- > that. So let's say we put 132 in the config file, but enforce 80 columns in review.
+Logfile snippet:
 
-Agreed! I also think sticking to 80 columns where possible would be good.
+2017-10-02T00:08:11 ^
+2017-10-02T00:08:12 rpc.c: In function ?nsm_recv_getport?:
+2017-10-02T00:08:12 rpc.c:469:13: error: ?UINT16_MAX? undeclared (first use in
+this function)
+2017-10-02T00:08:12 if (port > UINT16_MAX) {
+2017-10-02T00:08:12 ^
+2017-10-02T00:08:12 rpc.c:469:13: note: each undeclared identifier is reported
+only once for each function it appears in
+2017-10-02T00:08:12 rpc.c: In function ?nsm_recv_getaddr?:
+2017-10-02T00:08:12 rpc.c:506:25: error: ?UINT16_MAX? undeclared (first use in
+this function)
+2017-10-02T00:08:12 if (port < 0 || port > UINT16_MAX) {
+2017-10-02T00:08:12 ^
+2017-10-02T00:08:12 Makefile:452: recipe for target 'rpc.o' failed
+2017-10-02T00:08:12 make[5]: *** [rpc.o] Error 1
+2017-10-02T00:08:12 make[5]: *** Waiting for unfinished jobs....
+2017-10-02T00:08:12 Makefile:393: recipe for target 'all' failed
+2017-10-02T00:08:12 make[4]: *** [all] Error 2
+2017-10-02T00:08:12 Makefile:426: recipe for target 'all-recursive' failed
+2017-10-02T00:08:12 make[3]: *** [all-recursive] Error 1
+2017-10-02T00:08:12 Makefile:468: recipe for target 'all-recursive' failed
+2017-10-02T00:08:12 make[2]: *** [all-recursive] Error 1
+2017-10-02T00:08:12 package/pkg-generic.mk:234: recipe for target
+'/home/gitlab-runner/builds/9d7dc3b9/2/rclinux/rc-bsp/target_build/build/nfs-utils-1.3.3/.stamp_built'
+failed
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
