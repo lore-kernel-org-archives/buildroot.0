@@ -1,75 +1,68 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 02 Oct 2017 17:33:12 -0300
-Subject: [Buildroot] [PATCH 1/2] support/run-tests: move packages tests
- to packages directories
-References: <20171002053232.GA4753@scaer>
-Message-ID: <59d2a288a9ed4_2c753fcd949aec68109dc@ultri3.mail>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 2 Oct 2017 17:36:39 -0300 (BRT)
+Subject: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build
+ extlinux
+In-Reply-To: <20171002211547.4942e28d@windsurf.home>
+References: <20170930231309.17677-1-casantos@datacom.ind.br>
+ <20170930233520.20143-1-casantos@datacom.ind.br>
+ <20171002211547.4942e28d@windsurf.home>
+Message-ID: <1749064856.11956839.1506976599871.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "Beno?t Allard" <benoit.allard@greenbone.net>
+> Sent: Monday, October 2, 2017 4:15:47 PM
+> Subject: Re: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build extlinux
 
-On Mon, Oct 02, 2017 at 02:32 AM, Yann E. MORIN wrote:
-
-> On 2017-10-01 21:54 -0300, Ricardo Martincoski spake thusly:
->> On Sun, Sep 17, 2017 at 04:52 AM, Yann E. MORIN wrote:
->> > On 2017-09-17 09:18 +0200, Yann E. MORIN spake thusly:
->> >> On 2017-09-17 02:20 -0300, Ricardo Martincoski spake thusly:
->> >> > On Sat, Sep 16, 2017 at 05:38 PM, Yann E. MORIN wrote:
->> > [--SNIP--]
->> >> > > +        package = os.path.basename(dir)
->> >> > > +        for file in files:
->> >> > 
->> >> > You can import fnmatch to drastically reduce the number of regex compilations:
->> >> >         for file in fnmatch.filter(files, '*.py'):
->> >> Wee! :-)
->> > 
->> > In fact, no. At least, not in this state, because we do not want to
->> > match _any_ .py file; instead, we want to match only .py files that are
->> > named after the package.
+> Hello,
+> 
+> On Sat, 30 Sep 2017 20:35:20 -0300, Carlos Santos wrote:
+>> Like the utilities, it is meant to run on the host machine, hence must
+>> be built using the host toolchain.
 >> 
->> We could use 2 filters. Instead of 8k+ regex compilations (one for each file
->> inside a package directory) we would run 2k+ fnmatch.filter (that probably
->> compile one regex, one per directory) and one regex compilation for each test
->> file in the package tree.
->> 
->>          for file in fnmatch.filter(files, '*.py'):
->>              if re.match("^{}.py$".format(package),file):
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > 
-> Err... I already changed it to:
+> It is not entirely clear if everybody agrees that "extlinux" is a host
+> or a target program.
 > 
->     for file in fnmatch.filter(files, '{}.py'.format(package)):
+> Beno?t Allard, who used to work on the syslinux package in Buildroot
+> wrote in http://www.syslinux.org/archives/2017-April/025755.html:
 > 
-> Is there something wrong with that? ;-)
+> """
+> 1. utilities required during the build (prepcore)
+> 2. utilities meant to be run in the target operating-system (isohybrid,
+>  memdisk, the extlinux installer, ...)
+> 3. utilities used to boot the operating system
+> """
+> 
+> So he was considering the extlinux installer as a program for the
+> target.
+> 
+> A few years earlier, another person on the Buildroot mailing list, also
+> wanted to have the extlinux installer on the target:
+> http://buildroot-busybox.2317881.n4.nabble.com/syslinux-on-target-td81294.html.
+> 
+> So, I'm not sure. Perhaps we need a host-syslinux package to install
+> those utilities ?
+> 
+> Or perhaps I'm being too complicated here, we should just merge your
+> patch, and adjusts when/if someone complains ?
 
-Nothing wrong. It's better this (your) way IMO.
+Well, there is a chicken-egg problem here because extlinux is a boot
+loader so you must have it installed on the target partition in order to
+be able to boot.
 
-> 
->> But well... the default python interpreter has a cache for regex (I don't know
->> its internals, just that it exists) and perhaps the change I suggested won't
->> make any difference in performance.
->> 
->> > 
->> > But I guess I can make it to work with fnmatch nonetheless. ;-)
->> 
->> BTW, could you change the DEVELOPERS file in the same patch?
->> +F:     package/*/*.py
->>  F:     support/testing/
-> 
-> You meant, add it to your entry ?
+On embedded systems this made on the host machine, manipulating the
+disk image (which was exactly the problem I had when I needed to use
+extlinux).
 
-Yes.
-
-> 
-> In fact, I would expect to assign the test files to the corresponding
-> package custodian (now imp[licit by their location).
-> 
-> But yes, I can assign them to you as well.
-
-Thanks.
-
-Regards,
-Ricardo
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
