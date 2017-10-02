@@ -1,109 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Oct 2017 20:58:22 +0200
-Subject: [Buildroot] [git commit] dnsmasq: simplify build configuration
-Message-ID: <20171002185457.669BF80FF7@busybox.osuosl.org>
+Date: Mon, 2 Oct 2017 20:58:24 +0200
+Subject: [Buildroot] [git commit] monit: bump to version 5.24.0
+Message-ID: <20171002185457.7431680FF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1042fea88aea4ebddcac5e215286394f1ad012b4
+commit: https://git.buildroot.net/buildroot/commit/?id=fe945e6c23d1140dddf2de51ec5c53764c1b127d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop direct sed'ing of config.h for HAVE_CONNTRACK, HAVE_LUASCRIPT, and
-HAVE_DBUS. Use MAKE_OPTS COPTS parameters instead, like we do already
-for all other options.
-
-Rename DNSMASQ_ENABLE_LUA to DNSMASQ_TWEAK_LIBLUA since it now does only
-that.
-
-Merge two conntrack and three dbus conditional sections.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dnsmasq/dnsmasq.mk | 42 ++++++++++--------------------------------
- 1 file changed, 10 insertions(+), 32 deletions(-)
+ package/monit/monit.hash | 4 ++--
+ package/monit/monit.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 7322170..9f96030 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -40,32 +40,31 @@ endif
+diff --git a/package/monit/monit.hash b/package/monit/monit.hash
+index d20286c..611d3e1 100644
+--- a/package/monit/monit.hash
++++ b/package/monit/monit.hash
+@@ -1,2 +1,2 @@
+-# From https://mmonit.com/monit/dist/monit-5.23.0.tar.gz.sha256:
+-sha256  dd39fe3a379c02402ba9c44c201b3ba925ebdc8f04225918820607b6c5d56713  monit-5.23.0.tar.gz
++# From https://mmonit.com/monit/dist/monit-5.24.0.tar.gz.sha256:
++sha256  754d1f0e165e5a26d4639a6a83f44ccf839e381f2622e0946d5302fa1f2d2414  monit-5.24.0.tar.gz
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index 32cef1e..260bb5b 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
- DNSMASQ_DEPENDENCIES += libnetfilter_conntrack
--endif
--
--ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
--define DNSMASQ_ENABLE_CONNTRACK
--	$(SED) 's^.*#define HAVE_CONNTRACK.*^#define HAVE_CONNTRACK^' \
--		$(DNSMASQ_DIR)/src/config.h
--endef
-+DNSMASQ_COPTS += -DHAVE_CONNTRACK
- endif
- 
- ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
- DNSMASQ_DEPENDENCIES += lua
-+DNSMASQ_COPTS += -DHAVE_LUASCRIPT
- 
- # liblua uses dlopen when dynamically linked
- ifneq ($(BR2_STATIC_LIBS),y)
- DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
- endif
- 
--define DNSMASQ_ENABLE_LUA
-+define DNSMASQ_TWEAK_LIBLUA
- 	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
--	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
--		$(DNSMASQ_DIR)/src/config.h
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
- DNSMASQ_DEPENDENCIES += dbus
-+DNSMASQ_COPTS += -DHAVE_DBUS
-+
-+define DNSMASQ_INSTALL_DBUS
-+	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
-+		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
-+endef
- endif
- 
- define DNSMASQ_FIX_PKGCONFIG
-@@ -73,33 +72,12 @@ define DNSMASQ_FIX_PKGCONFIG
- 		$(DNSMASQ_DIR)/Makefile
- endef
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--define DNSMASQ_ENABLE_DBUS
--	$(SED) 's^.*#define HAVE_DBUS.*^#define HAVE_DBUS^' \
--		$(DNSMASQ_DIR)/src/config.h
--endef
--else
--define DNSMASQ_ENABLE_DBUS
--	$(SED) 's^.*#define HAVE_DBUS.*^/* #define HAVE_DBUS */^' \
--		$(DNSMASQ_DIR)/src/config.h
--endef
--endif
--
- define DNSMASQ_BUILD_CMDS
- 	$(DNSMASQ_FIX_PKGCONFIG)
--	$(DNSMASQ_ENABLE_DBUS)
--	$(DNSMASQ_ENABLE_LUA)
--	$(DNSMASQ_ENABLE_CONNTRACK)
-+	$(DNSMASQ_TWEAK_LIBLUA)
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
- endef
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--define DNSMASQ_INSTALL_DBUS
--	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
--		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
--endef
--endif
--
- define DNSMASQ_INSTALL_TARGET_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
- 	mkdir -p $(TARGET_DIR)/var/lib/misc/
+-MONIT_VERSION = 5.23.0
++MONIT_VERSION = 5.24.0
+ MONIT_SITE = http://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
