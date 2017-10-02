@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Oct 2017 07:32:32 +0200
-Subject: [Buildroot] [PATCH 1/2] support/run-tests: move packages tests
- to packages directories
-In-Reply-To: <59d18e5bc90a4_6a703fce129871805518f@ultri3.mail>
-References: <20170917075223.GC2930@scaer>
- <59d18e5bc90a4_6a703fce129871805518f@ultri3.mail>
-Message-ID: <20171002053232.GA4753@scaer>
+Date: Mon, 2 Oct 2017 07:49:06 +0200
+Subject: [Buildroot] [PATCH 2/5] support/testing: indent ccache
+	defconfig fragment
+In-Reply-To: <59d190611082_6a703fce1402c66055394@ultri3.mail>
+References: <20170929081758.GD2899@scaer>
+ <59d190611082_6a703fce1402c66055394@ultri3.mail>
+Message-ID: <20171002054906.GB4753@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +14,67 @@ To: buildroot@busybox.net
 
 Ricardo, All,
 
-On 2017-10-01 21:54 -0300, Ricardo Martincoski spake thusly:
-> On Sun, Sep 17, 2017 at 04:52 AM, Yann E. MORIN wrote:
-> > On 2017-09-17 09:18 +0200, Yann E. MORIN spake thusly:
-> >> On 2017-09-17 02:20 -0300, Ricardo Martincoski spake thusly:
-> >> > On Sat, Sep 16, 2017 at 05:38 PM, Yann E. MORIN wrote:
-> > [--SNIP--]
-> >> > > +        package = os.path.basename(dir)
-> >> > > +        for file in files:
-> >> > 
-> >> > You can import fnmatch to drastically reduce the number of regex compilations:
-> >> >         for file in fnmatch.filter(files, '*.py'):
-> >> Wee! :-)
+On 2017-10-01 22:03 -0300, Ricardo Martincoski spake thusly:
+> On Fri, Sep 29, 2017 at 05:17 AM, Yann E. MORIN wrote:
+> > On 2017-09-28 23:27 -0300, Ricardo Martincoski spake thusly:
+> >> Postpone the strip out of leading spaces in defconfig fragments from the
+> >> __init__  to the setUp method. It allows test cases to post-process the
+> >> defconfig in their own __init__ before calling the __init__ method from
+> >> the base class.
 > > 
-> > In fact, no. At least, not in this state, because we do not want to
-> > match _any_ .py file; instead, we want to match only .py files that are
-> > named after the package.
+> > Ideally, this should have been the very first patch in the series.
 > 
-> We could use 2 filters. Instead of 8k+ regex compilations (one for each file
-> inside a package directory) we would run 2k+ fnmatch.filter (that probably
-> compile one regex, one per directory) and one regex compilation for each test
-> file in the package tree.
-> 
->          for file in fnmatch.filter(files, '*.py'):
->              if re.match("^{}.py$".format(package),file):
-
-Err... I already changed it to:
-
-    for file in fnmatch.filter(files, '{}.py'.format(package)):
-
-Is there something wrong with that? ;-)
-
-> But well... the default python interpreter has a cache for regex (I don't know
-> its internals, just that it exists) and perhaps the change I suggested won't
-> make any difference in performance.
+> Good idea. I will do, but...
 > 
 > > 
-> > But I guess I can make it to work with fnmatch nonetheless. ;-)
+> >> Indent the only fragment in the tree that currently need this (in the
+> >> ccache test case), taking advantage of
+> >> "cf3cd4388a support/tests: allow properly indented config fragment".
+> > 
+> > And then that wcould have gone in the other patch without any issue.
 > 
-> BTW, could you change the DEVELOPERS file in the same patch?
-> +F:     package/*/*.py
->  F:     support/testing/
+> It should. But the reordering shows the jlevel handling is fragile.
+> 
+> Both the rootfs overlay and yaffs2 tests currently have defconfig fragments that
+> don't end in a newline, so the new patch 1 ends up silently disabling jlevel:
+> ...s/core/rootfs-overlay2"BR2_JLEVEL=1
+> BR2_TARGET_ROOTFS_YAFFS2=yBR2_JLEVEL=1
 
-You meant, add it to your entry ?
+Weird, because on line 46, we explicitly add a trainling '\n' :
+    https://git.buildroot.org/buildroot/tree/support/testing/infra/basetest.py#n45
 
-In fact, I would expect to assign the test files to the corresponding
-package custodian (now imp[licit by their location).
+   45:  self.config = '\n'.join([line.lstrip() for line in
+                                self.config.splitlines()]) + '\n'
+   46:  self.config += "BR2_JLEVEL={}\n".format(self.jlevel)
 
-But yes, I can assign them to you as well.
+> So I plan to add another patch before the series, to make jlevel handling more
+> robust (to other changes in the infra) and at same time use the same style.
+>           self.config += \
+>               """
+>               BR2_JLEVEL={}
+>               """.format(self.jlevel)
+
+Well, I doubt this is useful. Just prepend a \n, if it really is useful :
+
+    self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
+
+> It also made me realize that this patch implies that I need to resend another
+> one (tests for the git downloader) since there I override the setUp method.
+> http://patchwork.ozlabs.org/patch/806161/
+> I would need to duplicate there the logic to remove the indentation of defconfig
+> fragments.
+> 
+> Perhaps instead of moving the logic to the setUp of BRTest I could move it to
+> the builder init. This way any new test class that reimplements setUp and uses
+> builder will "inherit" it. Those that reimplement setUp but don't use builder
+> don't need that code.
+>  class Builder(object):
+>      def __init__(self, config, builddir, logtofile):
+>          self.config = '\n'.join([line.lstrip() for line in
+>                                   config.splitlines()]) + '\n'
+> What do you think?
+
+Yes, that would probably be better.
 
 Regards,
 Yann E. MORIN.
