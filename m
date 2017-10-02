@@ -1,67 +1,75 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 2 Oct 2017 17:28:47 -0300 (BRT)
-Subject: [Buildroot] [PATCH v3] nc: new virtual package providing
- "netcat" functionality
-In-Reply-To: <87k20dcp1j.fsf@dell.be.48ers.dk>
-References: <20170917214558.11061-1-casantos@datacom.ind.br>
- <1506953582-12965-1-git-send-email-casantos@datacom.ind.br>
- <20171002211840.104aa3df@windsurf.home> <87k20dcp1j.fsf@dell.be.48ers.dk>
-Message-ID: <1919404262.11955562.1506976127450.JavaMail.zimbra@datacom.ind.br>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 02 Oct 2017 17:33:12 -0300
+Subject: [Buildroot] [PATCH 1/2] support/run-tests: move packages tests
+ to packages directories
+References: <20171002053232.GA4753@scaer>
+Message-ID: <59d2a288a9ed4_2c753fcd949aec68109dc@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>,
-> buildroot at buildroot.org
-> Sent: Monday, October 2, 2017 4:44:56 PM
-> Subject: Re: [PATCH v3] nc: new virtual package providing "netcat" functionality
+Hello,
 
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> Hi,
-> 
-> > What is the benefit of having a virtual package for this ?
-> 
-> > Virtual packages are mainly useful when several variants of a given
-> > library provide the same API, but different implementations, and we
-> > have N consumers of this API. In such a case, a virtual package avoids
-> > having each consumer explicitly handle every possible provider of the
-> > API.
-> 
-> > However, in the case of netcat, I don't see the point. Yes, you can
-> > currently enable several packages that provide the netcat
-> > functionality, and they will step on each other in some combinations.
-> 
-> > But you can also enable several Web servers that will try to listen on
-> > port 80 at boot time, leaving only one functional, and still we're not
-> > going to have a "webserver" virtual package.
-> 
-> > So, I don't see where the problem is, and therefore I don't think a
-> > solution is necessary :-)
-> 
-> FYI, this is my feeling as well. The current setup afaik only has issues
-> if you enable more than one package providing a nc implementation (this
-> solution fixes it by not allowing such setup), but I'm not sure if
-> there's really a realistic use case where somebody would want to do this
-> in the first place?
+On Mon, Oct 02, 2017 at 02:32 AM, Yann E. MORIN wrote:
 
-I'm currenly working on porting libvirt to buildroor. It requires a
-modern "nc" command (with support for unix sockets) to provide remote
-access via ssh using virt-manager. Currently this is impossible with
-uClibc because openbsd-netcat depends on GLIBC.
+> On 2017-10-01 21:54 -0300, Ricardo Martincoski spake thusly:
+>> On Sun, Sep 17, 2017 at 04:52 AM, Yann E. MORIN wrote:
+>> > On 2017-09-17 09:18 +0200, Yann E. MORIN spake thusly:
+>> >> On 2017-09-17 02:20 -0300, Ricardo Martincoski spake thusly:
+>> >> > On Sat, Sep 16, 2017 at 05:38 PM, Yann E. MORIN wrote:
+>> > [--SNIP--]
+>> >> > > +        package = os.path.basename(dir)
+>> >> > > +        for file in files:
+>> >> > 
+>> >> > You can import fnmatch to drastically reduce the number of regex compilations:
+>> >> >         for file in fnmatch.filter(files, '*.py'):
+>> >> Wee! :-)
+>> > 
+>> > In fact, no. At least, not in this state, because we do not want to
+>> > match _any_ .py file; instead, we want to match only .py files that are
+>> > named after the package.
+>> 
+>> We could use 2 filters. Instead of 8k+ regex compilations (one for each file
+>> inside a package directory) we would run 2k+ fnmatch.filter (that probably
+>> compile one regex, one per directory) and one regex compilation for each test
+>> file in the package tree.
+>> 
+>>          for file in fnmatch.filter(files, '*.py'):
+>>              if re.match("^{}.py$".format(package),file):
+> 
+> Err... I already changed it to:
+> 
+>     for file in fnmatch.filter(files, '{}.py'.format(package)):
+> 
+> Is there something wrong with that? ;-)
 
-At the same time I think it's waste of space to install the full
-nmap suite just to have one command.
+Nothing wrong. It's better this (your) way IMO.
 
-By the way, nmap's ncat is the "nc" command used on Fedora Linux while
-Debian uses openbsd-netcat by default.
+> 
+>> But well... the default python interpreter has a cache for regex (I don't know
+>> its internals, just that it exists) and perhaps the change I suggested won't
+>> make any difference in performance.
+>> 
+>> > 
+>> > But I guess I can make it to work with fnmatch nonetheless. ;-)
+>> 
+>> BTW, could you change the DEVELOPERS file in the same patch?
+>> +F:     package/*/*.py
+>>  F:     support/testing/
+> 
+> You meant, add it to your entry ?
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+Yes.
+
+> 
+> In fact, I would expect to assign the test files to the corresponding
+> package custodian (now imp[licit by their location).
+> 
+> But yes, I can assign them to you as well.
+
+Thanks.
+
+Regards,
+Ricardo
