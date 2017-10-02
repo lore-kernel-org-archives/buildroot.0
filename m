@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 2 Oct 2017 15:35:54 +0200
-Subject: [Buildroot] [PATCH 1/2] matchbox-lib: select dependency
-In-Reply-To: <fc7e8fd1cfa1d2ffee7e0ec0ac91f787e9caef45.1506851870.git.yann.morin.1998@free.fr>
-References: <cover.1506851870.git.yann.morin.1998@free.fr>
- <fc7e8fd1cfa1d2ffee7e0ec0ac91f787e9caef45.1506851870.git.yann.morin.1998@free.fr>
-Message-ID: <192b3438-653d-c32f-53bb-234843ee8ab4@mind.be>
+Date: Mon, 2 Oct 2017 15:48:51 +0200
+Subject: [Buildroot] [PATCH 4/5] support/testing: fix remaining code
+	style
+In-Reply-To: <20171002060649.GC4753@scaer>
+References: <20170929080419.GA2899@scaer>
+ <59d191cdafd96_6a703fce1469bdfc55573@ultri3.mail>
+ <20171002060649.GC4753@scaer>
+Message-ID: <4fe624ec-385e-9f16-88c5-2cf6ca773dd6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +15,44 @@ To: buildroot@busybox.net
 
 
 
-On 01-10-17 11:58, Yann E. MORIN wrote:
-> Select the library we build-depend on.
+On 02-10-17 08:06, Yann E. MORIN wrote:
+>> If we follow this path of adopting command line arguments or a config file,
+>> don't worry about the test files in the package directories
+>> (http://patchwork.ozlabs.org/patch/814544/), I will send a RFC patch that also
+>> checks files pointed by symlinks.
+>>
+>> The bikeshedding challenge is to define the magic number: 100? 132? 150?
+> I did not choose 132 randomly; I choose it for a reason.
 > 
-> Add myself to developpers for matchbos packages.
+> https://en.wikipedia.org/wiki/132_(number)
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  DEVELOPERS                     | 1 +
->  package/matchbox-lib/Config.in | 1 +
->  2 files changed, 2 insertions(+)
+> The number of columns of a Line printer printing in landscape mode on
+> 14-inch paper.  /(while in portrait it was 80)/
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cedf5a6f84..5a1ca877de 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1819,6 +1819,7 @@ F:	package/libinput/
->  F:	package/libiscsi/
->  F:	package/libseccomp/
->  F:	package/linux-tools/
-> +F:	package/matchbox*
->  F:	package/mesa3d-headers/
->  F:	package/nbd/
->  F:	package/nut/
-> diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
-> index e50a5436c1..d758ab35a8 100644
-> --- a/package/matchbox-lib/Config.in
-> +++ b/package/matchbox-lib/Config.in
-> @@ -1,4 +1,5 @@
->  config BR2_PACKAGE_MATCHBOX_LIB
->  	bool "matchbox-lib"
-> +	select BR2_PACKAGE_XLIB_LIBXEXT
+> Also, 132 was the alternative line width on a VT (vt200? my memory of
+> it is a bit fuzzy... ;-] )
+> 
+> So, 132 is a good fit. ;-)
 
- matchbox-lib also has a DEPENDENCIES on expat. expat is indeed selected by the
-top-level matchbox package, but that package doesn't actually have it in its
-DEPENDENCIES. So perhaps move expat as well?
+ I don't agree :-)
 
- Otherwise:
+ For me, the ideal is to wrap at 80 columns most of the time, but allow
+exceptions up to something like 105 columns. 105 is still reasonable for
+side-by-side on a wide display with some room for scrollbars. I know, Yann, that
+you can easily fit 132 characters on side-by-side, but you've got an eagle-eyed
+font size :-) That said, I can live with 132 as the absolute maximum. However, I
+do think we should _normally_ wrap at 80 columns.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Standardizing on 80 columns is good because it's what we do in the rest of
+Buildroot. Allowing exceptions is good because there are some lines you really
+don't want to split (strings, mostly).
+
+ So ideally, I'd like to have a warning for anything about 80 columns, and an
+error for anything over 105 (or 132). Unfortunately, I don't think flake8 allows
+that. So let's say we put 132 in the config file, but enforce 80 columns in review.
 
  Regards,
  Arnout
-
->  	help
->  	  Matchbox common functionality library.
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
