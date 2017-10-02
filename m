@@ -1,73 +1,69 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 2 Oct 2017 08:20:36 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-10-01
-In-Reply-To: <20171002063058.73A6D20968@mail.free-electrons.com>
-References: <20171002063058.73A6D20968@mail.free-electrons.com>
-Message-ID: <CANQCQpYngM314ZhzOaA82BjCai8xiw1FpS227m9p5i9=nhKE9w@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 2 Oct 2017 15:35:54 +0200
+Subject: [Buildroot] [PATCH 1/2] matchbox-lib: select dependency
+In-Reply-To: <fc7e8fd1cfa1d2ffee7e0ec0ac91f787e9caef45.1506851870.git.yann.morin.1998@free.fr>
+References: <cover.1506851870.git.yann.morin.1998@free.fr>
+ <fc7e8fd1cfa1d2ffee7e0ec0ac91f787e9caef45.1506851870.git.yann.morin.1998@free.fr>
+Message-ID: <192b3438-653d-c32f-53bb-234843ee8ab4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-
-On Mon, Oct 2, 2017 at 1:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Hello,
->
-> Build statistics for 2017-10-01
-> ================================
->
->       successes : 214
->        failures : 61
->        timeouts : 0
->           TOTAL : 275
->
-> Classification of failures by reason
-> ====================================
->
-
-<snip>
-
->
->  powerpc64le |                 host-mtd-2.0.1 | NOK | http://autobuild.buildroot.net/results/95258b05d9d44d1775fb780d82713fca3c4c23dd | ORPH
->      powerpc |                 host-mtd-2.0.1 | NOK | http://autobuild.buildroot.net/results/7befbdc6206e5b9ece0e3336196a031ff7394709 | ORPH
->       mipsel |                 host-mtd-2.0.1 | NOK | http://autobuild.buildroot.net/results/fd719822686a3b37084e010677cb0bae6961e9cc | ORPH
->       mipsel |                 host-mtd-2.0.1 | NOK | http://autobuild.buildroot.net/results/30957ac0226e4a53b7ccb6fcbe5afa02c556410f | ORPH
->          arm |                 host-mtd-2.0.1 | NOK | http://autobuild.buildroot.net/results/1bd2f68338e1a8ca38c0c3d946cd0ab6e3502535 | ORPH
->       mipsel |                 host-mtd-2.0.1 | NOK | http://autobuild.buildroot.net/results/5d205467439f4f2313ccce38b98aa750415ba4a8 | ORPH
->         i686 | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/27703beb74be158b4a0ce1ce187b713c9cbffc3a |
->      aarch64 | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/eae6870c9dc626fc425e4e76bf6b2293ced8469d |
->          arm | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/09d2b3af3843b4c15e6d98ff9a73b5a3ac2218d2 |
->         m68k | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/0158f6c25dee54c76b1831264e6286729b40ff94 |
->          arm | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/e6c0c844872c46ad315389ca09515f719554adfa |
->       x86_64 | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/d2d3a7fe0c4009f5c474573070730e94a702dde9 |
->         or1k | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/86901d116c8c294d1b681f2039a22537f9ff127a |
->      aarch64 | host-squashfs-3de1687d7432e... | NOK | http://autobuild.buildroot.net/results/bf95e377682c024f9dfd9ca75ccf9f21bf551bc6 |
 
 
-I've brought a RHEL7.4 box online for autobr and I'm sure you've seen
-some of different failures.  This one is weird (both host mtd and
-squashfs, I think there is something in the configure step not
-evaluating correctly for the host dependency for lzo, hoping to get a
-chance to look at it this week.
+On 01-10-17 11:58, Yann E. MORIN wrote:
+> Select the library we build-depend on.
+> 
+> Add myself to developpers for matchbos packages.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  DEVELOPERS                     | 1 +
+>  package/matchbox-lib/Config.in | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index cedf5a6f84..5a1ca877de 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1819,6 +1819,7 @@ F:	package/libinput/
+>  F:	package/libiscsi/
+>  F:	package/libseccomp/
+>  F:	package/linux-tools/
+> +F:	package/matchbox*
+>  F:	package/mesa3d-headers/
+>  F:	package/nbd/
+>  F:	package/nut/
+> diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
+> index e50a5436c1..d758ab35a8 100644
+> --- a/package/matchbox-lib/Config.in
+> +++ b/package/matchbox-lib/Config.in
+> @@ -1,4 +1,5 @@
+>  config BR2_PACKAGE_MATCHBOX_LIB
+>  	bool "matchbox-lib"
+> +	select BR2_PACKAGE_XLIB_LIBXEXT
 
+ matchbox-lib also has a DEPENDENCIES on expat. expat is indeed selected by the
+top-level matchbox package, but that package doesn't actually have it in its
+DEPENDENCIES. So perhaps move expat as well?
 
->        arm |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/d72fc6095ffda260a1fbd268ed443a2f6c7689bd | ORPH
->         or1k |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/98f659434128d30bc7b6a2344828769e79296415 | ORPH
->     mips64el |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/c8202668666f7e2054bf5540fd07e87bf16f8a71 | ORPH
->          arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/96e0575b72b4f2d98fbad4baa3e5402e9044d10b | ORPH
->          arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/bfa6442bbc9b65ed7f0aab047b9f4a31ee775442 | ORPH
->          arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/519e4f60156db6fcee749e6147d237f2e8bddfba | ORPH
->          arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/0eb1da61683f746d9b12593ffd092e214bdd55ea | ORPH
->          sh4 | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/346350305e9416cd11c2fd86aeaec425531b21ff |
->          arc | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/6f1505527b09bd7f4831495abb078dc73b8f295d |
+ Otherwise:
 
-I've installed python3 now on my host and should resolve these
-Python.h issues.  Shouldn't be necessary thought so something must
-still be touching the host env.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
--Matt
+ Regards,
+ Arnout
+
+>  	help
+>  	  Matchbox common functionality library.
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
