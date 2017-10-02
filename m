@@ -1,74 +1,107 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Oct 2017 08:06:49 +0200
-Subject: [Buildroot] [PATCH 4/5] support/testing: fix remaining code
+Date: Mon, 2 Oct 2017 08:27:23 +0200
+Subject: [Buildroot] [RFC PATCH 1/1] testing/infra: add test for code
 	style
-In-Reply-To: <59d191cdafd96_6a703fce1469bdfc55573@ultri3.mail>
-References: <20170929080419.GA2899@scaer>
- <59d191cdafd96_6a703fce1469bdfc55573@ultri3.mail>
-Message-ID: <20171002060649.GC4753@scaer>
+In-Reply-To: <20171002011757.8245-1-ricardo.martincoski@gmail.com>
+References: <20171002011757.8245-1-ricardo.martincoski@gmail.com>
+Message-ID: <20171002062723.GD4753@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Ricardo, all,
 
-On 2017-10-01 22:09 -0300, Ricardo Martincoski spake thusly:
-> On Fri, Sep 29, 2017 at 05:04 AM, Yann E. MORIN wrote:
-> > On 2017-09-28 23:27 -0300, Ricardo Martincoski spake thusly:
-[--SNIP--]
-> > But I would like to allow for a bit longer lines, because we already
-> > have quite some deeply indented code, and 79 chars wide lines are all
-> > the shorter.
-> > 
-> > So I would suggest we add this file:
-> > 
-> >     $ cat support/testing/setup.cfg:
-> >     [flake8]
-> >     max-line-length=132
+On 2017-10-01 22:17 -0300, Ricardo Martincoski spake thusly:
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> ---
+> NOTICE: this would require to install flake8 to the docker image
+> buildroot/base.
 > 
-> I didn't know about this option. Nice!
-> 
-> > 
-> > Thoughts?
-> 
-> My personal preference is to use the default. We can add "  # noqa" to the
-> exceptions.
-> The beauty of using default values is that anyone can call the tool without
-> thinking about config files or command line options.
+> The configs could be fine-tuned by either adding options to the call,
+> such as:
+>  "--max-line-length=132",
+> or pointing to the config file:
+>  "--config={}".format(infra.filepath("conf/unittest.cfg")),
+> and adding to support/testing/conf/unittest.cfg something like this:
+>  [flake8]
+>  max-line-length=132
+> as pointed out by Yann E. MORIN in the review of
+> http://patchwork.ozlabs.org/patch/819800/
 
-Yes, but flake8 will automatically find and use that file, so users do
-not need to pass any option when calling flake8. That's the beauty of
-it:
+Note that if the file is support/testing/setup.cfg, then flake8 will
+automatically find it, without the need for passing the --config option.
 
-http://flake8.pycqa.org/en/latest/user/configuration.html#project-configuration
+It can also be named support/testing/.flake8, but I don't like
+dot-files, as they are hard to find.
 
-> But well... we can add a command line to the manual (as we have for
-> git format-patch), or either add such config file for the test infra and also
-> for all directories that have Python files.
-> 
-> If we follow this path of adopting command line arguments or a config file,
-> don't worry about the test files in the package directories
-> (http://patchwork.ozlabs.org/patch/814544/), I will send a RFC patch that also
-> checks files pointed by symlinks.
-> 
-> The bikeshedding challenge is to define the magic number: 100? 132? 150?
-
-I did not choose 132 randomly; I choose it for a reason.
-
-https://en.wikipedia.org/wiki/132_(number)
-
-The number of columns of a Line printer printing in landscape mode on
-14-inch paper.  /(while in portrait it was 80)/
-
-Also, 132 was the alternative line width on a VT (vt200? my memory of
-it is a bit fuzzy... ;-] )
-
-So, 132 is a good fit. ;-)
+If we wanted to sharea  single file for nose2 and flake8, then we could
+move support/testing/conf/unittest.cfg to support/testing/setup.cfg.
+But why would we want to share a single file for the two different
+tools?
 
 Regards,
 Yann E. MORIN.
+
+> Flake8 will also test files pointed by symlinks.
+> ---
+>  .gitlab-ci.yml                           |  1 +
+>  support/testing/infra/test_code_style.py | 27 +++++++++++++++++++++++++++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 support/testing/infra/test_code_style.py
+> 
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 0e0773fc74..9e33217bd8 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -218,6 +218,7 @@ zynq_microzed_defconfig: *defconfig
+>  zynq_zc706_defconfig: *defconfig
+>  zynq_zed_defconfig: *defconfig
+>  zynq_zybo_defconfig: *defconfig
+> +infra.test_code_style.TestInfraCodeStyle: *runtime_test
+>  tests.core.test_post_scripts.TestPostScripts: *runtime_test
+>  tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
+>  tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+> diff --git a/support/testing/infra/test_code_style.py b/support/testing/infra/test_code_style.py
+> new file mode 100644
+> index 0000000000..6f06ebd145
+> --- /dev/null
+> +++ b/support/testing/infra/test_code_style.py
+> @@ -0,0 +1,27 @@
+> +import subprocess
+> +
+> +import infra
+> +import infra.basetest
+> +
+> +
+> +class TestInfraCodeStyle(infra.basetest.BRTest):
+> +    config = ""
+> +    logfile = None
+> +
+> +    def setUp(self):
+> +        self.show_msg("Starting")
+> +        self.logfile = infra.open_log_file(self.builddir, "style",
+> +                                           self.logtofile)
+> +
+> +    def tearDown(self):
+> +        self.show_msg("Cleaning up")
+> +
+> +    def test_run(self):
+> +        cmd = ["flake8",
+> +               infra.filepath("run-tests"),
+> +               infra.filepath("")]
+> +        self.logfile.write("> starting '%s'\n" % " ".join(cmd))
+> +        self.logfile.flush()
+> +        ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile)
+> +        if ret != 0:
+> +            raise SystemError("There are code style warnings")
+> -- 
+> 2.13.0
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
