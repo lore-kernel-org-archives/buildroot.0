@@ -1,58 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Oct 2017 21:45:04 +0200
-Subject: [Buildroot] [git commit] arc/bfin: remove 60x cores
-Message-ID: <20171002193852.747B181049@busybox.osuosl.org>
+Date: Mon, 2 Oct 2017 21:41:29 +0200
+Subject: [Buildroot] [git commit] arch: add option to disable internal
+	toolchain backend
+Message-ID: <20171002193852.34A0481049@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29e046d6e36a4be577fbc0aef3ac0a8dfb034e9b
+commit: https://git.buildroot.net/buildroot/commit/?id=31a726122f6bf07b56341144465964fe342ec614
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Those cores are not supported in upstream gcc, not even in master.
+Some architectures or specific cores do not have support in upstream
+gcc. Currently, they are individually listed as exclusions in the
+toolchain choice.
 
-The only toolchain that supported those core was the 2014R1 ADI
-rebuilt toolchain, but we removed it in 311bc13 (toolchain: kill
-ADI Blackfin toolchain) because there was too many issues with it.
-ADI has not released any newer toolchain since then.
+This poses a maintainance burden, as the knowledge about what gcc
+version supports what architecture is split across many places: the
+toolchain choice, the gcc version choice, the external toolchains.
 
-There is little hope for those cores now, so remove them.
+As a first step, add a blind option that architectures or individual
+cores may select to indicate they lack support in our internal backend.
 
-Support for those cores has been useless and unusable for a while
-without nobody noticing, therefore we intentionally skip adding
-Config.in.legacy. This would require keeping code in
-arch/Config.in.bfin since the options being removed are inside a
-choice...endchoice block.
+Actual use of the option will come in followup patches.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: explain why we don't add the options to Config.in.legacy.]
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.bfin | 12 ------------
- 1 file changed, 12 deletions(-)
+ arch/Config.in      | 10 ++++++++++
+ toolchain/Config.in |  1 +
+ 2 files changed, 11 insertions(+)
 
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index 9ad2dd7..bd9589c 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -4,18 +4,6 @@ choice
- 	default BR2_bf532
- 	help
- 	  Specify target CPU
--config BR2_bf606
--	bool "bf606"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--config BR2_bf607
--	bool "bf607"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--config BR2_bf608
--	bool "bf608"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--config BR2_bf609
--	bool "bf609"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
- config BR2_bf512
- 	bool "bf512"
- config BR2_bf514
+diff --git a/arch/Config.in b/arch/Config.in
+index f385745..caf5a31 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -250,6 +250,16 @@ config BR2_xtensa
+ 
+ endchoice
+ 
++# For some architectures or specific cores, our internal toolchain
++# backend is not suitable (like, missing support in upstream gcc, or
++# no ChipCo fork exists...)
++config BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
++	bool
++
++config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
++	bool
++	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 584d053..8866b7d 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -43,6 +43,7 @@ choice
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
++	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
+ 	depends on !BR2_bf606
+ 	depends on !BR2_bf607
+ 	depends on !BR2_bf608
