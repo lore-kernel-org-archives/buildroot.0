@@ -1,28 +1,28 @@
 From: Martin Kepplinger <martink@posteo.de>
-Date: Mon,  2 Oct 2017 15:12:16 +0200
-Subject: [Buildroot] [PATCH] tslib: add the hash for the COPYING license file
-Message-ID: <20171002131216.5508-1-martink@posteo.de>
+Date: Mon,  2 Oct 2017 15:12:45 +0200
+Subject: [Buildroot] [PATCH] x11r7: xdriver_xf86-input-tslib: add the hash
+	for the COPYING license file
+Message-ID: <20171002131245.6056-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since tslib's COPYING file in part of the source tree, we can easily
-include it's hash for the given version here.
+Add the hash for the COPYING file. It is part of the project's source tree.
 
 Signed-off-by: Martin Kepplinger <martink@posteo.de>
 ---
- package/tslib/tslib.hash | 3 +++
+ package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 3ed49008fb..cca74fc827 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+index faff5d4798..ebf1671e76 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
++++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
 @@ -1,2 +1,5 @@
- # https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
- sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
+ # https://github.com/merge/xf86-input-tslib/releases/download/1.1.1/xf86-input-tslib-1.1.1.tar.bz2.sha256
+ sha256 8b6a9f2ad73598a3619e66e252bd54b1792c4deba0213101fa4d272b5e9217ec  xf86-input-tslib-1.1.1.tar.bz2
 +
 +# Locally computed
 +sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
