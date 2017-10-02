@@ -1,77 +1,62 @@
-From: apin prastya <apin.klas@gmail.com>
-Date: Mon, 2 Oct 2017 22:18:53 +0700
-Subject: [Buildroot] Orange Pi HDMI to VGA output
-In-Reply-To: <955fd355-3b00-dde9-d629-f55a39a302d0@ecagroup.com>
-References: <CAOJD9H+8eSuY_Rm+E-yzCOTSe2KjohLz28fcvH1tv6RDLHefkg@mail.gmail.com>
- <878thum8u8.fsf@dell.be.48ers.dk>
- <20170905094103.GA5082@airbook.vandijck-laurijssen.be>
- <874lshmo2z.fsf@dell.be.48ers.dk>
- <955fd355-3b00-dde9-d629-f55a39a302d0@ecagroup.com>
-Message-ID: <CAOJD9HKd6+15MHF+yQ8NRjxjuLTUff=puRJnbZtS5z_1B28Krg@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  2 Oct 2017 10:31:07 -0500
+Subject: [Buildroot] [PATCH] strongswan: add missing include of stdint.h
+Message-ID: <1506958267-31934-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was able to make an output to HDMI and using HDMI to VGA converter.
-Using this kernel : https://github.com/megous/linux/tree/orange-pi-4.13
+Recent releases of glibc don't include the full stdint.h
+header in some network headers included by utils.h.
+Upstream is targetting a 5.6.1 release of the fix.
 
-But the problem comes that the fb is outside the monitor (way too left).
-And here the modes :
-# cat /sys/class/graphics/fb0/modes
-U:1920x1080p-0
+Ustream: https://wiki.strongswan.org/issues/2425
 
-For the height of the monitor is correct, but the width is wrong.
-Already set screen resolution : disp.screen0_output_mode=EDID:1280x1024p60.
-But not working.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ ...trongswan-add-missing-include-of-stdint.h.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
 
-On Wed, Sep 6, 2017 at 11:06 PM, Julien CORJON <corjon.j@ecagroup.com>
-wrote:
-
-> Hi,
->
-> Le 05/09/2017 ? 12:33, Peter Korsgaard a ?crit :
-> >>>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
-> >
-> > Hi,
-> >
-> >   > My experience with HDMI to VGA convertors, on a beaglebone:
-> >
-> >   > an "HDMI to VGA" convertor needs power.
-> >   > An HDMI port provides, per spec, up to 10mA or so.
-> >   > So, if you're using such HDMI to VGA convertor:
-> >   > The beaglebone has a polyfuse to enforce this current limit.
-> >   > Then the HDMI to VGA will never actually power up and fail to
-> >   > emit VGA signal.
-> >   > I once managed to succeed here with bypassing the polyfuse with a
-> wire.
-> >
-> > Alternatively, the HDMI-to-VGA adapters I've seen typically can be
-> > powered through USB (sometimes not exposed on the outside though).
-> >
->
-> I'm also trying to make a HDMI to VGA converter on an i.MX6 and just
-> discovered that most of them only support CEA resolutions [1]...
-> (720p,1080p, etc.)
->
-> This can be the issue with your 1280x720 resolution.
->
-> I would recommend to take a look in /sys/class/graphics/fbX/modes to see
-> the resolution negociated with your dongle.
->
-> Kind regards,
->
-> Julien
->
-> [1] https://en.wikipedia.org/wiki/Extended_Display_Identification_Data
-
-
-
-
+diff --git a/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
+new file mode 100644
+index 0000000..d5ca690
+--- /dev/null
++++ b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
+@@ -0,0 +1,32 @@
++From a8fd708ce89d5ffb64a5e8873d49a55094dde898 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Mon, 2 Oct 2017 10:16:36 -0500
++Subject: [PATCH] strongswan: add missing include of stdint.h
++
++Recent releases of glibc don't include the full stdint.h
++header in some network headers included by utils.h.
++Upstream is targetting a 5.6.1 release of the fix.
++
++Ustream: https://wiki.strongswan.org/issues/2425
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ src/libstrongswan/utils/utils/memory.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/libstrongswan/utils/utils/memory.h b/src/libstrongswan/utils/utils/memory.h
++index aef318f..c11624d 100644
++--- a/src/libstrongswan/utils/utils/memory.h
+++++ b/src/libstrongswan/utils/utils/memory.h
++@@ -14,6 +14,8 @@
++  * for more details.
++  */
++ 
+++#include <stdint.h> /* for uintptr_t */
+++
++ /**
++  * @defgroup memory_i memory
++  * @{ @ingroup utils_i
++-- 
++1.9.1
++
 -- 
-Apin,
-Indonesia
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171002/30e070f1/attachment.html>
+1.9.1
