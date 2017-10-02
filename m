@@ -1,68 +1,66 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 2 Oct 2017 17:36:39 -0300 (BRT)
-Subject: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build
- extlinux
-In-Reply-To: <20171002211547.4942e28d@windsurf.home>
-References: <20170930231309.17677-1-casantos@datacom.ind.br>
- <20170930233520.20143-1-casantos@datacom.ind.br>
- <20171002211547.4942e28d@windsurf.home>
-Message-ID: <1749064856.11956839.1506976599871.JavaMail.zimbra@datacom.ind.br>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  2 Oct 2017 22:52:58 +0200
+Subject: [Buildroot] [PATCH] package/icu: remove xlocale.h header
+Message-ID: <20171002205259.15434-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org, "Beno?t Allard" <benoit.allard@greenbone.net>
-> Sent: Monday, October 2, 2017 4:15:47 PM
-> Subject: Re: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build extlinux
+Remove xlocale.h header since it's removed from glibc 2.26.
 
-> Hello,
-> 
-> On Sat, 30 Sep 2017 20:35:20 -0300, Carlos Santos wrote:
->> Like the utilities, it is meant to run on the host machine, hence must
->> be built using the host toolchain.
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> It is not entirely clear if everybody agrees that "extlinux" is a host
-> or a target program.
-> 
-> Beno?t Allard, who used to work on the syslinux package in Buildroot
-> wrote in http://www.syslinux.org/archives/2017-April/025755.html:
-> 
-> """
-> 1. utilities required during the build (prepcore)
-> 2. utilities meant to be run in the target operating-system (isohybrid,
->  memdisk, the extlinux installer, ...)
-> 3. utilities used to boot the operating system
-> """
-> 
-> So he was considering the extlinux installer as a program for the
-> target.
-> 
-> A few years earlier, another person on the Buildroot mailing list, also
-> wanted to have the extlinux installer on the target:
-> http://buildroot-busybox.2317881.n4.nabble.com/syslinux-on-target-td81294.html.
-> 
-> So, I'm not sure. Perhaps we need a host-syslinux package to install
-> those utilities ?
-> 
-> Or perhaps I'm being too complicated here, we should just merge your
-> patch, and adjusts when/if someone complains ?
+Reported-by: Ross <grunpferd@netscape.net>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/icu/0006-i18n-Drop-include-xlocale.h.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/icu/0006-i18n-Drop-include-xlocale.h.patch
 
-Well, there is a chicken-egg problem here because extlinux is a boot
-loader so you must have it installed on the target partition in order to
-be able to boot.
-
-On embedded systems this made on the host machine, manipulating the
-disk image (which was exactly the problem I had when I needed to use
-extlinux).
-
+diff --git a/package/icu/0006-i18n-Drop-include-xlocale.h.patch b/package/icu/0006-i18n-Drop-include-xlocale.h.patch
+new file mode 100644
+index 0000000..a5eb9cb
+--- /dev/null
++++ b/package/icu/0006-i18n-Drop-include-xlocale.h.patch
+@@ -0,0 +1,39 @@
++From 5f38e4f8c4be351db96a3be23ce25c97597cc508 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Mon, 2 Oct 2017 22:41:02 +0200
++Subject: [PATCH] i18n: Drop include <xlocale.h>
++
++glibc 2.26 drops this header
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++
++Reported Upstream: http://bugs.icu-project.org/trac/ticket/13385
++From: https://git.yoctoproject.org/cgit.cgi/poky/commit/meta/recipes-support/icu/icu/0001-i18n-Drop-include-xlocale.h.patch?id=931430f94c018bc3f58d70e11ca4a4ae7cb2e19c
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++Upstream-Status: Pending
++---
++ source/i18n/digitlst.cpp | 6 +-----
++ 1 file changed, 1 insertion(+), 5 deletions(-)
++
++diff --git a/source/i18n/digitlst.cpp b/source/i18n/digitlst.cpp
++index 4d7c3f4..f111cf3 100644
++--- a/source/i18n/digitlst.cpp
+++++ b/source/i18n/digitlst.cpp
++@@ -61,11 +61,7 @@
++ #endif
++ 
++ #if U_USE_STRTOD_L
++-# if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN
++-#   include <locale.h>
++-# else
++-#   include <xlocale.h>
++-# endif
+++# include <locale.h>
++ #endif
++ 
++ // ***************************************************************************
++-- 
++2.9.5
++
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.9.5
