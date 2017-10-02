@@ -1,90 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Oct 2017 19:26:55 +0200
-Subject: [Buildroot] [PATCH 2/2] package/matchbox-lib: correctly fix the
-	.pc file
-In-Reply-To: <73a014e628bcbf58c220a91a54d8637b792186f6.1506851870.git.yann.morin.1998@free.fr>
-References: <cover.1506851870.git.yann.morin.1998@free.fr>
- <73a014e628bcbf58c220a91a54d8637b792186f6.1506851870.git.yann.morin.1998@free.fr>
-Message-ID: <20171002172655.GF4753@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  2 Oct 2017 20:38:26 +0300
+Subject: [Buildroot] [PATCH v2 2/2] dnsmasq: simplify build configuration
+In-Reply-To: <9b9ffd72d158a792696b98b6612e4e66ee11892a.1506965906.git.baruch@tkos.co.il>
+References: <9b9ffd72d158a792696b98b6612e4e66ee11892a.1506965906.git.baruch@tkos.co.il>
+Message-ID: <f88a9ebaa4fc5a3ac0b8697efaa5da40fd041e82.1506965906.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Drop direct sed'ing of config.h for HAVE_CONNTRACK, HAVE_LUASCRIPT, and
+HAVE_DBUS. Use MAKE_OPTS COPTS parameters instead, like we do already
+for all other options.
 
-Replying to myself here...
+Rename DNSMASQ_ENABLE_LUA to DNSMASQ_TWEAK_LIBLUA since it now does only
+that.
 
-On 2017-10-01 11:58 +0200, Yann E. MORIN spake thusly:
-> First, the .pc file was so far fixed as a post-configure hook of the
-> matchbox-fakekey package, by directly tweaking the installed .pc file in
-> staging. That's uterly wrong and bad.
-> 
-> Second, it was incorreclty tweaking the .pc file when xlib_libXft was
-> not enabled, because then only a path to staging was present.
-> 
-> Third, even when xlib_libXft was enabled, the tweaking was still wrong,
-> because unnecessary.
-> 
-> Fix all that.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/matchbox-fakekey/matchbox-fakekey.mk | 4 ++--
->  package/matchbox-lib/matchbox-lib.mk         | 7 +++++++
->  2 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
-> index 996206e266..e607c48c15 100644
-> --- a/package/matchbox-fakekey/matchbox-fakekey.mk
-> +++ b/package/matchbox-fakekey/matchbox-fakekey.mk
-> @@ -14,8 +14,8 @@ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
->  MATCHBOX_FAKEKEY_CONF_OPTS = --enable-expat
->  
->  define MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
-> -	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-> -	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' $(MATCHBOX_FAKEKEY_DIR)/Makefile
-> +	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' \
-> +		$(@D)/Makefile
->  endef
->  
->  MATCHBOX_FAKEKEY_POST_CONFIGURE_HOOKS += MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
-> diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-> index ee206b6d82..627e1c7417 100644
-> --- a/package/matchbox-lib/matchbox-lib.mk
-> +++ b/package/matchbox-lib/matchbox-lib.mk
-> @@ -55,4 +55,11 @@ else
->  MATCHBOX_LIB_CONF_OPTS += --disable-xft
->  endif
->  
-> +define MATCHBOX_LIB_FIX_PC
-> +	$(SED) 's:-I$(STAGING_DIR)/:-I/:g' \
-> +		-e 's:-I/usr/include\( \|$$\)::g' \
-> +		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-> +endef
-> +MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_FIX_PC
+Merge two conntrack and three dbus conditional sections.
 
-Certainly not. There is already a similar hook at the top of the file.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: No change
+---
+ package/dnsmasq/dnsmasq.mk | 42 ++++++++++--------------------------------
+ 1 file changed, 10 insertions(+), 32 deletions(-)
 
-But it is also incorrect anyway.
-
-Damned.
-
-I'll fix.
-
-Regards,
-Yann E. MORIN.
-
->  $(eval $(autotools-package))
-> -- 
-> 2.11.0
-> 
-
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 7322170432a0..9f96030eb624 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -40,32 +40,31 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+ DNSMASQ_DEPENDENCIES += libnetfilter_conntrack
+-endif
+-
+-ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+-define DNSMASQ_ENABLE_CONNTRACK
+-	$(SED) 's^.*#define HAVE_CONNTRACK.*^#define HAVE_CONNTRACK^' \
+-		$(DNSMASQ_DIR)/src/config.h
+-endef
++DNSMASQ_COPTS += -DHAVE_CONNTRACK
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+ DNSMASQ_DEPENDENCIES += lua
++DNSMASQ_COPTS += -DHAVE_LUASCRIPT
+ 
+ # liblua uses dlopen when dynamically linked
+ ifneq ($(BR2_STATIC_LIBS),y)
+ DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
+ endif
+ 
+-define DNSMASQ_ENABLE_LUA
++define DNSMASQ_TWEAK_LIBLUA
+ 	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
+-	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
+-		$(DNSMASQ_DIR)/src/config.h
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ DNSMASQ_DEPENDENCIES += dbus
++DNSMASQ_COPTS += -DHAVE_DBUS
++
++define DNSMASQ_INSTALL_DBUS
++	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
++		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
++endef
+ endif
+ 
+ define DNSMASQ_FIX_PKGCONFIG
+@@ -73,33 +72,12 @@ define DNSMASQ_FIX_PKGCONFIG
+ 		$(DNSMASQ_DIR)/Makefile
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-define DNSMASQ_ENABLE_DBUS
+-	$(SED) 's^.*#define HAVE_DBUS.*^#define HAVE_DBUS^' \
+-		$(DNSMASQ_DIR)/src/config.h
+-endef
+-else
+-define DNSMASQ_ENABLE_DBUS
+-	$(SED) 's^.*#define HAVE_DBUS.*^/* #define HAVE_DBUS */^' \
+-		$(DNSMASQ_DIR)/src/config.h
+-endef
+-endif
+-
+ define DNSMASQ_BUILD_CMDS
+ 	$(DNSMASQ_FIX_PKGCONFIG)
+-	$(DNSMASQ_ENABLE_DBUS)
+-	$(DNSMASQ_ENABLE_LUA)
+-	$(DNSMASQ_ENABLE_CONNTRACK)
++	$(DNSMASQ_TWEAK_LIBLUA)
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-define DNSMASQ_INSTALL_DBUS
+-	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
+-		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
+-endef
+-endif
+-
+ define DNSMASQ_INSTALL_TARGET_CMDS
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
+ 	mkdir -p $(TARGET_DIR)/var/lib/misc/
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.2
