@@ -1,81 +1,62 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  2 Oct 2017 16:13:05 -0500
-Subject: [Buildroot] [PATCH] trinity: undefined UIO_MAXIOV need sys/io.h
-Message-ID: <1506978785-27792-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  2 Oct 2017 23:40:09 +0200
+Subject: [Buildroot] [PATCH] package/bridge-utils: fix headers path
+Message-ID: <20171002214009.13353-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes the build error produced by building
-for powerpc 32bit after the glibc bump to 2.26
-with the following internal toolchain config.
+Currently, bridge-utils wants to grap the headers from the linux-headers
+package, so we point it directly there, as has been the case since we
+first added bridge-utils in 2003 (c8eea31d3f), and then further refined
+in 2005 (178a317d26) which is the first moment we pointed to the linux-
+headers directory.
 
-gcc5.4.0
-glibc2.26
-bin2.28.1
-linux4.1.43
+However, ther are two things wrong with that.
 
-Failure log:
-  CC	net/proto-ipv4.o
-net/proto-ipv4.c: In function ?ip_setsockopt?:
-net/proto-ipv4.c:231:49: error: ?UIO_MAXIOV? undeclared (first use in this function); did you mean ?_IO_MAGIC??
-   so->optlen = rnd() % sizeof(unsigned long)*(2*UIO_MAXIOV+512);
-                                                 ^~~~~~~~~~
-                                                 _IO_MAGIC
+First, the headers are not directly in $(LINUX_HEADERS_DIR). Instead,
+they are in a sub-directory thereof. So, we could not have found them
+the way we are doing now.
 
-Signed-off-by: Vinson Lee <vlee@freedesktop.org>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Second, this definitely does not work when using an external toolchain,
+because there is not linux-headers package enabled then.
+
+Yet, against all odds, bridge-utils has valiantly deflected all rocks
+thrown its way, day-in day-out building without any issue in every
+autobuilders it's been confronted with. Good boy, good boy. :-)
+
+And indeed, it turns out that the required headers are easily found from
+within the sysroot of the toolchain. Wonders! :-)
+
+But there's still a gotcha: the default search path is still a hard
+coded path pointing to oft installed kernel source tree on the host.
+
+So, we still have to pass this option, but we can simply point to a
+non-existent directory.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...06-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch
+ package/bridge-utils/bridge-utils.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch b/package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch
-new file mode 100644
-index 0000000..46021ae
---- /dev/null
-+++ b/package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch
-@@ -0,0 +1,39 @@
-+From dd7fc8b44cc8bb8a7e9dc03aa3aa57fbefbf433b Mon Sep 17 00:00:00 2001
-+From: Vinson Lee <vlee@freedesktop.org>
-+Date: Tue, 20 Jun 2017 22:43:01 +0000
-+Subject: [PATCH] Include sys/io.h for UIO_MAXIOV symbol.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
+index 798202556f..c3e7c10e30 100644
+--- a/package/bridge-utils/bridge-utils.mk
++++ b/package/bridge-utils/bridge-utils.mk
+@@ -8,8 +8,11 @@ BRIDGE_UTILS_VERSION = 1.6
+ BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
+ BRIDGE_UTILS_SOURCE = bridge-utils-1.6.tar.xz
+ BRIDGE_UTILS_AUTORECONF = YES
+-BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(LINUX_HEADERS_DIR)
+ BRIDGE_UTILS_LICENSE = GPL-2.0+
+ BRIDGE_UTILS_LICENSE_FILES = COPYING
+ 
++# Point to a non-existent directory, to avoid using the host's headers.
++# Required headers will anyway be found from within the sysroot.
++BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(TOPDIR)/does-not-exist
 +
-+This patch fixes this build error.
-+
-+  CC	net/proto-ipv4.o
-+net/proto-ipv4.c: In function ?ip_setsockopt?:
-+net/proto-ipv4.c:231:49: error: ?UIO_MAXIOV? undeclared (first use in this function); did you mean ?_IO_MAGIC??
-+   so->optlen = rnd() % sizeof(unsigned long)*(2*UIO_MAXIOV+512);
-+                                                 ^~~~~~~~~~
-+                                                 _IO_MAGIC
-+
-+Upstream: https://github.com/kernelslacker/trinity/commit/dd7fc8b44cc8bb8a7e9dc03aa3aa57fbefbf433b
-+
-+Signed-off-by: Vinson Lee <vlee@freedesktop.org>
-+---
-+ net/proto-ipv4.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/net/proto-ipv4.c b/net/proto-ipv4.c
-+index b77364e..9ffaa5e 100644
-+--- a/net/proto-ipv4.c
-++++ b/net/proto-ipv4.c
-+@@ -1,6 +1,7 @@
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <sys/un.h>
-++#include <sys/uio.h>
-+ #include <netinet/in.h>
-+ #include <netinet/udp.h>
-+ #include <stdlib.h>
-+-- 
-+1.9.1
-+
+ $(eval $(autotools-package))
 -- 
-1.9.1
+2.11.0
