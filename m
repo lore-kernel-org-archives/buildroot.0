@@ -1,84 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Oct 2017 19:14:55 +0200
-Subject: [Buildroot] [PATCH 1/2] matchbox-lib: select dependency
-In-Reply-To: <192b3438-653d-c32f-53bb-234843ee8ab4@mind.be>
+Date: Mon, 2 Oct 2017 19:26:55 +0200
+Subject: [Buildroot] [PATCH 2/2] package/matchbox-lib: correctly fix the
+	.pc file
+In-Reply-To: <73a014e628bcbf58c220a91a54d8637b792186f6.1506851870.git.yann.morin.1998@free.fr>
 References: <cover.1506851870.git.yann.morin.1998@free.fr>
- <fc7e8fd1cfa1d2ffee7e0ec0ac91f787e9caef45.1506851870.git.yann.morin.1998@free.fr>
- <192b3438-653d-c32f-53bb-234843ee8ab4@mind.be>
-Message-ID: <20171002171455.GE4753@scaer>
+ <73a014e628bcbf58c220a91a54d8637b792186f6.1506851870.git.yann.morin.1998@free.fr>
+Message-ID: <20171002172655.GF4753@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+All,
 
-On 2017-10-02 15:35 +0200, Arnout Vandecappelle spake thusly:
-> On 01-10-17 11:58, Yann E. MORIN wrote:
-> > Select the library we build-depend on.
-> > 
-> > Add myself to developpers for matchbos packages.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  DEVELOPERS                     | 1 +
-> >  package/matchbox-lib/Config.in | 1 +
-> >  2 files changed, 2 insertions(+)
-> > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index cedf5a6f84..5a1ca877de 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -1819,6 +1819,7 @@ F:	package/libinput/
-> >  F:	package/libiscsi/
-> >  F:	package/libseccomp/
-> >  F:	package/linux-tools/
-> > +F:	package/matchbox*
-> >  F:	package/mesa3d-headers/
-> >  F:	package/nbd/
-> >  F:	package/nut/
-> > diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
-> > index e50a5436c1..d758ab35a8 100644
-> > --- a/package/matchbox-lib/Config.in
-> > +++ b/package/matchbox-lib/Config.in
-> > @@ -1,4 +1,5 @@
-> >  config BR2_PACKAGE_MATCHBOX_LIB
-> >  	bool "matchbox-lib"
-> > +	select BR2_PACKAGE_XLIB_LIBXEXT
+Replying to myself here...
+
+On 2017-10-01 11:58 +0200, Yann E. MORIN spake thusly:
+> First, the .pc file was so far fixed as a post-configure hook of the
+> matchbox-fakekey package, by directly tweaking the installed .pc file in
+> staging. That's uterly wrong and bad.
 > 
->  matchbox-lib also has a DEPENDENCIES on expat. expat is indeed selected by the
-> top-level matchbox package, but that package doesn't actually have it in its
-> DEPENDENCIES. So perhaps move expat as well?
+> Second, it was incorreclty tweaking the .pc file when xlib_libXft was
+> not enabled, because then only a path to staging was present.
+> 
+> Third, even when xlib_libXft was enabled, the tweaking was still wrong,
+> because unnecessary.
+> 
+> Fix all that.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/matchbox-fakekey/matchbox-fakekey.mk | 4 ++--
+>  package/matchbox-lib/matchbox-lib.mk         | 7 +++++++
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
+> index 996206e266..e607c48c15 100644
+> --- a/package/matchbox-fakekey/matchbox-fakekey.mk
+> +++ b/package/matchbox-fakekey/matchbox-fakekey.mk
+> @@ -14,8 +14,8 @@ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
+>  MATCHBOX_FAKEKEY_CONF_OPTS = --enable-expat
+>  
+>  define MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
+> -	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
+> -	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' $(MATCHBOX_FAKEKEY_DIR)/Makefile
+> +	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' \
+> +		$(@D)/Makefile
+>  endef
+>  
+>  MATCHBOX_FAKEKEY_POST_CONFIGURE_HOOKS += MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
+> diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
+> index ee206b6d82..627e1c7417 100644
+> --- a/package/matchbox-lib/matchbox-lib.mk
+> +++ b/package/matchbox-lib/matchbox-lib.mk
+> @@ -55,4 +55,11 @@ else
+>  MATCHBOX_LIB_CONF_OPTS += --disable-xft
+>  endif
+>  
+> +define MATCHBOX_LIB_FIX_PC
+> +	$(SED) 's:-I$(STAGING_DIR)/:-I/:g' \
+> +		-e 's:-I/usr/include\( \|$$\)::g' \
+> +		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
+> +endef
+> +MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_FIX_PC
 
-Hmm... I did not see the expat issue, because as you said, matchbox does
-select it.
+Certainly not. There is already a similar hook at the top of the file.
 
-I'll check whether it is needed in matchbox-lib or not, and will send an
-appropriate patch.
+But it is also incorrect anyway.
 
->  Otherwise:
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Damned.
 
-Thanks! :-)
+I'll fix.
 
 Regards,
 Yann E. MORIN.
 
->  Regards,
->  Arnout
-> 
-> >  	help
-> >  	  Matchbox common functionality library.
-> > 
-> 
+>  $(eval $(autotools-package))
 > -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 2.11.0
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
