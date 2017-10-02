@@ -1,71 +1,21 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  2 Oct 2017 10:38:09 -0500
-Subject: [Buildroot] [PATCH] nfs-utils: add missing include of stdint
-Message-ID: <1506958689-1289-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Oct 2017 15:39:06 +0000
+Subject: [Buildroot] [Bug 10356] nfs-utils missing header
+In-Reply-To: <bug-10356-163@https.bugs.busybox.net/>
+References: <bug-10356-163@https.bugs.busybox.net/>
+Message-ID: <bug-10356-163-6gyE1WAbuz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Glibc bump to 2.26 exposed this missing header when building
-with the following combination using an i386 internal toolchain.
-gcc5.4.0
-bin2.28.1
-linux4.1.43
+https://bugs.busybox.net/show_bug.cgi?id=10356
 
-Logfile snippet:
+--- Comment #2 from Matt Weber <matthew.weber@rockwellcollins.com> ---
+Found upstream and sent a proposed fix.
+https://patchwork.ozlabs.org/patch/820578/
 
-2017-10-02T00:08:11 ^
-2017-10-02T00:08:12 rpc.c: In function ?nsm_recv_getport?:
-2017-10-02T00:08:12 rpc.c:469:13: error: ?UINT16_MAX? undeclared (first use in this function)
-
-Upstream: https://bugzilla.linux-nfs.org/show_bug.cgi?id=312
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- ...nfs-utils-add-missing-include-of-stdint.h.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
-
-diff --git a/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch b/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
-new file mode 100644
-index 0000000..e34c3c9
---- /dev/null
-+++ b/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
-@@ -0,0 +1,33 @@
-+From b3ff26fa182b34b6faa1317f18a9dac4c7963334 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 2 Oct 2017 09:57:15 -0500
-+Subject: [PATCH] nfs-utils: add missing include of stdint.h
-+
-+Glibc bump to 2.26 exposed this missing header when building
-+with the following combination using an i386 internal toolchain.
-+gcc5.4.0
-+bin2.28.1
-+linux4.1.43
-+
-+Upstream: https://bugzilla.linux-nfs.org/show_bug.cgi?id=312
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ support/nsm/rpc.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/support/nsm/rpc.c b/support/nsm/rpc.c
-+index 4e5f40e..d91c6ea 100644
-+--- a/support/nsm/rpc.c
-++++ b/support/nsm/rpc.c
-+@@ -40,6 +40,7 @@
-+ 
-+ #include <time.h>
-+ #include <stdbool.h>
-++#include <stdint.h>
-+ #include <string.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+-- 
-+1.9.1
-+
 -- 
-1.9.1
+You are receiving this mail because:
+You are on the CC list for the bug.
