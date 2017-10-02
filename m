@@ -1,39 +1,55 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  2 Oct 2017 21:14:57 +0200
-Subject: [Buildroot] [PATCH] jsoncpp: bump to version 1.8.3
-Message-ID: <20171002191457.17370-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Oct 2017 21:15:47 +0200
+Subject: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build
+ extlinux
+In-Reply-To: <20170930233520.20143-1-casantos@datacom.ind.br>
+References: <20170930231309.17677-1-casantos@datacom.ind.br>
+ <20170930233520.20143-1-casantos@datacom.ind.br>
+Message-ID: <20171002211547.4942e28d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/jsoncpp/jsoncpp.hash | 2 +-
- package/jsoncpp/jsoncpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
-index 34d76f157b..09ceb58553 100644
---- a/package/jsoncpp/jsoncpp.hash
-+++ b/package/jsoncpp/jsoncpp.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 858db2faf348f89fdf1062bd3e79256772e897e7f17df73e0624edf004f2f9ac  jsoncpp-1.8.1.tar.gz
-+sha256  3671ba6051e0f30849942cc66d1798fdf0362d089343a83f704c09ee7156604f  jsoncpp-1.8.3.tar.gz
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index b4aea56eff..6dfaecefdd 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSONCPP_VERSION = 1.8.1
-+JSONCPP_VERSION = 1.8.3
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
+On Sat, 30 Sep 2017 20:35:20 -0300, Carlos Santos wrote:
+> Like the utilities, it is meant to run on the host machine, hence must
+> be built using the host toolchain.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+
+It is not entirely clear if everybody agrees that "extlinux" is a host
+or a target program.
+
+Beno?t Allard, who used to work on the syslinux package in Buildroot
+wrote in http://www.syslinux.org/archives/2017-April/025755.html:
+
+"""
+1. utilities required during the build (prepcore)
+2. utilities meant to be run in the target operating-system (isohybrid,
+  memdisk, the extlinux installer, ...)
+3. utilities used to boot the operating system
+"""
+
+So he was considering the extlinux installer as a program for the
+target.
+
+A few years earlier, another person on the Buildroot mailing list, also
+wanted to have the extlinux installer on the target:
+http://buildroot-busybox.2317881.n4.nabble.com/syslinux-on-target-td81294.html.
+
+So, I'm not sure. Perhaps we need a host-syslinux package to install
+those utilities ?
+
+Or perhaps I'm being too complicated here, we should just merge your
+patch, and adjusts when/if someone complains ?
+
+Best regards,
+
+Thomas
 -- 
-2.14.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
