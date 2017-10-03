@@ -1,43 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Oct 2017 17:31:17 +0200
-Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20171001
-Message-ID: <20171003152539.1DDB481103@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Oct 2017 18:42:22 +0200
+Subject: [Buildroot] [PATCH] host-lzo: default liblzo2.a install to
+ host/lib
+In-Reply-To: <1507038558-27163-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1507038558-27163-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20171003164222.GG4753@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0036e30ae652fb27bae4c011530a3bb960d6d19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Matthew, All,
 
-And add a hash for the license file while we're at it.
+On 2017-10-03 08:49 -0500, Matt Weber spake thusly:
+> Discovered the issue on a RHEL7.4 machine where
+> the cmake build dynamically selected HOST_DIR/lib64
+> as the installation path for the library.
+> 
+> Fixes failures like the following:
+> host-mtd
+> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
+> host-squashfs
+> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/lzo/lzo.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+> index 27ca459..0cafba2 100644
+> --- a/package/lzo/lzo.mk
+> +++ b/package/lzo/lzo.mk
+> @@ -11,6 +11,9 @@ LZO_LICENSE_FILES = COPYING
+>  LZO_INSTALL_STAGING = YES
+>  LZO_SUPPORTS_IN_SOURCE_BUILD = NO
+>  
+> +# Prevent dynamically using lib64 as install libdir
+> +HOST_LZO_CONF_OPTS += -DCMAKE_INSTALL_LIBDIR=lib
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 3 ++-
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+So, probably other packages would have the same issue, then? And indeed,
+we've just had Jan on IRC reporting the same issue with a new package
+he's adding.
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 5bd1163..6ee22a7 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 ab96230390625aad6f4816fa23aef6e9f7fee130f083d838919129ff12089bf7 WireGuard-0.0.20170810.tar.xz
-+sha256 ecff9a184685b7dd2d81576eba5bd96bb59031c9e9b5eeee05d6dc298f30998e  WireGuard-0.0.20171001.tar.xz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 1f2190c..e946e4c 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20170810
-+WIREGUARD_VERSION = 0.0.20171001
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+So I suggest that we simply symlink lib64 -> lib like we do for the
+target, and be done with it.
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
+>  ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+>  LZO_CONF_OPTS += -DENABLE_SHARED=ON
+>  else
+> -- 
+> 1.8.3.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
