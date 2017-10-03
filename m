@@ -1,13 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 3 Oct 2017 13:15:50 -0500
-Subject: [Buildroot] [PATCH] host-lzo: default liblzo2.a install to
-	host/lib
-In-Reply-To: <CANQCQpaZQ4TAN+F0yO30XTTrOvaHk4j-mQW0SKS55nH-kEuVVg@mail.gmail.com>
-References: <1507038558-27163-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20171003164222.GG4753@scaer>
- <CANQCQpYFxcNzRVvQpjSCbCxr+TvfKy9MbfZtvxS1raHgyAkkjw@mail.gmail.com>
- <CANQCQpaZQ4TAN+F0yO30XTTrOvaHk4j-mQW0SKS55nH-kEuVVg@mail.gmail.com>
-Message-ID: <CANQCQpY=t3eU6_k6DmgoQ4dzDa07MenLXLgeh98QCK3mQbCZhA@mail.gmail.com>
+Date: Tue, 3 Oct 2017 13:40:58 -0500
+Subject: [Buildroot] [PATCH] HOST_DIR/lib: symlink respectively to
+	lib32/64
+In-Reply-To: <1507054359-21131-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1507054359-21131-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpZH7d1n8-h_s41paqaNK+ObzPmVhKYcr6WenrGvhpexFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,53 +13,62 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Tue, Oct 3, 2017 at 1:00 PM, Matthew Weber
+On Tue, Oct 3, 2017 at 1:12 PM, Matt Weber
 <matthew.weber@rockwellcollins.com> wrote:
-> Yann,
+> Modeled after system/system.mk creation of
+> TARGET_DIR equivalent.
 >
-> On Tue, Oct 3, 2017 at 12:17 PM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->> Yann,
->>
->> On Tue, Oct 3, 2017 at 11:42 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->>> Matthew, All,
->>>
->>> On 2017-10-03 08:49 -0500, Matt Weber spake thusly:
->>>> Discovered the issue on a RHEL7.4 machine where
->>>> the cmake build dynamically selected HOST_DIR/lib64
->>>> as the installation path for the library.
->>>>
->>>> Fixes failures like the following:
->>>> host-mtd
->>>> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
->>>> host-squashfs
->>>> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
->>>>
->>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->>>> ---
->>>>  package/lzo/lzo.mk | 3 +++
->>>>  1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
->>>> index 27ca459..0cafba2 100644
->>>> --- a/package/lzo/lzo.mk
->>>> +++ b/package/lzo/lzo.mk
->>>> @@ -11,6 +11,9 @@ LZO_LICENSE_FILES = COPYING
->>>>  LZO_INSTALL_STAGING = YES
->>>>  LZO_SUPPORTS_IN_SOURCE_BUILD = NO
->>>>
->>>> +# Prevent dynamically using lib64 as install libdir
->>>> +HOST_LZO_CONF_OPTS += -DCMAKE_INSTALL_LIBDIR=lib
->>>
->>> So, probably other packages would have the same issue, then? And indeed,
->>> we've just had Jan on IRC reporting the same issue with a new package
->>> he's adding.
->>>
->>> So I suggest that we simply symlink lib64 -> lib like we do for the
->>> target, and be done with it.
->>>
->>> Thoughts?
+> Discovered the issue on a RHEL7.4 machine where
+> the cmake build dynamically selected HOST_DIR/lib64
+> as the installation path for the lzo2 library.
+>
+> Fixes failures like the following:
+> host-mtd
+> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
+>
+> host-squashfs
+> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  Makefile | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 9b09589..d51f8ce 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -542,7 +542,7 @@ endif
+>
+>  .PHONY: dirs
+>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+> -       $(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
+> +       $(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+>
+>  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+>         $(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+> @@ -565,6 +565,15 @@ sdk: world
+>  $(HOST_DIR)/usr: $(HOST_DIR)
+>         @ln -snf . $@
+>
+> +$(HOST_DIR)/lib: $(HOST_DIR)
+> +# Make a symlink lib32->lib or lib64->lib as appropriate.
+> +# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
+> +ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
+> +       @ln -snf lib $@64
+> +else
+> +       @ln -snf lib $@32
+> +endif
+> +
 
-Proposed patch to supersede this lzo patch using the symlink approach.
-Tested with a 32bit and 64bit archs.
-https://patchwork.ozlabs.org/patch/820978/
+Good catch, wasn't thinking about the conditional.  Here's my proposed
+update (testing it now).
+$(HOST_DIR)/lib: $(HOST_DIR)
+ifeq ($(HOSTARCH),x86)
+        @ln -snf lib $@32
+else
+        @ln -snf lib $@64
+endif
+
+
+Matt
