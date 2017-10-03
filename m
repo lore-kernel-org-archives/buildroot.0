@@ -1,63 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Oct 2017 14:28:32 +0200
-Subject: [Buildroot] [git commit] strongswan: add missing include of stdint.h
-Message-ID: <20171003123215.DC43181047@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 3 Oct 2017 07:45:48 -0500
+Subject: [Buildroot] [PATCH] vboot-utils: disable static futility
+In-Reply-To: <20171003083737.GA3986@latitude.localdomain>
+References: <20171003083737.GA3986@latitude.localdomain>
+Message-ID: <CANQCQpb76ZKCxDbaT+sbSQF3fO99DRQaJp1Ty0xYi+nX+GU+Qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc7fd91c4b978ea3113464624ce051e0918b48f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Alex,
 
-Recent releases of glibc don't include the full stdint.h
-header in some network headers included by utils.h.
-Upstream is targetting a 5.6.1 release of the fix.
+On Tue, Oct 3, 2017 at 3:37 AM, Alex Suykov <alex.suykov@gmail.com> wrote:
+>
+> Possibly fixes
+> http://autobuild.buildroot.net/results/fbe/fbe7892539cc1bf18f89d18c6609a5aa747647d0/
+> http://autobuild.buildroot.net/results/4bc/4bc388618ff02dde26ae09db021434a936c8cc1b/
+> and similar errors.
 
-Ustream: https://wiki.strongswan.org/issues/2425
+I'll take a look and see if it works.  The patch looks like it
+completely disables building of static bins for target and host.  Is
+that intended?
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...trongswan-add-missing-include-of-stdint.h.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+>
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+> Please note this is a blind fix. I cannot reproduce the build errors,
+> which all happen on the same build node, and I cannot verify that
+> the patch does in fact fix them.
+>
+> It's probably still a good idea to avoid unnecessary static linking
+> in a host package.
+>
+>  .../vboot-utils/0004-Disable-static-futility.patch | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/vboot-utils/0004-Disable-static-futility.patch
+>
+> diff --git a/package/vboot-utils/0004-Disable-static-futility.patch b/package/vboot-utils/0004-Disable-static-futility.patch
+> new file mode 100644
+> index 0000000000..574476d340
+> --- /dev/null
+> +++ b/package/vboot-utils/0004-Disable-static-futility.patch
+> @@ -0,0 +1,30 @@
+> +The package attempts to build a statically-linked host binary, futility_s,
+> +which is not used anywhere in buildroot but may be causing build failures
+> +if the build host lacks static libc.
+> +
+> +Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> +
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -1079,7 +1079,7 @@
+> + # new Firmware Utility
+> +
+> + .PHONY: futil
+> +-futil: ${FUTIL_STATIC_BIN} ${FUTIL_BIN}
+> ++futil: ${FUTIL_BIN}
+> +
+> + ${FUTIL_STATIC_BIN}: ${FUTIL_STATIC_OBJS} ${UTILLIB}
+> +       @${PRINTF} "    LD            $(subst ${BUILD}/,,$@)\n"
+> +@@ -1091,10 +1091,10 @@
+> +       ${Q}${LD} -o $@ ${CFLAGS} ${LDFLAGS} $^ ${LDLIBS}
+> +
+> + .PHONY: futil_install
+> +-futil_install: ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
+> ++futil_install: ${FUTIL_BIN}
+> +       @${PRINTF} "    INSTALL       futility\n"
+> +       ${Q}mkdir -p ${UB_DIR}
+> +-      ${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
+> ++      ${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN}
+> +       ${Q}for prog in ${FUTIL_SYMLINKS}; do \
+> +               ln -sf futility "${UB_DIR}/$$prog"; done
+> +
+> --
+> 2.14.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
-new file mode 100644
-index 0000000..d5ca690
---- /dev/null
-+++ b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
-@@ -0,0 +1,32 @@
-+From a8fd708ce89d5ffb64a5e8873d49a55094dde898 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 2 Oct 2017 10:16:36 -0500
-+Subject: [PATCH] strongswan: add missing include of stdint.h
-+
-+Recent releases of glibc don't include the full stdint.h
-+header in some network headers included by utils.h.
-+Upstream is targetting a 5.6.1 release of the fix.
-+
-+Ustream: https://wiki.strongswan.org/issues/2425
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ src/libstrongswan/utils/utils/memory.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/libstrongswan/utils/utils/memory.h b/src/libstrongswan/utils/utils/memory.h
-+index aef318f..c11624d 100644
-+--- a/src/libstrongswan/utils/utils/memory.h
-++++ b/src/libstrongswan/utils/utils/memory.h
-+@@ -14,6 +14,8 @@
-+  * for more details.
-+  */
-+ 
-++#include <stdint.h> /* for uintptr_t */
-++
-+ /**
-+  * @defgroup memory_i memory
-+  * @{ @ingroup utils_i
-+-- 
-+1.9.1
-+
+
+
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
