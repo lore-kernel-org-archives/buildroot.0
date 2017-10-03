@@ -1,46 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Oct 2017 14:18:37 +0200
-Subject: [Buildroot] [git commit] package/php: bump version to 7.1.10
-Message-ID: <20171003121609.0EE35807B5@busybox.osuosl.org>
+Date: Tue, 3 Oct 2017 14:16:10 +0200
+Subject: [Buildroot] [git commit] x11r7: xdriver_xf86-input-tslib: add the
+	hash for the COPYING license file
+Message-ID: <20171003121608.D994D81028@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6429f1a4bc7cab98dbc1141760c5ed5d04612411
+commit: https://git.buildroot.net/buildroot/commit/?id=43fd1838a07d76bf1a3f8dff6f2fe080da8f8349
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.php.net/ChangeLog-7.php#7.1.10
+The COPYING file is part of the xf86-input-tslib project's source tree.
+Let's include the hash for it's current version.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 2c53d84..cf2a73d 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 ec9ca348dd51f19a84dc5d33acfff1fba1f977300604bdac08ed46ae2c281e8c  php-7.1.9.tar.xz
-+sha256 2b8efa771a2ead0bb3ae67b530ca505b5b286adc873cca9ce97a6e1d6815c50b  php-7.1.10.tar.xz
- 
- # License file
- sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index a58b8a5..d184429 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.1.9
-+PHP_VERSION = 7.1.10
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+index faff5d4..d2c1d8e 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
++++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+@@ -1,2 +1,5 @@
+ # https://github.com/merge/xf86-input-tslib/releases/download/1.1.1/xf86-input-tslib-1.1.1.tar.bz2.sha256
+ sha256 8b6a9f2ad73598a3619e66e252bd54b1792c4deba0213101fa4d272b5e9217ec  xf86-input-tslib-1.1.1.tar.bz2
++
++# Locally computed
++sha256  edfc46c9b91499699fc54d39e986756a2dcce8a919c6066be177123441532856  COPYING
