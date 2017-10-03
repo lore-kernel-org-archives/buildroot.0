@@ -1,57 +1,62 @@
-From: Robert Lerche <robert.lerche@msbit.com>
-Date: Tue, 3 Oct 2017 13:51:55 -0700
-Subject: [Buildroot] Private mirror repository for Python package
- dependencies -- howto?
-In-Reply-To: <20170929215151.35dea574@windsurf>
-References: <CAF7SrrG6-FgUdN3HESU_vGX4+HEfrU8hfFQc9VzH9wh2GugxBQ@mail.gmail.com>
- <20170929215151.35dea574@windsurf>
-Message-ID: <CAF7SrrFDHt1=+a0DcJUBrwk7vL_01Kd8YfyCBKFswCtLw3TEBg@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  3 Oct 2017 15:58:54 -0500
+Subject: [Buildroot] [PATCH v2] HOST_DIR/lib: symlink respectively to
+	lib32/64
+Message-ID: <1507064334-22885-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your response.
+Discovered the issue on a RHEL7.4 machine where
+the cmake build dynamically selected HOST_DIR/lib64
+as the installation path for the lzo2 library.
 
-At the request of one of our developers I added Python connexion (
-https://pypi.python.org/pypi/connexion) which in turn pulled in a bunch of
-other components (flake8, mccabe, pyflakes, pycodestyle, pytest-runner).
+Fixes failures like the following:
+host-mtd
+http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
 
-Reading between the lines of your mail, I added each of those components
-individually to my customized Buildroot and that takes care of the issue.
+host-squashfs
+http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
 
-On Fri, Sep 29, 2017 at 12:51 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+[Yann
+v1 -> v2
+ - Correct the condition used to determine host arch.
+   (Previously used the target arch check)
+---
+ Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-> Hello,
->
-> On Fri, 29 Sep 2017 09:53:25 -0700, Robert Lerche wrote:
-> > Buildroot provides a simple and effective means to specify a private
-> mirror
-> > for package source code components (BR2_PRIMARY_SITE).  This is essential
-> > for a company basing an embedded system product on Buildroot.
-> >
-> > Is there an equivalent mechanism to support a private repository for
-> Python
-> > package dependencies?  Otherwise distutils and setuptools will fetch from
-> > public sources even though the package base comes from the private
-> mirror.
->
-> This should never happen. If a Python package downloads its
-> dependencies by itself without going through Buildroot's download
-> mechanism, it's a bug.
->
-> Could you give a more specific example of a problematic Python package ?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171003/2334f1fd/attachment.html>
+diff --git a/Makefile b/Makefile
+index 9b09589..1cc474a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -542,7 +542,7 @@ endif
+ 
+ .PHONY: dirs
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
++	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+@@ -565,6 +565,13 @@ sdk: world
+ $(HOST_DIR)/usr: $(HOST_DIR)
+ 	@ln -snf . $@
+ 
++$(HOST_DIR)/lib: $(HOST_DIR)
++ifeq ($(HOSTARCH),x86)
++	@ln -snf lib $@32
++else
++	@ln -snf lib $@64
++endif
++
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
+-- 
+1.9.1
