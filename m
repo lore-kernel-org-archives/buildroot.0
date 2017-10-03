@@ -1,75 +1,119 @@
 From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 3 Oct 2017 21:31:58 +0930
-Subject: [Buildroot] [PATCH] pdbg: bump version to latest
-In-Reply-To: <20171002215935.125438c2@windsurf.home>
-References: <20170927021547.19421-1-joel@jms.id.au>
- <20171002215935.125438c2@windsurf.home>
-Message-ID: <CACPK8Xd5h64mnbvdcWmT69Tpg1vmzaD5bYf5dyE2vPNaPYGevw@mail.gmail.com>
+Date: Tue,  3 Oct 2017 22:44:25 +1030
+Subject: [Buildroot] [PATCH v2] pdbg: bump version to latest
+Message-ID: <20171003121425.28490-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 3, 2017 at 5:29 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 27 Sep 2017 11:45:47 +0930, Joel Stanley wrote:
->> I got this error when attempting to build:
->>
->>  aclocal: error: couldn't open directory 'm4': No such file or directory
->>
->> So we now have the post patch hook to ensure the m4 directory is
->> present.
->>
->> In addition, the package now sets a variable with the Git SHA1 so that
->> the binary contians the expected output for --version.
->>
->> Signed-off-by: Joel Stanley <joel@jms.id.au>
->
-> It doesn't build here:
->
->>>> pdbg 77158819158d1d7053a737ac090d04fdfbfe9265 Building
-> PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin"  /usr/bin/make -j5 "GIT_SHA1=\"77158819158d1d7053a737ac090d04fdfbfe9265\"" -C /home/thomas/projets/buildroot/output/build/pdbg-77158819158d1d7053a737ac090d04fdfbfe9265/
-> /usr/bin/make  all-am
-> dtc -i./ -I dts fake.dts -O dtb > fake.dtb.o.tmp
-> m4 -I./ p8-fsi.dts.m4 > p8-fsi.dts
-> m4 -I./ p8-i2c.dts.m4 > p8-i2c.dts
-> dd if=fake.dtb.o.tmp of=fake.dtb.o ibs=16 conv=sync
-> m4 -I./ p9-fsi.dtsi.m4 > p9-fsi.dtsi
-> 23+1 records in
-> 0+1 records out
-> 384 bytes copied, 5.8961e-05 s, 6.5 MB/s
-> rm fake.dtb.o.tmp
-> m4 -I./ p8-host.dts.m4 > p8-host.dts
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-objcopy -I binary -O elf32-littlearm -B arm  fake.dtb.o fake.dtb.o
-> m4 -I./ p9-kernel.dts.m4 > p9-kernel.dts
-> m4 -I./ p9-host.dts.m4 > p9-host.dts
->   CC       libpdbg/libpdbg_la-host.lo
->   CC       libpdbg/libpdbg_la-kernel.lo
->   CC       libpdbg/libpdbg_la-fake.lo
->   CC       libpdbg/libpdbg_la-chip.lo
->   CC       libpdbg/libpdbg_la-p8chip.lo
-> In file included from /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/stdio.h:71:0,
->                  from libpdbg/fake.c:17:
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/uClibc_stdio.h:149:16: error: expected identifier or ?(? before ?;? token
->   void *__unused;    /* Placeholder for codeset binding. */
+I got this error when attempting to build:
 
-Oops. I tested with uclibc, but it must have had a different
-configuration. I think that symbol is defined when locale support is
-enabled.
+ aclocal: error: couldn't open directory 'm4': No such file or directory
 
-I created a patch to resolve the issue.
+So we now have the post patch hook to ensure the m4 directory is
+present.
 
->> +PDBG_MAKE_OPTS = "GIT_SHA1=\"${PDBG_VERSION}\""
->
-> Please use $() and not ${} when referencing make variables.
+In addition, the package now sets a variable with the Git SHA1 so that
+the binary contains the expected output for --version.
 
-Fixed in v2.
+Specific configurations of uClibc cause a build failure in pdbg. This commit
+adds a patch to remove the definition of the offending macro (it is unused in
+the source).
 
-Thanks for the review!
+ In file included from usr/include/stdio.h:71:0,
+                  from libpdbg/fake.c:17:
+ include/bits/uClibc_stdio.h:149:16: error: expected identifier or ?(? before ?;? token
+   void *__unused;    /* Placeholder for codeset binding. */
 
-Cheers,
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+v2:
+ - Use $() and not ${} when referencing make variables
+ - Fix building with uClibc. I've also sent the patch upstream
 
-Joel
+ ...bg-Remove-unused-__unused-from-compiler.h.patch | 39 ++++++++++++++++++++++
+ package/pdbg/pdbg.hash                             |  2 +-
+ package/pdbg/pdbg.mk                               |  9 ++++-
+ 3 files changed, 48 insertions(+), 2 deletions(-)
+ create mode 100644 package/pdbg/0001-libpdbg-Remove-unused-__unused-from-compiler.h.patch
+
+diff --git a/package/pdbg/0001-libpdbg-Remove-unused-__unused-from-compiler.h.patch b/package/pdbg/0001-libpdbg-Remove-unused-__unused-from-compiler.h.patch
+new file mode 100644
+index 000000000000..e778f283d76e
+--- /dev/null
++++ b/package/pdbg/0001-libpdbg-Remove-unused-__unused-from-compiler.h.patch
+@@ -0,0 +1,39 @@
++From 5a85b8c78846b342bdeba37caed03b64b1dd2864 Mon Sep 17 00:00:00 2001
++From: Joel Stanley <joel@jms.id.au>
++Date: Tue, 3 Oct 2017 21:37:46 +1030
++Subject: [PATCH] libpdbg: Remove unused __unused from compiler.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The compiler.h header contains a macro that defines __unused. When
++building against uClibc this collides with uClibc_stdio.h:
++
++In file included from /usr/include/stdio.h:71:0,
++                 from libpdbg/fake.c:17:
++/usr/include/bits/uClibc_stdio.h:149:16: error: expected identifier or ?(? before ?;? token
++  void *__unused;    /* Placeholder for codeset binding. */
++                ^
++
++As it is unused in pdbg, remove it.
++
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ libpdbg/compiler.h | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/libpdbg/compiler.h b/libpdbg/compiler.h
++index 35bf16525761..86bd9673ac36 100644
++--- a/libpdbg/compiler.h
+++++ b/libpdbg/compiler.h
++@@ -24,7 +24,6 @@
++ /* Macros for various compiler bits and pieces */
++ #define __packed		__attribute__((packed))
++ #define __align(x)		__attribute__((__aligned__(x)))
++-#define __unused		__attribute__((unused))
++ #define __used			__attribute__((used))
++ #define __section(x)		__attribute__((__section__(x)))
++ #define __noreturn		__attribute__((noreturn))
++-- 
++2.14.1
++
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index 16bf58024c61..2aec71817770 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
++sha256 e0b81fc65eb83692c5c07d7ae109882cefebf663444b7ea804d0544451c1a72f pdbg-77158819158d1d7053a737ac090d04fdfbfe9265.tar.gz
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 184de8650d37..1a3a6b7422a9 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,10 +4,17 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
++PDBG_VERSION = 77158819158d1d7053a737ac090d04fdfbfe9265
+ PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
+ PDBG_AUTORECONF = YES
+ 
++PDBG_MAKE_OPTS = "GIT_SHA1=\"$(PDBG_VERSION)\""
++
++define PDBG_PATCH_M4
++	mkdir -p $(@D)/m4
++endef
++PDBG_POST_PATCH_HOOKS += PDBG_PATCH_M4
++
+ $(eval $(autotools-package))
+-- 
+2.14.1
