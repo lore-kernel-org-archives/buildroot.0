@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Oct 2017 21:59:37 +0200
-Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
-In-Reply-To: <20170922125003.32618-1-didin@synopsys.com>
-References: <20170922125003.32618-1-didin@synopsys.com>
-Message-ID: <20171003215937.643077a7@windsurf.home>
+Date: Tue, 3 Oct 2017 22:03:02 +0200
+Subject: [Buildroot] [PATCH 1/6] lpeg-patterns: new package
+In-Reply-To: <20170924161859.10994-1-francois.perrad@gadz.org>
+References: <20170924161859.10994-1-francois.perrad@gadz.org>
+Message-ID: <20171003220302.4e08c9b6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +12,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 22 Sep 2017 15:50:03 +0300, Evgeniy Didin wrote:
-> Building Qt with QtWebKit on configuration step there is
-> a check which disables QtWebKit build with GCC 6+.
-> Back in the day nobody thought about building Qt with GCC
-> version greater than 5.x. And now with modern GCCs like
-> 6.x and 7.x this assumption gets in the way.
-> 
-> Given in Buildroot today we don't have GCC older than 4.9
-> it should be safe to remove now meaningless check completely
-> by adding patch to qt.
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Sun, 24 Sep 2017 18:18:54 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  .../qt/0014-Enable-QtWebKit-with-newer-GCC.patch   | 50 ++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 package/qt/0014-Enable-QtWebKit-with-newer-GCC.patch
+>  package/Config.in                        |  1 +
+>  package/lpeg-patterns/Config.in          |  8 ++++++++
+>  package/lpeg-patterns/lpeg-patterns.hash |  2 ++
+>  package/lpeg-patterns/lpeg-patterns.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/lpeg-patterns/Config.in
+>  create mode 100644 package/lpeg-patterns/lpeg-patterns.hash
+>  create mode 100644 package/lpeg-patterns/lpeg-patterns.mk
 
-Applied to master, thanks.
+Thanks, but according to the Buildroot manual, all Lua packages must
+now start with "lua", i.e lualpeg-patterns or perhaps preferably
+lua-lpeg-patterns.
+
+See also commit 75cf694bb0892186a68bd954cef82922d825ca6f from Arnout.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
