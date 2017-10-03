@@ -1,65 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Oct 2017 14:37:22 +0200
-Subject: [Buildroot] [git commit] package/bridge-utils: fix headers path
-Message-ID: <20171003123216.1851681047@busybox.osuosl.org>
+Date: Tue, 3 Oct 2017 14:28:32 +0200
+Subject: [Buildroot] [git commit] strongswan: add missing include of stdint.h
+Message-ID: <20171003123215.DC43181047@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2a06accade570a3b1ad3be7e714e6bb60addb77
+commit: https://git.buildroot.net/buildroot/commit/?id=cc7fd91c4b978ea3113464624ce051e0918b48f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, bridge-utils wants to grap the headers from the linux-headers
-package, so we point it directly there, as has been the case since we
-first added bridge-utils in 2003 (c8eea31d3f), and then further refined
-in 2005 (178a317d26) which is the first moment we pointed to the linux-
-headers directory.
+Recent releases of glibc don't include the full stdint.h
+header in some network headers included by utils.h.
+Upstream is targetting a 5.6.1 release of the fix.
 
-However, ther are two things wrong with that.
+Ustream: https://wiki.strongswan.org/issues/2425
 
-First, the headers are not directly in $(LINUX_HEADERS_DIR). Instead,
-they are in a sub-directory thereof. So, we could not have found them
-the way we are doing now.
-
-Second, this definitely does not work when using an external toolchain,
-because there is not linux-headers package enabled then.
-
-Yet, against all odds, bridge-utils has valiantly deflected all rocks
-thrown its way, day-in day-out building without any issue in every
-autobuilders it's been confronted with. Good boy, good boy. :-)
-
-And indeed, it turns out that the required headers are easily found from
-within the sysroot of the toolchain. Wonders! :-)
-
-But there's still a gotcha: the default search path is still a hard
-coded path pointing to the installed kernel source tree on the host.
-
-So, we still have to pass this option, but we can simply point to the
-sysroot.
-
-[Peter: point to sysroot instead of non-existing directory]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bridge-utils/bridge-utils.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ ...trongswan-add-missing-include-of-stdint.h.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
-index 7982025..2519227 100644
---- a/package/bridge-utils/bridge-utils.mk
-+++ b/package/bridge-utils/bridge-utils.mk
-@@ -8,8 +8,11 @@ BRIDGE_UTILS_VERSION = 1.6
- BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
- BRIDGE_UTILS_SOURCE = bridge-utils-1.6.tar.xz
- BRIDGE_UTILS_AUTORECONF = YES
--BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(LINUX_HEADERS_DIR)
- BRIDGE_UTILS_LICENSE = GPL-2.0+
- BRIDGE_UTILS_LICENSE_FILES = COPYING
- 
-+# Avoid using the host's headers. Location is not important as
-+# required headers will anyway be found from within the sysroot.
-+BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(STAGING_DIR)/usr/include
+diff --git a/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
+new file mode 100644
+index 0000000..d5ca690
+--- /dev/null
++++ b/package/strongswan/0002-strongswan-add-missing-include-of-stdint.h.patch
+@@ -0,0 +1,32 @@
++From a8fd708ce89d5ffb64a5e8873d49a55094dde898 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Mon, 2 Oct 2017 10:16:36 -0500
++Subject: [PATCH] strongswan: add missing include of stdint.h
 +
- $(eval $(autotools-package))
++Recent releases of glibc don't include the full stdint.h
++header in some network headers included by utils.h.
++Upstream is targetting a 5.6.1 release of the fix.
++
++Ustream: https://wiki.strongswan.org/issues/2425
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ src/libstrongswan/utils/utils/memory.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/libstrongswan/utils/utils/memory.h b/src/libstrongswan/utils/utils/memory.h
++index aef318f..c11624d 100644
++--- a/src/libstrongswan/utils/utils/memory.h
+++++ b/src/libstrongswan/utils/utils/memory.h
++@@ -14,6 +14,8 @@
++  * for more details.
++  */
++ 
+++#include <stdint.h> /* for uintptr_t */
+++
++ /**
++  * @defgroup memory_i memory
++  * @{ @ingroup utils_i
++-- 
++1.9.1
++
