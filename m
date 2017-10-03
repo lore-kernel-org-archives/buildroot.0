@@ -1,63 +1,32 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 02 Oct 2017 22:05:55 -0300
-Subject: [Buildroot] [RFC PATCH 1/1] testing/infra: add test for code
-	style
-References: <20171002062723.GD4753@scaer>
-Message-ID: <59d2e2735d8e2_18423fe6f88598049870@ultri3.mail>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Tue,  3 Oct 2017 08:21:03 +0200
+Subject: [Buildroot] [PATCH v2] x11r7: xdriver_xf86-input-tslib: add the
+	hash for the COPYING license file
+Message-ID: <20171003062103.22951-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The COPYING file is part of the xf86-input-tslib project's source tree.
+Let's include the hash for it's current version.
 
-On Mon, Oct 02, 2017 at 03:27 AM, Yann E. MORIN wrote:
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
 
-> On 2017-10-01 22:17 -0300, Ricardo Martincoski spake thusly:
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->> ---
->> NOTICE: this would require to install flake8 to the docker image
->> buildroot/base.
->> 
->> The configs could be fine-tuned by either adding options to the call,
->> such as:
->>  "--max-line-length=132",
->> or pointing to the config file:
->>  "--config={}".format(infra.filepath("conf/unittest.cfg")),
->> and adding to support/testing/conf/unittest.cfg something like this:
->>  [flake8]
->>  max-line-length=132
->> as pointed out by Yann E. MORIN in the review of
->> http://patchwork.ozlabs.org/patch/819800/
-> 
-> Note that if the file is support/testing/setup.cfg, then flake8 will
-> automatically find it, without the need for passing the --config option.
+ package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Indeed. Also in any parent directory it works, i.e. support/setup.cfg
-
-> 
-> It can also be named support/testing/.flake8, but I don't like
-> dot-files, as they are hard to find.
-
-This filename seems suitable to use in the root directory of the project:
-buildroot/.flake8
-
-So with one file we would cover support/, utils/ and also the test files in each
-package directory.
-
-And even this RFC patch becomes almost useless.
-
-> 
-> If we wanted to sharea  single file for nose2 and flake8, then we could
-> move support/testing/conf/unittest.cfg to support/testing/setup.cfg.
-> But why would we want to share a single file for the two different
-> tools?
-
-Fair enough. We don't need to share a single file.
-
-Regards,
-Ricardo
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+index faff5d4798..d2c1d8ed6d 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
++++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
+@@ -1,2 +1,5 @@
+ # https://github.com/merge/xf86-input-tslib/releases/download/1.1.1/xf86-input-tslib-1.1.1.tar.bz2.sha256
+ sha256 8b6a9f2ad73598a3619e66e252bd54b1792c4deba0213101fa4d272b5e9217ec  xf86-input-tslib-1.1.1.tar.bz2
++
++# Locally computed
++sha256  edfc46c9b91499699fc54d39e986756a2dcce8a919c6066be177123441532856  COPYING
+-- 
+2.11.0
