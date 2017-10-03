@@ -1,60 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Oct 2017 14:30:24 +0200
-Subject: [Buildroot] [git commit] package/netsniff-ng: add missing header
-Message-ID: <20171003123216.0424981047@busybox.osuosl.org>
+Date: Tue, 3 Oct 2017 14:37:22 +0200
+Subject: [Buildroot] [git commit] package/bridge-utils: fix headers path
+Message-ID: <20171003123216.1851681047@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b19586f93ad4ce2c42d22283170a0a8763a88eb
+commit: https://git.buildroot.net/buildroot/commit/?id=c2a06accade570a3b1ad3be7e714e6bb60addb77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like for nfs-utils and strongswan, add stdint.h header for
-UINT16_MAX definition
+Currently, bridge-utils wants to grap the headers from the linux-headers
+package, so we point it directly there, as has been the case since we
+first added bridge-utils in 2003 (c8eea31d3f), and then further refined
+in 2005 (178a317d26) which is the first moment we pointed to the linux-
+headers directory.
 
-Reported-by: Ross <grunpferd@netscape.net>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+However, ther are two things wrong with that.
+
+First, the headers are not directly in $(LINUX_HEADERS_DIR). Instead,
+they are in a sub-directory thereof. So, we could not have found them
+the way we are doing now.
+
+Second, this definitely does not work when using an external toolchain,
+because there is not linux-headers package enabled then.
+
+Yet, against all odds, bridge-utils has valiantly deflected all rocks
+thrown its way, day-in day-out building without any issue in every
+autobuilders it's been confronted with. Good boy, good boy. :-)
+
+And indeed, it turns out that the required headers are easily found from
+within the sysroot of the toolchain. Wonders! :-)
+
+But there's still a gotcha: the default search path is still a hard
+coded path pointing to the installed kernel source tree on the host.
+
+So, we still have to pass this option, but we can simply point to the
+sysroot.
+
+[Peter: point to sysroot instead of non-existing directory]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0004-staging-compilation-fix-with-new-gcc.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/bridge-utils/bridge-utils.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch b/package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch
-new file mode 100644
-index 0000000..fce604e
---- /dev/null
-+++ b/package/netsniff-ng/0004-staging-compilation-fix-with-new-gcc.patch
-@@ -0,0 +1,31 @@
-+From 551aa0ee996132e443b5d12cbb6f114ac9aabcd3 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jaroslav=20=C5=A0karvada?= <jskarvad@redhat.com>
-+Date: Mon, 3 Jul 2017 18:24:32 +0200
-+Subject: [PATCH] staging: compilation fix with new gcc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
+index 7982025..2519227 100644
+--- a/package/bridge-utils/bridge-utils.mk
++++ b/package/bridge-utils/bridge-utils.mk
+@@ -8,8 +8,11 @@ BRIDGE_UTILS_VERSION = 1.6
+ BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
+ BRIDGE_UTILS_SOURCE = bridge-utils-1.6.tar.xz
+ BRIDGE_UTILS_AUTORECONF = YES
+-BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(LINUX_HEADERS_DIR)
+ BRIDGE_UTILS_LICENSE = GPL-2.0+
+ BRIDGE_UTILS_LICENSE_FILES = COPYING
+ 
++# Avoid using the host's headers. Location is not important as
++# required headers will anyway be found from within the sysroot.
++BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(STAGING_DIR)/usr/include
 +
-+Signed-off-by: Jaroslav ??karvada <jskarvad@redhat.com>
-+
-+Upstream patch 551aa0ee996132e443b5d12cbb6f114ac9aabcd3
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ staging/mz.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/staging/mz.h b/staging/mz.h
-+index 5ed05a7..aa2c36f 100644
-+--- a/staging/mz.h
-++++ b/staging/mz.h
-+@@ -40,6 +40,7 @@
-+ #include <netinet/in.h>
-+ #include <stdarg.h>
-+ #include <math.h>
-++#include <stdint.h>
-+ 
-+ extern int verbose_level;
-+ 
-+-- 
-+2.9.5
-+
+ $(eval $(autotools-package))
