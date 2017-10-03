@@ -1,24 +1,41 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Tue, 3 Oct 2017 16:13:00 +0300
-Subject: [Buildroot] [PATCH] vboot-utils: disable static futility
-In-Reply-To: <CANQCQpb76ZKCxDbaT+sbSQF3fO99DRQaJp1Ty0xYi+nX+GU+Qg@mail.gmail.com>
-References: <20171003083737.GA3986@latitude.localdomain>
- <CANQCQpb76ZKCxDbaT+sbSQF3fO99DRQaJp1Ty0xYi+nX+GU+Qg@mail.gmail.com>
-Message-ID: <20171003131300.GA20634@latitude.localdomain>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  3 Oct 2017 08:49:18 -0500
+Subject: [Buildroot] [PATCH] host-lzo: default liblzo2.a install to host/lib
+Message-ID: <1507038558-27163-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tue, Oct 03, 2017 at 07:45:48AM -0500, Matthew Weber wrote:
+Discovered the issue on a RHEL7.4 machine where
+the cmake build dynamically selected HOST_DIR/lib64
+as the installation path for the library.
 
-> I'll take a look and see if it works.  The patch looks like it
-> completely disables building of static bins for target and host.  Is
-> that intended?
+Fixes failures like the following:
+host-mtd
+http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
+host-squashfs
+http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
 
-There's a single static binary, and it's a host-only package.
-So yeah the patch just cuts it out and it's intentional.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/lzo/lzo.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I'm not even sure why they needed a static version of this particular
-tool, but it doesn't look like there's any better way to disable it.
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 27ca459..0cafba2 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -11,6 +11,9 @@ LZO_LICENSE_FILES = COPYING
+ LZO_INSTALL_STAGING = YES
+ LZO_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
++# Prevent dynamically using lib64 as install libdir
++HOST_LZO_CONF_OPTS += -DCMAKE_INSTALL_LIBDIR=lib
++
+ ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ LZO_CONF_OPTS += -DENABLE_SHARED=ON
+ else
+-- 
+1.8.3.1
