@@ -1,38 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Oct 2017 22:17:03 +0200
-Subject: [Buildroot] [PATCH 6/6] lua-http: new package
-In-Reply-To: <20170924161859.10994-6-francois.perrad@gadz.org>
-References: <20170924161859.10994-1-francois.perrad@gadz.org>
- <20170924161859.10994-6-francois.perrad@gadz.org>
-Message-ID: <20171003221703.6921e6cf@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  3 Oct 2017 22:19:38 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/openjdk-bootstrap: new package
+Message-ID: <20171003201939.8382-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This package provides a binary installation of the JDK created by
+the BLFS (Beyond Linux From Scratch) editors.
 
-On Sun, 24 Sep 2017 18:18:59 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in              |  1 +
->  package/lua-http/Config.in     | 18 ++++++++++++++++++
->  package/lua-http/lua-http.hash |  2 ++
->  package/lua-http/lua-http.mk   | 14 ++++++++++++++
->  4 files changed, 35 insertions(+)
->  create mode 100644 package/lua-http/Config.in
->  create mode 100644 package/lua-http/lua-http.hash
->  create mode 100644 package/lua-http/lua-http.mk
+It is meant to be used by Kodi which currently depends on a JDK
+installation provided by the host machine.
 
-Looks good to me. However, since it depends on PATCH 1/6, I'll wait
-for a v2. I've merged the other patches, so please resend just
-lpeg-patterns and lua-http.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
 
-Thanks!
+ DEVELOPERS                                       |  1 +
+ package/Config.in.host                           |  1 +
+ package/openjdk-bootstrap/Config.in.host         | 11 +++++++++++
+ package/openjdk-bootstrap/openjdk-bootstrap.hash |  4 ++++
+ package/openjdk-bootstrap/openjdk-bootstrap.mk   | 25 ++++++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
+ create mode 100644 package/openjdk-bootstrap/Config.in.host
+ create mode 100644 package/openjdk-bootstrap/openjdk-bootstrap.hash
+ create mode 100644 package/openjdk-bootstrap/openjdk-bootstrap.mk
 
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 43ad9e5f8a..f2eb3557a1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -266,6 +266,7 @@ F:	package/mesa3d/
+ F:	package/minidlna/
+ F:	package/mjpg-streamer/
+ F:	package/mplayer/
++F:	package/openjdk-bootstrap/
+ F:	package/perl-crypt-openssl-random/
+ F:	package/perl-crypt-openssl-rsa/
+ F:	package/perl-digest-sha1/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 679fe22a52..90fa5af5fa 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -30,6 +30,7 @@ menu "Host utilities"
+ 	source "package/mtools/Config.in.host"
+ 	source "package/mxsldr/Config.in.host"
+ 	source "package/omap-u-boot-utils/Config.in.host"
++	source "package/openjdk-bootstrap/Config.in.host"
+ 	source "package/openocd/Config.in.host"
+ 	source "package/opkg-utils/Config.in.host"
+ 	source "package/parted/Config.in.host"
+diff --git a/package/openjdk-bootstrap/Config.in.host b/package/openjdk-bootstrap/Config.in.host
+new file mode 100644
+index 0000000000..e769699dd4
+--- /dev/null
++++ b/package/openjdk-bootstrap/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP
++	bool "host openjdk bootstrap"
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	help
++	  OpenJDK (Open Java Development Kit) is a free and open source
++	  implementation of the Java Platform, Standard Edition
++	  This package provides a binary installation of the JDK created
++	  by the BLFS editors.
++
++	  http://openjdk.java.net
++	  http://www.linuxfromscratch.org/blfs/view/svn/general/java.html
+diff --git a/package/openjdk-bootstrap/openjdk-bootstrap.hash b/package/openjdk-bootstrap/openjdk-bootstrap.hash
+new file mode 100644
+index 0000000000..7fa65592d6
+--- /dev/null
++++ b/package/openjdk-bootstrap/openjdk-bootstrap.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++sha256 0321057130cad789ed14d7e923e69c4def6ad7470d167116f104008a079b0215  OpenJDK-1.8.0.141-i686-bin.tar.xz
++sha256 40051afdb57ed798a910ff5b1a5bbef555481bcf76f0423686861da983871e7d  OpenJDK-1.8.0.141-x86_64-bin.tar.xz
++sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk-bootstrap/openjdk-bootstrap.mk b/package/openjdk-bootstrap/openjdk-bootstrap.mk
+new file mode 100644
+index 0000000000..a8a6447712
+--- /dev/null
++++ b/package/openjdk-bootstrap/openjdk-bootstrap.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# openjdk-bootstrap
++#
++################################################################################
++
++OPENJDK_BOOTSTRAP_VERSION = 1.8.0.141
++OPENJDK_BOOTSTRAP_SITE = http://anduin.linuxfromscratch.org/BLFS/OpenJDK/OpenJDK-$(OPENJDK_BOOTSTRAP_VERSION)
++ifeq ($(BR2_HOSTARCH),x86)
++OPENJDK_BOOTSTRAP_SOURCE = OpenJDK-$(OPENJDK_BOOTSTRAP_VERSION)-i686-bin.tar.xz
++else
++OPENJDK_BOOTSTRAP_SOURCE = OpenJDK-$(OPENJDK_BOOTSTRAP_VERSION)-x86_64-bin.tar.xz
++endif
++OPENJDK_BOOTSTRAP_LICENSE = GPL-2.0+ with exception
++OPENJDK_BOOTSTRAP_LICENSE_FILES = LICENSE
++
++# Also provided to other packages
++OPENJDK_BOOTSTRAP_BOOTSTRAP_DIR = $(HOST_DIR)/opt/jdk-bootstrap/
++
++define HOST_OPENJDK_BOOTSTRAP_INSTALL_CMDS
++	mkdir -p $(OPENJDK_BOOTSTRAP_BOOTSTRAP_DIR)
++	cp -r $(@D)/* $(OPENJDK_BOOTSTRAP_BOOTSTRAP_DIR)
++endef
++
++$(eval $(host-generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
