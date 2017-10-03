@@ -1,41 +1,44 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  3 Oct 2017 08:49:18 -0500
-Subject: [Buildroot] [PATCH] host-lzo: default liblzo2.a install to host/lib
-Message-ID: <1507038558-27163-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
+Date: Tue,  3 Oct 2017 15:55:25 +0200
+Subject: [Buildroot] [PATCH] wireguard: version bump
+Message-ID: <20171003135525.14684-1-Jason@zx2c4.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Discovered the issue on a RHEL7.4 machine where
-the cmake build dynamically selected HOST_DIR/lib64
-as the installation path for the library.
+Even though this package was added just a day or two ago, it seems to
+have committed an old version, perhaps due to the length of review.
 
-Fixes failures like the following:
-host-mtd
-http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
-host-squashfs
-http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
+This simply updates the package to use the newer snapshot.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- package/lzo/lzo.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/wireguard/wireguard.hash | 2 +-
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index 27ca459..0cafba2 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -11,6 +11,9 @@ LZO_LICENSE_FILES = COPYING
- LZO_INSTALL_STAGING = YES
- LZO_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 5bd1163d3c..5103681e42 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 ab96230390625aad6f4816fa23aef6e9f7fee130f083d838919129ff12089bf7 WireGuard-0.0.20170810.tar.xz
++sha256 ecff9a184685b7dd2d81576eba5bd96bb59031c9e9b5eeee05d6dc298f30998e WireGuard-0.0.20171001.tar.xz
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 1f2190c0d7..e946e4ca39 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Prevent dynamically using lib64 as install libdir
-+HOST_LZO_CONF_OPTS += -DCMAKE_INSTALL_LIBDIR=lib
-+
- ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
- LZO_CONF_OPTS += -DENABLE_SHARED=ON
- else
+-WIREGUARD_VERSION = 0.0.20170810
++WIREGUARD_VERSION = 0.0.20171001
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
 -- 
-1.8.3.1
+2.14.2
