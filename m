@@ -1,65 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 Oct 2017 18:41:45 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain: Add glibc support for ARCv2
-In-Reply-To: <1506624636.3713.20.camel@synopsys.com>
-References: <20170914221446.13647-1-abrodkin@synopsys.com>
- <20170914221446.13647-3-abrodkin@synopsys.com>
- <1506624636.3713.20.camel@synopsys.com>
-Message-ID: <e199b1b7-2c6f-4711-938a-15616d6d85a1@mind.be>
+Date: Wed, 4 Oct 2017 22:37:15 +0200
+Subject: [Buildroot] [PATCH v3] HOST_DIR/lib: symlink respectively to
+ lib32/64
+In-Reply-To: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <78e41d61-c2f5-1e7f-0e45-66b497f8bff6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Matt,
 
-
-On 28-09-17 20:50, Alexey Brodkin wrote:
-> Hi Thomas, Arnout,
+On 04-10-17 14:41, Matt Weber wrote:
+> Discovered the issue on a RHEL7.4 machine where
+> the cmake build dynamically selected HOST_DIR/lib64
+> as the installation path for the lzo2 library.
 > 
-> On Fri, 2017-09-15 at 01:14 +0300, Alexey Brodkin wrote:
->> Finally there's working ARC port of glibc thanks to Vineet and Cuper!
->> This port is based on pretty recent glibc's master branch and ARC
->> changes are being reviewed now in glibc's mailing list.
->>
->> Thus we again have to use sources from our GitHub but as soon as there's
->> a glibc release with our patches applied we'll switch to unpstream releases
->> and will drop our glibc GitHub repo alltogether.
->>
->> Note now we cut tags in glibc repo simultaneously with tags
->> in Binutils and GCC repos and so to make sure everything works in the best
->> way we plan to update glibc tag together with Binutils and GCC.
->>
->> Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
->> but we plan to fix it soonish so for now we make glibc intentionally
->> dependent on archs38.
->>
->> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
->> Cc: Cupertino Miranda <cmiranda@synopsys.com>
->> Cc: Vineet Gupta <vgupta@synopsys.com>
->> Cc: Anton Kolesov <akolesov@synopsys.com>
+> Fixes failures like the following:
+> host-mtd
+> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
 > 
-> This patch was sitting in patchwork for 2 weeks now.
-> If there're any complaints an suggestions why don't we merge it?
+> host-squashfs
+> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
- Since I merged the bump to glibc 2.26, patch 1 is not correct anymore.
+ Two small nits...
 
- Would it be useful to instead add patches to our glibc to add ARC support? Or
-are the ARC patches too difficult to backport?
+> ---
+> Changes
+> [Yann
+> v2 -> v3
+>  - Updated hostarch logic to check for 64bit in the name
+>    and if present create link.  This supports all archs
+>    vs just x86.
+> 
+> v1 -> v2
+>  - Correct the condition used to determine host arch.
+>    (Previously used the target arch check)
+> ---
+>  Makefile | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 9b09589..601de1d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -542,7 +542,7 @@ endif
+>  
+>  .PHONY: dirs
+>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+> -	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
+> +	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+>  
+>  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+>  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+> @@ -565,6 +565,13 @@ sdk: world
+>  $(HOST_DIR)/usr: $(HOST_DIR)
+>  	@ln -snf . $@
+>  
+> +$(HOST_DIR)/lib: $(HOST_DIR)
+> +	@mkdir -p $@
+> +	case $(HOSTARCH) in \
 
+ Better put @ in front here.
 
-> I'd like to see how we ramp-up with glibc toolchain for ARC.
-> That said once the patch is applied would be good to add
-> a corresponding config for autobuilder.
+> +		(*64) ln -s lib $(@D)/lib64;; \
 
- You can actually do that yourself by adding a config to
-support/config-fragments/autobuild and updating toolchain-configs.csv
-in that directory. Something like br-arc-full-internal.config but then with glibc.
+ Probably not really important, but what would HOSTARCH be on a MIP64 n32?
 
+ More importantly: it is possible that HOST_DIR/lib64 exists already but that
+HOST_DIR ends up newer - for example because a new directory (e.g. sbin) was
+created in it. Then the rule will be executed again, and a new symlink will be
+created within the lib directory. So to avoid this, use ln -snf.
+
+ To be sure, could you test with BR2_HOST_DIR set to somewhere else and also
+rebuilding?
 
  Regards,
  Arnout
 
+> +		(*)   ln -s lib $(@D)/lib32;; \
+> +	esac
+> +
+>  # Populating the staging with the base directories is handled by the skeleton package
+>  $(STAGING_DIR):
+>  	@mkdir -p $(STAGING_DIR)
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
