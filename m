@@ -1,107 +1,48 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed,  4 Oct 2017 09:49:20 -0300
-Subject: [Buildroot] [PATCH] nmap: add option to build/install "ncat"
+Date: Wed, 4 Oct 2017 09:58:38 -0300 (BRT)
+Subject: [Buildroot] [PATCH v3] nc: new virtual package providing
+ "netcat" functionality
 In-Reply-To: <20171004112008.4426cff9@windsurf.home>
-References: <20171004112008.4426cff9@windsurf.home>
-Message-ID: <20171004124920.7358-1-casantos@datacom.ind.br>
+References: <20170917214558.11061-1-casantos@datacom.ind.br>
+ <1506953582-12965-1-git-send-email-casantos@datacom.ind.br>
+ <20171002211840.104aa3df@windsurf.home>
+ <1637040809.11941224.1506974995439.JavaMail.zimbra@datacom.ind.br>
+ <20171004112008.4426cff9@windsurf.home>
+Message-ID: <334684218.12236639.1507121918373.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ncat is a much-improved reimplementation of the venerable Netcat and is
-compatible with uClibc.
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+> Sent: Wednesday, October 4, 2017 6:20:08 AM
+> Subject: Re: [Buildroot] [PATCH v3] nc: new virtual package providing "netcat" functionality
 
-So far the "nc" options available to build with uClibc were the ancient
-GNU netcat and its Busybox double (the openbsd-netcat package cannot be
-used because it requires GLIBC). Both lack features available in modern
-netcats like IPv6, proxies, and Unix sockets.
+> Hello Carlos,
+> 
+> On Mon, 2 Oct 2017 17:09:55 -0300 (BRT), Carlos Santos wrote:
+> 
+>> > Virtual packages are mainly useful when several variants of a given
+>> > library provide the same API, but different implementations, and we
+>> > have N consumers of this API. In such a case, a virtual package avoids
+>> > having each consumer explicitly handle every possible provider of the
+>> > API.
+>> 
+>> There are three packages able to provide the "nc" command (four, if
+>> we count busybox). I want to allow the user to choose only one of them,
+>> unambiguously.
+> 
+> I'm sorry, but I really don't think we want to go down this route.
+---8<---
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-------
-Changes v1->v2:
-  - Prevent build error
-    Makefile:537: *** nmap is in the dependency chain of nc that has \
-    added it to its _DEPENDENCIES variable without selecting it or \
-    depending on it from Config.in.  Stop.
-------
- package/Config.in                        |  3 +-
- package/nc/Config.in                     | 84 ++++++++++++++++++++++++++++++++
- package/nc/nc.mk                         |  7 +++
- package/netcat-openbsd/Config.in         | 25 ----------
- package/netcat-openbsd/netcat-openbsd.mk |  2 +
- package/netcat/Config.in                 | 13 -----
- package/netcat/netcat.mk                 |  1 +
- package/nmap/Config.in                   |  4 ++
- package/nmap/nmap.mk                     | 30 +++++++++++-
- 9 files changed, 127 insertions(+), 42 deletions(-)
- create mode 100644 package/nc/Config.in
- create mode 100644 package/nc/nc.mk
----
- package/nmap/Config.in | 12 ++++++++++++
- package/nmap/nmap.mk   | 21 ++++++++++++++++++++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
+OK, I sent a smaller patch which simply adds an option to build/install
+ncat.
 
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-index 79f587afd1..7986bd6544 100644
---- a/package/nmap/Config.in
-+++ b/package/nmap/Config.in
-@@ -11,6 +11,18 @@ config BR2_PACKAGE_NMAP
- 
- 	  http://nmap.org
- 
-+if BR2_PACKAGE_NMAP
-+
-+config BR2_PACKAGE_NMAP_NCAT
-+	bool "nmap-ncat"
-+	help
-+	  Ncat is a feature-packed networking utility which reads and
-+	  writes data across networks from the command line. Ncat was
-+	  written for the Nmap Project as a much-improved
-+	  reimplementation of the venerable Netcat.
-+
-+endif
-+
- comment "nmap needs a toolchain w/ C++, threads"
- 	depends on BR2_USE_MMU
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 9db06d1455..e41a66927c 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -10,7 +10,7 @@ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
- NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included --with-liblinear=included \
--	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
-+	--with-libpcre="$(STAGING_DIR)/usr"
- NMAP_LICENSE = GPL-2.0
- NMAP_LICENSE_FILES = COPYING
- 
-@@ -50,4 +50,23 @@ else
- NMAP_CONF_OPTS += --without-ndiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_NMAP_NCAT),y)
-+
-+# If both nmap-ncat and busybox are selected, make certain coreutils
-+# wins the fight over who gets to have their utils actually installed.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),Y)
-+NMAP_DEPENDENCIES += busybox
-+endif
-+
-+define NMAP_INSTALL_NCAT_SYMLINK
-+        ln -fs ncat $(TARGET_DIR)/usr/bin/nc
-+endef
-+NMAP_POST_INSTALL_TARGET_HOOKS += NMAP_INSTALL_NCAT_SYMLINK
-+
-+else
-+
-+NMAP_CONF_OPTS += --without-ncat
-+
-+endif
-+
- $(eval $(autotools-package))
 -- 
-2.13.6
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
