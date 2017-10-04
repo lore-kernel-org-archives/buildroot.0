@@ -1,88 +1,85 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed,  4 Oct 2017 12:43:13 -0300
-Subject: [Buildroot] [PATCH v2] nmap: add option to build/install "ncat"
-In-Reply-To: <20171004124920.7358-1-casantos@datacom.ind.br>
-References: <20171004124920.7358-1-casantos@datacom.ind.br>
-Message-ID: <20171004154313.25762-1-casantos@datacom.ind.br>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Wed, 04 Oct 2017 18:20:27 +0200
+Subject: [Buildroot]
+	=?iso-8859-1?q?=5BPATCH_v3=5D_HOST=5FDIR/lib=3A_symli?=
+	=?iso-8859-1?q?nk_respectively_to_lib32/64?=
+In-Reply-To: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <9b8afa0d-6867-4898-9389-678b1cec8458@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ncat is a much-improved reimplementation of the venerable Netcat and is
-compatible with uClibc.
+On st?eda 4. ??jna 2017 14:41:48 CEST, Matt Weber wrote:
+> Discovered the issue on a RHEL7.4 machine where
+> the cmake build dynamically selected HOST_DIR/lib64
+> as the installation path for the lzo2 library.
+>
+> Fixes failures like the following:
+> host-mtd
+> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
+>
+> host-squashfs
+> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes
+> [Yann
+> v2 -> v3
+>  - Updated hostarch logic to check for 64bit in the name
+>    and if present create link.  This supports all archs
+>    vs just x86.
+>
+> v1 -> v2
+>  - Correct the condition used to determine host arch.
+>    (Previously used the target arch check)
+> ---
+>  Makefile | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 9b09589..601de1d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -542,7 +542,7 @@ endif
+>  
+>  .PHONY: dirs
+>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+> -	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
+> +	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+>  
+>  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+>  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" 
+> HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+> @@ -565,6 +565,13 @@ sdk: world
+>  $(HOST_DIR)/usr: $(HOST_DIR)
+>  	@ln -snf . $@
+>  
+> +$(HOST_DIR)/lib: $(HOST_DIR)
+> +	@mkdir -p $@
+> +	case $(HOSTARCH) in \
+> +		(*64) ln -s lib $(@D)/lib64;; \
+> +		(*)   ln -s lib $(@D)/lib32;; \
+> +	esac
+> +
+>  # Populating the staging with the base directories is handled 
+> by the skeleton package
+>  $(STAGING_DIR):
+>  	@mkdir -p $(STAGING_DIR)
 
-So far the "nc" options available to build with uClibc were the ancient
-GNU netcat and its Busybox double (the openbsd-netcat package cannot be
-used because it requires GLIBC). Both lack features available in modern
-netcats like IPv6, proxies, and Unix sockets.
+Thanks, I was hitting a same issue with another package that I was working 
+on yesterday. I think that anybody whose distribution sets up CMake to use 
+lib64 for libdir will hit that, at least on package which include 
+GNUInstallDirs.cmake.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1->v2:
-  - Add dependens on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, like netcat does
-  - Remove forced dependence on busybox, since its installation script
-    does not override existing programs.
----
- package/nmap/Config.in | 13 +++++++++++++
- package/nmap/nmap.mk   | 15 ++++++++++++++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+I can confirm that this patch fixes that issue for me.
 
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-index 79f587afd1..a2e330dacd 100644
---- a/package/nmap/Config.in
-+++ b/package/nmap/Config.in
-@@ -11,6 +11,19 @@ config BR2_PACKAGE_NMAP
- 
- 	  http://nmap.org
- 
-+if BR2_PACKAGE_NMAP
-+
-+config BR2_PACKAGE_NMAP_NCAT
-+	bool "nmap-ncat"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	help
-+	  Ncat is a feature-packed networking utility which reads and
-+	  writes data across networks from the command line. Ncat was
-+	  written for the Nmap Project as a much-improved
-+	  reimplementation of the venerable Netcat.
-+
-+endif
-+
- comment "nmap needs a toolchain w/ C++, threads"
- 	depends on BR2_USE_MMU
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 9db06d1455..fb16c2887d 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -10,7 +10,7 @@ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
- NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included --with-liblinear=included \
--	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
-+	--with-libpcre="$(STAGING_DIR)/usr"
- NMAP_LICENSE = GPL-2.0
- NMAP_LICENSE_FILES = COPYING
- 
-@@ -50,4 +50,17 @@ else
- NMAP_CONF_OPTS += --without-ndiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_NMAP_NCAT),y)
-+
-+define NMAP_INSTALL_NCAT_SYMLINK
-+        ln -fs ncat $(TARGET_DIR)/usr/bin/nc
-+endef
-+NMAP_POST_INSTALL_TARGET_HOOKS += NMAP_INSTALL_NCAT_SYMLINK
-+
-+else
-+
-+NMAP_CONF_OPTS += --without-ncat
-+
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.13.6
+Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz> (host: x86_64, targets: 
+i686, arm)
+
+Cheers,
+Jan
