@@ -1,85 +1,66 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 04 Oct 2017 18:20:27 +0200
-Subject: [Buildroot]
-	=?iso-8859-1?q?=5BPATCH_v3=5D_HOST=5FDIR/lib=3A_symli?=
-	=?iso-8859-1?q?nk_respectively_to_lib32/64?=
-In-Reply-To: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <9b8afa0d-6867-4898-9389-678b1cec8458@cesnet.cz>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 4 Oct 2017 18:35:07 +0200
+Subject: [Buildroot] [PATCH] pkg-download: make package name optional in
+ github helper
+In-Reply-To: <20171004085745.15457-1-ismael@iodev.co.uk>
+References: <20171004085745.15457-1-ismael@iodev.co.uk>
+Message-ID: <26d3dc60-5a3a-0fce-f3cf-b75ee2670644@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On st?eda 4. ??jna 2017 14:41:48 CEST, Matt Weber wrote:
-> Discovered the issue on a RHEL7.4 machine where
-> the cmake build dynamically selected HOST_DIR/lib64
-> as the installation path for the lzo2 library.
->
-> Fixes failures like the following:
-> host-mtd
-> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
->
-> host-squashfs
-> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
->
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ Hi Ismael,
+
+
+On 04-10-17 10:57, Ismael Luceno wrote:
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 > ---
-> Changes
-> [Yann
-> v2 -> v3
->  - Updated hostarch logic to check for 64bit in the name
->    and if present create link.  This supports all archs
->    vs just x86.
->
-> v1 -> v2
->  - Correct the condition used to determine host arch.
->    (Previously used the target arch check)
-> ---
->  Makefile | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 9b09589..601de1d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -542,7 +542,7 @@ endif
+>  package/pkg-download.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index dc4ff1c8c755..78307eee8a33 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -52,8 +52,8 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
+>  # default domainseparator is /, specify alternative value as first argument
+>  domainseparator = $(if $(1),$(1),/)
 >  
->  .PHONY: dirs
->  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-> -	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
-> +	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+> -# github(user,package[,version]): returns site of GitHub repository
+> -github = https://github.com/$(1)/$(2)/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
+
+ As noticed by Peter, this was already wrong in the original patch: it only
+works if the github helper is used in a := assignment, otherwise $(pkgname)
+evaluates to empty by the time the variable is evaluated.
+
+ The solution (probably) is to use $(PKG) instead of $(pkgname).
+
+> +# github(user[,package[,version]]): returns site of GitHub repository
+> +github = https://github.com/$(1)/$(or $(2),$(pkgname))/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
+
+ Could you estimate how many packages could be simplified with this?
+
+ I'm not actually sure this is a good idea anyway. The _VERSION is OK because it
+works for *all* packages, the third argument is only needed when you use the
+github helper outside a package (e.g. for a custom kernel URL). But this change
+will apply only to a limited number of packages on the one hand, and on the
+other hand it makes it even more difficult for people to understand what is
+meant with this $(call github,foo) construct.
+
+ Regards,
+ Arnout
+
 >  
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" 
-> HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-> @@ -565,6 +565,13 @@ sdk: world
->  $(HOST_DIR)/usr: $(HOST_DIR)
->  	@ln -snf . $@
->  
-> +$(HOST_DIR)/lib: $(HOST_DIR)
-> +	@mkdir -p $@
-> +	case $(HOSTARCH) in \
-> +		(*64) ln -s lib $(@D)/lib64;; \
-> +		(*)   ln -s lib $(@D)/lib32;; \
-> +	esac
-> +
->  # Populating the staging with the base directories is handled 
-> by the skeleton package
->  $(STAGING_DIR):
->  	@mkdir -p $(STAGING_DIR)
+>  # Expressly do not check hashes for those files
+>  # Exported variables default to immediately expanded in some versions of
+> 
 
-Thanks, I was hitting a same issue with another package that I was working 
-on yesterday. I think that anybody whose distribution sets up CMake to use 
-lib64 for libdir will hit that, at least on package which include 
-GNUInstallDirs.cmake.
-
-I can confirm that this patch fixes that issue for me.
-
-Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz> (host: x86_64, targets: 
-i686, arm)
-
-Cheers,
-Jan
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
