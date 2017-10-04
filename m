@@ -1,58 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  4 Oct 2017 09:13:57 +0200
-Subject: [Buildroot] [PATCH] qemu: security bump to version 2.8.1.1
-Message-ID: <20171004071357.15093-1-peter@korsgaard.com>
+Date: Wed,  4 Oct 2017 09:35:17 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.56.0
+Message-ID: <20171004073517.7164-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues and adds a number of other bigfixes:
+Drop upstreamed patch.
 
-2.8.1: Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
+Fixes CVE-2017-1000254 - FTP PWD response parser out of bounds read:
 
-CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
-mode
-
-CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
-cirrus_bitblt_cputovideo
-
-CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
-
-2.8.1.1 Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-
-CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
-host
+https://curl.haxx.se/docs/adv_20171004.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...confopts.m4-fix-disable-threaded-resolver.patch | 40 ----------------------
+ package/libcurl/libcurl.hash                       |  4 +--
+ package/libcurl/libcurl.mk                         |  4 +--
+ 3 files changed, 3 insertions(+), 45 deletions(-)
+ delete mode 100644 package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 19cb306938..5164303768 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,2 +1,2 @@
- # Locally computed, tarball verified with GPG signature
--sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
-+sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index f42d6497b6..155cb281b9 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
+diff --git a/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch b/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
+deleted file mode 100644
+index c7a563e825..0000000000
+--- a/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 3cb4bb6b5fb8a936cb69e2e9ea6a4e692122abb9 Mon Sep 17 00:00:00 2001
+-From: Jakub Zakrzewski <slither.jz@gmail.com>
+-Date: Tue, 15 Aug 2017 13:21:33 -0400
+-Subject: [PATCH] curl-confopts.m4: fix --disable-threaded-resolver
+-
+-Closes https://github.com/curl/curl/issues/1784
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 3cb4bb6b5fb
+-
+- m4/curl-confopts.m4 | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/m4/curl-confopts.m4 b/m4/curl-confopts.m4
+-index d77a884d58bd..6dcd0f1a6794 100644
+---- a/m4/curl-confopts.m4
+-+++ b/m4/curl-confopts.m4
+-@@ -37,14 +37,14 @@ AC_HELP_STRING([--enable-threaded-resolver],[Enable threaded resolver])
+- AC_HELP_STRING([--disable-threaded-resolver],[Disable threaded resolver]),
+-   OPT_THRES=$enableval)
+-   case "$OPT_THRES" in
+--    *)
+--      dnl configure option not specified
+--      want_thres="yes"
+--      ;;
+-     no)
+-       dnl --disable-threaded-resolver option used
+-       want_thres="no"
+-       ;;
+-+    *)
+-+      dnl configure option not specified
+-+      want_thres="yes"
+-+      ;;
+-   esac
+-   AC_MSG_RESULT([$want_thres])
+- ])
+--- 
+-2.14.1
+-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 571526a9b7..c6970632ac 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
+-sha256 3eafca6e84ecb4af5f35795dee84e643d5428287e88c041122bb8dac18676bb7  curl-7.55.1.tar.xz
++# https://curl.haxx.se/download/curl-7.56.0.tar.xz.asc
++sha256 32437bcca0e9434384329fdc733547879d25ba70335b3cf9e3d9cbc3e71fd172  curl-7.56.0.tar.xz
+ sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index d7f860eb1b..a6b699ce9c 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QEMU_VERSION = 2.8.0
-+QEMU_VERSION = 2.8.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+-LIBCURL_VERSION = 7.55.1
++LIBCURL_VERSION = 7.56.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -14,8 +14,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
+ LIBCURL_LICENSE = curl
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_INSTALL_STAGING = YES
+-# Patching m4/curl-confopts.m4
+-LIBCURL_AUTORECONF = YES
+ 
+ # We disable NTLM support because it uses fork(), which doesn't work
+ # on non-MMU platforms. Moreover, this authentication method is
 -- 
 2.11.0
