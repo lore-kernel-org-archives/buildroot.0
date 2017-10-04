@@ -1,60 +1,132 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 Oct 2017 18:35:07 +0200
-Subject: [Buildroot] [PATCH] pkg-download: make package name optional in
- github helper
-In-Reply-To: <20171004085745.15457-1-ismael@iodev.co.uk>
-References: <20171004085745.15457-1-ismael@iodev.co.uk>
-Message-ID: <26d3dc60-5a3a-0fce-f3cf-b75ee2670644@mind.be>
+Date: Wed, 4 Oct 2017 22:00:08 +0200
+Subject: [Buildroot] Package infrastructure for Go programs
+In-Reply-To: <CA+TH9VmgHZ5xxYXeO7dzqKObsz+X=v38XhcK34tY3Fp=DjDyig@mail.gmail.com>
+References: <CA+TH9VmgHZ5xxYXeO7dzqKObsz+X=v38XhcK34tY3Fp=DjDyig@mail.gmail.com>
+Message-ID: <7041482c-85c6-1a99-95dd-1ba1d592701d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ismael,
+ Hi Angelo,
 
-
-On 04-10-17 10:57, Ismael Luceno wrote:
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-> ---
->  package/pkg-download.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 28-09-17 12:14, Angelo Compagnucci wrote:
+> Hello guys,
 > 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index dc4ff1c8c755..78307eee8a33 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -52,8 +52,8 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
->  # default domainseparator is /, specify alternative value as first argument
->  domainseparator = $(if $(1),$(1),/)
->  
-> -# github(user,package[,version]): returns site of GitHub repository
-> -github = https://github.com/$(1)/$(2)/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
+> I was reading a thread [1] about a packaging infrastructure for Go
+> software and I'm interested to revive it.
+> 
+> The most difficult objection to overcome is the fact that we should
+> decompose software dependencies in the correspondent packages to be
+> downloadable separately, but unfortunately with go software (or in
+> general with any other software with fluid dependencies and package
+> management) this is really not possible.
 
- As noticed by Peter, this was already wrong in the original patch: it only
-works if the github helper is used in a := assignment, otherwise $(pkgname)
-evaluates to empty by the time the variable is evaluated.
+ Indeed, this is a recurring problem with languages that provide their own
+packaging infrastructure. Currently, the rule is indeed that every package needs
+to be packaged separately. For npm we have a kind of escape route, that allows
+you to give a list of npm packages to install and Buildroot will use npm to
+install those (plus dependencies). But that approach doesn't apply for a
+Buildroot package that has npm dependencies, only for something the end user
+wants to use.
 
- The solution (probably) is to use $(PKG) instead of $(pkgname).
+ My personal opinion is that we should let go of the rule that every package
+needs to be packaged separately and instead use the language packaging
+infrastructure as much as possible. *How* exactly this can be done, I'm not sure
+of. But I want to keep the following features (in decreasing order of priority).
 
-> +# github(user[,package[,version]]): returns site of GitHub repository
-> +github = https://github.com/$(1)/$(or $(2),$(pkgname))/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
+1. The build is reproducible. If I build the same .config a year from now, I
+should use exactly the same source (and normally end up with exactly the same
+result, barring some timestamps etc.).
 
- Could you estimate how many packages could be simplified with this?
+2. "make source" downloads everything so after that you can do an offline build.
 
- I'm not actually sure this is a good idea anyway. The _VERSION is OK because it
-works for *all* packages, the third argument is only needed when you use the
-github helper outside a package (e.g. for a custom kernel URL). But this change
-will apply only to a limited number of packages on the one hand, and on the
-other hand it makes it even more difficult for people to understand what is
-meant with this $(call github,foo) construct.
+3. Everything appears only once in the target, only a single version is used for
+each package, unless the versions are incompatible (e.g. a gstreamer-0.10 and
+gstreamer-1 side by side is acceptable).
+
+4. BR2_PRIMARY_SITE works, it should be possible to do an offline build with an
+empty download dir as long as you can access BR2_PRIMARY_SITE.
+
+5. Something like our hashes is implemented, i.e. if the upstream archive is
+changed, the build breaks.
+
+6. legal-info works, the licenses end up in our manifest and preferably also a
+license file.
+
+7. BR2_SECONDARY_SITE works, so if the original archive disappears we can still
+do a build.
+
+
+ 1 and 2 are for me essential. The rest is is negotiable :-). Note that the npm
+hack currently doesn't even satisfy point 1. I'm absolutely NOT in favour of
+repeating that exercise for other languages...
+
+
+> Go permits to define dependencies on the form of a git repository
+> somewhere and this could change from a release to another. Moreover
+> the git repository linked by a software could have nested dependencies
+> that will be downloaded automatically by the go build system
+> recursively.
+
+ And is reproducibility guaranteed, or are these dependencies going to change
+automagically (without changing the root version)? I.e., will 1 be satisfied?
+
+> Dependencies are btw private to the software, downloaded in a nested
+> folder (usually called "vendor") and cannot be shared easily with
+> other software.
+
+ So this will violate 3. But that's actually no problem, because Go always does
+static linking so 3 will always be violated in practice (every executable
+contains all its dependencies).
+
+
+> This is generally true with each software that uses a package
+> management infrastructure. I can't think of packaging any modern php
+> software in buildroot cause the intricacies of dependency management
+> added by composer. Using composer in php offers no easy way to share a
+> dependency with another php project btw.
+> 
+> Indeed, some buildroot software written in Go (like flannel) already
+> escapes [2] this rule.
+> 
+> So in the end, it's feasible for software with an internal package
+> management and download mechanism to be in buildroot or should we
+> leave them out and so the package infrastructure?
+
+ So, above were my preferences. We should probably reserve some time at the next
+BR meeting (just two and a half weeks from now) to discuss this face to face.
+
+ Angelo, could you give some thoughts about which of these requirements might
+possibly be satisfiable and which ones we will have to sacrifice?
 
  Regards,
  Arnout
 
->  
->  # Expressly do not check hashes for those files
->  # Exported variables default to immediately expanded in some versions of
+> 
+> Thanks for your insights!
+> 
+> 
+> Sincerely, Angelo
+> 
+> 
+> [1] http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-8-RFC-Adding-a-Go-package-infrastructure-td124596.html
+> 
+> [2] From the build log for flannel:
+> github.com/coreos/flannel/Godeps/_workspace/src/golang.org/x/net/context
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/coreos/go-iptables/iptables
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awserr
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/vaughan0/go-ini
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/endpoints
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awsutil
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/protocol/query/queryutil
+> github.com/coreos/flannel/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/protocol/xml/xmlutil
+> [...]
+> In this case flannel doesn't download anything only because the
+> dependencies are pre-downloaded and included in the release archive,
+> but this still conflict with the buildroot policies.
 > 
 
 -- 
