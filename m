@@ -1,33 +1,39 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Wed,  4 Oct 2017 05:57:45 -0300
-Subject: [Buildroot] [PATCH] pkg-download: make package name optional in
-	github helper
-Message-ID: <20171004085745.15457-1-ismael@iodev.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 04 Oct 2017 10:59:07 +0200
+Subject: [Buildroot] [PATCH] dump1090: new package
+In-Reply-To: <CANCHnQo6Z=53Nq9JPEDnnjTE0BvN6PsjT2MM35oAc5_M88eaGg@mail.gmail.com>
+ (Jeroen Roovers's message of "Wed, 4 Oct 2017 09:44:12 +0200")
+References: <20170930183842.17954-1-peter@korsgaard.com>
+ <CANCHnQo6Z=53Nq9JPEDnnjTE0BvN6PsjT2MM35oAc5_M88eaGg@mail.gmail.com>
+Message-ID: <87r2uj9tlw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
----
- package/pkg-download.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Jeroen" == Jeroen Roovers <jer@airfi.aero> writes:
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index dc4ff1c8c755..78307eee8a33 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -52,8 +52,8 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
- # default domainseparator is /, specify alternative value as first argument
- domainseparator = $(if $(1),$(1),/)
- 
--# github(user,package[,version]): returns site of GitHub repository
--github = https://github.com/$(1)/$(2)/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
-+# github(user[,package[,version]]): returns site of GitHub repository
-+github = https://github.com/$(1)/$(or $(2),$(pkgname))/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
- 
- # Expressly do not check hashes for those files
- # Exported variables default to immediately expanded in some versions of
+ >      Hi,
+ > On 30 September 2017 at 20:38, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+ >> +         https://github.com/MalcolmRobb/dump1090
+
+ >> +DUMP1090_SITE = $(call github,MalcolmRobb,dump1090,$(DUMP1090_VERSION))
+
+ > Interesting. I have been using https://github.com/antirez/dump1090
+ > instead. Did you have a particular reason to choose this fork?
+
+Yes, I hessitated as well. The reason why I went with MalcolmRobb's
+version (that is explictly referenced from the antirez readme) was:
+
+- Support for finding data files elsewhere than . (/usr/share/dump1090)
+
+- Extra viewer program, making it easier to run as a service in the
+  background
+
+- More advanced web interface
+
 -- 
-2.14.2
+Bye, Peter Korsgaard
