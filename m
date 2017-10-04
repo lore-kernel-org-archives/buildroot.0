@@ -1,80 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 4 Oct 2017 11:22:17 +0300
-Subject: [Buildroot] [PATCH] qemu: security bump to version 2.8.1.1
-In-Reply-To: <20171004071357.15093-1-peter@korsgaard.com>
-References: <20171004071357.15093-1-peter@korsgaard.com>
-Message-ID: <20171004082217.o2yzbrwjdpicpe4r@tarshish>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed,  4 Oct 2017 10:24:36 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.1.3
+Message-ID: <20171004082436.10105-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Fixes a runtime startup issue on SysV init systems:
+```
+# shairport-sync -d
+Daemon returned 2 as return value.
+```
 
-On Wed, Oct 04, 2017 at 09:13:57AM +0200, Peter Korsgaard wrote:
-> Fixes the following security issues and adds a number of other bigfixes:
-> 
-> 2.8.1: Changelog:
-> https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
-> 
-> CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
-> mode
-> 
-> CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
-> cirrus_bitblt_cputovideo
-> 
-> CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
-> 
-> 2.8.1.1 Changelog:
-> https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-> 
-> CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
-> host
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/qemu/qemu.hash | 2 +-
->  package/qemu/qemu.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-> index 19cb306938..5164303768 100644
-> --- a/package/qemu/qemu.hash
-> +++ b/package/qemu/qemu.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed, tarball verified with GPG signature
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The signatures are at:
-
-  https://download.qemu.org/qemu-2.8.1.1.tar.bz2.sig
-  https://download.qemu.org/qemu-2.8.1.1.tar.xz.sig
-
-> -sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
-> +sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index f42d6497b6..155cb281b9 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -QEMU_VERSION = 2.8.0
-> +QEMU_VERSION = 2.8.1.1
->  QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
-
-There is also a .xz tarball available.
-
->  QEMU_SITE = http://wiki.qemu.org/download
-
-This redirects to https://download.qemu.org.
-
->  QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
-
-baruch
-
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 35391a84f5..eac39138db 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  8c13f7ebbd417e8cab07ea9f74392ced0f54315d8697d4513580f472859a9c65  shairport-sync-3.1.2.tar.gz
++sha256  dd0484d7e8ee7631aee78c78b3762abbdba7ec3f2ee8cd6c1e361544c1414da3  shairport-sync-3.1.3.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 01c13707e8..acca45c121 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.2
++SHAIRPORT_SYNC_VERSION = 3.1.3
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.14.2
