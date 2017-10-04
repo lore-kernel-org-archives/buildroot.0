@@ -1,48 +1,55 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 4 Oct 2017 09:58:38 -0300 (BRT)
-Subject: [Buildroot] [PATCH v3] nc: new virtual package providing
- "netcat" functionality
-In-Reply-To: <20171004112008.4426cff9@windsurf.home>
-References: <20170917214558.11061-1-casantos@datacom.ind.br>
- <1506953582-12965-1-git-send-email-casantos@datacom.ind.br>
- <20171002211840.104aa3df@windsurf.home>
- <1637040809.11941224.1506974995439.JavaMail.zimbra@datacom.ind.br>
- <20171004112008.4426cff9@windsurf.home>
-Message-ID: <334684218.12236639.1507121918373.JavaMail.zimbra@datacom.ind.br>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 4 Oct 2017 13:24:38 +0000
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.09-rc1
+In-Reply-To: <20171003212746.22c89884@windsurf.home>
+References: <20170921182828.26985-1-didin@synopsys.com>
+ <20171003212746.22c89884@windsurf.home>
+Message-ID: <1507123476.11412.3.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
-> Sent: Wednesday, October 4, 2017 6:20:08 AM
-> Subject: Re: [Buildroot] [PATCH v3] nc: new virtual package providing "netcat" functionality
+Hi Thomas,
 
-> Hello Carlos,
+On Tue, 2017-10-03 at 21:27 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Mon, 2 Oct 2017 17:09:55 -0300 (BRT), Carlos Santos wrote:
+> On Thu, 21 Sep 2017 21:28:28 +0300, Evgeniy Didin wrote:
 > 
->> > Virtual packages are mainly useful when several variants of a given
->> > library provide the same API, but different implementations, and we
->> > have N consumers of this API. In such a case, a virtual package avoids
->> > having each consumer explicitly handle every possible provider of the
->> > API.
->> 
->> There are three packages able to provide the "nc" command (four, if
->> we count busybox). I want to allow the user to choose only one of them,
->> unambiguously.
+> > 
+> > diff --git a/package/binutils/arc-2017.09-rc1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch b/package/binutils/arc-2017.09-rc1/0006-
+> > Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
+> > new file mode 100644
+> > index 000000000..e5409efe1
+> > --- /dev/null
+> > +++ b/package/binutils/arc-2017.09-rc1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
+> > @@ -0,0 +1,31 @@
+> > +From 122de3b633f4273826a2d01702d7c515f93ec2be Mon Sep 17 00:00:00 2001
+> > +From: Waldemar Brodkorb <wbx@openadk.org>
+> > +Date: Sat, 29 Jul 2017 14:08:20 +0200
+> > +Subject: [PATCH] Fixes: LINKER BUG: .rofixup section size mismatch
+> > +
+> > +Workaround from adi-toolchain commit:
+> > +af414ec1fb628ddb1562f062f3db49823ca14ca2
+> > +[#6798] binutils-2.21/bfd: temp workaround for rofixup mismatch errors.
+> > +
+> > +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > +---
+> > + bfd/elf32-bfin.c | 3 ++-
+> > + 1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> I'm sorry, but I really don't think we want to go down this route.
----8<---
+> What is the point of adding this Blackfin-only patch to the patch stack
+> used only for the ARC binutils version ?
 
-OK, I sent a smaller patch which simply adds an option to build/install
-ncat.
+Indeed this patch is not needed.
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+I guess we forgot to delete it when copied patches from
+"package/binutils/2.29.1" since its name doesn't indicate its
+arch-specific nature.
+
+We may either send a respin or you may just fix this up on
+patch application. Please let us know what do you prefer here.
+
+-Alexey
