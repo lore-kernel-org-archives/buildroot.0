@@ -1,48 +1,94 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 5 Oct 2017 20:33:39 +0200
-Subject: [Buildroot] [git commit] package/tor: fix openssl detection for
-	static builds
-Message-ID: <20171005184039.AC0107F96F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 5 Oct 2017 20:59:26 +0200
+Subject: [Buildroot] [PATCH] vboot-utils: disable static futility
+In-Reply-To: <20171003083737.GA3986@latitude.localdomain>
+References: <20171003083737.GA3986@latitude.localdomain>
+Message-ID: <ff810c0f-c031-a331-0dfb-f3baad11d263@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2268adf5b9e19fba6094f53e397168c8a4b8abb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/8e6/8e639ab8912e7d884fd8e6dbb1ca8b49451dd766/
 
-/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
-In function `zlib_stateful_expand_block':
-c_zlib.c:(.text+0x54): undefined reference to `inflate'
-/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
-In function `zlib_stateful_compress_block':
-c_zlib.c:(.text+0xd4): undefined reference to `deflate'
+On 03-10-17 10:37, Alex Suykov wrote:
+> Possibly fixes
+> http://autobuild.buildroot.net/results/fbe/fbe7892539cc1bf18f89d18c6609a5aa747647d0/
+> http://autobuild.buildroot.net/results/4bc/4bc388618ff02dde26ae09db021434a936c8cc1b/
+> and similar errors.
+> 
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/tor/0001-openssl-libz.patch | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ Applied to master, thanks.
 
-diff --git a/package/tor/0001-openssl-libz.patch b/package/tor/0001-openssl-libz.patch
-index c70894e..9d3cf6e 100644
---- a/package/tor/0001-openssl-libz.patch
-+++ b/package/tor/0001-openssl-libz.patch
-@@ -11,7 +11,12 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- diff -uNr tor-0.3.1.7.org/configure.ac tor-0.3.1.7/configure.ac
- --- tor-0.3.1.7.org/configure.ac	2017-09-15 15:34:06.000000000 +0200
- +++ tor-0.3.1.7/configure.ac	2017-09-19 19:40:17.090538467 +0200
--@@ -713,7 +713,7 @@
-+@@ -709,11 +709,11 @@
-+       fi
-+   ])
-+ 
-+-TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto $TOR_LIB_GDI],
-++TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto -lz $TOR_LIB_GDI],
-      [#include <openssl/rand.h>],
-      [void RAND_add(const void *buf, int num, double entropy);],
-      [RAND_add((void*)0,0,0);], [],
+ I don't particularly like this solution (a non-upstreamable patch), but the
+comments in the Makefile seem to suggest that this stuff is going to change in
+the future, so eventually the patch will fail to apply and will be removed :-)
+
+ It would be nice though if you could work with upstream to find a fundamental
+solution.
+
+ I'm actually quite surprised that this happens, because I thought 'gcc -static'
+didn't preclude dynamic linking if only a dynamic lib was available.
+
+ Regards,
+ Arnout
+
+> ---
+> Please note this is a blind fix. I cannot reproduce the build errors,
+> which all happen on the same build node, and I cannot verify that
+> the patch does in fact fix them. 
+> 
+> It's probably still a good idea to avoid unnecessary static linking
+> in a host package.
+> 
+>  .../vboot-utils/0004-Disable-static-futility.patch | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/vboot-utils/0004-Disable-static-futility.patch
+> 
+> diff --git a/package/vboot-utils/0004-Disable-static-futility.patch b/package/vboot-utils/0004-Disable-static-futility.patch
+> new file mode 100644
+> index 0000000000..574476d340
+> --- /dev/null
+> +++ b/package/vboot-utils/0004-Disable-static-futility.patch
+> @@ -0,0 +1,30 @@
+> +The package attempts to build a statically-linked host binary, futility_s,
+> +which is not used anywhere in buildroot but may be causing build failures
+> +if the build host lacks static libc.
+> +
+> +Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> +
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -1079,7 +1079,7 @@
+> + # new Firmware Utility
+> + 
+> + .PHONY: futil
+> +-futil: ${FUTIL_STATIC_BIN} ${FUTIL_BIN}
+> ++futil: ${FUTIL_BIN}
+> + 
+> + ${FUTIL_STATIC_BIN}: ${FUTIL_STATIC_OBJS} ${UTILLIB}
+> + 	@${PRINTF} "    LD            $(subst ${BUILD}/,,$@)\n"
+> +@@ -1091,10 +1091,10 @@
+> + 	${Q}${LD} -o $@ ${CFLAGS} ${LDFLAGS} $^ ${LDLIBS}
+> + 
+> + .PHONY: futil_install
+> +-futil_install: ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
+> ++futil_install: ${FUTIL_BIN}
+> + 	@${PRINTF} "    INSTALL       futility\n"
+> + 	${Q}mkdir -p ${UB_DIR}
+> +-	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
+> ++	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN}
+> + 	${Q}for prog in ${FUTIL_SYMLINKS}; do \
+> + 		ln -sf futility "${UB_DIR}/$$prog"; done
+> + 
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
