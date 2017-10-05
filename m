@@ -1,93 +1,67 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Oct 2017 21:00:35 +0200
-Subject: [Buildroot] [PATCH v4] HOST_DIR/lib: symlink respectively to
- lib32/64
-In-Reply-To: <1507152799-16949-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1507152799-16949-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <7410f3e8-7aed-f5d0-6e73-396d692d01f3@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 5 Oct 2017 22:07:38 +0300
+Subject: [Buildroot] [PATCH 2/2] dnsmasq: Disable CHAOS by default
+In-Reply-To: <20171005072532.21720-1-jer@airfi.aero>
+References: <20171005072532.21720-1-jer@airfi.aero>
+Message-ID: <20171005190738.kb5qgdlmnfxdd7nu@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Jeroen,
 
+On Thu, Oct 05, 2017 at 09:25:32AM +0200, Jeroen Roovers wrote:
+> dnsmasq exposes its version and some statistics through DNS, a features
+> that is configurable only at build time and is enabled by default.
 
-On 04-10-17 23:33, Matt Weber wrote:
-> Discovered the issue on a RHEL7.4 machine where
-> the cmake build dynamically selected HOST_DIR/lib64
-> as the installation path for the lzo2 library.
-> 
-> Fixes failures like the following:
-> host-mtd
-> http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
-> 
-> host-squashfs
-> http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
- Applied to master, thanks.
-
- Regards,
- Arnout
+Your sign-off is missing.
 
 > ---
+>  package/dnsmasq/Config.in  | 6 ++++++
+>  package/dnsmasq/dnsmasq.mk | 4 ++++
+>  2 files changed, 10 insertions(+)
 > 
-> Changes:
-> [Arnout
-> v3 -> v4
->  - Added @ infront of case statement
->  - Handled case of HOST_DIR ends up being newer and ln -s
->    would create a link inside of the lib folder.  Add -nf
->    to the args of ln (ie. ln -snf)
-> 
-> [Yann
-> v2 -> v3
->  - Updated hostarch logic to check for 64bit in the name
->    and if present create link.  This supports all archs
->    vs just x86.
-> 
-> v1 -> v2
->  - Correct the condition used to determine host arch.
->    (Previously used the target arch check)
-> ---
->  Makefile | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 9b09589..02f7cda 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -542,7 +542,7 @@ endif
+> diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+> index 8921fc629d..ea733d964e 100644
+> --- a/package/dnsmasq/Config.in
+> +++ b/package/dnsmasq/Config.in
+> @@ -27,6 +27,12 @@ config BR2_PACKAGE_DNSMASQ_DNSSEC
+>  	help
+>  	  Enable DNSSEC validation and caching support.
 >  
->  .PHONY: dirs
->  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-> -	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
-> +	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
->  
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-> @@ -565,6 +565,13 @@ sdk: world
->  $(HOST_DIR)/usr: $(HOST_DIR)
->  	@ln -snf . $@
->  
-> +$(HOST_DIR)/lib: $(HOST_DIR)
-> +	@mkdir -p $@
-> +	@case $(HOSTARCH) in \
-> +		(*64) ln -snf lib $(@D)/lib64;; \
-> +		(*)   ln -snf lib $(@D)/lib32;; \
-> +	esac
+> +config BR2_PACKAGE_DNSMASQ_CHAOS
+> +	bool "Enable identification support"
+> +	default n
+
+This is the default for kconfig symbols.
+
+> +	help
+> +	  Report *.bind CHAOS info to clients.
 > +
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
->  	@mkdir -p $(STAGING_DIR)
-> 
+>  config BR2_PACKAGE_DNSMASQ_IDN
+>  	bool "IDN support"
+>  	depends on BR2_USE_WCHAR
+> diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+> index 9f96030eb6..dd2b5eb615 100644
+> --- a/package/dnsmasq/dnsmasq.mk
+> +++ b/package/dnsmasq/dnsmasq.mk
+> @@ -30,6 +30,10 @@ ifneq ($(BR2_PACKAGE_DNSMASQ_TFTP),y)
+>  DNSMASQ_COPTS += -DNO_TFTP
+>  endif
+>  
+> +ifneq ($(BR2_PACKAGE_DNSMASQ_CHAOS),y)
+> +DNSMASQ_COPTS += -DNO_ID
+> +endif
+> +
+>  # NLS requires IDN so only enable it (i18n) when IDN is true
+>  ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
+>  DNSMASQ_DEPENDENCIES += libidn $(TARGET_NLS_DEPENDENCIES)
+
+baruch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
