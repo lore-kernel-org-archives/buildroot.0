@@ -1,75 +1,52 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  4 Oct 2017 16:33:19 -0500
-Subject: [Buildroot] [PATCH v4] HOST_DIR/lib: symlink respectively to
-	lib32/64
-Message-ID: <1507152799-16949-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 05 Oct 2017 02:19:36 +0000
+Subject: [Buildroot] [Bug 10361] New: python3 python-config script generates
+ invalid includes
+Message-ID: <bug-10361-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Discovered the issue on a RHEL7.4 machine where
-the cmake build dynamically selected HOST_DIR/lib64
-as the installation path for the lzo2 library.
+https://bugs.busybox.net/show_bug.cgi?id=10361
 
-Fixes failures like the following:
-host-mtd
-http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
+            Bug ID: 10361
+           Summary: python3 python-config script generates invalid
+                    includes
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: matthew.weber at rockwellcollins.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-host-squashfs
-http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
+If building in a path that starts with /usr, the includedir=$(echo
+"@includedir@" | sed "s#^$prefix_build#$prefix_real#") assignment in the
+python-config.sh ends up having the path it processes ran through a path
+substitution once before this line is executed because the @includedir@ in the
+python-config.sh.in is set to the string '${prefix}/include'.  ${prefix} is
+assigned just above includedir in python-config.sh to prefix=$(echo
+"$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
+I believe we need to update the line ref below to 
 
-Changes:
-[Arnout
-v3 -> v4
- - Added @ infront of case statement
- - Handled case of HOST_DIR ends up being newer and ln -s
-   would create a link inside of the lib folder.  Add -nf
-   to the args of ln (ie. ln -snf)
+includedir=$(echo "@includedir@")
 
-[Yann
-v2 -> v3
- - Updated hostarch logic to check for 64bit in the name
-   and if present create link.  This supports all archs
-   vs just x86.
+https://git.busybox.net/buildroot/tree/package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch#n43
 
-v1 -> v2
- - Correct the condition used to determine host arch.
-   (Previously used the target arch check)
----
- Makefile | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Another option would be to rename the prefix variable in this file so that
+there isn't a naming conflict......
 
-diff --git a/Makefile b/Makefile
-index 9b09589..02f7cda 100644
---- a/Makefile
-+++ b/Makefile
-@@ -542,7 +542,7 @@ endif
- 
- .PHONY: dirs
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
-+	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -565,6 +565,13 @@ sdk: world
- $(HOST_DIR)/usr: $(HOST_DIR)
- 	@ln -snf . $@
- 
-+$(HOST_DIR)/lib: $(HOST_DIR)
-+	@mkdir -p $@
-+	@case $(HOSTARCH) in \
-+		(*64) ln -snf lib $(@D)/lib64;; \
-+		(*)   ln -snf lib $(@D)/lib32;; \
-+	esac
-+
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
+Example build failure
+http://autobuild.buildroot.net/results/dfd/dfdac93d25d5730f08aa747e615a1a1c3ac7f1c0/
+
 -- 
-1.9.1
+You are receiving this mail because:
+You are on the CC list for the bug.
