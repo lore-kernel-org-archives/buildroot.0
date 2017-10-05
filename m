@@ -1,68 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Oct 2017 22:45:46 +0200
-Subject: [Buildroot] [git commit] cryptsetup: add host variant
-Message-ID: <20171005203902.49A3A7FEB5@busybox.osuosl.org>
+Date: Thu, 05 Oct 2017 22:53:15 +0200
+Subject: [Buildroot] [PATCH] wireguard: needs 3.10+ kernel
+In-Reply-To: <0fb02bba-856e-2721-a482-37831b3a85fd@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 5 Oct 2017 21:51:01 +0200")
+References: <20171003080448.3809-1-peter@korsgaard.com>
+ <0b87fcfb-da25-7574-3c7e-e3929383df71@mind.be>
+ <8760btidhp.fsf@dell.be.48ers.dk>
+ <0fb02bba-856e-2721-a482-37831b3a85fd@mind.be>
+Message-ID: <87376xgvus.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=456cd09fb92f13ce592e470056d50a753b0407cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-E.G. for generating dm-verity hashes or dm-crypt data at build time in a
-post-image script.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in.host            |  1 +
- package/cryptsetup/Config.in.host |  8 ++++++++
- package/cryptsetup/cryptsetup.mk  | 10 ++++++++++
- 3 files changed, 19 insertions(+)
+ >> That was my first thought as well, but it doesn't make much sense to
+ >> build the user space part if the kernel is too old,
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 679fe22..3755310 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -6,6 +6,7 @@ menu "Host utilities"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/cmake/Config.in.host"
- 	source "package/cramfs/Config.in.host"
-+	source "package/cryptsetup/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
- 	source "package/dos2unix/Config.in.host"
- 	source "package/dosfstools/Config.in.host"
-diff --git a/package/cryptsetup/Config.in.host b/package/cryptsetup/Config.in.host
-new file mode 100644
-index 0000000..7060ed1
---- /dev/null
-+++ b/package/cryptsetup/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_CRYPTSETUP
-+	bool "host-cryptsetup"
-+	select BR2_PACKAGE_HOST_UTIL_LINUX
-+	help
-+	  This tool helps manipulate dm-crypt and luks partitions for
-+	  on-disk encryption.
-+
-+	  https://gitlab.com/cryptsetup/cryptsetup
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 5496583..6b0fa31 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -28,4 +28,14 @@ else
- CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
- endif
- 
-+HOST_CRYPTSETUP_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-lvm2 \
-+	host-popt \
-+	host-util-linux \
-+	host-openssl
-+
-+HOST_CRYPTSETUP_CONF_OPTS = --with-crypto-backend=openssl
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ >  That's true indeed, could you add that reasoning to the commit message? Then
+ > there's no need to complicate the dependency.
+
+ >> and I couldn't come
+ >> up with a good and clear wording for the comment - So I opted to keep it
+ >> simple.
+ >> 
+ >> But we can change it if you feel strongly about it. What do you suggest
+ >> for the comment text?
+
+ > 	# kernel module requires 3.10+, userspace makes no sense without it
+
+Committed with these fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
