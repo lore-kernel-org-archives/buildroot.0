@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Oct 2017 14:57:14 +0200
-Subject: [Buildroot] [PATCH] pkg-download: make package name optional in
- github helper
-In-Reply-To: <20171005122356.2b31e9b5@windsurf.home>
-References: <20171004085745.15457-1-ismael@iodev.co.uk>
- <26d3dc60-5a3a-0fce-f3cf-b75ee2670644@mind.be>
- <20171005122356.2b31e9b5@windsurf.home>
-Message-ID: <56b30245-79c9-a29d-c8ee-b9d4f91e461a@mind.be>
+Date: Thu, 5 Oct 2017 15:00:36 +0200
+Subject: [Buildroot] [PATCH v3] HOST_DIR/lib: symlink respectively to
+ lib32/64
+In-Reply-To: <CANQCQpZBooKow=5hX_m++Eqfee9o9R6rczRHkxXO_MtjxagS+w@mail.gmail.com>
+References: <1507120908-48104-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <78e41d61-c2f5-1e7f-0e45-66b497f8bff6@mind.be>
+ <CANQCQpZBooKow=5hX_m++Eqfee9o9R6rczRHkxXO_MtjxagS+w@mail.gmail.com>
+Message-ID: <021206e6-be3c-4489-0913-47a229954f37@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +15,39 @@ To: buildroot@busybox.net
 
 
 
-On 05-10-17 12:23, Thomas Petazzoni wrote:
-> Hello,
+On 04-10-17 23:28, Matthew Weber wrote:
+> Arnout,
 > 
-> On Wed, 4 Oct 2017 18:35:07 +0200, Arnout Vandecappelle wrote:
-> 
->>  As noticed by Peter, this was already wrong in the original patch: it only
->> works if the github helper is used in a := assignment,
-> 
-> Doh? We're using the github helper almost exclusively in = assignments:
-> 
-> package/assimp/assimp.mk:ASSIMP_SITE = $(call github,assimp,assimp,$(ASSIMP_VERSION))
-> package/asterisk/asterisk.mk:ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-> package/atest/atest.mk:ATEST_SITE = $(call github,amouiche,atest,$(ATEST_VERSION))
-> package/aufs/aufs.mk:AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
-> package/avrdude/avrdude.mk:AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
-> package/axfsutils/axfsutils.mk:AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
-> package/azmq/azmq.mk:AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
-> 
-> Am I missing something in your explanation ?
-> 
-> Or perhaps you meant "when the third argument is not passed, we need to
-> use a := assignment" ?
+> On Wed, Oct 4, 2017 at 3:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi Matt,
+>>
+>> On 04-10-17 14:41, Matt Weber wrote:
 
- Yes, "it" was meant to mean "making the argument optional".
+[snip]
+>>> +$(HOST_DIR)/lib: $(HOST_DIR)
+>>> +     @mkdir -p $@
+>>> +     case $(HOSTARCH) in \
+>>
+>>  Better put @ in front here.
+>>
+>>> +             (*64) ln -s lib $(@D)/lib64;; \
+> 
+> So like the following but not the ln lines?  I'm not completely sure
+> on how @ would work with a case statement.
+>     @case $(HOSTARCH) in \
+>             (*64) ln -s lib $(@D)/lib64;; \
+>             (*)   ln -s lib $(@D)/lib32;; \
+>      esac
+
+ Yes indeed. The @ is taken away by make, the rest of the line (which in this
+case is 4 lines because of the \) is passed to shell and interpreted there. Make
+syntax is quite crazy :-)
+
 
  Regards,
  Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
