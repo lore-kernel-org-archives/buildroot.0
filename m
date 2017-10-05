@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 05 Oct 2017 16:30:12 +0000
-Subject: [Buildroot] [Bug 10366] New: dropbear download url has changed
-Message-ID: <bug-10366-163@https.bugs.busybox.net/>
+Date: Thu, 05 Oct 2017 16:34:17 +0000
+Subject: [Buildroot] [Bug 10366] dropbear download url has changed
+In-Reply-To: <bug-10366-163@https.bugs.busybox.net/>
+References: <bug-10366-163@https.bugs.busybox.net/>
+Message-ID: <bug-10366-163-pJuF5u1TfI@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +12,13 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=10366
 
-            Bug ID: 10366
-           Summary: dropbear download url has changed
-           Product: buildroot
-           Version: 2017.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: adyke at harris.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+--- Comment #1 from adyke at harris.com ---
+Oops, typo'd the new URL:
 
-The dropbear download URL has changed
+https://matt.ucc.asn.au/dropbear/releases
 
-it used to be http://matt.ucc.asn.au/dropbear/releases
 
-it is now https://matt.ucc.asn.au/dropbear/
+the https is the important part
 
 -- 
 You are receiving this mail because:
