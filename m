@@ -1,19 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Oct 2017 22:39:55 +0200
-Subject: [Buildroot] [PATCH] package/iprutils: bump version to 2.4.15.1
-In-Reply-To: <20171004021254.6610-1-sam@mendozajonas.com> (Samuel
- Mendoza-Jonas's message of "Wed, 4 Oct 2017 13:12:54 +1100")
-References: <20171004021254.6610-1-sam@mendozajonas.com>
-Message-ID: <87o9plgwh0.fsf@dell.be.48ers.dk>
+Date: Thu, 05 Oct 2017 22:40:19 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.56.0
+In-Reply-To: <20171004073517.7164-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 4 Oct 2017 09:35:17 +0200")
+References: <20171004073517.7164-1-peter@korsgaard.com>
+Message-ID: <87k209gwgc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+ > Drop upstreamed patch.
+ > Fixes CVE-2017-1000254 - FTP PWD response parser out of bounds read:
+
+ > https://curl.haxx.se/docs/adv_20171004.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
