@@ -1,58 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 5 Oct 2017 20:32:14 +0200
-Subject: [Buildroot] [git commit] HOST_DIR/lib: symlink respectively to
-	lib32/64
-Message-ID: <20171005184039.977368116F@busybox.osuosl.org>
+Date: Thu, 5 Oct 2017 20:34:01 +0200
+Subject: [Buildroot] [git commit] vboot-utils: disable static futility
+Message-ID: <20171005184039.C4CE780FEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ad679c8a8369f27df7080e678f9b004bf9d9647
+commit: https://git.buildroot.net/buildroot/commit/?id=3c10ba4b1eba589096447cce9b77191dc2d8388d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Discovered the issue on a RHEL7.4 machine where
-the cmake build dynamically selected HOST_DIR/lib64
-as the installation path for the lzo2 library.
+Possibly fixes
+http://autobuild.buildroot.net/results/fbe/fbe7892539cc1bf18f89d18c6609a5aa747647d0/
+http://autobuild.buildroot.net/results/4bc/4bc388618ff02dde26ae09db021434a936c8cc1b/
+and similar errors.
 
-Fixes failures like the following:
-host-mtd
-http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
-
-host-squashfs
-http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ .../vboot-utils/0004-Disable-static-futility.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 9b09589..02f7cda 100644
---- a/Makefile
-+++ b/Makefile
-@@ -542,7 +542,7 @@ endif
- 
- .PHONY: dirs
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
-+	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -565,6 +565,13 @@ sdk: world
- $(HOST_DIR)/usr: $(HOST_DIR)
- 	@ln -snf . $@
- 
-+$(HOST_DIR)/lib: $(HOST_DIR)
-+	@mkdir -p $@
-+	@case $(HOSTARCH) in \
-+		(*64) ln -snf lib $(@D)/lib64;; \
-+		(*)   ln -snf lib $(@D)/lib32;; \
-+	esac
+diff --git a/package/vboot-utils/0004-Disable-static-futility.patch b/package/vboot-utils/0004-Disable-static-futility.patch
+new file mode 100644
+index 0000000..649d316
+--- /dev/null
++++ b/package/vboot-utils/0004-Disable-static-futility.patch
+@@ -0,0 +1,30 @@
++The package attempts to build a statically-linked host binary, futility_s,
++which is not used anywhere in buildroot but may be causing build failures
++if the build host lacks static libc.
 +
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++
++--- a/Makefile
+++++ b/Makefile
++@@ -1079,7 +1079,7 @@
++ # new Firmware Utility
++ 
++ .PHONY: futil
++-futil: ${FUTIL_STATIC_BIN} ${FUTIL_BIN}
+++futil: ${FUTIL_BIN}
++ 
++ ${FUTIL_STATIC_BIN}: ${FUTIL_STATIC_OBJS} ${UTILLIB}
++ 	@${PRINTF} "    LD            $(subst ${BUILD}/,,$@)\n"
++@@ -1091,10 +1091,10 @@
++ 	${Q}${LD} -o $@ ${CFLAGS} ${LDFLAGS} $^ ${LDLIBS}
++ 
++ .PHONY: futil_install
++-futil_install: ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
+++futil_install: ${FUTIL_BIN}
++ 	@${PRINTF} "    INSTALL       futility\n"
++ 	${Q}mkdir -p ${UB_DIR}
++-	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
+++	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN}
++ 	${Q}for prog in ${FUTIL_SYMLINKS}; do \
++ 		ln -sf futility "${UB_DIR}/$$prog"; done
++ 
