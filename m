@@ -1,39 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Oct 2017 22:53:15 +0200
-Subject: [Buildroot] [PATCH] wireguard: needs 3.10+ kernel
-In-Reply-To: <0fb02bba-856e-2721-a482-37831b3a85fd@mind.be> (Arnout
- Vandecappelle's message of "Thu, 5 Oct 2017 21:51:01 +0200")
-References: <20171003080448.3809-1-peter@korsgaard.com>
- <0b87fcfb-da25-7574-3c7e-e3929383df71@mind.be>
- <8760btidhp.fsf@dell.be.48ers.dk>
- <0fb02bba-856e-2721-a482-37831b3a85fd@mind.be>
-Message-ID: <87376xgvus.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Oct 2017 22:54:20 +0200
+Subject: [Buildroot] [git commit] wireguard: needs 3.10+ kernel
+Message-ID: <20171005204737.493D37FA99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1afda25ed281b0e842833cf85c3f3aa7cca343df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The dependency is actually only for the kernel module (and thus on the
+runtime kernel version rather than kernel headers), but as we don't know the
+runtime version in kconfig and the user space part doesn't make much sense
+without the kernel module this will have to do.
 
- >> That was my first thought as well, but it doesn't make much sense to
- >> build the user space part if the kernel is too old,
+[Peter: extend commit message, add comment to Config.in as suggested by
+	Arnout, fix off-by-one in comment text]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- >  That's true indeed, could you add that reasoning to the commit message? Then
- > there's no need to complicate the dependency.
-
- >> and I couldn't come
- >> up with a good and clear wording for the comment - So I opted to keep it
- >> simple.
- >> 
- >> But we can change it if you feel strongly about it. What do you suggest
- >> for the comment text?
-
- > 	# kernel module requires 3.10+, userspace makes no sense without it
-
-Committed with these fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireguard/Config.in b/package/wireguard/Config.in
+index 0321755..fe92fd6 100644
+--- a/package/wireguard/Config.in
++++ b/package/wireguard/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_WIREGUARD
+ 	bool "wireguard"
++	# kernel module requires 3.10+, userspace makes no sense without it
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_PACKAGE_LIBMNL
+ 	help
+ 	  WireGuard is an extremely simple yet fast and modern VPN
+@@ -16,3 +18,6 @@ config BR2_PACKAGE_WIREGUARD
+ 	  VPN solution in the industry.
+ 
+ 	  https://www.wireguard.com
++
++comment "wireguard needs a toolchain w/ headers >= 3.10"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
