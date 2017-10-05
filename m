@@ -1,68 +1,61 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu,  5 Oct 2017 14:41:00 +0200
-Subject: [Buildroot] [RFC 4/4] package/flannel: converting to golang
-	infrastructure
-In-Reply-To: <1507207260-26734-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1507207260-26734-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1507207260-26734-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 5 Oct 2017 07:46:48 -0500
+Subject: [Buildroot] [Bug 10361] New: python3 python-config script
+ generates invalid includes
+In-Reply-To: <bug-10361-163@https.bugs.busybox.net/>
+References: <bug-10361-163@https.bugs.busybox.net/>
+Message-ID: <CANQCQpbYVanvev0KFaa-8sqScAewJ-uVWTByPB4zXhTGa9T3yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the flannel package to the new golang
-infrastructure.
+Peter,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/flannel/flannel.mk | 25 ++++---------------------
- 1 file changed, 4 insertions(+), 21 deletions(-)
+On Wed, Oct 4, 2017 at 9:19 PM,  <bugzilla@busybox.net> wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=10361
+>
+>             Bug ID: 10361
+>            Summary: python3 python-config script generates invalid
+>                     includes
+>            Product: buildroot
+>            Version: unspecified
+>           Hardware: All
+>                 OS: Linux
+>             Status: NEW
+>           Severity: normal
+>           Priority: P5
+>          Component: Other
+>           Assignee: unassigned at buildroot.uclibc.org
+>           Reporter: matthew.weber at rockwellcollins.com
+>                 CC: buildroot at uclibc.org
+>   Target Milestone: ---
+>
+> If building in a path that starts with /usr, the includedir=$(echo
+> "@includedir@" | sed "s#^$prefix_build#$prefix_real#") assignment in the
+> python-config.sh ends up having the path it processes ran through a path
+> substitution once before this line is executed because the @includedir@ in the
+> python-config.sh.in is set to the string '${prefix}/include'.  ${prefix} is
+> assigned just above includedir in python-config.sh to prefix=$(echo
+> "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
+>
+> I believe we need to update the line ref below to
+>
+> includedir=$(echo "@includedir@")
+>
+> https://git.busybox.net/buildroot/tree/package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch#n43
+>
+> Another option would be to rename the prefix variable in this file so that
+> there isn't a naming conflict......
+>
+> Example build failure
+> http://autobuild.buildroot.net/results/dfd/dfdac93d25d5730f08aa747e615a1a1c3ac7f1c0/
 
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index bbb2c72..641bb97 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -11,14 +11,6 @@ FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
- FLANNEL_LICENSE = Apache-2.0
- FLANNEL_LICENSE_FILES = LICENSE
- 
--FLANNEL_DEPENDENCIES = host-go
--
--FLANNEL_MAKE_ENV = \
--	$(HOST_GO_TARGET_ENV) \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(@D)/gopath" \
--	CGO_ENABLED=1
--
- FLANNEL_GLDFLAGS = \
- 	-X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
- 
-@@ -26,21 +18,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
- FLANNEL_GLDFLAGS += -extldflags '-static'
- endif
- 
--define FLANNEL_CONFIGURE_CMDS
--	# Put sources at prescribed GOPATH location.
--	mkdir -p $(@D)/gopath/src/github.com/coreos
--	ln -s $(@D) $(@D)/gopath/src/github.com/coreos/flannel
--endef
--
--define FLANNEL_BUILD_CMDS
--	cd $(@D) && $(FLANNEL_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/flanneld -ldflags "$(FLANNEL_GLDFLAGS)" .
--endef
-+FLANNEL_BUILD_OPTS = -ldflags "$(FLANNEL_GLDFLAGS)"
- 
-+# Install flannel to its well known location.
- define FLANNEL_INSTALL_TARGET_CMDS
--	# Install flannel to its well known location.
--	$(INSTALL) -D -m 0755 $(@D)/bin/flanneld $(TARGET_DIR)/opt/bin/flanneld
-+	$(INSTALL) -D -m 0755 $(FLANNEL_EXECUTABLE) $(TARGET_DIR)/opt/bin/flanneld
- 	$(INSTALL) -D -m 0755 $(@D)/dist/mk-docker-opts.sh $(TARGET_DIR)/opt/bin/mk-docker-opts.sh
- endef
- 
--$(eval $(generic-package))
-+$(eval $(golang-package))
--- 
-2.7.4
+I see u authored the original patch (unsure how much you are invested
+in it, but curious of your feedback)?  I assume the content of
+@includedir@ is based on the user of python's value they pass in, so I
+think changing the prefix variable name in that script might be the
+preferred option?
+
+Matt
