@@ -1,55 +1,51 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Thu, 5 Oct 2017 08:36:57 -0300 (BRT)
-Subject: [Buildroot] [PATCH] Create 'make <pkt>-show-rrdepends' command
-In-Reply-To: <63a3e218-f37c-649b-fc48-0e9c0a892a10@mind.be>
-References: <1493305458-15309-1-git-send-email-george.redivo@datacom.ind.br>
- <1507033962-5566-1-git-send-email-casantos@datacom.ind.br>
- <63a3e218-f37c-649b-fc48-0e9c0a892a10@mind.be>
-Message-ID: <909405437.12454753.1507203417835.JavaMail.zimbra@datacom.ind.br>
+From: =?UTF-8?q?B=C3=A9la=20Becker?= <bela.becker@pcbdesign.hu>
+Date: Thu,  5 Oct 2017 13:33:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libiio: add binding for python3
+Message-ID: <20171005113325.11715-1-bela.becker@pcbdesign.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all
+Python3 support was added to libiio in version 0.10.
+This commit adds the option to compile libiio bindings if python3 was
+selected instead of python.
 
------ Mensagem original -----
-> De: "Arnout Vandecappelle" <arnout@mind.be>
-> Para: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
-> Cc: "George Redivo" <george.redivo@datacom.ind.br>
-> Enviadas: Quarta-feira, 4 de outubro de 2017 13:18:32
-> Assunto: Re: [Buildroot] [PATCH] Create 'make <pkt>-show-rrdepends' command
+Signed-off-by: B?la Becker <bela.becker@pcbdesign.hu>
+---
+ package/libiio/Config.in | 2 +-
+ package/libiio/libiio.mk | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-> On 03-10-17 14:32, Carlos Santos wrote:
->> From: George Redivo <george.redivo@datacom.ind.br>
->> 
->> Hello,
->> 
->> Looks like this https://patchwork.ozlabs.org/patch/756075/ was accepted by
->> Arnout but was left behind. Could we have it applied, please?
-> 
-> I didn't exactly "accept" this patch. I thought the implementation was
-> acceptable, but I wasn't entirely sure the use case was important enough to
-> warrant the additional complexity.
-> 
-> If I understand the use case correctly, what you want is that you have changed
-> something in package A, so you want to rebuild package A and all its recursive
-> dependencies. For that, a recursive dirclean is probably more appropriate:
-> 
-> $(1)-dirclean-recursive: $(1)-dirclean $$(patsubst
-> %,%-dirclean-recursive,$$($(2)_FINAL_ALL_DEPENDENCIES))
-> 
-
-Not exactly the same i guess, i think this will rebuild package A and all its dependencies (we are going "down" on dependencies).
-
-The point of this script is to rebuild package A and all those who depends on it (we are going "up" on dependencies).
-
-Based on previous work done on the reverse-dependencies (make <pkg>-show-rdepends), this has been turned in recursive-reverse-dependencies.
-
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index 75f6f3a847..baa163126a 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -96,7 +96,7 @@ config BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP
+ 
+ config BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON
+ 	bool "Install Python bindings"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Install the Python bindings.
+ 
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index d066ae0314..0b13064085 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -60,7 +60,11 @@ LIBIIO_DEPENDENCIES += avahi
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON),y)
++ifeq ($(BR2_PACKAGE_PYTHON),y)
+ LIBIIO_DEPENDENCIES += python
++else ifeq ($(BR2_PACKAGE_PYTHON3),y)
++LIBIIO_DEPENDENCIES += python3
++endif
+ LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=ON
+ else
+ LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=OFF
 -- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+2.11.0
