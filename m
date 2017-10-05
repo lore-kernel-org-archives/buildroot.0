@@ -1,59 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Oct 2017 20:32:02 +0200
-Subject: [Buildroot] [PATCH 1/2] lvm2: add host variant
-In-Reply-To: <20171005150621.19570-1-peter@korsgaard.com>
-References: <20171005150621.19570-1-peter@korsgaard.com>
-Message-ID: <d10a8a17-a515-ce9e-95bf-50e32916901e@mind.be>
+Date: Thu, 5 Oct 2017 20:44:47 +0200
+Subject: [Buildroot] [PATCH] wireguard: needs 3.10+ kernel
+In-Reply-To: <20171003080448.3809-1-peter@korsgaard.com>
+References: <20171003080448.3809-1-peter@korsgaard.com>
+Message-ID: <0b87fcfb-da25-7574-3c7e-e3929383df71@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Peter,
 
+ Looks like I don't manage to apply any of your patches today :-)
 
-On 05-10-17 17:06, Peter Korsgaard wrote:
-> This is only for the device-mapper library, so a user selectable
-> Config.in.host option isn't needed.
+On 03-10-17 10:04, Peter Korsgaard wrote:
+> The dependency is actually only for the kernel module (and thus on the
+> runtime kernel version rather than kernel headers), but as we don't know the
+> runtime version in kconfig this will have to do.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
- I was going to apply, but...
-
 > ---
->  package/lvm2/lvm2.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  package/wireguard/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-> index f7f706976f..5783ab08be 100644
-> --- a/package/lvm2/lvm2.mk
-> +++ b/package/lvm2/lvm2.mk
-> @@ -51,4 +51,16 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
->  LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
->  endif
->  
-> +HOST_LVM2_CONF_OPTS = \
-> +	--enable-write_install \
-> +	--enable-pkgconfig \
+> diff --git a/package/wireguard/Config.in b/package/wireguard/Config.in
+> index 0321755db3..acce6663ba 100644
+> --- a/package/wireguard/Config.in
+> +++ b/package/wireguard/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_WIREGUARD
+>  	bool "wireguard"
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
 
- ... this made me think: shouldn't it depend on host-pkgconf? The target package
-depends on host-pkgconf, even though it doesn't depend on anything else (except
-optionally readline but that doesn't have a .pc file). It's probably OK but I'd
-like an explanation just to be sure.
+ The kernel module is only built if BR2_LINUX_KERNEL=y, so shouldn't this be
+
+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_LINUX_KERNEL
+
+? And of course in the comment as well.
+
+ In addition, I think you should add the (abbreviated) contents of the commit
+message as a comment here, otherwise it's not at all clear.
 
  Regards,
  Arnout
 
-> +	--disable-cmdlib \
-> +	--disable-dmeventd \
-> +	--disable-applib \
-> +	--disable-fsadm \
-> +	--disable-readline
-> +HOST_LVM2_MAKE_OPTS = device-mapper
-> +HOST_LVM2_INSTALL_OPTS = install_device-mapper
+>  	select BR2_PACKAGE_LIBMNL
+>  	help
+>  	  WireGuard is an extremely simple yet fast and modern VPN
+> @@ -16,3 +17,6 @@ config BR2_PACKAGE_WIREGUARD
+>  	  VPN solution in the industry.
+>  
+>  	  https://www.wireguard.com
 > +
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+> +comment "wireguard needs a toolchain w/ headers > 3.10"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
 > 
 
 -- 
