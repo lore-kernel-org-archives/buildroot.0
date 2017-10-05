@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Oct 2017 19:50:14 +0200
-Subject: [Buildroot] [PATCH] pkg-download: make package name optional in
- github helper
-In-Reply-To: <20171005101312.GA9688@pirotess.bf.iodev.co.uk>
-References: <20171004085745.15457-1-ismael@iodev.co.uk>
- <26d3dc60-5a3a-0fce-f3cf-b75ee2670644@mind.be>
- <20171005101312.GA9688@pirotess.bf.iodev.co.uk>
-Message-ID: <8ffd6e7b-4a9e-e23b-38b1-2144ea207705@mind.be>
+Date: Thu, 5 Oct 2017 19:52:44 +0200
+Subject: [Buildroot] [PATCH] Create 'make <pkt>-show-rrdepends' command
+In-Reply-To: <909405437.12454753.1507203417835.JavaMail.zimbra@datacom.ind.br>
+References: <1493305458-15309-1-git-send-email-george.redivo@datacom.ind.br>
+ <1507033962-5566-1-git-send-email-casantos@datacom.ind.br>
+ <63a3e218-f37c-649b-fc48-0e9c0a892a10@mind.be>
+ <909405437.12454753.1507203417835.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <035c7e77-706f-1f8b-dda8-3dbac3d14d39@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +15,45 @@ To: buildroot@busybox.net
 
 
 
-On 05-10-17 12:13, Ismael Luceno wrote:
-> On 04/Oct/2017 18:35, Arnout Vandecappelle wrote:
-> <...>
->>  The solution (probably) is to use $(PKG) instead of $(pkgname).
+On 05-10-17 13:36, Henrique Marks wrote:
+> Hello all
 > 
-> I see.
+> ----- Mensagem original -----
+>> De: "Arnout Vandecappelle" <arnout@mind.be>
+>> Para: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
+>> Cc: "George Redivo" <george.redivo@datacom.ind.br>
+>> Enviadas: Quarta-feira, 4 de outubro de 2017 13:18:32
+>> Assunto: Re: [Buildroot] [PATCH] Create 'make <pkt>-show-rrdepends' command
 > 
->>> +# github(user[,package[,version]]): returns site of GitHub repository
->>> +github = https://github.com/$(1)/$(or $(2),$(pkgname))/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
+>> On 03-10-17 14:32, Carlos Santos wrote:
+>>> From: George Redivo <george.redivo@datacom.ind.br>
+>>>
+>>> Hello,
+>>>
+>>> Looks like this https://patchwork.ozlabs.org/patch/756075/ was accepted by
+>>> Arnout but was left behind. Could we have it applied, please?
 >>
->>  Could you estimate how many packages could be simplified with this?
+>> I didn't exactly "accept" this patch. I thought the implementation was
+>> acceptable, but I wasn't entirely sure the use case was important enough to
+>> warrant the additional complexity.
+>>
+>> If I understand the use case correctly, what you want is that you have changed
+>> something in package A, so you want to rebuild package A and all its recursive
+>> dependencies. For that, a recursive dirclean is probably more appropriate:
+>>
+>> $(1)-dirclean-recursive: $(1)-dirclean $$(patsubst
+>> %,%-dirclean-recursive,$$($(2)_FINAL_ALL_DEPENDENCIES))
+>>
 > 
-> A great deal, including axel, in 219 out of 380 the repo matches the
-> package name, with 30 also matching the username.
-
- Hm, not convincing enough for me. It saves just a tiny little bit of typing, it
-does not make things more readable, and it adds complexity to the github macro
-itself. No, I don't think it's worth it.
-
-
->> I'm not actually sure this is a good idea anyway. The _VERSION is OK
->> because it works for *all* packages, the third argument is only needed
->> when you use the github helper outside a package (e.g. for a custom
->> kernel URL). But this change will apply only to a limited number of
->> packages on the one hand, and on the other hand it makes it even more
->> difficult for people to understand what is meant with this $(call
->> github,foo) construct.
+> Not exactly the same i guess, i think this will rebuild package A and all its dependencies (we are going "down" on dependencies).
 > 
-> It's "magic" anyway. It would perhaps make sense to implement this kind
-> of rules via rewriting AXEL_SITE, it could be something descriptive like:
+> The point of this script is to rebuild package A and all those who depends on it (we are going "up" on dependencies).
 > 
-> 	AXEL_SITE = @ github user:axel-download-accelerator repo:libtls
-> 
-> Here's a mockup: http://tmp.iodev.co.uk/rtest.mk
+> Based on previous work done on the reverse-dependencies (make <pkg>-show-rdepends), this has been turned in recursive-reverse-dependencies.
 
- Here also I don't think the added complexity in the implementation is worth it.
-It is indeed a bit more explicit, but now you have to remember that the
-arguments are called user: and repo:. For me,
-$(call github,axel-download-accelerator,libtls) is an easy-to-remember way to
-refer to https://github.com/axel-download-accelerator/libtls.
+ Ah right of course, I was getting confused by the double r (reverse-reverse,
+but of course it means recursive-reverse...).
+
 
  Regards,
  Arnout
