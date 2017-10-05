@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Oct 2017 20:28:49 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
-	13}.x series
-In-Reply-To: <20171005173007.15974-1-bernd.kuhls@t-online.de>
-References: <20171005173007.15974-1-bernd.kuhls@t-online.de>
-Message-ID: <a945e6ba-e344-5101-9d21-17a4f095d3d2@mind.be>
+Date: Thu, 5 Oct 2017 20:32:02 +0200
+Subject: [Buildroot] [PATCH 1/2] lvm2: add host variant
+In-Reply-To: <20171005150621.19570-1-peter@korsgaard.com>
+References: <20171005150621.19570-1-peter@korsgaard.com>
+Message-ID: <d10a8a17-a515-ce9e-95bf-50e32916901e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,48 @@ To: buildroot@busybox.net
 
 
 
-On 05-10-17 19:30, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 05-10-17 17:06, Peter Korsgaard wrote:
+> This is only for the device-mapper library, so a user selectable
+> Config.in.host option isn't needed.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- Both applied to master, thanks!
+ I was going to apply, but...
+
+> ---
+>  package/lvm2/lvm2.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+> index f7f706976f..5783ab08be 100644
+> --- a/package/lvm2/lvm2.mk
+> +++ b/package/lvm2/lvm2.mk
+> @@ -51,4 +51,16 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+>  LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
+>  endif
+>  
+> +HOST_LVM2_CONF_OPTS = \
+> +	--enable-write_install \
+> +	--enable-pkgconfig \
+
+ ... this made me think: shouldn't it depend on host-pkgconf? The target package
+depends on host-pkgconf, even though it doesn't depend on anything else (except
+optionally readline but that doesn't have a .pc file). It's probably OK but I'd
+like an explanation just to be sure.
 
  Regards,
  Arnout
 
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index ff9c0d2a24..9e1a77f533 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
->  	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
->  	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
->  	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
-> -	default "4.4.89"	if BR2_KERNEL_HEADERS_4_4
-> -	default "4.9.52"	if BR2_KERNEL_HEADERS_4_9
-> +	default "4.4.90"	if BR2_KERNEL_HEADERS_4_4
-> +	default "4.9.53"	if BR2_KERNEL_HEADERS_4_9
->  	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
->  	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
->  	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
-> -	default "4.13.4"	if BR2_KERNEL_HEADERS_4_13
-> +	default "4.13.5"	if BR2_KERNEL_HEADERS_4_13
->  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> +	--disable-cmdlib \
+> +	--disable-dmeventd \
+> +	--disable-applib \
+> +	--disable-fsadm \
+> +	--disable-readline
+> +HOST_LVM2_MAKE_OPTS = device-mapper
+> +HOST_LVM2_INSTALL_OPTS = install_device-mapper
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 > 
 
 -- 
