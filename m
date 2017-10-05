@@ -1,856 +1,687 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu,  5 Oct 2017 18:42:08 -0300
-Subject: [Buildroot] [PATCH v2 2/6] support/testing: standardize defconfig
-	fragments style
+Date: Thu,  5 Oct 2017 18:42:09 -0300
+Subject: [Buildroot] [PATCH v2 3/6] support/testing: fix code style
 In-Reply-To: <20171005214212.27613-1-ricardo.martincoski@gmail.com>
 References: <20171005214212.27613-1-ricardo.martincoski@gmail.com>
-Message-ID: <20171005214212.27613-2-ricardo.martincoski@gmail.com>
+Message-ID: <20171005214212.27613-3-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change all defconfig fragments to take advantage of
-"cf3cd4388a support/tests: allow properly indented config fragment".
-
-Make each defconfig fragment:
- - start after a backslash;
- - be declared as a string literal;
- - be indented one level more than the variable that contains it.
+Fix the trivial warnings from flake8:
+ - remove modules imported but unused;
+ - use 2 lines before class or module level method;
+ - remove blank line at end of file.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2: (suggested by Yann E. MORIN)
-  - renumber patch 1 -> 2
-  - merge ccache defconfig fragment to this patch, since the mechanism
-    that allows it to be indented is now in the patch 1;
-  - keep acked-by since I did only what was suggested + adapted the
-    commit title to reflect the change
+Changes v1 -> v2:
+  - no change
 
 Number of warnings reported by flake8 for the test infra:
-before: 132
-after:   99
+before:  99
+after:   17
 ---
- support/testing/infra/basetest.py                 |  38 +++---
- support/testing/tests/core/test_post_scripts.py   |  18 +--
- support/testing/tests/core/test_rootfs_overlay.py |   7 +-
- support/testing/tests/core/test_timezone.py       |  44 +++----
- support/testing/tests/fs/test_ext.py              |  50 ++++----
- support/testing/tests/fs/test_iso9660.py          | 102 +++++++--------
- support/testing/tests/fs/test_jffs2.py            |  18 +--
- support/testing/tests/fs/test_squashfs.py         |  12 +-
- support/testing/tests/fs/test_ubi.py              |  16 +--
- support/testing/tests/fs/test_yaffs2.py           |   6 +-
- support/testing/tests/package/test_dropbear.py    |  14 +--
- support/testing/tests/package/test_ipython.py     |  16 +--
- support/testing/tests/package/test_python.py      |  20 +--
- support/testing/tests/toolchain/test_external.py  | 144 +++++++++++-----------
- 14 files changed, 255 insertions(+), 250 deletions(-)
+ support/testing/infra/__init__.py                 |  7 ++++++-
+ support/testing/infra/basetest.py                 |  2 ++
+ support/testing/infra/builder.py                  |  1 +
+ support/testing/run-tests                         |  2 ++
+ support/testing/tests/core/test_post_scripts.py   |  1 +
+ support/testing/tests/core/test_rootfs_overlay.py |  2 ++
+ support/testing/tests/core/test_timezone.py       |  4 ++++
+ support/testing/tests/fs/test_ext.py              |  9 +++++++--
+ support/testing/tests/fs/test_iso9660.py          |  8 ++++++--
+ support/testing/tests/fs/test_jffs2.py            |  2 ++
+ support/testing/tests/fs/test_squashfs.py         |  1 +
+ support/testing/tests/fs/test_ubi.py              |  1 +
+ support/testing/tests/fs/test_yaffs2.py           |  1 +
+ support/testing/tests/init/base.py                |  1 +
+ support/testing/tests/init/test_busybox.py        |  5 +----
+ support/testing/tests/init/test_none.py           |  1 +
+ support/testing/tests/init/test_systemd.py        |  7 +------
+ support/testing/tests/package/test_dropbear.py    |  1 +
+ support/testing/tests/package/test_ipython.py     |  8 +++-----
+ support/testing/tests/package/test_python.py      |  5 +++++
+ support/testing/tests/toolchain/test_external.py  | 10 ++++++++++
+ 21 files changed, 59 insertions(+), 20 deletions(-)
 
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+index 27e2a2708d..b03e891771 100644
+--- a/support/testing/infra/__init__.py
++++ b/support/testing/infra/__init__.py
+@@ -1,4 +1,3 @@
+-import contextlib
+ import os
+ import re
+ import sys
+@@ -8,6 +7,7 @@ from urllib2 import urlopen, HTTPError, URLError
+ 
+ ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
+ 
++
+ def open_log_file(builddir, stage, logtofile=True):
+     """
+     Open a file for logging and return its handler.
+@@ -20,9 +20,11 @@ def open_log_file(builddir, stage, logtofile=True):
+         fhandle = sys.stdout
+     return fhandle
+ 
++
+ def filepath(relpath):
+     return os.path.join(os.getcwd(), "support/testing", relpath)
+ 
++
+ def download(dldir, filename):
+     finalpath = os.path.join(dldir, filename)
+     if os.path.exists(finalpath):
+@@ -46,6 +48,7 @@ def download(dldir, filename):
+     os.rename(tmpfile, finalpath)
+     return finalpath
+ 
++
+ def get_elf_arch_tag(builddir, prefix, fpath, tag):
+     """
+     Runs the cross readelf on 'fpath', then extracts the value of tag 'tag'.
+@@ -66,9 +69,11 @@ def get_elf_arch_tag(builddir, prefix, fpath, tag):
+         return m.group(1)
+     return None
+ 
++
+ def get_file_arch(builddir, prefix, fpath):
+     return get_elf_arch_tag(builddir, prefix, fpath, "Tag_CPU_arch")
+ 
++
+ def get_elf_prog_interpreter(builddir, prefix, fpath):
+     """
+     Runs the cross readelf on 'fpath' to extract the program interpreter
 diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index d6fcc619b1..52dad7c43d 100644
+index 52dad7c43d..5210f0ae58 100644
 --- a/support/testing/infra/basetest.py
 +++ b/support/testing/infra/basetest.py
-@@ -6,27 +6,27 @@ from infra.builder import Builder
- from infra.emulator import Emulator
+@@ -28,6 +28,7 @@ MINIMAL_CONFIG = \
+     # BR2_TARGET_ROOTFS_TAR is not set
+     """
  
- BASIC_TOOLCHAIN_CONFIG = \
--"""
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
--BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--"""
-+    """
-+    BR2_arm=y
-+    BR2_TOOLCHAIN_EXTERNAL=y
-+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
-+    BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-+    BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-+    # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-+    BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+    """
- 
- MINIMAL_CONFIG = \
--"""
--BR2_INIT_NONE=y
--BR2_SYSTEM_BIN_SH_NONE=y
--# BR2_PACKAGE_BUSYBOX is not set
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+    """
-+    BR2_INIT_NONE=y
-+    BR2_SYSTEM_BIN_SH_NONE=y
-+    # BR2_PACKAGE_BUSYBOX is not set
-+    # BR2_TARGET_ROOTFS_TAR is not set
-+    """
- 
++
  class BRTest(unittest.TestCase):
      config = None
+     downloaddir = None
+@@ -47,6 +48,7 @@ class BRTest(unittest.TestCase):
+     def show_msg(self, msg):
+         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
+                                     self.testname, msg)
++
+     def setUp(self):
+         self.show_msg("Starting")
+         self.b = Builder(self.config, self.builddir, self.logtofile)
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index ef66b86113..7512339ae1 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -4,6 +4,7 @@ import subprocess
+ 
+ import infra
+ 
++
+ class Builder(object):
+     def __init__(self, config, builddir, logtofile):
+         self.config = '\n'.join([line.lstrip() for line in
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index ae0bd336b5..270e78cff7 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -7,6 +7,7 @@ import multiprocessing
+ 
+ from infra.basetest import BRTest
+ 
++
+ def main():
+     parser = argparse.ArgumentParser(description='Run Buildroot tests')
+     parser.add_argument('testname', nargs='*',
+@@ -116,5 +117,6 @@ def main():
+ 
+     nose2.discover(argv=nose2_args)
+ 
++
+ if __name__ == "__main__":
+     sys.exit(main())
 diff --git a/support/testing/tests/core/test_post_scripts.py b/support/testing/tests/core/test_post_scripts.py
-index d2a0be15bf..7ca9b9d836 100644
+index 7ca9b9d836..1db568b0d6 100644
 --- a/support/testing/tests/core/test_post_scripts.py
 +++ b/support/testing/tests/core/test_post_scripts.py
-@@ -5,15 +5,15 @@ import infra.basetest
+@@ -3,6 +3,7 @@ import csv
  
+ import infra.basetest
+ 
++
  class TestPostScripts(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_INIT_NONE=y
--BR2_SYSTEM_BIN_SH_NONE=y
--# BR2_PACKAGE_BUSYBOX is not set
--BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="{}"
--BR2_ROOTFS_POST_SCRIPT_ARGS="foobar baz"
--""".format(infra.filepath("tests/core/post-build.sh"),
--           infra.filepath("tests/core/post-image.sh"))
-+        """
-+        BR2_INIT_NONE=y
-+        BR2_SYSTEM_BIN_SH_NONE=y
-+        # BR2_PACKAGE_BUSYBOX is not set
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="{}"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="foobar baz"
-+        """.format(infra.filepath("tests/core/post-build.sh"),
-+                   infra.filepath("tests/core/post-image.sh"))
- 
-     def check_post_log_file(self, path, what):
-         lines = {}
+         """
 diff --git a/support/testing/tests/core/test_rootfs_overlay.py b/support/testing/tests/core/test_rootfs_overlay.py
-index 42d890ba20..22ef9722d6 100644
+index 22ef9722d6..fedd40d8ac 100644
 --- a/support/testing/tests/core/test_rootfs_overlay.py
 +++ b/support/testing/tests/core/test_rootfs_overlay.py
-@@ -9,11 +9,12 @@ def compare_file(file1, file2):
+@@ -3,9 +3,11 @@ import subprocess
+ 
+ import infra.basetest
+ 
++
+ def compare_file(file1, file2):
+     return subprocess.call(["cmp", file1, file2])
+ 
++
  class TestRootfsOverlay(infra.basetest.BRTest):
  
      rootfs_overlay_path = infra.filepath("tests/core/rootfs-overlay")
--    rootfs_overlay = "BR2_ROOTFS_OVERLAY=\"{0}1 {0}2\"".format(rootfs_overlay_path)
- 
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--            infra.basetest.MINIMAL_CONFIG + \
--            rootfs_overlay
-+        infra.basetest.MINIMAL_CONFIG + \
-+        """
-+        BR2_ROOTFS_OVERLAY="{0}1 {0}2"
-+        """.format(rootfs_overlay_path)
- 
-     def test_run(self):
-         target_file = os.path.join(self.builddir, "target", "test-file1")
 diff --git a/support/testing/tests/core/test_timezone.py b/support/testing/tests/core/test_timezone.py
-index 9776b4bcee..f4ba5039ca 100644
+index f4ba5039ca..050624e0aa 100644
 --- a/support/testing/tests/core/test_timezone.py
 +++ b/support/testing/tests/core/test_timezone.py
-@@ -10,11 +10,11 @@ def boot_armv5_cpio(emulator, builddir):
+@@ -2,12 +2,14 @@ import os
  
- class TestNoTimezone(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--             """
--# BR2_TARGET_TZ_INFO is not set
--BR2_TARGET_ROOTFS_CPIO=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        # BR2_TARGET_TZ_INFO is not set
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         boot_armv5_cpio(self.emulator, self.builddir)
-@@ -24,13 +24,14 @@ BR2_TARGET_ROOTFS_CPIO=y
-         self.assertEqual(tz[0].strip(), "UTC")
- 
- class TestGlibcAllTimezone(infra.basetest.BRTest):
--    config = """
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TARGET_TZ_INFO=y
--BR2_TARGET_ROOTFS_CPIO=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_TZ_INFO=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         boot_armv5_cpio(self.emulator, self.builddir)
-@@ -44,15 +45,16 @@ BR2_TARGET_ROOTFS_CPIO=y
-         self.assertEqual(tz[0].strip(), "CET")
- 
- class TestGlibcNonDefaultLimitedTimezone(infra.basetest.BRTest):
--    config = """
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TARGET_TZ_INFO=y
--BR2_TARGET_TZ_ZONELIST="northamerica"
--BR2_TARGET_LOCALTIME="America/New_York"
--BR2_TARGET_ROOTFS_CPIO=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_TZ_INFO=y
-+        BR2_TARGET_TZ_ZONELIST="northamerica"
-+        BR2_TARGET_LOCALTIME="America/New_York"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         boot_armv5_cpio(self.emulator, self.builddir)
-diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
-index 0832ba4ce2..49bce45dc8 100644
---- a/support/testing/tests/fs/test_ext.py
-+++ b/support/testing/tests/fs/test_ext.py
-@@ -39,12 +39,12 @@ def boot_img_and_check_fs_type(emulator, builddir, fs_type):
- 
- class TestExt2(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_2r0=y
--BR2_TARGET_ROOTFS_EXT2_LABEL="foobaz"
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_2r0=y
-+        BR2_TARGET_ROOTFS_EXT2_LABEL="foobaz"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         out = dumpe2fs_run(self.builddir, "rootfs.ext2")
-@@ -57,12 +57,12 @@ BR2_TARGET_ROOTFS_EXT2_LABEL="foobaz"
- 
- class TestExt2r1(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_2r1=y
--BR2_TARGET_ROOTFS_EXT2_LABEL="foobar"
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_2r1=y
-+        BR2_TARGET_ROOTFS_EXT2_LABEL="foobar"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         out = dumpe2fs_run(self.builddir, "rootfs.ext2")
-@@ -76,11 +76,11 @@ BR2_TARGET_ROOTFS_EXT2_LABEL="foobar"
- 
- class TestExt3(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_3=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_3=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         out = dumpe2fs_run(self.builddir, "rootfs.ext3")
-@@ -94,14 +94,14 @@ BR2_TARGET_ROOTFS_EXT2_3=y
- 
- class TestExt4(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="16384"
--BR2_TARGET_ROOTFS_EXT2_INODES=3000
--BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="16384"
-+        BR2_TARGET_ROOTFS_EXT2_INODES=3000
-+        BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         out = dumpe2fs_run(self.builddir, "rootfs.ext4")
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index e804808c96..60dcbdc139 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -3,27 +3,27 @@ import os
  import infra.basetest
  
- BASIC_CONFIG = \
--"""
--BR2_x86_pentium4=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
--BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
--# BR2_TARGET_ROOTFS_TAR is not set
--""".format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
-+    """
-+    BR2_x86_pentium4=y
-+    BR2_TOOLCHAIN_EXTERNAL=y
-+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
-+    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
-+    BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-+    # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-+    BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+    BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+    BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+    BR2_LINUX_KERNEL=y
-+    BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+    BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
-+    BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+    BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-+    # BR2_TARGET_ROOTFS_TAR is not set
-+    """.format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
++
+ def boot_armv5_cpio(emulator, builddir):
+         img = os.path.join(builddir, "images", "rootfs.cpio")
+         emulator.boot(arch="armv5", kernel="builtin",
+                       options=["-initrd", img])
+         emulator.login()
  
++
+ class TestNoTimezone(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+@@ -23,6 +25,7 @@ class TestNoTimezone(infra.basetest.BRTest):
+         tz, _ = self.emulator.run("TZ=America/Los_Angeles date +%Z")
+         self.assertEqual(tz[0].strip(), "UTC")
+ 
++
+ class TestGlibcAllTimezone(infra.basetest.BRTest):
+     config = \
+         """
+@@ -44,6 +47,7 @@ class TestGlibcAllTimezone(infra.basetest.BRTest):
+         tz, _ = self.emulator.run("TZ=Europe/Paris date +%Z")
+         self.assertEqual(tz[0].strip(), "CET")
+ 
++
+ class TestGlibcNonDefaultLimitedTimezone(infra.basetest.BRTest):
+     config = \
+         """
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+index 49bce45dc8..f5f9e9fdf1 100644
+--- a/support/testing/tests/fs/test_ext.py
++++ b/support/testing/tests/fs/test_ext.py
+@@ -12,6 +12,7 @@ RESBLKCNT_PROP = "Reserved block count"
+ 
+ CHECK_FS_TYPE_CMD = "mount | grep '/dev/root on / type {}'"
+ 
++
+ def dumpe2fs_run(builddir, image):
+     cmd = ["host/sbin/dumpe2fs", os.path.join("images", image)]
+     ret = subprocess.check_output(cmd,
+@@ -20,12 +21,14 @@ def dumpe2fs_run(builddir, image):
+                                   env={"LANG": "C"})
+     return ret.strip().splitlines()
+ 
++
+ def dumpe2fs_getprop(out, prop):
+     for line in out:
+         fields = line.split(": ")
+         if fields[0] == prop:
+             return fields[1].strip()
+ 
++
+ def boot_img_and_check_fs_type(emulator, builddir, fs_type):
+     img = os.path.join(builddir, "images", "rootfs.{}".format(fs_type))
+     emulator.boot(arch="armv7",
+@@ -37,6 +40,7 @@ def boot_img_and_check_fs_type(emulator, builddir, fs_type):
+     _, exit_code = emulator.run(CHECK_FS_TYPE_CMD.format(fs_type))
+     return exit_code
+ 
++
+ class TestExt2(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+@@ -55,6 +59,7 @@ class TestExt2(infra.basetest.BRTest):
+                                                self.builddir, "ext2")
+         self.assertEqual(exit_code, 0)
+ 
++
+ class TestExt2r1(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+@@ -74,6 +79,7 @@ class TestExt2r1(infra.basetest.BRTest):
+                                                self.builddir, "ext2")
+         self.assertEqual(exit_code, 0)
+ 
++
+ class TestExt3(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+@@ -92,6 +98,7 @@ class TestExt3(infra.basetest.BRTest):
+                                                self.builddir, "ext3")
+         self.assertEqual(exit_code, 0)
+ 
++
+ class TestExt4(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+@@ -116,5 +123,3 @@ class TestExt4(infra.basetest.BRTest):
+         exit_code = boot_img_and_check_fs_type(self.emulator,
+                                                self.builddir, "ext4")
+         self.assertEqual(exit_code, 0)
+-
+-
+diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+index 60dcbdc139..41430eb4d2 100644
+--- a/support/testing/tests/fs/test_iso9660.py
++++ b/support/testing/tests/fs/test_iso9660.py
+@@ -25,6 +25,7 @@ BASIC_CONFIG = \
+     # BR2_TARGET_ROOTFS_TAR is not set
+     """.format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
+ 
++
  def test_mount_internal_external(emulator, builddir, internal=True):
      img = os.path.join(builddir, "images", "rootfs.iso9660")
-@@ -48,14 +48,14 @@ def test_touch_file(emulator):
+     emulator.boot(arch="i386", options=["-cdrom", img])
+@@ -38,13 +39,14 @@ def test_mount_internal_external(emulator, builddir, internal=True):
+     _, exit_code = emulator.run(cmd)
+     return exit_code
+ 
++
+ def test_touch_file(emulator):
+     _, exit_code = emulator.run("touch test")
+     return exit_code
+ 
+ #
+ # Grub 2
+-#
++
  
  class TestIso9660Grub2External(infra.basetest.BRTest):
      config = BASIC_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_ISO9660=y
--# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
--BR2_TARGET_GRUB2=y
--BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
--BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
--BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
--""".format(infra.filepath("conf/grub2.cfg"))
-+        """
-+        BR2_TARGET_ROOTFS_ISO9660=y
-+        # BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-+        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-+        """.format(infra.filepath("conf/grub2.cfg"))
+@@ -65,6 +67,7 @@ class TestIso9660Grub2External(infra.basetest.BRTest):
+         exit_code = test_touch_file(self.emulator)
+         self.assertEqual(exit_code, 1)
  
-     def test_run(self):
-         exit_code = test_mount_internal_external(self.emulator,
-@@ -67,14 +67,14 @@ BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
- 
++
  class TestIso9660Grub2Internal(infra.basetest.BRTest):
      config = BASIC_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_ISO9660=y
--BR2_TARGET_ROOTFS_ISO9660_INITRD=y
--BR2_TARGET_GRUB2=y
--BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
--BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
--BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
--""".format(infra.filepath("conf/grub2.cfg"))
-+        """
-+        BR2_TARGET_ROOTFS_ISO9660=y
-+        BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-+        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-+        """.format(infra.filepath("conf/grub2.cfg"))
+         """
+@@ -86,7 +89,7 @@ class TestIso9660Grub2Internal(infra.basetest.BRTest):
  
-     def test_run(self):
-         exit_code = test_mount_internal_external(self.emulator,
-@@ -90,13 +90,13 @@ BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
+ #
+ # Syslinux
+-#
++
  
  class TestIso9660SyslinuxExternal(infra.basetest.BRTest):
      config = BASIC_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_ISO9660=y
--# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
--BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
--BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
--BR2_TARGET_SYSLINUX=y
--""".format(infra.filepath("conf/isolinux.cfg"))
-+        """
-+        BR2_TARGET_ROOTFS_ISO9660=y
-+        # BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
-+        BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
-+        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-+        BR2_TARGET_SYSLINUX=y
-+        """.format(infra.filepath("conf/isolinux.cfg"))
+@@ -106,6 +109,7 @@ class TestIso9660SyslinuxExternal(infra.basetest.BRTest):
+         exit_code = test_touch_file(self.emulator)
+         self.assertEqual(exit_code, 1)
  
-     def test_run(self):
-         exit_code = test_mount_internal_external(self.emulator,
-@@ -108,13 +108,13 @@ BR2_TARGET_SYSLINUX=y
- 
++
  class TestIso9660SyslinuxInternal(infra.basetest.BRTest):
      config = BASIC_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_ISO9660=y
--BR2_TARGET_ROOTFS_ISO9660_INITRD=y
--BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
--BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
--BR2_TARGET_SYSLINUX=y
--""".format(infra.filepath("conf/isolinux.cfg"))
-+        """
-+        BR2_TARGET_ROOTFS_ISO9660=y
-+        BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-+        BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
-+        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-+        BR2_TARGET_SYSLINUX=y
-+        """.format(infra.filepath("conf/isolinux.cfg"))
- 
-     def test_run(self):
-         exit_code = test_mount_internal_external(self.emulator,
+         """
 diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
-index 7185df7899..a84c858238 100644
+index a84c858238..2ff5099180 100644
 --- a/support/testing/tests/fs/test_jffs2.py
 +++ b/support/testing/tests/fs/test_jffs2.py
-@@ -12,15 +12,15 @@ def jffs2dump_find_file(files_list, fname):
+@@ -3,6 +3,7 @@ import subprocess
  
+ import infra.basetest
+ 
++
+ def jffs2dump_find_file(files_list, fname):
+     for file_name in files_list:
+         file_name = file_name.strip()
+@@ -10,6 +11,7 @@ def jffs2dump_find_file(files_list, fname):
+             return True
+     return False
+ 
++
  class TestJffs2(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_JFFS2=y
--BR2_TARGET_ROOTFS_JFFS2_CUSTOM=y
--BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x80000
--BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
--BR2_TARGET_ROOTFS_JFFS2_PAD=y
--BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x4000000
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_JFFS2=y
-+        BR2_TARGET_ROOTFS_JFFS2_CUSTOM=y
-+        BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x80000
-+        BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
-+        BR2_TARGET_ROOTFS_JFFS2_PAD=y
-+        BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x4000000
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     # TODO: there are some scary JFFS2 messages when one starts to
-     # write files in the rootfs: "jffs2: Newly-erased block contained
+         """
 diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-index b205b6a55a..9fad28f834 100644
+index 9fad28f834..066c054342 100644
 --- a/support/testing/tests/fs/test_squashfs.py
 +++ b/support/testing/tests/fs/test_squashfs.py
-@@ -5,12 +5,12 @@ import infra.basetest
+@@ -3,6 +3,7 @@ import subprocess
  
+ import infra.basetest
+ 
++
  class TestSquashfs(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_SQUASHFS=y
--# BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
--BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_SQUASHFS=y
-+        # BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
-+        BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
+         """
 diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
-index ede4999aa1..360932a0bf 100644
+index 360932a0bf..015d82f769 100644
 --- a/support/testing/tests/fs/test_ubi.py
 +++ b/support/testing/tests/fs/test_ubi.py
-@@ -5,14 +5,14 @@ import infra.basetest
+@@ -3,6 +3,7 @@ import os
  
+ import infra.basetest
+ 
++
  class TestUbi(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_UBIFS=y
--BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x7ff80
--BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1
--BR2_TARGET_ROOTFS_UBI=y
--BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x80000
--BR2_TARGET_ROOTFS_UBI_SUBSIZE=1
--"""
-+        """
-+        BR2_TARGET_ROOTFS_UBIFS=y
-+        BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x7ff80
-+        BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1
-+        BR2_TARGET_ROOTFS_UBI=y
-+        BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x80000
-+        BR2_TARGET_ROOTFS_UBI_SUBSIZE=1
-+        """
- 
-     # TODO: if you boot Qemu twice on the same UBI image, it fails to
-     # attach the image the second time, with "ubi0 error:
+         """
 diff --git a/support/testing/tests/fs/test_yaffs2.py b/support/testing/tests/fs/test_yaffs2.py
-index 0ffb758083..a11c1a40a7 100644
+index a11c1a40a7..b60e90e660 100644
 --- a/support/testing/tests/fs/test_yaffs2.py
 +++ b/support/testing/tests/fs/test_yaffs2.py
-@@ -4,8 +4,10 @@ import infra.basetest
+@@ -2,6 +2,7 @@ import os
  
+ import infra.basetest
+ 
++
  class TestYaffs2(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--            infra.basetest.MINIMAL_CONFIG + \
--            "BR2_TARGET_ROOTFS_YAFFS2=y"
-+        infra.basetest.MINIMAL_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_YAFFS2=y
-+        """
+         infra.basetest.MINIMAL_CONFIG + \
+diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
+index a261d7dd46..c09ee46eb0 100644
+--- a/support/testing/tests/init/base.py
++++ b/support/testing/tests/init/base.py
+@@ -2,6 +2,7 @@ import os
+ import subprocess
+ import infra.basetest
  
-     def test_run(self):
-         img = os.path.join(self.builddir, "images", "rootfs.yaffs2")
++
+ class InitSystemBase(infra.basetest.BRTest):
+ 
+     def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
+diff --git a/support/testing/tests/init/test_busybox.py b/support/testing/tests/init/test_busybox.py
+index c3e425bf5d..6c75f685ad 100644
+--- a/support/testing/tests/init/test_busybox.py
++++ b/support/testing/tests/init/test_busybox.py
+@@ -1,6 +1,7 @@
+ import infra.basetest
+ from tests.init.base import InitSystemBase as InitSystemBase
+ 
++
+ class InitSystemBusyboxBase(InitSystemBase):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+@@ -11,7 +12,6 @@ class InitSystemBusyboxBase(InitSystemBase):
+         super(InitSystemBusyboxBase, self).checkInit("/bin/busybox")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemBusyboxRo(InitSystemBusyboxBase):
+     config = InitSystemBusyboxBase.config + \
+         """
+@@ -25,7 +25,6 @@ class TestInitSystemBusyboxRo(InitSystemBusyboxBase):
+         self.checkNetwork("eth0", 1)
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemBusyboxRw(InitSystemBusyboxBase):
+     config = InitSystemBusyboxBase.config + \
+         """
+@@ -38,7 +37,6 @@ class TestInitSystemBusyboxRw(InitSystemBusyboxBase):
+         self.checkNetwork("eth0", 1)
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemBusyboxRoNet(InitSystemBusyboxBase):
+     config = InitSystemBusyboxBase.config + \
+         """
+@@ -53,7 +51,6 @@ class TestInitSystemBusyboxRoNet(InitSystemBusyboxBase):
+         self.checkNetwork("eth0")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemBusyboxRwNet(InitSystemBusyboxBase):
+     config = InitSystemBusyboxBase.config + \
+         """
+diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
+index f55db5d3e0..c8a79f0bab 100644
+--- a/support/testing/tests/init/test_none.py
++++ b/support/testing/tests/init/test_none.py
+@@ -3,6 +3,7 @@ import pexpect
+ import infra.basetest
+ from tests.init.base import InitSystemBase as InitSystemBase
+ 
++
+ class TestInitSystemNone(InitSystemBase):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index b1b6517373..77d734895b 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -1,6 +1,7 @@
+ import infra.basetest
+ from tests.init.base import InitSystemBase as InitSystemBase
+ 
++
+ class InitSystemSystemdBase(InitSystemBase):
+     config = \
+         """
+@@ -21,7 +22,6 @@ class InitSystemSystemdBase(InitSystemBase):
+         super(InitSystemSystemdBase, self).checkInit("/lib/systemd/systemd")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -43,7 +43,6 @@ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
+         self.assertEqual(out[0], "foobar")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -57,7 +56,6 @@ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
+         self.checkNetwork("eth0")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -73,7 +71,6 @@ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
+         self.checkNetwork("eth0")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -89,7 +86,6 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+         self.checkNetwork("eth0")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -121,7 +117,6 @@ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
+         self.checkNetwork("eth0")
+ 
+ 
+-#-------------------------------------------------------------------------------
+ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
 diff --git a/support/testing/tests/package/test_dropbear.py b/support/testing/tests/package/test_dropbear.py
-index a64b782229..da569d9b1b 100644
+index da569d9b1b..8f7f1fee82 100644
 --- a/support/testing/tests/package/test_dropbear.py
 +++ b/support/testing/tests/package/test_dropbear.py
-@@ -4,13 +4,13 @@ import infra.basetest
+@@ -2,6 +2,7 @@ import os
  
+ import infra.basetest
+ 
++
  class TestDropbear(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_GENERIC_ROOT_PASSWD="testpwd"
--BR2_SYSTEM_DHCP="eth0"
--BR2_PACKAGE_DROPBEAR=y
--BR2_TARGET_ROOTFS_CPIO=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_GENERIC_ROOT_PASSWD="testpwd"
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_PACKAGE_DROPBEAR=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
- 
-     def test_run(self):
-         img = os.path.join(self.builddir, "images", "rootfs.cpio")
+         """
 diff --git a/support/testing/tests/package/test_ipython.py b/support/testing/tests/package/test_ipython.py
-index dd8bf500a3..a943101372 100644
+index a943101372..3b291d9583 100644
 --- a/support/testing/tests/package/test_ipython.py
 +++ b/support/testing/tests/package/test_ipython.py
-@@ -11,10 +11,10 @@ from tests.package.test_python import TestPythonBase
+@@ -1,5 +1,3 @@
+-import os
+-
+ from tests.package.test_python import TestPythonBase
  #
+ # The following pythong tests are not being used here:
+@@ -8,7 +6,8 @@ from tests.package.test_python import TestPythonBase
+ #
+ # - zlib_test: IPython does not return a non-zero code the way CPython
+ #              does, so this test ends up being a false-negative
+-#
++
++
  class TestIPythonPy2(TestPythonBase):
      config = TestPythonBase.config + \
--"""
--BR2_PACKAGE_PYTHON=y
--BR2_PACKAGE_PYTHON_IPYTHON=y
--"""
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_IPYTHON=y
-+        """
-     interpreter = "ipython"
+         """
+@@ -22,6 +21,7 @@ class TestIPythonPy2(TestPythonBase):
+         self.math_floor_test(40)
+         self.libc_time_test(40)
  
-     def test_run(self):
-@@ -24,10 +24,10 @@ BR2_PACKAGE_PYTHON_IPYTHON=y
- 
++
  class TestIPythonPy3(TestPythonBase):
      config = TestPythonBase.config + \
--"""
--BR2_PACKAGE_PYTHON3=y
--BR2_PACKAGE_PYTHON_IPYTHON=y
--"""
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_IPYTHON=y
-+        """
-     interpreter = "ipython"
- 
-     def test_run(self):
+         """
+@@ -34,5 +34,3 @@ class TestIPythonPy3(TestPythonBase):
+         self.login()
+         self.math_floor_test(40)
+         self.libc_time_test(40)
+-
+-
 diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index bddf09ddbc..79773fff63 100644
+index 79773fff63..26cf49947b 100644
 --- a/support/testing/tests/package/test_python.py
 +++ b/support/testing/tests/package/test_python.py
-@@ -4,10 +4,10 @@ import infra.basetest
+@@ -2,6 +2,7 @@ import os
  
+ import infra.basetest
+ 
++
  class TestPythonBase(infra.basetest.BRTest):
      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--"""
--BR2_TARGET_ROOTFS_CPIO=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-     interpreter = "python"
+         """
+@@ -40,11 +41,13 @@ class TestPythonBase(infra.basetest.BRTest):
+         _, exit_code = self.emulator.run(cmd, timeout)
+         self.assertEqual(exit_code, 1)
  
-     def login(self):
-@@ -42,9 +42,9 @@ BR2_TARGET_ROOTFS_CPIO=y
- 
++
  class TestPython2(TestPythonBase):
      config = TestPythonBase.config + \
--"""
--BR2_PACKAGE_PYTHON=y
--"""
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        """
+         """
+         BR2_PACKAGE_PYTHON=y
+         """
++
      def test_run(self):
          self.login()
          self.version_test("Python 2")
-@@ -54,9 +54,9 @@ BR2_PACKAGE_PYTHON=y
+@@ -52,11 +55,13 @@ class TestPython2(TestPythonBase):
+         self.libc_time_test()
+         self.zlib_test()
  
++
  class TestPython3(TestPythonBase):
      config = TestPythonBase.config + \
--"""
--BR2_PACKAGE_PYTHON3=y
--"""
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        """
+         """
+         BR2_PACKAGE_PYTHON3=y
+         """
++
      def test_run(self):
          self.login()
          self.version_test("Python 3")
 diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index 394fa17345..ad2f56a20e 100644
+index ad2f56a20e..072cf0048e 100644
 --- a/support/testing/tests/toolchain/test_external.py
 +++ b/support/testing/tests/toolchain/test_external.py
-@@ -2,10 +2,10 @@ import os
- import infra
+@@ -7,6 +7,7 @@ BASIC_CONFIG = \
+     # BR2_TARGET_ROOTFS_TAR is not set
+     """
  
- BASIC_CONFIG = \
--"""
--BR2_TARGET_ROOTFS_CPIO=y
--# BR2_TARGET_ROOTFS_TAR is not set
--"""
-+    """
-+    BR2_TARGET_ROOTFS_CPIO=y
-+    # BR2_TARGET_ROOTFS_TAR is not set
-+    """
- 
++
  def has_broken_links(path):
      for root, dirs, files in os.walk(path):
-@@ -32,12 +32,12 @@ class TestExternalToolchain(infra.basetest.BRTest):
+         for f in files:
+@@ -15,6 +16,7 @@ def has_broken_links(path):
+                 return True
+     return False
  
++
+ class TestExternalToolchain(infra.basetest.BRTest):
+     def common_check(self):
+         # Check for broken symlinks
+@@ -30,6 +32,7 @@ class TestExternalToolchain(infra.basetest.BRTest):
+         interp_path = os.path.join(self.builddir, "target", interp[1:])
+         self.assertTrue(os.path.exists(interp_path))
+ 
++
  class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_arm920t=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_arm920t=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-+        """
-     toolchain_prefix = "arm-none-linux-gnueabi"
+         """
+@@ -61,6 +64,7 @@ class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -63,11 +63,11 @@ BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
- 
++
  class TestExternalToolchainSourceryArmv5(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-+        """
-     toolchain_prefix = "arm-none-linux-gnueabi"
+         """
+@@ -86,6 +90,7 @@ class TestExternalToolchainSourceryArmv5(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -88,14 +88,14 @@ BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
- 
++
  class TestExternalToolchainSourceryArmv7(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_cortex_a8=y
--BR2_ARM_EABI=y
--BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABI=y
-+        BR2_ARM_INSTRUCTIONS_THUMB2=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-+        """
-     toolchain_prefix = "arm-none-linux-gnueabi"
+         """
+@@ -124,6 +129,7 @@ class TestExternalToolchainSourceryArmv7(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -126,12 +126,12 @@ BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
- 
++
  class TestExternalToolchainLinaroArm(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_cortex_a8=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a8=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-+        """
-     toolchain_prefix = "arm-linux-gnueabihf"
+         """
+@@ -155,6 +161,7 @@ class TestExternalToolchainLinaroArm(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -157,19 +157,19 @@ BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
- 
++
  class TestExternalToolchainBuildrootMusl(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_VFP=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2017.05-444-g6c704ba.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_11=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2017.05-444-g6c704ba.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_11=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        """
-     toolchain_prefix = "arm-linux"
+         """
+@@ -180,6 +187,7 @@ class TestExternalToolchainBuildrootMusl(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -182,20 +182,20 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
- 
++
  class TestExternalToolchainCtngMusl(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_VFP=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/arm-ctng-linux-musleabihf.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-ctng-linux-musleabihf"
--BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/arm-ctng-linux-musleabihf.tar.xz"
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-ctng-linux-musleabihf"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        """
-     toolchain_prefix = "arm-ctng-linux-musleabihf"
+         """
+@@ -206,6 +214,7 @@ class TestExternalToolchainCtngMusl(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -208,18 +208,18 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
- 
++
  class TestExternalToolchainBuildrootuClibc(TestExternalToolchain):
      config = BASIC_CONFIG + \
--"""
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
--BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--"""
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-+        BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-+        # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        """
-     toolchain_prefix = "arm-linux"
+         """
+@@ -230,6 +239,7 @@ class TestExternalToolchainBuildrootuClibc(TestExternalToolchain):
+                            options=["-initrd", img])
+         self.emulator.login()
  
-     def test_run(self):
-@@ -232,10 +232,10 @@ BR2_TOOLCHAIN_EXTERNAL_CXX=y
- 
++
  class TestExternalToolchainCCache(TestExternalToolchainBuildrootuClibc):
      extraconfig = \
--"""
--BR2_CCACHE=y
--BR2_CCACHE_DIR="{builddir}/ccache-dir"
--"""
-+        """
-+        BR2_CCACHE=y
-+        BR2_CCACHE_DIR="{builddir}/ccache-dir"
-+        """
- 
-     def __init__(self, names):
-         super(TestExternalToolchainBuildrootuClibc, self).__init__(names)
+         """
 -- 
 2.13.0
