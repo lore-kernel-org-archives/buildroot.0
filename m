@@ -1,53 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 05 Oct 2017 20:31:31 +0000
-Subject: [Buildroot] [Bug 10366] dropbear download url has changed
-In-Reply-To: <bug-10366-163@https.bugs.busybox.net/>
-References: <bug-10366-163@https.bugs.busybox.net/>
-Message-ID: <bug-10366-163-0TmxdXXTcM@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Oct 2017 22:38:35 +0200
+Subject: [Buildroot] [PATCH] qemu: security bump to version 2.8.1.1
+In-Reply-To: <20171004071357.15093-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 4 Oct 2017 09:13:57 +0200")
+References: <20171004071357.15093-1-peter@korsgaard.com>
+Message-ID: <87wp49gwj8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10366
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > Fixes the following security issues and adds a number of other bigfixes:
+ > 2.8.1: Changelog:
+ > https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+ > CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
+ > mode
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-In what way has it changed?
+ > CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
+ > cirrus_bitblt_cputovideo
 
-http still works here:
+ > CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
 
-wget http://matt.ucc.asn.au/dropbear/releases/dropbear-2017.75.tar.bz2
---2017-10-05 22:26:51-- 
-http://matt.ucc.asn.au/dropbear/releases/dropbear-2017.75.tar.bz2
-Resolving matt.ucc.asn.au (matt.ucc.asn.au)... 130.95.13.18,
-2405:3c00:5200:100::18
-Connecting to matt.ucc.asn.au (matt.ucc.asn.au)|130.95.13.18|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1623392 (1.5M) [application/x-bzip2]
-Saving to: ?dropbear-2017.75.tar.bz2?
+ > 2.8.1.1 Changelog:
+ > https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
 
-(and so does https):
+ > CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
+ > host
 
-wget https://matt.ucc.asn.au/dropbear/releases/dropbear-2017.75.tar.bz2
---2017-10-05 22:27:26-- 
-https://matt.ucc.asn.au/dropbear/releases/dropbear-2017.75.tar.bz2
-Resolving matt.ucc.asn.au (matt.ucc.asn.au)... 130.95.13.18,
-2405:3c00:5200:100::18
-Connecting to matt.ucc.asn.au (matt.ucc.asn.au)|130.95.13.18|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1623392 (1.5M) [application/x-bzip2]
-Saving to: ?dropbear-2017.75.tar.bz2.1?
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-The server does send a HSTS header to ask browsers to use https, but that isn't
-really a problem with wget.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
