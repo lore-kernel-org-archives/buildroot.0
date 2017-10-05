@@ -1,43 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Oct 2017 12:23:56 +0200
-Subject: [Buildroot] [PATCH] pkg-download: make package name optional in
- github helper
-In-Reply-To: <26d3dc60-5a3a-0fce-f3cf-b75ee2670644@mind.be>
-References: <20171004085745.15457-1-ismael@iodev.co.uk>
- <26d3dc60-5a3a-0fce-f3cf-b75ee2670644@mind.be>
-Message-ID: <20171005122356.2b31e9b5@windsurf.home>
+From: Henrique Marks <henrique.marks@datacom.ind.br>
+Date: Thu, 5 Oct 2017 08:36:57 -0300 (BRT)
+Subject: [Buildroot] [PATCH] Create 'make <pkt>-show-rrdepends' command
+In-Reply-To: <63a3e218-f37c-649b-fc48-0e9c0a892a10@mind.be>
+References: <1493305458-15309-1-git-send-email-george.redivo@datacom.ind.br>
+ <1507033962-5566-1-git-send-email-casantos@datacom.ind.br>
+ <63a3e218-f37c-649b-fc48-0e9c0a892a10@mind.be>
+Message-ID: <909405437.12454753.1507203417835.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello all
 
-On Wed, 4 Oct 2017 18:35:07 +0200, Arnout Vandecappelle wrote:
+----- Mensagem original -----
+> De: "Arnout Vandecappelle" <arnout@mind.be>
+> Para: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
+> Cc: "George Redivo" <george.redivo@datacom.ind.br>
+> Enviadas: Quarta-feira, 4 de outubro de 2017 13:18:32
+> Assunto: Re: [Buildroot] [PATCH] Create 'make <pkt>-show-rrdepends' command
 
->  As noticed by Peter, this was already wrong in the original patch: it only
-> works if the github helper is used in a := assignment,
+> On 03-10-17 14:32, Carlos Santos wrote:
+>> From: George Redivo <george.redivo@datacom.ind.br>
+>> 
+>> Hello,
+>> 
+>> Looks like this https://patchwork.ozlabs.org/patch/756075/ was accepted by
+>> Arnout but was left behind. Could we have it applied, please?
+> 
+> I didn't exactly "accept" this patch. I thought the implementation was
+> acceptable, but I wasn't entirely sure the use case was important enough to
+> warrant the additional complexity.
+> 
+> If I understand the use case correctly, what you want is that you have changed
+> something in package A, so you want to rebuild package A and all its recursive
+> dependencies. For that, a recursive dirclean is probably more appropriate:
+> 
+> $(1)-dirclean-recursive: $(1)-dirclean $$(patsubst
+> %,%-dirclean-recursive,$$($(2)_FINAL_ALL_DEPENDENCIES))
+> 
 
-Doh? We're using the github helper almost exclusively in = assignments:
+Not exactly the same i guess, i think this will rebuild package A and all its dependencies (we are going "down" on dependencies).
 
-package/assimp/assimp.mk:ASSIMP_SITE = $(call github,assimp,assimp,$(ASSIMP_VERSION))
-package/asterisk/asterisk.mk:ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-package/atest/atest.mk:ATEST_SITE = $(call github,amouiche,atest,$(ATEST_VERSION))
-package/aufs/aufs.mk:AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
-package/avrdude/avrdude.mk:AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
-package/axfsutils/axfsutils.mk:AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
-package/azmq/azmq.mk:AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
+The point of this script is to rebuild package A and all those who depends on it (we are going "up" on dependencies).
 
-Am I missing something in your explanation ?
+Based on previous work done on the reverse-dependencies (make <pkg>-show-rdepends), this has been turned in recursive-reverse-dependencies.
 
-Or perhaps you meant "when the third argument is not passed, we need to
-use a := assignment" ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Dr. Henrique Marks
+henrique.marks at datacom.ind.br
+R. Am?rica, 1000 - Eldorado do Sul - RS
+CEP: 92990-000 - Brasil
+Fone: +55 51 3933 3000 - Ramal 3466
