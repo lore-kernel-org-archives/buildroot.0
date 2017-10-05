@@ -1,66 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Oct 2017 20:44:47 +0200
-Subject: [Buildroot] [PATCH] wireguard: needs 3.10+ kernel
-In-Reply-To: <20171003080448.3809-1-peter@korsgaard.com>
-References: <20171003080448.3809-1-peter@korsgaard.com>
-Message-ID: <0b87fcfb-da25-7574-3c7e-e3929383df71@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 5 Oct 2017 20:32:14 +0200
+Subject: [Buildroot] [git commit] HOST_DIR/lib: symlink respectively to
+	lib32/64
+Message-ID: <20171005184039.977368116F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=5ad679c8a8369f27df7080e678f9b004bf9d9647
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Looks like I don't manage to apply any of your patches today :-)
+Discovered the issue on a RHEL7.4 machine where
+the cmake build dynamically selected HOST_DIR/lib64
+as the installation path for the lzo2 library.
 
-On 03-10-17 10:04, Peter Korsgaard wrote:
-> The dependency is actually only for the kernel module (and thus on the
-> runtime kernel version rather than kernel headers), but as we don't know the
-> runtime version in kconfig this will have to do.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/wireguard/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/wireguard/Config.in b/package/wireguard/Config.in
-> index 0321755db3..acce6663ba 100644
-> --- a/package/wireguard/Config.in
-> +++ b/package/wireguard/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_WIREGUARD
->  	bool "wireguard"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+Fixes failures like the following:
+host-mtd
+http://autobuild.buildroot.net/results/d31/d31581d2e60f35cf70312683df99c768e2ea8516/
 
- The kernel module is only built if BR2_LINUX_KERNEL=y, so shouldn't this be
+host-squashfs
+http://autobuild.buildroot.net/results/d9c/d9c95231ac774ed71580754a15ebb3b121764310/
 
-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_LINUX_KERNEL
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-? And of course in the comment as well.
-
- In addition, I think you should add the (abbreviated) contents of the commit
-message as a comment here, otherwise it's not at all clear.
-
- Regards,
- Arnout
-
->  	select BR2_PACKAGE_LIBMNL
->  	help
->  	  WireGuard is an extremely simple yet fast and modern VPN
-> @@ -16,3 +17,6 @@ config BR2_PACKAGE_WIREGUARD
->  	  VPN solution in the industry.
->  
->  	  https://www.wireguard.com
-> +
-> +comment "wireguard needs a toolchain w/ headers > 3.10"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/Makefile b/Makefile
+index 9b09589..02f7cda 100644
+--- a/Makefile
++++ b/Makefile
+@@ -542,7 +542,7 @@ endif
+ 
+ .PHONY: dirs
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(HOST_DIR)/usr $(BINARIES_DIR)
++	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+@@ -565,6 +565,13 @@ sdk: world
+ $(HOST_DIR)/usr: $(HOST_DIR)
+ 	@ln -snf . $@
+ 
++$(HOST_DIR)/lib: $(HOST_DIR)
++	@mkdir -p $@
++	@case $(HOSTARCH) in \
++		(*64) ln -snf lib $(@D)/lib64;; \
++		(*)   ln -snf lib $(@D)/lib32;; \
++	esac
++
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
