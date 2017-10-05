@@ -1,39 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Oct 2017 22:38:35 +0200
+Date: Thu, 05 Oct 2017 22:39:01 +0200
 Subject: [Buildroot] [PATCH] qemu: security bump to version 2.8.1.1
-In-Reply-To: <20171004071357.15093-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 4 Oct 2017 09:13:57 +0200")
+In-Reply-To: <20171004082217.o2yzbrwjdpicpe4r@tarshish> (Baruch Siach's
+ message of "Wed, 4 Oct 2017 11:22:17 +0300")
 References: <20171004071357.15093-1-peter@korsgaard.com>
-Message-ID: <87wp49gwj8.fsf@dell.be.48ers.dk>
+ <20171004082217.o2yzbrwjdpicpe4r@tarshish>
+Message-ID: <87shexgwii.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes the following security issues and adds a number of other bigfixes:
- > 2.8.1: Changelog:
- > https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
+Hi,
 
- > CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
- > mode
+ >> +++ b/package/qemu/qemu.mk
+ >> @@ -4,7 +4,7 @@
+ >> #
+ >> ################################################################################
+ >> 
+ >> -QEMU_VERSION = 2.8.0
+ >> +QEMU_VERSION = 2.8.1.1
+ >> QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
 
- > CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
- > cirrus_bitblt_cputovideo
+ > There is also a .xz tarball available.
 
- > CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
+ >> QEMU_SITE = http://wiki.qemu.org/download
 
- > 2.8.1.1 Changelog:
- > https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
+ > This redirects to https://download.qemu.org.
 
- > CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
- > host
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+Thanks. I've pushed a followup patch changing this.
 
 -- 
 Bye, Peter Korsgaard
