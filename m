@@ -1,59 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Oct 2017 22:33:30 +0200
-Subject: [Buildroot] [git commit] qemu: security bump to version 2.8.1.1
-Message-ID: <20171005203341.6F36C8115F@busybox.osuosl.org>
+Date: Thu, 5 Oct 2017 22:40:31 +0200
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.1.3
+Message-ID: <20171005203341.CCC2780F6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af0f2d2bbcaca9000e62b5388f4c3cd8e700c6ff
+commit: https://git.buildroot.net/buildroot/commit/?id=ab646bf1628bba83c84f02219759a6461dd18701
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues and adds a number of other bigfixes:
+Fixes a runtime startup issue on SysV init systems:
+```
+# shairport-sync -d
+Daemon returned 2 as return value.
+```
 
-2.8.1: Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
-
-CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
-mode
-
-CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
-cirrus_bitblt_cputovideo
-
-CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
-
-2.8.1.1 Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-
-CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
-host
-
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 19cb306..5164303 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 35391a8..eac3913 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
 @@ -1,2 +1,2 @@
- # Locally computed, tarball verified with GPG signature
--sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
-+sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index f42d649..155cb28 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
+ # Locally calculated
+-sha256  8c13f7ebbd417e8cab07ea9f74392ced0f54315d8697d4513580f472859a9c65  shairport-sync-3.1.2.tar.gz
++sha256  dd0484d7e8ee7631aee78c78b3762abbdba7ec3f2ee8cd6c1e361544c1414da3  shairport-sync-3.1.3.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 01c1370..acca45c 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QEMU_VERSION = 2.8.0
-+QEMU_VERSION = 2.8.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+-SHAIRPORT_SYNC_VERSION = 3.1.2
++SHAIRPORT_SYNC_VERSION = 3.1.3
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
