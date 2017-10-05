@@ -1,75 +1,78 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 5 Oct 2017 21:30:24 +0000
-Subject: [Buildroot] [PATCH 2/2] toolchain: Add glibc support for ARCv2
-In-Reply-To: <e199b1b7-2c6f-4711-938a-15616d6d85a1@mind.be>
-References: <20170914221446.13647-1-abrodkin@synopsys.com>
- <20170914221446.13647-3-abrodkin@synopsys.com>
- <1506624636.3713.20.camel@synopsys.com>
- <e199b1b7-2c6f-4711-938a-15616d6d85a1@mind.be>
-Message-ID: <1507239024.31627.18.camel@synopsys.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu,  5 Oct 2017 18:42:07 -0300
+Subject: [Buildroot] [PATCH v2 1/6] support/testing: allow to indent ccache
+	defconfig fragment
+In-Reply-To: <20170929022713.2967-1-ricardo.martincoski@gmail.com>
+References: <20170929022713.2967-1-ricardo.martincoski@gmail.com>
+Message-ID: <20171005214212.27613-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Move the strip out of leading spaces in defconfig fragments from the
+BRTest class to the Builder class. It actually postpones the strip out,
+consequentially allowing test cases to post-process the defconfig in
+their own __init__ before calling the __init__ method from BRTest.
 
-On Wed, 2017-10-04 at 18:41 +0200, Arnout Vandecappelle wrote:
-> 
-> On 28-09-17 20:50, Alexey Brodkin wrote:
-> > 
-> > Hi Thomas, Arnout,
-> > 
-> > On Fri, 2017-09-15 at 01:14 +0300, Alexey Brodkin wrote:
-> > > 
-> > > Finally there's working ARC port of glibc thanks to Vineet and Cuper!
-> > > This port is based on pretty recent glibc's master branch and ARC
-> > > changes are being reviewed now in glibc's mailing list.
-> > > 
-> > > Thus we again have to use sources from our GitHub but as soon as there's
-> > > a glibc release with our patches applied we'll switch to unpstream releases
-> > > and will drop our glibc GitHub repo alltogether.
-> > > 
-> > > Note now we cut tags in glibc repo simultaneously with tags
-> > > in Binutils and GCC repos and so to make sure everything works in the best
-> > > way we plan to update glibc tag together with Binutils and GCC.
-> > > 
-> > > Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
-> > > but we plan to fix it soonish so for now we make glibc intentionally
-> > > dependent on archs38.
-> > > 
-> > > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > > Cc: Cupertino Miranda <cmiranda@synopsys.com>
-> > > Cc: Vineet Gupta <vgupta@synopsys.com>
-> > > Cc: Anton Kolesov <akolesov@synopsys.com>
-> > 
-> > This patch was sitting in patchwork for 2 weeks now.
-> > If there're any complaints an suggestions why don't we merge it?
-> 
-> ?Since I merged the bump to glibc 2.26, patch 1 is not correct anymore.
+Moving this code to the Builder class also allows any new test class
+that inherits from BRTest to reuse the same code even if the new class
+overrides the setUp method.
 
-I'll send a respin shortly, OK?
+At same time, prepend a newline to the jlevel handling otherwise it
+would stop working for defconfig fragments that don't end in a newline.
 
-> ?Would it be useful to instead add patches to our glibc to add ARC support? Or
-> are the ARC patches too difficult to backport?
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+Changes v1 -> v2:
+  - reorder patch 2 and 1 (suggested by Yann E. MORIN);
+  - keep only the mechanism in this patch, merging the change to
+    ccache defconfig fragment to the old patch 1, now patch 2 (suggested
+    by Yann E. MORIN);
+  - move the code that strips out leadings spaces to the builder class
+    instead of to the setUp of BRTest;
+  - add newline to jlevel handling to ensure it works fine even if the
+    defconfig fragment does not end in a newline;
+  - adapt commit message.
 
-Well not now definitely. The point is:
-?a) ARC port is not yet merged upstream
-?b) Our patches are on top of pretty much up-to-date master branch,
-? ? which means they alone won't apply on top of the most recent release
+Number of warnings reported by flake8 for the test infra:
+before: 132
+after:  132
+---
+ support/testing/infra/basetest.py | 4 +---
+ support/testing/infra/builder.py  | 3 ++-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-> 
-> 
-> > 
-> > I'd like to see how we ramp-up with glibc toolchain for ARC.
-> > That said once the patch is applied would be good to add
-> > a corresponding config for autobuilder.
-> 
-> ?You can actually do that yourself by adding a config to
-> support/config-fragments/autobuild and updating toolchain-configs.csv
-> in that directory. Something like br-arc-full-internal.config but then with glibc.
-
-Sure, will do once glibc for ARC is supported in BR.
-
--Alexey
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 493dea5125..d6fcc619b1 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -42,9 +42,7 @@ class BRTest(unittest.TestCase):
+         self.testname = self.__class__.__name__
+         self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
+         self.emulator = None
+-        self.config = '\n'.join([line.lstrip() for line in
+-                                 self.config.splitlines()]) + '\n'
+-        self.config += "BR2_JLEVEL={}\n".format(self.jlevel)
++        self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
+ 
+     def show_msg(self, msg):
+         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index 905b127c91..ef66b86113 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -6,7 +6,8 @@ import infra
+ 
+ class Builder(object):
+     def __init__(self, config, builddir, logtofile):
+-        self.config = config
++        self.config = '\n'.join([line.lstrip() for line in
++                                 config.splitlines()]) + '\n'
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+ 
+-- 
+2.13.0
