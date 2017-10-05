@@ -1,61 +1,48 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 5 Oct 2017 20:34:01 +0200
-Subject: [Buildroot] [git commit] vboot-utils: disable static futility
-Message-ID: <20171005184039.C4CE780FEF@busybox.osuosl.org>
+Date: Thu, 5 Oct 2017 20:33:39 +0200
+Subject: [Buildroot] [git commit] package/tor: fix openssl detection for
+	static builds
+Message-ID: <20171005184039.AC0107F96F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c10ba4b1eba589096447cce9b77191dc2d8388d
+commit: https://git.buildroot.net/buildroot/commit/?id=d2268adf5b9e19fba6094f53e397168c8a4b8abb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Possibly fixes
-http://autobuild.buildroot.net/results/fbe/fbe7892539cc1bf18f89d18c6609a5aa747647d0/
-http://autobuild.buildroot.net/results/4bc/4bc388618ff02dde26ae09db021434a936c8cc1b/
-and similar errors.
+Fixes
+http://autobuild.buildroot.net/results/8e6/8e639ab8912e7d884fd8e6dbb1ca8b49451dd766/
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+In function `zlib_stateful_expand_block':
+c_zlib.c:(.text+0x54): undefined reference to `inflate'
+/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+In function `zlib_stateful_compress_block':
+c_zlib.c:(.text+0xd4): undefined reference to `deflate'
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../vboot-utils/0004-Disable-static-futility.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/tor/0001-openssl-libz.patch | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/vboot-utils/0004-Disable-static-futility.patch b/package/vboot-utils/0004-Disable-static-futility.patch
-new file mode 100644
-index 0000000..649d316
---- /dev/null
-+++ b/package/vboot-utils/0004-Disable-static-futility.patch
-@@ -0,0 +1,30 @@
-+The package attempts to build a statically-linked host binary, futility_s,
-+which is not used anywhere in buildroot but may be causing build failures
-+if the build host lacks static libc.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1079,7 +1079,7 @@
-+ # new Firmware Utility
+diff --git a/package/tor/0001-openssl-libz.patch b/package/tor/0001-openssl-libz.patch
+index c70894e..9d3cf6e 100644
+--- a/package/tor/0001-openssl-libz.patch
++++ b/package/tor/0001-openssl-libz.patch
+@@ -11,7 +11,12 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ diff -uNr tor-0.3.1.7.org/configure.ac tor-0.3.1.7/configure.ac
+ --- tor-0.3.1.7.org/configure.ac	2017-09-15 15:34:06.000000000 +0200
+ +++ tor-0.3.1.7/configure.ac	2017-09-19 19:40:17.090538467 +0200
+-@@ -713,7 +713,7 @@
++@@ -709,11 +709,11 @@
++       fi
++   ])
 + 
-+ .PHONY: futil
-+-futil: ${FUTIL_STATIC_BIN} ${FUTIL_BIN}
-++futil: ${FUTIL_BIN}
-+ 
-+ ${FUTIL_STATIC_BIN}: ${FUTIL_STATIC_OBJS} ${UTILLIB}
-+ 	@${PRINTF} "    LD            $(subst ${BUILD}/,,$@)\n"
-+@@ -1091,10 +1091,10 @@
-+ 	${Q}${LD} -o $@ ${CFLAGS} ${LDFLAGS} $^ ${LDLIBS}
-+ 
-+ .PHONY: futil_install
-+-futil_install: ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
-++futil_install: ${FUTIL_BIN}
-+ 	@${PRINTF} "    INSTALL       futility\n"
-+ 	${Q}mkdir -p ${UB_DIR}
-+-	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
-++	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN}
-+ 	${Q}for prog in ${FUTIL_SYMLINKS}; do \
-+ 		ln -sf futility "${UB_DIR}/$$prog"; done
-+ 
++-TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto $TOR_LIB_GDI],
+++TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto -lz $TOR_LIB_GDI],
+      [#include <openssl/rand.h>],
+      [void RAND_add(const void *buf, int num, double entropy);],
+      [RAND_add((void*)0,0,0);], [],
