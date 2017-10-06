@@ -1,83 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 6 Oct 2017 18:41:57 +0200
-Subject: [Buildroot] [git commit] package/apache: bump to version 2.4.28
-Message-ID: <20171006163928.EDF278102A@busybox.osuosl.org>
+Date: Fri, 6 Oct 2017 18:43:16 +0200
+Subject: [Buildroot] [git commit] mosh: bump to version 1.3.2
+Message-ID: <20171006163929.162D380F47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cff68251e6cd2fe8ed421d7b07813256342a150
+commit: https://git.buildroot.net/buildroot/commit/?id=5e897285bfa7b06de1e63a35bcd66711a3f6b082
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix for CVE-2017-9798 is included in this release, so this patch is
-removed.
+And add hashes for the license files while we're at it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Update commit log: not a security bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/apache/0003-CVS-2017-9798.patch | 30 ------------------------------
- package/apache/apache.hash              |  4 ++--
- package/apache/apache.mk                |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
+ package/mosh/mosh.hash | 7 +++++--
+ package/mosh/mosh.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
-deleted file mode 100644
-index dc0a67a..0000000
---- a/package/apache/0003-CVS-2017-9798.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--core: Disallow Methods' registration at run time (.htaccess), they may
--be used only if registered at init time (httpd.conf).
--
--Calling ap_method_register() in children processes is not the right scope
--since it won't be shared for all requests.
--
--git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
--
--Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
--
--Downloaded from upstream repo:
--https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- a/server/core.c	2017/08/16 16:50:29	1805223
--+++ b/server/core.c	2017/09/08 13:13:11	1807754
--@@ -2266,6 +2266,12 @@
--             /* method has not been registered yet, but resource restriction
--              * is always checked before method handling, so register it.
--              */
--+            if (cmd->pool == cmd->temp_pool) {
--+                /* In .htaccess, we can't globally register new methods. */
--+                return apr_psprintf(cmd->pool, "Could not register method '%s' "
--+                                   "for %s from .htaccess configuration",
--+                                    method, cmd->cmd->name);
--+            }
--             methnum = ap_method_register(cmd->pool,
--                                          apr_pstrdup(cmd->pool, method));
--         }
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index f29ae45..d5e985f 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
--sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.28.tar.bz2.sha256
-+sha256 c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666 httpd-2.4.28.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 857e538..d8f8580 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+index 4dae51d..baffe1f 100644
+--- a/package/mosh/mosh.hash
++++ b/package/mosh/mosh.hash
+@@ -1,2 +1,5 @@
+-# From https://mailman.mit.edu/pipermail/mosh-users/2017-March/000340.html
+-sha256 320e12f461e55d71566597976bd9440ba6c5265fa68fbf614c6f1c8401f93376 mosh-1.3.0.tar.gz
++# From https://mailman.mit.edu/pipermail/mosh-users/2017-July/000357.html
++sha256 da600573dfa827d88ce114e0fed30210689381bbdcff543c931e4d6a2e851216 mosh-1.3.2.tar.gz
++# Locally calculcated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 8042495ddc8d99b883335d53552554eccf825fc1f0ba487d0f8e6656baaa8199  COPYING.iOS
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index 06502f6..fa6ab17 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.27
-+APACHE_VERSION = 2.4.28
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-MOSH_VERSION = 1.3.0
++MOSH_VERSION = 1.3.2
+ MOSH_SITE = https://mosh.org
+ MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPL-3.0+ with exception
