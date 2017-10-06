@@ -1,27 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Oct 2017 12:32:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
-	security bump to version 1.19.4
-In-Reply-To: <20171006052259.8439-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 6 Oct 2017 07:22:59 +0200")
-References: <20171006052259.8439-1-bernd.kuhls@t-online.de>
-Message-ID: <87poa0ftxa.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Oct 2017 12:35:38 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/atmel: bump to linux4sam_5.7
+In-Reply-To: <20171006100825.11378-1-nicolas.ferre@microchip.com> (Nicolas
+ Ferre's message of "Fri, 6 Oct 2017 12:08:25 +0200")
+References: <20171006100825.11378-1-nicolas.ferre@microchip.com>
+Message-ID: <87lgkofts5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Nicolas" == Nicolas Ferre <nicolas.ferre@microchip.com> writes:
 
- > Fixes CVE-2017-13721 & CVE-2017-13723:
- > https://lists.x.org/archives/xorg-announce/2017-October/002809.html
+ > Bump at91sam9x5ek, atmel_sama5d2_xplained, atmel_sama5d3_xplained and
+ > atmel_sama5d4_xplained all variants to linux4sam_5.7. The 3 foundation
+ > components have their tags changed (AT91Bootstrap, U-Boot, Linux kernel).
 
- > Added all hashes provided by upstream.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
 Committed, thanks.
+
+ > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.7"
+
+4.9.53 is out, so time to rebase ;)
 
 -- 
 Bye, Peter Korsgaard
