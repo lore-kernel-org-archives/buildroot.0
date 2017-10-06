@@ -1,36 +1,45 @@
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Date: Fri, 6 Oct 2017 13:34:54 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/atmel: bump to linux4sam_5.7
-In-Reply-To: <87lgkofts5.fsf@dell.be.48ers.dk>
-References: <20171006100825.11378-1-nicolas.ferre@microchip.com>
- <87lgkofts5.fsf@dell.be.48ers.dk>
-Message-ID: <46c1f6fc-5310-2faf-5c54-459c8d7ab4da@microchip.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  6 Oct 2017 13:43:53 +0200
+Subject: [Buildroot] [PATCH] mosh: bump to version 1.3.2
+Message-ID: <20171006114353.1814-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/10/2017 at 12:35, Peter Korsgaard wrote:
->>>>>> "Nicolas" == Nicolas Ferre <nicolas.ferre@microchip.com> writes:
-> 
->  > Bump at91sam9x5ek, atmel_sama5d2_xplained, atmel_sama5d3_xplained and
->  > atmel_sama5d4_xplained all variants to linux4sam_5.7. The 3 foundation
->  > components have their tags changed (AT91Bootstrap, U-Boot, Linux kernel).
-> 
->  > Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> 
-> Committed, thanks.
-> 
->  > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.7"
-> 
-> 4.9.53 is out, so time to rebase ;)
+And add hashes for the license files while we're at it.
 
-Yeah, I thought 4.9.52 would be good at least for release announcement,
-but... no, Crap! ;-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosh/mosh.hash | 7 +++++--
+ package/mosh/mosh.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Anyway, we'll see if I have better timing for linux4sam 5.8...
-
-Thanks Peter, cheers,
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+index 4dae51df64..baffe1f143 100644
+--- a/package/mosh/mosh.hash
++++ b/package/mosh/mosh.hash
+@@ -1,2 +1,5 @@
+-# From https://mailman.mit.edu/pipermail/mosh-users/2017-March/000340.html
+-sha256 320e12f461e55d71566597976bd9440ba6c5265fa68fbf614c6f1c8401f93376 mosh-1.3.0.tar.gz
++# From https://mailman.mit.edu/pipermail/mosh-users/2017-July/000357.html
++sha256 da600573dfa827d88ce114e0fed30210689381bbdcff543c931e4d6a2e851216 mosh-1.3.2.tar.gz
++# Locally calculcated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 8042495ddc8d99b883335d53552554eccf825fc1f0ba487d0f8e6656baaa8199  COPYING.iOS
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index 06502f6e0c..fa6ab17010 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSH_VERSION = 1.3.0
++MOSH_VERSION = 1.3.2
+ MOSH_SITE = https://mosh.org
+ MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPL-3.0+ with exception
 -- 
-Nicolas Ferre
+2.11.0
