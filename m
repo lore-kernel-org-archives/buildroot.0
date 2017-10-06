@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 22:50:44 +0200
-Subject: [Buildroot] [next v2 3/7] testing/infra/builder: allow to
- override logfile
-In-Reply-To: <20170826222056.6119-3-ricardo.martincoski@gmail.com>
+Date: Fri, 6 Oct 2017 23:02:32 +0200
+Subject: [Buildroot] [next v2 2/7] testing/infra/builder: build with
+ target and environment
+In-Reply-To: <6455fdd0-c445-09cd-d249-ebfaf275c3fb@mind.be>
 References: <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
- <20170826222056.6119-3-ricardo.martincoski@gmail.com>
-Message-ID: <30031227-952e-c7c0-cae1-f9e040d9b201@mind.be>
+ <20170826222056.6119-2-ricardo.martincoski@gmail.com>
+ <6455fdd0-c445-09cd-d249-ebfaf275c3fb@mind.be>
+Message-ID: <8f08d633-1956-c734-7317-fdf0b849123f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,73 +15,21 @@ To: buildroot@busybox.net
 
 
 
-On 27-08-17 00:20, Ricardo Martincoski wrote:
-> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+On 06-10-17 22:42, Arnout Vandecappelle wrote:
 > 
-> Some test cases can use only the configure step as setup, while the
-> build is part of the test itself.
-> Allow the caller to build() to override the logfile used. This way all
-> the log for the actual test can be directed to *-run.log.
+> On 27-08-17 00:20, Ricardo Martincoski wrote:
+>> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+[snip]
+>> +        cmd = ["make", "O={}".format(self.builddir)]
+>> +        if makecmdline:
+>> +            cmd += makecmdline
+>  This allows only a single options to be passed. I would require make_extra_opts
+> to be an iterable and do cmd.extend(make_extra_opts) here.
 
- This feels weird to me. If you need this kind of argument, then there is
-something wrong with the logfile member of Builder.
-
- Your explanation here seems to suggest that the only reason to have this is to
-split the -build and the -run logs so the -run logs contains something useful
-for the git tests. I don't think that that's a good enough reason. What's wrong
-with collecting all the output in the -build log?
-
- But looking at later patches, it looks like you're actually trying to solve a
-problem here that a file is opened from two places and they run over each other.
-If that is the case, I think a better solution needs to be found to handle the
-log files. Could be as simple as the log file being maintained by the test class
-itself, and passed as an argument to the Builder functions every time.
+ Sorry, += is the same as extend, of course...
 
  Regards,
  Arnout
-
-> 
-> This change will be needed to make nice logs for git downloader test
-> cases.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> ---
-> Changes v1 -> v2:
->   - new patch to adapt the test infra to test git download
-> ---
->  support/testing/infra/builder.py | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-> index de7c141a76..d634c211ac 100644
-> --- a/support/testing/infra/builder.py
-> +++ b/support/testing/infra/builder.py
-> @@ -46,7 +46,13 @@ class Builder(object):
->      # that calls make.
->      # e.g. env={"BR2_DL_DIR": "/path"}
->      #
-> -    def build(self, makecmdline=None, env=None):
-> +    # ovrdlogfile: when the build is part of the actual test case instead of
-> +    # the setup, this parameter can be used to override the logfile used.
-> +    # e.g. ovrdlogfile=handler_for_the_run_log
-> +    #
-> +    def build(self, makecmdline=None, env=None, ovrdlogfile=None):
-> +        logfile = ovrdlogfile or self.logfile
-> +
->          buildenv = os.environ.copy()
->          if env:
->              buildenv.update(env)
-> @@ -55,7 +61,7 @@ class Builder(object):
->          if makecmdline:
->              cmd += makecmdline
->  
-> -        ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
-> +        ret = subprocess.call(cmd, stdout=logfile, stderr=logfile,
->                                env=buildenv)
->          if ret != 0:
->              raise SystemError("Build failed")
-> 
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
