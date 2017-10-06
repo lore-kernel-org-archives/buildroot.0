@@ -1,69 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 18:48:38 +0200
-Subject: [Buildroot] [PATCH] u-boot: add option to specify config
- fragments
-In-Reply-To: <20171006134633.22940-1-peter@korsgaard.com>
-References: <20171006134633.22940-1-peter@korsgaard.com>
-Message-ID: <ce535501-4703-fe8e-83fa-f706c3871079@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 6 Oct 2017 19:06:05 +0200
+Subject: [Buildroot] [git commit] support/testing: fix remaining code style
+Message-ID: <20171006165925.C927280489@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=022d8df1b5e2c5daf3b5b6d0ed8f740164d3be81
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix the remaining code style warnings from flake8:
+ - properly indent continuation lines;
+ - use proper code to test a parameter is not None.
 
-On 06-10-17 15:46, Peter Korsgaard wrote:
-> U-Boot nowadays also uses kconfig, so we can handle config fragments like we
-> do for barebox/busybox/linux.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/testing/tests/init/base.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  boot/uboot/Config.in | 6 ++++++
->  boot/uboot/uboot.mk  | 1 +
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 84b7fb42ee..8215912339 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -129,6 +129,12 @@ config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
->  	depends on BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
->  	help
->  	  Path to the U-Boot configuration file.
-> +
-> +config BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
-> +	string "Additional configuration fragment files"
-> +	help
-> +	  A space-separated list of configuration fragment files,
-> +	  that will be merged to the main U-Boot configuration file.
->  endif
->  
->  config BR2_TARGET_UBOOT_NEEDS_DTC
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 14a8cc949a..fdacf16856 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -196,6 +196,7 @@ else ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
->  UBOOT_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
->  endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
->  
-> +UBOOT_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES))
->  UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
->  UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
->  define UBOOT_HELP_CMDS
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
+index dea46a4..75cfbe9 100644
+--- a/support/testing/tests/init/base.py
++++ b/support/testing/tests/init/base.py
+@@ -18,7 +18,7 @@ class InitSystemBase(infra.basetest.BRTest):
+         else:
+             kernel = os.path.join(self.builddir, "images", kernel)
+             options.extend(["-dtb", os.path.join(self.builddir, "images",
+-                                             "{}.dtb".format(dtb))])
++                                                 "{}.dtb".format(dtb))])
+ 
+         kernel_cmdline = ["root=/dev/mmcblk0",
+                           "rootfstype={}".format(fs_type),
+@@ -26,7 +26,7 @@ class InitSystemBase(infra.basetest.BRTest):
+                           "ro",
+                           "console=ttyAMA0"]
+ 
+-        if not init is None:
++        if init is not None:
+             kernel_cmdline.extend(["init={}".format(init)])
+ 
+         self.emulator.boot(arch="armv7",
