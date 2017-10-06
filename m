@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 20:59:14 +0200
-Subject: [Buildroot] [PATCH 2/2] libressl: fix musl build with older
- kernel headers
-In-Reply-To: <639a3f4f5d58b498ba75f4a206203bb041a8c3e7.1506676404.git.baruch@tkos.co.il>
-References: <fcd9c70d93d412866e9f973469a81acfffa1860a.1506676404.git.baruch@tkos.co.il>
- <639a3f4f5d58b498ba75f4a206203bb041a8c3e7.1506676404.git.baruch@tkos.co.il>
-Message-ID: <0f0f617a-06a3-b999-92b3-d570444150fa@mind.be>
+Date: Fri, 6 Oct 2017 21:00:52 +0200
+Subject: [Buildroot] [PATCH] lbase64: fix build
+In-Reply-To: <20170929165906.18974-1-francois.perrad@gadz.org>
+References: <20170929165906.18974-1-francois.perrad@gadz.org>
+Message-ID: <ac7f279e-49c9-d16d-69c8-5f5cd16e0fb3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +12,37 @@ To: buildroot@busybox.net
 
 
 
-On 29-09-17 11:13, Baruch Siach wrote:
-> musl provides its own SYS_getrandom definition, but not GRND_NONBLOCK.
-> This breaks the build with kernel headers older than v3.17. Add a patch
-> adding a local definition of GRND_NONBLOCK to fix the build.
+On 29-09-17 18:59, Francois Perrad wrote:
+> see http://autobuild.buildroot.net/results/b56/b567096cbfdb89b1895924051265c56204ffb512/
 > 
-> The following defconfig reproduces the build failure:
-> 
-> BR2_x86_pentium_mmx=y
-> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-> BR2_KERNEL_HEADERS_3_12=y
-> BR2_PACKAGE_LIBRESSL=y
-> 
-> The getentropy_linux.c file is in upstream tarball, but not in its git
-> repository. It originates form OpenBSD. For this reason the patch is
-> against the tarball, but not git formatted.
-> 
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- Applied to master, thanks.
+ I added a commit message and applied to master, thanks.
 
-> ---
->  package/libressl/0002-fix-musl.patch | 38 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/libressl/0002-fix-musl.patch
-> 
-> diff --git a/package/libressl/0002-fix-musl.patch b/package/libressl/0002-fix-musl.patch
-
- But I changed the name to correspond to the subject line.
+ However, wouldn't an upstreamable patch have been better?
 
  Regards,
  Arnout
+
+> ---
+>  package/lbase64/lbase64.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/lbase64/lbase64.mk b/package/lbase64/lbase64.mk
+> index fd78a6ccd..0225fc67c 100644
+> --- a/package/lbase64/lbase64.mk
+> +++ b/package/lbase64/lbase64.mk
+> @@ -12,7 +12,8 @@ LBASE64_LICENSE_FILES = README
+>  LBASE64_DEPENDENCIES = luainterpreter
+>  
+>  define LBASE64_BUILD_CMDS
+> -	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) so
+> +	$(MAKE1) $(TARGET_CONFIGURE_OPTS) \
+> +		CFLAGS="$(TARGET_CFLAGS) -fPIC" -C $(@D) so
+>  endef
+>  
+>  define LBASE64_INSTALL_TARGET_CMDS
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
