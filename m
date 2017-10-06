@@ -1,92 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 20:56:18 +0200
-Subject: [Buildroot] [PATCH v1] evemu: fix PATH_MAX related compile
- failure
-In-Reply-To: <20171001180414.12072-1-ps.report@gmx.net>
-References: <20171001180414.12072-1-ps.report@gmx.net>
-Message-ID: <94687a02-6072-03f0-7438-b0ce37852160@mind.be>
+Date: Fri, 6 Oct 2017 20:59:14 +0200
+Subject: [Buildroot] [PATCH 2/2] libressl: fix musl build with older
+ kernel headers
+In-Reply-To: <639a3f4f5d58b498ba75f4a206203bb041a8c3e7.1506676404.git.baruch@tkos.co.il>
+References: <fcd9c70d93d412866e9f973469a81acfffa1860a.1506676404.git.baruch@tkos.co.il>
+ <639a3f4f5d58b498ba75f4a206203bb041a8c3e7.1506676404.git.baruch@tkos.co.il>
+Message-ID: <0f0f617a-06a3-b999-92b3-d570444150fa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Peter,
 
-On 01-10-17 20:04, Peter Seiderer wrote:
-> Fixes [1]:
+
+On 29-09-17 11:13, Baruch Siach wrote:
+> musl provides its own SYS_getrandom definition, but not GRND_NONBLOCK.
+> This breaks the build with kernel headers older than v3.17. Add a patch
+> adding a local definition of GRND_NONBLOCK to fix the build.
 > 
->   find_event_devices.c: In function 'find_event_devices':
-> find_event_devices.c:60:14: error: 'PATH_MAX' undeclared (first use in this function)
->    char fname[PATH_MAX];
->               ^~~~~~~~
+> The following defconfig reproduces the build failure:
 > 
-> [1] http://autobuild.buildroot.net/results/607/607bb29231f80a138e1b5423bc01c89e36efe78c/
+> BR2_x86_pentium_mmx=y
+> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+> BR2_KERNEL_HEADERS_3_12=y
+> BR2_PACKAGE_LIBRESSL=y
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> The getentropy_linux.c file is in upstream tarball, but not in its git
+> repository. It originates form OpenBSD. For this reason the patch is
+> against the tarball, but not git formatted.
+> 
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+ Applied to master, thanks.
+
 > ---
->  ...0001-Fix-PATH_MAX-related-compile-failure.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
+>  package/libressl/0002-fix-musl.patch | 38 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/libressl/0002-fix-musl.patch
 > 
-> diff --git a/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch b/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
-> new file mode 100644
-> index 0000000000..4f4f795e07
-> --- /dev/null
-> +++ b/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
-> @@ -0,0 +1,35 @@
-> +From 8164f4e7707012fcfce0cd178cc326e8af8ce8bc Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Sun, 1 Oct 2017 19:54:53 +0200
-> +Subject: [PATCH] Fix PATH_MAX related compile failure.
+> diff --git a/package/libressl/0002-fix-musl.patch b/package/libressl/0002-fix-musl.patch
 
- A better commit message would be "Include limits.h for PATH_MAX"
-
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes:
-> +
-> +  find_event_devices.c: In function ?find_event_devices?:
-> +  find_event_devices.c:60:14: error: ?PATH_MAX? undeclared (first use in this function)
-> +     char fname[PATH_MAX];
-> +                ^~~~~~~~
-
- And also add:
-
-when building with musl.
-
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + tools/find_event_devices.c | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/tools/find_event_devices.c b/tools/find_event_devices.c
-> +index 2a43d54..e5dbcd2 100644
-> +--- a/tools/find_event_devices.c
-> ++++ b/tools/find_event_devices.c
-> +@@ -24,6 +24,7 @@
-> + 
-> + #define _GNU_SOURCE
-> + #include <linux/input.h>
-> ++#include <linux/limits.h>
-
- The proper place (according to POSIX) is limits.h, not linux/limits.h.
-
- Also, did you send the patch upstream?
+ But I changed the name to correspond to the subject line.
 
  Regards,
  Arnout
-
-> + #include <dirent.h>
-> + #include <string.h>
-> + #include <stdio.h>
-> +-- 
-> +2.14.1
-> +
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
