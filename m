@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 19:10:42 +0200
-Subject: [Buildroot] [PATCH v2 5/6] .flake8: add config file for Python
-	code style
-In-Reply-To: <20171005214212.27613-5-ricardo.martincoski@gmail.com>
+Date: Fri, 6 Oct 2017 19:16:35 +0200
+Subject: [Buildroot] [PATCH v2 6/6] support/testing: fix remaining code
+	style
+In-Reply-To: <20171005214212.27613-6-ricardo.martincoski@gmail.com>
 References: <20170929022713.2967-1-ricardo.martincoski@gmail.com>
- <20171005214212.27613-5-ricardo.martincoski@gmail.com>
-Message-ID: <fdf33648-ab35-9b69-8f25-ee00ebc77e31@mind.be>
+ <20171005214212.27613-6-ricardo.martincoski@gmail.com>
+Message-ID: <84479e08-ca74-2ebe-4d14-13758b227689@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +15,46 @@ To: buildroot@busybox.net
 
 
 On 05-10-17 23:42, Ricardo Martincoski wrote:
-> We recommend wrapping at 80 columns but we accept 132 columns when it
-> makes more readable.
+> Fix the remaining code style warnings from flake8:
+>  - properly indent continuation lines;
+>  - use proper code to test a parameter is not None.
 > 
-> Follow up of discussion at this thread:
-> http://lists.busybox.net/pipermail/buildroot/2017-October/203624.html
-
- Yann said somewhere in that thread that he prefers files that don't start with
-a ., but if that really bothers him he should alias ls='ls -A' :-) So I applied
-as is.
-
- Regards,
- Arnout
-
-> 
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > ---
 > Changes v1 -> v2:
->    - new patch
-> 
-> Following patch is replaced by this one:
-> http://patchwork.ozlabs.org/patch/820324/
+>    - renumbered 4 -> 6;
+>    - keep only a small part of the old patch;
+>    - use 'if x is not None' instead of 'if x:' (Yann E. MORIN);
+>    - update commit log.
 > 
 > Number of warnings reported by flake8 for the test infra:
-> before:  17
-> after:    2
-> ---
->  .flake8 | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 .flake8
-> 
-> diff --git a/.flake8 b/.flake8
-> new file mode 100644
-> index 0000000000..afdb967930
-> --- /dev/null
-> +++ b/.flake8
-> @@ -0,0 +1,2 @@
-> +[flake8]
-> +max-line-length=132
-> 
+> before:   2
+> after:    0
+
+ I still have a warning:
+
+$ python -m flake8 support/testing/
+support/testing/tests/init/base.py:45:9: N803 argument name should be lowercase
+
+ Any idea why you didn't catch this?
+
+
+ Also, there are still warnings in support/scripts and utils, care to take a
+look at those?
+
+
+ Also, you used to have a patch that ran flake8 from .gitlab-ci.yml, but it
+seems to be gone from patchwork.
+
+
+ And finally, if you have nothing else to do :-), maybe you could make the tests
+python3 compatible. For me, it'd be fine to even require python3 to be able to
+run the tests, if that simplifies things.
+
+
+ Regards,
+ Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
