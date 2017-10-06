@@ -1,81 +1,97 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 6 Oct 2017 20:39:15 +0200
-Subject: [Buildroot] [git commit] libressl: fix musl build with older kernel
-	headers
-Message-ID: <20171006184939.E64E881150@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 6 Oct 2017 20:56:18 +0200
+Subject: [Buildroot] [PATCH v1] evemu: fix PATH_MAX related compile
+ failure
+In-Reply-To: <20171001180414.12072-1-ps.report@gmx.net>
+References: <20171001180414.12072-1-ps.report@gmx.net>
+Message-ID: <94687a02-6072-03f0-7438-b0ce37852160@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7adc268b58a1eea9967ed5c7a3b7b4471575d73a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Peter,
 
-musl provides its own SYS_getrandom definition, but not GRND_NONBLOCK.
-This breaks the build with kernel headers older than v3.17. Add a patch
-adding a local definition of GRND_NONBLOCK to fix the build.
+On 01-10-17 20:04, Peter Seiderer wrote:
+> Fixes [1]:
+> 
+>   find_event_devices.c: In function 'find_event_devices':
+> find_event_devices.c:60:14: error: 'PATH_MAX' undeclared (first use in this function)
+>    char fname[PATH_MAX];
+>               ^~~~~~~~
+> 
+> [1] http://autobuild.buildroot.net/results/607/607bb29231f80a138e1b5423bc01c89e36efe78c/
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...0001-Fix-PATH_MAX-related-compile-failure.patch | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
+> 
+> diff --git a/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch b/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
+> new file mode 100644
+> index 0000000000..4f4f795e07
+> --- /dev/null
+> +++ b/package/evemu/0001-Fix-PATH_MAX-related-compile-failure.patch
+> @@ -0,0 +1,35 @@
+> +From 8164f4e7707012fcfce0cd178cc326e8af8ce8bc Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sun, 1 Oct 2017 19:54:53 +0200
+> +Subject: [PATCH] Fix PATH_MAX related compile failure.
 
-The following defconfig reproduces the build failure:
+ A better commit message would be "Include limits.h for PATH_MAX"
 
-BR2_x86_pentium_mmx=y
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_KERNEL_HEADERS_3_12=y
-BR2_PACKAGE_LIBRESSL=y
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes:
+> +
+> +  find_event_devices.c: In function ?find_event_devices?:
+> +  find_event_devices.c:60:14: error: ?PATH_MAX? undeclared (first use in this function)
+> +     char fname[PATH_MAX];
+> +                ^~~~~~~~
 
-The getentropy_linux.c file is in upstream tarball, but not in its git
-repository. It originates from OpenBSD. For this reason the patch is
-against the tarball, but not git formatted.
+ And also add:
 
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-[Arnout: change filename to correspond to how git creates it]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...ix-build-with-musl-and-older-Linux-kernel.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+when building with musl.
 
-diff --git a/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch b/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
-new file mode 100644
-index 0000000..ddb9534
---- /dev/null
-+++ b/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
-@@ -0,0 +1,38 @@
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 29 Sep 2017 10:06:52 +0300
-+Subject: [PATCH] Fix build with musl and older Linux kernel
-+
-+The musl libc carries its own copy of Linux system calls. When building
-+with Linux headers older than v3.17, musl provides SYS_getrandom
-+definition, but not GRND_NONBLOCK. This causes build failure for
-+libressl and openntpd:
-+
-+getentropy_linux.c: In function 'getentropy_getrandom':
-+getentropy_linux.c:205:42: error: 'GRND_NONBLOCK' undeclared (first use in this function)
-+   ret = syscall(SYS_getrandom, buf, len, GRND_NONBLOCK);
-+                                          ^~~~~~~~~~~~~
-+
-+Define GRND_NONBLOCK locally when its definition is missing to fix the
-+build. There should be no run-time effect. Older kernels return ENOSYS
-+for unsupported syscall().
-+
-+[ from upstream pull request with file location changed ]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/libressl-portable/openbsd/pull/82
-+
-+diff -Nuar libressl-2.5.5-orig/crypto/compat/getentropy_linux.c libressl-2.5.5/crypto/compat/getentropy_linux.c
-+--- libressl-2.5.5-orig/crypto/compat/getentropy_linux.c	2017-07-09 13:59:48.000000000 +0300
-++++ libressl-2.5.5/crypto/compat/getentropy_linux.c	2017-09-29 10:03:32.447958829 +0300
-+@@ -194,6 +194,11 @@
-+ }
-+ 
-+ #ifdef SYS_getrandom
-++
-++#ifndef GRND_NONBLOCK
-++#define GRND_NONBLOCK   0x0001
-++#endif
-++
-+ static int
-+ getentropy_getrandom(void *buf, size_t len)
-+ {
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + tools/find_event_devices.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/tools/find_event_devices.c b/tools/find_event_devices.c
+> +index 2a43d54..e5dbcd2 100644
+> +--- a/tools/find_event_devices.c
+> ++++ b/tools/find_event_devices.c
+> +@@ -24,6 +24,7 @@
+> + 
+> + #define _GNU_SOURCE
+> + #include <linux/input.h>
+> ++#include <linux/limits.h>
+
+ The proper place (according to POSIX) is limits.h, not linux/limits.h.
+
+ Also, did you send the patch upstream?
+
+ Regards,
+ Arnout
+
+> + #include <dirent.h>
+> + #include <string.h>
+> + #include <stdio.h>
+> +-- 
+> +2.14.1
+> +
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
