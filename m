@@ -1,45 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  6 Oct 2017 13:43:53 +0200
-Subject: [Buildroot] [PATCH] mosh: bump to version 1.3.2
-Message-ID: <20171006114353.1814-1-peter@korsgaard.com>
+From: daggs <daggs@gmx.com>
+Date: Fri, 6 Oct 2017 14:26:29 +0200
+Subject: [Buildroot] [PATCH] odroidc2_defconfig: bump kernel and u-boot
+ versions
+In-Reply-To: <20171005192637.19310-1-peter@korsgaard.com>
+References: <20171005192637.19310-1-peter@korsgaard.com>
+Message-ID: <trinity-07ae3f61-868d-4a5a-82d7-d6cf77f26f36-1507292789886@3c-app-mailcom-bs07>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And add hashes for the license files while we're at it.
+Greetings Peter,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosh/mosh.hash | 7 +++++--
- package/mosh/mosh.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+> Sent: Thursday, October 05, 2017 at 10:26 PM
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Cc: daggs at gmx.com
+> Subject: [Buildroot] [PATCH] odroidc2_defconfig: bump kernel and u-boot versions
+>
+> To the latest commits on the odroidc2-3.14.y / odroidc2-v2015.01 branches.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  configs/odroidc2_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+> index f2d82296db..f52f29adeb 100644
+> --- a/configs/odroidc2_defconfig
+> +++ b/configs/odroidc2_defconfig
+> @@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a7fe6f2258e30c7a547908b5480bdbe6b56d6d3c"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f966ebfc0e8dc88c7931b4640b8a1b4bc2e13faa"
+>  BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
+> @@ -28,7 +28,7 @@ BR2_LINUX_KERNEL_IMAGE=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="eb5d2d16fd45f52ec49e9b4ff9d562630c08e61c"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cff3edb675933ea2e2ecd659eab127a42f3777df"
+>  BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
+>  
+>  # Required tools to create the SD image
+> -- 
+> 2.11.0
 
-diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
-index 4dae51df64..baffe1f143 100644
---- a/package/mosh/mosh.hash
-+++ b/package/mosh/mosh.hash
-@@ -1,2 +1,5 @@
--# From https://mailman.mit.edu/pipermail/mosh-users/2017-March/000340.html
--sha256 320e12f461e55d71566597976bd9440ba6c5265fa68fbf614c6f1c8401f93376 mosh-1.3.0.tar.gz
-+# From https://mailman.mit.edu/pipermail/mosh-users/2017-July/000357.html
-+sha256 da600573dfa827d88ce114e0fed30210689381bbdcff543c931e4d6a2e851216 mosh-1.3.2.tar.gz
-+# Locally calculcated
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256 8042495ddc8d99b883335d53552554eccf825fc1f0ba487d0f8e6656baaa8199  COPYING.iOS
-diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-index 06502f6e0c..fa6ab17010 100644
---- a/package/mosh/mosh.mk
-+++ b/package/mosh/mosh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSH_VERSION = 1.3.0
-+MOSH_VERSION = 1.3.2
- MOSH_SITE = https://mosh.org
- MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
- MOSH_LICENSE = GPL-3.0+ with exception
--- 
-2.11.0
+do you know by any chance if it was tested? if not, I'd like to test it before it gets pushed if it is ok by you.
+
+Dagg.
