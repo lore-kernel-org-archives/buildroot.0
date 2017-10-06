@@ -1,96 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 6 Oct 2017 08:28:36 +0300
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to
- version 2.4.28
-In-Reply-To: <20171006052430.8546-1-bernd.kuhls@t-online.de>
-References: <20171006052430.8546-1-bernd.kuhls@t-online.de>
-Message-ID: <20171006052836.ooeixnyh3xqeheir@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 06 Oct 2017 07:51:56 +0200
+Subject: [Buildroot] [PATCH 1/2] openntpd: fix musl build with older
+	kernel headers
+In-Reply-To: <20171006043515.chpkvp4z2vpmd2bu@tarshish> (Baruch Siach's
+ message of "Fri, 6 Oct 2017 07:35:15 +0300")
+References: <fcd9c70d93d412866e9f973469a81acfffa1860a.1506676404.git.baruch@tkos.co.il>
+ <871smhic23.fsf@dell.be.48ers.dk>
+ <20171006043515.chpkvp4z2vpmd2bu@tarshish>
+Message-ID: <87y3oog6wz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Fri, Oct 06, 2017 at 07:24:30AM +0200, Bernd Kuhls wrote:
-> Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
+Hi,
 
-Buildroot already carries the patch fixing this vulnerability. So this bump 
-does not that.
+ >> FYI, I believe upstream openntpd development only supports openbsd,
+ >> similar to E.G. openssh, and the linux specific code is in
+ >> openntpd-portable:
+ >> 
+ >> https://github.com/openntpd-portable/openntpd-portable
 
-baruch
+ > The getentropy_linux.c file is not in the openntpd-portable git repo:
 
-> Removed patch applied upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/apache/0003-CVS-2017-9798.patch | 30 ------------------------------
->  package/apache/apache.hash              |  4 ++--
->  package/apache/apache.mk                |  2 +-
->  3 files changed, 3 insertions(+), 33 deletions(-)
->  delete mode 100644 package/apache/0003-CVS-2017-9798.patch
-> 
-> diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
-> deleted file mode 100644
-> index dc0a67a1b7..0000000000
-> --- a/package/apache/0003-CVS-2017-9798.patch
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -core: Disallow Methods' registration at run time (.htaccess), they may
-> -be used only if registered at init time (httpd.conf).
-> -
-> -Calling ap_method_register() in children processes is not the right scope
-> -since it won't be shared for all requests.
-> -
-> -git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
-> -
-> -Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
-> -
-> -Downloaded from upstream repo:
-> -https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -
-> ---- a/server/core.c	2017/08/16 16:50:29	1805223
-> -+++ b/server/core.c	2017/09/08 13:13:11	1807754
-> -@@ -2266,6 +2266,12 @@
-> -             /* method has not been registered yet, but resource restriction
-> -              * is always checked before method handling, so register it.
-> -              */
-> -+            if (cmd->pool == cmd->temp_pool) {
-> -+                /* In .htaccess, we can't globally register new methods. */
-> -+                return apr_psprintf(cmd->pool, "Could not register method '%s' "
-> -+                                   "for %s from .htaccess configuration",
-> -+                                    method, cmd->cmd->name);
-> -+            }
-> -             methnum = ap_method_register(cmd->pool,
-> -                                          apr_pstrdup(cmd->pool, method));
-> -         }
-> diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-> index f29ae45187..d5e985f678 100644
-> --- a/package/apache/apache.hash
-> +++ b/package/apache/apache.hash
-> @@ -1,2 +1,2 @@
-> -# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
-> -sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
-> +# From http://www.apache.org/dist/httpd/httpd-2.4.28.tar.bz2.sha256
-> +sha256 c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666 httpd-2.4.28.tar.bz2
-> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> index 857e538346..d8f8580036 100644
-> --- a/package/apache/apache.mk
-> +++ b/package/apache/apache.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -APACHE_VERSION = 2.4.27
-> +APACHE_VERSION = 2.4.28
->  APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
->  APACHE_SITE = http://archive.apache.org/dist/httpd
->  APACHE_LICENSE = Apache-2.0
+ >   https://github.com/openntpd-portable/openntpd-portable/tree/master/compat
+
+Sorry - You're right, I must have been tired yesterday evening.
+
+ > It is apparently copied when generating the tarball from the code openbsd 
+ > libressl:
+
+>   https://github.com/libressl-portable/openbsd/blob/master/src/lib/libcrypto/arc4random/getentropy_linux.c
+
+What a mess :/
+
+ > The same goes for libressl-portable, the target of the second patch in this 
+ > series. For that reason the upstream pull request is against the openbsd tree, 
+ > the real upstream for that file.
+
+Ok, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
