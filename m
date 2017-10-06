@@ -1,41 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 19:07:56 +0200
-Subject: [Buildroot] [PATCH v2 1/6] support/testing: allow to indent
- ccache defconfig fragment
-In-Reply-To: <20171005214212.27613-1-ricardo.martincoski@gmail.com>
+Date: Fri, 6 Oct 2017 19:09:43 +0200
+Subject: [Buildroot] [PATCH v2 4/6] testing/tests/init: use lowercase
+	method names
+In-Reply-To: <20171005214212.27613-4-ricardo.martincoski@gmail.com>
 References: <20170929022713.2967-1-ricardo.martincoski@gmail.com>
- <20171005214212.27613-1-ricardo.martincoski@gmail.com>
-Message-ID: <8c06086e-15a4-71f4-14ac-18fd17341baf@mind.be>
+ <20171005214212.27613-4-ricardo.martincoski@gmail.com>
+Message-ID: <86443cc6-ea89-6d94-f833-685a9d86e029@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ricardo,
+
 
 On 05-10-17 23:42, Ricardo Martincoski wrote:
-> Move the strip out of leading spaces in defconfig fragments from the
-> BRTest class to the Builder class. It actually postpones the strip out,
-> consequentially allowing test cases to post-process the defconfig in
-> their own __init__ before calling the __init__ method from BRTest.
+> Use method naming convention from PEP8 as other test cases already do.
 > 
-> Moving this code to the Builder class also allows any new test class
-> that inherits from BRTest to reuse the same code even if the new class
-> overrides the setUp method.
-> 
-> At same time, prepend a newline to the jlevel handling otherwise it
-> would stop working for defconfig fragments that don't end in a newline.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> sed \
+>   -e 's,startEmulator,start_emulator,g' \
+>   -e 's,checkInit,check_init,g' \
+>   -e 's,checkNetwork,check_network,g' \
+>   -i support/testing/tests/init/*.py
 
- Series applied to master, thanks! Some remarks in separate mails.
+ Very nice that you put this in the commit log, makes it easy to double-check
+the patch. Personally, I'd have writting it as
+
+find support/testing -name \*.py | xargs sed -i ...
+
+so it works across directories, but that's not relevant now :-)
 
  Regards,
  Arnout
 
-[snip]
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
