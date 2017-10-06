@@ -1,46 +1,233 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 6 Oct 2017 19:06:05 +0200
-Subject: [Buildroot] [git commit] support/testing: fix remaining code style
-Message-ID: <20171006165925.C927280489@busybox.osuosl.org>
+Date: Fri, 6 Oct 2017 18:58:16 +0200
+Subject: [Buildroot] [git commit] testing/tests/init: use lowercase method
+	names
+Message-ID: <20171006165925.A78AF81002@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=022d8df1b5e2c5daf3b5b6d0ed8f740164d3be81
+commit: https://git.buildroot.net/buildroot/commit/?id=847d6d1e8568c8efd2089e81dac872e371f747a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the remaining code style warnings from flake8:
- - properly indent continuation lines;
- - use proper code to test a parameter is not None.
+Use method naming convention from PEP8 as other test cases already do.
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+sed \
+  -e 's,startEmulator,start_emulator,g' \
+  -e 's,checkInit,check_init,g' \
+  -e 's,checkNetwork,check_network,g' \
+  -i support/testing/tests/init/*.py
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/testing/tests/init/base.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/init/base.py         |  6 ++---
+ support/testing/tests/init/test_busybox.py | 28 ++++++++++-----------
+ support/testing/tests/init/test_none.py    |  4 +--
+ support/testing/tests/init/test_systemd.py | 40 +++++++++++++++---------------
+ 4 files changed, 39 insertions(+), 39 deletions(-)
 
 diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
-index dea46a4..75cfbe9 100644
+index c09ee46..dea46a4 100644
 --- a/support/testing/tests/init/base.py
 +++ b/support/testing/tests/init/base.py
-@@ -18,7 +18,7 @@ class InitSystemBase(infra.basetest.BRTest):
-         else:
-             kernel = os.path.join(self.builddir, "images", kernel)
-             options.extend(["-dtb", os.path.join(self.builddir, "images",
--                                             "{}.dtb".format(dtb))])
-+                                                 "{}.dtb".format(dtb))])
+@@ -5,7 +5,7 @@ import infra.basetest
  
-         kernel_cmdline = ["root=/dev/mmcblk0",
-                           "rootfstype={}".format(fs_type),
-@@ -26,7 +26,7 @@ class InitSystemBase(infra.basetest.BRTest):
-                           "ro",
-                           "console=ttyAMA0"]
+ class InitSystemBase(infra.basetest.BRTest):
  
--        if not init is None:
-+        if init is not None:
-             kernel_cmdline.extend(["init={}".format(init)])
+-    def startEmulator(self, fs_type, kernel=None, dtb=None, init=None):
++    def start_emulator(self, fs_type, kernel=None, dtb=None, init=None):
+         img = os.path.join(self.builddir, "images", "rootfs.{}".format(fs_type))
+         subprocess.call(["truncate", "-s", "%1M", img])
  
-         self.emulator.boot(arch="armv7",
+@@ -37,12 +37,12 @@ class InitSystemBase(infra.basetest.BRTest):
+         if init is None:
+             self.emulator.login()
+ 
+-    def checkInit(self, path):
++    def check_init(self, path):
+         cmd = "cmp /proc/1/exe {}".format(path)
+         _, exit_code = self.emulator.run(cmd)
+         self.assertEqual(exit_code, 0)
+ 
+-    def checkNetwork(self, interface, exitCode=0):
++    def check_network(self, interface, exitCode=0):
+         cmd = "ip addr show {} |grep inet".format(interface)
+         _, exit_code = self.emulator.run(cmd)
+         self.assertEqual(exit_code, exitCode)
+diff --git a/support/testing/tests/init/test_busybox.py b/support/testing/tests/init/test_busybox.py
+index 6c75f68..3be4dea 100644
+--- a/support/testing/tests/init/test_busybox.py
++++ b/support/testing/tests/init/test_busybox.py
+@@ -8,8 +8,8 @@ class InitSystemBusyboxBase(InitSystemBase):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
+ 
+-    def checkInit(self):
+-        super(InitSystemBusyboxBase, self).checkInit("/bin/busybox")
++    def check_init(self):
++        super(InitSystemBusyboxBase, self).check_init("/bin/busybox")
+ 
+ 
+ class TestInitSystemBusyboxRo(InitSystemBusyboxBase):
+@@ -20,9 +20,9 @@ class TestInitSystemBusyboxRo(InitSystemBusyboxBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("squashfs")
+-        self.checkInit()
+-        self.checkNetwork("eth0", 1)
++        self.start_emulator("squashfs")
++        self.check_init()
++        self.check_network("eth0", 1)
+ 
+ 
+ class TestInitSystemBusyboxRw(InitSystemBusyboxBase):
+@@ -32,9 +32,9 @@ class TestInitSystemBusyboxRw(InitSystemBusyboxBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("ext2")
+-        self.checkInit()
+-        self.checkNetwork("eth0", 1)
++        self.start_emulator("ext2")
++        self.check_init()
++        self.check_network("eth0", 1)
+ 
+ 
+ class TestInitSystemBusyboxRoNet(InitSystemBusyboxBase):
+@@ -46,9 +46,9 @@ class TestInitSystemBusyboxRoNet(InitSystemBusyboxBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("squashfs")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("squashfs")
++        self.check_init()
++        self.check_network("eth0")
+ 
+ 
+ class TestInitSystemBusyboxRwNet(InitSystemBusyboxBase):
+@@ -59,6 +59,6 @@ class TestInitSystemBusyboxRwNet(InitSystemBusyboxBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("ext2")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("ext2")
++        self.check_init()
++        self.check_network("eth0")
+diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
+index c8a79f0..5b9b4e4 100644
+--- a/support/testing/tests/init/test_none.py
++++ b/support/testing/tests/init/test_none.py
+@@ -13,7 +13,7 @@ class TestInitSystemNone(InitSystemBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator(fs_type="squashfs", init="/bin/sh")
++        self.start_emulator(fs_type="squashfs", init="/bin/sh")
+         index = self.emulator.qemu.expect(["/bin/sh: can't access tty; job control turned off", pexpect.TIMEOUT], timeout=60)
+         if index != 0:
+             self.emulator.logfile.write("==> System does not boot")
+@@ -30,4 +30,4 @@ class TestInitSystemNone(InitSystemBase):
+         _, exit_code = self.emulator.run("mount -t proc none /proc")
+         self.assertEqual(exit_code, 0)
+ 
+-        self.checkInit("/bin/sh")
++        self.check_init("/bin/sh")
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 77d7348..48fac14 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -18,8 +18,8 @@ class InitSystemSystemdBase(InitSystemBase):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
+ 
+-    def checkInit(self):
+-        super(InitSystemSystemdBase, self).checkInit("/lib/systemd/systemd")
++    def check_init(self):
++        super(InitSystemSystemdBase, self).check_init("/lib/systemd/systemd")
+ 
+ 
+ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
+@@ -32,9 +32,9 @@ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
+         """.format(infra.filepath("tests/init/systemd-factory"))
+ 
+     def test_run(self):
+-        self.startEmulator("squashfs", "zImage", "vexpress-v2p-ca9")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.check_init()
++        self.check_network("eth0")
+ 
+         # This one must be executed on the target, to check that
+         # the factory feature works as expected
+@@ -51,9 +51,9 @@ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.check_init()
++        self.check_network("eth0")
+ 
+ 
+ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
+@@ -66,9 +66,9 @@ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("squashfs", "zImage", "vexpress-v2p-ca9")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.check_init()
++        self.check_network("eth0")
+ 
+ 
+ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+@@ -81,9 +81,9 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.check_init()
++        self.check_network("eth0")
+ 
+ 
+ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
+@@ -112,9 +112,9 @@ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("squashfs", "zImage", "vexpress-v2p-ca9")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.check_init()
++        self.check_network("eth0")
+ 
+ 
+ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+@@ -142,6 +142,6 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+         """
+ 
+     def test_run(self):
+-        self.startEmulator("ext2", "zImage", "vexpress-v2p-ca9")
+-        self.checkInit()
+-        self.checkNetwork("eth0")
++        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.check_init()
++        self.check_network("eth0")
