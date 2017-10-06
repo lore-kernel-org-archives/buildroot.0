@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 21:20:35 +0200
-Subject: [Buildroot] [PATCH v3 3/4] package/freeswitch-mod-bcg729: new
- package
-In-Reply-To: <20171004210224.12763-3-bernd.kuhls@t-online.de>
+Date: Fri, 6 Oct 2017 21:23:07 +0200
+Subject: [Buildroot] [PATCH v3 4/4] package/freeswitch: Use mod_g729
+ only when freeswitch-mod-bcg729 is disabled
+In-Reply-To: <20171004210224.12763-4-bernd.kuhls@t-online.de>
 References: <20171004210224.12763-1-bernd.kuhls@t-online.de>
- <20171004210224.12763-3-bernd.kuhls@t-online.de>
-Message-ID: <ee641e60-305f-8a53-8b4e-1e1601a5dc3e@mind.be>
+ <20171004210224.12763-4-bernd.kuhls@t-online.de>
+Message-ID: <ee38a94e-cac5-f151-55cf-07b9f14119f9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,64 +15,48 @@ To: buildroot@busybox.net
 
 
 On 04-10-17 23:02, Bernd Kuhls wrote:
-> This package is based on the bcg729 library from Belledonne
-> Communications which is wrapped into a freeswitch module to provide a
-> native G729.A codec.
+> mod_g729 contained in freeswitch source provides pass-through:
+> https://freeswitch.org/confluence/display/FREESWITCH/mod_g729
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v3: no changes
+> v2: no changes
+> 
+>  package/freeswitch/freeswitch.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+> index 0adb35d751..6c1dc7c012 100644
+> --- a/package/freeswitch/freeswitch.mk
+> +++ b/package/freeswitch/freeswitch.mk
+> @@ -116,7 +116,6 @@ FREESWITCH_ENABLED_MODULES += \
+>  	applications/mod_valet_parking \
+>  	applications/mod_voicemail \
+>  	codecs/mod_g723_1 \
+> -	codecs/mod_g729 \
+>  	dialplans/mod_dialplan_asterisk \
+>  	dialplans/mod_dialplan_xml \
+>  	endpoints/mod_loopback \
+> @@ -175,6 +174,10 @@ FREESWITCH_DEPENDENCIES += alsa-lib
+>  FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_FREESWITCH_MOD_BCG729),)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Perhaps add a comment above to explain the inverted logic:
 
-[snip]
-> +config BR2_PACKAGE_FREESWITCH_MOD_BCG729
-> +	bool "freeswitch-mod-bcg729"
-> +	depends on BR2_PACKAGE_FREESWITCH
-> +	select BR2_PACKAGE_LIBBCG729
-> +	help
-> +	  FreeSWITCH G.729A module using the opensource bcg729
-> +	  implementation by Belledonne Communications.
-> +
-> +	  https://github.com/xadhoom/mod_bcg729
-[snip]
-> +################################################################################
-> +#
-> +# freeswitch-mod-bcg729
-> +#
-> +################################################################################
-> +
-> +FREESWITCH_MOD_BCG729_VERSION = c504eea91f225014380ae17c00b35e7173e316ad
-> +FREESWITCH_MOD_BCG729_SITE = $(call github,xadhoom,mod_bcg729,$(FREESWITCH_MOD_BCG729_VERSION))
-> +FREESWITCH_MOD_BCG729_LICENSE = MPL-1.1
-> +FREESWITCH_MOD_BCG729_LICENSE_FILES = LICENSE
-> +FREESWITCH_MOD_BCG729_DEPENDENCIES = freeswitch libbcg729
-> +
-> +# instead of patching the not cross-compile friendly Makefile from
-> +# upstream we issue the necessary build commands ourselves
-> +define FREESWITCH_MOD_BCG729_BUILD_CMDS
-> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-> +		-I$(STAGING_DIR)/usr/include/freeswitch \
-> +		-fPIC -fomit-frame-pointer -fno-exceptions \
-> +		-c $(@D)/mod_bcg729.c -o $(@D)/mod_bcg729.o
-> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-> +		-fPIC -fomit-frame-pointer -fno-exceptions \
-> +		-shared -Xlinker -x -lm -lbcg729 -Wl,-Bdynamic \
-> +		-o $(@D)/mod_bcg729.so $(@D)/mod_bcg729.o
-
- Since this clearly only works with dynamic libraries, I think it's worth adding
-this explicitly as a dependency in Config.in. Of course, the dependency is
-implicit already through freeswitch, but who knows, maybe freeswitch itself may
-loose it one day.
+# Build the internal G.729 passthrough module if the external one is not enabled
 
  Regards,
  Arnout
 
-> +endef
+> +FREESWITCH_ENABLED_MODULES += codecs/mod_g729
+> +endif
 > +
-> +define FREESWITCH_MOD_BCG729_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 $(@D)/mod_bcg729.so $(TARGET_DIR)/usr/lib/freeswitch/mod/mod_bcg729.so
-> +endef
-> +
-> +$(eval $(generic-package))
+>  ifeq ($(BR2_PACKAGE_FREETYPE),y)
+>  FREESWITCH_DEPENDENCIES += freetype
+>  endif
 > 
 
 -- 
