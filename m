@@ -1,86 +1,136 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 22:31:52 +0200
-Subject: [Buildroot] [next v2 1/7] testing/infra/builder: split
- configure() from build()
-In-Reply-To: <20170826222056.6119-1-ricardo.martincoski@gmail.com>
+Date: Fri, 6 Oct 2017 22:42:44 +0200
+Subject: [Buildroot] [next v2 2/7] testing/infra/builder: build with
+ target and environment
+In-Reply-To: <20170826222056.6119-2-ricardo.martincoski@gmail.com>
 References: <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
- <20170826222056.6119-1-ricardo.martincoski@gmail.com>
-Message-ID: <fb667fe0-7577-9d7b-5b7a-5e293d31a1c2@mind.be>
+ <20170826222056.6119-2-ricardo.martincoski@gmail.com>
+Message-ID: <6455fdd0-c445-09cd-d249-ebfaf275c3fb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I believe you might respin this series soonish, so time to review it :-)
 
- BTW, when you do respin, could you push it to a gitlab clone, trigger the
-build, and report the result in your cover letter?
 
 On 27-08-17 00:20, Ricardo Martincoski wrote:
 > From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 > 
-> Some test cases don't use a full build as setup, so split the build()
-> method into configure() and build().
-> It allows a test case to perform configuration at the setup stage and
-> the build inside the test itself.
+> Make the builder able to call 'VAR1=1 make VAR2=2 target'.
 > 
-> Call this new method just before build in the BRTest base class, to keep
-> the current behavior for existing test cases.
+> Allow to send extra parameters to be added to the end of make command
+> line. It can be used for these purposes:
+>  - to configure a br2-external, by passing 'BR2_EXTERNAL="dir"';
+>  - to specify a make target, such as 'foo-source'.
+> 
+> Allow to add variables to the environment in which make runs. It can be
+> used for these purposes:
+>  - to override values from environment, such as 'BR2_DL_DIR="dl"';
+>  - to set variables not set in the .mk files (for testing purpose), as
+>    FOO_VERSION='1/1', triggering the preprocessing of values.
 > 
 > This change will be needed when adding a common class to test the git
 > download infra.
 > 
 > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- It would be nice though to have an example of its use earlier in the series.
-
- Regards,
- Arnout
-
 > ---
 > Changes v1 -> v2:
 >   - new patch to adapt the test infra to test git download
 > ---
->  support/testing/infra/basetest.py | 1 +
->  support/testing/infra/builder.py  | 3 ++-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+>  support/testing/infra/builder.py | 37 +++++++++++++++++++++++++++++++------
+>  1 file changed, 31 insertions(+), 6 deletions(-)
 > 
-> diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-> index 431605b23f..d61f4d337b 100644
-> --- a/support/testing/infra/basetest.py
-> +++ b/support/testing/infra/basetest.py
-> @@ -57,6 +57,7 @@ class BRTest(unittest.TestCase):
->  
->          if not self.b.is_finished():
->              self.show_msg("Building")
-> +            self.b.configure()
->              self.b.build()
->              self.show_msg("Building done")
->  
 > diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-> index 905b127c91..e7c8e0102c 100644
+> index e7c8e0102c..de7c141a76 100644
 > --- a/support/testing/infra/builder.py
 > +++ b/support/testing/infra/builder.py
-> @@ -10,7 +10,7 @@ class Builder(object):
+> @@ -10,7 +10,12 @@ class Builder(object):
 >          self.builddir = builddir
 >          self.logfile = infra.open_log_file(builddir, "build", logtofile)
 >  
-> -    def build(self):
-> +    def configure(self):
+> -    def configure(self):
+> +    # Configure the build
+> +    #
+> +    # makecmdline: a list of arguments to be passed to the make command.
+> +    # e.g. makecmdline=["BR2_EXTERNAL=/path"]
+> +    #
+
+ Better to do this as a docstring rather than a comment. And use the docstring
+formatting as well.
+
+> +    def configure(self, makecmdline=None):
+
+ Maybe makecmdline -> make_extra_opts ?
+
+ For symmetry, I'd add both make_extra_opts and make_extra_env here.
+
 >          if not os.path.isdir(self.builddir):
 >              os.makedirs(self.builddir)
 >  
-> @@ -29,6 +29,7 @@ class Builder(object):
+> @@ -22,16 +27,36 @@ class Builder(object):
+>                             "> end defconfig\n")
+>          self.logfile.flush()
+>  
+> -        cmd = ["make",
+> -               "O={}".format(self.builddir),
+> -               "olddefconfig"]
+> +        cmd = ["make", "O={}".format(self.builddir)]
+> +        if makecmdline:
+> +            cmd += makecmdline
+
+ This allows only a single options to be passed. I would require make_extra_opts
+to be an iterable and do cmd.extend(make_extra_opts) here.
+
+ Also, if you default it to () instead of None, you don't need the condition.
+
+> +        cmd += ["olddefconfig"]
+> +
+>          ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile)
 >          if ret != 0:
 >              raise SystemError("Cannot olddefconfig")
 >  
-> +    def build(self):
+> -    def build(self):
+> +    # Perform the build
+> +    #
+> +    # makecmdline: a list of arguments to be passed to the make command. It can
+> +    # include a make target.
+> +    # e.g. makecmdline=["foo-source"]
+> +    #
+> +    # env: a dict of variables to be appended (or replaced) in the environment
+> +    # that calls make.
+> +    # e.g. env={"BR2_DL_DIR": "/path"}
+> +    #
+> +    def build(self, makecmdline=None, env=None):
+
+ env -> make_extra_env
+
+> +        buildenv = os.environ.copy()
+> +        if env:
+> +            buildenv.update(env)
+> +
+
+ Here you could default make_extra_env to {} and do:
+
+        env = os.environ.copy()
+        env.update(make_extra_env)
+
+ However, do we really want to keep the environment? Perhaps it's better to
+start with an empty environment anyway...
+
+ Regards,
+ Arnout
+
 >          cmd = ["make", "-C", self.builddir]
->          ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile)
+> -        ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile)
+> +        if makecmdline:
+> +            cmd += makecmdline
+> +
+> +        ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+> +                              env=buildenv)
 >          if ret != 0:
+>              raise SystemError("Build failed")
+>  
 > 
 
 -- 
