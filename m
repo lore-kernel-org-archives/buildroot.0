@@ -1,52 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  6 Oct 2017 07:22:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: security
-	bump to version 1.19.4
-Message-ID: <20171006052259.8439-1-bernd.kuhls@t-online.de>
+Date: Fri,  6 Oct 2017 07:24:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to version
+	2.4.28
+Message-ID: <20171006052430.8546-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-13721 & CVE-2017-13723:
-https://lists.x.org/archives/xorg-announce/2017-October/002809.html
+Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
 
-Added all hashes provided by upstream.
+Removed patch applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xserver_xorg-server/Config.in                | 2 +-
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/apache/0003-CVS-2017-9798.patch | 30 ------------------------------
+ package/apache/apache.hash              |  4 ++--
+ package/apache/apache.mk                |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
+ delete mode 100644 package/apache/0003-CVS-2017-9798.patch
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 5971e13f54..71164b3794 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -99,7 +99,7 @@ endchoice
+diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
+deleted file mode 100644
+index dc0a67a1b7..0000000000
+--- a/package/apache/0003-CVS-2017-9798.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-core: Disallow Methods' registration at run time (.htaccess), they may
+-be used only if registered at init time (httpd.conf).
+-
+-Calling ap_method_register() in children processes is not the right scope
+-since it won't be shared for all requests.
+-
+-git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
+-
+-Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
+-
+-Downloaded from upstream repo:
+-https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+---- a/server/core.c	2017/08/16 16:50:29	1805223
+-+++ b/server/core.c	2017/09/08 13:13:11	1807754
+-@@ -2266,6 +2266,12 @@
+-             /* method has not been registered yet, but resource restriction
+-              * is always checked before method handling, so register it.
+-              */
+-+            if (cmd->pool == cmd->temp_pool) {
+-+                /* In .htaccess, we can't globally register new methods. */
+-+                return apr_psprintf(cmd->pool, "Could not register method '%s' "
+-+                                   "for %s from .htaccess configuration",
+-+                                    method, cmd->cmd->name);
+-+            }
+-             methnum = ap_method_register(cmd->pool,
+-                                          apr_pstrdup(cmd->pool, method));
+-         }
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index f29ae45187..d5e985f678 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,2 +1,2 @@
+-# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
+-sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.28.tar.bz2.sha256
++sha256 c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666 httpd-2.4.28.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 857e538346..d8f8580036 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.19.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-+	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 841be041fe..d0acc24102 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,5 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.freedesktop.org/archives/xorg/2017-March/058662.html
--sha256 677a8166e03474719238dfe396ce673c4234735464d6dadf2959b600d20e5a98        xorg-server-1.19.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
-+md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
-+sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
-+sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
-+sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
+-APACHE_VERSION = 2.4.27
++APACHE_VERSION = 2.4.28
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
 2.11.0
