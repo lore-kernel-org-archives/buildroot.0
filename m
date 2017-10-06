@@ -1,65 +1,83 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Oct 2017 19:16:35 +0200
-Subject: [Buildroot] [PATCH v2 6/6] support/testing: fix remaining code
-	style
-In-Reply-To: <20171005214212.27613-6-ricardo.martincoski@gmail.com>
-References: <20170929022713.2967-1-ricardo.martincoski@gmail.com>
- <20171005214212.27613-6-ricardo.martincoski@gmail.com>
-Message-ID: <84479e08-ca74-2ebe-4d14-13758b227689@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 6 Oct 2017 19:23:35 +0200
+Subject: [Buildroot] [git commit] trinity: undefined UIO_MAXIOV need sys/io.h
+Message-ID: <20171006171618.D128C81187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=da34a889d218ba5722774a769842ed08a64279ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This upstream patch fixes the build error produced by building for
+powerpc 32bit after the glibc bump to 2.26 with the following internal
+toolchain config.
 
-On 05-10-17 23:42, Ricardo Martincoski wrote:
-> Fix the remaining code style warnings from flake8:
->  - properly indent continuation lines;
->  - use proper code to test a parameter is not None.
-> 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> Changes v1 -> v2:
->    - renumbered 4 -> 6;
->    - keep only a small part of the old patch;
->    - use 'if x is not None' instead of 'if x:' (Yann E. MORIN);
->    - update commit log.
-> 
-> Number of warnings reported by flake8 for the test infra:
-> before:   2
-> after:    0
+gcc5.4.0
+glibc2.26
+bin2.28.1
+linux4.1.43
 
- I still have a warning:
+Failure log:
+  CC	net/proto-ipv4.o
+net/proto-ipv4.c: In function ???ip_setsockopt???:
+net/proto-ipv4.c:231:49: error: ???UIO_MAXIOV??? undeclared (first use in this function); did you mean ???_IO_MAGIC????
+   so->optlen = rnd() % sizeof(unsigned long)*(2*UIO_MAXIOV+512);
+                                                 ^~~~~~~~~~
+                                                 _IO_MAGIC
 
-$ python -m flake8 support/testing/
-support/testing/tests/init/base.py:45:9: N803 argument name should be lowercase
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Arnout: add Matthew's Sob to the patch]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...06-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
- Any idea why you didn't catch this?
-
-
- Also, there are still warnings in support/scripts and utils, care to take a
-look at those?
-
-
- Also, you used to have a patch that ran flake8 from .gitlab-ci.yml, but it
-seems to be gone from patchwork.
-
-
- And finally, if you have nothing else to do :-), maybe you could make the tests
-python3 compatible. For me, it'd be fine to even require python3 to be able to
-run the tests, if that simplifies things.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch b/package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch
+new file mode 100644
+index 0000000..27c7850
+--- /dev/null
++++ b/package/trinity/0006-Include-sys-io.h-for-UIO_MAXIOV-symbol.patch
+@@ -0,0 +1,40 @@
++From dd7fc8b44cc8bb8a7e9dc03aa3aa57fbefbf433b Mon Sep 17 00:00:00 2001
++From: Vinson Lee <vlee@freedesktop.org>
++Date: Tue, 20 Jun 2017 22:43:01 +0000
++Subject: [PATCH] Include sys/io.h for UIO_MAXIOV symbol.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This patch fixes this build error.
++
++  CC	net/proto-ipv4.o
++net/proto-ipv4.c: In function ???ip_setsockopt???:
++net/proto-ipv4.c:231:49: error: ???UIO_MAXIOV??? undeclared (first use in this function); did you mean ???_IO_MAGIC????
++   so->optlen = rnd() % sizeof(unsigned long)*(2*UIO_MAXIOV+512);
++                                                 ^~~~~~~~~~
++                                                 _IO_MAGIC
++
++Upstream: https://github.com/kernelslacker/trinity/commit/dd7fc8b44cc8bb8a7e9dc03aa3aa57fbefbf433b
++
++Signed-off-by: Vinson Lee <vlee@freedesktop.org>
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ net/proto-ipv4.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/net/proto-ipv4.c b/net/proto-ipv4.c
++index b77364e..9ffaa5e 100644
++--- a/net/proto-ipv4.c
+++++ b/net/proto-ipv4.c
++@@ -1,6 +1,7 @@
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ #include <sys/un.h>
+++#include <sys/uio.h>
++ #include <netinet/in.h>
++ #include <netinet/udp.h>
++ #include <stdlib.h>
++-- 
++1.9.1
++
