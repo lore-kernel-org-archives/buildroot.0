@@ -1,83 +1,103 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 7 Oct 2017 12:18:29 +0200
-Subject: [Buildroot] [PATCH 1/3] arch/mips: inverse the NaN logic
-In-Reply-To: <585dda9412d61d550fc9c6fa76a29e7e878ceec0.1504432422.git.yann.morin.1998@free.fr>
-References: <cover.1504432422.git.yann.morin.1998@free.fr>
- <585dda9412d61d550fc9c6fa76a29e7e878ceec0.1504432422.git.yann.morin.1998@free.fr>
-Message-ID: <93faf8c9-2223-3305-308c-6da56200a61d@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Oct 2017 12:26:16 +0200
+Subject: [Buildroot] [PATCH 1/8] arch: introduce minimal required gcc
+ version
+In-Reply-To: <e500946f-2c07-e7a5-99ee-68b5611cc14d@gmail.com>
+References: <cover.1504431850.git.yann.morin.1998@free.fr>
+ <8de5375c8ca0110ebd5baaec946fed002cc7eb80.1504431850.git.yann.morin.1998@free.fr>
+ <e500946f-2c07-e7a5-99ee-68b5611cc14d@gmail.com>
+Message-ID: <20171007102616.GF21901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Romain, All,
 
-Le 03/09/2017 ? 11:53, Yann E. MORIN a ?crit?:
-> Currentlym the possibility to choose the NaN encoding is conditional to
-> having a sufficiently recent gcc version.
+On 2017-10-07 11:59 +0200, Romain Naour spake thusly:
+> Le 03/09/2017 ? 11:44, Yann E. MORIN a ?crit?:
+> > Some CPU variants require that a recent-enough gcc be selected. For
+> > example, ARM's cortex-a35 requires gcc-5, while cortex-a73 requires
+> > gcc-7. Same goes for other architectures, of course.
+> > 
+> > Currently, we hard-code every such conditions in the gcc version choice,
+> > as well as in the individual external toolchains.
+> > 
+> > However, as we add even more CPU variants, the conditions are getting
+> > more and more complex to write and maintain.
+> > 
+> > Introduce new symbols, that architectures can select if they have a
+> > specific requirement on the gcc version. gcc and external toolchains
+> > can then properly depend on those symbols.
+> > 
+> > The burden of maintaining the requirements on the gcc version now falls
+> > down to the architeture, instead of being split up in gcc and all the
+> > external toolchains.
+> > 
+> > As the oldest gcc version to handle, we can either choose gcc-4.9, as
+> > the odlest version we support in our internal toolchain, or choose
+> > gcc-4.8, as the oldest external toolchain we support (except for the
+> > custom ones, but they'll be handled specifically in upcoming changes).
+> > We choose to go back up to gcc-4.8.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  arch/Config.in | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/arch/Config.in b/arch/Config.in
+> > index c10bf16809..607da36c1d 100644
+> > --- a/arch/Config.in
+> > +++ b/arch/Config.in
+> > @@ -261,6 +261,27 @@ config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
+> >  	bool
+> >  	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+> >  
+> > +# The following symbols are selected by the individual
+> > +# Config.in.$ARCH files
 > 
-> Which means that the architecture selection depends on the gcc version.
-> 
-> But that's opposite to what we've always done in Buildroot: the software
-> versions are conditional to the architecture options. There is nothing
-> we can do about the hardware: it is there, we can't change it, while we
-> can restrict ourselves to using software that is working on said
-> hardware.
-> 
-> Thus, we inverse the logic, to move the condition onto the software
-> side: whenever NaN-2008 are selected, we restrict the toolchain
-> selection to at least a gcc-4.9.
-> 
-> But now, the option with the NaN type is always set, so we must enclose
-> the code in gcc.mk inside a HAS_NAN_OPTION condition, as is already done
-> for the external toolchain case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  arch/Config.in.mips | 2 +-
->  package/gcc/gcc.mk  | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> index c08b2a2968..13d1a477e6 100644
-> --- a/arch/Config.in.mips
-> +++ b/arch/Config.in.mips
-> @@ -176,10 +176,10 @@ config BR2_MIPS_NAN_LEGACY
->  
->  config BR2_MIPS_NAN_2008
->  	bool
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+> I believe something is missing from this patch.
 
-This series require the previous series "arch: some require a minimal gcc
-version" adding this option.
+Nope, this patch only adds the symbols. The follow-up patches convert
+the individual architectures, one by one, over to using them.
 
-Best regards,
-Romain
+Regards,
+Yann E. MORIN.
 
->  
->  choice
->  	prompt "Target NaN"
-> -	depends on BR2_TOOLCHAIN_HAS_MNAN_OPTION
->  	depends on BR2_mips_32r5 || BR2_mips_64r5
->  	default BR2_MIPS_ENABLE_NAN_2008
->  	help
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 49ccccf56f..d45b6d7a06 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -207,9 +207,11 @@ endif
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
->  HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
->  endif
-> +ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
->  HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
->  endif
-> +endif
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_FP32_MODE)),)
->  HOST_GCC_COMMON_CONF_OPTS += --with-fp-32=$(BR2_GCC_TARGET_FP32_MODE)
->  endif
+> Best regards,
+> Romain
 > 
+> > +config BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> > +	bool
+> > +
+> > +config BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+> > +	bool
+> > +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> > +
+> > +config BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+> > +	bool
+> > +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+> > +
+> > +config BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+> > +	bool
+> > +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+> > +
+> > +config BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+> > +	bool
+> > +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+> > +
+> >  # The following string values are defined by the individual
+> >  # Config.in.$ARCH files
+> >  config BR2_ARCH
+> > 
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
