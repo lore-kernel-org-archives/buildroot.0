@@ -1,54 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Oct 2017 13:02:08 +0200
-Subject: [Buildroot] [PATCH 1/2] package/iucode-tool: security bump to
-	version 2.2
-Message-ID: <20171007110209.26248-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Oct 2017 13:58:43 +0200
+Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
+In-Reply-To: <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
+References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
+ <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
+ <1501150411.21202.1.camel@embedded.rocks>
+ <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
+ <20170727165026.4a5f59a1@windsurf.lan>
+ <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
+Message-ID: <20171007135843.5a75c7f5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.1.1 fixed CVE-2017-0357:
-https://gitlab.com/iucode-tool/iucode-tool/commit/657ce44ac462bcec35a3e12f9e7f53ca92ae62b7
+Hello,
 
-Dropped IUCODE_TOOL_CONF_ENV after version 2.2 added a configure check
-for libargp:
-https://gitlab.com/iucode-tool/iucode-tool/commit/b14bed6771e7ab48371b272a0c68dd017767142a
+On Fri, 6 Oct 2017 15:39:03 -0700, Andrey Yurovsky wrote:
 
-Added hash for license file.
+> On Thu, Jul 27, 2017 at 7:50 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > No, let's wait to have a few Meson-based packages in Buildroot, and
+> > then we'll have a package infrastructure. This will allow us to see
+> > what are the commonalities, what are the differences, etc.  
+> 
+> systemd 235 is released (https://lwn.net/Articles/735691/) and it
+> drops autoconf/automake and only has meson as the build system (in 234
+> they warned this would happen next) so perhaps that's a good starting
+> point for buildroot to integrate meson support? I'm happy to help out
+> if no one else was already working on it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/iucode-tool/iucode-tool.hash | 3 ++-
- package/iucode-tool/iucode-tool.mk   | 3 +--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This would indeed be a very compelling reason to support meson.
 
-diff --git a/package/iucode-tool/iucode-tool.hash b/package/iucode-tool/iucode-tool.hash
-index c1f3bef045..1dab8de978 100644
---- a/package/iucode-tool/iucode-tool.hash
-+++ b/package/iucode-tool/iucode-tool.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	33271652032f20f866a212bc98ea01a8db65c4ac839fa820aa23da974fd6ff62	iucode-tool_1.5.tar.xz
-+sha256 9810daf925b8a9ca244adc4e1916bcab65601c9ebe87e91c2281f78055982971  iucode-tool_2.2.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index e8ae36cede..fb746c3cb8 100644
---- a/package/iucode-tool/iucode-tool.mk
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--IUCODE_TOOL_VERSION = 1.5
-+IUCODE_TOOL_VERSION = 2.2
- IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
- IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--IUCODE_TOOL_CONF_ENV = LIBS="-largp"
- IUCODE_TOOL_DEPENDENCIES = argp-standalone
- endif
- IUCODE_TOOL_LICENSE = GPL-2.0+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
