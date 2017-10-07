@@ -1,70 +1,99 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 7 Oct 2017 20:43:33 +0200
-Subject: [Buildroot] [PATCH 1/3] arch/mips: inverse the NaN logic
-In-Reply-To: <20171007122233.GH21901@scaer>
-References: <cover.1504432422.git.yann.morin.1998@free.fr>
- <585dda9412d61d550fc9c6fa76a29e7e878ceec0.1504432422.git.yann.morin.1998@free.fr>
- <93faf8c9-2223-3305-308c-6da56200a61d@gmail.com>
- <20171007122233.GH21901@scaer>
-Message-ID: <7d5da0e6-ec34-483f-631b-c59f21b82ec4@gmail.com>
+Date: Sat, 7 Oct 2017 21:55:12 +0200
+Subject: [Buildroot] [PATCH 4/8] toolchain/external: hide versions too
+ old for the current arch
+In-Reply-To: <20171007121500.GG21901@scaer>
+References: <cover.1504431850.git.yann.morin.1998@free.fr>
+ <56ab77ea28f24c9495de8a7ca8822c61a1642f97.1504431850.git.yann.morin.1998@free.fr>
+ <ae5be870-2ae4-966f-0cd6-261d02db7d1d@gmail.com>
+ <20171007121500.GG21901@scaer>
+Message-ID: <e19c1b4e-c160-a3eb-456f-9bb0c790ed12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Hi Yann, all,
 
-Le 07/10/2017 ? 14:22, Yann E. MORIN a ?crit?:
+Le 07/10/2017 ? 14:15, Yann E. MORIN a ?crit?:
 > Romain, All,
 > 
-> On 2017-10-07 12:18 +0200, Romain Naour spake thusly:
->> Le 03/09/2017 ? 11:53, Yann E. MORIN a ?crit?:
->>> Currentlym the possibility to choose the NaN encoding is conditional to
->>> having a sufficiently recent gcc version.
->>>
->>> Which means that the architecture selection depends on the gcc version.
->>>
->>> But that's opposite to what we've always done in Buildroot: the software
->>> versions are conditional to the architecture options. There is nothing
->>> we can do about the hardware: it is there, we can't change it, while we
->>> can restrict ourselves to using software that is working on said
->>> hardware.
->>>
->>> Thus, we inverse the logic, to move the condition onto the software
->>> side: whenever NaN-2008 are selected, we restrict the toolchain
->>> selection to at least a gcc-4.9.
->>>
->>> But now, the option with the NaN type is always set, so we must enclose
->>> the code in gcc.mk inside a HAS_NAN_OPTION condition, as is already done
->>> for the external toolchain case.
+> On 2017-10-07 11:57 +0200, Romain Naour spake thusly:
+>> This patch needs to be rebased on master after the last linaro toolchain version
+>> bump (sorry ;-) )
+>>
+>> Le 03/09/2017 ? 11:44, Yann E. MORIN a ?crit?:
+>>> Hide the toolchains if the arch requires a gcc version more recent
+>>> than the one they provide.
 >>>
 >>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 >>> ---
->>>  arch/Config.in.mips | 2 +-
->>>  package/gcc/gcc.mk  | 2 ++
->>>  2 files changed, 3 insertions(+), 1 deletion(-)
+>>>  .../toolchain-external/toolchain-external-codescape-img-mips/Config.in  | 1 +
+>>>  .../toolchain-external/toolchain-external-codescape-mti-mips/Config.in  | 1 +
+>>>  .../toolchain-external-codesourcery-aarch64/Config.in                   | 1 +
+>>>  .../toolchain-external/toolchain-external-codesourcery-amd64/Config.in  | 1 +
+>>>  .../toolchain-external/toolchain-external-codesourcery-arm/Config.in    | 2 ++
+>>>  .../toolchain-external/toolchain-external-codesourcery-mips/Config.in   | 2 ++
+>>>  .../toolchain-external/toolchain-external-codesourcery-niosII/Config.in | 1 +
+>>>  .../toolchain-external/toolchain-external-linaro-aarch64/Config.in      | 1 +
+>>>  toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in    | 2 ++
+>>>  toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in  | 2 ++
+>>>  toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in  | 1 +
+>>>  11 files changed, 15 insertions(+)
 >>>
->>> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
->>> index c08b2a2968..13d1a477e6 100644
->>> --- a/arch/Config.in.mips
->>> +++ b/arch/Config.in.mips
->>> @@ -176,10 +176,10 @@ config BR2_MIPS_NAN_LEGACY
->>>  
->>>  config BR2_MIPS_NAN_2008
->>>  	bool
->>> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+>>> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+>>> index e29c4dcb87..8b2eab0ad2 100644
+>>> --- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+>>> +++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+>>> @@ -1,6 +1,7 @@
+>>>  config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+>>>  	bool "Codescape IMG GNU Linux Toolchain 2016.05"
+>>>  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
 >>
->> This series require the previous series "arch: some require a minimal gcc
->> version" adding this option.
+>> Having
+>>
+>>> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>>
+>> and
+>> 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>>
+>> looks redundant...
 > 
-> Yes, that's why the four series were replies one to the previous, so that
-> they are correctly threaded in your MUA. As long as you use a decent MUA,
-> that is. ;-]
+> It might, but this serves two different purposes.
 
-I'm only looking at the patchwork web interface and git pwc :p
+Yes, I understand that.
+
+> 
+>> Also where BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9 is selected when you use a packaged
+>> toolchain ?
+> 
+> The architectures do. Either the full arch, or individual cores.
+> 
+>> With the complete series applied I can't select a packaged external toolchain.
+>>
+>> Try with to select the Linaro toolchain with this defconfig:
+>>
+>> BR2_arm=y
+>> BR2_cortex_a9=y
+>> BR2_ARM_ENABLE_NEON=y
+>> BR2_ARM_ENABLE_VFP=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+> 
+> Weird, it works for me:
+> 
+>     $ make defconfig BR2_DEFCONFIG=$(pwd)/kubu.defconfig
+>     $ grep LINARO .config
+>     BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+
+I made a mistake while applying the patch locally and resolve the conflict due
+to the Linaro toolchain bump.
+
+The '!' was missing before "BR2_ARCH_NEEDS_GCC_AT_LEAST_7"...
+That's why I wasn't able to select the toolchain.
+
+Sorry for the noise.
 
 Best regards,
 Romain
@@ -76,29 +105,3 @@ Romain
 >> Best regards,
 >> Romain
 >>
->>>  
->>>  choice
->>>  	prompt "Target NaN"
->>> -	depends on BR2_TOOLCHAIN_HAS_MNAN_OPTION
->>>  	depends on BR2_mips_32r5 || BR2_mips_64r5
->>>  	default BR2_MIPS_ENABLE_NAN_2008
->>>  	help
->>> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
->>> index 49ccccf56f..d45b6d7a06 100644
->>> --- a/package/gcc/gcc.mk
->>> +++ b/package/gcc/gcc.mk
->>> @@ -207,9 +207,11 @@ endif
->>>  ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
->>>  HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
->>>  endif
->>> +ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
->>>  ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
->>>  HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
->>>  endif
->>> +endif
->>>  ifneq ($(call qstrip,$(BR2_GCC_TARGET_FP32_MODE)),)
->>>  HOST_GCC_COMMON_CONF_OPTS += --with-fp-32=$(BR2_GCC_TARGET_FP32_MODE)
->>>  endif
->>>
->>
-> 
