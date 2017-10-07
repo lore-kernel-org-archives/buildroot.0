@@ -1,50 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Oct 2017 23:31:43 +0200
-Subject: [Buildroot] [PATCH v2]] radvd: improve startup script
-In-Reply-To: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
-References: <7d0f3151-bce7-8512-bae1-2c0d44717faf@mind.be>
- <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20171007233143.12b8bdd2@windsurf.home>
+Date: Sat, 7 Oct 2017 23:32:41 +0200
+Subject: [Buildroot] [git commit] jose: new package
+Message-ID: <20171007213323.915B180F7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aa06b72f3b24594056df60287dfb9669158d6b55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Sep 2017 23:16:09 -0300, Carlos Santos wrote:
-> Print an error message if /usr/sbin/radvd is missing.
-> 
-> Print an error message if the kernel does not support IPv6 forwarding,
-> which is required by radvd.
-> 
-> Ignore any start/stop/restart option if /etc/radvd.conf does not exist.
-> The previous script printed an error message in this case but is valid
-> to install radvd without a configuration file. The daemon may be started
-> later by another service with a configuration created at run-time.
-> 
-> This is a copy/paste/edit/fix of package/dnsmasq/S80dnsmasq.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/jose/Config.in | 14 ++++++++++++++
+ package/jose/jose.hash |  3 +++
+ package/jose/jose.mk   | 15 +++++++++++++++
+ 5 files changed, 34 insertions(+)
 
-Not quite true: since v1, you changed things and you're no longer doing
-like S80dnsmasq anymore.
-
-> +[ -x /usr/sbin/radvd ] || {
-> +	echo "Error: /usr/sbin/radvd is missing."
->  	exit 1
-> -fi
-> +}
-
-I think this test is useless. Why not let start-stop-daemon fail
-is /usr/sbin/radvd is missing? It's unlikely to happen because
-Buildroot installs both radvd and its init script as part of the same
-package. But if it ever happens for some reason, the error message from
-start-stop-daemon should be pretty clear.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index daa63be..64acc7d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1337,6 +1337,7 @@ F:	package/dump1090/
+ F:	package/flickcurl/
+ F:	package/fscryptctl/
+ F:	package/jo/
++F:	package/jose/
+ F:	package/libfastjson/
+ F:	package/lzop/
+ F:	package/memtool/
+diff --git a/package/Config.in b/package/Config.in
+index 031413b..98f8fee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1232,6 +1232,7 @@ menu "JSON/XML"
+ 	source "package/expat/Config.in"
+ 	source "package/ezxml/Config.in"
+ 	source "package/jansson/Config.in"
++	source "package/jose/Config.in"
+ 	source "package/jsmn/Config.in"
+ 	source "package/json-c/Config.in"
+ 	source "package/json-glib/Config.in"
+diff --git a/package/jose/Config.in b/package/jose/Config.in
+new file mode 100644
+index 0000000..4a9ed8d
+--- /dev/null
++++ b/package/jose/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_JOSE
++	bool "jose"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_OPENSSL
++	help
++	  C-language implementation of Javascript Object Signing and
++	  Encryption.
++
++	  https://github.com/latchset/jose
++
++comment "jose needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/jose/jose.hash b/package/jose/jose.hash
+new file mode 100644
+index 0000000..376bc0b
+--- /dev/null
++++ b/package/jose/jose.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 5c9cdcfb535c4d9f781393d7530521c72b1dd81caa9934cab6dd752cc7efcd72  jose-10.tar.bz2
++sha256 09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  COPYING
+diff --git a/package/jose/jose.mk b/package/jose/jose.mk
+new file mode 100644
+index 0000000..1f5e3e4
+--- /dev/null
++++ b/package/jose/jose.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# jose
++#
++################################################################################
++
++JOSE_VERSION = 10
++JOSE_SOURCE = jose-$(JOSE_VERSION).tar.bz2
++JOSE_SITE = https://github.com/latchset/jose/releases/download/v$(JOSE_VERSION)
++JOSE_LICENSE = Apache-2.0
++JOSE_LICENSE_FILES = COPYING
++JOSE_INSTALL_STAGING = YES
++JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
++
++$(eval $(autotools-package))
