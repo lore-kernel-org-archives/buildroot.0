@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Oct 2017 14:22:33 +0200
-Subject: [Buildroot] [PATCH 1/3] arch/mips: inverse the NaN logic
-In-Reply-To: <93faf8c9-2223-3305-308c-6da56200a61d@gmail.com>
-References: <cover.1504432422.git.yann.morin.1998@free.fr>
- <585dda9412d61d550fc9c6fa76a29e7e878ceec0.1504432422.git.yann.morin.1998@free.fr>
- <93faf8c9-2223-3305-308c-6da56200a61d@gmail.com>
-Message-ID: <20171007122233.GH21901@scaer>
+Date: Sat, 7 Oct 2017 14:27:07 +0200
+Subject: [Buildroot] [PATCH 3/8] toolchain/external-custom: hide
+ versions too old for the current arch
+In-Reply-To: <8dbdd051-e288-fd2d-433b-a441a9e4e6bc@gmail.com>
+References: <cover.1504431850.git.yann.morin.1998@free.fr>
+ <a9dc18ece6b62e3ac4ce274b708081a9d16bb6aa.1504431850.git.yann.morin.1998@free.fr>
+ <8dbdd051-e288-fd2d-433b-a441a9e4e6bc@gmail.com>
+Message-ID: <20171007122707.GI21901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,51 +15,29 @@ To: buildroot@busybox.net
 
 Romain, All,
 
-On 2017-10-07 12:18 +0200, Romain Naour spake thusly:
-> Le 03/09/2017 ? 11:53, Yann E. MORIN a ?crit?:
-> > Currentlym the possibility to choose the NaN encoding is conditional to
-> > having a sufficiently recent gcc version.
-> > 
-> > Which means that the architecture selection depends on the gcc version.
-> > 
-> > But that's opposite to what we've always done in Buildroot: the software
-> > versions are conditional to the architecture options. There is nothing
-> > we can do about the hardware: it is there, we can't change it, while we
-> > can restrict ourselves to using software that is working on said
-> > hardware.
-> > 
-> > Thus, we inverse the logic, to move the condition onto the software
-> > side: whenever NaN-2008 are selected, we restrict the toolchain
-> > selection to at least a gcc-4.9.
-> > 
-> > But now, the option with the NaN type is always set, so we must enclose
-> > the code in gcc.mk inside a HAS_NAN_OPTION condition, as is already done
-> > for the external toolchain case.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > ---
-> >  arch/Config.in.mips | 2 +-
-> >  package/gcc/gcc.mk  | 2 ++
-> >  2 files changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> > index c08b2a2968..13d1a477e6 100644
-> > --- a/arch/Config.in.mips
-> > +++ b/arch/Config.in.mips
-> > @@ -176,10 +176,10 @@ config BR2_MIPS_NAN_LEGACY
-> >  
-> >  config BR2_MIPS_NAN_2008
-> >  	bool
-> > +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+On 2017-10-07 11:27 +0200, Romain Naour spake thusly:
+> Le 03/09/2017 ? 11:44, Yann E. MORIN a ?crit?:
+[--SNIP--]
+> > Note: this implies that it is no longer possible to use a custom
+> > external toolchain in which a specific core has been back-ported
+> > Thus, this patch may cause regressions in very specific and rare
+> > corner cases. Do we want to support those cases? If yes, then we
+> > should drop this patch.
 > 
-> This series require the previous series "arch: some require a minimal gcc
-> version" adding this option.
+> This can be a problem for Linaro toolchains [1] where the GCC support for some
+> new cpu are backported. (Ok this example is moot since Buildroot doesn't support
+> these cpu).
 
-Yes, that's why the four series were replies one to the previous, so that
-they are correctly threaded in your MUA. As long as you use a decent MUA,
-that is. ;-]
+On the other hand, we could get a non-working configuration for other
+external toolchains.
+
+And that is not nice to let the user generate a configuration we know if
+invalid.
+
+> Also since BR2_TOOLCHAIN_EXTERNAL_GCC_XXX is an user choice, we can print a
+> warning instead of completely disabling the gcc version ?
+
+I'll see if I can do something about that.
 
 Regards,
 Yann E. MORIN.
@@ -66,29 +45,81 @@ Yann E. MORIN.
 > Best regards,
 > Romain
 > 
+> [1] https://releases.linaro.org/components/toolchain/binaries/5.4-2017.05/
+> 
+> > ---
+> >  .../toolchain-external-custom/Config.in.options           | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > index ae343ddad5..eb7c30f171 100644
+> > --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > @@ -18,6 +18,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
 > >  
 > >  choice
-> >  	prompt "Target NaN"
-> > -	depends on BR2_TOOLCHAIN_HAS_MNAN_OPTION
-> >  	depends on BR2_mips_32r5 || BR2_mips_64r5
-> >  	default BR2_MIPS_ENABLE_NAN_2008
+> >  	bool "External toolchain gcc version"
+> > +	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+> > +	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+> > +	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+> > +	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+> > +	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
 > >  	help
-> > diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> > index 49ccccf56f..d45b6d7a06 100644
-> > --- a/package/gcc/gcc.mk
-> > +++ b/package/gcc/gcc.mk
-> > @@ -207,9 +207,11 @@ endif
-> >  ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
-> >  HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
-> >  endif
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
-> >  ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
-> >  HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
-> >  endif
-> > +endif
-> >  ifneq ($(call qstrip,$(BR2_GCC_TARGET_FP32_MODE)),)
-> >  HOST_GCC_COMMON_CONF_OPTS += --with-fp-32=$(BR2_GCC_TARGET_FP32_MODE)
-> >  endif
+> >  	  Set to the gcc version that is used by your external
+> > @@ -29,42 +34,52 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+> >  	bool "6.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+> >  	bool "5.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+> >  	bool "4.9.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+> >  	bool "4.8.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+> >  	bool "4.7.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+> >  	bool "4.6.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+> >  	bool "4.5.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+> >  	bool "4.4.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+> >  	bool "4.3.x"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+> >  
+> >  config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+> >  	bool "older"
+> > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+> >  	help
+> >  	  Use this option if your GCC version is older than any of the
+> >  	  above.
 > > 
 > 
 
