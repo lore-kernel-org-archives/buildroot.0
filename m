@@ -1,135 +1,222 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 7 Oct 2017 11:27:32 +0200
-Subject: [Buildroot] [PATCH 3/8] toolchain/external-custom: hide
- versions too old for the current arch
-In-Reply-To: <a9dc18ece6b62e3ac4ce274b708081a9d16bb6aa.1504431850.git.yann.morin.1998@free.fr>
+Date: Sat, 7 Oct 2017 11:57:48 +0200
+Subject: [Buildroot] [PATCH 4/8] toolchain/external: hide versions too
+ old for the current arch
+In-Reply-To: <56ab77ea28f24c9495de8a7ca8822c61a1642f97.1504431850.git.yann.morin.1998@free.fr>
 References: <cover.1504431850.git.yann.morin.1998@free.fr>
- <a9dc18ece6b62e3ac4ce274b708081a9d16bb6aa.1504431850.git.yann.morin.1998@free.fr>
-Message-ID: <8dbdd051-e288-fd2d-433b-a441a9e4e6bc@gmail.com>
+ <56ab77ea28f24c9495de8a7ca8822c61a1642f97.1504431850.git.yann.morin.1998@free.fr>
+Message-ID: <ae5be870-2ae4-966f-0cd6-261d02db7d1d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All
+Yann, All,
+
+This patch needs to be rebased on master after the last linaro toolchain version
+bump (sorry ;-) )
 
 Le 03/09/2017 ? 11:44, Yann E. MORIN a ?crit?:
-> When an architecture expresses a requirement on the gcc version, limit
-> the version choice in the custom external toolchain.
-> 
-> The ratioanle being that there is no point in offering that version to
-
-rationale
-
-> the user if we know before-hand that the gcc version will not work for
-> that architecture.
-> 
-> All versions below the minimum we support is just made conditional to
-> that minimum as well, including the "older" entry.
-> 
-> However, this means that the "older" entry is no longer available when
-> the architecture requires a minimum gcc version. A user who wants to use
-> a toolchain with a gcc older than the minimum will have no choice but to
-> realise the toolchain is not suitable (or lie and we would catch that
-
-realize
-
-> when checking the gcc version anyway).
+> Hide the toolchains if the arch requires a gcc version more recent
+> than the one they provide.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
 > ---
-> Note: this implies that it is no longer possible to use a custom
-> external toolchain in which a specific core has been back-ported
-> Thus, this patch may cause regressions in very specific and rare
-> corner cases. Do we want to support those cases? If yes, then we
-> should drop this patch.
+>  .../toolchain-external/toolchain-external-codescape-img-mips/Config.in  | 1 +
+>  .../toolchain-external/toolchain-external-codescape-mti-mips/Config.in  | 1 +
+>  .../toolchain-external-codesourcery-aarch64/Config.in                   | 1 +
+>  .../toolchain-external/toolchain-external-codesourcery-amd64/Config.in  | 1 +
+>  .../toolchain-external/toolchain-external-codesourcery-arm/Config.in    | 2 ++
+>  .../toolchain-external/toolchain-external-codesourcery-mips/Config.in   | 2 ++
+>  .../toolchain-external/toolchain-external-codesourcery-niosII/Config.in | 1 +
+>  .../toolchain-external/toolchain-external-linaro-aarch64/Config.in      | 1 +
+>  toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in    | 2 ++
+>  toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in  | 2 ++
+>  toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in  | 1 +
+>  11 files changed, 15 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+> index e29c4dcb87..8b2eab0ad2 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+>  	bool "Codescape IMG GNU Linux Toolchain 2016.05"
+>  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
 
-This can be a problem for Linaro toolchains [1] where the GCC support for some
-new cpu are backported. (Ok this example is moot since Buildroot doesn't support
-these cpu).
+Having
 
-Also since BR2_TOOLCHAIN_EXTERNAL_GCC_XXX is an user choice, we can print a
-warning instead of completely disabling the gcc version ?
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+
+and
+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+
+looks redundant...
+
+Also where BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9 is selected when you use a packaged
+toolchain ?
+With the complete series applied I can't select a packaged external toolchain.
+
+Try with to select the Linaro toolchain with this defconfig:
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
 
 Best regards,
 Romain
 
-[1] https://releases.linaro.org/components/toolchain/binaries/5.4-2017.05/
-
-> ---
->  .../toolchain-external-custom/Config.in.options           | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> index ae343ddad5..eb7c30f171 100644
-> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> @@ -18,6 +18,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
->  
->  choice
->  	bool "External toolchain gcc version"
-> +	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-> +	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
-> +	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
-> +	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
-> +	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
->  	help
->  	  Set to the gcc version that is used by your external
-> @@ -29,42 +34,52 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_6
->  	bool "6.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_5
->  	bool "5.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
->  	bool "4.9.x"
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+> index efe6f8527e..db191fd1be 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+>  	bool "Codescape MTI GNU Linux Toolchain 2016.05"
+>  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
 > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
->  	bool "4.8.x"
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT) || \
+>  		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
+> diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+> index 66a032e9ac..24cbcffa29 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+>  	bool "CodeSourcery AArch64 2014.11"
+>  	depends on BR2_aarch64
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>  	# a57/a53 and a72/a53 appeared in gcc-6 or were broken before
+>  	depends on !BR2_cortex_a57_a53 && !BR2_cortex_a72_a53
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+> index 101e227af9..50c5a20019 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+>  	bool "Sourcery CodeBench AMD64 2016.11"
+>  	depends on BR2_x86_64
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_x86_jaguar || BR2_x86_steamroller
+> diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+> index e1a7891007..b91daa5c81 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+>  	bool "Sourcery CodeBench ARM 2014.05"
+>  	depends on BR2_arm
 > +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  	# a15/a7 appeared in gcc-4.9, a17/a7 in gcc-5, a57/a53 and a72/a53
+>  	# in gcc-6, or they each were broken earlier than that.
+>  	depends on !BR2_cortex_a15_a7 && !BR2_cortex_a17_a7
+> @@ -35,5 +36,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
 >  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
->  	bool "4.7.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+>  comment "Sourcery CodeBench toolchains available for the EABI ABI"
+>  	depends on BR2_arm
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+>  	depends on !BR2_ARM_EABI
+>  	depends on !BR2_STATIC_LIBS
+> diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
+> index 6a13ae6cd6..734f0e4c7c 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
+> @@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+>  	bool "Sourcery CodeBench MIPS 2016.05"
+>  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+>  	depends on BR2_MIPS_CPU_MIPS32R2 || BR2_MIPS_CPU_MIPS64R2
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  	# Unsupported MIPS cores
+>  	depends on !BR2_mips_interaptiv
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> @@ -89,5 +90,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+>  	      Select BR2_SOFT_FLOAT
 >  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
->  	bool "4.6.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+>  comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 and n64"
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  	depends on BR2_MIPS_NABI32
+>  	depends on !BR2_STATIC_LIBS
+> diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
+> index 341bc2ab44..7563995eb6 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+>  	bool "Sourcery CodeBench Nios-II 2017.05"
+>  	depends on BR2_nios2
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+> index caa5ed340a..71ae73adb8 100644
+> --- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+>  	bool "Linaro AArch64 2017.02"
+>  	depends on BR2_aarch64
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+> index f538eb7eb3..f5bbbaaad8 100644
+> --- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+> @@ -1,11 +1,13 @@
+>  comment "Linaro toolchains available for Cortex-A + EABIhf"
+>  	depends on BR2_arm
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+>  	depends on !BR2_STATIC_LIBS
 >  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
->  	bool "4.5.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+>  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+>  	bool "Linaro ARM 2017.02"
+>  	depends on BR2_arm
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on BR2_ARM_EABIHF
+> diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+> index 14c7481f81..64e97eeea7 100644
+> --- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+> @@ -1,11 +1,13 @@
+>  comment "Linaro toolchains available for Cortex-A + EABIhf"
+>  	depends on BR2_armeb
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+>  	depends on !BR2_STATIC_LIBS
 >  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
->  	bool "4.4.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
->  	bool "4.3.x"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
->  	bool "older"
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
->  	help
->  	  Use this option if your GCC version is older than any of the
->  	  above.
+>  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+>  	bool "Linaro armeb 2017.02"
+>  	depends on BR2_armeb
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	depends on BR2_ARM_EABIHF
+> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+> index f438ea765d..8e4344a83d 100644
+> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+>  	bool "Synopsys ARC 2016.09 toolchain"
+>  	depends on BR2_arc
+> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  	depends on BR2_HOSTARCH = "x86_64"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+>  	select BR2_INSTALL_LIBSTDCPP
 > 
