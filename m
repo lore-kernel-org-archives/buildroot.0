@@ -1,45 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Oct 2017 13:02:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/intel-microcode: bump to version
-	20170707
-In-Reply-To: <20171007110209.26248-1-bernd.kuhls@t-online.de>
-References: <20171007110209.26248-1-bernd.kuhls@t-online.de>
-Message-ID: <20171007110209.26248-2-bernd.kuhls@t-online.de>
+Date: Sat,  7 Oct 2017 13:02:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package/iucode-tool: security bump to
+	version 2.2
+Message-ID: <20171007110209.26248-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Version 2.1.1 fixed CVE-2017-0357:
+https://gitlab.com/iucode-tool/iucode-tool/commit/657ce44ac462bcec35a3e12f9e7f53ca92ae62b7
+
+Dropped IUCODE_TOOL_CONF_ENV after version 2.2 added a configure check
+for libargp:
+https://gitlab.com/iucode-tool/iucode-tool/commit/b14bed6771e7ab48371b272a0c68dd017767142a
+
+Added hash for license file.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 4 ++--
+ package/iucode-tool/iucode-tool.hash | 3 ++-
+ package/iucode-tool/iucode-tool.mk   | 3 +--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 8f0a3fc84d..5ccfd51466 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/iucode-tool/iucode-tool.hash b/package/iucode-tool/iucode-tool.hash
+index c1f3bef045..1dab8de978 100644
+--- a/package/iucode-tool/iucode-tool.hash
++++ b/package/iucode-tool/iucode-tool.hash
+@@ -1,2 +1,3 @@
  # Locally computed
--sha256 2f77fd2d87403b754d01a66c78a36a8b8ffc16dc3c50fb7aa2c4cd4da7f681a3  microcode-20170511.tgz
-+sha256 4fd44769bf52a7ac11e90651a307aa6e56ca6e1a814e50d750ba8207973bee93  microcode-20170707.tgz
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 831e6c0940..7ad3bba3d2 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,9 +4,9 @@
+-sha256	33271652032f20f866a212bc98ea01a8db65c4ac839fa820aa23da974fd6ff62	iucode-tool_1.5.tar.xz
++sha256 9810daf925b8a9ca244adc4e1916bcab65601c9ebe87e91c2281f78055982971  iucode-tool_2.2.tar.xz
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index e8ae36cede..fb746c3cb8 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20170511
-+INTEL_MICROCODE_VERSION = 20170707
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26798/eng
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26925/eng
- INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
+-IUCODE_TOOL_VERSION = 1.5
++IUCODE_TOOL_VERSION = 2.2
+ IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
+ IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-IUCODE_TOOL_CONF_ENV = LIBS="-largp"
+ IUCODE_TOOL_DEPENDENCIES = argp-standalone
+ endif
+ IUCODE_TOOL_LICENSE = GPL-2.0+
 -- 
 2.11.0
