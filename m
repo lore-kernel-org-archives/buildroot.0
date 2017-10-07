@@ -1,282 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  7 Oct 2017 15:01:56 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: rename patch
-	directory after the last version bump
-Message-ID: <20171007130156.17309-1-romain.naour@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 7 Oct 2017 15:06:33 +0200
+Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
+In-Reply-To: <20171007135843.5a75c7f5@windsurf.home>
+References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
+ <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
+ <1501150411.21202.1.camel@embedded.rocks>
+ <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
+ <20170727165026.4a5f59a1@windsurf.lan>
+ <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
+ <20171007135843.5a75c7f5@windsurf.home>
+Message-ID: <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The last bump [1] forgot to rename the patch directory and remove
-upstream patches.
+Thomas, Andrey, All,
 
-We still need to fix the monotonic clock check which doesn't work
-when cross-compiling.
+Le 07/10/2017 ? 13:58, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Fri, 6 Oct 2017 15:39:03 -0700, Andrey Yurovsky wrote:
+> 
+>> On Thu, Jul 27, 2017 at 7:50 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> No, let's wait to have a few Meson-based packages in Buildroot, and
+>>> then we'll have a package infrastructure. This will allow us to see
+>>> what are the commonalities, what are the differences, etc.  
+>>
+>> systemd 235 is released (https://lwn.net/Articles/735691/) and it
+>> drops autoconf/automake and only has meson as the build system (in 234
+>> they warned this would happen next) so perhaps that's a good starting
+>> point for buildroot to integrate meson support? I'm happy to help out
+>> if no one else was already working on it.
+> 
+> This would indeed be a very compelling reason to support meson.
 
-[1] 436659c55f8d3c6155546cfc666a13c793d992f9
+Also the next enlightenment release (0.22) will only support meson.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- ...target-buffer-in-SProcXSendExtensionEvent.patch | 39 ------------
- ...isallow-GenericEvent-in-SendEvent-request.patch | 71 ----------------------
- ...ify-all-events-in-ProcXSendExtensionEvent.patch | 50 ---------------
- .../0007-Xi-Do-not-try-to-swap-GenericEvent.patch  | 45 --------------
- .../0001-modesettings-needs-dri2.patch             |  0
- ...onfigure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
- .../0003-Remove-check-for-useSIGIO-option.patch    |  0
- 7 files changed, 205 deletions(-)
- delete mode 100644 package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch
- rename package/x11r7/xserver_xorg-server/{1.19.3 => 1.19.4}/0001-modesettings-needs-dri2.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.19.3 => 1.19.4}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.19.3 => 1.19.4}/0003-Remove-check-for-useSIGIO-option.patch (100%)
+Best regards,
+Romain
 
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
-deleted file mode 100644
-index c15dc9f..0000000
---- a/package/x11r7/xserver_xorg-server/1.19.3/0004-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:39 +0300
--Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
--
--Make sure that the xEvent eventT is initialized with zeros, the same way as
--in SProcSendEvent.
--
--Some event swapping functions do not overwrite all 32 bytes of xEvent
--structure, for example XSecurityAuthorizationRevoked. Two cooperating
--clients, one swapped and the other not, can send
--XSecurityAuthorizationRevoked event to each other to retrieve old stack data
--from X server. This can be potentialy misused to go around ASLR or
--stack-protector.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Xi/sendexev.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 11d82029f..1cf118ab6 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
-- {
--     CARD32 *p;
--     int i;
---    xEvent eventT;
--+    xEvent eventT = { .u.u.type = 0 };
--     xEvent *eventP;
--     EventSwapPtr proc;
-- 
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch
-deleted file mode 100644
-index 12da5f5..0000000
---- a/package/x11r7/xserver_xorg-server/1.19.3/0005-dix-Disallow-GenericEvent-in-SendEvent-request.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:40 +0300
--Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
--
--The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
--no less. Both ProcSendEvent and SProcSendEvent verify that the received data
--exactly match the request size. However nothing stops the client from passing
--in event with xEvent::type = GenericEvent and any value of
--xGenericEvent::length.
--
--In the case of ProcSendEvent, the event will be eventually passed to
--WriteEventsToClient which will see that it is Generic event and copy the
--arbitrary length from the receive buffer (and possibly past it) and send it to
--the other client. This allows clients to copy unitialized heap memory out of X
--server or to crash it.
--
--In case of SProcSendEvent, it will attempt to swap the incoming event by
--calling a swapping function from the EventSwapVector array. The swapped event
--is written to target buffer, which in this case is local xEvent variable. The
--xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
--expect that the target buffer has size matching the size of the source
--GenericEvent. This allows clients to cause stack buffer overflows.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- dix/events.c  | 6 ++++++
-- dix/swapreq.c | 7 +++++++
-- 2 files changed, 13 insertions(+)
--
--diff --git a/dix/events.c b/dix/events.c
--index 3e3a01ef9..d3a33ea3f 100644
----- a/dix/events.c
--+++ b/dix/events.c
--@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
--         client->errorValue = stuff->event.u.u.type;
--         return BadValue;
--     }
--+    /* Generic events can have variable size, but SendEvent request holds
--+       exactly 32B of event data. */
--+    if (stuff->event.u.u.type == GenericEvent) {
--+        client->errorValue = stuff->event.u.u.type;
--+        return BadValue;
--+    }
--     if (stuff->event.u.u.type == ClientMessage &&
--         stuff->event.u.u.detail != 8 &&
--         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
--diff --git a/dix/swapreq.c b/dix/swapreq.c
--index 719e9b81c..67850593b 100644
----- a/dix/swapreq.c
--+++ b/dix/swapreq.c
--@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
--     swapl(&stuff->destination);
--     swapl(&stuff->eventMask);
-- 
--+    /* Generic events can have variable size, but SendEvent request holds
--+       exactly 32B of event data. */
--+    if (stuff->event.u.u.type == GenericEvent) {
--+        client->errorValue = stuff->event.u.u.type;
--+        return BadValue;
--+    }
--+
--     /* Swap event */
--     proc = EventSwapVector[stuff->event.u.u.type & 0177];
--     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
-deleted file mode 100644
-index 2e65100..0000000
---- a/package/x11r7/xserver_xorg-server/1.19.3/0006-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:41 +0300
--Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
--
--The requirement is that events have type in range
--EXTENSION_EVENT_BASE..lastEvent, but it was tested
--only for first event of all.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Xi/sendexev.c | 12 +++++++-----
-- 1 file changed, 7 insertions(+), 5 deletions(-)
--
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 1cf118ab6..5e63bfcca 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
-- int
-- ProcXSendExtensionEvent(ClientPtr client)
-- {
---    int ret;
--+    int ret, i;
--     DeviceIntPtr dev;
--     xEvent *first;
--     XEventClass *list;
--@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
--     /* The client's event type must be one defined by an extension. */
-- 
--     first = ((xEvent *) &stuff[1]);
---    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
---          (first->u.u.type < lastEvent))) {
---        client->errorValue = first->u.u.type;
---        return BadValue;
--+    for (i = 0; i < stuff->num_events; i++) {
--+        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
--+            (first[i].u.u.type < lastEvent))) {
--+            client->errorValue = first[i].u.u.type;
--+            return BadValue;
--+        }
--     }
-- 
--     list = (XEventClass *) (first + stuff->num_events);
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch
-deleted file mode 100644
-index 871e762..0000000
---- a/package/x11r7/xserver_xorg-server/1.19.3/0007-Xi-Do-not-try-to-swap-GenericEvent.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:42 +0300
--Subject: [PATCH] Xi: Do not try to swap GenericEvent.
--
--The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
--it is assuming that the event has fixed size and gives the swapping function
--xEvent-sized buffer.
--
--A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Xi/sendexev.c | 10 +++++++++-
-- 1 file changed, 9 insertions(+), 1 deletion(-)
--
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 5e63bfcca..5c2e0fc56 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
-- 
--     eventP = (xEvent *) &stuff[1];
--     for (i = 0; i < stuff->num_events; i++, eventP++) {
--+        if (eventP->u.u.type == GenericEvent) {
--+            client->errorValue = eventP->u.u.type;
--+            return BadValue;
--+        }
--+
--         proc = EventSwapVector[eventP->u.u.type & 0177];
---        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
--+        /* no swapping proc; invalid event type? */
--+        if (proc == NotImplemented) {
--+            client->errorValue = eventP->u.u.type;
--             return BadValue;
--+        }
--         (*proc) (eventP, &eventT);
--         *eventP = eventT;
--     }
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.3/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.3/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.3/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.3/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch
--- 
-2.9.5
+> 
+> Best regards,
+> 
+> Thomas
+> 
