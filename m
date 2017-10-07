@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Oct 2017 23:14:44 +0200
-Subject: [Buildroot] [PATCH v2] pdbg: bump version to latest
-In-Reply-To: <20171003121425.28490-1-joel@jms.id.au>
-References: <20171003121425.28490-1-joel@jms.id.au>
-Message-ID: <20171007231444.326c0a25@windsurf.home>
+Date: Sat, 7 Oct 2017 23:14:56 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: Bump to version 20170929
+Message-ID: <20171007210734.3EFE480E30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d583756faefad31b7103e71f886fcde60dbc549
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  3 Oct 2017 22:44:25 +1030, Joel Stanley wrote:
-> I got this error when attempting to build:
-> 
->  aclocal: error: couldn't open directory 'm4': No such file or directory
-> 
-> So we now have the post patch hook to ensure the m4 directory is
-> present.
-> 
-> In addition, the package now sets a variable with the Git SHA1 so that
-> the binary contains the expected output for --version.
-> 
-> Specific configurations of uClibc cause a build failure in pdbg. This commit
-> adds a patch to remove the definition of the offending macro (it is unused in
-> the source).
-> 
->  In file included from usr/include/stdio.h:71:0,
->                   from libpdbg/fake.c:17:
->  include/bits/uClibc_stdio.h:149:16: error: expected identifier or ?(? before ?;? token
->    void *__unused;    /* Placeholder for codeset binding. */
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
-> v2:
->  - Use $() and not ${} when referencing make variables
->  - Fix building with uClibc. I've also sent the patch upstream
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 68b9523..42feaad 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,2 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20170516/ltp-full-20170516.tar.xz.sha1
+-sha1 bd5210b73b14708c88449089a3a3c64ace3cd22a  ltp-full-20170516.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20170929/ltp-full-20170929.tar.xz.sha1
++sha1 a170db3bc7203c9a998a277a369e7020dc61a382  ltp-full-20170929.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index eb9453a..bbeee5b 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20170516
++LTP_TESTSUITE_VERSION = 20170929
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
