@@ -1,49 +1,45 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 7 Oct 2017 15:06:33 +0200
-Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
-In-Reply-To: <20171007135843.5a75c7f5@windsurf.home>
-References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
- <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
- <1501150411.21202.1.camel@embedded.rocks>
- <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
- <20170727165026.4a5f59a1@windsurf.lan>
- <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
- <20171007135843.5a75c7f5@windsurf.home>
-Message-ID: <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  7 Oct 2017 15:52:13 +0200
+Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.21.10
+Message-ID: <20171007135213.27820-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Andrey, All,
+https://www.enlightenment.org/news/e0.21.10_release
 
-Le 07/10/2017 ? 13:58, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Fri, 6 Oct 2017 15:39:03 -0700, Andrey Yurovsky wrote:
-> 
->> On Thu, Jul 27, 2017 at 7:50 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> No, let's wait to have a few Meson-based packages in Buildroot, and
->>> then we'll have a package infrastructure. This will allow us to see
->>> what are the commonalities, what are the differences, etc.  
->>
->> systemd 235 is released (https://lwn.net/Articles/735691/) and it
->> drops autoconf/automake and only has meson as the build system (in 234
->> they warned this would happen next) so perhaps that's a good starting
->> point for buildroot to integrate meson support? I'm happy to help out
->> if no one else was already working on it.
-> 
-> This would indeed be a very compelling reason to support meson.
+Add COPYING file hash
 
-Also the next enlightenment release (0.22) will only support meson.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/enlightenment/enlightenment.hash | 5 +++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 91fb98a..6fb29a2 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,2 +1,3 @@
+-# From https://www.enlightenment.org/news/e0.21.9_release
+-sha256	eb560c0027378baf650d0690747ef0d08b5b329504e26e2210cc7978c019ae70 	enlightenment-0.21.9.tar.xz
++# From https://www.enlightenment.org/news/e0.21.10_release
++sha256	9bb915caa5b390b2e212ff5f6f75b57a3d082f80d2f7b5b278bd902e2fad7f14	enlightenment-0.21.10.tar.xz
++sha256	34dbd501ec9d1c8dcc569c01db9cf9a4b7ee5981614cc9f8f613a97463d27350	COPYING
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 441f049..1c88c8b 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.21.9
++ENLIGHTENMENT_VERSION = 0.21.10
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause
+-- 
+2.9.5
