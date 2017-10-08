@@ -1,54 +1,46 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 8 Oct 2017 19:16:11 +0200
-Subject: [Buildroot] [PATCH] swig: enable support for Node.js >= 7.x
-In-Reply-To: <20171008155252.5f08f349@windsurf>
-References: <1506686356-4509-1-git-send-email-yegorslists@googlemail.com>
- <20171008155252.5f08f349@windsurf>
-Message-ID: <CAGm1_kvanZjOBLtt4N+ucMhKJ1u+Y6vowr4Gju6rp5dM_LYjCg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Oct 2017 20:05:02 +0200
+Subject: [Buildroot] [PATCH v3 2/3] docs/manual: document meson-based
+ packages
+In-Reply-To: <20171008184855.GB17300@momiji>
+References: <20170727095527.14324-1-joerg.krause@embedded.rocks>
+ <20170727095527.14324-3-joerg.krause@embedded.rocks>
+ <20171008100341.GB2803@scaer> <20171008144817.GB17840@itchy>
+ <20171008184855.GB17300@momiji>
+Message-ID: <20171008180502.GD2803@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Adrian, All,
 
-On Sun, Oct 8, 2017 at 3:52 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 29 Sep 2017 13:59:16 +0200, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Recent Node.js versions have removed some depreciated API calls,
->> that swig still relies on. Patches taken from this PR [1] fix
->> this issue.
->>
->> [1] https://github.com/swig/swig/pull/968
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>  .../0001-Add-Node-7.x-aka-V8-5.2-support.patch     | 328 +++++++++++++++++++++
->>  ...e-warnings-on-Node-6.x-aka-V8-5.0-and-5.1.patch | 222 ++++++++++++++
->
-> Applied to master.
->
-> To be honest, I hesitated a bit, those patches are a bit big and
-> invasive, and have not been merged upstream yet. I've merged anyway,
-> but we might need to drop them at the next swig bump if they haven't
-> been merged upstream.
+On 2017-10-08 18:48 +0200, Adrian Perez de Castro spake thusly:
+> On Sun, 8 Oct 2017 16:48:17 +0200, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+> > On 17-10-08 12:03:41, Yann E. MORIN wrote:
+> > > On 2017-07-27 11:55 +0200, J?rg Krause spake thusly:
+> > > > From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[--SNIP--]
+> > > > +20: define FOO_CONFIGURE_CMDS
+> > > > +21: 	rm -rf $(@D)/build
+> > > We don't usually remove stuff created in a previous run, unless it
+> > > breaks the build.
+> > OK.
+> Though you may want/need to remove the build directory at least for the
+> ?<pkg>-reconfigure? target because Meson will refuse to use an
+> already-configured build directory:
+[--SNIP--]
 
-Thanks for merging. The problem is that the project lacks a Node.js
-maintainer. That's why none has applied the patch.
+This is a good reason to forcibly remove it, indeed.
 
-> Also, how do you in practice build swig with nodejs support? There is
-> no dependency between host-swig and host-nodejs.
+Regards,
+Yann E. MORIN.
 
-SWIG as such has nothing to do with Node.js directly, but it creates
-code, that will be compiled against node.js via node-gyp utility [1].
-BR uses newest Node.js version with removed obsolete APIs. That's why
-we need this patch, but SWIG has no direct dependency to host-nodejs.
-
-[1] https://github.com/nodejs/node-gyp
-
-Yegor
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
