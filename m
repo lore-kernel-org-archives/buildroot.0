@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Oct 2017 15:30:40 +0200
-Subject: [Buildroot] [PATCH] parted: properly link with libiconv
-In-Reply-To: <20171007230611.25347-1-arnout@mind.be>
-References: <20171007230611.25347-1-arnout@mind.be>
-Message-ID: <20171008153040.5700dfea@windsurf>
+Date: Sun, 8 Oct 2017 15:31:09 +0200
+Subject: [Buildroot] [git commit] imx6-sabresd: Improve the explanation of
+	the fragment file
+Message-ID: <20171008132348.7B7D17FE4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f99636a044820fb61f400de0fdb96315a1aa9279
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 8 Oct 2017 01:06:11 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> parted uses libiconv but doesn't link with it. All the checks are there
-> in configure, but the Makefile.am doesn't add it to the link. Add a
-> patch to fix this.
-> 
-> Also add an optional dependency on libiconv, so it is reproducible.
-> 
-> While we're at it, regenerate the existing patches on top of v3.2, and
-> make patch 0003 a properly git formatted one.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: srg.venema at gmail.com
-> ---
->  ...rch-linux.c-Compile-without-ENABLE_DEVICE.patch |  8 ++---
->  .../0002-configure.ac-uclinux-is-also-linux.patch  |  4 +--
->  ...Include-fcntl.h-to-get-loff_t-definition.patch} | 19 ++++++++----
->  ...arted-labels-link-with-libiconv-if-needed.patch | 34 ++++++++++++++++++++++
->  package/parted/parted.mk                           |  7 ++++-
->  5 files changed, 60 insertions(+), 12 deletions(-)
->  rename package/parted/{0003-fix-includes-for-musl.patch => 0003-Include-fcntl.h-to-get-loff_t-definition.patch} (36%)
->  create mode 100644 package/parted/0004-libparted-labels-link-with-libiconv-if-needed.patch
+Improve the explanation of the need for using the performance governor.
 
-Applied to master, thanks. Don't forget to send the patch upstream.
-Thanks!
+This problem is specific to mx6sabresd board and the Egalax touchscreen
+running a mainline kernel, so make this clear.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/imx6-sabresd/linux_qt5.fragment | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/board/freescale/imx6-sabresd/linux_qt5.fragment b/board/freescale/imx6-sabresd/linux_qt5.fragment
+index 5c0505e..ffa5f63 100644
+--- a/board/freescale/imx6-sabresd/linux_qt5.fragment
++++ b/board/freescale/imx6-sabresd/linux_qt5.fragment
+@@ -1,4 +1,4 @@
+-# Currently kernel mainline exhibits issues when running cpufreq as ondemand
+-# governor on mx6.
++# Currently mx6sabresd exhibits touchscreen issues when running cpufreq as
++# ondemand governor with a mainline kernel.
+ # CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+ CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
