@@ -1,78 +1,149 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Oct 2017 16:23:36 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.09-rc1
-In-Reply-To: <20170921182828.26985-1-didin@synopsys.com>
-References: <20170921182828.26985-1-didin@synopsys.com>
-Message-ID: <20171008162336.5e0f49ac@windsurf>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 8 Oct 2017 16:42:04 +0200
+Subject: [Buildroot] [PATCH v3 1/3] meson: new package
+In-Reply-To: <20171008101754.GC2803@scaer>
+References: <20170727095527.14324-1-joerg.krause@embedded.rocks>
+ <20170727095527.14324-2-joerg.krause@embedded.rocks>
+ <20171008101754.GC2803@scaer>
+Message-ID: <20171008144204.GA17840@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-On Thu, 21 Sep 2017 21:28:28 +0300, Evgeniy Didin wrote:
-> This commit bumps ARC toolchain to arc-2017.09-rc1.
-> 
-> Now speaking about arc-2017.09 series it is built on top
-> of upstream GCC 7.1.1 and Binutils 2.29 so please expect
-> all kinds of breakages related to GCC 7.x as we saw earlier
-> with move from 4.8 to 6.x :)
-> 
-> Note patches for both GCC and Binutils were updated with
-> copies from corresponding mainline versions, i.e.
-> "package/gcc/7.2.0" and "package/binutils/2.29".
-> 
-> Please note that it is a release candidate and it might contain
-> some breakages, please don't use it for production builds.
-> 
-> !!This super commit rewrites older commit which bumped
-> !!arc toolchain to 2017.09-eng008 vesrion
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/binutils/Config.in.host                    |   2 +-
->  .../0002-ld-makefile.patch}                        |  10 +-
->  .../0003-check-ldrunpath-length.patch}             |  12 +--
->  .../0004-add-sysroot-fix-from-bug-3049.patch}      |  17 ++--
->  .../0005-poison-system-directories.patch}          |  54 +++++-----
->  ...LINKER-BUG-.rofixup-section-size-mismatch.patch |  31 ++++++
->  package/binutils/binutils.hash                     |   2 +-
->  package/binutils/binutils.mk                       |   2 +-
->  package/gcc/Config.in.host                         |   6 +-
->  .../0001-ARC-Fix-tst_movb-pattern.patch            |  55 ----------
->  .../gcc/arc-2017.03/301-missing-execinfo_h.patch   |  13 ---
->  .../arc-2017.03/940-uclinux-enable-threads.patch   |  19 ----
->  package/gcc/arc-2017.09-rc1/0100-uclibc-conf.patch |  29 ++++++
->  .../0860-cilk-fix-build-without-wchar.patch}       |  24 +++--
->  .../arc-2017.09-rc1/0900-remove-selftests.patch    | 111 +++++++++++++++++++++
->  .../0910-Update-uses-for-hw-loop-labels.patch      |  63 ++++++++++++
->  package/gcc/gcc.hash                               |   2 +-
->  package/gdb/Config.in.host                         |   2 +-
->  package/gdb/gdb.hash                               |   2 +-
->  19 files changed, 307 insertions(+), 149 deletions(-)
->  rename package/binutils/{arc-2017.03/0300-PATCH-ld-makefile.patch => arc-2017.09-rc1/0002-ld-makefile.patch} (87%)
->  rename package/binutils/{arc-2017.03/0301-PATCH-check-ldrunpath-length.patch => arc-2017.09-rc1/0003-check-ldrunpath-length.patch} (79%)
->  rename package/binutils/{arc-2017.03/0500-add-sysroot-fix-from-bug-3049.patch => arc-2017.09-rc1/0004-add-sysroot-fix-from-bug-3049.patch} (80%)
->  rename package/binutils/{arc-2017.03/0600-poison-system-directories.patch => arc-2017.09-rc1/0005-poison-system-directories.patch} (89%)
->  create mode 100644 package/binutils/arc-2017.09-rc1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
->  delete mode 100644 package/gcc/arc-2017.03/0001-ARC-Fix-tst_movb-pattern.patch
->  delete mode 100644 package/gcc/arc-2017.03/301-missing-execinfo_h.patch
->  delete mode 100644 package/gcc/arc-2017.03/940-uclinux-enable-threads.patch
->  create mode 100644 package/gcc/arc-2017.09-rc1/0100-uclibc-conf.patch
->  rename package/gcc/{arc-2017.03/860-cilk-wchar.patch => arc-2017.09-rc1/0860-cilk-fix-build-without-wchar.patch} (79%)
->  create mode 100644 package/gcc/arc-2017.09-rc1/0900-remove-selftests.patch
->  create mode 100644 package/gcc/arc-2017.09-rc1/0910-Update-uses-for-hw-loop-labels.patch
+On 17-10-08 12:17:54, Yann E. MORIN wrote:
+> J?rg, ?ric, All,
+>
+> On 2017-07-27 11:55 +0200, J?rg Krause spake thusly:
+> > From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> >
+> > This new package provides the host variant of the Meson Build System, an
+> > open source build system meant to be both extremely fast, and as user
+> > friendly as possible.
+> >
+> > More precisely, Meson creates configuration files for the Ninja build
+> > system.
+> >
+> > Besides building Meson, it generates a configuration file
+> > ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
+> > cross-compiling a Meson-based project.
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > [J?rg Krause:
+> >  * bump to version 0.41.2
+> >  * use explicit tarball release instead of github helper
+> >  * use explicit sed
+> >  * pass BR2_GCC_TARGET_CPU to cross file]
+> >
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > v3:
+> >  * fix missing mkdir
+> > ---
+> >  package/meson/cross-compilation.conf.in | 15 +++++++++++++++
+> >  package/meson/meson.hash                |  2 ++
+> >  package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
+> >  3 files changed, 48 insertions(+)
+> >  create mode 100644 package/meson/cross-compilation.conf.in
+> >  create mode 100644 package/meson/meson.hash
+> >  create mode 100644 package/meson/meson.mk
+> >
+> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> > new file mode 100644
+> > index 0000000000..d38fbb03cc
+> > --- /dev/null
+> > +++ b/package/meson/cross-compilation.conf.in
+>
+> And what about host packages that use meson?
 
-Applied to master, after dropping the useless Blackfin-related binutils
-patch. Thanks!
+Good question. I don't know about host packages that may switch to
+Meson. But, out of curiosity, I'll try with a dummy package to see how
+it would behave.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> > @@ -0,0 +1,15 @@
+> > +# Note: in Meson terminology, what Buildroot calls the "host" system is the
+> > +# "build" system and the "target" system is called the "host" system.
+>
+> Yeah, pretty confusing, isn't it? Buildroot is wrong here, but since
+> we've been wrong for almost two decades now, we can't really change...
+>
+> I'd still suggest a little rephrasing:
+>
+>     # Note: Buildroot's and Meson's terminologies differ about the meaning
+>     # of 'build', 'host' and 'target':
+>     # - Buildroot's 'host' is Meson's 'build'
+>     # - Buildroot's 'target' is Meson's 'host'
+
+Looks sensible to me.
+
+> Regards,
+> Yann E. MORIN.
+>
+> > +[binaries]
+> > +c = '@TARGET_CROSS at gcc'
+> > +cpp = '@TARGET_CROSS at g++'
+> > +ar = '@TARGET_CROSS at ar'
+> > +strip = '@TARGET_CROSS at strip'
+> > +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> > +
+> > +[host_machine]
+> > +system = 'linux'
+> > +cpu_family ='@TARGET_ARCH@'
+> > +cpu = '@TARGET_CPU@'
+> > +endian = '@TARGET_ENDIAN@'
+> > diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+> > new file mode 100644
+> > index 0000000000..7f0de1d437
+> > --- /dev/null
+> > +++ b/package/meson/meson.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally generated
+> > +sha256  074dd24fd068be0893e2e45bcc35c919d8e12777e9d6a7efdf72d4dc300867ca  meson-0.41.2.tar.gz
+> > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> > new file mode 100644
+> > index 0000000000..e9f1ffe4d4
+> > --- /dev/null
+> > +++ b/package/meson/meson.mk
+> > @@ -0,0 +1,31 @@
+> > +################################################################################
+> > +#
+> > +# meson
+> > +#
+> > +################################################################################
+> > +
+> > +MESON_VERSION = 0.41.2
+> > +MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+> > +MESON_LICENSE = Apache-2.0
+> > +MESON_LICENSE_FILES = COPYING
+> > +MESON_SETUP_TYPE = setuptools
+> > +
+> > +HOST_MESON_DEPENDENCIES = host-ninja
+> > +HOST_MESON_NEEDS_HOST_PYTHON = python3
+> > +
+> > +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
+> > +
+> > +define HOST_MESON_INSTALL_CROSS_CONF
+> > +	mkdir -p $(HOST_DIR)/etc/meson
+> > +	sed -e 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
+> > +	    -e 's;@TARGET_ARCH@;$(ARCH);g' \
+> > +	    -e 's;@TARGET_CPU@;$(BR2_GCC_TARGET_CPU);g' \
+> > +	    -e 's;@TARGET_ENDIAN@;$(HOST_MESON_TARGET_ENDIAN);g' \
+> > +	    -e 's;@HOST_DIR@;$(HOST_DIR);g' \
+> > +	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+> > +	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+> > +endef
+> > +
+> > +HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+> > +
+> > +$(eval $(host-python-package))
+> > --
+> > 2.13.3
+> >
+
+Regards,
+
+--
+ELB
