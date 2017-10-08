@@ -1,57 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 08 Oct 2017 17:08:27 +0000
-Subject: [Buildroot] [Bug 10386] New: Add an option to put all compiled
- executables that show up on target/ in staging/ as well
-Message-ID: <bug-10386-163@https.bugs.busybox.net/>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 8 Oct 2017 19:16:11 +0200
+Subject: [Buildroot] [PATCH] swig: enable support for Node.js >= 7.x
+In-Reply-To: <20171008155252.5f08f349@windsurf>
+References: <1506686356-4509-1-git-send-email-yegorslists@googlemail.com>
+ <20171008155252.5f08f349@windsurf>
+Message-ID: <CAGm1_kvanZjOBLtt4N+ucMhKJ1u+Y6vowr4Gju6rp5dM_LYjCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10386
+Hi Thomas,
 
-            Bug ID: 10386
-           Summary: Add an option to put all compiled executables that
-                    show up on target/ in staging/ as well
-           Product: buildroot
-           Version: 2017.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ciro.santilli at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Sun, Oct 8, 2017 at 3:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 29 Sep 2017 13:59:16 +0200, yegorslists at googlemail.com wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Recent Node.js versions have removed some depreciated API calls,
+>> that swig still relies on. Patches taken from this PR [1] fix
+>> this issue.
+>>
+>> [1] https://github.com/swig/swig/pull/968
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  .../0001-Add-Node-7.x-aka-V8-5.2-support.patch     | 328 +++++++++++++++++++++
+>>  ...e-warnings-on-Node-6.x-aka-V8-5.0-and-5.1.patch | 222 ++++++++++++++
+>
+> Applied to master.
+>
+> To be honest, I hesitated a bit, those patches are a bit big and
+> invasive, and have not been merged upstream yet. I've merged anyway,
+> but we might need to drop them at the next swig bump if they haven't
+> been merged upstream.
 
-Why this would be cool: you can then easily find the non-stripped executables
-to debug them with gdbserver, as they are in the same relative path as in the
-target.
+Thanks for merging. The problem is that the project lacks a Node.js
+maintainer. That's why none has applied the patch.
 
-Without that, you need to do a `find` inside build/
+> Also, how do you in practice build swig with nodejs support? There is
+> no dependency between host-swig and host-nodejs.
 
-This is already done for shared libraries, where it is required for
-compilation, and that is already great as it allows me to `set sysroot
-${buildroot_out_dir}/staging`
+SWIG as such has nothing to do with Node.js directly, but it creates
+code, that will be compiled against node.js via node-gyp utility [1].
+BR uses newest Node.js version with removed obsolete APIs. That's why
+we need this patch, but SWIG has no direct dependency to host-nodejs.
 
-This is an example of the type of setup I'm using:
-https://github.com/cirosantilli/linux-kernel-module-cheat/tree/b89ba9b799480e4eb1975f0a704409efb7d667d1#gdbserver
+[1] https://github.com/nodejs/node-gyp
 
-Maybe we could hardlink them or something to reduce disk usage if that is a
-concern.
-
-I know that this is already doable on a per package basis, possiby by modifying
-the .mk of packages, e.g. as `pciutils` has for `lspci`:
-
-        define PCIUTILS_INSTALL_STAGING_CMDS
-            $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(PCIUTILS_MAKE_OPTS) \
-                PREFIX=$(STAGING_DIR)/usr SBINDIR=$(STAGING_DIR)/usr/bin \
-                install install-lib install-pcilib
-        endef
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Yegor
