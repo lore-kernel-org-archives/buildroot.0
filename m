@@ -1,189 +1,105 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 8 Oct 2017 01:06:11 +0200
-Subject: [Buildroot] [PATCH] parted: properly link with libiconv
-Message-ID: <20171007230611.25347-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  8 Oct 2017 08:31:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-10-07
+Message-ID: <20171008063108.C09FC2088E@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-parted uses libiconv but doesn't link with it. All the checks are there
-in configure, but the Makefile.am doesn't add it to the link. Add a
-patch to fix this.
+Hello,
 
-Also add an optional dependency on libiconv, so it is reproducible.
+Build statistics for 2017-10-07
+================================
 
-While we're at it, regenerate the existing patches on top of v3.2, and
-make patch 0003 a properly git formatted one.
+      successes : 196
+       failures : 52 
+       timeouts : 0  
+          TOTAL : 248
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: srg.venema at gmail.com
----
- ...rch-linux.c-Compile-without-ENABLE_DEVICE.patch |  8 ++---
- .../0002-configure.ac-uclinux-is-also-linux.patch  |  4 +--
- ...Include-fcntl.h-to-get-loff_t-definition.patch} | 19 ++++++++----
- ...arted-labels-link-with-libiconv-if-needed.patch | 34 ++++++++++++++++++++++
- package/parted/parted.mk                           |  7 ++++-
- 5 files changed, 60 insertions(+), 12 deletions(-)
- rename package/parted/{0003-fix-includes-for-musl.patch => 0003-Include-fcntl.h-to-get-loff_t-definition.patch} (36%)
- create mode 100644 package/parted/0004-libparted-labels-link-with-libiconv-if-needed.patch
+Classification of failures by reason
+====================================
 
-diff --git a/package/parted/0001-libparted-arch-linux.c-Compile-without-ENABLE_DEVICE.patch b/package/parted/0001-libparted-arch-linux.c-Compile-without-ENABLE_DEVICE.patch
-index 5adc9beb12..1cf699bb12 100644
---- a/package/parted/0001-libparted-arch-linux.c-Compile-without-ENABLE_DEVICE.patch
-+++ b/package/parted/0001-libparted-arch-linux.c-Compile-without-ENABLE_DEVICE.patch
-@@ -1,4 +1,4 @@
--From 7e87ca3c531228d35e13e802d2622006138b104c Mon Sep 17 00:00:00 2001
-+From 141c4309d7164dcd4e09d137fc075c1726fd8dbb Mon Sep 17 00:00:00 2001
- From: Felix Janda <felix.janda@posteo.de>
- Date: Sun, 3 May 2015 10:33:15 +0200
- Subject: [PATCH] libparted/arch/linux.c: Compile without ENABLE_DEVICE_MAPPER
-@@ -10,7 +10,7 @@ Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-  1 file changed, 17 insertions(+), 4 deletions(-)
- 
- diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
--index 90ab21d..f6141e4 100644
-+index 0f18904..cf38c6f 100644
- --- a/libparted/arch/linux.c
- +++ b/libparted/arch/linux.c
- @@ -2304,6 +2304,7 @@ zasprintf (const char *format, ...)
-@@ -57,7 +57,7 @@ index 90ab21d..f6141e4 100644
-          return result;
-  }
-  
--@@ -2958,12 +2968,15 @@ _disk_sync_part_table (PedDisk* disk)
-+@@ -2945,12 +2955,15 @@ _disk_sync_part_table (PedDisk* disk)
-                                                 unsigned long long *length);
-  
-  
-@@ -75,5 +75,5 @@ index 90ab21d..f6141e4 100644
-                  remove_partition = _blkpg_remove_partition;
-  #ifdef BLKPG_RESIZE_PARTITION
- -- 
--2.1.4
-+2.14.2
- 
-diff --git a/package/parted/0002-configure.ac-uclinux-is-also-linux.patch b/package/parted/0002-configure.ac-uclinux-is-also-linux.patch
-index b2119bcdd7..5a264ced80 100644
---- a/package/parted/0002-configure.ac-uclinux-is-also-linux.patch
-+++ b/package/parted/0002-configure.ac-uclinux-is-also-linux.patch
-@@ -1,4 +1,4 @@
--From b3958317c5ee2940e7024bec2e7f288b5a6a26c3 Mon Sep 17 00:00:00 2001
-+From 7697d9c54e489b32b82c01f17db04f8b51857e51 Mon Sep 17 00:00:00 2001
- From: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Date: Mon, 30 Jun 2014 10:09:04 -0300
- Subject: [PATCH] configure.ac: uclinux is also linux
-@@ -29,5 +29,5 @@ index 436d0e2..50ad478 100644
-  AC_SUBST([OS])
-  
- -- 
--1.8.5.5
-+2.14.2
- 
-diff --git a/package/parted/0003-fix-includes-for-musl.patch b/package/parted/0003-Include-fcntl.h-to-get-loff_t-definition.patch
-similarity index 36%
-rename from package/parted/0003-fix-includes-for-musl.patch
-rename to package/parted/0003-Include-fcntl.h-to-get-loff_t-definition.patch
-index 28c94ace7c..ca82174a55 100644
---- a/package/parted/0003-fix-includes-for-musl.patch
-+++ b/package/parted/0003-Include-fcntl.h-to-get-loff_t-definition.patch
-@@ -1,13 +1,19 @@
--Include <fcntl.h> to get loff_t definition
-+From 2078c07d38ee7841b89ac8d81afc5e8bfcd4f703 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 8 Oct 2017 00:58:58 +0200
-+Subject: [PATCH] Include <fcntl.h> to get loff_t definition
- 
- Patch borrowed from Alpine Linux at
- http://git.alpinelinux.org/cgit/aports/plain/main/parted/fix-includes.patch. Solves
- build with musl.
-+---
-+ libparted/fs/xfs/platform_defs.h | 1 +
-+ 1 file changed, 1 insertion(+)
- 
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
----- parted-3.1.orig/libparted/fs/xfs/platform_defs.h
--+++ parted-3.1/libparted/fs/xfs/platform_defs.h
-+diff --git a/libparted/fs/xfs/platform_defs.h b/libparted/fs/xfs/platform_defs.h
-+index 2b55752..17023dc 100644
-+--- a/libparted/fs/xfs/platform_defs.h
-++++ b/libparted/fs/xfs/platform_defs.h
- @@ -35,6 +35,7 @@
-  #define __XFS_PLATFORM_DEFS_H__
-  
-@@ -16,3 +22,6 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  #include <stdarg.h>
-  #include <assert.h>
-  #include <endian.h>
-+-- 
-+2.14.2
-+
-diff --git a/package/parted/0004-libparted-labels-link-with-libiconv-if-needed.patch b/package/parted/0004-libparted-labels-link-with-libiconv-if-needed.patch
-new file mode 100644
-index 0000000000..9cabdeed89
---- /dev/null
-+++ b/package/parted/0004-libparted-labels-link-with-libiconv-if-needed.patch
-@@ -0,0 +1,34 @@
-+From 1084b0255c42fc86adb0a2c7614e341ac530db65 Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Sun, 8 Oct 2017 00:53:31 +0200
-+Subject: [PATCH] libparted/labels: link with libiconv if needed
-+
-+gpt.c uses iconv so it should link with it. Otherwise, on platforms
-+where libiconv is a separate library, we get a link failure of parted:
-+
-+    CCLD     parted
-+  ../libparted/.libs/libparted.so: undefined reference to `libiconv'
-+  ../libparted/.libs/libparted.so: undefined reference to `libiconv_open'
-+  ../libparted/.libs/libparted.so: undefined reference to `libiconv_close'
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ libparted/labels/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libparted/labels/Makefile.am b/libparted/labels/Makefile.am
-+index c996f81..b204379 100644
-+--- a/libparted/labels/Makefile.am
-++++ b/libparted/labels/Makefile.am
-+@@ -35,7 +35,7 @@ liblabels_la_SOURCES = \
-+   rdb.c		\
-+   sun.c
-+ 
-+-liblabels_la_LIBADD = $(OS_LIBS) $(INTLLIBS)
-++liblabels_la_LIBADD = $(OS_LIBS) $(INTLLIBS) $(LIBICONV)
-+ 
-+ AM_CPPFLAGS = $(partedincludedir) $(INTLINCS)
-+ 
-+-- 
-+2.14.2
-+
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index 35d152b469..1f0428a55b 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -9,7 +9,8 @@ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
- PARTED_DEPENDENCIES = host-pkgconf util-linux
- PARTED_INSTALL_STAGING = YES
--# For uclinux patch
-+# 0002-configure.ac-uclinux-is-also-linux.patch
-+# 0004-libparted-labels-link-with-libiconv-if-needed.patch
- PARTED_AUTORECONF = YES
- PARTED_GETTEXTIZE = YES
- PARTED_LICENSE = GPL-3.0+
-@@ -29,6 +30,10 @@ else
- PARTED_CONF_OPTS += --disable-device-mapper
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+PARTED_DEPENDENCIES += libiconv
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- PARTED_CONF_OPTS += --disable-dynamic-loading
- endif
+        wireguard-0.0.20171005 | 7 
+      host-uboot-tools-2017.07 | 6 
+                    flex-2.6.4 | 5 
+                 mesa3d-17.2.2 | 5 
+         xkeyboard-config-2.22 | 5 
+             dbus-python-1.2.4 | 4 
+                     nmap-7.60 | 3 
+                openjpeg-2.2.0 | 3 
+                  boost-1.64.0 | 1 
+                  cc-tool-0.26 | 1 
+             expect-2014-05-02 | 1 
+            host-lvm2-2.02.173 | 1 
+      host-monolite-1050200001 | 1 
+             lttng-tools-2.9.5 | 1 
+                 mplayer-1.3.0 | 1 
+                    mpv-0.27.0 | 1 
+                openobex-1.7.2 | 1 
+         python-gobject-2.28.6 | 1 
+           python-numpy-1.13.1 | 1 
+                    sdl2-2.0.6 | 1 
+           uboot-tools-2017.07 | 1 
+               wireshark-2.2.7 | 1 
+
+
+Detail of failures
+===================
+
+     powerpc |                   boost-1.64.0 | NOK | http://autobuild.buildroot.net/results/ae4e9745ec58788bedc4476a04cdd3165062808a |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/1fdacf5b33d97edf937705ed5befae2c9cf8be34 |     
+     aarch64 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/c35b8287ca6bb4e2de11901e79e71108b4cd5eb3 | ORPH
+      mipsel |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/4aed30c76bec5fad48e4c0aef70664336e8337b0 | ORPH
+        i686 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/e2debbd8c89f6fe41572c28b31cbf7692bc2fae0 | ORPH
+     aarch64 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/0ff292ac61c3a754e990e184fb38527924b5252f | ORPH
+        i586 |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/81fd9c57ea4a560218c9c9105e55cdbda9bcdc7f | ORPH
+        bfin |                     flex-2.6.4 | NOK | http://autobuild.buildroot.net/results/34c6f1dd167b647333e1e8b6279819206139a8a8 | ORPH
+        bfin |                     flex-2.6.4 | NOK | http://autobuild.buildroot.net/results/952248e9270a1124f44d1703c0a4cefde6a6d970 | ORPH
+        m68k |                     flex-2.6.4 | NOK | http://autobuild.buildroot.net/results/1a14e64631c2b52fb834d4d5eeed5ac3ff18dfe9 | ORPH
+         arm |                     flex-2.6.4 | NOK | http://autobuild.buildroot.net/results/cba60edc65bf14e191d1d7ace0706008ad281062 | ORPH
+        m68k |                     flex-2.6.4 | NOK | http://autobuild.buildroot.net/results/9b49b96da65ae3e7645496b6775311189a47e1fc | ORPH
+         arm |             host-lvm2-2.02.173 | NOK | http://autobuild.buildroot.net/results/dc0c1a9ae09fe838a710d5bd57cabf2fb4d42008 | ORPH
+         arm |       host-monolite-1050200001 | NOK | http://autobuild.buildroot.net/results/ed7b3ad78499a172d4380cf3184d6d0d8f0b9f23 |     
+   powerpc64 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/4f6ea604d43958531911a60d005d187367acff0a | ORPH
+      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/3c1f2244a966824ed76f350121c878b0eeb02807 | ORPH
+   powerpc64 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/f1fb34ff8c1d56adb3a15e6f7c0426baf6f8772d | ORPH
+    mips64el |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/41bf9eb0585a822ed3dd267d17a876e0f63d934d | ORPH
+      x86_64 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/59fa8a7858117f6a57e5ce8ff203f7a68d57d8b3 | ORPH
+         arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/2489c818dd2166879a9b8c75cb6929dde6b1d6e4 | ORPH
+        i686 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/3cdf4be77b4b0a8cb352e0ac94cdda82c24a9618 |     
+     powerpc |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/276dec0ce0d25bc75e5bfdc0b419537289dccfb3 |     
+       nios2 |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/25430e3e7f9972dd70b618b5e2925c0742f32ea6 |     
+      x86_64 |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/7d1bf236120493276a8bdfe228137215d830ed3d |     
+      x86_64 |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/4ade6c6a33b7b3bfc5f023ea0f8264a2c0ae9ac9 |     
+         arm |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/dedb1d303b8fe0b0b59d1bc47910de5765f3b1bf |     
+     powerpc |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/c348c9b376095ac7846b399b624eacbf159fead4 |     
+      x86_64 |                     mpv-0.27.0 | NOK | http://autobuild.buildroot.net/results/6f16448912845b5af5d502a03cc60e44f028340d |     
+      x86_64 |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/ac928926ed972157bf57b7c10becd4c8b7dd4e53 |     
+        mips |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/7458cd04b95bf7c204fa340013bf59bc5469498c |     
+        mips |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/1774fcb2f60af72fb0562ed6d0debbfa9d549404 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/fbeaabc4e559a98d6b364a01e972c6e5d54e74b6 |     
+         arc |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/025e66422edc6685e7e323a386f8ebe8da5f9965 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/8d9088bdc881be1192bb8a0d716a4d7f3f8ffae2 |     
+        bfin |                 openobex-1.7.2 | NOK | http://autobuild.buildroot.net/results/bfdea8d4dcf86df0cf18e548c82898c0a0eb3c1d |     
+      mipsel |          python-gobject-2.28.6 | NOK | http://autobuild.buildroot.net/results/88406cc5110d2a6d24a1b3d335f8c65aeecf59be |     
+         arm |            python-numpy-1.13.1 | NOK | http://autobuild.buildroot.net/results/92b1bce9208452a87b72f3f238176952745ba9ce |     
+         arm |                     sdl2-2.0.6 | NOK | http://autobuild.buildroot.net/results/f6a41eb0458de709e89c706188535e61bd873165 |     
+     powerpc |            uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/8e85e41c8fa4395df4d3a072b8f7dacf4f9fe499 | ORPH
+         arm |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/dd43820320cec48e33da930af7ca62c31db575da | ORPH
+      mipsel |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/cf059bf4b068020283733d5ae44cc299175f06d4 | ORPH
+    mips64el |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/53554feb571b81f4d302926970a7f042cb317ece | ORPH
+      x86_64 |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/c14dbafd78a4405f96dee35bd4aaca7c487c2b46 | ORPH
+microblazeel |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/1d7812477fda4a62f10463b541568d11a7198da9 | ORPH
+    mips64el |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/aba5ec3ab76baff7ef4624599d1e94dd7600c2f8 | ORPH
+        m68k |         wireguard-0.0.20171005 | NOK | http://autobuild.buildroot.net/results/3fe552d3fe8387c32f61e76055d385d941ce1a45 | ORPH
+     aarch64 |                wireshark-2.2.7 | NOK | http://autobuild.buildroot.net/results/36112d5e861751d88e1ad431204312ff99aac3e9 |     
+         arm |          xkeyboard-config-2.22 | NOK | http://autobuild.buildroot.net/results/c03b5a15b01663e17a148605e6520c83e1f2f776 |     
+        m68k |          xkeyboard-config-2.22 | NOK | http://autobuild.buildroot.net/results/017a271f6609282d981a2715a5bb35fd7678333a |     
+     sparc64 |          xkeyboard-config-2.22 | NOK | http://autobuild.buildroot.net/results/cb6061fa43b4c81b21a140385bdb1b529bad8778 |     
+   powerpc64 |          xkeyboard-config-2.22 | NOK | http://autobuild.buildroot.net/results/54c5356d26fdc60045679e447f20c2737710f78c |     
+      xtensa |          xkeyboard-config-2.22 | NOK | http://autobuild.buildroot.net/results/a64b4da33ab2cfdb2fb188d899f6162326a27ff1 |     
+
 -- 
-2.14.2
+http://autobuild.buildroot.net
