@@ -1,46 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Oct 2017 20:05:02 +0200
-Subject: [Buildroot] [PATCH v3 2/3] docs/manual: document meson-based
- packages
-In-Reply-To: <20171008184855.GB17300@momiji>
-References: <20170727095527.14324-1-joerg.krause@embedded.rocks>
- <20170727095527.14324-3-joerg.krause@embedded.rocks>
- <20171008100341.GB2803@scaer> <20171008144817.GB17840@itchy>
- <20171008184855.GB17300@momiji>
-Message-ID: <20171008180502.GD2803@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Oct 2017 20:50:31 +0200
+Subject: [Buildroot] [PATCH] swig: enable support for Node.js >= 7.x
+In-Reply-To: <CAGm1_kvanZjOBLtt4N+ucMhKJ1u+Y6vowr4Gju6rp5dM_LYjCg@mail.gmail.com>
+References: <1506686356-4509-1-git-send-email-yegorslists@googlemail.com>
+ <20171008155252.5f08f349@windsurf>
+ <CAGm1_kvanZjOBLtt4N+ucMhKJ1u+Y6vowr4Gju6rp5dM_LYjCg@mail.gmail.com>
+Message-ID: <20171008205031.44850462@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adrian, All,
+Hello,
 
-On 2017-10-08 18:48 +0200, Adrian Perez de Castro spake thusly:
-> On Sun, 8 Oct 2017 16:48:17 +0200, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
-> > On 17-10-08 12:03:41, Yann E. MORIN wrote:
-> > > On 2017-07-27 11:55 +0200, J?rg Krause spake thusly:
-> > > > From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-[--SNIP--]
-> > > > +20: define FOO_CONFIGURE_CMDS
-> > > > +21: 	rm -rf $(@D)/build
-> > > We don't usually remove stuff created in a previous run, unless it
-> > > breaks the build.
-> > OK.
-> Though you may want/need to remove the build directory at least for the
-> ?<pkg>-reconfigure? target because Meson will refuse to use an
-> already-configured build directory:
-[--SNIP--]
+On Sun, 8 Oct 2017 19:16:11 +0200, Yegor Yefremov wrote:
 
-This is a good reason to forcibly remove it, indeed.
+> > To be honest, I hesitated a bit, those patches are a bit big and
+> > invasive, and have not been merged upstream yet. I've merged anyway,
+> > but we might need to drop them at the next swig bump if they haven't
+> > been merged upstream.  
+> 
+> Thanks for merging. The problem is that the project lacks a Node.js
+> maintainer. That's why none has applied the patch.
 
-Regards,
-Yann E. MORIN.
+Hopefully with all the comments received in the github PR, the Node.js
+maintainers will apply those patches.
 
+> SWIG as such has nothing to do with Node.js directly, but it creates
+> code, that will be compiled against node.js via node-gyp utility [1].
+> BR uses newest Node.js version with removed obsolete APIs. That's why
+> we need this patch, but SWIG has no direct dependency to host-nodejs.
+
+OK, makes sense. Thanks for the explanation!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
