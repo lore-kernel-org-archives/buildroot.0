@@ -1,107 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Oct 2017 23:09:58 +0200
-Subject: [Buildroot] [git commit] package/bcg729: new package
-Message-ID: <20171008210409.F18E580FC6@busybox.osuosl.org>
+Date: Sun, 8 Oct 2017 23:12:13 +0200
+Subject: [Buildroot] [git commit] package/freeswitch-mod-bcg729: new package
+Message-ID: <20171008210553.30E1281109@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a98e1bdd746d5b1bc9572106b5313967d9928b98
+commit: https://git.buildroot.net/buildroot/commit/?id=c81810de50e19de77cf79b4eb0dc2808751bc389
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoting http://www.linphone.org/technical-corner/bcg729/downloads
-regarding patent information:
-
-"ITU G729 Annex A/B were offically released October/November 1996
-(https://www.itu.int/rec/T-REC-G.729), hence all patents covering these
-specifications shall have expired in November 2016.
-
-Patent pool administrator confirmed most licensed patents under the
-G.729 Consortium have expired (http://www.sipro.com/G729.html)."
+This package is based on the bcg729 library from Belledonne Communica-
+tions which is wrapped into a freeswitch module to provide a native
+G729.A codec.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/bcg729/Config.in   |  7 +++++++
- package/bcg729/bcg729.hash |  3 +++
- package/bcg729/bcg729.mk   | 21 +++++++++++++++++++++
- 5 files changed, 33 insertions(+)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/freeswitch-mod-bcg729/Config.in            | 10 ++++++++
+ .../freeswitch-mod-bcg729.hash                     |  3 +++
+ .../freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk | 30 ++++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 64acc7d..1e1ed37 100644
+index 1e1ed37..f35d6f3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -197,6 +197,7 @@ F:	package/alsa-utils/
- F:	package/apache/
- F:	package/apr/
- F:	package/apr-util/
-+F:	package/bcg729/
- F:	package/bluez-tools/
- F:	package/clamav/
- F:	package/dovecot/
+@@ -207,6 +207,7 @@ F:	package/eudev/
+ F:	package/exim/
+ F:	package/fetchmail/
+ F:	package/freeswitch/
++F:	package/freeswitch-mod-bcg729/
+ F:	package/ffmpeg/
+ F:	package/ghostscript/
+ F:	package/giflib/
 diff --git a/package/Config.in b/package/Config.in
-index 98f8fee..a6c8f2d 100644
+index a6c8f2d..6f85643 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -944,6 +944,7 @@ menu "Audio/Sound"
- 	source "package/alsa-lib/Config.in"
- 	source "package/aubio/Config.in"
- 	source "package/audiofile/Config.in"
-+	source "package/bcg729/Config.in"
- 	source "package/celt051/Config.in"
- 	source "package/fdk-aac/Config.in"
- 	source "package/libao/Config.in"
-diff --git a/package/bcg729/Config.in b/package/bcg729/Config.in
+@@ -1636,6 +1636,7 @@ menu "Networking applications"
+ 	source "package/fmc/Config.in"
+ 	source "package/fping/Config.in"
+ 	source "package/freeswitch/Config.in"
++	source "package/freeswitch-mod-bcg729/Config.in"
+ 	source "package/gesftpserver/Config.in"
+ 	source "package/gupnp-tools/Config.in"
+ 	source "package/gutenprint/Config.in"
+diff --git a/package/freeswitch-mod-bcg729/Config.in b/package/freeswitch-mod-bcg729/Config.in
 new file mode 100644
-index 0000000..8e9bcfe
+index 0000000..e75e2ac
 --- /dev/null
-+++ b/package/bcg729/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BCG729
-+	bool "bcg729"
++++ b/package/freeswitch-mod-bcg729/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_FREESWITCH_MOD_BCG729
++	bool "freeswitch-mod-bcg729"
++	depends on BR2_PACKAGE_FREESWITCH
++	depends on !BR2_STATIC_LIBS # freeswitch
++	select BR2_PACKAGE_BCG729
 +	help
-+	  Bcg729 is an opensource implementation of both encoder and
-+	  decoder of the ITU G729 Annex A/B speech codec.
++	  FreeSWITCH G.729A module using the opensource bcg729
++	  implementation by Belledonne Communications.
 +
-+	  http://www.linphone.org/technical-corner/bcg729/overview
-diff --git a/package/bcg729/bcg729.hash b/package/bcg729/bcg729.hash
++	  https://github.com/xadhoom/mod_bcg729
+diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
 new file mode 100644
-index 0000000..4dbfbbb
+index 0000000..6780488
 --- /dev/null
-+++ b/package/bcg729/bcg729.hash
++++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256 94b3542a06cbd96306efc19f959f9febae62806a22599063f82a8c33e989d48b  bcg729-1.0.4.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/bcg729/bcg729.mk b/package/bcg729/bcg729.mk
++sha256 135f545ad0eef49d1228f8d66a4e66f1ff5f1f8fdf115e88c1df3df8df49fdcb  freeswitch-mod-bcg729-c504eea91f225014380ae17c00b35e7173e316ad.tar.gz
++sha256 bb4680b13c3190429464a8308a07d7d891e6454349fb7be856e02405b25b1195  LICENSE
+diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
 new file mode 100644
-index 0000000..426cfd9
+index 0000000..15f9375
 --- /dev/null
-+++ b/package/bcg729/bcg729.mk
-@@ -0,0 +1,21 @@
++++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
+@@ -0,0 +1,30 @@
 +################################################################################
 +#
-+# bcg729
++# freeswitch-mod-bcg729
 +#
 +################################################################################
 +
-+BCG729_VERSION = 1.0.4
-+BCG729_SITE = $(call github,BelledonneCommunications,bcg729,$(BCG729_VERSION))
-+BCG729_LICENSE = GPL-2.0+
-+BCG729_LICENSE_FILES = COPYING
-+BCG729_INSTALL_STAGING = YES
++FREESWITCH_MOD_BCG729_VERSION = c504eea91f225014380ae17c00b35e7173e316ad
++FREESWITCH_MOD_BCG729_SITE = $(call github,xadhoom,mod_bcg729,$(FREESWITCH_MOD_BCG729_VERSION))
++FREESWITCH_MOD_BCG729_LICENSE = MPL-1.1
++FREESWITCH_MOD_BCG729_LICENSE_FILES = LICENSE
++FREESWITCH_MOD_BCG729_DEPENDENCIES = freeswitch bcg729
 +
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BCG729_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+BCG729_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+BCG729_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
-+endif
++# instead of patching the not cross-compile friendly Makefile from
++# upstream we issue the necessary build commands ourselves
++define FREESWITCH_MOD_BCG729_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		-I$(STAGING_DIR)/usr/include/freeswitch \
++		-fPIC -fomit-frame-pointer -fno-exceptions \
++		-c $(@D)/mod_bcg729.c -o $(@D)/mod_bcg729.o
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		-fPIC -fomit-frame-pointer -fno-exceptions \
++		-shared -Xlinker -x -lm -lbcg729 -Wl,-Bdynamic \
++		-o $(@D)/mod_bcg729.so $(@D)/mod_bcg729.o
++endef
 +
-+$(eval $(cmake-package))
++define FREESWITCH_MOD_BCG729_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/mod_bcg729.so $(TARGET_DIR)/usr/lib/freeswitch/mod/mod_bcg729.so
++endef
++
++$(eval $(generic-package))
