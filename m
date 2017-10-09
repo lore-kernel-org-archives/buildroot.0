@@ -1,111 +1,128 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  9 Oct 2017 18:27:27 -0400
-Subject: [Buildroot] [PATCH 4/8] Checkpolicy: bump to 2.7
+Date: Mon,  9 Oct 2017 18:27:29 -0400
+Subject: [Buildroot] [PATCH 6/8] sepolgen: Remove package
 In-Reply-To: <20171009222731.15119-1-Adamduskett@outlook.com>
 References: <20171009222731.15119-1-Adamduskett@outlook.com>
-Message-ID: <20171009222731.15119-4-Adamduskett@outlook.com>
+Message-ID: <20171009222731.15119-6-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove patch, as it's in this release.
+sepolgen has been consolidated into the selinux-python package for version
+2.7.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- .../0001-checkpolicy-remove-lfl-from-LDLIBS.patch  | 58 ----------------------
- package/checkpolicy/checkpolicy.hash               |  2 +-
- package/checkpolicy/checkpolicy.mk                 |  4 +-
- 3 files changed, 3 insertions(+), 61 deletions(-)
- delete mode 100644 package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+ package/Config.in              |  1 -
+ package/sepolgen/Config.in     | 19 ----------------
+ package/sepolgen/sepolgen.hash |  2 --
+ package/sepolgen/sepolgen.mk   | 49 ------------------------------------------
+ 4 files changed, 71 deletions(-)
+ delete mode 100644 package/sepolgen/Config.in
+ delete mode 100644 package/sepolgen/sepolgen.hash
+ delete mode 100644 package/sepolgen/sepolgen.mk
 
-diff --git a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+diff --git a/package/Config.in b/package/Config.in
+index 6f8564334d..b9c62de1f3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1840,7 +1840,6 @@ menu "Security"
+ 	source "package/paxtest/Config.in"
+ 	source "package/policycoreutils/Config.in"
+ 	source "package/refpolicy/Config.in"
+-	source "package/sepolgen/Config.in"
+ 	source "package/setools/Config.in"
+ endmenu
+ 
+diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
 deleted file mode 100644
-index c0b6de8a5a..0000000000
---- a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+index 8dd90388c8..0000000000
+--- a/package/sepolgen/Config.in
 +++ /dev/null
-@@ -1,58 +0,0 @@
--From 4d215a1e8111e14f6074f7abe2559800b6f4838c Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Adamduskett@outlook.com>
--Date: Sat, 20 May 2017 11:01:08 -0400
--Subject: [PATCH] checkpolicy: remove -lfl from LDLIBSlogin
+@@ -1,19 +0,0 @@
+-config BR2_PACKAGE_SEPOLGEN
+-	bool "sepolgen"
+-	depends on BR2_USE_WCHAR # python3
+-	depends on BR2_USE_MMU # python3
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
+-	depends on !BR2_STATIC_LIBS # python3
+-	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+-	help
+-	  This package contains a Python module that forms the core of
+-	  the modern audit2allow (which is a part of the package
+-	  policycoreutils).  It contains infrastructure for parsing
+-	  SELinux related messages as produced by the audit system.
+-	  It has facilities for generating policy based on required
+-	  access.
 -
--When building checkpolicy/test, the linker reports the following error:
--cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
---L/usr/src/selinux/DESTDIR/usr/lib -o dispol
--/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
--undefined reference to `yylex'
--collect2: error: ld returned 1 exit status
+-comment "sepolgen needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
+diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
+deleted file mode 100644
+index b338a7019f..0000000000
+--- a/package/sepolgen/sepolgen.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 6a327b1576d914e57ad796a541a7a9bcceefb14c445355559993de0fdb8e7a60  sepolgen-2.6.tar.gz
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+deleted file mode 100644
+index ab7f18d857..0000000000
+--- a/package/sepolgen/sepolgen.mk
++++ /dev/null
+@@ -1,49 +0,0 @@
+-################################################################################
+-#
+-# sepolgen
+-#
+-################################################################################
 -
--According to flex documentation
--(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
--to provide an implementation for yywrap(). However every flex file now
--uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
--this option from checkpolicy Makefiles.
+-SEPOLGEN_VERSION = 2.6
+-SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
+-SEPOLGEN_LICENSE = GPL-2.0
+-SEPOLGEN_LICENSE_FILES = COPYING
 -
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-SEPOLGEN_DEPENDENCIES = python3
+-SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
+-	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+-else
+-SEPOLGEN_DEPENDENCIES = python
+-SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
+-	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+-endif
 -
--Backported from:
--https://patchwork.kernel.org/patch/9450549/
+-define SEPOLGEN_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
+-endef
 -
--Original author: Nicolas Iooss <nicolas.iooss@m4x.org>
--Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-----
-- Makefile      | 2 +-
-- test/Makefile | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
+-define SEPOLGEN_INSTALL_TARGET_CMDS
+-	$(MAKE_ENV) $(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR) install
+-endef
 -
--diff --git a/Makefile b/Makefile
--index 53a3074..875cf00 100644
----- a/Makefile
--+++ b/Makefile
--@@ -20,7 +20,7 @@ CHECKOBJS = y.tab.o lex.yy.o queue.o module_compiler.o parse_util.o \
-- CHECKPOLOBJS = $(CHECKOBJS) checkpolicy.o
-- CHECKMODOBJS = $(CHECKOBJS) checkmodule.o
-- 
---LDLIBS=$(LIBDIR)/libsepol.a -lfl
--+LDLIBS=$(LIBDIR)/libsepol.a
-- 
-- GENERATED=lex.yy.c y.tab.c y.tab.h
-- 
--diff --git a/test/Makefile b/test/Makefile
--index c2367e1..e7bd717 100644
----- a/test/Makefile
--+++ b/test/Makefile
--@@ -9,7 +9,7 @@ INCLUDEDIR ?= $(PREFIX)/include
-- CFLAGS ?= -g -Wall -W -Werror -O2 -pipe
-- override CFLAGS += -I$(INCLUDEDIR)
-- 
---LDLIBS=-lfl $(LIBDIR)/libsepol.a -L$(LIBDIR)
--+LDLIBS=$(LIBDIR)/libsepol.a -L$(LIBDIR)
-- 
-- all: dispol dismod
-- 
---- 
--2.9.3
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-HOST_SEPOLGEN_DEPENDENCIES = host-python3
+-HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+-	PYTHONLIBDIR=lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+-else
+-HOST_SEPOLGEN_DEPENDENCIES = host-python
+-HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+-	PYTHONLIBDIR=lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+-endif
 -
-diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
-index 6208d7749c..7397393a76 100644
---- a/package/checkpolicy/checkpolicy.hash
-+++ b/package/checkpolicy/checkpolicy.hash
-@@ -1,2 +1,2 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 0bebd18688ca8027b1b3b4ff1532c0626f1fe49883ae6cb74d9d385940e74157  checkpolicy-2.6.tar.gz
-+sha256 5413479f1dcde866c19896b4dbfec315d822aa431606e1d03c944408984c3201  checkpolicy-2.7.tar.gz
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index f0cca593d3..c1fb43da4d 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CHECKPOLICY_VERSION = 2.6
--CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
-+CHECKPOLICY_VERSION = 2.7
-+CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
- CHECKPOLICY_LICENSE = GPL-2.0
- CHECKPOLICY_LICENSE_FILES = COPYING
- 
+-define HOST_SEPOLGEN_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR)
+-endef
+-
+-define HOST_SEPOLGEN_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR) install
+-endef
+-
+-$(eval $(generic-package))
+-$(eval $(host-generic-package))
 -- 
 2.13.6
