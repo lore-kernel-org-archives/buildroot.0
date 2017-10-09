@@ -1,35 +1,99 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 9 Oct 2017 17:42:17 -0300
-Subject: [Buildroot] [PATCH v2] configs/imx6-sabresd: Add VPU decoding
+Date: Mon,  9 Oct 2017 17:43:41 -0300
+Subject: [Buildroot] [PATCH v3] configs/imx6-sabresd: Add VPU decoding
 	support
-In-Reply-To: <20171009202523.ntymaz2dpdfy3atu@tarshish>
-References: <1507579948-22128-1-git-send-email-festevam@gmail.com>
- <20171009202523.ntymaz2dpdfy3atu@tarshish>
-Message-ID: <CAOMZO5AzkUhc=y75Mw1igVckkB4LvTJL0dEpscVRxQf-fGH6EQ@mail.gmail.com>
+Message-ID: <1507581821-22648-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Mon, Oct 9, 2017 at 5:25 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+Mainline kernel is able to decode video via the coda driver.
 
->> +# For automatic firmware loading
->> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
->
-> Are you sure this is necessary for the kernel to load the firmware? As far as
+Add support for it and also add some explanation on how VPU decoding
+can be tested with Gstreamer.
 
-Copy and paste error :-) Will fix in v3.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+Changes since v2:
+- Remove incorrect comment on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV (Baruch)
+Changes since v1:
+- Add instructions in the readme file (Thomas)
 
-This is necessary for loading the coda driver as module.
+ board/freescale/imx6-sabresd/linux_qt5.fragment |  1 +
+ board/freescale/imx6-sabresd/readme.txt         | 21 +++++++++++++++++++++
+ configs/imx6-sabresd_qt5_defconfig              | 20 ++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
 
-In the imx_v6_v7_defconfig we changed the coda driver from built-in to module
-in this commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/arm/configs/imx_v6_v7_defconfig?h=v4.14-rc4&id=a5a56f07c2726cc801efccd23f8df29af04d6d19
-
-This is necessary to avoid issues when the coda driver is probed prior
-to the rootfs getting mounted.
-
-Thanks
+diff --git a/board/freescale/imx6-sabresd/linux_qt5.fragment b/board/freescale/imx6-sabresd/linux_qt5.fragment
+index ffa5f63..d4f26b1 100644
+--- a/board/freescale/imx6-sabresd/linux_qt5.fragment
++++ b/board/freescale/imx6-sabresd/linux_qt5.fragment
+@@ -2,3 +2,4 @@
+ # ondemand governor with a mainline kernel.
+ # CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+ CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
++CONFIG_VIDEO_CODA=m
+diff --git a/board/freescale/imx6-sabresd/readme.txt b/board/freescale/imx6-sabresd/readme.txt
+index 2943f8b..f09ff5c 100644
+--- a/board/freescale/imx6-sabresd/readme.txt
++++ b/board/freescale/imx6-sabresd/readme.txt
+@@ -86,4 +86,25 @@ Running gl2mark benchmark:
+ 
+ # glmark2-es2-drm
+ 
++Testing video playback on the i.MX6 Sabre SD board
++==================================================
++
++As the mx6sabresd has two display outputs (LVDS and HDMI), it is necessary to
++know what is the connector that corresponds to the HDMI output.
++
++This information can be found by running:
++
++# modetest
++
++And search for the HDMI connector number. In our case it shows up as 37.
++
++In the mx6sabresd prompt run the following Gstreamer pipeline:
++
++# gst-launch-1.0 filesrc location=/root/trailer_1080p_h264_mp3.avi ! avidemux ! \
++h264parse ! v4l2video1dec capture-io-mode=dmabuf ! kmssink connector-id=37    \
++name=imx-drm sync=0
++
++(The video used on this example was retrieved from:
++http://linode.boundarydevices.com/videos/trailer_1080p_h264_mp3.avi)
++
+ Enjoy!
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 832e326..a056b87 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -75,3 +75,23 @@ BR2_PACKAGE_QT5BASE_GIF=y
+ BR2_PACKAGE_QT5BASE_JPEG=y
+ BR2_PACKAGE_QT5CINEX=y
+ BR2_PACKAGE_QT5CINEX_HD=y
++
++# NXP firmware package
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# libdrm tests
++BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
++
++# gstreamer-1.0
++BR2_PACKAGE_GSTREAMER1=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE=y
++BR2_PACKAGE_GST1_PLUGINS_BAD=y
++BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS=y
++BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS=y
++
++# For automatic kernel module loading
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-- 
+2.7.4
