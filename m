@@ -1,95 +1,97 @@
-From: Mason <slash.tmp@free.fr>
-Date: Mon, 9 Oct 2017 22:02:59 +0200
-Subject: [Buildroot] [PATCH 4/6] toolchain-external: bump version of Linaro
- ARM toolchain to 2017.08
-In-Reply-To: <d0aa1248-6dab-90a6-c405-838953afedc9@sigmadesigns.com>
-References: <d0aa1248-6dab-90a6-c405-838953afedc9@sigmadesigns.com>
-Message-ID: <7ebf3566-55e6-3ae1-6010-d0b6f7119e59@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon,  9 Oct 2017 17:12:28 -0300
+Subject: [Buildroot] [PATCH v2] configs/imx6-sabresd: Add VPU decoding
+	support
+Message-ID: <1507579948-22128-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-GDB has been updated to 8.0 version in the release.
+Mainline kernel is able to decode video via the coda driver.
 
-https://releases.linaro.org/components/toolchain/binaries/6.4-2017.08
+Add support for it and also add some explanation on how VPU decoding
+can be tested with Gstreamer.
 
-Tested with qemu_arm_vexpress_defconfig.
-
-6.4-2017.08 includes several patches for glibc 2.23 mitigating
-some of the "stack clash" vulnerabilities reported by Qualys.
-
-https://www.qualys.com/2017/06/19/stack-clash/stack-clash.txt
-https://git.linaro.org/toolchain/glibc.git/log/?h=linaro/2.23/master
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit aed5a0fcf7c0ce964deb5fe96d60f5e4d260fe14)
-Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- .../toolchain-external/toolchain-external-linaro-arm/Config.in    | 6 +++---
- .../toolchain-external-linaro-arm.hash                            | 4 ++--
- .../toolchain-external-linaro-arm.mk                              | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Changes since v1:
+- Add instructions in the readme file (Thomas)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-index f538eb7eb31c..fd4e03b2bcc5 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-@@ -4,7 +4,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on !BR2_STATIC_LIBS
+ board/freescale/imx6-sabresd/linux_qt5.fragment |  1 +
+ board/freescale/imx6-sabresd/readme.txt         | 21 +++++++++++++++++++++
+ configs/imx6-sabresd_qt5_defconfig              | 20 ++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+
+diff --git a/board/freescale/imx6-sabresd/linux_qt5.fragment b/board/freescale/imx6-sabresd/linux_qt5.fragment
+index ffa5f63..d4f26b1 100644
+--- a/board/freescale/imx6-sabresd/linux_qt5.fragment
++++ b/board/freescale/imx6-sabresd/linux_qt5.fragment
+@@ -2,3 +2,4 @@
+ # ondemand governor with a mainline kernel.
+ # CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+ CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
++CONFIG_VIDEO_CODA=m
+diff --git a/board/freescale/imx6-sabresd/readme.txt b/board/freescale/imx6-sabresd/readme.txt
+index 2943f8b..f09ff5c 100644
+--- a/board/freescale/imx6-sabresd/readme.txt
++++ b/board/freescale/imx6-sabresd/readme.txt
+@@ -86,4 +86,25 @@ Running gl2mark benchmark:
  
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
--	bool "Linaro ARM 2017.02"
-+	bool "Linaro ARM 2017.08"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -19,8 +19,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2017.02 (based on gcc 6.3.1), Linaro GDB 2017.02 (based on
--	  GDB 7.12), glibc 2.23, Binutils 2017.02 (based on 2.27). It
-+	  GCC 2017.08 (based on gcc 6.4.1), Linaro GDB 2017.08 (based on
-+	  GDB 8.0), glibc 2.23, Binutils 2017.08 (based on 2.27). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
- 	  with the hard floating point calling convention, and uses
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-index ec861ec1d9c9..664663df05ea 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 2505348d30fd3f67544b8915ad7a557e643fbf987f3113e092463b37577c9b95  gcc-linaro-6.3.1-2017.02-i686_arm-linux-gnueabihf.tar.xz
--sha256 fe1cae02e0734665487b9b642171a5685a6e91416cea869bb22590f6dc7260c3  gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
-+sha256 a99029dff3d17d28c89831f2cd2aa37752c2f85fe89fe38fdd17971c36a9f1dc  gcc-linaro-6.4.1-2017.08-i686_arm-linux-gnueabihf.tar.xz
-+sha256 1c975a1936cc966099b3fcaff8f387d748caff27f43593214ae6d4601241ae40  gcc-linaro-6.4.1-2017.08-x86_64_arm-linux-gnueabihf.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-index b8ba43ced810..a165184b5b1a 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
+ # glmark2-es2-drm
  
--TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.02
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.08
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.4-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
- 
- ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
- else
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
- endif
- 
- $(eval $(toolchain-external-package))
++Testing video playback on the i.MX6 Sabre SD board
++==================================================
++
++As the mx6sabresd has two display outputs (LVDS and HDMI), it is necessary to
++know what is the connector that corresponds to the HDMI output.
++
++This information can be found by running:
++
++# modetest
++
++And search for the HDMI connector number. In our case it shows up as 37.
++
++In the mx6sabresd prompt run the following Gstreamer pipeline:
++
++# gst-launch-1.0 filesrc location=/root/trailer_1080p_h264_mp3.avi ! avidemux ! \
++h264parse ! v4l2video1dec capture-io-mode=dmabuf ! kmssink connector-id=37    \
++name=imx-drm sync=0
++
++(The video used on this example was retrieved from:
++http://linode.boundarydevices.com/videos/trailer_1080p_h264_mp3.avi)
++
+ Enjoy!
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 832e326..a056b87 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -75,3 +75,23 @@ BR2_PACKAGE_QT5BASE_GIF=y
+ BR2_PACKAGE_QT5BASE_JPEG=y
+ BR2_PACKAGE_QT5CINEX=y
+ BR2_PACKAGE_QT5CINEX_HD=y
++
++# NXP firmware package
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# libdrm tests
++BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
++
++# gstreamer-1.0
++BR2_PACKAGE_GSTREAMER1=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE=y
++BR2_PACKAGE_GST1_PLUGINS_BAD=y
++BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS=y
++BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS=y
++
++# For automatic firmware loading
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
 -- 
-2.14.2
+2.7.4
