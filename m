@@ -1,156 +1,111 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  9 Oct 2017 18:27:26 -0400
-Subject: [Buildroot] [PATCH 3/8] libsepol: bump to 2.7
+Date: Mon,  9 Oct 2017 18:27:27 -0400
+Subject: [Buildroot] [PATCH 4/8] Checkpolicy: bump to 2.7
 In-Reply-To: <20171009222731.15119-1-Adamduskett@outlook.com>
 References: <20171009222731.15119-1-Adamduskett@outlook.com>
-Message-ID: <20171009222731.15119-3-Adamduskett@outlook.com>
+Message-ID: <20171009222731.15119-4-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also refresh patches to work with new version.
+Also remove patch, as it's in this release.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/libsepol/0001-support-static-only.patch | 32 +++++++++++++++----------
- package/libsepol/0003-revert-ln-relative.patch  | 18 ++++++++++----
- package/libsepol/libsepol.hash                  |  4 ++--
- package/libsepol/libsepol.mk                    |  4 ++--
- 4 files changed, 37 insertions(+), 21 deletions(-)
+ .../0001-checkpolicy-remove-lfl-from-LDLIBS.patch  | 58 ----------------------
+ package/checkpolicy/checkpolicy.hash               |  2 +-
+ package/checkpolicy/checkpolicy.mk                 |  4 +-
+ 3 files changed, 3 insertions(+), 61 deletions(-)
+ delete mode 100644 package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
 
-diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-index 3e6d555e96..185a5641de 100644
---- a/package/libsepol/0001-support-static-only.patch
-+++ b/package/libsepol/0001-support-static-only.patch
-@@ -1,4 +1,7 @@
--Add support for static-only build
-+From 2140db697c7f1da2a0a3f7bbcb14c1a0dade84e5 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Mon, 9 Oct 2017 16:28:12 -0400
-+Subject: [PATCH] Add support for static-only build
- 
- Instead of unconditionally building shared libraries, this patch
- improves the libsepol build system with a "STATIC" variable, which
-@@ -7,30 +10,30 @@ libraries. It allows to support cases where the target architecture
- does not have support for shared libraries.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+diff --git a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+deleted file mode 100644
+index c0b6de8a5a..0000000000
+--- a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 4d215a1e8111e14f6074f7abe2559800b6f4838c Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <Adamduskett@outlook.com>
+-Date: Sat, 20 May 2017 11:01:08 -0400
+-Subject: [PATCH] checkpolicy: remove -lfl from LDLIBSlogin
 -
--Index: b/src/Makefile
--===================================================================
-+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-+---
-+ src/Makefile | 13 ++++++++++---
-+ 1 file changed, 10 insertions(+), 3 deletions(-)
- 
- diff --git a/src/Makefile b/src/Makefile
--index db6c2ba..0006285 100644
-+index 819d261..040921d 100644
- --- a/src/Makefile
- +++ b/src/Makefile
--@@ -30,8 +30,12 @@ LOBJS += $(sort $(patsubst %.c,%.lo,$(wildcard $(CILDIR)/src/*.c) $(CIL_GENERATE
-- override CFLAGS += -I$(CILDIR)/include
-+@@ -40,7 +40,12 @@ LDFLAGS += -undefined dynamic_lookup
-+ LN=gln
-  endif
-  
-+-all: $(LIBA) $(LIBSO) $(LIBPC)
- +ALL_TARGETS = $(LIBA) $(LIBPC)
- +ifeq ($(STATIC),)
- +ALL_TARGETS += $(LIBSO)
- +endif
+-When building checkpolicy/test, the linker reports the following error:
+-cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
+--L/usr/src/selinux/DESTDIR/usr/lib -o dispol
+-/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
+-undefined reference to `yylex'
+-collect2: error: ld returned 1 exit status
 -
---all: $(LIBA) $(LIBSO) $(LIBPC)
-++
- +all: $(ALL_TARGETS)
-  
+-According to flex documentation
+-(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
+-to provide an implementation for yywrap(). However every flex file now
+-uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
+-this option from checkpolicy Makefiles.
 -
-+ 
-  $(LIBA):  $(OBJS)
--@@ -66,11 +70,13 @@
-+@@ -82,11 +87,13 @@ endif
-  install: all
-  	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
-  	install -m 644 $(LIBA) $(LIBDIR)
-@@ -41,8 +44,11 @@ index db6c2ba..0006285 100644
- +ifeq ($(STATIC),)
- +	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
- +	install -m 755 $(LIBSO) $(SHLIBDIR)
-- 	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
-+ 	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
- +endif
-  
-  relabel:
-  	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
-+-- 
-+2.13.6
-+
-diff --git a/package/libsepol/0003-revert-ln-relative.patch b/package/libsepol/0003-revert-ln-relative.patch
-index 0902d8d40e..488a9abea0 100644
---- a/package/libsepol/0003-revert-ln-relative.patch
-+++ b/package/libsepol/0003-revert-ln-relative.patch
-@@ -1,4 +1,7 @@
--Makefile: revert libsepol: use ln --relative to create .so symlinks
-+From 16b2b0e21e10727065042a1baabd1a887757c65c Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Mon, 9 Oct 2017 16:29:36 -0400
-+Subject: [PATCH] Makefile: revert libsepol: use ln --relative to create .so symlinks
- 
- This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
- 
-@@ -9,16 +12,23 @@ they are maintained (up to 10 years in some cases?).
- For the sake of Buildroot, revert the upstream patch.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
--diff -durN a/src/Makefile b/src/Makefile
-+diff --git a/src/Makefile b/src/Makefile
-+index 040921d..e811c9e 100644
- --- a/src/Makefile
- +++ b/src/Makefile
--@@ -77,7 +77,7 @@
-+@@ -92,7 +92,7 @@ install: all
-  ifeq ($(STATIC),)
-  	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
-  	install -m 755 $(LIBSO) $(SHLIBDIR)
---	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
-+-	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
- +	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
-  endif
-  
-  relabel:
-+-- 
-+2.13.6
-+
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index 6c705067a2..08e2bf97a4 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
+-
+-Backported from:
+-https://patchwork.kernel.org/patch/9450549/
+-
+-Original author: Nicolas Iooss <nicolas.iooss@m4x.org>
+-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+----
+- Makefile      | 2 +-
+- test/Makefile | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 53a3074..875cf00 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -20,7 +20,7 @@ CHECKOBJS = y.tab.o lex.yy.o queue.o module_compiler.o parse_util.o \
+- CHECKPOLOBJS = $(CHECKOBJS) checkpolicy.o
+- CHECKMODOBJS = $(CHECKOBJS) checkmodule.o
+- 
+--LDLIBS=$(LIBDIR)/libsepol.a -lfl
+-+LDLIBS=$(LIBDIR)/libsepol.a
+- 
+- GENERATED=lex.yy.c y.tab.c y.tab.h
+- 
+-diff --git a/test/Makefile b/test/Makefile
+-index c2367e1..e7bd717 100644
+---- a/test/Makefile
+-+++ b/test/Makefile
+-@@ -9,7 +9,7 @@ INCLUDEDIR ?= $(PREFIX)/include
+- CFLAGS ?= -g -Wall -W -Werror -O2 -pipe
+- override CFLAGS += -I$(INCLUDEDIR)
+- 
+--LDLIBS=-lfl $(LIBDIR)/libsepol.a -L$(LIBDIR)
+-+LDLIBS=$(LIBDIR)/libsepol.a -L$(LIBDIR)
+- 
+- all: dispol dismod
+- 
+--- 
+-2.9.3
+-
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 6208d7749c..7397393a76 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
 @@ -1,2 +1,2 @@
--# From https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 d856d6506054f52abeaa3543ea2f2344595a3dc05d0d873ed7f724f7a16b1874  libsepol-2.6.tar.gz
-+# From: https://github.com/SELinuxProject/selinux/wiki/Releases
-+sha256 d69d3bd8ec901a3bd5adf2be2fb47fb1a685ed73066ab482e7e505371a48f9e7  libsepol-2.7.tar.gz
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 21ca419c74..c54c3bfc42 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 0bebd18688ca8027b1b3b4ff1532c0626f1fe49883ae6cb74d9d385940e74157  checkpolicy-2.6.tar.gz
++sha256 5413479f1dcde866c19896b4dbfec315d822aa431606e1d03c944408984c3201  checkpolicy-2.7.tar.gz
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index f0cca593d3..c1fb43da4d 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSEPOL_VERSION = 2.6
--LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
-+LIBSEPOL_VERSION = 2.7
-+LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
- LIBSEPOL_LICENSE = LGPL-2.1+
- LIBSEPOL_LICENSE_FILES = COPYING
+-CHECKPOLICY_VERSION = 2.6
+-CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
++CHECKPOLICY_VERSION = 2.7
++CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = COPYING
  
 -- 
 2.13.6
