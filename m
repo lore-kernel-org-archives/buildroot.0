@@ -1,139 +1,89 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Oct 2017 15:04:12 +0300
-Subject: [Buildroot] [PATCH v2] dbus: bump to version 1.10.24
-Message-ID: <fb614bbb360335a88aa0608ca3711a1ef7e6d782.1507637052.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 10 Oct 2017 14:42:38 +0200
+Subject: [Buildroot] [PATCH v2] nmap: add option to build/install "ncat"
+In-Reply-To: <20171010101223.67b1ab6e@windsurf.lan>
+References: <20171004124920.7358-1-casantos@datacom.ind.br>
+ <20171004154313.25762-1-casantos@datacom.ind.br>
+ <f45e607f-ebff-129a-0064-de7fa4255be6@mind.be>
+ <1613988304.12988742.1507565613269.JavaMail.zimbra@datacom.ind.br>
+ <1eb061ff-7182-4ee3-15ab-8f2068db4696@mind.be>
+ <20171010101223.67b1ab6e@windsurf.lan>
+Message-ID: <20171010124238.GA2683@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Thomas, Carlos, Arnout, All,
 
-Add license hash.
+On 2017-10-10 10:12 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 10 Oct 2017 00:08:38 +0200, Arnout Vandecappelle wrote:
+> > 5. BR2_PACKAGE_NMAP builds nothing, two new options BR2_PACKAGE_NMAP_NMAP and
+> > BR2_PACKAGE_NMAP_NCAT build nmap resp. ncat. To avoid building nothing, you
+> > could try something like
+> > 
+> > config BR2_PACKAGE_NMAP
+> > 	select BR2_PACKAGE_NMAP_NCAT if !BR2_PACKAGE_NMAP_NMAP
+> > 
+> > if BR2_PACKAGE_NMAP
+> > config BR2_PACKAGE_NMAP_NMAP
+> > 	default y
+> > 
+> > config BR2_PACKAGE_NMAP_NCAT
+> > endif
+> > 
+> > but that might give a circular dependency.
+> 
+> This option has my preference. And it doesn't have a circular
+> dependency, we use this construct in several places already.
+> 
+> One example:
+> 
+> config BR2_PACKAGE_ANDROID_TOOLS
+>         bool "android-tools"
+>         select BR2_PACKAGE_ANDROID_TOOLS_ADBD if \
+>               !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT && \
+>               !BR2_PACKAGE_ANDROID_TOOLS_ADB
+> 
+> if BR2_PACKAGE_ANDROID_TOOLS
+> 
+> config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
+>         bool "fastboot"
+> 
+> config BR2_PACKAGE_ANDROID_TOOLS_ADB
+>         bool "adb"
+> 
+> config BR2_PACKAGE_ANDROID_TOOLS_ADBD
+>         bool "adbd"
+> 
+> endif
+> 
+> However, perhaps we should invert the select:
+> 
+> 	select BR2_PACKAGE_NMAP_NMAP if !BR2_PACKAGE_NMAP_NCAT
+> 
+> and drop the "default y" in BR2_PACKAGE_NMAP_NMAP. This way, we still
+> have "nmap" enabled by default, and now allow the option to select ncat.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Fix signature link
----
- ...er-expat-Tell-Expat-not-to-defend-against.patch | 78 ----------------------
- package/dbus/dbus.hash                             |  6 +-
- package/dbus/dbus.mk                               |  5 +-
- 3 files changed, 5 insertions(+), 84 deletions(-)
- delete mode 100644 package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+Since Arnout pulled me in the discussion, here is my stake at it: I
+second Thomas' position on this. ;-)
 
-diff --git a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
-deleted file mode 100644
-index fd9e01dad53b..000000000000
---- a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 1252dc1d1f465b8ab6b36ff7252e395e66a040cf Mon Sep 17 00:00:00 2001
--From: Simon McVittie <smcv@debian.org>
--Date: Fri, 21 Jul 2017 10:46:39 +0100
--Subject: [PATCH 1/2] config-loader-expat: Tell Expat not to defend against
-- hash collisions
--
--By default, Expat uses cryptographic-quality random numbers as a salt for
--its hash algorithm, and since 2.2.1 it gets them from the getrandom
--syscall on Linux. That syscall refuses to return any entropy until the
--kernel's CSPRNG (random pool) has been initialized. Unfortunately, this
--can take as long as 40 seconds on embedded devices with few entropy
--sources, which is too long: if the system dbus-daemon blocks for that
--length of time, important D-Bus clients like systemd and systemd-logind
--time out and fail to connect to it.
--
--We're parsing small configuration files here, and we trust them
--completely, so we don't need to defend against hash collisions: nobody
--is going to be crafting them to cause pathological performance.
--
--Bug: https://bugs.freedesktop.org/show_bug.cgi?id=101858
--Signed-off-by: Simon McVittie <smcv@debian.org>
--Tested-by: Christopher Hewitt <hewitt@ieee.org>
--Reviewed-by: Philip Withnall <withnall@endlessm.com>
--
--Upstream commit 1252dc1d1f465b8ab6b36ff7252e395e66a040cf
--Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-----
-- bus/config-loader-expat.c | 14 ++++++++++++++
-- configure.ac              |  8 ++++++++
-- 2 files changed, 22 insertions(+)
--
--diff --git a/bus/config-loader-expat.c b/bus/config-loader-expat.c
--index b571fda3..27cbe2d0 100644
----- a/bus/config-loader-expat.c
--+++ b/bus/config-loader-expat.c
--@@ -203,6 +203,20 @@ bus_config_load (const DBusString      *file,
--       goto failed;
--     }
-- 
--+  /* We do not need protection against hash collisions (CVE-2012-0876)
--+   * because we are only parsing trusted XML; and if we let Expat block
--+   * waiting for the CSPRNG to be initialized, as it does by default to
--+   * defeat CVE-2012-0876, it can cause timeouts during early boot on
--+   * entropy-starved embedded devices.
--+   *
--+   * TODO: When Expat gets a more explicit API for this than
--+   * XML_SetHashSalt, check for that too, and use it preferentially.
--+   * https://github.com/libexpat/libexpat/issues/91 */
--+#if defined(HAVE_XML_SETHASHSALT)
--+  /* Any nonzero number will do. https://xkcd.com/221/ */
--+  XML_SetHashSalt (expat, 4);
--+#endif
--+
--   if (!_dbus_string_get_dirname (file, &dirname))
--     {
--       dbus_set_error (error, DBUS_ERROR_NO_MEMORY, NULL);
--diff --git a/configure.ac b/configure.ac
--index 52da11fb..c4022ed7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -938,6 +938,14 @@ XML_CFLAGS=
-- AC_SUBST([XML_CFLAGS])
-- AC_SUBST([XML_LIBS])
-- 
--+save_cflags="$CFLAGS"
--+save_libs="$LIBS"
--+CFLAGS="$CFLAGS $XML_CFLAGS"
--+LIBS="$LIBS $XML_LIBS"
--+AC_CHECK_FUNCS([XML_SetHashSalt])
--+CFLAGS="$save_cflags"
--+LIBS="$save_libs"
--+
-- # Thread lib detection
-- AC_ARG_VAR([THREAD_LIBS])
-- save_libs="$LIBS"
---- 
--2.11.0
--
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index b0052422c503..b174391c1303 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,3 +1,5 @@
- # Locally calculated after checking pgp signature
--# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz.asc
--sha256	e2b1401e3eedc7b5c9a2034d31254c886e1fcbc7858006e0a1c59158fe4b7b97  dbus-1.10.22.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz.asc
-+sha256	71184eb27638e224579ffa998e88f01d0f1fef17a7811406e53350735eaecd1b  dbus-1.10.24.tar.gz
-+# Locally calculated
-+sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index a2f81cdbefcb..6fa04962baf7 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,11 +4,8 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.22
-+DBUS_VERSION = 1.10.24
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
--
--# 0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
--DBUS_AUTORECONF = YES
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
- DBUS_INSTALL_STAGING = YES
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
 -- 
-2.14.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
