@@ -1,10 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Oct 2017 22:42:10 +0200
-Subject: [Buildroot] [PATCH] support/kconfig: fix usage typo and align
- verb tenses
-In-Reply-To: <20171010083229.GU10849@argentina>
-References: <20171010083229.GU10849@argentina>
-Message-ID: <20171010224210.2305f688@windsurf.lan>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 10 Oct 2017 22:32:55 +0200
+Subject: [Buildroot] sunxi-mali r6p2 package
+Message-ID: <13250504-ac44-f203-3447-38475b12146f@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +10,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 Oct 2017 10:32:29 +0200, Thomas De Schampheleire wrote:
-> Fix typo 'selectes' -> 'selects'.
-> Additionally, change 'will exclude' to 'excludes' to align with 'selects'.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
+could it be useful adding package for sunxi-mali r6p2?
+I have a package already working based on Repo who Maxime Ripard did,
+the only issue could be the lincensing Allwinner provided.
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
