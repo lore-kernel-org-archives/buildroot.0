@@ -1,51 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Oct 2017 23:17:55 +0200
-Subject: [Buildroot] [PATCHv2] toolchain: Add glibc support for ARCv2
-In-Reply-To: <20171010133150.42030-1-didin@synopsys.com>
-References: <20171010133150.42030-1-didin@synopsys.com>
-Message-ID: <20171010231755.110e806b@windsurf.lan>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 10 Oct 2017 23:25:03 +0200
+Subject: [Buildroot] [PATCH] utils/genrandconfig: use
+ --no-check-certificate in wget by default
+In-Reply-To: <20171010222543.0beed48d@windsurf.lan>
+References: <20170902212938.23712-1-thomas.petazzoni@free-electrons.com>
+ <20171010222543.0beed48d@windsurf.lan>
+Message-ID: <f8f82c6a-f51a-8fe6-dc3a-dfc061dd7955@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Thanks, I've applied to master. One comment below.
 
-On Tue, 10 Oct 2017 16:31:50 +0300, Evgeniy Didin wrote:
-> Finally there's working ARC port of glibc thanks to Vineet and Cuper!
-> This port is based on pretty recent glibc's master branch and ARC
-> changes are being reviewed now in glibc's mailing list.
+On 10-10-17 22:25, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Thus we again have to use sources from our GitHub but as soon as there's
-> a glibc release with our patches applied we'll switch to upstream releases
-> and will drop our glibc GitHub repo alltogether.
+> On Sat,  2 Sep 2017 23:29:38 +0200, Thomas Petazzoni wrote:
+>> A number of autobuilder failures are due to the fact that autobuilder
+>> instances use old distributions, with old SSL certificates, and
+>> therefore wget aborts with an error "The certificate of `xyz.org' is
+>> not trusted.".
+
+ I don't understand how this can happen. The autobuilders should all be running
+supported (not EOL) distros, right? And in a supported distro, I'd expect
+ca-certificates get updated. Otherwise the distro becomes next to useless.
+
+ But I seem to remember that you have a CentOS 5 autobuilder running, and CentOS
+5 went EOL on March 31, 2017. So perhaps it's time to switch to CentOS 6?
+
+
+>> In order to avoid such failures that are not very interesting in the
+>> context of the autobuilders
+
+ I think they *are* interesting (not very, but still interesting), because
+actual users *will* hit these problems.
+
+>> , we pass --no-check-certificate to
+>> wget. The integrity of the downloaded files is anyway verified by the
+>> hashes, and this is only meant to be used in the context of
+>> testing/CI, not in production.
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Note now we cut tags in glibc repo simultaneously with tags
-> in Binutils and GCC repos and so to make sure everything works in the best
-> way we plan to update glibc tag together with Binutils and GCC.
+> Would it be possible to get some feedback on this patch?
 > 
-> Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
-> but we plan to fix it soonish so for now we make glibc intentionally
-> dependent on archs38.
+> We recently bump dbus to 1.10.24, and look how the autobuilders are
+> "polluted" by this certificate issue:
+> http://autobuild.buildroot.net/?reason=dbus-1.10.24.
+
+ But once Peter updates sources.buildroot.org that should be OK again, no?
+
+ Regards,
+ Arnout
+
 > 
-> Also note we are not creating directory "2.26" because all patches for glibc
-> ver 2.26 applies to arc glibc port.
+> We've got two options: either we do it in utils/genrandconfig as
+> proposed, or we do it in the autobuild-run script that runs on the
+> autobuilder slaves.
+> 
+> Comments ?
+> 
+> Thanks,
+> 
+> Thomas
+> 
 
-This last thing will probably cause problems in the future: when we
-will add new glibc patches, they may not work with the ARC version of
-glibc, or when we bump to glibc 2.26.1, the ARC version of glibc will
-probably not be rebased at exactly the same time.
-
-So I've left it as-is for now, but I'm pretty sure we'll have to switch
-to per-version directories very soon.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
