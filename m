@@ -1,82 +1,119 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 10 Oct 2017 22:43:28 +0200
-Subject: [Buildroot] [RFC 1/3] support/kconfig/merge_config.sh: merge also
-	buildroot config files
+Date: Tue, 10 Oct 2017 22:43:29 +0200
+Subject: [Buildroot] [RFC 2/3] Makefile: add handling of software stacks
 In-Reply-To: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
 References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1507668210-5427-3-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a way to merge buildroot config file programmatically.
-It adds an option (-b, buildroot mode) to manage buildroot config files.
-The buildroot mode changes the way the script looks for configurations
-entries using the BR2_ prefix and modify the call to the make command
-to be buildroot friendly.
+Software stacks are a new way to express a bundle of configuration
+options that should be used togheter.
+A software stack is orthogonal to a classic buildroot config: a software
+stack indeed could be shared beetween multiple configs.
+
+A software stack could be used with standard buildroot tools, like:
+
+make qt5-fb_stack
+
+The fragment called qt5-fb_stack is merged inside current .config and
+everithing is checked to produce a valid configurationqt5-fb_stack is
+merged inside current .config and everithing is checked to produce a
+valid configuration.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- support/kconfig/merge_config.sh | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ Makefile | 40 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 2 deletions(-)
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 8a1708b..cb6e439 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -29,6 +29,7 @@ trap clean_up HUP INT TERM
- usage() {
- 	echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
- 	echo "  -h    display this help text"
-+	echo "  -b    buildroot mode (searches for BR2_ and uses a custom make command)"
- 	echo "  -m    only merge the fragments, do not execute the make command"
- 	echo "  -n    use allnoconfig instead of alldefconfig"
- 	echo "  -r    list redundant entries when merging fragments"
-@@ -39,6 +40,8 @@ MAKE=true
- ALLTARGET=alldefconfig
- WARNREDUN=false
- OUTPUT=.
-+BUILDROOT_MODE=FALSE
-+CONFIG_PREFIX=CONFIG_
+diff --git a/Makefile b/Makefile
+index 02f7cda..27283b8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -128,7 +128,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
  
- while true; do
- 	case $1 in
-@@ -71,6 +74,12 @@ while true; do
- 		shift 2
- 		continue
- 		;;
-+	"-b")
-+		BUILDROOT_MODE=true
-+		CONFIG_PREFIX=BR2_
-+		shift
-+		continue
-+		;;
- 	*)
- 		break
- 		;;
-@@ -81,7 +90,7 @@ INITFILE=$1
- shift;
+ # List of targets and target patterns for which .config doesn't need to be read in
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+-	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
++	defconfig %_defconfig %_stack allyesconfig allnoconfig alldefconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+ 	print-version olddefconfig distclean manual manual-%
  
- MERGE_LIST=$*
--SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
- TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
+@@ -146,7 +146,7 @@ nobuild_targets := source %-source source-check \
+ 	clean distclean help show-targets graph-depends \
+ 	%-graph-depends %-show-depends %-show-version \
+ 	graph-build graph-size list-defconfigs \
+-	savedefconfig printvars
++	list-stacks savedefconfig printvars
+ ifeq ($(MAKECMDGOALS),)
+ BR_BUILDING = y
+ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+@@ -919,6 +919,12 @@ define percent_defconfig
+ endef
+ $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
  
- echo "Using $INITFILE as base"
-@@ -131,7 +140,12 @@ fi
- # Use the merged file as the starting point for:
- # alldefconfig: Fills in any missing symbols with Kconfig default
- # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
-+if [ "$BUILDROOT_MODE" = "false" ]; then
- make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
-+else
-+cp $TMP_FILE $OUTPUT/.config
-+make $OUTPUT_ARG olddefconfig
-+fi
++define percent_stack
++%_stack: $(1)/stacks/%_stack
++	$(TOPDIR)/support/kconfig/merge_config.sh -b -O $(BASE_DIR) $(BR2_CONFIG) $(1)/stacks/$$@
++endef
++$(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_stack,$(d))$(sep)))
++
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+@@ -1039,6 +1045,7 @@ help:
+ 	@echo '  graph-depends          - generate graph of the dependency tree'
+ 	@echo '  graph-size             - generate stats of the filesystem size'
+ 	@echo '  list-defconfigs        - list all defconfigs (pre-configured minimal systems)'
++	@echo '  list-stacks            - list all stacks (pre-configured group of packages)'
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+@@ -1075,6 +1082,26 @@ define list-defconfigs
+ 	$${first} || printf "\n"
+ endef
  
++# List the stacks files
++# $(1): base directory
++# $(2): br2-external name, empty for bundled
++define list-stacks
++	@first=true; \
++	for stack in $(1)/stacks/*_stack; do \
++		[ -f "$${stack}" ] || continue; \
++		if $${first}; then \
++			if [ "$(2)" ]; then \
++				printf 'External stacks in "$(call qstrip,$(2))":\n'; \
++			else \
++				printf "Built-in stacks:\n"; \
++			fi; \
++			first=false; \
++		fi; \
++		printf "  %-35s - %s\n" ""$${stack##*/}"" "$$(head -n1 $${stack} | sed 's/^##*//' )"; \
++	done; \
++	$${first} || printf "\n"
++endef
++
+ # We iterate over BR2_EXTERNAL_NAMES rather than BR2_EXTERNAL_DIRS,
+ # because we want to display the name of the br2-external tree.
+ .PHONY: list-defconfigs
+@@ -1084,6 +1111,15 @@ list-defconfigs:
+ 		$(call list-defconfigs,$(BR2_EXTERNAL_$(name)_PATH),\
+ 			$(BR2_EXTERNAL_$(name)_DESC))$(sep))
  
- # Check all specified config values took (might have missed-dependency issues)
++# We iterate over BR2_EXTERNAL_NAMES rather than BR2_EXTERNAL_DIRS,
++# because we want to display the name of the br2-external tree.
++.PHONY: list-stacks
++list-stacks:
++	$(call list-stacks,$(TOPDIR))
++	$(foreach name,$(BR2_EXTERNAL_NAMES),\
++		$(call list-stacks,$(BR2_EXTERNAL_$(name)_PATH),\
++			$(BR2_EXTERNAL_$(name)_DESC))$(sep))
++
+ release: OUT = buildroot-$(BR2_VERSION)
+ 
+ # Create release tarballs. We need to fiddle a bit to add the generated
 -- 
 2.7.4
