@@ -1,31 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Oct 2017 23:26:56 +0200
-Subject: [Buildroot] [PATCHv2] toolchain: Add glibc support for ARCv2
-In-Reply-To: <20171010231755.110e806b@windsurf.lan>
-References: <20171010133150.42030-1-didin@synopsys.com>
- <20171010231755.110e806b@windsurf.lan>
-Message-ID: <7f5d9ba0-b90e-f9f1-f489-9ae1959f18be@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Oct 2017 23:33:07 +0200
+Subject: [Buildroot] [git commit] support/run-tests: export download dir
+Message-ID: <20171010212558.3DCFF8110F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=33f3cb8a878e208d46db3def78fe990075b681fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Currently, the download directory, when specified with the -d option, is
+only used to store the files downloaded by the testing infra, not those
+downloaded by Buildroot.
 
-On 10-10-17 23:17, Thomas Petazzoni wrote:
-> when we bump to glibc 2.26.1
+So, we end up with this situation:
 
- Is there any hope of that? I thought the glibc maintainers had made it clear
-that there wouldn't be point releases?
+    BR2_DL_DIR  | -d DIR   | test downloads   | BR downloads
+    ------------+----------+------------------+--------------
+    unset       | unset    | [error]          | [error]
+    unset       | set      | in $(DIR)        | in $(TOP_DIR)/dl
+    set         | unset    | in $(BR2_DL_DIR) | in $(BR2_DL_DIR)
+    set         | set      | in $(DIR)        | in $(BR2_DL_DIR)
 
- Regards,
- Arnout
+This is not very consistent.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+We change the behaviour so that the value of -d always takes precedence,
+and is used by Buildroot as well, giving this new behaviour:
+
+    BR2_DL_DIR  | -d DIR   | test downloads   | BR downloads
+    ------------+----------+------------------+--------------
+    unset       | unset    | [error]          | [error]
+    unset       | set      | in $(DIR)        | in $(DIR)
+    set         | unset    | in $(BR2_DL_DIR) | in $(BR2_DL_DIR)
+    set         | set      | in $(DIR)        | in $(DIR)
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/run-tests | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 270e78c..f8cee09 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -58,6 +58,7 @@ def main():
+             return 1
+ 
+     BRTest.downloaddir = os.path.abspath(args.download)
++    os.putenv("BR2_DL_DIR", BRTest.downloaddir)
+ 
+     if args.output is None:
+         print "Missing output directory, please use -o/--output"
