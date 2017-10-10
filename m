@@ -1,96 +1,48 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 10 Oct 2017 14:15:09 +0000
-Subject: [Buildroot] [PATCHv2] toolchain: Add glibc support for ARCv2
-In-Reply-To: <20171010133150.42030-1-didin@synopsys.com>
-References: <20171010133150.42030-1-didin@synopsys.com>
-Message-ID: <1507644909.3555.4.camel@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Oct 2017 18:49:24 +0300
+Subject: [Buildroot] [PATCH] ipset: bump to version 6.34
+Message-ID: <045477894f7f541eec41055afb399a4264869335.1507650564.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding Arnout as he reviewed v1 earlier.
+Add license hash.
 
--Alexey
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ipset/ipset.hash | 8 +++++---
+ package/ipset/ipset.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-On Tue, 2017-10-10 at 16:31 +0300, Evgeniy Didin wrote:
-> Finally there's working ARC port of glibc thanks to Vineet and Cuper!
-> This port is based on pretty recent glibc's master branch and ARC
-> changes are being reviewed now in glibc's mailing list.
-> 
-> Thus we again have to use sources from our GitHub but as soon as there's
-> a glibc release with our patches applied we'll switch to upstream releases
-> and will drop our glibc GitHub repo alltogether.
-> 
-> Note now we cut tags in glibc repo simultaneously with tags
-> in Binutils and GCC repos and so to make sure everything works in the best
-> way we plan to update glibc tag together with Binutils and GCC.
-> 
-> Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
-> but we plan to fix it soonish so for now we make glibc intentionally
-> dependent on archs38.
-> 
-> Also note we are not creating directory "2.26" because all patches for glibc
-> ver 2.26 applies to arc glibc port.
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> CC: Alexey Brodkin <abrodkin@synopsys.com>
-> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> CC: Waldemar Brodkorb <wbx@openadk.org>
-> CC: Romain Naour <romain.naour@gmail.com>
-> Cc: Cupertino Miranda <cmiranda@synopsys.com>
-> Cc: Vineet Gupta <vgupta@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> 
-> ---
-> ?package/glibc/glibc.hash????????????????| 3 +++
-> ?package/glibc/glibc.mk??????????????????| 8 +++++++-
-> ?toolchain/toolchain-buildroot/Config.in | 2 +-
-> ?3 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index afae10fa57..5458102a8a 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,2 +1,5 @@
-> ?# Locally calculated after checking pgp signature (glibc)
-> ?sha256	e54e0a934cd2bc94429be79da5e9385898d2306b9eaf3c92d5a77af96190f6bd	glibc-2.26.tar.xz
-> +# Locally calculated (fetched from Github)
-> +sha256??adf2dd19a76705a6fb748492eba30cb0be621422190116382a891a3cf099e895?????glibc-arc-2017.09-eng010.tar.gz
-> +
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index f5d028239f..ea31847c51 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -3,10 +3,16 @@
-> ?# glibc
-> ?#
-> ?################################################################################
-> -
-> +ifeq ($(BR2_arc),y)
-> +GLIBC_VERSION =??arc-2017.09-eng010
-> +GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
-> +GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
-> +else
-> ?GLIBC_VERSION = 2.26
-> ?GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
-> ?GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
-> +endif
-> +
-> ?GLIBC_SRC_SUBDIR = .
-> ?
-> ?GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index ac6017fd6e..25ab667927 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -47,7 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
-> ?		???BR2_mipsel??????|| BR2_mips64?????|| BR2_mips64el|| \
-> ?		???BR2_powerpc?????|| BR2_powerpc64??|| BR2_powerpc64le || \
-> ?		???BR2_sh??????????|| BR2_sparc64????|| BR2_x86_64 || \
-> -		???BR2_microblaze || BR2_nios2
-> +		???BR2_microblaze??|| BR2_nios2??????|| BR2_archs38
-> ?	depends on BR2_USE_MMU
-> ?	depends on !BR2_STATIC_LIBS
-> ?	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
+index 9fa85f2aaebf..dcd709e8c11f 100644
+--- a/package/ipset/ipset.hash
++++ b/package/ipset/ipset.hash
+@@ -1,4 +1,6 @@
+-# From http://ftp.netfilter.org/pub/ipset/ipset-6.32.tar.bz2.md5sum.txt
+-md5 857a5c6a6d645196865a82bf6fd7f567  ipset-6.32.tar.bz2
++# From http://ftp.netfilter.org/pub/ipset/ipset-6.34.tar.bz2.md5sum.txt
++md5 51bd03f976a1501fd45e1d71a1e2e6bf  ipset-6.34.tar.bz2
+ # Calculated based on the hash above
+-sha256 d9cbb49a4ae9e32d7808a604f1a37f359f9fc9064c210c4c5f35d629d49fb9fe  ipset-6.32.tar.bz2
++sha256 d70e831b670b7aa25dde81fd994d3a7ce0c0e801559a557105576df66cd8d680  ipset-6.34.tar.bz2
++# Locally calculated
++sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index 88415f6b124f..d7299568e591 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPSET_VERSION = 6.32
++IPSET_VERSION = 6.34
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
+-- 
+2.14.2
