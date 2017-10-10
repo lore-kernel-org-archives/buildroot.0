@@ -1,44 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Oct 2017 12:23:28 +0200
-Subject: [Buildroot] [PATCH] parted: properly link with libiconv
-In-Reply-To: <CAPzckP6FYH1rQPVnaozWg167THtdhovB7nYtX=XVe5_yM7W2Gg@mail.gmail.com>
-References: <20171007230611.25347-1-arnout@mind.be>
- <20171008230925.55777190@windsurf>
- <CAPzckP6FYH1rQPVnaozWg167THtdhovB7nYtX=XVe5_yM7W2Gg@mail.gmail.com>
-Message-ID: <abfbfba1-5d59-2884-e672-1f4c33420398@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Oct 2017 14:54:14 +0300
+Subject: [Buildroot] [PATCH] audit: bump to version 2.7.8
+Message-ID: <6336f8437b050d86685d530904f7a0ded9599c7c.1507636454.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit d1011f89a18 (audit: update legal info) set the libraries license
+to "unclear" because of GPL license text in a few libraries source
+files. Upstream audit package commit 239765162fa494 (Correct the
+licensing description in lib/ and auparse/ to be LGPL as was always
+intended) clarified the license in these files.
 
+Add license files hashes.
 
-On 10-10-17 12:15, Sjoerd Venema wrote:
-> Hi All,
-> 
-> Is there any way for me, a "user" to get udisks (depending on the problematic
-> parted package) on my buildroot built?
-> I'd be happy with a quick hack or dirty workaround for the moment. My project is
-> now somewhat dead in the water...
+Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/audit/audit.hash | 4 +++-
+ package/audit/audit.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
- One quick hack should be to enable BR2_ENABLE_LOCALE=y, which will disable the
-libiconv package because it will be part of uClibc.
-
-
- Regards,
- Arnout
-
-> I'm not demanding anyone to go out of their way to support just one guy in the
-> crowd, just want to know if there are any possible quick fixes... ;-)
-> Much appreciated! :)
-
-[snip]
-
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 189c98251ee7..32cedc5d6b58 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,2 +1,4 @@
+ #Locally computed
+-sha256 98e22549444c313187dc98c2e137f36a9882efa0874b559b0457e5f87ae178ef audit-2.7.7.tar.gz
++sha256 57b5ae5697f288b8e53286eacd1c6c2e88bd65db18df3d855332fc63b302fdae audit-2.7.8.tar.gz
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
++sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 1398d9d996ee..6c0947715f41 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-AUDIT_VERSION = 2.7.7
++AUDIT_VERSION = 2.7.8
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+-AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
+-AUDIT_LICENSE_FILES = COPYING
++AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
++AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ AUDIT_INSTALL_STAGING = YES
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.2
