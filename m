@@ -1,48 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Oct 2017 18:49:24 +0300
-Subject: [Buildroot] [PATCH] ipset: bump to version 6.34
-Message-ID: <045477894f7f541eec41055afb399a4264869335.1507650564.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Oct 2017 17:54:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nginx/S50nginx: Do not assume
+	start-stop-daemon knows -R.
+In-Reply-To: <20171009095049.22290-1-thomas.claveirole@green-communications.fr>
+ (Thomas Claveirole's message of "Mon, 9 Oct 2017 11:50:49 +0200")
+References: <87bmluk4bm.fsf@dell.be.48ers.dk>
+ <20171009095049.22290-1-thomas.claveirole@green-communications.fr>
+Message-ID: <87vajndmmk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license hash.
+>>>>> "Thomas" == Thomas Claveirole <thomas.claveirole@green-communications.fr> writes:
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ipset/ipset.hash | 8 +++++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ > start-stop-daemon fails on -R when not compiled with
+ > CONFIG_FEATURE_START_STOP_DAEMON_FANCY.  Thus, do not rely on -R
+ > during stop to avoid a race condition during restart.
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 9fa85f2aaebf..dcd709e8c11f 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,4 +1,6 @@
--# From http://ftp.netfilter.org/pub/ipset/ipset-6.32.tar.bz2.md5sum.txt
--md5 857a5c6a6d645196865a82bf6fd7f567  ipset-6.32.tar.bz2
-+# From http://ftp.netfilter.org/pub/ipset/ipset-6.34.tar.bz2.md5sum.txt
-+md5 51bd03f976a1501fd45e1d71a1e2e6bf  ipset-6.34.tar.bz2
- # Calculated based on the hash above
--sha256 d9cbb49a4ae9e32d7808a604f1a37f359f9fc9064c210c4c5f35d629d49fb9fe  ipset-6.32.tar.bz2
-+sha256 d70e831b670b7aa25dde81fd994d3a7ce0c0e801559a557105576df66cd8d680  ipset-6.34.tar.bz2
-+# Locally calculated
-+sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 88415f6b124f..d7299568e591 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 6.32
-+IPSET_VERSION = 6.34
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+ > Use a sleep 1 during restart instead, as suggested by Peter Korsgaard
+ > in <87bmluk4bm.fsf@dell.be.48ers.dk>.
+
+ > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+
+Committed, thanks.
+
 -- 
-2.14.2
+Bye, Peter Korsgaard
