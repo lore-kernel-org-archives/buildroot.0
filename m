@@ -1,7 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Oct 2017 14:56:16 +0300
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.24
-Message-ID: <ed89aa8c28bf3c09cd536fed15fb869d5e0a4656.1507636576.git.baruch@tkos.co.il>
+Date: Tue, 10 Oct 2017 15:04:12 +0300
+Subject: [Buildroot] [PATCH v2] dbus: bump to version 1.10.24
+Message-ID: <fb614bbb360335a88aa0608ca3711a1ef7e6d782.1507637052.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,8 @@ Drop upstream patch.
 Add license hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: Fix signature link
 ---
  ...er-expat-Tell-Expat-not-to-defend-against.patch | 78 ----------------------
  package/dbus/dbus.hash                             |  6 +-
@@ -105,14 +107,14 @@ index fd9e01dad53b..000000000000
 -2.11.0
 -
 diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index b0052422c503..61e6e0f40744 100644
+index b0052422c503..b174391c1303 100644
 --- a/package/dbus/dbus.hash
 +++ b/package/dbus/dbus.hash
 @@ -1,3 +1,5 @@
  # Locally calculated after checking pgp signature
 -# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz.asc
 -sha256	e2b1401e3eedc7b5c9a2034d31254c886e1fcbc7858006e0a1c59158fe4b7b97  dbus-1.10.22.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz.asc
 +sha256	71184eb27638e224579ffa998e88f01d0f1fef17a7811406e53350735eaecd1b  dbus-1.10.24.tar.gz
 +# Locally calculated
 +sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
