@@ -1,222 +1,96 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 10 Oct 2017 10:10:10 -0400
-Subject: [Buildroot] [PATCH 8/8] selinux-python: new package
-In-Reply-To: <8da778d5-9dc6-6be3-8191-b13ae388a01a@mind.be>
-References: <20171009222731.15119-1-Adamduskett@outlook.com>
- <20171009222731.15119-8-Adamduskett@outlook.com>
- <8da778d5-9dc6-6be3-8191-b13ae388a01a@mind.be>
-Message-ID: <CAFSsvmodc-eFs5a59dNtJQfnHsg0quSNAW3WkDoG3VzwiEvHfA@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 10 Oct 2017 14:15:09 +0000
+Subject: [Buildroot] [PATCHv2] toolchain: Add glibc support for ARCv2
+In-Reply-To: <20171010133150.42030-1-didin@synopsys.com>
+References: <20171010133150.42030-1-didin@synopsys.com>
+Message-ID: <1507644909.3555.4.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Arnout
+Adding Arnout as he reviewed v1 earlier.
 
-On Mon, Oct 9, 2017 at 8:42 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 10-10-17 00:27, Adam Duskett wrote:
->> The python utilities that were previously in policycoreutils are now maintained
->                                                               ^ and sepolgen
->
->> in a seperate package called selinux-python.  This package includes:
->>
->> - audit2allow
->> - chcat
->> - semanage
->> - sepolgen
->> - sepolicy
->>
->> Currently, only audit2allow and sepolgen are selectable.
->>
->> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> [snip]
->> diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
->> new file mode 100644
->> index 0000000000..1078c4e792
->> --- /dev/null
->> +++ b/package/selinux-python/Config.in
->> @@ -0,0 +1,47 @@
->> +menuconfig BR2_PACKAGE_SELINUX_PYTHON
->> +     bool "SELinux Python packages"
->> +     help
->> +       A set of SELinux tools written in python that help with
->> +       managing a system with SELinux enabled.
->
->  Since nothing will be built unless one of the tools is selected, this should
-> probably be mentioned in the help text.
->
-Fair enough!
+-Alexey
 
->> +
->> +       https://github.com/SELinuxProject/selinux/wiki
->> +
->> +if BR2_PACKAGE_SELINUX_PYTHON
->> +
->> +comment "packages"
->> +
->> +config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
->> +     bool "audit2allow"
->> +     depends on BR2_USE_WCHAR # python3, sepolgen
->> +     depends on BR2_USE_MMU # python3, sepolgen
->> +     depends on BR2_TOOLCHAIN_HAS_THREADS # python3, sepolgen, checkpolicy
->> +     depends on !BR2_STATIC_LIBS # python3, sepolgen
->> +     depends on BR2_TOOLCHAIN_USES_GLIBC # checkpolicy
->> +     depends on !BR2_arc # checkpolicy
->> +     select BR2_PACKAGE_SEPOLGEN
->
->  Didn't you just remove sepolgen?
->
-Gah! So many packages! Just a typo, will fix.
-
->> +     select BR2_PACKAGE_CHECKPOLICY
->> +     select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
->
->  This is more appropriate to move up to the BR2_PACKAGE_SELINUX_PYTHON level.
-> And then the python dependencies as well. The sepolgen comments are actually not
-> relevant any more since sepolgen is now part of this package.
->
->  You should then also have a global comment for when selinux-python is not
-> available, and an additional comment for when audit2allow is not available.
->
-Can do.
-
->  However, let's take a step back here: is it really useful to have separate
-> options for the different tools? Isn't it easier to just install everything,
-> excluding audit2allow if checkpolicy is not selected? Or is there a significant
-> size difference?
->
-It's not about the size difference.  When it comes to security, and
-specifically about SELinux,
-some people might not want all of these things enabled.  I also
-wouldn't want all of these
-tools and packages installed if I don't need them.  The extra logic is
-minimal, and currently,
-we only have audit2allow and sepolgen anyways.  If a end user was to
-do a "git pull" and run
-"make" after that, I wouldn't want a bunch of extra packages I didn't
-select being installed on
-my filing system.
-
->> +     help
->> +       Enable audit2allow to be built
->> +
->> +config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
->> +     bool "sepolgen"
->> +     depends on BR2_USE_WCHAR # python3
->> +     depends on BR2_USE_MMU # python3
->> +     depends on BR2_TOOLCHAIN_HAS_THREADS # python3
->> +     depends on !BR2_STATIC_LIBS # python3
->> +     select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
->> +     help
->> +       This package contains a Python module that forms the core of
->> +       the modern audit2allow (which is a part of the package
->> +       policycoreutils).
->
->  No it's not, it's part of this package...
->
->>  It contains infrastructure for parsing
->> +       SELinux related messages as produced by the audit system.
->> +       It has facilities for generating policy based on required
->> +       access.
->> +
->> +comment "sepolgen needs a toolchain w/ wchar, threads, dynamic library"
->> +     depends on BR2_USE_MMU
->> +     depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->> +             BR2_STATIC_LIBS
->> +
->> +endif
->> diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
->> new file mode 100644
->> index 0000000000..42fe575e7b
->> --- /dev/null
->> +++ b/package/selinux-python/selinux-python.hash
->> @@ -0,0 +1,2 @@
->> +# https://github.com/SELinuxProject/selinux/wiki/Releases
->> +sha256 4217cb965ecda96c91e15ffcc2e7ddd13ecc2bf5631100f3cd072a7616f140ed selinux-python-2.7.tar.gz
->> diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
->> new file mode 100644
->> index 0000000000..2a141be9ab
->> --- /dev/null
->> +++ b/package/selinux-python/selinux-python.mk
->> @@ -0,0 +1,53 @@
->> +################################################################################
->> +#
->> +# selinux-python
->> +#
->> +################################################################################
->> +
->> +SELINUX_PYTHON_VERSION = 2.7
->> +SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
->> +SELINUX_PYTHON_LICENSE = GPL-2.0
->> +SELINUX_PYTHON_LICENSE_FILES = COPYING
->> +
->> +SELINUX_PYTHON_MAKE_OPTS += \
->> +     $(TARGET_CONFIGURE_OPTS) \
->> +     CFLAGS="$(TARGET_CFLAGS)" \
->> +     CPPFLAGS="$(TARGET_CPPFLAGS)" \
->
->  These two are already part of TARGET_CONFIGURE_OPTS so they shouldn't be needed.
->
->> +     ARCH="$(BR2_ARCH)" \
->> +     LIBDIR="$(STAGING_DIR)/usr/lib"
->> +
->> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> +HOST_SELINUX_PYTHON_DEPENDENCIES += host-python3
->> +HOST_SELINUX_PYTHON_MAKE_OPTS += \
->> +     PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
->
->  There is no host-selinux-python, you only enable a target package here... And
-> you'd probably need this for the target package, no? Well, probably you don't or
-> you would have noticed, so possibly this is redundant?
->
->  Hm, actually, there was a host-sepolgen so you should probably have a
-> host-selinux-python as well.
->
-Yeah, I will make sure host-selinux-python is added.
->
->  Regards,
->  Arnout
->
->> +else
->> +HOST_SELINUX_PYTHON_DEPENDENCIES += host-python
->> +HOST_SELINUX_PYTHON_MAKE_OPTS += \
->> +     PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW),y)
->> +SELINUX_PYTHON_DEPENDENCIES += checkpolicy
->> +SELINUX_PYTHON_MAKE_DIRS += audit2allow
->> +
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN),y)
->> +SELINUX_PYTHON_MAKE_DIRS += sepolgen/src/sepolgen
->> +endif
->> +
->> +define SELINUX_PYTHON_BUILD_CMDS
->> +     $(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
->> +             $(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
->> +                     DESTDIR=$(STAGING_DIR) all
->> +     )
->> +endef
->> +
->> +define SELINUX_PYTHON_INSTALL_TARGET_CMDS
->> +     $(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
->> +             $(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
->> +                     DESTDIR=$(TARGET_DIR) install
->> +     )
->> +endef
->> +
->> +$(eval $(generic-package))
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+On Tue, 2017-10-10 at 16:31 +0300, Evgeniy Didin wrote:
+> Finally there's working ARC port of glibc thanks to Vineet and Cuper!
+> This port is based on pretty recent glibc's master branch and ARC
+> changes are being reviewed now in glibc's mailing list.
+> 
+> Thus we again have to use sources from our GitHub but as soon as there's
+> a glibc release with our patches applied we'll switch to upstream releases
+> and will drop our glibc GitHub repo alltogether.
+> 
+> Note now we cut tags in glibc repo simultaneously with tags
+> in Binutils and GCC repos and so to make sure everything works in the best
+> way we plan to update glibc tag together with Binutils and GCC.
+> 
+> Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
+> but we plan to fix it soonish so for now we make glibc intentionally
+> dependent on archs38.
+> 
+> Also note we are not creating directory "2.26" because all patches for glibc
+> ver 2.26 applies to arc glibc port.
+> 
+> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> CC: Alexey Brodkin <abrodkin@synopsys.com>
+> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> CC: Waldemar Brodkorb <wbx@openadk.org>
+> CC: Romain Naour <romain.naour@gmail.com>
+> Cc: Cupertino Miranda <cmiranda@synopsys.com>
+> Cc: Vineet Gupta <vgupta@synopsys.com>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> 
+> ---
+> ?package/glibc/glibc.hash????????????????| 3 +++
+> ?package/glibc/glibc.mk??????????????????| 8 +++++++-
+> ?toolchain/toolchain-buildroot/Config.in | 2 +-
+> ?3 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index afae10fa57..5458102a8a 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,2 +1,5 @@
+> ?# Locally calculated after checking pgp signature (glibc)
+> ?sha256	e54e0a934cd2bc94429be79da5e9385898d2306b9eaf3c92d5a77af96190f6bd	glibc-2.26.tar.xz
+> +# Locally calculated (fetched from Github)
+> +sha256??adf2dd19a76705a6fb748492eba30cb0be621422190116382a891a3cf099e895?????glibc-arc-2017.09-eng010.tar.gz
+> +
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index f5d028239f..ea31847c51 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -3,10 +3,16 @@
+> ?# glibc
+> ?#
+> ?################################################################################
+> -
+> +ifeq ($(BR2_arc),y)
+> +GLIBC_VERSION =??arc-2017.09-eng010
+> +GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+> +GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
+> +else
+> ?GLIBC_VERSION = 2.26
+> ?GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
+> ?GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
+> +endif
+> +
+> ?GLIBC_SRC_SUBDIR = .
+> ?
+> ?GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index ac6017fd6e..25ab667927 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -47,7 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+> ?		???BR2_mipsel??????|| BR2_mips64?????|| BR2_mips64el|| \
+> ?		???BR2_powerpc?????|| BR2_powerpc64??|| BR2_powerpc64le || \
+> ?		???BR2_sh??????????|| BR2_sparc64????|| BR2_x86_64 || \
+> -		???BR2_microblaze || BR2_nios2
+> +		???BR2_microblaze??|| BR2_nios2??????|| BR2_archs38
+> ?	depends on BR2_USE_MMU
+> ?	depends on !BR2_STATIC_LIBS
+> ?	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
