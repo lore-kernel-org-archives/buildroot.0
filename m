@@ -1,174 +1,199 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Oct 2017 09:42:20 +0200
-Subject: [Buildroot] [PATCH 04/10] gst1-plugins-bad: bump to 1.12.3
-In-Reply-To: <20171009185659.7631-4-Adamduskett@outlook.com>
-References: <20171009185659.7631-1-Adamduskett@outlook.com>
- <20171009185659.7631-4-Adamduskett@outlook.com>
-Message-ID: <trinity-3ccbd365-19e8-43cd-851c-f2a9d1c03b2d-1507621340208@3c-app-gmx-bs10>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 10 Oct 2017 02:42:49 +0200
+Subject: [Buildroot] [PATCH 8/8] selinux-python: new package
+In-Reply-To: <20171009222731.15119-8-Adamduskett@outlook.com>
+References: <20171009222731.15119-1-Adamduskett@outlook.com>
+ <20171009222731.15119-8-Adamduskett@outlook.com>
+Message-ID: <8da778d5-9dc6-6be3-8191-b13ae388a01a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
 
-> Gesendet: Montag, 09. Oktober 2017 um 20:56 Uhr
-> Von: "Adam Duskett" <aduskett@gmail.com>
-> An: buildroot at buildroot.org
-> Cc: "Adam Duskett" <Adamduskett@outlook.com>
-> Betreff: [Buildroot] [PATCH 04/10] gst1-plugins-bad: bump to 1.12.3
->
+
+On 10-10-17 00:27, Adam Duskett wrote:
+> The python utilities that were previously in policycoreutils are now maintained
+                                                              ^ and sepolgen
+
+> in a seperate package called selinux-python.  This package includes:
 > 
-> Also remove openjpeg-Fix-build-against-openjpeg-2.2.patch.
-> Upstream commit id: df4c6385aa0739d59e83916d32b704de9b9f3d40
-
-Wrong commit id, df4c6385aa0739d59e83916d32b704de9b9f3d40 points to 
-'meson: Fix build with openjpeg>=2.2', the correct id is
-15f24fef53a955c7c76fc966302cb0453732e657 pointing to
-'openjpeg: Fix build against openjpeg 2.2', see the upstream
-url in the deleted patch...
-
-Will try to test the patchset the next days...
-
-Regards,
-Peter
-
+> - audit2allow
+> - chcat
+> - semanage
+> - sepolgen
+> - sepolicy
+> 
+> Currently, only audit2allow and sepolgen are selectable.
 > 
 > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  ...1-openjpeg-Fix-build-against-openjpeg-2.2.patch | 93 ----------------------
->  .../gst1-plugins-bad/gst1-plugins-bad.hash         |  4 +-
->  .../gst1-plugins-bad/gst1-plugins-bad.mk           |  2 +-
->  3 files changed, 3 insertions(+), 96 deletions(-)
->  delete mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
+[snip]
+> diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+> new file mode 100644
+> index 0000000000..1078c4e792
+> --- /dev/null
+> +++ b/package/selinux-python/Config.in
+> @@ -0,0 +1,47 @@
+> +menuconfig BR2_PACKAGE_SELINUX_PYTHON
+> +	bool "SELinux Python packages"
+> +	help
+> +	  A set of SELinux tools written in python that help with
+> +	  managing a system with SELinux enabled.
+
+ Since nothing will be built unless one of the tools is selected, this should
+probably be mentioned in the help text.
+
+> +
+> +	  https://github.com/SELinuxProject/selinux/wiki
+> +
+> +if BR2_PACKAGE_SELINUX_PYTHON
+> +
+> +comment "packages"
+> +
+> +config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+> +	bool "audit2allow"
+> +	depends on BR2_USE_WCHAR # python3, sepolgen
+> +	depends on BR2_USE_MMU # python3, sepolgen
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3, sepolgen, checkpolicy
+> +	depends on !BR2_STATIC_LIBS # python3, sepolgen
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC # checkpolicy
+> +	depends on !BR2_arc # checkpolicy
+> +	select BR2_PACKAGE_SEPOLGEN
+
+ Didn't you just remove sepolgen?
+
+> +	select BR2_PACKAGE_CHECKPOLICY
+> +	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+
+ This is more appropriate to move up to the BR2_PACKAGE_SELINUX_PYTHON level.
+And then the python dependencies as well. The sepolgen comments are actually not
+relevant any more since sepolgen is now part of this package.
+
+ You should then also have a global comment for when selinux-python is not
+available, and an additional comment for when audit2allow is not available.
+
+ However, let's take a step back here: is it really useful to have separate
+options for the different tools? Isn't it easier to just install everything,
+excluding audit2allow if checkpolicy is not selected? Or is there a significant
+size difference?
+
+> +	help
+> +	  Enable audit2allow to be built
+> +
+> +config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+> +	bool "sepolgen"
+> +	depends on BR2_USE_WCHAR # python3
+> +	depends on BR2_USE_MMU # python3
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
+> +	depends on !BR2_STATIC_LIBS # python3
+> +	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+> +	help
+> +	  This package contains a Python module that forms the core of
+> +	  the modern audit2allow (which is a part of the package
+> +	  policycoreutils).
+
+ No it's not, it's part of this package...
+
+>  It contains infrastructure for parsing
+> +	  SELinux related messages as produced by the audit system.
+> +	  It has facilities for generating policy based on required
+> +	  access.
+> +
+> +comment "sepolgen needs a toolchain w/ wchar, threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+> +
+> +endif
+> diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
+> new file mode 100644
+> index 0000000000..42fe575e7b
+> --- /dev/null
+> +++ b/package/selinux-python/selinux-python.hash
+> @@ -0,0 +1,2 @@
+> +# https://github.com/SELinuxProject/selinux/wiki/Releases
+> +sha256 4217cb965ecda96c91e15ffcc2e7ddd13ecc2bf5631100f3cd072a7616f140ed selinux-python-2.7.tar.gz
+> diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
+> new file mode 100644
+> index 0000000000..2a141be9ab
+> --- /dev/null
+> +++ b/package/selinux-python/selinux-python.mk
+> @@ -0,0 +1,53 @@
+> +################################################################################
+> +#
+> +# selinux-python
+> +#
+> +################################################################################
+> +
+> +SELINUX_PYTHON_VERSION = 2.7
+> +SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+> +SELINUX_PYTHON_LICENSE = GPL-2.0
+> +SELINUX_PYTHON_LICENSE_FILES = COPYING
+> +
+> +SELINUX_PYTHON_MAKE_OPTS += \
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	CFLAGS="$(TARGET_CFLAGS)" \
+> +	CPPFLAGS="$(TARGET_CPPFLAGS)" \
+
+ These two are already part of TARGET_CONFIGURE_OPTS so they shouldn't be needed.
+
+> +	ARCH="$(BR2_ARCH)" \
+> +	LIBDIR="$(STAGING_DIR)/usr/lib"
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +HOST_SELINUX_PYTHON_DEPENDENCIES += host-python3
+> +HOST_SELINUX_PYTHON_MAKE_OPTS += \
+> +	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
+
+ There is no host-selinux-python, you only enable a target package here... And
+you'd probably need this for the target package, no? Well, probably you don't or
+you would have noticed, so possibly this is redundant?
+
+ Hm, actually, there was a host-sepolgen so you should probably have a
+host-selinux-python as well.
+
+
+ Regards,
+ Arnout
+
+> +else
+> +HOST_SELINUX_PYTHON_DEPENDENCIES += host-python
+> +HOST_SELINUX_PYTHON_MAKE_OPTS += \
+> +	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW),y)
+> +SELINUX_PYTHON_DEPENDENCIES += checkpolicy
+> +SELINUX_PYTHON_MAKE_DIRS += audit2allow
+> +
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN),y)
+> +SELINUX_PYTHON_MAKE_DIRS += sepolgen/src/sepolgen
+> +endif
+> +
+> +define SELINUX_PYTHON_BUILD_CMDS
+> +	$(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
+> +		$(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
+> +			DESTDIR=$(STAGING_DIR) all
+> +	)
+> +endef
+> +
+> +define SELINUX_PYTHON_INSTALL_TARGET_CMDS
+> +	$(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
+> +		$(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
+> +			DESTDIR=$(TARGET_DIR) install
+> +	)
+> +endef
+> +
+> +$(eval $(generic-package))
 > 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
-> deleted file mode 100644
-> index d9268bc9b6..0000000000
-> --- a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Fix-build-against-openjpeg-2.2.patch
-> +++ /dev/null
-> @@ -1,93 +0,0 @@
-> -From daaf649bda7231fd0d760802232a36ba62a4ea2d Mon Sep 17 00:00:00 2001
-> -From: Clemens Lang <cal@macports.org>
-> -Date: Sun, 13 Aug 2017 21:17:18 +0200
-> -Subject: [PATCH] openjpeg: Fix build against openjpeg 2.2
-> -
-> -OpenJPEG 2.2 has some API changes and thus ships its headers in a new
-> -include path. Add a configure check (to both meson and autoconf) to
-> -detect the newer version of OpenJPEG and add conditional includes.
-> -
-> -Fix the autoconf test for OpenJPEG 2.1, which checked for HAVE_OPENJPEG,
-> -which was always set even for 2.0.
-> -
-> -https://bugzilla.gnome.org/show_bug.cgi?id=786250
-> -
-> -Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/patch/?id=15f24fef53a955c7c76fc966302cb0453732e657
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - configure.ac               |  7 ++++++-
-> - ext/openjpeg/gstopenjpeg.h |  4 +++-
-> - ext/openjpeg/meson.build   | 21 +++++++++++++--------
-> - 3 files changed, 22 insertions(+), 10 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 30e26b8..c4f08c7 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -2813,8 +2813,13 @@ AG_GST_CHECK_FEATURE(OPENJPEG, [openjpeg library], openjpeg, [
-> -   if test x"$HAVE_OPENJPEG" = x"yes"; then
-> -     dnl minor API changes in v2.1
-> -     AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_1, libopenjp2 >= 2.1)
-> --    if test x"$HAVE_OPENJPEG" = x"yes"; then
-> -+    if test x"$HAVE_OPENJPEG_2_1" = x"yes"; then
-> -       AC_DEFINE([HAVE_OPENJPEG_2_1], 1, [Define if OpenJPEG 2.1 is used])
-> -+        dnl include paths changed for v2.2
-> -+        AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_2, libopenjp2 >= 2.2)
-> -+        if test x"$HAVE_OPENJPEG_2_2" = x"yes"; then
-> -+          AC_DEFINE([HAVE_OPENJPEG_2_2], 1, [Define if OpenJPEG 2.2 is used])
-> -+        fi
-> -     fi
-> -   else
-> -     # Fallback to v1.5
-> -diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
-> -index 03ce52e..52410a4 100644
-> ---- a/ext/openjpeg/gstopenjpeg.h
-> -+++ b/ext/openjpeg/gstopenjpeg.h
-> -@@ -38,7 +38,9 @@
-> - #define OPJ_CPRL CPRL
-> - #else
-> - #include <stdio.h>
-> --# ifdef HAVE_OPENJPEG_2_1
-> -+# if defined(HAVE_OPENJPEG_2_2)
-> -+#  include <openjpeg-2.2/openjpeg.h>
-> -+# elif defined(HAVE_OPENJPEG_2_1)
-> - #  include <openjpeg-2.1/openjpeg.h>
-> - # else
-> - #  include <openjpeg-2.0/openjpeg.h>
-> -diff --git a/ext/openjpeg/meson.build b/ext/openjpeg/meson.build
-> -index d60974c..e9c416c 100644
-> ---- a/ext/openjpeg/meson.build
-> -+++ b/ext/openjpeg/meson.build
-> -@@ -6,16 +6,21 @@ openjpeg_sources = [
-> - 
-> - openjpeg_cargs = []
-> - 
-> --# Check for 2.1, then 2.0
-> --openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
-> -+# Check for 2.2, 2.1, then 2.0
-> -+openjpeg_dep = dependency('libopenjp2', version : '>=2.2', required : false)
-> - if openjpeg_dep.found()
-> --  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
-> -+  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_2']
-> - else
-> --  openjpeg_dep = dependency('libopenjp2', required : false)
-> --  # Fallback to 1.5
-> --  if not openjpeg_dep.found()
-> --    openjpeg_dep = dependency('libopenjpeg1', required : false)
-> --    openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
-> -+  openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
-> -+  if openjpeg_dep.found()
-> -+    openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
-> -+  else
-> -+    openjpeg_dep = dependency('libopenjp2', required : false)
-> -+    # Fallback to 1.5
-> -+    if not openjpeg_dep.found()
-> -+      openjpeg_dep = dependency('libopenjpeg1', required : false)
-> -+      openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
-> -+    endif
-> -   endif
-> - endif
-> - 
-> --- 
-> -2.12.3
-> -
-> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-> index b34fb02b5e..e4b83ff11c 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-> @@ -1,2 +1,2 @@
-> -From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.12.2.tar.xz.sha256sum
-> -sha256 9c2c7edde4f59d74eb414e0701c55131f562e5c605a3ce9b091754f106c09e37 gst-plugins-bad-1.12.2.tar.xz
-> +From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.12.3.tar.xz.sha256sum
-> +sha256 36d059761852bed0f1a7fcd3ef64a8aeecab95d2bca53cd6aa0f08054b1cbfec gst-plugins-bad-1.12.3.tar.xz
-> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> index 8b707d5eb9..9f94148cfa 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GST1_PLUGINS_BAD_VERSION = 1.12.2
-> +GST1_PLUGINS_BAD_VERSION = 1.12.3
->  GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
->  GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
->  GST1_PLUGINS_BAD_INSTALL_STAGING = YES
-> -- 
-> 2.13.6
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
