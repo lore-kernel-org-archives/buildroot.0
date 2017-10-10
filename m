@@ -1,48 +1,57 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 9 Oct 2017 20:55:11 -0300 (BRT)
-Subject: [Buildroot] [PATCH v2] nmap: add option to build/install "ncat"
-In-Reply-To: <5d1dc740-1eda-8052-1ee0-c8a543524a7b@mind.be>
-References: <20171004124920.7358-1-casantos@datacom.ind.br>
- <20171004154313.25762-1-casantos@datacom.ind.br>
- <f45e607f-ebff-129a-0064-de7fa4255be6@mind.be>
- <1613988304.12988742.1507565613269.JavaMail.zimbra@datacom.ind.br>
- <1eb061ff-7182-4ee3-15ab-8f2068db4696@mind.be>
- <5d1dc740-1eda-8052-1ee0-c8a543524a7b@mind.be>
-Message-ID: <1352411131.13079113.1507593311288.JavaMail.zimbra@datacom.ind.br>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 10 Oct 2017 02:01:24 +0200
+Subject: [Buildroot] [PATCH 6/8] sepolgen: Remove package
+In-Reply-To: <20171009222731.15119-6-Adamduskett@outlook.com>
+References: <20171009222731.15119-1-Adamduskett@outlook.com>
+ <20171009222731.15119-6-Adamduskett@outlook.com>
+Message-ID: <3d523201-24ff-23f4-dd44-d91fe1370ad3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Maxime Hadjinlian"
-> <maxime.hadjinlian@gmail.com>, "Peter Korsgaard" <peter@korsgaard.com>, "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Sent: Monday, October 9, 2017 7:10:55 PM
-> Subject: Re: [Buildroot] [PATCH v2] nmap: add option to build/install "ncat"
+ Hi Adam,
 
-> On 10-10-17 00:08, Arnout Vandecappelle wrote:
->> 2. No specific option, always install nmap + ncat if BR2_PACKAGE_NMAP is
->> selected. Note that this might create a problem if both nmap and netcat-openbsd
->> are selected, so there should probably be a dependency introduced and a check
->> that nc doesn't exist yet before creating the symlink.
+On 10-10-17 00:27, Adam Duskett wrote:
+> sepolgen has been consolidated into the selinux-python package for version
+> 2.7.
+
+ We want people to be able to upgrade their Buildroot by doing:
+
+git pull
+make menuconfig
+
+i.e. they should not loose any package that they previously had.
+
+ In this case, people who previously had sepolgen selected will now NOT have it
+anymore if they didn't have selinux-python selected.
+
+ Therefore, you need to create an entry in Config.in.legacy that selects
+selinux-python. Its help text should have what you had in the commit message here.
+
+
+ Regards,
+ Arnout
+
 > 
-> Let me clarify that bit: in all the other options, the user makes a conscious
-> decision to enable ncat (and therefore the nc symlink). With this option,
-> however, the nc symlink will be created without the user being aware of it, so
-> it could be that it is not what the user intended. This is only a problem if
-> netcat-openbsd is also installed (since ncat is a strict superset of GNU and
-> busybox nc).
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> ---
+>  package/Config.in              |  1 -
+>  package/sepolgen/Config.in     | 19 ----------------
+>  package/sepolgen/sepolgen.hash |  2 --
+>  package/sepolgen/sepolgen.mk   | 49 ------------------------------------------
+>  4 files changed, 71 deletions(-)
+>  delete mode 100644 package/sepolgen/Config.in
+>  delete mode 100644 package/sepolgen/sepolgen.hash
+>  delete mode 100644 package/sepolgen/sepolgen.mk
 
-That was one of the advantages of the virtual package "nc": it
-would require the user to choose only one netcat variant at a time.
-
-Anyway, I can make the link creation optional or create it only if
-none of the competing netcat variants is selected.
+[snip]
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
