@@ -1,38 +1,82 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 10 Oct 2017 22:43:27 +0200
-Subject: [Buildroot] [RFC 0/3] Adding software stacks
-Message-ID: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Tue, 10 Oct 2017 22:43:28 +0200
+Subject: [Buildroot] [RFC 1/3] support/kconfig/merge_config.sh: merge also
+	buildroot config files
+In-Reply-To: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Software stacks are a way to define a group of options that should be used together and they are orthogonal to configs: a software stack can indeed be shared among several configs.
+This patch adds a way to merge buildroot config file programmatically.
+It adds an option (-b, buildroot mode) to manage buildroot config files.
+The buildroot mode changes the way the script looks for configurations
+entries using the BR2_ prefix and modify the call to the make command
+to be buildroot friendly.
 
-Having a stack system like the one envisioned in this patch series make possible to do something like this:
-
-make imx6-sabresd_defconfig; make mesa3d-etnaviv_stack qt5-fb_stack qt5-demos_stack; make
-
-In this way we can declutter redundant configs (ex: imx6-sabresd_qt5_defconfig) and decouple software packages side releated symbols from hardware related defconfigs.
-
-
-Angelo Compagnucci (3):
-  support/kconfig/merge_config.sh: merge also buildroot config files
-  Makefile: add handling of software stacks
-  stacks: add a bunch of stacks
-
- Makefile                        | 40 ++++++++++++++++++++++++++++++++++++++--
- stacks/lamp_stack               | 10 ++++++++++
- stacks/mesa3d-etnaviv_stack     |  7 +++++++
- stacks/qt5-demos_stack          |  7 +++++++
- stacks/qt5-fb_stack             | 11 +++++++++++
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
  support/kconfig/merge_config.sh | 16 +++++++++++++++-
- 6 files changed, 88 insertions(+), 3 deletions(-)
- create mode 100644 stacks/lamp_stack
- create mode 100644 stacks/mesa3d-etnaviv_stack
- create mode 100644 stacks/qt5-demos_stack
- create mode 100644 stacks/qt5-fb_stack
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
+diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
+index 8a1708b..cb6e439 100755
+--- a/support/kconfig/merge_config.sh
++++ b/support/kconfig/merge_config.sh
+@@ -29,6 +29,7 @@ trap clean_up HUP INT TERM
+ usage() {
+ 	echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
+ 	echo "  -h    display this help text"
++	echo "  -b    buildroot mode (searches for BR2_ and uses a custom make command)"
+ 	echo "  -m    only merge the fragments, do not execute the make command"
+ 	echo "  -n    use allnoconfig instead of alldefconfig"
+ 	echo "  -r    list redundant entries when merging fragments"
+@@ -39,6 +40,8 @@ MAKE=true
+ ALLTARGET=alldefconfig
+ WARNREDUN=false
+ OUTPUT=.
++BUILDROOT_MODE=FALSE
++CONFIG_PREFIX=CONFIG_
+ 
+ while true; do
+ 	case $1 in
+@@ -71,6 +74,12 @@ while true; do
+ 		shift 2
+ 		continue
+ 		;;
++	"-b")
++		BUILDROOT_MODE=true
++		CONFIG_PREFIX=BR2_
++		shift
++		continue
++		;;
+ 	*)
+ 		break
+ 		;;
+@@ -81,7 +90,7 @@ INITFILE=$1
+ shift;
+ 
+ MERGE_LIST=$*
+-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
++SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
+ TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
+ 
+ echo "Using $INITFILE as base"
+@@ -131,7 +140,12 @@ fi
+ # Use the merged file as the starting point for:
+ # alldefconfig: Fills in any missing symbols with Kconfig default
+ # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
++if [ "$BUILDROOT_MODE" = "false" ]; then
+ make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
++else
++cp $TMP_FILE $OUTPUT/.config
++make $OUTPUT_ARG olddefconfig
++fi
+ 
+ 
+ # Check all specified config values took (might have missed-dependency issues)
 -- 
 2.7.4
