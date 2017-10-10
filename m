@@ -1,89 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Oct 2017 14:42:38 +0200
-Subject: [Buildroot] [PATCH v2] nmap: add option to build/install "ncat"
-In-Reply-To: <20171010101223.67b1ab6e@windsurf.lan>
-References: <20171004124920.7358-1-casantos@datacom.ind.br>
- <20171004154313.25762-1-casantos@datacom.ind.br>
- <f45e607f-ebff-129a-0064-de7fa4255be6@mind.be>
- <1613988304.12988742.1507565613269.JavaMail.zimbra@datacom.ind.br>
- <1eb061ff-7182-4ee3-15ab-8f2068db4696@mind.be>
- <20171010101223.67b1ab6e@windsurf.lan>
-Message-ID: <20171010124238.GA2683@scaer>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Tue, 10 Oct 2017 18:38:19 +0530
+Subject: [Buildroot] [PATCH] audit: bump to version 2.7.8
+In-Reply-To: <6336f8437b050d86685d530904f7a0ded9599c7c.1507636454.git.baruch@tkos.co.il>
+References: <6336f8437b050d86685d530904f7a0ded9599c7c.1507636454.git.baruch@tkos.co.il>
+Message-ID: <CA+NV+VmjKO_GHvzgsbiFzxkXDt-4bdZ0NqRH2s8iuNOjRXz8hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Carlos, Arnout, All,
+On Tue, Oct 10, 2017 at 5:24 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Commit d1011f89a18 (audit: update legal info) set the libraries license
+> to "unclear" because of GPL license text in a few libraries source
+> files. Upstream audit package commit 239765162fa494 (Correct the
+> licensing description in lib/ and auparse/ to be LGPL as was always
+> intended) clarified the license in these files.
+>
+> Add license files hashes.
+>
+> Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/audit/audit.hash | 4 +++-
+>  package/audit/audit.mk   | 6 +++---
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+> index 189c98251ee7..32cedc5d6b58 100644
+> --- a/package/audit/audit.hash
+> +++ b/package/audit/audit.hash
+> @@ -1,2 +1,4 @@
+>  #Locally computed
+> -sha256 98e22549444c313187dc98c2e137f36a9882efa0874b559b0457e5f87ae178ef audit-2.7.7.tar.gz
+> +sha256 57b5ae5697f288b8e53286eacd1c6c2e88bd65db18df3d855332fc63b302fdae audit-2.7.8.tar.gz
+> +sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
+> +sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
+> diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+> index 1398d9d996ee..6c0947715f41 100644
+> --- a/package/audit/audit.mk
+> +++ b/package/audit/audit.mk
+> @@ -4,10 +4,10 @@
+>  #
+>  ################################################################################
+>
+> -AUDIT_VERSION = 2.7.7
+> +AUDIT_VERSION = 2.7.8
+>  AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+> -AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
+> -AUDIT_LICENSE_FILES = COPYING
+> +AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+> +AUDIT_LICENSE_FILES = COPYING COPYING.LIB
 
-On 2017-10-10 10:12 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 10 Oct 2017 00:08:38 +0200, Arnout Vandecappelle wrote:
-> > 5. BR2_PACKAGE_NMAP builds nothing, two new options BR2_PACKAGE_NMAP_NMAP and
-> > BR2_PACKAGE_NMAP_NCAT build nmap resp. ncat. To avoid building nothing, you
-> > could try something like
-> > 
-> > config BR2_PACKAGE_NMAP
-> > 	select BR2_PACKAGE_NMAP_NCAT if !BR2_PACKAGE_NMAP_NMAP
-> > 
-> > if BR2_PACKAGE_NMAP
-> > config BR2_PACKAGE_NMAP_NMAP
-> > 	default y
-> > 
-> > config BR2_PACKAGE_NMAP_NCAT
-> > endif
-> > 
-> > but that might give a circular dependency.
-> 
-> This option has my preference. And it doesn't have a circular
-> dependency, we use this construct in several places already.
-> 
-> One example:
-> 
-> config BR2_PACKAGE_ANDROID_TOOLS
->         bool "android-tools"
->         select BR2_PACKAGE_ANDROID_TOOLS_ADBD if \
->               !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT && \
->               !BR2_PACKAGE_ANDROID_TOOLS_ADB
-> 
-> if BR2_PACKAGE_ANDROID_TOOLS
-> 
-> config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
->         bool "fastboot"
-> 
-> config BR2_PACKAGE_ANDROID_TOOLS_ADB
->         bool "adb"
-> 
-> config BR2_PACKAGE_ANDROID_TOOLS_ADBD
->         bool "adbd"
-> 
-> endif
-> 
-> However, perhaps we should invert the select:
-> 
-> 	select BR2_PACKAGE_NMAP_NMAP if !BR2_PACKAGE_NMAP_NCAT
-> 
-> and drop the "default y" in BR2_PACKAGE_NMAP_NMAP. This way, we still
-> have "nmap" enabled by default, and now allow the option to select ncat.
+Reviewed-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 
-Since Arnout pulled me in the discussion, here is my stake at it: I
-second Thomas' position on this. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Rahul
