@@ -1,31 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Oct 2017 22:33:19 +0200
-Subject: [Buildroot] [PATCH 01/10] gstreamer1: bump to 1.12.3
-In-Reply-To: <20171009185659.7631-1-Adamduskett@outlook.com>
-References: <20171009185659.7631-1-Adamduskett@outlook.com>
-Message-ID: <20171010223319.4916d794@windsurf.lan>
+Date: Tue, 10 Oct 2017 22:37:11 +0200
+Subject: [Buildroot] [git commit] support/kconfig: fix usage typo and align
+	verb tenses
+Message-ID: <20171010203003.DBCDE81172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=787f4fee7184e4b86343a1d6d60c303622d458b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  9 Oct 2017 14:56:50 -0400, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
->  package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fix typo 'selectes' -> 'selects'.
+Additionally, change 'will exclude' to 'excludes' to align with 'selects'.
 
-Series applied, after fixing the commit log of PATCH 04/10 according to
-Peter Seiderer's comment.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/kconfig/mconf.c                                      | 2 +-
+ support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/kconfig/mconf.c b/support/kconfig/mconf.c
+index 7d6cf80..91c4df7 100644
+--- a/support/kconfig/mconf.c
++++ b/support/kconfig/mconf.c
+@@ -176,7 +176,7 @@ menu_instructions[] = N_(
+ 	"Arrow keys navigate the menu.  "
+ 	"<Enter> selects submenus ---> (or empty submenus ----).  "
+ 	"Highlighted letters are hotkeys.  "
+-	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
++	"Pressing <Y> selects a feature, while <N> excludes a feature.  "
+ 	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
+ 	"Legend: [*] feature is selected  [ ] feature is excluded"),
+ radiolist_instructions[] = N_(
+diff --git a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
+index ecfe76b..e76198a 100644
+--- a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
++++ b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
+@@ -28,7 +28,7 @@ Index: kconfig/mconf.c
+  	"<Enter> selects submenus ---> (or empty submenus ----).  "
+  	"Highlighted letters are hotkeys.  "
+ -	"Pressing <Y> includes, <N> excludes, <M> modularizes features.  "
+-+	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
+++	"Pressing <Y> selects a feature, while <N> excludes a feature.  "
+  	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
+ -	"Legend: [*] built-in  [ ] excluded  <M> module  < > module capable"),
+ +	"Legend: [*] feature is selected  [ ] feature is excluded"),
