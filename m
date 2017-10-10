@@ -1,40 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Oct 2017 22:03:50 +0200
-Subject: [Buildroot] [git commit] lvm2: disable selinux for host
-Message-ID: <20171010195717.7494E8104F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Oct 2017 22:25:43 +0200
+Subject: [Buildroot] [PATCH] utils/genrandconfig: use
+ --no-check-certificate in wget by default
+In-Reply-To: <20170902212938.23712-1-thomas.petazzoni@free-electrons.com>
+References: <20170902212938.23712-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171010222543.0beed48d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=549908bf5f860f6d07d77f19d8e14c7be4c2f3f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-There is no need for selinux support in the host lvm2 package.
+On Sat,  2 Sep 2017 23:29:38 +0200, Thomas Petazzoni wrote:
+> A number of autobuilder failures are due to the fact that autobuilder
+> instances use old distributions, with old SSL certificates, and
+> therefore wget aborts with an error "The certificate of `xyz.org' is
+> not trusted.".
+> 
+> In order to avoid such failures that are not very interesting in the
+> context of the autobuilders, we pass --no-check-certificate to
+> wget. The integrity of the downloaded files is anyway verified by the
+> hashes, and this is only meant to be used in the context of
+> testing/CI, not in production.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Should fix:
-http://autobuild.buildroot.net/results/6cd/6cde658da1fa815c157acf36b39c10a8d885e9a9/
-http://autobuild.buildroot.net/results/430/43071433814a3176256687720c1d665f41748484/
-http://autobuild.buildroot.net/results/ced/cedd7ff4b287d7b71612134444964dc847cc6062/
+Would it be possible to get some feedback on this patch?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lvm2/lvm2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+We recently bump dbus to 1.10.24, and look how the autobuilders are
+"polluted" by this certificate issue:
+http://autobuild.buildroot.net/?reason=dbus-1.10.24.
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 9880c12..79691dd 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -59,7 +59,8 @@ HOST_LVM2_CONF_OPTS = \
- 	--disable-dmeventd \
- 	--disable-applib \
- 	--disable-fsadm \
--	--disable-readline
-+	--disable-readline \
-+	--disable-selinux
- HOST_LVM2_MAKE_OPTS = device-mapper
- HOST_LVM2_INSTALL_OPTS = install_device-mapper
- 
+We've got two options: either we do it in utils/genrandconfig as
+proposed, or we do it in the autobuild-run script that runs on the
+autobuilder slaves.
+
+Comments ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
