@@ -1,50 +1,148 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Oct 2017 15:10:56 +0200
-Subject: [Buildroot] Boot Buildroot OS from CF(compact flash)
-In-Reply-To: <CAMGEwNnz=741u4PTeMQBOWT28bA8wNJbfzogZsdQpySfxF8F3Q@mail.gmail.com>
-References: <CAMGEwNnz=741u4PTeMQBOWT28bA8wNJbfzogZsdQpySfxF8F3Q@mail.gmail.com>
-Message-ID: <20171010151056.2fb6a82f@windsurf.lan>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 10 Oct 2017 10:32:17 -0300
+Subject: [Buildroot] [PATCH] nmap: add option to build/install ncat
+In-Reply-To: <20171004154313.25762-1-casantos@datacom.ind.br>
+References: <20171004154313.25762-1-casantos@datacom.ind.br>
+Message-ID: <1507642337-545-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Ncat is a much-improved reimplementation of the venerable Netcat and is
+compatible with uClibc and musl. It provides features not available in
+the ancient GNU netcat and its Busybox double like IPv6, proxies, and
+Unix sockets.
 
-On Tue, 10 Oct 2017 18:22:48 +0530, sunil m wrote:
+Tha nmap package now installs ncat if the BR2_PACKAGE_NMAP_NCAT option
+is selected. The other programs (nmap, ndiff, etc.) are chosen via the
+BR2_PACKAGE_NMAP_NMAP option.
 
-> i created partition of 1GB (/dev/sdb1) on my thumbdrive by using "fdisk"
-> which is of FAT32 System ID(b). then i used "grub-install" utility to
-> install grub on /dev/sdb1.
-> 
-> mkdir /mnt/USB && mount /dev/sdb1 /mnt/USB
-> grub-install --force --removable --boot-directory=/mnt/USB/boot /dev/sdb
-> 
-> i've builded and copied bzimage(initial RAM filesystem linked into linux
-> kernel) to /boot of /dev/sdb1(/mnt/USB/boot).
-> i've copied grub.cfg(attached in mail) file which is having location of
-> bzimage to /boot/grub/ of /dev/sdb1(/mnt/USB/boot/grub/).
-> connect the USB to target mechine and then boot the buildroot OS on target
-> mechine (RAM) by setting boot option as thumbdrive.
-> once the OS is boot in RAM, i'm able to see CF(compact flash) disk. (fdisk
-> -l)
-> from here, how can i install grub on CF & copy the buildroot
-> images(bzImage, rootfs.cpio) to CF and boot from CF? as i can see there is
-> no "grub-install" utility in buildroot OS.
-> 
-> i tried one way is," dd if=/dev/sdb1 of=/dev/sda1 ", with this command i'm
-> able to boot from compact flash. will that be good approach to flash os on
-> CF(compact flash)?
+We symlink 'nc' to ncat if neiter netcat nor netcat-openbsd is selected,
+even though ncat does not have the same interface as netcat-openbsd.
+However, since Fedora/RHEL install nmap-ncat as 'nc', it can be assumed
+that packages that depend on 'nc' know how to deal with this diversity.
+For example, the virt-manager package does that. Also user-supplied
+scripts can be assumed to do the right thing, since the user also
+selects whether nmap-ncat, netcat or netcat-openbsd is installed.
 
-Assuming you're using grub2 (and not the deprecated grub that has been
-removed from Buildroot recently), then you should read
-boot/grub2/readme.txt that has lots of details on how to setup grub2.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+Changes v1->v2:
+  - Add dependens on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, like netcat does
+  - Remove forced dependence on busybox, since its installation script
+    does not override existing programs.
+Changes v2->v3:
+  - Use a better logic to select either ncat tools, nmap or both, as
+    suggested by Arnout Vandecappelle and Thomas Petazzoni.
+  - Add a prominent comment about the symlink to 'nc', as suggested by
+    Arnout.
+---
+ package/nmap/Config.in | 27 ++++++++++++++++++++++++++-
+ package/nmap/nmap.mk   | 32 ++++++++++++++++++++++++++++++--
+ 2 files changed, 56 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+index 79f587a..1843bb6 100644
+--- a/package/nmap/Config.in
++++ b/package/nmap/Config.in
+@@ -4,6 +4,12 @@ config BR2_PACKAGE_NMAP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_NMAP_NMAP if !BR2_PACKAGE_NMAP_NCAT
++
++if  BR2_PACKAGE_NMAP
++
++config BR2_PACKAGE_NMAP_NMAP
++	bool "install nmap tools"
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Nmap ("Network Mapper") is a free and open source (license)
+@@ -11,6 +17,25 @@ config BR2_PACKAGE_NMAP
+ 
+ 	  http://nmap.org
+ 
+-comment "nmap needs a toolchain w/ C++, threads"
++config BR2_PACKAGE_NMAP_NCAT
++	bool "install ncat"
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	help
++	  Ncat is a feature-packed networking utility which reads and
++	  writes data across networks from the command line. Ncat was
++	  written for the Nmap Project as a much-improved
++	  reimplementation of the venerable Netcat.
++
++	  If symlink to "nc" is installed if neither netcat or
++	  netcat-openbsd is selected.
++
++comment "a symlink from ncat to 'nc' will be installed"
++	depends on BR2_PACKAGE_NMAP_NCAT
++	depends on !BR2_PACKAGE_NETCAT
++	depends on !BR2_PACKAGE_NETCAT_OPENBSD
++
++endif
++
++comment "nmap-nmap needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 37720e2..cd8f34a 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -7,10 +7,10 @@
+ NMAP_VERSION = 7.40
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+-NMAP_DEPENDENCIES = libpcap pcre
++NMAP_DEPENDENCIES = libpcap
+ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ 	--with-libdnet=included --with-liblinear=included \
+-	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
++	--with-libpcre="$(STAGING_DIR)/usr"
+ NMAP_LICENSE = GPL-2.0
+ NMAP_LICENSE_FILES = COPYING
+ 
+@@ -35,6 +35,10 @@ else
+ NMAP_CONF_OPTS += --without-openssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NMAP_NMAP),y)
++
++NMAP_DEPENDENCIES += pcre
++
+ # ndiff only works with python2.x
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ NMAP_DEPENDENCIES += python
+@@ -42,4 +46,28 @@ else
+ NMAP_CONF_OPTS += --without-ndiff
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NMAP_NCAT),)
++NMAP_CONF_OPTS += --without-ncat
++endif
++
++else # only ncat
++
++NMAP_CONF_OPTS += --without-ndiff --without-zenmap --without-nping --without-nmap-update
++define NMAP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) build-ncat
++endef
++define NMAP_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-ncat
++endef
++
++endif
++
++# Add a symlink to "nc" if none of the competing netcats is selected
++ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
++define NMAP_INSTALL_NCAT_SYMLINK
++        ln -fs ncat $(TARGET_DIR)/usr/bin/nc
++endef
++NMAP_POST_INSTALL_TARGET_HOOKS += NMAP_INSTALL_NCAT_SYMLINK
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.5
