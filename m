@@ -1,37 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Oct 2017 22:04:22 +0200
-Subject: [Buildroot] [git commit] lvm2: optionally depend on libselinux
-Message-ID: <20171010195717.8A25D81144@busybox.osuosl.org>
+Date: Tue, 10 Oct 2017 22:03:50 +0200
+Subject: [Buildroot] [git commit] lvm2: disable selinux for host
+Message-ID: <20171010195717.7494E8104F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11683002c69ea8b243980e68f5cad3f79b268757
+commit: https://git.buildroot.net/buildroot/commit/?id=549908bf5f860f6d07d77f19d8e14c7be4c2f3f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+There is no need for selinux support in the host lvm2 package.
+
+Should fix:
+http://autobuild.buildroot.net/results/6cd/6cde658da1fa815c157acf36b39c10a8d885e9a9/
+http://autobuild.buildroot.net/results/430/43071433814a3176256687720c1d665f41748484/
+http://autobuild.buildroot.net/results/ced/cedd7ff4b287d7b71612134444964dc847cc6062/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/lvm2/lvm2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 79691dd..20e0dd0 100644
+index 9880c12..79691dd 100644
 --- a/package/lvm2/lvm2.mk
 +++ b/package/lvm2/lvm2.mk
-@@ -35,6 +35,13 @@ else
- LVM2_CONF_OPTS += --disable-readline
- endif
+@@ -59,7 +59,8 @@ HOST_LVM2_CONF_OPTS = \
+ 	--disable-dmeventd \
+ 	--disable-applib \
+ 	--disable-fsadm \
+-	--disable-readline
++	--disable-readline \
++	--disable-selinux
+ HOST_LVM2_MAKE_OPTS = device-mapper
+ HOST_LVM2_INSTALL_OPTS = install_device-mapper
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+LVM2_CONF_OPTS += --enable-selinux
-+LVM2_DEPENDENCIES += libselinux
-+else
-+LVM2_CONF_OPTS += --disable-selinux
-+endif
-+
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
- LVM2_MAKE_OPTS = device-mapper
- LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install_device-mapper
