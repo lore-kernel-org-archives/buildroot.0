@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Oct 2017 23:16:33 +0200
-Subject: [Buildroot] sunxi-mali r6p2 package
-In-Reply-To: <13250504-ac44-f203-3447-38475b12146f@micronovasrl.com>
-References: <13250504-ac44-f203-3447-38475b12146f@micronovasrl.com>
-Message-ID: <20171010231633.25729727@windsurf.lan>
+Date: Tue, 10 Oct 2017 23:17:55 +0200
+Subject: [Buildroot] [PATCHv2] toolchain: Add glibc support for ARCv2
+In-Reply-To: <20171010133150.42030-1-didin@synopsys.com>
+References: <20171010133150.42030-1-didin@synopsys.com>
+Message-ID: <20171010231755.110e806b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 Oct 2017 22:32:55 +0200, Giulio Benetti wrote:
+Thanks, I've applied to master. One comment below.
 
-> could it be useful adding package for sunxi-mali r6p2?
+On Tue, 10 Oct 2017 16:31:50 +0300, Evgeniy Didin wrote:
+> Finally there's working ARC port of glibc thanks to Vineet and Cuper!
+> This port is based on pretty recent glibc's master branch and ARC
+> changes are being reviewed now in glibc's mailing list.
+> 
+> Thus we again have to use sources from our GitHub but as soon as there's
+> a glibc release with our patches applied we'll switch to upstream releases
+> and will drop our glibc GitHub repo alltogether.
+> 
+> Note now we cut tags in glibc repo simultaneously with tags
+> in Binutils and GCC repos and so to make sure everything works in the best
+> way we plan to update glibc tag together with Binutils and GCC.
+> 
+> Also note as of today ARCompact (AKA ARCv1 ISA) is not supported in glibc
+> but we plan to fix it soonish so for now we make glibc intentionally
+> dependent on archs38.
+> 
+> Also note we are not creating directory "2.26" because all patches for glibc
+> ver 2.26 applies to arc glibc port.
 
-Yes, it would be very useful. Perhaps just as a sub-option of the
-existing sunxi-mali package ?
+This last thing will probably cause problems in the future: when we
+will add new glibc patches, they may not work with the ARC version of
+glibc, or when we bump to glibc 2.26.1, the ARC version of glibc will
+probably not be rebased at exactly the same time.
 
-> I have a package already working based on Repo who Maxime Ripard did,
-> the only issue could be the lincensing Allwinner provided.
+So I've left it as-is for now, but I'm pretty sure we'll have to switch
+to per-version directories very soon.
 
-I don't think the licensing is really different between the existing
-sunxi-mali package we have in Buildroot and the licensing of the r6p2
-blob.
+Best regards,
 
 Thomas
 -- 
