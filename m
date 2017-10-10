@@ -1,28 +1,94 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 10 Oct 2017 22:32:55 +0200
-Subject: [Buildroot] sunxi-mali r6p2 package
-Message-ID: <13250504-ac44-f203-3447-38475b12146f@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Oct 2017 22:43:04 +0200
+Subject: [Buildroot] [git commit] configs/imx6-sabresd: Add VPU decoding
+	support
+Message-ID: <20171010203546.0A11A81150@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=444afad615a1673d591b6ab9e48d83566effa89a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-could it be useful adding package for sunxi-mali r6p2?
-I have a package already working based on Repo who Maxime Ripard did,
-the only issue could be the lincensing Allwinner provided.
+Mainline kernel is able to decode video via the coda driver.
 
--- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
+Add support for it and also add some explanation on how VPU decoding
+can be tested with Gstreamer.
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/imx6-sabresd/linux_qt5.fragment |  1 +
+ board/freescale/imx6-sabresd/readme.txt         | 21 +++++++++++++++++++++
+ configs/imx6-sabresd_qt5_defconfig              | 20 ++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+
+diff --git a/board/freescale/imx6-sabresd/linux_qt5.fragment b/board/freescale/imx6-sabresd/linux_qt5.fragment
+index ffa5f63..d4f26b1 100644
+--- a/board/freescale/imx6-sabresd/linux_qt5.fragment
++++ b/board/freescale/imx6-sabresd/linux_qt5.fragment
+@@ -2,3 +2,4 @@
+ # ondemand governor with a mainline kernel.
+ # CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+ CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
++CONFIG_VIDEO_CODA=m
+diff --git a/board/freescale/imx6-sabresd/readme.txt b/board/freescale/imx6-sabresd/readme.txt
+index 2943f8b..f09ff5c 100644
+--- a/board/freescale/imx6-sabresd/readme.txt
++++ b/board/freescale/imx6-sabresd/readme.txt
+@@ -86,4 +86,25 @@ Running gl2mark benchmark:
+ 
+ # glmark2-es2-drm
+ 
++Testing video playback on the i.MX6 Sabre SD board
++==================================================
++
++As the mx6sabresd has two display outputs (LVDS and HDMI), it is necessary to
++know what is the connector that corresponds to the HDMI output.
++
++This information can be found by running:
++
++# modetest
++
++And search for the HDMI connector number. In our case it shows up as 37.
++
++In the mx6sabresd prompt run the following Gstreamer pipeline:
++
++# gst-launch-1.0 filesrc location=/root/trailer_1080p_h264_mp3.avi ! avidemux ! \
++h264parse ! v4l2video1dec capture-io-mode=dmabuf ! kmssink connector-id=37    \
++name=imx-drm sync=0
++
++(The video used on this example was retrieved from:
++http://linode.boundarydevices.com/videos/trailer_1080p_h264_mp3.avi)
++
+ Enjoy!
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 832e326..e20266e 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -75,3 +75,23 @@ BR2_PACKAGE_QT5BASE_GIF=y
+ BR2_PACKAGE_QT5BASE_JPEG=y
+ BR2_PACKAGE_QT5CINEX=y
+ BR2_PACKAGE_QT5CINEX_HD=y
++
++# NXP firmware package
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# libdrm tests
++BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
++
++# gstreamer-1.0
++BR2_PACKAGE_GSTREAMER1=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2=y
++BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE=y
++BR2_PACKAGE_GST1_PLUGINS_BAD=y
++BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS=y
++BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS=y
++
++# For automatic kernel module loading
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
