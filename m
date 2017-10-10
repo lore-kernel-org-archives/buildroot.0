@@ -1,28 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Oct 2017 17:54:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx/S50nginx: Do not assume
-	start-stop-daemon knows -R.
-In-Reply-To: <20171009095049.22290-1-thomas.claveirole@green-communications.fr>
- (Thomas Claveirole's message of "Mon, 9 Oct 2017 11:50:49 +0200")
-References: <87bmluk4bm.fsf@dell.be.48ers.dk>
- <20171009095049.22290-1-thomas.claveirole@green-communications.fr>
-Message-ID: <87vajndmmk.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Oct 2017 17:56:36 +0200
+Subject: [Buildroot] [PATCH v2] dbus: bump to version 1.10.24
+In-Reply-To: <fb614bbb360335a88aa0608ca3711a1ef7e6d782.1507637052.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 10 Oct 2017 15:04:12 +0300")
+References: <fb614bbb360335a88aa0608ca3711a1ef7e6d782.1507637052.git.baruch@tkos.co.il>
+Message-ID: <87r2ubdmiz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Claveirole <thomas.claveirole@green-communications.fr> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > start-stop-daemon fails on -R when not compiled with
- > CONFIG_FEATURE_START_STOP_DAEMON_FANCY.  Thus, do not rely on -R
- > during stop to avoid a race condition during restart.
+ > Drop upstream patch.
+ > Add license hash.
 
- > Use a sleep 1 during restart instead, as suggested by Peter Korsgaard
- > in <87bmluk4bm.fsf@dell.be.48ers.dk>.
-
- > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: Fix signature link
 
 Committed, thanks.
 
