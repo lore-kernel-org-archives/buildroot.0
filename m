@@ -1,46 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Oct 2017 10:35:40 +0200
-Subject: [Buildroot] [PATCH 1/8] libselinux: bump to 2.7
-In-Reply-To: <8f8f5547-b7f4-8172-4989-36a5d8767c16@mind.be>
-References: <20171009222731.15119-1-Adamduskett@outlook.com>
- <8f8f5547-b7f4-8172-4989-36a5d8767c16@mind.be>
-Message-ID: <20171010103540.44ee4777@windsurf.lan>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Date: Tue, 10 Oct 2017 10:32:29 +0200
+Subject: [Buildroot] [PATCH] support/kconfig: fix usage typo and align verb
+	tenses
+Message-ID: <20171010083229.GU10849@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix typo 'selectes' -> 'selects'.
+Additionally, change 'will exclude' to 'excludes' to align with 'selects'.
 
-On Tue, 10 Oct 2017 02:47:59 +0200, Arnout Vandecappelle wrote:
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
 
->  You update all the individual packages in separate patches, which is excellent
-> for review. However, I wonder if it is really possible to update just one of
-> them without updating the rest. Does libselinux-2.7 work with libsepol-2.7?
-> 
->  If not, we should probably squash all patches into one single patch while
-> applying. Thomas, Peter, do you agree?
+Note: I bumped into this by accident and couldn't let it sit there.
 
-I don't really have a strong opinion. I think it's sometimes hard to
-achieve both full bisectability and fine-grained patches.
 
-In the same vein, in your review of comment PATCH 5/8 on
-policycoreutils, you rightfully tell Adam that the patch adding the new
-restorecond should come *before* the bump of policycoreutils that drops
-the built-in restorecond functionality. This is obviously correct, but
-it means that there is a step where you have both the new restorecond
-package and the old policycoreutils package, possibly stepping on each
-other, or maybe even with restorecond not building (because it needs
-the newer version of policycoreutils or something).
+ support/kconfig/mconf.c                                      | 2 +-
+ support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So, it's probably hard to have something that is both easy to review
-(fine-grained patches) and bisectable (one big patch).
-
-Best regards,
-
-Thomas
+diff --git a/support/kconfig/mconf.c b/support/kconfig/mconf.c
+index 7d6cf80703..91c4df78f3 100644
+--- a/support/kconfig/mconf.c
++++ b/support/kconfig/mconf.c
+@@ -176,7 +176,7 @@ menu_instructions[] = N_(
+ 	"Arrow keys navigate the menu.  "
+ 	"<Enter> selects submenus ---> (or empty submenus ----).  "
+ 	"Highlighted letters are hotkeys.  "
+-	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
++	"Pressing <Y> selects a feature, while <N> excludes a feature.  "
+ 	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
+ 	"Legend: [*] feature is selected  [ ] feature is excluded"),
+ radiolist_instructions[] = N_(
+diff --git a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
+index ecfe76b6e2..e76198a36b 100644
+--- a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
++++ b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
+@@ -28,7 +28,7 @@ Index: kconfig/mconf.c
+  	"<Enter> selects submenus ---> (or empty submenus ----).  "
+  	"Highlighted letters are hotkeys.  "
+ -	"Pressing <Y> includes, <N> excludes, <M> modularizes features.  "
+-+	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
+++	"Pressing <Y> selects a feature, while <N> excludes a feature.  "
+  	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
+ -	"Legend: [*] built-in  [ ] excluded  <M> module  < > module capable"),
+ +	"Legend: [*] feature is selected  [ ] feature is excluded"),
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.5
