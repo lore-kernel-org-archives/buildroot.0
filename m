@@ -1,60 +1,54 @@
-From: Marc Murphy <marcmltd@marcm.co.uk>
-Date: Tue, 10 Oct 2017 21:25:35 +0000
-Subject: [Buildroot] Successfully creating a new user
-In-Reply-To: <44585641-6176-e9e2-5199-12361e75bda5@gmx.de>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A477BB1C23D@MARCM-SBS2011.marcmltd.local>
- <44585641-6176-e9e2-5199-12361e75bda5@gmx.de>
-Message-ID: <8AE4BE7D9622DF41B76E1AD887AA1A477BB20F2A@MARCM-SBS2011.marcmltd.local>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Oct 2017 23:33:47 +0200
+Subject: [Buildroot] [PATCH] support/run-tests: export download dir
+In-Reply-To: <20170917092028.5236-1-yann.morin.1998@free.fr>
+References: <20170917092028.5236-1-yann.morin.1998@free.fr>
+Message-ID: <20171010233347.5907a289@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->-----Original Message-----
->From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Jan
->Schmidt
->Sent: 09 October 2017 22:29
->To: buildroot at busybox.net
->Subject: Re: [Buildroot] Successfully creating a new user
->
->On 09.10.2017 23:01, Marc Murphy wrote:
->> Hello,
->> Currently using buildroot-2017.02 and trying to add a user.
->>
->> I have been reading through the documentation about adding new users to
->my image and declared the path to the users file using
->BR2_ROOTFS_USERS_TABLES, this points to a file new_users in my
->board/boardname folder.
->>
->> To test I used the defined example user:
->> test 8000 wheel -1 = - /bin/sh - Test user
->
->> test:x:8000:10:Test user^M:/:/bin/sh
->>
->> What is generating the ^M ??
->> Even if I edit passwd and remove the ^M I can't log in.
->
->
->Hi Marc,
->
->"Test user" is the last column at your file. Could it be, that you saved it DOS
->formatted with CRLF line ending?
->
->jan
->
-Hi Jan
-I have had another go and recreated everything, this time it worked :)
+Hello,
 
-As you say it could be a windows/linux battle for line ending.....
-Previously I used Visual Studio to edit the file I created with touch and vi.
-This time I just used vi.
+On Sun, 17 Sep 2017 11:20:28 +0200, Yann E. MORIN wrote:
+> Currently, the download directory, when specified with the -d option, is
+> only used to store the files downloaded by the testing infra, not those
+> downloaded by Buildroot.
+> 
+> So, we end up with this situation:
+> 
+>     BR2_DL_DIR  | -d DIR   | test downloads   | BR downloads
+>     ------------+----------+------------------+--------------
+>     unset       | unset    | [error]          | [error]
+>     unset       | set      | in $(DIR)        | in $(TOP_DIR)/dl
+>     set         | unset    | in $(BR2_DL_DIR) | in $(BR2_DL_DIR)
+>     set         | set      | in $(DIR)        | in $(BR2_DL_DIR)
+> 
+> This is not very consistent.
+> 
+> We change the behaviour so that the value of -d always takes precedence,
+> and is used by Buildroot as well, giving this new behaviour:
+> 
+>     BR2_DL_DIR  | -d DIR   | test downloads   | BR downloads
+>     ------------+----------+------------------+--------------
+>     unset       | unset    | [error]          | [error]
+>     unset       | set      | in $(DIR)        | in $(DIR)
+>     set         | unset    | in $(BR2_DL_DIR) | in $(BR2_DL_DIR)
+>     set         | set      | in $(DIR)        | in $(DIR)
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/testing/run-tests | 1 +
+>  1 file changed, 1 insertion(+)
 
-Onto folder permissions now.
+Indeed, makes sense. Applied, thanks!
 
-Thanks again
-Marc
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
