@@ -1,56 +1,137 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Oct 2017 14:54:14 +0300
-Subject: [Buildroot] [PATCH] audit: bump to version 2.7.8
-Message-ID: <6336f8437b050d86685d530904f7a0ded9599c7c.1507636454.git.baruch@tkos.co.il>
+Date: Tue, 10 Oct 2017 14:56:16 +0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.24
+Message-ID: <ed89aa8c28bf3c09cd536fed15fb869d5e0a4656.1507636576.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit d1011f89a18 (audit: update legal info) set the libraries license
-to "unclear" because of GPL license text in a few libraries source
-files. Upstream audit package commit 239765162fa494 (Correct the
-licensing description in lib/ and auparse/ to be LGPL as was always
-intended) clarified the license in these files.
+Drop upstream patch.
 
-Add license files hashes.
+Add license hash.
 
-Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/audit/audit.hash | 4 +++-
- package/audit/audit.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...er-expat-Tell-Expat-not-to-defend-against.patch | 78 ----------------------
+ package/dbus/dbus.hash                             |  6 +-
+ package/dbus/dbus.mk                               |  5 +-
+ 3 files changed, 5 insertions(+), 84 deletions(-)
+ delete mode 100644 package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 189c98251ee7..32cedc5d6b58 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,2 +1,4 @@
- #Locally computed
--sha256 98e22549444c313187dc98c2e137f36a9882efa0874b559b0457e5f87ae178ef audit-2.7.7.tar.gz
-+sha256 57b5ae5697f288b8e53286eacd1c6c2e88bd65db18df3d855332fc63b302fdae audit-2.7.8.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
-+sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 1398d9d996ee..6c0947715f41 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch b/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+deleted file mode 100644
+index fd9e01dad53b..000000000000
+--- a/package/dbus/0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 1252dc1d1f465b8ab6b36ff7252e395e66a040cf Mon Sep 17 00:00:00 2001
+-From: Simon McVittie <smcv@debian.org>
+-Date: Fri, 21 Jul 2017 10:46:39 +0100
+-Subject: [PATCH 1/2] config-loader-expat: Tell Expat not to defend against
+- hash collisions
+-
+-By default, Expat uses cryptographic-quality random numbers as a salt for
+-its hash algorithm, and since 2.2.1 it gets them from the getrandom
+-syscall on Linux. That syscall refuses to return any entropy until the
+-kernel's CSPRNG (random pool) has been initialized. Unfortunately, this
+-can take as long as 40 seconds on embedded devices with few entropy
+-sources, which is too long: if the system dbus-daemon blocks for that
+-length of time, important D-Bus clients like systemd and systemd-logind
+-time out and fail to connect to it.
+-
+-We're parsing small configuration files here, and we trust them
+-completely, so we don't need to defend against hash collisions: nobody
+-is going to be crafting them to cause pathological performance.
+-
+-Bug: https://bugs.freedesktop.org/show_bug.cgi?id=101858
+-Signed-off-by: Simon McVittie <smcv@debian.org>
+-Tested-by: Christopher Hewitt <hewitt@ieee.org>
+-Reviewed-by: Philip Withnall <withnall@endlessm.com>
+-
+-Upstream commit 1252dc1d1f465b8ab6b36ff7252e395e66a040cf
+-Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+----
+- bus/config-loader-expat.c | 14 ++++++++++++++
+- configure.ac              |  8 ++++++++
+- 2 files changed, 22 insertions(+)
+-
+-diff --git a/bus/config-loader-expat.c b/bus/config-loader-expat.c
+-index b571fda3..27cbe2d0 100644
+---- a/bus/config-loader-expat.c
+-+++ b/bus/config-loader-expat.c
+-@@ -203,6 +203,20 @@ bus_config_load (const DBusString      *file,
+-       goto failed;
+-     }
+- 
+-+  /* We do not need protection against hash collisions (CVE-2012-0876)
+-+   * because we are only parsing trusted XML; and if we let Expat block
+-+   * waiting for the CSPRNG to be initialized, as it does by default to
+-+   * defeat CVE-2012-0876, it can cause timeouts during early boot on
+-+   * entropy-starved embedded devices.
+-+   *
+-+   * TODO: When Expat gets a more explicit API for this than
+-+   * XML_SetHashSalt, check for that too, and use it preferentially.
+-+   * https://github.com/libexpat/libexpat/issues/91 */
+-+#if defined(HAVE_XML_SETHASHSALT)
+-+  /* Any nonzero number will do. https://xkcd.com/221/ */
+-+  XML_SetHashSalt (expat, 4);
+-+#endif
+-+
+-   if (!_dbus_string_get_dirname (file, &dirname))
+-     {
+-       dbus_set_error (error, DBUS_ERROR_NO_MEMORY, NULL);
+-diff --git a/configure.ac b/configure.ac
+-index 52da11fb..c4022ed7 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -938,6 +938,14 @@ XML_CFLAGS=
+- AC_SUBST([XML_CFLAGS])
+- AC_SUBST([XML_LIBS])
+- 
+-+save_cflags="$CFLAGS"
+-+save_libs="$LIBS"
+-+CFLAGS="$CFLAGS $XML_CFLAGS"
+-+LIBS="$LIBS $XML_LIBS"
+-+AC_CHECK_FUNCS([XML_SetHashSalt])
+-+CFLAGS="$save_cflags"
+-+LIBS="$save_libs"
+-+
+- # Thread lib detection
+- AC_ARG_VAR([THREAD_LIBS])
+- save_libs="$LIBS"
+--- 
+-2.11.0
+-
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index b0052422c503..61e6e0f40744 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,3 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# http://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz.asc
+-sha256	e2b1401e3eedc7b5c9a2034d31254c886e1fcbc7858006e0a1c59158fe4b7b97  dbus-1.10.22.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz
++sha256	71184eb27638e224579ffa998e88f01d0f1fef17a7811406e53350735eaecd1b  dbus-1.10.24.tar.gz
++# Locally calculated
++sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index a2f81cdbefcb..6fa04962baf7 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,11 +4,8 @@
  #
  ################################################################################
  
--AUDIT_VERSION = 2.7.7
-+AUDIT_VERSION = 2.7.8
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
--AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
--AUDIT_LICENSE_FILES = COPYING
-+AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-+AUDIT_LICENSE_FILES = COPYING COPYING.LIB
- 
- AUDIT_INSTALL_STAGING = YES
- 
+-DBUS_VERSION = 1.10.22
++DBUS_VERSION = 1.10.24
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+-
+-# 0001-config-loader-expat-Tell-Expat-not-to-defend-against.patch
+-DBUS_AUTORECONF = YES
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+ DBUS_INSTALL_STAGING = YES
 -- 
 2.14.2
