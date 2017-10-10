@@ -1,37 +1,102 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Oct 2017 22:30:15 +0300
-Subject: [Buildroot] [PATCH 2/2] lvm2: optionally depend on libselinux
-In-Reply-To: <dd465954531e2cfa6d0ca76ece7b6384f642ea59.1507663815.git.baruch@tkos.co.il>
-References: <dd465954531e2cfa6d0ca76ece7b6384f642ea59.1507663815.git.baruch@tkos.co.il>
-Message-ID: <e2b73c341c75a31612f5a7e72db1cf9867ce9b0d.1507663815.git.baruch@tkos.co.il>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 10 Oct 2017 15:52:05 -0400
+Subject: [Buildroot] [PATCH v2 1/5] libselinux: bump to 2.7
+Message-ID: <20171010195209.24074-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/lvm2/lvm2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+remove patch as it's in this release.
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 79691ddec6f6..20e0dd0d5c36 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -35,6 +35,13 @@ else
- LVM2_CONF_OPTS += --disable-readline
- endif
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - None
+
+ ...src-regex.c-support-old-compilers-for-the.patch | 47 ----------------------
+ package/libselinux/libselinux.hash                 |  4 +-
+ package/libselinux/libselinux.mk                   |  4 +-
+ 3 files changed, 4 insertions(+), 51 deletions(-)
+ delete mode 100644 package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
+
+diff --git a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch b/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
+deleted file mode 100644
+index 3bda607512..0000000000
+--- a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From e0803c0bdbb1abf06b6b5bb1b52fdb733505b8f7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 25 Jan 2017 22:41:02 +1300
+-Subject: [PATCH] src/regex.c: support old compilers for the endian
+- check
+-
+-libselinux 2.6 has added some code in regex.c that uses __BYTE_ORDER__
+-to determine the system endianness. Unfortunately, this definition
+-provided directly by the compiler doesn't exist in older gcc versions
+-such as gcc 4.4.
+-
+-In order to address this, this commit extends the logic to use
+-<endian.h> definitions if __BYTE_ORDER__ is not provided by the
+-compiler. This allows libselinux to build properly with gcc 4.4.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/regex.c | 13 ++++++++++++-
+- 1 file changed, 12 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/regex.c b/src/regex.c
+-index a3b427b..0c5ad27 100644
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -13,7 +13,18 @@
+- #endif
+- 
+- #ifndef __BYTE_ORDER__
+--#error __BYTE_ORDER__ not defined. Unable to determine endianness.
+-+
+-+/* If the compiler doesn't define __BYTE_ORDER__, try to use the C
+-+ * library <endian.h> header definitions. */
+-+#include <endian.h>
+-+#ifndef __BYTE_ORDER
+-+#error Neither __BYTE_ORDER__ nor __BYTE_ORDER defined. Unable to determine endianness.
+-+#endif
+-+
+-+#define __ORDER_LITTLE_ENDIAN __LITTLE_ENDIAN
+-+#define __ORDER_BIG_ENDIAN __BIG_ENDIAN
+-+#define __BYTE_ORDER__ __BYTE_ORDER
+-+
+- #endif
+- 
+- #ifdef USE_PCRE2
+--- 
+-2.7.4
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 76130b2dc0..3c60d5111d 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 4ea2dde50665c202253ba5caac7738370ea0337c47b251ba981c60d24e1a118a libselinux-2.6.tar.gz
++# From: https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256 d0fec0769b3ad60aa7baf9b9a4b7a056827769dc2dadda0dc0eb59b3d1c18c57 libselinux-2.7.tar.gz
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f23eea4962..8ac8000de5 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+LVM2_CONF_OPTS += --enable-selinux
-+LVM2_DEPENDENCIES += libselinux
-+else
-+LVM2_CONF_OPTS += --disable-selinux
-+endif
-+
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
- LVM2_MAKE_OPTS = device-mapper
- LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install_device-mapper
+-LIBSELINUX_VERSION = 2.6
+-LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
++LIBSELINUX_VERSION = 2.7
++LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+ 
 -- 
-2.14.2
+2.13.6
