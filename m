@@ -1,8 +1,9 @@
 From: Alexandre Gambier <agambier.dev@gmail.com>
-Date: Wed, 11 Oct 2017 14:19:30 +0200
-Subject: [Buildroot] [PATCH 1/9] iMX6S-PICO: add default config file
-	(imx6spico_defconfig)
-Message-ID: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+Date: Wed, 11 Oct 2017 14:19:32 +0200
+Subject: [Buildroot] [PATCH 3/9] iMX6S-PICO: add post image scripts
+In-Reply-To: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+References: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+Message-ID: <1507724378-23461-3-git-send-email-agambier.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,73 +12,117 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexandre Gambier <agambier.dev@gmail.com>
 ---
- configs/imx6spico_defconfig | 58 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 configs/imx6spico_defconfig
+ board/technexion/imx6spico/genimage.cfg.template | 40 ++++++++++++++++++
+ board/technexion/imx6spico/post-image.sh         | 54 ++++++++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100644 board/technexion/imx6spico/genimage.cfg.template
+ create mode 100755 board/technexion/imx6spico/post-image.sh
 
-diff --git a/configs/imx6spico_defconfig b/configs/imx6spico_defconfig
+diff --git a/board/technexion/imx6spico/genimage.cfg.template b/board/technexion/imx6spico/genimage.cfg.template
 new file mode 100644
-index 0000000..16ebf5b
+index 0000000..45450a9
 --- /dev/null
-+++ b/configs/imx6spico_defconfig
-@@ -0,0 +1,58 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_KERNEL_HEADERS_4_1=y
-+BR2_GCC_VERSION_5_X=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_GCC_ENABLE_LTO=y
-+BR2_PACKAGE_HOST_GDB=y
-+BR2_PACKAGE_HOST_GDB_PYTHON=y
-+BR2_ROOTFS_MERGED_USR=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/technexion/imx6spico/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technexion/imx6spico/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/TechNexion/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ecb66a3d34667fb4402457bbd6a4864e73b0fe87"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technexion/imx6spico/linux/linux-tn-imx-4.1.15/defconfig"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-pico_dwarf"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_EXPAT=y
-+BR2_PACKAGE_LIBCAP=y
-+BR2_PACKAGE_READLINE=y
-+BR2_PACKAGE_DHCP=y
-+BR2_PACKAGE_DHCP_CLIENT=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_NETCAT=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_HTOP=y
-+BR2_PACKAGE_KMOD=y
-+BR2_PACKAGE_KMOD_TOOLS=y
-+BR2_PACKAGE_UTIL_LINUX=y
-+BR2_PACKAGE_UTIL_LINUX_BINARIES=y
-+BR2_PACKAGE_UTIL_LINUX_FSCK=y
-+BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-+BR2_PACKAGE_UTIL_LINUX_NOLOGIN=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="40M"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="pico-imx6"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/TechNexion/u-boot-edm.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6b12193853eceda0da3da7eeb73c41ed6059acb4"
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_PACKAGE_HOST_GENIMAGE=y
++++ b/board/technexion/imx6spico/genimage.cfg.template
+@@ -0,0 +1,40 @@
++# Minimal SD card image for the Freescale boards Template
++#
++# We mimic the .sdcard Freescale's image format:
++# * the SD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 8 MB is containing zImage/uImage and DTB files
++# * a single root filesystem partition is required (ext2, ext3 or ext4)
++#
++
++image boot.vfat {
++  vfat {
++    files = {
++      %FILES%
++    }
++  }
++  size = 16M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "SPL"
++    offset = 1024
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/technexion/imx6spico/post-image.sh b/board/technexion/imx6spico/post-image.sh
+new file mode 100755
+index 0000000..52b423a
+--- /dev/null
++++ b/board/technexion/imx6spico/post-image.sh
+@@ -0,0 +1,54 @@
++#!/usr/bin/env bash
++
++#
++# dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
++# in ${BR_CONFIG}, then prints the corresponding list of file names for the
++# genimage configuration file
++#
++dtb_list()
++{
++	local DTB_LIST="imx6dl-pico_dwarf"
++
++	for dt in $DTB_LIST; do
++		echo -n "\"$dt.dtb\", "
++	done
++}
++
++#
++# linux_image extracts the Linux image format from BR2_LINUX_KERNEL_UIMAGE in
++# ${BR_CONFIG}, then prints the corresponding file name for the genimage
++# configuration file
++#
++linux_image()
++{
++	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
++		echo "\"uImage\""
++	else
++		echo "\"zImage\""
++	fi
++}
++
++main()
++{
++	local FILES="$(dtb_list) $(linux_image), \"u-boot.img\""
++	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
++	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++	sed -e "s/%FILES%/${FILES}/" \
++		board/technexion/imx6spico/genimage.cfg.template > ${GENIMAGE_CFG}
++
++	rm -rf "${GENIMAGE_TMP}"
++
++	genimage \
++		--rootpath "${TARGET_DIR}" \
++		--tmppath "${GENIMAGE_TMP}" \
++		--inputpath "${BINARIES_DIR}" \
++		--outputpath "${BINARIES_DIR}" \
++		--config "${GENIMAGE_CFG}"
++
++	rm -f ${GENIMAGE_CFG}
++
++	exit $?
++}
++
++main $@
 -- 
 2.7.4
