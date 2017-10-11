@@ -1,64 +1,79 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Wed, 11 Oct 2017 18:36:14 -0300 (BRT)
-Subject: [Buildroot] pre-built binary packages
-In-Reply-To: <20171011151137.469e7fd6@windsurf.lan>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A477BB220F1@MARCM-SBS2011.marcmltd.local>
- <20171011151137.469e7fd6@windsurf.lan>
-Message-ID: <572050367.13476787.1507757774068.JavaMail.zimbra@datacom.ind.br>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Oct 2017 23:38:51 +0200
+Subject: [Buildroot] [RFC 0/3] Adding software stacks
+In-Reply-To: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <60e44779-04da-d7d4-9589-cfef09d1a226@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Angelo,
 
-> Hello,
-> 
-> On Wed, 11 Oct 2017 11:00:11 +0000, Marc Murphy wrote:
-> 
->> I am wondering if it is possible to generate binary releases of
->> packages to be included in the build tree.  For example I have a
->> system that is rooted in 2017.02 and still has work done on some
->> packages but when updating releases from other engineers the changes
->> can get conflicted or messed up resulting in a fresh rebuild.  This
->> normally isn't a problem until Qt is in the equation.  For me once Qt
->> is configured built that's it I shouldn't need to build it again.  Is
->> there any way to 1) export or package the binaries and headers for
->> module archiving 2) use the prebuilt binaries and headers in a new
->> build to prevent having to rebuild Qt again
->> 
->> I think it could be a useful feature to create controlled releases or
->> to speed up builds.
-> 
-> Buildroot does not implement any mechanism to "cache" build results. It
-> is quite complicated to do it right, because you have to figure out
-> when an existing build result can be re-used from the cache or should
-> be rebuilt. Indeed, "building Qt" doesn't mean anything. With which
-> configuration was it built? For which host architecture and which
-> target architecture? With which target flags and optimization?
-> 
-> If you want to speed up your build with Buildroot, consider:
-> 
-> - Using a faster build machine (more SSD, more RAM)
-> - Using an external toolchain
-> - Using ccache
-> 
-> If you want a build system that caches existing build artifacts, then
-> you should use OpenEmbedded/Yocto.
-> 
+On 10-10-17 22:43, Angelo Compagnucci wrote:
+> Software stacks are a way to define a group of options that should be used together and they are orthogonal to configs: a software stack can indeed be shared among several configs.
 
-Here in Datacom we use "binary artifacts": when we build a package, we make a tarball of the artifacts. When we want to build the package, we try to use the tarball first, if the version (in the tarball) matches the package version.
+ Wow, you always come with the innovative ideas, don't you?
 
-We have not contributed this solution to buildroot because it doesn't seem to be possible to do this in a generic way. We have this binary artifact generation for our internal packages (and all of them use cmake to build). I think it is the only patch to buildroot that we consider to be "eternal".
+ We discussed such a feature before, but never came up with an elegant way to do
+it, and that was better than just calling merge_config.sh.
 
-You can do the same for any package: you can control what's installed in staging and target, and create a tarball containing these folders and the stamp files. Then, use this Binary, instead of the source, when the binary can be used (same source version, for instance).
+> Having a stack system like the one envisioned in this patch series make possible to do something like this:
+> 
+> make imx6-sabresd_defconfig; make mesa3d-etnaviv_stack qt5-fb_stack qt5-demos_stack; make
 
-So, a compilation in our systems always starts with a "build form binaries" and then "rebuild some parts from source". That's way we would like the python script that implements show-<pkg>-rrdepends to be accepted upstream: combined with binary artifacts, it is possible to build fast (from binaries) and rebuild fast (from source).
+ So yeah, is this really better than
+
+./utils/merge_config.sh configs/imx6-sabresd_defconfig
+stacks/mesa3d-etnaviv_stack stacks/qt5-fb_stack stacks/qt5-demos_stack; make
+
+? Yes, it is significantly shorter, but you can at least use tab-completion.
+
+ That said, I'm not absolutely opposed to the idea. But I'm not convinced either.
+
+ Adding stacks, on the other hand, seems like a worthwhile endeavour.
+
+
+> In this way we can declutter redundant configs (ex: imx6-sabresd_qt5_defconfig) and decouple software packages side releated symbols from hardware related defconfigs.
+
+ Not the best example, because imx6-sabresd_qt5_defconfig contains quite a few
+board-specific adaptions: a kconfig fragment and a rootfs overlay. And of course
+increasing the ext2 rootfs size.
+
+ A better example would be atmel_sama5d4_xplained_dev_defconfig which is purely
+a collection of packages.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> 
+> Angelo Compagnucci (3):
+>   support/kconfig/merge_config.sh: merge also buildroot config files
+>   Makefile: add handling of software stacks
+>   stacks: add a bunch of stacks
+> 
+>  Makefile                        | 40 ++++++++++++++++++++++++++++++++++++++--
+>  stacks/lamp_stack               | 10 ++++++++++
+>  stacks/mesa3d-etnaviv_stack     |  7 +++++++
+>  stacks/qt5-demos_stack          |  7 +++++++
+>  stacks/qt5-fb_stack             | 11 +++++++++++
+>  support/kconfig/merge_config.sh | 16 +++++++++++++++-
+>  6 files changed, 88 insertions(+), 3 deletions(-)
+>  create mode 100644 stacks/lamp_stack
+>  create mode 100644 stacks/mesa3d-etnaviv_stack
+>  create mode 100644 stacks/qt5-demos_stack
+>  create mode 100644 stacks/qt5-fb_stack
+> 
 
 -- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
