@@ -1,90 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Oct 2017 22:38:39 +0200
-Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
-In-Reply-To: <CAAkeqgV=snat2dr7MpHOc9HE4MWf5eqHX3HJQVR6P+BZb5WN1w@mail.gmail.com>
-References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
- <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
- <1501150411.21202.1.camel@embedded.rocks>
- <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
- <20170727165026.4a5f59a1@windsurf.lan>
- <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
- <20171007135843.5a75c7f5@windsurf.home>
- <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
- <CAAkeqgV=snat2dr7MpHOc9HE4MWf5eqHX3HJQVR6P+BZb5WN1w@mail.gmail.com>
-Message-ID: <8186cfc2-f587-8d35-2560-2f2f314a186d@mind.be>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 11 Oct 2017 20:51:47 +0000
+Subject: [Buildroot] [PATCH] extern-toolchain: Bump ARC tools to
+ arc-2017.09-rc1
+In-Reply-To: <275d998b-73cf-ebd0-2047-a48704eeda36@mind.be>
+References: <20171011091703.32495-1-didin@synopsys.com>
+ <275d998b-73cf-ebd0-2047-a48704eeda36@mind.be>
+Message-ID: <1507755106.3839.19.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
-
-On 11-10-17 05:51, Andrey Yurovsky wrote:
-> Hi,
+On Wed, 2017-10-11 at 22:14 +0200, Arnout Vandecappelle wrote:
 > 
-> On Sat, Oct 7, 2017 at 6:06 AM, Romain Naour <romain.naour@smile.fr> wrote:
->> Thomas, Andrey, All,
->>
->> Le 07/10/2017 ? 13:58, Thomas Petazzoni a ?crit :
->>> Hello,
->>>
->>> On Fri, 6 Oct 2017 15:39:03 -0700, Andrey Yurovsky wrote:
->>>
->>>> On Thu, Jul 27, 2017 at 7:50 AM, Thomas Petazzoni
->>>> <thomas.petazzoni@free-electrons.com> wrote:
->>>>> No, let's wait to have a few Meson-based packages in Buildroot, and
->>>>> then we'll have a package infrastructure. This will allow us to see
->>>>> what are the commonalities, what are the differences, etc.
->>>>
->>>> systemd 235 is released (https://lwn.net/Articles/735691/) and it
->>>> drops autoconf/automake and only has meson as the build system (in 234
->>>> they warned this would happen next) so perhaps that's a good starting
->>>> point for buildroot to integrate meson support? I'm happy to help out
->>>> if no one else was already working on it.
->>>
->>> This would indeed be a very compelling reason to support meson.
->>
->> Also the next enlightenment release (0.22) will only support meson.
->>
+> On 11-10-17 11:17, Evgeniy Didin wrote:
+> > 
+> > This commit bumps ARC prebuild toolchain to arc-2017.09-rc1
+> > 
+> > There might be subtle differences between uClibc configuration
+> > compared to Buildroot's one. Native RPC now is disabled?
+> > because uClinc-ng has removed it.
 > 
-> I was able to add a package/pkg-meson.mk wrapper (that seems to be
-> missing from the Meson patch set, or did I completely miss it?) and
+> ?These two sentences are unrelated, right? I mean, Buildroot's uClibc hasn't had
+> RPC since April... So better make that two paragraphs.
 
- Yes, our original idea was that there should be a few packages using meson
-before we add an infra for it. But since there are quite a few packages that
-will use the meson infra, and since it seems pretty straightforward, it can
-indeed be done right away (at least according to me, Thomas may have a different
-opinion).
+Probably so.
 
-> built the previously submitted libmpdclient version bump via the
-> $(eval $(meson-package)) wrapper. I'll work on version bumping systemd
-> and converting it to use that wrapper as well. If possible I'd like to
-> get this more or less right, what would a reasonable patch set look
-> like? I was thinking, as a patch set:
-> 1. resubmit the Meson patches (package/meson, documentation) by J?rg Krause
+> ?Could you describe the subtle differences?
 
- If you're anyway adding pkg-meson.mk, then the documentation doesn't make much
-sense (in that form). Better do it after pkg-meson.mk.
+Well we may do a full side-by-side comparison of uClibc's defconfigs
+but that barely makes a lot of sense. I mean we used to use some configuration
+which was formed as it was in years and not all choices I may justify and explain.
 
-> 2. add package/pkg-meson.mk
-> 3. resubmit the libmpdclient version bump patch by J?rg Krause but
-> with $(eval $(meson-package)) changes
-> 4. submit the systemd version bump and meson conversion patch(es)
+Still we're slowly drifting to Buildroot's uClibc defconfig with pretty much every
+our release but not yet there... and Buildroot's defconfig changes with time but
+we cannot change ours in the middle of development cycle.
+
+Again we may do that comparison and identify all [meaningful] differences
+but not sure what it gives.
+
+> > 
+> > 
+> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> > Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> > Cc: arc-buildroot at synopsys.com
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > 
+> > ---
+> > ?.../toolchain-external/toolchain-external-synopsys-arc/Config.in??| 8 ++++----
+> > ?.../toolchain-external-synopsys-arc.hash??????????????????????????| 8 ++++----
+> > ?.../toolchain-external-synopsys-arc.mk????????????????????????????| 4 ++--
+> > ?3 files changed, 10 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-
+> > arc/Config.in
+> > index f438ea765d..cdf36d08e6 100644
+> > --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+> > +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+> > @@ -1,18 +1,18 @@
+> > ?config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+> > -	bool "Synopsys ARC 2016.09 toolchain"
+> > +	bool "Synopsys ARC 2017.09-rc1 toolchain"
 > 
-> That way we have the infrastructure, documentation, and two packages
-> utilizing the infrastructure in one set to review. Does that sound
-> alright?
+> ?Do we really want the -rc1 toolchain? Shouldn't we wait for the release? It
+> can't be because you want additional testing in the autobuilders, since this
+> toolchain doesn't appear in support/config-fragments/autobuild.
 
- Yes it does!
+Well we used to have ARC prebuilt toolchain in autobuilder if I'm not mistaken.
+But due to some significant deviations from Buildroot defaults like missing IPv6
+back in the day it got nuked. Maybe Thomas can remember it better... for some
+reason I cannot find any signs of ARC prebuilt tools in
+https://git.busybox.net/buildroot-test/?so I might be wrong here.
 
- Regards,
- Arnout
+But indeed we wanted to get some more testing for that pre-built toolchain
+and catch a couple of issues before cutting rc2 and final release.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+And essentially once and if that patch gets accepted the plan was to
+submit a config-fragment for it.
+
+> > 
+> > ?	depends on BR2_arc
+> > ?	depends on BR2_HOSTARCH = "x86_64"
+> > ?	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> > ?	select BR2_INSTALL_LIBSTDCPP
+> > -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> > +	#select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> 
+> ?You shouldn't comment this line, just remove it.
+
+Good catch - we'll fix that.
+
+-Alexey
