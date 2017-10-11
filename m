@@ -1,45 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Oct 2017 15:15:39 +0200
-Subject: [Buildroot] [PATCH v1] wiringpi: bump version to
-	96344ff7125182989f98d3be8d111952a8f74e15 (the real 2.44)
-Message-ID: <20171011131539.19407-1-ps.report@gmx.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 11 Oct 2017 15:15:56 +0200
+Subject: [Buildroot] [PATCH] libtomcrypt: bump to version 1.18.0
+Message-ID: <20171011131556.21983-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug 10391 [1].
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=10391
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/wiringpi/wiringpi.hash | 2 +-
- package/wiringpi/wiringpi.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libtomcrypt/libtomcrypt.hash | 2 +-
+ package/libtomcrypt/libtomcrypt.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wiringpi/wiringpi.hash b/package/wiringpi/wiringpi.hash
-index 35eedb935f..f4832e5fa8 100644
---- a/package/wiringpi/wiringpi.hash
-+++ b/package/wiringpi/wiringpi.hash
+diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
+index 562016d52..6f7720e8a 100644
+--- a/package/libtomcrypt/libtomcrypt.hash
++++ b/package/libtomcrypt/libtomcrypt.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 464c98ed54f5c0ad6611e270be3491c4598a32b7e86b208255862a301c564955  wiringpi-2.44.tar.gz
-+sha256 4eae1d4f37f77534b1e2db4678a1003a5fd7ced4721c340527e3476d0bed1d9f wiringpi-96344ff7125182989f98d3be8d111952a8f74e15.tar.gz
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
-index cec34fadd1..f2e9e246d9 100644
---- a/package/wiringpi/wiringpi.mk
-+++ b/package/wiringpi/wiringpi.mk
-@@ -4,7 +4,8 @@
+ # Locally computed
+-sha256  e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116  crypt-1.17.tar.bz2
++sha256  da9df56a314afaab71963aa71bb6a075ea6bdee3d4db4af045f6bfe23e88b87a  crypt-1.18.0.tar.xz
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index 8cc02b28d..02610f16d 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WIRINGPI_VERSION = 2.44
-+# using git commit id instead of (wrong) 2.44 git tag (Bug 10391)
-+WIRINGPI_VERSION = 96344ff7125182989f98d3be8d111952a8f74e15
- WIRINGPI_SITE = git://git.drogon.net/wiringPi
- 
- WIRINGPI_LICENSE = LGPL-3.0+
+-LIBTOMCRYPT_VERSION = 1.17
+-LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
+-LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
++LIBTOMCRYPT_VERSION = 1.18.0
++LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/v$(LIBTOMCRYPT_VERSION)
++LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.xz
+ LIBTOMCRYPT_LICENSE = WTFPL
+ LIBTOMCRYPT_LICENSE_FILES = LICENSE
+ LIBTOMCRYPT_INSTALL_STAGING = YES
 -- 
-2.14.2
+2.11.0
