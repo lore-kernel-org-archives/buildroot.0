@@ -1,46 +1,34 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Wed, 11 Oct 2017 15:50:05 +0300
-Subject: [Buildroot] [PATCH] vlc: enable package on ARC
-Message-ID: <20171011125005.25545-1-didin@synopsys.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Oct 2017 13:06:39 +0000
+Subject: [Buildroot] [Bug 10391] WiringPi retrieves wrong (old) version
+In-Reply-To: <bug-10391-163@https.bugs.busybox.net/>
+References: <bug-10391-163@https.bugs.busybox.net/>
+Message-ID: <bug-10391-163-0gYcqslrz4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now using arc-2017.09-rc1 toolchain it is possible to
-build vlc package.
+https://bugs.busybox.net/show_bug.cgi?id=10391
 
-Note this patch has a prerequisite that updates ARC prebuilt toolchain,
-http://patchwork.ozlabs.org/patch/824311/
+--- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
+The problem seems to be a wrong tag in the original repository[1],
+buildroot checks out the 2.44 tag, same as commit [2], but the
+apparent version bump happens one  commit [3] later (and gives
+the PiZero-W support)...
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-CC: Alexey Brodkin <abrodkin@synopsys.com>
-CC: arc-buildroot at synopsys.com
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+But no changes regarding old/new kernels?
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 78023fb500..166e7d256a 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -11,8 +11,6 @@ config BR2_PACKAGE_VLC
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
--	# ARC toolchain issue
--	depends on !BR2_arc
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
- 	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
-@@ -36,6 +34,5 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
- 
- comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_arc
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+Regards,
+Peter
+
+[1]https://git.drogon.net/?p=wiringPi;a=summary
+[2]
+https://git.drogon.net/?p=wiringPi;a=commitdiff;h=e8da87fbaced1edf75a5b37f78e8d4eb5ec0f18d
+[3]
+https://git.drogon.net/?p=wiringPi;a=commitdiff;h=96344ff7125182989f98d3be8d111952a8f74e15
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
