@@ -1,79 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Oct 2017 23:38:51 +0200
-Subject: [Buildroot] [RFC 0/3] Adding software stacks
-In-Reply-To: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <60e44779-04da-d7d4-9589-cfef09d1a226@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Oct 2017 23:27:16 +0200
+Subject: [Buildroot] [git commit] wiringpi: bump version to
+	96344ff7125182989f98d3be8d111952a8f74e15
+Message-ID: <20171011213615.D8956811B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Angelo,
+commit: https://git.buildroot.net/buildroot/commit/?id=6fdc039a011c646421798a9dee6208c605fb2885
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 10-10-17 22:43, Angelo Compagnucci wrote:
-> Software stacks are a way to define a group of options that should be used together and they are orthogonal to configs: a software stack can indeed be shared among several configs.
+Upstream wiringpi apparently has some issues with their release
+process: their 2.42 and 2.44 tags point to the exact same commit. And
+at the 2.44 tag, the VERSION file was not updated to indicate that
+it's version 2.44.
 
- Wow, you always come with the innovative ideas, don't you?
+A follow-up commit added support for the RPi Zero-W, and fixed the
+VERSION file to contain 2.44. So let's use this follow-up commit as
+the new version for wiringpi.
 
- We discussed such a feature before, but never came up with an elegant way to do
-it, and that was better than just calling merge_config.sh.
+This will hopefully clarify things, and avoid confusion such as the
+one reported in bug #10391 [1].
 
-> Having a stack system like the one envisioned in this patch series make possible to do something like this:
-> 
-> make imx6-sabresd_defconfig; make mesa3d-etnaviv_stack qt5-fb_stack qt5-demos_stack; make
+[1] https://bugs.busybox.net/show_bug.cgi?id=10391
 
- So yeah, is this really better than
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Thomas: rewrite commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wiringpi/wiringpi.hash | 2 +-
+ package/wiringpi/wiringpi.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-./utils/merge_config.sh configs/imx6-sabresd_defconfig
-stacks/mesa3d-etnaviv_stack stacks/qt5-fb_stack stacks/qt5-demos_stack; make
-
-? Yes, it is significantly shorter, but you can at least use tab-completion.
-
- That said, I'm not absolutely opposed to the idea. But I'm not convinced either.
-
- Adding stacks, on the other hand, seems like a worthwhile endeavour.
-
-
-> In this way we can declutter redundant configs (ex: imx6-sabresd_qt5_defconfig) and decouple software packages side releated symbols from hardware related defconfigs.
-
- Not the best example, because imx6-sabresd_qt5_defconfig contains quite a few
-board-specific adaptions: a kconfig fragment and a rootfs overlay. And of course
-increasing the ext2 rootfs size.
-
- A better example would be atmel_sama5d4_xplained_dev_defconfig which is purely
-a collection of packages.
-
-
- Regards,
- Arnout
-
-
-> 
-> 
-> Angelo Compagnucci (3):
->   support/kconfig/merge_config.sh: merge also buildroot config files
->   Makefile: add handling of software stacks
->   stacks: add a bunch of stacks
-> 
->  Makefile                        | 40 ++++++++++++++++++++++++++++++++++++++--
->  stacks/lamp_stack               | 10 ++++++++++
->  stacks/mesa3d-etnaviv_stack     |  7 +++++++
->  stacks/qt5-demos_stack          |  7 +++++++
->  stacks/qt5-fb_stack             | 11 +++++++++++
->  support/kconfig/merge_config.sh | 16 +++++++++++++++-
->  6 files changed, 88 insertions(+), 3 deletions(-)
->  create mode 100644 stacks/lamp_stack
->  create mode 100644 stacks/mesa3d-etnaviv_stack
->  create mode 100644 stacks/qt5-demos_stack
->  create mode 100644 stacks/qt5-fb_stack
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/wiringpi/wiringpi.hash b/package/wiringpi/wiringpi.hash
+index 35eedb9..f4832e5 100644
+--- a/package/wiringpi/wiringpi.hash
++++ b/package/wiringpi/wiringpi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 464c98ed54f5c0ad6611e270be3491c4598a32b7e86b208255862a301c564955  wiringpi-2.44.tar.gz
++sha256 4eae1d4f37f77534b1e2db4678a1003a5fd7ced4721c340527e3476d0bed1d9f wiringpi-96344ff7125182989f98d3be8d111952a8f74e15.tar.gz
+diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
+index cec34fa..f2e9e24 100644
+--- a/package/wiringpi/wiringpi.mk
++++ b/package/wiringpi/wiringpi.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-WIRINGPI_VERSION = 2.44
++# using git commit id instead of (wrong) 2.44 git tag (Bug 10391)
++WIRINGPI_VERSION = 96344ff7125182989f98d3be8d111952a8f74e15
+ WIRINGPI_SITE = git://git.drogon.net/wiringPi
+ 
+ WIRINGPI_LICENSE = LGPL-3.0+
