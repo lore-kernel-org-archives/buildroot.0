@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Oct 2017 15:11:37 +0200
-Subject: [Buildroot] pre-built binary packages
-In-Reply-To: <8AE4BE7D9622DF41B76E1AD887AA1A477BB220F1@MARCM-SBS2011.marcmltd.local>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A477BB220F1@MARCM-SBS2011.marcmltd.local>
-Message-ID: <20171011151137.469e7fd6@windsurf.lan>
+Date: Wed, 11 Oct 2017 15:14:05 +0200
+Subject: [Buildroot] [PATCH 1/9] iMX6S-PICO: add default config file
+ (imx6spico_defconfig)
+In-Reply-To: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+References: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+Message-ID: <20171011151405.3fd491f9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 11 Oct 2017 11:00:11 +0000, Marc Murphy wrote:
+On Wed, 11 Oct 2017 14:19:30 +0200, Alexandre Gambier wrote:
+> Signed-off-by: Alexandre Gambier <agambier.dev@gmail.com>
 
-> I am wondering if it is possible to generate binary releases of
-> packages to be included in the build tree.  For example I have a
-> system that is rooted in 2017.02 and still has work done on some
-> packages but when updating releases from other engineers the changes
-> can get conflicted or messed up resulting in a fresh rebuild.  This
-> normally isn't a problem until Qt is in the equation.  For me once Qt
-> is configured built that's it I shouldn't need to build it again.  Is
-> there any way to 1) export or package the binaries and headers for
-> module archiving 2) use the prebuilt binaries and headers in a new
-> build to prevent having to rebuild Qt again
-> 
-> I think it could be a useful feature to create controlled releases or
-> to speed up builds.
+Thanks for your contributions.
 
-Buildroot does not implement any mechanism to "cache" build results. It
-is quite complicated to do it right, because you have to figure out
-when an existing build result can be re-used from the cache or should
-be rebuilt. Indeed, "building Qt" doesn't mean anything. With which
-configuration was it built? For which host architecture and which
-target architecture? With which target flags and optimization?
+However, as I have written to you off list already, your patches 7/9,
+8/9 and 9/9 will not make it to the list because they are too big.
 
-If you want to speed up your build with Buildroot, consider:
+And we anyway don't want such huge firmware files in Buildroot
+directly, as I already explained to you. Especially without a license
+file.
 
- - Using a faster build machine (more SSD, more RAM)
- - Using an external toolchain
- - Using ccache
+Can you instead work with the linux-firmware project to get those
+firmware files included? This will obviously require to have a proper
+license for them, but that would anyway be needed for you to be allowed
+to redistribute them.
 
-If you want a build system that caches existing build artifacts, then
-you should use OpenEmbedded/Yocto.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
