@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Oct 2017 22:00:19 +0200
-Subject: [Buildroot] [PATCH 1/2] libdrm: VC4 change dependency to arm OR
- aarch64
-In-Reply-To: <20171011154211.2651-1-olivier.schonken@gmail.com>
-References: <20171011154211.2651-1-olivier.schonken@gmail.com>
-Message-ID: <20171011220019.16500560@windsurf.lan>
+Date: Wed, 11 Oct 2017 22:01:35 +0200
+Subject: [Buildroot] [git commit] libtomcrypt: bump to version 1.18.0
+Message-ID: <20171011195744.0E74381144@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=123f2e60769ff848d19754d541182a13dc2a52a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Oct 2017 17:42:10 +0200, Olivier Schonken wrote:
-> Enable selection of VC4 driver when compiling for Rpi3 using aarch64
-> 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
->  package/libdrm/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libtomcrypt/libtomcrypt.hash | 2 +-
+ package/libtomcrypt/libtomcrypt.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
+index 562016d..6f7720e 100644
+--- a/package/libtomcrypt/libtomcrypt.hash
++++ b/package/libtomcrypt/libtomcrypt.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116  crypt-1.17.tar.bz2
++sha256  da9df56a314afaab71963aa71bb6a075ea6bdee3d4db4af045f6bfe23e88b87a  crypt-1.18.0.tar.xz
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index 8cc02b2..02610f1 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBTOMCRYPT_VERSION = 1.17
+-LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
+-LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
++LIBTOMCRYPT_VERSION = 1.18.0
++LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/v$(LIBTOMCRYPT_VERSION)
++LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.xz
+ LIBTOMCRYPT_LICENSE = WTFPL
+ LIBTOMCRYPT_LICENSE_FILES = LICENSE
+ LIBTOMCRYPT_INSTALL_STAGING = YES
