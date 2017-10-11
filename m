@@ -1,11 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Oct 2017 22:14:34 +0200
-Subject: [Buildroot] [PATCH v2] evemu: fix PATH_MAX related compile
- failure
-In-Reply-To: <20171011220646.21c208a5@windsurf.lan>
-References: <20171011091452.11162-1-ps.report@gmx.net>
- <20171011220646.21c208a5@windsurf.lan>
-Message-ID: <20171011221434.6d8e41b2@gmx.net>
+Date: Wed, 11 Oct 2017 22:21:24 +0200
+Subject: [Buildroot] [PATCH v1] wiringpi: bump version to
+ 96344ff7125182989f98d3be8d111952a8f74e15 (the real 2.44)
+In-Reply-To: <20171011155932.01b6cf48@windsurf.lan>
+References: <20171011131539.19407-1-ps.report@gmx.net>
+ <20171011155932.01b6cf48@windsurf.lan>
+Message-ID: <20171011222124.4d9e0756@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,32 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On Wed, 11 Oct 2017 22:06:46 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Wed, 11 Oct 2017 15:59:32 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
 > Hello,
 > 
-> On Wed, 11 Oct 2017 11:14:52 +0200, Peter Seiderer wrote:
-> > Fixes [1] when building with musl:
+> On Wed, 11 Oct 2017 15:15:39 +0200, Peter Seiderer wrote:
+> > Fixes bug 10391 [1].
 > > 
-> >   find_event_devices.c: In function 'find_event_devices':
-> > find_event_devices.c:60:14: error: 'PATH_MAX' undeclared (first use in this function)
-> >    char fname[PATH_MAX];
-> >               ^~~~~~~~
+> > [1] https://bugs.busybox.net/show_bug.cgi?id=10391
 > > 
-> > [1] http://autobuild.buildroot.net/results/607/607bb29231f80a138e1b5423bc01c89e36efe78c/
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - use limits.h instead of linux/limits.h, change patch commit message,
-> >     add musl reference (suggested by Arnout Vandecappelle)
-> > ---
-> >  .../evemu/0001-Include-limits.h-for-PATH_MAX.patch | 35 ++++++++++++++++++++++
-> >  1 file changed, 35 insertions(+)
-> >  create mode 100644 package/evemu/0001-Include-limits.h-for-PATH_MAX.patch  
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
 > 
-> Applied to master, thanks. Please don't forget to submit the patch
-> upstream if not already done. Thanks!
+> I don't think it really fixes bug 10391. Bug 10391 is bogus by itself.
+> The update to 96344ff7125182989f98d3be8d111952a8f74e15 doesn't fix
+> anything, it only adds support for RPi Zero W.
 
-Upstream submit done already, see [1]...
+Saving a download as wiringpi-2.44.tar.gz containing something
+identifying itself as 2.42? I would call it a bug (not on the buildroot
+side but in the original git repository).
+
+The suggested patch fixes the original complain of Bug 10391:
+'WiringPi retrieves wrong (old) version'
+
+Any suggestion on how to reference the bug report otherwise?
 
 Regards,
 Peter
-
-[1] https://lists.freedesktop.org/archives/input-tools/2017-October/001434.html
 
 > 
 > Thomas
