@@ -1,79 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Oct 2017 23:43:42 +0200
-Subject: [Buildroot] [RFC 1/3] support/kconfig/merge_config.sh: merge
- also buildroot config files
-In-Reply-To: <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
-References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
- <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <4b5e865a-dfba-4fdf-4043-0bcd401832b6@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Oct 2017 23:44:25 +0200
+Subject: [Buildroot] [PATCH v1] wiringpi: bump version to
+ 96344ff7125182989f98d3be8d111952a8f74e15 (the real 2.44)
+In-Reply-To: <20171011131539.19407-1-ps.report@gmx.net>
+References: <20171011131539.19407-1-ps.report@gmx.net>
+Message-ID: <20171011234425.6456c79f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 10-10-17 22:43, Angelo Compagnucci wrote:
-> This patch adds a way to merge buildroot config file programmatically.
-
- We already do that in test-pkg, without this patch. What are we doing wrong?
-
-> It adds an option (-b, buildroot mode) to manage buildroot config files.
-
- I wouldn't bother with that option. It's only going to be used for Buildroot
-config files (other packages using Kconfig will have a copy of the script
-already). So we can just change it directly. And we already have a stack of
-changes on the upstream kconfig.
-
-> The buildroot mode changes the way the script looks for configurations
-> entries using the BR2_ prefix and modify the call to the make command
-> to be buildroot friendly.
+On Wed, 11 Oct 2017 15:15:39 +0200, Peter Seiderer wrote:
+> Fixes bug 10391 [1].
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[snip]
-> @@ -81,7 +90,7 @@ INITFILE=$1
->  shift;
->  
->  MERGE_LIST=$*
-> -SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-> +SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
+> [1] https://bugs.busybox.net/show_bug.cgi?id=10391
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/wiringpi/wiringpi.hash | 2 +-
+>  package/wiringpi/wiringpi.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
- So here you can just hardcode BR2_
+Applied to master, with a reworked commit log.
 
->  TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
->  
->  echo "Using $INITFILE as base"
-> @@ -131,7 +140,12 @@ fi
->  # Use the merged file as the starting point for:
->  # alldefconfig: Fills in any missing symbols with Kconfig default
->  # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
-> +if [ "$BUILDROOT_MODE" = "false" ]; then
->  make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
-> +else
-> +cp $TMP_FILE $OUTPUT/.config
-> +make $OUTPUT_ARG olddefconfig
+Best regards,
 
- Why is this needed? alldefconfig works fine, no?
-
-> +fi
->  
->  
->  # Check all specified config values took (might have missed-dependency issues)
-
- Since the kconfig stuff comes from upstream but is modified, we also maintain
-the changes as a stack of patches in support/kconfig/patches. So you should
-generate a new patch for this change and add it to the series file. I'm not sure
-why we don't use a vendor branch and just merge, but that's the way we do it :-).
-
-
- Regards,
- Arnout
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
