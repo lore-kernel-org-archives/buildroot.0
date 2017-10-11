@@ -1,72 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Oct 2017 11:14:52 +0200
-Subject: [Buildroot] [PATCH v2] evemu: fix PATH_MAX related compile failure
-Message-ID: <20171011091452.11162-1-ps.report@gmx.net>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Wed, 11 Oct 2017 12:17:03 +0300
+Subject: [Buildroot] [PATCH] extern-toolchain: Bump ARC tools to
+	arc-2017.09-rc1
+Message-ID: <20171011091703.32495-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1] when building with musl:
+This commit bumps ARC prebuild toolchain to arc-2017.09-rc1
 
-  find_event_devices.c: In function 'find_event_devices':
-find_event_devices.c:60:14: error: 'PATH_MAX' undeclared (first use in this function)
-   char fname[PATH_MAX];
-              ^~~~~~~~
+There might be subtle differences between uClibc configuration
+compared to Buildroot's one. Native RPC now is disabled 
+because uClinc-ng has removed it.
 
-[1] http://autobuild.buildroot.net/results/607/607bb29231f80a138e1b5423bc01c89e36efe78c/
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 -> v2:
-  - use limits.h instead of linux/limits.h, change patch commit message,
-    add musl reference (suggested by Arnout Vandecappelle)
----
- .../evemu/0001-Include-limits.h-for-PATH_MAX.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/evemu/0001-Include-limits.h-for-PATH_MAX.patch
+ .../toolchain-external/toolchain-external-synopsys-arc/Config.in  | 8 ++++----
+ .../toolchain-external-synopsys-arc.hash                          | 8 ++++----
+ .../toolchain-external-synopsys-arc.mk                            | 4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/evemu/0001-Include-limits.h-for-PATH_MAX.patch b/package/evemu/0001-Include-limits.h-for-PATH_MAX.patch
-new file mode 100644
-index 0000000000..04a0cc6b9a
---- /dev/null
-+++ b/package/evemu/0001-Include-limits.h-for-PATH_MAX.patch
-@@ -0,0 +1,35 @@
-+From e80a13776e6d6df29fd704cd63e0744200c3df1b Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 1 Oct 2017 19:54:53 +0200
-+Subject: [PATCH] Include limits.h for PATH_MAX.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes the following compile failure when building with musl:
-+
-+  find_event_devices.c: In function ?find_event_devices?:
-+  find_event_devices.c:60:14: error: ?PATH_MAX? undeclared (first use in this function)
-+     char fname[PATH_MAX];
-+                ^~~~~~~~
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ tools/find_event_devices.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tools/find_event_devices.c b/tools/find_event_devices.c
-+index 2a43d54..3a74096 100644
-+--- a/tools/find_event_devices.c
-++++ b/tools/find_event_devices.c
-+@@ -24,6 +24,7 @@
-+ 
-+ #define _GNU_SOURCE
-+ #include <linux/input.h>
-++#include <limits.h>
-+ #include <dirent.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+-- 
-+2.14.2
-+
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index f438ea765d..cdf36d08e6 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -1,18 +1,18 @@
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2016.09 toolchain"
++	bool "Synopsys ARC 2017.09-rc1 toolchain"
+ 	depends on BR2_arc
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	#select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	help
+ 	  Toolchain for the ARC cores, from
+ 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+index c96f53b1f6..4e6d71205a 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 9123e35510cc9105e5f9468d5154e0093770d7c11ed771c1a595ecf813692baf  arc_gnu_2016.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 3140066cdbda2df7ed0fb60424bbd9db740fb25393928e733234b0bf65508df2  arc_gnu_2016.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 aa6edb2101b13df3ac59f8d8ccbcfba37a6f7882f0e03baa9d9883480dbed4e7  arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 4de227bf73536a87784d88e5f10085b91ede62c76ef8fedf53b4bf2e215054cf  arc_gnu_2016.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
++sha256 db48969f433a69c1598208bbd4263341ccc75fb54004776e7030c29a12ab26c6  arc_gnu_2017.09-rc1_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 cc1d0e2391d6a3856610aa4ca56fc4c1bc8a43252a28a924385ba2bdbe3025da  arc_gnu_2017.09-rc1_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 86f1b736e8ead5fba31fed74b620c5f951d30a1903ca95dccd80889612d324bd  arc_gnu_2017.09-rc1_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 e655beef55bd3d1ced5326ceab499b6b694d71a4d3f9c6e5a48364eb486d52f3  arc_gnu_2017.09-rc1_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+index f4cb7b73a1..cb19f9bd14 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2016.09
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2017.09-rc1
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)
+ 
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
 -- 
-2.14.2
+2.11.0
