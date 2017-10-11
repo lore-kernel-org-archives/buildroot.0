@@ -1,94 +1,62 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Tue, 10 Oct 2017 22:41:29 -0300
-Subject: [Buildroot] [PATCH] axel: bump to version 2.15
-Message-ID: <20171011014129.32230-1-ismael@iodev.co.uk>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Tue, 10 Oct 2017 20:51:55 -0700
+Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
+In-Reply-To: <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
+References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
+ <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
+ <1501150411.21202.1.camel@embedded.rocks>
+ <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
+ <20170727165026.4a5f59a1@windsurf.lan>
+ <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
+ <20171007135843.5a75c7f5@windsurf.home>
+ <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
+Message-ID: <CAAkeqgV=snat2dr7MpHOc9HE4MWf5eqHX3HJQVR6P+BZb5WN1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Change upstream URL.
-- Add optional dependency on libressl/openssl.
-- Switch to autotools-package.
+Hi,
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
----
- package/axel/Config.in |  2 +-
- package/axel/axel.hash |  3 +--
- package/axel/axel.mk   | 35 ++++++++++++-----------------------
- 3 files changed, 14 insertions(+), 26 deletions(-)
+On Sat, Oct 7, 2017 at 6:06 AM, Romain Naour <romain.naour@smile.fr> wrote:
+> Thomas, Andrey, All,
+>
+> Le 07/10/2017 ? 13:58, Thomas Petazzoni a ?crit :
+>> Hello,
+>>
+>> On Fri, 6 Oct 2017 15:39:03 -0700, Andrey Yurovsky wrote:
+>>
+>>> On Thu, Jul 27, 2017 at 7:50 AM, Thomas Petazzoni
+>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>> No, let's wait to have a few Meson-based packages in Buildroot, and
+>>>> then we'll have a package infrastructure. This will allow us to see
+>>>> what are the commonalities, what are the differences, etc.
+>>>
+>>> systemd 235 is released (https://lwn.net/Articles/735691/) and it
+>>> drops autoconf/automake and only has meson as the build system (in 234
+>>> they warned this would happen next) so perhaps that's a good starting
+>>> point for buildroot to integrate meson support? I'm happy to help out
+>>> if no one else was already working on it.
+>>
+>> This would indeed be a very compelling reason to support meson.
+>
+> Also the next enlightenment release (0.22) will only support meson.
+>
 
-diff --git a/package/axel/Config.in b/package/axel/Config.in
-index 6e709cfb1351..4507855ff8e7 100644
---- a/package/axel/Config.in
-+++ b/package/axel/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_AXEL
- 	help
- 	  HTTP/FTP download accelerator.
- 
--	  http://axel.alioth.debian.org/
-+	  https://github.com/axel-download-accelerator/axel/
- 
- comment "axel needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index 895767011892..a49de66b9497 100644
---- a/package/axel/axel.hash
-+++ b/package/axel/axel.hash
-@@ -1,2 +1 @@
--# Locally calculated
--sha256	359a57ab4e354bcb6075430d977c59d33eb3e2f1415a811948fa8ae657ca8036  axel-2.4.tar.gz
-+sha256 70daa27abca5a3f1abe4be833d8f64205ac422416f5bcf396856eb6dd0fe9194  axel-2.15.tar.xz
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index 60bf5e4a61df..0563d9b6ed95 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -4,33 +4,22 @@
- #
- ################################################################################
- 
--AXEL_VERSION = 2.4
--AXEL_SITE = http://sources.buildroot.net
-+AXEL_VERSION = 2.15
-+AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
- AXEL_LICENSE = GPL-2.0+
- AXEL_LICENSE_FILES = COPYING
- AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
- 
--ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
--AXEL_DISABLE_I18N = --i18n=0
-+ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+AXEL_CONF_OPTS += --with-ssl
-+AXEL_DEPENDENCIES += libressl
-+else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+AXEL_CONF_OPTS += --with-ssl
-+AXEL_DEPENDENCIES += openssl
-+else
-+AXEL_CONF_OPTS += --without-ssl
- endif
- 
--define AXEL_CONFIGURE_CMDS
--	(cd $(@D); \
--		./configure \
--			--prefix=/usr \
--			--debug=1 \
--			$(AXEL_DISABLE_I18N) \
--	)
--endef
--
--define AXEL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--	LFLAGS="$(TARGET_LDFLAGS) $(AXEL_LDFLAGS)" -C $(@D)
--endef
--
--define AXEL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
--endef
-+AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
--- 
-2.14.2
+I was able to add a package/pkg-meson.mk wrapper (that seems to be
+missing from the Meson patch set, or did I completely miss it?) and
+built the previously submitted libmpdclient version bump via the
+$(eval $(meson-package)) wrapper. I'll work on version bumping systemd
+and converting it to use that wrapper as well. If possible I'd like to
+get this more or less right, what would a reasonable patch set look
+like? I was thinking, as a patch set:
+1. resubmit the Meson patches (package/meson, documentation) by J?rg Krause
+2. add package/pkg-meson.mk
+3. resubmit the libmpdclient version bump patch by J?rg Krause but
+with $(eval $(meson-package)) changes
+4. submit the systemd version bump and meson conversion patch(es)
+
+That way we have the infrastructure, documentation, and two packages
+utilizing the infrastructure in one set to review. Does that sound
+alright?
