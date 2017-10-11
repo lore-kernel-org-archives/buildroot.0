@@ -1,31 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Oct 2017 15:59:32 +0200
-Subject: [Buildroot] [PATCH v1] wiringpi: bump version to
- 96344ff7125182989f98d3be8d111952a8f74e15 (the real 2.44)
-In-Reply-To: <20171011131539.19407-1-ps.report@gmx.net>
-References: <20171011131539.19407-1-ps.report@gmx.net>
-Message-ID: <20171011155932.01b6cf48@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Oct 2017 16:10:41 +0200
+Subject: [Buildroot] Discussion on per-package logging
+In-Reply-To: <20171011151918.5c48d933@windsurf.lan>
+References: <20171011105809.2bf05267@windsurf.lan>
+ <20171011130842.GA2659@scaer>
+ <20171011151918.5c48d933@windsurf.lan>
+Message-ID: <20171011141041.GA2801@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Wed, 11 Oct 2017 15:15:39 +0200, Peter Seiderer wrote:
-> Fixes bug 10391 [1].
+On 2017-10-11 15:19 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 11 Oct 2017 15:08:42 +0200, Yann E. MORIN wrote:
+> > In my opinion, we can't do and should not do anything about it.
+> > 
+> > Either the user wants a fast build, and then it is acceptable that the
+> > output gets mangled, or he is trying to debug the build and thus is not
+> > doing parallel build to start with.
 > 
-> [1] https://bugs.busybox.net/show_bug.cgi?id=10391
+> I disagree with you, because there will obviously be cases where we
+> want to debug a parallel build. A parallel build might uncover some
+> specific issues, and we will want to have a look at the build log of a
+> given package to understand what happened.
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> So I disagree on your assumption that either you're debugging or you're
+> building in parallel.
 
-I don't think it really fixes bug 10391. Bug 10391 is bogus by itself.
-The update to 96344ff7125182989f98d3be8d111952a8f74e15 doesn't fix
-anything, it only adds support for RPi Zero W.
+Fair enough.
 
-Thomas
+Yet, that does not change the outcome: we can't and shouldn't do much.
+The user can specify -Orecursive (or maybe just -Otarget) in that case.
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas Petazzoni
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
