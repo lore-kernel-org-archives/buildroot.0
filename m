@@ -1,9 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 11 Oct 2017 15:19:56 +0200
-Subject: [Buildroot] [V2 2/2] lua-http: new package
-In-Reply-To: <20171011131956.22397-1-francois.perrad@gadz.org>
-References: <20171011131956.22397-1-francois.perrad@gadz.org>
-Message-ID: <20171011131956.22397-2-francois.perrad@gadz.org>
+Date: Wed, 11 Oct 2017 15:21:40 +0200
+Subject: [Buildroot] [PATCH] prosody: new package
+Message-ID: <20171011132140.22547-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,78 +10,101 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in              |  1 +
- package/lua-http/Config.in     | 18 ++++++++++++++++++
- package/lua-http/lua-http.hash |  2 ++
- package/lua-http/lua-http.mk   | 14 ++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/lua-http/Config.in
- create mode 100644 package/lua-http/lua-http.hash
- create mode 100644 package/lua-http/lua-http.mk
+ package/Config.in            |  1 +
+ package/prosody/Config.in    | 17 +++++++++++++++++
+ package/prosody/prosody.hash |  2 ++
+ package/prosody/prosody.mk   | 38 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 package/prosody/Config.in
+ create mode 100644 package/prosody/prosody.hash
+ create mode 100644 package/prosody/prosody.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f125156e3..3e6a51033 100644
+index e333c66e1..81d87ad66 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -582,6 +582,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-ev/Config.in"
- 	source "package/lua-fifo/Config.in"
- 	source "package/lua-flu/Config.in"
-+	source "package/lua-http/Config.in"
- 	source "package/lua-iconv/Config.in"
- 	source "package/lua-lpeg-patterns/Config.in"
- 	source "package/lua-markdown/Config.in"
-diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
+@@ -1720,6 +1720,7 @@ endif
+ 	source "package/pptp-linux/Config.in"
+ 	source "package/privoxy/Config.in"
+ 	source "package/proftpd/Config.in"
++	source "package/prosody/Config.in"
+ 	source "package/proxychains-ng/Config.in"
+ 	source "package/ptpd/Config.in"
+ 	source "package/ptpd2/Config.in"
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
 new file mode 100644
-index 000000000..247cc4031
+index 000000000..57c71a83e
 --- /dev/null
-+++ b/package/lua-http/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LUA_HTTP
-+	bool "lua-http"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS    # luaossl & lua-cqueues
++++ b/package/prosody/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PROSODY
++	bool "prosody"
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	select BR2_PACKAGE_LIBIDN
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_BIN
 +	# These are runtime dependencies
-+	select BR2_PACKAGE_LUA_BASEXX
-+	select BR2_PACKAGE_LUA_COMPAT53 if !BR2_PACKAGE_LUA_5_3
-+	select BR2_PACKAGE_LUA_CQUEUES
-+	select BR2_PACKAGE_LUA_FIFO
-+	select BR2_PACKAGE_LUA_LPEG_PATTERNS
-+	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
-+	select BR2_PACKAGE_LUAOSSL
++	select BR2_PACKAGE_LUAEXPAT
++	select BR2_PACKAGE_LUAFILESYSTEM
++	select BR2_PACKAGE_LUASOCKET
 +	help
-+	  HTTP library for Lua
++	  Prosody is a modern XMPP communication server.
 +
-+	  https://daurnimator.github.io/lua-http/
++	  https://prosody.im/
 +
-+comment "lua-http needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lua-http/lua-http.hash b/package/lua-http/lua-http.hash
++comment "prosody needs a Lua interpreter"
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
 new file mode 100644
-index 000000000..2346ab97a
+index 000000000..67735f9cb
 --- /dev/null
-+++ b/package/lua-http/lua-http.hash
++++ b/package/prosody/prosody.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 d68591eeeeb60c4187469eae89f5bad02d753a8c0adaa460d453b0734222645a  http-0.2-0.src.rock
-diff --git a/package/lua-http/lua-http.mk b/package/lua-http/lua-http.mk
++# Locally computed
++sha256  7414e447256c60b2645578c4a5913113cd74b419ca5a032b54db90d98a978498  prosody-0.10.0.tar.gz
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
 new file mode 100644
-index 000000000..9bc416b8a
+index 000000000..cf42b1b66
 --- /dev/null
-+++ b/package/lua-http/lua-http.mk
-@@ -0,0 +1,14 @@
++++ b/package/prosody/prosody.mk
+@@ -0,0 +1,38 @@
 +################################################################################
 +#
-+# lua-http
++# prosody
 +#
 +################################################################################
 +
-+LUA_HTTP_VERSION_UPSTREAM = 0.2
-+LUA_HTTP_VERSION = $(LUA_HTTP_VERSION_UPSTREAM)-0
-+LUA_HTTP_NAME_UPSTREAM = http
-+LUA_HTTP_SUBDIR = lua-http-$(LUA_HTTP_VERSION_UPSTREAM)
-+LUA_HTTP_LICENSE = MIT
-+LUA_HTTP_LICENSE_FILES = $(LUA_HTTP_SUBDIR)/LICENSE.md
++PROSODY_VERSION = 0.10.0
++PROSODY_SITE = https://prosody.im/downloads/source
++PROSODY_LICENSE = MIT
++PROSODY_LICENSE_FILES = COPYING
++PROSODY_DEPENDENCIES = host-luainterpreter host-openssl libidn luainterpreter openssl
 +
-+$(eval $(luarocks-package))
++PROSODY_CONF_OPTS = \
++	--with-lua-bin="$(HOST_DIR)/usr/bin" \
++	--with-lua="$(STAGING_DIR)/usr" \
++	--lua-version=$(LUAINTERPRETER_ABIVER) \
++	--c-compiler="$(TARGET_CC)" \
++	--linker="$(TARGET_LD)" \
++	--add-ldflags="-L$(STAGING_DIR)/usr/lib" \
++	--prefix="/usr"
++
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++PROSODY_CONF_OPTS += --runwith=luajit
++endif
++
++define PROSODY_CONFIGURE_CMDS
++	cd $(@D) && ./configure $(PROSODY_CONF_OPTS)
++endef
++
++define PROSODY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
++endef
++
++define PROSODY_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(generic-package))
 -- 
 2.11.0
