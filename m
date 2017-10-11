@@ -1,152 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Oct 2017 23:23:15 +0200
-Subject: [Buildroot] [Patch v3 2/2] docs/manual: document meson-based
- packages
-In-Reply-To: <20171011065005.9235-3-eric.le.bihan.dev@free.fr>
-References: <20171011065005.9235-1-eric.le.bihan.dev@free.fr>
- <20171011065005.9235-3-eric.le.bihan.dev@free.fr>
-Message-ID: <8b303271-8d04-9c19-41af-22b506ccaed4@mind.be>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 11 Oct 2017 21:30:21 +0000
+Subject: [Buildroot] [PATCH] mpd: enable package for external ARC
+ toolchain
+In-Reply-To: <20171011231916.1e88100d@windsurf.lan>
+References: <20171011121617.15179-1-didin@synopsys.com>
+ <528747de-6a5f-a011-4ec8-ac9141ce9bf2@mind.be>
+ <20171011231916.1e88100d@windsurf.lan>
+Message-ID: <1507757420.3839.24.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-
-On 11-10-17 08:50, Eric Le Bihan wrote:
-> Add instructions for adding a package which uses the Meson build system.
+On Wed, 2017-10-11 at 23:19 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  docs/manual/adding-packages-meson.txt | 80 +++++++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt       |  2 +
->  2 files changed, 82 insertions(+)
->  create mode 100644 docs/manual/adding-packages-meson.txt
+> On Wed, 11 Oct 2017 22:14:38 +0200, Arnout Vandecappelle wrote:
+> > 
+> > ?Hi Evgeny,
+> > 
+> > On 11-10-17 14:16, Evgeniy Didin wrote:
+> > > 
+> > > Now using prebuilt arc-2017.09-rc1 toolchain it is possible to
+> > > build mpd package. The GCC patch solving the problem with pthread
+> > > support check now is the part of ARC toolchain.
+> > > 
+> > > Note this patch has a prerequisite that updates ARC prebuilt toolchain,
+> > > https://urldefense.proofpoint.com/v2/url?u=http-3A__patchwork.ozlabs.org_patch_824311_&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eV
+> > > iXO7breS55ytWkhpk5R81I&m=g9SyhkcD7kkLjdVnxy_0PIxm6vf8vG9VuhheaCLHUOM&s=iTUcPjYUEl_yRBzAeiF08HNRskfS5hohJtPn80zE064&e=??
 > 
-> diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-> new file mode 100644
-> index 0000000000..14153a2ad3
-> --- /dev/null
-> +++ b/docs/manual/adding-packages-meson.txt
-> @@ -0,0 +1,80 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +=== Integration of Meson-based packages
-> +
-> +[[meson-package-tutorial]]
-> +
-> +==== +meson-package+ tutorial
-> +
-> +http://mesonbuild.com[Meson] is an open source build system meant to be both
-> +extremely fast, and, even more importantly, as user friendly as possible.
-> +
-> +Buildroot does not (yet) provide a dedicated package infrastructure for
-> +meson-based packages. So, we will explain how to write a +.mk+ file for such a
-> +package. Let's start with an example:
-> +
-> +------------------------------
-> +01: ################################################################################
-> +02: #
-> +03: # foo
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: FOO_VERSION = 1.0
-
- As mentioned before, all the examples use libfoo instead of foo, so please
-stick to that.
-
-> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
-> +09: FOO_SITE = http://www.foosoftware.org/download
-> +10: FOO_LICENSE = GPLv3+
-
- This should be SPDX code so GPL-3.0+
-
-> +11: FOO_LICENSE_FILES = COPYING
-> +12:
-> +13: FOO_DEPENDENCIES = host-meson host-pkgconf bar
-> +14:
-> +15: FOO_CONF_OPTS += \
-> +16: 	--prefix=/usr \
-> +17: 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
-> +18: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
-> +19:
-> +20: define FOO_CONFIGURE_CMDS
-> +21: 	rm -rf $(@D)/build
-> +22: 	mkdir -p $(@D)/build
-> +23: 	$(TARGET_MAKE_ENV) meson.py $(FOO_CONF_OPTS) $(@D) $(@D)/build
-
- For this example it is OK, but if we add an infra for it, it should be
-$(@D)/buildroot-build to be consistent with pkg-cmake.
-
-> +24: endef
-> +25:
-> +26: define FOO_BUILD_CMDS
-> +27: 	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
-> +28: endef
-> +29:
-> +30: define FOO_INSTALL_TARGET_CMDS
-> +31: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
-> +32: endef
-> +33:
-> +34: $(eval $(generic-package))
-> +--------------------------------
-> +
-> +The Makefile starts with the definition of the standard variables for package
-> +declaration (lines 7 to 11).
-> +
-> +As seen in line 34, it is based on the
-> +xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
-> +the variables required by this particular infrastructure, where Meson and its
-> +companion tool, Ninja, are invoked:
-> +
-> +* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
-> +  Meson is invoked to generate the Ninja build file. The options required to
-> +  configure the cross-compilation of the package are passed via
-> +  +FOO_CONF_OPTS+.
-> +
-> +* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
-> +
-> +* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
-> +  during the build step.
-> +
-> +In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
-> +contain +host-meson+. In the example, +host-pkgconf+ and +bar+ are also
-> +declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
-> +to determine the compilation flags and libraries of package +bar+.
-> +
-> +To sum it up, to add a new meson-based package, the Makefile example can be
-> +copied verbatim then edited to replace all occurences of +FOO+ with the
-> +uppercase name of the new package and update the values of the standard
-> +variables.
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index d577ff030e..e542124cf9 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -34,6 +34,8 @@ include::adding-packages-rebar.txt[]
->  
->  include::adding-packages-waf.txt[]
->  
-> +include::adding-packages-meson.txt[]
-
- I think it fits better after cmake.
-
- Regards,
- Arnout
-
-> +
->  include::adding-packages-kernel-module.txt[]
->  
->  include::adding-packages-asciidoc.txt[]
+> The ARC prebuilt toolchain is not tested by our autobuilders. The two
+> ARC configurations that we have are:
 > 
+> support/config-fragments/autobuild/br-arc-full-internal.config
+> support/config-fragments/autobuild/br-arcle-hs38.config
+> 
+> The first is a Buildroot internal toolchain, the second is an external
+> toolchain, built with Buildroot.
+> 
+> So we are not testing the Synopsys-provided pre-built toolchain, and
+> therefore the build failures that were detected in mpd and vlc were not
+> caused by Synopsys pre-built toolchain.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Indeed, so then that note about prerequisite makes no sense.
+Evgeniy will resend this patch with fixed commit message shortly.
+
+-Alexey
