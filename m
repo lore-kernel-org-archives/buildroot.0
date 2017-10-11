@@ -1,55 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Oct 2017 16:10:41 +0200
-Subject: [Buildroot] Discussion on per-package logging
-In-Reply-To: <20171011151918.5c48d933@windsurf.lan>
-References: <20171011105809.2bf05267@windsurf.lan>
- <20171011130842.GA2659@scaer>
- <20171011151918.5c48d933@windsurf.lan>
-Message-ID: <20171011141041.GA2801@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Oct 2017 14:23:11 +0000
+Subject: [Buildroot] [Bug 10391] WiringPi retrieves wrong (old) version
+In-Reply-To: <bug-10391-163@https.bugs.busybox.net/>
+References: <bug-10391-163@https.bugs.busybox.net/>
+Message-ID: <bug-10391-163-Pbuk3sWRJu@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=10391
 
-On 2017-10-11 15:19 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 11 Oct 2017 15:08:42 +0200, Yann E. MORIN wrote:
-> > In my opinion, we can't do and should not do anything about it.
-> > 
-> > Either the user wants a fast build, and then it is acceptable that the
-> > output gets mangled, or he is trying to debug the build and thus is not
-> > doing parallel build to start with.
-> 
-> I disagree with you, because there will obviously be cases where we
-> want to debug a parallel build. A parallel build might uncover some
-> specific issues, and we will want to have a look at the build log of a
-> given package to understand what happened.
-> 
-> So I disagree on your assumption that either you're debugging or you're
-> building in parallel.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Fair enough.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+         Resolution|WORKSFORME                  |---
+             Status|RESOLVED                    |REOPENED
+                 CC|                            |yann.morin.1998 at free.fr
 
-Yet, that does not change the outcome: we can't and shouldn't do much.
-The user can specify -Orecursive (or maybe just -Otarget) in that case.
+--- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to srg.venema from comment #3)
+> warning: Remote branch 2.44 not found in upstream origin, using HEAD instead
 
-Regards,
-Yann E. MORIN.
+I've sen that message with older versions of git.
 
-> Best regards,
-> 
-> Thomas Petazzoni
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Basically, our wrapper uses: git clone --depth 1 -b ${ref} ${repo}
+
+However, in older versions of git, the -b option only expected a branch,
+not a tag. git-2.7.4 does accept either a tag or a branch for -b, while
+git-1.7.9.5 only accepts a branch with -b.
+
+What's more, as the message implies, if the branch is not found, then
+the HEAD if the default branch is used instead, a warning is printed,
+but this is not considered an error, which is clearly bad. :-(
+
+I don't know the exact version which started accepting a tag with -b.
+I'll research that, so we can decide if we want to support such an old
+git version, or if we start requiring something newer.
+
+Ergo, I'm reopenning, and assigning to me.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
