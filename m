@@ -1,25 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Oct 2017 11:29:52 +0000
-Subject: [Buildroot] [Bug 10391] WiringPi retrieves wrong (old) version
-In-Reply-To: <bug-10391-163@https.bugs.busybox.net/>
-References: <bug-10391-163@https.bugs.busybox.net/>
-Message-ID: <bug-10391-163-BkFp4qVU70@https.bugs.busybox.net/>
+From: Motor-e LO Jean-Alexandre <jean-alexandre.lo@motor-e.fr>
+Date: Wed, 11 Oct 2017 13:53:30 +0200
+Subject: [Buildroot] Could not open egl display error on toradex apalis imx6q
+Message-ID: <000e01d34287$8f0fc570$ad2f5050$@motor-e.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10391
+Hi,
 
---- Comment #3 from srg.venema at gmail.com ---
-Have a closer look at:
+I cross-compile Qt5 with buildroot-2016.11
+My board is an imx6q from Toradex.
 
-warning: Remote branch 2.44 not found in upstream origin, using HEAD instead
-Could not fetch special ref '2.44'; assuming it is not special.
+I have this problem when I want to execute my program:
+QML debugging is enabled. Only use this in a safe environment.
+QEglFSVivIntegration will set environment variable FB_MULTI_BUFFER=2 to
+enable double buffering and vsync.
+If this is not desired, you can override this via: export
+QT_EGLFS_IMX6_NO_FB_MULTI_BUFFER=1
+Could not open egl display
+Aborted
 
-It goes ahead to download 2.42 instead.
+My default graphical platform is eglfs
+On buildroot I selected :
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+*	open GL support
+- open GL API (OpenGL ES 2.0+)
+- openGL module
+*	freescale im.x librairies: imx-gpu-viv
+
+Before I use buildroot-2014.08 and it works!
+I need some help to resolve this problem!
+
+--
+
+Cordialement / Best regards 
+Jean-Alexandre LO
+Ing?nieur logiciels embarqu?s / Embedded software engineer
+
+ 
+
+
+
+1,rue royale 
+Bureaux de la Colline, num?ro 218
+Bat D - ?tage 7 
+92213 Saint-Cloud Cedex 
+Tel: +33 (0)1.41.12.66.08
+
+ <http://www.motor-e.com> www.motor-e.com
+ <mailto:jean-alexandre.lo@motor-e.fr> jean-alexandre.lo at motor-e.fr
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171011/e54e5984/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image001.png
+Type: image/png
+Size: 13578 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171011/e54e5984/attachment.png>
