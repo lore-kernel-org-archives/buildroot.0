@@ -1,72 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Oct 2017 22:14:38 +0200
-Subject: [Buildroot] [PATCH] mpd: enable package for external ARC
- toolchain
-In-Reply-To: <20171011121617.15179-1-didin@synopsys.com>
-References: <20171011121617.15179-1-didin@synopsys.com>
-Message-ID: <528747de-6a5f-a011-4ec8-ac9141ce9bf2@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 11 Oct 2017 22:14:34 +0200
+Subject: [Buildroot] [PATCH v2] evemu: fix PATH_MAX related compile
+ failure
+In-Reply-To: <20171011220646.21c208a5@windsurf.lan>
+References: <20171011091452.11162-1-ps.report@gmx.net>
+ <20171011220646.21c208a5@windsurf.lan>
+Message-ID: <20171011221434.6d8e41b2@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Evgeny,
+Hello Thomas,
 
-On 11-10-17 14:16, Evgeniy Didin wrote:
-> Now using prebuilt arc-2017.09-rc1 toolchain it is possible to
-> build mpd package. The GCC patch solving the problem with pthread
-> support check now is the part of ARC toolchain.
-> 
-> Note this patch has a prerequisite that updates ARC prebuilt toolchain,
-> http://patchwork.ozlabs.org/patch/824311/
+On Wed, 11 Oct 2017 22:06:46 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
- In this case you should send the patches as a series. And if you don't, such a
-comment should be below the --- line because it's not something that should stay
-in the history.
+> Hello,
+> 
+> On Wed, 11 Oct 2017 11:14:52 +0200, Peter Seiderer wrote:
+> > Fixes [1] when building with musl:
+> > 
+> >   find_event_devices.c: In function 'find_event_devices':
+> > find_event_devices.c:60:14: error: 'PATH_MAX' undeclared (first use in this function)
+> >    char fname[PATH_MAX];
+> >               ^~~~~~~~
+> > 
+> > [1] http://autobuild.buildroot.net/results/607/607bb29231f80a138e1b5423bc01c89e36efe78c/
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - use limits.h instead of linux/limits.h, change patch commit message,
+> >     add musl reference (suggested by Arnout Vandecappelle)
+> > ---
+> >  .../evemu/0001-Include-limits.h-for-PATH_MAX.patch | 35 ++++++++++++++++++++++
+> >  1 file changed, 35 insertions(+)
+> >  create mode 100644 package/evemu/0001-Include-limits.h-for-PATH_MAX.patch  
+> 
+> Applied to master, thanks. Please don't forget to submit the patch
+> upstream if not already done. Thanks!
 
- Otherwise:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Upstream submit done already, see [1]...
 
- Regards,
- Arnout
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> CC: Alexey Brodkin <abrodkin@synopsys.com>
-> CC: arc-buildroot at synopsys.com
-> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
->  package/mpd/Config.in | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index 5991b6f4bb..b7b21672fc 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -7,8 +7,6 @@ menuconfig BR2_PACKAGE_MPD
->  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-> -	# ARC toolchain issue
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
->  	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
-> @@ -320,7 +318,6 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
->  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
->  
->  comment "mpd needs a toolchain not affected by GCC bug 64735"
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> 
+Regards,
+Peter
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+[1] https://lists.freedesktop.org/archives/input-tools/2017-October/001434.html
+
+> 
+> Thomas
