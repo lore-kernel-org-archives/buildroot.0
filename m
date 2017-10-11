@@ -1,49 +1,146 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Wed, 11 Oct 2017 15:16:17 +0300
-Subject: [Buildroot] [PATCH] mpd: enable package for external ARC toolchain
-Message-ID: <20171011121617.15179-1-didin@synopsys.com>
+From: Alexandre Gambier <agambier.dev@gmail.com>
+Date: Wed, 11 Oct 2017 14:19:35 +0200
+Subject: [Buildroot] [PATCH 6/9] iMX6S-PICO: add firmware files (bcmfmac*)
+In-Reply-To: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+References: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+Message-ID: <1507724378-23461-6-git-send-email-agambier.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now using prebuilt arc-2017.09-rc1 toolchain it is possible to
-build mpd package. The GCC patch solving the problem with pthread
-support check now is the part of ARC toolchain.
+From: Alexandre Gambier <aagambier.dev@gmail.com>
 
-Note this patch has a prerequisite that updates ARC prebuilt toolchain,
-http://patchwork.ozlabs.org/patch/824311/
-
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-CC: Alexey Brodkin <abrodkin@synopsys.com>
-CC: arc-buildroot at synopsys.com
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Alexandre Gambier <agambier.dev@gmail.com>
 ---
- package/mpd/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ .../lib/firmware/brcm/brcmfmac4330-sdio.txt        | 118 +++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100755 board/technexion/imx6spico/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 5991b6f4bb..b7b21672fc 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -7,8 +7,6 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
--	# ARC toolchain issue
--	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
-@@ -320,7 +318,6 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 
- comment "mpd needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/board/technexion/imx6spico/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/technexion/imx6spico/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+new file mode 100755
+index 0000000..09a044f
+--- /dev/null
++++ b/board/technexion/imx6spico/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+@@ -0,0 +1,118 @@
++manfid=0x2d0
++prodid=0x0532
++vendid=0x14e4
++devid=0x4360
++boardtype=0x0532
++boardrev=0x20
++boardflags=0x10080201
++
++nocrc=1
++xtalfreq=37400
++xtalmode=0x20,0x4,0
++boardnum=22
++macaddr=00:90:4c:c5:12:38
++ag0=252
++ag1=252
++aa2g=1
++aa5g=1
++ccode=EU
++regrev=5
++
++#for BT-coexistence
++btc_params80=0
++btc_params6=10
++btc_params8=10000
++
++sd_gpout=0
++# sd_oobonly=1
++muxenab=0x10
++
++# 2G PA param_B42R 110927
++pa0b0=0x12E4
++pa0b1=0xFE09
++pa0b2=0xFF9A
++#pa0itssit=62
++rssismf2g=0xa
++rssismc2g=0x3
++rssisav2g=0x7
++
++# rssi params for 5GHz B42R_110803
++#rssismf5g=0x4
++rssismf5g=0xa
++rssismc5g=0x7
++rssisav5g=0x1
++#PA parameters for lower band
++pa1lob0=0x144F
++pa1lob1=0xFD6B
++pa1lob2=0xFF3B
++#PA parameters for midband
++pa1b0=0x139C
++pa1b1=0xFD87
++pa1b2=0xFF4F
++#PA parameters for high band
++pa1hib0=0x12CA
++pa1hib1=0xFD9A
++pa1hib2=0xFF4E
++
++# 2G PA offset
++maxp2ga0=64
++sromrev=3
++cckpo=0
++ofdm2gpo=0x66666666
++mcs2gpo0=0xaaaa
++mcs2gpo1=0xaaaa
++
++# 5G PA offset
++maxp5ga0=66
++maxp5gla0=66
++maxp5gha0=66
++ofdm5gpo=0x22222222
++ofdm5glpo=0x11111111
++ofdm5ghpo=0x22222222
++mcs5gpo0=0x6666
++mcs5gpo1=0x6666
++mcs5glpo0=0x5555
++mcs5glpo1=0x5555
++mcs5ghpo0=0x6666
++mcs5ghpo1=0x6666
++
++cckPwrOffset=4
++cckdigfilttype=22
++ofdmdigfilttype=2
++extpagain5g=2
++#wl0id=0x431b
++
++# For 2GHz Tx EVM/SM
++rfreg033=0x19
++rfreg033_cck=0x1d
++pacalidx2g=65
++dacrate2g=160
++txalpfbyp2g=1
++bphyscale=17
++
++# 5GHz LOFT and IQ CAL
++txgaintbl5g=1
++txiqlopapu5g=1
++txiqlopag5g=0x10
++iqlocalidx5g=24
++
++# 5GHz Noise CAL parameter
++noise_cal_po_5g=5
++noise_cal_enable_5g=0
++
++# 2GHz RxPER at low rates
++noise_cal_ref_2g=56
++noise_cal_po_bias_2g=-4
++noise_cal_enable_2g=1
++
++# Max input level on a-band
++triso5g=9
++
++# Tx power control, especially temp.
++tssitime=1
++
++#fc+1.7GHz Spur Elimination
++loidacmode5g=1
++
++swctrlmap_2g=0x84048404, 0x82028202, 0x84048404, 0x010202, 0x1ff
++swctrlmap_5g=0xC040C040, 0xB030A020, 0xA020C040, 0x010A02, 0x2F8
 -- 
-2.11.0
+2.7.4
