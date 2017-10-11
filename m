@@ -1,96 +1,135 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 11 Oct 2017 20:51:47 +0000
-Subject: [Buildroot] [PATCH] extern-toolchain: Bump ARC tools to
- arc-2017.09-rc1
-In-Reply-To: <275d998b-73cf-ebd0-2047-a48704eeda36@mind.be>
-References: <20171011091703.32495-1-didin@synopsys.com>
- <275d998b-73cf-ebd0-2047-a48704eeda36@mind.be>
-Message-ID: <1507755106.3839.19.camel@synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Oct 2017 23:04:56 +0200
+Subject: [Buildroot] [Patch v3 1/2] meson: new package
+In-Reply-To: <20171011065005.9235-2-eric.le.bihan.dev@free.fr>
+References: <20171011065005.9235-1-eric.le.bihan.dev@free.fr>
+ <20171011065005.9235-2-eric.le.bihan.dev@free.fr>
+Message-ID: <cc27e1eb-8ea7-6e2a-6748-748c017b25b2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-On Wed, 2017-10-11 at 22:14 +0200, Arnout Vandecappelle wrote:
+On 11-10-17 08:50, Eric Le Bihan wrote:
+> This new package provides the host variant of the Meson Build System, an
+> open source build system meant to be both extremely fast, and as user
+> friendly as possible.
 > 
-> On 11-10-17 11:17, Evgeniy Didin wrote:
-> > 
-> > This commit bumps ARC prebuild toolchain to arc-2017.09-rc1
-> > 
-> > There might be subtle differences between uClibc configuration
-> > compared to Buildroot's one. Native RPC now is disabled?
-> > because uClinc-ng has removed it.
+> More precisely, Meson creates configuration files for the Ninja build
+> system.
 > 
-> ?These two sentences are unrelated, right? I mean, Buildroot's uClibc hasn't had
-> RPC since April... So better make that two paragraphs.
-
-Probably so.
-
-> ?Could you describe the subtle differences?
-
-Well we may do a full side-by-side comparison of uClibc's defconfigs
-but that barely makes a lot of sense. I mean we used to use some configuration
-which was formed as it was in years and not all choices I may justify and explain.
-
-Still we're slowly drifting to Buildroot's uClibc defconfig with pretty much every
-our release but not yet there... and Buildroot's defconfig changes with time but
-we cannot change ours in the middle of development cycle.
-
-Again we may do that comparison and identify all [meaningful] differences
-but not sure what it gives.
-
-> > 
-> > 
-> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> > Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> > Cc: arc-buildroot at synopsys.com
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > 
-> > ---
-> > ?.../toolchain-external/toolchain-external-synopsys-arc/Config.in??| 8 ++++----
-> > ?.../toolchain-external-synopsys-arc.hash??????????????????????????| 8 ++++----
-> > ?.../toolchain-external-synopsys-arc.mk????????????????????????????| 4 ++--
-> > ?3 files changed, 10 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-
-> > arc/Config.in
-> > index f438ea765d..cdf36d08e6 100644
-> > --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-> > +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-> > @@ -1,18 +1,18 @@
-> > ?config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
-> > -	bool "Synopsys ARC 2016.09 toolchain"
-> > +	bool "Synopsys ARC 2017.09-rc1 toolchain"
+> Besides building Meson, it generates a configuration file
+> ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
+> cross-compiling a Meson-based project.
 > 
-> ?Do we really want the -rc1 toolchain? Shouldn't we wait for the release? It
-> can't be because you want additional testing in the autobuilders, since this
-> toolchain doesn't appear in support/config-fragments/autobuild.
-
-Well we used to have ARC prebuilt toolchain in autobuilder if I'm not mistaken.
-But due to some significant deviations from Buildroot defaults like missing IPv6
-back in the day it got nuked. Maybe Thomas can remember it better... for some
-reason I cannot find any signs of ARC prebuilt tools in
-https://git.busybox.net/buildroot-test/?so I might be wrong here.
-
-But indeed we wanted to get some more testing for that pre-built toolchain
-and catch a couple of issues before cutting rc2 and final release.
-
-And essentially once and if that patch gets accepted the plan was to
-submit a config-fragment for it.
-
-> > 
-> > ?	depends on BR2_arc
-> > ?	depends on BR2_HOSTARCH = "x86_64"
-> > ?	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> > ?	select BR2_INSTALL_LIBSTDCPP
-> > -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> > +	#select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/meson/cross-compilation.conf.in | 17 +++++++++++++++++
+>  package/meson/meson.hash                |  2 ++
+>  package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
+>  3 files changed, 50 insertions(+)
+>  create mode 100644 package/meson/cross-compilation.conf.in
+>  create mode 100644 package/meson/meson.hash
+>  create mode 100644 package/meson/meson.mk
 > 
-> ?You shouldn't comment this line, just remove it.
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> new file mode 100644
+> index 0000000000..84b399f51f
+> --- /dev/null
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -0,0 +1,17 @@
+> +# Note: Buildroot's and Meson's terminologies differ about the meaning
+> +# of 'build', 'host' and 'target':
+> +# - Buildroot's 'host' is Meson's 'build'
+> +# - Buildroot's 'target' is Meson's 'host'
+> +
+> +[binaries]
+> +c = '@TARGET_CROSS at gcc'
+> +cpp = '@TARGET_CROSS at g++'
+> +ar = '@TARGET_CROSS at ar'
+> +strip = '@TARGET_CROSS at strip'
+> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> +
+> +[host_machine]
+> +system = 'linux'
+> +cpu_family ='@TARGET_ARCH@'
 
-Good catch - we'll fix that.
+ Does meson have the same definition of ARCH as we do? Does it support all our
+ARCHes?
 
--Alexey
+> +cpu = '@TARGET_CPU@'
+> +endian = '@TARGET_ENDIAN@'
+
+ I'm completely missing our TARGET_CFLAGS and TARGET_LDFLAGS here. Is there no
+way to specify those?
+
+> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+> new file mode 100644
+> index 0000000000..cdb7d1b9ef
+> --- /dev/null
+> +++ b/package/meson/meson.hash
+> @@ -0,0 +1,2 @@
+> +# Locally generated
+
+ You should also verify it against upstream's meson-0.43.0.tar.gz.asc.
+
+> +sha256 324894427dcd29f6156fe06b046c6ad1b998470714debd7c5705902f21aaaa73  meson-0.43.0.tar.gz
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> new file mode 100644
+> index 0000000000..e4bff229a6
+> --- /dev/null
+> +++ b/package/meson/meson.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# meson
+> +#
+> +################################################################################
+> +
+> +MESON_VERSION = 0.43.0
+> +MESON_SITE = $(call github,mesonbuild,meson,$(MESON_VERSION))
+
+ Upstream has an uploaded tarball. In that case, we use the uploaded tarball,
+not the autogenerated one. The uploaded tarball is signed, and sometimes it is
+subtly different (e.g. containing some generated files).
+
+> +MESON_LICENSE = Apache-2.0
+> +MESON_LICENSE_FILES = COPYING
+> +MESON_SETUP_TYPE = setuptools
+> +
+> +HOST_MESON_DEPENDENCIES = host-ninja
+> +HOST_MESON_NEEDS_HOST_PYTHON = python3
+> +
+> +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
+
+ $(call LOWERCASE,$(BR2_ENDIAN))
+
+ Regards,
+ Arnout
+
+> +
+> +define HOST_MESON_INSTALL_CROSS_CONF
+> +	mkdir -p $(HOST_DIR)/etc/meson
+> +	sed -e 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
+> +	    -e 's;@TARGET_ARCH@;$(ARCH);g' \
+> +	    -e 's;@TARGET_CPU@;$(BR2_GCC_TARGET_CPU);g' \
+> +	    -e 's;@TARGET_ENDIAN@;$(HOST_MESON_TARGET_ENDIAN);g' \
+> +	    -e 's;@HOST_DIR@;$(HOST_DIR);g' \
+> +	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+> +	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+> +endef
+> +
+> +HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+> +
+> +$(eval $(host-python-package))
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
