@@ -1,43 +1,131 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 11 Oct 2017 15:15:56 +0200
-Subject: [Buildroot] [PATCH] libtomcrypt: bump to version 1.18.0
-Message-ID: <20171011131556.21983-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Oct 2017 15:17:25 +0200
+Subject: [Buildroot] [PATCH 1/9] iMX6S-PICO: add default config file
+ (imx6spico_defconfig)
+In-Reply-To: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+References: <1507724378-23461-1-git-send-email-agambier.dev@gmail.com>
+Message-ID: <20171011151725.54ba232c@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libtomcrypt/libtomcrypt.hash | 2 +-
- package/libtomcrypt/libtomcrypt.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
-index 562016d52..6f7720e8a 100644
---- a/package/libtomcrypt/libtomcrypt.hash
-+++ b/package/libtomcrypt/libtomcrypt.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116  crypt-1.17.tar.bz2
-+sha256  da9df56a314afaab71963aa71bb6a075ea6bdee3d4db4af045f6bfe23e88b87a  crypt-1.18.0.tar.xz
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index 8cc02b28d..02610f16d 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBTOMCRYPT_VERSION = 1.17
--LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
--LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
-+LIBTOMCRYPT_VERSION = 1.18.0
-+LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/v$(LIBTOMCRYPT_VERSION)
-+LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.xz
- LIBTOMCRYPT_LICENSE = WTFPL
- LIBTOMCRYPT_LICENSE_FILES = LICENSE
- LIBTOMCRYPT_INSTALL_STAGING = YES
+On Wed, 11 Oct 2017 14:19:30 +0200, Alexandre Gambier wrote:
+> Signed-off-by: Alexandre Gambier <agambier.dev@gmail.com>
+> ---
+>  configs/imx6spico_defconfig | 58 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 configs/imx6spico_defconfig
+> 
+> diff --git a/configs/imx6spico_defconfig b/configs/imx6spico_defconfig
+> new file mode 100644
+> index 0000000..16ebf5b
+> --- /dev/null
+> +++ b/configs/imx6spico_defconfig
+> @@ -0,0 +1,58 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_ARM_ENABLE_NEON=y
+> +BR2_ARM_ENABLE_VFP=y
+> +BR2_ARM_FPU_VFPV3=y
+> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+
+Please use the default C library, i.e uClibc.
+
+> +BR2_KERNEL_HEADERS_4_1=y
+
+Please use the "Same as kernel being built" option for the kernel
+headers.
+
+> +BR2_GCC_VERSION_5_X=y
+
+Please use the default gcc version.
+
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> +BR2_GCC_ENABLE_LTO=y
+
+Don't enable C++ or LTO support in a defconfig.
+
+> +BR2_PACKAGE_HOST_GDB=y
+> +BR2_PACKAGE_HOST_GDB_PYTHON=y
+
+I don't think this is really needed for a defconfig.
+
+> +BR2_ROOTFS_MERGED_USR=y
+
+Same, not needed.
+
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+> +BR2_SYSTEM_DHCP="eth0"
+> +BR2_ROOTFS_OVERLAY="board/technexion/imx6spico/rootfs_overlay"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technexion/imx6spico/post-image.sh"
+
+This doesn't work because those files are added in follow-up patches. A
+patch series should be bisectable, so it should work if I apply just
+PATCH 1, or just PATCH 1, 2, or just PATCH 1, 2, 3.
+
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/TechNexion/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ecb66a3d34667fb4402457bbd6a4864e73b0fe87"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technexion/imx6spico/linux/linux-tn-imx-4.1.15/defconfig"
+
+Same comment here: this is added in a follow up patch.
+
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-pico_dwarf"
+> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> +BR2_PACKAGE_EXPAT=y
+> +BR2_PACKAGE_LIBCAP=y
+> +BR2_PACKAGE_READLINE=y
+> +BR2_PACKAGE_DHCP=y
+> +BR2_PACKAGE_DHCP_CLIENT=y
+> +BR2_PACKAGE_ETHTOOL=y
+> +BR2_PACKAGE_IW=y
+> +BR2_PACKAGE_NETCAT=y
+> +BR2_PACKAGE_OPENSSH=y
+> +BR2_PACKAGE_WIRELESS_TOOLS=y
+> +BR2_PACKAGE_HTOP=y
+> +BR2_PACKAGE_KMOD=y
+> +BR2_PACKAGE_KMOD_TOOLS=y
+> +BR2_PACKAGE_UTIL_LINUX=y
+> +BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+> +BR2_PACKAGE_UTIL_LINUX_FSCK=y
+> +BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+> +BR2_PACKAGE_UTIL_LINUX_NOLOGIN=y
+
+None of these BR2_PACKAGE_* options are needed in a defconfig. We want
+them to be minimal.
+
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="40M"
+
+Why this custom size ?
+
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="pico-imx6"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/TechNexion/u-boot-edm.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6b12193853eceda0da3da7eeb73c41ed6059acb4"
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_IMG=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+
+You also need HOST_DOSFSTOOLS and HOST_MTOOLS, because your
+genimage.cfg file generates a VFAT partition.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
