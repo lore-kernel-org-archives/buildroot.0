@@ -1,18 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Oct 2017 23:21:47 +0200
-Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
-In-Reply-To: <8186cfc2-f587-8d35-2560-2f2f314a186d@mind.be>
-References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
- <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
- <1501150411.21202.1.camel@embedded.rocks>
- <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
- <20170727165026.4a5f59a1@windsurf.lan>
- <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
- <20171007135843.5a75c7f5@windsurf.home>
- <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
- <CAAkeqgV=snat2dr7MpHOc9HE4MWf5eqHX3HJQVR6P+BZb5WN1w@mail.gmail.com>
- <8186cfc2-f587-8d35-2560-2f2f314a186d@mind.be>
-Message-ID: <20171011232147.4206a377@windsurf.lan>
+Date: Wed, 11 Oct 2017 23:22:59 +0200
+Subject: [Buildroot] [PATCH v1] wiringpi: bump version to
+ 96344ff7125182989f98d3be8d111952a8f74e15 (the real 2.44)
+In-Reply-To: <20171011222124.4d9e0756@gmx.net>
+References: <20171011131539.19407-1-ps.report@gmx.net>
+ <20171011155932.01b6cf48@windsurf.lan>
+ <20171011222124.4d9e0756@gmx.net>
+Message-ID: <20171011232259.16581f9a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,17 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 11 Oct 2017 22:38:39 +0200, Arnout Vandecappelle wrote:
+On Wed, 11 Oct 2017 22:21:24 +0200, Peter Seiderer wrote:
 
->  Yes, our original idea was that there should be a few packages using meson
-> before we add an infra for it. But since there are quite a few packages that
-> will use the meson infra, and since it seems pretty straightforward, it can
-> indeed be done right away (at least according to me, Thomas may have a different
-> opinion).
+> > I don't think it really fixes bug 10391. Bug 10391 is bogus by itself.
+> > The update to 96344ff7125182989f98d3be8d111952a8f74e15 doesn't fix
+> > anything, it only adds support for RPi Zero W.  
+> 
+> Saving a download as wiringpi-2.44.tar.gz containing something
+> identifying itself as 2.42? I would call it a bug (not on the buildroot
+> side but in the original git repository).
 
-Yes, I believe it's fine to have a Meson package infrastructure right
-away. There is a clear trend towards using Meson, so I'm fine with
-merging a package infrastructure for it.
+The release identified as 2.42 is in fact 2.44, since both tags point
+to exactly the same commit.
+
+> The suggested patch fixes the original complain of Bug 10391:
+> 'WiringPi retrieves wrong (old) version'
+> 
+> Any suggestion on how to reference the bug report otherwise?
+
+I'll try to find a reasonable wording when applying, no need to respin.
+
+Best regards,
 
 Thomas
 -- 
