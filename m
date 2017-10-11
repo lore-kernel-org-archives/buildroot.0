@@ -1,69 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Oct 2017 23:51:56 +0200
-Subject: [Buildroot] [PATCHv3] flex: rework patches to avoid host/target
- difference
-In-Reply-To: <20171008214423.11535-1-yann.morin.1998@free.fr>
-References: <20171008214423.11535-1-yann.morin.1998@free.fr>
-Message-ID: <20171011235156.5516323f@windsurf.lan>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Oct 2017 23:56:01 +0200
+Subject: [Buildroot] [RFC 2/3] Makefile: add handling of software stacks
+In-Reply-To: <1507668210-5427-3-git-send-email-angelo.compagnucci@gmail.com>
+References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1507668210-5427-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <2347ed43-0b6a-2368-5b2c-77a4b28ceac9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sun,  8 Oct 2017 23:44:23 +0200, Yann E. MORIN wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Currently, the target and host flex packages do not behave the same in
-> terms of patching: the target variant has a patch hook that disables
-> building the programs (because they are not needed, and do not build
-> on no-MMU platforms). However, this hook is obviously not executed for
-> host-flex, because we really want the host flex binary to be built.
-> 
-> In preparation for the introduction of out-of-tree package build, it
-> is important that we don't do different things in the patch hooks for
-> the target and host variant of a given package, because the source
-> tree will be shared between the target and host builds.
-> 
-> To solve this, we introduce a --disable-program configure option,
-> through a patch to the flex configure.ac and Makefile.am. This patch
-> makes the current 0001-flex-disable-documentation.patch no longer
-> needed.
-> 
-> Furthermore, building the documentation is a PITA: flex.1 depends on
-> configure.ac and a few other files generated during the build. Touching
-> flex.1 does not work, because automake will forcibly remove the files
-> when its prerequisites are too old, so pre-requisites of flex.1 will
-> always be more recent than flex.1. So, we add a patch that adds a
-> --disable-doc configure option.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/f70/f70b39632535bb9692d0a032166b2f4104532967/
->     http://autobuild.buildroot.org/results/525/52567afdfe7992b3518de0e01227ba14aa300f21/
->     [...]
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> [yann.morin.1998 at free.fr:
->   - rebase on-top of master,
->   - add patch to not build the documentation, because simply touching
->     flex.1 is no longer enough.
->   - keep install in target/, for shared builds
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Adrian Perez de Castro <aperez@igalia.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Changes v2 -> v3:
->   - keep install in target/, for shared builds
 
-Applied to master, thanks.
+On 10-10-17 22:43, Angelo Compagnucci wrote:
+> +define percent_stack
+> +%_stack: $(1)/stacks/%_stack
+> +	$(TOPDIR)/support/kconfig/merge_config.sh -b -O $(BASE_DIR) $(BR2_CONFIG) $(1)/stacks/$$@
+> +endef
+> +$(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_stack,$(d))$(sep)))
 
-Thomas
+ I forgot to mention: there's a future problem here. When we finally enable
+top-level parallel build, the different stacks are going to overwrite each other
+when you call it as "make stack1 stack2 stack3".
+
+ Regards,
+ Arnout
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
