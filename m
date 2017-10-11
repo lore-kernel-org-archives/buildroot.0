@@ -1,66 +1,49 @@
-From: Motor-e LO Jean-Alexandre <jean-alexandre.lo@motor-e.fr>
-Date: Wed, 11 Oct 2017 13:53:30 +0200
-Subject: [Buildroot] Could not open egl display error on toradex apalis imx6q
-Message-ID: <000e01d34287$8f0fc570$ad2f5050$@motor-e.fr>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Wed, 11 Oct 2017 15:16:17 +0300
+Subject: [Buildroot] [PATCH] mpd: enable package for external ARC toolchain
+Message-ID: <20171011121617.15179-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Now using prebuilt arc-2017.09-rc1 toolchain it is possible to
+build mpd package. The GCC patch solving the problem with pthread
+support check now is the part of ARC toolchain.
 
-I cross-compile Qt5 with buildroot-2016.11
-My board is an imx6q from Toradex.
+Note this patch has a prerequisite that updates ARC prebuilt toolchain,
+http://patchwork.ozlabs.org/patch/824311/
 
-I have this problem when I want to execute my program:
-QML debugging is enabled. Only use this in a safe environment.
-QEglFSVivIntegration will set environment variable FB_MULTI_BUFFER=2 to
-enable double buffering and vsync.
-If this is not desired, you can override this via: export
-QT_EGLFS_IMX6_NO_FB_MULTI_BUFFER=1
-Could not open egl display
-Aborted
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+CC: Alexey Brodkin <abrodkin@synopsys.com>
+CC: arc-buildroot at synopsys.com
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-My default graphical platform is eglfs
-On buildroot I selected :
+---
+ package/mpd/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-*	open GL support
-- open GL API (OpenGL ES 2.0+)
-- openGL module
-*	freescale im.x librairies: imx-gpu-viv
-
-Before I use buildroot-2014.08 and it works!
-I need some help to resolve this problem!
-
---
-
-Cordialement / Best regards 
-Jean-Alexandre LO
-Ing?nieur logiciels embarqu?s / Embedded software engineer
-
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 5991b6f4bb..b7b21672fc 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -7,8 +7,6 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+-	# ARC toolchain issue
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
+@@ -320,7 +318,6 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
  
-
-
-
-1,rue royale 
-Bureaux de la Colline, num?ro 218
-Bat D - ?tage 7 
-92213 Saint-Cloud Cedex 
-Tel: +33 (0)1.41.12.66.08
-
- <http://www.motor-e.com> www.motor-e.com
- <mailto:jean-alexandre.lo@motor-e.fr> jean-alexandre.lo at motor-e.fr
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171011/e54e5984/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.png
-Type: image/png
-Size: 13578 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171011/e54e5984/attachment.png>
+ comment "mpd needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-- 
+2.11.0
