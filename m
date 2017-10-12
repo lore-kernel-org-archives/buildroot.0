@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Oct 2017 22:45:26 +0200
-Subject: [Buildroot] [PATCH v2 1/2] tbb: new package
-In-Reply-To: <20170928235043.31891-2-bradford@density.io>
+Date: Thu, 12 Oct 2017 22:46:38 +0200
+Subject: [Buildroot] [PATCH v2 2/2] opencv3: add support for tbb
+In-Reply-To: <20170928235043.31891-3-bradford@density.io>
 References: <20170928235043.31891-1-bradford@density.io>
- <20170928235043.31891-2-bradford@density.io>
-Message-ID: <20171012224526.132fc274@windsurf.home>
+ <20170928235043.31891-3-bradford@density.io>
+Message-ID: <20171012224638.20c6a202@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Sep 2017 19:50:42 -0400, Bradford Barr wrote:
+On Thu, 28 Sep 2017 19:50:43 -0400, Bradford Barr wrote:
 
-> diff --git a/package/tbb/0001-cross-compile.patch b/package/tbb/0001-cross-compile.patch
+> diff --git a/package/opencv3/0001-tbb-debug.patch b/package/opencv3/0001-tbb-debug.patch
 > new file mode 100644
-> index 0000000..7c57603
+> index 0000000..808483d
 > --- /dev/null
-> +++ b/package/tbb/0001-cross-compile.patch
-> @@ -0,0 +1,41 @@
-> +Author: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
-
-This patch should be Git formatted and have a proper commit title and
-description.
-
-
-> diff --git a/package/tbb/Config.in b/package/tbb/Config.in
-> new file mode 100644
-> index 0000000..eda1f09
-> --- /dev/null
-> +++ b/package/tbb/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_TBB
-> +	bool "tbb"
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	help
-> +	  Intel(R) Threading Building Blocks (Intel(R) TBB) lets you
-> +	  easily write parallel C++ programs that take full advantage
-> +	  of multicore performance, that are portable, composable and
-> +	  have future-proof scalability.
+> +++ b/package/opencv3/0001-tbb-debug.patch
+> @@ -0,0 +1,27 @@
+> +From a56d7592f0f2f63a84e2159171a784026cc99986 Mon Sep 17 00:00:00 2001
+> +From: bradford barr <bradford@density.io>
+> +Date: Thu, 28 Sep 2017 17:31:41 -0400
+> +Subject: [PATCH] TBB Debug Release
 > +
-> +	  https://www.threadingbuildingblocks.org/
-> +
-> +comment "tbb needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +OpenCV fails to detect tbb on a debug build if the platform has only installed
+> +debug libraries.  This PR adds an additional check to the tbb detect logic for
+> +systems that only install tbb debug and not both tbb debug and release.
 
-This comment is not in sync with the dependencies of the package: C++,
-dynamic library, glibc.
+This would be unnecessary if you drop the "debug" support in the tbb
+package.
 
+> +config BR2_PACKAGE_OPENCV3_WITH_TBB
+> +	bool "tbb support"
+> +	select BR2_PACKAGE_TBB
 
-> +TBB_SO_VERSION = 2
-> +TBB_LIBS = libtbb libtbbmalloc libtbbmalloc_proxy
-> +
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +TBB_BIN_PATH = $(@D)/build/linux_*_debug
-> +else
-> +TBB_BIN_PATH = $(@D)/build/linux_*_release
-> +endif
+You forgot to propagate the dependencies of tbb here (and don't forget
+to add the corresponding Config.in comment).
 
-What is the difference between the debug and release builds? In
-general, we don't want to special case BR2_ENABLE_DEBUG in packages, as
-we only want this to enable building with debugging symbols, and
-nothing else. We used to handle BR2_ENABLE_DEBUG in lots of packages
-and got rid of that a while ago, so I don't want to get back to this.
-
-> +define TBB_INSTALL_LIBS
-> +	$(foreach lib,$(TBB_LIBS),
-> +		$(if $(BR2_ENABLE_DEBUG),
-> +			$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib)_debug.so.$(TBB_SO_VERSION) \
-> +				$(1)/usr/lib/$(lib)_debug.so.$(TBB_SO_VERSION) ;
-> +			ln -sf $(lib)_debug.so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib)_debug.so
-
-And this looks particularly painful here because the library doesn't
-even have the same name on the filesystem depending on whether you're
-doing a debug or a normal build. Clearly not good.
-
-> +		,
-> +			$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib).so.$(TBB_SO_VERSION) \
-> +				$(1)/usr/lib/$(lib).so.$(TBB_SO_VERSION) ;
-> +			ln -sf $(lib).so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib).so
-> +		)
-> +	)
-> +endef
-
-So unless you need it, I'd say drop the support for BR2_ENABLE_DEBUG
-altogether.
+Otherwise, looks good to me.
 
 Thanks!
 
