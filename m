@@ -1,110 +1,95 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Wed, 11 Oct 2017 19:25:22 -0300 (BRT)
-Subject: [Buildroot] pre-built binary packages
-In-Reply-To: <20171011235642.610fdc3d@windsurf.lan>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A477BB220F1@MARCM-SBS2011.marcmltd.local>
- <20171011151137.469e7fd6@windsurf.lan>
- <572050367.13476787.1507757774068.JavaMail.zimbra@datacom.ind.br>
- <20171011235642.610fdc3d@windsurf.lan>
-Message-ID: <516314793.13478025.1507760722546.JavaMail.zimbra@datacom.ind.br>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 12 Oct 2017 01:06:32 +0000
+Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
+	file.
+In-Reply-To: <20170718210704.GO1482@waldemar-brodkorb.de>
+References: <20170713142549.28078-1-aduskett@gmail.com>
+ <20170715114432.0b01a373@windsurf> <87d191afyw.fsf@dell.be.48ers.dk>
+ <20170715214809.2158c3e2@windsurf> <87inis8jjj.fsf@dell.be.48ers.dk>
+ <20170716164353.GI1482@waldemar-brodkorb.de>
+ <246b2393-ffd3-99e5-5de9-db52d73488bb@mind.be>
+ <20170718230641.479308e9@windsurf>
+ <20170718210704.GO1482@waldemar-brodkorb.de>
+Message-ID: <1507770391.3839.67.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
->> Here in Datacom we use "binary artifacts": when we build a package,
->> we make a tarball of the artifacts. When we want to build the
->> package, we try to use the tarball first, if the version (in the
->> tarball) matches the package version.
->> 
->> We have not contributed this solution to buildroot because it doesn't
->> seem to be possible to do this in a generic way. We have this binary
->> artifact generation for our internal packages (and all of them use
->> cmake to build). I think it is the only patch to buildroot that we
->> consider to be "eternal".
->> 
->> You can do the same for any package: you can control what's installed
->> in staging and target, and create a tarball containing these folders
->> and the stamp files. Then, use this Binary, instead of the source,
->> when the binary can be used (same source version, for instance).
->> 
->> So, a compilation in our systems always starts with a "build form
->> binaries" and then "rebuild some parts from source". That's way we
->> would like the python script that implements show-<pkg>-rrdepends to
->> be accepted upstream: combined with binary artifacts, it is possible
->> to build fast (from binaries) and rebuild fast (from source).
+Hi Thomas, Waldemar, Arnout, all,
+
+On Tue, 2017-07-18 at 23:07 +0200, Waldemar Brodkorb wrote:
+> Hi,
+> Thomas Petazzoni wrote,
 > 
-> The problem is that you don't have any reliable way to know if your
-> binary artifacts are valid for a given build or not.
+> > 
+> > Hello,
+> > 
+> > On Tue, 18 Jul 2017 21:24:05 +0200, Arnout Vandecappelle wrote:
+> > 
+> > > 
+> > > ?I'm with you on this one. If a package can work with uClibc, we really should
+> > > allow it.
+> > > 
+> > > ?However, I don't think the solution is to bloat our default uClibc config with
+> > > features that are not useful for 99.82% of our packages. fts.h is not something
+> > > like IPv6 that is useful for a large number of packages.
+> > > 
+> > > ?I also don't think we should add more options like BR2_ENABLE_LOCALE that copy
+> > > the uClibc config options.
+> > > 
+> > > ?Perhaps the way to go is to have a BR2_TOOLCHAIN_UCLIBC_BLOAT_CONFIG option
+> > > that a user can set to indicate he wants to see packages that will not work with
+> > > our default uClibc config. That option could give a nice warning that this
+> > > configuration is not tested and YMMV.
+> > 
+> > I have to say I don't like this. If we have an option, it should work,
+> > and therefore be tested. It's the worst thing for users to simply tick
+> > an option, and discover build failures here and there. If you have an
+> > option that explicitly allows to do something, then that something
+> > should work.
 > 
-> Let's say you have a binary artifact of Qt5. But that artifact was
-> created with a given set of Qt5 configuration options. If you change
-> any Qt5 configuration option in Buildroot, then your binary artifact
-> should no longer be used.
+> I still don't get it.
+> We are not trying to disable fts in glibc, so it is available there.
+> Why we can't enable it for uClibc-ng to get more compatibility?
+> Just because of the bigger size?
 > 
-> The situation becomes worse with optional dependencies. You have built
-> package FOO, which optionally depends on BAR, but BAR was disabled. You
-> create a binary artifact of FOO, and re-use it to avoid rebuilding.
-> Later on, you enable BAR. How do you notice that your binary artifact
-> of FOO is no longer correct and should be rebuilt ?
-> 
-> So yes, you can use binary artifact, but only if you are very, very,
-> very, very, very careful, and you have a full and complete
-> understanding of what you're doing. You can shoot yourself in the foot
-> very easily.
-> 
-> Best regards,
-> 
+> If someone needs a really small system, there is always the
+> possibilty to use a really small uClibc-ng config.
 
-Yes, that's why it is not "upstreamable".
+Sorry for bumping that stale thread - unintentionally bumped into it
+so here're my 2 cents.
 
-We have an integration process, that publish new binary artifacts for all packages and all platforms. It is extremely controlled.
+1. As a representative of those minorities who's been living without glibc
+? ?I'm a bit disappointed to see those packages that "depends on *GLIBC*"
+? ?especially if that's just a matter of config option in some tool.
+? ?BTW it's not very obvious that "make uclibc-menucofig" may help here,
+? ?also inevitably user will need to patch Buildroot removing
+? ?"depends on BR2_TOOLCHAIN_USES_GLIBC" to get desired stuff built.
+? ?That said for an experienced people like we are it's a piece of cake
+? ?while for newcomers who only expect to toggle options in Buildroot's
+? ?xconfig (i.e. with mouse in nice GUI) it will be a roadblock.
 
-But, i disagree about "shooting yourself in the foot easily": it never happened, in some YEARS using it. Or we are very special (very smart) or it is not so hard. The second option is the right one.
+2. Speaking about bloating of default uClibc config in Buildroot I think
+? ?we saw movements from both sides but in the same direction:
+? ? - uClibc's options get removed or become enabled by default to make it
+? ? ? simpler, cleaner and more robust tool but that inevitable adds a couple
+? ? ? of hundred bytes here and there. I haven't done comparison of uClibc
+? ? ? sizes from release to release, but might be Waldemar has some data here.
+? ? - Buildroot's add-ons to uClibc's defaults also were adding more and more
+? ? ? things [and some unconditionally]. For example IPv6 is always on now while
+? ? ? I guess this option adds quite a bit of size.
 
-I would say to Marc try it. An example (qt5base.mk)
+? ? So I think yet another minor option being enabled won't be a problem.
 
-define QT5BASE_INSTALL_STAGING_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-        $(QT5_LA_PRL_FILES_FIXUP)
-endef
+3. Regarding purity of standards I may agree that we as more knowledgeable
+? ?engineers need to educate our users and resist temptation to return to
+? ?deprecated things. But as an advocate of my users I'd say that usability
+? ?and support of wider packages might be even more important.
+? ?In the end glibc developers and users couldn't care less about users of
+? ?musl and uClibc if glibc legacy causes issues to named minorities as well
+? ?as they are not?courageously getting rid of that legacy knowing it will
+? ?really break applications used by many-many people.
 
-define QT5BASE_INSTALL_TARGET_EXAMPLES
-        if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
-                mkdir -p $(TARGET_DIR)/usr/lib/qt/examples ; \
-                cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* $(TARGET_DIR)/usr/lib/qt/examples ; \
-        fi
-endef
-
-define FAKE_STAGING
-define FAKE_TARGET
-
-and
-
-use this FAKE_STAGING in place of (@D) in the STAGING part and FAKE_TARGET in the TARGET part. Something like this:
-
-define QT5BASE_INSTALL_STAGING_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(FAKE_STAGING) install
-        $(QT5_LA_PRL_FILES_FIXUP)
-endef
-
-define QT5BASE_INSTALL_TARGET_EXAMPLES
-        if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
-                mkdir -p $(TARGET_DIR)/usr/lib/qt/examples ; \
-                cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* $(TARGET_DIR)/usr/lib/qt/examples ; \
-                mkdir -p $(FAKE_TARGET_DIR)/usr/lib/qt/examples ; \
-                cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* $(FAKE_TARGET)/usr/lib/qt/examples ; \
-        fi
-endef
-
-When you build, you will have these artifacts in the fake staging and target. Create a tarball (in the recipe, when building from source), and use the tarball (in the recipe, when building from binary), and that's it (put the stamp files in the tarball also, of course).
-
--- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+-Alexey
