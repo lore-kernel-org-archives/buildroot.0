@@ -1,71 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Oct 2017 22:03:47 +0200
-Subject: [Buildroot] [git commit] arm-trusted-firmware: bump to version 1.4
-Message-ID: <20171012195626.B53D87FF24@busybox.osuosl.org>
+Date: Thu, 12 Oct 2017 22:03:28 +0200
+Subject: [Buildroot] [git commit] arm-trusted-firmware: fix comment typo
+Message-ID: <20171012195626.9980181042@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08aa81768ed64d07f62d83da3760e9d09bf139ff
+commit: https://git.buildroot.net/buildroot/commit/?id=6d245fee1e276b2da5a8786e691ddd9159cffe41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The license file got reformatted as reStructuredText, but the license itself
-didn't change.
-
-Drop unneeded md5sum and add license hash.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/arm-trusted-firmware/Config.in                 | 4 ++--
- boot/arm-trusted-firmware/arm-trusted-firmware.hash | 4 ++--
- boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 2df8267..799370c 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -14,7 +14,7 @@ choice
- 	  Select the specific ATF version you want to use
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
--	bool "v1.2"
-+	bool "v1.4"
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
- 	bool "Custom tarball"
-@@ -33,7 +33,7 @@ endif
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
- 	string
--	default "v1.2"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
-+	default "v1.4"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
- 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
- 	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-index e048e01..3940718 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 cbdd9b770ec1ab4933fc7f9f520daea5a364bb4dc964820fb017a0cf8c7df556 arm-trusted-firmware-v1.2.tar.gz
--md5 fac2c08bd74337fec2e14a98fc9f748f arm-trusted-firmware-v1.2.tar.gz
-+sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
-+sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
 diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index e02c622..7b1cc6e 100644
+index 9bd3bfc..e02c622 100644
 --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
 +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -6,7 +6,7 @@
+@@ -49,7 +49,7 @@ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release/*.bin $(BINARIES_DIR)/
+ endef
  
- ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
- ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
--ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.md
-+ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
+-# Configuration ckeck
++# Configuration check
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR_BUILDING),yy)
  
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
- 
+ ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
