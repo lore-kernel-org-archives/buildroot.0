@@ -1,100 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Oct 2017 07:59:31 +0200
-Subject: [Buildroot] [git commit] luksmeta: new package
-Message-ID: <20171013055308.4955B80F83@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 12 Oct 2017 16:41:38 +0200
+Subject: [Buildroot] [RFC 1/3] support/kconfig/merge_config.sh: merge
+ also buildroot config files
+In-Reply-To: <CA+TH9VkYrz1cKyVaHk-iT6_uB45tLs71i+tLe+Lhia5f0EsZvg@mail.gmail.com>
+References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
+ <4b5e865a-dfba-4fdf-4043-0bcd401832b6@mind.be>
+ <CA+TH9VkYrz1cKyVaHk-iT6_uB45tLs71i+tLe+Lhia5f0EsZvg@mail.gmail.com>
+Message-ID: <cfc59c1c-b783-5ba7-178b-b63b8ea00f04@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f3bcb4f5a97faa615692e904f26143e9fc31a38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: add DEVELOPERS entry]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/luksmeta/Config.in     | 17 +++++++++++++++++
- package/luksmeta/luksmeta.hash |  3 +++
- package/luksmeta/luksmeta.mk   | 15 +++++++++++++++
- 5 files changed, 37 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 52a2c6a..942abcf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1344,6 +1344,7 @@ F:	package/fscryptctl/
- F:	package/jo/
- F:	package/jose/
- F:	package/libfastjson/
-+F:	package/luksmeta/
- F:	package/lzop/
- F:	package/memtool/
- F:	package/mosquitto/
-diff --git a/package/Config.in b/package/Config.in
-index 40f496a..d4cf627 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -442,6 +442,7 @@ endmenu
- 	source "package/lshw/Config.in"
- 	source "package/lsscsi/Config.in"
- 	source "package/lsuio/Config.in"
-+	source "package/luksmeta/Config.in"
- 	source "package/lvm2/Config.in"
- 	source "package/mali-t76x/Config.in"
- 	source "package/mdadm/Config.in"
-diff --git a/package/luksmeta/Config.in b/package/luksmeta/Config.in
-new file mode 100644
-index 0000000..62e1f3e
---- /dev/null
-+++ b/package/luksmeta/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LUKSMETA
-+	bool "luksmeta"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # cryptsetup -> lvm2
-+	depends on BR2_USE_MMU # cryptsetup -> lvm2
-+	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # cryptsetup -> lvm2
-+	select BR2_PACKAGE_CRYPTSETUP
-+	help
-+	  LUKSMeta is a simple library and utility for storing
-+	  metadata in the LUKSv1 header.
-+
-+	  https://github.com/latchset/luksmeta
-+
-+comment "luksmeta needs a glibc or uClibc toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/luksmeta/luksmeta.hash b/package/luksmeta/luksmeta.hash
-new file mode 100644
-index 0000000..f5d7564
---- /dev/null
-+++ b/package/luksmeta/luksmeta.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 0154af98e7302a172060d83d24b6d87557a822c39ba3e911461bb1a6d3a22d51  luksmeta-8.tar.bz2
-+sha256 4b72eb6b5a336cd3ec837cc2d6347c23bf7574168db6b4802267700b93021abf  COPYING
-diff --git a/package/luksmeta/luksmeta.mk b/package/luksmeta/luksmeta.mk
-new file mode 100644
-index 0000000..33671e4
---- /dev/null
-+++ b/package/luksmeta/luksmeta.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# luksmeta
-+#
-+################################################################################
-+
-+LUKSMETA_VERSION = 8
-+LUKSMETA_SOURCE = luksmeta-$(LUKSMETA_VERSION).tar.bz2
-+LUKSMETA_SITE = https://github.com/latchset/luksmeta/releases/download/v$(LUKSMETA_VERSION)
-+LUKSMETA_LICENSE = LGPL-2.1+
-+LUKSMETA_LICENSE_FILES = COPYING
-+LUKSMETA_DEPENDENCIES = host-pkgconf cryptsetup
-+LUKSMETA_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+On 12-10-17 08:42, Angelo Compagnucci wrote:
+> Dear Arnout Vandecappelle,
+> 
+> 2017-10-11 23:43 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>
+>> On 10-10-17 22:43, Angelo Compagnucci wrote:
+>>> This patch adds a way to merge buildroot config file programmatically.
+>>
+>>  We already do that in test-pkg, without this patch. What are we doing wrong?
+> 
+> The actual support/kconfig/merge_config.sh looks for CONFIG_ symbols
+> via a regexp to print it's output and to check for inconsistencies.
+> Without the correct regexp this is impossible. Probably the right
+> commit message should be: "support/kconfig/merge_config.sh: check also
+> buildroot config files"
+
+ Ah, and in test-pkg we don't need it because we check for that explicitly after
+running merge_config.sh.
+
+ But if you start from a full .config (which you do in the example of 'make
+foo_defconfig; make bar_stack), isn't it going to give a warning for each and
+every symbol defined in the stack?
+
+[snip]
+>>> @@ -131,7 +140,12 @@ fi
+>>>  # Use the merged file as the starting point for:
+>>>  # alldefconfig: Fills in any missing symbols with Kconfig default
+>>>  # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
+>>> +if [ "$BUILDROOT_MODE" = "false" ]; then
+>>>  make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
+>>> +else
+>>> +cp $TMP_FILE $OUTPUT/.config
+>>> +make $OUTPUT_ARG olddefconfig
+>>
+>>  Why is this needed? alldefconfig works fine, no?
+> 
+> Yes, indeed, this part could be removed.
+
+ We only added alldefconfig a few months ago, perhaps your initial patch still
+predates that.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
