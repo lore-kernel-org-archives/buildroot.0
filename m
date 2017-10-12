@@ -1,119 +1,88 @@
-From: Alejandro Ariel Fachini <alefachinic@gmail.com>
-Date: Thu, 12 Oct 2017 16:11:38 -0300
-Subject: [Buildroot] [BuildRoot] at91sam9x5ek_defconfig not booting
-Message-ID: <CAHnuF31sDH93MRN8nU6kdvfymwD7LOAz56YckWrk-OLSdMx3Qg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Oct 2017 21:34:29 +0200
+Subject: [Buildroot] [PATCH] luksmeta: new package
+Message-ID: <20171012193429.25977-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, im new to Buildroot and I understand this may be more related to
-linux4sam website but i need some help.
-I am currently beginning with at91sam9x35ek. I've read and followed these
-documentations:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in              |  1 +
+ package/luksmeta/Config.in     | 17 +++++++++++++++++
+ package/luksmeta/luksmeta.hash |  3 +++
+ package/luksmeta/luksmeta.mk   | 15 +++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/luksmeta/Config.in
+ create mode 100644 package/luksmeta/luksmeta.hash
+ create mode 100644 package/luksmeta/luksmeta.mk
 
-linux4sam/bin/view/Linux4SAM/BuildRootB ... nux_U_boot
-<http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#Customizing_Busybox_Linux_U_boot>
-linux4sam/bin/view/Linux4SAM/BuildRoot_9x5
-<http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRoot_9x5>
-
-Doing what was described in these documents i got on Ubuntu 16.04 LTS the
-following resulting files, I am using this buildroot tag; *2016.02-rc3*:
-
-buildroot/output/images$ ls
-at91bootstrap.bin at91sam9x35ek.dtb rootfs.ubifs
-at91sam9g15ek.dtb at91sam9x5ek-nandflashboot-uboot-3.8.bin u-boot.bin
-at91sam9g25ek.dtb boot.bin zImage
-at91sam9g35ek.dtb rootfs.tar
-at91sam9x25ek.dtb rootfs.ubi
-
-I have to flash the device with windows where my Ubuntu VM runs.
-The flashing addresses aree found inside the script for flashing being:
-
-   - 0x0 for atboostrap.bin
-
-
-   - 0x40000 for u-boot.bin
-
-
-   - 0x180000 for at91sam9x35ek.dtb
-
-
-   - 0x200000 for zImage
-
-
-   - 0x800000 for rootfs.ubi
-
-This configuration won't boot KERNEL. System goes to u-boot> prompt and
-when i use:
-*bootz 0x22000000 - 0x21000000*
-Results in:
-
-*Wrong Ramdisk Image FormatRamdisk image is corrupt or invalid*
-
-Now. i have this demo:
-*linux4sam-buildroot-at91sam9x5ek-4.2*
-
-This demo contains the following files(relevant):
-
-at91sam9x5ek-nandflashboot-uboot-3.6.0.bin
-at91sam9x35ek.dtb
-u-boot-at91sam9x5ek_nandflash.bin
-ubootEnvtFileNandFlash.bin
-zImage-at91_dt
-rootfs-at91sam9.ubi
-
-I flash them with SAM-BA 2.12 on windows 10 at the following addresses:
-
-   - 0x0 for at91sam9x5ek-nandflashboot-uboot-3.6.0.bin
-
-
-   - 0x40000 for u-boot-at91sam9x5ek_nandflash.bin
-
-
-   - 0xc0000 for ubootEnvtFileNandFlash.bin
-
-
-   - 0x180000 for at91sam9x35ek.dtb
-
-
-   - 0x200000 for zImage-at91_dt
-
-
-   - 0x800000 for rootfs-at91sam9.ubi
-
-THis configuraion and these files work up to buildroot login prompt without
-issues.
-
-So i have a set of questions may be related to my inexperience:
-
-1- In my Buildroots build on my Ubuntu enviroment, if the file
-*at91bootstrap.bin* is my ATbootstrap bootloader, what is the file
-*at91sam9x5ek-nandflashboot-uboot-3.8.bin*?
-
-2- What is the file *boot.bin*?
-
-3-Where is the file with the U_BOOT enviroment variables, in the compiled
-Buildroot results?????
-
-4-I used "make at91sam9x5ek_defconfig", then "make". Does this means that
-the default configuration in these files are not working???
-
-5- Where do i set for building the file with Uboot Environment Variables?
-
-6- Do i need to apply patches to the newest Bootloader version?
-
-7- How do i do to change UBI format to jffs2 for compiling? i know how to
-do it in buildroot's menuconfig, but environment variables still sets to
-UBI.
-
-
-Thanks for your help and patience since I dont really know much about this.
-
-On side note I tried using the latest Build from Buildroot master at git
-and got same results. so All the above questons apply for BuildRoot
-mainline too. PLease Help me and Im sorry for asking noob things here.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171012/75fcd5d4/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index aa0f2d7f8e..fd553a1080 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -442,6 +442,7 @@ endmenu
+ 	source "package/lshw/Config.in"
+ 	source "package/lsscsi/Config.in"
+ 	source "package/lsuio/Config.in"
++	source "package/luksmeta/Config.in"
+ 	source "package/lvm2/Config.in"
+ 	source "package/mali-t76x/Config.in"
+ 	source "package/mdadm/Config.in"
+diff --git a/package/luksmeta/Config.in b/package/luksmeta/Config.in
+new file mode 100644
+index 0000000000..62e1f3e42f
+--- /dev/null
++++ b/package/luksmeta/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LUKSMETA
++	bool "luksmeta"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # cryptsetup -> lvm2
++	depends on BR2_USE_MMU # cryptsetup -> lvm2
++	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
++	depends on !BR2_TOOLCHAIN_USES_MUSL # cryptsetup -> lvm2
++	select BR2_PACKAGE_CRYPTSETUP
++	help
++	  LUKSMeta is a simple library and utility for storing
++	  metadata in the LUKSv1 header.
++
++	  https://github.com/latchset/luksmeta
++
++comment "luksmeta needs a glibc or uClibc toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/luksmeta/luksmeta.hash b/package/luksmeta/luksmeta.hash
+new file mode 100644
+index 0000000000..f5d756405a
+--- /dev/null
++++ b/package/luksmeta/luksmeta.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 0154af98e7302a172060d83d24b6d87557a822c39ba3e911461bb1a6d3a22d51  luksmeta-8.tar.bz2
++sha256 4b72eb6b5a336cd3ec837cc2d6347c23bf7574168db6b4802267700b93021abf  COPYING
+diff --git a/package/luksmeta/luksmeta.mk b/package/luksmeta/luksmeta.mk
+new file mode 100644
+index 0000000000..33671e469a
+--- /dev/null
++++ b/package/luksmeta/luksmeta.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# luksmeta
++#
++################################################################################
++
++LUKSMETA_VERSION = 8
++LUKSMETA_SOURCE = luksmeta-$(LUKSMETA_VERSION).tar.bz2
++LUKSMETA_SITE = https://github.com/latchset/luksmeta/releases/download/v$(LUKSMETA_VERSION)
++LUKSMETA_LICENSE = LGPL-2.1+
++LUKSMETA_LICENSE_FILES = COPYING
++LUKSMETA_DEPENDENCIES = host-pkgconf cryptsetup
++LUKSMETA_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.11.0
