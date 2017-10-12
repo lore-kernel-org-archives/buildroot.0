@@ -1,95 +1,105 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 12 Oct 2017 01:06:32 +0000
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
-	file.
-In-Reply-To: <20170718210704.GO1482@waldemar-brodkorb.de>
-References: <20170713142549.28078-1-aduskett@gmail.com>
- <20170715114432.0b01a373@windsurf> <87d191afyw.fsf@dell.be.48ers.dk>
- <20170715214809.2158c3e2@windsurf> <87inis8jjj.fsf@dell.be.48ers.dk>
- <20170716164353.GI1482@waldemar-brodkorb.de>
- <246b2393-ffd3-99e5-5de9-db52d73488bb@mind.be>
- <20170718230641.479308e9@windsurf>
- <20170718210704.GO1482@waldemar-brodkorb.de>
-Message-ID: <1507770391.3839.67.camel@synopsys.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 12 Oct 2017 08:13:13 +0200
+Subject: [Buildroot] [RFC 0/3] Adding software stacks
+In-Reply-To: <60e44779-04da-d7d4-9589-cfef09d1a226@mind.be>
+References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+ <60e44779-04da-d7d4-9589-cfef09d1a226@mind.be>
+Message-ID: <CA+TH9VmG3vnC_1Nx92kQNeeTobW1SiBbts_9o+M4bX4xaYH2Wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Waldemar, Arnout, all,
+Dear Arnout Vandecappelle
 
-On Tue, 2017-07-18 at 23:07 +0200, Waldemar Brodkorb wrote:
-> Hi,
-> Thomas Petazzoni wrote,
-> 
-> > 
-> > Hello,
-> > 
-> > On Tue, 18 Jul 2017 21:24:05 +0200, Arnout Vandecappelle wrote:
-> > 
-> > > 
-> > > ?I'm with you on this one. If a package can work with uClibc, we really should
-> > > allow it.
-> > > 
-> > > ?However, I don't think the solution is to bloat our default uClibc config with
-> > > features that are not useful for 99.82% of our packages. fts.h is not something
-> > > like IPv6 that is useful for a large number of packages.
-> > > 
-> > > ?I also don't think we should add more options like BR2_ENABLE_LOCALE that copy
-> > > the uClibc config options.
-> > > 
-> > > ?Perhaps the way to go is to have a BR2_TOOLCHAIN_UCLIBC_BLOAT_CONFIG option
-> > > that a user can set to indicate he wants to see packages that will not work with
-> > > our default uClibc config. That option could give a nice warning that this
-> > > configuration is not tested and YMMV.
-> > 
-> > I have to say I don't like this. If we have an option, it should work,
-> > and therefore be tested. It's the worst thing for users to simply tick
-> > an option, and discover build failures here and there. If you have an
-> > option that explicitly allows to do something, then that something
-> > should work.
-> 
-> I still don't get it.
-> We are not trying to disable fts in glibc, so it is available there.
-> Why we can't enable it for uClibc-ng to get more compatibility?
-> Just because of the bigger size?
-> 
-> If someone needs a really small system, there is always the
-> possibilty to use a really small uClibc-ng config.
+2017-10-11 23:38 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>  Hi Angelo,
+>
+> On 10-10-17 22:43, Angelo Compagnucci wrote:
+>> Software stacks are a way to define a group of options that should be used together and they are orthogonal to configs: a software stack can indeed be shared among several configs.
+>
+>  Wow, you always come with the innovative ideas, don't you?
 
-Sorry for bumping that stale thread - unintentionally bumped into it
-so here're my 2 cents.
+Could you point me where I said it's innovative?
 
-1. As a representative of those minorities who's been living without glibc
-? ?I'm a bit disappointed to see those packages that "depends on *GLIBC*"
-? ?especially if that's just a matter of config option in some tool.
-? ?BTW it's not very obvious that "make uclibc-menucofig" may help here,
-? ?also inevitably user will need to patch Buildroot removing
-? ?"depends on BR2_TOOLCHAIN_USES_GLIBC" to get desired stuff built.
-? ?That said for an experienced people like we are it's a piece of cake
-? ?while for newcomers who only expect to toggle options in Buildroot's
-? ?xconfig (i.e. with mouse in nice GUI) it will be a roadblock.
+>  We discussed such a feature before, but never came up with an elegant way to do
+> it, and that was better than just calling merge_config.sh.
 
-2. Speaking about bloating of default uClibc config in Buildroot I think
-? ?we saw movements from both sides but in the same direction:
-? ? - uClibc's options get removed or become enabled by default to make it
-? ? ? simpler, cleaner and more robust tool but that inevitable adds a couple
-? ? ? of hundred bytes here and there. I haven't done comparison of uClibc
-? ? ? sizes from release to release, but might be Waldemar has some data here.
-? ? - Buildroot's add-ons to uClibc's defaults also were adding more and more
-? ? ? things [and some unconditionally]. For example IPv6 is always on now while
-? ? ? I guess this option adds quite a bit of size.
+I'm only proposing my POV.
 
-? ? So I think yet another minor option being enabled won't be a problem.
+>> Having a stack system like the one envisioned in this patch series make possible to do something like this:
+>>
+>> make imx6-sabresd_defconfig; make mesa3d-etnaviv_stack qt5-fb_stack qt5-demos_stack; make
+>
+>  So yeah, is this really better than
+>
+> ./utils/merge_config.sh configs/imx6-sabresd_defconfig
+> stacks/mesa3d-etnaviv_stack stacks/qt5-fb_stack stacks/qt5-demos_stack; make
+>
+> ? Yes, it is significantly shorter, but you can at least use tab-completion.
 
-3. Regarding purity of standards I may agree that we as more knowledgeable
-? ?engineers need to educate our users and resist temptation to return to
-? ?deprecated things. But as an advocate of my users I'd say that usability
-? ?and support of wider packages might be even more important.
-? ?In the end glibc developers and users couldn't care less about users of
-? ?musl and uClibc if glibc legacy causes issues to named minorities as well
-? ?as they are not?courageously getting rid of that legacy knowing it will
-? ?really break applications used by many-many people.
+Well, the difference is that on the mailing list or the documentation
+you can say "there's a defined way in buildroot to do this thing"
+instead of "you should merge your configurations manually". Explicit
+is better than implicit!
 
--Alexey
+>  That said, I'm not absolutely opposed to the idea. But I'm not convinced either.
+
+It's not a problem for me to have a makefile target or not, I really
+want to know if it's an acceptance to the idea and if I should spend
+some time to refine it. If it's a no go, please tell me!
+
+>  Adding stacks, on the other hand, seems like a worthwhile endeavour.
+>
+>
+>> In this way we can declutter redundant configs (ex: imx6-sabresd_qt5_defconfig) and decouple software packages side related symbols from hardware related defconfigs.
+>
+>  Not the best example, because imx6-sabresd_qt5_defconfig contains quite a few
+> board-specific adaptions: a kconfig fragment and a rootfs overlay. And of course
+> increasing the ext2 rootfs size.
+>
+>  A better example would be atmel_sama5d4_xplained_dev_defconfig which is purely
+> a collection of packages.
+
+It was an example. Obviously for the sama5d4, we can have a stack for
+each board variant to be merged with a base one.
+
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>>
+>>
+>> Angelo Compagnucci (3):
+>>   support/kconfig/merge_config.sh: merge also buildroot config files
+>>   Makefile: add handling of software stacks
+>>   stacks: add a bunch of stacks
+>>
+>>  Makefile                        | 40 ++++++++++++++++++++++++++++++++++++++--
+>>  stacks/lamp_stack               | 10 ++++++++++
+>>  stacks/mesa3d-etnaviv_stack     |  7 +++++++
+>>  stacks/qt5-demos_stack          |  7 +++++++
+>>  stacks/qt5-fb_stack             | 11 +++++++++++
+>>  support/kconfig/merge_config.sh | 16 +++++++++++++++-
+>>  6 files changed, 88 insertions(+), 3 deletions(-)
+>>  create mode 100644 stacks/lamp_stack
+>>  create mode 100644 stacks/mesa3d-etnaviv_stack
+>>  create mode 100644 stacks/qt5-demos_stack
+>>  create mode 100644 stacks/qt5-fb_stack
+>>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
