@@ -1,43 +1,105 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 12 Oct 2017 20:08:19 +0200
-Subject: [Buildroot] [PATCH 1/2] uclibc-ng: enable fts in default config
-	file.
-In-Reply-To: <20171012095248.1c9839a8@windsurf.lan>
-References: <20170715114432.0b01a373@windsurf>
- <87d191afyw.fsf@dell.be.48ers.dk>
- <20170715214809.2158c3e2@windsurf>
- <87inis8jjj.fsf@dell.be.48ers.dk>
- <20170716164353.GI1482@waldemar-brodkorb.de>
- <246b2393-ffd3-99e5-5de9-db52d73488bb@mind.be>
- <20170718230641.479308e9@windsurf>
- <20170718210704.GO1482@waldemar-brodkorb.de>
- <1507770391.3839.67.camel@synopsys.com>
- <20171012095248.1c9839a8@windsurf.lan>
-Message-ID: <20171012180819.GI7617@waldemar-brodkorb.de>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 12 Oct 2017 14:09:17 -0400
+Subject: [Buildroot] [PATCH v3 1/5] libselinux: bump to 2.7
+Message-ID: <20171012180921.22768-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
+remove patch as it's in this release.
 
-> > 3. Regarding purity of standards I may agree that we as more knowledgeable
-> > ? ?engineers need to educate our users and resist temptation to return to
-> > ? ?deprecated things. But as an advocate of my users I'd say that usability
-> > ? ?and support of wider packages might be even more important.
-> 
-> Yes, I agree that there is a balance between "purity" and "pragmatism".
-> 
-> I don't have a very strong opinion on this FTS enabled or not. I don't
-> remember the size measurements with FTS enabled/disabled. Perhaps we
-> should just enable all features needed by Buildroot packages in our
-> uClibc configuration.
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes v1 -> v2:
+  - None
 
-That would be indeed the best policy!
+Changes v2 -> v3:
+  - None
 
-And I don't think a lot is missing. May be just FTS!
+ ...src-regex.c-support-old-compilers-for-the.patch | 47 ----------------------
+ package/libselinux/libselinux.hash                 |  4 +-
+ package/libselinux/libselinux.mk                   |  4 +-
+ 3 files changed, 4 insertions(+), 51 deletions(-)
+ delete mode 100644 package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
 
-best regards
- Waldemar
+diff --git a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch b/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
+deleted file mode 100644
+index 3bda607512..0000000000
+--- a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From e0803c0bdbb1abf06b6b5bb1b52fdb733505b8f7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 25 Jan 2017 22:41:02 +1300
+-Subject: [PATCH] src/regex.c: support old compilers for the endian
+- check
+-
+-libselinux 2.6 has added some code in regex.c that uses __BYTE_ORDER__
+-to determine the system endianness. Unfortunately, this definition
+-provided directly by the compiler doesn't exist in older gcc versions
+-such as gcc 4.4.
+-
+-In order to address this, this commit extends the logic to use
+-<endian.h> definitions if __BYTE_ORDER__ is not provided by the
+-compiler. This allows libselinux to build properly with gcc 4.4.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/regex.c | 13 ++++++++++++-
+- 1 file changed, 12 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/regex.c b/src/regex.c
+-index a3b427b..0c5ad27 100644
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -13,7 +13,18 @@
+- #endif
+- 
+- #ifndef __BYTE_ORDER__
+--#error __BYTE_ORDER__ not defined. Unable to determine endianness.
+-+
+-+/* If the compiler doesn't define __BYTE_ORDER__, try to use the C
+-+ * library <endian.h> header definitions. */
+-+#include <endian.h>
+-+#ifndef __BYTE_ORDER
+-+#error Neither __BYTE_ORDER__ nor __BYTE_ORDER defined. Unable to determine endianness.
+-+#endif
+-+
+-+#define __ORDER_LITTLE_ENDIAN __LITTLE_ENDIAN
+-+#define __ORDER_BIG_ENDIAN __BIG_ENDIAN
+-+#define __BYTE_ORDER__ __BYTE_ORDER
+-+
+- #endif
+- 
+- #ifdef USE_PCRE2
+--- 
+-2.7.4
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 76130b2dc0..3c60d5111d 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 4ea2dde50665c202253ba5caac7738370ea0337c47b251ba981c60d24e1a118a libselinux-2.6.tar.gz
++# From: https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256 d0fec0769b3ad60aa7baf9b9a4b7a056827769dc2dadda0dc0eb59b3d1c18c57 libselinux-2.7.tar.gz
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f23eea4962..8ac8000de5 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSELINUX_VERSION = 2.6
+-LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
++LIBSELINUX_VERSION = 2.7
++LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+ 
+-- 
+2.13.6
