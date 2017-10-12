@@ -1,103 +1,57 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 12 Oct 2017 08:42:25 +0200
-Subject: [Buildroot] [RFC 1/3] support/kconfig/merge_config.sh: merge
- also buildroot config files
-In-Reply-To: <4b5e865a-dfba-4fdf-4043-0bcd401832b6@mind.be>
-References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
- <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
- <4b5e865a-dfba-4fdf-4043-0bcd401832b6@mind.be>
-Message-ID: <CA+TH9VkYrz1cKyVaHk-iT6_uB45tLs71i+tLe+Lhia5f0EsZvg@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 12 Oct 2017 09:45:18 +0200
+Subject: [Buildroot] [PATCH] lua: add patch to fix pkg-config file for
+	version 5.1.x
+Message-ID: <20171012074518.14902-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+This patch applies the fix added in commit
+8d845683e37640d33c186c0091ccce6ae3ef0777 to Lua version 5.1.x.
 
-2017-10-11 23:43 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 10-10-17 22:43, Angelo Compagnucci wrote:
->> This patch adds a way to merge buildroot config file programmatically.
->
->  We already do that in test-pkg, without this patch. What are we doing wrong?
+When Lua is linked with additional libraries, these libraries should go
+into the pkg-config file as well.
 
-The actual support/kconfig/merge_config.sh looks for CONFIG_ symbols
-via a regexp to print it's output and to check for inconsistencies.
-Without the correct regexp this is impossible. Probably the right
-commit message should be: "support/kconfig/merge_config.sh: check also
-buildroot config files"
+Otherwise, linking swupdate with the lua library (version 5.1.x) fails:
 
->> It adds an option (-b, buildroot mode) to manage buildroot config files.
->
->  I wouldn't bother with that option. It's only going to be used for Buildroot
-> config files (other packages using Kconfig will have a copy of the script
-> already). So we can just change it directly. And we already have a stack of
-> changes on the upstream kconfig.
->
->> The buildroot mode changes the way the script looks for configurations
->> entries using the BR2_ prefix and modify the call to the make command
->> to be buildroot friendly.
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> [snip]
->> @@ -81,7 +90,7 @@ INITFILE=$1
->>  shift;
->>
->>  MERGE_LIST=$*
->> -SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
->> +SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
->
->  So here you can just hardcode BR2_
+```
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlopen'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlclose'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlerror'
+/home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
+```
 
-Ok
+The build error was detected when building the package swupdate from
+upstream with Lua 5.1 compatibility support [1] enabled.
 
->
->>  TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
->>
->>  echo "Using $INITFILE as base"
->> @@ -131,7 +140,12 @@ fi
->>  # Use the merged file as the starting point for:
->>  # alldefconfig: Fills in any missing symbols with Kconfig default
->>  # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
->> +if [ "$BUILDROOT_MODE" = "false" ]; then
->>  make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
->> +else
->> +cp $TMP_FILE $OUTPUT/.config
->> +make $OUTPUT_ARG olddefconfig
->
->  Why is this needed? alldefconfig works fine, no?
+[1] https://groups.google.com/forum/#!topic/swupdate/cBvq27-zuvs
 
-Yes, indeed, this part could be removed.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch
 
->
->> +fi
->>
->>
->>  # Check all specified config values took (might have missed-dependency issues)
->
->  Since the kconfig stuff comes from upstream but is modified, we also maintain
-> the changes as a stack of patches in support/kconfig/patches. So you should
-> generate a new patch for this change and add it to the series file. I'm not sure
-> why we don't use a vendor branch and just merge, but that's the way we do it :-).
-
-Ok.
-
->
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-
-
+diff --git a/package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch b/package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch
+new file mode 100644
+index 0000000000..8a5a0d85be
+--- /dev/null
++++ b/package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch
+@@ -0,0 +1,12 @@
++diff -purN lua-5.1.5.orig/etc/lua.pc lua-5.1.5/etc/lua.pc
++--- lua-5.1.5.orig/etc/lua.pc	2017-10-12 09:25:20.339277165 +0200
+++++ lua-5.1.5/etc/lua.pc	2017-10-12 09:26:37.272796305 +0200
++@@ -25,7 +25,7 @@ Name: Lua
++ Description: An Extensible Extension Language
++ Version: ${R}
++ Requires: 
++-Libs: -L${libdir} -llua -lm
+++Libs: -L${libdir} -llua -lm @MYLIBS@
++ Cflags: -I${includedir}
++ 
++ # (end of lua.pc)
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.14.2
