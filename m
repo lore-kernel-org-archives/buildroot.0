@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Oct 2017 22:38:40 +0200
-Subject: [Buildroot] [PATCH v3 5/5] policycoreutils: bump to 2.7
-In-Reply-To: <20171012180921.22768-5-Adamduskett@outlook.com>
-References: <20171012180921.22768-1-Adamduskett@outlook.com>
- <20171012180921.22768-5-Adamduskett@outlook.com>
-Message-ID: <20171012223840.7e87a8f1@windsurf.home>
+Date: Thu, 12 Oct 2017 22:45:26 +0200
+Subject: [Buildroot] [PATCH v2 1/2] tbb: new package
+In-Reply-To: <20170928235043.31891-2-bradford@density.io>
+References: <20170928235043.31891-1-bradford@density.io>
+ <20170928235043.31891-2-bradford@density.io>
+Message-ID: <20171012224526.132fc274@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,190 +13,87 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 Oct 2017 14:09:21 -0400, Adam Duskett wrote:
+On Thu, 28 Sep 2017 19:50:42 -0400, Bradford Barr wrote:
 
-> +config BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW
-> +	bool "policycoreutils audit2allow option removed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_SEPOLGEN
-
-Why is selecting BR2_PACKAGE_SEPOLGEN needed?
-
-> +	select BR2_PACKAGE_SELINUX_PYTHON
-> +	select BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
-> +	help
-> +	  The policycoreutils package no longer offers audit2allow
-> +	  as a option.  This package has been moved into the
-
-Why do you have two spaces between the "." and the next sentence? Could
-you fix this globally?
-
-> +	  selinux-python package by the SELinux maintainers.
-> +
-> +config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
-> +	bool "policycoreutils restorecond option removed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_DBUS_GLIB
-
-Why do you select those options? It seems totally useless:
-BR2_PACKAGE_RESTORECOND already selects BR2_PACKAGE_DBUS_GLIB.
-
-> +	select BR2_PACKAGE_RESTORECOND
-> +	help
-> +	  The policycoreutils package no longer offers restorecond
-> +	  as a option.  This package has been moved into a seperate
-> +	  package maintained by the SELinux maintainers.
-> +
-> +config BR2_PACKAGE_SEPOLGEN
-> +	bool "sepolgen package has been removed"
-
-So actually there is some code above that selects an option that is
-legacy ? This doesn't make much sense.
-
-> diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
+> diff --git a/package/tbb/0001-cross-compile.patch b/package/tbb/0001-cross-compile.patch
 > new file mode 100644
-> index 0000000000..1ce1bcb605
+> index 0000000..7c57603
 > --- /dev/null
-> +++ b/package/restorecond/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_RESTORECOND
-> +	bool "restorecond"
-> +	depends on BR2_PACKAGE_DBUS # dbus-glib
+> +++ b/package/tbb/0001-cross-compile.patch
+> @@ -0,0 +1,41 @@
+> +Author: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
 
-Perhaps this should be a "select BR2_PACKAGE_DBUS", as it's not obvious
-that DBus is needed. D-Bus only depends on threads and MMU, which you
-already depend on anyway.
-
-> +	depends on BR2_USE_WCHAR # glib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +	depends on BR2_USE_MMU # glib2
-> +	select BR2_PACKAGE_LIBSELINUX
-> +	select BR2_PACKAGE_DBUS_GLIB
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	help
-> +	  restorecond is a daemon that watches for file creation and
-> +	  then sets the default SELinux file context for that file.
-
-Missing upstream URL. Missing Config.in comment that details the
-dependencies.
+This patch should be Git formatted and have a proper commit title and
+description.
 
 
-> +define RESTORECOND_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D $(@D)/restorecond.init \
-> +		$(TARGET_DIR)/etc/init.d/restorecond
-
-A script named /etc/init.d/restorecond will not be executed at boot
-time.
-
-> +endef
-> +
-> +define RESTORECOND_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -m 0644 -D $(@D)/restorecond.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/restorecond.service
-> +
-> +	$(INSTALL) -m 0600 -D $(@D)/org.selinux.Restorecond.service \
-> +		$(TARGET_DIR)/etc/systemd/system/org.selinux.Restorecond.service
-> +endef
-> +
-> +define RESTORECOND_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0644 -D $(@D)/restorecond.conf $(TARGET_DIR)/etc/selinux/restorecond.conf
-> +	$(INSTALL) -m 0644 -D $(@D)/restorecond_user.conf $(TARGET_DIR)/etc/selinux/restorecond_user.conf
-> +	$(INSTALL) -m 0755 -D $(@D)/restorecond $(TARGET_DIR)/usr/sbin/restorecond
-> +endef
-> +
-> +$(eval $(generic-package))
-> +$(eval $(host-generic-package))
-
-A host generic package call, but no definition of
-HOST_RESTORECOND_BUILD_CMDS or installation commands? Seems like the
-host variant of restorecond is not used anywhere.
-
-> diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+> diff --git a/package/tbb/Config.in b/package/tbb/Config.in
 > new file mode 100644
-> index 0000000000..6d8e5ed03b
+> index 0000000..eda1f09
 > --- /dev/null
-> +++ b/package/selinux-python/Config.in
-> @@ -0,0 +1,63 @@
-> +menuconfig BR2_PACKAGE_SELINUX_PYTHON
-> +	bool "selinux python"
-
-selinux-python (i.e exactly spelled like the package name)
-
-> +	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_USE_WCHAR 
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +++ b/package/tbb/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_TBB
+> +	bool "tbb"
 > +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 > +	help
-> +	  A set of SELinux tools written in python that help with
-> +	  managing a system with SELinux enabled. If no packages are
-> +	  selected nothing will actually be built.
-> +	  https://github.com/SELinuxProject/selinux/wiki
+> +	  Intel(R) Threading Building Blocks (Intel(R) TBB) lets you
+> +	  easily write parallel C++ programs that take full advantage
+> +	  of multicore performance, that are portable, composable and
+> +	  have future-proof scalability.
 > +
-> +if BR2_PACKAGE_SELINUX_PYTHON
+> +	  https://www.threadingbuildingblocks.org/
 > +
-> +comment "packages"
+> +comment "tbb needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-Useless Config.in comment.
+This comment is not in sync with the dependencies of the package: C++,
+dynamic library, glibc.
 
-> +
-> +config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
-> +	bool "audit2allow"
-> +	depends on BR2_USE_WCHAR # python3, sepolgen
-> +	depends on BR2_USE_MMU # python3, sepolgen
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3, sepolgen, checkpolicy
-> +	depends on !BR2_STATIC_LIBS # python3, sepolgen
 
-python3 is selected above, so it's already guaranteed to be there, so
-I'm not sure why you mention python3 in all those comments.
-
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # checkpolicy
-> +	depends on !BR2_arc # checkpolicy
-> +	select BR2_PACKAGE_CHECKPOLICY
-> +	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
-> +	help
-> +	  This module installs two programs:
-> +  	  
-> +  	  audit2allow - Generate SELinux policy allow/dontaudit rules
-> +  	  from logs of denied operations.
-> +  	  
-> +  	  audit2why - translates SELinux audit messages into a
-> +  	  description of why the access was denied (audit2allow -w)
+> +TBB_SO_VERSION = 2
+> +TBB_LIBS = libtbb libtbbmalloc libtbbmalloc_proxy
 > +
-> +comment "audit2allow needs a glibc toolchain w/ wchar, threads, dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_arc
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		BR2_STATIC_LIBS
-> +
-> +config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
-> +	bool "sepolgen"
-> +	depends on BR2_USE_WCHAR # python3
-> +	depends on BR2_USE_MMU # python3
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
-> +	depends on !BR2_STATIC_LIBS # python3
-
-Ditto.
-
-> +	help
-> +	  This package contains a Python module that allows you to
-> +	  generate an initial SELinux policy module template.
-> +
-> +comment "sepolgen needs a toolchain w/ wchar, threads, dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		BR2_STATIC_LIBS
-> +
+> +ifeq ($(BR2_ENABLE_DEBUG),y)
+> +TBB_BIN_PATH = $(@D)/build/linux_*_debug
+> +else
+> +TBB_BIN_PATH = $(@D)/build/linux_*_release
 > +endif
-> +
-> +comment "SELinux Python packages needs a toolchain w/ wchar, threads, dynamic library"
 
-comment "selinux-python needs a toolchain w/ ..."
+What is the difference between the debug and release builds? In
+general, we don't want to special case BR2_ENABLE_DEBUG in packages, as
+we only want this to enable building with debugging symbols, and
+nothing else. We used to handle BR2_ENABLE_DEBUG in lots of packages
+and got rid of that a while ago, so I don't want to get back to this.
 
-Best regards,
+> +define TBB_INSTALL_LIBS
+> +	$(foreach lib,$(TBB_LIBS),
+> +		$(if $(BR2_ENABLE_DEBUG),
+> +			$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib)_debug.so.$(TBB_SO_VERSION) \
+> +				$(1)/usr/lib/$(lib)_debug.so.$(TBB_SO_VERSION) ;
+> +			ln -sf $(lib)_debug.so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib)_debug.so
 
-Thomas Petazzoni
+And this looks particularly painful here because the library doesn't
+even have the same name on the filesystem depending on whether you're
+doing a debug or a normal build. Clearly not good.
+
+> +		,
+> +			$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib).so.$(TBB_SO_VERSION) \
+> +				$(1)/usr/lib/$(lib).so.$(TBB_SO_VERSION) ;
+> +			ln -sf $(lib).so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib).so
+> +		)
+> +	)
+> +endef
+
+So unless you need it, I'd say drop the support for BR2_ENABLE_DEBUG
+altogether.
+
+Thanks!
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
