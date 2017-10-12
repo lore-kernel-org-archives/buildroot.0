@@ -1,52 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Oct 2017 22:05:50 +0200
-Subject: [Buildroot] [PATCH] lua: add patch to fix pkg-config file for
- version 5.1.x
-In-Reply-To: <20171012074518.14902-1-joerg.krause@embedded.rocks>
-References: <20171012074518.14902-1-joerg.krause@embedded.rocks>
-Message-ID: <20171012220550.5c08ae93@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Oct 2017 22:23:55 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/qemu_aarch64_virt_defconfig: bump
+	kernel to 4.13.6
+Message-ID: <20171012202356.20398-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/qemu/aarch64-virt/{linux-4.11.config => linux-4.13.config} | 0
+ configs/qemu_aarch64_virt_defconfig                              | 8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename board/qemu/aarch64-virt/{linux-4.11.config => linux-4.13.config} (100%)
 
-On Thu, 12 Oct 2017 09:45:18 +0200, J?rg Krause wrote:
-> This patch applies the fix added in commit
-> 8d845683e37640d33c186c0091ccce6ae3ef0777 to Lua version 5.1.x.
-> 
-> When Lua is linked with additional libraries, these libraries should go
-> into the pkg-config file as well.
-> 
-> Otherwise, linking swupdate with the lua library (version 5.1.x) fails:
-> 
-> ```
-> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlopen'
-> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlclose'
-> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlerror'
-> /home/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblua.so: undefined reference to `dlsym'
-> ```
-> 
-> The build error was detected when building the package swupdate from
-> upstream with Lua 5.1 compatibility support [1] enabled.
-> 
-> [1] https://groups.google.com/forum/#!topic/swupdate/cBvq27-zuvs
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 package/lua/5.1.5/0003-add-MYLIBS-to-Libs-in-lua-pc.patch
-
-I have merged the other patch proposed by Fran?ois Perrad a while ago,
-and marked your patch as Rejected.
-
-Thanks!
-
-Thomas
+diff --git a/board/qemu/aarch64-virt/linux-4.11.config b/board/qemu/aarch64-virt/linux-4.13.config
+similarity index 100%
+rename from board/qemu/aarch64-virt/linux-4.11.config
+rename to board/qemu/aarch64-virt/linux-4.13.config
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 1ef4405ac4..84078ac892 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -9,12 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Linux headers same as kernel, a 4.11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.13.config"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
