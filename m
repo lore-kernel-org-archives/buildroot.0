@@ -1,153 +1,135 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 13 Oct 2017 10:34:03 +0200
-Subject: [Buildroot] [RFC 0/3] Adding software stacks
-In-Reply-To: <cd5b6907-c2d0-c68d-662b-40c4567fbdb4@mind.be>
+Date: Fri, 13 Oct 2017 10:39:42 +0200
+Subject: [Buildroot] [RFC 1/3] support/kconfig/merge_config.sh: merge
+ also buildroot config files
+In-Reply-To: <cfc59c1c-b783-5ba7-178b-b63b8ea00f04@mind.be>
 References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
- <60e44779-04da-d7d4-9589-cfef09d1a226@mind.be>
- <CA+TH9VmG3vnC_1Nx92kQNeeTobW1SiBbts_9o+M4bX4xaYH2Wg@mail.gmail.com>
- <cd5b6907-c2d0-c68d-662b-40c4567fbdb4@mind.be>
-Message-ID: <CA+TH9VmcWGSQdTkJonSE-484XoKxTLu2fuSburjUdxwHi-nL=A@mail.gmail.com>
+ <1507668210-5427-2-git-send-email-angelo.compagnucci@gmail.com>
+ <4b5e865a-dfba-4fdf-4043-0bcd401832b6@mind.be>
+ <CA+TH9VkYrz1cKyVaHk-iT6_uB45tLs71i+tLe+Lhia5f0EsZvg@mail.gmail.com>
+ <cfc59c1c-b783-5ba7-178b-b63b8ea00f04@mind.be>
+Message-ID: <CA+TH9VnCF47i-xv2fhaMje+tkhsOzmCGQbTemiLXwN_iBo1kBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Arnout Vandecappelle ,
 
-2017-10-13 8:31 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+2017-10-12 16:41 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
 >
 >
-> On 12-10-17 08:13, Angelo Compagnucci wrote:
->> Dear Arnout Vandecappelle
+> On 12-10-17 08:42, Angelo Compagnucci wrote:
+>> Dear Arnout Vandecappelle,
 >>
->> 2017-10-11 23:38 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->>>  Hi Angelo,
+>> 2017-10-11 23:43 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>>
 >>>
 >>> On 10-10-17 22:43, Angelo Compagnucci wrote:
->>>> Software stacks are a way to define a group of options that should be used together and they are orthogonal to configs: a software stack can indeed be shared among several configs.
+>>>> This patch adds a way to merge buildroot config file programmatically.
 >>>
->>>  Wow, you always come with the innovative ideas, don't you?
+>>>  We already do that in test-pkg, without this patch. What are we doing wrong?
 >>
->> Could you point me where I said it's innovative?
+>> The actual support/kconfig/merge_config.sh looks for CONFIG_ symbols
+>> via a regexp to print it's output and to check for inconsistencies.
+>> Without the correct regexp this is impossible. Probably the right
+>> commit message should be: "support/kconfig/merge_config.sh: check also
+>> buildroot config files"
 >
->  You didn't say it, but I thought it was innovative. Sorry, I probably didn't
-> express myself clearly. When I saw your patch series the first time, I
-> immediately thought "hey, this is nice" and started composing this answer (but
-> only this sentence). But then I realized we had discussed something like this
-> before both on the list and in face-to-face meetings, so I left it to have a
-> sleep on it before continuing. I realize now that the rest of my mail can come
-> over pretty critical. With my
-
-Sorry Arnout for having intended your sentence in a critical way, I
-know my patch series could be controversial at first and I was
-expecting negative reactions.
-So thank you for your appreciation! So let's go!
-
->  So to clarify (hopefully :-): I really like the idea of adding software stacks
-> (good name BTW, because I was thinking of "packages of packages" which sounds
-> awful). I also like the idea of making it very easy for people to add those
-> stacks together. But only if there is a real added value compared to calling
-> merge_config.sh directly. Some of my comments in patch 2/3 are meant to go in
-> that direction.
-
-My POV is that the intended way to go should be codified in software
-and not only in the manual.
-
-
->  Also, I only give my own opinion. This may or may not represent the position of
-> most of the community.
-
-Well, of course it's your own, but a really inspiring one!
-
->>>  We discussed such a feature before, but never came up with an elegant way to do
->>> it, and that was better than just calling merge_config.sh.
->>
->> I'm only proposing my POV.
->>
->>>> Having a stack system like the one envisioned in this patch series make possible to do something like this:
->>>>
->>>> make imx6-sabresd_defconfig; make mesa3d-etnaviv_stack qt5-fb_stack qt5-demos_stack; make
->>>
->>>  So yeah, is this really better than
->>>
->>> ./utils/merge_config.sh configs/imx6-sabresd_defconfig
->>> stacks/mesa3d-etnaviv_stack stacks/qt5-fb_stack stacks/qt5-demos_stack; make
->>>
->>> ? Yes, it is significantly shorter, but you can at least use tab-completion.
->>
->> Well, the difference is that on the mailing list or the documentation
->> you can say "there's a defined way in buildroot to do this thing"
->> instead of "you should merge your configurations manually". Explicit
->> is better than implicit!
+>  Ah, and in test-pkg we don't need it because we check for that explicitly after
+> running merge_config.sh.
 >
->  Very true. But calling merge_config.sh is also a defined way, isn't it?
+>  But if you start from a full .config (which you do in the example of 'make
+> foo_defconfig; make bar_stack), isn't it going to give a warning for each and
+> every symbol defined in the stack?
 
-Not documented anywhere:
+No, this is the output:
 
-$ rgrep "merge_config" docs/manual/ || echo nothing found
-nothing found
+$ make qemu_arm_versatile_defconfig && make lamp_stack
+umask 0022 && make -C /media/angelo/WD/data/BUILDROOT/buildroot
+O=/media/angelo/WD/data/BUILDROOT/br_qemu_arm/.
+qemu_arm_versatile_defconfig
+  GEN     /media/angelo/WD/data/BUILDROOT/br_qemu_arm/Makefile
+#
+# configuration written to /media/angelo/WD/data/BUILDROOT/br_qemu_arm/.config
+#
+umask 0022 && make -C /media/angelo/WD/data/BUILDROOT/buildroot
+O=/media/angelo/WD/data/BUILDROOT/br_qemu_arm/. lamp_stack
+/media/angelo/WD/data/BUILDROOT/buildroot/support/kconfig/merge_config.sh
+-b -O /media/angelo/WD/data/BUILDROOT/br_qemu_arm
+/media/angelo/WD/data/BUILDROOT/br_qemu_arm/.config
+/media/angelo/WD/data/BUILDROOT/buildroot/stacks/lamp_stack
+Using /media/angelo/WD/data/BUILDROOT/br_qemu_arm/.config as base
+Merging /media/angelo/WD/data/BUILDROOT/buildroot/stacks/lamp_stack
+Value of BR2_TOOLCHAIN_BUILDROOT_CXX is redefined by fragment
+/media/angelo/WD/data/BUILDROOT/buildroot/stacks/lamp_stack:
+Previous value: # BR2_TOOLCHAIN_BUILDROOT_CXX is not set
+New value: BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
->>>  That said, I'm not absolutely opposed to the idea. But I'm not convinced either.
->>
->> It's not a problem for me to have a makefile target or not, I really
->> want to know if it's an acceptance to the idea and if I should spend
->> some time to refine it. If it's a no go, please tell me!
+Value of BR2_PACKAGE_PHP is redefined by fragment
+/media/angelo/WD/data/BUILDROOT/buildroot/stacks/lamp_stack:
+Previous value: # BR2_PACKAGE_PHP is not set
+New value: BR2_PACKAGE_PHP=y
+
+Value of BR2_PACKAGE_APACHE is redefined by fragment
+/media/angelo/WD/data/BUILDROOT/buildroot/stacks/lamp_stack:
+Previous value: # BR2_PACKAGE_APACHE is not set
+New value: BR2_PACKAGE_APACHE=y
+
+  GEN     /media/angelo/WD/data/BUILDROOT/br_qemu_arm/Makefile
+#
+# configuration written to /media/angelo/WD/data/BUILDROOT/br_qemu_arm/.config
+#
+Value requested for BR2_PACKAGE_ZLIB not in final .config
+Requested value:  # BR2_PACKAGE_ZLIB is not set
+Actual value:     BR2_PACKAGE_ZLIB=y
+
+Value requested for BR2_PACKAGE_EXPAT not in final .config
+Requested value:  # BR2_PACKAGE_EXPAT is not set
+Actual value:     BR2_PACKAGE_EXPAT=y
+
+Value requested for BR2_PACKAGE_APR not in final .config
+Requested value:  # BR2_PACKAGE_APR is not set
+Actual value:     BR2_PACKAGE_APR=y
+
+Value requested for BR2_PACKAGE_APR_UTIL not in final .config
+Requested value:  # BR2_PACKAGE_APR_UTIL is not set
+Actual value:     BR2_PACKAGE_APR_UTIL=y
+
+Value requested for BR2_PACKAGE_NCURSES not in final .config
+Requested value:  # BR2_PACKAGE_NCURSES is not set
+Actual value:     BR2_PACKAGE_NCURSES=y
+
+Value requested for BR2_PACKAGE_PCRE not in final .config
+Requested value:  # BR2_PACKAGE_PCRE is not set
+Actual value:     BR2_PACKAGE_PCRE=y
+
+Value requested for BR2_PACKAGE_READLINE not in final .config
+Requested value:  # BR2_PACKAGE_READLINE is not set
+Actual value:     BR2_PACKAGE_READLINE=y
+
+
 >
->  I don't want to say you shouldn't spend time on it. Perhaps the best approach
-> is to start with the stacks themselves and document how to use them, and we can
-> add make rules or scripts later on.
-
-Ok, why not. But if the feature is interesting and can be discussed
-more, why not starting right from the begging instead of patching
-over?
-
-There a feature I included that I really like: if you do a make
-list-stacks the first line of the stack will be printed as a
-description of the stack. I think this feature should be here right
-from the start instead of having the user looking for help file by
-file manually. I was thinking to refine it more, having printed the
-first commented lines of a stack with something like:
-
-$ make qt5-fb_stack --help
-QT5 stack based on the Linux famebuffer
-
-This stack provides a complete QT5 with OPENGL enabled environment.
-Of course you should have included an opengl capable driver stack
-like mesa3d-etnaviv_stack
-
->>>  Adding stacks, on the other hand, seems like a worthwhile endeavour.
+> [snip]
+>>>> @@ -131,7 +140,12 @@ fi
+>>>>  # Use the merged file as the starting point for:
+>>>>  # alldefconfig: Fills in any missing symbols with Kconfig default
+>>>>  # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
+>>>> +if [ "$BUILDROOT_MODE" = "false" ]; then
+>>>>  make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
+>>>> +else
+>>>> +cp $TMP_FILE $OUTPUT/.config
+>>>> +make $OUTPUT_ARG olddefconfig
 >>>
->>>> In this way we can declutter redundant configs (ex: imx6-sabresd_qt5_defconfig) and decouple software packages side related symbols from hardware related defconfigs.
->>>
->>>  Not the best example, because imx6-sabresd_qt5_defconfig contains quite a few
->>> board-specific adaptions: a kconfig fragment and a rootfs overlay. And of course
->>> increasing the ext2 rootfs size.
->>>
->>>  A better example would be atmel_sama5d4_xplained_dev_defconfig which is purely
->>> a collection of packages.
+>>>  Why is this needed? alldefconfig works fine, no?
 >>
->> It was an example. Obviously for the sama5d4, we can have a stack for
->> each board variant to be merged with a base one.
+>> Yes, indeed, this part could be removed.
 >
->  My point is, the "dev" stack (a collection of development/debug tools +
-> enabling BR2_PTHREAD_DEBUG=y) is a more convincing example of why these stacks
-> are useful.
+>  We only added alldefconfig a few months ago, perhaps your initial patch still
+> predates that.
 
-Well yes, a stack could be anything. In my POV stacks should be used
-at first to declutter config files from packages configurations
-before, then I would very see stacks for each sort of complex
-configuration that could be tricky to do right like a lamp stack or a
-QT5 one.
-
-Stack could also be used to build products and distribute it outside
-buildroot (ex on an internal git of a corporate environment). I
-imagine a software products that runs on several boards: having a
-stack ready made make easy to port it beetween boards without too much
-fuss.
-
-Obviously, merge_confg.sh could do the same thing, but hey, having
-included such a feature in buildroot looks cool to me!
+Nope, only thought that olddefconfig could be better suited.
 
 >
 >  Regards,
