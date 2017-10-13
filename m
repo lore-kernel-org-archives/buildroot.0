@@ -1,103 +1,150 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 13 Oct 2017 07:49:59 -0400
-Subject: [Buildroot] [PATCH 0/3] Add support for Meson build
-In-Reply-To: <1507790553.8783.2.camel@embedded.rocks>
-References: <20170727094528.10745-1-joerg.krause@embedded.rocks>
- <866e116f-f9be-f138-4055-8ffe94ad2d19@imgtec.com>
- <1501150411.21202.1.camel@embedded.rocks>
- <bbae61aa-7e81-21b6-d7f8-2489b39e2893@imgtec.com>
- <20170727165026.4a5f59a1@windsurf.lan>
- <CAAkeqgWMAYm3B72AggbyamW3C6tEd27WdfyyW=EoBx4uFNhOyw@mail.gmail.com>
- <20171007135843.5a75c7f5@windsurf.home>
- <7d11c269-d453-6066-e6f1-2f68dd4b81d3@smile.fr>
- <CAAkeqgV=snat2dr7MpHOc9HE4MWf5eqHX3HJQVR6P+BZb5WN1w@mail.gmail.com>
- <20171011065502.GA29633@itchy> <1507790553.8783.2.camel@embedded.rocks>
-Message-ID: <CAFSsvmqgku41Jdd47B3GEOY39BS9OzC+fZhUfFSRG2p0nUDN4w@mail.gmail.com>
+From: Alejandro Ariel Fachini <alefachinic@gmail.com>
+Date: Fri, 13 Oct 2017 09:44:06 -0300
+Subject: [Buildroot] Fwd:  [BuildRoot] at91sam9x5ek_defconfig not booting
+In-Reply-To: <CAHnuF30iK6AQeoZBn3f35q1B5Ff+SG9uGUywzKH--wPp-THVVg@mail.gmail.com>
+References: <CAHnuF31sDH93MRN8nU6kdvfymwD7LOAz56YckWrk-OLSdMx3Qg@mail.gmail.com>
+ <20171012220111.301bb3af@windsurf.home>
+ <CAHnuF30iK6AQeoZBn3f35q1B5Ff+SG9uGUywzKH--wPp-THVVg@mail.gmail.com>
+Message-ID: <CAHnuF33Z3qQeVr5o1q=K1+OgMDCEhheOQm9qCGO1TpPZrjbeVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey all;
+---------- Forwarded message ----------
+From: Alejandro Ariel Fachini <alefachinic@gmail.com>
+Date: 2017-10-12 17:30 GMT-03:00
+Subject: Re: [Buildroot] [BuildRoot] at91sam9x5ek_defconfig not booting
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-gstreamer is also moving to meson as well, so I am glad to see this
-hapening sooner than later!
 
+Mr Thomas:
+Thanks For your help. I used the tag 2017.03 and Still got the same Result
+in fact the first thing i did was use the latest version of BuildRoot.
+ If i understand correctly:
+At first Boot after Install binaries i should set environment variables,
+then saveenv and then reset. After that use bootz?
 
-Adam
+How do I make the boot into Kernel auomatic? I believe all tthis is U-Boot
+Related? If thats so just tell me and i wont bother anymore.
 
-On Thu, Oct 12, 2017 at 2:42 AM, J?rg Krause
-<joerg.krause@embedded.rocks> wrote:
-> Hi Eric,
+<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>
+Libre
+de virus. www.avast.com
+<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>
+<#m_6279347772450905483_DAB4FAD8-2DD7-40BB-A1B8-4E2AA1F9FDF2>
+
+2017-10-12 17:01 GMT-03:00 Thomas Petazzoni <thomas.petazzoni@free-
+electrons.com>:
+
+> Hello,
 >
-> On Wed, 2017-10-11 at 08:55 +0200, Eric Le Bihan wrote:
->> Hi all!
->>
->> On 17-10-10 20:51:55, Andrey Yurovsky wrote:
->> > Hi,
->> >
->> > On Sat, Oct 7, 2017 at 6:06 AM, Romain Naour <romain.naour@smile.fr> wrote:
->> > > Thomas, Andrey, All,
->> > >
->> > > Le 07/10/2017 ? 13:58, Thomas Petazzoni a ?crit :
->> > > > Hello,
->> > > >
->> > > > On Fri, 6 Oct 2017 15:39:03 -0700, Andrey Yurovsky wrote:
->> > > >
->> > > > > On Thu, Jul 27, 2017 at 7:50 AM, Thomas Petazzoni
->> > > > > <thomas.petazzoni@free-electrons.com> wrote:
->> > > > > > No, let's wait to have a few Meson-based packages in Buildroot, and
->> > > > > > then we'll have a package infrastructure. This will allow us to see
->> > > > > > what are the commonalities, what are the differences, etc.
->> > > > >
->> > > > > systemd 235 is released (https://lwn.net/Articles/735691/) and it
->> > > > > drops autoconf/automake and only has meson as the build system (in 234
->> > > > > they warned this would happen next) so perhaps that's a good starting
->> > > > > point for buildroot to integrate meson support? I'm happy to help out
->> > > > > if no one else was already working on it.
->> > > >
->> > > > This would indeed be a very compelling reason to support meson.
->> > >
->> > > Also the next enlightenment release (0.22) will only support meson.
->> > >
->> >
->> > I was able to add a package/pkg-meson.mk wrapper (that seems to be
->> > missing from the Meson patch set, or did I completely miss it?) and
->> > built the previously submitted libmpdclient version bump via the
->> > $(eval $(meson-package)) wrapper. I'll work on version bumping systemd
->> > and converting it to use that wrapper as well. If possible I'd like to
->> > get this more or less right, what would a reasonable patch set look
->> > like? I was thinking, as a patch set:
->> > 1. resubmit the Meson patches (package/meson, documentation) by J?rg Krause
->>
->> I resubmitted the series, with a version bump to 0.43.0 and other
->> suggested changes.
->>
->> @J?rg: in your respin of the series, why was the github helper dropped
->> in favor of a direct tarball download?
->>
+> On Thu, 12 Oct 2017 16:11:38 -0300, Alejandro Ariel Fachini wrote:
 >
-> As Arnout has responded in a follow-up review, we prefer an uploaded
-> tarball because the github tarballs might change from time to time.
-> Furthermore, the uploaded tarballs often contains autogenerated files
-> which frees us from doing autoreconf for the package.
+> > following resulting files, I am using this buildroot tag; *2016.02-rc3*:
 >
->> > 2. add package/pkg-meson.mk
->> > 3. resubmit the libmpdclient version bump patch by J?rg Krause but
->> > with $(eval $(meson-package)) changes
->> > 4. submit the systemd version bump and meson conversion patch(es)
->> >
->> > That way we have the infrastructure, documentation, and two packages
->> > utilizing the infrastructure in one set to review. Does that sound
->> > alright?
->>
->> @Andrey: I'll be happy to test your patches.
->>
+> Why use this tag, which is old *and* is a release candidate and not a
+> final stable release ?
+>
+> > I have to flash the device with windows where my Ubuntu VM runs.
+> > The flashing addresses aree found inside the script for flashing being:
+> >
+> >    - 0x0 for atboostrap.bin
+> >
+> >
+> >    - 0x40000 for u-boot.bin
+> >
+> >
+> >    - 0x180000 for at91sam9x35ek.dtb
+> >
+> >
+> >    - 0x200000 for zImage
+> >
+> >
+> >    - 0x800000 for rootfs.ubi
+> >
+> > This configuration won't boot KERNEL. System goes to u-boot> prompt and
+> > when i use:
+> > *bootz 0x22000000 - 0x21000000*
+>
+> Those addresses (0x22000000 and 0x21000000) are addresses in RAM. You
+> have to load zImage from flash to RAM at 0x22000000 and
+> at91sam9x35ek.dtb from flash to RAM at 0x21000000 prior to issuing the
+> "bootz" command. "bootz" only starts the kernel. If you haven't loaded
+> the kernel and device tree before running bootz, it obviously cannot
+> work.
+>
+> > So i have a set of questions may be related to my inexperience:
+> >
+> > 1- In my Buildroots build on my Ubuntu enviroment, if the file
+> > *at91bootstrap.bin* is my ATbootstrap bootloader, what is the file
+> > *at91sam9x5ek-nandflashboot-uboot-3.8.bin*?
+>
+> They are exactly identical:
+>
+> $ md5sum at91bootstrap.bin at91sam9x5ek-nandflashboot-uboot-3.8.8.bin
+> fef2c8c4cf8eef64e28488324b11f86b  at91bootstrap.bin
+> fef2c8c4cf8eef64e28488324b11f86b  at91sam9x5ek-nandflashboot-ubo
+> ot-3.8.8.bin
+>
+> > 2- What is the file *boot.bin*?
+>
+> It's again the same thing:
+>
+> fef2c8c4cf8eef64e28488324b11f86b  boot.bin
+>
+> The bootloader must be named boot.bin when you're doing SD card based
+> boot, but that's not what you're doing here, so you don't care.
+>
+> > 3-Where is the file with the U_BOOT enviroment variables, in the compiled
+> > Buildroot results?????
+>
+> No such file is produced. Therefore, the U-Boot environment on flash is
+> empty. But the U-Boot binary embeds a default environment, which takes
+> precedence when there is no environment defined in flash.
+>
+> > 4-I used "make at91sam9x5ek_defconfig", then "make". Does this means that
+> > the default configuration in these files are not working???
+>
+> I believe they are working. Have you followed the instructions in
+> board/atmel/readme.txt ?
+>
+> > 5- Where do i set for building the file with Uboot Environment Variables?
+>
+> You don't need this for a basic build.
+>
+> > 6- Do i need to apply patches to the newest Bootloader version?
+>
+> No, it should work as-is.
+>
+> > 7- How do i do to change UBI format to jffs2 for compiling? i know how to
+> > do it in buildroot's menuconfig, but environment variables still sets to
+> > UBI.
+>
+> Just don't use JFFS2. UBI is the thing you want to use.
+>
+> Once again, please follow the instructions in board/atmel/readme.txt,
+> this should get you running.
+>
+> Also, I suggest that you go through Free Electrons training materials
+> (both slides [1] and labs [2] are available, and labs are done on an Atmel
+> SAMA5D3 Xplained, with has lots of similarities). This would help
+> giving you the background necessary.
+>
+> [1] http://free-electrons.com/doc/training/embedded-linux/embedd
+> ed-linux-slides.pdf
+> [2] http://free-electrons.com/doc/training/embedded-linux/embedd
+> ed-linux-labs.pdf
 >
 > Best regards,
-> J?rg Krause
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171013/e7c5ad35/attachment.html>
