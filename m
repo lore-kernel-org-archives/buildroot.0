@@ -1,42 +1,132 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Oct 2017 22:39:52 +0200
-Subject: [Buildroot] [PATCH] wireguard: bump to version 0.0.20171011
-Message-ID: <20171013203952.8670-1-peter@korsgaard.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 13 Oct 2017 19:01:16 -0300
+Subject: [Buildroot] [PATCH] configs/mx6udoo: Bump kernel and U-Boot versions
+Message-ID: <1507932076-19487-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Bump the kernel to version 4.13.5 and U-Boot to 2017.09.
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 1f55b7a6e7..8879f5fbbe 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2017-October/001791.html
--sha256 832a3b7cbb510f6986fd0c3a6b2d86bc75fc9f23b6754d8f46bc58ea8e02d608  WireGuard-0.0.20171005.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2017-October/001815.html
-+sha256  e2e44ff658743507bca0f6b443c2f85aacc48d507ba2dcd4812717145df10b96 WireGuard-0.0.20171011.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 0ecb90022b..502a384c0f 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20171005
-+WIREGUARD_VERSION = 0.0.20171011
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+While at it, remove the custom scripts for generating the SD card image
+and use the standard scripts instead.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ board/udoo/mx6qdl/genimage.cfg  | 48 -----------------------------------------
+ board/udoo/mx6qdl/post-image.sh | 14 ------------
+ configs/mx6udoo_defconfig       | 10 ++++-----
+ 3 files changed, 5 insertions(+), 67 deletions(-)
+ delete mode 100644 board/udoo/mx6qdl/genimage.cfg
+ delete mode 100755 board/udoo/mx6qdl/post-image.sh
+
+diff --git a/board/udoo/mx6qdl/genimage.cfg b/board/udoo/mx6qdl/genimage.cfg
+deleted file mode 100644
+index 4361d54..0000000
+--- a/board/udoo/mx6qdl/genimage.cfg
++++ /dev/null
+@@ -1,48 +0,0 @@
+-# Minimal microSD card image for Udoo MX6Q/DL boards
+-#
+-# We mimic the .sdcard Freescale's image format for i.MX6:
+-# * the microSD card must have 1 kB free space at the beginning,
+-# * U-Boot is dumped as is,
+-# * a FAT partition at offset 16 MB is containing zImage and dtbs,
+-# * a single root filesystem partition is required (Ext4 in this case).
+-#
+-
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"imx6q-udoo.dtb",
+-			"imx6dl-udoo.dtb",
+-			"zImage"
+-		}
+-	}
+-	size = 16M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition SPL {
+-		in-partition-table = "no"
+-		image = "SPL"
+-		offset = 1K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.img"
+-		offset = 69K
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-		offset = 16M
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/udoo/mx6qdl/post-image.sh b/board/udoo/mx6qdl/post-image.sh
+deleted file mode 100755
+index b4ac460..0000000
+--- a/board/udoo/mx6qdl/post-image.sh
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/usr/bin/env bash
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage \
+-  --rootpath "${TARGET_DIR}" \
+-  --tmppath "${GENIMAGE_TMP}" \
+-  --inputpath "${BINARIES_DIR}" \
+-  --outputpath "${BINARIES_DIR}" \
+-  --config "${GENIMAGE_CFG}"
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+index bf2a596..ad88129 100644
+--- a/configs/mx6udoo_defconfig
++++ b/configs/mx6udoo_defconfig
+@@ -3,22 +3,22 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/mx6qdl/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="udoo"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/mx6qdl/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
-2.11.0
+2.7.4
