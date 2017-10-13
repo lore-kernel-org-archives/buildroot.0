@@ -1,45 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Oct 2017 15:50:28 +0200
-Subject: [Buildroot] [BuildRoot] at91sam9x5ek_defconfig not booting
-In-Reply-To: <CAHnuF33Z3qQeVr5o1q=K1+OgMDCEhheOQm9qCGO1TpPZrjbeVw@mail.gmail.com>
-References: <CAHnuF31sDH93MRN8nU6kdvfymwD7LOAz56YckWrk-OLSdMx3Qg@mail.gmail.com>
- <20171012220111.301bb3af@windsurf.home>
- <CAHnuF30iK6AQeoZBn3f35q1B5Ff+SG9uGUywzKH--wPp-THVVg@mail.gmail.com>
- <CAHnuF33Z3qQeVr5o1q=K1+OgMDCEhheOQm9qCGO1TpPZrjbeVw@mail.gmail.com>
-Message-ID: <20171013155028.77a75504@windsurf.lan>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 13 Oct 2017 09:54:30 -0400
+Subject: [Buildroot] [PATCH v6 1/5] libselinux: bump to 2.7
+Message-ID: <20171013135434.32676-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+remove patch as it's in this release.
 
-On Fri, 13 Oct 2017 09:44:06 -0300, Alejandro Ariel Fachini wrote:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - None
 
-> Thanks For your help. I used the tag 2017.03 and Still got the same Result
+Changes v2 -> v3:
+  - None
 
-There is no 2017.03 tag, so this is not possible.
+Changes v3 -> v4:
+  - None
 
-> in fact the first thing i did was use the latest version of BuildRoot.
->  If i understand correctly:
-> At first Boot after Install binaries i should set environment variables,
+Changes v4 -> v5:
+  - None
 
-No, the default environment variables set inside the U-Boot binary
-should be good enough.
+Changes v5 -> v6:
+  - None
 
-> How do I make the boot into Kernel auomatic? I believe all tthis is U-Boot
-> Related? If thats so just tell me and i wont bother anymore.
+ ...src-regex.c-support-old-compilers-for-the.patch | 47 ----------------------
+ package/libselinux/libselinux.hash                 |  4 +-
+ package/libselinux/libselinux.mk                   |  4 +-
+ 3 files changed, 4 insertions(+), 51 deletions(-)
+ delete mode 100644 package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
 
-This is all U-Boot related of course. Please read the materials that I
-pointed in my previous e-mail. And as I said, the default U-Boot
-environment should automatically load and boot a Linux kernel, if I
-remember correctly.
-
-Best regards,
-
-Thomas
+diff --git a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch b/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
+deleted file mode 100644
+index 3bda607512..0000000000
+--- a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From e0803c0bdbb1abf06b6b5bb1b52fdb733505b8f7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 25 Jan 2017 22:41:02 +1300
+-Subject: [PATCH] src/regex.c: support old compilers for the endian
+- check
+-
+-libselinux 2.6 has added some code in regex.c that uses __BYTE_ORDER__
+-to determine the system endianness. Unfortunately, this definition
+-provided directly by the compiler doesn't exist in older gcc versions
+-such as gcc 4.4.
+-
+-In order to address this, this commit extends the logic to use
+-<endian.h> definitions if __BYTE_ORDER__ is not provided by the
+-compiler. This allows libselinux to build properly with gcc 4.4.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/regex.c | 13 ++++++++++++-
+- 1 file changed, 12 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/regex.c b/src/regex.c
+-index a3b427b..0c5ad27 100644
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -13,7 +13,18 @@
+- #endif
+- 
+- #ifndef __BYTE_ORDER__
+--#error __BYTE_ORDER__ not defined. Unable to determine endianness.
+-+
+-+/* If the compiler doesn't define __BYTE_ORDER__, try to use the C
+-+ * library <endian.h> header definitions. */
+-+#include <endian.h>
+-+#ifndef __BYTE_ORDER
+-+#error Neither __BYTE_ORDER__ nor __BYTE_ORDER defined. Unable to determine endianness.
+-+#endif
+-+
+-+#define __ORDER_LITTLE_ENDIAN __LITTLE_ENDIAN
+-+#define __ORDER_BIG_ENDIAN __BIG_ENDIAN
+-+#define __BYTE_ORDER__ __BYTE_ORDER
+-+
+- #endif
+- 
+- #ifdef USE_PCRE2
+--- 
+-2.7.4
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 76130b2dc0..3c60d5111d 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 4ea2dde50665c202253ba5caac7738370ea0337c47b251ba981c60d24e1a118a libselinux-2.6.tar.gz
++# From: https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256 d0fec0769b3ad60aa7baf9b9a4b7a056827769dc2dadda0dc0eb59b3d1c18c57 libselinux-2.7.tar.gz
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f23eea4962..8ac8000de5 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSELINUX_VERSION = 2.6
+-LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
++LIBSELINUX_VERSION = 2.7
++LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.6
