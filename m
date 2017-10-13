@@ -1,83 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Oct 2017 08:31:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-10-12
-Message-ID: <20171013063111.E5D1620820@mail.free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 13 Oct 2017 08:31:22 +0200
+Subject: [Buildroot] [RFC 0/3] Adding software stacks
+In-Reply-To: <CA+TH9VmG3vnC_1Nx92kQNeeTobW1SiBbts_9o+M4bX4xaYH2Wg@mail.gmail.com>
+References: <1507668210-5427-1-git-send-email-angelo.compagnucci@gmail.com>
+ <60e44779-04da-d7d4-9589-cfef09d1a226@mind.be>
+ <CA+TH9VmG3vnC_1Nx92kQNeeTobW1SiBbts_9o+M4bX4xaYH2Wg@mail.gmail.com>
+Message-ID: <cd5b6907-c2d0-c68d-662b-40c4567fbdb4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Build statistics for 2017-10-12
-================================
-
-      successes : 127
-       failures : 34 
-       timeouts : 0  
-          TOTAL : 161
-
-Classification of failures by reason
-====================================
-
-      host-uboot-tools-2017.07 | 6 
-             dbus-python-1.2.4 | 4 
-            libtomcrypt-1.18.0 | 3 
-wiringpi-96344ff7125182989f... | 3 
-           argp-standalone-1.3 | 2 
-                  cc-tool-0.26 | 2 
-                    ipset-6.34 | 2 
-                 msgpack-2.1.5 | 2 
-                  boost-1.64.0 | 1 
-             lttng-tools-2.9.5 | 1 
-                 mesa3d-17.2.2 | 1 
-                 mplayer-1.3.0 | 1 
-                     nmap-7.60 | 1 
-                openjpeg-2.2.0 | 1 
-pdbg-77158819158d1d7053a737... | 1 
-         python-gobject-2.28.6 | 1 
-           uboot-tools-2017.07 | 1 
-                     vlc-2.2.6 | 1 
 
 
-Detail of failures
-===================
+On 12-10-17 08:13, Angelo Compagnucci wrote:
+> Dear Arnout Vandecappelle
+> 
+> 2017-10-11 23:38 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>  Hi Angelo,
+>>
+>> On 10-10-17 22:43, Angelo Compagnucci wrote:
+>>> Software stacks are a way to define a group of options that should be used together and they are orthogonal to configs: a software stack can indeed be shared among several configs.
+>>
+>>  Wow, you always come with the innovative ideas, don't you?
+> 
+> Could you point me where I said it's innovative?
 
-         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/a40c32ed509bcbc701c7d571bca3af21dd4169aa |     
-         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/7e434d1cc07b06bc72bf10e7810113497f45d9db |     
-     powerpc |                   boost-1.64.0 | NOK | http://autobuild.buildroot.net/results/0d71bc24d55d2f8db5c9ac178922c3d956ab1b0f |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/15bca343558f28bb9994afc8262d5c7ff14a3f1c |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/51f3ffff1a23fa201385c1ef083f6a3f61162a07 |     
-      x86_64 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/eb31135326356ff4238e08d9f1c8324e4da80d3f | ORPH
-        i586 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/56daa9d6e36af3a22c5265ca13c67b2651e4f145 | ORPH
-    mips64el |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/b15e97a3aa2a2482f9daa14940ed94600f2d5958 | ORPH
-       nios2 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/765837f4765ade76d85431128d01b94e737e034e | ORPH
-      x86_64 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc | ORPH
-      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/efb79b773080c81223123cbf113b382f45dc480b | ORPH
-      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/3e699c976db89dd116d891b6ed821c12cffad01d | ORPH
-        or1k |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/1014a6c2728ef49b332aa3ed169125a0d5a0ae1e | ORPH
-      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/53e05fd1317242363f0e934b6ccbec377ea1e88c | ORPH
-         arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/9c6987c55a556c30e927b8d7d6f93a91a502f623 | ORPH
-        i586 |                     ipset-6.34 | NOK | http://autobuild.buildroot.net/results/b56a6e3b5036c10f2f2b74e36c130d751b2c1312 |     
-         arm |                     ipset-6.34 | NOK | http://autobuild.buildroot.net/results/0dc984427c16fc65a19abaecf17e52c0ca680a80 |     
-microblazeel |             libtomcrypt-1.18.0 | NOK | http://autobuild.buildroot.net/results/466672ed9e81c0542410293d7d5ea6bfbd65156d |     
-microblazeel |             libtomcrypt-1.18.0 | NOK | http://autobuild.buildroot.net/results/5ae4de8c33ee87a50684389d47399d03e79d07e7 |     
-         arm |             libtomcrypt-1.18.0 | NOK | http://autobuild.buildroot.net/results/f2ca8d61a9923490b40b349cd77fc4245167064d |     
-      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/d0281086cb150388be1025a09be7f58357b15860 |     
-     powerpc |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/021ada409e2de4e180552550a9883bd0e30f8755 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/5ac74031bf71f8a5f8c2bab6a3b0906ab769e043 |     
-         arm |                  msgpack-2.1.5 | NOK | http://autobuild.buildroot.net/results/22f64ae9beb6ddf5a52f627685c35f19565296c6 |     
-        or1k |                  msgpack-2.1.5 | NOK | http://autobuild.buildroot.net/results/7a395c50a7a1629de55d08bc026b952ce2486b2d |     
-        or1k |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/dad004e1850842f59b4b65898b64566d7d0d2a26 |     
-         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/bea737632a93f68c0a56f027b5d791ec5514615f |     
-    mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/e1a1002a50c2e9c1f8e2556b96508421258a7077 |     
-         sh4 |          python-gobject-2.28.6 | NOK | http://autobuild.buildroot.net/results/51c500035d1c964aadfbb24856597a8adab5c877 |     
-        m68k |            uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/e941da09b3a9f5a2c8af6976be4ca34cb8951e37 | ORPH
-    mips64el |                      vlc-2.2.6 | NOK | http://autobuild.buildroot.net/results/978bfc62128c7a5a24b949ff79ac30deb21be74d |     
-         arm | wiringpi-96344ff7125182989f... | NOK | http://autobuild.buildroot.net/results/473d60a6aadd5cb72164a33c537b0c968ba6019e |     
-         arc | wiringpi-96344ff7125182989f... | NOK | http://autobuild.buildroot.net/results/11cd355eda63aae414a1714187607ff388d93695 |     
-    mips64el | wiringpi-96344ff7125182989f... | NOK | http://autobuild.buildroot.net/results/334f5af36c42b2eee094444a33b0bd3dff82f536 |     
+ You didn't say it, but I thought it was innovative. Sorry, I probably didn't
+express myself clearly. When I saw your patch series the first time, I
+immediately thought "hey, this is nice" and started composing this answer (but
+only this sentence). But then I realized we had discussed something like this
+before both on the list and in face-to-face meetings, so I left it to have a
+sleep on it before continuing. I realize now that the rest of my mail can come
+over pretty critical. With my
+
+ So to clarify (hopefully :-): I really like the idea of adding software stacks
+(good name BTW, because I was thinking of "packages of packages" which sounds
+awful). I also like the idea of making it very easy for people to add those
+stacks together. But only if there is a real added value compared to calling
+merge_config.sh directly. Some of my comments in patch 2/3 are meant to go in
+that direction.
+
+ Also, I only give my own opinion. This may or may not represent the position of
+most of the community.
+
+>>  We discussed such a feature before, but never came up with an elegant way to do
+>> it, and that was better than just calling merge_config.sh.
+> 
+> I'm only proposing my POV.
+> 
+>>> Having a stack system like the one envisioned in this patch series make possible to do something like this:
+>>>
+>>> make imx6-sabresd_defconfig; make mesa3d-etnaviv_stack qt5-fb_stack qt5-demos_stack; make
+>>
+>>  So yeah, is this really better than
+>>
+>> ./utils/merge_config.sh configs/imx6-sabresd_defconfig
+>> stacks/mesa3d-etnaviv_stack stacks/qt5-fb_stack stacks/qt5-demos_stack; make
+>>
+>> ? Yes, it is significantly shorter, but you can at least use tab-completion.
+> 
+> Well, the difference is that on the mailing list or the documentation
+> you can say "there's a defined way in buildroot to do this thing"
+> instead of "you should merge your configurations manually". Explicit
+> is better than implicit!
+
+ Very true. But calling merge_config.sh is also a defined way, isn't it?
+
+
+>>  That said, I'm not absolutely opposed to the idea. But I'm not convinced either.
+> 
+> It's not a problem for me to have a makefile target or not, I really
+> want to know if it's an acceptance to the idea and if I should spend
+> some time to refine it. If it's a no go, please tell me!
+
+ I don't want to say you shouldn't spend time on it. Perhaps the best approach
+is to start with the stacks themselves and document how to use them, and we can
+add make rules or scripts later on.
+
+
+>>  Adding stacks, on the other hand, seems like a worthwhile endeavour.
+>>
+>>
+>>> In this way we can declutter redundant configs (ex: imx6-sabresd_qt5_defconfig) and decouple software packages side related symbols from hardware related defconfigs.
+>>
+>>  Not the best example, because imx6-sabresd_qt5_defconfig contains quite a few
+>> board-specific adaptions: a kconfig fragment and a rootfs overlay. And of course
+>> increasing the ext2 rootfs size.
+>>
+>>  A better example would be atmel_sama5d4_xplained_dev_defconfig which is purely
+>> a collection of packages.
+> 
+> It was an example. Obviously for the sama5d4, we can have a stack for
+> each board variant to be merged with a base one.
+
+ My point is, the "dev" stack (a collection of development/debug tools +
+enabling BR2_PTHREAD_DEBUG=y) is a more convincing example of why these stacks
+are useful.
+
+ Regards,
+ Arnout
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
