@@ -1,147 +1,83 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Oct 2017 17:24:05 +0200
-Subject: [Buildroot] pre-built binary packages
-In-Reply-To: <516314793.13478025.1507760722546.JavaMail.zimbra@datacom.ind.br>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A477BB220F1@MARCM-SBS2011.marcmltd.local>
- <20171011151137.469e7fd6@windsurf.lan>
- <572050367.13476787.1507757774068.JavaMail.zimbra@datacom.ind.br>
- <20171011235642.610fdc3d@windsurf.lan>
- <516314793.13478025.1507760722546.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <4b3756cb-23ec-48d2-63dc-0e2399c6f8ac@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Oct 2017 08:31:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-10-12
+Message-ID: <20171013063111.E5D1620820@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+Hello,
 
-On 12-10-17 00:25, Henrique Marks wrote:
-[snip]
->> Let's say you have a binary artifact of Qt5. But that artifact was
->> created with a given set of Qt5 configuration options. If you change
->> any Qt5 configuration option in Buildroot, then your binary artifact
->> should no longer be used.
+Build statistics for 2017-10-12
+================================
 
- If I understand Henrique correctly, what they do in such a case is that they
-"manually" remove the artifact in that case, and additionally remove any package
-that depends on qt5 with
-make qt5-rrdepends | sed -s 's/$/-artifact.tar.gz/' | xargs rm -f
+      successes : 127
+       failures : 34 
+       timeouts : 0  
+          TOTAL : 161
 
- So if you follow the rules (manually clean the artifacts and their dependencies
-whenever you change anything), it works fine.
+Classification of failures by reason
+====================================
 
- It is of course a problem when there is a dependency that Buildroot doesn't
-know about. But that will be solved with per-package staging.
-
-
->> The situation becomes worse with optional dependencies. You have built
->> package FOO, which optionally depends on BAR, but BAR was disabled. You
->> create a binary artifact of FOO, and re-use it to avoid rebuilding.
->> Later on, you enable BAR. How do you notice that your binary artifact
->> of FOO is no longer correct and should be rebuilt ?
-
- This one is covered by bar-rrdepends, because after the config change foo will
-be in bar-rrdepends. What doesn't work, however, is the reverse: you enable
-openssl and botan, you build. Then you realize you don't need openssl so you
-remove it and do a clean rebuild. Now botan-rrdepends does NOT contain openssl,
-so the botan artifact will be reused. You start botan and it doesn't find
-openssl.so...
+      host-uboot-tools-2017.07 | 6 
+             dbus-python-1.2.4 | 4 
+            libtomcrypt-1.18.0 | 3 
+wiringpi-96344ff7125182989f... | 3 
+           argp-standalone-1.3 | 2 
+                  cc-tool-0.26 | 2 
+                    ipset-6.34 | 2 
+                 msgpack-2.1.5 | 2 
+                  boost-1.64.0 | 1 
+             lttng-tools-2.9.5 | 1 
+                 mesa3d-17.2.2 | 1 
+                 mplayer-1.3.0 | 1 
+                     nmap-7.60 | 1 
+                openjpeg-2.2.0 | 1 
+pdbg-77158819158d1d7053a737... | 1 
+         python-gobject-2.28.6 | 1 
+           uboot-tools-2017.07 | 1 
+                     vlc-2.2.6 | 1 
 
 
->> So yes, you can use binary artifact, but only if you are very, very,
->> very, very, very careful, and you have a full and complete
->> understanding of what you're doing. You can shoot yourself in the foot
->> very easily.
->>
->> Best regards,
->>
-> 
-> Yes, that's why it is not "upstreamable".
-> 
-> We have an integration process, that publish new binary artifacts for all packages and all platforms. It is extremely controlled.
-> 
-> But, i disagree about "shooting yourself in the foot easily": it never happened, in some YEARS using it. Or we are very special (very smart) or it is not so hard. The second option is the right one.
+Detail of failures
+===================
 
- First of all, you are smart because you do properly clean artifacts when needed
-(except in the cases I mentioned, but perhaps you cover even those). Second, I
-think that when you do have an accident, you will indeed know what was the
-problem and fixed it by just removing the artifact. It's so easy you hardly
-would have noticed.
-
-
- There is one more element that is tricky that Thomas didn't mention:
-STAGING_DIR is full of absolute paths, so you must always build in the same
-directory. Sometimes it works because almost everything is installed in
-$(STAGING_DIR)/usr/lib, but there is a reasonable risk that you get into trouble
-when you change the build directory.
-
-
-> I would say to Marc try it. An example (qt5base.mk)
-> 
-> define QT5BASE_INSTALL_STAGING_CMDS
->         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->         $(QT5_LA_PRL_FILES_FIXUP)
-> endef
-> 
-> define QT5BASE_INSTALL_TARGET_EXAMPLES
->         if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
->                 mkdir -p $(TARGET_DIR)/usr/lib/qt/examples ; \
->                 cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* $(TARGET_DIR)/usr/lib/qt/examples ; \
->         fi
-> endef
-> 
-> define FAKE_STAGING
-> define FAKE_TARGET
-> 
-> and
-> 
-> use this FAKE_STAGING in place of (@D) in the STAGING part and FAKE_TARGET in the TARGET part. Something like this:
-> 
-> define QT5BASE_INSTALL_STAGING_CMDS
->         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->         $(TARGET_MAKE_ENV) $(MAKE) -C $(FAKE_STAGING) install
->         $(QT5_LA_PRL_FILES_FIXUP)
-
- You'll want to do the QT5_LA_PRL_FILES_FIXUP as well, no?
-
-> endef
-> 
-> define QT5BASE_INSTALL_TARGET_EXAMPLES
->         if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
->                 mkdir -p $(TARGET_DIR)/usr/lib/qt/examples ; \
->                 cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* $(TARGET_DIR)/usr/lib/qt/examples ; \
->                 mkdir -p $(FAKE_TARGET_DIR)/usr/lib/qt/examples ; \
->                 cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* $(FAKE_TARGET)/usr/lib/qt/examples ; \
->         fi
-> endef
-
- You don't even need to do this. Just replace the definition of STAGING_DIR and
-TARGET_DIR:
-
-GLOBAL_STAGING_DIR = $(HOST_DIR)/$(STAGING_SUBDIR)
-STAGING_DIR = $(if $(PKG),$($(PKG)_STAGING_DIR),$(GLOBAL_STAGING_DIR))
-
- Then add an install-staging-end and install-target-end step that makes a
-tarball of $($(PKG)_STAGING_DIR) and extracts it into $(GLOBAL_STAGING_DIR).
-
- There's one problem with this global approach: there are some packages that do
-tricky things, like installing stuff in host-dir during target-install.So these
-will have to be worked around.
-
- The good news is that Thomas is (AFAIU) paid to do exactly that right now.
-
- Regards,
- Arnout
-
-
-> When you build, you will have these artifacts in the fake staging and target. Create a tarball (in the recipe, when building from source), and use the tarball (in the recipe, when building from binary), and that's it (put the stamp files in the tarball also, of course).
-
+         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/a40c32ed509bcbc701c7d571bca3af21dd4169aa |     
+         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/7e434d1cc07b06bc72bf10e7810113497f45d9db |     
+     powerpc |                   boost-1.64.0 | NOK | http://autobuild.buildroot.net/results/0d71bc24d55d2f8db5c9ac178922c3d956ab1b0f |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/15bca343558f28bb9994afc8262d5c7ff14a3f1c |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/51f3ffff1a23fa201385c1ef083f6a3f61162a07 |     
+      x86_64 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/eb31135326356ff4238e08d9f1c8324e4da80d3f | ORPH
+        i586 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/56daa9d6e36af3a22c5265ca13c67b2651e4f145 | ORPH
+    mips64el |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/b15e97a3aa2a2482f9daa14940ed94600f2d5958 | ORPH
+       nios2 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/765837f4765ade76d85431128d01b94e737e034e | ORPH
+      x86_64 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc | ORPH
+      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/efb79b773080c81223123cbf113b382f45dc480b | ORPH
+      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/3e699c976db89dd116d891b6ed821c12cffad01d | ORPH
+        or1k |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/1014a6c2728ef49b332aa3ed169125a0d5a0ae1e | ORPH
+      xtensa |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/53e05fd1317242363f0e934b6ccbec377ea1e88c | ORPH
+         arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/9c6987c55a556c30e927b8d7d6f93a91a502f623 | ORPH
+        i586 |                     ipset-6.34 | NOK | http://autobuild.buildroot.net/results/b56a6e3b5036c10f2f2b74e36c130d751b2c1312 |     
+         arm |                     ipset-6.34 | NOK | http://autobuild.buildroot.net/results/0dc984427c16fc65a19abaecf17e52c0ca680a80 |     
+microblazeel |             libtomcrypt-1.18.0 | NOK | http://autobuild.buildroot.net/results/466672ed9e81c0542410293d7d5ea6bfbd65156d |     
+microblazeel |             libtomcrypt-1.18.0 | NOK | http://autobuild.buildroot.net/results/5ae4de8c33ee87a50684389d47399d03e79d07e7 |     
+         arm |             libtomcrypt-1.18.0 | NOK | http://autobuild.buildroot.net/results/f2ca8d61a9923490b40b349cd77fc4245167064d |     
+      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/d0281086cb150388be1025a09be7f58357b15860 |     
+     powerpc |                  mesa3d-17.2.2 | NOK | http://autobuild.buildroot.net/results/021ada409e2de4e180552550a9883bd0e30f8755 |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/5ac74031bf71f8a5f8c2bab6a3b0906ab769e043 |     
+         arm |                  msgpack-2.1.5 | NOK | http://autobuild.buildroot.net/results/22f64ae9beb6ddf5a52f627685c35f19565296c6 |     
+        or1k |                  msgpack-2.1.5 | NOK | http://autobuild.buildroot.net/results/7a395c50a7a1629de55d08bc026b952ce2486b2d |     
+        or1k |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/dad004e1850842f59b4b65898b64566d7d0d2a26 |     
+         arm |                 openjpeg-2.2.0 | NOK | http://autobuild.buildroot.net/results/bea737632a93f68c0a56f027b5d791ec5514615f |     
+    mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/e1a1002a50c2e9c1f8e2556b96508421258a7077 |     
+         sh4 |          python-gobject-2.28.6 | NOK | http://autobuild.buildroot.net/results/51c500035d1c964aadfbb24856597a8adab5c877 |     
+        m68k |            uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/e941da09b3a9f5a2c8af6976be4ca34cb8951e37 | ORPH
+    mips64el |                      vlc-2.2.6 | NOK | http://autobuild.buildroot.net/results/978bfc62128c7a5a24b949ff79ac30deb21be74d |     
+         arm | wiringpi-96344ff7125182989f... | NOK | http://autobuild.buildroot.net/results/473d60a6aadd5cb72164a33c537b0c968ba6019e |     
+         arc | wiringpi-96344ff7125182989f... | NOK | http://autobuild.buildroot.net/results/11cd355eda63aae414a1714187607ff388d93695 |     
+    mips64el | wiringpi-96344ff7125182989f... | NOK | http://autobuild.buildroot.net/results/334f5af36c42b2eee094444a33b0bd3dff82f536 |     
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+http://autobuild.buildroot.net
