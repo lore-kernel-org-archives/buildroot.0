@@ -1,8 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Oct 2017 13:40:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: bump version to
-	20170815
-Message-ID: <20171014114019.6762-1-bernd.kuhls@t-online.de>
+Date: Sat, 14 Oct 2017 13:50:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zstd: bump version to 1.3.2
+Message-ID: <20171014115036.25841-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libhdhomerun/libhdhomerun.hash | 2 +-
- package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ package/zstd/zstd.hash | 2 +-
+ package/zstd/zstd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-index 702007fb58..e7b7759fcf 100644
---- a/package/libhdhomerun/libhdhomerun.hash
-+++ b/package/libhdhomerun/libhdhomerun.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 7fa5f7bf6a..69e617f1d3 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256 23a3484723f3744eb38349d19cbe7d25b5bed27adf64929bd174c1669b194a8a  libhdhomerun_20161117.tgz
-+sha256 a9c14edb0ad0b0432bf64048c4a3e2f71a48298e80416d884d0b33428d65ca65  libhdhomerun_20170815.tgz
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index b624400b5b..47e6d22f61 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
+-sha256 312fb9dc75668addbc9c8f33c7fa198b0fc965c576386b8451397e06256eadc6 zstd-v1.3.1.tar.gz
++sha256 ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a zstd-v1.3.2.tar.gz
+ 
+ # License files (locally computed as well)
+ sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 88646eb16e..592e85ae61 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHDHOMERUN_VERSION = 20161117
-+LIBHDHOMERUN_VERSION = 20170815
- LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
- LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
- LIBHDHOMERUN_LICENSE = LGPL-2.1+
+-ZSTD_VERSION = v1.3.1
++ZSTD_VERSION = v1.3.2
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+ ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
+ ZSTD_LICENSE_FILES = LICENSE COPYING
 -- 
 2.11.0
