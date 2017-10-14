@@ -1,51 +1,227 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Oct 2017 22:11:52 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] hostapd: fix upstream URL
-Message-ID: <20171015200943.E54577FCB4@busybox.osuosl.org>
+Date: Sat, 14 Oct 2017 22:26:42 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] xlib_libXfont{,
+	2}: add upstream security fixes
+Message-ID: <20171015200943.C6BFA80F9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d63e4332dfb6aec9122a427756a225684274f49
+commit: https://git.buildroot.net/buildroot/commit/?id=cd12cca54c29181e299748714d2fda94fdcc59a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-hostapd project URL has been changed to w1.fi/hostapd.
-The old domain epitest.fi has expired.
+Fixes the following security issues:
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+CVE-2017-13720 - Check for end of string in PatternMatch
+
+CVE-2017-13722 - pcfGetProperties: Check string boundaries
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8a2396b90aeb411a856335d976a427eed6e115bc)
+(cherry picked from commit 46a54b6464d09edc36ae0d1d041f89ffd77b3ea1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/Config.in  | 2 +-
- package/hostapd/hostapd.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...nd-of-string-in-PatternMatch-CVE-2017-137.patch | 34 ++++++++++++++
+ ...rties-Check-string-boundaries-CVE-2017-13.patch | 52 ++++++++++++++++++++++
+ ...nd-of-string-in-PatternMatch-CVE-2017-137.patch | 34 ++++++++++++++
+ ...rties-Check-string-boundaries-CVE-2017-13.patch | 52 ++++++++++++++++++++++
+ 4 files changed, 172 insertions(+)
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 62fbb66..1609d0d 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_HOSTAPD
- 	  IEEE 802.1X/WPA/WPA2/EAP authenticators, RADIUS client,
- 	  EAP server and RADIUS authentication server.
- 
--	  http://hostap.epitest.fi/
-+	  http://w1.fi/hostapd/
- 
- if BR2_PACKAGE_HOSTAPD
- 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index a499011..39c8788 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HOSTAPD_VERSION = 2.6
--HOSTAPD_SITE = http://hostap.epitest.fi/releases
-+HOSTAPD_SITE = http://w1.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = host-pkgconf libnl
+diff --git a/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch b/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+new file mode 100644
+index 0000000..3795179
+--- /dev/null
++++ b/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+@@ -0,0 +1,34 @@
++From d1e670a4a8704b8708e493ab6155589bcd570608 Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Thu, 20 Jul 2017 13:38:53 +0200
++Subject: [PATCH] Check for end of string in PatternMatch (CVE-2017-13720)
++
++If a pattern contains '?' character, any character in the string is skipped,
++even if it is '\0'. The rest of the matching then reads invalid memory.
++
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Julien Cristau <jcristau@debian.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/fontfile/fontdir.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/fontfile/fontdir.c b/src/fontfile/fontdir.c
++index 4ce2473..996b7d1 100644
++--- a/src/fontfile/fontdir.c
+++++ b/src/fontfile/fontdir.c
++@@ -400,8 +400,10 @@ PatternMatch(char *pat, int patdashes, char *string, int stringdashes)
++ 		}
++ 	    }
++ 	case '?':
++-	    if (*string++ == XK_minus)
+++	    if ((t = *string++) == XK_minus)
++ 		stringdashes--;
+++	    if (!t)
+++		return 0;
++ 	    break;
++ 	case '\0':
++ 	    return (*string == '\0');
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch b/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
+new file mode 100644
+index 0000000..709e446
+--- /dev/null
++++ b/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
+@@ -0,0 +1,52 @@
++From 672bb944311392e2415b39c0d63b1e1902905bcd Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Thu, 20 Jul 2017 17:05:23 +0200
++Subject: [PATCH] pcfGetProperties: Check string boundaries (CVE-2017-13722)
++
++Without the checks a malformed PCF file can cause the library to make
++atom from random heap memory that was behind the `strings` buffer.
++This may crash the process or leak information.
++
++Signed-off-by: Julien Cristau <jcristau@debian.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/bitmap/pcfread.c | 13 +++++++++++--
++ 1 file changed, 11 insertions(+), 2 deletions(-)
++
++diff --git a/src/bitmap/pcfread.c b/src/bitmap/pcfread.c
++index dab1c44..ae34c28 100644
++--- a/src/bitmap/pcfread.c
+++++ b/src/bitmap/pcfread.c
++@@ -45,6 +45,7 @@ from The Open Group.
++ 
++ #include <stdarg.h>
++ #include <stdint.h>
+++#include <string.h>
++ 
++ void
++ pcfError(const char* message, ...)
++@@ -311,11 +312,19 @@ pcfGetProperties(FontInfoPtr pFontInfo, FontFilePtr file,
++     if (IS_EOF(file)) goto Bail;
++     position += string_size;
++     for (i = 0; i < nprops; i++) {
+++	if (props[i].name >= string_size) {
+++	    pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].name, string_size);
+++	    goto Bail;
+++	}
++ 	props[i].name = MakeAtom(strings + props[i].name,
++-				 strlen(strings + props[i].name), TRUE);
+++				 strnlen(strings + props[i].name, string_size - props[i].name), TRUE);
++ 	if (isStringProp[i]) {
+++	    if (props[i].value >= string_size) {
+++		pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].value, string_size);
+++		goto Bail;
+++	    }
++ 	    props[i].value = MakeAtom(strings + props[i].value,
++-				      strlen(strings + props[i].value), TRUE);
+++				      strnlen(strings + props[i].value, string_size - props[i].value), TRUE);
++ 	}
++     }
++     free(strings);
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xlib_libXfont2/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch b/package/x11r7/xlib_libXfont2/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+new file mode 100644
+index 0000000..3795179
+--- /dev/null
++++ b/package/x11r7/xlib_libXfont2/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+@@ -0,0 +1,34 @@
++From d1e670a4a8704b8708e493ab6155589bcd570608 Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Thu, 20 Jul 2017 13:38:53 +0200
++Subject: [PATCH] Check for end of string in PatternMatch (CVE-2017-13720)
++
++If a pattern contains '?' character, any character in the string is skipped,
++even if it is '\0'. The rest of the matching then reads invalid memory.
++
++Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Julien Cristau <jcristau@debian.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/fontfile/fontdir.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/fontfile/fontdir.c b/src/fontfile/fontdir.c
++index 4ce2473..996b7d1 100644
++--- a/src/fontfile/fontdir.c
+++++ b/src/fontfile/fontdir.c
++@@ -400,8 +400,10 @@ PatternMatch(char *pat, int patdashes, char *string, int stringdashes)
++ 		}
++ 	    }
++ 	case '?':
++-	    if (*string++ == XK_minus)
+++	    if ((t = *string++) == XK_minus)
++ 		stringdashes--;
+++	    if (!t)
+++		return 0;
++ 	    break;
++ 	case '\0':
++ 	    return (*string == '\0');
++-- 
++2.11.0
++
+diff --git a/package/x11r7/xlib_libXfont2/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch b/package/x11r7/xlib_libXfont2/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
+new file mode 100644
+index 0000000..709e446
+--- /dev/null
++++ b/package/x11r7/xlib_libXfont2/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
+@@ -0,0 +1,52 @@
++From 672bb944311392e2415b39c0d63b1e1902905bcd Mon Sep 17 00:00:00 2001
++From: Michal Srb <msrb@suse.com>
++Date: Thu, 20 Jul 2017 17:05:23 +0200
++Subject: [PATCH] pcfGetProperties: Check string boundaries (CVE-2017-13722)
++
++Without the checks a malformed PCF file can cause the library to make
++atom from random heap memory that was behind the `strings` buffer.
++This may crash the process or leak information.
++
++Signed-off-by: Julien Cristau <jcristau@debian.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/bitmap/pcfread.c | 13 +++++++++++--
++ 1 file changed, 11 insertions(+), 2 deletions(-)
++
++diff --git a/src/bitmap/pcfread.c b/src/bitmap/pcfread.c
++index dab1c44..ae34c28 100644
++--- a/src/bitmap/pcfread.c
+++++ b/src/bitmap/pcfread.c
++@@ -45,6 +45,7 @@ from The Open Group.
++ 
++ #include <stdarg.h>
++ #include <stdint.h>
+++#include <string.h>
++ 
++ void
++ pcfError(const char* message, ...)
++@@ -311,11 +312,19 @@ pcfGetProperties(FontInfoPtr pFontInfo, FontFilePtr file,
++     if (IS_EOF(file)) goto Bail;
++     position += string_size;
++     for (i = 0; i < nprops; i++) {
+++	if (props[i].name >= string_size) {
+++	    pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].name, string_size);
+++	    goto Bail;
+++	}
++ 	props[i].name = MakeAtom(strings + props[i].name,
++-				 strlen(strings + props[i].name), TRUE);
+++				 strnlen(strings + props[i].name, string_size - props[i].name), TRUE);
++ 	if (isStringProp[i]) {
+++	    if (props[i].value >= string_size) {
+++		pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].value, string_size);
+++		goto Bail;
+++	    }
++ 	    props[i].value = MakeAtom(strings + props[i].value,
++-				      strlen(strings + props[i].value), TRUE);
+++				      strnlen(strings + props[i].value, string_size - props[i].value), TRUE);
++ 	}
++     }
++     free(strings);
++-- 
++2.11.0
++
