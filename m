@@ -1,56 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Oct 2017 14:35:33 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x]
-	package/x11r7/xserver_xorg-server: security bump to version 1.19.4
-Message-ID: <20171014150059.CC3577FDF0@busybox.osuosl.org>
+Date: Sat, 14 Oct 2017 14:27:26 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: security bump to
+	version 7.56.0
+Message-ID: <20171014150059.90A6681002@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b5fe1c29e1a4a8697e0b0eeea4fbf66cd089e79
+commit: https://git.buildroot.net/buildroot/commit/?id=42f38b057c04ab40028f97055e6e9077b344f69c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-13721 & CVE-2017-13723:
-https://lists.x.org/archives/xorg-announce/2017-October/002809.html
+Drop upstreamed patch.
 
-Added all hashes provided by upstream.
+Fixes CVE-2017-1000254 - FTP PWD response parser out of bounds read:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://curl.haxx.se/docs/adv_20171004.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 436659c55f8d3c6155546cfc666a13c793d992f9)
+(cherry picked from commit 9d95b93e5d36442979cdff7a9f3ee10b1eb9e0c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/Config.in                | 2 +-
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ ...confopts.m4-fix-disable-threaded-resolver.patch | 40 ----------------------
+ package/libcurl/libcurl.hash                       |  4 +--
+ package/libcurl/libcurl.mk                         |  4 +--
+ 3 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index b04ccf4..0f1e819 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -99,7 +99,7 @@ endchoice
+diff --git a/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch b/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
+deleted file mode 100644
+index c7a563e..0000000
+--- a/package/libcurl/0001-curl-confopts.m4-fix-disable-threaded-resolver.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 3cb4bb6b5fb8a936cb69e2e9ea6a4e692122abb9 Mon Sep 17 00:00:00 2001
+-From: Jakub Zakrzewski <slither.jz@gmail.com>
+-Date: Tue, 15 Aug 2017 13:21:33 -0400
+-Subject: [PATCH] curl-confopts.m4: fix --disable-threaded-resolver
+-
+-Closes https://github.com/curl/curl/issues/1784
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 3cb4bb6b5fb
+-
+- m4/curl-confopts.m4 | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/m4/curl-confopts.m4 b/m4/curl-confopts.m4
+-index d77a884d58bd..6dcd0f1a6794 100644
+---- a/m4/curl-confopts.m4
+-+++ b/m4/curl-confopts.m4
+-@@ -37,14 +37,14 @@ AC_HELP_STRING([--enable-threaded-resolver],[Enable threaded resolver])
+- AC_HELP_STRING([--disable-threaded-resolver],[Disable threaded resolver]),
+-   OPT_THRES=$enableval)
+-   case "$OPT_THRES" in
+--    *)
+--      dnl configure option not specified
+--      want_thres="yes"
+--      ;;
+-     no)
+-       dnl --disable-threaded-resolver option used
+-       want_thres="no"
+-       ;;
+-+    *)
+-+      dnl configure option not specified
+-+      want_thres="yes"
+-+      ;;
+-   esac
+-   AC_MSG_RESULT([$want_thres])
+- ])
+--- 
+-2.14.1
+-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 571526a..c697063 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
+-sha256 3eafca6e84ecb4af5f35795dee84e643d5428287e88c041122bb8dac18676bb7  curl-7.55.1.tar.xz
++# https://curl.haxx.se/download/curl-7.56.0.tar.xz.asc
++sha256 32437bcca0e9434384329fdc733547879d25ba70335b3cf9e3d9cbc3e71fd172  curl-7.56.0.tar.xz
+ sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index d7f860e..a6b699c 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.19.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-+	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+-LIBCURL_VERSION = 7.55.1
++LIBCURL_VERSION = 7.56.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -14,8 +14,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
+ LIBCURL_LICENSE = curl
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_INSTALL_STAGING = YES
+-# Patching m4/curl-confopts.m4
+-LIBCURL_AUTORECONF = YES
  
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 841be04..d0acc24 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,5 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.freedesktop.org/archives/xorg/2017-March/058662.html
--sha256 677a8166e03474719238dfe396ce673c4234735464d6dadf2959b600d20e5a98        xorg-server-1.19.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
-+md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
-+sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
-+sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
-+sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
+ # We disable NTLM support because it uses fork(), which doesn't work
+ # on non-MMU platforms. Moreover, this authentication method is
