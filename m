@@ -1,62 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Oct 2017 10:03:26 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] qemu: security bump to
-	version 2.8.1.1
-Message-ID: <20171014110317.CF185810FD@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 14 Oct 2017 13:37:26 +0200
+Subject: [Buildroot] [PATCH 2/4] package/x11r7/xlib_libXres: bump version to
+	1.2.0
+In-Reply-To: <20171014113728.22890-1-bernd.kuhls@t-online.de>
+References: <20171014113728.22890-1-bernd.kuhls@t-online.de>
+Message-ID: <20171014113728.22890-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37fa007ab6eda5d6f483d36ed83e2bf3f67dd659
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Added all hashes provided by upstream.
 
-Fixes the following security issues and adds a number of other bigfixes:
-
-2.8.1: Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
-
-CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
-mode
-
-CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
-cirrus_bitblt_cputovideo
-
-CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
-
-2.8.1.1 Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-
-CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
-host
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit af0f2d2bbcaca9000e62b5388f4c3cd8e700c6ff)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXres/xlib_libXres.hash | 7 +++++--
+ package/x11r7/xlib_libXres/xlib_libXres.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 19cb306..5164303 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,2 +1,2 @@
- # Locally computed, tarball verified with GPG signature
--sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
-+sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index e744556..1fe4da4 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
+index 063df8e954..12a03518af 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.hash
++++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002233.html
+-sha256	26899054aa87f81b17becc68e8645b240f140464cf90c42616ebb263ec5fa0e5	libXres-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-October/002812.html
++md5 5d6d443d1abc8e1f6fc1c57fb27729bb  libXres-1.2.0.tar.bz2
++sha1 b6996ab05460a3b7311f02da23ddf117a5442fd9  libXres-1.2.0.tar.bz2
++sha256 ff75c1643488e64a7cfbced27486f0f944801319c84c18d3bd3da6bf28c812d4  libXres-1.2.0.tar.bz2
++sha512 8eb5a36b1f030eb4e27e676cc4befcc073da66a7bce2b39089314e1facb629d13b087bb53ca2c95fe5291857da7ff9f80c6ab28fb3e245eeb9e0344937900172  libXres-1.2.0.tar.bz2
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
+index 853f54205e..0075e8f60b 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.mk
++++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QEMU_VERSION = 2.8.0
-+QEMU_VERSION = 2.8.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
+-XLIB_LIBXRES_VERSION = 1.0.7
++XLIB_LIBXRES_VERSION = 1.2.0
+ XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
+ XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRES_LICENSE = MIT
+-- 
+2.11.0
