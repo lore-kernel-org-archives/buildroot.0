@@ -1,42 +1,26 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Oct 2017 13:50:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zstd: bump version to 1.3.2
-Message-ID: <20171014115036.25841-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Oct 2017 14:29:27 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.56.0
+In-Reply-To: <20171004073517.7164-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 4 Oct 2017 09:35:17 +0200")
+References: <20171004073517.7164-1-peter@korsgaard.com>
+Message-ID: <87zi8tykt4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/zstd/zstd.hash | 2 +-
- package/zstd/zstd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 7fa5f7bf6a..69e617f1d3 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 312fb9dc75668addbc9c8f33c7fa198b0fc965c576386b8451397e06256eadc6 zstd-v1.3.1.tar.gz
-+sha256 ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a zstd-v1.3.2.tar.gz
- 
- # License files (locally computed as well)
- sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 88646eb16e..592e85ae61 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZSTD_VERSION = v1.3.1
-+ZSTD_VERSION = v1.3.2
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
- ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
+ > Drop upstreamed patch.
+ > Fixes CVE-2017-1000254 - FTP PWD response parser out of bounds read:
+
+ > https://curl.haxx.se/docs/adv_20171004.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
