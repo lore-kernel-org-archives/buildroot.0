@@ -1,48 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Oct 2017 13:37:26 +0200
-Subject: [Buildroot] [PATCH 2/4] package/x11r7/xlib_libXres: bump version to
-	1.2.0
+Date: Sat, 14 Oct 2017 13:37:27 +0200
+Subject: [Buildroot] [PATCH 3/4] package/libdrm: bump version to 2.4.84
 In-Reply-To: <20171014113728.22890-1-bernd.kuhls@t-online.de>
 References: <20171014113728.22890-1-bernd.kuhls@t-online.de>
-Message-ID: <20171014113728.22890-2-bernd.kuhls@t-online.de>
+Message-ID: <20171014113728.22890-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream.
+Changed _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXres/xlib_libXres.hash | 7 +++++--
- package/x11r7/xlib_libXres/xlib_libXres.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
-index 063df8e954..12a03518af 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.hash
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
-@@ -1,2 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002233.html
--sha256	26899054aa87f81b17becc68e8645b240f140464cf90c42616ebb263ec5fa0e5	libXres-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002812.html
-+md5 5d6d443d1abc8e1f6fc1c57fb27729bb  libXres-1.2.0.tar.bz2
-+sha1 b6996ab05460a3b7311f02da23ddf117a5442fd9  libXres-1.2.0.tar.bz2
-+sha256 ff75c1643488e64a7cfbced27486f0f944801319c84c18d3bd3da6bf28c812d4  libXres-1.2.0.tar.bz2
-+sha512 8eb5a36b1f030eb4e27e676cc4befcc073da66a7bce2b39089314e1facb629d13b087bb53ca2c95fe5291857da7ff9f80c6ab28fb3e245eeb9e0344937900172  libXres-1.2.0.tar.bz2
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
-index 853f54205e..0075e8f60b 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.mk
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 704bf1b389..be24658b41 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-August/151077.html
+-md5 23800953ed7564988872e1e8c61fde31  libdrm-2.4.83.tar.bz2
+-sha1 f78d392684d6e482e8c0a85d355619ac64c4ad6a  libdrm-2.4.83.tar.bz2
+-sha256 03a52669da60ead62548a35bc430aafb6c2d8dd21ec9dba3a90f96eff5fe36d6  libdrm-2.4.83.tar.bz2
+-sha512 8f894ff61939bca03ac857506a84bbbcbe2367e60c91a0f2388bfce5ae81e12ba2f96fe1c962416cf9e2d25ef04b98b5437c7015497789561311a72607b3bfcb  libdrm-2.4.83.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2017-October/154645.html
++md5 35b9544bc2ad864acd1abaa1a2b99092  libdrm-2.4.84.tar.bz2
++sha1 3a8835aaef89648757593f00008de9eff95990dd  libdrm-2.4.84.tar.bz2
++sha256 7ae9c24d91139ac9a2cdee06fe46dbe1c401a1eda1c0bd2a6d1ecf72f479e0aa  libdrm-2.4.84.tar.bz2
++sha512 860ebc5fa934edee97e9e7e13aaa2f2e70a68b946f4f3893cd7f93b8296c10b3cd4ce4c23b1676eefe375286e6e2292b96e917d7976f65c61da3fa661e5e641a  libdrm-2.4.84.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index e4d3e3947b..da100b853b 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXRES_VERSION = 1.0.7
-+XLIB_LIBXRES_VERSION = 1.2.0
- XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
- XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRES_LICENSE = MIT
+-LIBDRM_VERSION = 2.4.83
++LIBDRM_VERSION = 2.4.84
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+-LIBDRM_SITE = http://dri.freedesktop.org/libdrm
++LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+ LIBDRM_INSTALL_STAGING = YES
+ LIBDRM_DEPENDENCIES = \
 -- 
 2.11.0
