@@ -1,51 +1,92 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Oct 2017 14:39:59 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python3: bump version to 3.6.3
-Message-ID: <20171014124000.18286-1-bernd.kuhls@t-online.de>
+Date: Sat, 14 Oct 2017 14:40:00 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python: bump version to 2.7.14
+In-Reply-To: <20171014124000.18286-1-bernd.kuhls@t-online.de>
+References: <20171014124000.18286-1-bernd.kuhls@t-online.de>
+Message-ID: <20171014124000.18286-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE to https.
+Rebased patch 0016, changed _SITE to https.
 
 Release notes:
-https://docs.python.org/3.6/whatsnew/changelog.html#python-3-6-3-final
+https://raw.githubusercontent.com/python/cpython/84471935ed2f62b8c5758fd544c7d37076fe0fa5/Misc/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0016-Add-an-option-to-disable-installation-of-test-module.patch | 6 +++++-
+ package/python/python.hash                                          | 6 +++---
+ package/python/python.mk                                            | 4 ++--
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index f4734db52c..1a1f71cb42 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
+diff --git a/package/python/0016-Add-an-option-to-disable-installation-of-test-module.patch b/package/python/0016-Add-an-option-to-disable-installation-of-test-module.patch
+index a147655af8..2e1a054f3b 100644
+--- a/package/python/0016-Add-an-option-to-disable-installation-of-test-module.patch
++++ b/package/python/0016-Add-an-option-to-disable-installation-of-test-module.patch
+@@ -8,6 +8,8 @@ are not necessarly useful on embedded targets.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++[Bernd: rebased against version 2.7.14]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  Makefile.pre.in | 48 ++++++++++++++++++++++++++++++++----------------
+  configure.ac    |  6 ++++++
+@@ -17,7 +19,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
+ index dedcf61..280cc4e 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -1038,27 +1038,43 @@ PLATMACDIRS= plat-mac plat-mac/Carbon plat-mac/lib-scriptpackages \
++@@ -1032,28 +1032,44 @@
+  	plat-mac/lib-scriptpackages/SystemEvents \
+  	plat-mac/lib-scriptpackages/Terminal
+  PLATMACPATH=:plat-mac:plat-mac/lib-scriptpackages
+@@ -26,6 +28,7 @@ index dedcf61..280cc4e 100644
+ -		test/data test/cjkencodings test/decimaltestdata test/xmltestdata \
+ -		test/imghdrdata \
+ -		test/subprocessdata \
++-		test/support \
+ -		test/tracedmodules \
+ +LIBSUBDIRS=	lib-tk site-packages \
+  		encodings compiler hotshot \
+@@ -58,6 +61,7 @@ index dedcf61..280cc4e 100644
+ +	test/cjkencodings test/decimaltestdata test/xmltestdata \
+ +	test/imghdrdata \
+ +	test/subprocessdata \
+++	test/support \
+ +	test/tracedmodules \
+ +	email/test email/test/data \
+ +	json/tests \
+diff --git a/package/python/python.hash b/package/python/python.hash
+index f285e4243f..3f64b83611 100644
+--- a/package/python/python.hash
++++ b/package/python/python.hash
 @@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-362/
--md5 2c68846471994897278364fc18730dd9 Python-3.6.2.tar.xz
-+# From https://www.python.org/downloads/release/python-363/
-+md5 b9c2c36c33fb89bda1fefd37ad5af9be Python-3.6.3.tar.xz
- # Locally computed
--sha256 9229773be41ed144370f47f0f626a1579931f5a390f1e8e3853174d52edd64a9 Python-3.6.2.tar.xz
-+sha256 cda7d967c9a4bfa52337cdf551bcc5cff026b6ac50a8834e568ce4a794ca81da Python-3.6.3.tar.xz
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7473737bc7..1d2201eec7 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
+-# From https://www.python.org/downloads/release/python-2713/
+-md5 53b43534153bb2a0363f08bae8b9d990  Python-2.7.13.tar.xz
++# From https://www.python.org/downloads/release/python-2714/
++md5 1f6db41ad91d9eb0a6f0c769b8613c5b  Python-2.7.14.tar.xz
+ # Locally calculated
+-sha256 35d543986882f78261f97787fd3e06274bfa6df29fac9b4a94f73930ff98f731  Python-2.7.13.tar.xz
++sha256 71ffb26e09e78650e424929b2b457b9c912ac216576e6bd9e7d204ed03296a66  Python-2.7.14.tar.xz
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cf1ddfb57a..aa7917ab46 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
 @@ -5,9 +5,9 @@
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.6
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
--PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
-+PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
- PYTHON3_LICENSE_FILES = LICENSE
- 
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).13
++PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).14
+ PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
+-PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
++PYTHON_SITE = https://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE = Python-2.0, others
+ PYTHON_LICENSE_FILES = LICENSE
+ PYTHON_LIBTOOL_PATCH = NO
 -- 
 2.11.0
