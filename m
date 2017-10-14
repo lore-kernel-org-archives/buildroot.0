@@ -1,69 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Oct 2017 10:02:54 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] qemu: fix user mode
-	emulation build on ARM
-Message-ID: <20171014110317.C51F6810E7@busybox.osuosl.org>
+Date: Sat, 14 Oct 2017 10:04:20 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] qemu: change to .tar.xz
+	format
+Message-ID: <20171014110317.DC7C2810E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12ff4e23485258644a9b7199dfcde6ea3160a121
+commit: https://git.buildroot.net/buildroot/commit/?id=b7fb34cc889be0756b256fae11317d48a4b9c5fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This commit adds a patch that adjusts how the mcontext structure is used
-on ARM with a uClibc C library.
+And use the official download location.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/79900b22c190e883b6d9a3075e1286ec95840ae1/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 40c5fff46629ac4f0f55165f9c3594980a4700ef)
+Suggested-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b79547014d0cdbf34aa4112a464a63f9e865b9ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-new file mode 100644
-index 0000000..6d6d024
---- /dev/null
-+++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-@@ -0,0 +1,35 @@
-+From d3f1e7e9ff9aae3f770b0bcb9aa3c2f787f76a1b Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 5 May 2017 09:07:15 +0200
-+Subject: [PATCH] user-exec: fix usage of mcontext structure on ARM/uClibc
-+
-+user-exec.c has some conditional code to decide how to use the
-+mcontext structure. Unfortunately, since uClibc defines __GLIBC__, but
-+with old versions of __GLIBC__ and __GLIBC_MINOR__, an old code path
-+gets used, which doesn't apply to uClibc.
-+
-+Fix this by excluding __UCLIBC__, which ensures we fall back to the
-+general case of using uc_mcontext.arm_pc, which works fine with
-+uClibc.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ user-exec.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/user-exec.c b/user-exec.c
-+index 6db0758..2b3d116 100644
-+--- a/user-exec.c
-++++ b/user-exec.c
-+@@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-+ 
-+ #if defined(__NetBSD__)
-+     pc = uc->uc_mcontext.__gregs[_REG_R15];
-+-#elif defined(__GLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
-++#elif defined(__GLIBC__) && !defined(__UCLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
-+     pc = uc->uc_mcontext.gregs[R15];
-+ #else
-+     pc = uc->uc_mcontext.arm_pc;
-+-- 
-+2.7.4
-+
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 5164303..405d192 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
++sha256 7b50634d729dcabe4a96d74062832274fa2f4c883e82904f5e6955f801edab54  qemu-2.8.1.1.tar.xz
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 1fe4da4..1cb6ed1 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ QEMU_VERSION = 2.8.1.1
+-QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+-QEMU_SITE = http://wiki.qemu.org/download
++QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
++QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
+ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ #??NOTE: there is no top-level license file for non-(L)GPL licenses;
