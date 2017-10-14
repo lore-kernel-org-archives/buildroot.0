@@ -1,105 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Oct 2017 14:26:59 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: bump to version
-	7.55.1
-Message-ID: <20171014150059.6C50E81002@busybox.osuosl.org>
+Date: Sat, 14 Oct 2017 14:35:33 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x]
+	package/x11r7/xserver_xorg-server: security bump to version 1.19.4
+Message-ID: <20171014150059.CC3577FDF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65883534171c1605a7edbb8eb081d4b10f74336d
+commit: https://git.buildroot.net/buildroot/commit/?id=2b5fe1c29e1a4a8697e0b0eeea4fbf66cd089e79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Drop upstream patch.
+Fixes CVE-2017-13721 & CVE-2017-13723:
+https://lists.x.org/archives/xorg-announce/2017-October/002809.html
 
-Add license hash.
+Added all hashes provided by upstream.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3f6c10df674b7cc7a854fb0099ebeb926d162975)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 436659c55f8d3c6155546cfc666a13c793d992f9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-curl-system.h-support-more-architectures.patch | 47 ----------------------
- package/libcurl/libcurl.hash                       |  5 ++-
- package/libcurl/libcurl.mk                         |  2 +-
- 3 files changed, 4 insertions(+), 50 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in                | 2 +-
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/0001-curl-system.h-support-more-architectures.patch b/package/libcurl/0001-curl-system.h-support-more-architectures.patch
-deleted file mode 100644
-index 94d9a2a..0000000
---- a/package/libcurl/0001-curl-system.h-support-more-architectures.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 7d84bd820ef412d251b643a4faced105668f4ebd Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 11 Aug 2017 18:52:37 +0200
--Subject: [PATCH] curl/system.h: support more architectures
--
--The long list of architectures in include/curl/system.h is annoying to
--maintain, and needs to be extended for each and every architecture to
--support.
--
--Instead, let's rely on the __SIZEOF_LONG__ define of the gcc compiler
--(we are in the GNUC condition anyway), which tells us if long is 4
--bytes or 8 bytes.
--
--This fixes the build of libcurl 7.55.0 on architectures such as
--OpenRISC or ARC.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/curl/system.h | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/include/curl/system.h b/include/curl/system.h
--index 79abf8f..0e13075 100644
----- a/include/curl/system.h
--+++ b/include/curl/system.h
--@@ -403,7 +403,7 @@
-- #  if !defined(__LP64__) && (defined(__ILP32__) || \
--       defined(__i386__) || defined(__ppc__) || defined(__arm__) || \
--       defined(__sparc__) || defined(__mips__) || defined(__sh__) || \
---      defined(__XTENSA__))
--+      defined(__XTENSA__) || (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 4))
-- #    define CURL_SIZEOF_LONG           4
-- #    define CURL_TYPEOF_CURL_OFF_T     long long
-- #    define CURL_FORMAT_CURL_OFF_T     "lld"
--@@ -412,7 +412,8 @@
-- #    define CURL_SUFFIX_CURL_OFF_T     LL
-- #    define CURL_SUFFIX_CURL_OFF_TU    ULL
-- #  elif defined(__LP64__) || \
---        defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__)
--+        defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__) || \
--+        (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 8)
-- #    define CURL_SIZEOF_LONG           8
-- #    define CURL_TYPEOF_CURL_OFF_T     long
-- #    define CURL_FORMAT_CURL_OFF_T     "ld"
---- 
--2.9.4
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 6d49b67..571526a 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.55.0.tar.xz.asc
--sha256 cdd58522f8607fd4e871df79d73acb3155075e2134641e5adab12a0962df059d  curl-7.55.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
-+sha256 3eafca6e84ecb4af5f35795dee84e643d5428287e88c041122bb8dac18676bb7  curl-7.55.1.tar.xz
-+sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index dd0ccbf..64110cc 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index b04ccf4..0f1e819 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -99,7 +99,7 @@ endchoice
  
--LIBCURL_VERSION = 7.55.0
-+LIBCURL_VERSION = 7.55.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.19.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
++	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 841be04..d0acc24 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,5 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.freedesktop.org/archives/xorg/2017-March/058662.html
+-sha256 677a8166e03474719238dfe396ce673c4234735464d6dadf2959b600d20e5a98        xorg-server-1.19.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
++md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
++sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
++sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
++sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
