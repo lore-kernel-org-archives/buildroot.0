@@ -1,35 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Oct 2017 00:05:03 +0200
-Subject: [Buildroot] [PATCH 1/4] fs/common.mk: support lz4 compression
-In-Reply-To: <20171013191655.30427-1-peter@korsgaard.com>
-References: <20171013191655.30427-1-peter@korsgaard.com>
-Message-ID: <20171014000503.615d7fa6@windsurf.lan>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 13 Oct 2017 20:01:19 -0500
+Subject: [Buildroot] [PATCH] uboot-tools: bugfix libfdt python build
+In-Reply-To: <20171013161128.37827061@windsurf.lan>
+References: <20171013023556.25825-1-matthew.weber@rockwellcollins.com>
+ <20171013161128.37827061@windsurf.lan>
+Message-ID: <CANQCQpZhRskjjpSbOiUEEM0qEimpkC+R7NA1B1iV-G+HO1+=iQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Fri, 13 Oct 2017 21:16:52 +0200, Peter Korsgaard wrote:
-> Similar to the other compressors.  Notice that we use the -l (legacy format)
-> for Linux kernel initrd compatibility.
-> 
-> Lz4 decompression is supported by the Linux kernel since 3.11.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Fri, Oct 13, 2017 at 9:11 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Thu, 12 Oct 2017 21:35:56 -0500, Matt Weber wrote:
+>
+> > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> > +HOST_UBOOT_TOOLS_DEPENDENCIES += host-python3
+> > +else
+> > +HOST_UBOOT_TOOLS_DEPENDENCIES += host-python
+> > +endif
+>
+> Gaah, adding host-python as a mandatory dependency of host-uboot-tools
+> is a big change. Any way around that ?
+>
 
-I don't know in which direction we want to go, but Yann has a series
-doing cleanups/improvements in the filesystem stuff, and as part of
-this, he is dropping the compression options:
+I looked at the uboot python issue a bit more and I'll send something
+upstream.  I'm thinking the best option would be to define an optional
+SWIG variable providing an absolute path to the tool and include an
+update to the SWIG detection logic using it.
 
-  https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/fs-2
+Then Buildroot could support an option to enable the libftd in the
+menu and let that select python.  This option would be applicable to
+host and/or target, as I noticed target uboot-tools was also failing
+just not as often.
 
-(This has not been submitted so far I believe.)
+So the python intepretor path is still valid, but if the plan above
+sounds good,  I'll rework and remove the unconditional dependency.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
