@@ -1,42 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Oct 2017 14:31:31 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libhdhomerun: bump version to
-	20170930
-Message-ID: <20171014123131.27579-1-bernd.kuhls@t-online.de>
+Date: Sat, 14 Oct 2017 14:39:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python3: bump version to 3.6.3
+Message-ID: <20171014124000.18286-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changed _SITE to https.
+
+Release notes:
+https://docs.python.org/3.6/whatsnew/changelog.html#python-3-6-3-final
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: bumped to 20170930
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- package/libhdhomerun/libhdhomerun.hash | 2 +-
- package/libhdhomerun/libhdhomerun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-index 702007fb58..0938889d88 100644
---- a/package/libhdhomerun/libhdhomerun.hash
-+++ b/package/libhdhomerun/libhdhomerun.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index f4734db52c..1a1f71cb42 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,4 +1,4 @@
+-# From https://www.python.org/downloads/release/python-362/
+-md5 2c68846471994897278364fc18730dd9 Python-3.6.2.tar.xz
++# From https://www.python.org/downloads/release/python-363/
++md5 b9c2c36c33fb89bda1fefd37ad5af9be Python-3.6.3.tar.xz
  # Locally computed
--sha256 23a3484723f3744eb38349d19cbe7d25b5bed27adf64929bd174c1669b194a8a  libhdhomerun_20161117.tgz
-+sha256 0cb392231961fab6c226c69012503e2ebe46ac0f13512689bd37d6cf9ee838a1  libhdhomerun_20170930.tgz
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index b624400b5b..10aff88e6a 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
-@@ -4,7 +4,7 @@
- #
+-sha256 9229773be41ed144370f47f0f626a1579931f5a390f1e8e3853174d52edd64a9 Python-3.6.2.tar.xz
++sha256 cda7d967c9a4bfa52337cdf551bcc5cff026b6ac50a8834e568ce4a794ca81da Python-3.6.3.tar.xz
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7473737bc7..1d2201eec7 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--LIBHDHOMERUN_VERSION = 20161117
-+LIBHDHOMERUN_VERSION = 20170930
- LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
- LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
- LIBHDHOMERUN_LICENSE = LGPL-2.1+
+ PYTHON3_VERSION_MAJOR = 3.6
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+-PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
++PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+ PYTHON3_LICENSE_FILES = LICENSE
+ 
 -- 
 2.11.0
