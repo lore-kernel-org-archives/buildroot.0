@@ -1,91 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Oct 2017 13:37:28 +0200
-Subject: [Buildroot] [PATCH 4/4] package/x11r7/xserver_xorg-server: security
-	bump version to 1.19.5
-In-Reply-To: <20171014113728.22890-1-bernd.kuhls@t-online.de>
-References: <20171014113728.22890-1-bernd.kuhls@t-online.de>
-Message-ID: <20171014113728.22890-4-bernd.kuhls@t-online.de>
+Date: Sat, 14 Oct 2017 13:40:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: bump version to
+	20170815
+Message-ID: <20171014114019.6762-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-
-xfixes: unvalidated lengths (CVE-2017-12183)
-
-Xi: fix wrong extra length check in ProcXIChangeHierarchy
- (CVE-2017-12178)
-
-dbe: Unvalidated variable-length request in ProcDbeGetVisualInfo
- (CVE-2017-12177)
-
-Unvalidated extra length in ProcEstablishConnection (CVE-2017-12176)
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../{1.19.4 => 1.19.5}/0001-modesettings-needs-dri2.patch      |  0
- .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
- .../0003-Remove-check-for-useSIGIO-option.patch                |  0
- package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
- 5 files changed, 7 insertions(+), 7 deletions(-)
- rename package/x11r7/xserver_xorg-server/{1.19.4 => 1.19.5}/0001-modesettings-needs-dri2.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.19.4 => 1.19.5}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.19.4 => 1.19.5}/0003-Remove-check-for-useSIGIO-option.patch (100%)
+ package/libhdhomerun/libhdhomerun.hash | 2 +-
+ package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 71164b3794..08dea0a5ef 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -79,7 +79,7 @@ choice
- 	bool "X Window System server version"
+diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
+index 702007fb58..e7b7759fcf 100644
+--- a/package/libhdhomerun/libhdhomerun.hash
++++ b/package/libhdhomerun/libhdhomerun.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 23a3484723f3744eb38349d19cbe7d25b5bed27adf64929bd174c1669b194a8a  libhdhomerun_20161117.tgz
++sha256 a9c14edb0ad0b0432bf64048c4a3e2f71a48298e80416d884d0b33428d65ca65  libhdhomerun_20170815.tgz
+diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
+index b624400b5b..47e6d22f61 100644
+--- a/package/libhdhomerun/libhdhomerun.mk
++++ b/package/libhdhomerun/libhdhomerun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
--	bool "1.19.3"
-+	bool "1.19.5"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
-@@ -99,7 +99,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-+	default "1.19.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index d0acc24102..c0feb985d2 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
--md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
--sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
--sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
--sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002814.html
-+md5 4ac6feeae6790436ce9de879ca9a3bf8  xorg-server-1.19.5.tar.bz2
-+sha1 307d3405f709f7e41966c850b37deefe7f83eb9b  xorg-server-1.19.5.tar.bz2
-+sha256 18fffa8eb93d06d2800d06321fc0df4d357684d8d714315a66d8dfa7df251447  xorg-server-1.19.5.tar.bz2
-+sha512 928dea5850b98cd815004cfa133eca23cfa9521920c934c68a92787f2cae13cca1534eee772a4fb74b8ae8cb92662b5d68b95b834c8aa8ec57cd57cb4e5dd45c  xorg-server-1.19.5.tar.bz2
+-LIBHDHOMERUN_VERSION = 20161117
++LIBHDHOMERUN_VERSION = 20170815
+ LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
+ LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
+ LIBHDHOMERUN_LICENSE = LGPL-2.1+
 -- 
 2.11.0
