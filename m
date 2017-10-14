@@ -1,48 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Oct 2017 10:04:20 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] qemu: change to .tar.xz
-	format
-Message-ID: <20171014110317.DC7C2810E7@busybox.osuosl.org>
+Date: Sat, 14 Oct 2017 10:02:03 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package: qemu: bump
+	version to 2.8.0
+Message-ID: <20171014110317.B7F738109F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7fb34cc889be0756b256fae11317d48a4b9c5fe
+commit: https://git.buildroot.net/buildroot/commit/?id=6dee0734aa2dd8368350b4a70b841d4ded2a5ae5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-And use the official download location.
+This adds a CPU definition for the Cortex A7 along with improvements described
+here: http://wiki.qemu-project.org/ChangeLog/2.8
 
-Suggested-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b79547014d0cdbf34aa4112a464a63f9e865b9ce)
+Tested on an ARM Cortex A7 target (both target and host builds). The change log
+does not describe any incompatible changes that would affect buildroot targets
+as far as I am aware.
+
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit f56b13897b9f30c78d7ccd78a25b1e985179d2ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 5164303..405d192 100644
+index 572a5c9..19cb306 100644
 --- a/package/qemu/qemu.hash
 +++ b/package/qemu/qemu.hash
 @@ -1,2 +1,2 @@
  # Locally computed, tarball verified with GPG signature
--sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
-+sha256 7b50634d729dcabe4a96d74062832274fa2f4c883e82904f5e6955f801edab54  qemu-2.8.1.1.tar.xz
+-sha256 326e739506ba690daf69fc17bd3913a6c313d9928d743bd8eddb82f403f81e53  qemu-2.7.0.tar.bz2
++sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 1fe4da4..1cb6ed1 100644
+index 66efcba..e744556 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -5,8 +5,8 @@
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- QEMU_VERSION = 2.8.1.1
--QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
--QEMU_SITE = http://wiki.qemu.org/download
-+QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
-+QEMU_SITE = http://download.qemu.org
+-QEMU_VERSION = 2.7.0
++QEMU_VERSION = 2.8.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
  QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
- QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #??NOTE: there is no top-level license file for non-(L)GPL licenses;
