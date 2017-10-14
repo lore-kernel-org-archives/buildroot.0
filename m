@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Oct 2017 13:10:15 +0200
-Subject: [Buildroot] [PATCH] qemu: security bump to version 2.8.1.1
-In-Reply-To: <20171004071357.15093-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 4 Oct 2017 09:13:57 +0200")
-References: <20171004071357.15093-1-peter@korsgaard.com>
-Message-ID: <878tgeyoh4.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Oct 2017 13:10:24 +0200
+Subject: [Buildroot] [git commit] qemu: change to .tar.xz format
+In-Reply-To: <20171005203341.9DD9B80504@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Thu, 5 Oct 2017 22:36:46 +0200")
+References: <20171005203341.9DD9B80504@busybox.osuosl.org>
+Message-ID: <874lr2yogv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues and adds a number of other bigfixes:
- > 2.8.1: Changelog:
- > https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
+ > commit: https://git.buildroot.net/buildroot/commit/?id=b79547014d0cdbf34aa4112a464a63f9e865b9ce
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
- > mode
+ > And use the official download location.
 
- > CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
- > cirrus_bitblt_cputovideo
-
- > CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
-
- > 2.8.1.1 Changelog:
- > https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-
- > CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
- > host
-
+ > Suggested-by: Baruch Siach <baruch@tkos.co.il>
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
