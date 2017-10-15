@@ -1,88 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Oct 2017 15:56:59 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
-	security bump version to 1.19.5
-Message-ID: <20171015134948.C8DBD7FA3A@busybox.osuosl.org>
+Date: Sun, 15 Oct 2017 15:55:18 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.84
+Message-ID: <20171015134948.BDAEB7FA3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7713abf89f3fa3ab773813a10b61080471f5bcb
+commit: https://git.buildroot.net/buildroot/commit/?id=d2569e3f6f1cd9cc7795db11016bbc70754eef15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-
-xfixes: unvalidated lengths (CVE-2017-12183)
-
-Xi: fix wrong extra length check in ProcXIChangeHierarchy
- (CVE-2017-12178)
-
-dbe: Unvalidated variable-length request in ProcDbeGetVisualInfo
- (CVE-2017-12177)
-
-Unvalidated extra length in ProcEstablishConnection (CVE-2017-12176)
+Changed _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{1.19.4 => 1.19.5}/0001-modesettings-needs-dri2.patch      |  0
- .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
- .../0003-Remove-check-for-useSIGIO-option.patch                |  0
- package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 71164b3..08dea0a 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -79,7 +79,7 @@ choice
- 	bool "X Window System server version"
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 704bf1b..be24658 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-August/151077.html
+-md5 23800953ed7564988872e1e8c61fde31  libdrm-2.4.83.tar.bz2
+-sha1 f78d392684d6e482e8c0a85d355619ac64c4ad6a  libdrm-2.4.83.tar.bz2
+-sha256 03a52669da60ead62548a35bc430aafb6c2d8dd21ec9dba3a90f96eff5fe36d6  libdrm-2.4.83.tar.bz2
+-sha512 8f894ff61939bca03ac857506a84bbbcbe2367e60c91a0f2388bfce5ae81e12ba2f96fe1c962416cf9e2d25ef04b98b5437c7015497789561311a72607b3bfcb  libdrm-2.4.83.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2017-October/154645.html
++md5 35b9544bc2ad864acd1abaa1a2b99092  libdrm-2.4.84.tar.bz2
++sha1 3a8835aaef89648757593f00008de9eff95990dd  libdrm-2.4.84.tar.bz2
++sha256 7ae9c24d91139ac9a2cdee06fe46dbe1c401a1eda1c0bd2a6d1ecf72f479e0aa  libdrm-2.4.84.tar.bz2
++sha512 860ebc5fa934edee97e9e7e13aaa2f2e70a68b946f4f3893cd7f93b8296c10b3cd4ce4c23b1676eefe375286e6e2292b96e917d7976f65c61da3fa661e5e641a  libdrm-2.4.84.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index e4d3e39..da100b8 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
--	bool "1.19.3"
-+	bool "1.19.5"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
-@@ -99,7 +99,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-+	default "1.19.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index d0acc24..c0feb98 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
--md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
--sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
--sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
--sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002814.html
-+md5 4ac6feeae6790436ce9de879ca9a3bf8  xorg-server-1.19.5.tar.bz2
-+sha1 307d3405f709f7e41966c850b37deefe7f83eb9b  xorg-server-1.19.5.tar.bz2
-+sha256 18fffa8eb93d06d2800d06321fc0df4d357684d8d714315a66d8dfa7df251447  xorg-server-1.19.5.tar.bz2
-+sha512 928dea5850b98cd815004cfa133eca23cfa9521920c934c68a92787f2cae13cca1534eee772a4fb74b8ae8cb92662b5d68b95b834c8aa8ec57cd57cb4e5dd45c  xorg-server-1.19.5.tar.bz2
+-LIBDRM_VERSION = 2.4.83
++LIBDRM_VERSION = 2.4.84
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+-LIBDRM_SITE = http://dri.freedesktop.org/libdrm
++LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+ LIBDRM_INSTALL_STAGING = YES
+ LIBDRM_DEPENDENCIES = \
