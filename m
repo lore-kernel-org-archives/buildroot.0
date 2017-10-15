@@ -1,53 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Oct 2017 23:03:33 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libnss: bump to version
-	3.31
-Message-ID: <20171015205800.9BB937FA99@busybox.osuosl.org>
+Date: Sun, 15 Oct 2017 23:02:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libnspr: bump version to
+	4.17
+Message-ID: <20171015205800.8B6687FA99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff4d2c18b6553ed0f76cc2a74d6cf623164079b2
+commit: https://git.buildroot.net/buildroot/commit/?id=4720122d2c37e0992214fd106321d43adcc8ffe4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes build with gcc 7.
+libnss 3.33 needs libnspr >= 4.17.
 
-https://hg.mozilla.org/projects/nss/rev/0dca14409fef
+Also add a hash for the license file while we're at it.
 
-Fixes:
-http://autobuild.buildroot.net/results/b71/b71e4e003ec5753708a07cfd04e3025c93f80e67/
-http://autobuild.buildroot.net/results/66d/66d31923824d34df3b20a363a1346df1c00ae222/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b39e6dbed1536cb5dbd91724cc25df050d8dd54d)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit b1363093248b6198eab285124b2c87411155a0a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libnspr/libnspr.hash | 6 ++++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 7be7e48..e4e2428 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_30_2_RTM/src/SHA256SUMS
--sha256	0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24	nss-3.30.2.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_31_RTM/src/SHA256SUMS
-+sha256	e90561256a3271486162c1fbe8d614d118c333d36a4455be2af8688bd420a65d	nss-3.31.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 3c38bb0..994db00 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 13cee6e..46c091e 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,2 +1,4 @@
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.15/src/SHA256SUMS
+-sha256	27dde06bc3d0c88903a20d6ad807361a912cfb624ca0ab4efb10fc50b19e2d80	nspr-4.15.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.17/src/SHA256SUMS
++sha256	590a0aea29412ae22d7728038c21ef2ab42646e48172a47d2e4bb782846d1095  nspr-4.17.tar.gz
++# Locally calculated
++sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 899aec1..b41b062 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.30.2
-+LIBNSS_VERSION = 3.31
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBNSPR_VERSION = 4.15
++LIBNSPR_VERSION = 4.17
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
