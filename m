@@ -1,62 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Oct 2017 15:56:51 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x]
- package/x11r7/xserver_xorg-server: security bump to version 1.19.4
-In-Reply-To: <20171014150059.CC3577FDF0@busybox.osuosl.org>
-References: <20171014150059.CC3577FDF0@busybox.osuosl.org>
-Message-ID: <20171015155651.50c30cef@windsurf>
+Date: Sun, 15 Oct 2017 15:55:09 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXres: bump version
+	to 1.2.0
+Message-ID: <20171015134948.B15D0802E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9112e584bdba07af51f66d9fcd7e603c788e1e96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Oct 2017 14:35:33 +0200, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=2b5fe1c29e1a4a8697e0b0eeea4fbf66cd089e79
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-> 
-> Fixes CVE-2017-13721 & CVE-2017-13723:
-> https://lists.x.org/archives/xorg-announce/2017-October/002809.html
-> 
-> Added all hashes provided by upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> (cherry picked from commit 436659c55f8d3c6155546cfc666a13c793d992f9)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/x11r7/xserver_xorg-server/Config.in                | 2 +-
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++++--
->  2 files changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-> index b04ccf4..0f1e819 100644
-> --- a/package/x11r7/xserver_xorg-server/Config.in
-> +++ b/package/x11r7/xserver_xorg-server/Config.in
-> @@ -99,7 +99,7 @@ endchoice
->  
->  config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
->  	string
-> -	default "1.19.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-> +	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
->  	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
->  	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+Added all hashes provided by upstream.
 
-Note that this commit forgot to update:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xlib_libXres/xlib_libXres.hash | 7 +++++--
+ package/x11r7/xlib_libXres/xlib_libXres.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-        bool "1.19.3"
-
-It will be fixed, as I'm going to apply
-https://patchwork.ozlabs.org/patch/825811/, which bumps to 1.19.5, in
-both locations.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
+index 063df8e..12a0351 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.hash
++++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002233.html
+-sha256	26899054aa87f81b17becc68e8645b240f140464cf90c42616ebb263ec5fa0e5	libXres-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-October/002812.html
++md5 5d6d443d1abc8e1f6fc1c57fb27729bb  libXres-1.2.0.tar.bz2
++sha1 b6996ab05460a3b7311f02da23ddf117a5442fd9  libXres-1.2.0.tar.bz2
++sha256 ff75c1643488e64a7cfbced27486f0f944801319c84c18d3bd3da6bf28c812d4  libXres-1.2.0.tar.bz2
++sha512 8eb5a36b1f030eb4e27e676cc4befcc073da66a7bce2b39089314e1facb629d13b087bb53ca2c95fe5291857da7ff9f80c6ab28fb3e245eeb9e0344937900172  libXres-1.2.0.tar.bz2
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
+index 853f542..0075e8f 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.mk
++++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXRES_VERSION = 1.0.7
++XLIB_LIBXRES_VERSION = 1.2.0
+ XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
+ XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRES_LICENSE = MIT
