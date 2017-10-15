@@ -1,53 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Oct 2017 15:58:44 +0200
-Subject: [Buildroot] [git commit] libnss: security bump to version 3.33
-Message-ID: <20171015135147.012AA81047@busybox.osuosl.org>
+Date: Sun, 15 Oct 2017 15:59:36 +0200
+Subject: [Buildroot] [PATCH 1/2] libnspr: bump version to 4.17
+In-Reply-To: <20171012211752.18036-1-peter@korsgaard.com>
+References: <20171012211752.18036-1-peter@korsgaard.com>
+Message-ID: <20171015155936.2fc63da8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=746502418fbf603464efe0dfc77c6bc10b10603e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes CVE-2017-7805 - Martin Thomson discovered that nss, the Mozilla
-Network Security Service library, is prone to a use-after-free vulnerability
-in the TLS 1.2 implementation when handshake hashes are generated.  A remote
-attacker can take advantage of this flaw to cause an application using the
-nss library to crash, resulting in a denial of service, or potentially to
-execute arbitrary code.
+On Thu, 12 Oct 2017 23:17:51 +0200, Peter Korsgaard wrote:
+> libnss 3.33 needs libnspr >= 4.17.
+> 
+> Also add a hash for the license file while we're at it.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/libnspr/libnspr.hash | 6 ++++--
+>  package/libnspr/libnspr.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 
-Also add a hash for the license file while we're at it.
+Both applied. Thanks!
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnss/libnss.hash | 6 ++++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index e4e2428..6c8ce83 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_31_RTM/src/SHA256SUMS
--sha256	e90561256a3271486162c1fbe8d614d118c333d36a4455be2af8688bd420a65d	nss-3.31.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_33_RTM/src/SHA256SUMS
-+sha256	98f0dabd36408e83dd3a11727336cc3cdfee4cbdd9aede2b2831eb2389c284e4  nss-3.33.tar.gz
-+# Locally calculated
-+sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 5155929..27d305c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.31
-+LIBNSS_VERSION = 3.33
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
