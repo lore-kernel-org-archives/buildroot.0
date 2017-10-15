@@ -1,48 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Oct 2017 15:55:09 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXres: bump version
-	to 1.2.0
-Message-ID: <20171015134948.B15D0802E0@busybox.osuosl.org>
+Date: Sun, 15 Oct 2017 15:56:59 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
+	security bump version to 1.19.5
+Message-ID: <20171015134948.C8DBD7FA3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9112e584bdba07af51f66d9fcd7e603c788e1e96
+commit: https://git.buildroot.net/buildroot/commit/?id=e7713abf89f3fa3ab773813a10b61080471f5bcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream.
+Fixes
+
+xfixes: unvalidated lengths (CVE-2017-12183)
+
+Xi: fix wrong extra length check in ProcXIChangeHierarchy
+ (CVE-2017-12178)
+
+dbe: Unvalidated variable-length request in ProcDbeGetVisualInfo
+ (CVE-2017-12177)
+
+Unvalidated extra length in ProcEstablishConnection (CVE-2017-12176)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXres/xlib_libXres.hash | 7 +++++--
- package/x11r7/xlib_libXres/xlib_libXres.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ .../{1.19.4 => 1.19.5}/0001-modesettings-needs-dri2.patch      |  0
+ .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
+ .../0003-Remove-check-for-useSIGIO-option.patch                |  0
+ package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
-index 063df8e..12a0351 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.hash
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
-@@ -1,2 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002233.html
--sha256	26899054aa87f81b17becc68e8645b240f140464cf90c42616ebb263ec5fa0e5	libXres-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002812.html
-+md5 5d6d443d1abc8e1f6fc1c57fb27729bb  libXres-1.2.0.tar.bz2
-+sha1 b6996ab05460a3b7311f02da23ddf117a5442fd9  libXres-1.2.0.tar.bz2
-+sha256 ff75c1643488e64a7cfbced27486f0f944801319c84c18d3bd3da6bf28c812d4  libXres-1.2.0.tar.bz2
-+sha512 8eb5a36b1f030eb4e27e676cc4befcc073da66a7bce2b39089314e1facb629d13b087bb53ca2c95fe5291857da7ff9f80c6ab28fb3e245eeb9e0344937900172  libXres-1.2.0.tar.bz2
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
-index 853f542..0075e8f 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.mk
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+rename to package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch
+rename to package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 71164b3..08dea0a 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -79,7 +79,7 @@ choice
+ 	bool "X Window System server version"
  
--XLIB_LIBXRES_VERSION = 1.0.7
-+XLIB_LIBXRES_VERSION = 1.2.0
- XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
- XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRES_LICENSE = MIT
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+-	bool "1.19.3"
++	bool "1.19.5"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+@@ -99,7 +99,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
++	default "1.19.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index d0acc24..c0feb98 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
+-md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
+-sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
+-sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
+-sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-October/002814.html
++md5 4ac6feeae6790436ce9de879ca9a3bf8  xorg-server-1.19.5.tar.bz2
++sha1 307d3405f709f7e41966c850b37deefe7f83eb9b  xorg-server-1.19.5.tar.bz2
++sha256 18fffa8eb93d06d2800d06321fc0df4d357684d8d714315a66d8dfa7df251447  xorg-server-1.19.5.tar.bz2
++sha512 928dea5850b98cd815004cfa133eca23cfa9521920c934c68a92787f2cae13cca1534eee772a4fb74b8ae8cb92662b5d68b95b834c8aa8ec57cd57cb4e5dd45c  xorg-server-1.19.5.tar.bz2
