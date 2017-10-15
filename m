@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Oct 2017 15:47:43 +0200
-Subject: [Buildroot] [git commit] ifupdown-scripts: do not install .empty
-	files
-Message-ID: <20171015134050.D1C3D80FB6@busybox.osuosl.org>
+Date: Sun, 15 Oct 2017 15:47:59 +0200
+Subject: [Buildroot] [git commit] docs/manual: fix BR2_EXTERNAL path typo
+Message-ID: <20171015134051.021137F8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58b74e0dbf9b22d7dbc11127c29e23e234a9e8cf
+commit: https://git.buildroot.net/buildroot/commit/?id=0c76d89e54705a477cedad5dc39b668af771be7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-ifupdown-scripts has some .empty files to maintain empty directories
-in git. Previously this package used to be part of the skeleton which
-used SYSTEM_RSYNC to copy the directories to the target. When it was
-split into a separate package, cp -a was used to do the copy instead,
-which copies the .empty files.
-
-Change to SYSTEM_RSYNC which excludes .empty files.
 
 Signed-off-by: Cam Hutchison <camh@xdna.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ifupdown-scripts/ifupdown-scripts.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/customize-outside-br.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
-index 317c8f4..ebc89b3 100644
---- a/package/ifupdown-scripts/ifupdown-scripts.mk
-+++ b/package/ifupdown-scripts/ifupdown-scripts.mk
-@@ -31,7 +31,7 @@ endif
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index ea0e120..b1eed32 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -199,7 +199,7 @@ and to the kernel configuration file as follows (e.g. by running
+ ----
+ BR2_GLOBAL_PATCH_DIR=$(BR2_EXTERNAL_BAR_42_PATH)/patches/
+ BR2_ROOTFS_OVERLAY=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/overlay/
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_FOO)/board/<boardname>/kernel.config
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/kernel.config
+ ----
  
- define IFUPDOWN_SCRIPTS_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/etc/network
--	cp -a $(IFUPDOWN_SCRIPTS_PKGDIR)/network/* $(TARGET_DIR)/etc/network
-+	$(call SYSTEM_RSYNC,$(IFUPDOWN_SCRIPTS_PKGDIR)/network,$(TARGET_DIR)/etc/network)
- 	$(IFUPDOWN_SCRIPTS_LOCALHOST)
- 	$(IFUPDOWN_SCRIPTS_DHCP)
- endef
+ ===== Example layout
+@@ -263,7 +263,7 @@ illustration, of course):
+   |     |BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_BAR_42_PATH)/patches/"
+   |     |BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/overlay/"
+   |     |BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/post-image.sh"
+-  |     |BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_BAR_42_FOO)/board/my-board/kernel.config"
++  |     |BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/kernel.config"
+   |     `----
+   |
+   |- patches/linux/0001-some-change.patch
