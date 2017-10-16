@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:02:55 +0200
-Subject: [Buildroot] [PATCH] libidn: fix build without makeinfo
-In-Reply-To: <583676ae200bd379b846d5ccdcc5a2aafa4aad18.1506196074.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sat, 23 Sep 2017 22:47:54 +0300")
-References: <583676ae200bd379b846d5ccdcc5a2aafa4aad18.1506196074.git.baruch@tkos.co.il>
-Message-ID: <87a80qoink.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:03:23 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/tor: security bump to
+	version 0.3.1.7
+In-Reply-To: <20170923084630.3841-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 23 Sep 2017 10:46:27 +0200")
+References: <20170923084630.3841-1-bernd.kuhls@t-online.de>
+Message-ID: <8760beoims.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Build fails when the makeinfo utility is not installed on the host.
- > Fixes:
- > http://autobuild.buildroot.net/results/dfd/dfdfb34ed81ba3a4b7a7271be482e75eca849dbf/
- > http://autobuild.buildroot.net/results/b33/b33c0b0e6b1033ab1d1294a91b869ee6adcd391a/
- > http://autobuild.buildroot.net/results/940/9401cc10f6da6a2e3453ebc65ce573c370733fb5/
+ > Quoted from release notes:
+ > https://blog.torproject.org/tor-0317-now-released
+ > "Tor 0.3.1.7 is the first stable release in the 0.3.1 series."
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Fixes CVE-2017-0380:
+ > https://trac.torproject.org/projects/tor/ticket/23490
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: added note about CVE-2017-0380 and updated subject
 
 Committed to 2017.08.x, thanks.
 
