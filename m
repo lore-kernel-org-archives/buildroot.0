@@ -1,26 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:55:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: security bump
-	version to 5.47
-In-Reply-To: <20170916084117.11155-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 16 Sep 2017 10:41:17 +0200")
-References: <20170916084117.11155-1-bernd.kuhls@t-online.de>
-Message-ID: <871sm2sqoo.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:56:02 +0200
+Subject: [Buildroot] [PATCH] cmake: explicitly disable openssl support
+	for host-cmake
+In-Reply-To: <20170918173848.13742-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 18 Sep 2017 19:38:48 +0200")
+References: <20170918173848.13742-1-peter@korsgaard.com>
+Message-ID: <87wp3urc3x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2017-1000250 - All versions of the SDP server in BlueZ 5.46 and
- > earlier are vulnerable to an information disclosure vulnerability which
- > allows remote attackers to obtain sensitive information from the bluetoothd
- > process memory.  This vulnerability lies in the processing of SDP search
- > attribute requests.
+ > host-cmake will optionally link with openssl for the embedded copy of
+ > libarchive if available, leaking host dependencies and possibly causing
+ > build issues in case of compatibility issues - E.G. the host-cmake version
+ > we have in 2017.02.x doesn't build against openssl-1.1.0+:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > https://github.com/libarchive/libarchive/issues/810
+
+ > The openssl support in libarchive is unlikely to be needed, so explicitly
+ > disable it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
