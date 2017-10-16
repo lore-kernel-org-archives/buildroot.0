@@ -1,32 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:03:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
-	glamor support needs egl
-In-Reply-To: <20170923113018.20562-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 23 Sep 2017 13:30:18 +0200")
-References: <20170923113018.20562-1-bernd.kuhls@t-online.de>
-Message-ID: <871sm2oimd.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:03:58 +0200
+Subject: [Buildroot] [PATCH 1/2] wandboard: genimage: Pass an offset for
+	the rootfs
+In-Reply-To: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Thu, 21 Sep 2017 10:59:38 -0300")
+References: <1506002379-23490-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <87wp3un41d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
- > Glamor support in xserver_xorg-server depends on gbm:
- > https://cgit.freedesktop.org/xorg/xserver/tree/configure.ac#n2100
+ > Pass an offset of 1MB for the start of the rootfs.
+ > Otherwise we get rootfs corruption when the bootloader is manually
+ > written to the SD card.
 
- > Gbm is provided by mesa3d only if egl is enabled:
- > https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n167
-
- > This patch adds libegl as additional prerequisite for enabling glamor
- > support in xserver_xorg-server.
-
- > Fixes
- > http://autobuild.buildroot.net/results/04d/04d93745d63fcfbea070c0126862b49f1b6f473e/
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
 Committed to 2017.08.x, thanks.
 
