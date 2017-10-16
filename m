@@ -1,93 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 09:18:03 +0200
+Date: Mon, 16 Oct 2017 09:17:37 +0200
 Subject: [Buildroot] [git commit branch/2017.02.x] toolchain-external: bump
-	version of Linaro ARM toolchain to 2017.08
-Message-ID: <20171016071851.48A777F9E8@busybox.osuosl.org>
+	Linaro AArch64 toolchain to 2017.02
+Message-ID: <20171016071851.3A2D47F9E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbf660aea8d68ee9fd2da6d0c9f3ef7173f106c0
+commit: https://git.buildroot.net/buildroot/commit/?id=7f7c6ea1142de37dc16439542da3b86850b007c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-GDB has been updated to 8.0 version in the release.
-
-https://releases.linaro.org/components/toolchain/binaries/6.4-2017.08
-
-Tested with qemu_arm_vexpress_defconfig.
-
-6.4-2017.08 includes several patches for glibc 2.23 mitigating
-some of the "stack clash" vulnerabilities reported by Qualys.
-
-https://www.qualys.com/2017/06/19/stack-clash/stack-clash.txt
-https://git.linaro.org/toolchain/glibc.git/log/?h=linaro/2.23/master
+Tested with qemu-2.7.1-2.fc25 and the qemu_aarch64_virt_defconfig
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit aed5a0fcf7c0ce964deb5fe96d60f5e4d260fe14)
+(cherry picked from commit 641fe0e39240af8e7cf03bc5ff14ba268f41bba7)
 Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external/toolchain-external-linaro-arm/Config.in    | 6 +++---
- .../toolchain-external-linaro-arm.hash                            | 4 ++--
- .../toolchain-external-linaro-arm.mk                              | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ .../toolchain-external-linaro-aarch64/Config.in                   | 2 +-
+ .../toolchain-external-linaro-aarch64.hash                        | 4 ++--
+ .../toolchain-external-linaro-aarch64.mk                          | 8 ++++----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-index f538eb7..fd4e03b 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-@@ -4,7 +4,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on !BR2_STATIC_LIBS
- 
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
--	bool "Linaro ARM 2017.02"
-+	bool "Linaro ARM 2017.08"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+index 4dc8dac..caa5ed3 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 2016.11"
++	bool "Linaro AArch64 2017.02"
+ 	depends on BR2_aarch64
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -19,8 +19,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2017.02 (based on gcc 6.3.1), Linaro GDB 2017.02 (based on
--	  GDB 7.12), glibc 2.23, Binutils 2017.02 (based on 2.27). It
-+	  GCC 2017.08 (based on gcc 6.4.1), Linaro GDB 2017.08 (based on
-+	  GDB 8.0), glibc 2.23, Binutils 2017.08 (based on 2.27). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
- 	  with the hard floating point calling convention, and uses
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-index ec861ec..664663d 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+index f7f4209..2379290 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 2505348d30fd3f67544b8915ad7a557e643fbf987f3113e092463b37577c9b95  gcc-linaro-6.3.1-2017.02-i686_arm-linux-gnueabihf.tar.xz
--sha256 fe1cae02e0734665487b9b642171a5685a6e91416cea869bb22590f6dc7260c3  gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
-+sha256 a99029dff3d17d28c89831f2cd2aa37752c2f85fe89fe38fdd17971c36a9f1dc  gcc-linaro-6.4.1-2017.08-i686_arm-linux-gnueabihf.tar.xz
-+sha256 1c975a1936cc966099b3fcaff8f387d748caff27f43593214ae6d4601241ae40  gcc-linaro-6.4.1-2017.08-x86_64_arm-linux-gnueabihf.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-index b8ba43c..a165184 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+-sha256 057156a47b9cd68cdc0b48adcbe96c8249e3653b082f6c051dd75cb644f64b3a  gcc-linaro-6.2.1-2016.11-i686_aarch64-linux-gnu.tar.xz
+-sha256 539cc29320bd84178cd093aae0b06b1ee5476511cecaba989faf9c6a1d4cdf81  gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu.tar.xz
++sha256 e8d1dba8712e3f3994faf742d5c5dff7deba69f94e9655b1e673df7f26b0908b  gcc-linaro-6.3.1-2017.02-i686_aarch64-linux-gnu.tar.xz
++sha256 10670e1c5d2ab77b937a26cc7f2a22e8eb6cb223e2df7c763f02ce63339e66bc  gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+index fb498fe..ff3d3db 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
 @@ -4,13 +4,13 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.02
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.08
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.4-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2016.11
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SITE = https://releases.linaro.org/components/toolchain/binaries/6.2-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)/aarch64-linux-gnu
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2017.02
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SITE = https://releases.linaro.org/components/toolchain/binaries/6.3-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)/aarch64-linux-gnu
  
  ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-6.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-i686_aarch64-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-i686_aarch64-linux-gnu.tar.xz
  else
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-6.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-x86_64_aarch64-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-x86_64_aarch64-linux-gnu.tar.xz
  endif
  
  $(eval $(toolchain-external-package))
