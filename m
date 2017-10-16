@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Oct 2017 21:23:52 +0200
-Subject: [Buildroot] [PATCH v2] axel: bump to version 2.15
-In-Reply-To: <20171016191127.14704-1-ismael@iodev.co.uk>
-References: <20171016191127.14704-1-ismael@iodev.co.uk>
-Message-ID: <20171016212352.4707159c@windsurf.lan>
+Date: Mon, 16 Oct 2017 21:25:45 +0200
+Subject: [Buildroot] [buildroot] No hash found for gcc-5.4.0.tar.bz2.
+In-Reply-To: <e953736f09ba4dd6a73358abf69f44aa@draper.com>
+References: <e953736f09ba4dd6a73358abf69f44aa@draper.com>
+Message-ID: <20171016212545.78715dff@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 Oct 2017 16:11:27 -0300, Ismael Luceno wrote:
-> - Change upstream URL.
-> - Add optional dependency on libressl/openssl.
-> - Switch to autotools-package.
+On Mon, 16 Oct 2017 19:07:53 +0000, Lim, Sungyung wrote:
+
+> As a beginner, I'm looking for some advices on the issue : No hash found for gcc-5.4.0.tar.bz2.
 > 
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-> ---
+> Here is a copy of the log from running buildroot make command:
+> 
+> >>> host-gcc-initial 5.4.0 Downloading  
+> Saving to ~output/build/.gcc-5.4.-.tar.bz2.aYTUOP/output
+> ~output/build/.gcc-5.4.0.tar.bz2.aYTUOP/output' saved
+> ERROR: No hash found for gcc-5.4.0.tar.bz2
+> Make[1]: *** [~output/build/host-gcc-initial-5.4.0/.stamp_downloaded] Error 1
+> Make: *** [_all] Error 2
 
-You forgot to add a changelog here, describing what changes since v1.
+Which version of Buildroot are you using? What is your
+Buildroot .config?
 
+Best regards,
 
-> -AXEL_VERSION = 2.4
-> -AXEL_SITE = http://sources.buildroot.net
-> +AXEL_VERSION = 2.15
-> +AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
-> +AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
->  AXEL_LICENSE = GPL-2.0+
->  AXEL_LICENSE_FILES = COPYING
->  AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-> -AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
->  
-> -ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> -AXEL_DISABLE_I18N = --i18n=0
-> -endif
-> -
-> -define AXEL_CONFIGURE_CMDS
-> -	(cd $(@D); \
-> -		./configure \
-> -			--prefix=/usr \
-> -			--debug=1 \
-> -			$(AXEL_DISABLE_I18N) \
-> -	)
-> -endef
-> +AXEL_CFLAGS = -D_POSIX_C_SOURCE=200112L
-> +AXEL_CONF_OPTS = \
-> +	ac_cv_prog_cc_c99=-std=c99 \
-> +	CFLAGS="$(TARGET_CFLAGS) $(AXEL_CFLAGS)"
-
-Why do you need these? It should be explained in the commit log, or
-perhaps even better with a short comment.
-
-Thanks!
-
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
