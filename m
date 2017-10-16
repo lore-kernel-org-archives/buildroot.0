@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:51:08 +0200
-Subject: [Buildroot] [PATCH] gd: security bump to version 2.2.5
-In-Reply-To: <20170907144551.23275-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 7 Sep 2017 16:45:51 +0200")
-References: <20170907144551.23275-1-peter@korsgaard.com>
-Message-ID: <877evuvk1f.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:51:18 +0200
+Subject: [Buildroot] [PATCH] libsoup: security bump to version 2.56.1
+In-Reply-To: <20170907150754.8147-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 7 Sep 2017 17:07:54 +0200")
+References: <20170907150754.8147-1-peter@korsgaard.com>
+Message-ID: <87376ivk15.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-6362: Double-free in gdImagePngPtr()
- > CVE-2017-7890: Buffer over-read into uninitialized memory
-
- > Drop patches no more needed:
-
- > 0001-gdlib-config.patch: @LIBICONV@ is nowadays correct AC_SUBST'ed by
- > configure
-
- > 0002-gd_bmp-fix-build-with-uClibc.patch: upstream uses ceil() since
- > https://github.com/libgd/libgd/commit/6913dd3cd2a7c2914ad9622419f9343bfe956135
+ > Fixes CVE-2017-2885: stack based buffer overflow with HTTP Chunked Encoding
+ > For more details, see
+ > https://bugzilla.gnome.org/show_bug.cgi?id=785774
 
  > While we're at it, add a hash for the license file.
 
