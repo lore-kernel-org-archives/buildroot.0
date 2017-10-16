@@ -1,42 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:01:05 +0200
-Subject: [Buildroot] [PATCH] gdk-pixbuf: security bump to version 2.36.10
-In-Reply-To: <20170921070416.17829-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 21 Sep 2017 09:04:16 +0200")
-References: <20170921070416.17829-1-peter@korsgaard.com>
-Message-ID: <874lqypxb2.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:01:31 +0200
+Subject: [Buildroot] [PATCH] libidn: add fix for CVE-2017-14062
+In-Reply-To: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 15 Sep 2017 07:40:20 +0300")
+References: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
+Message-ID: <87zi8qoipw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes the following security issues:
- > CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
- > gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
- > specially crafted jpeg file can cause a heap overflow resulting in remote
- > code execution.  An attacker can send a file or url to trigger this
- > vulnerability.
+ > Add upstream patch fixing CVE-2017-14062:
+ > Integer overflow in the decode_digit function in puny_decode.c in
+ > Libidn2 before 2.0.4 allows remote attackers to cause a denial of
+ > service or possibly have unspecified other impact.
 
- > CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
- > tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
- > Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
- > remote code execution.  An attacker can send a file or a URL to trigger this
- > vulnerability.
+ > This issue also affects libidn.
 
- > CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
- > context-dependent attackers to cause a denial of service (NULL pointer
- > dereference and application crash) via vectors related to printing an error
- > message.
+ > Unfortunately, the patch also triggers reconf of the documentation
+ > subdirectory, since lib/punycode.c is listed in GDOC_SRC that is defined
+ > in doc/Makefile.am. Add autoreconf to handle that.
 
- > The host version now needs the same workaround as we do for the target to
- > not pull in shared-mime-info.
-
- > Also add a hash for the license file while we're at it.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.08.x, thanks.
 
