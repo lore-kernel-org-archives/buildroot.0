@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:53:08 +0200
-Subject: [Buildroot] [PATCH] ruby: add upstream security patches bumping
-	rubygems to 2.6.13
-In-Reply-To: <20170907091755.9491-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 7 Sep 2017 11:17:55 +0200")
-References: <20170907091755.9491-1-peter@korsgaard.com>
-Message-ID: <874lqyu5dn.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:53:17 +0200
+Subject: [Buildroot] [PATCH] supervisor: security bump to version 3.1.4
+In-Reply-To: <20170907094459.10277-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 7 Sep 2017 11:44:59 +0200")
+References: <20170907094459.10277-1-peter@korsgaard.com>
+Message-ID: <87zi8qsqsy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +13,15 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > We unfortunately cannot use the upstream patches directly as they are not in
- > 'patch -p1' format, so convert them and include instead.
-
- > Fixes:
-
- > CVE-2017-0899 - RubyGems version 2.6.12 and earlier is vulnerable to
- > maliciously crafted gem specifications that include terminal escape
- > characters.  Printing the gem specification would execute terminal escape
- > sequences.
-
- > CVE-2017-0900 - RubyGems version 2.6.12 and earlier is vulnerable to
- > maliciously crafted gem specifications to cause a denial of service attack
- > against RubyGems clients who have issued a `query` command.
-
- > CVE-2017-0901 - RubyGems version 2.6.12 and earlier fails to validate
- > specification names, allowing a maliciously crafted gem to potentially
- > overwrite any file on the filesystem.
-
- > CVE-2017-0902 - RubyGems version 2.6.12 and earlier is vulnerable to a DNS
- > hijacking vulnerability that allows a MITM attacker to force the RubyGems
- > client to download and install gems from a server that the attacker
- > controls.
+ > Fixes CVE-2017-11610 - The XML-RPC server in supervisor before 3.0.1, 3.1.x
+ > before 3.1.4, 3.2.x before 3.2.4, and 3.3.x before 3.3.3 allows remote
+ > authenticated users to execute arbitrary commands via a crafted XML-RPC
+ > request, related to nested supervisord namespace lookups.
 
  > For more details, see
- > https://www.ruby-lang.org/en/news/2017/08/29/multiple-vulnerabilities-in-rubygems/
+ > https://github.com/Supervisor/supervisor/issues/964
+
+ > While we're at it, add hashes for the license files.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
