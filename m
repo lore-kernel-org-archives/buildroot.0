@@ -1,35 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:58:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] toolchain: detect external glibc in
-	merged /usr
-In-Reply-To: <20170903210043.19105-1-camh@xdna.net> (Cam Hutchison's message
- of "Mon, 4 Sep 2017 07:00:43 +1000")
-References: <20170903210043.19105-1-camh@xdna.net>
-Message-ID: <87376irbzx.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:58:45 +0200
+Subject: [Buildroot] [PATCH 1/3] package/softether: fix hash
+In-Reply-To: <20170920104143.21404-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 20 Sep 2017 12:41:41 +0200")
+References: <20170920104143.21404-1-bernd.kuhls@t-online.de>
+Message-ID: <87y3oapxey.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cam" == Cam Hutchison <camh@xdna.net> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > When using an external toolchain that was built with Buildroot and a
- > merged /usr, the dynamic linker is actually in /usr/lib.
+ > The tarball downloaded today from github does not match the checksum
+ > which once was valid.
 
- > But the check_glibc macro limits the depth it is looking for the dynamic
- > linker, and misses it when it is in /usr/lib because it is too deep.
+ > Comparing both
+ > https://github.com/SoftEtherVPN/SoftEtherVPN/archive/1e17c9bcfd7e7b31756aa5389bcbff76c2c9c88a/softether-1e17c9bcfd7e7b31756aa5389bcbff76c2c9c88a.tar.gz
+ > http://sources.buildroot.net/softether-1e17c9bcfd7e7b31756aa5389bcbff76c2c9c88a.tar.gz
+ > shows no differences in content.
 
- > We could fix that in two ways: increase the depth in which we look
- > for it, or follow symlinks. We choose the second solution.
-
- > Signed-off-by: Cam Hutchison <camh@xdna.net>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- > Changes v1 -> v2:
- >   - Reworded commit message (suggested by Yann)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.08.x, thanks.
 
