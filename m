@@ -1,43 +1,55 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 17 Oct 2017 10:59:02 +1300
-Subject: [Buildroot] [PATCH 1/3] zstd: install to staging directory
+Date: Tue, 17 Oct 2017 10:59:03 +1300
+Subject: [Buildroot] [PATCH 2/3] zstd: build for host
 In-Reply-To: <20171016215904.3380-1-judge.packham@gmail.com>
 References: <20171016215904.3380-1-judge.packham@gmail.com>
-Message-ID: <20171016215904.3380-2-judge.packham@gmail.com>
+Message-ID: <20171016215904.3380-3-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install libzstd to the staging directory.
-
 Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ---
- package/zstd/zstd.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/zstd/zstd.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 089d654749..f149ad2f91 100644
+index f149ad2f91..01fec7bb76 100644
 --- a/package/zstd/zstd.mk
 +++ b/package/zstd/zstd.mk
-@@ -6,6 +6,7 @@
+@@ -37,6 +37,26 @@ else
+ ZSTD_OPTS += HAVE_LZ4=0
+ endif
  
- ZSTD_VERSION = v1.3.2
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
-+ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
- 
-@@ -46,4 +47,9 @@ define ZSTD_INSTALL_TARGET_CMDS
- 		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
- endef
- 
-+define ZSTD_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib install
++HOST_ZSTD_DEPENDENCIES = host-zlib host-lz4 host-xz
++
++HOST_ZSTD_OPTS = \
++	HAVE_THREAD=1 \
++	HAVE_ZLIB=1 \
++	HAVE_LZMA=1 \
++	HAVE_LZ4=1
++
++define HOST_ZSTD_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
++		-C $(@D) zstd
 +endef
 +
++define HOST_ZSTD_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
++		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/programs install
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
++		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
++endef
++
+ define ZSTD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+ 		-C $(@D) zstd
+@@ -53,3 +73,4 @@ define ZSTD_INSTALL_STAGING_CMDS
+ endef
+ 
  $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.14.2
