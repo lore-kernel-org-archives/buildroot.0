@@ -1,27 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:54:55 +0200
-Subject: [Buildroot] [PATCH 1/1] download/git: force gzip compression
-	level 6
-In-Reply-To: <1505168020-23634-1-git-send-email-brain@jikos.cz> (Petr
- Kulhavy's message of "Tue, 12 Sep 2017 00:13:40 +0200")
-References: <1505168020-23634-1-git-send-email-brain@jikos.cz>
-Message-ID: <87efq2sqq8.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:55:06 +0200
+Subject: [Buildroot] [PATCH] libcurl: fix build without threads
+In-Reply-To: <502def3c81c8bc65ada11c1bb87e65725b8b8900.1505216638.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 12 Sep 2017 14:43:58 +0300")
+References: <502def3c81c8bc65ada11c1bb87e65725b8b8900.1505216638.git.baruch@tkos.co.il>
+Message-ID: <87a80qsqpx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Force gzip compression level 6 when calculating hash of a downloaded GIT repo.
- > To make sure the tar->gzip->checksum chain always provides consistent result.`
+ > When c-ares is not enabled libcurl enables the threaded DNS resolver by
+ > default. Make sure the threaded resolvers is disabled when the toolchain
+ > does not support threads.
 
- > The script was relying on the default compression level, which must not be
- > necessarily consistent among different gzip versions. The level 6 is gzip's
- > current default compression level.
+ > Add upstream patch that fixes the configure option for disabling the
+ > threaded resolver.
 
- > Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/39f/39fa63fb2ecb75e4b2521d1ee3dfa357c4e5c594/
+ > http://autobuild.buildroot.net/results/dfd/dfd296086d0d6bed73b92fe2fa4ba5434dddf796/
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.08.x, thanks.
 
