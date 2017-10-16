@@ -1,111 +1,30 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 16 Oct 2017 21:34:14 +0200
-Subject: [Buildroot] [PATCH] package/glibc: fix signbit build issue with
-	gcc < 6.x
-In-Reply-To: <20171015215736.3573-2-romain.naour@gmail.com>
-References: <20171015215736.3573-1-romain.naour@gmail.com>
- <20171015215736.3573-2-romain.naour@gmail.com>
-Message-ID: <63d5542e-b72b-e7fe-7e90-39f0cda4a630@gmail.com>
+From: Ismael Luceno <ismael@iodev.co.uk>
+Date: Mon, 16 Oct 2017 16:53:20 -0300
+Subject: [Buildroot] [PATCH v2] axel: bump to version 2.15
+In-Reply-To: <20171016212352.4707159c@windsurf.lan>
+References: <20171016191127.14704-1-ismael@iodev.co.uk>
+ <20171016212352.4707159c@windsurf.lan>
+Message-ID: <20171016195318.GA2965@pirotess.bf.iodev.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
-
-Le 15/10/2017 ? 23:57, Romain Naour a ?crit?:
-> As reported in [1], mesa3d package fail to build with a x86_64 toolchain
-> using gcc 5.5.0 and glibc 2.26.
+On 16/Oct/2017 21:23, Thomas Petazzoni wrote:
+<...>
+> > +AXEL_CFLAGS = -D_POSIX_C_SOURCE=200112L
+> > +AXEL_CONF_OPTS = \
+> > +	ac_cv_prog_cc_c99=-std=c99 \
+> > +	CFLAGS="$(TARGET_CFLAGS) $(AXEL_CFLAGS)"
 > 
-> Add a new patch providing signbit() functions for C++ that does not use
-> __MATH_TG macro.
-> 
-> [1] https://sourceware.org/bugzilla/show_bug.cgi?id=22296
+> Why do you need these? It should be explained in the commit log, or
+> perhaps even better with a short comment.
 
-I withdraw this patch since it's not the correct fix [1]
+ac_cv_prog_cc_c99 is needed because autoconf's C99 check requires
+wchar_t.
 
-[1] https://sourceware.org/ml/libc-alpha/2017-10/msg00703.html
+The define is to build against uClibc, it will be fixed upstream with
+the next release.
 
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...-version-of-signbit-that-does-not-use-__M.patch | 65 ++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 package/glibc/0007-Provide-a-C-version-of-signbit-that-does-not-use-__M.patch
-> 
-> diff --git a/package/glibc/0007-Provide-a-C-version-of-signbit-that-does-not-use-__M.patch b/package/glibc/0007-Provide-a-C-version-of-signbit-that-does-not-use-__M.patch
-> new file mode 100644
-> index 0000000..ea7a4e7
-> --- /dev/null
-> +++ b/package/glibc/0007-Provide-a-C-version-of-signbit-that-does-not-use-__M.patch
-> @@ -0,0 +1,65 @@
-> +From 2a735f52ec321f06b2af4b4265160d54260e5c44 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@gmail.com>
-> +Date: Sun, 15 Oct 2017 20:04:24 +0200
-> +Subject: [PATCH] Provide a C++ version of signbit that does not use __MATH_TG
-> + (bug 22296)
-> +
-> +The macro __MATH_TG contains the logic to select between long double and
-> +_Float128, when these types are ABI-distinct.  This logic relies on
-> +__builtin_types_compatible_p, which is not available in C++ mode.
-> +
-> +On the other hand, C++ function overloading provides the means to
-> +distinguish between the floating-point types.  The overloading
-> +resolution will match the correct parameter regardless of type
-> +qualifiers, i.e.: const and volatile.
-> +
-> +This is the same fix as for issignaling [1] but the issue appear
-> +only with gcc < 6.x. Since GCC 6.0, __builtin_signbit is type-generic,
-> +so signbit() is defined without __MATH_TG.
-> +
-> +Tested for x86_64.
-> +
-> +	* math/math.h [defined __cplusplus] (signbit): Provide a C++
-> +	definition for signbit that does not rely on __MATH_TG,
-> +	since __MATH_TG uses __builtin_types_compatible_p, which is only
-> +	available in C mode.
-> +
-> +[1] a16e8bc08edca84d507715c66d6cddbbc7ed3b62
-> +
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +---
-> +patch status: submited upstream
-> +https://sourceware.org/ml/libc-alpha/2017-10/msg00654.html
-> +---
-> + math/math.h | 15 +++++++++++++++
-> + 1 file changed, 15 insertions(+)
-> +
-> +diff --git a/math/math.h b/math/math.h
-> +index 2b216c6..0013ad9 100644
-> +--- a/math/math.h
-> ++++ b/math/math.h
-> +@@ -418,6 +418,21 @@ enum
-> + /* Return nonzero value if sign of X is negative.  */
-> + # if __GNUC_PREREQ (6,0)
-> + #  define signbit(x) __builtin_signbit (x)
-> ++# elif defined __cplusplus
-> ++   /* In C++ mode, __MATH_TG cannot be used, because it relies on
-> ++      __builtin_types_compatible_p, which is a C-only builtin.  On the
-> ++      other hand, overloading provides the means to distinguish between
-> ++      the floating-point types.  The overloading resolution will match
-> ++      the correct parameter (regardless of type qualifiers (i.e.: const
-> ++      and volatile).  */
-> ++extern "C++" {
-> ++inline int signbit (float __val) { return __signbitf (__val); }
-> ++inline int signbit (double __val) { return __signbit (__val); }
-> ++inline int signbit (long double __val) { return __signbitl (__val); }
-> ++#  if __HAVE_DISTINCT_FLOAT128
-> ++inline int signbit (_Float128 __val) { return __signbitf128 (__val); }
-> ++#  endif
-> ++} /* extern C++ */
-> + # elif __GNUC_PREREQ (4,0)
-> + #  define signbit(x) __MATH_TG ((x), __builtin_signbit, (x))
-> + # else
-> +-- 
-> +2.9.5
-> +
-> 
+I'll send another version of the patch.
