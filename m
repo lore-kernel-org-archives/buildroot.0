@@ -1,28 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:00:55 +0200
-Subject: [Buildroot] [PATCH] flashrom: fix static build with uClibc
-In-Reply-To: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 20 Sep 2017 11:17:18 +0300")
-References: <c35f0becf1a31f14275820c0f1c3e5d1742ded47.1505895438.git.baruch@tkos.co.il>
-Message-ID: <878tgapxbc.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:01:05 +0200
+Subject: [Buildroot] [PATCH] gdk-pixbuf: security bump to version 2.36.10
+In-Reply-To: <20170921070416.17829-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 21 Sep 2017 09:04:16 +0200")
+References: <20170921070416.17829-1-peter@korsgaard.com>
+Message-ID: <874lqypxb2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Define HAVE_STRNLEN to avoid local strnlen() definition.
- > Fixes:
- > http://autobuild.buildroot.net/results/7dc/7dc4298e3a07c73e03f70205516d68a0f4c2d297/
- > http://autobuild.buildroot.net/results/e36/e362848eb45f6b8100131361e6e5faa546f0bbd8/
- > http://autobuild.buildroot.net/results/69e/69ef10ec710f418b4d10c1edb4f2ce2e49b522bf/
+ > Fixes the following security issues:
+ > CVE-2017-2862 - An exploitable heap overflow vulnerability exists in the
+ > gdk_pixbuf__jpeg_image_load_increment functionality of Gdk-Pixbuf 2.36.6.  A
+ > specially crafted jpeg file can cause a heap overflow resulting in remote
+ > code execution.  An attacker can send a file or url to trigger this
+ > vulnerability.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > It seems like only uClibc is affected. Build with musl succeeds even
- > though the resulting binary contains a global strnlen symbol.
+ > CVE-2017-2870 - An exploitable integer overflow vulnerability exists in the
+ > tiff_image_parse functionality of Gdk-Pixbuf 2.36.6 when compiled with
+ > Clang.  A specially crafted tiff file can cause a heap-overflow resulting in
+ > remote code execution.  An attacker can send a file or a URL to trigger this
+ > vulnerability.
+
+ > CVE-2017-6311 - gdk-pixbuf-thumbnailer.c in gdk-pixbuf allows
+ > context-dependent attackers to cause a denial of service (NULL pointer
+ > dereference and application crash) via vectors related to printing an error
+ > message.
+
+ > The host version now needs the same workaround as we do for the target to
+ > not pull in shared-mime-info.
+
+ > Also add a hash for the license file while we're at it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
