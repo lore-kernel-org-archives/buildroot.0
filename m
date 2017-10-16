@@ -1,110 +1,118 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Mon, 16 Oct 2017 17:12:21 -0300
-Subject: [Buildroot] [PATCH v3] axel: bump to version 2.15
-Message-ID: <20171016201221.17376-1-ismael@iodev.co.uk>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Mon, 16 Oct 2017 13:36:22 -0700
+Subject: [Buildroot] [PATCH v1] qt5: bump latest version to 5.9.2
+In-Reply-To: <20171012212342.19443-1-ps.report@gmx.net>
+References: <20171012212342.19443-1-ps.report@gmx.net>
+Message-ID: <f75cf266-0434-ae1d-6c0b-351a32154ac0@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Change upstream URL.
-- Add optional dependency on libressl/openssl.
-- Switch to autotools-package.
+Peter,
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+On 10/12/2017 02:23 PM, Peter Seiderer wrote:
+> qt5base:
+>   - removed 0001-Fix-error-attribute-target-crc-is-unknown.patch
+>     (upstream committed, see [1])
+>   - removed 0002-examples-fix-compile-without-opengl-support.patch
+>     (upstream committed, see [2])
+> 
+> qt5declarative:
+>   - removed 0001-Fix-alignment-issue-on-ARMv7.patch
+>     (upstream committed, see [3])
+>   - moved 0001-examples-photoviewer-needs-widgets-support.patch to 5.6.2
+>     only (upstream 5.9.2 committed, see [4])
+>   - moved 0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+>     to 5.6.2 only (similare patch upstream committed, see [5])
+> 
+> qt5location:
+>   - 0001-Fix-plugins-build-dependency.patch
+>     (upstream committed, see [6])
+> 
+> qt5webengine:
+>   - 0001-Always-compile-QWebEnginePage-print.patch
+>     (upstream committed, see [7])
+>   - keep 0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+>     (upstream committed, see [8], but reverted afterwards, see [9])
+> 
+> qt5webkit:
+>  - fall back to 5.9.1 (no 5.9.2 package provided, see [10] and [11]).
+> 
+> [1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=b7722c251c3a0938c7c71fc3da47fdbe920060b7
+> [2] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=6ce4b680cdde7827a6ed4d00dbeb7e7e91569433
+> [3] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=03c2661b1243cc529fc3d8cfa65073f1da420307
+> [4] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=452a78d0ac4a1579733a8ab641be24c9b7c0dd96
+> [5] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6beb77a951c14c8edcba3541850afc
+> [6] http://code.qt.io/cgit/qt/qtlocation.git/commit/?id=3ac051c4549575634cecc706175b019f4ed4c3bf
+> [7] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=085c2c529473bbe9dd7c8c5698a45053520cc423
+> [8] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
+> [9] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=c11c2c8981e647c1eb2c6753ce77d436b92fff87
+> [10] https://blog.qt.io/blog/2017/10/06/qt-5-9-2-released/#comment-1200724
+> [11] https://blog.qt.io/blog/2017/10/06/qt-5-9-2-released/#comment-1200746
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/qt5/qt5.mk                                 |   2 +-
+>  package/qt5/qt53d/qt53d.hash                       |   4 +-
+>  ...uickviewcomparison-and-quickwidget-needs-.patch |   0
+>  ...Fix-error-attribute-target-crc-is-unknown.patch |  47 ----
+>  ...amples-fix-compile-without-opengl-support.patch |  33 ---
+>  package/qt5/qt5base/qt5base.hash                   |   4 +-
+>  package/qt5/qt5canvas3d/qt5canvas3d.hash           |   4 +-
+>  package/qt5/qt5connectivity/qt5connectivity.hash   |   4 +-
+>  ...xamples-photoviewer-needs-widgets-support.patch |   0
+>  .../5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch  |  37 ----
+>  package/qt5/qt5declarative/qt5declarative.hash     |   4 +-
+>  .../qt5graphicaleffects/qt5graphicaleffects.hash   |   4 +-
+>  package/qt5/qt5imageformats/qt5imageformats.hash   |   4 +-
+>  .../5.9.1/0001-Fix-plugins-build-dependency.patch  |  42 ----
+>  package/qt5/qt5location/qt5location.hash           |   4 +-
+>  package/qt5/qt5multimedia/qt5multimedia.hash       |   4 +-
+>  package/qt5/qt5quickcontrols/qt5quickcontrols.hash |   4 +-
+>  .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |   4 +-
+>  package/qt5/qt5script/qt5script.hash               |   4 +-
+>  package/qt5/qt5sensors/qt5sensors.hash             |   4 +-
+>  package/qt5/qt5serialbus/qt5serialbus.hash         |   4 +-
+>  package/qt5/qt5serialport/qt5serialport.hash       |   4 +-
+>  package/qt5/qt5svg/qt5svg.hash                     |   4 +-
+>  package/qt5/qt5tools/qt5tools.hash                 |   4 +-
+>  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |   4 +-
+>  package/qt5/qt5wayland/qt5wayland.hash             |   4 +-
+>  package/qt5/qt5webchannel/qt5webchannel.hash       |   4 +-
+>  .../0001-Always-compile-QWebEnginePage-print.patch | 246 ---------------------
+>  ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |   0
+>  package/qt5/qt5webengine/qt5webengine.hash         |   4 +-
+>  package/qt5/qt5webkit/qt5webkit.mk                 |   7 +
+>  package/qt5/qt5websockets/qt5websockets.hash       |   4 +-
+>  package/qt5/qt5x11extras/qt5x11extras.hash         |   4 +-
+>  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |   4 +-
+>  34 files changed, 56 insertions(+), 454 deletions(-)
+>  rename package/qt5/{qt5declarative => qt5base/5.6.2}/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch (100%)
 
----
-changes from v2:
-- comments on ac_cv_prog_cc_c99 and _POSIX_C_SOURCE
+5.6.2 qt5base is having a problem with
 
-changes from v1:
-- added missing AXEL_SOURCE
-- added ac_cv_prog_cc_c99 to override C99 test
-- added _POSIX_C_SOURCE to compile against uclibc
+    0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
 
- package/axel/Config.in |  2 +-
- package/axel/axel.hash |  3 +--
- package/axel/axel.mk   | 43 +++++++++++++++++++------------------------
- 3 files changed, 21 insertions(+), 27 deletions(-)
+which seems to be accidentally moved from qt5declarative to qt5base?
 
-diff --git a/package/axel/Config.in b/package/axel/Config.in
-index 6e709cfb1351..4507855ff8e7 100644
---- a/package/axel/Config.in
-+++ b/package/axel/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_AXEL
- 	help
- 	  HTTP/FTP download accelerator.
- 
--	  http://axel.alioth.debian.org/
-+	  https://github.com/axel-download-accelerator/axel/
- 
- comment "axel needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index 895767011892..a49de66b9497 100644
---- a/package/axel/axel.hash
-+++ b/package/axel/axel.hash
-@@ -1,2 +1 @@
--# Locally calculated
--sha256	359a57ab4e354bcb6075430d977c59d33eb3e2f1415a811948fa8ae657ca8036  axel-2.4.tar.gz
-+sha256 70daa27abca5a3f1abe4be833d8f64205ac422416f5bcf396856eb6dd0fe9194  axel-2.15.tar.xz
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index 60bf5e4a61df..9b0c77b4d504 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -4,33 +4,28 @@
- #
- ################################################################################
- 
--AXEL_VERSION = 2.4
--AXEL_SITE = http://sources.buildroot.net
-+AXEL_VERSION = 2.15
-+AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
-+AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
- AXEL_LICENSE = GPL-2.0+
- AXEL_LICENSE_FILES = COPYING
- AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
- 
--ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
--AXEL_DISABLE_I18N = --i18n=0
--endif
--
--define AXEL_CONFIGURE_CMDS
--	(cd $(@D); \
--		./configure \
--			--prefix=/usr \
--			--debug=1 \
--			$(AXEL_DISABLE_I18N) \
--	)
--endef
-+AXEL_CFLAGS = -D_POSIX_C_SOURCE=200112L
-+# _POSIX_C_SOURCE required to compile against uClibc
-+AXEL_CONF_OPTS = \
-+	ac_cv_prog_cc_c99=-std=c99 \
-+	CFLAGS="$(TARGET_CFLAGS) $(AXEL_CFLAGS)"
-+# ac_cv_prog_cc_c99 is required because the C99 test relies on wchar_t
- 
--define AXEL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--	LFLAGS="$(TARGET_LDFLAGS) $(AXEL_LDFLAGS)" -C $(@D)
--endef
--
--define AXEL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
--endef
-+ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+AXEL_CONF_OPTS += --with-ssl
-+AXEL_DEPENDENCIES += libressl
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+AXEL_CONF_OPTS += --with-ssl
-+AXEL_DEPENDENCIES += openssl
-+else
-+AXEL_CONF_OPTS += --without-ssl
-+endif
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
--- 
-2.14.2
+>  delete mode 100644 package/qt5/qt5base/5.9.1/0001-Fix-error-attribute-target-crc-is-unknown.patch
+>  delete mode 100644 package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
+>  rename package/qt5/qt5declarative/{ => 5.6.2}/0001-examples-photoviewer-needs-widgets-support.patch (100%)
+>  delete mode 100644 package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
+>  delete mode 100644 package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
+>  delete mode 100644 package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
+>  rename package/qt5/qt5webengine/{5.9.1 => 5.9.2}/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch (100%)
+
+This rots my previous patch for adding/updating all of the qt5 submodule
+license file hashes [1,2].  Not a big issue.
+
+Outside of the issue mentioned above, I've been running this for 5.9.2:
+
+Tested-by: Joshua Henderson <joshua.henderson@microchip.com>
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-July/198138.html
+[2] http://lists.busybox.net/pipermail/buildroot/2017-September/202600.html
+
+Josh
