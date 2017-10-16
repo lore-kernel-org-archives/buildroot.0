@@ -1,118 +1,135 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Mon, 16 Oct 2017 13:36:22 -0700
-Subject: [Buildroot] [PATCH v1] qt5: bump latest version to 5.9.2
-In-Reply-To: <20171012212342.19443-1-ps.report@gmx.net>
-References: <20171012212342.19443-1-ps.report@gmx.net>
-Message-ID: <f75cf266-0434-ae1d-6c0b-351a32154ac0@microchip.com>
+From: Anisse Astier <anisse@astier.eu>
+Date: Mon, 16 Oct 2017 23:18:42 +0200
+Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
+In-Reply-To: <20171016185248.0463ac82@windsurf.lan>
+References: <20171011105809.2bf05267@windsurf.lan>
+ <1508170801-31062-1-git-send-email-anisse@astier.eu>
+ <20171016185248.0463ac82@windsurf.lan>
+Message-ID: <20171016211842.GA32198@bifrost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
-
-On 10/12/2017 02:23 PM, Peter Seiderer wrote:
-> qt5base:
->   - removed 0001-Fix-error-attribute-target-crc-is-unknown.patch
->     (upstream committed, see [1])
->   - removed 0002-examples-fix-compile-without-opengl-support.patch
->     (upstream committed, see [2])
+On Mon, Oct 16, 2017 at 06:52:48PM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> qt5declarative:
->   - removed 0001-Fix-alignment-issue-on-ARMv7.patch
->     (upstream committed, see [3])
->   - moved 0001-examples-photoviewer-needs-widgets-support.patch to 5.6.2
->     only (upstream 5.9.2 committed, see [4])
->   - moved 0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
->     to 5.6.2 only (similare patch upstream committed, see [5])
+> Thanks for participating into the discussion and trying to prototype
+> other solutions! I'm happy to make the connection between your nickname
+> on IRC, and the real person: we have met several times at Kernel
+> Recipes! :-)
 > 
-> qt5location:
->   - 0001-Fix-plugins-build-dependency.patch
->     (upstream committed, see [6])
+> On Mon, 16 Oct 2017 18:20:01 +0200, Anisse Astier wrote:
 > 
-> qt5webengine:
->   - 0001-Always-compile-QWebEnginePage-print.patch
->     (upstream committed, see [7])
->   - keep 0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
->     (upstream committed, see [8], but reverted afterwards, see [9])
+> > -	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+> > +	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook)) >> $($(PKG)_LOGFILE) 2>&1 $(sep))
 > 
-> qt5webkit:
->  - fall back to 5.9.1 (no 5.9.2 package provided, see [10] and [11]).
+> Are you sure this is working for multi-line hooks ? I think hooks
+> suffer from the same problem as commands.
+
+No, it's not working for multi-line hooks, I forgot about it. But we
+could use the helper for this as well.
+
 > 
-> [1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=b7722c251c3a0938c7c71fc3da47fdbe920060b7
-> [2] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=6ce4b680cdde7827a6ed4d00dbeb7e7e91569433
-> [3] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=03c2661b1243cc529fc3d8cfa65073f1da420307
-> [4] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=452a78d0ac4a1579733a8ab641be24c9b7c0dd96
-> [5] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6beb77a951c14c8edcba3541850afc
-> [6] http://code.qt.io/cgit/qt/qtlocation.git/commit/?id=3ac051c4549575634cecc706175b019f4ed4c3bf
-> [7] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=085c2c529473bbe9dd7c8c5698a45053520cc423
-> [8] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
-> [9] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=c11c2c8981e647c1eb2c6753ce77d436b92fff87
-> [10] https://blog.qt.io/blog/2017/10/06/qt-5-9-2-released/#comment-1200724
-> [11] https://blog.qt.io/blog/2017/10/06/qt-5-9-2-released/#comment-1200746
+> >  	$(Q)mkdir -p $(@D)
+> > -	$($(PKG)_EXTRACT_CMDS)
+> > +	@$(call exportvar,$(PKG)_EXTRACT_CMDS)
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5.mk                                 |   2 +-
->  package/qt5/qt53d/qt53d.hash                       |   4 +-
->  ...uickviewcomparison-and-quickwidget-needs-.patch |   0
->  ...Fix-error-attribute-target-crc-is-unknown.patch |  47 ----
->  ...amples-fix-compile-without-opengl-support.patch |  33 ---
->  package/qt5/qt5base/qt5base.hash                   |   4 +-
->  package/qt5/qt5canvas3d/qt5canvas3d.hash           |   4 +-
->  package/qt5/qt5connectivity/qt5connectivity.hash   |   4 +-
->  ...xamples-photoviewer-needs-widgets-support.patch |   0
->  .../5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch  |  37 ----
->  package/qt5/qt5declarative/qt5declarative.hash     |   4 +-
->  .../qt5graphicaleffects/qt5graphicaleffects.hash   |   4 +-
->  package/qt5/qt5imageformats/qt5imageformats.hash   |   4 +-
->  .../5.9.1/0001-Fix-plugins-build-dependency.patch  |  42 ----
->  package/qt5/qt5location/qt5location.hash           |   4 +-
->  package/qt5/qt5multimedia/qt5multimedia.hash       |   4 +-
->  package/qt5/qt5quickcontrols/qt5quickcontrols.hash |   4 +-
->  .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |   4 +-
->  package/qt5/qt5script/qt5script.hash               |   4 +-
->  package/qt5/qt5sensors/qt5sensors.hash             |   4 +-
->  package/qt5/qt5serialbus/qt5serialbus.hash         |   4 +-
->  package/qt5/qt5serialport/qt5serialport.hash       |   4 +-
->  package/qt5/qt5svg/qt5svg.hash                     |   4 +-
->  package/qt5/qt5tools/qt5tools.hash                 |   4 +-
->  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |   4 +-
->  package/qt5/qt5wayland/qt5wayland.hash             |   4 +-
->  package/qt5/qt5webchannel/qt5webchannel.hash       |   4 +-
->  .../0001-Always-compile-QWebEnginePage-print.patch | 246 ---------------------
->  ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |   0
->  package/qt5/qt5webengine/qt5webengine.hash         |   4 +-
->  package/qt5/qt5webkit/qt5webkit.mk                 |   7 +
->  package/qt5/qt5websockets/qt5websockets.hash       |   4 +-
->  package/qt5/qt5x11extras/qt5x11extras.hash         |   4 +-
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |   4 +-
->  34 files changed, 56 insertions(+), 454 deletions(-)
->  rename package/qt5/{qt5declarative => qt5base/5.6.2}/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch (100%)
+> Why do variables need to be exported? Isn't their value passed as
+> argument to the recipe-forward-log script ?
+> 
 
-5.6.2 qt5base is having a problem with
+When simply using the multi-line make variable, it gets replaced in the
+recipe, and the shell command only receives the first line, even if we
+enclose the variable in double quotes. Exporting it to the environment
+made it possible to go through the make -> shell barrier.
 
-    0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+Then I had to use the eval trick because otherwise the nested/computed
+$(PKG)_EXTRACT_CMDS variable would only be interpreted once, at initial
+parsing and not for each packages.
 
-which seems to be accidentally moved from qt5declarative to qt5base?
+> > diff --git a/support/scripts/recipe-forward-log b/support/scripts/recipe-forward-log
+> > new file mode 100755
+> > index 0000000..8240d74
+> > --- /dev/null
+> > +++ b/support/scripts/recipe-forward-log
+> > @@ -0,0 +1,59 @@
+> > +#!/usr/bin/env python3
+> > +
+> > +import sys
+> > +import subprocess
+> > +
+> > +
+> > +DEBUG = False
+> > +
+> > +if len(sys.argv) < 2:
+> > +    print("usage: %s <log-file> <make-recipe>" % (sys.argv[0]))
+> > +    sys.exit(-1)
+> > +
+> > +
+> > +def dprint(*pargs):
+> > +    if DEBUG:
+> > +        print(*pargs)
+> > +
+> > +log_file = sys.argv[1]
+> > +
+> > +args = sys.argv[2:]
+> > +
+> > +dprint("args: %s" % (args))
+> > +if len(args) == 1 and len(args[0]) == 0:
+> > +    sys.exit(0)  # only one empty argument, supported use case
+> > +
+> > +for arg in args:
+> > +    for line in arg.splitlines():
+> > +        dprint("line: %s" % (line))
+> > +        if line[0] != '\t':
+> > +            print("Recipe line does not start with tab, aborting: %s" % (line))
+> > +            sys.exit(-1)
+> > +        line = line[1:]  # remove initial tab
+> > +        if len(line) == 0:
+> > +            continue  # empty lines are tolerated
+> > +        print_command = True
+> > +        stop_on_err = True
+> > +        while True:
+> > +            if line[0] == '@':
+> > +                dprint("silent mode")
+> > +                print_command = False
+> > +                line = line[1:]
+> > +            elif line[0] == '-':
+> > +                dprint("ignore err mode")
+> > +                stop_on_err = False
+> > +                line = line[1:]
+> > +            elif line[0] == '+':  # ignore
+> > +                dprint("jobserver MAKEFLAGS mode")
+> > +                line = line[1:]
+> > +            else:  # no more matching initial recipe character
+> > +                break
+> > +        if print_command:
+> > +            print(line)
+> > +        proc = subprocess.Popen(line, shell=True, stdout=subprocess.PIPE,
+> > +                                stderr=subprocess.STDOUT)
+> > +        tee = subprocess.call(["tee", "-a", log_file], stdin=proc.stdout,
+> > +                              stdout=sys.stdout)
+> > +        ret = proc.wait()
+> > +        if ret != 0 and stop_on_err:
+> > +            sys.exit(ret)
+> 
+> How many packages have you tested with this? I'm just a little bit
+> concerned with this parsing, and how it could break with arbitrary (but
+> valid) make commands.
 
->  delete mode 100644 package/qt5/qt5base/5.9.1/0001-Fix-error-attribute-target-crc-is-unknown.patch
->  delete mode 100644 package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
->  rename package/qt5/qt5declarative/{ => 5.6.2}/0001-examples-photoviewer-needs-widgets-support.patch (100%)
->  delete mode 100644 package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
->  delete mode 100644 package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
->  delete mode 100644 package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
->  rename package/qt5/qt5webengine/{5.9.1 => 5.9.2}/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch (100%)
+Not many. I have only tested the qemu_aarch64_virt_defconfig which does
+not contain much(~28 packages), but I was already able to fix a few
+parsing issues.
 
-This rots my previous patch for adding/updating all of the qt5 submodule
-license file hashes [1,2].  Not a big issue.
+> 
+> But besides that, I have to say your approach overall looks
+> interesting, and probably less hackish than the global shell wrapper
+> approach.
 
-Outside of the issue mentioned above, I've been running this for 5.9.2:
+I just want to see this progress! Let's hope it gives new ideas :-)
 
-Tested-by: Joshua Henderson <joshua.henderson@microchip.com>
+Regards,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-July/198138.html
-[2] http://lists.busybox.net/pipermail/buildroot/2017-September/202600.html
-
-Josh
+Anisse
