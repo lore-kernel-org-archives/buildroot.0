@@ -1,20 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:50:57 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
-	12}.x series
-In-Reply-To: <20170907182350.7117-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 7 Sep 2017 20:23:49 +0200")
-References: <20170907182350.7117-1-bernd.kuhls@t-online.de>
-Message-ID: <87bml6vk1q.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:51:08 +0200
+Subject: [Buildroot] [PATCH] gd: security bump to version 2.2.5
+In-Reply-To: <20170907144551.23275-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 7 Sep 2017 16:45:51 +0200")
+References: <20170907144551.23275-1-peter@korsgaard.com>
+Message-ID: <877evuvk1f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes the following security issues:
+ > CVE-2017-6362: Double-free in gdImagePngPtr()
+ > CVE-2017-7890: Buffer over-read into uninitialized memory
+
+ > Drop patches no more needed:
+
+ > 0001-gdlib-config.patch: @LIBICONV@ is nowadays correct AC_SUBST'ed by
+ > configure
+
+ > 0002-gd_bmp-fix-build-with-uClibc.patch: upstream uses ceil() since
+ > https://github.com/libgd/libgd/commit/6913dd3cd2a7c2914ad9622419f9343bfe956135
+
+ > While we're at it, add a hash for the license file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
