@@ -1,30 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:55:06 +0200
-Subject: [Buildroot] [PATCH] libcurl: fix build without threads
-In-Reply-To: <502def3c81c8bc65ada11c1bb87e65725b8b8900.1505216638.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Sep 2017 14:43:58 +0300")
-References: <502def3c81c8bc65ada11c1bb87e65725b8b8900.1505216638.git.baruch@tkos.co.il>
-Message-ID: <87a80qsqpx.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:55:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: security bump to
+	version 7.0.7-1
+In-Reply-To: <20170917091652.18140-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 17 Sep 2017 11:16:52 +0200")
+References: <20170917091652.18140-1-bernd.kuhls@t-online.de>
+Message-ID: <8760besqpm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > When c-ares is not enabled libcurl enables the threaded DNS resolver by
- > default. Make sure the threaded resolvers is disabled when the toolchain
- > does not support threads.
+ > Quoting CVE-related issues from
+ > https://github.com/ImageMagick/ImageMagick/blob/master/ChangeLog
 
- > Add upstream patch that fixes the configure option for disabling the
- > threaded resolver.
+ > 2017-07-29 7.0.6-5 Glenn Randers-Pehrson <glennrp@image...>
+ >   * Fix improper use of NULL in the JNG decoder (CVE-2017-11750, Reference
+ >     https://github.com/ImageMagick/ImageMagick/issues/632).
 
- > Fixes:
- > http://autobuild.buildroot.net/results/39f/39fa63fb2ecb75e4b2521d1ee3dfa357c4e5c594/
- > http://autobuild.buildroot.net/results/dfd/dfd296086d0d6bed73b92fe2fa4ba5434dddf796/
+ > 2017-07-24 7.0.6-4 Cristy <quetzlzacatenango@image...>
+ >   * Fixed numerous memory leaks (reference
+ >     https://github.com/ImageMagick/ImageMagick/issues) including
+ >     https://github.com/ImageMagick/ImageMagick/issues/618 (CVE-2017-12676).
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > 2017-07-23  7.0.6-3 Glenn Randers-Pehrson <glennrp@image...>
+ >   * Fix memory leaks when reading a malformed JNG image:
+ >     https://github.com/ImageMagick/ImageMagick/issues/600 (CVE-2017-13141),
+ >     https://github.com/ImageMagick/ImageMagick/issues/602 (CVE-2017-12565).
+
+ > 2017-07-19 7.0.6-2 Cristy <quetzlzacatenango@image...>
+ >   * coders/png.c: fixed memory leak of quantum_info (CVE-2017-11539, reference
+ >     https://github.com/ImageMagick/ImageMagick/issues/582
+ >   * coders/png.c: fixed NULL dereference when trying to write an empty MNG
+ >     (CVE-2017-11522, reference
+ >     https://github.com/ImageMagick/ImageMagick/issues/586).
+
+ > 2017-06-22  7.0.6-1 Glenn Randers-Pehrson <glennrp@image...>
+ >   * Stop a memory leak in read_user_chunk_callback() (reference
+ >     https://github.com/ImageMagick/ImageMagick/issues/517,
+ >     CVE 2017-11310).
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.08.x, thanks.
 
