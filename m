@@ -1,26 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:02:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsync: not available in
-	static builds
-In-Reply-To: <20170913101823.12808-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 13 Sep 2017 12:18:23 +0200")
-References: <20170913101823.12808-1-bernd.kuhls@t-online.de>
-Message-ID: <87mv4qoiop.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:02:28 +0200
+Subject: [Buildroot] [PATCH] docs: clarify <packagename>_PATCH behaviour
+In-Reply-To: <20170914144742.1844-1-alexander.i.mukhin@gmail.com> (Alexander
+ Mukhin's message of "Thu, 14 Sep 2017 17:47:42 +0300")
+References: <20170914144742.1844-1-alexander.i.mukhin@gmail.com>
+Message-ID: <87infeoiob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
 
- > Upstream only support shared builds:
- > https://github.com/librsync/librsync/blob/master/CMakeLists.txt#L319
+ > Reiterate once more that <packagename>_PATCH variable can point
+ > to an arbitrary URL, not just to a path relative to <packagename>_SITE.
 
- > Fixes
- > http://autobuild.buildroot.net/results/4b8/4b8db2d520373d0c9127e0d7695b5aeda6925dc5/
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
 
 Committed to 2017.08.x, thanks.
 
