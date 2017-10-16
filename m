@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:46:07 +0200
-Subject: [Buildroot] [git commit] support/scripts/check-bin-arch: fix
-	symbolic link check
-In-Reply-To: <20170905190117.BA95C80E2F@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Tue, 5 Sep 2017 20:59:04 +0200")
-References: <20170905190117.BA95C80E2F@busybox.osuosl.org>
-Message-ID: <87infewyu8.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:46:39 +0200
+Subject: [Buildroot] [git commit] libxml2: security bump to version 2.9.5
+In-Reply-To: <20170905190855.80C4C8214F@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 5 Sep 2017 21:15:55 +0200")
+References: <20170905190855.80C4C8214F@busybox.osuosl.org>
+Message-ID: <87efq2wytc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=cb0f3fa13f315a1aa0469d3479673860dcba8eb9
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d8bc440e3a6cd7245374c7d905911361987cb2f8
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Commit c96b8675ea03a5d3194d439f740c725dd239ed1a
- > ("support/scripts/check-bin-arch: ignore symbolic links") was bogus,
- > because it tested ${f}, which is the relative path of the file inside
- > ${TARGET_DIR}, so we end up testing if ${f} on the system is a
- > symbolic link.
+ > Fixes CVE-2017-9049, CVE-2017-9050, CVE-2017-9047, CVE-2017-9048,
+ > CVE-2017-5969.
 
- > This commit fixes that by testing ${TARGET_DIR}/${f}.
-
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ > [Thomas: improved commit log, from Baruch suggestion.]
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.08.x, thanks.
