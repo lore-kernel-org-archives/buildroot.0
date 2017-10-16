@@ -1,116 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Oct 2017 18:52:48 +0200
-Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
-In-Reply-To: <1508170801-31062-1-git-send-email-anisse@astier.eu>
-References: <20171011105809.2bf05267@windsurf.lan>
- <1508170801-31062-1-git-send-email-anisse@astier.eu>
-Message-ID: <20171016185248.0463ac82@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Oct 2017 18:56:41 +0200
+Subject: [Buildroot] [RFC 1/4] package/go: fixing crosscompilation
+ settings
+In-Reply-To: <1507207260-26734-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1507207260-26734-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20171016165641.GD2862@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Angelo, All,
 
-Thanks for participating into the discussion and trying to prototype
-other solutions! I'm happy to make the connection between your nickname
-on IRC, and the real person: we have met several times at Kernel
-Recipes! :-)
+On 2017-10-05 14:40 +0200, Angelo Compagnucci spake thusly:
+> This patch fixes a bug with the BR2_TOOLCHAIN_HAS_THREADS variable
+> handling which causes CGO_ENABLED to be always 0.
+> 
+> Furthermore, it fixes the cross compilation options for the go compiler:
+> setting CGO_ENABLED should be done only for the target compiler not the
+> host one.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/go/go.mk | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/go/go.mk b/package/go/go.mk
+> index 0781dff..8e510e7 100644
+> --- a/package/go/go.mk
+> +++ b/package/go/go.mk
+> @@ -52,7 +52,7 @@ HOST_GO_TARGET_ENV = \
+>  # set, build in cgo support for any go programs that may need it.  Note that
+>  # any target package needing cgo support must include
+>  # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
+> -ifeq (BR2_TOOLCHAIN_HAS_THREADS,y)
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 
-On Mon, 16 Oct 2017 18:20:01 +0200, Anisse Astier wrote:
+Indeed... Wonderfull that it passed through the cracks and stayed
+unnoticed so far...
 
-> -	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
-> +	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook)) >> $($(PKG)_LOGFILE) 2>&1 $(sep))
+>  HOST_GO_CGO_ENABLED = 1
+>  else
+>  HOST_GO_CGO_ENABLED = 0
+> @@ -74,8 +74,8 @@ HOST_GO_MAKE_ENV = \
+>  	GOARCH=$(GO_GOARCH) \
+>  	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+>  	GOOS=linux \
+> -	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+> -	CC=$(HOSTCC_NOCCACHE)
+> +	CC=$(HOSTCC_NOCCACHE) \
+> +	CXX=$(HOSTCXX_NOCCACHE)
+>  
+>  HOST_GO_TARGET_CC = \
+>  	CC_FOR_TARGET="$(TARGET_CC)" \
+> @@ -83,16 +83,18 @@ HOST_GO_TARGET_CC = \
+>  
+>  HOST_GO_HOST_CC = \
+>  	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
+> -	CXX_FOR_TARGET=$(HOSTCC_NOCCACHE)
+> +	CXX_FOR_TARGET=$(HOSTCXX_NOCCACHE)
+>  
+>  HOST_GO_TMP = $(@D)/host-go-tmp
+>  
+>  define HOST_GO_BUILD_CMDS
+> -	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
+> +	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) \
+> +		CGO_ENABLED=0 ./make.bash
 
-Are you sure this is working for multi-line hooks ? I think hooks
-suffer from the same problem as commands.
+Can we use a more logical location to split the line (I don't care if
+the second line is indented or not, but usually we do indent it):
 
->  	$(Q)mkdir -p $(@D)
-> -	$($(PKG)_EXTRACT_CMDS)
-> +	@$(call exportvar,$(PKG)_EXTRACT_CMDS)
+    cd $(@D)/src && \
+    $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) CGO_ENABLED=0 ./make.bash
 
-Why do variables need to be exported? Isn't their value passed as
-argument to the recipe-forward-log script ?
+>  	mkdir -p $(HOST_GO_TMP)
+>  	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+>  	mv $(@D)/bin/ $(HOST_GO_TMP)/
+> -	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
+> +	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) \
+> +		CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
 
-> diff --git a/support/scripts/recipe-forward-log b/support/scripts/recipe-forward-log
-> new file mode 100755
-> index 0000000..8240d74
-> --- /dev/null
-> +++ b/support/scripts/recipe-forward-log
-> @@ -0,0 +1,59 @@
-> +#!/usr/bin/env python3
-> +
-> +import sys
-> +import subprocess
-> +
-> +
-> +DEBUG = False
-> +
-> +if len(sys.argv) < 2:
-> +    print("usage: %s <log-file> <make-recipe>" % (sys.argv[0]))
-> +    sys.exit(-1)
-> +
-> +
-> +def dprint(*pargs):
-> +    if DEBUG:
-> +        print(*pargs)
-> +
-> +log_file = sys.argv[1]
-> +
-> +args = sys.argv[2:]
-> +
-> +dprint("args: %s" % (args))
-> +if len(args) == 1 and len(args[0]) == 0:
-> +    sys.exit(0)  # only one empty argument, supported use case
-> +
-> +for arg in args:
-> +    for line in arg.splitlines():
-> +        dprint("line: %s" % (line))
-> +        if line[0] != '\t':
-> +            print("Recipe line does not start with tab, aborting: %s" % (line))
-> +            sys.exit(-1)
-> +        line = line[1:]  # remove initial tab
-> +        if len(line) == 0:
-> +            continue  # empty lines are tolerated
-> +        print_command = True
-> +        stop_on_err = True
-> +        while True:
-> +            if line[0] == '@':
-> +                dprint("silent mode")
-> +                print_command = False
-> +                line = line[1:]
-> +            elif line[0] == '-':
-> +                dprint("ignore err mode")
-> +                stop_on_err = False
-> +                line = line[1:]
-> +            elif line[0] == '+':  # ignore
-> +                dprint("jobserver MAKEFLAGS mode")
-> +                line = line[1:]
-> +            else:  # no more matching initial recipe character
-> +                break
-> +        if print_command:
-> +            print(line)
-> +        proc = subprocess.Popen(line, shell=True, stdout=subprocess.PIPE,
-> +                                stderr=subprocess.STDOUT)
-> +        tee = subprocess.call(["tee", "-a", log_file], stdin=proc.stdout,
-> +                              stdout=sys.stdout)
-> +        ret = proc.wait()
-> +        if ret != 0 and stop_on_err:
-> +            sys.exit(ret)
+Ditto?
 
-How many packages have you tested with this? I'm just a little bit
-concerned with this parsing, and how it could break with arbitrary (but
-valid) make commands.
+Otherwise looks good:
 
-But besides that, I have to say your approach overall looks
-interesting, and probably less hackish than the global shell wrapper
-approach.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks!
+Can go in, even without the rest of the series, I think, no?
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+>  endef
+>  
+>  define HOST_GO_INSTALL_CMDS
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
