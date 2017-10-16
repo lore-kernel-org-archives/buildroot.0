@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:01:31 +0200
-Subject: [Buildroot] [PATCH] libidn: add fix for CVE-2017-14062
-In-Reply-To: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 15 Sep 2017 07:40:20 +0300")
-References: <282d433579419f522c6daa7c1bdaf60574ef3d4f.1505450420.git.baruch@tkos.co.il>
-Message-ID: <87zi8qoipw.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:01:53 +0200
+Subject: [Buildroot] [PATCH 1/2] bind: bump to version 9.11.2
+In-Reply-To: <20170913130115.25010-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 13 Sep 2017 15:01:14 +0200")
+References: <20170913130115.25010-1-peter@korsgaard.com>
+Message-ID: <87vajeoipa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Add upstream patch fixing CVE-2017-14062:
- > Integer overflow in the decode_digit function in puny_decode.c in
- > Libidn2 before 2.0.4 allows remote attackers to cause a denial of
- > service or possibly have unspecified other impact.
+ > Adds support for the new ICANN DNSSEC root key for the upcoming KSK rollover
+ > (Oct 11):
 
- > This issue also affects libidn.
+ > https://www.icann.org/resources/pages/ksk-rollover
 
- > Unfortunately, the patch also triggers reconf of the documentation
- > subdirectory, since lib/punycode.c is listed in GDOC_SRC that is defined
- > in doc/Makefile.am. Add autoreconf to handle that.
+ > For more details, see the release notes:
+ > https://kb.isc.org/article/AA-01522
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
