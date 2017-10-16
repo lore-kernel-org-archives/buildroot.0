@@ -1,29 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:48:09 +0200
-Subject: [Buildroot] [PATCH v2 2/2] configs/minnowboard_max-graphical:
-	wchar/grub2 fix
-In-Reply-To: <20170905000806.13295-3-sielicki@yandex.com> (Nicholas Sielicki's
- message of "Mon, 4 Sep 2017 19:08:06 -0500")
-References: <20170905000806.13295-1-sielicki@yandex.com>
- <20170905000806.13295-3-sielicki@yandex.com>
-Message-ID: <87wp3uvk6e.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:48:42 +0200
+Subject: [Buildroot] [PATCH] subversion: security bump to version 1.9.7
+In-Reply-To: <20170906154039.21569-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 6 Sep 2017 17:40:39 +0200")
+References: <20170906154039.21569-1-peter@korsgaard.com>
+Message-ID: <87sheivk5h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicholas" == Nicholas Sielicki <sielicki@yandex.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > minnowboard_max-graphical_defconfig has the line "BR_TARGET_GRUB2=y",
- > but this currently has no effect because BR_TARGET_GRUB2 cannot be
- > selected without BR2_TOOLCHAIN_BUILDROOT_WCHAR=y, which is not set by
- > default.
+ > Fixes CVE-2017-9800: Arbitrary code execution on clients through malicious
+ > svn+ssh URLs in svn:externals and svn:sync-from-url
 
- > The minnowboard max defconfig was updated to fix this problem, but the
- > graphical variant was not updated alongside it.
+ > For more details, see
+ > http://subversion.apache.org/security/CVE-2017-9800-advisory.txt
 
- > Signed-off-by: Nicholas Sielicki <sielicki@yandex.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
