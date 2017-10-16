@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:02:28 +0200
-Subject: [Buildroot] [PATCH] docs: clarify <packagename>_PATCH behaviour
-In-Reply-To: <20170914144742.1844-1-alexander.i.mukhin@gmail.com> (Alexander
- Mukhin's message of "Thu, 14 Sep 2017 17:47:42 +0300")
-References: <20170914144742.1844-1-alexander.i.mukhin@gmail.com>
-Message-ID: <87infeoiob.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:02:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix wrong symlink for
+	systemd service
+In-Reply-To: <1505902234-4876-1-git-send-email-brain@jikos.cz> (Petr Kulhavy's
+ message of "Wed, 20 Sep 2017 12:10:34 +0200")
+References: <1505902234-4876-1-git-send-email-brain@jikos.cz>
+Message-ID: <87efq2oio0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
+>>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
 
- > Reiterate once more that <packagename>_PATCH variable can point
- > to an arbitrary URL, not just to a path relative to <packagename>_SITE.
+ > The symlink to /etc/systemd/system/syslog.service was pointing 4 levels up
+ > to /usr/lib instead of 3 levels up.
 
- > Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+ > This wasn't an issue on the actual system (/../ equals to / ) but was causing a
+ > deadlink in the TARGET directory.
+
+ > Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 
 Committed to 2017.08.x, thanks.
 
