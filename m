@@ -1,71 +1,160 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 16 Oct 2017 19:08:45 +0200
-Subject: [Buildroot] [RFC v2 1/4] package/go: fixing crosscompilation
-	settings
-Message-ID: <1508173728-29181-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Mon, 16 Oct 2017 19:08:46 +0200
+Subject: [Buildroot] [RFC v2 2/4] package/pkg-golang: new package
+	infrastructure
+In-Reply-To: <1508173728-29181-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1508173728-29181-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1508173728-29181-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes a bug with the BR2_TOOLCHAIN_HAS_THREADS variable
-handling which causes CGO_ENABLED to be always 0.
-
-Furthermore, it fixes the cross compilation options for the go compiler:
-setting CGO_ENABLED should be done only for the target compiler not the
-host one.
+This patch adds a new infrastructure for golang based packages.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/go/go.mk | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ package/Makefile.in   |   1 +
+ package/pkg-golang.mk | 121 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 122 insertions(+)
+ create mode 100644 package/pkg-golang.mk
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 0781dff..6035164 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -52,7 +52,7 @@ HOST_GO_TARGET_ENV = \
- # set, build in cgo support for any go programs that may need it.  Note that
- # any target package needing cgo support must include
- # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
--ifeq (BR2_TOOLCHAIN_HAS_THREADS,y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- HOST_GO_CGO_ENABLED = 1
- else
- HOST_GO_CGO_ENABLED = 0
-@@ -74,8 +74,8 @@ HOST_GO_MAKE_ENV = \
- 	GOARCH=$(GO_GOARCH) \
- 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
- 	GOOS=linux \
--	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
--	CC=$(HOSTCC_NOCCACHE)
-+	CC=$(HOSTCC_NOCCACHE) \
-+	CXX=$(HOSTCXX_NOCCACHE)
- 
- HOST_GO_TARGET_CC = \
- 	CC_FOR_TARGET="$(TARGET_CC)" \
-@@ -83,16 +83,18 @@ HOST_GO_TARGET_CC = \
- 
- HOST_GO_HOST_CC = \
- 	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
--	CXX_FOR_TARGET=$(HOSTCC_NOCCACHE)
-+	CXX_FOR_TARGET=$(HOSTCXX_NOCCACHE)
- 
- HOST_GO_TMP = $(@D)/host-go-tmp
- 
- define HOST_GO_BUILD_CMDS
--	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
-+	cd $(@D)/src && \
-+		$(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) CGO_ENABLED=0 ./make.bash
- 	mkdir -p $(HOST_GO_TMP)
- 	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
- 	mv $(@D)/bin/ $(HOST_GO_TMP)/
--	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
-+	cd $(@D)/src && \
-+		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
- endef
- 
- define HOST_GO_INSTALL_CMDS
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a1a5316..60d98d0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -429,3 +429,4 @@ include package/pkg-kconfig.mk
+ include package/pkg-rebar.mk
+ include package/pkg-kernel-module.mk
+ include package/pkg-waf.mk
++include package/pkg-golang.mk
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+new file mode 100644
+index 0000000..c4e6410
+--- /dev/null
++++ b/package/pkg-golang.mk
+@@ -0,0 +1,121 @@
++################################################################################
++# Golang package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Go packages. It should be used for all
++# packages that are written in go.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++#
++# In terms of implementation, this golang infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default golang behaviour. The
++# package can also define some post operation hooks.
++#
++################################################################################
++
++################################################################################
++# inner-golang-package -- defines how the configuration, compilation and
++# installation of a Go package should be done, implements a few hooks to
++# tune the build process for Go specifities and calls the generic package
++# infrastructure to generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-golang-package
++
++ifndef $(2)_MAKE_ENV
++define $(2)_MAKE_ENV
++	$$(HOST_GO_TARGET_ENV) \
++	GOPATH="$$(@D)/gopath" \
++	CGO_ENABLED=$$(HOST_GO_CGO_ENABLED)
++endef
++endif
++
++# Target packages need the Go compiler on the host.
++$(2)_DEPENDENCIES += host-go
++
++#
++# go install command doesn't work well when cross compilation is enabled,
++# we set the executable output of the compilation to a specific location.
++# We set this variable here to be used by packages if needed.
++#
++$(2)_EXECUTABLE = $$(@D)/gopath/bin/$(1)
++
++#
++# Source files in Go should be uncompressed in a precise folder in the
++# hiearchy of GOPATH. It usually resolves around domain/vendor/software.
++#
++$(1)_src_path ?= $$(call domain,$($(2)_SITE))/$$(firstword $$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_PATH  = $$(@D)/gopath/src/$$($(1)_src_path)/$(1)
++
++#
++# Configure step. Only define it if not already defined by the package
++# .mk file. And take care of the differences between host and target
++# packages.
++#
++ifndef $(2)_CONFIGURE_CMDS
++define $(2)_CONFIGURE_CMDS
++	mkdir -p $$(@D)/gopath/bin
++	mkdir -p $$(@D)/gopath/src/$$($(1)_src_path)
++	ln -sf $$(@D) $$($(2)_SRC_PATH)
++endef
++endif
++
++#
++# Build step. Only define it if not already defined by the package .mk file.
++# There is no differences between host and target packages.
++#
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	cd $$($(2)_SRC_PATH) && $$($(2)_MAKE_ENV) $(HOST_DIR)/bin/go build \
++	-o $$($(2)_EXECUTABLE) -v $$($(2)_BUILD_OPTS)
++endef
++endif
++
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $$($(2)_EXECUTABLE) $(HOST_DIR)/usr/bin/
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $$($(2)_EXECUTABLE) $(TARGET_DIR)/usr/bin/
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary make
++# targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef # inner-golang-package
++
++################################################################################
++# golang-package -- the target generator macro for Go packages
++################################################################################
++
++golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
++
 -- 
 2.7.4
