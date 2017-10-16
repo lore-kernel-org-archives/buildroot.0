@@ -1,19 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:56:32 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix typo
-In-Reply-To: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Mon, 18 Sep 2017 11:34:18 +0200")
-References: <1505727258-9352-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87sheirc33.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:56:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/proxychains-ng: security bump
+	to version 4.11
+In-Reply-To: <20170917185216.25953-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 17 Sep 2017 20:52:16 +0200")
+References: <20170917185216.25953-1-bernd.kuhls@t-online.de>
+Message-ID: <87o9p6rc2p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Version 4.9 fixes CVE-2015-3887:
+ > https://github.com/rofl0r/proxychains-ng/issues/60
+
+ > Added md5 & sha1 hashes provided by upstream.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.08.x, thanks.
 
