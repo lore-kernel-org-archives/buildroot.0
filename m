@@ -1,20 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Oct 2017 23:56:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: add patch to fix
-	CVE-2017-9798
-In-Reply-To: <20170919185434.25976-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 19 Sep 2017 20:54:34 +0200")
-References: <20170919185434.25976-1-bernd.kuhls@t-online.de>
-Message-ID: <87k1zurc2f.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Oct 2017 23:57:14 +0200
+Subject: [Buildroot] [PATCH 1/2] pkgconf: update upstream URL in
+	Config.in
+In-Reply-To: <20170919110527.23975-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 19 Sep 2017 13:05:26 +0200")
+References: <20170919110527.23975-1-peter@korsgaard.com>
+Message-ID: <87fuairc1x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > The download location got changed two years ago when the version was bumped
+ > to 0.9.12, but the upstream URL in Config.in wasn't updated.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
