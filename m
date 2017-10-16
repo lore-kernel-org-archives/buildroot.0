@@ -1,26 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 00:02:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix wrong symlink for
-	systemd service
-In-Reply-To: <1505902234-4876-1-git-send-email-brain@jikos.cz> (Petr Kulhavy's
- message of "Wed, 20 Sep 2017 12:10:34 +0200")
-References: <1505902234-4876-1-git-send-email-brain@jikos.cz>
-Message-ID: <87efq2oio0.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 00:02:55 +0200
+Subject: [Buildroot] [PATCH] libidn: fix build without makeinfo
+In-Reply-To: <583676ae200bd379b846d5ccdcc5a2aafa4aad18.1506196074.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 23 Sep 2017 22:47:54 +0300")
+References: <583676ae200bd379b846d5ccdcc5a2aafa4aad18.1506196074.git.baruch@tkos.co.il>
+Message-ID: <87a80qoink.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The symlink to /etc/systemd/system/syslog.service was pointing 4 levels up
- > to /usr/lib instead of 3 levels up.
+ > Build fails when the makeinfo utility is not installed on the host.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/dfd/dfdfb34ed81ba3a4b7a7271be482e75eca849dbf/
+ > http://autobuild.buildroot.net/results/b33/b33c0b0e6b1033ab1d1294a91b869ee6adcd391a/
+ > http://autobuild.buildroot.net/results/940/9401cc10f6da6a2e3453ebc65ce573c370733fb5/
 
- > This wasn't an issue on the actual system (/../ equals to / ) but was causing a
- > deadlink in the TARGET directory.
-
- > Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.08.x, thanks.
 
