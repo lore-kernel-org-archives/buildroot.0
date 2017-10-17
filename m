@@ -1,30 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:04:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: fix openssl detection for
-	static builds
-In-Reply-To: <20171003173044.1595-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 3 Oct 2017 19:30:44 +0200")
-References: <20171003173044.1595-1-bernd.kuhls@t-online.de>
-Message-ID: <87zi8qjgcf.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:04:17 +0200
+Subject: [Buildroot] [PATCH] vboot-utils: disable static futility
+In-Reply-To: <20171003083737.GA3986@latitude.localdomain> (Alex Suykov's
+ message of "Tue, 3 Oct 2017 11:37:37 +0300")
+References: <20171003083737.GA3986@latitude.localdomain>
+Message-ID: <87vajejgby.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
 
- > Fixes
- > http://autobuild.buildroot.net/results/8e6/8e639ab8912e7d884fd8e6dbb1ca8b49451dd766/
+ > Possibly fixes
+ > http://autobuild.buildroot.net/results/fbe/fbe7892539cc1bf18f89d18c6609a5aa747647d0/
+ > http://autobuild.buildroot.net/results/4bc/4bc388618ff02dde26ae09db021434a936c8cc1b/
+ > and similar errors.
 
- > /home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
- > In function `zlib_stateful_expand_block':
- > c_zlib.c:(.text+0x54): undefined reference to `inflate'
- > /home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
- > In function `zlib_stateful_compress_block':
- > c_zlib.c:(.text+0xd4): undefined reference to `deflate'
+ > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+ > ---
+ > Please note this is a blind fix. I cannot reproduce the build errors,
+ > which all happen on the same build node, and I cannot verify that
+ > the patch does in fact fix them. 
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > It's probably still a good idea to avoid unnecessary static linking
+ > in a host package.
+
+ >  .../vboot-utils/0004-Disable-static-futility.patch | 30 ++++++++++++++++++++++
+ >  1 file changed, 30 insertions(+)
+ >  create mode 100644 package/vboot-utils/0004-Disable-static-futility.patch
 
 Committed to 2017.08.x, thanks.
 
