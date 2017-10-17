@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 22:24:24 +0200
-Subject: [Buildroot] [PATCH 2/2] msgpack: fix static build
-In-Reply-To: <cea0bf6f5635443cf457ec6e0bf13875b5de41bc.1508251333.git.baruch@tkos.co.il>
-References: <10b0beaaa7f14fb4847cb2c1d7cdda39ce6aa566.1508251333.git.baruch@tkos.co.il>
- <cea0bf6f5635443cf457ec6e0bf13875b5de41bc.1508251333.git.baruch@tkos.co.il>
-Message-ID: <20171017222424.44f562d3@windsurf.home>
+Date: Tue, 17 Oct 2017 22:25:01 +0200
+Subject: [Buildroot] [git commit] logrotate: bump version to 3.13.0
+Message-ID: <20171017201739.5A1EB8112C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e492cbbd9f6803a3f9cbc93aa0465919ed399f73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Oct 2017 17:42:13 +0300, Baruch Siach wrote:
-> Disabled shared libraries when building static only.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/057/057d72bc84c467973ec3c076f5d8108e02d6e283/
-> http://autobuild.buildroot.net/results/499/499069f6821ddd2dcb83201b017a58eae00ebe16/
-> http://autobuild.buildroot.net/results/499/499069f6821ddd2dcb83201b017a58eae00ebe16/
-> 
-> Cc: Simon Dawson <spdawson@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/msgpack/msgpack.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 860263c..70b068c 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 683ccb7fff74082471aa6bd9e962ae7a3f4d55eea7df41fd97aa12ec6f55e657  logrotate-3.12.3.tar.gz
++sha256 fb1ff8502e7ae4aedaa3d0da8d3740a6a0f44b72e34666af724e9094b166c942  logrotate-3.13.0.tar.gz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 274b2b6..c2c4885 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.12.3
++LOGROTATE_VERSION = 3.13.0
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
