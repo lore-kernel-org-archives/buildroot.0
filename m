@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 21:51:11 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove myself
-In-Reply-To: <20171017143322.9990-1-gustavo@zacarias.com.ar>
-References: <20171017143322.9990-1-gustavo@zacarias.com.ar>
-Message-ID: <20171017215111.35610113@windsurf.home>
+Date: Tue, 17 Oct 2017 21:53:16 +0200
+Subject: [Buildroot] [PATCH v2 1/2] qt5: add license file hashes for all
+ submodules
+In-Reply-To: <20171017191655.17723-1-ps.report@gmx.net>
+References: <20171017191655.17723-1-ps.report@gmx.net>
+Message-ID: <20171017215316.592370d2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gustavo,
+Hello,
 
-On Tue, 17 Oct 2017 11:33:22 -0300, Gustavo Zacarias wrote:
-> I'm no longer actively participating.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  DEVELOPERS | 151 -------------------------------------------------------------
->  1 file changed, 151 deletions(-)
+On Tue, 17 Oct 2017 21:16:54 +0200, Peter Seiderer wrote:
 
-Thanks a lot for all your work on Buildroot during those many years, it
-has been very, very appreciated. Sad to see your participation stopping
-now :/
+> +# Hash for license file:
+> +sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
+> +
+> +# Hash for license file:
+> +sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
+> +
+> +# Hash for license file:
+> +sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPLv3
 
-I wish you all the best, and many thanks again.
+It is a little bit extreme to repeat "Hash for license file" for each
+line. What about "Hashes for license files:" instead, just one time per
+file ?
 
-Patch applied to master, of course!
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
